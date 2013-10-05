@@ -1,5 +1,5 @@
 /*框架初始化JS*/
-$().ready(function() {
+$(function() {
     var obj_maincontent = jQuery('#maincontent');
     if (obj_maincontent.length > 0) {
         $("#maincontent").css("height", $(window).height() - 40);
@@ -22,7 +22,7 @@ $().ready(function() {
                 G_SelectedDocumentChannelId = 0;
 
                 if (G_NowSiteId > 0) {
-                    $("#lefttree").html("<img src=\"../images/spinner.gif\">");
+                    $("#lefttree").html("<img src=\"/system_images/manage/spinner.gif\">");
                     LoadChannelTree(sid);
                     //changedis(G_SelectedDocumentChannelId);
                     //sitename
@@ -89,7 +89,3 @@ $().ready(function() {
         });*/
     }
 });
-
-function setleftnav_height(leftnavcount) {
-    $("#lefttree").css("height", $(window).height() - 95 - 29 * (leftnavcount - 1));
-}

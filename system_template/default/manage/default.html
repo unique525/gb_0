@@ -18,58 +18,59 @@
         <script type="text/javascript" src="{rootpath}/system_js/manage/loadtabs.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/loadtree.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/default.js"></script>
-       
-        
-   <style type="text/css">
-        body { font-family: "微软雅黑"; }
-        input { font-family: "微软雅黑";}
-    </style>
+
+
+        <style type="text/css">
+            body { font-family: "微软雅黑"; }
+            input { font-family: "微软雅黑";}
+        </style>
     </head>
     <body>
         <div id="top">
-            <div class="topleft"><img src="{rootpath}/system_images/manage/top4.jpg" alt="" /></div>
+            <div class="topleft"><img src="/system_images/manage/top4.jpg" alt="" /></div>
             <div class="topright">字体：<span id="setfont14">大</span> <span id="setfont12">小</span> | 欢迎您：<a title="您的IP：{clientip}" href="#">{adminusername}</a> <span id="span_modpass" style="cursor:pointer">[修改密码]</span> <a href="{rootpath}/default.php?mod=manage&a=logout">[退出]</a></div>
             <div class="speall"></div>
         </div>
         <div id="progress">
-            <img id="progressimg" src="{rootpath}/images/top3.jpg" alt="" /></div>
+            <img id="progressimg" src="/system_images/manage/top3.jpg" alt="" /></div>
         <div id="maincontent">
             <div id="leftpane">
                 <div class="aheader" id="accord1">
                     <cscms id="leftnav" type="list">
                         <item>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem" style="background:url({rootpath}/images/{f_adminleftnavicon}) no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
+                            <h3 class="ha"><div class="divAccordItem" style="background:url('/system_images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
                             <div style="background:#fff;">{f_adminleftnavcontent}</div>
                             ]]>
                         </item>
                         <footer>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem" style="background:url({rootpath}/images/{f_adminleftnavicon}) no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
+                            <h3 class="ha"><div class="divAccordItem" style="background:url('/system_images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
                             <div style="background:#fff;">{f_adminleftnavcontent}</div>
-                            
                             ]]>
                         </footer>
                     </cscms>
-                            <div id="rMenu">
-                                <ul>
-                                    <li class="cm_pub_quick_channel"><a href="javascript:publish_channel();">发布频道</a></li>
-                                    <li class="cm_edit_channel"><a href="javascript:edit_channel();">编辑频道</a></li>
-                                    <li class="cm_add_channel"><a href="javascript:add_channel();">新增子频道</a></li>
-                                    <li class="cm_bin_channel"><a href="javascript:temp_channel();">频道模板</a></li>
-                                    <li class="cm_bin_channel"><a href="javascript:bin_channel();">删除频道</a></li>
-                                    <li class="cm_bin_channel"><a href="javascript:link_channel();">频道联动</a></li>
-                                    <li class="cm_pro_channel"><a href="javascript:pro_channel();">频道属性</a></li>
-                                </ul>
-                            </div>
+                    <div id="rMenu">
+                        <ul>
+                            <li class="cm_pub_quick_channel"><a href="javascript:publish_channel();">发布频道</a></li>
+                            <li class="cm_edit_channel"><a href="javascript:edit_channel();">编辑频道</a></li>
+                            <li class="cm_add_channel"><a href="javascript:add_channel();">新增子频道</a></li>
+                            <li class="cm_bin_channel"><a href="javascript:temp_channel();">频道模板</a></li>
+                            <li class="cm_bin_channel"><a href="javascript:bin_channel();">删除频道</a></li>
+                            <li class="cm_bin_channel"><a href="javascript:link_channel();">频道联动</a></li>
+                            <li class="cm_pro_channel"><a href="javascript:pro_channel();">频道属性</a></li>
+                        </ul>
+                    </div>
                     <script type="text/javascript">
-                        setleftnav_height({adminleftnavcount});
+                        var leftNavCount = parseInt('{adminleftnavcount}') - 1;
+                        var leftTreeHeight = $(window).height() - 95 - 29 * leftNavCount;
+                        $("#lefttree").css("height", leftTreeHeight);
                     </script>
                 </div>
             </div>
             <div id="rightpane">
                 <div id="rightnav"><div class="sitename"></div><div class="channelname"></div><div class="spe"></div></div>
-                
+
 
                 <div id="tabs" style="border: none; ">
                     <ul>
@@ -89,24 +90,7 @@
         <script type="text/javascript">
             $('#progressimg').hide();
         </script>
-        <div id="dialog_docchannelpub" title="发布频道" style="display:none;">
-            <div id="pubtable">
-                <table>
-                    <tr>
-                        <td><img src="{rootpath}/images/spinner2.gif" /></td>
-                        <td>正在发布，请稍候！</td>
-                    </tr></table>
-            </div>
-        </div>
-        <div id="dialog_docnewsdelete" title="撤掉文档" style="display:none;">
-            <div id="deletetable">
-                <table>
-                    <tr>
-                        <td><img src="{rootpath}/images/spinner2.gif" /></td>
-                        <td>正在撤掉文档，请稍候！</td>
-                    </tr></table>
-            </div>
-        </div>
+        
 
     </body>
 </html>
