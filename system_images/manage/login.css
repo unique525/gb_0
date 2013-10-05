@@ -1,0 +1,13 @@
+#loginlogobg{width:100%;height:70px;background:#333333;}
+#loginlogo{width:650px;line-height:68px;font-size:34px;color:#ffffff;}
+#loginlogo span{width:650px;line-height:68px;font-size:20px;color:#efefef;}
+#loginbox {width:650px;height:400px;margin-top:80px;padding-top:80px;background:url(loginbox_bg1.png);}
+
+#loginbox .inputbox1{width:200px;font-size:20px;color: #999999;}
+#loginbox .inputbox2{width:100px;font-size:20px;color: #999999;}
+#loginbox .textbox{font-size:20px;color: #999999;padding:10px;width:300px;height:50px;background:url(../inputbox/box_bg1.jpg) no-repeat;}
+
+#loginbox .btnbox{width:320px;padding:0;}
+#loginbox .btnlogin1{width:300px;height:40px;background:url(../inputbox/btn1bg.jpg);color:#956935;font-size:20px;border:none;border:0;cursor:pointer;}
+
+#divTips{width:320px;font-size:20px;color:#880404;line-height:100%;margin-bottom:20px;}
