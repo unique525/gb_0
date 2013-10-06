@@ -11,6 +11,8 @@ $(function() {
             accessKey: 'I'
         });
     }
+    $("#accord1").tooltip();
+    
     //select site
     $("#sel_site").change(function() {
         var sid_url = $("#sel_site").val();

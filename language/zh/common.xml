@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<module id="1"><content><![CDATA[验证码无效，请重试!]]></content></module>
+<module id="2"><content><![CDATA[没查询到相关内容，请更换关键字后再试!]]></content></module>
+<module id="3"><content><![CDATA[登录失败，原因可能是帐号密码错误，或者您的帐号已经停用或过期!]]></content></module>
+<module id="4"><content><![CDATA[登录失败，短信认证失败，请联系管理人员或重发短信进行认证!]]></content></module>
+<module id="5"><content><![CDATA[<div style="padding:5px;">此栏目目前还没有数据！</div>]]></content></module>
+<module id="6"><content><![CDATA[登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码!]]></content></module>
+<module id="7"><content><![CDATA[登录失败，因为是外网使用，请联系管理人员配置附加验证方式!]]></content></module>
+<module id="8"><content><![CDATA[登录失败，因为此帐号不允许外网使用，请联系管理人员!]]></content></module>
+<module id="9"><content><![CDATA[您无权访问此功能!]]></content></module>
+</root>

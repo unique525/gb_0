@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<module id="1"><content><![CDATA[上传失败，文件太大]]></content></module>
+<module id="2"><content><![CDATA[上传失败，文件太大，超出了HTML表单的限制]]></content></module>
+<module id="3"><content><![CDATA[上传失败，文件中只有一部分内容完成了上传]]></content></module>
+<module id="4"><content><![CDATA[上传失败，请先选择一个文件]]></content></module>
+<module id="5"><content><![CDATA[]]></content></module>
+<module id="6"><content><![CDATA[上传失败，临时储存文件夹不存在或丢失，请联系技术人员解决]]></content></module>
+<module id="7"><content><![CDATA[上传失败，文件夹没有写入权限，请联系技术人员解决]]></content></module>
+<module id="8"><content><![CDATA[上传失败，扩展使文件上传停止，请联系技术人员解决]]></content></module>
+<module id="9"><content><![CDATA[上传失败，没有可以显示的错误信息]]></content></module>
+<module id="10"><content><![CDATA[上传失败，不允许上传此类型的文件]]></content></module>
+<module id="11"><content><![CDATA[此文档没有图片]]></content></module>
+<module id="12"><content><![CDATA[修改失败]]></content></module>
+<module id="13"><content><![CDATA[删除失败]]></content></module>
+<module id="14"><content><![CDATA[上传失败！上传文件不存在或不合法，请返回。]]></content></module>
+<module id="15"><content><![CDATA[上传失败！非图片类型文件，请返回。]]></content></module>
+<module id="16"><content><![CDATA[上传失败！无法写入文件或写入失败，请返回。]]></content></module>
+<module id="17"><content><![CDATA[上传失败！无法识别的图像文件格式，请返回。]]></content></module>
+<module id="18"><content><![CDATA[此节点没有图片]]></content></module>
+</root>

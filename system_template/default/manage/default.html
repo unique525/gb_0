@@ -27,7 +27,7 @@
     </head>
     <body>
         <div id="top">
-            <div class="topleft"><img src="/system_images/manage/top4.jpg" alt="" /></div>
+            <div class="topleft"><img src="/system_images/manage/top4.jpg" alt="" /><img src="/system_images/manage/top5.jpg" alt="" /></div>
             <div class="topright">字体：<span id="setfont14">大</span> <span id="setfont12">小</span> | 欢迎您：<a title="您的IP：{clientip}" href="#">{adminusername}</a> <span id="span_modpass" style="cursor:pointer">[修改密码]</span> <a href="{rootpath}/default.php?mod=manage&a=logout">[退出]</a></div>
             <div class="speall"></div>
         </div>
@@ -40,13 +40,13 @@
                         <item>
                             <![CDATA[
                             <h3 class="ha"><div class="divAccordItem" style="background:url('/system_images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
-                            <div style="background:#fff;">{f_adminleftnavcontent}</div>
+                            <div>{f_adminleftnavcontent}</div>
                             ]]>
                         </item>
                         <footer>
                             <![CDATA[
                             <h3 class="ha"><div class="divAccordItem" style="background:url('/system_images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
-                            <div style="background:#fff;">{f_adminleftnavcontent}</div>
+                            <div>{f_adminleftnavcontent}</div>
                             ]]>
                         </footer>
                     </cscms>
@@ -72,11 +72,11 @@
                 <div id="rightnav"><div class="sitename"></div><div class="channelname"></div><div class="spe"></div></div>
 
 
-                <div id="tabs" style="border: none; ">
+                <div id="tabs">
                     <ul>
                         <li><a id="tabs_title" href="#tabs-1">欢迎页面</a></li>
                     </ul>
-                    <div id="tabs-1" style=" border: none;">
+                    <div id="tabs-1">
                         <div style="padding:20px;">请从右边的导航树上选择您想要操作的频道（栏目）</div>
                         <div id="gridlist" style=" overflow: auto;">
                         </div>

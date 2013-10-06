@@ -1,26 +1,26 @@
-#top{width:100%;height:35px;background:url(top1.jpg) repeat-x;}
+#top{width:100%;height:35px;background:#B5D6D9;}
 #top .topleft{ float:left; }
 #top .topright{ float:right; line-height: 35px; padding-right: 5px; }
-#progress{width:100%;height:5px;background:url(top2.jpg) repeat-x;}
+#progress{width:100%;height:2px;background:#ffffff;}
 #progressimg{position:absolute;}
 /* maincontent */
-#maincontent {width:100%;overflow:hidden;}
+#maincontent {width:100%;overflow:hidden;background:#eaeaea;}
 #leftpane {width:180px;min-width:180px;overflow:hidden;}
 #leftpane .aheader{width:100%;}
-#leftpane .ha{height:29px; line-height:29px;font-size:14px; font-weight:bold; cursor:pointer;display:block;background-image:url(left1.jpg);}
-#leftpane .ha:hover {background-image:url(left4.jpg);}
-#leftpane .ha.selected {background-image:url(left4.jpg);}
-#maincontent .vsplitbar{width:8px;cursor:e-resize;cursor:col-resize;background:url(mid1.jpg) repeat-y left;}
+#leftpane .ha{height:29px; line-height:29px;font-size:15px;color:#63AAAD;cursor:pointer;display:block;background:#B5D6D9;border-bottom:1px solid #ffffff;}
+#leftpane .ha:hover {background:#D2E7E8;color:#ffffff;}
+#leftpane .ha.selected {background:#D2E7E8;color:#ffffff;}
+#maincontent .vsplitbar{width:2px;cursor:e-resize;cursor:col-resize;background:#ffffff;}
 
-#rightpane {width:100%;}
-#rightnav{width:100%;background:url(right1.jpg);height:25px;}
-#rightnav .sitename{float:left;width:250px;color:#283347;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;background:url(right2.jpg) right center no-repeat;}
-#rightnav .channelname{float:left;width:520px;color:#283347;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;}
-#rightbtns{background:url(right3.jpg);height:37px;}
+#rightpane {width:100%;background:#f5f5f5;}
+#rightnav{width:100%;background:#CEE3E6;height:29px;padding-left:10px;}
+#rightnav .sitename{float:left;width:250px;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;background:url(right2.jpg) right center no-repeat;}
+#rightnav .channelname{float:left;width:520px;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;}
+#rightbtns{height:37px;padding-left:8px;}
 #rightbtns img{margin-top:4px;margin-left:4px;cursor:pointer;}
 .gridtitle{background:url(right4.jpg);height:26px;}
 
-#leftsite{width:100%;height:26px;line-height:26px;background:url(lsitebg.jpg) repeat-x;}
+#leftsite{width:100%;height:26px;line-height:26px;background:#D2E7E8;}
 #leftsite .con{padding-left:2px;}
 #sitemanage{ cursor: pointer;}
 

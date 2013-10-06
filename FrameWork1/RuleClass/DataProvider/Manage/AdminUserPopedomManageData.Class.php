@@ -7,10 +7,10 @@
  * @author zhangchi
  */
 class AdminUserPopedomManageData extends BaseManageData {
-
     /**
      * 表名
      */
+
     const tableName = "cst_adminpopedom";
 
     /**
@@ -21,7 +21,7 @@ class AdminUserPopedomManageData extends BaseManageData {
      * @return int 创建结果数字，1为成功 
      */
     public function CreateForDocumentChannel($siteId, $documentChannelId, $adminUserId) {
-        $sql = "INSERT INTO ".self::tableName." (
+        $sql = "INSERT INTO " . self::tableName . " (
             `SiteID`,
             `DocumentChannelID`,
             `AdminUserGroupID`,
@@ -40,6 +40,7 @@ class AdminUserPopedomManageData extends BaseManageData {
             `Audit4`, 
             `Refused`, 
             `DoOthers`,
+            `DoSameGroupOthers`,
             `Publish`
             )
             values
@@ -49,6 +50,7 @@ class AdminUserPopedomManageData extends BaseManageData {
 	0, 
 	:adminuserid, 
 	0, 
+	1, 
 	1, 
 	1, 
 	1, 
@@ -157,7 +159,7 @@ class AdminUserPopedomManageData extends BaseManageData {
      * @return type
      */
     public function CreateOrModifyForSiteAndAdminUserGroup(
-    $siteId, $adminUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
+    $siteId, $adminUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doSameGroupOthers, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
     ) {
         $result = -1;
         //判断是否存在数据
@@ -187,6 +189,7 @@ class AdminUserPopedomManageData extends BaseManageData {
 	`Audit4`, 
 	`Refused`, 
 	`DoOthers`, 
+	`DoSameGroupOthers`,
 	`Publish`, 
 	`UserExplore`, 
 	`UserAdd`, 
@@ -230,6 +233,7 @@ class AdminUserPopedomManageData extends BaseManageData {
 	:Audit4, 
 	:Refused, 
 	:DoOthers, 
+        :DoSameGroupOthers,
 	:Publish, 
 	:UserExplore, 
 	:UserAdd, 
@@ -269,6 +273,7 @@ class AdminUserPopedomManageData extends BaseManageData {
             $dataProperty->AddField("Audit4", $audit4);
             $dataProperty->AddField("Refused", $refused);
             $dataProperty->AddField("DoOthers", $doOthers);
+            $dataProperty->AddField("DoSameGroupOthers", $doSameGroupOthers);
             $dataProperty->AddField("Publish", $publish);
             $dataProperty->AddField("UserExplore", $userExplore);
             $dataProperty->AddField("UserAdd", $userAdd);
@@ -311,6 +316,7 @@ class AdminUserPopedomManageData extends BaseManageData {
 	`Audit4` = :Audit4, 
 	`Refused` = :Refused, 
 	`DoOthers` = :DoOthers, 
+	`DoSameGroupOthers` = :DoSameGroupOthers, 
 	`Publish` = :Publish, 
 	`UserExplore` = :UserExplore, 
 	`UserAdd` = :UserAdd, 
@@ -351,6 +357,7 @@ class AdminUserPopedomManageData extends BaseManageData {
             $dataProperty->AddField("Audit4", $audit4);
             $dataProperty->AddField("Refused", $refused);
             $dataProperty->AddField("DoOthers", $doOthers);
+            $dataProperty->AddField("DoSameGroupOthers", $doSameGroupOthers);
             $dataProperty->AddField("Publish", $publish);
             $dataProperty->AddField("UserExplore", $userExplore);
             $dataProperty->AddField("UserAdd", $userAdd);
@@ -374,7 +381,7 @@ class AdminUserPopedomManageData extends BaseManageData {
             $dataProperty->AddField("ManageFtp", $manageFtp);
             $dataProperty->AddField("ManageAd", $manageAd);
             $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
-            $dataProperty->AddField("ManageConfig", $manageConfig);            
+            $dataProperty->AddField("ManageConfig", $manageConfig);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
 
@@ -693,6 +700,17 @@ class AdminUserPopedomManageData extends BaseManageData {
     }
 
     /**
+     * 是否有操作同一组中他人的权限
+     * @param type $siteid
+     * @param type $documentchannelid
+     * @param type $adminuserid
+     * @return type
+     */
+    public function CanDoSameGroupOthers($siteid, $documentchannelid, $adminuserid) {
+        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "DoSameGroupOthers");
+    }
+
+    /**
      * 是否有发布权限
      * @param type $siteid
      * @param type $documentchannelid
@@ -790,6 +808,7 @@ class AdminUserPopedomManageData extends BaseManageData {
     public function CanManageConfig($siteid, $documentchannelid, $adminuserid) {
         return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageConfig");
     }
+
 }
 
 ?>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<module id="2"><content><![CDATA[对不起，社区数据库中不存在该用户名!]]></content></module>
+<module id="3"><content><![CDATA[对不起，用户密码不对!]]></content></module>
+<module id="4"><content><![CDATA[对不起，系统数据处理出错，请关闭浏览器再试!!]]></content></module>
+<module id="5"><content><![CDATA[登录成功!!]]></content></module>
+<module id="6"><content><![CDATA[失败!!]]></content></module>
+<module id="7"><content><![CDATA[修改成功!!]]></content></module>
+<module id="8"><content><![CDATA[修改失败!!]]></content></module>
+<module id="9"><content><![CDATA[提交成功!!]]></content></module>
+<module id="10"><content><![CDATA[提交失败!!]]></content></module>
+<module id="11"><content><![CDATA[评论成功!!]]></content></module>
+<module id="12"><content><![CDATA[评论失败!!]]></content></module>
+<module id="13"><content><![CDATA[对不起，该信息，您暂时不能评论！]]></content></module>
+<module id="14"><content><![CDATA[找不到对应经销商信息]]></content></module>
+<module id="15"><content><![CDATA[注册成功!!]]></content></module>
+<module id="16"><content><![CDATA[注册失败!!]]></content></module>
+<module id="17"><content><![CDATA[老密码输入不对!!]]></content></module>
+<module id="18"><content><![CDATA[对不起，您还没有登录，请先登录再进行操作！！！]]></content></module>
+<module id="19"><content><![CDATA[对不起，参数传递出错！！！]]></content></module>
+<module id="20"><content><![CDATA[对不起，该站点下已存在相同用户名,请换个用户名进行修改！！！]]></content></module>
+<module id="21"><content><![CDATA[删除失败！！！]]></content></module>
+<module id="22"><content><![CDATA[密码不对！！！]]></content></module>
+<module id="23"><content><![CDATA[对不起，您尚未开通评片系统中记录类评片功能的权限,请重新登录！！！]]></content></module>
+<module id="24"><content><![CDATA[对不起，您尚未开通评片系统中非记录类评片功能的权限,请重新登录！！！]]></content></module>
+<module id="25"><content><![CDATA[对不起，用户名不对！！！]]></content></module>
+<module id="26"><content><![CDATA[目前还没有订单！！！]]></content></module>
+<module id="27"><content><![CDATA[对不起，提交的内容中含有被过滤的字符：{0}，系统拒绝执行此操作]]></content></module>
+<module id="28"><content><![CDATA[对不起，您没有操作此功能的权限(<span style="cursor: pointer" onclick="self.parent.tb_remove();">关闭<span>)]]></content></module>
+<module id="29"><content><![CDATA[对不起，您没有操作此功能的权限]]></content></module>
+<module id="30"><content><![CDATA[新增成功]]></content></module>
+<module id="31"><content><![CDATA[新增失败]]></content></module>
+<module id="32"><content><![CDATA[对不起，没有找到此帐号对应的会员]]></content></module>
+<module id="33"><content><![CDATA[对不起，此会员已经是当前站点的所属会员了，不能重复增加]]></content></module>
+<module id="34"><content><![CDATA[发送成功]]></content></module>
+<module id="35"><content><![CDATA[发送失败]]></content></module>
+<module id="36"><content><![CDATA[对不起！请输入相关内容，不能提交内容为空的数据！！！]]></content></module>
+<module id="37"><content><![CDATA[对不起！该信息还不属于您所在部门的处理范畴内！！！]]></content></module>
+<module id="38"><content><![CDATA[<div style="padding:5px;">同一频道内已经有重复的心情配置了</div>]]></content></module>
+<module id="39"><content><![CDATA[<div style="padding:5px;">对不起！您只能修改自己发布的并且是处于未审状态下的稿子</div>]]></content></module>
+<module id="40"><content><![CDATA[<div style="padding:5px;">对不起！数据提交处理出错</div>]]></content></module> 
+</root>

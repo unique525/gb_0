@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root> 
+<module id="1"><content><![CDATA[失败，参数传递出错!]]></content></module>
+<module id="2"><content><![CDATA[对不起，该活动您已报过名，请勿重复报名!]]></content></module>
+<module id="3"><content><![CDATA[移动成功!]]></content></module>
+<module id="4"><content><![CDATA[移动失败!]]></content></module>
+<module id="5"><content><![CDATA[活动分类增加成功!]]></content></module>.
+<module id="6"><content><![CDATA[活动分类增加失败,在同一频道,同一分类下已存在相同的分类名称!]]></content></module>
+<module id="7"><content><![CDATA[]]></content></module>
+<module id="8"><content><![CDATA[对不起，该活动还未通过审核!]]></content></module>
+<module id="9"><content><![CDATA[对不起，该活动还未开始!]]></content></module>
+<module id="10"><content><![CDATA[对不起，该活动已截止!]]></content></module>
+<module id="11"><content><![CDATA[恭喜您,报名成功,请您准时参与活动!]]></content></module>
+<module id="12"><content><![CDATA[未开始]]></content></module>
+<module id="13"><content><![CDATA[进行中]]></content></module>
+<module id="14"><content><![CDATA[活动结束]]></content></module>
+<module id="15"><content><![CDATA[class='input6']]></content></module>
+<module id="16"><content><![CDATA[class='input8' disabled='disabled']]></content></module>
+<module id="17"><content><![CDATA[报名成功]]></content></module>
+<module id="18"><content><![CDATA[成功]]></content></module>
+<module id="19"><content><![CDATA[未成功]]></content></module>
+<module id="20"><content><![CDATA[用户同步登录未成功]]></content></module>
+<module id="21"><content><![CDATA[您还未报名参与活动,请先报名！]]></content></module>
+<module id="100"><content><![CDATA[数据插入出错]]></content></module>
+</root>

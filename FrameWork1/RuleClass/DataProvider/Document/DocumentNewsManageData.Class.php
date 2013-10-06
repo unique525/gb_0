@@ -16,7 +16,7 @@ class DocumentNewsManageData extends BaseManageData {
     /**
      * 表关键字段名
      */
-    const tableIdName = "documentnewsid";
+    const tableIdName = "DocumentNewsId";
 
     /**
      * 取得后台资讯列表数据集
@@ -69,7 +69,7 @@ class DocumentNewsManageData extends BaseManageData {
             $dataProperty->AddField("searchkey3", "%" . $searchKey . "%");
         }
 
-        $sql = "SELECT count(*) FROM cst_documentnews WHERE documentchannelid=:documentchannelid and state<100 " . $conditionAdminUserId . " " . $searchSql;
+        $sql = "SELECT count(*) FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid and state<100 " . $conditionAdminUserId . " " . $searchSql;
         $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
 
         return $result;
@@ -84,7 +84,7 @@ class DocumentNewsManageData extends BaseManageData {
             $strDocumentNewsId = join(',', $arrDocumentNewsId);
 
             $maxSort = 0;
-            $sql = "SELECT max(Sort) FROM " . self::tableName . " WHERE documentnewsid IN ($strDocumentNewsId)";
+            $sql = "SELECT max(Sort) FROM " . self::tableName . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
             $maxSort = $this->dbOperator->ReturnInt($sql, null);
             $arrSql = array();
             for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
@@ -92,11 +92,80 @@ class DocumentNewsManageData extends BaseManageData {
                 if ($newSort < 0) {
                     $newSort = 0;
                 }
-                $sql = "UPDATE " . self::tableName . " SET Sort=$newSort WHERE documentnewsid=$arrDocumentNewsId[$i];";
+                $sql = "UPDATE " . self::tableName . " SET Sort=$newSort WHERE DocumentNewsId=$arrDocumentNewsId[$i];";
                 $arrSql[] = $sql;
             }
-            $this->dbOperator->ExecuteBatch($arrSql,null);
+            $this->dbOperator->ExecuteBatch($arrSql, null);
         }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Get Info////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 取得文档的所属频道id
+     * @param int $documentNewsId 文档id
+     * @return int 所属频道id
+     */
+    public function GetDocumentChannelId($documentNewsId) {
+        $sql = "SELECT DocumentChannelId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得文档的管理员(发稿人)id
+     * @param int $documentNewsId 文档id
+     * @return int 管理员(发稿人)id
+     */
+    public function GetAdminUserId($documentNewsId) {
+        $sql = "SELECT AdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档的状态
+     * @param int $documentNewsId 文档id
+     * @return int 文档的状态
+     */
+    public function GetState($documentNewsId){
+        $sql = "SELECT State FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档的发布时间
+     * @param int $documentNewsId 文档id
+     * @return string 文档的发布时间
+     */
+    public function GetPublishDate($documentNewsId){
+        $sql = "SELECT PublishDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档的内容
+     * @param int $documentNewsId 文档id
+     * @return string 文档的内容
+     */
+    public function GetDocumentNewsContent($documentNewsId){
+        $sql = "SELECT DocumentNewsContent FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        return $result;
     }
 
 }

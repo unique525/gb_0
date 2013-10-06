@@ -19,6 +19,9 @@ class ManageGen extends BaseFrontGen implements IBaseFrontGen {
             case "login":
                 $result = self::Login();
                 break;
+            case "logout":
+                self::Logout();
+                break;
             case "verifytype":
                 $result = self::AsyncGenVerifyType();
                 break;
@@ -217,6 +220,15 @@ class ManageGen extends BaseFrontGen implements IBaseFrontGen {
         return $_GET['jsonpcallback'] . "(" . $arrVerifyType . ")";
     }
 
+    /*
+     * 后台退出登录
+     */
+    private function Logout(){
+        Control::DelAdminUserCookie();
+        session_start();
+        session_destroy();
+        header("Location:default.php?mod=manage&a=login");
+    }
 }
 
 ?>

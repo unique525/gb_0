@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<module id="1"><content><![CDATA[设置成功!]]></content></module>
+<module id="2"><content><![CDATA[积分]]></content></module>
+<module id="3"><content><![CDATA[金钱]]></content></module>
+<module id="4"><content><![CDATA[魅力]]></content></module>
+<module id="5"><content><![CDATA[经验]]></content></module>
+<module id="6"><content><![CDATA[发帖]]></content></module>
+<module id="7"><content><![CDATA[点券]]></content></module>
+<module id="8"><content><![CDATA[设置失败:重复!]]></content></module>
+<module id="9"><content><![CDATA[找不到内容!]]></content></module>
+</root>

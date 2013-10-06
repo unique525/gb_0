@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+<module id="1"><content><![CDATA[添加成功]]></content></module>
+<module id="2"><content><![CDATA[添加失败]]></content></module>
+<module id="3"><content><![CDATA[编辑成功]]></content></module>
+<module id="4"><content><![CDATA[编辑失败]]></content></module>
+<module id="5"><content><![CDATA[删除成功]]></content></module>
+<module id="6"><content><![CDATA[删除失败]]></content></module>
+<module id="7"><content><![CDATA[<div style="padding:5px;">此频道目前还没有文档，或者没有查询到相关文档</div>]]></content></module>
+<module id="8"><content><![CDATA[发布完成]]></content></module>
+<module id="9"><content><![CDATA[同一站点内已经有重复的发布文件夹了，请修改发布文件夹！]]></content></module>
+<module id="10"><content><![CDATA[缺少文档ID参数，请检查后重试!]]></content></module>
+<module id="11"><content><![CDATA[对不起，您还没有部门管理权限，不能以部门管理身份进行回复。]]></content></module>
+<module id="12"><content><![CDATA[<div style="padding:5px;">此频道目前还没有对应的标签，或者没有查询到相关标签</div>]]></content></module>
+<module id="13"><content><![CDATA[<div style="padding:5px;">同一频道内已经有重复的标签了</div>]]></content></module>
+<module id="14"><content><![CDATA[标签doctagid参数找不到对应标签数据！]]></content></module>
+<module id="15"><content><![CDATA[停用成功]]></content></module>
+<module id="16"><content><![CDATA[停用失败]]></content></module>
+<module id="17"><content><![CDATA[移动失败]]></content></module>
+<module id="18"><content><![CDATA[提交成功]]></content></module>
+<module id="19"><content><![CDATA[目前还没有对应的产品，或者没有查询到相关产品]]></content></module>
+<module id="20"><content><![CDATA[产品名称重复]]></content></module>
+<module id="21"><content><![CDATA[productid参数找不到对应产品数据]]></content></module>
+<module id="22"><content><![CDATA[不能重复添加]]></content></module>
+<module id="23"><content><![CDATA[文档必须为终审或已发状态才能发布]]></content></module>
+<module id="24"><content><![CDATA[此文档没有评论]]></content></module>
+<module id="25"><content><![CDATA[没有找到发布模板]]></content></module>
+<module id="26"><content><![CDATA[您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！]]></content></module>
+<module id="27"><content><![CDATA[目标频道和当前频道相同，不能进行联动！]]></content></module>
+<module id="28"><content><![CDATA[联动成功！]]></content></module>
+<module id="29"><content><![CDATA[联动失败！]]></content></module>
+<module id="30"><content><![CDATA[文档必须为终审或已发状态才能发布！]]></content></module>
+<module id="31"><content><![CDATA[没有找到文档数据！]]></content></module>
+<module id="32"><content><![CDATA[操作完成，<span style="cursor: pointer" onclick="self.parent.tb_remove();">【关闭窗口】</span>]]></content></module>
+<module id="33"><content><![CDATA[发布失败，请联系管理人员！]]></content></module>
+<module id="34"><content><![CDATA[没找到上级分类，请先添加上级分类！]]></content></module>
+<module id="35"><content><![CDATA[加载发布队列成功！]]></content></module>
+<module id="36"><content><![CDATA[当前文档正在被<strong>{adminusername}</strong>编辑，请稍后访问！]]></content></module>
+</root>

@@ -642,12 +642,12 @@ class Format {
     }
 
     /**
-     * 格式时间
-     * @param string $time 要处理的字符串形式的时间 例如：2012-11-12 12:01:02
+     * 格式化时间字符串为简单格式（没有-的形式）
+     * @param string $dateString 要处理的字符串形式的时间 例如：2012-11-12 12:01:02
      * @return string 格式化后字符串形式的时间 例如：20121112
      */
-    public static function Get_DetailName($time) {
-        $date1 = explode(' ', $time);
+    public static function DateStringToSimple($dateString) {
+        $date1 = explode(' ', $dateString);
         $date2 = explode('-', $date1[0]);
         return $date2[0] . $date2[1] . $date2[2];
     }

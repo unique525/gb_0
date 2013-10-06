@@ -49,7 +49,7 @@ $(function() {
         }, function() {
             //操作完成后触发的命令
         });
-        
+
     });
     $("#sortgrid").disableSelection();
 
@@ -61,13 +61,13 @@ $(function() {
             $(this).addClass('docselected');
         }
     });
-    
-    
-        $(".docnewssetstate").click(function() {
-            var docid = $(this).attr('idvalue');
-            var state = $(this).attr('statevalue');
-            DocumentNewsChangeState(docid,state);
-        });
+
+
+    $(".docnewssetstate").click(function() {
+        var docid = $(this).attr('idvalue');
+        var state = $(this).attr('statevalue');
+        DocumentNewsChangeState(docid, state);
+    });
 });
 
 function DocumentNewsChangeState(documentNewsId, state) {
