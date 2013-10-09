@@ -3,11 +3,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{systemname}</title>
-        <link id="css_font" type="text/css" href="font14.css" rel="stylesheet" />
-        <link type="text/css" href="common.css" rel="stylesheet" />
-        <link type="text/css" href="jqueryui/jquery-ui.min.css" rel="stylesheet" />
-        <link type="text/css" href="manage/default.css" rel="stylesheet" />
-        <link type="text/css" href="ztree/ztreestyle.css" rel="stylesheet" />
+        <link id="css_font" type="text/css" href="/system_template/default/images/font14.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/default/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/default/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/default/images/manage/default.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/default/images/ztree/ztreestyle.css" rel="stylesheet" />
         <script type="text/javascript" src="{rootpath}/system_js/manage/define_const.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/common.js"></script>
@@ -26,13 +26,12 @@
         </style>
     </head>
     <body>
-        <img id="loadframe" src="/system_template/common/images/spinner.gif" />
-            <div id="top" style="display:none;">
+            <div id="top">
                 <div class="topleft"><img class="systemimage" src="manage/top4.jpg" alt="" /><img class="systemimage" src="manage/top5.jpg" alt="" /></div>
                 <div class="topright">字体：<span id="setfont14">大</span> <span id="setfont12">小</span> | 欢迎您：<a title="您的IP：{clientip}" href="#">{adminusername}</a> <span id="span_modpass" style="cursor:pointer">[修改密码]</span> <a href="{rootpath}/default.php?mod=manage&a=logout">[退出]</a></div>
                 <div class="speall"></div>
             </div>
-            <div id="progress" style="display:none;">
+            <div id="progress">
                 <img id="progressimg" class="systemimage" src="manage/top3.jpg" alt="" /></div>
             <div id="maincontent">
                 <div id="leftpane">
@@ -66,8 +65,6 @@
                 </div>
                 <div id="rightpane">
                     <div id="rightnav"><div class="sitename"></div><div class="channelname"></div><div class="spe"></div></div>
-
-
                     <div id="tabs">
                         <ul>
                             <li><a id="tabs_title" href="#tabs-1">欢迎页面</a></li>
@@ -88,6 +85,8 @@
                             var leftNavCount = parseInt('{adminleftnavcount}') - 1;
                             var leftTreeHeight = $(window).height() - 98 - 29 * leftNavCount;
                             $("#lefttree").css("height", leftTreeHeight);
+                            
+                            
                         </script>
     </body>
 </html>

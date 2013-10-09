@@ -276,7 +276,7 @@ function setTemplate(adminUserTemplate) {
 function applyTemplate(adminUserTemplate) {
     $.each($("link"), function() {
         var cssName = $(this).attr("href");
-        $(this).attr("href","/system_template/"+adminUserTemplate + "/images/"+cssName);
+        //$(this).attr("href","/system_template/"+adminUserTemplate + "/images/"+cssName);
     });
     $.each($(".systemimage"), function() {
         var imageSrc = $(this).attr("src");

@@ -102,9 +102,8 @@ $(function() {
     //alert($("#accord1").css("height"));
     //$("#lefttree").css("height", leftTreeHeight);
     //$("#accord1").css("height", leftTreeHeight)
-    $("#loadframe").css("display", "none");
-    $("#top").css("display", "block");
-    $("#progress").css("display", "block");
-    
+    //$("#loadframe").css("display", "none");
+    //$("#top").css("display", "block");
+    //$("#progress").css("display", "block");
 });
     
