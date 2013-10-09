@@ -3,6 +3,8 @@
  */
 
 $(function() {
+    //load template
+    loadTemplate("default");
     $(document).tooltip();
     $("#selectall").click(function(event) {
         event.preventDefault();

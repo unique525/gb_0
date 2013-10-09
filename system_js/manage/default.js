@@ -1,5 +1,9 @@
 /*框架初始化JS*/
+
 $(function() {
+    //load template
+    loadTemplate("default");
+
     var obj_maincontent = jQuery('#maincontent');
     if (obj_maincontent.length > 0) {
         $("#maincontent").css("height", $(window).height() - 40);
@@ -12,7 +16,7 @@ $(function() {
         });
     }
     $("#accord1").tooltip();
-    
+
     //select site
     $("#sel_site").change(function() {
         var sid_url = $("#sel_site").val();
@@ -47,10 +51,11 @@ $(function() {
 
 
 
-    var obj_accord1 = jQuery('#accord1');
-    if (obj_accord1.length > 0) {
+    var objAccord1 = jQuery('#accord1');
+    if (objAccord1.length > 0) {
         $("#accord1").accordion({
-            header: 'h3'
+            header: 'h3',
+            heightStyle: "content"
         });
     }
     $(".divAccordItem").click(function() {
@@ -69,25 +74,37 @@ $(function() {
         //load usermanage
         var siteId = G_NowSiteId;
         /*
-        $.ajax({
-            url: "/default.php",
-            data: {
-                secu: "manage",
-                mod: "adminleftusermanage",
-                m: "async_list",
-                siteid: siteId
-            },
-            dataType: "jsonp",
-            jsonp: "jsonpcallback",
-            success: function(data) {
-                if (data !== undefined) {
-                    var aa = "";
-                    $.each(data, function(i, v) {
-                        aa = aa + '<div class="line" id="btn' + v["AdminPopedomName"] + '">' + v["AdminLeftUserManageName"] + '</div>';
-                    });
-                    $("#div_usermanage").html(aa);
-                }
-            }
-        });*/
+         $.ajax({
+         url: "/default.php",
+         data: {
+         secu: "manage",
+         mod: "adminleftusermanage",
+         m: "async_list",
+         siteid: siteId
+         },
+         dataType: "jsonp",
+         jsonp: "jsonpcallback",
+         success: function(data) {
+         if (data !== undefined) {
+         var aa = "";
+         $.each(data, function(i, v) {
+         aa = aa + '<div class="line" id="btn' + v["AdminPopedomName"] + '">' + v["AdminLeftUserManageName"] + '</div>';
+         });
+         $("#div_usermanage").html(aa);
+         }
+         }
+         });*/
     }
+
+    //var leftNavCount = parseInt('6') - 1;
+    //var leftTreeHeight = $(window).height() - 95 - 19 * leftNavCount;
+    //alert(leftTreeHeight);
+    //alert($("#accord1").css("height"));
+    //$("#lefttree").css("height", leftTreeHeight);
+    //$("#accord1").css("height", leftTreeHeight)
+    $("#loadframe").css("display", "none");
+    $("#top").css("display", "block");
+    $("#progress").css("display", "block");
+    
 });
+    

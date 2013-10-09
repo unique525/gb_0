@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link id="css_font" type="text/css" href="{rootpath}/system_images/font14.css" rel="stylesheet" />
-        <link type="text/css" href="/system_images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
-        <link type="text/css" href="/system_images/manage/default.css" rel="stylesheet" />
+        <link id="css_font" type="text/css" href="font14.css" rel="stylesheet" />
+        <link type="text/css" href="common.css" rel="stylesheet" />
+        <link type="text/css" href="jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link type="text/css" href="manage/default.css" rel="stylesheet" />
         <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="/system_js/common.js"></script>
         <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
@@ -77,12 +77,12 @@
                             <table class="docgrid" cellpadding="0" cellspacing="0">
                                 <tr class="griditem">
                                     <td class="speline2" style="width:30px;text-align:center;"><input class="docinput" type="checkbox" name="docinput" value="{f_documentnewsid}" /></td>
-                                    <td class="speline2" style="width:40px;text-align:center;"><img class="edit_doc" src="/system_images/manage/edit.gif" idvalue="{f_documentnewsid}" alt="编辑" /></td>
+                                    <td class="speline2" style="width:40px;text-align:center;"><img class="edit_doc systemimage" src="manage/edit.gif" idvalue="{f_documentnewsid}" alt="编辑" /></td>
                                     <td class="speline2" style="width:40px;text-align:right;"><span id="spanstate_{f_documentnewsid}">{f_state}</span></td>
                                     <td class="speline2" style="width:40px;text-align:left;">
-                                        <img class="imgchangestate" style="cursor: pointer" src="/system_images/manage/changestate.gif" idvalue="{f_documentnewsid}" title="改变文档状态" alt="改变状态" />
+                                        <img class="imgchangestate systemimage" style="cursor: pointer" src="manage/changestate.gif" idvalue="{f_documentnewsid}" title="改变文档状态" alt="改变状态" />
                                         <div class="docnewsstatebox" id="divstate_{f_documentnewsid}" idvalue="{f_documentnewsid}" title="">
-                                            <div style="float:right;"><img class="span_closebox" idvalue="{f_documentnewsid}" title="关闭" src="/system_images/manage/close3.gif" /></div>
+                                            <div style="float:right;"><img class="span_closebox systemimage" idvalue="{f_documentnewsid}" title="关闭" src="manage/close3.gif" /></div>
                                             <div style="clear:both;">
                                                 <div style="{CanCreate}" class="docnewssetstate" statevalue="0" idvalue="{f_documentnewsid}">新稿</div>
                                                 <div style="{CanModify}" class="docnewssetstate" statevalue="1" idvalue="{f_documentnewsid}">已编</div>
@@ -97,15 +97,15 @@
                                         </div>
                                     </td>
                                     <td class="speline2"><a target="_blank" href="{siteurl}/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html"><span style="color:{f_documentnewstitlecolor};font-weight:{f_documentnewstitlebold};">{f_documentnewstitle}</span></a></td>
-                                    <td class="speline2" style="width:20px;"><img class="preview_doc" style="cursor: pointer" src="/system_images/manage/docpreview.gif" idvalue="{f_documentnewsid}" alt="预览" title="预览文档" /></td>
-                                    <td class="speline2" style="width:20px;"><img class="imgpublish" style="cursor: pointer" src="/system_images/manage/publish.gif" idvalue="{f_documentnewsid}" title="发布文档" alt="发布" /></td>
-                                    <td class="speline2" style="width:36px;"><img class="imgup" style="cursor: pointer" src="/system_images/manage/arr_up.gif" idvalue="{f_documentnewsid}" title="向上移动" alt="向上" /><img class="imgdown" style="cursor: pointer" src="/system_images/manage/arr_down.gif" idvalue="{f_documentnewsid}" title="向下移动" alt="向下" /></td>
+                                    <td class="speline2" style="width:20px;"><img class="preview_doc systemimage" style="cursor: pointer" src="manage/docpreview.gif" idvalue="{f_documentnewsid}" alt="预览" title="预览文档" /></td>
+                                    <td class="speline2" style="width:20px;"><img class="imgpublish systemimage" style="cursor: pointer" src="manage/publish.gif" idvalue="{f_documentnewsid}" title="发布文档" alt="发布" /></td>
+                                    <td class="speline2" style="width:36px;"><img class="imgup systemimage" style="cursor: pointer" src="manage/arr_up.gif" idvalue="{f_documentnewsid}" title="向上移动" alt="向上" /><img class="imgdown systemimage" style="cursor: pointer" src="manage/arr_down.gif" idvalue="{f_documentnewsid}" title="向下移动" alt="向下" /></td>
                                     <td class="speline2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_sort}</td>
                                     <td class="speline2" style="width:50px;text-align:center;" title="文档的推荐级别，用在特定的模板中">{f_reclevel}</td>
                                     <td class="speline2" style="width:50px;text-align:center;">{f_hit}</td>
                                     <td class="speline2" style="width:180px;" title="文档创建时间">{f_createdate}</td>
                                     <td class="speline2" style="width:100px;" title="发稿人：{f_adminusername}">{f_adminusername}</td>
-                                    <td class="speline2" style="width:40px;"><img class="pic_manage" style="cursor: pointer" src="/system_images/manage/pic.gif" idvalue="{f_documentnewsid}" alt="图片管理" title="文档中上传的图片管理" /> <img class="comment_manage" style="cursor: pointer" src="/system_images/manage/comment.gif" idvalue="{f_documentnewsid}" alt="评论管理" title="文档的评论管理" /></td>
+                                    <td class="speline2" style="width:40px;"><img class="pic_manage systemimage" style="cursor: pointer" src="manage/pic.gif" idvalue="{f_documentnewsid}" alt="图片管理" title="文档中上传的图片管理" /> <img class="comment_manage systemimage" style="cursor: pointer" src="manage/comment.gif" idvalue="{f_documentnewsid}" alt="评论管理" title="文档的评论管理" /></td>
                                 </tr>
                             </table>
                         </li>
