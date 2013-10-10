@@ -9,32 +9,29 @@
 class Template {
 
     /**
-     * load template
-     * @param <type> $tempname
-     * @return <type>
+     * 读取模板内容
+     * @param string $templateFileUrl 模板文件路径
+     * @param string $templateName 模板名称
+     * @return string 模板内容
      */
-    public static function Load($tempname, $tempurl = "") {
-        $filepath = ROOTPATH . '/' . self::GetTempLateUrl($tempurl) . '/' . $tempname;
-        if (!file_exists($filepath)) {
-            die("can not found template file:" . $filepath);
+    public static function Load($templateFileUrl, $templateName = "") {
+        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName) . '/' . $templateFileUrl;
+        if (!file_exists($filePath)) {
+            die("can not found template file:" . $filePath);
         }
-        $tempcontent = file_get_contents($filepath);
+        $tempContent = file_get_contents($filePath);
         //去掉BOM
-        if (preg_match('/^\xEF\xBB\xBF/', $tempcontent)) {
-            $tempcontent = substr($tempcontent, 3);
+        if (preg_match('/^\xEF\xBB\xBF/', $tempContent)) {
+            $tempContent = substr($tempContent, 3);
         }
         //$tempcontent = iconv("utf-8", "gbk", $tempcontent);
-        return $tempcontent;
+        return $tempContent;
     }
 
-    /**
-     * get template url
-     * @return <type>
-     */
-    public static function GetTempLateUrl($tempurl) {
-
-        if (!empty($tempurl)) {
-            return $tempurl;
+    
+    private static function GetTempLateUrl($templateName) {
+        if (!empty($templateName)) {
+            return 'system_template/'.$templateName;
         } else {
             return 'system_template/default';
         }

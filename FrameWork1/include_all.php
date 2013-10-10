@@ -16,6 +16,7 @@ foreach ($arrFiles as $fileName) {
     include_once($fileName);
 }
 
+include_once(ROOTPATH . "/FrameWork1/RuleClass/DataProvider/BaseData.Class.php");
 include_once(ROOTPATH . "/FrameWork1/RuleClass/DataProvider/BaseFrontData.Class.php");
 include_once(ROOTPATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.Class.php");
 $dir = ROOTPATH . "/FrameWork1/RuleClass/DataProvider";

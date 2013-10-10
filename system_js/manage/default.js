@@ -1,8 +1,8 @@
 /*框架初始化JS*/
 
 $(function() {
-    //load template
-    loadTemplate("default");
+    $("#sitemanage").attr("src", "/system_template/" + G_TemplateName + "/images/manage/lsite.jpg");
+    $("#btngosite").attr("src", "/system_template/" + G_TemplateName + "/images/manage/go.jpg");
 
     var obj_maincontent = jQuery('#maincontent');
     if (obj_maincontent.length > 0) {
@@ -28,7 +28,7 @@ $(function() {
                 G_SelectedDocumentChannelId = 0;
 
                 if (G_NowSiteId > 0) {
-                    $("#lefttree").html("<img src=\"/system_images/manage/spinner.gif\">");
+                    $("#lefttree").html("<img src='/system_template/" + G_TemplateName + "/images/manage/spinner.gif' />");
                     LoadChannelTree(sid);
                     //changedis(G_SelectedDocumentChannelId);
                     //sitename
@@ -96,14 +96,21 @@ $(function() {
          });*/
     }
 
-    //var leftNavCount = parseInt('6') - 1;
-    //var leftTreeHeight = $(window).height() - 95 - 19 * leftNavCount;
-    //alert(leftTreeHeight);
-    //alert($("#accord1").css("height"));
-    //$("#lefttree").css("height", leftTreeHeight);
-    //$("#accord1").css("height", leftTreeHeight)
-    //$("#loadframe").css("display", "none");
-    //$("#top").css("display", "block");
-    //$("#progress").css("display", "block");
+    $(".btnsettemplate").click(function() {
+        var templateName = $(this).attr("idvalue");
+        $.post("/default.php?secu=manage&mod=settemplate&tn="+templateName, {
+            resultbox: $(this).html()
+        }, function(xml) {
+            window.location.href = window.location.href;
+            if (parseInt(xml) > 0) {
+
+            } else if (parseInt(xml) == -2) {
+                alert("设置失败");
+            }
+            else {
+                alert("设置失败");
+            }
+        });
+    });
 });
     

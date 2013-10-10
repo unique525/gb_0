@@ -626,22 +626,6 @@ class Format {
     }
 
     /**
-     * 格式化转换数组为 in 查询模式 
-     * @param array $arr 要处理的数组
-     * @return string 查询字符串 例如：in ('a','b')
-     */
-    public static function format_arr($arr = '') {
-        $k = array_keys($arr);
-        $n = count($k);
-        $result = "''";
-        for ($i = 0; $i < $n; $i++) {
-            $t = array_keys($arr[$k[$i]]);
-            $result .= ",'" . $arr[$k[$i]][$t[0]] . "'";
-        }
-        return $result;
-    }
-
-    /**
      * 格式化时间字符串为简单格式（没有-的形式）
      * @param string $dateString 要处理的字符串形式的时间 例如：2012-11-12 12:01:02
      * @return string 格式化后字符串形式的时间 例如：20121112
@@ -664,46 +648,6 @@ class Format {
         } else {
             return null;
         }
-    }
-
-    /**
-     * 格式化时间
-     * @param string $strDate 字符串形式的时间
-     * @return string
-     */
-    public static function GenFormtData($strDate) {
-        $returnDate = array();
-        $strDate = explode(' ', $strDate);
-        if (!empty($strDate)) {
-            $date1 = explode('-', $strDate[0]);
-            if (!empty($date1)) {
-                $returnDate[0] = $date1[0];
-                $returnDate[1] = $date1[1];
-                $returnDate[2] = $date1[2];
-            } else {
-                $returnDate[0] = "";
-                $returnDate[1] = "";
-                $returnDate[2] = "";
-            }
-            $date2 = explode('-', $strDate[1]);
-            if (!empty($date2)) {
-                $returnDate[3] = $date2[0];
-                $returnDate[4] = $date2[1];
-                $returnDate[5] = $date2[2];
-            } else {
-                $returnDate[3] = "";
-                $returnDate[4] = "";
-                $returnDate[5] = "";
-            }
-        } else {
-            $returnDate[0] = "";
-            $returnDate[1] = "";
-            $returnDate[2] = "";
-            $returnDate[3] = "";
-            $returnDate[4] = "";
-            $returnDate[5] = "";
-        }
-        return $returnDate;
     }
 
     /**

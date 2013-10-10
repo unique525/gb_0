@@ -180,6 +180,27 @@ class Control {
         setcookie("UID", 0, time() - 1);
         setcookie("USERNAME", "", time() - 1);
     }
+    
+    /**
+     * 取得后台管理员使用的模板名称COOKIE
+     * @return string 模板名称
+     */
+    public static function GetAdminUserTemplateName(){
+        if (isset($_COOKIE["ICMSADMINUSERTEMPLATENAME"])) {
+            return $_COOKIE["ICMSADMINUSERTEMPLATENAME"];
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * 设置后台管理员使用的模板名称COOKIE
+     * @param string $templateName 模板名称
+     * @param int $hour 保存时间（小时，默认50000）
+     */
+    public static function SetAdminUserTemplateName($templateName, $hour = 50000) {
+        setcookie("ICMSADMINUSERTEMPLATENAME", $templateName, time() + $hour * 3600);
+    }
 
     /**
      * 取得客户端IP

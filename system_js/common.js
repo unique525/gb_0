@@ -259,39 +259,6 @@ function applycss(css, rootpath) {
     $("#css_font").attr("href", rootpath + "/system_images/" + css);
 }
 
-function loadTemplate(defaultTemplateName) {
-    var adminusertemplate = getcookie("adminusertemplate");
-    if (adminusertemplate != "") {
-        applyTemplate(adminusertemplate);
-    }
-    else {
-        adminusertemplate = defaultTemplateName;
-        applyTemplate(adminusertemplate);
-    }
-}
-function setTemplate(adminUserTemplate) {
-    setcookie("adminusertemplate", adminUserTemplate);
-    loadTemplate(defaultTemplateName);
-}
-function applyTemplate(adminUserTemplate) {
-    $.each($("link"), function() {
-        var cssName = $(this).attr("href");
-        //$(this).attr("href","/system_template/"+adminUserTemplate + "/images/"+cssName);
-    });
-    $.each($(".systemimage"), function() {
-        var imageSrc = $(this).attr("src");
-        $(this).attr("src","/system_template/"+adminUserTemplate + "/images/"+imageSrc);
-    });
-    $.each($(".objbg"), function() {
-        var bgUrl = $(this).css("backgroundImage");
-        bgUrl = bgUrl.replaceAll("templageurl","/system_template/"+adminUserTemplate+"/images/");
-        //alert(bgUrl);
-        $(this).css("backgroundImage",bgUrl);
-    });
-    
-    
-    //$("link").attr("href", "/system_template/" + css);
-}
 
 
 //div show box

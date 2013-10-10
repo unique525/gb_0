@@ -1,0 +1,119 @@
+#top{width:100%;height:35px;background:#B5D6D9;}
+#top .topleft{ float:left; }
+#top .topright{ float:right; line-height: 35px; padding-right: 5px; }
+#progress{width:100%;height:2px;background:#ffffff;}
+#progressimg{position:absolute;}
+/* maincontent */
+#maincontent {width:100%;overflow:hidden;background:#eaeaea;}
+#leftpane {width:180px;min-width:180px;overflow:hidden;}
+#leftpane .aheader{width:100%;}
+#leftpane .ha{height:29px; line-height:29px;font-size:15px;color:#63AAAD;cursor:pointer;display:block;background:#B5D6D9;border-bottom:1px solid #ffffff;}
+#leftpane .ha:hover {background:#D2E7E8;color:#ffffff;}
+#leftpane .ha.selected {background:#D2E7E8;color:#ffffff;}
+#maincontent .vsplitbar{width:2px;cursor:e-resize;cursor:col-resize;background:#ffffff;}
+
+#rightpane {width:100%;background:#f5f5f5;}
+#rightnav{width:100%;background:#CEE3E6;height:29px;padding-left:10px;}
+#rightnav .sitename{float:left;width:250px;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;background:url(right2.jpg) right center no-repeat;}
+#rightnav .channelname{float:left;width:320px;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;}
+#rightnav .selecttemplate{float:right;width:220px;font-size:14px;font-weight:bold;line-height:25px;text-indent:6px;}
+#rightbtns{height:37px;padding-left:8px;}
+#rightbtns img{margin-top:4px;margin-left:4px;cursor:pointer;}
+.gridtitle{background:url(right4.jpg);height:26px;}
+
+.template_default{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#61AFB9;}
+.template_deepblue{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#61AFB9;}
+
+#leftsite{width:100%;height:26px;line-height:26px;background:#D2E7E8;}
+#leftsite .con{padding-left:2px;}
+#sitemanage{ cursor: pointer;}
+
+#lefttask{width:100%;}
+#lefttask .title{text-indent:10px;font-weight:bold;font-size:12px;}
+#lefttask .taskline1{cursor:pointer;line-height:22px;margin:0 30px;text-indent:24px;font-size:12px;background: url(task1.jpg) no-repeat left center;}
+#lefttask .taskline2{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+#lefttask .taskline3{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+#lefttask .taskline4{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+
+#systemconfig { font-size: 12px; color:#000;}
+#systemconfig .line{line-height: 20px ;background: url(sys.gif) no-repeat left center; text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
+#systemconfig span{ cursor: pointer;font-size: 12px; color:#000;}
+
+#userconfig { font-size: 12px; color:#000;}
+#userconfig .line{line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
+#userconfig span{ cursor: pointer;font-size: 12px; color:#000;}
+
+#voteconfig { font-size: 12px; color:#000;}
+#voteconfig .line{line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
+#voteconfig span{ cursor: pointer; font-size: 12px; color:#000;}
+
+#visitconfig { font-size: 12px; color:#000;}
+#visitconfig .line{line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
+#visitconfig span{ line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; cursor: pointer;font-size: 12px; color:#000;}
+
+#div_usermanage { font-size: 12px; color:#000;}
+#div_usermanage .line{line-height:20px;text-indent: 3px;border-bottom:1px dashed #cccccc; margin:0 30px;cursor: pointer;}
+#div_usermanage span{ cursor: pointer;font-size: 12px; color:#000;}
+
+#div_search { font-size: 12px; color:#000;}
+#div_search .line{line-height:20px;text-indent: 3px;border-bottom:1px dashed #cccccc; margin:0 30px;cursor: pointer;}
+#div_search span{ cursor: pointer;font-size: 12px; color:#000;}
+
+#forummanage { font-size: 12px; color:#000;}
+#forummanage .line{line-height:20px;border-bottom:1px dashed #cccccc; margin:0 20px;}
+#forummanage span{ cursor: pointer;font-size: 12px; color:#000;}
+
+
+
+
+#rMenu{
+    position:absolute; 
+    visibility:hidden;
+    background:url(cm_bg.jpg) #FFFBF7 repeat-y;
+    border: 1px solid #636563;
+    width:120px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    font-size: 14px;
+    z-index:999;
+
+}
+
+#rMenu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#rMenu li{
+    margin: 0px;
+    padding: 3px;
+    background-repeat:no-repeat;
+}
+#rMenu ul{
+    display: block;	    
+    text-decoration: none;
+    color: #000;       
+}
+#rMenu a{padding:1px 5px;margin-left:32px;}
+
+#rMenu ul li a:hover, #rMenu ul li a:focus {
+    color: #FFFFFF;
+    background-color:#3165CE;
+}
+
+.seprator{border-bottom:1px solid #a5a6a5;}
+
+
+#rMenu li.cm_adddoc{ background-image: url(cm_adddoc.jpg);  }
+#rMenu li.cm_viewdoc{ background-image: url(cm_viewdoc.jpg);}
+#rMenu li.cm_pub_quick_channel{ background-image: url(cm_pub_quick_channel.jpg); }
+#rMenu li.cm_edit_channel{}
+#rMenu li.cm_pro_channel{ background-image: url(cm_pro_channel.jpg); }
+
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+#sortable li span { position: absolute; margin-left: -1.3em; }
+#tabs li .ui-icon-close { float: left; margin: 0 0 0 0; cursor: pointer; }

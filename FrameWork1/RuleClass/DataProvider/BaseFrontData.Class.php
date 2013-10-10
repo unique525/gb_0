@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider
  * @author zhangchi
  */
-class BaseFrontData {
+class BaseFrontData extends BaseData {
 
     /**
      * 根据POST和附加字段生成INSERT SQL

@@ -162,28 +162,28 @@ class BaseGen {
      * @param string $tempContent 要处理的模板
      */
     public function ReplaceEnd(&$tempContent) {
-
-        $manageHead = Template::Load("manage/head.html");
-        //$tbWindowTop = Template::Load("manage/tbwindow_top.html");
-        //$tbWindowBottom = Template::Load("manage/tbwindow_bot.html");
-
-        $replace_arr = array(
-            "{manage_head}" => $manageHead
-                //"{tbwindow_top}" => $tbWindowTop,
-                //"{tbwindow_bot}" => $tbWindowBottom
-        );
-        $tempContent = strtr($tempContent, $replace_arr);
+        $templateName = self::GetTemplateName();
+        $selectTemplate = Template::Load("selecttemplate.html","common");
         $domain = null;
         require ROOTPATH . '/FrameWork1/SystemInc/domain.inc.php';
+        $tempContent = str_ireplace("{rootpath}", ROOTPATH, $tempContent);
+        $tempContent = str_ireplace("{icmsdomain}", $domain['icms'], $tempContent);
+        $tempContent = str_ireplace("{funcdomain}", $domain['func'], $tempContent);
+        $tempContent = str_ireplace("{usercenterdomain}", $domain['user'], $tempContent);
+        $tempContent = str_ireplace("{templatename}", $templateName, $tempContent);
+        $tempContent = str_ireplace("{selecttemplate}", $selectTemplate, $tempContent);      
+    }
 
-        $replace_arr = array(
-            "{rootpath}" => ROOTPATH,
-            "{icmsdomain}" => $domain['icms'],
-            "{funcdomain}" => $domain['func'],
-            "{usercenterdomain}" => $domain['user']
-        );
-
-        $tempContent = strtr($tempContent, $replace_arr);
+    /**
+     * 取得后台管理员使用的模板名称
+     * @return string 模板名称
+     */
+    private function GetTemplateName() {
+        $templateName = Control::GetAdminUserTemplateName();
+        if(strlen($templateName)<=0){
+            $templateName = "default";
+        }
+        return $templateName;
     }
 
 }

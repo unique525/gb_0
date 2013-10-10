@@ -36,6 +36,9 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $adminLeftUserManageData = new AdminLeftUserManageData();
                     $result = $adminLeftUserManageData->Gen();
                     break;
+                case "settemplate":
+                    self::SetTemplate();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
@@ -79,6 +82,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
+    private function SetTemplate(){
+        $templateName = Control::GetRequest("tn", "default");
+        Control::SetAdminUserTemplateName($templateName);
+    }
 }
 
 ?>
