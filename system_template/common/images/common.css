@@ -1,5 +1,7 @@
-.template_default{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#61AFB9;}
-.template_deepblue{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#52596B;}
+.template_default{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#61AFB9;cursor:pointer;}
+.template_default_selected{float:left;width:10px;height:10px;margin-left:4px;margin-top:6px;border:3px solid #ffffff;background:#61AFB9;cursor:pointer;}
+.template_deepblue{float:left;width:14px;height:14px;margin-left:4px;margin-top:6px;border:1px solid #ffffff;background:#52596B;cursor:pointer;}
+.template_deepblue_selected{float:left;width:10px;height:10px;margin-left:4px;margin-top:6px;border:3px solid #ffffff;background:#52596B;cursor:pointer;}
 
 
 

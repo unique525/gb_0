@@ -56,7 +56,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $adminUserName = Control::GetAdminUserName();
         $clientIp = Control::GetIp();
 
-        $tempContent = Template::Load("manage/default.html");
+        $tempContent = Template::Load("manage/default.html","common");
         parent::ReplaceFirst($tempContent);
 
         $tempContent = str_ireplace("{adminuserid}", $adminUserId, $tempContent);

@@ -74,7 +74,7 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
      * @return string 模板内容页面
      */
     private function GenCreate() {
-        $tempContent = Template::Load("document" . DIRECTORY_SEPARATOR . "documentchannel_deal.html");
+        $tempContent = Template::Load("document/documentchannel_deal.html","common");
         $parentId = Control::GetRequest("cid", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 

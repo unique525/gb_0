@@ -82,9 +82,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         //load template
         $documentChannelType = $documentChannelManageData->GetDocumentChannelType($documentChannelId);
         if ($documentChannelType === 1) {
-            $tempContent = Template::Load("document/documentnews_list.html");
+            $tempContent = Template::Load("document/documentnews_list.html","common");
         } else {
-            $tempContent = Template::Load("document/documentnews_slider_list.html");
+            $tempContent = Template::Load("document/documentnews_slider_list.html","common");
         }
 
         parent::ReplaceFirst($tempContent);

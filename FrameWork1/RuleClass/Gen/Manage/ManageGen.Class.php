@@ -36,7 +36,7 @@ class ManageGen extends BaseFrontGen implements IBaseFrontGen {
      */
     private function Login() {
         $result = "";
-        $tempContent = Template::Load("manage/login.html");
+        $tempContent = Template::Load("manage/login.html","common");
 
         parent::ReplaceEnd($tempContent);
 

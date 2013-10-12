@@ -171,7 +171,12 @@ class BaseGen {
         $tempContent = str_ireplace("{funcdomain}", $domain['func'], $tempContent);
         $tempContent = str_ireplace("{usercenterdomain}", $domain['user'], $tempContent);
         $tempContent = str_ireplace("{templatename}", $templateName, $tempContent);
-        $tempContent = str_ireplace("{selecttemplate}", $selectTemplate, $tempContent);      
+        $tempContent = str_ireplace("{selecttemplate}", $selectTemplate, $tempContent);
+        $tempContent = str_ireplace("{templateselected_$templateName}", "_selected", $tempContent);
+        $tempContent = str_ireplace("{templateselected_default}", "", $tempContent);
+        $tempContent = str_ireplace("{templateselected_deepblue}", "", $tempContent);
+        
+        
     }
 
     /**

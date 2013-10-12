@@ -16,7 +16,8 @@ $(function() {
         });
     }
     $("#accord1").tooltip();
-
+    $(".btnsettemplate").tooltip();
+    
     //select site
     $("#sel_site").change(function() {
         var sid_url = $("#sel_site").val();
@@ -105,10 +106,10 @@ $(function() {
             if (parseInt(xml) > 0) {
 
             } else if (parseInt(xml) == -2) {
-                alert("设置失败");
+                //alert("设置失败");
             }
             else {
-                alert("设置失败");
+                //alert("设置失败");
             }
         });
     });
