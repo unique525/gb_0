@@ -693,79 +693,79 @@ class Format {
         return $count;
     }
 
-}
-
-/**
- * 支持所有PHP版本的JSON_ENCODE
- * @param array $arrList 要处理的数组
- * @return string 返回Json格式的字符串
- */
-function FixJsonEncode($arrList) {
-    if (function_exists(json_encode)) { //系统支持json_encode方法
-        return json_encode($arrList);
-    } else {//系统不支持json_encode方法
-        return php_json_encode($arrList);
+    /**
+     * 支持所有PHP版本的JSON_ENCODE
+     * @param array $arrList 要处理的数组
+     * @return string 返回Json格式的字符串
+     */
+    public static function FixJsonEncode($arrList) {
+        if (function_exists(json_encode)) { //系统支持json_encode方法
+            return json_encode($arrList);
+        } else {//系统不支持json_encode方法
+            return self::OldPhpJsonEncode($arrList);
+        }
     }
-}
 
-/**
- * 对老版本PHP使用的json封装方法
- * @param type $arrList
- * @return type
- */
-function php_json_encode($arrList) {
-    if (is_array($arrList) || is_object($arrList)) {
-        $islist = is_array($arrList) && ( empty($arrList) || array_keys($arrList) === range(0, count($arrList) - 1) );
-        if ($islist) {
-            $json = '[' . implode(',', array_map('php_json_encode', $arrList)) . ']';
+    /**
+     * 对老版本PHP使用的json封装方法
+     * @param type $arrList
+     * @return type
+     */
+    private static function OldPhpJsonEncode($arrList) {
+        if (is_array($arrList) || is_object($arrList)) {
+            $islist = is_array($arrList) && ( empty($arrList) || array_keys($arrList) === range(0, count($arrList) - 1) );
+            if ($islist) {
+                $json = '[' . implode(',', array_map('php_json_encode', $arrList)) . ']';
+            } else {
+                $items = Array();
+                foreach ($arrList as $key => $value) {
+                    $items[] = php_json_encode("$key") . ':' . php_json_encode($value);
+                }
+                $json = '{' . implode(',', $items) . '}';
+            }
+        } elseif (is_string($arrList)) {
+            # Escape non-printable or Non-ASCII characters.
+            # I also put the \\ character first, as suggested in comments on the 'addclashes' page.
+            $string = '"' . addcslashes($arrList, "\\\"\n\r\t/" . chr(8) . chr(12)) . '"';
+            $json = '';
+            $len = strlen($string);
+            # Convert UTF-8 to Hexadecimal Codepoints.
+            for ($i = 0; $i < $len; $i++) {
+                $char = $string[$i];
+                $c1 = ord($char);
+                # Single byte;
+                if ($c1 < 128) {
+                    $json .= ( $c1 > 31) ? $char : sprintf("\\u%04x", $c1);
+                    continue;
+                }
+                # Double byte
+                $c2 = ord($string[++$i]);
+                if (($c1 & 32) === 0) {
+                    $json .= sprintf("\\u%04x", ($c1 - 192) * 64 + $c2 - 128);
+                    continue;
+                }
+                # Triple
+                $c3 = ord($string[++$i]);
+                if (($c1 & 16) === 0) {
+                    $json .= sprintf("\\u%04x", (($c1 - 224) << 12) + (($c2 - 128) << 6) + ($c3 - 128));
+                    continue;
+                }
+                # Quadruple
+                $c4 = ord($string[++$i]);
+                if (($c1 & 8 ) === 0) {
+                    $u = (($c1 & 15) << 2) + (($c2 >> 4) & 3) - 1;
+                    $w1 = (54 << 10) + ($u << 6) + (($c2 & 15) << 2) + (($c3 >> 4) & 3);
+                    $w2 = (55 << 10) + (($c3 & 15) << 6) + ($c4 - 128);
+                    $json .= sprintf("\\u%04x\\u%04x", $w1, $w2);
+                }
+            }
         } else {
-            $items = Array();
-            foreach ($arrList as $key => $value) {
-                $items[] = php_json_encode("$key") . ':' . php_json_encode($value);
-            }
-            $json = '{' . implode(',', $items) . '}';
+            # int, floats, bools, null
+            $json = strtolower(var_export($arrList, true));
         }
-    } elseif (is_string($arrList)) {
-        # Escape non-printable or Non-ASCII characters.
-        # I also put the \\ character first, as suggested in comments on the 'addclashes' page.
-        $string = '"' . addcslashes($arrList, "\\\"\n\r\t/" . chr(8) . chr(12)) . '"';
-        $json = '';
-        $len = strlen($string);
-        # Convert UTF-8 to Hexadecimal Codepoints.
-        for ($i = 0; $i < $len; $i++) {
-            $char = $string[$i];
-            $c1 = ord($char);
-            # Single byte;
-            if ($c1 < 128) {
-                $json .= ( $c1 > 31) ? $char : sprintf("\\u%04x", $c1);
-                continue;
-            }
-            # Double byte
-            $c2 = ord($string[++$i]);
-            if (($c1 & 32) === 0) {
-                $json .= sprintf("\\u%04x", ($c1 - 192) * 64 + $c2 - 128);
-                continue;
-            }
-            # Triple
-            $c3 = ord($string[++$i]);
-            if (($c1 & 16) === 0) {
-                $json .= sprintf("\\u%04x", (($c1 - 224) << 12) + (($c2 - 128) << 6) + ($c3 - 128));
-                continue;
-            }
-            # Quadruple
-            $c4 = ord($string[++$i]);
-            if (($c1 & 8 ) === 0) {
-                $u = (($c1 & 15) << 2) + (($c2 >> 4) & 3) - 1;
-                $w1 = (54 << 10) + ($u << 6) + (($c2 & 15) << 2) + (($c3 >> 4) & 3);
-                $w2 = (55 << 10) + (($c3 & 15) << 6) + ($c4 - 128);
-                $json .= sprintf("\\u%04x\\u%04x", $w1, $w2);
-            }
-        }
-    } else {
-        # int, floats, bools, null
-        $json = strtolower(var_export($arrList, true));
+        return $json;
     }
-    return $json;
+
 }
 
 ?>

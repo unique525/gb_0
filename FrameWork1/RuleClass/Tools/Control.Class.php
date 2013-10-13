@@ -51,11 +51,11 @@ class Control {
             if (is_float($_GET[$paramName])) {
                 return floatval($_GET[$paramName]);
             } else if (is_int($_GET[$paramName])) {
-                return getInt($_GET[$paramName]);
+                return intval($_GET[$paramName]);
             } else if (is_array($_GET[$paramName])) {
                 return $_GET[$paramName];
             } else {
-                return getStr($_GET[$paramName]);
+                return stripslashes($_GET[$paramName]);
             }
         } else {
             return $defaultValue;
@@ -417,20 +417,5 @@ class Control {
             return $isMobile;
         }
     }
-
 }
-
-function getInt($number) {
-    return intval($number);
-}
-
-function getStr($string) {
-    //if (!get_magic_quotes_gpc()) {
-    //    $string = addslashes($string);
-    //$string = mysql_real_escape_string($string);
-    //}
-    $string = stripslashes($string);
-    return $string;
-}
-
 ?>
