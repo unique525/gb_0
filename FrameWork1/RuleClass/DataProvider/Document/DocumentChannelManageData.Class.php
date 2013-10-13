@@ -1,13 +1,9 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of DocumentChannelManageData
- *
+ * 后台频道数据类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Document
  * @author zhangchi
  */
 class DocumentChannelManageData extends BaseManageData {
