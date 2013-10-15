@@ -10,12 +10,13 @@ class ForumDataManage extends BaseManageData {
     /**
      * 表名
      */
+
     const tableName = "cst_forum";
     /**
      * 表关键字段名
      */
     const tableIdName = "ForumId";
-    
+
     /**
      * 新增
      * @param string $forumPic 论坛图标网址
@@ -28,24 +29,19 @@ class ForumDataManage extends BaseManageData {
         return $result;
     }
 
-   
     /**
      * 修改
-     * @param type $forumId
-     * @param type $forumPic
+     * @param int $forumId
+     * @param string $forumPic
      * @return type
      */
     public function Modify($forumId, $forumPic = "") {
-        if (strlen($forumPic) > 0) {
-            self::UpdateForumPic($forumId, $forumPic);
-        }
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $forumPic, $dataProperty);
+        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $forumId, $dataProperty, "ForumPic", $forumPic);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
-    
-    
+
 }
 
 ?>

@@ -1,13 +1,9 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of ForumGen
- *
+ * 前台论坛生成类 
+ * @category iCMS
+ * @package iCMS_Rules_Gen_Forum
  * @author zhangchi
  */
 class ForumGen {

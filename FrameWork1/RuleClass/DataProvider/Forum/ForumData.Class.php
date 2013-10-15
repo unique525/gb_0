@@ -62,14 +62,14 @@ class ForumData extends BaseFrontData {
 
     /**
      * 根据ForumId取得SiteId
-     * @param type $ForumId
+     * @param type $forumId
      * @return type 
      */
-    public function GetSiteId($ForumId) {
-        if ($ForumId > 0) {
+    public function GetSiteId($forumId) {
+        if ($forumId > 0) {
             $dataProperty = new DataProperty();
             $sql = "SELECT SiteId FROM " . self::tableName . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $ForumId);
+            $dataProperty->AddField("ForumId", $forumId);
             $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
             return $result;
         }
