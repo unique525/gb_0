@@ -12,10 +12,11 @@ class Template {
      * 读取模板内容
      * @param string $templateFileUrl 模板文件路径
      * @param string $templateName 模板名称
+     * @param string $templatePath 模板路径
      * @return string 模板内容
      */
-    public static function Load($templateFileUrl, $templateName = "") {
-        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName) . '/' . $templateFileUrl;
+    public static function Load($templateFileUrl, $templateName = "", $templatePath = "system_template") {
+        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName,$templatePath) . '/' . $templateFileUrl;
         if (!file_exists($filePath)) {
             die("can not found template file:" . $filePath);
         }
@@ -28,12 +29,17 @@ class Template {
         return $tempContent;
     }
 
-    
-    private static function GetTempLateUrl($templateName) {
+    /**
+     * 
+     * @param string $templateName
+     * @param string $templatePath
+     * @return string 
+     */
+    private static function GetTempLateUrl($templateName,$templatePath = "system_template") {
         if (!empty($templateName)) {
-            return 'system_template/'.$templateName;
+            return $templatePath.'/'.$templateName;
         } else {
-            return 'system_template/default';
+            return $templatePath.'/default';
         }
     }
 

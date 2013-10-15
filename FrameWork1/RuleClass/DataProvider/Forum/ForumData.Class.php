@@ -140,18 +140,6 @@ class ForumData extends BaseFrontData {
         return $_result;
     }
 
-    /**
-     * 取得上级版块名称
-     * @param <type> $TableIDValue
-     * @return <type>
-     */
-    public function GetParentNameBYForumID($TableIDValue) {
-        $_dataProperty = new DataProperty();
-        $_sql = "SELECT forumname FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=(SELECT parentid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName . ")";
-        $_dataProperty->AddField(self::tableIdName, $TableIDValue);
-        $_result = $this->dbOperator->ReturnString($_sql, $_dataProperty);
-        return $_result;
-    }
 
 }
 

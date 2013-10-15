@@ -41,6 +41,21 @@ class ForumDataManage extends BaseManageData {
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
+    
+    
+    /**
+     * 取得上级版块名称
+     * @param int $forumId
+     * @return string 上级版块名称
+     */
+    public function GetParentName($forumId) {
+        $dataProperty = new DataProperty();
+        $sql = "SELECT ForumName FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=(SELECT parentid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName . ")";
+        $dataProperty->AddField(self::tableIdName, $forumId);
+        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        return $result;
+    }
+    
 
 }
 

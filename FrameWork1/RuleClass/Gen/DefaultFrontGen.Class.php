@@ -23,7 +23,11 @@ class DefaultFrontGen extends BaseFrontGen implements IBaseFrontGen {
             case "common":
                 $commonFrontGen = new CommonFrontGen();
                 $result = $commonFrontGen->GenFront();
-                break;                
+                break;
+            case "forum":
+                $forumGen = new ForumGen();
+                $result = $forumGen->GenFront();
+                break;
         }
         return $result;
     }
