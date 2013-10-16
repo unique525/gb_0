@@ -1,8 +1,9 @@
 <?php
+
 /**
  * 数据库对象化映射类
  * @category iCMS
- * @package iCMS_Rules_DataBase
+ * @package iCMS_FrameWork1_RuleClass_DataBase
  * @author zhangchi
  */
 class DataProperty {

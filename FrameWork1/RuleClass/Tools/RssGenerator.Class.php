@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class RSSGenerator {
+class RssGenerator {
 
     /**
      * 生成RSS数据

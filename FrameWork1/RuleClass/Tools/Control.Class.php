@@ -51,11 +51,11 @@ class Control {
             if (is_float($_GET[$paramName])) {
                 return floatval($_GET[$paramName]);
             } else if (is_int($_GET[$paramName])) {
-                return getInt($_GET[$paramName]);
+                return intval($_GET[$paramName]);
             } else if (is_array($_GET[$paramName])) {
                 return $_GET[$paramName];
             } else {
-                return getStr($_GET[$paramName]);
+                return stripslashes($_GET[$paramName]);
             }
         } else {
             return $defaultValue;
@@ -121,7 +121,7 @@ class Control {
     }
 
     /**
-     * 删除用户COOKIE
+     * 删除会员COOKIE
      */
     public static function DelUserCookie() {
         setcookie("UID", 0, time() - 1);
@@ -129,7 +129,7 @@ class Control {
     }
 
     /**
-     * 写入后台帐号cookie
+     * 写入后台管理员cookie
      * @param int $adminUserId 后台帐号id
      * @param string $adminUserName 后台帐号名
      * @param int $hour 保存时间（单位小时），默认24小时
@@ -148,8 +148,8 @@ class Control {
     }
 
     /**
-     * get admin user id by cookie
-     * @return int 返回后台帐号用户id
+     * 从cookie中取得后台管理员id
+     * @return int 返回后台管理员id
      */
     public static function GetAdminUserId() {
         if (isset($_COOKIE["ICMSADMINUSERID"])) {
@@ -223,26 +223,6 @@ class Control {
             $ip = "unknown";
         }
         return ($ip);
-    }
-
-    /**
-     * 设置购物车cookieid
-     */
-    public static function SetCookieID() {
-        $cookieid = md5(uniqid(rand()));
-        setcookie("COOKIEID", $cookieid, time() + 720 * 3600);
-    }
-
-    /**
-     * 获取购物车cookieid
-     * @return string 返回 cookieid的cookie值 
-     */
-    public static function GetCookieId() {
-        if (isset($_COOKIE["COOKIEID"])) {
-            return $_COOKIE["COOKIEID"];
-        } else {
-            return "";
-        }
     }
 
     /**
@@ -417,20 +397,5 @@ class Control {
             return $isMobile;
         }
     }
-
 }
-
-function getInt($number) {
-    return intval($number);
-}
-
-function getStr($string) {
-    //if (!get_magic_quotes_gpc()) {
-    //    $string = addslashes($string);
-    //$string = mysql_real_escape_string($string);
-    //}
-    $string = stripslashes($string);
-    return $string;
-}
-
 ?>

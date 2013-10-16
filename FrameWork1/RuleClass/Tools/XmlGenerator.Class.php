@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class XMLGenerator {
+class XmlGenerator {
 
     /**
      * 生成XML数据（只针对documentnews表）

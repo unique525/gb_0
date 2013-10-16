@@ -1,0 +1,17 @@
+body{margin:0 auto;}
+td,p{word-break:break-all;word-wrap:break-word;}
+legend{font-weight:bold;margin-bottom:8px;margin-top:5px;}
+form{ margin:0; border:0;}
+input,select{vertical-align:middle;}
+img{border:0;}
+iframe{border:0; margin:0;clear:both;}
+div{margin:0 auto;}
+a{text-decoration:none;}
+ul{list-style-type:none;width:100%;margin:0;padding:0;border:0;}
+*{padding: 0; margin: 0;}
+
+.spe{clear:left;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
+.speall{clear:both;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
+
+
+

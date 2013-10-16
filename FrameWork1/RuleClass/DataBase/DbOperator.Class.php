@@ -3,7 +3,7 @@
 /**
  * MySQL数据库操作类
  * @category iCMS
- * @package iCMS_Rules_DataBase
+ * @package iCMS_FrameWork1_RuleClass_DataBase
  * @author zhangchi
  */
 class DbOperator {

@@ -52,7 +52,7 @@ foreach ($arrFiles as $fileName) {
 
 /**
  * 输入文件夹地址，迭代循环返回此文件夹下所有文件名的列表数组
- * @param type $dir
+ * @param string $dir
  * @return array 
  */
 function getFileNames($dir) {
@@ -63,8 +63,8 @@ function getFileNames($dir) {
 
 /**
  * get_filenames子方法
- * @param type $dir
- * @param type $arrFileNames 
+ * @param string $dir
+ * @param array $arrFileNames 
  */
 function _getFileNames($dir, &$arrFileNames) {
     if (!isset($arrFileNames)) { //没有设置数组时，初始化一下

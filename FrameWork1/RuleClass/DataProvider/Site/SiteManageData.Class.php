@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 站点后台数据类
+ * 后台站点数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
  * @author zhangchi
