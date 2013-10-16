@@ -99,6 +99,27 @@ class DocumentNewsManageData extends BaseManageData {
         }
     }
 
+    /**
+     * 修改锁定状态和时间
+     * @param int $lockEdit 是否锁定
+     * @param int $documentNewsId 文档id
+     * @param int $adminUserId 操作管理员id
+     * @return int 操作结果
+     */
+    public function ModifyLockEdit($lockEdit, $documentNewsId, $adminUserId) {
+        $result = 0;
+        if ($documentNewsId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::tableName . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId";
+            $dataProperty->AddField("LockEdit", $lockEdit);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $dataProperty->AddField("LockEditAdminUserId", $adminUserId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Get Info////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
@@ -136,6 +157,45 @@ class DocumentNewsManageData extends BaseManageData {
      */
     public function GetState($documentNewsId){
         $sql = "SELECT State FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档是否锁定编辑
+     * @param int $documentNewsId 文档id
+     * @return int 是否锁定编辑 0:未锁定 1:已锁定
+     */
+    public function GetLockEdit($documentNewsId){
+        $sql = "SELECT LockEdit FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档锁定编辑的时间
+     * @param int $documentNewsId 文档id
+     * @return string 锁定编辑的时间
+     */
+    public function GetLockEditDate($documentNewsId){
+        $sql = "SELECT LockEditDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        return $result;
+    }
+    
+    /**
+     * 取得文档锁定编辑的操作管理员id
+     * @param int $documentNewsId 文档id
+     * @return int 锁定编辑的操作管理员id
+     */
+    public function GetLockEditAdminUserId($documentNewsId){
+        $sql = "SELECT LockEditAdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);

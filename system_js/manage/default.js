@@ -70,8 +70,6 @@ $(function() {
     if (obj_sel_site.length > 0) {
         $("#sel_site").change();
         //changedis(nowselectchannelid);
-        //load css
-        loadcss('..', 'font14.css');
         //load usermanage
         var siteId = G_NowSiteId;
         /*
