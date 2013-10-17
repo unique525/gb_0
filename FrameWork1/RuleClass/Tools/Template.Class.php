@@ -379,21 +379,21 @@ class Template {
     private static function FormatColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
         if (strtolower($columnname) == "state") {
             $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
+            //$columnvalue = Format::ToState($columnvalue, $listName);
         }
         //Select类型替换===Ljy
         if ((strtolower($columnname) == "tasktype") || (strtolower($columnname) == "userarea") || (strtolower($columnname) == "usertype")) {
             $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToSelectType($columnvalue, $listName);
+            //$columnvalue = Format::ToSelectType($columnvalue, $listName);
         }
 
         if (strtolower($columnname) == "threadstate") {
             $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
+            //$columnvalue = Format::ToState($columnvalue, $listName);
         }
         if (strtolower($columnname) == "threadid") {
             $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToUrl($columnvalue, $listName);
+            //$columnvalue = Format::ToUrl($columnvalue, $listName);
         }
 
         if (strtolower($columnname) == "useralbumtag") {

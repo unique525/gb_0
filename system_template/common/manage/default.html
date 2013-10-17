@@ -19,9 +19,8 @@
         <script type="text/javascript" src="{rootpath}/system_js/manage/loadtabs.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/loadtree.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/default.js"></script>
-        <script>
+        <script type="text/javascript">
             var G_TemplateName = "{templatename}";
-            
         </script>
 
         <style type="text/css">
@@ -91,6 +90,7 @@
             var leftNavCount = parseInt('{adminleftnavcount}') - 1;
             var leftTreeHeight = $(window).height() - 98 - 29 * leftNavCount;
             $("#lefttree").css("height", leftTreeHeight);
+            $("#forummanage").css("height", leftTreeHeight + 26);
         </script>
     </body>
 </html>

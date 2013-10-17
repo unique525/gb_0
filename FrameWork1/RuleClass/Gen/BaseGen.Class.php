@@ -190,6 +190,33 @@ class BaseGen {
         }
         return $templateName;
     }
+    
+    
+    /**
+     * 是否是安全IP
+     * @return boolean 
+     */
+    public function IsSecurityIp() {
+        $ip = Control::GetIP();
+        $isInnerIp = false; //是否安全IP
+        //
+        //安全登录IP，不需要短信认证
+        //$SecurityIP = array('130.1.0', '20.20.20', '40.40.40');
+        $securityIp = null;
+        require_once ROOTPATH . '/inc/securityip.inc.php';
+        if (empty($securityIp)) { //没有设置安全IP时，默认都安全
+            $isInnerIp = true;
+        } else {
+            for ($i = 0; $i < count($securityIp); $i++) {
+                if (stripos($ip, $securityIp[$i]) === 0) {
+                    $isInnerIp = true;
+                    break;
+                }
+            }
+        }
+        return $isInnerIp;
+    }
+
 
 }
 

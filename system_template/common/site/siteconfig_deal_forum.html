@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link id="css_font" type="text/css" href="/system_template/{templatename}/images/font14.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/system_js/common.js"></script>
+        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/system_js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/ajaxfileupload.js"></script>
+        <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
+
+        <script type="text/javascript">
+            var editor1;
+            var editor2;
+            $(function() {
+                editor1 = $('#cfg_ForumTopinfo_2').xheditor();
+                editor2 = $('#cfg_ForumBotinfo_2').xheditor();
+                $('#tabs').tabs();
+            });
+
+            function sub() {
+                $('#mainform').submit();
+            }
+
+
+            function ajaxForumLogoImageUpload() {
+                $("#ForumLogoImageloading").ajaxStart(function() {
+                    $(this).show();
+                }).ajaxComplete(function() {
+                    $(this).hide();
+                });
+
+                $.ajaxFileUpload({
+                    url: '{rootpath}/common/index.php?a=upload&ifn=ForumLogoImageToUpload&sid={siteid}&type=16&returntype=0',
+                    secureuri: false,
+                    fileElementId: 'ForumLogoImageToUpload',
+                    dataType: 'json',
+                    success: function(data, status) {
+                        if (typeof (data.error) != 'undefined') {
+                            if (data.error != '') {
+                                $("#resulttable").html(data.error);
+                                $("#dialog_resultbox").dialog({
+                                });
+                            }
+                            else {
+                                $("#cfg_ForumLogoImage_0").val(data['fileurl']);
+                                $("#preview_ForumLogoImage").attr("href", data['fileurl']);
+                            }
+                        }
+                    },
+                    error: function(data, status, e) {
+                        alert(e);
+                    }
+                });
+                return false;
+
+            }
+
+            /**
+             * ajax上传
+             */
+            function ajaxForumBackGroundUpload() {
+                $("#ForumBackgroundloading")
+                        .ajaxStart(function() {
+                    $(this).show();
+                })
+                        .ajaxComplete(function() {
+                    $(this).hide();
+                });
+
+                $.ajaxFileUpload({
+                    url: '{rootpath}/common/index.php?a=upload&ifn=ForumBackgroundToUpload&sid={siteid}&type=16&returntype=0',
+                    secureuri: false,
+                    fileElementId: 'ForumBackgroundToUpload',
+                    dataType: 'json',
+                    success: function(data, status) {
+                        if (typeof (data.error) !== 'undefined') {
+                            if (data.error !== '') {
+                                $("#resulttable").html(data.error);
+                                $("#dialog_resultbox").dialog({
+                                });
+                            }
+                            else {
+                                $("#cfg_ForumBackground_0").val(data['fileurl']);
+                                $("#preview_ForumBackground").attr("href", data['fileurl']);
+                            }
+                        }
+                    },
+                    error: function(data, status, e) {
+                        alert(e);
+                    }
+                })
+                return false;
+
+            }
+
+
+            function ajaxForumTopinfoUpload() {
+                $("#ForumTopinfoloading")
+                        .ajaxStart(function() {
+                    $(this).show();
+                })
+                        .ajaxComplete(function() {
+                    $(this).hide();
+                });
+
+                $.ajaxFileUpload({
+                    url: '{rootpath}/common/index.php?a=upload&ifn=ForumTopinfoToUpload&sid={siteid}&type=16&returntype=0',
+                    secureuri: false,
+                    fileElementId: 'ForumTopinfoToUpload',
+                    dataType: 'json',
+                    success: function(data, status) {
+                        if (typeof (data.error) !== 'undefined') {
+                            if (data.error !== '') {
+                                $("#resulttable").html(data.error);
+                                $("#dialog_resultbox").dialog({
+                                });
+                            }
+                            else {
+                                var outfile = tofile_html(data['fileurl']);
+
+                                editor1.appendHTML(outfile);
+                            }
+                        }
+                    },
+                    error: function(data, status, e) {
+                        alert(e);
+                    }
+                })
+                return false;
+
+            }
+
+
+            function ajaxForumBotinfoUpload() {
+                $("#ForumBotinfoloading")
+                        .ajaxStart(function() {
+                    $(this).show();
+                })
+                        .ajaxComplete(function() {
+                    $(this).hide();
+                });
+
+                $.ajaxFileUpload({
+                    url: '{rootpath}/common/index.php?a=upload&ifn=ForumBotinfoToUpload&sid={siteid}&type=16&returntype=0',
+                    secureuri: false,
+                    fileElementId: 'ForumBotinfoToUpload',
+                    dataType: 'json',
+                    success: function(data, status) {
+                        if (typeof (data.error) != 'undefined') {
+                            if (data.error != '') {
+                                $("#resulttable").html(data.error);
+                                $("#dialog_resultbox").dialog({
+                                });
+                            }
+                            else {
+                                var outfile = tofile_html(data['fileurl']);
+
+                                editor2.appendHTML(outfile);
+                            }
+                        }
+                    },
+                    error: function(data, status, e) {
+                        alert(e);
+                    }
+                })
+                return false;
+
+            }
+        </script>
+    </head>
+    <body>
+        <div>TODO write content</div>
+    </body>
+</html>

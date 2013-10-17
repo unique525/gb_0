@@ -39,6 +39,14 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                 case "settemplate":
                     self::SetTemplate();
                     break;
+                case "site":                    
+                    $siteManageGen = new SiteManageGen();
+                    $result = $siteManageGen->Gen();
+                    break;
+                case "siteconfig":
+                    $siteConfigManageGen = new SiteConfigManageGen();
+                    $result = $siteConfigManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
@@ -78,6 +86,9 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $arrSiteList = $siteManageData->GetList($adminUserId);
         Template::ReplaceList($tempContent, $arrSiteList, $listName);
 
+        $forumAdminLeftNavTemplateContent = Template::Load("manage/forumadminleftnav.html","common");
+        $tempContent = str_ireplace("{forumadminleftnav}", $forumAdminLeftNavTemplateContent, $tempContent);
+        
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }

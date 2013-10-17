@@ -9,8 +9,8 @@
 #leftpane {width:180px;min-width:180px;overflow:hidden;}
 #leftpane .aheader{width:100%;}
 #leftpane .ha{height:29px; line-height:29px;font-size:15px;color:#ffffff;cursor:pointer;display:block;background:#868DA2;border-bottom:1px solid #ffffff;}
-#leftpane .ha:hover {background:#C8CBD5;color:#ffffff;}
-#leftpane .ha.selected {background:#C8CBD5;color:#ffffff;}
+#leftpane .ha:hover {background:#868DA2;color:#ffffff;}
+#leftpane .ha.selected {background:#868DA2;color:#ffffff;}
 #maincontent .vsplitbar{width:2px;cursor:e-resize;cursor:col-resize;background:#ffffff;}
 
 #rightpane {width:100%;background:#f5f5f5;}
