@@ -33,11 +33,11 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenSet() {
         $siteId = Control::GetRequest("sid", 0);
-        $type = Control::GetRequest("type", 0);
+        $type = intval(Control::GetRequest("type", 0));        
         if ($type == 1) { //forum
-            $tempContent = Template::Load("site/siteconfig_deal_forum.tpl");
+            $tempContent = Template::Load("site/siteconfig_deal_forum.html", "common");
         } else {
-            $tempContent = Template::Load("site/siteconfig_deal.html");
+            $tempContent = Template::Load("site/siteconfig_deal.html", "common");
         }
         $nowAdminUserId = Control::GetAdminUserId();
         parent::ReplaceFirst($tempContent);

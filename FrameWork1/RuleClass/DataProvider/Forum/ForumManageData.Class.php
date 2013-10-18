@@ -10,7 +10,6 @@ class ForumDataManage extends BaseManageData {
     /**
      * 表名
      */
-
     const tableName = "cst_forum";
     /**
      * 表关键字段名

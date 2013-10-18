@@ -42,28 +42,57 @@ class ForumData extends BaseFrontData {
         return $result;
     }
 
-    public function GetList($SiteID, $ForumRank) {
+    public function GetList($siteId, $forumRank) {
         $sql = "SELECT * FROM " . self::tableName . " WHERE ForumRank=:ForumRank AND SiteID=:SiteID ORDER BY sort DESC";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ForumRank", $ForumRank);
-        $dataProperty->AddField("SiteID", $SiteID);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
-        return $result;
-    }
-
-    public function GetListByParentID($siteid, $parentid) {
-        $sql = "SELECT * FROM " . self::tableName . " WHERE parentid=:parentid AND SiteID=:siteid ORDER BY sort DESC";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("parentid", $parentid);
-        $dataProperty->AddField("siteid", $siteid);
+        $dataProperty->AddField("ForumRank", $forumRank);
+        $dataProperty->AddField("SiteID", $siteId);
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
 
     /**
+     * 
+     * @param type $siteId
+     * @param type $parentId
+     * @return type
+     */
+    public function GetListByParentId($siteId, $parentId) {
+        $sql = "SELECT * FROM " . self::tableName . " WHERE parentid=:parentid AND SiteID=:siteid ORDER BY sort DESC";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("parentid", $parentId);
+        $dataProperty->AddField("siteid", $siteId);
+        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        return $result;
+    }
+    
+    public function GetListPager($pageBegin, $pageSize, &$allCount, $state = -1) {
+        $searchSql = "";
+        $dataProperty = new DataProperty();
+        if ($state >= 0) {
+            $searchSql .= " AND f.state=:state ";
+            $dataProperty->AddField("state", $state);
+        } else {
+            $searchSql .= " ";
+        }
+        $sql = "SELECT
+            f.forumid,f.state,f.forumname,f.forumaccess
+            FROM
+            " . self::tableName . " f
+            WHERE f.forumid>0  " . $searchSql . " ORDER BY f.sort DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        //统计总数
+        $sql = "";
+        $sql = "SELECT count(*) FROM " . self::tableName . " f WHERE f.forumid>0 " . $searchSql;
+        $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+
+
+    /**
      * 根据ForumId取得SiteId
-     * @param type $forumId
-     * @return type 
+     * @param int $forumId 版块id
+     * @return int SiteId
      */
     public function GetSiteId($forumId) {
         if ($forumId > 0) {
@@ -77,14 +106,14 @@ class ForumData extends BaseFrontData {
 
     /**
      * 根据ForumId取得ForumRule
-     * @param type $ForumId
-     * @return type 
+     * @param int $forumId 版块id
+     * @return string ForumRule 
      */
-    public function GetForumRule($ForumId) {
-        if ($ForumId > 0) {
+    public function GetForumRule($forumId) {
+        if ($forumId > 0) {
             $dataProperty = new DataProperty();
             $sql = "SELECT ForumRule FROM " . self::tableName . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $ForumId);
+            $dataProperty->AddField("ForumId", $forumId);
             $result = $this->dbOperator->ReturnString($sql, $dataProperty);
             return $result;
         }
@@ -92,52 +121,45 @@ class ForumData extends BaseFrontData {
 
     /**
      * 根据ForumId取得审核类型
-     * @param type $ForumId
-     * @return type 
+     * @param int $forumId 版块id
+     * @return int 审核类型
      */
-    public function GetForumAuditType($ForumId) {
-        if ($ForumId > 0) {
+    public function GetForumAuditType($forumId) {
+        if ($forumId > 0) {
             $dataProperty = new DataProperty();
             $sql = "SELECT ForumAuditType FROM " . self::tableName . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $ForumId);
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+            return $result;
+        }
+    }
+    
+    /**
+     * 取得版块每排显示数量
+     * @param int $forumId 版块id
+     * @return int 版块每排显示数量
+     */
+    public function GetShowColumnCount($forumId) {
+        if ($forumId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "SELECT ShowColumnCount FROM " . self::tableName . " WHERE ForumId=:ForumId";
+            $dataProperty->AddField("ForumId", $forumId);
             $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
             return $result;
         }
     }
 
-    public function GetListPager($PageBegin, $pageSize, &$_allCount, $State = -1) {
-        $_searchsql = "";
-        $_dataProperty = new DataProperty();
-        if ($State >= 0) {
-            $_searchsql .= " AND f.state=:state ";
-            $_dataProperty->AddField("state", $State);
-        } else {
-            $_searchsql .= " ";
-        }
-        $_sql = "SELECT
-            f.forumid,f.state,f.forumname,f.forumaccess
-            FROM
-            " . self::tableName . " f
-            WHERE f.forumid>0  " . $_searchsql . " ORDER BY f.sort DESC LIMIT " . $PageBegin . "," . $pageSize . "";
-        $_result = $this->dbOperator->ReturnArray($_sql, $_dataProperty);
-        //统计总数
-        $_sql = "";
-        $_sql = "SELECT count(*) FROM " . self::tableName . " f WHERE f.forumid>0 " . $_searchsql;
-        $_allCount = $this->dbOperator->ReturnInt($_sql, $_dataProperty);
-        return $_result;
-    }
-
     /**
-     * 根据$TableIDValue到得编辑时所需的信息
-     * @param <type> $TableIDValue
-     * @return <type>
+     * 取得一条记录
+     * @param int $forumId 版块id
+     * @return array 一条记录
      */
-    public function GetOne($TableIDValue) {
-        $_dataProperty = new DataProperty();
-        $_sql = "SELECT forumid,parentid,forumrank,forumname,forumtype,forumaccess,forumguestaccess,forummode,forumaudittype,forumpic,foruminfo,forumrule,forumadcontent,sort,showonlineuser,autooptopic,autoaddtopictitlepre,usernamecolor,closeupload,state,siteid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName;
-        $_dataProperty->AddField(self::tableIdName, $TableIDValue);
-        $_result = $this->dbOperator->ReturnRow($_sql, $_dataProperty);
-        return $_result;
+    public function GetOne($forumId) {
+        $dataProperty = new DataProperty();
+        $sql = "SELECT forumid,parentid,forumrank,forumname,forumtype,forumaccess,forumguestaccess,forummode,forumaudittype,forumpic,foruminfo,forumrule,forumadcontent,sort,showonlineuser,autooptopic,autoaddtopictitlepre,usernamecolor,closeupload,state,siteid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName;
+        $dataProperty->AddField(self::tableIdName, $forumId);
+        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
+        return $result;
     }
 
 

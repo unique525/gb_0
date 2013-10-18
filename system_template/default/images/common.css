@@ -17,6 +17,7 @@ a{color:#3F7578;text-decoration:none;}
 .inputprice{border:solid 1px #d5d5d5;color:#38676D;padding:2px;ime-mode:disabled;}
 
 .selectbox{margin-left:6px;margin-top:3px;margin-bottom:3px;}
+.btn{font-family: "微软雅黑";border:none;color:#ffffff;background:#539A9D;height:28px;line-height:28px;padding-left:10px;padding-right:10px;font-size:14px;cursor:pointer;}
 .btn1{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg1.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
 .btn2{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg2.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
 .btn3{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg3.gif) no-repeat;height:37px;width:60px;padding-bottom:2px;font-size:14px;cursor:pointer;}

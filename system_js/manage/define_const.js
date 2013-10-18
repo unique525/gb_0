@@ -8,7 +8,7 @@ var G_NowId = 0;
 var G_NowPageIndex = 1;
 var G_SelectedDocumentChannelType = 1;
 var G_zTree, G_RightMenu;
-var G_NowSiteId = 1;
+var G_NowSiteId = 0;
 var G_Tabs = null;
 var G_TabUrl = "";
 var G_TabTitle = "";
