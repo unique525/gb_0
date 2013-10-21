@@ -216,6 +216,18 @@ class BaseGen {
         }
         return $isInnerIp;
     }
+    
+    /**
+     * 返回错误内容模板
+     * @param string $errorContent 错误提示内容
+     * @return string 错误内容模板
+     */
+    protected function ShowError($errorContent){
+        $errorTemplate = Template::Load("error.html","common");        
+        $errorTemplate = str_ireplace("{errorcontent}", $errorContent, $errorTemplate);
+        self::ReplaceEnd($errorTemplate);        
+        return $errorTemplate;
+    }
 
 
 }

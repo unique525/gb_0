@@ -42,7 +42,7 @@ class ForumData extends BaseFrontData {
         return $result;
     }
 
-    public function GetList($siteId, $forumRank) {
+    public function GetListByRank($siteId, $forumRank) {
         $sql = "SELECT * FROM " . self::tableName . " WHERE ForumRank=:ForumRank AND SiteID=:SiteID ORDER BY sort DESC";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumRank", $forumRank);

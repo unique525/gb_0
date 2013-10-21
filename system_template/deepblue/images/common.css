@@ -10,6 +10,8 @@ a{color:#52596B;text-decoration:none;}
 /*ul{list-style-type:none;width:100%;margin:0;padding:0;border:0;}*/
 *{padding: 0; margin: 0;}
 
+.errorcontent{font-family: "微软雅黑";border:solid 3px #C8CBD5;background:#E1E2E8;margin:20px;padding:5px;font-size:14px;width:300px;}
+
 .spe{clear:left;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
 .speall{clear:both;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
 .inputbox{border:solid 1px #d5d5d5;color:#52596B;padding:2px;}
@@ -18,17 +20,18 @@ a{color:#52596B;text-decoration:none;}
 
 .selectbox{margin-left:6px;margin-top:3px;margin-bottom:3px;}
 .btn{font-family: "微软雅黑";border:none;color:#ffffff;background:#52596B;height:28px;line-height:28px;padding-left:10px;padding-right:10px;font-size:14px;cursor:pointer;}
-.btn1{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg1.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.btn2{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg2.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.btn3{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg3.gif) no-repeat;height:37px;width:60px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.btn4{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg4.gif) no-repeat;height:37px;width:74px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.btn5{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg5.gif) no-repeat;height:37px;width:74px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.btn6{font-family: "微软雅黑";border:none;color:#539A9D;background:url(manage/btnaddbg6.gif) no-repeat;height:37px;width:74px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn1{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg1.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn2{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg2.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn3{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg3.gif) no-repeat;height:37px;width:60px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn4{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg4.gif) no-repeat;height:37px;width:74px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn5{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg5.gif) no-repeat;height:37px;width:74px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn6{font-family: "微软雅黑";border:none;color:#52596B;background:#C8CBD5;height:37px;width:74px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.btn7{font-family: "微软雅黑";border:none;color:#52596B;background:#C8CBD5;height:24px;width:104px;margin-top:6px;padding-bottom:2px;font-size:14px;cursor:pointer;}
+.linkbtn{margin-left:8px;cursor:pointer;line-height:26px;}
 /*.line{height:26px;line-height:24px;font-size:14px;color:#12539B;}*/
 .speline{border-bottom:dashed 1px #d5d5d5;}
 .speline2{border-bottom:solid 1px #E5E9EC; overflow: hidden; line-height: 25px; height: 25px;}
 .speline3{border-bottom:solid 2px #E5E9EC;}
-
 
 
 #bot_button{width:100%;height:30px;background:url(bot1.jpg) repeat-x;}

@@ -47,6 +47,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $siteConfigManageGen = new SiteConfigManageGen();
                     $result = $siteConfigManageGen->Gen();
                     break;
+                case "forum":
+                    $forumManageGen = new ForumManageGen();
+                    $result = $forumManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;

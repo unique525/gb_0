@@ -55,6 +55,20 @@ class ForumDataManage extends BaseManageData {
         return $result;
     }
     
+    /**
+     * 根据版块等级取得版块列表
+     * @param int $siteId 站点id
+     * @param int $forumRank 版块等级
+     * @return array 版块列表
+     */
+    public function GetListByRank($siteId, $forumRank) {
+        $sql = "SELECT * FROM " . self::tableName . " WHERE ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY sort DESC";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ForumRank", $forumRank);
+        $dataProperty->AddField("SiteId", $siteId);
+        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        return $result;
+    }
 
 }
 

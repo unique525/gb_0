@@ -38,6 +38,23 @@
             </div>
         <div id="maincontent">
             <div id="leftpane">
+                
+                <div id="divselectsite" class="divselectsite_normal">
+                    <cscms id="select_site" type="list">
+                        <item>
+                            <![CDATA[
+                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>
+                            ]]>
+                        </item>
+                        <footer>
+                            <![CDATA[
+                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>                            
+                            <div class="sitecount" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_allcount}"></div>
+                            ]]>
+                        </footer>
+                    </cscms>
+                </div>
+                
                 <div class="aheader" id="accord1">
                     <cscms id="leftnav" type="list">
                         <item>

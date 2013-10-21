@@ -15,8 +15,22 @@ $(function() {
             accessKey: 'I'
         });
     }
-    $("#accord1").tooltip();
-    $(".btnsettemplate").tooltip();
+    //$("#accord1").tooltip();
+    //$(".btnsettemplate").tooltip();
+    
+    $("#divselectsite").click(function(){
+        if($(this).attr("class") === "divselectsite_normal"){
+            $(this).attr("class","divselectsite_clicked");
+            var itemHeight = parseInt($(this).css("height"));
+            var siteCount = $(".sitecount").attr("idvalue");
+            //alert(siteCount);
+            var newHeight = itemHeight * siteCount;
+            $(this).css("height",newHeight+"px");
+        }else{
+            $(this).attr("class","divselectsite_normal");
+            //$(this).css("height","20px");
+        }
+    });
     
     //select site
     $("#sel_site").change(function() {
@@ -50,7 +64,9 @@ $(function() {
     //$(".sitename").html($("#sel_site").find("option:selected").text());
     //$(".sitename").attr("title",$("#sel_site").val());
 
-
+    if($("#showsitelist").length > 0){
+        $("#showsitelist").append($("#divselectsite"));
+    }
 
     var objAccord1 = jQuery('#accord1');
     if (objAccord1.length > 0) {
