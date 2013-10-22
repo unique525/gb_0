@@ -16,7 +16,7 @@ class Template {
      * @return string 模板内容
      */
     public static function Load($templateFileUrl, $templateName = "", $templatePath = "system_template") {
-        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName,$templatePath) . '/' . $templateFileUrl;
+        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName, $templatePath) . '/' . $templateFileUrl . '.php';
         if (!file_exists($filePath)) {
             die("can not found template file:" . $filePath);
         }
@@ -35,11 +35,11 @@ class Template {
      * @param string $templatePath
      * @return string 
      */
-    private static function GetTempLateUrl($templateName,$templatePath = "system_template") {
+    private static function GetTempLateUrl($templateName, $templatePath = "system_template") {
         if (!empty($templateName)) {
-            return $templatePath.'/'.$templateName;
+            return $templatePath . '/' . $templateName;
         } else {
-            return $templatePath.'/default';
+            return $templatePath . '/default';
         }
     }
 
@@ -329,7 +329,7 @@ class Template {
         if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
             $list = str_ireplace("{c_url}", $columns["DirectUrl"], $list); //直接输出url
         } else {
-            $list = str_ireplace("{c_url}", "/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html", $list);            
+            $list = str_ireplace("{c_url}", "/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html", $list);
             //$list = str_ireplace("{c_url}", "{pubrootpath}/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html", $list);
         }
         foreach ($columns as $columnname => $columnvalue) {

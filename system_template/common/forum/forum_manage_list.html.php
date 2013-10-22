@@ -24,6 +24,51 @@
                     }
                 });
 
+                $(".formatstate").each(function(i, n) {
+                    var state = parseInt($(this).text());
+                    switch (state) {
+                        case 0:
+                            $(this).text("正常");
+                            break;
+                        case 1:
+                            $(this).text("禁止访问");
+                            break;
+                        case 2:
+                            $(this).text("暂时关闭");
+                            break;
+                        case 3:
+                            $(this).text("按用户加密");
+                            break;
+                        case 4:
+                            $(this).text("按身份加密");
+                            break;
+                        case 5:
+                            $(this).text("按发帖加密");
+                            break;
+                        case 6:
+                            $(this).text("按积分加密");
+                            break;
+                        case 7:
+                            $(this).text("按金钱加密");
+                            break;
+                        case 8:
+                            $(this).text("按魅力加密");
+                            break;
+                        case 9:
+                            $(this).text("按经验加密");
+                            break;
+                        case 10:
+                            $(this).text("禁止发帖");
+                            break;
+                        case 100:
+                            $(this).text("已删除");
+                            break;
+                        default:
+                            $(this).text("未知状态");
+                            break;
+                    }
+                });
+
                 $(".edit_doc").css("cursor", "pointer");
                 $(".edit_doc").click(function(event) {
                     var docid = $(this).attr('idvalue');
@@ -96,11 +141,11 @@
                 <tr class="gridtitle">
                     <td style="width: 30px; text-align: center; cursor: pointer;" id="selectall">全</td>
                     <td style="width: 40px; text-align: center;">编辑</td>
-                    <td style="width: 40px; text-align: right;">状态</td>
+                    <td style="width: 90px; text-align: center;">状态</td>
                     <td style="width: 40px;"></td>
                     <td>名称</td>
                     <td style="width: 50px; text-align: center;">排序</td>
-                    <td style="width: 180px;">创建时间</td>
+                    <td style="width: 120px;">版主</td>
                 </tr>
             </table>
             <ul id="sortgrid" style="list-style: none;">

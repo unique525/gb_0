@@ -2,12 +2,12 @@
     $(function() {        
         $("#forumconfig").click(function() {
             G_TabTitle = $(this).html();
-            G_TabUrl = '/default.php?secu=manage&mod=siteconfig&a=set&type=1&sid=' + G_NowSiteId;
+            G_TabUrl = '/default.php?secu=manage&mod=siteconfig&a=set&type=1&siteid=' + G_NowSiteId;
             addTab();
         });
         $("#forumlist").click(function() {
             G_TabTitle = $(this).html();
-            G_TabUrl = '/default.php?secu=manage&mod=forum&a=list&sid=' + G_NowSiteId;
+            G_TabUrl = '/default.php?secu=manage&mod=forum&a=list&siteid=' + G_NowSiteId;
             addTab();
         });
     });

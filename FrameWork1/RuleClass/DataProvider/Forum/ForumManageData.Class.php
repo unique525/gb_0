@@ -6,7 +6,7 @@
  * @package iCMS_Rules_DataProvider_Forum
  * @author zhangchi
  */
-class ForumDataManage extends BaseManageData {
+class ForumManageData extends BaseManageData {
     /**
      * 表名
      */

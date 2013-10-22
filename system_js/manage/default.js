@@ -17,54 +17,40 @@ $(function() {
     }
     //$("#accord1").tooltip();
     //$(".btnsettemplate").tooltip();
-    
-    $("#divselectsite").click(function(){
-        if($(this).attr("class") === "divselectsite_normal"){
-            $(this).attr("class","divselectsite_clicked");
+
+    $("#divselectsite").click(function() {
+        if ($(this).attr("class") === "divselectsite_normal") {
+            $(this).attr("class", "divselectsite_clicked");
             var itemHeight = parseInt($(this).css("height"));
             var siteCount = $(".sitecount").attr("idvalue");
             //alert(siteCount);
             var newHeight = itemHeight * siteCount;
-            $(this).css("height",newHeight+"px");
-        }else{
-            $(this).attr("class","divselectsite_normal");
+            $(this).css("height", newHeight + "px");
+        } else {
+            $(this).attr("class", "divselectsite_normal");
             //$(this).css("height","20px");
         }
     });
-    
-    //select site
-    $("#sel_site").change(function() {
-        var sid_url = $("#sel_site").val();
-        if (sid_url !== undefined && sid_url.length > 1) {
-            var arr_site = sid_url.split("_");
-            if (arr_site.length > 0) {
-                var sid = arr_site[0];
-                G_NowSiteId = parseInt(sid);
-                G_SelectedDocumentChannelId = 0;
 
-                if (G_NowSiteId > 0) {
-                    $("#lefttree").html("<img src='/system_template/" + G_TemplateName + "/images/manage/spinner.gif' />");
-                    LoadChannelTree(sid);
-                    //changedis(G_SelectedDocumentChannelId);
-                    //sitename
-                    $(".sitename").html($("#sel_site").find("option:selected").text());
-                    $(".sitename").attr("title", sid);
-                } else {
-                    $("#lefttree").html("请先增加一个站点");
-                }
-            }
-            if (arr_site.length > 1) {
-                var siteurl = arr_site[1];
-                $("#gosite").attr("href", siteurl);
-            }
-        }
+    var siteId = $("#divdefaultsite").attr("idvalue");
+    var siteName = $("#divdefaultsite").html();
+    var siteUrl = $("#divdefaultsite").attr("title");
+    if (siteId.length > 0) {
+        LoadSite(siteId, siteName, siteUrl);
+    }
+    //select site
+    $(".divselectsite_item").click(function() {
+        siteId = $(this).attr("idvalue");
+        siteName = $(this).html();
+        siteUrl = $(this).attr("title");
+        LoadSite(siteId, siteName, siteUrl);
     });
 
     //sitename
     //$(".sitename").html($("#sel_site").find("option:selected").text());
     //$(".sitename").attr("title",$("#sel_site").val());
 
-    if($("#showsitelist").length > 0){
+    if ($("#showsitelist").length > 0) {
         $("#showsitelist").append($("#divselectsite"));
     }
 
@@ -81,14 +67,42 @@ $(function() {
         $(".channelname").html("");
     });
 
+    $(".btnsettemplate").click(function() {
+        var templateName = $(this).attr("idvalue");
+        $.post("/default.php?secu=manage&mod=settemplate&tn=" + templateName, {
+            resultbox: $(this).html()
+        }, function(xml) {
+            window.location.href = window.location.href;
+            if (parseInt(xml) > 0) {
 
-    var obj_sel_site = jQuery('#sel_site');
-    if (obj_sel_site.length > 0) {
-        $("#sel_site").change();
-        //changedis(nowselectchannelid);
-        //load usermanage
-        var siteId = G_NowSiteId;
-        /*
+            } else if (parseInt(xml) === -2) {
+                //alert("设置失败");
+            }
+            else {
+                //alert("设置失败");
+            }
+        });
+    });
+});
+
+function LoadSite(siteId, siteName, siteUrl) {
+
+    G_NowSiteId = parseInt(siteId);
+    G_SelectedDocumentChannelId = 0;
+
+    if (G_NowSiteId > 0) {
+        $("#lefttree").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
+        LoadChannelTree(siteId);
+        //sitename
+        $(".sitename").html(siteName);
+        if (siteUrl.length > 1) {
+            $("#gosite").attr("href", siteUrl);
+        }
+    } else {
+        $("#lefttree").html("请先增加一个站点");
+    }
+
+/*
          $.ajax({
          url: "/default.php",
          data: {
@@ -109,23 +123,5 @@ $(function() {
          }
          }
          });*/
-    }
 
-    $(".btnsettemplate").click(function() {
-        var templateName = $(this).attr("idvalue");
-        $.post("/default.php?secu=manage&mod=settemplate&tn="+templateName, {
-            resultbox: $(this).html()
-        }, function(xml) {
-            window.location.href = window.location.href;
-            if (parseInt(xml) > 0) {
-
-            } else if (parseInt(xml) == -2) {
-                //alert("设置失败");
-            }
-            else {
-                //alert("设置失败");
-            }
-        });
-    });
-});
-    
+}  

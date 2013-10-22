@@ -44,11 +44,11 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
 
             $forumManageData = new ForumManageData();
             $forumRank = 0;
-            $arrRankOneList = $forumManageData->GetList($siteId, $forumRank);
+            $arrRankOneList = $forumManageData->GetListByRank($siteId, $forumRank);
             $forumRank = 1;
-            $arrRankTwoList = $forumManageData->GetList($siteId, $forumRank);
+            $arrRankTwoList = $forumManageData->GetListByRank($siteId, $forumRank);
             $forumRank = 2;
-            $arrRankThreeList = $forumManageData->GetList($siteId, $forumRank);
+            $arrRankThreeList = $forumManageData->GetListByRank($siteId, $forumRank);
 
             if (count($arrRankOneList) > 0) {
 
@@ -60,13 +60,17 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
                     $rankOneForumName = $arrRankOneList[$i]["ForumName"];
                     $rankOneForumType = intval($arrRankOneList[$i]["ForumType"]);
                     $rankOneState = intval($arrRankOneList[$i]["State"]);
+                    $rankOneSort = intval($arrRankOneList[$i]["Sort"]);
                     $rankOneForumMode = intval($arrRankOneList[$i]["ForumMode"]);
                     $rankOneForumAccess = intval($arrRankOneList[$i]["ForumAccess"]);
                     $rankOneForumAdContent = $arrRankOneList[$i]["ForumAdContent"];
                     $rankOneForumMod = "";
 
                     $forumOneTemplate = $forumManageListOneTemplate;
-                    $forumOneTemplate = str_ireplace("{ForumName}", $rankTwoForumName, $forumOneTemplate);
+                    $forumOneTemplate = str_ireplace("{f_ForumId}", $rankOneForumId, $forumOneTemplate);
+                    $forumOneTemplate = str_ireplace("{f_ForumName}", $rankOneForumName, $forumOneTemplate);
+                    $forumOneTemplate = str_ireplace("{f_State}", $rankOneState, $forumOneTemplate);
+                    $forumOneTemplate = str_ireplace("{f_Sort}", $rankOneSort, $forumOneTemplate);
 
                     $resultTemplate = $resultTemplate . $forumOneTemplate;
                 }

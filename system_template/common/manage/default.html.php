@@ -35,12 +35,17 @@
             <div class="speall"></div>
         </div>
         <div id="progress">
-            </div>
+        </div>
         <div id="maincontent">
             <div id="leftpane">
-                
                 <div id="divselectsite" class="divselectsite_normal">
                     <cscms id="select_site" type="list">
+                        <header>
+                            <![CDATA[
+                            <div id="divdefaultsite" title="{f_siteurl}" idvalue="{f_siteid}" style="display:none;height:0;padding:0;width:0;margin:0;">{f_sitename}</div>
+                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>
+                            ]]>
+                        </header>
                         <item>
                             <![CDATA[
                             <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>
@@ -54,7 +59,6 @@
                         </footer>
                     </cscms>
                 </div>
-                
                 <div class="aheader" id="accord1">
                     <cscms id="leftnav" type="list">
                         <item>
