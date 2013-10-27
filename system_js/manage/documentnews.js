@@ -44,7 +44,7 @@ $(function() {
     $("#sortgrid").sortable();
     $("#sortgrid").bind("sortstop", function(event, ui) {
         var sortlist = $("#sortgrid").sortable("serialize");
-        $.post("/default.php?secu=manage&mod=documentnews&m=async_updatesort&" + sortlist, {
+        $.post("/default.php?secu=manage&mod=documentnews&m=async_modifysort&" + sortlist, {
             resultbox: $(this).html()
         }, function() {
             //操作完成后触发的命令
@@ -96,7 +96,7 @@ function DocumentNewsChangeState(documentNewsId, state) {
 }
 
 function _SetDocumentNewsState(documentNewsId, state) {
-    $.post("/default.php?secu=manage&mod=documentnews&m=async_changestate&documentnewsid=" + documentNewsId + "&state=" + state, {
+    $.post("/default.php?secu=manage&mod=documentnews&m=async_modifystate&documentnewsid=" + documentNewsId + "&state=" + state, {
         resultbox: $(this).html()
     }, function(xml) {
         if (parseInt(xml) > 0) {

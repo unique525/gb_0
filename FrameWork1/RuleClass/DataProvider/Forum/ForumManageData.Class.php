@@ -30,9 +30,9 @@ class ForumManageData extends BaseManageData {
 
     /**
      * 修改
-     * @param int $forumId
-     * @param string $forumPic
-     * @return type
+     * @param int $forumId 论坛id
+     * @param string $forumPic 论坛LOGO
+     * @return int 执行结果
      */
     public function Modify($forumId, $forumPic = "") {
         $dataProperty = new DataProperty();
@@ -40,6 +40,24 @@ class ForumManageData extends BaseManageData {
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
+    
+    /**
+     * 修改状态
+     * @param int $forumId 论坛id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($forumId, $state) {
+        $result = 0;
+        if ($forumId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::tableName . " SET `State`=:State WHERE ForumId=:ForumId;";
+            $dataProperty->AddField("ForumId", $forumId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }  
     
     
     /**

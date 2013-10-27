@@ -28,11 +28,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             case "listformanage":
                 $result = self::GenListForManage();
                 break;
-            case "async_updatesort":
-                self::AsyncUpdateSort();
+            case "async_modifysort":
+                self::AsyncModifySort();
                 break;
-            case "async_changestate":
-                $result = self::AsyncChangeState();
+            case "async_modifystate":
+                $result = self::AsyncModifyState();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -45,21 +45,21 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate() {
         
     }
-    
+
     /**
      * 生成资讯管理修改页面
      */
-    private function GenModify(){
-        $tempContent = Template::Load("document/documentnews_deal.html","common");
+    private function GenModify() {
+        $tempContent = Template::Load("document/documentnews_deal.html", "common");
         $documentNewsId = Control::GetRequest("documentnewsid", 0);
 
         $nowAdminUserId = Control::GetAdminUserId();
         $nowUserId = Control::GetUserId();
         //$tab_index = Control::GetRequest("tab", 1);
         $pageIndex = Control::GetRequest("p", 1);
-        
+
         $nowAdminUserName = Control::GetAdminUserName();
-        
+
         parent::ReplaceFirst($tempContent);
         if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
@@ -82,13 +82,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             } else {
                 //未锁定，则上锁
                 $lockEdit = 1;
-                $documentNewsManageData->ModifyLockEdit($lockEdit, $documentNewsId, $nowAdminUserId);
+                $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowAdminUserId);
             }
 
 
             $documentChannelData = new DocumentChannelData();
             $documentchannelid = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
-            $siteid = $documentChannelData->GetSiteID($documentchannelid);
+            $siteid = $documentChannelData->GetSiteId($documentchannelid);
 
 ///////////////判断是否有操作权限///////////////////
             $adminPopedomData = new AdminPopedomData();
@@ -133,17 +133,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 "{pageindex}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replace_arr);
-            
-            
+
+
             //////////////////////////////////////////////////
             //针对团结网编辑人暂时做特殊处理
-            if(stripos($_SERVER['HTTP_HOST'],"tjwang.net")==true){
-            $tempContent = str_ireplace("{adminuserid}",$nowAdminUserId , $tempContent);
-            $tempContent = str_ireplace("{adminusername}",$nowAdminUserName , $tempContent);
+            if (stripos($_SERVER['HTTP_HOST'], "tjwang.net") == true) {
+                $tempContent = str_ireplace("{adminuserid}", $nowAdminUserId, $tempContent);
+                $tempContent = str_ireplace("{adminusername}", $nowAdminUserName, $tempContent);
             }
-            
-            /////////////////////////////////////////////////
 
+            /////////////////////////////////////////////////
 //quick content
             $documentQuickContentData = new DocumentQuickContentData();
             $listName = "documentquickcontent";
@@ -244,7 +243,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 if ($result > 0) {
 //编辑完成后，解锁
                     $lockEdit = 0;
-                    $documentNewsManageData->ModifyLockEdit($lockEdit, $documentNewsId, $nowAdminUserId);
+                    $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowAdminUserId);
 
 //改变文档状态为 已编
 //$state = 1; //已编
@@ -334,9 +333,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         //load template
         $documentChannelType = $documentChannelManageData->GetDocumentChannelType($documentChannelId);
         if ($documentChannelType === 1) {
-            $tempContent = Template::Load("document/documentnews_list.html","common");
+            $tempContent = Template::Load("document/documentnews_list.html", "common");
         } else {
-            $tempContent = Template::Load("document/documentnews_slider_list.html","common");
+            $tempContent = Template::Load("document/documentnews_slider_list.html", "common");
         }
 
         parent::ReplaceFirst($tempContent);
@@ -414,21 +413,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
-    /*
+    /**
      * 更新文档的排序（前台拖动时使用）
      */
-
-    private function AsyncUpdateSort() {
+    private function AsyncModifySort() {
         $arrDocumentNewsId = Control::GetRequest("docnewssort", null);
         $documentNewsManageData = new DocumentNewsManageData();
-        $documentNewsManageData->UpdateSort($arrDocumentNewsId);
+        $documentNewsManageData->ModifySort($arrDocumentNewsId);
     }
 
-    /*
+    /**
      * 修改文档状态  0 新稿 1 已编 2  返工 11 一审 12 二审 13 三审 14 终审 20 已否   
      */
-
-    private function AsyncChangeState() {
+    private function AsyncModifyState() {
         $documentNewsId = Control::GetRequest("documentnewsid", 0);
         $state = Control::GetRequest("state", -1);
         if ($documentNewsId > 0 && $state >= 0) {
@@ -548,7 +545,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 /////////////////////////////////////////////////////////
             }
 //修改状态
-            $result = $documentNewsManageData->UpdateState($documentNewsId, $state);
+            $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
 //加入操作log
             $operatecontent = "DocumentNews：UpdateState id ：" . $documentNewsId . "；userid：" . Control::GetAdminUserID() . "；username；" . Control::GetAdminUserName() . "；oldstate：" . $oldState . "；tostate：" . $state . "；result：" . $result;
             $adminuserlogData = new AdminUserLogData();

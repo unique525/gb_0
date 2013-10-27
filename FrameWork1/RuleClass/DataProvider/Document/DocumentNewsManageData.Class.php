@@ -10,7 +10,6 @@ class DocumentNewsManageData extends BaseManageData {
     /**
      * 表名
      */
-
     const tableName = "cst_documentnews";
 
     /**
@@ -79,7 +78,7 @@ class DocumentNewsManageData extends BaseManageData {
      * 拖动排序
      * @param array $arrDocumentNewsId 待处理的文档编号数组
      */
-    public function UpdateSort($arrDocumentNewsId) {
+    public function ModifySort($arrDocumentNewsId) {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
             $strDocumentNewsId = join(',', $arrDocumentNewsId);
 
@@ -101,23 +100,41 @@ class DocumentNewsManageData extends BaseManageData {
 
     /**
      * 修改锁定状态和时间
-     * @param int $lockEdit 是否锁定
      * @param int $documentNewsId 文档id
+     * @param int $lockEdit 是否锁定
      * @param int $adminUserId 操作管理员id
      * @return int 操作结果
      */
-    public function ModifyLockEdit($lockEdit, $documentNewsId, $adminUserId) {
+    public function ModifyLockEdit($documentNewsId, $lockEdit, $adminUserId) {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::tableName . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId";
-            $dataProperty->AddField("LockEdit", $lockEdit);
+            $sql = "UPDATE " . self::tableName . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $dataProperty->AddField("LockEdit", $lockEdit);
             $dataProperty->AddField("LockEditAdminUserId", $adminUserId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
+    
+    /**
+     * 修改状态
+     * @param int $documentNewsId 文档id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($documentNewsId, $state) {
+        $result = 0;
+        if ($documentNewsId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::tableName . " SET `State`=:State WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }  
 
     
     //////////////////////////////////////////////////////////////////////////////
