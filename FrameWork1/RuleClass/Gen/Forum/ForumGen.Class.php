@@ -98,6 +98,7 @@ class ForumGen extends BaseFrontGen implements IBaseFrontGen {
 
                 if (count($arrRankTwoList) > 0) {
                     $resultTwoTemplate = "";
+                    $rankTwoIndex = 0;
                     for ($j = 0; $j < count($arrRankTwoList); $j++) {
                         $rankTwoForumId = intval($arrRankTwoList[$j]["ForumId"]);
                         $rankTwoParentId = intval($arrRankTwoList[$j]["ParentId"]);
@@ -117,6 +118,7 @@ class ForumGen extends BaseFrontGen implements IBaseFrontGen {
                         $rankTwoForumNameFontSize = $arrRankTwoList[$j]["ForumNameFontSize"];
 
                         if ($rankOneForumId === $rankTwoParentId) {
+                            $rankTwoIndex++;
                             $forumTwoTemplate = $forumListTwoType0Template;
                             $forumTwoTemplate = str_ireplace("{f_ForumId}", $rankTwoForumId, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_ForumName}", $rankTwoForumName, $forumTwoTemplate);
@@ -136,11 +138,11 @@ class ForumGen extends BaseFrontGen implements IBaseFrontGen {
                             }
                             if ($rankOneShowColumnCount > 0) {
                                 if ($rankOneShowColumnCount === 3) {
-                                    if ($j % $rankOneShowColumnCount === 2) {
+                                    if ($rankTwoIndex % $rankOneShowColumnCount === 0) {
                                         $itemFlag = "2";
                                     }
                                 } elseif ($rankOneShowColumnCount === 4) {
-                                    if ($j % $rankOneShowColumnCount === 3) {
+                                    if ($rankTwoIndex % $rankOneShowColumnCount === 0) {
                                         $itemFlag = "2";
                                     }
                                 }
