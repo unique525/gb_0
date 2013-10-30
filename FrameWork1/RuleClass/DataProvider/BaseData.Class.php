@@ -39,6 +39,20 @@ class BaseData {
 
         return $tableName;
     }
+    
+    /**
+     * 判断指定路径的数据是否缓存
+     * @param string $cacheDir 缓存目录
+     * @param string $cacheFile 缓存文件
+     * @return boolean 是否缓存
+     */
+    protected function IsDataCached($cacheDir,$cacheFile){
+        if(strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0){
+            return FALSE;
+        }else{
+            return TRUE;
+        }                
+    }
 }
 
 ?>

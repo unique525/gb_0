@@ -229,7 +229,55 @@ class BaseGen {
         return $errorTemplate;
     }
 
-
+    /**
+     * 替换模板中的配置标记
+     * @param int $siteId 站点id
+     * @param string $tempContent 模板内容
+     */
+    protected function ReplaceSiteConfig($siteId, &$tempContent) {
+        $siteConfigData = new SiteConfigData($siteId);
+        $arrSiteConfigOne = $siteConfigData->GetList($siteId);
+        if (count($arrSiteConfigOne) > 0) {
+            for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
+                $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
+                $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
+                $stringMidValue = $arrSiteConfigOne[$i]["StringMidValue"];
+                $textValue = $arrSiteConfigOne[$i]["TextValue"];
+                $intValue = $arrSiteConfigOne[$i]["IntValue"];
+                $numValue = $arrSiteConfigOne[$i]["NumValue"];
+                $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
+                switch ($siteConfigType) {
+                    case 0:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        break;
+                    case 1:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
+                        break;
+                    case 2:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
+                        break;
+                    case 3:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
+                        break;
+                    case 4:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
+                        break;
+                    default:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        break;
+                }
+            }
+        } else {//移除掉标记
+            $patterns = "/\{cfg_(.*)\<\/}/imsU";
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
+    }
 }
 
 ?>

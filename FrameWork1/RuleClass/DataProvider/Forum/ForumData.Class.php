@@ -10,12 +10,12 @@ class ForumData extends BaseFrontData {
     /**
      * 表名
      */
+
     const tableName = "cst_forum";
     /**
      * 表关键字段名
      */
     const tableIdName = "ForumId";
-
 
     /**
      * 更新版块的最后回复信息（发表主题时）
@@ -42,11 +42,42 @@ class ForumData extends BaseFrontData {
         return $result;
     }
 
+    /**
+     * 根据版块等级取得版块列表
+     * @param int $siteId 站点id
+     * @param int $forumRank 版块等级
+     * @return array 版块列表
+     */
     public function GetListByRank($siteId, $forumRank) {
-        $sql = "SELECT * FROM " . self::tableName . " WHERE ForumRank=:ForumRank AND SiteID=:SiteID ORDER BY sort DESC";
+        $sql = "SELECT 
+                ForumId, 
+                SiteId, 
+                ForumName, 
+                ForumType, 
+                ForumMode, 
+                ForumAuditType, 
+                ForumPic, 
+                ForumInfo,
+                ForumAdContent,
+                ParentId,
+                LastTopicId,
+                LastTopicTitle,
+                LastUserName,
+                LastUserId,
+                LastPostTime,
+                LastPostInfo,
+                NewCount, 
+                TopicCount, 
+                PostCount,
+                State,
+                ShowColumnCount,
+                ForumNameFontColor,
+                ForumNameFontBold,
+                ForumNameFontSize
+            FROM " . self::tableName . " WHERE State<100 AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumRank", $forumRank);
-        $dataProperty->AddField("SiteID", $siteId);
+        $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -65,7 +96,7 @@ class ForumData extends BaseFrontData {
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
-    
+
     public function GetListPager($pageBegin, $pageSize, &$allCount, $state = -1) {
         $searchSql = "";
         $dataProperty = new DataProperty();
@@ -87,7 +118,6 @@ class ForumData extends BaseFrontData {
         $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
-
 
     /**
      * 根据ForumId取得SiteId
@@ -133,20 +163,29 @@ class ForumData extends BaseFrontData {
             return $result;
         }
     }
-    
+
     /**
      * 取得版块每排显示数量
      * @param int $forumId 版块id
      * @return int 版块每排显示数量
      */
     public function GetShowColumnCount($forumId) {
+        $result = 0;
         if ($forumId > 0) {
-            $dataProperty = new DataProperty();
-            $sql = "SELECT ShowColumnCount FROM " . self::tableName . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
-            return $result;
+            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'forumdata';
+            $cacheFile = 'forum_showcolumncount.cache_' . $forumId . '.php';
+            if (parent::IsDataCached($cacheDir, $cacheFile)) {
+                $dataProperty = new DataProperty();
+                $sql = "SELECT ShowColumnCount FROM " . self::tableName . " WHERE ForumId=:ForumId";
+                $dataProperty->AddField("ForumId", $forumId);
+                $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = intval(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile));
+            }
         }
+
+        return $result;
     }
 
     /**
@@ -161,7 +200,6 @@ class ForumData extends BaseFrontData {
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
         return $result;
     }
-
 
 }
 
