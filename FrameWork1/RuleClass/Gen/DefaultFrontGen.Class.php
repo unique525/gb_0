@@ -28,6 +28,10 @@ class DefaultFrontGen extends BaseFrontGen implements IBaseFrontGen {
                 $forumGen = new ForumGen();
                 $result = $forumGen->GenFront();
                 break;
+            case "forumtopic":
+                $forumTopicGen = new ForumTopicGen();
+                $result = $forumTopicGen->GenFront();
+                break;
         }
         return $result;
     }
