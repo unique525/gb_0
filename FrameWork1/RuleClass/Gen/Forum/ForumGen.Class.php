@@ -33,7 +33,7 @@ class ForumGen extends BaseFrontGen implements IBaseFrontGen {
 
     /**
      * 生成论坛首页
-     * @return string
+     * @return string 论坛首页HTML
      */
     private function GenDefault() {
 

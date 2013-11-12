@@ -20,6 +20,9 @@ class ForumTopicGen extends BaseFrontGen implements IBaseFrontGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "create":
+                $result = self::GenCreate();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -28,13 +31,17 @@ class ForumTopicGen extends BaseFrontGen implements IBaseFrontGen {
         return $result;
     }
 
+    /**
+     * 生成论坛主题列表页html
+     * @return string 论坛主题列表页html
+     */
     private function GenList() {
         $siteId = Control::GetRequest("siteid", 0);
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdBySubDomain();
         }
         $forumId = Control::GetRequest("forumid", 0);
-        if($forumId<=0){
+        if ($forumId <= 0) {
             return;
         }
 
@@ -43,6 +50,27 @@ class ForumTopicGen extends BaseFrontGen implements IBaseFrontGen {
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+        return $tempContent;
+    }
+
+    private function GenCreate() {
+        $siteId = Control::GetRequest("siteid", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdBySubDomain();
+        }
+        $forumId = Control::GetRequest("forumid", 0);
+        if ($forumId <= 0) {
+            return;
+        }
+
+        $templateFileUrl = "forum/forum_topic_create.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
