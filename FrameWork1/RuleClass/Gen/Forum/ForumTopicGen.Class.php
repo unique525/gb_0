@@ -52,6 +52,31 @@ class ForumTopicGen extends BaseFrontGen implements IBaseFrontGen {
 
 
         parent::ReplaceFirstForForum($tempContent);
+        $siteConfigData = new SiteConfigData($siteId);
+        $pageIndex = Control::GetRequest("p", 1);
+        $pageSize = $siteConfigData->ForumTopicPageSize;
+        if ($pageSize <= 0 || empty($pageSize)) {
+            $pageSize = 25;
+        }
+        $pageBegin = ($pageIndex - 1) * $pageSize;
+        $allCount = 0;
+        $forumTopicData = new ForumTopicData();
+        $arrForumTopicList = $forumTopicData->GetListPager($siteId, $forumId, $pageBegin, $pageSize, $allCount);
+        Template::ReplaceList($tempContent, $arrForumTopicList, "forumTopicList");
+        $styleNumber = 1;
+        $pagerTemplate = Template::Load("../common/pager_style$styleNumber.html");
+        $isJs = FALSE;
+
+        $forumTopicListUrl = "default.php?mod=forumtopic"; //非静态化的地址
+
+        $navUrl = "$forumTopicListUrl&forumid=$forumId&p={0}";
+        $jsFunctionName = "";
+        $jsParamList = "";
+        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+        $tempContent = str_ireplace("{pagerbutton}", $pagerButton, $tempContent);
+
+
+
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
         return $tempContent;

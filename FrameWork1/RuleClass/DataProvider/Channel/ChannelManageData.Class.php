@@ -46,7 +46,7 @@ class ChannelManageData extends BaseManageData {
             }
 
             //删除缓冲
-            $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'docdata';
+            $cacheDir = DataCache::CacheDir . DIRECTORY_SEPARATOR . 'docdata';
             DataCache::RemoveDir($cacheDir);
         }
 
@@ -213,52 +213,52 @@ class ChannelManageData extends BaseManageData {
 
     /**
      * 取得频道所属站点id
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @return int 站点id
      */
-    public function GetSiteId($documentChannelId) {
-        $sql = "SELECT SiteId FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
+    public function GetSiteId($channelId) {
+        $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 取得频道Rank
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @return int 频道Rank
      */
-    public function GetRank($documentChannelId) {
-        $sql = "SELECT Rank FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
+    public function GetRank($channelId) {
+        $sql = "SELECT Rank FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 取得频道是否定义了FTP
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @return int 频道是否定义了FTP 0:未定义 1:已定义
      */
-    public function GetHasFtp($documentChannelId) {
-        $sql = "SELECT HasFtp FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
+    public function GetHasFtp($channelId) {
+        $sql = "SELECT HasFtp FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 取得频道类型编号
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @return int 站点id
      */
-    public function GetDocumentChannelType($documentChannelId) {
-        $sql = "SELECT DocumentChannelType FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid";
+    public function GetChannelType($channelId) {
+        $sql = "SELECT ChannelType FROM " . self::tableName . " WHERE ChannelId=:ChannelId";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }

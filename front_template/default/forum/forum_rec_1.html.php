@@ -1,6 +1,6 @@
 <div id="forum_rec_1">
     <div class="content">
-        <div class="newpictopic"><a href=""><img src="http://resource.weiphone.com/resource/h028/h11/img201310100842450.JPG" width="400" height="230" alt="" /></a></div>
+        <div class="newpictopic"><a href=""><img src="http://resource.weiphone.com/resource/h028/h11/img201310100842450.JPG" alt="" /></a></div>
         <div class="newtopic">
             <div class="title"><a href="" target="_blank">最新主题</a></div>
             <ul>

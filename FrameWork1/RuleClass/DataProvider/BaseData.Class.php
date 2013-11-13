@@ -31,6 +31,8 @@ class BaseData {
     
     const TableName_Forum = "cst_forum";
     const TableId_Forum = "ForumId";
+    const TableName_ForumTopic = "cst_forum_topic";
+    const TableId_ForumTopic = "ForumTopicId";
     
     
     /**

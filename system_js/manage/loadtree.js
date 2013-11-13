@@ -15,7 +15,7 @@ function LoadChannelTree(siteId) {
     };
 
     var _jsloader = new jsloader();
-    _jsloader.load("/default.php?secu=manage&mod=documentchannel&m=tree&sid=" + siteId + "&ram=" + Math.random());
+    _jsloader.load("/default.php?secu=manage&mod=channel&m=tree&siteid=" + siteId + "&ram=" + Math.random());
     _jsloader.onsuccess = function() {
         $.fn.zTree.init($("#lefttree"), tree_setting, zNodesChannel);
         G_zTree = $.fn.zTree.getZTreeObj("lefttree");

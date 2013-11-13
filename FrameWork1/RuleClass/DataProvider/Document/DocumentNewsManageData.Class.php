@@ -10,7 +10,7 @@ class DocumentNewsManageData extends BaseManageData {
 
     /**
      * 取得后台资讯列表数据集
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @param int $pageBegin 起始记录行
      * @param int $pageSize 页大小
      * @param int $allCount 记录总数
@@ -20,10 +20,10 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $adminUserId 当前管理员id
      * @return array 资讯列表数据集
      */
-    public function GetListForManage($documentChannelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchTypeBox = "", $isSelf = 0, $adminUserId = 0) {
+    public function GetListForManage($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchTypeBox = "", $isSelf = 0, $adminUserId = 0) {
         $searchSql = "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             if ($searchTypeBox == "source") {
                 $searchSql = " AND (sourcename like :searchkey)";
@@ -46,12 +46,12 @@ class DocumentNewsManageData extends BaseManageData {
             createdate,adminuserid,adminusername,username,documentnewstitlecolor,documentnewstitlebold,titlepic,reclevel,hit
             FROM
             " . self::tableName . "
-            WHERE documentchannelid=:documentchannelid AND state<100 " . $searchSql . " " . $conditionAdminUserId . " ORDER BY sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " " . $conditionAdminUserId . " ORDER BY sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
 
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
 
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             $searchSql = " and (documentnewstitle like :searchkey1 or adminusername like :searchkey2 or username like :searchkey3)";
             $dataProperty->AddField("searchkey1", "%" . $searchKey . "%");
@@ -59,7 +59,7 @@ class DocumentNewsManageData extends BaseManageData {
             $dataProperty->AddField("searchkey3", "%" . $searchKey . "%");
         }
 
-        $sql = "SELECT count(*) FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid and state<100 " . $conditionAdminUserId . " " . $searchSql;
+        $sql = "SELECT count(*) FROM " . self::tableName . " WHERE ChannelId=:ChannelId and State<100 " . $conditionAdminUserId . " " . $searchSql;
         $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
 
         return $result;

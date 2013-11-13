@@ -206,7 +206,7 @@ class SiteConfigManageData extends BaseManageData {
      * @param type $siteConfigName
      * @param type $fieldValue 
      */
-    private function __set($siteConfigName, $fieldValue) {
+    public function __set($siteConfigName, $fieldValue) {
         $siteConfigType = 0;
         if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
             $siteConfigType = 1;
@@ -300,7 +300,7 @@ class SiteConfigManageData extends BaseManageData {
 
         if (intval($siteId) > 0) {
 
-            $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteId;
+            $cacheDir = DataCache::CacheDir . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'siteconfig.cache_' . strtolower($siteConfigName);
 
 
