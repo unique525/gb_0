@@ -7,16 +7,6 @@
  * @author zhangchi
  */
 class AdminUserLogManageData extends BaseManageData {
-    
-    /**
-     * 表名
-     */
-    const tableName = "cst_adminuserlog";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "AdminUserLogId";
 
     /**
      * 物理删除
@@ -24,9 +14,9 @@ class AdminUserLogManageData extends BaseManageData {
      * @return int 删除结果，大于0则成功
      */
     public function Delete($adminUserLogId) {
-        $sql = "DELETE FROM " . self::tableName . " WHERE `" . self::tableIdName . "`=:" . self::tableIdName . "";
+        $sql = "DELETE FROM " . self::TableName_AdminUserLog . " WHERE `" . self::TableId_AdminUserLog . "`=:" . self::TableId_AdminUserLog . "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField(self::tableIdName, $adminUserLogId);
+        $dataProperty->AddField(self::TableId_AdminUserLog, $adminUserLogId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
@@ -37,7 +27,7 @@ class AdminUserLogManageData extends BaseManageData {
      * @return type
      */
     public function Insert($operateContent) {
-        $sql = "INSERT INTO " . self::tableName . " (adminuserid,createdate,operatecontent,ipaddress,agent,refdomain,refurl) values (:adminuserid,:createdate,:operatecontent,:ipaddress,:agent,:refdomain,:refurl)";
+        $sql = "INSERT INTO " . self::TableName_AdminUserLog . " (adminuserid,createdate,operatecontent,ipaddress,agent,refdomain,refurl) values (:adminuserid,:createdate,:operatecontent,:ipaddress,:agent,:refdomain,:refurl)";
         $adminUserId = Control::GetAdminUserId();
         $createDate = date("Y-m-d H:i:s", time());
         $ipAddress = Control::GetIp();
@@ -78,12 +68,12 @@ class AdminUserLogManageData extends BaseManageData {
             t.adminuserlogid,t.operatecontent as operatecontentall,t.createdate,t.ipaddress,LEFT(t.operatecontent,50) as operatecontent,
             d.adminusername
             FROM
-            " . self::tableName . " t, cst_adminuser d
+            " . self::TableName_AdminUserLog . " t, cst_adminuser d
             WHERE t.adminuserid=d.adminuserid  " . $searchSql . " order by t.createdate desc LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         //统计总数
         $sqlCount = "SELECT count(*) FROM
-            " . self::tableName . " t, cst_adminuser d
+            " . self::TableName_AdminUserLog . " t, cst_adminuser d
             WHERE t.adminuserid=d.adminuserid  " . $searchSql;
         $allCount = $this->dbOperator->ReturnInt($sqlCount, $dataProperty);
         return $result;

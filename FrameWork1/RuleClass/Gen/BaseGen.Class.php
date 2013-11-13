@@ -145,7 +145,7 @@ class BaseGen {
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
-                $documentChannelData = new DocumentChannelData();
+                $documentChannelData = new ChannelData();
                 foreach ($arr2 as $key => $val) {
                     $docontent = '<documentchannelname' . $val . '</documentchannelname>';
                     $keyname = "documentchannelname";

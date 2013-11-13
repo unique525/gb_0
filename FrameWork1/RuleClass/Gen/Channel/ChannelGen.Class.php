@@ -3,10 +3,10 @@
 /**
  * 前台Gen频道生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_Document
+ * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi
  */
-class DocumentChannelGen extends BaseFrontGen implements IBaseFrontGen {
+class ChannelGen extends BaseFrontGen implements IBaseFrontGen {
         
     /**
      * 引导方法

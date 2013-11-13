@@ -101,7 +101,7 @@ class BaseManageGen extends BaseGen {
         if (substr($dest, 0, 1) == DIRECTORY_SEPARATOR) {
             $dest = substr($dest, 1, strlen($dest));
         }
-        $documentChannelData = new DocumentChannelData();
+        $documentChannelData = new ChannelData();
         $siteid = $documentChannelData->GetSiteID($childid);
         $ftpData = new FtpData();
         $ftp_cong = $ftpData->GetFtpData($siteid, $childid, $hasftp);
@@ -141,7 +141,7 @@ class BaseManageGen extends BaseGen {
     public function Ftp($dest_path, $source_path, $source_content, $documentchannelid = 0, $hasftp = 0, $ftptype = 0) {
         include ROOTPATH . '/inc/domain.inc.php';
         //发布目录和程序目录在同一站点下时，不发布附件  func分服务器则不进行发布
-        $documentChannelData = new DocumentChannelData();
+        $documentChannelData = new ChannelData();
         $_siteId = $documentChannelData->GetSiteID($documentchannelid);
         if ($_siteId > 0) {
             $_siteData = new SiteData();
@@ -179,7 +179,7 @@ class BaseManageGen extends BaseGen {
 
         //判断是否定义了FTP信息
         if ($documentchannelid > 0) {
-            $_documentChannelData = new DocumentChannelData();
+            $_documentChannelData = new ChannelData();
             $siteid = $_documentChannelData->GetSiteID($documentchannelid);
         }
         if ($siteid > 0) {
@@ -188,7 +188,7 @@ class BaseManageGen extends BaseGen {
 
             if (!empty($_arrOneFtp)) { //定义了FTP信息
                 //使用FTP方式
-                $documentChannelData = new DocumentChannelData();
+                $documentChannelData = new ChannelData();
                 if ($siteid <= 0) {
                     $siteid = $documentChannelData->GetSiteID($documentchannelid);
                 }
@@ -219,7 +219,7 @@ class BaseManageGen extends BaseGen {
         $_isdel = 0;
         //判断是否定义了FTP信息
         if ($documentchannelid > 0) {
-            $_documentChannelData = new DocumentChannelData();
+            $_documentChannelData = new ChannelData();
             $_siteid = $_documentChannelData->GetSiteID($documentchannelid);
         }
         if ($_siteid > 0) {

@@ -86,7 +86,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
 
-            $documentChannelData = new DocumentChannelData();
+            $documentChannelData = new ChannelData();
             $documentchannelid = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
             $siteid = $documentChannelData->GetSiteId($documentchannelid);
 
@@ -308,7 +308,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             return "";
         }
         $adminUserId = Control::GetAdminUserId();
-        $documentChannelManageData = new DocumentChannelManageData();
+        $documentChannelManageData = new ChannelManageData();
         $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
 
         ///////////////判断是否有操作权限///////////////////
@@ -432,7 +432,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $documentNewsManageData = new DocumentNewsManageData();
             $documentChannelId = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
             $adminUserId = Control::GetAdminUserId();
-            $documentChannelManageData = new DocumentChannelManageData();
+            $documentChannelManageData = new ChannelManageData();
             $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
 ////////////////////////////////////////////////////
 ///////////////判断是否有操作权限///////////////////
@@ -523,7 +523,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     }
                 }
 //联动发布所在频道和上级频道
-                $documentChannelGen = new DocumentChannelGen();
+                $documentChannelGen = new ChannelGen();
                 $documentChannelGen->PublishMuti($documentChannelId);
 /////////////////////////////////////////////////////////////
 ////////////////xunsearch全文检索引擎 索引更新///////////////

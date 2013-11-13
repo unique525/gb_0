@@ -10,12 +10,7 @@ class DocumentNewsData extends BaseFrontData {
     /**
      * 表名
      */
-    const tableName = "cst_documentnews";
 
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "documentnewsid";
 
     /**
      * 新增

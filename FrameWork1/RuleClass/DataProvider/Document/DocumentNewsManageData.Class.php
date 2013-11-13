@@ -7,15 +7,6 @@
  * @author zhangchi
  */
 class DocumentNewsManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_documentnews";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "DocumentNewsId";
 
     /**
      * 取得后台资讯列表数据集

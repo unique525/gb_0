@@ -7,15 +7,6 @@
  * @author zhangchi
  */
 class SiteData extends BaseFrontData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_site";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "siteid";
 
     /**
      * 取得站点子域名
@@ -23,10 +14,10 @@ class SiteData extends BaseFrontData {
      * @return string 子域名 
      */
     public function GetSubDomain($siteId) {
-        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'sitedata';
+        $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'sitedata';
         $cacheFile = 'site_subdomain.cache_' . $siteId . '.php';
         if (parent::IsDataCached($cacheDir, $cacheFile)) {
-            $sql = "SELECT SubDomain FROM " . self::tableName . " WHERE SiteId=:SiteId";
+            $sql = "SELECT SubDomain FROM " . self::TableName_Site . " WHERE SiteId=:SiteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -43,10 +34,10 @@ class SiteData extends BaseFrontData {
      * @return int 站点id
      */
     public function GetSiteId($subDomain) {
-        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'sitedata';
+        $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'sitedata';
         $cacheFile = 'site_siteid.cache_' . $subDomain . '.php';
         if (parent::IsDataCached($cacheDir, $cacheFile)) {
-            $sql = "SELECT SiteId FROM " . self::tableName . " WHERE SubDomain=:SubDomain";
+            $sql = "SELECT SiteId FROM " . self::TableName_Site . " WHERE SubDomain=:SubDomain";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SubDomain", $subDomain);
             $result = $this->dbOperator->ReturnInt($sql, $dataProperty);

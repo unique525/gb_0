@@ -3,19 +3,10 @@
 /**
  * 后台频道数据类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_Document
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Channel
  * @author zhangchi
  */
-class DocumentChannelManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_documentchannel";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "documentchannelid";
+class ChannelManageData extends BaseManageData {
 
     /**
      * 新增频道
@@ -31,15 +22,14 @@ class DocumentChannelManageData extends BaseManageData {
         $preNumber = "";
         $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3");
         $addFieldValues = array($titlePic1, $titlePic2, $titlePic3);
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->LastInsertId($sql, $dataProperty);
+        $sql = parent::GetInsertSql(self::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         $siteId = Control::PostRequest("f_siteid", 0);
 
         if ($result > 0) {
             //活动类的默认添加Class分类====Ljy
-            $documentChannelType = Control::PostRequest("f_documentchanneltype", 1);
-            if ($documentChannelType == 6) {
+            $channelType = Control::PostRequest("f_documentchanneltype", 1);
+            if ($channelType == 6) {
                 $activityClassName = "默认";
                 $state = 0;
                 $activityType = 0;     //0为线下活动
@@ -48,7 +38,7 @@ class DocumentChannelManageData extends BaseManageData {
             }
 
             //授权给创建人
-            $adminUserId = Control::GetAdminUserID();
+            $adminUserId = Control::GetAdminUserId();
 
             if ($adminUserId > 1) { //只有非ADMIN的要授权
                 $adminPopedomData = new AdminPopedomData();
@@ -56,7 +46,7 @@ class DocumentChannelManageData extends BaseManageData {
             }
 
             //删除缓冲
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
+            $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'docdata';
             DataCache::RemoveDir($cacheDir);
         }
 
@@ -70,11 +60,11 @@ class DocumentChannelManageData extends BaseManageData {
      */
     public function CreateWhenSiteCreate($siteId) {
         if ($siteId > 0) {
-            $adminUserId = Control::GetAdminUserID();
+            $adminUserId = Control::GetAdminUserId();
             $documentChannelName = "首页";
 
             $dataProperty = new DataProperty();
-            $sql = "insert into " . self::tableName . " (siteid,createdate,adminuserid,documentchannelname) values (:siteid,now(),:adminuserid,:documentchannelname)";
+            $sql = "insert into " . self::TableName_Channel . " (siteid,createdate,adminuserid,documentchannelname) values (:siteid,now(),:adminuserid,:documentchannelname)";
 
             $dataProperty->AddField("siteid", $siteId);
             $dataProperty->AddField("adminuserid", $adminUserId);
@@ -191,21 +181,32 @@ class DocumentChannelManageData extends BaseManageData {
 
     /**
      * 返回所有此站点下的频道列表,ZTREE使用
-     * @param type $siteid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId
+     * @param int $adminUserId
+     * @return array 
      */
-    public function GetListAllForZtree($siteid, $adminuserid) {
+    public function GetListAllForZtree($siteId, $adminUserId) {
         $dataProperty = new DataProperty();
-        if ($adminuserid == 1) {
-            $sql = "select dc.DocumentChannelID,dc.ParentID,dc.DocumentChannelType,dc.DocumentChannelName,dc.Rank,(select count(*) from cst_documentchannel where parentid=dc.DocumentChannelID AND State<100) as childcounts from cst_documentchannel dc where dc.state<100 and dc.siteid=:siteid AND dc.Invisible=0 order by dc.sort desc,dc.documentchannelid";
+        if ($adminUserId == 1) {
+            $sql = "SELECT dc.*,(SELECT Count(*) FROM " . self::TableName_Channel . " WHERE ParentId=dc.ChannelId AND State<100) as ChildCounts FROM " . self::TableName_Channel . " dc WHERE dc.State<100 AND dc.SiteId=:SiteId AND dc.Invisible=0 ORDER BY dc.Sort DESC,dc.ChannelId";
         } else {
-            $sql = "select dc.DocumentChannelID,dc.ParentID,dc.DocumentChannelType,dc.DocumentChannelName,dc.Rank,(select count(*) from cst_documentchannel where parentid=dc.DocumentChannelID AND State<100) as childcounts from cst_documentchannel dc where dc.state<100 and dc.siteid=:siteid AND dc.Invisible=0 and dc.documentchannelid in  (select documentchannelid from cst_adminpopedom where explore=1 and adminuserid=:adminuserid union select documentchannelid from cst_adminpopedom where explore=1 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid2) union select documentchannelid from cst_documentchannel where siteid in (select siteid from cst_adminpopedom where explore=1 and documentchannelid=0 and adminuserid=0 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid3))) order by dc.sort desc,dc.documentchannelid";
-            $dataProperty->AddField("adminuserid", $adminuserid);
-            $dataProperty->AddField("adminuserid2", $adminuserid);
-            $dataProperty->AddField("adminuserid3", $adminuserid);
+            $sql = "SELECT dc.*,(SELECT Count(*) FROM " . self::TableName_Channel . " WHERE ParentId=dc.ChannelId AND State<100) as ChildCounts FROM " . self::TableName_Channel . " dc WHERE dc.State<100 AND dc.SiteId=:SiteId AND dc.Invisible=0 AND dc.ChannelId IN
+                (   
+                    SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserId=:AdminUserId
+                    UNION
+                    SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserGroupId IN 
+                        (
+                         SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId2)
+                         UNION 
+                         SELECT ChannelId FROM " . self::TableName_Channel . " WHERE SiteId IN (SELECT SiteId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND ChannelId=0 AND AdminUserId=0 AND AdminUserGroupId IN (SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId3)
+                         )
+                 ) ORDER BY dc.Sort DESC,dc.ChannelId;";
+
+            $dataProperty->AddField("AdminUserId", $adminUserId);
+            $dataProperty->AddField("AdminUserId2", $adminUserId);
+            $dataProperty->AddField("AdminUserId3", $adminUserId);
         }
-        $dataProperty->AddField("siteid", $siteid);
+        $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -222,7 +223,7 @@ class DocumentChannelManageData extends BaseManageData {
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
-    
+
     /**
      * 取得频道Rank
      * @param int $documentChannelId 频道id
@@ -248,8 +249,7 @@ class DocumentChannelManageData extends BaseManageData {
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
-    
-    
+
     /**
      * 取得频道类型编号
      * @param int $documentChannelId 频道id
@@ -262,8 +262,6 @@ class DocumentChannelManageData extends BaseManageData {
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
-    
-    
 
 }
 

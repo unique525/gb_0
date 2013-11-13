@@ -7,16 +7,6 @@
  * @author zhangchi
  */
 class AdminUserGroupManageData extends BaseManageData {
-    
-    /**
-     * 表名
-     */
-    const tableName = "cst_adminusergroup";    
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "adminusergroupid";
 
     public function Create() {
         $dataProperty = new DataProperty();
