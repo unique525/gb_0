@@ -32,7 +32,7 @@
             <div class="content">
                 <div>
                 <div class="postnewtopic">
-                    <span class="btnpostnewtopic"><a href="">发表新主题</a></span>
+                    <span class="btnpostnewtopic"><a href="default.php?mod=forumtopic&a=create&forumid={forumid}">发表新主题</a></span>
                 </div>
                 <div class="forumtopictypelist"><span>全部分类</span></div>
                 <div class="spe"></div>

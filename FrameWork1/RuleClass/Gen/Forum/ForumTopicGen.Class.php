@@ -73,7 +73,10 @@ class ForumTopicGen extends BaseFrontGen implements IBaseFrontGen {
         $jsFunctionName = "";
         $jsParamList = "";
         $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+        
+        
         $tempContent = str_ireplace("{pagerbutton}", $pagerButton, $tempContent);
+        $tempContent = str_ireplace("{forumid}", $forumId, $tempContent);
 
 
 
