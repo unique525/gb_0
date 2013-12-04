@@ -145,7 +145,7 @@ class BaseGen {
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
-                $documentChannelData = new DocumentChannelData();
+                $documentChannelData = new ChannelData();
                 foreach ($arr2 as $key => $val) {
                     $docontent = '<documentchannelname' . $val . '</documentchannelname>';
                     $keyname = "documentchannelname";
@@ -163,7 +163,7 @@ class BaseGen {
      */
     public function ReplaceEnd(&$tempContent) {
         $templateName = self::GetTemplateName();
-        $selectTemplate = Template::Load("selecttemplate.html","common");
+        $selectTemplate = Template::Load("selecttemplate.html", "common");
         $domain = null;
         require ROOTPATH . '/FrameWork1/SystemInc/domain.inc.php';
         $tempContent = str_ireplace("{rootpath}", ROOTPATH, $tempContent);
@@ -175,8 +175,6 @@ class BaseGen {
         $tempContent = str_ireplace("{templateselected_$templateName}", "_selected", $tempContent);
         $tempContent = str_ireplace("{templateselected_default}", "", $tempContent);
         $tempContent = str_ireplace("{templateselected_deepblue}", "", $tempContent);
-        
-        
     }
 
     /**
@@ -185,13 +183,12 @@ class BaseGen {
      */
     private function GetTemplateName() {
         $templateName = Control::GetAdminUserTemplateName();
-        if(strlen($templateName)<=0){
+        if (strlen($templateName) <= 0) {
             $templateName = "default";
         }
         return $templateName;
     }
-    
-    
+
     /**
      * 是否是安全IP
      * @return boolean 
@@ -216,16 +213,16 @@ class BaseGen {
         }
         return $isInnerIp;
     }
-    
+
     /**
      * 返回错误内容模板
      * @param string $errorContent 错误提示内容
      * @return string 错误内容模板
      */
-    protected function ShowError($errorContent){
-        $errorTemplate = Template::Load("error.html","common");        
+    protected function ShowError($errorContent) {
+        $errorTemplate = Template::Load("error.html", "common");
         $errorTemplate = str_ireplace("{errorcontent}", $errorContent, $errorTemplate);
-        self::ReplaceEnd($errorTemplate);        
+        self::ReplaceEnd($errorTemplate);
         return $errorTemplate;
     }
 
@@ -233,9 +230,12 @@ class BaseGen {
      * 替换模板中的配置标记
      * @param int $siteId 站点id
      * @param string $tempContent 模板内容
+     * @param SiteConfigData $siteConfigData 站点配置数据对象，默认为NULL时，从传入的站点id初始化，否则直接使用传入的对象
      */
-    protected function ReplaceSiteConfig($siteId, &$tempContent) {
-        $siteConfigData = new SiteConfigData($siteId);
+    protected function ReplaceSiteConfig($siteId, &$tempContent, $siteConfigData = NULL) {
+        if ($siteConfigData == NULL) {
+            $siteConfigData = new SiteConfigData($siteId);
+        }
         $arrSiteConfigOne = $siteConfigData->GetList($siteId);
         if (count($arrSiteConfigOne) > 0) {
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
@@ -278,6 +278,7 @@ class BaseGen {
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
     }
+
 }
 
 ?>

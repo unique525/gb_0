@@ -20,17 +20,13 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
-                case "documentchannel":
-                    $documentChannelManageGen = new DocumentChannelManageGen();
-                    $result = $documentChannelManageGen->Gen();
+                case "channel":
+                    $channelManageGen = new ChannelManageGen();
+                    $result = $channelManageGen->Gen();
                     break;
                 case "documentnews":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
-                    break;
-                case "documentthreadmanage":
-                    $documentThreadManageGen = new DocumentThreadManageGen();
-                    $result = $documentThreadManageGen->Gen();
                     break;
                 case "adminleftusermanage":
                     $adminLeftUserManageData = new AdminLeftUserManageData();

@@ -1,10 +1,19 @@
-#topnav .content{width:1400px;}
+#topnav .content{width:1310px;}
 
-#forum_nav .content{width:1400px;}
-#forum_bul .content{width:1398px;}
+#forum_nav .content{width:1310px;}
+#forum_bul .content{width:1308px;}
 
-#forum_rec_1 .content{width:1400px;}
+#forum_rec_1 .content{width:1310px;}
 
-#forum_list .content{width:1400px;}
-#forum_list .forum_two_item{width:430px;}
-#forum_list .forum_two_item2{width:430px;}
+#forum_list .content{width:1310px;}
+#forum_list .forum_two_item{width:400px;}
+#forum_list .forum_two_item2{width:400px;}
+
+#forum_rec_1 .newpictopic{width:370px;}
+#forum_rec_1 .newpictopic img{width:370px;}
+#forum_rec_1 .newtopic{width:280px;}
+#forum_rec_1 .hottopic{width:280px;}
+#forum_rec_1 .besttopic{width:280px;}
+
+#forum_topic_topbtn .content{width:1310px;}
+#forum_topic_list .content{width:1310px;}

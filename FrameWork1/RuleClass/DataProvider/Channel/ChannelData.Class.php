@@ -3,20 +3,10 @@
 /**
  * 前台频道数据类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_Document
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Channel
  * @author zhangchi
  */
-class DocumentChannelData extends BaseFrontData {
-
-    /**
-     * 表名
-     */
-    const tableName = "cst_channel";
-    
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "ChannelId";
+class ChannelData extends BaseFrontData {
 
 }
 

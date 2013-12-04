@@ -7,15 +7,6 @@
  * @author zhangchi
  */
 class AdminUserManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_adminuser";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "adminuserid";
 
     /**
      * 管理后台登录
@@ -25,7 +16,7 @@ class AdminUserManageData extends BaseManageData {
      */
     public function Login($adminUserName, $adminUserPass) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT adminuserid FROM " . self::tableName . " WHERE AdminUserName=:AdminUserName AND AdminUserPass=:AdminUserPass AND State<100 AND EndDate>now()";
+        $sql = "SELECT " . self::TableId_AdminUser . " FROM " . self::TableName_AdminUser . " WHERE AdminUserName=:AdminUserName AND AdminUserPass=:AdminUserPass AND State<100 AND EndDate>now()";
         $dataProperty->AddField("AdminUserName", $adminUserName);
         $dataProperty->AddField("AdminUserPass", $adminUserPass);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
@@ -34,42 +25,42 @@ class AdminUserManageData extends BaseManageData {
 
     public function Create() {
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty);
+        $sql = parent::GetInsertSql(self::TableName_AdminUser, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
-    public function Modify($tableidvalue) {
+    public function Modify($adminUserId) {
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $tableidvalue, $dataProperty);
+        $sql = parent::GetUpdateSql(self::TableName_AdminUser, self::tableIdName, $adminUserId, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
-    public function RemoveBin($uid) {
-        $sql = "update " . self::tableName . " set state=100 where adminuserid=:adminuserid";
+    public function RemoveBin($adminUserId) {
+        $sql = "UPDATE " . self::TableName_AdminUser . " SET State=100 WHERE " . self::TableId_AdminUser . "=:" . self::TableId_AdminUser . "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $uid);
+        $dataProperty->AddField(self::TableId_AdminUser, $adminUserId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 根据type修改密码
-     * @param <type> $pass
+     * @param <type> $userPass
      * @param <type> $tablevalue
      * @param <type> $type 为0时根据adminuserid修改 1根据adminusername修改
      */
-    public function UpdateAdminUserPass($pass, $tablevalue, $type = 0) {
+    public function ModifyAdminUserPassByAdminUserName($userPass, $tablevalue, $type = 0) {
         $dataProperty = new DataProperty();
         if (intval($type) === 0) {
-            $sql = "UPDATE " . self::tableName . " SET adminuserpass=:adminuserpass WHERE adminuserid=:adminuserid";
+            $sql = "UPDATE " . self::TableName_AdminUser . " SET adminuserpass=:adminuserpass WHERE adminuserid=:adminuserid";
             $dataProperty->AddField("adminuserid", $tablevalue);
         } elseif (intval($type === 1)) {
-            $sql .= "UPDATE " . self::tableName . " SET adminuserpass=:adminuserpass WHERE adminusername=:adminusername";
+            $sql .= "UPDATE " . self::TableName_AdminUser . " SET adminuserpass=:adminuserpass WHERE adminusername=:adminusername";
             $dataProperty->AddField("adminusername", $tablevalue);
         }
-        $dataProperty->AddField("adminuserpass", $pass);
+        $dataProperty->AddField("adminuserpass", $userPass);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
@@ -82,7 +73,7 @@ class AdminUserManageData extends BaseManageData {
      */
     public function UpdateAdminUserEmail($email, $tableValue) {
         $dataProperty = new DataProperty();
-        $sql = "UPDATE " . self::tableName . " SET email=:email WHERE adminuserid=:adminuserid";
+        $sql = "UPDATE " . self::TableName_AdminUser . " SET email=:email WHERE adminuserid=:adminuserid";
         $dataProperty->AddField("adminuserid", $tableValue);
         $dataProperty->AddField("email", $email);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -96,7 +87,7 @@ class AdminUserManageData extends BaseManageData {
      */
     public function GetAdminUserPass($adminUserId) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT adminuserpass FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT adminuserpass FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty->AddField("adminuserid", $adminUserId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
@@ -129,7 +120,7 @@ class AdminUserManageData extends BaseManageData {
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         //统计总数
         $sql = "";
-        $sql = "SELECT count(*) FROM " . self::tableName . " u WHERE u." . self::tableIdName . " >0 " . $searchsql;
+        $sql = "SELECT count(*) FROM " . self::TableName_AdminUser . " u WHERE u." . self::tableIdName . " >0 " . $searchsql;
         $allcount = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
@@ -140,7 +131,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetAdminUserName($adminuserid) {
-        $sql = "SELECT adminusername FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT adminusername FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -153,7 +144,7 @@ class AdminUserManageData extends BaseManageData {
      * @return string 返回查询到的用户邮件
      */
     public function GetAdminUserEmail($adminUserId) {
-        $sql = "SELECT email FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT email FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminUserId);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -166,7 +157,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetOpenEnLogin($adminusername) {
-        $sql = "SELECT OpenEnLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
+        $sql = "SELECT OpenEnLogin FROM " . self::TableName_AdminUser . " WHERE adminusername=:adminusername";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminusername", $adminusername);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
@@ -179,7 +170,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetOpenSmsLogin($adminusername) {
-        $sql = "SELECT OpenSmsLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
+        $sql = "SELECT OpenSmsLogin FROM " . self::TableName_AdminUser . " WHERE adminusername=:adminusername";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminusername", $adminusername);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
@@ -192,7 +183,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetOpenOtpLogin($adminusername) {
-        $sql = "SELECT OtpVerifyLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
+        $sql = "SELECT OtpVerifyLogin FROM " . self::TableName_AdminUser . " WHERE adminusername=:adminusername";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminusername", $adminusername);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
@@ -205,7 +196,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetMobile($adminuserid) {
-        $sql = "SELECT mobile FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT mobile FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -219,12 +210,12 @@ class AdminUserManageData extends BaseManageData {
      */
     public function GetAdminUserNameList($state) {
         if ($state >= 0) {
-            $sql = "SELECT adminuserid,adminusername FROM " . self::tableName . " WHERE state=:state";
+            $sql = "SELECT adminuserid,adminusername FROM " . self::TableName_AdminUser . " WHERE state=:state";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("state", $state);
             $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         } else {
-            $sql = "SELECT adminuserid,adminusername FROM " . self::tableName . "";
+            $sql = "SELECT adminuserid,adminusername FROM " . self::TableName_AdminUser . "";
             $result = $this->dbOperator->ReturnArray($sql, null);
         }
         return $result;
@@ -236,7 +227,7 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetUserId($adminuserid) {
-        $sql = "SELECT userid FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT userid FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -244,7 +235,7 @@ class AdminUserManageData extends BaseManageData {
     }
 
     public function GetUserName($adminuserid) {
-        $sql = "SELECT UserName FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT UserName FROM " . self::TableName_AdminUser . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -258,7 +249,6 @@ class AdminUserManageData extends BaseManageData {
      * @return <type>
      */
     public function GetAdminUserList($adminusergroupid = 0, $adminusergroupids = null, $countadminuserid = 0, $state = 0) {
-
 
         $searchsql = "";
         $dataProperty = new DataProperty();
@@ -283,7 +273,7 @@ class AdminUserManageData extends BaseManageData {
             $searchsql .= " AND state=:state ";
             $dataProperty->AddField("state", $state);
         }
-        $sql = "SELECT adminuserid,adminusername,userid,username FROM " . self::tableName . " WHERE " . self::tableIdName . ">0 " . $searchsql . " order by adminuserid desc";
+        $sql = "SELECT adminuserid,adminusername,userid,username FROM " . self::TableName_AdminUser . " WHERE " . self::TableId_AdminUser . ">0 " . $searchsql . " order by adminuserid desc";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -295,7 +285,7 @@ class AdminUserManageData extends BaseManageData {
      */
     public function GetAdminUserGroupId($tablevalue) {
         $dataProperty = new DataProperty();
-        $sql = "select adminusergroupid from " . self::tableName . " where " . self::tableIdName . "=:" . self::tableIdName;
+        $sql = "select adminusergroupid from " . self::TableName_AdminUser . " where " . self::TableId_AdminUser . "=:" . self::TableId_AdminUser;
         $dataProperty->AddField(self::tableIdName, $tablevalue);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
@@ -307,7 +297,7 @@ class AdminUserManageData extends BaseManageData {
      * @return array 管理员帐号信息数组
      */
     public function GetOne($adminUserId) {
-        $sql = "SELECT * FROM " . self::tableName . " WHERE " . self::tableIdName . "=:AdminUserId";
+        $sql = "SELECT * FROM " . self::TableName_AdminUser . " WHERE " . self::TableId_AdminUser . "=:AdminUserId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("AdminUserId", $adminUserId);
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
@@ -320,7 +310,7 @@ class AdminUserManageData extends BaseManageData {
      * @return type
      */
     public function UpdateOtpValue($adminuserid, $otpcurrsucc, $otpcurrdft) {
-        $sql = "UPDATE " . self::tableName . " SET otpcurrsucc=:otpcurrsucc,otpcurrdft=:otpcurrdft where " . self::tableIdName . "=:id";
+        $sql = "UPDATE " . self::TableName_AdminUser . " SET otpcurrsucc=:otpcurrsucc,otpcurrdft=:otpcurrdft where " . self::TableId_AdminUser . "=:id";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("id", $adminuserid);
         $dataProperty->AddField("otpcurrsucc", $otpcurrsucc);
