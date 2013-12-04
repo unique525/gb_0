@@ -7,15 +7,16 @@
  * @author zhangchi
  */
 class DocumentChannelManageData extends BaseManageData {
+
     /**
      * 表名
      */
-    const tableName = "cst_documentchannel";
-
+    const tableName = "cst_channel";
+    
     /**
      * 表关键字段名
      */
-    const tableIdName = "documentchannelid";
+    const tableIdName = "ChannelId";
 
     /**
      * 新增频道
@@ -32,33 +33,7 @@ class DocumentChannelManageData extends BaseManageData {
         $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3");
         $addFieldValues = array($titlePic1, $titlePic2, $titlePic3);
         $sql = parent::GetInsertSql(self::tableName, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->LastInsertId($sql, $dataProperty);
-        $siteId = Control::PostRequest("f_siteid", 0);
-
-        if ($result > 0) {
-            //活动类的默认添加Class分类====Ljy
-            $documentChannelType = Control::PostRequest("f_documentchanneltype", 1);
-            if ($documentChannelType == 6) {
-                $activityClassName = "默认";
-                $state = 0;
-                $activityType = 0;     //0为线下活动
-                $activityClsaaData = new ActivityClassData();
-                $activityClsaaData->CreateInt($siteId, $result, $activityClassName, $state, $activityType);
-            }
-
-            //授权给创建人
-            $adminUserId = Control::GetAdminUserID();
-
-            if ($adminUserId > 1) { //只有非ADMIN的要授权
-                $adminPopedomData = new AdminPopedomData();
-                $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
-            }
-
-            //删除缓冲
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-            DataCache::RemoveDir($cacheDir);
-        }
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
         return $result;
     }
@@ -68,34 +43,27 @@ class DocumentChannelManageData extends BaseManageData {
      * @param int $siteId 站点id
      * @return int 新增的频道id
      */
-    public function CreateWhenSiteCreate($siteId) {
+    public function CreateWhenSiteCreate($siteId,$adminUserId,$channelName) {
         if ($siteId > 0) {
-            $adminUserId = Control::GetAdminUserID();
-            $documentChannelName = "首页";
+            //$adminUserId = Control::GetAdminUserID();
+            //$channelName = "首页";
 
             $dataProperty = new DataProperty();
-            $sql = "insert into " . self::tableName . " (siteid,createdate,adminuserid,documentchannelname) values (:siteid,now(),:adminuserid,:documentchannelname)";
-
-            $dataProperty->AddField("siteid", $siteId);
-            $dataProperty->AddField("adminuserid", $adminUserId);
-            $dataProperty->AddField("documentchannelname", $documentChannelName);
-
-            $dbOperator = DBOperator::getInstance();
-            $result = $dbOperator->LastInsertId($sql, $dataProperty);
-
+            $sql = "INSERT INTO " . self::tableName . " (SiteId,CreateDate,AdminUserId,ChannelName) VALUES (:SiteId,now(),:AdminUserId,:ChannelName);";
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("AdminUserId", $adminUserId);
+            $dataProperty->AddField("ChannelName", $channelName);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
             if ($result > 0) {
                 //授权给创建人
-
                 if ($adminUserId > 1) { //只有非ADMIN的要授权
                     $adminPopedomData = new AdminPopedomData();
                     $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
                 }
-
                 //删除缓冲
                 $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
                 DataCache::RemoveDir($cacheDir);
             }
-
             return $result;
         }
     }

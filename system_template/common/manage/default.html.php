@@ -22,11 +22,6 @@
         <script type="text/javascript">
             var G_TemplateName = "{templatename}";
         </script>
-
-        <style type="text/css">
-            body { font-family: "微软雅黑"; }
-            input { font-family: "微软雅黑";}
-        </style>
     </head>
     <body>
         <div id="top">

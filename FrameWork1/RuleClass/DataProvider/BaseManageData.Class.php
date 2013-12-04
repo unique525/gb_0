@@ -76,7 +76,7 @@ class BaseManageData extends BaseData {
             if (strpos($fieldValues, ",") === 0) {
                 $fieldValues = substr($fieldValues, 1);
             }
-            $sql = "insert into " . $tableName . " (" . $fieldNames . ") values (" . $fieldValues . ")";
+            $sql = "INSERT INTO " . $tableName . " (" . $fieldNames . ") VALUES (" . $fieldValues . ");";
             return $sql;
         } else {
             return null;

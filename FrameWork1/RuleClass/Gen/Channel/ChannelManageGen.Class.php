@@ -3,11 +3,11 @@
 /**
  * 前台Gen频道生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_Document
+ * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi
  */
-class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  {
-    
+class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
+
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -68,17 +68,17 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
-        
+
     /**
      * 新增频道
      * @return string 模板内容页面
      */
     private function GenCreate() {
-        $tempContent = Template::Load("document/documentchannel_deal.html","common");
+        $tempContent = Template::Load("channel/channel_deal.html", "common");
         $parentId = Control::GetRequest("cid", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 
-        $adminUserId = Control::GetAdminUserID();
+        $adminUserId = Control::GetAdminUserId();
         parent::ReplaceFirst($tempContent);
 
         if ($parentId > 0) {
@@ -143,6 +143,30 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
                     $adminUserLogData->Insert($operateContent);
 
                     if ($result > 0) {
+
+                        //活动类的默认添加Class分类====Ljy
+                        $channelType = Control::PostRequest("f_channeltype", 1);
+                        if ($channelType == 6) {
+                            $activityClassName = "默认";
+                            $state = 0;
+                            $activityType = 0;     //0为线下活动
+                            $activityClsaaData = new ActivityClassData();
+                            $activityClsaaData->CreateInt($siteId, $result, $activityClassName, $state, $activityType);
+                        }
+
+                        //授权给创建人
+                        $adminUserId = Control::GetAdminUserID();
+
+                        if ($adminUserId > 1) { //只有非ADMIN的要授权
+                            $adminPopedomData = new AdminPopedomData();
+                            $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
+                        }
+
+                        //删除缓冲
+                        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
+                        DataCache::RemoveDir($cacheDir);
+
+
                         $uploadFileData = new UploadFileData();
                         //修改题图1的TableID
                         $uploadFileData->ModifyTableID($uploadFileId1, $result);
@@ -188,7 +212,7 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
-    
+
     /**
      * 频道树，后台主界面用
      * @return string 返回ztree的JSON数据结构
@@ -197,19 +221,19 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
         $siteId = Control::GetRequest("sid", 0);
         $adminUserId = Control::GetAdminUserId();
         if ($siteId > 0 && $adminUserId > 0) {
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-            $cacheFile = 'docchanneltree.cache_' . $siteId . '_' . $adminUserId . '.php';
+            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheFile = 'channeltree.cache_' . $siteId . '_' . $adminUserId . '.php';
             $result = '';
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 $documentChannelManageData = new DocumentChannelManageData();
                 $arrList = $documentChannelManageData->GetListAllForZtree($siteId, $adminUserId);
                 $sb = '[';
                 for ($i = 0; $i < count($arrList); $i++) {
-                    $documentChannelName = Format::FormatQuote($arrList[$i]['DocumentChannelName']);
-                    $documentChannelId = $arrList[$i]['DocumentChannelID'];
-                    $documentChannelType = intval($arrList[$i]['DocumentChannelType']);
+                    $documentChannelName = Format::FormatQuote($arrList[$i]['ChannelName']);
+                    $documentChannelId = $arrList[$i]['ChannelId'];
+                    $documentChannelType = intval($arrList[$i]['ChannelType']);
                     $rank = intval($arrList[$i]['Rank']);
-                    $parentId = intval($arrList[$i]['ParentID']);
+                    $parentId = intval($arrList[$i]['ParentId']);
                     $childCounts = intval($arrList[$i]['childcounts']);
                     $isParent = "";
                     if ($childCounts > 0) {
@@ -250,9 +274,9 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
      * @return string 返回新的拼接结果的字符串
      */
     private function _getTree($adminUserId, $flag, $siteId, $rank, $parentId, $resultString) {
-        $documentChannelData = new DocumentChannelData();
+        $channelData = new DocumentChannelData();
         $arrList = null;
-        $arrList = $documentChannelData->GetList($siteId, $adminUserId, $rank, $parentId);
+        $arrList = $channelData->GetList($siteId, $adminUserId, $rank, $parentId);
 
         if (count($arrList) > 0) {
 
@@ -263,44 +287,44 @@ class DocumentChannelManageGen extends BaseManageGen implements IBaseManageGen  
                     $resultString = $resultString . '<ul><li>';
                 }
 
-                $documentChannelName = Format::FormatQuote($arrList[$i]['DocumentChannelName']);
-                $documentChannelId = $arrList[$i]['DocumentChannelID'];
-                $documentChannelType = $arrList[$i]['DocumentChannelType'];
+                $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);
+                $channelId = $arrList[$i]['ChannelId'];
+                $channelType = $arrList[$i]['ChannelType'];
                 $rank = $arrList[$i]['Rank'];
                 $css = 'folder';
-                $hasSubChannel = $documentChannelData->HasSubChannel($documentChannelId);
+                $hasSubChannel = $channelData->HasSubChannel($channelId);
                 if ($hasSubChannel <= 0) {
                     $css = "file";
                 }
-                if (intval($documentChannelType) === 2) {
+                if (intval($channelType) === 2) {
                     $css = "type2";
-                } else if (intval($documentChannelType) === 4) {
+                } else if (intval($channelType) === 4) {
                     $css = "type4";
-                } else if (intval($documentChannelType) === 5) {
+                } else if (intval($channelType) === 5) {
                     $css = "type5";
-                } else if (intval($documentChannelType) === 6) {
+                } else if (intval($channelType) === 6) {
                     $css = "type6";
-                } else if (intval($documentChannelType) === 7) {
+                } else if (intval($channelType) === 7) {
                     $css = "type7";
-                } else if (intval($documentChannelType) === 8) {
+                } else if (intval($channelType) === 8) {
                     $css = "type8";
-                } else if (intval($documentChannelType) === 9) {
+                } else if (intval($channelType) === 9) {
                     $css = "type9";
-                } else if (intval($documentChannelType) === 10) {
+                } else if (intval($channelType) === 10) {
                     $css = "type10";
-                } else if (intval($documentChannelType) === 11) {
+                } else if (intval($channelType) === 11) {
                     $css = "type11";
-                } else if (intval($documentChannelType) === 12) {
+                } else if (intval($channelType) === 12) {
                     $css = "type12";
-                } else if (intval($documentChannelType) === 0) {
+                } else if (intval($channelType) === 0) {
                     $css = "type0";
                 }
 
 
-                $resultString = $resultString . '<span id="' . $documentChannelId . '" class="' . $css . ' tcm" title="' . $documentChannelName . '[' . $documentChannelId . ']" accesskey="' . $documentChannelType . '">' . $documentChannelName . '</span>';
+                $resultString = $resultString . '<span id="' . $channelId . '" class="' . $css . ' tcm" title="' . $channelName . '[' . $channelId . ']" accesskey="' . $channelType . '">' . $channelName . '</span>';
 
                 $rank = $rank + 1;
-                $parentId = $documentChannelId;
+                $parentId = $channelId;
                 $resultString = self::_getTree($adminUserId, $flag, $siteId, $rank, $parentId, $resultString);
                 $resultString = $resultString . '</li></ul>';
             }

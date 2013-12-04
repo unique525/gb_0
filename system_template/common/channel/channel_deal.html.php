@@ -3,13 +3,13 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link type="text/css" href="{rootpath}/system_images/common.css" rel="stylesheet" />
-        <link type="text/css" href="{rootpath}/system_images/editor.css" rel="stylesheet" />
-        <link type="text/css" href="{rootpath}/system_images/jquery.ui.all.css" rel="stylesheet" />
-        <script type="text/javascript" src="{rootpath}/system_js/jquery-1.5.1.min.js"></script>
+        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{templatename}/images/editor.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="{rootpath}/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/common.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jquery-ui-1.8.2.custom.min.js"></script>
+        <script type="text/javascript" src="{rootpath}/system_js/jqueryui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/tiny_mce/tiny_mce.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/editor.js"></script>
         <script type="text/javascript">
@@ -21,7 +21,7 @@
                     showButtonPanel: true
                 }); 
                 
-                if(Request["id"] == undefined){
+                if(Request["id"] === undefined){
                     var today = new Date();
                     var month = today.getMonth()+1;
                     var s_date = today.getFullYear()+"-"+month+"-"+today.getDate();
@@ -36,7 +36,7 @@
                 theimage1.src = img1.attr("src");
                 var tp1 = '{titlepic1}';
                 $("#preview_titlepic1").click(function() {
-                    if(tp1 != ''){
+                    if(tp1 !== ''){
                         $("#dialog_titlepic1").dialog({
                             width : theimage1.width+30,
                             height : theimage1.height+50

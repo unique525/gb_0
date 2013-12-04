@@ -11,12 +11,12 @@ class DocumentChannelData extends BaseFrontData {
     /**
      * 表名
      */
-    const tableName = "cst_documentchannel";
+    const tableName = "cst_channel";
     
     /**
      * 表关键字段名
      */
-    const tableIdName = "documentchannelid";
+    const tableIdName = "ChannelId";
 
 }
 
