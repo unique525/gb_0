@@ -7,6 +7,15 @@
  * @author zhangchi
  */
 class ForumData extends BaseFrontData {
+    /**
+     * 表名
+     */
+
+    const tableName = "cst_forum";
+    /**
+     * 表关键字段名
+     */
+    const tableIdName = "ForumId";
 
     /**
      * 更新版块的最后回复信息（发表主题时）
@@ -20,13 +29,13 @@ class ForumData extends BaseFrontData {
      * @return type 
      */
     public function UpdateForumInfo($forumId, $lastTopicId, $lastTopicTitle, $lastUserName, $lastUserId, $lastPostTime, $lastPostInfo) {
-        $sql = "UPDATE " . self::TableName_Forum . " SET NewCount=NewCount+1,TopicCount=TopicCount+1,LastTopicID=:LastTopicID,LastTopicTitle=:LastTopicTitle,LastUserName=:LastUserName,LastUserID=:LastUserID,LastPostTime=:LastPostTime,LastPostInfo=:LastPostInfo WHERE ForumID=:ForumID;";
+        $sql = "UPDATE " . self::tableName . " SET NewCount=NewCount+1,TopicCount=TopicCount+1,LastTopicID=:LastTopicID,LastTopicTitle=:LastTopicTitle,LastUserName=:LastUserName,LastUserID=:LastUserID,LastPostTime=:LastPostTime,LastPostInfo=:LastPostInfo WHERE ForumID=:ForumID;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ForumId", $forumId);
-        $dataProperty->AddField("LastTopicId", $lastTopicId);
+        $dataProperty->AddField("ForumID", $forumId);
+        $dataProperty->AddField("LastTopicID", $lastTopicId);
         $dataProperty->AddField("LastTopicTitle", $lastTopicTitle);
         $dataProperty->AddField("LastUserName", $lastUserName);
-        $dataProperty->AddField("LastUserId", $lastUserId);
+        $dataProperty->AddField("LastUserID", $lastUserId);
         $dataProperty->AddField("LastPostTime", $lastPostTime);
         $dataProperty->AddField("LastPostInfo", $lastPostInfo);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -34,7 +43,7 @@ class ForumData extends BaseFrontData {
     }
 
     /**
-     * 取得版块列表(根据版块等级)
+     * 根据版块等级取得版块列表
      * @param int $siteId 站点id
      * @param int $forumRank 版块等级
      * @return array 版块列表
@@ -65,7 +74,7 @@ class ForumData extends BaseFrontData {
                 ForumNameFontColor,
                 ForumNameFontBold,
                 ForumNameFontSize
-            FROM " . self::TableName_Forum . " WHERE State<100 AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
+            FROM " . self::tableName . " WHERE State<100 AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumRank", $forumRank);
         $dataProperty->AddField("SiteId", $siteId);
@@ -74,16 +83,16 @@ class ForumData extends BaseFrontData {
     }
 
     /**
-     * 取得版块列表(根据父版块id)
-     * @param int $siteId 站点id
-     * @param int $parentId 父版块id
-     * @return array 版块列表
+     * 
+     * @param type $siteId
+     * @param type $parentId
+     * @return type
      */
     public function GetListByParentId($siteId, $parentId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND SiteId=:SiteId ORDER BY Sort DESC";
+        $sql = "SELECT * FROM " . self::tableName . " WHERE parentid=:parentid AND SiteID=:siteid ORDER BY sort DESC";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ParentId", $parentId);
-        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("parentid", $parentId);
+        $dataProperty->AddField("siteid", $siteId);
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -100,12 +109,12 @@ class ForumData extends BaseFrontData {
         $sql = "SELECT
             f.forumid,f.state,f.forumname,f.forumaccess
             FROM
-            " . self::TableName_Forum . " f
+            " . self::tableName . " f
             WHERE f.forumid>0  " . $searchSql . " ORDER BY f.sort DESC LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         //统计总数
         $sql = "";
-        $sql = "SELECT count(*) FROM " . self::TableName_Forum . " f WHERE f.forumid>0 " . $searchSql;
+        $sql = "SELECT count(*) FROM " . self::tableName . " f WHERE f.forumid>0 " . $searchSql;
         $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
@@ -118,7 +127,7 @@ class ForumData extends BaseFrontData {
     public function GetSiteId($forumId) {
         if ($forumId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "SELECT SiteId FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId";
+            $sql = "SELECT SiteId FROM " . self::tableName . " WHERE ForumId=:ForumId";
             $dataProperty->AddField("ForumId", $forumId);
             $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
             return $result;

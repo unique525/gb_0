@@ -7,7 +7,12 @@
  * @author zhangchi
  */
 class AdminUserPopedomManageData extends BaseManageData {
-    
+    /**
+     * 表名
+     */
+
+    const tableName = "cst_adminpopedom";
+
     /**
      * 建立频道时授权
      * @param int $siteId 站点id
@@ -16,7 +21,7 @@ class AdminUserPopedomManageData extends BaseManageData {
      * @return int 创建结果数字，1为成功 
      */
     public function CreateForDocumentChannel($siteId, $documentChannelId, $adminUserId) {
-        $sql = "INSERT INTO " . self::TableName_AdminPopedom . " (
+        $sql = "INSERT INTO " . self::tableName . " (
             `SiteID`,
             `DocumentChannelID`,
             `AdminUserGroupID`,
@@ -91,14 +96,14 @@ class AdminUserPopedomManageData extends BaseManageData {
         $dataProperty->AddField("documentchannelid", $documentChannelId);
         $dataProperty->AddField("adminuserid", $adminUserId);
 
-        $sql = "select count(*) from " . self::TableName_AdminPopedom . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
+        $sql = "select count(*) from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
 
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
 
         if ($result > 0) {
-            $sql = "update " . self::TableName_AdminPopedom . " set `" . $field . "`=:" . $field . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
+            $sql = "update " . self::tableName . " set `" . $field . "`=:" . $field . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
         } else {
-            $sql = "insert into " . self::TableName_AdminPopedom . " (siteid,documentchannelid,`" . $field . "`,adminuserid) values (:siteid,:documentchannelid,:" . $field . ",:adminuserid)";
+            $sql = "insert into " . self::tableName . " (siteid,documentchannelid,`" . $field . "`,adminuserid) values (:siteid,:documentchannelid,:" . $field . ",:adminuserid)";
         }
         $dataProperty2 = new DataProperty();
         $dataProperty2->AddField("siteid", $siteId);
@@ -158,7 +163,7 @@ class AdminUserPopedomManageData extends BaseManageData {
     ) {
         $result = -1;
         //判断是否存在数据
-        $sql = "SELECT Count(*) FROM " . self::TableName_AdminPopedom . " WHERE SiteID=:SiteID AND AdminUserGroupID=:AdminUserGroupID AND AdminUserID=0 AND DocumentChannelID=0;";
+        $sql = "SELECT Count(*) FROM " . self::tableName . " WHERE SiteID=:SiteID AND AdminUserGroupID=:AdminUserGroupID AND AdminUserID=0 AND DocumentChannelID=0;";
 
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteID", $siteId);
@@ -167,7 +172,7 @@ class AdminUserPopedomManageData extends BaseManageData {
         $hasCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
 
         if ($hasCount <= 0) {
-            $sql = "INSERT INTO " . self::TableName_AdminPopedom . "
+            $sql = "INSERT INTO " . self::tableName . "
 	(
 	`SiteID`,  
 	`AdminUserGroupID`,
@@ -296,7 +301,7 @@ class AdminUserPopedomManageData extends BaseManageData {
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         } else {
 
-            $sql = "UPDATE " . self::TableName_AdminPopedom . "
+            $sql = "UPDATE " . self::tableName . "
 	SET  
 	`Explore` = :Explore, 
 	`Create` = :Create, 
@@ -389,7 +394,7 @@ class AdminUserPopedomManageData extends BaseManageData {
      * @param type $adminUserId 
      */
     public function Remove($siteId, $adminUserId) {
-        $sql = "DELETE FROM " . self::TableName_AdminPopedom . " WHERE siteid=:siteid and adminuserid=:adminuserid";
+        $sql = "DELETE FROM " . self::tableName . " WHERE siteid=:siteid and adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
         $dataProperty->AddField("adminuserid", $adminUserId);
@@ -410,7 +415,7 @@ class AdminUserPopedomManageData extends BaseManageData {
         $dataProperty->AddField("documentchannelid", $documentChannelId);
         $dataProperty->AddField("adminuserid", $adminUserId);
 
-        $sql = "SELECT * FROM " . self::TableName_AdminPopedom . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminuserid=:adminuserid";
+        $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminuserid=:adminuserid";
 
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
         return $result;
@@ -428,10 +433,10 @@ class AdminUserPopedomManageData extends BaseManageData {
         $dataProperty->AddField("siteid", $siteId);
         $dataProperty->AddField("adminusergroupid", $adminUserGroupId);
         if ($documentChannelId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_AdminPopedom . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminusergroupid=:adminusergroupid AND AdminUserID=0";
+            $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminusergroupid=:adminusergroupid AND AdminUserID=0";
             $dataProperty->AddField("documentchannelid", $documentChannelId);
         } else {
-            $sql = "SELECT * FROM " . self::TableName_AdminPopedom . " WHERE siteid=:siteid AND adminusergroupid=:adminusergroupid AND documentchannelid=0 AND AdminUserID=0;";
+            $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND adminusergroupid=:adminusergroupid AND documentchannelid=0 AND AdminUserID=0;";
         }
 
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
@@ -457,18 +462,18 @@ class AdminUserPopedomManageData extends BaseManageData {
         $dataProperty->AddField("adminuserid", $adminuserid);
 
         //检查用户频道权限
-        $sql = "select `" . $fieldname . "` from " . self::TableName_AdminPopedom . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
+        $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
 
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
 
         if ($result <= 0) {
             //检查用户组频道权限
-            $sql = "select `" . $fieldname . "` from " . self::TableName_AdminPopedom . " where siteid=:siteid and documentchannelid=:documentchannelid and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
+            $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
             $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
         }
         if ($result <= 0) {
             //检查用户组站点权限
-            $sql = "select `" . $fieldname . "` from " . self::TableName_AdminPopedom . " where siteid=:siteid and documentchannelid=0 and adminuserid=0 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
+            $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=0 and adminuserid=0 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
             $dataProperty2 = new DataProperty();
             $dataProperty2->AddField("siteid", $siteid);
             $dataProperty2->AddField("adminuserid", $adminuserid);
@@ -795,13 +800,13 @@ class AdminUserPopedomManageData extends BaseManageData {
 
     /**
      * 是否可以管理配置
-     * @param type $siteId
-     * @param type $channelId
-     * @param type $adminUserId
+     * @param type $siteid
+     * @param type $documentchannelid
+     * @param type $adminuserid
      * @return type
      */
-    public function CanManageConfig($siteId, $channelId, $adminUserId) {
-        return self::GetPopedomField($siteId, $channelId, $adminUserId, "ManageConfig");
+    public function CanManageConfig($siteid, $documentchannelid, $adminuserid) {
+        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageConfig");
     }
 
 }

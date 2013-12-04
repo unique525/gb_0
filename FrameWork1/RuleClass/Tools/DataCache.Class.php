@@ -7,11 +7,7 @@
  * @author zhangchi
  */
 class DataCache {
-    /**
-     * 服务器上缓存目录名
-     */
-    const CacheDir = "cachedata";
-    
+
     /**
      * 写入缓冲文件
      * @param string $cacheFile 缓冲文件名

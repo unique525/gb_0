@@ -3,7 +3,7 @@
         <tr>
             <td class="td_pic"><img src="/front_template/1.gif" /></td>
             <td class="td_info">
-                <div class="forum_name"><a style="color:{f_ForumNameFontColor};font-size:{f_ForumNameFontSize};font-weight:{f_ForumNameFontBold};" href="{ForumListUrl}&forumid={f_ForumId}">{f_ForumName}</a></div>
+                <div class="forum_name"><a style="color:{f_ForumNameFontColor};font-size:{f_ForumNameFontSize};font-weight:{f_ForumNameFontBold};" href="">{f_ForumName}</a></div>
                 <div class="forum_intro" title="{f_ForumInfo}">{f_ForumInfo}</div>
                 <div class="forum_stat">新帖 {f_NewCount} 主题 {f_TopicCount} 回复 {f_PostCount}</div>
             </td>

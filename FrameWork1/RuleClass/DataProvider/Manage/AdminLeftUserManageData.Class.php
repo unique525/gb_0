@@ -9,6 +9,16 @@
 class AdminLeftUserManageData extends BaseManageData {
     
     /**
+     * 表名
+     */
+    const tableName = "cst_AdminLeftUserManage";    
+
+    /**
+     * 表关键字段名
+     */ 
+    const tableIdName = "AdminLeftUserManageId";
+    
+    /**
      * 返回列表数据集
      * @return array 结果数据集
      */

@@ -6,7 +6,15 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
  * @author zhangchi
  */
-class SiteConfigManageData extends BaseManageData {
+class SiteConfigManageData {
+    /**
+     * 表名
+     */
+    const tableName = "cst_siteconfig";
+    /**
+     * 表关键字段名
+     */
+    const tableIdName = "SiteConfigId";
 
     //string mid Short Message
     private $ArrSiteConfigTypes_1 = array(
@@ -222,12 +230,12 @@ class SiteConfigManageData extends BaseManageData {
 
     /**
      * 设置配置值
-     * @param type $siteId
+     * @param type $siteID
      * @param type $siteConfigName
      * @param type $fieldValue
      * @param type $siteConfigType 
      */
-    private function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
+    public function SetValue($siteID, $siteConfigName, $fieldValue, $siteConfigType = 0) {
         $fieldName = "StringNorValue";
         switch ($siteConfigType) {
             case 0:
@@ -267,44 +275,45 @@ class SiteConfigManageData extends BaseManageData {
                 }
                 break;
         }
-        $sql = "SELECT count(*) FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName";
+        $sql = "SELECT count(*) FROM cst_siteconfig WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("SiteID", $siteID);
         $dataProperty->AddField("SiteConfigName", $siteConfigName);
-        $hasCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $dbOperator = DBOperator::getInstance();
+        $hasCount = $dbOperator->ReturnInt($sql, $dataProperty);
         if ($hasCount > 0) { //已存在相关配置记录
-            $sql = "UPDATE ".self::TableName_SiteConfig." SET " . $fieldName . "=:FieldValue,SiteConfigType=:SiteConfigType WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName";
-            $dataProperty->AddField("FieldValue", $fieldValue);
-            $dataProperty->AddField("SiteConfigType", $siteConfigType);
-            $this->dbOperator->Execute($sql, $dataProperty);
+            $sql = "UPDATE cst_siteconfig SET " . $fieldName . "=:fieldvalue,SiteConfigType=:siteconfigtype WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
+            $dataProperty->AddField("fieldvalue", $fieldValue);
+            $dataProperty->AddField("siteconfigtype", $siteConfigType);
+            $dbOperator->Execute($sql, $dataProperty);
         } else {
-            $sql = "INSERT INTO ".self::TableName_SiteConfig." (SiteId,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType)";
-            $dataProperty->AddField("FieldValue", $fieldValue);
-            $dataProperty->AddField("SiteConfigType", $siteConfigType);
-            $this->dbOperator->Execute($sql, $dataProperty);
+            $sql = "INSERT INTO cst_siteconfig (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteID,:SiteConfigName,:fieldvalue,:siteconfigtype)";
+            $dataProperty->AddField("fieldvalue", $fieldValue);
+            $dataProperty->AddField("siteconfigtype", $siteConfigType);
+            $dbOperator->Execute($sql, $dataProperty);
         }
-        $cacheDir = self::CacheDir . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteId;
-        $cacheFile = 'siteconfig.cache_' . strtolower($siteConfigName);
-        DataCache::Set($cacheFile, $cacheDir, $fieldValue);
+        $cachedir = 'data' . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteID;
+        $cachefile = 'siteconfig.cache_' . strtolower($siteConfigName);
+        DataCache::Set($cachefile, $cachedir, $fieldValue);
     }
 
     /**
      * 取得配置值（已缓冲）
-     * @param type $siteId
+     * @param type $siteID
      * @param type $siteConfigName
      * @param type $siteConfigType
      * @param type $defaultValue
      * @return type 
      */
-    private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null) {
+    private function GetValue($siteID, $siteConfigName, $siteConfigType = 0, $defaultValue = null) {
 
-        if (intval($siteId) > 0) {
+        if (intval($siteID) > 0) {
 
-            $cacheDir = DataCache::CacheDir . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteId;
-            $cacheFile = 'siteconfig.cache_' . strtolower($siteConfigName);
+            $cachedir = 'data' . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteID;
+            $cachefile = 'siteconfig.cache_' . strtolower($siteConfigName);
 
 
-            if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
+            if (strlen(DataCache::Get($cachedir . DIRECTORY_SEPARATOR . $cachefile)) <= 0) {
 
                 $fieldName = "StringNorValue";
 
@@ -329,20 +338,21 @@ class SiteConfigManageData extends BaseManageData {
                         break;
                 }
 
-                $sql = "SELECT " . $fieldName . " FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName";
+                $sql = "SELECT " . $fieldName . " FROM cst_siteconfig WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
 
                 $dataProperty = new DataProperty();
-                $dataProperty->AddField("SiteId", $siteId);
+                $dataProperty->AddField("SiteID", $siteID);
                 $dataProperty->AddField("SiteConfigName", $siteConfigName);
-                $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+                $dbOperator = DBOperator::getInstance();
+                $result = $dbOperator->ReturnString($sql, $dataProperty);
                 if ($result == FALSE) {
-                    self::SetValue($siteId, $siteConfigName, $defaultValue, $siteConfigType);
+                    self::SetValue($siteID, $siteConfigName, $defaultValue, $siteConfigType);
                     $result = $defaultValue;
                 } else {
-                    DataCache::Set($cacheFile, $cacheDir, $result);
+                    DataCache::Set($cachefile, $cachedir, $result);
                 }
             } else {
-                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                $result = DataCache::Get($cachedir . DIRECTORY_SEPARATOR . $cachefile);
             }
             return $result;
         } else {
@@ -351,15 +361,16 @@ class SiteConfigManageData extends BaseManageData {
     }
 
     /**
-     * 返回站点所有配置项列表
-     * @param int $siteId 站点id
-     * @return array 站点所有配置项列表 
+     * 返回某一站点下所有配置项列表
+     * @param type $SiteID
+     * @return type 
      */
-    public function GetList($siteId) {
-        $sql = "SELECT * FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId";
+    public function GetList($SiteID) {
+        $sql = "SELECT * FROM cst_siteconfig WHERE SiteID=:SiteID";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $dataProperty->AddField("SiteID", $SiteID);
+        $dbOperator = DBOperator::getInstance();
+        $result = $dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
 }

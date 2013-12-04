@@ -161,10 +161,6 @@ class ForumGen extends BaseFrontGen implements IBaseFrontGen {
             $templateForumBoard = str_ireplace("{forum_one_list}", $resultOneTemplate, $templateForumBoard);
 
             $tempContent = str_ireplace("{forum_list}", $templateForumBoard, $tempContent);
-            
-            $forumTopicListUrl = "default.php?mod=forumtopic"; //非静态化的地址
-            
-            $tempContent = str_ireplace("{ForumListUrl}", $forumTopicListUrl, $tempContent);
         } else {
             $tempContent = str_ireplace("{forum_list}", "", $tempContent);
         }

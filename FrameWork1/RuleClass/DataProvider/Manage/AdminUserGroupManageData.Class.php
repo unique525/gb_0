@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 后台管理分组后台数据类
  * @category iCMS
@@ -6,139 +7,106 @@
  * @author zhangchi
  */
 class AdminUserGroupManageData extends BaseManageData {
+    
+    /**
+     * 表名
+     */
+    const tableName = "cst_adminusergroup";    
 
     /**
-     * 新增后台管理分组
-     * @return int 新增的后台管理分组id
+     * 表关键字段名
      */
+    const tableIdName = "adminusergroupid";
+
     public function Create() {
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::TableName_AdminUserGroup, $dataProperty);
+        $sql = parent::GetInsertSql(self::tableName, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
-    /**
-     * 修改后台管理分组id
-     * @param int $adminUserGroupId 后台管理分组id
-     * @return int 执行结果（影响的行数）
-     */
-    public function Modify($adminUserGroupId) {
+    public function Modify($tableidvalue) {
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::TableName_AdminUserGroup, self::TableId_AdminUserGroup, $adminUserGroupId, $dataProperty);
+        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $tableidvalue, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
-    /**
-     * 删除到回收站
-     * @param int $adminUserGroupId 后台管理分组id
-     * @return int 执行结果（影响的行数）
-     */
-    public function RemoveBin($adminUserGroupId) {
-        $sql = "UPDATE " . self::TableName_AdminUserGroup . " SET State=100 WHERE AdminUserGroupId=:AdminUserGroupId";
+    public function RemoveBin($groupid) {
+        $sql = "update " . self::tableName . " set state=100 where adminusergroupid=:adminusergroupid";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("AdminUserGroupId", $adminUserGroupId);
+        $dataProperty->AddField("adminusergroupid", $groupid);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
-    /**
-     * 根据State的值取得列表
-     * @param int $state 状态值
-     * @return array 结果数据集
-     */
+    //根据State的值取得列表
     public function GetList($state = -1) {
-        if ($state < 0) {
-            $sql = "SELECT * FROM " . self::TableName_AdminUserGroup;
+        if ($state == -1) {
+            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName;
             $result = $this->dbOperator->ReturnArray($sql, null);
         } else {
-            $sql = "SELECT * FROM " . self::TableName_AdminUserGroup . " WHERE State=:State";
+            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE state=:state";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("state", $state);
             $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         }
         return $result;
     }
 
-    /**
-     * 取得一条记录
-     * @param int $adminUserGroupId 后台管理分组id
-     * @return array 结果行
-     */
-    public function GetOne($adminUserGroupId) {
+    //根据用户组ID或用户组名取值
+    public function GetAdminUserGroupOne($str, $type) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT * FROM " . self::TableName_AdminUserGroup . " WHERE AdminUserGroupId=:AdminUserGroupId";
-        $dataProperty->AddField("AdminUserGroupId", $adminUserGroupId);
+        if ($type == 0) {
+            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE adminusergroupid=:adminusergroupid";
+            $dataProperty->AddField("adminusergroupid", $str);
+        } else {
+            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE adminusergroupname=:adminusergroupname";
+            $dataProperty->AddField("adminusergroupname", $str);
+        }
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
         return $result;
     }
 
-    /**
-     * 取得一条记录(根据后台管理分组名称)
-     * @param string $adminUserGroupName 后台管理分组名称
-     * @return array 结果行
-     */
-    public function GetOneByAdminUserGroupName($adminUserGroupName) {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT * FROM " . self::TableName_AdminUserGroup . " WHERE AdminUserGroupName=:AdminUserGroupName";
-        $dataProperty->AddField("AdminUserGroupName", $adminUserGroupName);
-        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
-        return $result;
-    }
-
-    /**
-     * 取得分页数据集
-     * @param int $pageBegin 当前页码
-     * @param int $pageSize 每页记录数
-     * @param int $allCount 记录总数（输出参数）
-     * @return array 取得分页数据集
-     */
-    public function GetListPager($pageBegin, $pageSize, &$allCount) {
-        $sql = "SELECT * FROM " . self::TableName_AdminUserGroup . " ORDER BY Sort DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+    public function GetListPager($pagebegin, $pagesize, &$allcount, $gruopid=0) {
+        $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM cst_adminusergroup ORDER BY sort DESC LIMIT " . $pagebegin . "," . $pagesize . "";
         $result = $this->dbOperator->ReturnArray($sql, null);
-        $sql = "SELECT count(*) FROM " . self::TableName_AdminUserGroup;
-        $allCount = $this->dbOperator->ReturnInt($sql, null);
+        $sql = "SELECT count(*) FROM " . self::tableName;
+        $allcount = $this->dbOperator->ReturnInt($sql, null);
         return $result;
     }
 
     /**
-     * 根据后台管理员id取得开启的左边导航id字符串
-     * @param int $adminUserId 后台管理员id
-     * @return string 左边导航id字符串
+     * 根据用户ID取得左边导航权限
+     * @param type $adminuserid
+     * @return type 
      */
-    public function GetAdminLeftNavIds($adminUserId) {
+    public function GetAdminLeftNavIDs($adminuserid) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT AdminLeftNavIds FROM " . self::TableName_AdminUserGroup . " WHERE AdminUserGroupId IN (SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId)";
-        $dataProperty->AddField("AdminUserId", $adminUserId);
+        $sql = "SELECT AdminLeftNavIDs FROM " . self::tableName . " WHERE adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
+        $dataProperty->AddField("adminuserid", $adminuserid);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 取得后台管理分组名称
-     * @param int $adminUserGroupId 后台管理分组id
-     * @return string 后台管理分组名称
+     * 取得adminusergroupname 根据管理组ID adminusergroupid 或是管理员ID adminuserid
+     * @param <type> $tableidvalue
+     * @param <type> $gettype   为0时根据adminusergroupid 否则根据 adminuserid
+     * @return <type> 
      */
-    public function GetAdminUserGroupName($adminUserGroupId) {
+    public function GetAdminUserGroupName($tableidvalue, $gettype = 0) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT AdminUserGroupName FROM " . self::TableName_AdminUserGroup . " WHERE " . self::TableId_AdminUserGroup . "=:" . self::TableId_AdminUserGroup;
-        $dataProperty->AddField(self::TableId_AdminUserGroup, $adminUserGroupId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
-        return $result;
-    }
-
-    /**
-     * 取得后台管理分组名称(根据后台管理员id)
-     * @param int $adminUserId 后台管理员id
-     * @return string 后台管理分组名称
-     */
-    public function GetAdminUserGroupNameByAdminUserId($adminUserId) {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT AdminUserGroupName FROM " . self::TableName_AdminUserGroup . " WHERE " . self::TableId_AdminUserGroup . " IN (SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId)";
-        $dataProperty->AddField("AdminUserId", $adminUserId);
+        if (intval($gettype) === 0) {
+            $sql = "SELECT adminusergroupname FROM " . self::tableName . " WHERE " . self::tableIdName . "=:" . self::tableIdName;
+            $dataProperty->AddField(self::tableIdName, $tableidvalue);
+        } else {
+            $sql = "SELECT adminusergroupname FROM " . self::tableName . " WHERE " . self::tableIdName . " in (SELECT adminusergroupid FROM cst_adminuser WHERE adminuserid=:adminuserid)";
+            $dataProperty->AddField("adminuserid", $tableidvalue);
+        }
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
         return $result;
     }
 }
+
 ?>
