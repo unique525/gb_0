@@ -16,8 +16,8 @@
         <script type="text/javascript" src="{rootpath}/system_js/jqueryui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/splitter.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/loadtabs.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/loadtree.js"></script>
+        <script type="text/javascript" src="{rootpath}/system_js/manage/load_tabs.js"></script>
+        <script type="text/javascript" src="{rootpath}/system_js/manage/channel.js"></script>
         <script type="text/javascript" src="{rootpath}/system_js/manage/default.js"></script>
         <script type="text/javascript">
             var G_TemplateName = "{templatename}";

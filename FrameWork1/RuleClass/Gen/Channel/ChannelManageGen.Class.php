@@ -38,8 +38,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "publishall":
                 $result = self::PublishAll();
                 break;
-            case "tree":
-                $result = self::GenTree();
+            case "list_for_manage_left":
+                $result = self::GenListForManageLeft();
                 break;
             case "tree_popedom":
                 $result = self::GenTreeForPopedom();
@@ -217,12 +217,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * 频道树，后台主界面用
      * @return string 返回ztree的JSON数据结构
      */
-    private function GenTree() {
+    private function GenListForManageLeft() {
         $siteId = Control::GetRequest("sid", 0);
         $adminUserId = Control::GetAdminUserId();
         if ($siteId > 0 && $adminUserId > 0) {
             $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
-            $cacheFile = 'channeltree.cache_' . $siteId . '_' . $adminUserId . '.php';
+            $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $adminUserId . '.php';
             $result = '';
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 $documentChannelManageData = new DocumentChannelManageData();

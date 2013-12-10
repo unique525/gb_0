@@ -72,7 +72,8 @@ $(function() {
         $.post("/default.php?secu=manage&mod=settemplate&tn=" + templateName, {
             resultbox: $(this).html()
         }, function(xml) {
-            window.location.href = window.location.href;
+            var nowUrl = window.location.href;
+            window.location.href = nowUrl;
             if (parseInt(xml) > 0) {
 
             } else if (parseInt(xml) === -2) {
@@ -88,7 +89,7 @@ $(function() {
 function LoadSite(siteId, siteName, siteUrl) {
 
     G_NowSiteId = parseInt(siteId);
-    G_SelectedDocumentChannelId = 0;
+    G_SelectedChannelId = 0;
 
     if (G_NowSiteId > 0) {
         $("#lefttree").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
