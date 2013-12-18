@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Framework 入口文件
  * @category iCMS
@@ -14,11 +15,12 @@ $security = Control::GetRequest("secu", "");
 if ($security === "manage") {
     $adminUserId = Control::GetAdminUserId();
     if ($adminUserId <= 0) {
-        Control::GoUrl(ROOTPATH . "/default.php?mod=manage&a=login");
-    }else{
+        die("<script>window.location.href='" . ROOTPATH . "/default.php?mod=manage&a=login';</script>");
+        //Control::GoUrl(ROOTPATH . "/default.php?mod=manage&a=login");
+    } else {
         echo getManageHtml(new DefaultManageGen());
     }
-} else {    
+} else {
     echo getHtml(new DefaultFrontGen());
 }
 

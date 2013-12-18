@@ -229,9 +229,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $arrList = $documentChannelManageData->GetListAllForZtree($siteId, $adminUserId);
                 $sb = '[';
                 for ($i = 0; $i < count($arrList); $i++) {
-                    $documentChannelName = Format::FormatQuote($arrList[$i]['ChannelName']);
-                    $documentChannelId = $arrList[$i]['ChannelId'];
-                    $documentChannelType = intval($arrList[$i]['ChannelType']);
+                    $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);
+                    $channelId = $arrList[$i]['ChannelId'];
+                    $channelType = intval($arrList[$i]['ChannelType']);
                     $rank = intval($arrList[$i]['Rank']);
                     $parentId = intval($arrList[$i]['ParentId']);
                     $childCounts = intval($arrList[$i]['childcounts']);
@@ -240,12 +240,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         $isParent = ", isParent:true";
                     }
 
-                    $iconSkin = ',iconSkin:"diy' . $documentChannelType . '"';
+                    $iconSkin = ',iconSkin:"diy' . $channelType . '"';
 
                     if ($rank == 0) {
-                        $sb = $sb . '{ id:' . $documentChannelId . ', pId:' . $parentId . ', name:"' . $documentChannelName . '", "doctype":"' . $documentChannelType . '", open:true ' . $isParent . ' ' . $iconSkin . '}';
+                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "doctype":"' . $channelType . '", open:true ' . $isParent . ' ' . $iconSkin . '}';
                     } else {
-                        $sb = $sb . '{ id:' . $documentChannelId . ', pId:' . $parentId . ', name:"' . $documentChannelName . '", "doctype":"' . $documentChannelType . '" ' . $isParent . ' ' . $iconSkin . '}';
+                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "doctype":"' . $channelType . '" ' . $isParent . ' ' . $iconSkin . '}';
                     }
 
                     if ($i < count($arrList) - 1) {
@@ -261,76 +261,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             }
             return $result;
         }
-    }
-
-    /**
-     * 迭代循环返回后台主界面树信息
-     * @param int $adminUserId 后台帐号id
-     * @param int $flag 未使用
-     * @param int $siteId 站点id
-     * @param int $rank 频道级别
-     * @param int $parentId 父频道id
-     * @param string $resultString 上一次拼接结果的字符串
-     * @return string 返回新的拼接结果的字符串
-     */
-    private function _getTree($adminUserId, $flag, $siteId, $rank, $parentId, $resultString) {
-        $channelData = new DocumentChannelData();
-        $arrList = null;
-        $arrList = $channelData->GetList($siteId, $adminUserId, $rank, $parentId);
-
-        if (count($arrList) > 0) {
-
-            for ($i = 0; $i < count($arrList); $i++) {
-                if ($rank == 0) {
-                    $resultString = $resultString . '<ul id="browser" class="filetree"><li>';
-                } else {
-                    $resultString = $resultString . '<ul><li>';
-                }
-
-                $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);
-                $channelId = $arrList[$i]['ChannelId'];
-                $channelType = $arrList[$i]['ChannelType'];
-                $rank = $arrList[$i]['Rank'];
-                $css = 'folder';
-                $hasSubChannel = $channelData->HasSubChannel($channelId);
-                if ($hasSubChannel <= 0) {
-                    $css = "file";
-                }
-                if (intval($channelType) === 2) {
-                    $css = "type2";
-                } else if (intval($channelType) === 4) {
-                    $css = "type4";
-                } else if (intval($channelType) === 5) {
-                    $css = "type5";
-                } else if (intval($channelType) === 6) {
-                    $css = "type6";
-                } else if (intval($channelType) === 7) {
-                    $css = "type7";
-                } else if (intval($channelType) === 8) {
-                    $css = "type8";
-                } else if (intval($channelType) === 9) {
-                    $css = "type9";
-                } else if (intval($channelType) === 10) {
-                    $css = "type10";
-                } else if (intval($channelType) === 11) {
-                    $css = "type11";
-                } else if (intval($channelType) === 12) {
-                    $css = "type12";
-                } else if (intval($channelType) === 0) {
-                    $css = "type0";
-                }
-
-
-                $resultString = $resultString . '<span id="' . $channelId . '" class="' . $css . ' tcm" title="' . $channelName . '[' . $channelId . ']" accesskey="' . $channelType . '">' . $channelName . '</span>';
-
-                $rank = $rank + 1;
-                $parentId = $channelId;
-                $resultString = self::_getTree($adminUserId, $flag, $siteId, $rank, $parentId, $resultString);
-                $resultString = $resultString . '</li></ul>';
-            }
-        }
-
-        return $resultString;
     }
 
 }
