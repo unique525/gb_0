@@ -6,221 +6,167 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Document
  * @author zhangchi
  */
-class DocumentChannelManageData extends BaseManageData {
+class DocumentChannelManageData extends BaseManageData
+{
 
     /**
      * 新增频道
+     * @param array $httpPostData $_POST数组
      * @param string $titlePic1 题图1
      * @param string $titlePic2 题图2
      * @param string $titlePic3 题图3
-     * @return int 新增的频道id 
+     * @return int 新增的频道id
      */
-    public function Create($titlePic1 = "", $titlePic2 = "", $titlePic3 = "") {
+    public function Create($httpPostData, $titlePic1, $titlePic2, $titlePic3)
+    {
+        $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
         $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3");
         $addFieldValues = array($titlePic1, $titlePic2, $titlePic3);
-        $sql = parent::GetInsertSql(parent::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        if (!empty($httpPostData)) {
+            $sql = parent::GetInsertSql($httpPostData, self::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
         return $result;
     }
 
     /**
      * 新增站点时默认新增首页频道
      * @param int $siteId 站点id
+     * @param int $adminUserId 管理员id
+     * @param string $channelName 新增的频道名称
      * @return int 新增的频道id
      */
-    public function CreateWhenSiteCreate($siteId,$adminUserId,$channelName) {
-        if ($siteId > 0) {
-            //$adminUserId = Control::GetAdminUserID();
-            //$channelName = "首页";
-
+    public function CreateWhenSiteCreate($siteId, $adminUserId, $channelName)
+    {
+        $result = -1;
+        if ($siteId > 0 && $adminUserId > 0 && !empty($channelName)) {
             $dataProperty = new DataProperty();
-            $sql = "INSERT INTO " . self::tableName . " (SiteId,CreateDate,AdminUserId,ChannelName) VALUES (:SiteId,now(),:AdminUserId,:ChannelName);";
+            $sql = "INSERT INTO " . self::TableName_Channel . " (SiteId,CreateDate,AdminUserId,ChannelName) VALUES (:SiteId,now(),:AdminUserId,:ChannelName);";
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("AdminUserId", $adminUserId);
             $dataProperty->AddField("ChannelName", $channelName);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
-            if ($result > 0) {
-                //授权给创建人
-                if ($adminUserId > 1) { //只有非ADMIN的要授权
-                    $adminPopedomData = new AdminPopedomData();
-                    $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
-                }
-                //删除缓冲
-                $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-                DataCache::RemoveDir($cacheDir);
+        }
+        return $result;
+    }
+
+    /**
+     * 返回所有此站点下的频道列表数据集,供后台左部导航使用
+     * @param int $siteId 站点id
+     * @param int $adminUserId 管理员id
+     * @return array 频道列表数据集
+     */
+    public function GetListForManageLeft($siteId, $adminUserId)
+    {
+        $result = null;
+        if ($siteId > 0 && $adminUserId > 0) {
+            $dataProperty = new DataProperty();
+            if ($adminUserId == 1) {
+                $sql = "SELECT
+                        c.ChannelId,
+                        c.ParentId,
+                        c.ChannelType,
+                        c.DocumentChannelName,
+                        c.Rank,
+                        (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCounts
+                    FROM " . self::TableName_Channel . " c
+                    WHERE
+                        c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
+                    ORDER BY c.Sort DESC,c.ChannelId;";
+            } else {
+                $sql = "SELECT
+                            c.ChannelId,
+                            c.ParentId,
+                            c.ChannelType,
+                            c.DocumentChannelName,
+                            c.Rank,
+                            (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCounts
+                        FROM " . self::TableName_Channel . " c
+                        WHERE
+                            c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
+                            AND c.ChannelId in
+                                ( SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserId=:AdminUserId
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserGroupId IN (SELECT AdminUserGroupId from " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId2)
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_AdminPopedom . " WHERE Explore=1 and ChannelId=0 and AdminUserId=0 and AdminUserGroupId IN (SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId3))
+                                )
+                        ORDER BY c.Sort DESC,c.ChannelId;";
+                $dataProperty->AddField("AdminUserId", $adminUserId);
+                $dataProperty->AddField("AdminUserId2", $adminUserId);
+                $dataProperty->AddField("AdminUserId3", $adminUserId);
             }
-            return $result;
-        }
-    }
-
-    /**
-     * 修改频道
-     * @param int $documentChannelId 频道id
-     * @param string $titlePic1 题图1
-     * @param string $titlePic2 题图2
-     * @param string $titlePic3 题图3
-     * @return int 修改影响的行数
-     */
-    public function Modify($documentChannelId, $titlePic1 = "", $titlePic2 = "", $titlePic3 = "") {
-        $addFieldName = "";
-        $addFieldValue = "";
-        $preNumber = "";
-        $addFieldNames = array();
-        $addFieldValues = array();
-        if (!empty($titlePic1)) {
-            $addFieldNames[] = "TitlePic1";
-            $addFieldValues[] = $titlePic1;
-        }
-        if (!empty($titlePic2)) {
-            $addFieldNames[] = "TitlePic2";
-            $addFieldValues[] = $titlePic2;
-        }
-        if (!empty($titlePic3)) {
-            $addFieldNames[] = "TitlePic3";
-            $addFieldValues[] = $titlePic3;
-        }
-        $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $documentChannelId, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
-
-        if ($result > 0) {
-            //删除缓冲
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-            DataCache::RemoveDir($cacheDir);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         }
 
-        return $result;
-    }
-
-    public function ModifyInvisible($parentId, $invisible) {
-        $sql = "UPDATE " . self::tableName . " SET Invisible=:Invisible WHERE ParentId=:ParentId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("Invisible", $invisible);
-        $dataProperty->AddField("ParentId", $parentId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    /**
-     * 删除频道到回收站
-     * @param int $documentChannelId 频道id
-     * @return int 修改影响的行数
-     */
-    function RemoveBin($documentChannelId) {
-        $sql = "update cst_documentchannel set state=100 where documentchannelid=:documentchannelid";
-        //$sql2 = "update cst_documentchannel set state=100 where documentchannelid in (=:documentchannelid)";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
-
-        if ($result > 0) {
-            //删除缓冲
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-            DataCache::RemoveDir($cacheDir);
-
-            self::RemoveBinChild($documentChannelId);
-        }
-
-        return $result;
-    }
-
-    /**
-     * 删除全部下属频道到回收站
-     * @param int $documentChannelId 频道id
-     */
-    public function RemoveBinChild($documentChannelId) {
-        $sql = "select DocumentChannelID from cst_documentchannel where parentid=" . $documentChannelId;
-        $dbOperator = DBOperator::getInstance();
-        $arrChild = $dbOperator->ReturnArray($sql, null);
-        for ($i = 0; $i < count($arrChild); $i++) {
-            $sql = "update cst_documentchannel set state=100 where documentchannelid=" . $arrChild[$i]["DocumentChannelID"];
-            $dbOperator->Execute($sql, null);
-            self::RemoveBinChild($arrChild[$i]["DocumentChannelID"]);
-        }
-    }
-
-    /**
-     * 返回所有此站点下的频道列表,ZTREE使用
-     * @param type $siteid
-     * @param type $adminuserid
-     * @return type 
-     */
-    public function GetListAllForZtree($siteid, $adminuserid) {
-        $dataProperty = new DataProperty();
-        if ($adminuserid == 1) {
-            $sql = "select dc.DocumentChannelID,dc.ParentID,dc.DocumentChannelType,dc.DocumentChannelName,dc.Rank,(select count(*) from cst_documentchannel where parentid=dc.DocumentChannelID AND State<100) as childcounts from cst_documentchannel dc where dc.state<100 and dc.siteid=:siteid AND dc.Invisible=0 order by dc.sort desc,dc.documentchannelid";
-        } else {
-            $sql = "select dc.DocumentChannelID,dc.ParentID,dc.DocumentChannelType,dc.DocumentChannelName,dc.Rank,(select count(*) from cst_documentchannel where parentid=dc.DocumentChannelID AND State<100) as childcounts from cst_documentchannel dc where dc.state<100 and dc.siteid=:siteid AND dc.Invisible=0 and dc.documentchannelid in  (select documentchannelid from cst_adminpopedom where explore=1 and adminuserid=:adminuserid union select documentchannelid from cst_adminpopedom where explore=1 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid2) union select documentchannelid from cst_documentchannel where siteid in (select siteid from cst_adminpopedom where explore=1 and documentchannelid=0 and adminuserid=0 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid3))) order by dc.sort desc,dc.documentchannelid";
-            $dataProperty->AddField("adminuserid", $adminuserid);
-            $dataProperty->AddField("adminuserid2", $adminuserid);
-            $dataProperty->AddField("adminuserid3", $adminuserid);
-        }
-        $dataProperty->AddField("siteid", $siteid);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 取得频道所属站点id
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
+     * @param boolean $withCache 是否从缓冲中取
      * @return int 站点id
      */
-    public function GetSiteId($documentChannelId) {
-        $sql = "SELECT SiteId FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
-        return $result;
-    }
-    
-    /**
-     * 取得频道Rank
-     * @param int $documentChannelId 频道id
-     * @return int 频道Rank
-     */
-    public function GetRank($documentChannelId) {
-        $sql = "SELECT Rank FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+    public function GetSiteId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheFile = 'channel_get_siteid.cache_' . $channelId . '.php';
+            $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 
     /**
-     * 取得频道是否定义了FTP
-     * @param int $documentChannelId 频道id
-     * @return int 频道是否定义了FTP 0:未定义 1:已定义
+     * 取得频道级别
+     * @param int $channelId 频道id
+     * @param boolean $withCache 是否从缓冲中取
+     * @return int 频道级别
      */
-    public function GetHasFtp($documentChannelId) {
-        $sql = "SELECT HasFtp FROM " . self::tableName . " WHERE DocumentChannelId=:DocumentChannelId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("DocumentChannelId", $documentChannelId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+    public function GetRank($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheFile = 'channel_get_rank.cache_' . $channelId . '.php';
+            $sql = "SELECT Rank FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
-    
-    
+
     /**
-     * 取得频道类型编号
-     * @param int $documentChannelId 频道id
-     * @return int 站点id
+     * 取得频道类型
+     * @param int $channelId 频道id
+     * @param boolean $withCache 是否从缓冲中取
+     * @return int 频道类型
      */
-    public function GetDocumentChannelType($documentChannelId) {
-        $sql = "SELECT DocumentChannelType FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+    public function GetChannelType($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheFile = 'channel_get_channeltype.cache_' . $channelId . '.php';
+            $sql = "SELECT ChannelType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
-    
-    
+
 
 }
 

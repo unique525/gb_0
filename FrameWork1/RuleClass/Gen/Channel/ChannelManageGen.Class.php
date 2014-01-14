@@ -22,7 +22,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "removebin":
+            case "remove_to_bin":
                 $result = self::GenRemoveBin();
                 break;
             case "publish":
@@ -75,13 +75,14 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreate() {
         $tempContent = Template::Load("channel/channel_deal.html", "common");
-        $parentId = Control::GetRequest("cid", 0);
+        $parentId = Control::GetRequest("parentid", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 
         $adminUserId = Control::GetAdminUserId();
-        parent::ReplaceFirst($tempContent);
 
-        if ($parentId > 0) {
+        if ($parentId > 0 && $adminUserId > 0) {
+
+            parent::ReplaceFirst($tempContent);
             $documentChannelData = new DocumentChannelData();
             $parentName = $documentChannelData->GetName($parentId);
             $siteId = $documentChannelData->GetSiteID($parentId);
@@ -93,6 +94,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{documentchannelintro}", "", $tempContent);
 
             if (!empty($_POST)) {
+                $httpPostData = $_POST;
                 $publishPath = Control::PostRequest("f_publishpath", "");
                 $hasPublishPath = 0;
                 if (strlen($publishPath) > 0) {
@@ -136,13 +138,21 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $titlePicPath3 = $commonGen->UploadFile($fileElementName, $fileType, $returnType, $uploadFileId3);
                     $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
 
-                    $result = $documentChannelData->Create($titlePicPath1, $titlePicPath2, $titlePicPath3);
+                    $result = $documentChannelData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
                     //加入操作log
                     $operateContent = "DocumentChannel：news id ：" . $result . "；adminuserid：" . Control::GetAdminUserID() . "；adminusername；" . Control::GetAdminUserName() . "；result：" . $result;
                     $adminUserLogData = new AdminUserLogData();
                     $adminUserLogData->Insert($operateContent);
 
                     if ($result > 0) {
+                            //授权给创建人
+                            if ($adminUserId > 1) { //只有非ADMIN的要授权
+                                $adminPopedomData = new AdminPopedomData();
+                                $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
+                            }
+                            //删除缓冲
+                            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
+                            DataCache::RemoveDir($cacheDir);
 
                         //活动类的默认添加Class分类====Ljy
                         $channelType = Control::PostRequest("f_channeltype", 1);
@@ -226,7 +236,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $result = '';
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 $documentChannelManageData = new DocumentChannelManageData();
-                $arrList = $documentChannelManageData->GetListAllForZtree($siteId, $adminUserId);
+                $arrList = $documentChannelManageData->GetListAllForManageLeft($siteId, $adminUserId);
                 $sb = '[';
                 for ($i = 0; $i < count($arrList); $i++) {
                     $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);

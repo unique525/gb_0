@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 数据库对象化映射类
+ * 数据库字段集合类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataBase
  * @author zhangchi

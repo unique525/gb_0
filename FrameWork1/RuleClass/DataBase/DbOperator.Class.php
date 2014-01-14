@@ -45,18 +45,6 @@ class DbOperator {
     private $dbPass = '';
 
     /**
-     * 数据库查询次数
-     * @var int
-     */
-    //private $queryCount = 0;
-
-    /**
-     * stmt 对象
-     * @var object
-     */
-    //private $stmt = null;
-
-    /**
      * PDO对象
      * @var object
      */
@@ -67,12 +55,6 @@ class DbOperator {
      * @var int
      */
     private $version = 0;
-
-    /**
-     * 是否调试模式
-     * @var int
-     */
-    //private $debug = 0;
 
     /**
      * 初始化数据库连接

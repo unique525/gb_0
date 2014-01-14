@@ -10,6 +10,7 @@ class BaseManageData extends BaseData {
 
     /**
      * 根据POST和附加字段生成INSERT SQL
+     * @param array $httpPostData $_POST数组
      * @param string $tableName 表名
      * @param DataProperty $dataProperty 数据对象
      * @param string $addFieldName 附加字段名
@@ -19,11 +20,11 @@ class BaseManageData extends BaseData {
      * @param array $addFieldValues 附加字段值数组
      * @return string SQL字符串
      */
-    public function GetInsertSql($tableName, DataProperty &$dataProperty, $addFieldName = "", $addFieldValue = "", $preNumber = "", $addFieldNames = null, $addFieldValues = null) {
-        if (!empty($_POST)) {
+    public function GetInsertSql($httpPostData, $tableName, DataProperty &$dataProperty, $addFieldName = "", $addFieldValue = "", $preNumber = "", $addFieldNames = null, $addFieldValues = null) {
+        if (!empty($httpPostData)) {
             $fieldNames = "";
             $fieldValues = "";
-            foreach ($_POST as $key => $value) {
+            foreach ($httpPostData as $key => $value) {
                 if (strpos($key, "f" . $preNumber . "_") === 0) { //text textarea 类字段
                     if ($preNumber === "") {
                         $keyName = substr($key, 2);
@@ -35,9 +36,7 @@ class BaseManageData extends BaseData {
                         if(strpos($value,'0000-00-00') >= 0 || empty($value)){
                             $value = date("Y-m-d H:i:s", time());
                         }
-                    }                   
-                    
-                    
+                    }
                     $fieldNames = $fieldNames . ",`" . $keyName . "`";
                     $fieldValues = $fieldValues . ",:" . $keyName;
                     $dataProperty->AddField($keyName, stripslashes($value));
@@ -161,6 +160,7 @@ class BaseManageData extends BaseData {
     
     /**
      * 根据POST和附加字段生成UPDATE SQL
+     * @param array $httpPostData $_POST数组
      * @param string $tableName 表名
      * @param string $tableIdName 关键字段名
      * @param string $tableIdValue 关键字段值
@@ -172,10 +172,10 @@ class BaseManageData extends BaseData {
      * @param array $addFieldValues 附加字段值数组
      * @return string SQL字符串 
      */
-    public function GetUpdateSql($tableName, $tableIdName, $tableIdValue, DataProperty &$dataProperty, $addFieldName = "", $addFieldValue = "", $preNumber = "", $addFieldNames = null, $addFieldValues = null) {
-        if (!empty($_POST)) {
+    public function GetUpdateSql($httpPostData, $tableName, $tableIdName, $tableIdValue, DataProperty &$dataProperty, $addFieldName = "", $addFieldValue = "", $preNumber = "", $addFieldNames = null, $addFieldValues = null) {
+        if (!empty($httpPostData)) {
             $fieldNames = "";
-            foreach ($_POST as $key => $value) {
+            foreach ($httpPostData as $key => $value) {
                 if (strpos($key, "f" . $preNumber . "_") === 0) {
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`=:" . $keyName;

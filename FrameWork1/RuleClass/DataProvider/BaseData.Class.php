@@ -1,12 +1,13 @@
 <?php
 
 /**
- * 数据业务层基类 
+ * 数据业务层基类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider
  * @author zhangchi
  */
-class BaseData {
+class BaseData
+{
 
     const TableName_Site = "cst_site";
     const TableId_Site = "SiteId";
@@ -34,11 +35,12 @@ class BaseData {
 
     /**
      * 数据库操作对象的实例
-     * @var DbOperator 返回数据库操作对象 
+     * @var DbOperator 返回数据库操作对象
      */
     protected $dbOperator = null;
 
-    function __construct() {
+    function __construct()
+    {
         $this->dbOperator = DbOperator::getInstance();
     }
 
@@ -47,7 +49,8 @@ class BaseData {
      * @param string $sourceTableName 原始表
      * @return string 返回分表表名
      */
-    protected function CreateAndGetTableName($sourceTableName) {
+    protected function CreateAndGetTableName($sourceTableName)
+    {
         $nowYear = date('Y');
         $nowMonth = date('m');
 
@@ -71,12 +74,57 @@ class BaseData {
      * @param string $cacheFile 缓存文件
      * @return boolean 是否缓存
      */
-    protected function IsDataCached($cacheDir, $cacheFile) {
+    protected function IsDataCached($cacheDir, $cacheFile)
+    {
         if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
             return FALSE;
         } else {
             return TRUE;
         }
+    }
+
+    /**
+     * 返回int型的信息值（某行某字段的值）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return int 返回查询结果
+     */
+    protected function GetInfoOfIntValue($sql, DataProperty $dataProperty, $withCache, $cacheDir, $cacheFile)
+    {
+        $result = -1;
+        if (strlen($sql) > 0) {
+            $result = intval(self::GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile));
+        }
+        return $result;
+    }
+
+    /**
+     * 返回string型的信息值（某行某字段的值）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return string 返回查询结果
+     */
+    protected function GetInfoOfStringValue($sql, DataProperty $dataProperty, $withCache, $cacheDir, $cacheFile)
+    {
+        $result = "";
+        if (strlen($sql) > 0) {
+            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            if (!$withCache) {
+                $cacheContent = "";
+            }
+            if (strlen($cacheContent) <= 0) {
+                $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+            } else {
+                $result = $cacheContent;
+            }
+        }
+        return $result;
     }
 
 }
