@@ -35,7 +35,6 @@ class ManageGen extends BaseFrontGen implements IBaseFrontGen {
      * @return string 返回模板页面
      */
     private function Login() {
-        $result = "";
         $tempContent = Template::Load("manage/login.html","common");
 
         parent::ReplaceEnd($tempContent);
@@ -53,10 +52,10 @@ class ManageGen extends BaseFrontGen implements IBaseFrontGen {
             $adminUserLogManageData = new AdminUserLogManageData();
             $adminUserLogManageData->Insert($operateContent);
 
-            $domain = null;
-            include ROOTPATH . '/FrameWork1/SystemInc/domain.inc.php';
-            $funcDomain = $domain['func'];
-            $icmsDomain = $domain['icms'];
+            if(isset($IncDomain) && !empty($IncDomain)){
+                $funcDomain = $IncDomain['func'];
+                $icmsDomain = $IncDomain['icms'];
+            }
 
             if ($adminUserId > 0) {
                 if (!$isSecurityIp) { //不是内网IP才需要附加认证

@@ -11,6 +11,7 @@ class BaseData {
     const TableName_Site = "cst_site";
     const TableId_Site = "SiteId";
     const TableName_SiteConfig = "cst_site_config";
+    const TableId_SiteConfig = "SiteConfigId";
     const TableName_AdminLeftNav = "cst_admin_left_nav";
     const TableId_AdminLeftNav = "AdminLeftNavId";
     const TableName_AdminLeftUserManage = "cst_admin_left_user_manage";
@@ -43,7 +44,7 @@ class BaseData {
 
     /**
      * 创建数据分表
-     * @param type $sourceTableName 原始表
+     * @param string $sourceTableName 原始表
      * @return string 返回分表表名
      */
     protected function CreateAndGetTableName($sourceTableName) {

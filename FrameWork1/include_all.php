@@ -5,10 +5,7 @@
  * @package iCMS_FrameWork1
  * @author zhangchi
  */
-
-
 //include once rule class
-
 
 $dir = ROOTPATH . "/FrameWork1/RuleClass/DataBase";
 $arrFiles = getFileNames($dir);
@@ -41,13 +38,6 @@ $dir = ROOTPATH . "/FrameWork1/RuleClass/Tools";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
     include_once($fileName);
-}
-
-//require inc
-$dir = ROOTPATH . "/FrameWork1/SystemInc";
-$arrFiles = getFileNames($dir);
-foreach ($arrFiles as $fileName) {
-    require $fileName;
 }
 
 /**

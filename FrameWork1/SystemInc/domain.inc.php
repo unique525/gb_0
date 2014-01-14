@@ -6,8 +6,8 @@
  * @package iCMS_FrameWork1_SystemInc
  * @author zhangchi
  */
-$domain = array();
-$domain['func'] = 'http://localhost';
-$domain['user'] = 'http://localhost';
-$domain['icms'] = 'http://localhost';
+$IncDomain = array();
+$IncDomain['func'] = 'http://localhost';
+$IncDomain['user'] = 'http://localhost';
+$IncDomain['icms'] = 'http://localhost';
 ?>

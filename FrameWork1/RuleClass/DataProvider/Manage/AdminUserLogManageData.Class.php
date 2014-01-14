@@ -33,8 +33,8 @@ class AdminUserLogManageData extends BaseManageData {
 
     /**
      * 插入记录
-     * @param type $operateContent
-     * @return type
+     * @param string $operateContent
+     * @return int
      */
     public function Insert($operateContent) {
         $sql = "INSERT INTO " . self::tableName . " (adminuserid,createdate,operatecontent,ipaddress,agent,refdomain,refurl) values (:adminuserid,:createdate,:operatecontent,:ipaddress,:agent,:refdomain,:refurl)";

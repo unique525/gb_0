@@ -18,75 +18,76 @@ class DbOperator {
      * 默认数据库主机名
      * @var string
      */
-    public $dbHost = 'localhost';
+    private $dbHost = 'localhost';
 
     /**
      * 默认数据库主机端口
      * @var int
      */
-    public $dbPort = 3306;
+    private $dbPort = 3306;
 
     /**
      * 默认数据库名
      * @var string
      */
-    public $dbName = '';
+    private $dbName = '';
 
     /**
      * 默认数据库用户名
      * @var string
      */
-    public $dbUser = '';
+    private $dbUser = '';
 
     /**
      * 默认数据库密码
      * @var string
      */
-    public $dbPass = '';
+    private $dbPass = '';
 
     /**
      * 数据库查询次数
      * @var int
      */
-    public $queryCount = 0;
+    //private $queryCount = 0;
 
     /**
      * stmt 对象
      * @var object
      */
-    public $stmt = null;
+    //private $stmt = null;
 
     /**
      * PDO对象
      * @var object
      */
-    public $pdo = null;
+    private $pdo = null;
 
     /**
      * 数据库版本
      * @var int
      */
-    public $version = 0;
+    private $version = 0;
 
     /**
      * 是否调试模式
      * @var int
      */
-    public $debug = 0;
+    //private $debug = 0;
 
     /**
      * 初始化数据库连接
      */
     private function __construct() {
         $dbi = null;
-        require_once ROOTPATH . '/inc/config.inc.php';
-        //require_once ROOTPATH . '/FrameWork1/SystemInc/config.inc.php';
-        $this->dbHost = $dbi['dbhost'];
-        $this->dbPort = $dbi['dbport'];
-        $this->dbName = $dbi['dbname'];
-        $this->dbUser = $dbi['dbuser'];
-        $this->dbPass = $dbi['dbpass'];
-        $this->connect();
+        require ROOTPATH . '/FrameWork1/SystemInc/config.inc.php';
+        if (!empty($this) && isset($dbi) && !empty($dbi)) {
+            $this->dbHost = $dbi['dbhost'];
+            $this->dbPort = $dbi['dbport'];
+            $this->dbName = $dbi['dbname'];
+            $this->dbUser = $dbi['dbuser'];
+            $this->dbPass = $dbi['dbpass'];
+            $this->connect();
+        }
         unset($dbi);
     }
 
@@ -154,7 +155,6 @@ class DbOperator {
      * @return string 返回第一列第一行的STRING型值
      */
     public function ReturnString($sql, DataProperty $dataProperty = null) {
-
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -241,7 +241,7 @@ class DbOperator {
      * 批量执行SQL
      * @param array $arrsql 要查询的SQL语句数组
      * @param array $arrDataProperty 数据对象的数组
-     * @return int 批量执行结果 
+     * @return int 批量执行结果
      */
     public function ExecuteBatch($arrsql, $arrDataProperty) {
         try {

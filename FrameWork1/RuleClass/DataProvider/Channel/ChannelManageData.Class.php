@@ -9,16 +9,6 @@
 class DocumentChannelManageData extends BaseManageData {
 
     /**
-     * 表名
-     */
-    const tableName = "cst_channel";
-    
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "ChannelId";
-
-    /**
      * 新增频道
      * @param string $titlePic1 题图1
      * @param string $titlePic2 题图2
@@ -32,9 +22,8 @@ class DocumentChannelManageData extends BaseManageData {
         $preNumber = "";
         $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3");
         $addFieldValues = array($titlePic1, $titlePic2, $titlePic3);
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+        $sql = parent::GetInsertSql(parent::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
-
         return $result;
     }
 

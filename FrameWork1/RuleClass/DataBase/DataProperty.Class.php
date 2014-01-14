@@ -19,7 +19,7 @@ class DataProperty {
      * @param string $fieldName 字段名
      * @param mixed $fieldValue 字段值
      */
-    function AddField($fieldName,$fieldValue)
+    public function AddField($fieldName,$fieldValue)
     {
         $this->ArrayField[$fieldName] = $fieldValue;
     }
@@ -28,7 +28,7 @@ class DataProperty {
      * 删除字段
      * @param string $fieldName
      */
-    function RemoveField($fieldName)
+    public function RemoveField($fieldName)
     {
         unset($this->ArrayField[$fieldName]);
     }
@@ -36,7 +36,7 @@ class DataProperty {
     /**
      * 清空对象数组
      */
-    function Clear()
+    public function Clear()
     {
         unset($this->ArrayField);
     }

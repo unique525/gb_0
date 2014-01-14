@@ -10,7 +10,6 @@ mb_internal_encoding('utf8');
 date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////
 require ROOTPATH . "/FrameWork1/include_all.php";
-
 $security = Control::GetRequest("secu", "");
 if ($security === "manage") {
     $adminUserId = Control::GetAdminUserId();
