@@ -23,12 +23,10 @@ $(function() {
             $(this).attr("class", "divselectsite_clicked");
             var itemHeight = parseInt($(this).css("height"));
             var siteCount = $(".sitecount").attr("idvalue");
-            //alert(siteCount);
             var newHeight = itemHeight * siteCount;
             $(this).css("height", newHeight + "px");
         } else {
             $(this).attr("class", "divselectsite_normal");
-            //$(this).css("height","20px");
         }
     });
 
@@ -54,14 +52,14 @@ $(function() {
         $("#showsitelist").append($("#divselectsite"));
     }
 
-    var objAccord1 = jQuery('#accord1');
-    if (objAccord1.length > 0) {
-        $("#accord1").accordion({
+    var objAccord = jQuery('#div_left_accordion');
+    if (objAccord.length > 0) {
+        $("#div_left_accordion").accordion({
             header: 'h3',
             heightStyle: "content"
         });
     }
-    $(".divAccordItem").click(function() {
+    $(".div_accordion_item").click(function() {
         $(".sitename").html($(this).html());
         //channelname
         $(".channelname").html("");

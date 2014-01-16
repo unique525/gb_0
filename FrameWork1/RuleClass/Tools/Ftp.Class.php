@@ -240,16 +240,16 @@ class Ftp {
                 $randStr = $microTime . $rand;
                 $fileDir = 'data' . DIRECTORY_SEPARATOR . 'temphtml' . DIRECTORY_SEPARATOR . $siteId;
                 $tempDir = $fileDir . DIRECTORY_SEPARATOR . $randStr;
-                $sourcePath = P_PATH . DIRECTORY_SEPARATOR . $tempDir . DIRECTORY_SEPARATOR . $fileName;  //源文件绝对路径        //源服务器路径
+                $sourcePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $tempDir . DIRECTORY_SEPARATOR . $fileName;  //源文件绝对路径        //源服务器路径
 
                 File::Write($sourcePath, $sourceFileContent);
                 $result = @ftp_put($ftpConn, $fileName, $sourcePath, FTP_BINARY);
-                File::DelDir(ROOTPATH . DIRECTORY_SEPARATOR . $fileDir);
+                File::DelDir(RELATIVE_PATH . DIRECTORY_SEPARATOR . $fileDir);
                 //@unlink($source_path);
             }
         } else {            //附件文件上传
             $destPath = $ftpPath . "/" . $destPath;             //目标文件地址
-            $sourcePath = realpath(ROOTPATH . $sourcePath);       //源文件路径
+            $sourcePath = realpath(RELATIVE_PATH . $sourcePath);       //源文件路径
             if (!empty($destPath)) {  //目标服务器路径不能为空
                 $dirName = dirname($destPath);
                 $fileName = basename($destPath);

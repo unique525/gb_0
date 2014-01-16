@@ -16,7 +16,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $result = "";
         $adminUserId = Control::GetAdminUserId();
         if ($adminUserId <= 0) {
-            Control::GoUrl(ROOTPATH . "/default.php?mod=manage&a=login");
+            Control::GoUrl(RELATIVE_PATH . "/default.php?mod=manage&a=login");
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
@@ -39,7 +39,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                 case "settemplate":
                     self::SetTemplate();
                     break;
-                case "site":                    
+                case "site":
                     $siteManageGen = new SiteManageGen();
                     $result = $siteManageGen->Gen();
                     break;

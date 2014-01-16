@@ -6,7 +6,7 @@
  * @package iCMS_Rules_Gen_Forum
  * @author zhangchi
  */
-class ForumGen extends BaseFrontGen implements IBaseFrontGen {
+class ForumGen extends BasePublicGen implements IBasePublicGen {
 
     /**
      * 引导方法

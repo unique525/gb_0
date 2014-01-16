@@ -7,15 +7,6 @@
  * @author zhangchi
  */
 class DocumentNewsManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_documentnews";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "DocumentNewsId";
 
     /**
      * 取得后台资讯列表数据集
@@ -57,7 +48,7 @@ class DocumentNewsManageData extends BaseManageData {
             " . self::tableName . "
             WHERE documentchannelid=:documentchannelid AND state<100 " . $searchSql . " " . $conditionAdminUserId . " ORDER BY sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
 
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         $dataProperty = new DataProperty();
         $dataProperty->AddField("documentchannelid", $documentChannelId);
@@ -69,7 +60,7 @@ class DocumentNewsManageData extends BaseManageData {
         }
 
         $sql = "SELECT count(*) FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid and state<100 " . $conditionAdminUserId . " " . $searchSql;
-        $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
     }
@@ -84,7 +75,7 @@ class DocumentNewsManageData extends BaseManageData {
 
             $maxSort = 0;
             $sql = "SELECT max(Sort) FROM " . self::tableName . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
-            $maxSort = $this->dbOperator->ReturnInt($sql, null);
+            $maxSort = $this->dbOperator->GetInt($sql, null);
             $arrSql = array();
             for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
                 $newSort = $maxSort - $i;
@@ -150,7 +141,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT DocumentChannelId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -163,7 +154,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT AdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
     
@@ -176,7 +167,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT State FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
     
@@ -189,7 +180,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT LockEdit FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
     
@@ -202,7 +193,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT LockEditDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
     
@@ -215,7 +206,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT LockEditAdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
     
@@ -228,7 +219,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT PublishDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
     
@@ -241,7 +232,7 @@ class DocumentNewsManageData extends BaseManageData {
         $sql = "SELECT DocumentNewsContent FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 

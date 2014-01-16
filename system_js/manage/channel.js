@@ -15,7 +15,7 @@ function LoadChannelListForManage(siteId) {
     };
 
     var _jsloader = new jsloader();
-    _jsloader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&sid=" + siteId + "&ram=" + Math.random());
+    _jsloader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ram=" + Math.random());
     _jsloader.onsuccess = function() {
         $.fn.zTree.init($("#lefttree"), tree_setting, zNodes);
         G_zTree = $.fn.zTree.getZTreeObj("lefttree");
@@ -30,7 +30,7 @@ function LoadChannelListForManage(siteId) {
 function zTreeOnClick(event, treeId, treeNode) {
     G_SelectedChannelId = treeNode.id;
     G_SelectedChannelName = treeNode.name;
-    var channeltype = treeNode.doctype;
+    var channeltype = treeNode.channel_type;
     if (channeltype === 'undefined') {
         channeltype = 0;
     }
@@ -42,7 +42,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 function zTreeOnRightClick(event, treeId, treeNode) {
     G_SelectedChannelId = treeNode.id;
     G_SelectedChannelName = treeNode.name;
-    var channeltype = treeNode.doctype;
+    var channeltype = treeNode.channel_type;
     if (channeltype === 'undefined') {
         channeltype = 0;
     }

@@ -9,28 +9,28 @@
 mb_internal_encoding('utf8');
 date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////
-require ROOTPATH . "/FrameWork1/include_all.php";
+require RELATIVE_PATH . "/FrameWork1/include_all.php";
 $security = Control::GetRequest("secu", "");
 if ($security === "manage") {
     $adminUserId = Control::GetAdminUserId();
     if ($adminUserId <= 0) {
-        die("<script>window.location.href='" . ROOTPATH . "/default.php?mod=manage&a=login';</script>");
+        die("<script>window.location.href='" . RELATIVE_PATH . "/default.php?mod=manage&a=login';</script>");
         //Control::GoUrl(ROOTPATH . "/default.php?mod=manage&a=login");
     } else {
         echo getManageHtml(new DefaultManageGen());
     }
 } else {
-    echo getHtml(new DefaultFrontGen());
+    echo getHtml(new DefaultPublicGen());
 }
 
 /**
  * 利用接口生成对应的前台HTML代码
- * @param IBaseFrontGen $gen
+ * @param IBasePublicGen $gen
  * @return string 返回HTML结果
  */
-function getHtml(IBaseFrontGen $gen) {
+function getHtml(IBasePublicGen $gen) {
     header("Content-type: text/html; charset=utf-8");
-    return $gen->GenFront();
+    return $gen->GenPublic();
 }
 
 /**

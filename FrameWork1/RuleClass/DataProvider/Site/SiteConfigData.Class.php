@@ -6,7 +6,7 @@
  * @package iCMS_Rules_DataProvider_Site
  * @author zhangchi
  */
-class SiteConfigData extends BaseFrontData {
+class SiteConfigData extends BasePublicData {
     /**
      * 表名
      */
@@ -25,7 +25,7 @@ class SiteConfigData extends BaseFrontData {
         $sql = "SELECT * FROM ".self::tableName." WHERE SiteId=:SiteId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 }

@@ -15,7 +15,7 @@ class DataCache {
      * @param string $content 要写入的缓冲内容
      */
     public static function Set($cacheFile, $cacheDir, $content) {
-        $cacheDir = ROOTPATH . DIRECTORY_SEPARATOR . $cacheDir;
+        $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
         File::CreateFolder($cacheDir);
         file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $cacheFile, $content);
     }
@@ -26,7 +26,7 @@ class DataCache {
      * @return string 返回缓冲内容 
      */
     public static function Get($cacheFile) {
-        $cacheFile = ROOTPATH . DIRECTORY_SEPARATOR . $cacheFile;
+        $cacheFile = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheFile;
         if (file_exists($cacheFile)) {
             return trim(file_get_contents($cacheFile));
         } else {
@@ -39,7 +39,7 @@ class DataCache {
      * @param string $cacheFile 缓冲文件名（文件夹+文件名）
      */
     public static function Remove($cacheFile) {
-        $cacheFile = ROOTPATH . DIRECTORY_SEPARATOR . $cacheFile;
+        $cacheFile = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheFile;
         File::DelFile($cacheFile);
     }
 
@@ -49,7 +49,7 @@ class DataCache {
      * @return int 处理结果
      */
     public static function RemoveDir($cacheDir) {
-        $cacheDir = ROOTPATH . DIRECTORY_SEPARATOR . $cacheDir;
+        $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
         return File::DelDir($cacheDir);
     }
 }

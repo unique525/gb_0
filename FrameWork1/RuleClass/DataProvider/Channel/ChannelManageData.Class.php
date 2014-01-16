@@ -72,7 +72,7 @@ class DocumentChannelManageData extends BaseManageData
                         c.ChannelType,
                         c.DocumentChannelName,
                         c.Rank,
-                        (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCounts
+                        (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
                     FROM " . self::TableName_Channel . " c
                     WHERE
                         c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
@@ -101,7 +101,7 @@ class DocumentChannelManageData extends BaseManageData
                 $dataProperty->AddField("AdminUserId3", $adminUserId);
             }
             $dataProperty->AddField("SiteId", $siteId);
-            $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
         return $result;
@@ -117,7 +117,7 @@ class DocumentChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_get_siteid.cache_' . $channelId . '.php';
             $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
@@ -137,7 +137,7 @@ class DocumentChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_get_rank.cache_' . $channelId . '.php';
             $sql = "SELECT Rank FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
@@ -157,7 +157,7 @@ class DocumentChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_get_channeltype.cache_' . $channelId . '.php';
             $sql = "SELECT ChannelType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();

@@ -61,7 +61,7 @@ class DbOperator {
      */
     private function __construct() {
         $dbi = null;
-        require ROOTPATH . '/FrameWork1/SystemInc/config.inc.php';
+        require RELATIVE_PATH . '/FrameWork1/SystemInc/config.inc.php';
         if (!empty($this) && isset($dbi) && !empty($dbi)) {
             $this->dbHost = $dbi['dbhost'];
             $this->dbPort = $dbi['dbport'];
@@ -110,8 +110,8 @@ class DbOperator {
      * @param DataProperty $dataProperty 数据对象
      * @return int 返回第一列第一行的INT型值
      */
-    public function ReturnInt($sql, DataProperty $dataProperty = null) {
-        $result = $this->ReturnString($sql, $dataProperty);
+    public function GetInt($sql, DataProperty $dataProperty = null) {
+        $result = $this->GetString($sql, $dataProperty);
         if (strlen($result) <= 0) {
             return -1;
         } else {
@@ -125,8 +125,8 @@ class DbOperator {
      * @param DataProperty $dataProperty 数据对象
      * @return double 返回第一列第一行的FLOAT型值
      */
-    public function ReturnFloat($sql, DataProperty $dataProperty = null) {
-        $result = $this->ReturnString($sql, $dataProperty);
+    public function GetFloat($sql, DataProperty $dataProperty = null) {
+        $result = $this->GetString($sql, $dataProperty);
         return floatval($result);
     }
 
@@ -136,7 +136,7 @@ class DbOperator {
      * @param DataProperty $dataProperty 数据对象
      * @return string 返回第一列第一行的STRING型值
      */
-    public function ReturnString($sql, DataProperty $dataProperty = null) {
+    public function GetString($sql, DataProperty $dataProperty = null) {
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -154,7 +154,7 @@ class DbOperator {
      * @param int $type PDO的fetch类型
      * @return array 返回二维数组结果集
      */
-    public function ReturnArray($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
+    public function GetArrayList($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null && !empty($dataProperty->ArrayField)) {
             $this->BindStmt($stmt, $dataProperty);
@@ -172,7 +172,7 @@ class DbOperator {
      * @param int $type PDO的fetch类型
      * @return array 返回一维数组结果集
      */
-    public function ReturnRow($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
+    public function GetRow($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -189,7 +189,7 @@ class DbOperator {
      * @param DataProperty $dataProperty 数据对象
      * @return object 返回lob对象
      */
-    public function ReturnLob($sql, DataProperty $dataProperty = null) {
+    public function GetLob($sql, DataProperty $dataProperty = null) {
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -221,15 +221,15 @@ class DbOperator {
 
     /**
      * 批量执行SQL
-     * @param array $arrsql 要查询的SQL语句数组
+     * @param array $sqlList 要查询的SQL语句数组
      * @param array $arrDataProperty 数据对象的数组
      * @return int 批量执行结果
      */
-    public function ExecuteBatch($arrsql, $arrDataProperty) {
+    public function ExecuteBatch($sqlList, $arrDataProperty) {
         try {
             $this->pdo->beginTransaction();
-            for ($i = 0; $i < count($arrsql); $i++) {
-                $sql = $arrsql[$i];
+            for ($i = 0; $i < count($sqlList); $i++) {
+                $sql = $sqlList[$i];
 
                 if (strlen($sql) > 0) {
                     $stmt = $this->pdo->prepare($sql);

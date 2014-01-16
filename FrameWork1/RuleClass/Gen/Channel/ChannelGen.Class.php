@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi
  */
-class ChannelGen extends BaseFrontGen implements IBaseFrontGen {
+class ChannelGen extends BasePublicGen implements IBasePublicGen {
         
     /**
      * 引导方法

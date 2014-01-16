@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
  * @author zhangchi
  */
-class SiteData extends BaseFrontData {
+class SiteData extends BasePublicData {
     /**
      * 表名
      */
@@ -29,7 +29,7 @@ class SiteData extends BaseFrontData {
             $sql = "SELECT SubDomain FROM " . self::tableName . " WHERE SiteId=:SiteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
-            $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+            $result = $this->dbOperator->GetString($sql, $dataProperty);
             DataCache::Set($cacheDir, $cacheFile, $result);
         } else {
             $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
@@ -49,7 +49,7 @@ class SiteData extends BaseFrontData {
             $sql = "SELECT SiteId FROM " . self::tableName . " WHERE SubDomain=:SubDomain";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SubDomain", $subDomain);
-            $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
             DataCache::Set($cacheDir, $cacheFile, $result);
         } else {
             $result = intval(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile));

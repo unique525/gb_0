@@ -16,7 +16,7 @@ class Template {
      * @return string 模板内容
      */
     public static function Load($templateFileUrl, $templateName = "", $templatePath = "system_template") {
-        $filePath = ROOTPATH . '/' . self::GetTempLateUrl($templateName, $templatePath) . '/' . $templateFileUrl . '.php';
+        $filePath = RELATIVE_PATH . '/' . self::GetTempLateUrl($templateName, $templatePath) . '/' . $templateFileUrl . '.php';
         if (!file_exists($filePath)) {
             die("can not found template file:" . $filePath);
         }
@@ -804,7 +804,7 @@ class Template {
      */
     private static function FormatActivityUserListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount) {
         $pos = stripos(strtolower($columnname), "avatar");
-        include ROOTPATH . '/inc/domain.inc.php';
+        include RELATIVE_PATH . '/inc/domain.inc.php';
         $_funcurl = $domain['func'];
         $_posf = stripos($_funcurl, "http://");
         if ($_posf === false) {
@@ -1319,7 +1319,7 @@ class Template {
      * @param <type> $columnvalue
      */
     private static function _ReplaceActivityOne(&$tempcontent, $columnname, $columnvalue) {
-        include ROOTPATH . '/inc/domain.inc.php';
+        include RELATIVE_PATH . '/inc/domain.inc.php';
         $_icmsurl = $domain['icms'];
         $_funcurl = $domain['func'];
         $_pos = stripos($_icmsurl, "http://");

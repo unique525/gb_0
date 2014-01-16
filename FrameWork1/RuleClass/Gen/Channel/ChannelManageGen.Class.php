@@ -225,15 +225,14 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 频道树，后台主界面用
-     * @return string 返回ztree的JSON数据结构
+     * @return string 返回zTree的JSON数据结构
      */
     private function GenListForManageLeft() {
-        $siteId = Control::GetRequest("sid", 0);
+        $siteId = Control::GetRequest("siteid", 0);
         $adminUserId = Control::GetAdminUserId();
         if ($siteId > 0 && $adminUserId > 0) {
-            $cacheDir = CACHEDATA . DIRECTORY_SEPARATOR . 'channeldata';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $adminUserId . '.php';
-            $result = '';
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 $documentChannelManageData = new DocumentChannelManageData();
                 $arrList = $documentChannelManageData->GetListAllForManageLeft($siteId, $adminUserId);
@@ -244,7 +243,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $channelType = intval($arrList[$i]['ChannelType']);
                     $rank = intval($arrList[$i]['Rank']);
                     $parentId = intval($arrList[$i]['ParentId']);
-                    $childCounts = intval($arrList[$i]['childcounts']);
+                    $childCounts = intval($arrList[$i]['ChildCount']);
                     $isParent = "";
                     if ($childCounts > 0) {
                         $isParent = ", isParent:true";

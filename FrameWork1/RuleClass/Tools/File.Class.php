@@ -53,12 +53,12 @@ class File {
             $result = -5;           //上传数组为空
         } else {
             for ($i = 0; $i < count($arrFileContents); $i++) {
-                $destPath = P_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["dest"];
+                $destPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["dest"];
 
 
                 $destPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destPath);
                 $destPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destPath);
-                $source = P_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["source"];
+                $source = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["source"];
 
                 $source = str_ireplace("/", DIRECTORY_SEPARATOR, $source);
                 $source = str_ireplace("\\", DIRECTORY_SEPARATOR, $source);
@@ -96,11 +96,11 @@ class File {
         if (empty($sourcePath) && empty($sourceContent)) {
             $result = -5;           //来源为空
         } else {
-            $destPath = P_PATH . DIRECTORY_SEPARATOR . $destPath;
+            $destPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $destPath;
             $destPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destPath);
             $destPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destPath);
 
-            $sourcePath = P_PATH . DIRECTORY_SEPARATOR . $sourcePath;
+            $sourcePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $sourcePath;
             $sourcePath = str_ireplace("/", DIRECTORY_SEPARATOR, $sourcePath);
             $sourcePath = str_ireplace("\\", DIRECTORY_SEPARATOR, $sourcePath);
 
@@ -282,7 +282,7 @@ class File {
      */
     public static function CreatThumb($source, $toWidth = 0, $toHeight = 0, $thumbFileName = "thumb", $isThumb = 1) {
         $error = 0;
-        $absolutelyPath = P_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
+        $absolutelyPath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
 
         if (!file_exists($absolutelyPath)) {
             $error = -1;        //'源图片文件不存在!'.$source;
@@ -395,7 +395,7 @@ class File {
      */
     public static function CreatDocumentNewsTitlePic($source, $toWidth = 0, $toHeight = 0, $thumbFileName = "thumb") {
         $result = 0;
-        $absolutelyPath = P_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
+        $absolutelyPath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
 
         if (!file_exists($absolutelyPath)) {
             $result = -1;        //'源图片文件不存在!'.$source;
@@ -504,7 +504,7 @@ class File {
      * @return boolean TRUE:超过限制值,FALSE:没有超过限制值
      */
     public static function IsOverWidthOrHeight($filePath, $maxValue = 8000) {
-        $filePath = P_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $filePath);         //绝对路径
+        $filePath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $filePath);         //绝对路径
 
         if (!file_exists($filePath)) {
             //$error = -1;        //源图片文件不存在!
@@ -579,7 +579,7 @@ class File {
             $targ_w = $width;
             $targ_h = $height;
             $jpeg_quality = 100;
-            $src = P_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);
+            $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);
             $imgtype = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
             $data = getimagesize($src);    //取得原文件信息
 //header('Content-type: image/jpeg');
@@ -704,10 +704,10 @@ class File {
      */
     public static function CreateExcel($dest, $headArr, $data, $fileName = "excel", $tableName = "simple") {
         $reSult = 0;
-        include ROOTPATH . '/Rules/Plugins/PHPExcel/PHPExcel.php';
-        include ROOTPATH . '/Rules/Plugins/PHPExcel/PHPExcel/Reader/Excel2007.php';
-        include ROOTPATH . '/Rules/Plugins/PHPExcel/PHPExcel/Reader/Excel5.php';
-        include ROOTPATH . '/Rules/Plugins/PHPExcel/PHPExcel/IOFactory.php';
+        include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel.php';
+        include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel/Reader/Excel2007.php';
+        include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel/Reader/Excel5.php';
+        include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel/IOFactory.php';
 
         if (empty($data) || !is_array($data)) {
             $reSult = -2;        //数据内容为空或不符合标准    die("data must be a array");
@@ -789,7 +789,7 @@ class File {
         if (!empty($url)) {     //源图片路径存在则进行本地保存
             //处理保路径
             if ($savePath == "") {//如果没有指定新的文件保存路径则自动保存到 images目录下
-                $savePath = P_PATH . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR;
+                $savePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR;
             }
             self::CreateFolder($savePath);
             //处理新文件名

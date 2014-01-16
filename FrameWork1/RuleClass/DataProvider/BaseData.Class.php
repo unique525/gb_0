@@ -15,8 +15,11 @@ class BaseData
     const TableId_SiteConfig = "SiteConfigId";
     const TableName_AdminLeftNav = "cst_admin_left_nav";
     const TableId_AdminLeftNav = "AdminLeftNavId";
-    const TableName_AdminLeftUserManage = "cst_admin_left_user_manage";
-    const TableId_AdminLeftUserManage = "AdminLeftUserManageId";
+    /**
+     *
+     */
+    const TableName_ManageMenuOfUser = "cst_manage_menu_of_user";
+    const TableId_ManageMenuOfUser = "ManageMenuOfUserId";
     const TableName_AdminUserGroup = "cst_admin_user_group";
     const TableId_AdminUserGroup = "AdminUserGroupId";
     const TableName_AdminUserLog = "cst_admin_user_log";
@@ -119,7 +122,7 @@ class BaseData
                 $cacheContent = "";
             }
             if (strlen($cacheContent) <= 0) {
-                $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+                $result = $this->dbOperator->GetInt($sql, $dataProperty);
             } else {
                 $result = $cacheContent;
             }

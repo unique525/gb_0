@@ -17,9 +17,9 @@ class Language {
     public static function Load($docName, $moduleId) {
         $lan = 'zh';
         $url = '/language/' . $lan . '/' . $docName . '.xml';
-        if (file_exists(ROOTPATH . $url)) {
+        if (file_exists(RELATIVE_PATH . $url)) {
 
-            $xml = simplexml_load_file(ROOTPATH . $url);
+            $xml = simplexml_load_file(RELATIVE_PATH . $url);
 
             $result = $xml->xpath("//module[@id='" . $moduleId . "']");
             if ($result) {

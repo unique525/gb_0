@@ -2,59 +2,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>{systemname}</title>
+        <title>{system_name}</title>
         <link type="text/css" href="/system_template/common/images/common.css" rel="stylesheet" />
-        <link id="css_font" type="text/css" href="/system_template/{templatename}/images/font14.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/manage/default.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/ztree/ztreestyle.css" rel="stylesheet" />
-        <script type="text/javascript" src="{rootpath}/system_js/manage/define_const.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/common.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jqueryui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/splitter.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/load_tabs.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/channel.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/manage/default.js"></script>
+        <link id="css_font" type="text/css" href="/system_template/{template_name}/images/font14.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/manage/default.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/ztree/ztreestyle.css" rel="stylesheet" />
+        <script type="text/javascript" src="{root_path}/system_js/manage/define_const.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/common.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/manage/splitter.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/manage/load_tabs.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/manage/channel.js"></script>
+        <script type="text/javascript" src="{root_path}/system_js/manage/default.js"></script>
         <script type="text/javascript">
-            var G_TemplateName = "{templatename}";
+            var G_TemplateName = "{template_name}";
         </script>
     </head>
     <body>
-        <div id="top">
-            <div class="topleft"><img class="systemimage" src="/system_template/{templatename}/images/manage/top4.jpg" alt="" /><img class="systemimage" src="/system_template/{templatename}/images/manage/top5.jpg" alt="" /></div>
-            <div class="topright">字体：<span id="setfont14">大</span> <span id="setfont12">小</span> | 欢迎您：<a title="您的IP：{clientip}" href="#">{adminusername}</a> <span id="span_modpass" style="cursor:pointer">[修改密码]</span> <a href="{rootpath}/default.php?mod=manage&a=logout">[退出]</a></div>
-            <div class="speall"></div>
+        <div id="div_top">
+            <div class="top_left"><img class="system_image" src="/system_template/{template_name}/images/manage/top4.jpg" alt="" /><img class="system_image" src="/system_template/{template_name}/images/manage/top5.jpg" alt="" /></div>
+            <div class="top_right">字体：<span id="set_font14">大</span> <span id="set_font12">小</span> | 欢迎您：<a title="您的IP：{client_ip_address}" href="#">{admin_username}</a> <span id="btn_modify_admin_user_pass" style="cursor:pointer">[修改密码]</span> <a href="{root_path}/default.php?mod=manage&a=logout">[退出]</a></div>
+            <div class="spe_all"></div>
         </div>
-        <div id="progress">
+        <div id="div_progress">
         </div>
-        <div id="maincontent">
-            <div id="leftpane">
-                <div id="divselectsite" class="divselectsite_normal">
+        <div id="div_main_content">
+            <div id="div_left_panel">
+                <div id="div_select_site" class="select_site_normal">
                     <cscms id="select_site" type="list">
                         <header>
                             <![CDATA[
-                            <div id="divdefaultsite" title="{f_siteurl}" idvalue="{f_siteid}" style="display:none;height:0;padding:0;width:0;margin:0;">{f_sitename}</div>
-                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>
+                            <div id="div_default_site" title="{f_SiteUrl}" idvalue="{f_SiteId}" style="display:none;height:0;padding:0;width:0;margin:0;">{f_SiteName}</div>
+                            <div class="select_site_item" idvalue="{f_SiteId}" title="{f_SiteUrl}">{f_SiteName}</div>
                             ]]>
                         </header>
                         <item>
                             <![CDATA[
-                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>
+                            <div class="select_site_item" idvalue="{f_SiteId}" title="{f_SiteUrl}">{f_SiteName}</div>
                             ]]>
                         </item>
                         <footer>
                             <![CDATA[
-                            <div class="divselectsite_item" idvalue="{f_siteid}" title="{f_siteurl}">{f_sitename}</div>                            
-                            <div class="sitecount" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_allcount}"></div>
+                            <div class="select_site_item" idvalue="{f_SiteId}" title="{f_SiteUrl}">{f_SiteName}</div>
+                            <div class="site_count" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_all_count}"></div>
                             ]]>
                         </footer>
                     </cscms>
                 </div>
-                <div class="aheader" id="accord1">
+                <div class="header" id="div_left_accordion">
                     <cscms id="leftnav" type="list">
                         <item>
                             <![CDATA[

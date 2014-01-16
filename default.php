@@ -1,6 +1,6 @@
 <?php
-define('ROOTPATH', '.');
-define('P_PATH', realpath('.'));
-define("CACHEDATA", "cachedata");
-include_once(ROOTPATH . '/FrameWork1/start.php');
+define('RELATIVE_PATH', '.');
+define('PHYSICAL_PATH', realpath('.'));
+define("CACHE_PATH", "cache");
+include_once(RELATIVE_PATH . '/FrameWork1/start.php');
 ?>

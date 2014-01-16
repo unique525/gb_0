@@ -10,15 +10,15 @@ a{color:#52596B;text-decoration:none;}
 /*ul{list-style-type:none;width:100%;margin:0;padding:0;border:0;}*/
 *{padding: 0; margin: 0;}
 
-.errorcontent{font-family: "微软雅黑";border:solid 3px #C8CBD5;background:#E1E2E8;margin:20px;padding:5px;font-size:14px;width:300px;}
+.error_content{font-family: "微软雅黑";border:solid 3px #C8CBD5;background:#E1E2E8;margin:20px;padding:5px;font-size:14px;width:300px;}
 
 .spe{clear:left;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
-.speall{clear:both;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
-.inputbox{border:solid 1px #d5d5d5;color:#52596B;padding:2px;}
-.inputnumber{border:solid 1px #d5d5d5;color:#52596B;padding:2px;ime-mode:disabled;}
-.inputprice{border:solid 1px #d5d5d5;color:#52596B;padding:2px;ime-mode:disabled;}
+.spe_all{clear:both;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
+.input_box{border:solid 1px #d5d5d5;color:#52596B;padding:2px;}
+.input_number{border:solid 1px #d5d5d5;color:#52596B;padding:2px;ime-mode:disabled;}
+.input_price{border:solid 1px #d5d5d5;color:#52596B;padding:2px;ime-mode:disabled;}
 
-.selectbox{margin-left:6px;margin-top:3px;margin-bottom:3px;}
+.select_box{margin-left:6px;margin-top:3px;margin-bottom:3px;}
 .btn{font-family: "微软雅黑";border:none;color:#ffffff;background:#52596B;height:28px;line-height:28px;padding-left:10px;padding-right:10px;font-size:14px;cursor:pointer;}
 .btn1{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg1.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
 .btn2{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg2.gif) no-repeat;height:37px;width:87px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
@@ -27,11 +27,11 @@ a{color:#52596B;text-decoration:none;}
 .btn5{font-family: "微软雅黑";border:none;color:#52596B;background:url(manage/btnaddbg5.gif) no-repeat;height:37px;width:74px;padding-left:12px;padding-bottom:2px;font-size:14px;cursor:pointer;}
 .btn6{font-family: "微软雅黑";border:none;color:#52596B;background:#C8CBD5;height:37px;width:74px;padding-bottom:2px;font-size:14px;cursor:pointer;}
 .btn7{font-family: "微软雅黑";border:none;color:#52596B;background:#C8CBD5;height:24px;width:104px;margin-top:6px;padding-bottom:2px;font-size:14px;cursor:pointer;}
-.linkbtn{margin-left:8px;cursor:pointer;line-height:26px;}
+.link_btn{margin-left:8px;cursor:pointer;line-height:26px;}
 /*.line{height:26px;line-height:24px;font-size:14px;color:#12539B;}*/
-.speline{border-bottom:dashed 1px #d5d5d5;}
-.speline2{border-bottom:solid 1px #E5E9EC; overflow: hidden; line-height: 25px; height: 25px;}
-.speline3{border-bottom:solid 2px #E5E9EC;}
+.spe_line{border-bottom:dashed 1px #d5d5d5;}
+.spe_line2{border-bottom:solid 1px #E5E9EC; overflow: hidden; line-height: 25px; height: 25px;}
+.spe_line3{border-bottom:solid 2px #E5E9EC;}
 
 
 #bot_button{width:100%;height:30px;background:url(bot1.jpg) repeat-x;}
@@ -39,8 +39,8 @@ a{color:#52596B;text-decoration:none;}
 
 
 /* pager css */
-#pagerbtn{margin-top:3px;margin-left:4px;font-size:16px;}
-#pagerbtn a{font-size:16px;}
+#pager_btn{margin-top:3px;margin-left:4px;font-size:16px;}
+#pager_btn a{font-size:16px;}
 .pb1{float:left;padding:0 12px;height:30px;line-height:30px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
 .pb1_over{float:left;padding:0 12px;height:30px;line-height:30px;background:#CEE3E6;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
 .pb2{float:left;padding:0 12px;height:30px;line-height:30px;margin-right:2px;text-align:center;}
@@ -50,7 +50,7 @@ a{color:#52596B;text-decoration:none;}
 .pb2 a{font-weight:bold;text-decoration:underline;}
 .pb4{float:left;padding:0 3px;background:#efefef;border:solid 1px #d5d5d5;text-align:center;}
 .pb5{float:left;padding:0 3px;height:30px;line-height:30px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
-.pagerinput{color:#999;ime-mode:disabled;width:68px;border:0;height:24px;padding-top:3px;padding-bottom:3px;font-size: 16px;}
+.pager_input{color:#999;ime-mode:disabled;width:68px;border:0;height:24px;padding-top:3px;padding-bottom:3px;font-size: 16px;}
 
 
 

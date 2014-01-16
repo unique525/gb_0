@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Site
  * @author zhangchi
  */
-class SiteConfigGen extends BaseFrontGen implements IBaseFrontGen {
+class SiteConfigGen extends BasePublicGen implements IBasePublicGen {
         
     /**
      * 引导方法

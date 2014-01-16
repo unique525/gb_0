@@ -85,7 +85,7 @@ class DocumentThreadManageGen extends BaseManageGen implements IBaseManageGen {
         $viewType = Control::GetRequest("viewtype", "");
         $adminUserId = Control::GetAdminUserID();
         $adminUserName = Control::GetAdminUserName();
-        include ROOTPATH . '/inc/domain.inc.php';
+        include RELATIVE_PATH . '/inc/domain.inc.php';
         $icmsUrl = $domain['icms'];
         $pos = stripos($icmsUrl, "http://");
         if ($pos === false) {
@@ -744,7 +744,7 @@ class DocumentThreadManageGen extends BaseManageGen implements IBaseManageGen {
         $formDealUserGroupIditename = $formDealUserGroupIditedata->GetSiteName($formSiteId);
         $documentChannelName = $documentChannelData->GetName($documentChannelId);
 
-        include ROOTPATH . '/inc/domain.inc.php';
+        include RELATIVE_PATH . '/inc/domain.inc.php';
         $funcUrl = $domain['func'];
 
         $pos = stripos($funcUrl, "http://");

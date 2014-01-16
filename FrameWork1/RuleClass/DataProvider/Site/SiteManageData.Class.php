@@ -37,7 +37,7 @@ class SiteManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid1", $adminUserId);
         $dataProperty->AddField("adminuserid2", $adminUserId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
     
@@ -51,7 +51,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT IETitle FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 
@@ -64,7 +64,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT IEDescription FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 
@@ -77,7 +77,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT IEKeywords FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 
@@ -90,7 +90,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT SiteType FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 
@@ -103,7 +103,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT State FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
     
@@ -116,7 +116,7 @@ class SiteManageData extends BaseManageData {
         $sql = "SELECT siteurl FROM ".self::tableName." WHERE siteid=:siteid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 

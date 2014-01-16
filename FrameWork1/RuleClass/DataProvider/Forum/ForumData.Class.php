@@ -6,7 +6,7 @@
  * @package iCMS_Rules_DataProvider_Forum
  * @author zhangchi
  */
-class ForumData extends BaseFrontData {
+class ForumData extends BasePublicData {
     /**
      * 表名
      */
@@ -78,7 +78,7 @@ class ForumData extends BaseFrontData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumRank", $forumRank);
         $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 
@@ -93,7 +93,7 @@ class ForumData extends BaseFrontData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("parentid", $parentId);
         $dataProperty->AddField("siteid", $siteId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 
@@ -111,11 +111,11 @@ class ForumData extends BaseFrontData {
             FROM
             " . self::tableName . " f
             WHERE f.forumid>0  " . $searchSql . " ORDER BY f.sort DESC LIMIT " . $pageBegin . "," . $pageSize . "";
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         //统计总数
         $sql = "";
         $sql = "SELECT count(*) FROM " . self::tableName . " f WHERE f.forumid>0 " . $searchSql;
-        $allCount = $this->dbOperator->ReturnInt($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -129,7 +129,7 @@ class ForumData extends BaseFrontData {
             $dataProperty = new DataProperty();
             $sql = "SELECT SiteId FROM " . self::tableName . " WHERE ForumId=:ForumId";
             $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
             return $result;
         }
     }
@@ -144,7 +144,7 @@ class ForumData extends BaseFrontData {
             $dataProperty = new DataProperty();
             $sql = "SELECT ForumRule FROM " . self::tableName . " WHERE ForumId=:ForumId";
             $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+            $result = $this->dbOperator->GetString($sql, $dataProperty);
             return $result;
         }
     }
@@ -159,7 +159,7 @@ class ForumData extends BaseFrontData {
             $dataProperty = new DataProperty();
             $sql = "SELECT ForumAuditType FROM " . self::tableName . " WHERE ForumId=:ForumId";
             $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
             return $result;
         }
     }
@@ -178,7 +178,7 @@ class ForumData extends BaseFrontData {
                 $dataProperty = new DataProperty();
                 $sql = "SELECT ShowColumnCount FROM " . self::tableName . " WHERE ForumId=:ForumId";
                 $dataProperty->AddField("ForumId", $forumId);
-                $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+                $result = $this->dbOperator->GetInt($sql, $dataProperty);
                 DataCache::Set($cacheDir, $cacheFile, $result);
             } else {
                 $result = intval(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile));
@@ -197,7 +197,7 @@ class ForumData extends BaseFrontData {
         $dataProperty = new DataProperty();
         $sql = "SELECT forumid,parentid,forumrank,forumname,forumtype,forumaccess,forumguestaccess,forummode,forumaudittype,forumpic,foruminfo,forumrule,forumadcontent,sort,showonlineuser,autooptopic,autoaddtopictitlepre,usernamecolor,closeupload,state,siteid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName;
         $dataProperty->AddField(self::tableIdName, $forumId);
-        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetRow($sql, $dataProperty);
         return $result;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class CommonFrontGen extends BaseFrontGen implements IBaseFrontGen {
+class CommonPublicGen extends BasePublicGen implements IBasePublicGen {
 
     /**
      * 引导方法

@@ -69,7 +69,7 @@ class ForumManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $sql = "SELECT ForumName FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=(SELECT parentid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName . ")";
         $dataProperty->AddField(self::tableIdName, $forumId);
-        $result = $this->dbOperator->ReturnString($sql, $dataProperty);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
     
@@ -84,7 +84,7 @@ class ForumManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumRank", $forumRank);
         $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 

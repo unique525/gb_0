@@ -165,8 +165,8 @@ class BaseGen {
         $templateName = self::GetTemplateName();
         $selectTemplate = Template::Load("selecttemplate.html","common");
         $domain = null;
-        require ROOTPATH . '/FrameWork1/SystemInc/domain.inc.php';
-        $tempContent = str_ireplace("{rootpath}", ROOTPATH, $tempContent);
+        require RELATIVE_PATH . '/FrameWork1/SystemInc/domain.inc.php';
+        $tempContent = str_ireplace("{rootpath}", RELATIVE_PATH, $tempContent);
         $tempContent = str_ireplace("{icmsdomain}", $domain['icms'], $tempContent);
         $tempContent = str_ireplace("{funcdomain}", $domain['func'], $tempContent);
         $tempContent = str_ireplace("{usercenterdomain}", $domain['user'], $tempContent);

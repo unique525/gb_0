@@ -7,7 +7,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Document
  * @author Liujunyi
  */
-class DocumentThreadGen extends BaseFrontGen implements IBaseFrontGen {
+class DocumentThreadGen extends BasePublicGen implements IBasePublicGen {
 
     /**
      * 前台引导方法
@@ -77,7 +77,7 @@ class DocumentThreadGen extends BaseFrontGen implements IBaseFrontGen {
         $viewType = Control::GetRequest("viewtype", "");
         $userId = Control::GetUserID();
         $userName = Control::GetUserName();
-        include ROOTPATH . '/inc/domain.inc.php';
+        include RELATIVE_PATH . '/inc/domain.inc.php';
         $_icmsUrl = $domain['icms'];
 
         $_pos = stripos($_icmsUrl, "http://");
@@ -610,7 +610,7 @@ class DocumentThreadGen extends BaseFrontGen implements IBaseFrontGen {
                 $adminUserLogData = new AdminUserLogData();
                 $adminUserLogData->Insert($operateContent);
                 if ($postId > 0) {
-                    include ROOTPATH . '/inc/domain.inc.php';
+                    include RELATIVE_PATH . '/inc/domain.inc.php';
                     $_funcUrl = $domain['func'];
 
                     $_pos = stripos($_funcUrl, "http://");
@@ -763,7 +763,7 @@ class DocumentThreadGen extends BaseFrontGen implements IBaseFrontGen {
             $txtContent = nl2br(Format::RemoveScritpt(Control::PostRequest("txtcontent", "不错，支持下")));
             $userId = Control::GetUserID();
             $userName = Control::GetUserName();
-            include ROOTPATH . '/inc/domain.inc.php';
+            include RELATIVE_PATH . '/inc/domain.inc.php';
             $_funcUrl = $domain['func'];
 
             $_pos = stripos($_funcUrl, "http://");

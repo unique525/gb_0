@@ -19,7 +19,7 @@ class IpLocation {
      */
 
     function ipLocation($datfile = "") {
-        $datfile = ROOTPATH . DIRECTORY_SEPARATOR . "data/ipLocation.dat";
+        $datfile = RELATIVE_PATH . DIRECTORY_SEPARATOR . "data/ipLocation.dat";
         $this->fp = fopen($datfile, 'rb');   //二制方式打开
         $this->firstip = $this->Get4b(); //第一条ip索引的绝对偏移地址
         $this->lastip = $this->Get4b();  //最后一条ip索引的绝对偏移地址
@@ -244,7 +244,7 @@ class IpLocation {
      */
     function FormatCityStrToArr($addressStr) {
         if (!empty($addressStr)) {
-            include ROOTPATH . '/inc/city.inc.php';
+            include RELATIVE_PATH . '/inc/city.inc.php';
             $returnArr = array();
             foreach ($provinceArr as $key => $val) {
                 $_posf = stripos($addressStr, $val);
