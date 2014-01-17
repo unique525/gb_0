@@ -64,7 +64,7 @@ class ManageUserGroupManageData extends BaseManageData {
             $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE adminusergroupname=:adminusergroupname";
             $dataProperty->AddField("adminusergroupname", $str);
         }
-        $result = $this->dbOperator->GetRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

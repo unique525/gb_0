@@ -172,7 +172,7 @@ class DbOperator {
      * @param int $type PDO的fetch类型
      * @return array 返回一维数组结果集
      */
-    public function GetRow($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
+    public function GetArray($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);

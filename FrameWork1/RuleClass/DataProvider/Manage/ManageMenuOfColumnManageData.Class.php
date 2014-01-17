@@ -9,14 +9,14 @@
 class ManageMenuOfColumnManageData extends BaseManageData {
 
     /**
-     * 管理后台左边导航数据集
-     * @param int $adminUserId 后台管理员id
-     * @param AdminUserGroupManageData $adminUserGroupManageData 后台管理员分组数据对象
+     * 根据后台菜单的id字符串取得后台菜单数据集
+     * @param string $manageMenuOfColumnIdValue 后台管理员id
      * @return array 结果数据集
      */
-    function GetList($adminLeftNavIds) {
-        if (strlen($adminLeftNavIds) > 0) {
-            $sql = "SELECT * FROM cst_adminleftnav WHERE AdminLeftNavID IN (" . $adminLeftNavIds . ") ORDER BY Sort DESC";
+    function GetList($manageMenuOfColumnIdValue) {
+        if (strlen($manageMenuOfColumnIdValue) > 0) {
+            $manageMenuOfColumnIdValue = Format::RemoveQuote($manageMenuOfColumnIdValue);
+            $sql = "SELECT * FROM ".self::TableId_ManageMenuOfColumn." WHERE ".self::TableId_ManageMenuOfColumn." IN (" . $manageMenuOfColumnIdValue . ") ORDER BY Sort DESC";
             $result = $this->dbOperator->GetArrayList($sql, null);
             return $result;
         } else {
@@ -25,12 +25,23 @@ class ManageMenuOfColumnManageData extends BaseManageData {
     }
 
     /**
-     * 
-     * @return array
+     * 取得全部后台菜单数据集
+     * @return array 结果数据集
      */
-    public function GetListForShow() {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT adminleftnavid,adminleftnavname FROM " . self::tableName;
+    public function GetListOfAll() {
+        $dataProperty = null;
+        $sql = "SELECT * FROM " . self::TableId_ManageMenuOfColumn . " ORDER BY Sort DESC;";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得开启的后台菜单数据集
+     * @return array 结果数据集
+     */
+    public function GetListOfOpen() {
+        $dataProperty = null;
+        $sql = "SELECT * FROM " . self::TableId_ManageMenuOfColumn . " WHERE State<100 ORDER BY Sort DESC;";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }

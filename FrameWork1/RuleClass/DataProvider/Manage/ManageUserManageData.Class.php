@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理员后台数据类
+ * 后台管理 管理员 后台数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi
@@ -310,7 +310,7 @@ class ManageUserManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::tableName . " WHERE " . self::tableIdName . "=:AdminUserId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("AdminUserId", $adminUserId);
-        $result = $this->dbOperator->GetRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

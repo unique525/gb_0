@@ -1,21 +1,12 @@
 <?php
 
 /**
- * 后台站点数据类
+ * 后台管理 站点 后台数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
  * @author zhangchi
  */
 class SiteManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_site";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "siteid";
 
     /**
      * 根据后台管理员id返回此管理员可以管理的站点列表数据集
@@ -24,11 +15,11 @@ class SiteManageData extends BaseManageData {
      */
     public function GetList($adminUserId) {
         if ($adminUserId == 1) {
-            $sql = "SELECT * FROM ".self::tableName." WHERE State<10 ORDER BY Sort DESC,convert(SiteName USING gbk);";
+            $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<10 ORDER BY Sort DESC,convert(SiteName USING gbk);";
         } else {
-            $sql = "SELECT * FROM ".self::tableName." WHERE State<10 AND 
+            $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<10 AND
                 SiteId IN 
-                ( SELECT SiteId FROM cst_adminpopedom WHERE AdminUserId=:adminuserid1 
+                ( SELECT SiteId FROM ".self::T." WHERE AdminUserId=:adminuserid1
                   UNION 
                   SELECT SiteId FROM cst_adminpopedom WHERE AdminUserGroupId IN (SELECT adminusergroupid FROM cst_adminuser WHERE adminuserid=:adminuserid2)
                  ) 

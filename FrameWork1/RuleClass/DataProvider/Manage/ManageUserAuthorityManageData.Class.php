@@ -412,7 +412,7 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
         $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminuserid=:adminuserid";
 
-        $result = $this->dbOperator->GetRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
@@ -434,7 +434,7 @@ class ManageUserAuthorityManageData extends BaseManageData {
             $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND adminusergroupid=:adminusergroupid AND documentchannelid=0 AND AdminUserID=0;";
         }
 
-        $result = $this->dbOperator->GetRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

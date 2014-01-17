@@ -1,20 +1,13 @@
 <?php
 
 /**
- * 后台站点配置数据类
+ * 后台管理 站点配置 后台数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
  * @author zhangchi
  */
-class SiteConfigManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_siteconfig";
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "SiteConfigId";
+class SiteConfigManageData extends BaseManageData {
+
 
     //string mid Short Message
     private $ArrSiteConfigTypes_1 = array(

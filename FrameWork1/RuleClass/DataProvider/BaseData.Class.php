@@ -8,25 +8,77 @@
  */
 class BaseData
 {
-
-    const TableName_Site = "cst_site";
-    const TableId_Site = "SiteId";
-    const TableName_SiteConfig = "cst_site_config";
-    const TableId_SiteConfig = "SiteConfigId";
-    const TableName_AdminLeftNav = "cst_admin_left_nav";
-    const TableId_AdminLeftNav = "AdminLeftNavId";
     /**
-     *
+     * 后台管理 站点 数据表名
+     */
+    const TableName_Site = "cst_site";
+    /**
+     * 后台管理 站点 数据表自增字段名
+     */
+    const TableId_Site = "SiteId";
+    /**
+     * 后台管理 站点配置 数据表名
+     */
+    const TableName_SiteConfig = "cst_site_config";
+    /**
+     * 后台管理 站点配置 数据表自增字段名
+     */
+    const TableId_SiteConfig = "SiteConfigId";
+
+    /***********************************************************************/
+    /***********************************************************************/
+    /***********************************************************************/
+    /**
+     * 后台管理 栏目菜单 数据表名
+     */
+    const TableName_ManageMenuOfColumn = "cst_manage_menu_of_column";
+    /**
+     * 后台管理 栏目菜单 数据表自增字段名
+     */
+    const TableId_ManageMenuOfColumn = "ManageMenuOfColumnId";
+    /**
+     * 后台管理 会员管理菜单 数据表名
      */
     const TableName_ManageMenuOfUser = "cst_manage_menu_of_user";
+    /**
+     * 后台管理 会员管理菜单 数据表自增字段名
+     */
     const TableId_ManageMenuOfUser = "ManageMenuOfUserId";
-    const TableName_AdminUserGroup = "cst_admin_user_group";
-    const TableId_AdminUserGroup = "AdminUserGroupId";
-    const TableName_AdminUserLog = "cst_admin_user_log";
-    const TableId_AdminUserLog = "AdminUserLogId";
-    const TableName_AdminUser = "cst_admin_user";
-    const TableId_AdminUser = "AdminUserId";
-    const TableName_AdminPopedom = "cst_admin_popedom";
+    /**
+     * 后台管理 分组 数据表名
+     */
+    const TableName_ManageUserGroup = "cst_manage_user_group";
+    /**
+     * 后台管理 分组 数据表自增字段名
+     */
+    const TableId_ManageUserGroup = "ManageUserGroupId";
+    /**
+     * 后台管理 操作日志 数据表名
+     */
+    const TableName_ManageUserLog = "cst_manage_user_log";
+    /**
+     * 后台管理 操作日志 数据表自增字段名
+     */
+    const TableId_ManageUserLog = "ManageUserLogId";
+    /**
+     * 后台管理 管理员 数据表名
+     */
+    const TableName_ManageUser = "cst_manage_user";
+    /**
+     * 后台管理 管理员 数据表自增字段名
+     */
+    const TableId_ManageUser = "ManageUserId";
+    /**
+     * 后台管理 权限 数据表名
+     */
+    const TableName_ManageUserAuthority = "cst_manage_user_authority";
+    /**
+     * 后台管理 权限 数据表自增字段名
+     */
+    const TableId_ManageUserAuthority = "ManageUserAuthorityId";
+    /***********************************************************************/
+    /***********************************************************************/
+    /***********************************************************************/
     const TableName_Channel = "cst_channel";
     const TableId_Channel = "ChannelId";
     const TableName_DocumentNews = "cst_document_news";
