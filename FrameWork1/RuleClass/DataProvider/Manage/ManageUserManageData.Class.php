@@ -6,50 +6,46 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi
  */
-class ManageUserManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_adminuser";
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "adminuserid";
+class ManageUserManageData extends BaseManageData
+{
 
     /**
      * 管理后台登录
-     * @param string $adminUserName 帐号
-     * @param string $adminUserPass 密码
+     * @param string $manageUserName 帐号
+     * @param string $manageUserPass 密码
      * @return int 后台管理员id
      */
-    public function Login($adminUserName, $adminUserPass) {
+    public function Login($manageUserName, $manageUserPass)
+    {
         $dataProperty = new DataProperty();
-        $sql = "SELECT adminuserid FROM " . self::tableName . " WHERE AdminUserName=:AdminUserName AND AdminUserPass=:AdminUserPass AND State<100 AND EndDate>now()";
-        $dataProperty->AddField("AdminUserName", $adminUserName);
-        $dataProperty->AddField("AdminUserPass", $adminUserPass);
+        $sql = "SELECT ManageUserId FROM " . self::TableName_ManageUser . " WHERE ManageUserName=:ManageUserName AND ManageUserPass=:ManageUserPass AND State<100 AND EndDate>now();";
+        $dataProperty->AddField("ManageUserName", $manageUserName);
+        $dataProperty->AddField("ManageUserPass", $manageUserPass);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
-    public function Create() {
+    public function Create()
+    {
         $dataProperty = new DataProperty();
         $sql = parent::GetInsertSql(self::tableName, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
-    public function Modify($tableidvalue) {
+    public function Modify($manageUserId)
+    {
         $dataProperty = new DataProperty();
         $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $tableidvalue, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
-    public function RemoveBin($uid) {
+    public function RemoveBin($manageUserId)
+    {
         $sql = "update " . self::tableName . " set state=100 where adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $uid);
+        $dataProperty->AddField("adminuserid", $manageUserId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
@@ -60,7 +56,8 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $tablevalue
      * @param <type> $type 为0时根据adminuserid修改 1根据adminusername修改
      */
-    public function UpdateAdminUserPass($pass, $tablevalue, $type = 0) {
+    public function UpdateAdminUserPass($pass, $tablevalue, $type = 0)
+    {
         $dataProperty = new DataProperty();
         if (intval($type) === 0) {
             $sql = "UPDATE " . self::tableName . " SET adminuserpass=:adminuserpass WHERE adminuserid=:adminuserid";
@@ -80,7 +77,8 @@ class ManageUserManageData extends BaseManageData {
      * @param int $tableValue
      * @return int 返回执行结果集
      */
-    public function UpdateAdminUserEmail($email, $tableValue) {
+    public function UpdateAdminUserEmail($email, $tableValue)
+    {
         $dataProperty = new DataProperty();
         $sql = "UPDATE " . self::tableName . " SET email=:email WHERE adminuserid=:adminuserid";
         $dataProperty->AddField("adminuserid", $tableValue);
@@ -91,13 +89,14 @@ class ManageUserManageData extends BaseManageData {
 
     /**
      * 根据管理员id取得密码
-     * @param int $adminUserId 管理员id
+     * @param int $manageUserId 管理员id
      * @return string 管理员密码
      */
-    public function GetAdminUserPass($adminUserId) {
+    public function GetManageUserPass($manageUserId)
+    {
         $dataProperty = new DataProperty();
-        $sql = "SELECT adminuserpass FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
-        $dataProperty->AddField("adminuserid", $adminUserId);
+        $sql = "SELECT ManageUserPass FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId";
+        $dataProperty->AddField("ManageUserId", $manageUserId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
@@ -109,9 +108,10 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $allcount
      * @param <type> $gruopid
      * @param <type> $searchkey
-     * @return <type> 
+     * @return <type>
      */
-    public function GetListPager($pagebegin, $pagesize, &$allcount, $gruopid = 0, $searchkey = "") {
+    public function GetListPager($pagebegin, $pagesize, &$allcount, $gruopid = 0, $searchkey = "")
+    {
         $dataProperty = new DataProperty();
 
         $searchsql = "";
@@ -139,7 +139,8 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $adminuserid
      * @return <type>
      */
-    public function GetAdminUserName($adminuserid) {
+    public function GetAdminUserName($adminuserid)
+    {
         $sql = "SELECT adminusername FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
@@ -148,11 +149,12 @@ class ManageUserManageData extends BaseManageData {
     }
 
     /**
-     * 取用户邮件 
+     * 取用户邮件
      * @param int $adminUserId
      * @return string 返回查询到的用户邮件
      */
-    public function GetAdminUserEmail($adminUserId) {
+    public function GetAdminUserEmail($adminUserId)
+    {
         $sql = "SELECT email FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminUserId);
@@ -162,39 +164,29 @@ class ManageUserManageData extends BaseManageData {
 
     /**
      * 根据帐号取得管理员是否允许外网登陆
-     * @param <type> $adminusername
-     * @return <type>
+     * @param string $manageUserName 管理员帐号
+     * @return int 是否允许外网登陆 0 不允许 1 允许
      */
-    public function GetOpenEnLogin($adminusername) {
-        $sql = "SELECT OpenEnLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
+    public function GetOpenPublicLogin($manageUserName)
+    {
+        $sql = "SELECT OpenPublicLogin FROM " . self::TableName_ManageUser . " WHERE ManageUserName=:ManageUserName;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminusername", $adminusername);
+        $dataProperty->AddField("ManageUserName", $manageUserName);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
-    /**
-     * 根据帐号取得管理员是否要开启外网登录短信认证
-     * @param <type> $adminusername
-     * @return <type>
-     */
-    public function GetOpenSmsLogin($adminusername) {
-        $sql = "SELECT OpenSmsLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminusername", $adminusername);
-        $result = $this->dbOperator->GetInt($sql, $dataProperty);
-        return $result;
-    }
 
     /**
-     * 根据帐号取得管理员是否要开启外网登录口令牌认证
-     * @param <type> $adminusername
-     * @return <type>
+     * 根据帐号取得管理员是否开启外网登录口令牌认证
+     * @param string $manageUserName 管理员帐号
+     * @return int 是否开启外网登录口令牌认证 0 未开启 1 开启
      */
-    public function GetOpenOtpLogin($adminusername) {
-        $sql = "SELECT OtpVerifyLogin FROM " . self::tableName . " WHERE adminusername=:adminusername";
+    public function GetOtpVerifyLogin($manageUserName)
+    {
+        $sql = "SELECT OtpVerifyLogin FROM " . self::TableName_ManageUser . " WHERE ManageUserName=:ManageUserName;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminusername", $adminusername);
+        $dataProperty->AddField("ManageUserName", $manageUserName);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
@@ -204,7 +196,8 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $adminuserid
      * @return <type>
      */
-    public function GetMobile($adminuserid) {
+    public function GetMobile($adminuserid)
+    {
         $sql = "SELECT mobile FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("adminuserid", $adminuserid);
@@ -217,7 +210,8 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $state
      * @return <type>
      */
-    public function GetAdminUserNameList($state) {
+    public function GetAdminUserNameList($state)
+    {
         if ($state >= 0) {
             $sql = "SELECT adminuserid,adminusername FROM " . self::tableName . " WHERE state=:state";
             $dataProperty = new DataProperty();
@@ -231,22 +225,29 @@ class ManageUserManageData extends BaseManageData {
     }
 
     /**
-     * 相关会员用户ID
-     * @param <type> $adminuserid
-     * @return <type>
+     * 取得管理员对应的会员id
+     * @param int $manageUserId 管理员id
+     * @return int 会员id
      */
-    public function GetUserId($adminuserid) {
-        $sql = "SELECT userid FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+    public function GetUserId($manageUserId)
+    {
+        $sql = "SELECT UserId FROM " . self::TableName_ManageUser . " WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $adminuserid);
+        $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
 
-    public function GetUserName($adminuserid) {
-        $sql = "SELECT UserName FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+    /**
+     * 取得管理员对应的会员帐号名
+     * @param int $manageUserId 管理员id
+     * @return string
+     */
+    public function GetUserName($manageUserId)
+    {
+        $sql = "SELECT UserName FROM " . self::TableName_ManageUser . " WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $adminuserid);
+        $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }
@@ -257,7 +258,8 @@ class ManageUserManageData extends BaseManageData {
      * @param <type> $state
      * @return <type>
      */
-    public function GetAdminUserList($adminusergroupid = 0, $adminusergroupids = null, $countadminuserid = 0, $state = 0) {
+    public function GetAdminUserList($adminusergroupid = 0, $adminusergroupids = null, $countadminuserid = 0, $state = 0)
+    {
 
 
         $searchsql = "";
@@ -291,9 +293,10 @@ class ManageUserManageData extends BaseManageData {
     /**
      * 根据adminuserid取得adminusergroupid
      * @param type $tablevalue
-     * @return type 
+     * @return type
      */
-    public function GetAdminUserGroupId($tablevalue) {
+    public function GetAdminUserGroupId($tablevalue)
+    {
         $dataProperty = new DataProperty();
         $sql = "select adminusergroupid from " . self::tableName . " where " . self::tableIdName . "=:" . self::tableIdName;
         $dataProperty->AddField(self::tableIdName, $tablevalue);
@@ -303,28 +306,32 @@ class ManageUserManageData extends BaseManageData {
 
     /**
      * 根据$adminUserId取得管理员帐号信息
-     * @param int $adminUserId 管理员id
+     * @param int $manageUserId 管理员id
      * @return array 管理员帐号信息数组
      */
-    public function GetOne($adminUserId) {
-        $sql = "SELECT * FROM " . self::tableName . " WHERE " . self::tableIdName . "=:AdminUserId";
+    public function GetInfo($manageUserId)
+    {
+        $sql = "SELECT * FROM " . self::TableName_ManageUser . " WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("AdminUserId", $adminUserId);
+        $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 登陆成功则更新令牌成功值和漂移值
-     * @param type $tablevalue
-     * @return type
+     * 更新令牌成功值和漂移值
+     * @param int $manageUserId 管理员id
+     * @param string $otpCurrentSuccess 成功值
+     * @param string $otpCurrentDrift 漂移值
+     * @return int 执行结果
      */
-    public function UpdateOtpValue($adminuserid, $otpcurrsucc, $otpcurrdft) {
-        $sql = "UPDATE " . self::tableName . " SET otpcurrsucc=:otpcurrsucc,otpcurrdft=:otpcurrdft where " . self::tableIdName . "=:id";
+    public function ModifyForOtp($manageUserId, $otpCurrentSuccess, $otpCurrentDrift)
+    {
+        $sql = "UPDATE " . self::TableName_ManageUser . " SET OtpCurrentSuccess=:OtpCurrentSuccess,OtpCurrentDrift=:OtpCurrentDrift WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("id", $adminuserid);
-        $dataProperty->AddField("otpcurrsucc", $otpcurrsucc);
-        $dataProperty->AddField("otpcurrdft", $otpcurrdft);
+        $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
+        $dataProperty->AddField("OtpCurrentSuccess", $otpCurrentSuccess);
+        $dataProperty->AddField("OtpCurrentDrift", $otpCurrentDrift);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }

@@ -7,6 +7,24 @@
  */
 //include once rule class
 
+$dir = RELATIVE_PATH . "/FrameWork1/SystemInc/config.inc.php";
+if(file_exists($dir)){
+    require $dir;
+    if(!isset($incDomain['webapp']) || !isset($incDomain['manage'])){
+        die('domain is null');
+    }
+    define('WEBAPP_DOMAIN', $incDomain['webapp']);
+    define('MANAGE_DOMAIN', $incDomain['manage']);
+    define('DATABASE_INFO', $incDatabaseInfo);
+    define('SYSTEM_NAME', $incSystemName);
+    define('LANGUAGE', $incLanguage);
+    define('OPEN_MANAGE_USER_LOG', $incOpenManageUserLog);
+    define('SECURITY_IP',$incSecurityIP);
+
+}else{
+    die("config file not found.");
+}
+
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataBase";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
@@ -15,7 +33,7 @@ foreach ($arrFiles as $fileName) {
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.Class.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseOfManageData.Class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.Class.php");
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
@@ -24,7 +42,7 @@ foreach ($arrFiles as $fileName) {
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.Class.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseOfManageGen.Class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.Class.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.Interface.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.Interface.php");
 //include once rule class
@@ -35,6 +53,12 @@ foreach ($arrFiles as $fileName) {
 }
 
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Tools";
+$arrFiles = getFileNames($dir);
+foreach ($arrFiles as $fileName) {
+    include_once($fileName);
+}
+
+$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
     include_once($fileName);
@@ -52,7 +76,7 @@ function getFileNames($dir) {
 }
 
 /**
- * get_filenames子方法
+ * getFileNames子方法
  * @param string $dir
  * @param array $arrFileNames 
  */

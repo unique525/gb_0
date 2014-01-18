@@ -22,28 +22,61 @@ class ManageUserLogManageData extends BaseManageData {
     }
 
     /**
-     * 插入记录
-     * @param string $operateContent
-     * @return int
+     * 新增操作日志
+     * @param int $manageUserId 管理员id
+     * @param string $manageUserName 管理员帐号
+     * @param string $ipAddress IP地址
+     * @param string $webAgent 浏览器类型
+     * @param string $selfUrl 当前运行网址
+     * @param string $refererUrl 来源网址
+     * @param string $refererDomain 来源域名
+     * @param int $userId 会员id
+     * @param string $userName 会员帐号名
+     * @param string $operateContent 操作内容
+     * @return int 执行结果
      */
-    public function Insert($operateContent) {
-        $sql = "INSERT INTO " . self::tableName . " (adminuserid,createdate,operatecontent,ipaddress,agent,refdomain,refurl) values (:adminuserid,:createdate,:operatecontent,:ipaddress,:agent,:refdomain,:refurl)";
-        $adminUserId = Control::GetAdminUserId();
-        $createDate = date("Y-m-d H:i:s", time());
-        $ipAddress = Control::GetIp();
-        $agent = Control::GetOs() . " and " . Control::GetBrowser();
-        $refererUrl = $_SERVER["HTTP_REFERER"];
-        $nowUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-        $refererDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $refererUrl));
+    public function Create($manageUserId, $manageUserName, $ipAddress, $webAgent, $selfUrl, $refererUrl, $refererDomain, $userId, $userName, $operateContent) {
+        $sql = "INSERT INTO " . self::TableName_ManageUserLog . "
+                  ( ManageUserId,
+                    ManageUserName,
+                    CreateDate,
+                    OperateContent,
+                    IpAddress,
+                    WebAgent,
+                    SelfUrl,
+                    RefererDomain,
+                    RefererUrl,
+                    UserId,
+                    UserName
+                    )
+                VALUES
+                  (
+                    :ManageUserId,
+                    :ManageUserName,
+                     now(),
+                    :OperateContent,
+                    :IpAddress,
+                    :WebAgent,
+                    :SelfUrl,
+                    :RefererDomain,
+                    :RefererUrl,
+                    :UserId,
+                    :UserName
+                  );";
+
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $adminUserId);
-        $dataProperty->AddField("createdate", $createDate);
-        $dataProperty->AddField("operatecontent", $operateContent . ";ms:" . floor(microtime() * 1000) . " nowurl:" . $nowUrl);
-        $dataProperty->AddField("ipaddress", $ipAddress);
-        $dataProperty->AddField("agent", $agent);
-        $dataProperty->AddField("refdomain", $refererDomain);
-        $dataProperty->AddField("refurl", $refererUrl);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+        $dataProperty->AddField("ManageUserName", $manageUserName);
+        $dataProperty->AddField("OperateContent", $operateContent);
+        $dataProperty->AddField("IpAddress", $ipAddress);
+        $dataProperty->AddField("WebAgent", $webAgent);
+        $dataProperty->AddField("SelfUrl", $selfUrl);
+        $dataProperty->AddField("RefererDomain", $refererDomain);
+        $dataProperty->AddField("RefererUrl", $refererUrl);
+        $dataProperty->AddField("UserId", $userId);
+        $dataProperty->AddField("UserName", $userName);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+
         return $result;
     }
 

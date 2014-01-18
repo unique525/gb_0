@@ -163,18 +163,15 @@ class BaseGen {
      */
     public function ReplaceEnd(&$tempContent) {
         $templateName = self::GetTemplateName();
-        $selectTemplate = Template::Load("selecttemplate.html","common");
-        $domain = null;
-        require RELATIVE_PATH . '/FrameWork1/SystemInc/domain.inc.php';
-        $tempContent = str_ireplace("{rootpath}", RELATIVE_PATH, $tempContent);
-        $tempContent = str_ireplace("{icmsdomain}", $domain['icms'], $tempContent);
-        $tempContent = str_ireplace("{funcdomain}", $domain['func'], $tempContent);
-        $tempContent = str_ireplace("{usercenterdomain}", $domain['user'], $tempContent);
-        $tempContent = str_ireplace("{templatename}", $templateName, $tempContent);
-        $tempContent = str_ireplace("{selecttemplate}", $selectTemplate, $tempContent);
-        $tempContent = str_ireplace("{templateselected_$templateName}", "_selected", $tempContent);
-        $tempContent = str_ireplace("{templateselected_default}", "", $tempContent);
-        $tempContent = str_ireplace("{templateselected_deepblue}", "", $tempContent);
+        $selectTemplate = Template::Load("select_template.html","common");
+        $tempContent = str_ireplace("{relative_path}", RELATIVE_PATH, $tempContent);
+        $tempContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $tempContent);
+        $tempContent = str_ireplace("{webapp_domain}", WEBAPP_DOMAIN, $tempContent);
+        $tempContent = str_ireplace("{template_name}", $templateName, $tempContent);
+        $tempContent = str_ireplace("{select_template}", $selectTemplate, $tempContent);
+        $tempContent = str_ireplace("{template_selected_$templateName}", "_selected", $tempContent);
+        $tempContent = str_ireplace("{template_selected_default}", "", $tempContent);
+        $tempContent = str_ireplace("{template_selected_deepblue}", "", $tempContent);
         
         
     }
@@ -184,7 +181,7 @@ class BaseGen {
      * @return string 模板名称
      */
     private function GetTemplateName() {
-        $templateName = Control::GetAdminUserTemplateName();
+        $templateName = Control::GetManageUserTemplateName();
         if(strlen($templateName)<=0){
             $templateName = "default";
         }
@@ -286,6 +283,26 @@ class BaseGen {
         $arrayOfWebClientInfo = array();
 
         return $arrayOfWebClientInfo;
+    }
+
+
+    /**
+     * 新增管理员操作日志
+     * @param string $operateContent 操作内容
+     */
+    protected function CreateManageUserLog($operateContent)
+    {
+        $manageUserId = Control::GetManageUserId();
+        $manageUserName = Control::GetManageUserName();
+        $ipAddress = Control::GetIp();
+        $webAgent = Control::GetOs() . " and " . Control::GetBrowser();
+        $refererUrl = $_SERVER["HTTP_REFERER"];
+        $refererDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $refererUrl));
+        $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+        $userId = Control::GetUserId();
+        $userName = Control::GetUserName();
+        $manageUserLogManageData = new ManageUserLogManageData();
+        $manageUserLogManageData->Create($manageUserId, $manageUserName, $ipAddress, $webAgent, $selfUrl, $refererUrl, $refererDomain, $userId, $userName, $operateContent);
     }
 }
 

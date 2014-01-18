@@ -78,7 +78,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $parentId = Control::GetRequest("parentid", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 
-        $adminUserId = Control::GetAdminUserId();
+        $adminUserId = Control::GetManageUserId();
 
         if ($parentId > 0 && $adminUserId > 0) {
 
@@ -140,7 +140,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                     $result = $documentChannelData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
                     //加入操作log
-                    $operateContent = "DocumentChannel：news id ：" . $result . "；adminuserid：" . Control::GetAdminUserID() . "；adminusername；" . Control::GetAdminUserName() . "；result：" . $result;
+                    $operateContent = "DocumentChannel：news id ：" . $result . "；adminuserid：" . Control::GetManageUserId() . "；adminusername；" . Control::GetManageUserName() . "；result：" . $result;
                     $adminUserLogData = new AdminUserLogData();
                     $adminUserLogData->Insert($operateContent);
 
@@ -165,7 +165,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         //授权给创建人
-                        $adminUserId = Control::GetAdminUserID();
+                        $adminUserId = Control::GetManageUserId();
 
                         if ($adminUserId > 1) { //只有非ADMIN的要授权
                             $adminPopedomData = new AdminPopedomData();
@@ -229,7 +229,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenListForManageLeft() {
         $siteId = Control::GetRequest("siteid", 0);
-        $adminUserId = Control::GetAdminUserId();
+        $adminUserId = Control::GetManageUserId();
         if ($siteId > 0 && $adminUserId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $adminUserId . '.php';

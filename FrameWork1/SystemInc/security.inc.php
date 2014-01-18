@@ -1,3 +1,0 @@
-<?php
-$IncSecurityIP = array();
-?>

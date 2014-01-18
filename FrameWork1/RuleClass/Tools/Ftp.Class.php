@@ -205,7 +205,7 @@ class Ftp {
         }
 
         $time2 = date("Y-m-d H:i:s", time());
-        $adminUserId = Control::GetAdminUserID();
+        $adminUserId = Control::GetManageUserId();
         if ($adminUserId == 1) {
             $ftpLogData->Insert("0", "", "", "time:" . $time1 ."|". $time2. ";ftp;ftpinfo:" . implode("|", $ftpInfo));
         }

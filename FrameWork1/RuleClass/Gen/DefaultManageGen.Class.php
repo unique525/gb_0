@@ -14,7 +14,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
      */
     public function Gen() {
         $result = "";
-        $adminUserId = Control::GetAdminUserId();
+        $adminUserId = Control::GetManageUserId();
         if ($adminUserId <= 0) {
             Control::GoUrl(RELATIVE_PATH . "/default.php?mod=manage&a=login");
         } else {
@@ -61,11 +61,11 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
 
     private function GenDefault() {
         //is logined
-        $adminUserId = Control::GetAdminUserId();
+        $adminUserId = Control::GetManageUserId();
         if ($adminUserId <= 0) {
             return;
         }
-        $adminUserName = Control::GetAdminUserName();
+        $adminUserName = Control::GetManageUserName();
         $clientIp = Control::GetIp();
 
         $tempContent = Template::Load("manage/default.html","common");
@@ -99,7 +99,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
 
     private function SetTemplate(){
         $templateName = Control::GetRequest("tn", "default");
-        Control::SetAdminUserTemplateName($templateName);
+        Control::SetManageUserTemplateName($templateName);
     }
 }
 

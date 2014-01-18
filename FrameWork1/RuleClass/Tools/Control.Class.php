@@ -130,20 +130,20 @@ class Control {
 
     /**
      * 写入后台管理员cookie
-     * @param int $adminUserId 后台帐号id
-     * @param string $adminUserName 后台帐号名
+     * @param int $manageUserId 后台帐号id
+     * @param string $manageUserName 后台帐号名
      * @param int $hour 保存时间（单位小时），默认24小时
      * @param string $domain 保存路径，默认""
      */
-    public static function SetAdminUserCookie($adminUserId, $adminUserName, $hour = 24, $domain = "") {
+    public static function SetManageUserCookie($manageUserId, $manageUserName, $hour = 1, $domain = "") {
         if (!empty($domain)) {
-            setcookie("ICMSADMINUSERID", $adminUserId, time() + $hour * 3600, "/", $domain);
-            $adminUserName = urlencode($adminUserName);
-            setcookie("ICMSADMINUSERNAME", $adminUserName, time() + $hour * 3600, "/", $domain);
+            setcookie('ICMS_MANAGE_USER_ID', $manageUserId, time() + $hour * 3600, "/", $domain);
+            $manageUserName = urlencode($manageUserName);
+            setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/", $domain);
         } else {
-            setcookie("ICMSADMINUSERID", $adminUserId, time() + $hour * 3600, "/");
-            $adminUserName = urlencode($adminUserName);
-            setcookie("ICMSADMINUSERNAME", $adminUserName, time() + $hour * 3600, "/");
+            setcookie('ICMS_MANAGE_USER_ID', $manageUserId, time() + $hour * 3600, "/");
+            $manageUserName = urlencode($manageUserName);
+            setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/");
         }
     }
 
@@ -151,9 +151,9 @@ class Control {
      * 从cookie中取得后台管理员id
      * @return int 返回后台管理员id
      */
-    public static function GetAdminUserId() {
-        if (isset($_COOKIE["ICMSADMINUSERID"])) {
-            return intval($_COOKIE["ICMSADMINUSERID"]);
+    public static function GetManageUserId() {
+        if (isset($_COOKIE["ICMS_MANAGE_USER_ID"])) {
+            return intval($_COOKIE["ICMS_MANAGE_USER_ID"]);
         } else {
             return -1;
         }
@@ -163,9 +163,9 @@ class Control {
      * get admin user name by cookie
      * @return string 返回后台帐号用户名
      */
-    public static function GetAdminUserName() {
-        if (isset($_COOKIE["ICMSADMINUSERNAME"])) {
-            return urldecode($_COOKIE["ICMSADMINUSERNAME"]);
+    public static function GetManageUserName() {
+        if (isset($_COOKIE["ICMS_MANAGE_USER_NAME"])) {
+            return urldecode($_COOKIE["ICMS_MANAGE_USER_NAME"]);
         } else {
             return "";
         }
@@ -174,9 +174,9 @@ class Control {
     /**
      * 删除管理员COOKIE
      */
-    public static function DelAdminUserCookie() {
-        setcookie("ICMSADMINUSERID", 0, time() - 1);
-        setcookie("ICMSADMINUSERNAME", "", time() - 1);
+    public static function DelManageUserCookie() {
+        setcookie("ICMS_MANAGE_USER_ID", 0, time() - 1);
+        setcookie("ICMS_MANAGE_USER_NAME", "", time() - 1);
         setcookie("UID", 0, time() - 1);
         setcookie("USERNAME", "", time() - 1);
     }
@@ -185,11 +185,11 @@ class Control {
      * 取得后台管理员使用的模板名称COOKIE
      * @return string 模板名称
      */
-    public static function GetAdminUserTemplateName(){
-        if (isset($_COOKIE["ICMSADMINUSERTEMPLATENAME"])) {
-            return $_COOKIE["ICMSADMINUSERTEMPLATENAME"];
+    public static function GetManageUserTemplateName(){
+        if (isset($_COOKIE["ICMS_MANAGE_USER_TEMPLATE_NAME"])) {
+            return $_COOKIE["ICMS_MANAGE_USER_TEMPLATE_NAME"];
         } else {
-            return "";
+            return null;
         }
     }
     
@@ -198,8 +198,8 @@ class Control {
      * @param string $templateName 模板名称
      * @param int $hour 保存时间（小时，默认50000）
      */
-    public static function SetAdminUserTemplateName($templateName, $hour = 50000) {
-        setcookie("ICMSADMINUSERTEMPLATENAME", $templateName, time() + $hour * 3600);
+    public static function SetManageUserTemplateName($templateName, $hour = 50000) {
+        setcookie("ICMS_MANAGE_USER_TEMPLATE_NAME", $templateName, time() + $hour * 3600);
     }
 
     /**
@@ -250,7 +250,6 @@ class Control {
             $temp = explode(' ', $browserVersion);
             $browserVersion = $temp[0];
             $browserVersion = preg_replace('/([d.]+)/', '1', $browserVersion);
-            $browserVersion = $browserVersion;
             $browserType = 'Netscape Navigator';
         }
         if (preg_match('/Mozilla/i', $agent) && preg_match('/Opera/i', $agent)) {
@@ -261,7 +260,6 @@ class Control {
             $temp = explode(' ', $browserVersion);
             $browserVersion = $temp[2];
             $browserVersion = preg_replace('/([d.]+)/', '1', $browserVersion);
-            $browserVersion = $browserVersion;
             $browserType = 'Opera';
         }
         if (preg_match('/Mozilla/i', $agent) && preg_match('/MSIE/i', $agent)) {
@@ -272,7 +270,6 @@ class Control {
             $temp = explode(' ', $part);
             $browserVersion = $temp[2];
             $browserVersion = preg_replace('/([d.]+)/', '1', $browserVersion);
-            $browserVersion = $browserVersion;
             $browserType = 'Internet Explorer';
         }
         if ($browserType != '') {
@@ -291,7 +288,6 @@ class Control {
     public static function GetOs() {
         global $_SERVER;
         $agent = $_SERVER['HTTP_USER_AGENT'];
-        $os = false;
         if (preg_match('/win/i', $agent) && strpos($agent, '95')) {
             $os = 'Windows 95';
         } else if (preg_match('/win 9x/i', $agent) && strpos($agent, '4.90')) {
@@ -310,7 +306,7 @@ class Control {
             $os = 'Windows 2003 Server';
         } else if (preg_match('/win/i', $agent) && preg_match('/nt 6.1/i', $agent)) {
             $os = 'Windows 7';
-        } else if (preg_match('/win/i', $strAgent) && preg_match('/nt 6.0/i', $strAgent)) {
+        } else if (preg_match('/win/i', $agent) && preg_match('/nt 6.0/i', $agent)) {
             $os = 'Windows Vista';
         } else if (preg_match('/linux/i', $agent)) {
             $os = 'Linux';
@@ -354,11 +350,11 @@ class Control {
 
     /**
      * 判断是否为utf8   http://w3.org/International/questions/qa-forms-utf-8.html
-     * @param <type> $string
-     * @return <type>
+     * @param string $content
+     * @return boolean
      */
-    public static function isUTF8($string) {
-        $r_is_utf8 = preg_match('%^(?:
+    public static function isUtf8($content) {
+        $isUtf8 = preg_match('%^(?:
             [\x09\x0A\x0D\x20-\x7E]            # ASCII
             | [\xC2-\xDF][\x80-\xBF]            # non-overlong 2-byte
             |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
@@ -367,17 +363,29 @@ class Control {
             |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
             | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
             |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-            )*$%xs', $string);
-        return $r_is_utf8;
+            )*$%xs', $content);
+        return $isUtf8;
     }
 
     /**
-     * 计算时间
-     * @return float 返回时间 
+     * 取得毫秒时间戳
+     * @return string 返回时间
      */
     public static function GetMicroTime() {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float) $usec + (float) $sec);
+        $time = explode(" ", microtime());
+        $time = $time[1] . ($time [0] * 1000);
+        $time2 = explode(".", $time);
+        $time = $time2[0];
+        if(strlen($time) == 11){
+            $time = $time.'000';
+        }
+        if(strlen($time) == 12){
+            $time = $time.'00';
+        }
+        if(strlen($time) == 13){
+            $time = $time.'0';
+        }
+        return $time;
     }
 
     /**
@@ -385,17 +393,67 @@ class Control {
      * @return boolean 是否为移动浏览器 
      */
     public static function IsMobile() {
-        global $_SERVER;
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $mobileAgents = Array("240x320", "acer", "acoon", "acs-", "abacho", "ahong", "airness", "alcatel", "amoi", "android", "anywhereyougo.com", "applewebkit/525", "applewebkit/532", "asus", "audio", "au-mic", "avantogo", "becker", "benq", "bilbo", "bird", "blackberry", "blazer", "bleu", "cdm-", "compal", "coolpad", "danger", "dbtel", "dopod", "elaine", "eric", "etouch", "fly ", "fly_", "fly-", "go.web", "goodaccess", "gradiente", "grundig", "haier", "hedy", "hitachi", "htc", "huawei", "hutchison", "inno", "ipad", "ipaq", "ipod", "jbrowser", "kddi", "kgt", "kwc", "lenovo", "lg ", "lg2", "lg3", "lg4", "lg5", "lg7", "lg8", "lg9", "lg-", "lge-", "lge9", "longcos", "maemo", "mercator", "meridian", "micromax", "midp", "mini", "mitsu", "mmm", "mmp", "mobi", "mot-", "moto", "nec-", "netfront", "newgen", "nexian", "nf-browser", "nintendo", "nitro", "nokia", "nook", "novarra", "obigo", "palm", "panasonic", "pantech", "philips", "phone", "pg-", "playstation", "pocket", "pt-", "qc-", "qtek", "rover", "sagem", "sama", "samu", "sanyo", "samsung", "sch-", "scooter", "sec-", "sendo", "sgh-", "sharp", "siemens", "sie-", "softbank", "sony", "spice", "sprint", "spv", "symbian", "tablet", "talkabout", "tcl-", "teleca", "telit", "tianyu", "tim-", "toshiba", "tsm", "up.browser", "utec", "utstar", "verykool", "virgin", "vk-", "voda", "voxtel", "vx", "wap", "wellco", "wig browser", "wii", "windows ce", "wireless", "xda", "xde", "zte");
-        $isMobile = false;
-        foreach ($mobileAgents as $device) {
-            if (stristr($userAgent, $device)) {
-                $isMobile = true;
-                break;
+
+            // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+            if (isset ($_SERVER['HTTP_X_WAP_PROFILE'])) {
+                return true;
             }
-            return $isMobile;
-        }
+            //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+            if (isset ($_SERVER['HTTP_VIA'])) {
+                //找不到为false,否则为true
+                return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+            }
+            //脑残法，判断手机发送的客户端标志,兼容性有待提高
+            if (isset ($_SERVER['HTTP_USER_AGENT'])) {
+                $clientKeywords = array (
+                    'nokia',
+                    'sony',
+                    'ericsson',
+                    'mot',
+                    'samsung',
+                    'htc',
+                    'sgh',
+                    'lg',
+                    'sharp',
+                    'sie-',
+                    'philips',
+                    'panasonic',
+                    'alcatel',
+                    'lenovo',
+                    'iphone',
+                    'ipod',
+                    'blackberry',
+                    'meizu',
+                    'android',
+                    'netfront',
+                    'symbian',
+                    'ucweb',
+                    'windowsce',
+                    'palm',
+                    'operamini',
+                    'operamobi',
+                    'openwave',
+                    'nexusone',
+                    'cldc',
+                    'midp',
+                    'wap',
+                    'mobile'
+                );
+                // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+                if (preg_match("/(" . implode('|', $clientKeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
+                    return true;
+                }
+            }
+            //协议法，因为有可能不准确，放到最后判断
+            if (isset ($_SERVER['HTTP_ACCEPT'])) {
+                // 如果只支持wml并且不支持html那一定是移动设备
+                // 如果支持wml和html但是wml在html之前则是移动设备
+                if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
+                    return true;
+                }
+            }
+            return false;
+
     }
 }
 ?>

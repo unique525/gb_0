@@ -6,13 +6,15 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Manage
  * @author zhangchi
  */
-class ManageLoginGen extends BasePublicGen implements IBasePublicGen {
+class ManageLoginGen extends BasePublicGen implements IBasePublicGen
+{
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenPublic() {
+    public function GenPublic()
+    {
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -22,8 +24,8 @@ class ManageLoginGen extends BasePublicGen implements IBasePublicGen {
             case "logout":
                 self::Logout();
                 break;
-            case "verifytype":
-                $result = self::AsyncGenVerifyType();
+            case "get_verify_type":
+                $result = self::AsyncGetVerifyType();
                 break;
         }
 
@@ -34,196 +36,142 @@ class ManageLoginGen extends BasePublicGen implements IBasePublicGen {
      * 后台登录方法
      * @return string 返回模板页面
      */
-    private function Login() {
-        $tempContent = Template::Load("manage/login.html","common");
-
-        parent::ReplaceEnd($tempContent);
+    private function Login()
+    {
+        $tempContent = Template::Load("manage/login.html", "common");
 
         if (!empty($_POST)) {
             $isSecurityIp = parent::IsSecurityIp();
-            $adminUserManageData = new AdminUserManageData();
-            $adminUserName = Control::PostRequest("adminusername", "");
-            $adminUserPass = Control::PostRequest("adminuserpass", "");
+            $manageUserManageData = new ManageUserManageData();
+            $manageUserName = Control::PostRequest("manage_user_name", "");
+            $manageUserPass = Control::PostRequest("manage_user_pass", "");
 
-            $adminUserId = $adminUserManageData->Login($adminUserName, $adminUserPass);
+            $manageUserId = $manageUserManageData->Login($manageUserName, $manageUserPass);
 
             //加入操作log
-            $operateContent = "AdminUser Login:AdminUserId$adminUserId;AdminUserName:$adminUserName;AdminUserPass:$adminUserPass";
-            $adminUserLogManageData = new AdminUserLogManageData();
-            $adminUserLogManageData->Insert($operateContent);
+            //$operateContent = "Manage User Login:ManageUserPass:$manageUserPass";
+            $operateContent = implode('|',$_POST);
+            self::CreateManageUserLog($operateContent);
 
-            if(isset($IncDomain) && !empty($IncDomain)){
-                $funcDomain = $IncDomain['func'];
-                $icmsDomain = $IncDomain['icms'];
-            }
-
-            if ($adminUserId > 0) {
+            if ($manageUserId > 0) {
                 if (!$isSecurityIp) { //不是内网IP才需要附加认证
-                    $adminUserManageData = new AdminUserManageData();
-                    $openEnLogin = $adminUserManageData->GetOpenEnLogin($adminUserName);
-                    $openSmsLogin = $adminUserManageData->GetOpenSmsLogin($adminUserName);
-                    $openOtpLogin = $adminUserManageData->GetOpenOtpLogin($adminUserName);
+                    $openPublicLogin = $manageUserManageData->GetOpenPublicLogin($manageUserName);
+                    $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLogin($manageUserName);
 
-                    if (isset($openEnLogin) && !empty($openEnLogin)) { //允许外网登录
-                        if (isset($openOtpLogin) && !empty($openOtpLogin)) { //使用了Otp认证
-                            $arrAdminUserInfo = $adminUserManageData->GetOne($adminUserId);
-                            $otp = Control::PostRequest("adminuserotppass", "");
-                            $otpAuthKey = $arrAdminUserInfo["OtpAuthKey"];
-                            $otpCurrSucc = $arrAdminUserInfo["OtpCurrsucc"];
-                            $otpCurrDft = $arrAdminUserInfo["OtpCurrdft"];
-                            if ($this->CheckOtp($otp, $otpAuthKey, $otpCurrSucc, $otpCurrDft) == 0) {
+                    if (isset($openPublicLogin) && !empty($openPublicLogin)) { //允许外网登录
+                        if (isset($otpVerifyLogin) && !empty($otpVerifyLogin)) { //使用了Otp认证
+                            $arrAdminUserInfo = $manageUserManageData->GetInfo($manageUserId);
+                            $otpNumber = Control::PostRequest("manage_user_otp_number", "");
+                            $otpAuthorityKey = $arrAdminUserInfo["OtpAuthorityKey"];
+                            $otpCurrentSuccess = $arrAdminUserInfo["OtpCurrentSuccess"];
+                            $otpCurrentDrift = $arrAdminUserInfo["OtpCurrentDrift"];
+                            if ($this->CheckOtp($otpNumber, $otpAuthorityKey, $otpCurrentSuccess, $otpCurrentDrift) == 0) {
                                 //验证成功写入成功值和漂移值
-                                $adminUserManageData->UpdateOtpValue($adminUserId, $otpCurrSucc, $otpCurrDft);
-                                Control::SetAdminUserCookie($adminUserId, $adminUserName);
-                                //后台管理中func域名和icms同步登录cookie
-
-                                if ($funcDomain != $icmsDomain) {
-                                    $funcDomain = str_ireplace("http://", "", $funcDomain);
-                                    Control::SetAdminUserCookie($adminUserId, $adminUserName, 24, $funcDomain);
-                                }
-
-                                $userId = $adminUserManageData->GetUserID($adminUserId);
-                                $userName = $adminUserManageData->GetUserName($adminUserId);
-                                if ($userId > 0) {
-                                    Control::SetUserCookie($userId, $userName);
-                                }
-                                Control::GoUrl("default.php?secu=manage");
-                                //header("Location:index.php");
+                                $manageUserManageData->ModifyForOtp($manageUserId, $otpCurrentSuccess, $otpCurrentDrift);
+                                self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
                             } else {
                                 Control::ShowMessage(Language::Load('common', 6));
                             }
-                        } else if (isset($openSmsLogin) && !empty($openSmsLogin)) { //使用了短信认证
-                            $mobile = $adminUserManageData->GetMobile($adminUserId);
-                            if (strlen($mobile) > 3) { //设置了验证手机
-                                $smsData = new SMSData();
-                                $smsContent = $smsData->GetToSP($mobile);
-                                if ($smsContent == $smsCode) {
-                                    //后台管理中func域名和icms同步登录cookie
-
-                                    if ($funcDomain != $icmsDomain) {
-                                        $funcDomain = str_ireplace("http://", "", $funcDomain);
-                                        Control::SetAdminUserCookie($adminUserId, $adminUserName, 24, $funcDomain);
-                                    }
-
-                                    Control::SetAdminUserCookie($adminUserId, $adminUserName);
-                                    $userId = $adminUserManageData->GetUserID($adminUserId);
-                                    $userName = $adminUserManageData->GetUserName($adminUserId);
-                                    if ($userId > 0) {
-                                        Control::SetUserCookie($userId, $userName);
-                                    }
-                                    Control::GoUrl("default.php?secu=manage");
-                                    //header("Location:index.php");
-                                } else {
-                                    Control::ShowMessage(Language::Load('common', 4));
-                                }
-                            }
                         } else {
                             //口令牌和短信验证方式都未开启的话默认登录
-                            Control::SetAdminUserCookie($adminUserId, $adminUserName);
-                            //后台管理中func域名和icms同步登录cookie
-
-                            if ($funcDomain != $icmsDomain) {
-                                $funcDomain = str_ireplace("http://", "", $funcDomain);
-                                Control::SetAdminUserCookie($adminUserId, $adminUserName, 24, $funcDomain);
-                            }
-
-                            $userId = $adminUserManageData->GetUserID($adminUserId);
-                            $userName = $adminUserManageData->GetUserName($adminUserId);
-                            if ($userId > 0) {
-                                Control::SetUserCookie($userId, $userName);
-                            }
-                            Control::GoUrl("default.php?secu=manage");
-                            //header("Location:index.php");
+                            self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
                         }
                     } else {
                         Control::ShowMessage(Language::Load('common', 8));
                     }
                 } else {
-                    //后台管理中func域名和icms同步登录cookie
-                    Control::SetAdminUserCookie($adminUserId, $adminUserName);
-
-                    if ($funcDomain != $icmsDomain) {
-                        $funcDomain = str_ireplace("http://", "", $funcDomain);
-                        Control::SetAdminUserCookie($adminUserId, $adminUserName, 24, $funcDomain);
-                    }
-
-                    $userId = $adminUserManageData->GetUserID($adminUserId);
-                    $userName = $adminUserManageData->GetUserName($adminUserId);
-                    if ($userId > 0) {
-                        Control::SetUserCookie($userId, $userName);
-                    }
-                    Control::GoUrl("default.php?secu=manage");
-                    //header("Location:index.php");
+                    self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
                 }
             } else {
                 Control::ShowMessage(Language::Load('common', 3));
             }
         }
 
+        parent::ReplaceEnd($tempContent);
         $result = $tempContent;
         return $result;
     }
 
     /**
-     * Otp验证接口函数调用
-     * @param type $otp
-     * @param type $authKey
-     * @param int $currSucc
-     * @param int $currDft
-     * @return type
+     * 登录成功后执行的操作
+     * @param int $manageUserId 管理员id
+     * @param string $manageUserName 管理员帐号
+     * @param ManageUserManageData $manageUserManageData 管理员后台数据类
      */
-    private function CheckOtp($otp, $authKey, &$currSucc, &$currDft) {
+    private function DoLogin($manageUserId,$manageUserName,ManageUserManageData $manageUserManageData){
+        Control::SetManageUserCookie($manageUserId, $manageUserName);
+        //后台管理中func域名和icms同步登录cookie
+
+        if (WEBAPP_DOMAIN != MANAGE_DOMAIN) {
+            $webAppDomain = str_ireplace("http://", "", WEBAPP_DOMAIN);
+            Control::SetManageUserCookie($manageUserId, $manageUserName, 1, $webAppDomain);
+        }
+
+        $userId = $manageUserManageData->GetUserId($manageUserId);
+        $userName = $manageUserManageData->GetUserName($manageUserId);
+        if ($userId > 0) {
+            Control::SetUserCookie($userId, $userName);
+        }
+        Control::GoUrl("default.php?secu=manage");
+    }
+
+    /**
+     * Otp验证接口函数调用
+     * @param string $otpNumber 输入的口令
+     * @param string $authorityKey 数据库中的密钥
+     * @param int $currentSuccess 数据库中的成功值
+     * @param int $currentDrift 数据库中的漂移值
+     * @return int 返回值
+     */
+    private function CheckOtp($otpNumber, $authorityKey, &$currentSuccess, &$currentDrift)
+    {
         $result = 9;
         if (function_exists('et_checkpwdz201')) {
             $t = time();
             $t0 = 0;
             $x = 60;
             $drift = 0;
-            $authwnd = 20;
-            $lastsucc = 0;
-            $otplen = 6;
-            $currSucc = 0;
-            $currDft = 0;
-
-            $result = et_checkpwdz201($authKey, $t, $t0, $x, $drift, $authwnd, $lastsucc, $otp, $otplen, $currSucc, $currDft);
+            $authorityWnd = 20;
+            $lastSuccess = 0;
+            $otpLength = 6;
+            $currentSuccess = 0;
+            $currentDrift = 0;
+            $result = et_checkpwdz201($authorityKey, $t, $t0, $x, $drift, $authorityWnd, $lastSuccess, $otpNumber, $otpLength, $currentSuccess, $currentDrift);
         }
         return $result;
     }
 
     /**
-     * 生成是否登录验证的数组JSON结果
-     * @return string JSON
+     * 生成是否开启外网、口令牌、短信登录认证的数组
+     * @return string JSON结果
      */
-    private function AsyncGenVerifyType() {
-        $isSecurityIp = false;
+    private function AsyncGetVerifyType()
+    {
         $isSecurityIp = parent::IsSecurityIp();
-        $arrVerifyType = array("en" => "0", "otp" => "0", "sms" => "0");
+        $arrVerifyType = array("open_public_login" => "0", "otp_verify_login" => "0");
         if (!$isSecurityIp) { //不是内网IP再判断是否需要额外验证
-            $adminUserName = Control::GetRequest("adminusername", "");
-            $adminUserData = new AdminUserData();
-            $openEnLogin = $adminUserData->GetOpenENLogin($adminUserName);
+            $manageUserName = Control::GetRequest("manage_user_name", "");
+            $manageUserData = new ManageUserData();
+            $openPublicLogin = $manageUserData->GetOpenENLogin($manageUserName);
             //允许外网登陆
-            if ($openEnLogin === 1) {
-                $arrVerifyType["en"] = "1";
-                $openSmsLogin = $adminUserData->GetOpenSMSLogin($adminUserName);
-                $openOtpLogin = $adminUserData->GetOpenOtpLogin($adminUserName);
-                if ($openOtpLogin === 1) { //开启了口令牌认证
-                    $arrVerifyType["otp"] = "1";
-                }
-                if ($openSmsLogin === 1) { //开启了外网短信认证
-                    $arrVerifyType["sms"] = "1";
+            if ($openPublicLogin === 1) {
+                $arrVerifyType["open_public_login"] = "1";
+                $otpVerifyLogin = $manageUserData->GetOtpVerifyLogin($manageUserName);
+                if ($otpVerifyLogin === 1) { //开启了口令牌认证
+                    $arrVerifyType["otp_verify_login"] = "1";
                 }
             }
         }
-        $arrVerifyType = json_encode($arrVerifyType);
+        $arrVerifyType = Format::FixJsonEncode($arrVerifyType);
         return $_GET['jsonpcallback'] . "(" . $arrVerifyType . ")";
     }
 
     /*
      * 后台退出登录
      */
-    private function Logout(){
-        Control::DelAdminUserCookie();
+    private function Logout()
+    {
+        Control::DelManageUserCookie();
         session_start();
         session_destroy();
         header("Location:default.php?mod=manage&a=login");

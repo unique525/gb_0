@@ -53,12 +53,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = Template::Load("document/documentnews_deal.html", "common");
         $documentNewsId = Control::GetRequest("documentnewsid", 0);
 
-        $nowAdminUserId = Control::GetAdminUserId();
+        $nowAdminUserId = Control::GetManageUserId();
         $nowUserId = Control::GetUserId();
         //$tab_index = Control::GetRequest("tab", 1);
         $pageIndex = Control::GetRequest("p", 1);
 
-        $nowAdminUserName = Control::GetAdminUserName();
+        $nowAdminUserName = Control::GetManageUserName();
 
         parent::ReplaceFirst($tempContent);
         if ($documentNewsId > 0) {
@@ -237,7 +237,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = $documentNewsManageData->Modify($documentNewsId, $titlePicPath, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
 
 //加入操作log
-                $operatecontent = "DocumentNews：Edit id ：" . $documentNewsId . "；userid：" . Control::GetAdminUserID() . "；username；" . Control::GetAdminUserName() . "；result：" . $result . "；title：" . Control::PostRequest("f_documentnewstitle", "");
+                $operatecontent = "DocumentNews：Edit id ：" . $documentNewsId . "；userid：" . Control::GetManageUserId() . "；username；" . Control::GetManageUserName() . "；result：" . $result . "；title：" . Control::PostRequest("f_documentnewstitle", "");
                 $adminuserlogData = new AdminUserLogData();
                 $adminuserlogData->Insert($operatecontent);
                 if ($result > 0) {
@@ -307,7 +307,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if ($documentChannelId <= 0) {
             return "";
         }
-        $adminUserId = Control::GetAdminUserId();
+        $adminUserId = Control::GetManageUserId();
         $documentChannelManageData = new DocumentChannelManageData();
         $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
 
@@ -319,7 +319,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             Control::ShowMessage(Language::Load('document', 26));
             return "";
         }
-        $adminUserName = Control::GetAdminUserName();
+        $adminUserName = Control::GetManageUserName();
         $clientIp = Control::GetIp();
 
         $siteManageData = new SiteManageData();
@@ -431,7 +431,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if ($documentNewsId > 0 && $state >= 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             $documentChannelId = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
-            $adminUserId = Control::GetAdminUserId();
+            $adminUserId = Control::GetManageUserId();
             $documentChannelManageData = new DocumentChannelManageData();
             $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
 ////////////////////////////////////////////////////
@@ -547,7 +547,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 //修改状态
             $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
 //加入操作log
-            $operatecontent = "DocumentNews：UpdateState id ：" . $documentNewsId . "；userid：" . Control::GetAdminUserID() . "；username；" . Control::GetAdminUserName() . "；oldstate：" . $oldState . "；tostate：" . $state . "；result：" . $result;
+            $operatecontent = "DocumentNews：UpdateState id ：" . $documentNewsId . "；userid：" . Control::GetManageUserId() . "；username；" . Control::GetManageUserName() . "；oldstate：" . $oldState . "；tostate：" . $state . "；result：" . $result;
             $adminuserlogData = new AdminUserLogData();
             $adminuserlogData->Insert($operatecontent);
             return $result;

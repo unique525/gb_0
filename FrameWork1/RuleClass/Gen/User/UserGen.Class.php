@@ -6,13 +6,13 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_User
  * @author zhangchi
  */
-class UserGen {
+class UserGen extends BasePublicGen implements IBasePublicGen {
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenFront() {
+    public function GenPublic() {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {

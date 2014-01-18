@@ -29,7 +29,7 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
         $siteId = Control::GetRequest("siteid", 0);
         $arrList = $adminLeftUserManageData->GetList();
         if (!empty($arrList)) {
-            $adminUserId = Control::GetAdminUserId();
+            $adminUserId = Control::GetManageUserId();
             $adminUserPopedomManageData = new AdminUserPopedomManageData();
             $arrWaitForDelete = array();
 

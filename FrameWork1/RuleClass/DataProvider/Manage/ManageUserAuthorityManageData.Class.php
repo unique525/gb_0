@@ -11,14 +11,14 @@ class ManageUserAuthorityManageData extends BaseManageData {
     /**
      * 建立频道时授权
      * @param int $siteId 站点id
-     * @param int $documentChannelId 频道id
-     * @param int $adminUserId 管理员id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 管理员id
      * @return int 创建结果数字，1为成功 
      */
-    public function CreateForDocumentChannel($siteId, $documentChannelId, $adminUserId) {
+    public function CreateForChannel($siteId, $channelId, $manageUserId) {
         $sql = "INSERT INTO " . self::tableName . " (
-            `SiteID`,
-            `DocumentChannelID`,
+            `SiteId`,
+            `ChannelId`,
             `AdminUserGroupID`,
             `AdminUserID`,
             `PopedomLevel`,

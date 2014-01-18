@@ -12,7 +12,7 @@ class ChannelGen extends BasePublicGen implements IBasePublicGen {
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenFront() {
+    public function GenPublic() {
         $result = "";
         
         return $result;

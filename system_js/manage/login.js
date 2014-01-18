@@ -2,73 +2,74 @@
  * 后台登录js
  */
 $().ready(function() {
-    $("#adminusername").blur(function() {
+    $("#manage_user_name").blur(function() {
         $.ajax({
             type: "get",
-            url: "default.php?mod=manage&a=verifytype",
+            url: "default.php?mod=manage&a=get_verify_type",
             data: {
-                adminusername: $("#adminusername").val()
+                manage_user_name: $("#manage_user_name").val()
             },
             dataType: "jsonp",
             jsonp: "jsonpcallback",
-            success: function(verifytype) {
-                if (verifytype["otp"] == 1) {
-                    $("#otptr").css("display", "");
+            success: function(verifyType) {
+                if (verifyType["otp_verify_login"] == "1") {
+                    $("#div_manage_user_otp").css("display", "");
                 }
-            //$("#divsms").html(verifytype["otp"]);
             }
         });
     });
 
-    $("#checkcode").focus(function() {
-        $("#divTips").css("display", "none");
-        $("#divTips").html("");
+    $("#txt_check_code").focus(function() {
+        $("#div_tips").css("display", "none");
+        $("#div_tips").html("");
     });
     
-    $("#btnsub").click(function() {
-        subform();
+    $("#btn_sub").click(function() {
+        subForm();
     });
 });
 
 
-function submitkeyclick(button) {
-    if (event.keyCode == 13) {
-        event.keyCode = 9;
-        event.returnValue = false;
-        document.getElementById(button).click();
+function submitKeyClick(event) {
+    event = event || window.event;
+    var myKeyCode = event.keyCode;
+    if (myKeyCode == 13) {
+        //keyCode = 9;
+        //window.event.returnValue = false;
+        document.getElementById("btn_sub").click();
     }
 }
-function subform() {
+function subForm() {
     if ($("#adminusername").val() == '') {
-        $("#divTips").css("display", "block");
-        $("#divTips").html("请输入帐号！");
-        $("#divTips").insertAfter("#divAdminUserName");
+        $("#div_tips").css("display", "block");
+        $("#div_tips").html("请输入帐号！");
+        $("#div_tips").insertAfter("#div_manage_user_name");
         return;
     }
     if ($("#adminuserpass").val() == '') {
-        $("#divTips").css("display", "block");
-        $("#divTips").html("请输入密码！");
-        $("#divTips").insertAfter("#divAdminUserPass");
+        $("#div_tips").css("display", "block");
+        $("#div_tips").html("请输入密码！");
+        $("#div_tips").insertAfter("#div_manage_user_pass");
         return;
     }
-    if ($("#checkcode").val() == '') {
-        $("#divTips").css("display", "block");
-        $("#divTips").html("请输入验证码！");
-        $("#divTips").insertAfter("#divVerifyCode");
+    if ($("#txt_check_code").val() == '') {
+        $("#div_tips").css("display", "block");
+        $("#div_tips").html("请输入验证码！");
+        $("#div_tips").insertAfter("#div_verify_code");
         return;
     }
 
-    var code = $("#checkcode").val();
-    $.post("/default.php?mod=common&a=checkverifycode&sn=managelogin&vct=0&vcv=" + code, {
+    var code = $("#txt_check_code").val();
+    $.post("/default.php?mod=common&a=check_verify_code&sn=manage_login&vct=0&vcv=" + code, {
         opresult: $(this).html()
     }, function(xml) {
         var result = parseInt(xml);
         if (result == -1) {
-            $("#divTips").css("display", "block");
-            $("#divTips").html("验证码错误！");
-            $("#divTips").insertAfter("#divVerifyCode");
+            $("#div_tips").css("display", "block");
+            $("#div_tips").html("验证码错误！");
+            $("#div_tips").insertAfter("#div_verify_code");
         } else if (result == 1) {
-            $('#theform').submit();
+            $('#login_form').submit();
         } else {
 
         }

@@ -804,7 +804,6 @@ class Template {
      */
     private static function FormatActivityUserListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount) {
         $pos = stripos(strtolower($columnname), "avatar");
-        include RELATIVE_PATH . '/inc/domain.inc.php';
         $_funcurl = $domain['func'];
         $_posf = stripos($_funcurl, "http://");
         if ($_posf === false) {
@@ -1319,7 +1318,7 @@ class Template {
      * @param <type> $columnvalue
      */
     private static function _ReplaceActivityOne(&$tempcontent, $columnname, $columnvalue) {
-        include RELATIVE_PATH . '/inc/domain.inc.php';
+
         $_icmsurl = $domain['icms'];
         $_funcurl = $domain['func'];
         $_pos = stripos($_icmsurl, "http://");

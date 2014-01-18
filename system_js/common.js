@@ -45,7 +45,6 @@ $().ready(function() {
     });
 });
 
-//前台获得时间，返回（年-月-日 时:分:秒）
 function getDate() {
     var d = new Date()
     var vYear = d.getFullYear();

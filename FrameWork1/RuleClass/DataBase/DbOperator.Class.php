@@ -60,17 +60,16 @@ class DbOperator {
      * 初始化数据库连接
      */
     private function __construct() {
-        $dbi = null;
-        require RELATIVE_PATH . '/FrameWork1/SystemInc/config.inc.php';
-        if (!empty($this) && isset($dbi) && !empty($dbi)) {
-            $this->dbHost = $dbi['dbhost'];
-            $this->dbPort = $dbi['dbport'];
-            $this->dbName = $dbi['dbname'];
-            $this->dbUser = $dbi['dbuser'];
-            $this->dbPass = $dbi['dbpass'];
+        $databaseInfo = explode('|',DATABASE_INFO);
+        if (!empty($databaseInfo)) {
+            $this->dbHost = $databaseInfo[0];
+            $this->dbPort = $databaseInfo[1];
+            $this->dbName = $databaseInfo[2];
+            $this->dbUser = $databaseInfo[3];
+            $this->dbPass = $databaseInfo[4];
             $this->connect();
         }
-        unset($dbi);
+        unset($databaseInfo);
     }
 
     /**
