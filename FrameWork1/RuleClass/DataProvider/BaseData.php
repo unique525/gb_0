@@ -79,9 +79,29 @@ class BaseData
     /***********************************************************************/
     /***********************************************************************/
     /***********************************************************************/
+    /**
+     * 频道 数据表名
+     */
     const TableName_Channel = "cst_channel";
+    /**
+     * 频道 数据表自增字段名
+     */
     const TableId_Channel = "ChannelId";
+    /**
+     * 频道模板 数据表名
+     */
+    const TableName_ChannelTemplate = "cst_channel_template";
+    /**
+     * 频道模板 数据表自增字段名
+     */
+    const TableId_ChannelTemplate = "ChannelTemplateId";
+    /**
+     * 新闻资讯 数据表名
+     */
     const TableName_DocumentNews = "cst_document_news";
+    /**
+     * 新闻资讯 数据表自增字段名
+     */
     const TableId_DocumentNews = "DocumentNewsId";
     const TableName_Forum = "cst_forum";
     const TableId_Forum = "ForumId";

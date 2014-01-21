@@ -1467,68 +1467,14 @@ class Template {
 
     /**
      * 取得页面中所有的标记段，并存入数组
-     * @param type $string
-     * @param type $keyName
-     * @return string
+     * @param string $tempContent
+     * @param string $keyName
+     * @return array 返回数组
      */
-    public static function GetAllCMS($string, $keyName = "cscms") {
-        $strResult = "";
+    public static function GetAllCustomTag($tempContent, $keyName = "icms") {
         $preg = "/\<$keyName(.*)\<\/$keyName>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
-    }
-
-    /**
-     * 取得页面中所有的pretemp标记段，并存入数组
-     * @param <type> $string
-     * @return <type>
-     */
-    public static function GetAllPreTemp($string) {
-        $strResult = "";
-        $preg = "/\<pretemp(.*)\<\/pretemp>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
-    }
-
-    public static function GetAllSiteContent($string) {
-        $strResult = "";
-        $preg = "/\<sitecontent(.*)\<\/sitecontent>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
-    }
-
-    /**
-     * 取得页面中所有的adsite标记段，并存入数组
-     * @param <type> $string
-     * @return <type>
-     */
-    public static function GetAllSiteAd($string) {
-        $preg = "/\<sitead(.*)\<\/sitead>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
-    }
-
-    /**
-     * 取得页面中所有的icmsslider标记段，并存入数组
-     * @param <type> $string
-     * @return <type>
-     */
-    public static function GetAllIcmsSlider($string) {
-        $preg = "/\<icmsslider(.*)\<\/icmsslider>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
-    }
-
-    /**
-     * 取得页面中所有的icmsvote标记段，并存入数组
-     * @param <type> $string
-     * @return <type>
-     */
-    public static function GetAllIcmsVote($string) {
-        $strResult = "";
-        $preg = "/\<icmsvote(.*)\<\/icmsvote>/imsU";
-        preg_match_all($preg, $string, $strResult, PREG_PATTERN_ORDER);
-        return $strResult;
+        preg_match_all($preg, $tempContent, $result, PREG_PATTERN_ORDER);
+        return $result;
     }
 
     /**
@@ -1550,90 +1496,29 @@ class Template {
     }
 
     /**
-     * 把对应ID的CMS标记替换成指定内容，识别cscms标记的type属性
-     * @param string $tempcontent
-     * @param type $id
-     * @param type $type
-     * @param type $replace
-     * @param type $keyName
-     * @return string
+     * 把对应id的自定义标记替换成指定内容，可以识别标记的type属性
+     * @param string $tempContent 模板
+     * @param string $id 标记的id
+     * @param string $replace 要替换的内容
+     * @param string $keyName 标记名称
+     * @param string $type 标记的type
+     * @return string 替换后的内容
      */
-    public static function ReplaceCMSType($tempcontent, $id, $type, $replace, $keyName = "cscms") {
-        $beginstr = '<' . $keyName . ' id="' . $id . '" type="' . $type . '"';
-        $endstr = '</' . $keyName . '>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + 8);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
+    public static function ReplaceCustomTag($tempContent, $id, $replace, $keyName = "icms", $type = null)
+    {
+        if($type != null && strlen($type)>0){
+            $beginString = '<' . $keyName . ' id="' . $id . '" type="' . $type . '"';
+        }else{
+            $beginString = '<' . $keyName . ' id="' . $id . '"';
+        }
+        $endString = '</' . $keyName . '>';
+        $temp1 = substr($tempContent, 0, stripos($tempContent, $beginString));
+        $x = stripos($tempContent, $endString, stripos($tempContent, $beginString));
+        $temp2 = substr($tempContent, $x + strlen($keyName) + 3);
+        $tempContent = $temp1 . $replace . $temp2;
+        return $tempContent;
     }
 
-    /**
-     * 把对应ID的pretemp标记替换成指定内容
-     * @param string $tempcontent
-     * @param <type> $id
-     * @param <type> $replace
-     * @return string
-     */
-    public static function ReplacePreTemp($tempcontent, $id, $replace) {
-        $beginstr = '<pretemp id="' . $id . '"';
-        $endstr = '</pretemp>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + 10);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
-    }
-
-    /**
-     * 把对应ID的sitecontent标记替换成指定内容
-     * @param string $tempcontent
-     * @param type $id
-     * @param type $replace
-     * @return string
-     */
-    public static function ReplaceSiteContent($tempcontent, $id, $replace) {
-        $beginstr = '<sitecontent id="' . $id . '"';
-        $endstr = '</sitecontent>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + 14);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
-    }
-
-    /**
-     * 把对应ID的adsite标记替换成指定广告内容
-     * @param string $tempcontent
-     * @param <type> $id
-     * @param <type> $replace
-     * @return string
-     */
-    public static function ReplaceSiteAd($tempcontent, $id, $replace) {
-        $beginstr = '<sitead id="' . $id . '"';
-        $endstr = '</sitead>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + 9);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
-    }
-
-    /**
-     * 根据指定的ID替换新闻
-     * @param string $tempcontent
-     * @param type $id
-     * @param type $replace
-     */
-    public static function ReplaceIcmsSlider($tempcontent, $id, $replace) {
-        $beginstr = '<icmsslider id="' . $id . '"';
-        $endstr = '</icmsslider>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + 13);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
-    }
 
     /**
      * 删除模板中所有cms标记或指定ID的标记
