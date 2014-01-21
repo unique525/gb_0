@@ -9,19 +9,19 @@
 class BaseData
 {
     /**
-     * 后台管理 站点 数据表名
+     * 站点 数据表名
      */
     const TableName_Site = "cst_site";
     /**
-     * 后台管理 站点 数据表自增字段名
+     * 站点 数据表自增字段名
      */
     const TableId_Site = "SiteId";
     /**
-     * 后台管理 站点配置 数据表名
+     * 站点配置 数据表名
      */
     const TableName_SiteConfig = "cst_site_config";
     /**
-     * 后台管理 站点配置 数据表自增字段名
+     * 站点配置 数据表自增字段名
      */
     const TableId_SiteConfig = "SiteConfigId";
 
@@ -45,35 +45,35 @@ class BaseData
      */
     const TableId_ManageMenuOfUser = "ManageMenuOfUserId";
     /**
-     * 后台管理 分组 数据表名
+     * 管理分组 数据表名
      */
     const TableName_ManageUserGroup = "cst_manage_user_group";
     /**
-     * 后台管理 分组 数据表自增字段名
+     * 管理分组 数据表自增字段名
      */
     const TableId_ManageUserGroup = "ManageUserGroupId";
     /**
-     * 后台管理 操作日志 数据表名
+     * 管理操作日志 数据表名
      */
     const TableName_ManageUserLog = "cst_manage_user_log";
     /**
-     * 后台管理 操作日志 数据表自增字段名
+     * 管理操作日志 数据表自增字段名
      */
     const TableId_ManageUserLog = "ManageUserLogId";
     /**
-     * 后台管理 管理员 数据表名
+     * 管理员 数据表名
      */
     const TableName_ManageUser = "cst_manage_user";
     /**
-     * 后台管理 管理员 数据表自增字段名
+     * 管理员 数据表自增字段名
      */
     const TableId_ManageUser = "ManageUserId";
     /**
-     * 后台管理 权限 数据表名
+     * 管理权限 数据表名
      */
     const TableName_ManageUserAuthority = "cst_manage_user_authority";
     /**
-     * 后台管理 权限 数据表自增字段名
+     * 管理权限 数据表自增字段名
      */
     const TableId_ManageUserAuthority = "ManageUserAuthorityId";
     /***********************************************************************/
@@ -87,6 +87,22 @@ class BaseData
     const TableId_Forum = "ForumId";
     const TableName_ForumTopic = "cst_forum_topic";
     const TableId_ForumTopic = "ForumTopicId";
+    /**
+     * 会员 数据表名
+     */
+    const TableName_User = "cst_user";
+    /**
+     * 会员 数据表自增字段名
+     */
+    const TableId_User = "UserId";
+    /**
+     * 会员相册 数据表名
+     */
+    const TableName_UserAlbum = "cst_user_album";
+    /**
+     * 会员相册 数据表自增字段名
+     */
+    const TableId_UserAlbum = "UserAlbumId";
 
     /**
      * 数据库操作对象的实例
