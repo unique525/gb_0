@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理 会员管理菜单 后台数据类
+ * 后台管理 会员管理菜单 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi

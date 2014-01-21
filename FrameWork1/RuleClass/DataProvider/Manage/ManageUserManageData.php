@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理 管理员 后台数据类
+ * 后台管理 管理员 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi

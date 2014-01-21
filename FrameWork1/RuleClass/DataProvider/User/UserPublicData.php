@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台会员数据类
+ * 公共访问 会员 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * @author zhangchi
