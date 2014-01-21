@@ -31,20 +31,20 @@ foreach ($arrFiles as $fileName) {
     include_once($fileName);
 }
 
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.Class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.php");
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
     include_once($fileName);
 }
 
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.Class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.Interface.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.Interface.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
 //include once rule class
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
 $arrFiles = getFileNames($dir);
