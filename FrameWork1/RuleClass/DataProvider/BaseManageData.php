@@ -25,13 +25,13 @@ class BaseManageData extends BaseData {
             $fieldNames = "";
             $fieldValues = "";
             foreach ($httpPostData as $key => $value) {
-                if (strpos($key, "f" . $preNumber . "_") === 0) { //text textarea 类字段
+                if (strpos($key, "f" . $preNumber . "_") === 0) { //text TextArea 类字段
                     if ($preNumber === "") {
                         $keyName = substr($key, 2);
                     } else {
                         $keyName = substr($key, 3);
                     }
-                    //修复createdate
+                    //修复CreateDate
                     if(strtolower($keyName) == 'createdate'){
                         if(strpos($value,'0000-00-00') >= 0 || empty($value)){
                             $value = date("Y-m-d H:i:s", time());
