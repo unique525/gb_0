@@ -175,6 +175,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
         session_start();
         session_destroy();
         header("Location:default.php?mod=manage&a=login");
+        die();
     }
 }
 

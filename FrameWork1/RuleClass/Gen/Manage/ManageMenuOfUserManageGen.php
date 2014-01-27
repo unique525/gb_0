@@ -26,17 +26,17 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
 
     private function GenAsyncList() {
         $adminLeftUserManageData = new AdminLeftUserManageData();
-        $siteId = Control::GetRequest("siteid", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $arrList = $adminLeftUserManageData->GetList();
         if (!empty($arrList)) {
-            $adminUserId = Control::GetManageUserId();
-            $adminUserPopedomManageData = new AdminUserPopedomManageData();
+            $manageUserId = Control::GetManageUserId();
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $arrWaitForDelete = array();
 
             for ($i = 0; $i < count($arrList); $i++) {
                 //$adminLeftUserManageName = $arrList[$i]["AdminLeftUserManageName"];
                 $adminPopedomName = $arrList[$i]["AdminPopedomName"];
-                $can = $adminUserPopedomManageData->GetPopedomField($siteId, 0, $adminUserId, $adminPopedomName);
+                $can = $manageUserAuthorityManageData->GetPopedomField($siteId, 0, $manageUserId, $adminPopedomName);
                 if (!$can) {
                     $arrWaitForDelete[] = $i;
                 }
