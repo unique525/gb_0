@@ -16,11 +16,11 @@ class ManageUserAuthorityManageData extends BaseManageData {
      * @return int 创建结果数字，1为成功 
      */
     public function CreateForChannel($siteId, $channelId, $manageUserId) {
-        $sql = "INSERT INTO " . self::tableName . " (
+        $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . " (
             `SiteId`,
             `ChannelId`,
-            `AdminUserGroupID`,
-            `AdminUserID`,
+            `ManageUserGroupId`,
+            `ManageUserID`,
             `PopedomLevel`,
             `Explore`, 
             `Create`, 
@@ -40,10 +40,10 @@ class ManageUserAuthorityManageData extends BaseManageData {
             )
             values
 	( 
-	:siteid, 
-	:documentchannelid, 
+	:SiteId,
+	:ChannelId,
 	0, 
-	:adminuserid, 
+	:ManageUserId,
 	0, 
 	1, 
 	1, 
@@ -59,18 +59,18 @@ class ManageUserAuthorityManageData extends BaseManageData {
 	1, 
 	1, 
 	1,
-        1
+    1
 	)";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteId);
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
-        $dataProperty->AddField("adminuserid", $adminUserId);
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ChannelId", $channelId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
 
         if ($result > 0) {
             //删除缓冲
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
-            DataCache::RemoveDir($cacheDir);
+            //$cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
+            DataCache::RemoveDir(CACHE_PATH);
         }
 
         return $result;

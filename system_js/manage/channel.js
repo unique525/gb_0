@@ -14,14 +14,14 @@ function LoadChannelListForManage(siteId) {
         }
     };
 
-    var _jsloader = new jsloader();
-    _jsloader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ram=" + Math.random());
-    _jsloader.onsuccess = function() {
+    var jsLoader = new jsloader();
+    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ram=" + Math.random());
+    jsLoader.onSuccess = function() {
         $.fn.zTree.init($("#lefttree"), tree_setting, zNodes);
         G_zTree = $.fn.zTree.getZTreeObj("lefttree");
         G_RightMenu = $("#rMenu");
     };
-    _jsloader.onfailure = function() {
+    jsLoader.onFailure = function() {
         $("#lefttree").html("导航树加载失败");
     };
 

@@ -24,10 +24,8 @@ class BaseManageGen extends BaseGen
                     $docContent = "<$keyName$val</$keyName>";
                     //模板ID
                     $channelTemplateId = Template::GetDocParamValue($docContent, "id", $keyName);
-
                     $channelTemplateData = new ChannelTemplateData();
                     $preTempContent = $channelTemplateData->GetChannelTemplateContent($channelTemplateId);
-
                     $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $keyName);
                 }
             }
@@ -50,19 +48,18 @@ class BaseManageGen extends BaseGen
         }
 
         ///////找出SiteAd标记/////////
-        $arr = Template::GetAllSiteAd($tempContent);
+        $keyName = "site_ad";
+        $arr = Template::GetAllCustomTag($tempContent, $keyName);
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
                 foreach ($arr2 as $key => $val) {
-                    $docContent = '<sitead' . $val . '</sitead>';
-                    $keyName = "sitead";
-//模板ID
-                    $adid = Template::GetDocParamValue($docContent, "id", $keyName);
+                    $docContent = "<$keyName$val</$keyName>";
+                    $siteAdId = Template::GetDocParamValue($docContent, "id", $keyName);
 
                     $adgen = new AdGen();
-                    $pre_content = $adgen->GenFormatAd($adid);
-                    $tempContent = Template::ReplaceSiteAd($tempContent, $adid, $pre_content);
+                    $pre_content = $adgen->GenFormatAd($siteAdId);
+                    $tempContent = Template::ReplaceSiteAd($tempContent, $siteAdId, $pre_content);
                 }
             }
         }
