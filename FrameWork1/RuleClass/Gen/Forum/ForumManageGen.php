@@ -88,7 +88,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
 
                         if ($rankOneForumId === $rankTwoParentId) {
                             $forumTwoTemplate = $forumManageListTwoTemplate;
-                            $forumTwoTemplate = str_ireplace("{f_ForumId}", $rankTwoForumId, $forumTwoTemplate);
+                            $forumTwoTemplate = str_ireplace("{f_forum_id}", $rankTwoForumId, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_ForumName}", $rankTwoForumName, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_State}", $rankTwoState, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_Sort}", $rankTwoSort, $forumTwoTemplate);

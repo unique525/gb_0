@@ -147,7 +147,7 @@ class BaseData
 
         $tableName = $sourceTableName . "_" . $nowYear . $nowMonth;
         $dbOperator = DBOperator::getInstance();
-        $sqlHasCount = "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME='$tableName'";
+        $sqlHasCount = "SELECT count(*) FROM information_schema.TABLES WHERE TABLE_NAME='$tableName'";
 
         $hasCount = $dbOperator->ReturnInt($sqlHasCount, null);
 

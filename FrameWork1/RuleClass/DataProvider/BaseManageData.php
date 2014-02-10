@@ -213,8 +213,7 @@ class BaseManageData extends BaseData {
             if (strpos($fieldNames, ",") === 0) {
                 $fieldNames = substr($fieldNames, 1);
             }
-            $sql = "update " . $tableName . " set " . $fieldNames . " where " . $tableIdName . "=" . $tableIdValue;
-
+            $sql = "UPDATE $tableName SET $fieldNames WHERE $tableIdName = $tableIdValue ;";
             return $sql;
         } else {
             return null;

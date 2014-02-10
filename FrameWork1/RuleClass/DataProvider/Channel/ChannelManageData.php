@@ -69,9 +69,9 @@ class DocumentChannelManageData extends BaseManageData
                         c.ChannelId,
                         c.ParentId,
                         c.ChannelType,
-                        c.DocumentChannelName,
+                        c.ChannelName,
                         c.Rank,
-                        (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
+                        (SELECT count(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
                     FROM " . self::TableName_Channel . " c
                     WHERE
                         c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
