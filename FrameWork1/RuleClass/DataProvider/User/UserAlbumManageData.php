@@ -165,7 +165,7 @@ class UserAlbumManageData extends BaseManageData {
      */
     public function GetName($userAlbumId) {
         if ($userAlbumId > 0) {
-            $sql = "SELECT UserAlbumName FROM " . self::TableName_UserAlbum . " WHERE " . TableId_UserAlbum . " = :UserAlbumId";
+            $sql = "SELECT UserAlbumName FROM " . self::TableName_UserAlbum . " WHERE " . self::TableId_UserAlbum . " = :UserAlbumId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
             $result = $this->dbOperator->GetString($sql, $dataProperty);
