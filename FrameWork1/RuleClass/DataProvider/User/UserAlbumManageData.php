@@ -9,7 +9,7 @@
 class UserAlbumManageData extends BaseManageData {
 
     /**
-     * 修改相册
+     * 修改相册(checked)
      * @param array $httpPostData $_POST里的数据
      * @param int $userAlbumId 要修改的相册的ID
      * @return int 影响的行数
@@ -43,7 +43,7 @@ class UserAlbumManageData extends BaseManageData {
     }
 
     /**
-     * 通过相册ID获取用户ID
+     * 通过相册ID获取用户ID(checked)
      * @param int $userAlbumId 相册ID
      * @return int 用户ID
      */
@@ -194,7 +194,7 @@ class UserAlbumManageData extends BaseManageData {
     }
 
     /**
-     * 获取当前相册的状态
+     * 获取当前相册的状态(checked)
      * @param int $userAlbumId 相册ID
      * @return int 相册的当前状态 0为未审核,
      */
@@ -231,13 +231,13 @@ class UserAlbumManageData extends BaseManageData {
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumPicCount > 1";
         } else if ($country == 'china' && $userAlbumTag != '' && $single == 0) {//国内的带类别的相册数 只包括已编辑 未审核 已审核的 单照
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country = 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumPicCount = 1";
-            $dataProperty->AddField("useralbumtag", $userAlbumTag);
+            $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
         } else if ($country == '!china' && $userAlbumTag != '' && $single == 0) {//国外的带类别的相册数 只包括已编辑 未审核 已审核的 单照
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumPicCount = 1";
-            $dataProperty->AddField("useralbumtag", $userAlbumTag);
+            $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
         } else if ($country == 'china' && $userAlbumTag != '' && $single == 1) {//国内的带类别的相册数 只包括已编辑 未审核 已审核的 组照
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country = 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumPicCount > 1";
-            $dataProperty->AddField("useralbumtag", $userAlbumTag);
+            $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
         } else if ($country == '!china' && $userAlbumTag != '' && $single == 1) {//国外的带类别的相册数 只包括已编辑 未审核 已审核的 组照
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumPicCount > 1";
             $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
@@ -264,34 +264,24 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $recLevel 推荐级别
      * @return array 符合查询条件的相册数组
      */
-    public function GetListOfAllForSearch($pageBegin, $pageSize, &$allCount, $siteId, $author, $userAlbumName, $indexTop, $isBest, $equipment, $userAlbumTag, $beginDate, $endDate, $state, $recLevel) {
+    public function GetListForSearch($pageBegin, $pageSize, &$allCount, $siteId, $author, $userAlbumName, $indexTop, $isBest, $equipment, $userAlbumTag, $beginDate, $endDate, $state, $recLevel) {
         if ($siteId > 0) {
             $dataProperty = new DataProperty();
             $sql = "SELECT ui.NickName AS NickName,ui.RealName AS RealName,ui.UserId,ua.*,uap.UserAlbumPicThumbnailUrl  FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua." . self::TableId_UserAlbum . " = uap.UserAlbumId AND uap.IsCover = 1," . self::TableName_UserRole . " ur WHERE ur.UserId=ui.UserId AND ur.SiteId=:SiteId AND ui." . self::TableId_UserInfo . " = ua.UserId AND ua.State < 100 ";
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UserRole . " ur  WHERE ur.UserId=ui." . self::TableId_UserInfo . " AND ur.SiteId=:SiteId AND  ui." . self::TableId_UserInfo . " = ua.UserId AND ua.State < 100 ";
 
             $dataProperty->AddField("SiteId", $siteId);
-//        $front_addsql = true;
+
             if (isset($author) && !empty($author)) {//作者
-//            if ($front_addsql) {
-//                $add_username = " where u.username = :username";
-//                $front_addsql = false;
-//            } else {
                 $addUserName = " AND (ui.NickName = :NickName OR ui.RealName = :RealName) ";
-//            }
                 $sql = $sql . $addUserName;
                 $sqlCount = $sqlCount . $addUserName;
                 $dataProperty->AddField("NickName", $author);
                 $dataProperty->AddField("RealName", $author);
-//            $frontAddSql = false;
+
             }
             if (isset($userAlbumName) && !empty($userAlbumName)) {//作品名
-//            if ($front_addsql) {
-//                $add_useralbumname = " where ua.useralbumname = :useralbumname";
-//                $front_addsql = false;
-//            } else {
                 $addUserAlbumName = " AND ua.UserAlbumName LIKE :UserAlbumName";
-//            }
                 $sql = $sql . $addUserAlbumName;
                 $sqlCount = $sqlCount . $addUserAlbumName;
                 $dataProperty->AddField("UserAlbumName", "%" . $userAlbumName . "%");
@@ -315,16 +305,6 @@ class UserAlbumManageData extends BaseManageData {
                 $dataProperty->AddField("Equipment", $equipment);
             }
             if (isset($userAlbumTag) && !empty($userAlbumTag)) {//按照分类查询
-//            $add_oneuseralbumtag = "";
-//            for($i=0;$i<count($_POST["albumtag"]);$i++){
-//                if($i < count($_POST["albumtag"])-1){
-//                    $add_oneuseralbumtag = $add_oneuseralbumtag . "ua.useralbumtag = :useralbumtag".$i." or ";
-//                    $dataProperty->AddField("useralbumtag".$i, $_POST["albumtag"][$i]);
-//                }else{
-//                    $add_oneuseralbumtag = $add_oneuseralbumtag . "ua.useralbumtag = :useralbumtag".$i;
-//                    $dataProperty->AddField("useralbumtag".$i, $_POST["albumtag"][$i]);
-//                }
-//            }
                 $addUserAlbumTag = " AND ua.UserAlbumTag = :UserAlbumTag";
                 $sql = $sql . $addUserAlbumTag;
                 $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
@@ -355,9 +335,9 @@ class UserAlbumManageData extends BaseManageData {
                 $sqlCount = $sqlCount . $addEndDate;
             }
             if (isset($recLevel) && !empty($recLevel)) {
-                $addReclevel = " AND ua.RecLevel = :RecLevel";
-                $sql = $sql . $addReclevel;
-                $sqlCount = $sqlCount . $addReclevel;
+                $addRecLevel = " AND ua.RecLevel = :RecLevel";
+                $sql = $sql . $addRecLevel;
+                $sqlCount = $sqlCount . $addRecLevel;
                 $dataProperty->AddField("RecLevel", $recLevel);
             }
             if (isset($state) && !empty($state)) {
@@ -394,34 +374,22 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $recLevel 推荐级别
      * @return array 符合查询条件的相册数组
      */
-    public function GetListOfAllForSearchAndForeign($pageBegin, $pageSize, &$allCount, $siteId, $author, $userAlbumName, $indexTop, $isBest, $equipment, $userAlbumTag, $beginDate, $endDate, $state, $recLevel) {
+    public function GetListForSearchAndForeign($pageBegin, $pageSize, &$allCount, $siteId, $author, $userAlbumName, $indexTop, $isBest, $equipment, $userAlbumTag, $beginDate, $endDate, $state, $recLevel) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT ui.NickName AS nickname,ui.RealName AS realname,ui.UserId,ui.Country,ua.*,uap.UserAlbumPicThumbnailUrl  FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua." . self::TableId_UserAlbum . " = uap.UserAlbumId AND uap.IsCover = 1," . self::TableName_UserRole . " ur WHERE ur.UserId=ui." . self::TableName_UserInfo . " AND ur.SiteId=:SiteId AND ui." . self::TableName_UserInfo . " = ua.UserId AND ua.State < 100 AND ui.Country != 'china' ";
+        $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ui.Country,ua.*,uap.UserAlbumPicThumbnailUrl  FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua." . self::TableId_UserAlbum . " = uap.UserAlbumId AND uap.IsCover = 1," . self::TableName_UserRole . " ur WHERE ur.UserId=ui." . self::TableName_UserInfo . " AND ur.SiteId=:SiteId AND ui." . self::TableName_UserInfo . " = ua.UserId AND ua.State < 100 AND ui.Country != 'china' ";
         $sqlCount = "SELECT count(*) FROM " . self::TableId_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UserRole . " ur  WHERE ur.UserId=ui.UserId AND ur.SiteId=:SiteId AND  ui.UserId = ua.UserId AND ua.State < 100 AND ui.Country != 'china' ";
 
         $dataProperty->AddField("SiteId", $siteId);
-//        $front_addsql = true;
         if ($siteId > 0) {
             if (isset($author) && !empty($author)) {//作者
-//            if ($front_addsql) {
-//                $add_username = " where u.username = :username";
-//                $front_addsql = false;
-//            } else {
                 $addUserName = " AND (ui.NickName = :NickName OR ui.RealName = :RealName) ";
-//            }
                 $sql = $sql . $addUserName;
                 $sqlCount = $sqlCount . $addUserName;
                 $dataProperty->AddField("NickName", $author);
                 $dataProperty->AddField("RealName", $author);
-//            $frontAddSql = false;
             }
             if (isset($userAlbumName) && !empty($userAlbumName)) {//作品名
-//            if ($front_addsql) {
-//                $add_useralbumname = " where ua.useralbumname = :useralbumname";
-//                $front_addsql = false;
-//            } else {
                 $addUserAlbumName = " AND ua.UserAlbumName LIKE :UserAlbumName";
-//            }
                 $sql = $sql . $addUserAlbumName;
                 $sqlCount = $sqlCount . $addUserAlbumName;
                 $dataProperty->AddField("UserAlbumName", "%" . $userAlbumName . "%");
@@ -445,16 +413,6 @@ class UserAlbumManageData extends BaseManageData {
                 $dataProperty->AddField("Equipment", $equipment);
             }
             if (isset($userAlbumTag) && !empty($userAlbumTag)) {//按照分类查询
-//            $add_oneuseralbumtag = "";
-//            for($i=0;$i<count($_POST["albumtag"]);$i++){
-//                if($i < count($_POST["albumtag"])-1){
-//                    $add_oneuseralbumtag = $add_oneuseralbumtag . "ua.useralbumtag = :useralbumtag".$i." or ";
-//                    $dataProperty->AddField("useralbumtag".$i, $_POST["albumtag"][$i]);
-//                }else{
-//                    $add_oneuseralbumtag = $add_oneuseralbumtag . "ua.useralbumtag = :useralbumtag".$i;
-//                    $dataProperty->AddField("useralbumtag".$i, $_POST["albumtag"][$i]);
-//                }
-//            }
                 $addUserAlbumTag = " AND ua.UserAlbumTag = :UserAlbumTag";
                 $sql = $sql . $addUserAlbumTag;
                 $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
@@ -485,9 +443,9 @@ class UserAlbumManageData extends BaseManageData {
                 $sqlCount = $sqlCount . $addEndDate;
             }
             if (isset($recLevel) && !empty($recLevel)) {
-                $addReclevel = " AND ua.RecLevel = :RecLevel";
-                $sql = $sql . $addReclevel;
-                $sqlCount = $sqlCount . $addReclevel;
+                $addRecLevel = " AND ua.RecLevel = :RecLevel";
+                $sql = $sql . $addRecLevel;
+                $sqlCount = $sqlCount . $addRecLevel;
                 $dataProperty->AddField("RecLevel", $recLevel);
             }
             if (isset($state) && !empty($state)) {
@@ -511,7 +469,7 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $userAlbumId 相册ID
      * @return int 影响的行数
      */
-    public function DeleteByModifyState($userAlbumId) {
+    public function DeleteToRecycleBin($userAlbumId) {
         if ($userAlbumId > 0) {
             $sql = "UPDATE " . self::TableName_UserAlbum . " SET State = 110 WHERE " . self::TableId_UserAlbum . " = :UserAlbumId";
             $dataProperty = new DataProperty();
