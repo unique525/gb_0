@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 提供验证码相关的工具方法
  * @category iCMS

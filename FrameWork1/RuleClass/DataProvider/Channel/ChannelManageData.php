@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Channel
  * @author zhangchi
  */
-class DocumentChannelManageData extends BaseManageData
+class ChannelManageData extends BaseManageData
 {
 
     /**
@@ -81,23 +81,23 @@ class DocumentChannelManageData extends BaseManageData
                             c.ChannelId,
                             c.ParentId,
                             c.ChannelType,
-                            c.DocumentChannelName,
+                            c.ChannelName,
                             c.Rank,
                             (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCounts
                         FROM " . self::TableName_Channel . " c
                         WHERE
                             c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
                             AND c.ChannelId in
-                                ( SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserId=:AdminUserId
+                                ( SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserId=:ManageUserId
                                   UNION
-                                  SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE Explore=1 AND AdminUserGroupId IN (SELECT AdminUserGroupId from " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId2)
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserGroupId IN (SELECT ManageUserGroupId from " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId2)
                                   UNION
-                                  SELECT ChannelId FROM " . self::TableName_AdminPopedom . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_AdminPopedom . " WHERE Explore=1 and ChannelId=0 and AdminUserId=0 and AdminUserGroupId IN (SELECT AdminUserGroupId FROM " . self::TableName_AdminUser . " WHERE AdminUserId=:AdminUserId3))
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE Explore=1 and ChannelId=0 and ManageUserId=0 and ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId3))
                                 )
                         ORDER BY c.Sort DESC,c.ChannelId;";
-                $dataProperty->AddField("AdminUserId", $adminUserId);
-                $dataProperty->AddField("AdminUserId2", $adminUserId);
-                $dataProperty->AddField("AdminUserId3", $adminUserId);
+                $dataProperty->AddField("ManageUserId", $adminUserId);
+                $dataProperty->AddField("ManageUserId2", $adminUserId);
+                $dataProperty->AddField("ManageUserId3", $adminUserId);
             }
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

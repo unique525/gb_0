@@ -47,16 +47,16 @@ class Template {
      * Replace list template
      * @param type $tempcontent
      * @param type $arrList
-     * @param type $id
+     * @param type $tagId
      * @param type $keyName
      */
-    public static function ReplaceList(&$tempcontent, $arrList, $id, $keyName = "cscms") {
+    public static function ReplaceList(&$tempcontent, $arrList, $tagId, $keyName = "cscms") {
         $result = "";
 
         if (stripos($tempcontent, $keyName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
 
-                $beginstr = '<' . $keyName . ' id="' . $id . '"';
+                $beginstr = '<' . $keyName . ' id="' . $tagId . '"';
                 $endstr = '</' . $keyName . '>';
                 $listTempContent = substr($tempcontent, strpos($tempcontent, $beginstr));
                 $listTempContent = substr($listTempContent, 0, strpos($listTempContent, $endstr) + strlen($endstr));
@@ -240,7 +240,7 @@ class Template {
                         $columns = $arrList[$i];
                         $list = $headerTempContent;
                         $itemtype = "header";
-                        $list = self::ReplaceListFor($i, $type, $id, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
                         $list = str_ireplace("{c_allcount}", count($arrList), $list);
                         $sb = $sb . $list;
                     }
@@ -270,7 +270,7 @@ class Template {
 
                         $columns = $arrList[$i];
                         $itemtype = "item";
-                        $list = self::ReplaceListFor($i, $type, $id, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
                         $list = str_ireplace("{c_allcount}", count($arrList), $list);
                         $sb = $sb . $list;
                         //每隔一定主段条数附加分割线，最底部分割线不附加
@@ -291,7 +291,7 @@ class Template {
                             $columns = $arrList[$i];
                             $list = $footerTempContent;
                             $itemtype = "footer";
-                            $list = self::ReplaceListFor($i, $type, $id, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                            $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
                             $sb = $sb . $list;
                         }
                     }
@@ -300,7 +300,7 @@ class Template {
                     $tempcontent = str_replace($listTempContent, $result, $tempcontent);
                 }
             } else {
-                $beginstr = '<' . $keyName . ' id="' . $id . '"';
+                $beginstr = '<' . $keyName . ' id="' . $tagId . '"';
                 $endstr = '</' . $keyName . '>';
                 $temp1 = substr($tempcontent, 0, strpos($tempcontent, $beginstr));
                 $x = strpos($tempcontent, $endstr, strpos($tempcontent, $beginstr));

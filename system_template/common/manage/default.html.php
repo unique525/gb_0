@@ -9,24 +9,25 @@
         <link type="text/css" href="/system_template/{template_name}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/manage/default.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/ztree/ztreestyle.css" rel="stylesheet" />
-        <script type="text/javascript" src="{root_path}/system_js/manage/define_const.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/common.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/jqueryui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/manage/splitter.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/manage/load_tabs.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/manage/channel.js"></script>
-        <script type="text/javascript" src="{root_path}/system_js/manage/default.js"></script>
         <script type="text/javascript">
             var G_TemplateName = "{template_name}";
         </script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/define_const.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/common.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/splitter.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/load_tabs.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/channel.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/default.js"></script>
+
     </head>
     <body>
         <div id="div_top">
             <div class="top_left"><img class="system_image" src="/system_template/{template_name}/images/manage/top4.jpg" alt="" /><img class="system_image" src="/system_template/{template_name}/images/manage/top5.jpg" alt="" /></div>
-            <div class="top_right">字体：<span id="set_font14">大</span> <span id="set_font12">小</span> | 欢迎您：<a title="您的IP：{client_ip_address}" href="#">{admin_username}</a> <span id="btn_modify_admin_user_pass" style="cursor:pointer">[修改密码]</span> <a href="{root_path}/default.php?mod=manage&a=logout">[退出]</a></div>
+            <div class="top_right">字体：<span id="set_font14">大</span> <span id="set_font12">小</span> | 欢迎您：<a title="您的IP：{client_ip_address}" href="#">{manage_user_name}</a> <span id="btn_modify_admin_user_pass" style="cursor:pointer">[修改密码]</span> <a href="{relative_path}/default.php?mod=manage&a=logout">[退出]</a></div>
             <div class="spe_all"></div>
         </div>
         <div id="div_progress">
@@ -55,17 +56,17 @@
                     </cscms>
                 </div>
                 <div class="header" id="div_left_accordion">
-                    <cscms id="leftnav" type="list">
+                    <cscms id="manage_menu_of_column" type="list">
                         <item>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{templatename}/images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
-                            <div>{f_adminleftnavcontent}</div>
+                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
+                            <div>{f_ManageMenuOfColumnContent}</div>
                             ]]>
                         </item>
                         <footer>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{templatename}/images/manage/{f_adminleftnavicon}') no-repeat left center;text-indent:30px;">{f_adminleftnavname}</div></h3>
-                            <div>{f_adminleftnavcontent}</div>
+                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
+                            <div>{f_ManageMenuOfColumnContent}</div>
                             ]]>
                         </footer>
                     </cscms>
@@ -84,7 +85,7 @@
             </div>
             <div id="rightpane">
                 <div id="rightnav"><div class="sitename"></div><div class="channelname"></div><div class="selecttemplate">
-                        {selecttemplate}
+                        {select_template}
                     </div><div class="speall"></div></div>
                 <div id="tabs">
                     <ul>
@@ -103,7 +104,7 @@
         </div> 
 
         <script type="text/javascript">
-            var leftNavCount = parseInt('{adminleftnavcount}') - 1;
+            var leftNavCount = parseInt('{manage_menu_of_column_count}') - 1;
             var leftTreeHeight = $(window).height() - 98 - 29 * leftNavCount;
             $("#lefttree").css("height", leftTreeHeight);
             $("#forummanage").css("height", leftTreeHeight + 26);

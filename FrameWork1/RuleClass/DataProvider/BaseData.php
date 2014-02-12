@@ -125,6 +125,41 @@ class BaseData
     const TableId_UserAlbum = "UserAlbumId";
 
     /**
+     * 自定义表单 数据表名
+     */
+    const TableName_CustomForm = "cst_custom_form";
+    /**
+     * 自定义表单 数据表自增字段名
+     */
+    const TableId_CustomForm = "CustomFormId";
+    /**
+     * 自定义表单 存储内容 数据表名
+     */
+    const TableName_CustomFormContent = "cst_custom_form_content";
+    /**
+     * 自定义表单 存储内容 数据表自增字段名
+     */
+    const TableId_CustomFormContent = "CustomFormContentId";
+    /**
+     * 自定义表单 字段定义 数据表名
+     */
+    const TableName_CustomFormField = "cst_custom_form_field";
+    /**
+     * 自定义表单 字段定义 数据表自增字段名
+     */
+    const TableId_CustomFormField = "CustomFormFieldId";
+    /**
+     * 自定义表单 数据记录 数据表名
+     */
+    const TableName_CustomFormRecord = "cst_custom_form_record";
+    /**
+     * 自定义表单 数据记录 数据表自增字段名
+     */
+    const TableId_CustomFormRecord = "CustomFormRecordId";
+
+
+
+    /**
      * 数据库操作对象的实例
      * @var DbOperator 返回数据库操作对象
      */

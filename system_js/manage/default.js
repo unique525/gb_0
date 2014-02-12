@@ -1,13 +1,16 @@
-/*框架初始化JS*/
-
+/**框架初始化JS**/
 $(function() {
-    $("#sitemanage").attr("src", "/system_template/" + G_TemplateName + "/images/manage/lsite.jpg");
-    $("#btngosite").attr("src", "/system_template/" + G_TemplateName + "/images/manage/go.jpg");
+    var nowTemplateName = "default";
+    if(G_TemplateName != undefined){
+        nowTemplateName = G_TemplateName;
+    }
+    $("#btn_site_manage").attr("src", "/system_template/" + nowTemplateName + "/images/manage/site_manage.jpg");
+    $("#img_go_site_url").attr("src", "/system_template/" + nowTemplateName + "/images/manage/go.jpg");
 
-    var obj_maincontent = jQuery('#maincontent');
-    if (obj_maincontent.length > 0) {
-        $("#maincontent").css("height", $(window).height() - 40);
-        $("#maincontent").splitter({
+    var divMainContent = jQuery('#div_main_content');
+    if (divMainContent.length > 0) {
+        $("#div_main_content").css("height", $(window).height() - 40);
+        $("#div_main_content").splitter({
             type: "v",
             minLeft: 180,
             sizeLeft: 180,
@@ -18,26 +21,26 @@ $(function() {
     //$("#accord1").tooltip();
     //$(".btnsettemplate").tooltip();
 
-    $("#divselectsite").click(function() {
-        if ($(this).attr("class") === "divselectsite_normal") {
-            $(this).attr("class", "divselectsite_clicked");
+    $("#div_select_site").click(function() {
+        if ($(this).attr("class") === "select_site_normal") {
+            $(this).attr("class", "select_site_clicked");
             var itemHeight = parseInt($(this).css("height"));
-            var siteCount = $(".sitecount").attr("idvalue");
+            var siteCount = $(".site_count").attr("idvalue");
             var newHeight = itemHeight * siteCount;
             $(this).css("height", newHeight + "px");
         } else {
-            $(this).attr("class", "divselectsite_normal");
+            $(this).attr("class", "select_site_normal");
         }
     });
 
-    var siteId = $("#divdefaultsite").attr("idvalue");
-    var siteName = $("#divdefaultsite").html();
-    var siteUrl = $("#divdefaultsite").attr("title");
+    var siteId = $("#div_default_site").attr("idvalue");
+    var siteName = $("#div_default_site").html();
+    var siteUrl = $("#div_default_site").attr("title");
     if (siteId.length > 0) {
         LoadSite(siteId, siteName, siteUrl);
     }
     //select site
-    $(".divselectsite_item").click(function() {
+    $(".select_site_item").click(function() {
         siteId = $(this).attr("idvalue");
         siteName = $(this).html();
         siteUrl = $(this).attr("title");
@@ -48,8 +51,8 @@ $(function() {
     //$(".sitename").html($("#sel_site").find("option:selected").text());
     //$(".sitename").attr("title",$("#sel_site").val());
 
-    if ($("#showsitelist").length > 0) {
-        $("#showsitelist").append($("#divselectsite"));
+    if ($("#div_show_site_list").length > 0) {
+        $("#div_show_site_list").append($("#div_select_site"));
     }
 
     var objAccord = jQuery('#div_left_accordion');
@@ -90,7 +93,7 @@ function LoadSite(siteId, siteName, siteUrl) {
     G_SelectedChannelId = 0;
 
     if (G_NowSiteId > 0) {
-        $("#lefttree").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
+        $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
         LoadChannelTree(siteId);
         //sitename
         $(".sitename").html(siteName);
@@ -98,7 +101,7 @@ function LoadSite(siteId, siteName, siteUrl) {
             $("#gosite").attr("href", siteUrl);
         }
     } else {
-        $("#lefttree").html("请先增加一个站点");
+        $("#div_manage_menu_of_column").html("请先增加一个站点");
     }
 
 /*
