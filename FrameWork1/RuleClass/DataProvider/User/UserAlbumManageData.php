@@ -9,7 +9,7 @@
 class UserAlbumManageData extends BaseManageData {
 
     /**
-     * 修改相册
+     * 修改相册(checked)
      * @param array $httpPostData $_POST里的数据
      * @param int $userAlbumId 要修改的相册的ID
      * @return int 影响的行数
@@ -45,7 +45,7 @@ class UserAlbumManageData extends BaseManageData {
     }
 
     /**
-     * 通过相册ID获取用户ID
+     * 通过相册ID获取用户ID(checked)
      * @param int $userAlbumId 相册ID
      * @return int 用户ID
      */
@@ -194,7 +194,7 @@ class UserAlbumManageData extends BaseManageData {
     }
 
     /**
-     * 获取当前相册的状态
+     * 获取当前相册的状态(checked)
      * @param int $userAlbumId 相册ID
      * @return int 相册的当前状态 0为未审核,
      */
@@ -271,12 +271,14 @@ class UserAlbumManageData extends BaseManageData {
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UserRole . " ur  WHERE ur.UserId=ui." . self::TableId_UserInfo . " AND ur.SiteId=:SiteId AND  ui." . self::TableId_UserInfo . " = ua.UserId AND ua.State < 100 ";
 
             $dataProperty->AddField("SiteId", $siteId);
+
             if (isset($author) && !empty($author)) {//作者
                 $addUserName = " AND (ui.NickName = :NickName OR ui.RealName = :RealName) ";
                 $sql = $sql . $addUserName;
                 $sqlCount = $sqlCount . $addUserName;
                 $dataProperty->AddField("NickName", $author);
                 $dataProperty->AddField("RealName", $author);
+
             }
             if (isset($userAlbumName) && !empty($userAlbumName)) {//作品名
                 $addUserAlbumName = " AND ua.UserAlbumName LIKE :UserAlbumName";
@@ -333,9 +335,9 @@ class UserAlbumManageData extends BaseManageData {
                 $sqlCount = $sqlCount . $addEndDate;
             }
             if (isset($recLevel) && !empty($recLevel)) {
-                $addReclevel = " AND ua.RecLevel = :RecLevel";
-                $sql = $sql . $addReclevel;
-                $sqlCount = $sqlCount . $addReclevel;
+                $addRecLevel = " AND ua.RecLevel = :RecLevel";
+                $sql = $sql . $addRecLevel;
+                $sqlCount = $sqlCount . $addRecLevel;
                 $dataProperty->AddField("RecLevel", $recLevel);
             }
             if (isset($state) && !empty($state)) {
@@ -441,9 +443,9 @@ class UserAlbumManageData extends BaseManageData {
                 $sqlCount = $sqlCount . $addEndDate;
             }
             if (isset($recLevel) && !empty($recLevel)) {
-                $addReclevel = " AND ua.RecLevel = :RecLevel";
-                $sql = $sql . $addReclevel;
-                $sqlCount = $sqlCount . $addReclevel;
+                $addRecLevel = " AND ua.RecLevel = :RecLevel";
+                $sql = $sql . $addRecLevel;
+                $sqlCount = $sqlCount . $addRecLevel;
                 $dataProperty->AddField("RecLevel", $recLevel);
             }
             if (isset($state) && !empty($state)) {
