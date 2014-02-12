@@ -22,7 +22,6 @@
         <script type="text/javascript" src="{relative_path}/system_js/manage/load_tabs.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/channel.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/default.js"></script>
-
     </head>
     <body>
         <div id="div_top">
@@ -83,10 +82,10 @@
                     </div>
                 </div>
             </div>
-            <div id="rightpane">
-                <div id="rightnav"><div class="sitename"></div><div class="channelname"></div><div class="selecttemplate">
+            <div id="div_right_pane">
+                <div id="div_right_nav"><div class="site_name"></div><div class="channel_name"></div><div class="select_template">
                         {select_template}
-                    </div><div class="speall"></div></div>
+                    </div><div class="spe_all"></div></div>
                 <div id="tabs">
                     <ul>
                         <li><a id="tabs_title" href="#tabs-1">欢迎页面</a></li>
@@ -106,7 +105,7 @@
         <script type="text/javascript">
             var leftNavCount = parseInt('{manage_menu_of_column_count}') - 1;
             var leftTreeHeight = $(window).height() - 98 - 29 * leftNavCount;
-            $("#lefttree").css("height", leftTreeHeight);
+            $("#div_manage_menu_of_column").css("height", leftTreeHeight);
             $("#forummanage").css("height", leftTreeHeight + 26);
         </script>
     </body>
