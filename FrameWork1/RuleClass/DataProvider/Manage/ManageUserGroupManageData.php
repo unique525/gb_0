@@ -7,16 +7,6 @@
  * @author zhangchi
  */
 class ManageUserGroupManageData extends BaseManageData {
-    
-    /**
-     * 表名
-     */
-    const tableName = "cst_adminusergroup";    
-
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "adminusergroupid";
 
     public function Create() {
         $dataProperty = new DataProperty();
@@ -78,15 +68,19 @@ class ManageUserGroupManageData extends BaseManageData {
 
     /**
      * 根据用户ID取得左边导航权限
-     * @param type $adminuserid
-     * @return type 
+     * @param int $manageUserId
+     * @return string 左边导航编号分割字符串
      */
-    public function GetAdminLeftNavIDs($adminuserid) {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT AdminLeftNavIDs FROM " . self::tableName . " WHERE adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
-        $dataProperty->AddField("adminuserid", $adminuserid);
-        $result = $this->dbOperator->GetString($sql, $dataProperty);
-        return $result;
+    public function GetManageMenuOfColumnIdValue($manageUserId) {
+        if($manageUserId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT ManageMenuOfColumnIdValue FROM " . self::TableName_ManageUserGroup . " WHERE ManageUserGroupId IN (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId);";
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $result = $this->dbOperator->GetString($sql, $dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
     }
 
     /**

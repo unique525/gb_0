@@ -16,7 +16,7 @@ class ManageMenuOfColumnManageData extends BaseManageData {
     function GetList($manageMenuOfColumnIdValue) {
         if (strlen($manageMenuOfColumnIdValue) > 0) {
             $manageMenuOfColumnIdValue = Format::RemoveQuote($manageMenuOfColumnIdValue);
-            $sql = "SELECT * FROM ".self::TableId_ManageMenuOfColumn." WHERE ".self::TableId_ManageMenuOfColumn." IN (" . $manageMenuOfColumnIdValue . ") ORDER BY Sort DESC";
+            $sql = "SELECT * FROM ".self::TableName_ManageMenuOfColumn." WHERE ".self::TableId_ManageMenuOfColumn." IN (" . $manageMenuOfColumnIdValue . ") ORDER BY Sort DESC";
             $result = $this->dbOperator->GetArrayList($sql, null);
             return $result;
         } else {

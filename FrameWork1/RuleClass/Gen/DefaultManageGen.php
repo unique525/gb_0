@@ -20,32 +20,20 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
-                case "documentchannel":
-                    $documentChannelManageGen = new DocumentChannelManageGen();
-                    $result = $documentChannelManageGen->Gen();
+                case "channel":
+                    $channelManageGen = new ChannelManageGen();
+                    $result = $channelManageGen->Gen();
                     break;
-                case "documentnews":
+                case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
                     break;
-                case "documentthreadmanage":
-                    $documentThreadManageGen = new DocumentThreadManageGen();
-                    $result = $documentThreadManageGen->Gen();
-                    break;
-                case "adminleftusermanage":
-                    $adminLeftUserManageData = new AdminLeftUserManageData();
-                    $result = $adminLeftUserManageData->Gen();
-                    break;
-                case "settemplate":
+                case "set_template":
                     self::SetTemplate();
                     break;
                 case "site":
                     $siteManageGen = new SiteManageGen();
                     $result = $siteManageGen->Gen();
-                    break;
-                case "siteconfig":
-                    $siteConfigManageGen = new SiteConfigManageGen();
-                    $result = $siteConfigManageGen->Gen();
                     break;
                 case "forum":
                     $forumManageGen = new ForumManageGen();
@@ -60,34 +48,34 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     private function GenDefault() {
-        //is logined
-        $adminUserId = Control::GetManageUserId();
-        if ($adminUserId <= 0) {
-            return;
+        //is login
+        $manageUserId = Control::GetManageUserId();
+        if ($manageUserId <= 0) {
+            die();
         }
-        $adminUserName = Control::GetManageUserName();
+        $manageUserName = Control::GetManageUserName();
         $clientIp = Control::GetIp();
 
         $tempContent = Template::Load("manage/default.html","common");
         parent::ReplaceFirst($tempContent);
 
-        $tempContent = str_ireplace("{adminuserid}", $adminUserId, $tempContent);
-        $tempContent = str_ireplace("{adminusername}", $adminUserName, $tempContent);
-        $tempContent = str_ireplace("{clientip}", $clientIp, $tempContent);
+        $tempContent = str_ireplace("{manage_user_id}", $manageUserId, $tempContent);
+        $tempContent = str_ireplace("{manage_user_name}", $manageUserName, $tempContent);
+        $tempContent = str_ireplace("{client_ip_address}", $clientIp, $tempContent);
 
-        //admin left nav
-        $listName = "leftnav";
-        $adminLeftNavManageData = new AdminLeftNavManageData();
-        $adminUserGroupManageData = new AdminUserGroupManageData();
-        $adminLeftNavIds = $adminUserGroupManageData->GetAdminLeftNavIDs($adminUserId);
+        //manage_menu_of_column
+        $tagId = "manage_menu_of_column";
+        $manageMenuOfColumnManageData = new ManageMenuOfColumnManageData();
+        $manageUserGroupManageData = new ManageUserGroupManageData();
+        $manageMenuOfColumnIdValue = $manageUserGroupManageData->GetManageMenuOfColumnIdValue($manageUserId);
 
-        $arrAdminLeftNavList = $adminLeftNavManageData->GetList($adminLeftNavIds);
-        Template::ReplaceList($tempContent, $arrAdminLeftNavList, $listName);
-        $tempContent = str_ireplace("{adminleftnavcount}", count($arrAdminLeftNavList), $tempContent);
+        $arrManageMenuOfColumn = $manageMenuOfColumnManageData->GetList($manageMenuOfColumnIdValue);
+        Template::ReplaceList($tempContent, $arrManageMenuOfColumn, $tagId);
+        $tempContent = str_ireplace("{manage_menu_of_column_count}", count($arrManageMenuOfColumn), $tempContent);
 
         $listName = "select_site";
         $siteManageData = new SiteManageData();
-        $arrSiteList = $siteManageData->GetList($adminUserId);
+        $arrSiteList = $siteManageData->GetList($manageUserId);
         Template::ReplaceList($tempContent, $arrSiteList, $listName);
 
         $forumAdminLeftNavTemplateContent = Template::Load("manage/forumadminleftnav.html","common");
