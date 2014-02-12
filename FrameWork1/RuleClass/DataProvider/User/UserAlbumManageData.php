@@ -127,11 +127,11 @@ class UserAlbumManageData extends BaseManageData {
      */
     public function GetList($pageBegin, $pageSize, &$allCount, $state, $siteId) {
         if ($state == 100) {
-            //countpic 用于统计相册有多少图片
+            //CountPic 用于统计相册有多少图片
             $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ua.UserAlbumId,ua.UserAlbumName,ua.State,ua.SupportCount,ua.HitCount,
-                (SELECT count(*) FROM " . self::TableName_UserAlbumPicture . " uap WHERE uap.UserAlbumId = ua.UserAlbumId) AS countpic,
+                (SELECT count(*) FROM " . self::TableName_UserAlbumPic . " uap WHERE uap.UserAlbumId = ua.UserAlbumId) AS CountPic,
                 ua.UserAlbumTag,ua.CreateDate,ua.IsBest,ua.RecLevel,ua.IndexTop,uap.UserAlbumPicThumbnailUrl 
-                FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1 
+                FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPic . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1
                 WHERE ua.State <= 100 AND ua.UserId = ui.UserId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
             $result = $this->dbOperator->GetArrayList($sql, null);
 
@@ -139,11 +139,11 @@ class UserAlbumManageData extends BaseManageData {
             $allCount = $this->dbOperator->GetInt($sqlCount, null);
         } else {
             if ($siteId > 0) {
-                //countpic 用于统计相册有多少图片
+                //CountPic 用于统计相册有多少图片
                 $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ua.UserAlbumId,ua.UserAlbumName,ua.State,ua.SupportCount,ua.HitCount,
-                    (SELECT count(*) FROM " . self::TableName_UserAlbunPicture . " uap WHERE uap.UserAlbumID = ua.UserAlbumID) AS countpic,
+                    (SELECT count(*) FROM " . self::TableName_UserAlbumPic . " uap WHERE uap.UserAlbumID = ua.UserAlbumID) AS CountPic,
                     ua.UserAlbumTag,ua.CreateDate,ua.IsBest,ua.RecLevel,ua.IndexTop,uap.UserAlbumPicThumbnailUrl 
-                    FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1 
+                    FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPic . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1
                     WHERE ua.State = :State AND ua.UserId = ui.UserId AND ua.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("State", $state);
@@ -241,6 +241,8 @@ class UserAlbumManageData extends BaseManageData {
         } else if ($country == '!china' && $userAlbumTag != '' && $single == 1) {//国外的带类别的相册数 只包括已编辑 未审核 已审核的 组照
             $sql = "SELECT count(ua." . self::TableId_UserAlbum . ") FROM " . self::TableName_UserAlbum . " ua," . self::TableName_UserInfo . " ui WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumPicCount > 1;";
             $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
+        } else{
+            $sql = "";
         }
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
@@ -258,8 +260,8 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $isBest 是否精华
      * @param string $equipment 拍摄设备
      * @param string $userAlbumTag 相册类别
-     * @param date $beginDate 查询从begindate之后的作品
-     * @param date $endDate 查询enddate之前的作品
+     * @param string $beginDate 查询从BeginDate之后的作品
+     * @param string $endDate 查询EndDate之前的作品
      * @param int $recLevel 推荐级别
      * @param int $state 状态
      * @param string $country 默认为中国,否则为国外
@@ -268,8 +270,21 @@ class UserAlbumManageData extends BaseManageData {
     public function GetListForSearch($pageBegin, $pageSize, &$allCount, $siteId, $author, $userAlbumName, $indexTop, $isBest, $equipment, $userAlbumTag, $beginDate, $endDate, $recLevel, $state, $country = "china") {
         if ($siteId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "SELECT ui.NickName AS NickName,ui.RealName AS RealName,ui.UserId,ua.*,uap.UserAlbumPicThumbnailUrl  FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPicture . " uap ON ua." . self::TableId_UserAlbum . " = uap.UserAlbumId AND uap.IsCover = 1," . self::TableName_UserRole . " ur WHERE ur.UserId=ui.UserId AND ur.SiteId=:SiteId AND ui." . self::TableId_UserInfo . " = ua.UserId AND ua.Country = :Country";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UserRole . " ur  WHERE ur.UserId=ui." . self::TableId_UserInfo . " AND ur.SiteId=:SiteId AND  ui." . self::TableId_UserInfo . " = ua.UserId AND ua.Country = :Country";
+            $sql = "SELECT
+                        ui.NickName,
+                        ui.RealName,
+                        ui.UserId,ua.*,
+                        uap.UserAlbumPicThumbnailUrl
+                    FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua
+                    LEFT JOIN " . self::TableName_UserAlbumPic . " uap
+                    ON ua." . self::TableId_UserAlbum . " = uap.UserAlbumId
+                    AND uap.IsCover = 1," . self::TableName_UserRole . " ur
+                    WHERE ur.UserId=ui.UserId
+                        AND ur.SiteId=:SiteId
+                        AND ui." . self::TableId_User . " = ua.UserId
+                        AND ua.Country = :Country;";
+
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UserRole . " ur  WHERE ur.UserId=ui." . self::TableId_User . " AND ur.SiteId=:SiteId AND  ui." . self::TableId_User . " = ua.UserId AND ua.Country = :Country";
 
             $dataProperty->AddField("SiteId", $siteId);
             if($country == "china"){

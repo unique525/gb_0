@@ -116,6 +116,16 @@ class BaseData
      */
     const TableId_User = "UserId";
     /**
+     * 会员详细信息 数据表名
+     */
+    const TableName_UserInfo = "cst_user_info";
+    /**
+     * 会员角色 数据表名
+     */
+    const TableName_UserRole = "cst_user_role";
+
+
+    /**
      * 会员相册 数据表名
      */
     const TableName_UserAlbum = "cst_user_album";
@@ -123,6 +133,14 @@ class BaseData
      * 会员相册 数据表自增字段名
      */
     const TableId_UserAlbum = "UserAlbumId";
+    /**
+     * 会员相册图片 数据表名
+     */
+    const TableName_UserAlbumPic = "cst_user_album_pic";
+    /**
+     * 会员相册图片 数据表自增字段名
+     */
+    const TableId_UserAlbumPic = "UserAlbumPicId";
 
     /**
      * 自定义表单 数据表名
