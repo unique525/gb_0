@@ -1,7 +1,7 @@
 /**框架初始化JS**/
-$(function() {
+$(function () {
     var nowTemplateName = "default";
-    if(G_TemplateName != undefined){
+    if (G_TemplateName != undefined) {
         nowTemplateName = G_TemplateName;
     }
     $("#btn_site_manage").attr("src", "/system_template/" + nowTemplateName + "/images/manage/site_manage.jpg");
@@ -20,8 +20,8 @@ $(function() {
     }
     //$("#accord1").tooltip();
     //$(".btnsettemplate").tooltip();
-
-    $("#div_select_site").click(function() {
+    var divSelectSite = $("#div_select_site");
+    divSelectSite.click(function () {
         if ($(this).attr("class") === "select_site_normal") {
             $(this).attr("class", "select_site_clicked");
             var itemHeight = parseInt($(this).css("height"));
@@ -32,24 +32,24 @@ $(function() {
             $(this).attr("class", "select_site_normal");
         }
     });
-
-    var siteId = $("#div_default_site").attr("idvalue");
-    var siteName = $("#div_default_site").html();
-    var siteUrl = $("#div_default_site").attr("title");
+    var divDefaultSite = $("#div_default_site");
+    var siteId = divDefaultSite.attr("idvalue");
+    var siteName = divDefaultSite.html();
+    var siteUrl = divDefaultSite.attr("title");
     if (siteId.length > 0) {
         LoadSite(siteId, siteName, siteUrl);
     }
     //select site
-    $(".select_site_item").click(function() {
+    $(".select_site_item").click(function () {
         siteId = $(this).attr("idvalue");
         siteName = $(this).html();
         siteUrl = $(this).attr("title");
         LoadSite(siteId, siteName, siteUrl);
     });
 
-    //sitename
-    //$(".sitename").html($("#sel_site").find("option:selected").text());
-    //$(".sitename").attr("title",$("#sel_site").val());
+    //site name
+    //$(".site name").html($("#sel_site").find("option:selected").text());
+    //$(".site name").attr("title",$("#sel_site").val());
 
     if ($("#div_show_site_list").length > 0) {
         $("#div_show_site_list").append($("#div_select_site"));
@@ -62,17 +62,17 @@ $(function() {
             heightStyle: "content"
         });
     }
-    $(".div_accordion_item").click(function() {
+    $(".div_accordion_item").click(function () {
         $(".site_name").html($(this).html());
         //channel name
         $(".channel_name").html("");
     });
 
-    $(".btn_set_template").click(function() {
+    $(".btn_set_template").click(function () {
         var templateName = $(this).attr("idvalue");
         $.post("/default.php?secu=manage&mod=set_template&tn=" + templateName, {
             resultbox: $(this).html()
-        }, function(xml) {
+        }, function (xml) {
             var nowUrl = window.location.href;
             window.location.href = nowUrl;
             if (parseInt(xml) > 0) {
@@ -104,26 +104,26 @@ function LoadSite(siteId, siteName, siteUrl) {
         $("#div_manage_menu_of_column").html("请先增加一个站点");
     }
 
-/*
-         $.ajax({
-         url: "/default.php",
-         data: {
-         secu: "manage",
-         mod: "adminleftusermanage",
-         m: "async_list",
-         siteid: siteId
-         },
-         dataType: "jsonp",
-         jsonp: "jsonpcallback",
-         success: function(data) {
-         if (data !== undefined) {
-         var aa = "";
-         $.each(data, function(i, v) {
-         aa = aa + '<div class="line" id="btn' + v["AdminPopedomName"] + '">' + v["AdminLeftUserManageName"] + '</div>';
-         });
-         $("#div_usermanage").html(aa);
-         }
-         }
-         });*/
+
+    $.ajax({
+        url: "/default.php",
+        data: {
+            secu: "manage",
+            mod: "manage_menu_of_user",
+            m: "async_list",
+            siteid: siteId
+        },
+        dataType: "jsonp",
+        jsonp: "jsonpcallback",
+        success: function (data) {
+            if (data !== undefined) {
+                var aa = "";
+                $.each(data, function (i, v) {
+                    aa = aa + '<div class="line" id="btn' + v["ManageMenuOfUserTagName"] + '">' + v["ManageMenuOfUserName"] + '</div>';
+                });
+                $("#div_user_manage").html(aa);
+            }
+        }
+    });
 
 }  

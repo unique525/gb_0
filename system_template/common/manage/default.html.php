@@ -106,7 +106,9 @@
             var leftNavCount = parseInt('{manage_menu_of_column_count}') - 1;
             var leftTreeHeight = $(window).height() - 98 - 29 * leftNavCount;
             $("#div_manage_menu_of_column").css("height", leftTreeHeight);
-            $("#forummanage").css("height", leftTreeHeight + 26);
+            $("#div_user_manage").css("height", leftTreeHeight + 26);
+            $("#div_task_manage").css("height", leftTreeHeight + 26);
+            $("#div_forum_manage").css("height", leftTreeHeight + 26);
         </script>
     </body>
 </html>

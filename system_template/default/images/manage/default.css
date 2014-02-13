@@ -33,16 +33,16 @@
 #left_site .right{float:right;}
 #site_manage{ cursor: pointer;}
 
-#lefttask{width:100%;}
-#lefttask .title{text-indent:10px;font-weight:bold;font-size:12px;}
-#lefttask .taskline1{cursor:pointer;line-height:22px;margin:0 30px;text-indent:24px;font-size:12px;background: url(task1.jpg) no-repeat left center;}
-#lefttask .taskline2{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
-#lefttask .taskline3{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
-#lefttask .taskline4{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+#div_task_manage{width:100%;}
+#div_task_manage .title{text-indent:10px;font-weight:bold;font-size:12px;}
+#div_task_manage .taskline1{cursor:pointer;line-height:22px;margin:0 30px;text-indent:24px;font-size:12px;background: url(task1.jpg) no-repeat left center;}
+#div_task_manage .taskline2{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+#div_task_manage .taskline3{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
+#div_task_manage .taskline4{cursor:pointer;line-height:22px;margin:0 45px;text-indent:24px;font-size:12px;background: url(task2.jpg) no-repeat left center;}
 
-#systemconfig { font-size: 12px; color:#000;}
-#systemconfig .line{line-height: 20px ;background: url(sys.gif) no-repeat left center; text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
-#systemconfig span{ cursor: pointer;font-size: 12px; color:#000;}
+#div_system_config { font-size: 12px; color:#000;}
+#div_system_config .line{line-height: 20px ;background: url(sys.gif) no-repeat left center; text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
+#div_system_config span{ cursor: pointer;font-size: 12px; color:#000;}
 
 #userconfig { font-size: 12px; color:#000;}
 #userconfig .line{line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
@@ -56,17 +56,17 @@
 #visitconfig .line{line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; margin:0 30px;}
 #visitconfig span{ line-height:20px;text-indent: 25px;border-bottom:1px dashed #cccccc; cursor: pointer;font-size: 12px; color:#000;}
 
-#div_usermanage { font-size: 12px; color:#000;}
-#div_usermanage .line{line-height:20px;text-indent: 3px;border-bottom:1px dashed #cccccc; margin:0 30px;cursor: pointer;}
-#div_usermanage span{ cursor: pointer;font-size: 12px; color:#000;}
+#div_user_manage { font-size: 12px; color:#000;}
+#div_user_manage .line{line-height:20px;text-indent: 3px;border-bottom:1px dashed #cccccc; margin:0 30px;cursor: pointer;}
+#div_user_manage span{ cursor: pointer;font-size: 12px; color:#000;}
 
 #div_search { font-size: 12px; color:#000;}
 #div_search .line{line-height:20px;text-indent: 3px;border-bottom:1px dashed #cccccc; margin:0 30px;cursor: pointer;}
 #div_search span{ cursor: pointer;font-size: 12px; color:#000;}
 
-#forummanage { font-size: 12px; color:#000;}
-#forummanage .line{line-height:20px;border-bottom:1px dashed #cccccc; margin:0 20px;}
-#forummanage span{ cursor: pointer;font-size: 12px; color:#000;}
+#div_forum_manage { font-size: 12px; color:#000;}
+#div_forum_manage .line{line-height:20px;border-bottom:1px dashed #cccccc; margin:0 20px;}
+#div_forum_manage span{ cursor: pointer;font-size: 12px; color:#000;}
 
 
 

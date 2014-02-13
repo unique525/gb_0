@@ -35,6 +35,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $siteManageGen = new SiteManageGen();
                     $result = $siteManageGen->Gen();
                     break;
+                case "manage_menu_of_user":
+                    $manageMenuOfUserManageGen = new ManageMenuOfUserManageGen();
+                    $result = $manageMenuOfUserManageGen->Gen();
+                    break;
                 case "forum":
                     $forumManageGen = new ForumManageGen();
                     $result = $forumManageGen->Gen();
@@ -63,24 +67,39 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{manage_user_name}", $manageUserName, $tempContent);
         $tempContent = str_ireplace("{client_ip_address}", $clientIp, $tempContent);
 
+
+
         //manage_menu_of_column
         $tagId = "manage_menu_of_column";
         $manageMenuOfColumnManageData = new ManageMenuOfColumnManageData();
         $manageUserGroupManageData = new ManageUserGroupManageData();
         $manageMenuOfColumnIdValue = $manageUserGroupManageData->GetManageMenuOfColumnIdValue($manageUserId);
 
+
         $arrManageMenuOfColumn = $manageMenuOfColumnManageData->GetList($manageMenuOfColumnIdValue);
         Template::ReplaceList($tempContent, $arrManageMenuOfColumn, $tagId);
         $tempContent = str_ireplace("{manage_menu_of_column_count}", count($arrManageMenuOfColumn), $tempContent);
+
+        $manageMenuOfSiteChannelTemplateContent = Template::Load("manage/manage_menu_of_site_channel.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_site_channel}", $manageMenuOfSiteChannelTemplateContent, $tempContent);
+        $manageMenuOfForumTemplateContent = Template::Load("manage/manage_menu_of_forum.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_forum}", $manageMenuOfForumTemplateContent, $tempContent);
+        $manageMenuOfUserManageTemplateContent = Template::Load("manage/manage_menu_of_user_manage.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_user_manage}", $manageMenuOfUserManageTemplateContent, $tempContent);
+        $manageMenuOfSearchTemplateContent = Template::Load("manage/manage_menu_of_search.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_search}", $manageMenuOfSearchTemplateContent, $tempContent);
+        $manageMenuOfSystemConfigTemplateContent = Template::Load("manage/manage_menu_of_system_config.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_system_config}", $manageMenuOfSystemConfigTemplateContent, $tempContent);
+        $manageMenuOfTaskTemplateContent = Template::Load("manage/manage_menu_of_task.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_task}", $manageMenuOfTaskTemplateContent, $tempContent);
+
 
         $listName = "select_site";
         $siteManageData = new SiteManageData();
         $arrSiteList = $siteManageData->GetList($manageUserId);
         Template::ReplaceList($tempContent, $arrSiteList, $listName);
 
-        $forumAdminLeftNavTemplateContent = Template::Load("manage/forumadminleftnav.html","common");
-        $tempContent = str_ireplace("{forumadminleftnav}", $forumAdminLeftNavTemplateContent, $tempContent);
-        
+
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
