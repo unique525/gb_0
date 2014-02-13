@@ -25,9 +25,9 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
     }
 
     private function GenAsyncList() {
-        $adminLeftUserManageData = new AdminLeftUserManageData();
+        $manageMenuOfUserManageData = new ManageMenuOfUserManageData();
         $siteId = Control::GetRequest("site_id", 0);
-        $arrList = $adminLeftUserManageData->GetList();
+        $arrList = $manageMenuOfUserManageData->GetList();
         if (!empty($arrList)) {
             $manageUserId = Control::GetManageUserId();
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -35,8 +35,8 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
 
             for ($i = 0; $i < count($arrList); $i++) {
                 //$adminLeftUserManageName = $arrList[$i]["AdminLeftUserManageName"];
-                $adminPopedomName = $arrList[$i]["AdminPopedomName"];
-                $can = $manageUserAuthorityManageData->GetPopedomField($siteId, 0, $manageUserId, $adminPopedomName);
+                $manageMenuOfUserTagName = $arrList[$i]["ManageMenuOfUserTagName"];
+                $can = $manageUserAuthorityManageData->GetPopedomField($siteId, 0, $manageUserId, $manageMenuOfUserTagName);
                 if (!$can) {
                     $arrWaitForDelete[] = $i;
                 }
@@ -45,9 +45,8 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
             for ($j = 0; $j < count($arrWaitForDelete); $j++) {
                 unset($arrList[$arrWaitForDelete[$j]]);
             }
-
-            return $_GET['jsonpcallback'] . "(" . FixJsonEncode($arrList) . ")";
         }
+        return $_GET['jsonpcallback'] . "(" . Format::FixJsonEncode($arrList) . ")";
     }
 
 }
