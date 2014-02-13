@@ -15,8 +15,8 @@ class CustomFormManageData extends BaseManageData {
      */
     public function Create($httpPostData) {
         $result=-1;
-        $dataProperty = new DataProperty();
         if(!empty($httpPostData)){
+            $dataProperty = new DataProperty();
             $sql = parent::GetInsertSql($httpPostData,self::TableName_CustomForm, $dataProperty);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
@@ -31,8 +31,8 @@ class CustomFormManageData extends BaseManageData {
      */
     public function Modify($httpPostData,$customFormId) {
         $result=-1;
-        $dataProperty = new DataProperty();
         if(!empty($httpPostData)){
+            $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_CustomForm, self::TableId_CustomForm, $customFormId, $dataProperty);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
