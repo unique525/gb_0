@@ -6,16 +6,18 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi
  */
-class ManageUserAuthorityManageData extends BaseManageData {
+class ManageUserAuthorityManageData extends BaseManageData
+{
 
     /**
      * 建立频道时授权
      * @param int $siteId 站点id
      * @param int $channelId 频道id
      * @param int $manageUserId 管理员id
-     * @return int 创建结果数字，1为成功 
+     * @return int 创建结果数字，1为成功
      */
-    public function CreateForChannel($siteId, $channelId, $manageUserId) {
+    public function CreateForChannel($siteId, $channelId, $manageUserId)
+    {
         $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . " (
             `SiteId`,
             `ChannelId`,
@@ -38,29 +40,29 @@ class ManageUserAuthorityManageData extends BaseManageData {
             `DoSameGroupOthers`,
             `Publish`
             )
-            values
-	( 
-	:SiteId,
-	:ChannelId,
-	0, 
-	:ManageUserId,
-	0, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1,
-    1
-	)";
+            VALUES
+	        (
+	        :SiteId,
+	        :ChannelId,
+	            0,
+	        :ManageUserId,
+	        0,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+	        1,
+            1
+	        );";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
@@ -69,7 +71,6 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
         if ($result > 0) {
             //删除缓冲
-            //$cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
             DataCache::RemoveDir(CACHE_PATH);
         }
 
@@ -78,33 +79,34 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
     /**
      * 更新权限
-     * @param type $siteId
-     * @param type $adminUserId
-     * @param type $documentChannelId
-     * @param type $field
-     * @param type $value
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $manageUserId 后台管理员id
+     * @param int $channelId 频道id
+     * @param string $fieldName 要更新的字段
+     * @param string $value 要更新的值
+     * @return int 更新结果
      */
-    public function Update($siteId, $adminUserId, $documentChannelId, $field, $value) {
+    public function Update($siteId, $manageUserId, $channelId, $fieldName, $value)
+    {
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteId);
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
-        $dataProperty->AddField("adminuserid", $adminUserId);
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ChannelId", $channelId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
 
-        $sql = "select count(*) from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
+        $sql = "SELECT count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId;";
 
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
 
         if ($result > 0) {
-            $sql = "update " . self::tableName . " set `" . $field . "`=:" . $field . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . " SET `" . $fieldName . "`=:" . $fieldName . " where SiteId=:SiteId and ChannelId=:ChannelId and ManageUserId=:ManageUserId;";
         } else {
-            $sql = "insert into " . self::tableName . " (siteid,documentchannelid,`" . $field . "`,adminuserid) values (:siteid,:documentchannelid,:" . $field . ",:adminuserid)";
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . " (SiteId,ChannelId,`" . $fieldName . "`,ManageUserId) values (:SiteId,:ChannelId,:" . $fieldName . ",:ManageUserId);";
         }
         $dataProperty2 = new DataProperty();
-        $dataProperty2->AddField("siteid", $siteId);
-        $dataProperty2->AddField("documentchannelid", $documentChannelId);
-        $dataProperty2->AddField("adminuserid", $adminUserId);
-        $dataProperty2->AddField($field, $value);
+        $dataProperty2->AddField("SiteId", $siteId);
+        $dataProperty2->AddField("ChannelId", $channelId);
+        $dataProperty2->AddField("ManageUserId", $manageUserId);
+        $dataProperty2->AddField($fieldName, $value);
         $result = $this->dbOperator->Execute($sql, $dataProperty2);
 
         return $result;
@@ -112,148 +114,148 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
     /**
      * 为后台帐号分组和站点设置权限（新增或修改）
-     * @param type $siteId
-     * @param type $adminUserGroupId
-     * @param type $explore
-     * @param type $create
-     * @param type $modify
-     * @param type $delete
-     * @param type $disabled
-     * @param type $search
-     * @param type $rework
-     * @param type $audit1
-     * @param type $audit2
-     * @param type $audit3
-     * @param type $audit4
-     * @param type $refused
-     * @param type $doOthers
-     * @param type $publish
-     * @param type $userExplore
-     * @param type $userAdd
-     * @param type $userEdit
-     * @param type $userDelete
-     * @param type $userRoleExplore
-     * @param type $userRoleAdd
-     * @param type $userRoleEdit
-     * @param type $userRoleDelete
-     * @param type $userAlbumExplore
-     * @param type $userAlbumAdd
-     * @param type $userAlbumEdit
-     * @param type $userAlbumDelete
-     * @param type $userGroupExplore
-     * @param type $userLevelExplore
-     * @param type $userOrderExplore
-     * @param type $manageSite
-     * @param type $manageComment
-     * @param type $manageTemplateLibrary
-     * @param type $manageFilter
-     * @param type $manageFtp
-     * @param type $manageAd
-     * @param type $manageDocumentTag
-     * @param type $manageConfig
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $manageUserGroupId
+     * @param int $explore
+     * @param int $create
+     * @param int $modify
+     * @param int $delete
+     * @param int $disabled
+     * @param int $search
+     * @param int $rework
+     * @param int $audit1
+     * @param int $audit2
+     * @param int $audit3
+     * @param int $audit4
+     * @param int $refused
+     * @param int $doOthers
+     * @param int $doSameGroupOthers
+     * @param int $publish
+     * @param int $userExplore
+     * @param int $userAdd
+     * @param int $userEdit
+     * @param int $userDelete
+     * @param int $userRoleExplore
+     * @param int $userRoleAdd
+     * @param int $userRoleEdit
+     * @param int $userRoleDelete
+     * @param int $userAlbumExplore
+     * @param int $userAlbumAdd
+     * @param int $userAlbumEdit
+     * @param int $userAlbumDelete
+     * @param int $userGroupExplore
+     * @param int $userLevelExplore
+     * @param int $userOrderExplore
+     * @param int $manageSite
+     * @param int $manageComment
+     * @param int $manageTemplateLibrary
+     * @param int $manageFilter
+     * @param int $manageFtp
+     * @param int $manageAd
+     * @param int $manageDocumentTag
+     * @param int $manageConfig
+     * @return int
      */
     public function CreateOrModifyForSiteAndAdminUserGroup(
-    $siteId, $adminUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doSameGroupOthers, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
-    ) {
-        $result = -1;
+        $siteId, $manageUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doSameGroupOthers, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
+    )
+    {
         //判断是否存在数据
-        $sql = "SELECT Count(*) FROM " . self::tableName . " WHERE SiteID=:SiteID AND AdminUserGroupID=:AdminUserGroupID AND AdminUserID=0 AND DocumentChannelID=0;";
+        $sql = "SELECT Count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0 AND ChannelId=0;";
 
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteID", $siteId);
-        $dataProperty->AddField("AdminUserGroupID", $adminUserGroupId);
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
 
         $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         if ($hasCount <= 0) {
-            $sql = "INSERT INTO " . self::tableName . "
-	(
-	`SiteID`,  
-	`AdminUserGroupID`,
-	`Explore`, 
-	`Create`, 
-	`Modify`, 
-	`Delete`, 
-	`Disabled`, 
-	`Search`, 
-	`Rework`, 
-	`Audit1`, 
-	`Audit2`, 
-	`Audit3`, 
-	`Audit4`, 
-	`Refused`, 
-	`DoOthers`, 
-	`DoSameGroupOthers`,
-	`Publish`, 
-	`UserExplore`, 
-	`UserAdd`, 
-	`UserEdit`, 
-	`UserDelete`, 
-	`UserRoleExplore`, 
-	`UserRoleAdd`, 
-	`UserRoleEdit`, 
-	`UserRoleDelete`, 
-	`UserAlbumExplore`, 
-	`UserAlbumAdd`, 
-	`UserAlbumEdit`, 
-	`UserAlbumDelete`, 
-	`UserGroupExplore`, 
-	`UserLevelExplore`, 
-	`UserOrderExplore`,
-        `ManageSite`,
-        `ManageComment`,
-        `ManageTemplateLibrary`,
-        `ManageFilter`,
-        `ManageFtp`,
-        `ManageAd`,
-        `ManageDocumentTag`,
-        `ManageConfig`
-        
-	)
-	VALUES 
-	(
-	:SiteID, 
-	:AdminUserGroupID,
-	:Explore, 
-	:Create, 
-	:Modify, 
-	:Delete, 
-	:Disabled, 
-	:Search, 
-	:Rework, 
-	:Audit1, 
-	:Audit2, 
-	:Audit3, 
-	:Audit4, 
-	:Refused, 
-	:DoOthers, 
-        :DoSameGroupOthers,
-	:Publish, 
-	:UserExplore, 
-	:UserAdd, 
-	:UserEdit, 
-	:UserDelete, 
-	:UserRoleExplore, 
-	:UserRoleAdd, 
-	:UserRoleEdit, 
-	:UserRoleDelete, 
-	:UserAlbumExplore, 
-	:UserAlbumAdd, 
-	:UserAlbumEdit, 
-	:UserAlbumDelete, 
-	:UserGroupExplore, 
-	:UserLevelExplore, 
-	:UserOrderExplore,
-        :ManageSite,
-        :ManageComment,
-        :ManageTemplateLibrary,
-        :ManageFilter,
-        :ManageFtp,
-        :ManageAd,
-        :ManageDocumentTag,
-        :ManageConfig
-	);";
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . "
+	            (
+	                `SiteId`,
+	                `ManageUserGroupId`,
+	                `Explore`,
+	                `Create`,
+	                `Modify`,
+	                `Delete`,
+	                `Disabled`,
+	                `Search`,
+	                `Rework`,
+	                `Audit1`,
+	                `Audit2`,
+	                `Audit3`,
+	                `Audit4`,
+	                `Refused`,
+	                `DoOthers`,
+		            `DoSameGroupOthers`,
+		            `Publish`,
+		            `UserExplore`,
+		            `UserAdd`,
+		            `UserEdit`,
+		            `UserDelete`,
+		            `UserRoleExplore`,
+		            `UserRoleAdd`,
+		            `UserRoleEdit`,
+		            `UserRoleDelete`,
+		            `UserAlbumExplore`,
+		            `UserAlbumAdd`,
+		            `UserAlbumEdit`,
+		            `UserAlbumDelete`,
+		            `UserGroupExplore`,
+		            `UserLevelExplore`,
+		            `UserOrderExplore`,
+    	            `ManageSite`,
+    	            `ManageComment`,
+    	            `ManageTemplateLibrary`,
+    	            `ManageFilter`,
+    	            `ManageFtp`,
+    	            `ManageAd`,
+    	            `ManageDocumentTag`,
+    	            `ManageConfig`
+		            )
+		            VALUES
+		            (
+		            :SiteId,
+		            :ManageUserGroupId,
+		            :Explore,
+		            :Create,
+		            :Modify,
+		            :Delete,
+		            :Disabled,
+		            :Search,
+		            :Rework,
+		            :Audit1,
+		            :Audit2,
+		            :Audit3,
+		            :Audit4,
+		            :Refused,
+		            :DoOthers,
+        	        :DoSameGroupOthers,
+		            :Publish,
+		            :UserExplore,
+		            :UserAdd,
+		            :UserEdit,
+		            :UserDelete,
+		            :UserRoleExplore,
+		            :UserRoleAdd,
+		            :UserRoleEdit,
+		            :UserRoleDelete,
+		            :UserAlbumExplore,
+		            :UserAlbumAdd,
+		            :UserAlbumEdit,
+		            :UserAlbumDelete,
+		            :UserGroupExplore,
+		            :UserLevelExplore,
+		            :UserOrderExplore,
+    	            :ManageSite,
+    	            :ManageComment,
+    	            :ManageTemplateLibrary,
+    	            :ManageFilter,
+    	            :ManageFtp,
+    	            :ManageAd,
+    	            :ManageDocumentTag,
+    	            :ManageConfig
+		            );";
 
             $dataProperty->AddField("Explore", $explore);
             $dataProperty->AddField("Create", $create);
@@ -296,48 +298,47 @@ class ManageUserAuthorityManageData extends BaseManageData {
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         } else {
 
-            $sql = "UPDATE " . self::tableName . "
-	SET  
-	`Explore` = :Explore, 
-	`Create` = :Create, 
-	`Modify` = :Modify, 
-	`Delete` = :Delete, 
-	`Disabled` = :Disabled, 
-	`Search` = :Search, 
-	`Rework` = :Rework, 
-	`Audit1` = :Audit1, 
-	`Audit2` = :Audit2, 
-	`Audit3` = :Audit3, 
-	`Audit4` = :Audit4, 
-	`Refused` = :Refused, 
-	`DoOthers` = :DoOthers, 
-	`DoSameGroupOthers` = :DoSameGroupOthers, 
-	`Publish` = :Publish, 
-	`UserExplore` = :UserExplore, 
-	`UserAdd` = :UserAdd, 
-	`UserEdit` = :UserEdit, 
-	`UserDelete` = :UserDelete, 
-	`UserRoleExplore` = :UserRoleExplore, 
-	`UserRoleAdd` = :UserRoleAdd, 
-	`UserRoleEdit` = :UserRoleEdit, 
-	`UserRoleDelete` = :UserRoleDelete, 
-	`UserAlbumExplore` = :UserAlbumExplore, 
-	`UserAlbumAdd` = :UserAlbumAdd, 
-	`UserAlbumEdit` = :UserAlbumEdit, 
-	`UserAlbumDelete` = :UserAlbumDelete, 
-	`UserGroupExplore` = :UserGroupExplore, 
-	`UserLevelExplore` = :UserLevelExplore, 
-	`UserOrderExplore` = :UserOrderExplore,
-        `ManageSite`=:ManageSite,
-        `ManageComment`=:ManageComment,
-        `ManageTemplateLibrary`=:ManageTemplateLibrary,
-        `ManageFilter`=:ManageFilter,
-        `ManageFtp`=:ManageFtp,
-        `ManageAd`=:ManageAd,
-        `ManageDocumentTag`=:ManageDocumentTag,
-        `ManageConfig`=:ManageConfig        
-	
-	WHERE SiteID=:SiteID AND AdminUserGroupID=:AdminUserGroupID AND AdminUserID=0 AND DocumentChannelID=0;";
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . "
+	                SET
+	                    `Explore` = :Explore,
+	                    `Create` = :Create,
+	                    `Modify` = :Modify,
+	                    `Delete` = :Delete,
+	                    `Disabled` = :Disabled,
+	                    `Search` = :Search,
+	                    `Rework` = :Rework,
+	                    `Audit1` = :Audit1,
+	                    `Audit2` = :Audit2,
+	                    `Audit3` = :Audit3,
+	                    `Audit4` = :Audit4,
+	                    `Refused` = :Refused,
+	                    `DoOthers` = :DoOthers,
+	                    `DoSameGroupOthers` = :DoSameGroupOthers,
+	                    `Publish` = :Publish,
+	                    `UserExplore` = :UserExplore,
+	                    `UserAdd` = :UserAdd,
+	                    `UserEdit` = :UserEdit,
+	                    `UserDelete` = :UserDelete,
+	                    `UserRoleExplore` = :UserRoleExplore,
+	                    `UserRoleAdd` = :UserRoleAdd,
+	                    `UserRoleEdit` = :UserRoleEdit,
+	                    `UserRoleDelete` = :UserRoleDelete,
+	                    `UserAlbumExplore` = :UserAlbumExplore,
+	                    `UserAlbumAdd` = :UserAlbumAdd,
+	                    `UserAlbumEdit` = :UserAlbumEdit,
+	                    `UserAlbumDelete` = :UserAlbumDelete,
+	                    `UserGroupExplore` = :UserGroupExplore,
+	                    `UserLevelExplore` = :UserLevelExplore,
+	                    `UserOrderExplore` = :UserOrderExplore,
+                        `ManageSite`=:ManageSite,
+                        `ManageComment`=:ManageComment,
+                        `ManageTemplateLibrary`=:ManageTemplateLibrary,
+                        `ManageFilter`=:ManageFilter,
+                        `ManageFtp`=:ManageFtp,
+                        `ManageAd`=:ManageAd,
+                        `ManageDocumentTag`=:ManageDocumentTag,
+                        `ManageConfig`=:ManageConfig
+	                WHERE SiteId=:SiteId AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0 AND ChannelId=0;";
 
             $dataProperty->AddField("Explore", $explore);
             $dataProperty->AddField("Create", $create);
@@ -385,53 +386,55 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
     /**
      * 删除权限
-     * @param type $siteId
-     * @param type $adminUserId 
+     * @param int $siteId 站点id
+     * @param int $manageUserId 后台管理员id
+     * @return int 删除结果
      */
-    public function Remove($siteId, $adminUserId) {
-        $sql = "DELETE FROM " . self::tableName . " WHERE siteid=:siteid and adminuserid=:adminuserid";
+    public function Remove($siteId, $manageUserId)
+    {
+        $sql = "DELETE FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteId);
-        $dataProperty->AddField("adminuserid", $adminUserId);
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 根据$siteId，$documentChannelId，$adminUserId取得一条记录
-     * @param type $siteId
-     * @param type $documentChannelId
-     * @param type $adminUserId
-     * @return type 
+     * 根据siteId，channelId，manageUserId取得一条记录
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return array 一条权限记录
      */
-    public function GetOne($siteId, $documentChannelId, $adminUserId) {
+    public function GetOne($siteId, $channelId, $manageUserId)
+    {
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteId);
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
-        $dataProperty->AddField("adminuserid", $adminUserId);
-
-        $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminuserid=:adminuserid";
-
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ChannelId", $channelId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+        $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId;";
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 根据$siteId，$documentChannelId，$adminUserGroupId取得一条记录（已经缓冲）
-     * @param type $siteId
-     * @param type $documentChannelId
-     * @param type $adminUserGroupId
-     * @return type
+     * 根据siteId，channelId，manageUserGroupId取得一条记录（已经缓冲）
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserGroupId 后台管理员分组id
+     * @return array 一条权限记录
      */
-    public function GetOneByAdminUserGroupId($siteId, $documentChannelId, $adminUserGroupId) {
+    public function GetOneByAdminUserGroupId($siteId, $channelId, $manageUserGroupId)
+    {
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteId);
-        $dataProperty->AddField("adminusergroupid", $adminUserGroupId);
-        if ($documentChannelId > 0) {
-            $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND documentchannelid=:documentchannelid AND adminusergroupid=:adminusergroupid AND AdminUserID=0";
-            $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+        if ($channelId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0;";
+            $dataProperty->AddField("ChannelId", $channelId);
         } else {
-            $sql = "SELECT * FROM " . self::tableName . " WHERE siteid=:siteid AND adminusergroupid=:adminusergroupid AND documentchannelid=0 AND AdminUserID=0;";
+            $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserGroupId=:ManageUserGroupId AND ChannelId=0 AND ManageUserId=0;";
         }
 
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -440,38 +443,35 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
     /**
      * 取得单条权限字段信息
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @param type $fieldname
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @param string $fieldName 要查询的权限字段
+     * @return bool 是否有权限
      */
-    public function GetPopedomField($siteid, $documentchannelid, $adminuserid, $fieldname) {
-
-        if (intval($adminuserid) == 1) {
+    public function GetPopedomField($siteId, $channelId, $manageUserId, $fieldName)
+    {
+        if (intval($manageUserId) == 1) {
             return TRUE;
         }
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("siteid", $siteid);
-        $dataProperty->AddField("documentchannelid", $documentchannelid);
-        $dataProperty->AddField("adminuserid", $adminuserid);
-
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ChannelId", $channelId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
         //检查用户频道权限
-        $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminuserid=:adminuserid";
-
+        $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId;";
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
-
         if ($result <= 0) {
             //检查用户组频道权限
-            $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=:documentchannelid and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
+            $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId);";
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
         if ($result <= 0) {
             //检查用户组站点权限
-            $sql = "select `" . $fieldname . "` from " . self::tableName . " where siteid=:siteid and documentchannelid=0 and adminuserid=0 and adminusergroupid in (select adminusergroupid from cst_adminuser where adminuserid=:adminuserid)";
+            $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId);";
             $dataProperty2 = new DataProperty();
-            $dataProperty2->AddField("siteid", $siteid);
-            $dataProperty2->AddField("adminuserid", $adminuserid);
+            $dataProperty2->AddField("SiteId", $siteId);
+            $dataProperty2->AddField("ManageUserId", $manageUserId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty2);
         }
 
@@ -484,324 +484,422 @@ class ManageUserAuthorityManageData extends BaseManageData {
 
     /**
      * 是否有浏览权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览权限
      */
-    public function CanExplore($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Explore");
+    public function CanExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Explore");
     }
 
     /**
      * 是否有新增权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有新增权限
      */
-    public function CanCreate($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Create");
+    public function CanCreate($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Create");
     }
 
     /**
      * 是否有编辑权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑权限
      */
-    public function CanModify($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Modify");
+    public function CanModify($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Modify");
     }
 
     /**
      * 是否有删除权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有删除权限
      */
-    public function CanDelete($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Delete");
+    public function CanDelete($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Delete");
     }
 
     /**
      * 是否有停用权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有停用权限
      */
-    public function CanDisabled($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Disabled");
+    public function CanDisabled($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Disabled");
     }
 
     /**
      * 是否有查询权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有查询权限
      */
-    public function CanSearch($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Search");
-    }
-
-    public function CanUserExplore($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserExplore");
+    public function CanSearch($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Search");
     }
 
     /**
-     * 是否有会员新增权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * 是否有浏览会员权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览会员权限
      */
-    public function CanUserAdd($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserAdd");
+    public function CanUserExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserExplore");
     }
 
     /**
-     * 是否有会员编辑权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * 是否有新增会员权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有新增会员权限
      */
-    public function CanUserEdit($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserEdit");
+    public function CanUserAdd($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAdd");
     }
 
     /**
-     * 是否有会员删除权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * 是否有编辑会员权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑会员权限
      */
-    public function CanUserDelete($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserDelete");
+    public function CanUserEdit($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserEdit");
     }
 
-    public function CanUserRoleExplore($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserRoleExplore");
+    /**
+     * 是否有删除会员权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有删除会员权限
+     */
+    public function CanUserDelete($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserDelete");
     }
 
-    public function CanUserRoleAdd($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserRoleAdd");
+    /**
+     * 是否有浏览会员角色的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览会员角色的权限
+     */
+    public function CanUserRoleExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleExplore");
     }
 
-    public function CanUserRoleEdit($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserRoleEdit");
+    /**
+     * 是否有新增会员角色的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有新增会员角色的权限
+     */
+    public function CanUserRoleAdd($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleAdd");
     }
 
-    public function CanUserRoleDelete($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserRoleDelete");
+    /**
+     * 是否有编辑会员角色的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑会员角色的权限
+     */
+    public function CanUserRoleEdit($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleEdit");
     }
 
-    public function CanUserAlbumExplore($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserAlbumExplore");
+    /**
+     * 是否有删除会员角色的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有删除会员角色的权限
+     */
+    public function CanUserRoleDelete($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleDelete");
     }
 
-    public function CanUserAlbumAdd($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserAlbumAdd");
+    /**
+     * 是否有浏览会员相册的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览会员相册的权限
+     */
+    public function CanUserAlbumExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumExplore");
     }
 
-    public function CanUserAlbumEdit($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserAlbumEdit");
+    /**
+     * 是否有新增会员相册的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有新增会员相册的权限
+     */
+    public function CanUserAlbumAdd($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumAdd");
     }
 
-    public function CanUserAlbumDelete($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "UserAlbumDelete");
+    /**
+     * 是否有编辑会员相册的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑会员相册的权限
+     */
+    public function CanUserAlbumEdit($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumEdit");
+    }
+
+    /**
+     * 是否有删除会员相册的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有删除会员相册的权限
+     */
+    public function CanUserAlbumDelete($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumDelete");
     }
 
     /**
      * 是否有返工权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有返工权限
      */
-    public function CanRework($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Rework");
+    public function CanRework($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Rework");
     }
 
     /**
      * 是否有一审权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有一审权限
      */
-    public function CanAudit1($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Audit1");
+    public function CanAudit1($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit1");
     }
 
     /**
      * 是否有二审权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有二审权限
      */
-    public function CanAudit2($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Audit2");
+    public function CanAudit2($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit2");
     }
 
     /**
      * 是否有三审权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有三审权限
      */
-    public function CanAudit3($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Audit3");
+    public function CanAudit3($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit3");
     }
 
     /**
      * 是否有终审权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有终审权限
      */
-    public function CanAudit4($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Audit4");
+    public function CanAudit4($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit4");
     }
 
     /**
      * 是否有已否权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有已否权限
      */
-    public function CanRefused($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Refused");
+    public function CanRefused($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Refused");
     }
 
     /**
      * 是否有操作他人权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有操作他人权限
      */
-    public function CanDoOthers($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "DoOthers");
+    public function CanDoOthers($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "DoOthers");
     }
 
     /**
      * 是否有操作同一组中他人的权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有操作同一组中他人的权限
      */
-    public function CanDoSameGroupOthers($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "DoSameGroupOthers");
+    public function CanDoSameGroupOthers($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "DoSameGroupOthers");
     }
 
     /**
      * 是否有发布权限
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type 
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool  是否有发布权限
      */
-    public function CanPublish($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "Publish");
+    public function CanPublish($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Publish");
     }
 
     /**
      * 是否可以管理站点
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理站点
      */
-    public function CanManageSite($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageSite");
+    public function CanManageSite($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageSite");
     }
 
     /**
      * 是否可以管理评论
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理评论
      */
-    public function CanManageComment($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageComment");
+    public function CanManageComment($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageComment");
     }
 
     /**
      * 是否可以管理模板库
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理模板库
      */
-    public function CanManageTemplateLibrary($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageTemplateLibrary");
+    public function CanManageTemplateLibrary($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageTemplateLibrary");
     }
 
     /**
      * 是否可以管理过滤字符
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理过滤字符
      */
-    public function CanManageFilter($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageFilter");
+    public function CanManageFilter($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageFilter");
     }
 
     /**
      * 是否可以管理FTP
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理FTP
      */
-    public function CanManageFtp($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageFtp");
+    public function CanManageFtp($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageFtp");
     }
 
     /**
      * 是否可以管理广告
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理广告
      */
-    public function CanManageAd($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageAd");
+    public function CanManageAd($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageAd");
     }
 
     /**
      * 是否可以管理标签
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理标签
      */
-    public function CanManageDocumentTag($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageDocumentTag");
+    public function CanManageDocumentTag($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageDocumentTag");
     }
 
     /**
      * 是否可以管理配置
-     * @param type $siteid
-     * @param type $documentchannelid
-     * @param type $adminuserid
-     * @return type
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否可以管理配置
      */
-    public function CanManageConfig($siteid, $documentchannelid, $adminuserid) {
-        return self::GetPopedomField($siteid, $documentchannelid, $adminuserid, "ManageConfig");
+    public function CanManageConfig($siteId, $channelId, $manageUserId)
+    {
+        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageConfig");
     }
 
 }

@@ -63,14 +63,14 @@ $(function() {
         });
     }
     $(".div_accordion_item").click(function() {
-        $(".sitename").html($(this).html());
-        //channelname
-        $(".channelname").html("");
+        $(".site_name").html($(this).html());
+        //channel name
+        $(".channel_name").html("");
     });
 
-    $(".btnsettemplate").click(function() {
+    $(".btn_set_template").click(function() {
         var templateName = $(this).attr("idvalue");
-        $.post("/default.php?secu=manage&mod=settemplate&tn=" + templateName, {
+        $.post("/default.php?secu=manage&mod=set_template&tn=" + templateName, {
             resultbox: $(this).html()
         }, function(xml) {
             var nowUrl = window.location.href;
@@ -94,11 +94,11 @@ function LoadSite(siteId, siteName, siteUrl) {
 
     if (G_NowSiteId > 0) {
         $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
-        LoadChannelTree(siteId);
-        //sitename
-        $(".sitename").html(siteName);
+        LoadChannelListForManage(siteId);
+        //site name
+        $(".site_name").html(siteName);
         if (siteUrl.length > 1) {
-            $("#gosite").attr("href", siteUrl);
+            $("#btn_go_site_url").attr("href", siteUrl);
         }
     } else {
         $("#div_manage_menu_of_column").html("请先增加一个站点");

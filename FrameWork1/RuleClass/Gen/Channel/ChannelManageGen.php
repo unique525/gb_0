@@ -75,7 +75,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreate() {
         $tempContent = Template::Load("channel/channel_deal.html", "common");
-        $parentId = Control::GetRequest("parentid", 0);
+        $parentId = Control::GetRequest("parent_id", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 
         $adminUserId = Control::GetManageUserId();
@@ -234,8 +234,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
             $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $adminUserId . '.php';
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
-                $documentChannelManageData = new DocumentChannelManageData();
-                $arrList = $documentChannelManageData->GetListAllForManageLeft($siteId, $adminUserId);
+                $channelManageData = new ChannelManageData();
+                $arrList = $channelManageData->GetListForManageLeft($siteId, $adminUserId);
                 $sb = '[';
                 for ($i = 0; $i < count($arrList); $i++) {
                     $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);
@@ -252,9 +252,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $iconSkin = ',iconSkin:"diy' . $channelType . '"';
 
                     if ($rank == 0) {
-                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "doctype":"' . $channelType . '", open:true ' . $isParent . ' ' . $iconSkin . '}';
+                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "channelType":"' . $channelType . '", open:true ' . $isParent . ' ' . $iconSkin . '}';
                     } else {
-                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "doctype":"' . $channelType . '" ' . $isParent . ' ' . $iconSkin . '}';
+                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "channelType":"' . $channelType . '" ' . $isParent . ' ' . $iconSkin . '}';
                     }
 
                     if ($i < count($arrList) - 1) {

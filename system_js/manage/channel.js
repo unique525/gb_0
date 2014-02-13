@@ -1,5 +1,5 @@
 function LoadChannelListForManage(siteId) {
-    var tree_setting = {
+    var treeSetting = {
         data: {
             simpleData: {
                 enable: true
@@ -14,28 +14,26 @@ function LoadChannelListForManage(siteId) {
         }
     };
 
-    var jsLoader = new jsloader();
-    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ram=" + Math.random());
+    var jsLoader = new JsLoader();
+    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ramdom=" + Math.random());
     jsLoader.onSuccess = function() {
-        $.fn.zTree.init($("#lefttree"), tree_setting, zNodes);
-        G_zTree = $.fn.zTree.getZTreeObj("lefttree");
+        $.fn.zTree.init($("#div_manage_menu_of_column"), treeSetting, zNodes);
+        G_zTree = $.fn.zTree.getZTreeObj("div_manage_menu_of_column");
         G_RightMenu = $("#rMenu");
     };
     jsLoader.onFailure = function() {
-        $("#lefttree").html("导航树加载失败");
+        $("#div_manage_menu_of_column").html("导航树加载失败");
     };
-
-
 }
 function zTreeOnClick(event, treeId, treeNode) {
     G_SelectedChannelId = treeNode.id;
     G_SelectedChannelName = treeNode.name;
-    var channeltype = treeNode.channel_type;
-    if (channeltype === 'undefined') {
-        channeltype = 0;
+    var channelType = treeNode.channelType;
+    if (channelType === 'undefined') {
+        channelType = 0;
     }
-    channeltype = parseInt(channeltype);
-    G_SelectedChannelType = channeltype;
+    channelType = parseInt(channelType);
+    G_SelectedChannelType = channelType;
 
     _ChannelClick();
 }
