@@ -72,7 +72,7 @@ class CustomFormManageData extends BaseManageData {
      * @return int type 取得的管理员id
      */
     public function GetManageUserId($customFormId) {
-        $sql = "SELECT AdminUserId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT ManageUserId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
