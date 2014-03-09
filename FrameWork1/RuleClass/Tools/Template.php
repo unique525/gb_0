@@ -25,15 +25,14 @@ class Template {
         if (preg_match('/^\xEF\xBB\xBF/', $tempContent)) {
             $tempContent = substr($tempContent, 3);
         }
-        //$tempcontent = iconv("utf-8", "gbk", $tempcontent);
         return $tempContent;
     }
 
     /**
-     * 
-     * @param string $templateName
-     * @param string $templatePath
-     * @return string 
+     * 返回系统模板路径
+     * @param string $templateName 模板名称
+     * @param string $templatePath 模板路径
+     * @return string 系统模板路径
      */
     private static function GetTempLateUrl($templateName, $templatePath = "system_template") {
         if (!empty($templateName)) {
@@ -44,191 +43,165 @@ class Template {
     }
 
     /**
-     * Replace list template
-     * @param type $tempcontent
-     * @param type $arrList
-     * @param type $tagId
-     * @param type $keyName
+     * 替换列表类的模板
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param array $arrList 用来替换到模板中的集合内容
+     * @param int $tagId 替换标签的id
+     * @param string $tagName 替换标签名称
      */
-    public static function ReplaceList(&$tempcontent, $arrList, $tagId, $keyName = "cscms") {
-        $result = "";
-
-        if (stripos($tempcontent, $keyName) > 0) {
+    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = "icms_list") {
+        if (stripos($tempContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
 
-                $beginstr = '<' . $keyName . ' id="' . $tagId . '"';
-                $endstr = '</' . $keyName . '>';
-                $listTempContent = substr($tempcontent, strpos($tempcontent, $beginstr));
-                $listTempContent = substr($listTempContent, 0, strpos($listTempContent, $endstr) + strlen($endstr));
+                $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
+                $endTagString = '</' . $tagName . '>';
+                $listTempContent = substr($tempContent, strpos($tempContent, $beginTagString));
+                $listTempContent = substr($listTempContent, 0, strpos($listTempContent, $endTagString) + strlen($endTagString));
 
                 if (strlen($listTempContent) > 0) {
-                    $_isOpenDom = TRUE;
-                    if (class_exists('DOMDocument')) { //服务器是否开启了DOM
-                        $doc = new DOMDocument();
-                        $doc->loadXML($listTempContent);
-                    } else {
-                        $_isOpenDom = FALSE;
+                    $isDomOpen = TRUE;
+                    if (!class_exists('DOMDocument')) { //服务器是否开启了DOM
+                        $isDomOpen = FALSE;
                     }
 
-                    if ($_isOpenDom) {
-                        //$cscms = $doc->getElementsByTagName("cscms");
+                    if ($isDomOpen) {
+                        $doc = new DOMDocument();
+                        $doc->loadXML($listTempContent);
                         //////////////////////////////param list///////////////////////////
-                        $type = self::GetParamStrValue($doc, "type", $keyName);  //cscms's type
+                        $type = self::GetParamStringValue($doc, $tagName, "type");
                         if ($type == '') {
-                            $type = self::GetParamStrValue($doc, "t", $keyName);
+                            $type = self::GetParamStringValue($doc, $tagName, "t");
                         }
                         //头段行数
-                        $headerRowCount = self::GetParamIntValue($doc, $keyName, "headerrowcount");
+                        $headerRowCount = self::GetParamIntValue($doc, $tagName, "header_row_count");
                         if ($headerRowCount <= 0) {
-                            $headerRowCount = self::GetParamIntValue($doc, $keyName, "hrc");
+                            $headerRowCount = self::GetParamIntValue($doc, $tagName, "hrc");
                         }
                         //主段行数
-                        $itemRowCount = self::GetParamIntValue($doc, $keyName, "itemrowcount");
+                        $itemRowCount = self::GetParamIntValue($doc, $tagName, "item_row_count");
                         if ($itemRowCount <= 0) {
-                            $itemRowCount = self::GetParamIntValue($doc, $keyName, "irc");
+                            $itemRowCount = self::GetParamIntValue($doc, $tagName, "irc");
                         }
                         //尾段行数
-                        $footerRowCount = self::GetParamIntValue($doc, $keyName, "footerrowcount");
+                        $footerRowCount = self::GetParamIntValue($doc, $tagName, "footer_row_count");
                         if ($footerRowCount <= 0) {
-                            $footerRowCount = self::GetParamIntValue($doc, $keyName, "frc");
+                            $footerRowCount = self::GetParamIntValue($doc, $tagName, "frc");
                         }
 
                         //HEADER标题最大字符数
-                        $headerRowShortCount = self::GetParamIntValue($doc, $keyName, "headerrowshortcount");
-                        if ($headerRowShortCount <= 0) {
-                            $headerRowShortCount = self::GetParamIntValue($doc, $keyName, "headershort");
-                        }
-                        if ($headerRowShortCount <= 0) {
-                            $headerRowShortCount = self::GetParamIntValue($doc, $keyName, "headersubjectlen");
+                        $headerRowTitleCount = self::GetParamIntValue($doc, $tagName, "header_row_title_count");
+                        if ($headerRowTitleCount <= 0) {
+                            $headerRowTitleCount = self::GetParamIntValue($doc, $tagName, "header_title");
                         }
 
                         //Footer标题最大字符数
-                        $footerRowShortCount = self::GetParamIntValue($doc, $keyName, "footerrowshortcount");
-                        if ($footerRowShortCount <= 0) {
-                            $footerRowShortCount = self::GetParamIntValue($doc, $keyName, "footershort");
-                        }
-                        if ($footerRowShortCount <= 0) {
-                            $footerRowShortCount = self::GetParamIntValue($doc, $keyName, "footersubjectlen");
+                        $footerRowTitleCount = self::GetParamIntValue($doc, $tagName, "footer_row_title_count");
+                        if ($footerRowTitleCount <= 0) {
+                            $footerRowTitleCount = self::GetParamIntValue($doc, $tagName, "footer_title");
                         }
 
                         //标题最大字符数
-                        $itemRowShortCount = self::GetParamIntValue($doc, $keyName, "itemrowshortcount");
-                        if ($itemRowShortCount <= 0) {
-                            $itemRowShortCount = self::GetParamIntValue($doc, $keyName, "short");
-                        }
-                        if ($itemRowShortCount <= 0) {
-                            $itemRowShortCount = self::GetParamIntValue($doc, $keyName, "subjectlen");
+                        $itemRowTitleCount = self::GetParamIntValue($doc, $tagName, "item_row_title_count");
+                        if ($itemRowTitleCount <= 0) {
+                            $itemRowTitleCount = self::GetParamIntValue($doc, $tagName, "title");
                         }
 
-                        $itemRowIntroShortCount = self::GetParamIntValue($doc, $keyName, "itemrowintroshortcount");
-                        if ($itemRowIntroShortCount <= 0) {
-                            $itemRowIntroShortCount = self::GetParamIntValue($doc, $keyName, "introshort");
+                        $itemRowIntroTitleCount = self::GetParamIntValue($doc, $tagName, "item_row_intro_count");
+                        if ($itemRowIntroTitleCount <= 0) {
+                            $itemRowIntroTitleCount = self::GetParamIntValue($doc, $tagName, "intro");
                         }
-                        if ($itemRowIntroShortCount <= 0) {
-                            $itemRowIntroShortCount = self::GetParamIntValue($doc, $keyName, "introlen");
-                        }
-                        $headerTempContent = self::GetNodeValue($doc, "header", $keyName);
+
+                        $headerTempContent = self::GetNodeValue($doc, "header", $tagName);
                         if (strlen($headerTempContent) > 0 && $headerRowCount <= 0) {
                             $headerRowCount = 1;
                         }
-                        $footerTempContent = self::GetNodeValue($doc, "footer", $keyName);
+                        $footerTempContent = self::GetNodeValue($doc, "footer", $tagName);
                         if (strlen($footerTempContent) > 0 && $footerRowCount <= 0) {
                             $footerRowCount = 1;
                         }
                         //读取头段到主段的分割线
-                        $headerSpliterTempContent = self::GetNodeValue($doc, "headerspliter", $keyName);
+                        $headerSplitterTempContent = self::GetNodeValue($doc, "header_splitter", $tagName);
                         //读取主段
-                        $itemTempContent = self::GetNodeValue($doc, "item", $keyName);
-                        $alteritemTempContent = self::GetNodeValue($doc, "alteritem", $keyName);
+                        $itemTempContent = self::GetNodeValue($doc, "item", $tagName);
+                        $alterItemTempContent = self::GetNodeValue($doc, "alter_item", $tagName);
 
                         //读取主段的分割线
-                        $itemSpliterTempContent = self::GetNodeValue($doc, "itemspliter", $keyName);
+                        $itemSplitterTempContent = self::GetNodeValue($doc, "item_splitter", $tagName);
                         //读取分割线出现的间隔数
-                        $itemSpliterCount = self::GetParamIntValue($doc, $keyName, "itemsplitercount");
+                        $itemSplitterCount = self::GetParamIntValue($doc, $tagName, "item_splitter_count");
                         //读取主段到尾段的分割线
-                        $footerSpliterTempContent = self::GetNodeValue($doc, "footerspliter", $keyName);
+                        $footerSplitterTempContent = self::GetNodeValue($doc, "footer_splitter", $tagName);
                     } else {
                         //使用SAX
-                        $_p = xml_parser_create();
-                        $_arrayXml = array();
-                        xml_parse_into_struct($_p, $listTempContent, $_arrayXml);
-                        xml_parser_free($_p);
+                        $parser = xml_parser_create();
+                        $arrayXml = array();
+                        xml_parse_into_struct($parser, $listTempContent, $arrayXml);
+                        xml_parser_free($parser);
 
-                        $type = $_arrayXml[0]['attributes']['TYPE'];  //cscms's type
+                        $type = $arrayXml[0]['attributes']['TYPE'];
                         if ($type == '') {
-                            $type = $_arrayXml[0]['attributes']['T'];
+                            $type = $arrayXml[0]['attributes']['T'];
                         }
                         //头段行数
-                        $headerRowCount = intval($_arrayXml[0]['attributes']['HEADERROWCOUNT']);
+                        $headerRowCount = intval($arrayXml[0]['attributes']['HEADER_ROW_COUNT']);
                         if ($headerRowCount <= 0) {
-                            $headerRowCount = intval($_arrayXml[0]['attributes']['HRC']);
+                            $headerRowCount = intval($arrayXml[0]['attributes']['HRC']);
                         }
                         //主段行数
-                        $itemRowCount = intval($_arrayXml[0]['attributes']['ITEMROWCOUNT']);
+                        $itemRowCount = intval($arrayXml[0]['attributes']['ITEM_ROW_COUNT']);
                         if ($itemRowCount <= 0) {
-                            $itemRowCount = intval($_arrayXml[0]['attributes']['IRC']);
+                            $itemRowCount = intval($arrayXml[0]['attributes']['IRC']);
                         }
                         //尾段行数
-                        $footerRowCount = intval($_arrayXml[0]['attributes']['FOOTERROWCOUNT']);
+                        $footerRowCount = intval($arrayXml[0]['attributes']['FOOTER_ROW_COUNT']);
                         if ($footerRowCount <= 0) {
-                            $footerRowCount = intval($_arrayXml[0]['attributes']['FRC']);
+                            $footerRowCount = intval($arrayXml[0]['attributes']['FRC']);
                         }
 
                         //HEADER标题最大字符数
-                        $headerRowShortCount = intval($_arrayXml[0]['attributes']['HEADERROWSHORTCOUNT']);
-                        if ($headerRowShortCount <= 0) {
-                            $headerRowShortCount = intval($_arrayXml[0]['attributes']['HEADERSHORT']);
-                        }
-                        if ($headerRowShortCount <= 0) {
-                            $headerRowShortCount = intval($_arrayXml[0]['attributes']['HEADERSUBJECTLEN']);
+                        $headerRowTitleCount = intval($arrayXml[0]['attributes']['HEADER_ROW_TITLE_COUNT']);
+                        if ($headerRowTitleCount <= 0) {
+                            $headerRowTitleCount = intval($arrayXml[0]['attributes']['HEADER_TITLE']);
                         }
 
                         //Footer标题最大字符数
-                        $footerRowShortCount = intval($_arrayXml[0]['attributes']['FOOTERROWSHORTCOUNT']);
-                        if ($footerRowShortCount <= 0) {
-                            $footerRowShortCount = intval($_arrayXml[0]['attributes']['FOOTERSHORT']);
-                        }
-                        if ($footerRowShortCount <= 0) {
-                            $footerRowShortCount = intval($_arrayXml[0]['attributes']['FOOTERSUBJECTLEN']);
+                        $footerRowTitleCount = intval($arrayXml[0]['attributes']['FOOTER_ROW_TITLE_COUNT']);
+                        if ($footerRowTitleCount <= 0) {
+                            $footerRowTitleCount = intval($arrayXml[0]['attributes']['FOOTER_TITLE']);
                         }
 
                         //标题最大字符数
-                        $itemRowShortCount = intval($_arrayXml[0]['attributes']['ITEMROWSHORTCOUNT']);
-                        if ($itemRowShortCount <= 0) {
-                            $itemRowShortCount = intval($_arrayXml[0]['attributes']['SHORT']);
-                        }
-                        if ($itemRowShortCount <= 0) {
-                            $itemRowShortCount = intval($_arrayXml[0]['attributes']['SUBJECTLEN']);
+                        $itemRowTitleCount = intval($arrayXml[0]['attributes']['ITEM_ROW_TITLE_COUNT']);
+                        if ($itemRowTitleCount <= 0) {
+                            $itemRowTitleCount = intval($arrayXml[0]['attributes']['TITLE']);
                         }
 
-                        $itemRowIntroShortCount = intval($_arrayXml[0]['attributes']['ITEMROWINTROSHORTCOUNT']);
-                        if ($itemRowIntroShortCount <= 0) {
-                            $itemRowIntroShortCount = intval($_arrayXml[0]['attributes']['INTROSHORT']);
+                        $itemRowIntroTitleCount = intval($arrayXml[0]['attributes']['ITEM_ROW_INTRO_TITLE_COUNT']);
+                        if ($itemRowIntroTitleCount <= 0) {
+                            $itemRowIntroTitleCount = intval($arrayXml[0]['attributes']['INTRO']);
                         }
-                        if ($itemRowIntroShortCount <= 0) {
-                            $itemRowIntroShortCount = intval($_arrayXml[0]['attributes']['INTROLEN']);
-                        }
-                        $headerTempContent = self::GetNodeValueForSax($_arrayXml, "HEADER");
+
+                        $headerTempContent = self::GetNodeValueForSax($arrayXml, "HEADER");
                         if (strlen($headerTempContent) > 0 && $headerRowCount <= 0) {
                             $headerRowCount = 1;
                         }
-                        $footerTempContent = self::GetNodeValueForSax($_arrayXml, "FOOTER");
+                        $footerTempContent = self::GetNodeValueForSax($arrayXml, "FOOTER");
                         if (strlen($footerTempContent) > 0 && $footerRowCount <= 0) {
                             $footerRowCount = 1;
                         }
                         //读取头段到主段的分割线
-                        $headerSpliterTempContent = self::GetNodeValueForSax($_arrayXml, "HEADERSPLITER");
+                        $headerSplitterTempContent = self::GetNodeValueForSax($arrayXml, "HEADER_SPLITTER");
                         //读取主段
-                        $itemTempContent = self::GetNodeValueForSax($_arrayXml, "ITEM");
+                        $itemTempContent = self::GetNodeValueForSax($arrayXml, "ITEM");
 
-                        $alteritemTempContent = self::GetNodeValueForSax($_arrayXml, "ALTERITEM");
+                        $alterItemTempContent = self::GetNodeValueForSax($arrayXml, "ALTER_ITEM");
 
                         //读取主段的分割线
-                        $itemSpliterTempContent = self::GetNodeValueForSax($_arrayXml, "ITEMSPLITER");
+                        $itemSplitterTempContent = self::GetNodeValueForSax($arrayXml, "ITEM_SPLITTER");
                         //读取分割线出现的间隔数
-                        $itemSpliterCount = intval($_arrayXml[0]['attributes']['ITEMSPLITERCOUNT']);
+                        $itemSplitterCount = intval($arrayXml[0]['attributes']['ITEM_SPLITTER_COUNT']);
                         //读取主段到尾段的分割线
-                        $footerSpliterTempContent = self::GetNodeValueForSax($_arrayXml, "FOOTERSPLITER");
+                        $footerSplitterTempContent = self::GetNodeValueForSax($arrayXml, "FOOTER_SPLITTER");
                     }
                     ///////////////////////////////////////////////////////////////////
 
@@ -240,27 +213,27 @@ class Template {
                         $columns = $arrList[$i];
                         $list = $headerTempContent;
                         $itemtype = "header";
-                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
                         $list = str_ireplace("{c_allcount}", count($arrList), $list);
                         $sb = $sb . $list;
                     }
 
 
                     //附加分割线
-                    $sb = $sb . $headerSpliterTempContent;
+                    $sb = $sb . $headerSplitterTempContent;
 
-                    if ($itemSpliterCount <= 0) {
-                        $itemSpliterCount = 0;
+                    if ($itemSplitterCount <= 0) {
+                        $itemSplitterCount = 0;
                     }
 
                     //echo $alteritemTempContent;
 
                     for ($i = 0 + $headerRowCount; $i < count($arrList) - $footerRowCount; $i++) {
                         //如果有交替行
-                        if (strlen($alteritemTempContent) > 0) {
+                        if (strlen($alterItemTempContent) > 0) {
 
                             if ($i % 2 === 1) {
-                                $list = $alteritemTempContent;
+                                $list = $alterItemTempContent;
                             } else {
                                 $list = $itemTempContent;
                             }
@@ -270,20 +243,20 @@ class Template {
 
                         $columns = $arrList[$i];
                         $itemtype = "item";
-                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
                         $list = str_ireplace("{c_allcount}", count($arrList), $list);
                         $sb = $sb . $list;
                         //每隔一定主段条数附加分割线，最底部分割线不附加
-                        if ($itemSpliterCount > 0) {
-                            if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSpliterCount) == 0) {
-                                $sb = $sb . $itemSpliterTempContent;
+                        if ($itemSplitterCount > 0) {
+                            if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSplitterCount) == 0) {
+                                $sb = $sb . $itemSplitterTempContent;
                             }
                         }
                     }
 
 
                     //附加分割线
-                    $sb = $sb . $footerSpliterTempContent;
+                    $sb = $sb . $footerSplitterTempContent;
 
                     //处理尾段
                     if ($footerRowCount > 0) {
@@ -291,27 +264,24 @@ class Template {
                             $columns = $arrList[$i];
                             $list = $footerTempContent;
                             $itemtype = "footer";
-                            $list = self::ReplaceListFor($i, $type, $tagId, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype);
+                            $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
                             $sb = $sb . $list;
                         }
                     }
 
                     $result = $sb;
-                    $tempcontent = str_replace($listTempContent, $result, $tempcontent);
+                    $tempContent = str_replace($listTempContent, $result, $tempContent);
                 }
             } else {
-                $beginstr = '<' . $keyName . ' id="' . $tagId . '"';
-                $endstr = '</' . $keyName . '>';
-                $temp1 = substr($tempcontent, 0, strpos($tempcontent, $beginstr));
-                $x = strpos($tempcontent, $endstr, strpos($tempcontent, $beginstr));
-                $temp2 = substr($tempcontent, $x + 8);
-                $tempcontent = $temp1 . $temp2;
+                $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
+                $endTagString = '</' . $tagName . '>';
+                $temp1 = substr($tempContent, 0, strpos($tempContent, $beginTagString));
+                $x = strpos($tempContent, $endTagString, strpos($tempContent, $beginTagString));
+                $temp2 = substr($tempContent, $x + 8);
+                $tempContent = $temp1 . $temp2;
 
-                //$patterns = "/\<cscms(.*?)\<\/cscms>/";
-                //$tempcontent = preg_replace($patterns,"",$tempcontent);
             }
         }
-        //$tempcontent = iconv("UTF-8", "GBK", $tempcontent);
     }
 
     /**
@@ -1382,7 +1352,7 @@ class Template {
         if (class_exists('DOMDocument')) { //服务器是否开启了DOM
             $doc = new DOMDocument();
             $doc->loadXML($doccontent);
-            $result = self::GetParamStrValue($doc, $paramname, $keyname);
+            $result = self::GetParamStringValue($doc, $keyname, $paramname);
             return $result;
         } else {
             //使用SAX
@@ -1416,34 +1386,34 @@ class Template {
 
     /**
      * 取得节点的内容 SAX用
-     * @param type $ArrayXml
-     * @param type $TagName
-     * @return type 
+     * @param array $arrayXml
+     * @param string $tagName
+     * @return string 节点的内容
      */
-    private static function GetNodeValueForSax($ArrayXml, $TagName) {
+    private static function GetNodeValueForSax($arrayXml, $tagName) {
         $result = "";
-        for ($i = 0; $i < count($ArrayXml); $i++) {
-            if ($ArrayXml[$i]['tag'] == $TagName && $ArrayXml[$i]['type'] == 'complete') {
-                $result = $ArrayXml[$i]['value'];
-                $i = count($ArrayXml);
+        for ($i = 0; $i < count($arrayXml); $i++) {
+            if ($arrayXml[$i]['tag'] == $tagName && $arrayXml[$i]['type'] == 'complete') {
+                $result = $arrayXml[$i]['value'];
+                $i = count($arrayXml);
             }
         }
         return $result;
     }
 
     /**
-     *
-     * @param <type> $doc
-     * @param <type> $attrName
-     * @param <type> $keyname
-     * @param <type> $defaultValue
-     * @return <type>
+     * 取得String类型的参数的值
+     * @param DOMDocument $domDocument DOM对象
+     * @param string $tagName 标签名称
+     * @param string $attrName 属性名称
+     * @param string $defaultValue 默认值
+     * @return string 参数的值
      */
-    private static function GetParamStrValue($doc, $attrName, $keyname, $defaultValue = "") {
+    private static function GetParamStringValue($domDocument, $tagName, $attrName, $defaultValue = "") {
         $result = $defaultValue;
-        $cscmsNode = $doc->getElementsByTagName($keyname)->item(0);
-        if ($cscmsNode->hasAttributes()) {
-            foreach ($cscmsNode->attributes as $attr) {
+        $node = $domDocument->getElementsByTagName($tagName)->item(0);
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
                 if (strtolower($attr->name) == strtolower($attrName)) {
                     $result = $attr->value;
                 }
@@ -1453,15 +1423,15 @@ class Template {
     }
 
     /**
-     *
-     * @param <type> $doc
-     * @param <type> $attrName
-     * @param <type> $defaultValue
-     * @return <type>
+     * 取得Int类型的参数的值
+     * @param DOMDocument $domDocument DOM对象
+     * @param string $tagName 标签名称
+     * @param string $attrName 属性名称
+     * @param int $defaultValue 默认值
+     * @return int 参数的值
      */
-    private static function GetParamIntValue($doc, $keyname, $attrName, $defaultValue = 0) {
-        $result = $defaultValue;
-        $result = intval(self::GetParamStrValue($doc, $attrName, $keyname));
+    private static function GetParamIntValue($domDocument, $tagName, $attrName, $defaultValue = 0) {
+        $result = intval(self::GetParamStringValue($domDocument, $tagName, $attrName, strval($defaultValue)));
         return $result;
     }
 
