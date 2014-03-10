@@ -34,7 +34,7 @@ class CustomFormRecordManageData extends BaseManageData {
         if(!empty($httpPostData)){
             $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_CustomFormRecord, self::TableId_CustomFormRecord, $customFormRecordId, $dataProperty);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
+           $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
@@ -50,10 +50,10 @@ class CustomFormRecordManageData extends BaseManageData {
     public function GetListPager($customFormId, $pageBegin, $pageSize, &$allCount) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
-        $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
 
-        $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord." WHERE CustomFormId=:CustomFormId";
+        $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord." WHERE CustomFormId=:CustomFormId ;";
         $allCount = $this->dbOperator->ReturnInt($sqlCount, $dataProperty);
 
         return $result;
@@ -67,7 +67,7 @@ class CustomFormRecordManageData extends BaseManageData {
      */
     public function GetOne($customFormRecordId) {
 
-        $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormRecordID = :CustomFormRecordID";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormRecordID = :CustomFormRecordID ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordID", $customFormRecordId);
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
