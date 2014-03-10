@@ -57,11 +57,11 @@ class CustomFormManageData extends BaseManageData {
             *
             FROM
             " . self::TableName_CustomForm . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
 
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
-        $sqlCount = "SELECT count(*) FROM " . self::TableName_CustomForm . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql;
+        $sqlCount = "SELECT count(*) FROM " . self::TableName_CustomForm . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
         $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
@@ -72,7 +72,7 @@ class CustomFormManageData extends BaseManageData {
      * @return int type 取得的管理员id
      */
     public function GetManageUserId($customFormId) {
-        $sql = "SELECT ManageUserId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT ManageUserId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -85,7 +85,7 @@ class CustomFormManageData extends BaseManageData {
      * @return array 表单数据
      */
     public function GetOne($customFormId) {
-        $sql = "SELECT * FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT * FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
@@ -100,7 +100,7 @@ class CustomFormManageData extends BaseManageData {
      */
 
     public function ModifyState($customFormId, $state) {
-        $sql = "UPDATE " . self::TableName_CustomForm . " SET State = :State WHERE CustomFormId = :CustomFormId";
+        $sql = "UPDATE " . self::TableName_CustomForm . " SET State = :State WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("CustomFormId", $customFormId);
@@ -114,7 +114,7 @@ class CustomFormManageData extends BaseManageData {
      * @return int 表单状态
      */
     public function GetState($customFormId) {
-        $sql = "SELECT State FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT State FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -127,7 +127,7 @@ class CustomFormManageData extends BaseManageData {
      * @return string 表单创建日期
      */
     public function GetCreateDate($customFormId) {
-        $sql = "SELECT CreateDate FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT CreateDate FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->ReturnString($sql, $dataProperty);
@@ -140,7 +140,7 @@ class CustomFormManageData extends BaseManageData {
      * @return int 表单所在频道id
      */
     public function GetChannelId($customFormId) {
-        $sql = "SELECT ChannelId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId";
+        $sql = "SELECT ChannelId FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);

@@ -20,7 +20,7 @@ class CustomFormContentManageData extends BaseManageData {
         if (!empty($httpPostData) && !empty($customFormRecordId)) {
             //先删除旧数据
             self::Delete($customFormRecordId);
-            //读取表单 cf_customformid_customformfieldid
+            //读取表单 cf_CustomFormId_CustomFormFieldId
             foreach ($httpPostData as $key => $value) {
                 if (strpos($key, "cf_") === 0) { //
                     $arr = Format::ToSplit($key, '_');
@@ -64,27 +64,27 @@ class CustomFormContentManageData extends BaseManageData {
         switch ($customFormFieldType) {
             case 0:
                 $dataProperty->AddField("ContentOfInt", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfInt) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfInt)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfInt) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfInt) ;";
                 break;
             case 1:
                 $dataProperty->AddField("ContentOfString", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfString) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfString)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfString) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfString) ;";
                 break;
             case 2:
                 $dataProperty->AddField("ContentOfText", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfText) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfText)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfText) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfText) ;";
                 break;
             case 3:
                 $dataProperty->AddField("ContentOfFloat", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfFloat) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfFloat)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfFloat) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfFloat) ;";
                 break;
             case 4:
                 $dataProperty->AddField("ContentOfDatetime", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfDatetime) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfDatetime)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfDatetime) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfDatetime) ;";
                 break;
             case 5:
                 $dataProperty->AddField("ContentOfBlob", $content);
-                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob)";
+                $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob) ;";
                 break;
         }
 
@@ -102,7 +102,7 @@ class CustomFormContentManageData extends BaseManageData {
     public function Delete($customFormRecordId) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
-        $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId";
+        $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId ;";
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
@@ -115,7 +115,7 @@ class CustomFormContentManageData extends BaseManageData {
     public function GetList($customFormRecordId) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
-        $sql = "SELECT * FROM " . self::TableName_CustomFormContent . " WHERE CustomFormRecordId=:CustomFormRecordId ORDER BY Sort DESC ";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormContent . " WHERE CustomFormRecordId=:CustomFormRecordId ORDER BY Sort DESC ;";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }

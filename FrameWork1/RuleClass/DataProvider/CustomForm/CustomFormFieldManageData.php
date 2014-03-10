@@ -46,7 +46,7 @@ class CustomFormFieldManageData extends BaseManageData {
     public function GetList($customFormId) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
-        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC ";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC ;";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -59,7 +59,7 @@ class CustomFormFieldManageData extends BaseManageData {
     public function GetListForContent($customFormId) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
-        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormId=:CustomFormId and ShowInList=1 ORDER BY Sort DESC ";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormId=:CustomFormId and ShowInList=1 ORDER BY Sort DESC ;";
         $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
         return $result;
     }
@@ -70,7 +70,7 @@ class CustomFormFieldManageData extends BaseManageData {
      * @return array 取得的一个字段的所有属性
      */
     public function GetOne($customFormFieldId) {
-        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId";
+        $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
         $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
@@ -84,7 +84,7 @@ class CustomFormFieldManageData extends BaseManageData {
      * @return int 字段类型
      */
     public function GetCustomFormFieldType($customFormFieldId) {
-        $sql = "SELECT CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId";
+        $sql = "SELECT CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
         $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
