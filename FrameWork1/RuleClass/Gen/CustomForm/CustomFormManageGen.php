@@ -165,7 +165,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetAdminUserID($customFormId);
+            $createUserId = $customFormManageData->GetManageUserID($customFormId);
             if ($createUserId !== $nowManageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
