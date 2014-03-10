@@ -96,7 +96,7 @@ function _ChannelClick() {
             var size = aw / 28;
             var ps = parseInt(size) - 1;
 
-            G_TabUrl = '/default.php?secu=manage&mod=documentnews&m=listformanage&ps=' + ps + '&cid=' + G_SelectedChannelId;
+            G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&ps=' + ps + '&cid=' + G_SelectedChannelId;
             addTab();
 
         } else if (G_SelectedChannelType === 2) { //咨询回复类频道

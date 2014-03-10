@@ -37,7 +37,7 @@ class ManageUserAuthorityManageData extends BaseManageData
             `Audit4`, 
             `Refused`, 
             `DoOthers`,
-            `DoSameGroupOthers`,
+            `DoOthersInSameGroup`,
             `Publish`
             )
             VALUES
@@ -129,7 +129,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $audit4
      * @param int $refused
      * @param int $doOthers
-     * @param int $doSameGroupOthers
+     * @param int $doOthersInSameGroup
      * @param int $publish
      * @param int $userExplore
      * @param int $userAdd
@@ -157,7 +157,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @return int
      */
     public function CreateOrModifyForSiteAndAdminUserGroup(
-        $siteId, $manageUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doSameGroupOthers, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
+        $siteId, $manageUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
     )
     {
         //判断是否存在数据
@@ -187,7 +187,7 @@ class ManageUserAuthorityManageData extends BaseManageData
 	                `Audit4`,
 	                `Refused`,
 	                `DoOthers`,
-		            `DoSameGroupOthers`,
+		            `DoOthersInSameGroup`,
 		            `Publish`,
 		            `UserExplore`,
 		            `UserAdd`,
@@ -230,7 +230,7 @@ class ManageUserAuthorityManageData extends BaseManageData
 		            :Audit4,
 		            :Refused,
 		            :DoOthers,
-        	        :DoSameGroupOthers,
+        	        :DoOthersInSameGroup,
 		            :Publish,
 		            :UserExplore,
 		            :UserAdd,
@@ -270,7 +270,7 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("Audit4", $audit4);
             $dataProperty->AddField("Refused", $refused);
             $dataProperty->AddField("DoOthers", $doOthers);
-            $dataProperty->AddField("DoSameGroupOthers", $doSameGroupOthers);
+            $dataProperty->AddField("DoOthersInSameGroup", $doOthersInSameGroup);
             $dataProperty->AddField("Publish", $publish);
             $dataProperty->AddField("UserExplore", $userExplore);
             $dataProperty->AddField("UserAdd", $userAdd);
@@ -313,7 +313,7 @@ class ManageUserAuthorityManageData extends BaseManageData
 	                    `Audit4` = :Audit4,
 	                    `Refused` = :Refused,
 	                    `DoOthers` = :DoOthers,
-	                    `DoSameGroupOthers` = :DoSameGroupOthers,
+	                    `DoOthersInSameGroup` = :DoOthersInSameGroup,
 	                    `Publish` = :Publish,
 	                    `UserExplore` = :UserExplore,
 	                    `UserAdd` = :UserAdd,
@@ -353,7 +353,7 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("Audit4", $audit4);
             $dataProperty->AddField("Refused", $refused);
             $dataProperty->AddField("DoOthers", $doOthers);
-            $dataProperty->AddField("DoSameGroupOthers", $doSameGroupOthers);
+            $dataProperty->AddField("DoOthersInSameGroup", $doOthersInSameGroup);
             $dataProperty->AddField("Publish", $publish);
             $dataProperty->AddField("UserExplore", $userExplore);
             $dataProperty->AddField("UserAdd", $userAdd);
@@ -425,7 +425,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserGroupId 后台管理员分组id
      * @return array 一条权限记录
      */
-    public function GetOneByAdminUserGroupId($siteId, $channelId, $manageUserGroupId)
+    public function GetOneByManageUserGroupId($siteId, $channelId, $manageUserGroupId)
     {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
@@ -449,7 +449,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param string $fieldName 要查询的权限字段
      * @return bool 是否有权限
      */
-    public function GetPopedomField($siteId, $channelId, $manageUserId, $fieldName)
+    public function GetFieldValue($siteId, $channelId, $manageUserId, $fieldName)
     {
         if (intval($manageUserId) == 1) {
             return TRUE;
@@ -491,7 +491,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanExplore($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Explore");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Explore");
     }
 
     /**
@@ -503,7 +503,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanCreate($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Create");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Create");
     }
 
     /**
@@ -515,7 +515,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanModify($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Modify");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Modify");
     }
 
     /**
@@ -527,7 +527,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanDelete($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Delete");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Delete");
     }
 
     /**
@@ -539,7 +539,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanDisabled($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Disabled");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Disabled");
     }
 
     /**
@@ -551,7 +551,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanSearch($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Search");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Search");
     }
 
     /**
@@ -563,7 +563,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserExplore($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserExplore");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserExplore");
     }
 
     /**
@@ -575,7 +575,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserAdd($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAdd");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserAdd");
     }
 
     /**
@@ -587,7 +587,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserEdit($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserEdit");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserEdit");
     }
 
     /**
@@ -599,7 +599,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserDelete($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserDelete");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserDelete");
     }
 
     /**
@@ -611,7 +611,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserRoleExplore($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleExplore");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserRoleExplore");
     }
 
     /**
@@ -623,7 +623,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserRoleAdd($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleAdd");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserRoleAdd");
     }
 
     /**
@@ -635,7 +635,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserRoleEdit($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleEdit");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserRoleEdit");
     }
 
     /**
@@ -647,7 +647,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserRoleDelete($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserRoleDelete");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserRoleDelete");
     }
 
     /**
@@ -659,7 +659,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserAlbumExplore($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumExplore");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserAlbumExplore");
     }
 
     /**
@@ -671,7 +671,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserAlbumAdd($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumAdd");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserAlbumAdd");
     }
 
     /**
@@ -683,7 +683,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserAlbumEdit($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumEdit");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserAlbumEdit");
     }
 
     /**
@@ -695,7 +695,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanUserAlbumDelete($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "UserAlbumDelete");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "UserAlbumDelete");
     }
 
     /**
@@ -707,7 +707,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanRework($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Rework");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Rework");
     }
 
     /**
@@ -719,7 +719,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanAudit1($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit1");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit1");
     }
 
     /**
@@ -731,7 +731,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanAudit2($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit2");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit2");
     }
 
     /**
@@ -743,7 +743,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanAudit3($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit3");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit3");
     }
 
     /**
@@ -755,7 +755,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanAudit4($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Audit4");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit4");
     }
 
     /**
@@ -767,7 +767,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanRefused($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Refused");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Refused");
     }
 
     /**
@@ -779,8 +779,21 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanDoOthers($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "DoOthers");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoOthers");
     }
+
+    /**
+     * 是否有操作同一组内他人权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有操作同一组内他人权限
+     */
+    public function CanDoOthersInSameGroup($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoOthersInSameGroup");
+    }
+
 
     /**
      * 是否有操作同一组中他人的权限
@@ -791,7 +804,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanDoSameGroupOthers($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "DoSameGroupOthers");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoSameGroupOthers");
     }
 
     /**
@@ -803,7 +816,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanPublish($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "Publish");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Publish");
     }
 
     /**
@@ -815,7 +828,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageSite($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageSite");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageSite");
     }
 
     /**
@@ -827,7 +840,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageComment($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageComment");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageComment");
     }
 
     /**
@@ -839,7 +852,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageTemplateLibrary($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageTemplateLibrary");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageTemplateLibrary");
     }
 
     /**
@@ -851,7 +864,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageFilter($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageFilter");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageFilter");
     }
 
     /**
@@ -863,7 +876,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageFtp($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageFtp");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageFtp");
     }
 
     /**
@@ -875,7 +888,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageAd($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageAd");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageAd");
     }
 
     /**
@@ -887,7 +900,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageDocumentTag($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageDocumentTag");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageDocumentTag");
     }
 
     /**
@@ -899,7 +912,7 @@ class ManageUserAuthorityManageData extends BaseManageData
      */
     public function CanManageConfig($siteId, $channelId, $manageUserId)
     {
-        return self::GetPopedomField($siteId, $channelId, $manageUserId, "ManageConfig");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageConfig");
     }
 
 }

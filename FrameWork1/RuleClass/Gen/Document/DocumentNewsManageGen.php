@@ -22,16 +22,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "removebin":
+            case "remove_to_bin":
                 $result = self::GenRemoveBin();
                 break;
-            case "listformanage":
-                $result = self::GenListForManage();
+            case "list":
+                $result = self::GenList();
                 break;
-            case "async_modifysort":
+            case "async_modify_sort":
                 self::AsyncModifySort();
                 break;
-            case "async_modifystate":
+            case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
         }
@@ -50,15 +50,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 生成资讯管理修改页面
      */
     private function GenModify() {
-        $tempContent = Template::Load("document/documentnews_deal.html", "common");
-        $documentNewsId = Control::GetRequest("documentnewsid", 0);
+        $tempContent = Template::Load("document/document_news_deal.html", "common");
+        $documentNewsId = Control::GetRequest("document_news_id", 0);
 
-        $nowAdminUserId = Control::GetManageUserId();
+        $nowManageUserId = Control::GetManageUserId();
         $nowUserId = Control::GetUserId();
         //$tab_index = Control::GetRequest("tab", 1);
         $pageIndex = Control::GetRequest("p", 1);
 
-        $nowAdminUserName = Control::GetManageUserName();
+        $nowManageUserName = Control::GetManageUserName();
 
         parent::ReplaceFirst($tempContent);
         if ($documentNewsId > 0) {
@@ -67,50 +67,51 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             //检查编辑锁
             $lockEdit = $documentNewsManageData->GetLockEdit($documentNewsId);
             $lockEditDate = $documentNewsManageData->GetLockEditDate($documentNewsId);
-            $lockEditAdminUserId = $documentNewsManageData->GetLockEditAdminUserId($documentNewsId);
+            $lockEditManageUserId = $documentNewsManageData->GetLockEditManageUserId($documentNewsId);
 
             $dateNowSpan = strtotime(date("Y-m-d H:i:s", time()));
             $lockEditDateSpan = strtotime(date("Y-m-d H:i:s", strtotime($lockEditDate)) . " +5 minute");
 
-            if ($lockEditAdminUserId > 0 && $lockEdit > 0 && $lockEditDateSpan > $dateNowSpan && empty($_POST) && $lockEditAdminUserId != $nowAdminUserId) {
+            if ($lockEditManageUserId > 0 && $lockEdit > 0 && $lockEditDateSpan > $dateNowSpan && empty($_POST) && $lockEditManageUserId != $nowManageUserId) {
                 //当前已经锁定，并且锁定时间在5分钟内
-                $adminUserManageData = new AdminUserManageData();
-                $lockEditAdminUserName = $adminUserManageData->GetAdminUserName($lockEditAdminUserId);
+                $manageUserManageData = new ManageUserManageData();
+                $lockEditManageUserName = $manageUserManageData->GetManageUserName($lockEditManageUserId);
                 $returnInfo = Language::Load('document', 36);
-                $returnInfo = str_ireplace("{adminusername}", $lockEditAdminUserName, $returnInfo);
+                $returnInfo = str_ireplace("{manage_user_name}", $lockEditManageUserName, $returnInfo);
                 return $returnInfo;
             } else {
                 //未锁定，则上锁
                 $lockEdit = 1;
-                $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowAdminUserId);
+                $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
             }
 
 
-            $documentChannelData = new DocumentChannelData();
-            $documentchannelid = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
-            $siteid = $documentChannelData->GetSiteId($documentchannelid);
+            $channelManageData = new ChannelManageData();
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId);
+            $withCache = FALSE;
+            $siteid = $channelManageData->GetSiteId($channelId, $withCache);
 
-///////////////判断是否有操作权限///////////////////
-            $adminPopedomData = new AdminPopedomData();
-//编辑权限
-            $can = $adminPopedomData->CanModify($siteid, $documentchannelid, $nowAdminUserId);
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            //编辑权限
+            $can = $manageUserAuthorityManageData->CanModify($siteid, $channelId, $nowManageUserId);
             if (!$can) {
                 Control::ShowMessage(Language::Load('document', 26));
-                $jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                if ($tab_index > 0) {
-                    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                }
-                Control::RunJS($jscode);
+                //$jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
+                //if ($tab_index > 0) {
+                //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
+                //}
+                //Control::RunJS($jscode);
                 return "";
             }
-//操作他人的权限
-            $docadminuserid = $documentNewsManageData->GetAdminUserID($documentNewsId);
-            if ($docadminuserid !== $nowAdminUserId) { //操作人不是发布人
-                $can = $adminPopedomData->CanDoOthers($siteid, $documentchannelid, $nowAdminUserId);
+            //操作他人的权限
+            $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId);
+            if ($documentNewsManageUserId !== $nowManageUserId) { //操作人不是发布人
+                $can = $manageUserAuthorityManageData->CanDoOthers($siteid, $channelId, $nowManageUserId);
 
                 $adminuserData = new AdminUserData(); //组内可操作他人 FOR芙蓉区食安网
-                $docAdminUserGroupId = $adminuserData->GetAdminUserGroupID($docadminuserid);
-                $adminUserGroupId = $adminuserData->GetAdminUserGroupID($nowAdminUserId);
+                $docAdminUserGroupId = $adminuserData->GetAdminUserGroupID($documentNewsManageUserId);
+                $adminUserGroupId = $adminuserData->GetAdminUserGroupID($nowManageUserId);
 
                 if (!$can && $docAdminUserGroupId != $adminUserGroupId) {
                     Control::ShowMessage(Language::Load('document', 26));
@@ -123,10 +124,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 ////////////////////////////////////////////////////
-            $documentchannelname = $documentChannelData->GetName($documentchannelid);
+            $documentchannelname = $channelManageData->GetName($channelId);
             $replace_arr = array(
-                "{documentchannelid}" => $documentchannelid,
-                "{cid}" => $documentchannelid,
+                "{documentchannelid}" => $channelId,
+                "{cid}" => $channelId,
                 "{id}" => $documentNewsId,
                 "{siteid}" => $siteid,
                 "{tab}" => $tab_index,
@@ -138,8 +139,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             //////////////////////////////////////////////////
             //针对团结网编辑人暂时做特殊处理
             if (stripos($_SERVER['HTTP_HOST'], "tjwang.net") == true) {
-                $tempContent = str_ireplace("{adminuserid}", $nowAdminUserId, $tempContent);
-                $tempContent = str_ireplace("{adminusername}", $nowAdminUserName, $tempContent);
+                $tempContent = str_ireplace("{adminuserid}", $nowManageUserId, $tempContent);
+                $tempContent = str_ireplace("{adminusername}", $nowManageUserName, $tempContent);
             }
 
             /////////////////////////////////////////////////
@@ -243,7 +244,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 if ($result > 0) {
 //编辑完成后，解锁
                     $lockEdit = 0;
-                    $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowAdminUserId);
+                    $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
 
 //改变文档状态为 已编
 //$state = 1; //已编
@@ -269,7 +270,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     }
 
 ///////////////发布模式处理
-                    $_publishType = $documentChannelData->GetPublishType($documentchannelid);
+                    $_publishType = $channelManageData->GetPublishType($channelId);
                     if ($_publishType > 0) {
                         switch ($_publishType) {
                             case 1: //自动发布新稿

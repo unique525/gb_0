@@ -135,15 +135,15 @@ class ManageUserManageData extends BaseManageData
     }
 
     /**
-     * 根据adminuserid 取得 adminusername
-     * @param <type> $adminuserid
-     * @return <type>
+     * 根据后台管理员id取得后台管理员帐号
+     * @param int $manageUserId 后台管理员id
+     * @return string 后台管理员帐号
      */
-    public function GetAdminUserName($adminuserid)
+    public function GetManageUserName($manageUserId)
     {
-        $sql = "SELECT adminusername FROM " . self::tableName . " WHERE adminuserid=:adminuserid";
+        $sql = "SELECT ManageUserName FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid", $adminuserid);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);
         return $result;
     }

@@ -10,56 +10,59 @@ class DocumentNewsManageData extends BaseManageData {
 
     /**
      * 取得后台资讯列表数据集
-     * @param int $documentChannelId 频道id
+     * @param int $channelId 频道id
      * @param int $pageBegin 起始记录行
      * @param int $pageSize 页大小
      * @param int $allCount 记录总数
-     * @param type $searchKey 查询字符
-     * @param type $searchTypeBox 查询下拉框的类别
+     * @param string $searchKey 查询字符
+     * @param string $searchTypeBox 查询下拉框的类别
      * @param int $isSelf 是否只显示当前登录的管理员录入的资讯
-     * @param int $adminUserId 当前管理员id
+     * @param int $manageUserId 后台管理员id
      * @return array 资讯列表数据集
      */
-    public function GetListForManage($documentChannelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchTypeBox = "", $isSelf = 0, $adminUserId = 0) {
+    public function GetList($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchTypeBox = "", $isSelf = 0, $manageUserId = 0) {
         $searchSql = "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             if ($searchTypeBox == "source") {
-                $searchSql = " AND (sourcename like :searchkey)";
-                $dataProperty->AddField("searchkey", "%" . $searchKey . "%");
+                $searchSql = " AND (SourceName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else {
-                $searchSql = " AND (documentnewstitle like :searchkey1 or adminusername like :searchkey2 or username like :searchkey3 or documentnewstag like :searchkey4)";
-                $dataProperty->AddField("searchkey1", "%" . $searchKey . "%");
-                $dataProperty->AddField("searchkey2", "%" . $searchKey . "%");
-                $dataProperty->AddField("searchkey3", "%" . $searchKey . "%");
-                $dataProperty->AddField("searchkey4", "%" . $searchKey . "%");
+                $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1 OR ManageUserName LIKE :SearchKey2 OR username LIKE :SearchKey3 OR DocumentNewsTag LIKE :SearchKey4)";
+                $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+                $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+                $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+                $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
             }
         }
-        if ($isSelf === 1 && $adminUserId > 0) {
-            $conditionAdminUserId = ' AND adminuserid=' . intval($adminUserId);
+        if ($isSelf === 1 && $manageUserId > 0) {
+            $conditionManageUserId = ' AND ManageUserId=' . intval($manageUserId);
+        }else{
+            $conditionManageUserId = "";
         }
 
         $sql = "
             SELECT
-            documentnewsid,documentnewstype,documentnewstitle,state,sort,documentchannelid,publishdate,
-            createdate,adminuserid,adminusername,username,documentnewstitlecolor,documentnewstitlebold,titlepic,reclevel,hit
+            DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
+            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,TitlePic,RecLevel,Hit
             FROM
-            " . self::tableName . "
-            WHERE documentchannelid=:documentchannelid AND state<100 " . $searchSql . " " . $conditionAdminUserId . " ORDER BY sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            " . self::TableName_DocumentNews . "
+            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentChannelId);
+        $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql = " and (documentnewstitle like :searchkey1 or adminusername like :searchkey2 or username like :searchkey3)";
-            $dataProperty->AddField("searchkey1", "%" . $searchKey . "%");
-            $dataProperty->AddField("searchkey2", "%" . $searchKey . "%");
-            $dataProperty->AddField("searchkey3", "%" . $searchKey . "%");
+            $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1 OR ManageUserName LIKE :SearchKey2 OR username LIKE :SearchKey3 OR DocumentNewsTag LIKE :SearchKey4)";
+            $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
         }
 
-        $sql = "SELECT count(*) FROM " . self::tableName . " WHERE documentchannelid=:documentchannelid and state<100 " . $conditionAdminUserId . " " . $searchSql;
+        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql. ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
@@ -72,9 +75,7 @@ class DocumentNewsManageData extends BaseManageData {
     public function ModifySort($arrDocumentNewsId) {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
             $strDocumentNewsId = join(',', $arrDocumentNewsId);
-
-            $maxSort = 0;
-            $sql = "SELECT max(Sort) FROM " . self::tableName . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
+            $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
             $maxSort = $this->dbOperator->GetInt($sql, null);
             $arrSql = array();
             for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
@@ -82,7 +83,7 @@ class DocumentNewsManageData extends BaseManageData {
                 if ($newSort < 0) {
                     $newSort = 0;
                 }
-                $sql = "UPDATE " . self::tableName . " SET Sort=$newSort WHERE DocumentNewsId=$arrDocumentNewsId[$i];";
+                $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=$newSort WHERE DocumentNewsId=$arrDocumentNewsId[$i];";
                 $arrSql[] = $sql;
             }
             $this->dbOperator->ExecuteBatch($arrSql, null);
@@ -100,7 +101,7 @@ class DocumentNewsManageData extends BaseManageData {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::tableName . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId;";
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("LockEdit", $lockEdit);
             $dataProperty->AddField("LockEditAdminUserId", $adminUserId);
@@ -119,7 +120,7 @@ class DocumentNewsManageData extends BaseManageData {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::tableName . " SET `State`=:State WHERE DocumentNewsId=:DocumentNewsId;";
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET `State`=:State WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -137,8 +138,8 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $documentNewsId 文档id
      * @return int 所属频道id
      */
-    public function GetDocumentChannelId($documentNewsId) {
-        $sql = "SELECT DocumentChannelId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+    public function GetChannelId($documentNewsId) {
+        $sql = "SELECT ChannelId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -150,8 +151,8 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $documentNewsId 文档id
      * @return int 管理员(发稿人)id
      */
-    public function GetAdminUserId($documentNewsId) {
-        $sql = "SELECT AdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+    public function GetManageUserId($documentNewsId) {
+        $sql = "SELECT ManageUserId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -164,7 +165,7 @@ class DocumentNewsManageData extends BaseManageData {
      * @return int 文档的状态
      */
     public function GetState($documentNewsId){
-        $sql = "SELECT State FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $sql = "SELECT State FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -177,7 +178,7 @@ class DocumentNewsManageData extends BaseManageData {
      * @return int 是否锁定编辑 0:未锁定 1:已锁定
      */
     public function GetLockEdit($documentNewsId){
-        $sql = "SELECT LockEdit FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $sql = "SELECT LockEdit FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -190,7 +191,7 @@ class DocumentNewsManageData extends BaseManageData {
      * @return string 锁定编辑的时间
      */
     public function GetLockEditDate($documentNewsId){
-        $sql = "SELECT LockEditDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $sql = "SELECT LockEditDate FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);
@@ -202,8 +203,8 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $documentNewsId 文档id
      * @return int 锁定编辑的操作管理员id
      */
-    public function GetLockEditAdminUserId($documentNewsId){
-        $sql = "SELECT LockEditAdminUserId FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+    public function GetLockEditManageUserId($documentNewsId){
+        $sql = "SELECT LockEditManageUserId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -216,7 +217,7 @@ class DocumentNewsManageData extends BaseManageData {
      * @return string 文档的发布时间
      */
     public function GetPublishDate($documentNewsId){
-        $sql = "SELECT PublishDate FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $sql = "SELECT PublishDate FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);
@@ -229,7 +230,7 @@ class DocumentNewsManageData extends BaseManageData {
      * @return string 文档的内容
      */
     public function GetDocumentNewsContent($documentNewsId){
-        $sql = "SELECT DocumentNewsContent FROM " . self::tableName . " WHERE DocumentNewsId=:DocumentNewsId;";
+        $sql = "SELECT DocumentNewsContent FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("DocumentNewsId", $documentNewsId);
         $result = $this->dbOperator->GetString($sql, $dataProperty);

@@ -36,7 +36,7 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
             for ($i = 0; $i < count($arrList); $i++) {
                 //$adminLeftUserManageName = $arrList[$i]["AdminLeftUserManageName"];
                 $manageMenuOfUserTagName = $arrList[$i]["ManageMenuOfUserTagName"];
-                $can = $manageUserAuthorityManageData->GetPopedomField($siteId, 0, $manageUserId, $manageMenuOfUserTagName);
+                $can = $manageUserAuthorityManageData->GetFieldValue($siteId, 0, $manageUserId, $manageMenuOfUserTagName);
                 if (!$can) {
                     $arrWaitForDelete[] = $i;
                 }
