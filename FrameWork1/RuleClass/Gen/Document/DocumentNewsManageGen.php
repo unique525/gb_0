@@ -3,7 +3,7 @@
 /**
  * 后台Gen总引导类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen
+ * @package iCMS_FrameWork1_RuleClass_Gen_Document
  * @author zhangchi
  */
 class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
@@ -23,7 +23,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = self::GenModify();
                 break;
             case "remove_to_bin":
-                $result = self::GenRemoveBin();
+                $result = self::GenRemoveToBin();
                 break;
             case "list":
                 $result = self::GenList();
@@ -43,7 +43,219 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 生成资讯管理新增页面
      */
     private function GenCreate() {
-        
+        $tempContent = Template::Load("document/document_news_deal.html","common");
+        $channelId = Control::GetRequest("channel_id", 0);
+        $manageUserId = Control::GetManageUserId();
+        $manageUserName = Control::GetManageUserName();
+        //$userid = Control::GetUserID();
+        //$username = Control::GetUserName();
+        //$tab_index = Control::GetRequest("tab", 0);
+        $pageIndex = Control::GetRequest("p", 1);
+
+        parent::ReplaceFirst($tempContent);
+
+        if ($channelId > 0) {
+
+            $channelManageData = new ChannelManageData();
+            $siteid = $channelManageData->GetSiteId($channelId, false);
+            $documentchannelname = $channelManageData->GetName($channelId);
+
+///////////////判断是否有操作权限///////////////////
+            $adminPopedomData = new AdminPopedomData();
+            $can = $adminPopedomData->CanCreate($siteid, $channelId, $manageUserId);
+            if (!$can) {
+                Control::ShowMessage(Language::Load('document', 26));
+                $jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
+                if ($tab_index > 0) {
+                    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
+                }
+                Control::RunJS($jscode);
+                return "";
+            }
+////////////////////////////////////////////////////
+
+            $documentNewsData = new DocumentNewsData();
+
+            $replace_arr = array(
+                "{documentchannelid}" => $channelId,
+                "{cid}" => $channelId,
+                "{id}" => "",
+                "{siteid}" => $siteid,
+                "{adminuserid}" => $manageUserId,
+                "{adminusername}" => $manageUserName,
+                "{userid}" => $userid,
+                "{username}" => $username,
+                "{pageindex}" => $pageIndex,
+                "{tab}" => $tab_index
+            );
+            $tempContent = strtr($tempContent, $replace_arr);
+
+            //quick content
+            $documentQuickContentData = new DocumentQuickContentData();
+            $listName = "documentquickcontent";
+            $arrList = $documentQuickContentData->GetList();
+            if (count($arrList) > 0) {
+                Template::ReplaceList($tempContent, $arrList, $listName);
+            } else {
+                Template::RemoveCMS($tempContent, $listName);
+            }
+
+
+            //sourcecommon
+            $sourceCommonData = new SourceCommonData();
+            $listName = "sourcecommonlist";
+            $arrList = $sourceCommonData->GetList();
+            if (count($arrList) > 0) {
+                Template::ReplaceList($tempContent, $arrList, $listName);
+            } else {
+                Template::RemoveCMS($tempContent, $listName);
+            }
+
+            parent::ReplaceWhenAdd($tempContent, 'cst_documentnews');
+
+            if (!empty($_POST)) {
+                //titlepic
+                $fileElementName = "titlepic_upload";
+                $filetype = 1; //docnews
+                $commongen = new CommonGen();
+                $titlePicPath = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid);
+                $titlePicPath = str_ireplace("..", "", $titlePicPath);
+
+                if (!empty($titlePicPath)) {
+                    sleep(1);
+                }
+//有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
+                if (strlen($titlePicPath) > 5) {
+                    $siteConfigData = new SiteConfigData($siteid);
+                    $documentNewsTitleMobileWidth = $siteConfigData->DocumentNewsTitleMobileWidth;
+                    $documentNewsTitlePadWidth = $siteConfigData->DocumentNewsTitlePadWidth;
+
+                    $toHeight = 0;      //缩略后的高度
+                    $creatUploadFileTableId = 0;
+
+                    if ($documentNewsTitleMobileWidth > 0) {
+                        $toWidth = $documentNewsTitleMobileWidth;      //缩略后的宽度
+                        $thumbFileName = "mobile";
+                        $creatUploadFileTableType = 23; //新闻题图,移动终端使用
+                        $creatDocumentNewsTitleMobile = self::CreatDocumentNewsTitlePic($titlePicPath, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFileMobileId);
+                        sleep(1);
+                    } else {
+                        $creatDocumentNewsTitleMobile = "";
+                        $creatUploadFileMobileId = 0;
+                    }
+
+                    if ($documentNewsTitlePadWidth > 0) {
+                        $toWidth = $documentNewsTitlePadWidth;      //缩略后的宽度
+                        $thumbFileName = "pad";
+                        $creatUploadFileTableType = 24; //新闻题图,移动终端使用
+                        $creatDocumentNewsTitlePad = self::CreatDocumentNewsTitlePic($titlePicPath, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFilePadId);
+                        sleep(1);
+                    } else {
+                        $creatDocumentNewsTitlePad = "";
+                        $creatUploadFilePadId = 0;
+                    }
+                } else {
+                    $creatDocumentNewsTitleMobile = "";
+                    $creatDocumentNewsTitlePad = "";
+                    $creatUploadFileMobileId = 0;
+                    $creatUploadFilePadId = 0;
+                }
+                $fileElementName = "titlepic_upload2";
+                $filetype = 29; //docnews 题图2
+                $commongen = new CommonGen();
+                $titlePicPath2 = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid2);
+                $titlePicPath2 = str_ireplace("..", "", $titlePicPath2);
+
+                if (!empty($titlePicPath2)) {
+                    sleep(1);
+                }
+                $fileElementName = "titlepic_upload3";
+                $filetype = 30; //docnews 题图3
+                $commongen = new CommonGen();
+                $titlePicPath3 = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid3);
+                $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
+                $newid = $documentNewsData->Create($titlePicPath, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
+
+
+//加入操作log
+                $operatecontent = "DocumentNews：New id ：" . $newid . "；userid：" . $manageUserId . "；username；" . $manageUserName . "；result：" . $newid . "；title：" . Control::PostRequest("f_documentnewstitle", "");
+                $adminuserlogData = new AdminUserLogData();
+                $adminuserlogData->Insert($operatecontent);
+
+
+
+                if ($newid > 0) {
+//新增文档时修改排序号到当前频道的最大排序
+                    $documentNewsData->UpdateSortWhenAdd($channelId, $newid);
+//修改上传文件的tableid;
+                    $uploadfiles = Control::PostRequest("f_uploadfiles", "");
+
+                    $uploadfile_arr = split(",", $uploadfiles);
+
+                    $uploadFileData = new UploadFileData();
+
+//修改题图的FILEID
+                    $uploadFileData->ModifyTableID($uploadfileid, $newid);
+
+                    for ($i = 0; $i < count($uploadfile_arr); $i++) {
+                        if (intval($uploadfile_arr[$i]) > 0) {
+                            $uploadFileData->ModifyTableID(intval($uploadfile_arr[$i]), $newid);
+                        }
+                    }
+//修改DocumentNewsTitleMobile 在UploadFile表中的tableid
+                    if ($creatUploadFileMobileId > 0) {
+                        $uploadFileData->ModifyTableID(intval($creatUploadFileMobileId), $newid);
+                    }
+//修改DocumentNewsTitlePad 在UploadFile表中的tableid
+                    if ($creatUploadFilePadId > 0) {
+                        $uploadFileData->ModifyTableID(intval($creatUploadFilePadId), $newid);
+                    }
+
+                    //修改题图的FILEID 题图2
+                    $uploadFileData->ModifyTableID($uploadfileid2, $newid);
+
+                    //修改题图的FILEID 题图3
+                    $uploadFileData->ModifyTableID($uploadfileid3, $newid);
+
+///////////////发布模式处理
+                    $_publishType = $channelManageData->GetPublishType($channelId);
+                    if ($_publishType > 0) {
+                        switch ($_publishType) {
+                            case 1: //自动发布新稿
+//修改文档状态为终审
+                                $state = 14;
+                                $documentNewsData->UpdateState($newid, $state);
+                                $execute_ftp = 1;
+                                $pub_channel = 1;
+                                $ftpQueueData = new FtpQueueData();
+                                self::Publish($newid, $ftpQueueData, $execute_ftp, $pub_channel);
+                                break;
+                        }
+                    }
+///////////////////////////
+                    Control::ShowMessage(Language::Load('document', 1));
+                    $jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
+
+                    if ($tab_index > 0) {
+                        $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
+                    }
+                    Control::RunJS($jscode);
+                } else {
+                    Control::ShowMessage(Language::Load('document', 2));
+                }
+            }
+//去掉s开头的标记 {s_xxx_xxx}
+            $patterns = "/\{s_(.*?)\}/";
+            $tempContent = preg_replace($patterns, "", $tempContent);
+//去掉c开头的标记 {c_xxx}
+            $patterns = "/\{c_(.*?)\}/";
+            $tempContent = preg_replace($patterns, "", $tempContent);
+//去掉r开头的标记 {r_xxx_xxx}
+            $patterns = "/\{r_(.*?)\}/";
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
     }
 
     /**
@@ -299,11 +511,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
+    private function GenRemoveToBin(){
+
+    }
+
+
     /*
      * 生成资讯管理列表页面
      */
 
-    private function GenListForManage() {
+    private function GenList() {
         $documentChannelId = Control::GetRequest("cid", 0);
         if ($documentChannelId <= 0) {
             return "";

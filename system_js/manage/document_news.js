@@ -22,8 +22,8 @@ $(function() {
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=documentnews&m=modify&documentnewsid=' + docid + '&p=' + pageIndex + '&cid=' + parent.G_SelectedDocumentChannelId;
-        parent.G_TabTitle = parent.G_SelectedDocumentChannelName + '-编辑文档';
+        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&documentnewsid=' + docid + '&p=' + pageIndex + '&cid=' + parent.G_SelectedChannelId;
+        parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
         parent.addTab();
     });
 

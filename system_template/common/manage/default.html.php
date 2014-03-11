@@ -92,8 +92,6 @@
                     </ul>
                     <div id="tabs-1">
                         <div style="padding:20px;">请从右边的导航树上选择您想要操作的频道（栏目）</div>
-                        <div id="gridlist" style=" overflow: auto;">
-                        </div>
                     </div>
                 </div>
 

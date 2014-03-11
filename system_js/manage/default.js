@@ -9,8 +9,8 @@ $(function () {
 
     var divMainContent = jQuery('#div_main_content');
     if (divMainContent.length > 0) {
-        $("#div_main_content").css("height", $(window).height() - 40);
-        $("#div_main_content").splitter({
+        divMainContent.css("height", $(window).height() - 40);
+        divMainContent.splitter({
             type: "v",
             minLeft: 180,
             sizeLeft: 180,
@@ -50,14 +50,14 @@ $(function () {
     //site name
     //$(".site name").html($("#sel_site").find("option:selected").text());
     //$(".site name").attr("title",$("#sel_site").val());
-
-    if ($("#div_show_site_list").length > 0) {
-        $("#div_show_site_list").append($("#div_select_site"));
+    var divShowSiteList = $("#div_show_site_list");
+    if (divShowSiteList.length > 0) {
+        divShowSiteList.append(divSelectSite);
     }
 
-    var objAccord = jQuery('#div_left_accordion');
+    var objAccord = $('#div_left_accordion');
     if (objAccord.length > 0) {
-        $("#div_left_accordion").accordion({
+        objAccord.accordion({
             header: 'h3',
             heightStyle: "content"
         });
@@ -73,8 +73,7 @@ $(function () {
         $.post("/default.php?secu=manage&mod=set_template&tn=" + templateName, {
             resultbox: $(this).html()
         }, function (xml) {
-            var nowUrl = window.location.href;
-            window.location.href = nowUrl;
+            window.location.href = window.location.href;
             if (parseInt(xml) > 0) {
 
             } else if (parseInt(xml) === -2) {

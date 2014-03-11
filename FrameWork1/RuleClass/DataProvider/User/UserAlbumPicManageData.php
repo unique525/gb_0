@@ -10,7 +10,7 @@ class UserAlbumPicManageData extends BaseManageData
 {
 
     /**
-     * 创建新照片
+     * 创建新图片
      * @param int $userAlbumId 相册Id
      * @param string $userAlbumPicTitle 图片标题
      * @param string $userAlbumPicUrl 原图片路径
@@ -18,7 +18,7 @@ class UserAlbumPicManageData extends BaseManageData
      * @param string $userAlbumPicIntro 图片简介
      * @param string $userAlbumPicContent 图片介绍
      * @param int $state 状态
-     * @return int 新添加的照片Id
+     * @return int 新添加的图片Id
      */
     public function Create($userAlbumId, $userAlbumPicTitle, $userAlbumPicUrl, $userAlbumPicCompressUrl, $userAlbumPicIntro = "", $userAlbumPicContent = "", $state = 0)
     {
@@ -58,7 +58,7 @@ class UserAlbumPicManageData extends BaseManageData
     }
 
     /**
-     * 根据图片Id来查找照片
+     * 根据图片Id来查找图片
      * @param int $userAlbumPicId 图片Id
      * @return array 一张图片的所有信息集合
      */
@@ -229,7 +229,7 @@ class UserAlbumPicManageData extends BaseManageData
      * @param int $userAlbumPicId 图片Id
      * @param $userAlbumPicUrl
      * @param $userAlbumPicThumbnailUrl
-     * @return int|null
+     * @return int 影响行数
      */
     public function ModifyUserAlbumPicUrl($userAlbumPicId, $userAlbumPicUrl, $userAlbumPicThumbnailUrl) {
         if($userAlbumPicId > 0){
@@ -239,6 +239,23 @@ class UserAlbumPicManageData extends BaseManageData
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $dataProperty->AddField("UserAlbumPicUrl", $userAlbumPicUrl);
             $dataProperty->AddField("UserAlbumPicThumbnailUrl", $userAlbumPicThumbnailUrl);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 删除图片
+     * @param int $userAlbumPicId 图片Id
+     * @return int 影响行数
+     */
+    public function DeletePic($userAlbumPicId) {
+        if($userAlbumPicId > 0){
+            $sql = "DELETE FROM " . self::TableName_UserAlbumPic . " WHERE UserAlbumPicId = :UserAlbumPicId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
         }else{
