@@ -175,6 +175,15 @@ class BaseData
      */
     const TableId_CustomFormRecord = "CustomFormRecordId";
 
+    /**
+     * 投票调查 数据表名
+     */
+    const TableName_Vote = "cst_vote";
+    /**
+     * 投票调查 数据表自增字段名
+     */
+    const TableId_Vote = "VoteId";
+
 
 
     /**
