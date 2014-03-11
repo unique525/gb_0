@@ -14,9 +14,8 @@ $().ready(function() {
 });
 
 function addTab() {
-    var url = "";
     var tabHeight = $(window).height() - 120;
-    url = G_TabUrl + '&tab=' + G_TabCounter;
+    var url = G_TabUrl + '&tab=' + G_TabCounter;
     if (G_TabTitle.length <= 0) {
         G_TabTitle = G_SelectedChannelName + "[" + G_SelectedChannelId + "]";
     }
