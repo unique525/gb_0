@@ -89,16 +89,12 @@ function onBodyMouseDown(event) {
 function _ChannelClick() {
 
     if (G_SelectedChannelId > 0) {
-
+        var aw = $(window).height() - 108 - 35;
+        var size = aw / 28;
+        var ps = parseInt(size) - 1;
         if (G_SelectedChannelType === 1) { //新闻类频道
-
-            var aw = $(window).height() - 108 - 35;
-            var size = aw / 28;
-            var ps = parseInt(size) - 1;
-
-            G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&ps=' + ps + '&cid=' + G_SelectedChannelId;
+            G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&ps=' + ps + '&channel_id=' + G_SelectedChannelId;
             addTab();
-
         } else if (G_SelectedChannelType === 2) { //咨询回复类频道
 
         } else if (G_SelectedChannelType === 3) { //图片轮换类频道 

@@ -11,7 +11,7 @@
         <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
         <script type="text/javascript" src="/system_js/jqueryui/jquery-ui.min.js"></script>
 
-        <script type="text/javascript" src="/system_js/manage/documentnews.js"></script>
+        <script type="text/javascript" src="/system_js/manage/document_news.js"></script>
         
 
         <style type="text/css">

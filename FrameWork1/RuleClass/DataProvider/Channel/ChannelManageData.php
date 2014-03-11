@@ -7,7 +7,6 @@
  */
 class ChannelManageData extends BaseManageData
 {
-
     /**
      * 新增频道
      * @param array $httpPostData $_POST数组
@@ -107,6 +106,26 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
+     * 取得频道名称
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 频道名称
+     */
+    public function GetChannelName($channelId, $withCache)
+    {
+        $result = "";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_channel_name.cache_' . $channelId . '';
+            $sql = "SELECT ChannelName FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得频道所属站点id
      * @param int $channelId 频道id
      * @param boolean $withCache 是否从缓冲中取
@@ -116,8 +135,8 @@ class ChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
-            $cacheFile = 'channel_get_siteid.cache_' . $channelId . '.php';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_site_id.cache_' . $channelId . '';
             $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
@@ -136,8 +155,8 @@ class ChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
-            $cacheFile = 'channel_get_rank.cache_' . $channelId . '.php';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_rank.cache_' . $channelId . '';
             $sql = "SELECT Rank FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
@@ -156,8 +175,8 @@ class ChannelManageData extends BaseManageData
     {
         $result = -1;
         if ($channelId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channeldata';
-            $cacheFile = 'channel_get_channeltype.cache_' . $channelId . '.php';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_channel_type.cache_' . $channelId . '';
             $sql = "SELECT ChannelType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);

@@ -36,7 +36,7 @@ class Control {
      * Javascript方法，运行指定的JS代码
      * @param string $jsCode 要运行的Javascript代码串
      */
-    public static function RunJS($jsCode) {
+    public static function RunJavascript($jsCode) {
         echo '<script type="text/javascript">' . $jsCode . '</script>';
     }
 

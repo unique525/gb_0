@@ -18,7 +18,7 @@ function addTab() {
     var tabHeight = $(window).height() - 120;
     url = G_TabUrl + '&tab=' + G_TabCounter;
     if (G_TabTitle.length <= 0) {
-        G_TabTitle = G_SelectedDocumentChannelName + "[" + G_SelectedDocumentChannelId + "]";
+        G_TabTitle = G_SelectedChannelName + "[" + G_SelectedChannelId + "]";
     }
     var tabContent = '<iframe id="iframeNewTab" frameborder="0" marginwidth="0" marginheight="0" width="100%" height="' + tabHeight + 'px" src="' + url + '"></iframe>';
     var tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
