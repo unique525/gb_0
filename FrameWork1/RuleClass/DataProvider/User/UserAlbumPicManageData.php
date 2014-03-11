@@ -225,20 +225,24 @@ class UserAlbumPicManageData extends BaseManageData
     }
 
     /**
-     * @param $userAlbumPicId
-     * @param $picPath
-     * @param $picThumbPath
-     * @return mixed
+     * 修改图片的路径
+     * @param int $userAlbumPicId 图片Id
+     * @param $userAlbumPicUrl
+     * @param $userAlbumPicThumbnailUrl
+     * @return int|null
      */
-    public function ModifyUserAlbumPicUrl($userAlbumPicId, $picPath, $picThumbPath) {
-        $dataProperty = new DataProperty();
-        $sql = "update " . self::tablename . " set useralbumpicurl = :useralbumpicurl,
-            useralbumpicthumbnailurl = :useralbumpicthumbnailurl where useralbumpicid = :useralbumpicid";
-        $dataProperty->AddField("useralbumpicid", $userAlbumPicId);
-        $dataProperty->AddField("useralbumpicurl", $picPath);
-        $dataProperty->AddField("useralbumpicthumbnailurl", $picThumbPath);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
-        return $result;
+    public function ModifyUserAlbumPicUrl($userAlbumPicId, $userAlbumPicUrl, $userAlbumPicThumbnailUrl) {
+        if($userAlbumPicId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserAlbumPic . " SET UserAlbumPicUrl = :UserAlbumPicUrl,
+                UserAlbumPicThumbnailUrl = :UserAlbumPicThumbnailUrl WHERE UserAlbumPicId = :UserAlbumPicId";
+            $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
+            $dataProperty->AddField("UserAlbumPicUrl", $userAlbumPicUrl);
+            $dataProperty->AddField("UserAlbumPicThumbnailUrl", $userAlbumPicThumbnailUrl);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
     }
 }
