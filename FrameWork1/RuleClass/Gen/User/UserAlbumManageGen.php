@@ -9,7 +9,7 @@
 class UserAlbumManageGen {
 
     /**
-     * 引导方法12311111
+     * 引导方法111
      * @return string 返回执行结果
      */
     public function Gen() {
