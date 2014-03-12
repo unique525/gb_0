@@ -128,7 +128,7 @@ class ChannelManageData extends BaseManageData
     /**
      * 取得频道所属站点id
      * @param int $channelId 频道id
-     * @param boolean $withCache 是否从缓冲中取
+     * @param bool $withCache 是否从缓冲中取
      * @return int 站点id
      */
     public function GetSiteId($channelId, $withCache)
@@ -148,7 +148,7 @@ class ChannelManageData extends BaseManageData
     /**
      * 取得频道级别
      * @param int $channelId 频道id
-     * @param boolean $withCache 是否从缓冲中取
+     * @param bool $withCache 是否从缓冲中取
      * @return int 频道级别
      */
     public function GetRank($channelId, $withCache)
@@ -168,7 +168,7 @@ class ChannelManageData extends BaseManageData
     /**
      * 取得频道类型
      * @param int $channelId 频道id
-     * @param boolean $withCache 是否从缓冲中取
+     * @param bool $withCache 是否从缓冲中取
      * @return int 频道类型
      */
     public function GetChannelType($channelId, $withCache)
