@@ -51,7 +51,7 @@ class VoteManageData extends BaseManageData {
     }
 
 //    /**
-//     * 获取投票调查列表
+//     * 获取投票调查列表11
 //     * @param int $state 状态
 //     * @return array 投票调查列表数组
 //     */
