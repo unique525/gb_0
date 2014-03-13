@@ -58,18 +58,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
             $channelManageData = new ChannelManageData();
             $siteid = $channelManageData->GetSiteId($channelId, false);
-            $documentchannelname = $channelManageData->GetName($channelId);
+            $channelName = $channelManageData->GetChannelName($channelId, false);
 
 ///////////////判断是否有操作权限///////////////////
-            $adminPopedomData = new AdminPopedomData();
-            $can = $adminPopedomData->CanCreate($siteid, $channelId, $manageUserId);
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthorityManageData->CanCreate($siteid, $channelId, $manageUserId);
             if (!$can) {
                 Control::ShowMessage(Language::Load('document', 26));
-                $jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                if ($tab_index > 0) {
-                    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                }
-                Control::RunJS($jscode);
+                //删除标签页
+
                 return "";
             }
 ////////////////////////////////////////////////////
@@ -77,16 +74,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $documentNewsData = new DocumentNewsData();
 
             $replace_arr = array(
-                "{documentchannelid}" => $channelId,
-                "{cid}" => $channelId,
-                "{id}" => "",
-                "{siteid}" => $siteid,
-                "{adminuserid}" => $manageUserId,
-                "{adminusername}" => $manageUserName,
-                "{userid}" => $userid,
-                "{username}" => $username,
-                "{pageindex}" => $pageIndex,
-                "{tab}" => $tab_index
+                "{channel_id}" => $channelId,
+                "{channel_name}" => $channelName,
+                "{document_news_id}" => "",
+                "{site_id}" => $siteid,
+                "{manage_user_id}" => $manageUserId,
+                "{manage_user_name}" => $manageUserName,
+                "{user_id}" => $userid,
+                "{user_name}" => $username,
+                "{page_index}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replace_arr);
 
