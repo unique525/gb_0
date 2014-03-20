@@ -308,8 +308,6 @@ class Template {
                 self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'activity_list') {
                 self::FormatActivityColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'activity_user_list') {
-                self::FormatActivityUserListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'user_album_list') {
                 self::FormatUserAlbumListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'comment_list') {
@@ -560,27 +558,31 @@ class Template {
 
     /**
      * 为product 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatProductColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype = "item") {
-        $pos = stripos(strtolower($columnname), "saleprice");
+    private static function FormatProductColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+        $pos = stripos(strtolower($columnName), "sale_price");
         if ($pos !== false) {
-            if (is_numeric($columnvalue) && $columnvalue > 0)
-                $list = str_ireplace("{f_saleprice_show}", number_format($columnvalue / 10000, 2, '.', ''), $list);
+            if (is_numeric($columnValue) && $columnValue > 0)
+                $tempContent = str_ireplace("{f_sale_price_show}", number_format($columnValue / 10000, 2, '.', ''), $tempContent);
             else
-                $list = str_ireplace("{f_saleprice_show}", "", $list);
+                $tempContent = str_ireplace("{f_sale_price_show}", "", $tempContent);
         }
 
-        if (strtolower($columnname) === "productcontent") {
-            $columnvalue = str_ireplace("../upload/product", "/upload/product", $columnvalue);
+        if (strtolower($columnName) === "product_content") {
+            $columnValue = str_ireplace("../upload/product", "/upload/product", $columnValue);
         }
 
-        $columnvalue = str_ireplace("'", "&#039;", $columnvalue);
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
+        $columnValue = str_ireplace("'", "&#039;", $columnValue);
+        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
     public static function FormatUserAlbumListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
