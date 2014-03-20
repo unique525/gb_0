@@ -6,16 +6,18 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Vote
  * @author hy
  */
-class VoteManageData extends BaseManageData {
+class VoteManageData extends BaseManageData
+{
 
     /**
      * 新增投票调查
      * @param array $httpPostData $_post数组
      * @return int 投票调查Id
      */
-    public function Create($httpPostData) {
+    public function Create($httpPostData)
+    {
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql($httpPostData,self::TableName_Vote, $dataProperty);
+        $sql = parent::GetInsertSql($httpPostData, self::TableName_Vote, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
@@ -25,9 +27,12 @@ class VoteManageData extends BaseManageData {
      * @param int $voteId 投票调查Id
      * @return int 执行结果
      */
-    public function RemoveToBin($voteId) {
+    public function RemoveToBin($voteId)
+    {
         $result = -1;
-        if($voteId<0) return $result;
+        if ($voteId < 0) {
+            return $result;
+        }
         $sql = "UPDATE " . self::TableName_Vote . " SET State=100 WHERE VoteId=:VoteId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
@@ -41,9 +46,12 @@ class VoteManageData extends BaseManageData {
      * @param int $voteId 投票调查Id
      * @return int 执行结果
      */
-    public function Modify($httpPostData,$voteId) {
+    public function Modify($httpPostData, $voteId)
+    {
         $result = -1;
-        if($voteId<0) return $result;
+        if ($voteId < 0) {
+            return $result;
+        }
         $dataProperty = new DataProperty();
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_Vote, self::TableId_Vote, $voteId, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -70,12 +78,15 @@ class VoteManageData extends BaseManageData {
 
     /**
      * 一个投票调查的信息
-     * @param int $voteId  投票调查Id
+     * @param int $voteId 投票调查Id
      * @return array 投票调查一维数组
      */
-    public function GetOne($voteId) {
+    public function GetOne($voteId)
+    {
         $result = null;
-        if($voteId<0) return $result;
+        if ($voteId < 0) {
+            return $result;
+        }
         $sql = "SELECT VoteId,SiteId,ChannelId,VoteTitle,State,CreateDate,BeginDate,EndDate,Sort,RecordCount,AddCount,IsCheckCode,IpMaxCount,UserMaxCount,UserScoreNum,TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
@@ -88,14 +99,17 @@ class VoteManageData extends BaseManageData {
      * @param int $siteId 站点Id
      * @param int $channelId 频道Id
      * @param int $pageBegin 起始页码
-     * @param int $pageSize  每页记录数
-     * @param int $allCount  记录总数
+     * @param int $pageSize 每页记录数
+     * @param int $allCount 记录总数
      * @param string $searchKey 查询字符
      * @return array  投票调查列表数组
      */
-    public function GetList($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
+    public function GetList($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    {
         $result = null;
-        if($siteId<0||$channelId<0||$pageBegin<0||$pageSize<0) return $result;
+        if ($siteId < 0 || $channelId < 0 || $pageBegin < 0 || $pageSize < 0) {
+            return $result;
+        }
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
@@ -111,7 +125,7 @@ class VoteManageData extends BaseManageData {
 
         $sql = "SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId FROM " . self::TableName_Vote . " " . $searchSql . "  ORDER BY sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT count(*) FROM " . self::TableName_Vote . $searchSql. ";";
+        $sql = "SELECT count(*) FROM " . self::TableName_Vote . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
@@ -122,9 +136,12 @@ class VoteManageData extends BaseManageData {
      * @param int $addCount 加票数
      * @return int 执行结果
      */
-    public function ModifyAddCount($voteId, $addCount) {
+    public function ModifyAddCount($voteId, $addCount)
+    {
         $result = -1;
-        if($voteId<0) return $result;
+        if ($voteId < 0) {
+            return $result;
+        }
         $sql = "UPDATE " . self::TableName_Vote . " SET AddCount=:AddCount WHERE VoteId=:VoteId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("AddCount", $addCount);
