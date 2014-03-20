@@ -103,6 +103,14 @@ class BaseData
      * 新闻资讯 数据表自增字段名
      */
     const TableId_DocumentNews = "DocumentNewsId";
+    /**
+     * 快捷内容录入 数据表名
+     */
+    const TableName_DocumentQuickContent = "cst_document_quick_content";
+    /**
+     * 快捷内容录入 数据表自增字段名
+     */
+    const TableId_DocumentQuickContent = "DocumentQuickContentId";
     const TableName_Forum = "cst_forum";
     const TableId_Forum = "ForumId";
     const TableName_ForumTopic = "cst_forum_topic";

@@ -23,7 +23,7 @@ class BaseGen {
                 foreach ($arr2 as $key => $val) {
                     $docContent = "<$keyName$val</$keyName>";
                     //模板ID
-                    $channelTemplateId = Template::GetDocParamValue($docContent, "id", $keyName);
+                    $channelTemplateId = Template::GetParamValue($docContent, "id", $keyName);
                     $channelTemplateData = new ChannelTemplateData();
                     $preTempContent = $channelTemplateData->GetChannelTemplateContent($channelTemplateId);
                     $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $keyName);
@@ -39,7 +39,7 @@ class BaseGen {
                 foreach ($arr2 as $key => $val) {
                     $docContent = "<$keyName$val</$keyName>";
                     //模板ID
-                    $siteContentId = Template::GetDocParamValue($docContent, "id", $keyName);
+                    $siteContentId = Template::GetParamValue($docContent, "id", $keyName);
                     $siteContentData = new SiteContentData();
                     $siteContent = $siteContentData->GetSiteContentValue($siteContentId);
                     $tempContent = Template::ReplaceSiteContent($tempContent, $siteContentId, $siteContent);
@@ -55,7 +55,7 @@ class BaseGen {
                 $arr2 = $arr[1];
                 foreach ($arr2 as $key => $val) {
                     $docContent = "<$keyName$val</$keyName>";
-                    $siteAdId = Template::GetDocParamValue($docContent, "id", $keyName);
+                    $siteAdId = Template::GetParamValue($docContent, "id", $keyName);
 
                     $adgen = new AdGen();
                     $pre_content = $adgen->GenFormatAd($siteAdId);
@@ -76,30 +76,30 @@ class BaseGen {
                     foreach ($arr2 as $val) {
                         $docContent = '<icmsslider' . $val . '</icmsslider>';
 
-                        $docchannelid = Template::GetDocParamValue($docContent, "id", "icmsslider");
-                        $top = Template::GetDocParamValue($docContent, "top", "icmsslider");
+                        $docchannelid = Template::GetParamValue($docContent, "id", "icmsslider");
+                        $top = Template::GetParamValue($docContent, "top", "icmsslider");
 
-                        $pattern = Template::GetDocParamValue($docContent, "pattern", "icmsslider");
-                        $time = Template::GetDocParamValue($docContent, "time", "icmsslider");
-                        $trigger = Template::GetDocParamValue($docContent, "trigger", "icmsslider");
-                        $width = Template::GetDocParamValue($docContent, "width", "icmsslider");
-                        $height = Template::GetDocParamValue($docContent, "height", "icmsslider");
-                        $txtHeight = Template::GetDocParamValue($docContent, "txtHeight", "icmsslider");
-                        $auto = Template::GetDocParamValue($docContent, "auto", "icmsslider");
-                        $wrap = Template::GetDocParamValue($docContent, "wrap", "icmsslider");
-                        $index = Template::GetDocParamValue($docContent, "index", "icmsslider");
-                        $delay = Template::GetDocParamValue($docContent, "delay", "icmsslider");
-                        $duration = Template::GetDocParamValue($docContent, "duration", "icmsslider");
-                        $direction = Template::GetDocParamValue($docContent, "direction", "icmsslider");
-                        $easing = Template::GetDocParamValue($docContent, "easing", "icmsslider");
-                        $less = Template::GetDocParamValue($docContent, "less", "icmsslider");
-                        $chip = Template::GetDocParamValue($docContent, "chip", "icmsslider");
-                        $type = Template::GetDocParamValue($docContent, "type", "icmsslider");
-                        $pad = Template::GetDocParamValue($docContent, "pad", "icmsslider");
-                        $txtWidth = Template::GetDocParamValue($docContent, "txtWidth", "icmsslider");
-                        $gray = Template::GetDocParamValue($docContent, "gray", "icmsslider");
-                        $direct = Template::GetDocParamValue($docContent, "direct", "icmsslider");
-                        $turn = Template::GetDocParamValue($docContent, "turn", "icmsslider");
+                        $pattern = Template::GetParamValue($docContent, "pattern", "icmsslider");
+                        $time = Template::GetParamValue($docContent, "time", "icmsslider");
+                        $trigger = Template::GetParamValue($docContent, "trigger", "icmsslider");
+                        $width = Template::GetParamValue($docContent, "width", "icmsslider");
+                        $height = Template::GetParamValue($docContent, "height", "icmsslider");
+                        $txtHeight = Template::GetParamValue($docContent, "txtHeight", "icmsslider");
+                        $auto = Template::GetParamValue($docContent, "auto", "icmsslider");
+                        $wrap = Template::GetParamValue($docContent, "wrap", "icmsslider");
+                        $index = Template::GetParamValue($docContent, "index", "icmsslider");
+                        $delay = Template::GetParamValue($docContent, "delay", "icmsslider");
+                        $duration = Template::GetParamValue($docContent, "duration", "icmsslider");
+                        $direction = Template::GetParamValue($docContent, "direction", "icmsslider");
+                        $easing = Template::GetParamValue($docContent, "easing", "icmsslider");
+                        $less = Template::GetParamValue($docContent, "less", "icmsslider");
+                        $chip = Template::GetParamValue($docContent, "chip", "icmsslider");
+                        $type = Template::GetParamValue($docContent, "type", "icmsslider");
+                        $pad = Template::GetParamValue($docContent, "pad", "icmsslider");
+                        $txtWidth = Template::GetParamValue($docContent, "txtWidth", "icmsslider");
+                        $gray = Template::GetParamValue($docContent, "gray", "icmsslider");
+                        $direct = Template::GetParamValue($docContent, "direct", "icmsslider");
+                        $turn = Template::GetParamValue($docContent, "turn", "icmsslider");
 
                         $arr_par = array(
                             "{pattern}" => $pattern,
@@ -147,7 +147,7 @@ class BaseGen {
                     foreach ($arr2 as $val) {
                         $docContent = '<documentchannelname' . $val . '</documentchannelname>';
                         $keyName = "documentchannelname";
-                        $channelId = Template::GetDocParamValue($docContent, "id", $keyName);
+                        $channelId = Template::GetParamValue($docContent, "id", $keyName);
                         $documentChannelName = $documentChannelData->GetName($channelId);
                         $tempContent = Template::ReplaceCMS($tempContent, $channelId, $documentChannelName, $keyName);
                     }

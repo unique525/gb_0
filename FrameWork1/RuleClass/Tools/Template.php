@@ -106,9 +106,9 @@ class Template {
                             $itemRowTitleCount = self::GetParamIntValue($doc, $tagName, "title");
                         }
 
-                        $itemRowIntroTitleCount = self::GetParamIntValue($doc, $tagName, "item_row_intro_count");
-                        if ($itemRowIntroTitleCount <= 0) {
-                            $itemRowIntroTitleCount = self::GetParamIntValue($doc, $tagName, "intro");
+                        $itemRowIntroCount = self::GetParamIntValue($doc, $tagName, "item_row_intro_count");
+                        if ($itemRowIntroCount <= 0) {
+                            $itemRowIntroCount = self::GetParamIntValue($doc, $tagName, "intro");
                         }
 
                         $headerTempContent = self::GetNodeValue($doc, "header", $tagName);
@@ -176,9 +176,9 @@ class Template {
                             $itemRowTitleCount = intval($arrayXml[0]['attributes']['TITLE']);
                         }
 
-                        $itemRowIntroTitleCount = intval($arrayXml[0]['attributes']['ITEM_ROW_INTRO_TITLE_COUNT']);
-                        if ($itemRowIntroTitleCount <= 0) {
-                            $itemRowIntroTitleCount = intval($arrayXml[0]['attributes']['INTRO']);
+                        $itemRowIntroCount = intval($arrayXml[0]['attributes']['ITEM_ROW_INTRO_COUNT']);
+                        if ($itemRowIntroCount <= 0) {
+                            $itemRowIntroCount = intval($arrayXml[0]['attributes']['INTRO']);
                         }
 
                         $headerTempContent = self::GetNodeValueForSax($arrayXml, "HEADER");
@@ -204,20 +204,17 @@ class Template {
                         $footerSplitterTempContent = self::GetNodeValueForSax($arrayXml, "FOOTER_SPLITTER");
                     }
                     ///////////////////////////////////////////////////////////////////
-
                     $sb = "";
-
 
                     //处理头段
                     for ($i = 0; $i < $headerRowCount; $i++) {
                         $columns = $arrList[$i];
                         $list = $headerTempContent;
-                        $itemtype = "header";
-                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
-                        $list = str_ireplace("{c_allcount}", count($arrList), $list);
+                        $itemType = "header";
+                        $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                        $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
                     }
-
 
                     //附加分割线
                     $sb = $sb . $headerSplitterTempContent;
@@ -226,12 +223,9 @@ class Template {
                         $itemSplitterCount = 0;
                     }
 
-                    //echo $alteritemTempContent;
-
                     for ($i = 0 + $headerRowCount; $i < count($arrList) - $footerRowCount; $i++) {
                         //如果有交替行
                         if (strlen($alterItemTempContent) > 0) {
-
                             if ($i % 2 === 1) {
                                 $list = $alterItemTempContent;
                             } else {
@@ -242,9 +236,9 @@ class Template {
                         }
 
                         $columns = $arrList[$i];
-                        $itemtype = "item";
-                        $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
-                        $list = str_ireplace("{c_allcount}", count($arrList), $list);
+                        $itemType = "item";
+                        $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                        $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
                         //每隔一定主段条数附加分割线，最底部分割线不附加
                         if ($itemSplitterCount > 0) {
@@ -263,8 +257,8 @@ class Template {
                         for ($i = count($arrList) - $footerRowCount; $i < count($arrList); $i++) {
                             $columns = $arrList[$i];
                             $list = $footerTempContent;
-                            $itemtype = "footer";
-                            $list = self::ReplaceListFor($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroTitleCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemtype);
+                            $itemType = "footer";
+                            $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
                             $sb = $sb . $list;
                         }
                     }
@@ -272,600 +266,296 @@ class Template {
                     $result = $sb;
                     $tempContent = str_replace($listTempContent, $result, $tempContent);
                 }
-            } else {
-                $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
-                $endTagString = '</' . $tagName . '>';
-                $temp1 = substr($tempContent, 0, strpos($tempContent, $beginTagString));
-                $x = strpos($tempContent, $endTagString, strpos($tempContent, $beginTagString));
-                $temp2 = substr($tempContent, $x + 8);
-                $tempContent = $temp1 . $temp2;
-
+            } else { //替换模板内容为空
+                self::ReplaceCustomTag($tempContent, $tagId, "", $tagName);
             }
         }
     }
 
     /**
-     * 循环FOR的方法
-     * @param type $type
-     * @param type $id
-     * @param type $itemRowShortCount
-     * @param type $itemRowIntroShortCount
-     * @param type $columns
-     * @param type $list
-     * @return type 
+     * 子方法，替换数据集的每一行内容
+     * @param int $i 行号
+     * @param string $tagType 标签的type属性
+     * @param string $tagId 标签的id
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param array $columns 字段数组
+     * @param string $listTemplate 要替换的列表模板内容
+     * @param string $itemType 标签的类型 header item footer
+     * @return mixed
      */
-    private static function ReplaceListFor($i, $type, $id, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $columns, $list, $itemtype) {
-        $list = str_ireplace("{c_no}", $i + 1, $list);        //加入输出序号
+    private static function ReplaceListItem($i, $tagType, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType) {
+        $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate);        //加入输出序号
         if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
-            $list = str_ireplace("{c_url}", $columns["DirectUrl"], $list); //直接输出url
+            $listTemplate = str_ireplace("{c_url}", $columns["DirectUrl"], $listTemplate); //直接输出url
         } else {
-            $list = str_ireplace("{c_url}", "/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html", $list);
-            //$list = str_ireplace("{c_url}", "{pubrootpath}/h/{f_documentchannelid}/{f_year}{f_month}{f_day}/{f_documentnewsid}.html", $list);
+            $listTemplate = str_ireplace("{c_url}", "/h/{f_channel_id}/{f_year}{f_month}{f_day}/{f_document_news_id}.html", $listTemplate);
         }
-        foreach ($columns as $columnname => $columnvalue) {
-            if (strtolower($type) === 'list') {
-                self::FormatColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount);
-            } else if (strtolower($type) === 'docnewslist') {
-                self::FormatDocNewsColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype);
-            } else if (strtolower($type) === 'docthreadlist') {
-                self::FormatDocThreadColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'productlist') {
-                self::FormatProductColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype);
-            } else if (strtolower($type) === 'productparamparentlist' || strtolower($type) === 'productparamchildlist') {
-                self::FormatProductParamColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype);
-            } else if (strtolower($type) === 'productparamtypeoptionlist') {
-                self::FormatProductParamTypeOptionColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype);
-            } else if (strtolower($type) === 'usergrouplist') {
-                self::FormatColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype);
-            } else if (strtolower($type) === 'activitylist') {
-                self::FormatActivityColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'activityuserlist') {
-                self::FormatActivityUserListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'useralbumlist') {
-                self::FormatUserAlbumListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $headerRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'commentlist') {
-                self::FormatCommentListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $headerRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'userlist') {
-                self::FormatUserListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'userrolelist') {
-                self::FormatUserRoleListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else if (strtolower($type) === 'sitelist') {
-                self::FormatSiteListColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $itemRowIntroShortCount);
-            } else {
-                self::FormatColumnValue($columnname, $columnvalue, $id, $list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount);
+        foreach ($columns as $columnName => $columnValue) {
+            //公用替换
+            self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            if (strtolower($tagType) === 'document_news_list') {
+                self::FormatDocumentNewsColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'document_thread_list') {
+                self::FormatDocumentThreadColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'product_list') {
+                self::FormatProductColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'product_param_parent_list' || strtolower($tagType) === 'product_param_child_list') {
+                self::FormatProductParamColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'user_group_list') {
+                self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'activity_list') {
+                self::FormatActivityColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'activity_user_list') {
+                self::FormatActivityUserListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'user_album_list') {
+                self::FormatUserAlbumListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            } else if (strtolower($tagType) === 'comment_list') {
+                self::FormatCommentListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             }
         }
-        return $list;
+        return $listTemplate;
     }
 
     /**
-     * 通用的格式化字段
-     * @param type $columnname
-     * @param type $columnvalue
-     * @param type $listName
-     * @param type $list
-     * @param type $itemRowShortCount 
+     * 通用的格式化行内容
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
-        if (strtolower($columnname) == "state") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            //$columnvalue = Format::ToState($columnvalue, $listName);
+    private static function FormatColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType) {
+        if (strtolower($columnName) == "state") {
+            $tempContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $tempContent);
         }
-        //Select类型替换===Ljy
-        if ((strtolower($columnname) == "tasktype") || (strtolower($columnname) == "userarea") || (strtolower($columnname) == "usertype")) {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            //$columnvalue = Format::ToSelectType($columnvalue, $listName);
-        }
-
-        if (strtolower($columnname) == "threadstate") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            //$columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        if (strtolower($columnname) == "threadid") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            //$columnvalue = Format::ToUrl($columnvalue, $listName);
-        }
-
-        if (strtolower($columnname) == "useralbumtag") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = urlencode($columnvalue);
-        }
-        if (strtolower($columnname) == "documentnewstag") {  //标签链接
-            $documentnewstag_region = urlencode($columnvalue);
-            $list = str_ireplace("{f_" . $columnname . "_urlencode}", $documentnewstag_region, $list);
-        }
-        $pos = stripos(strtolower($columnname), "subject");
+        $pos = stripos(strtolower($columnName), "subject");
         if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            $list = str_ireplace("{c_titleall}", $columnvalue, $list);
-            if (intval($itemRowShortCount) > 0) {
+            $columnValue = Format::FormatHtmlTag($columnValue);
+            $tempContent = str_ireplace("{c_title_all}", $columnValue, $tempContent);
+            if (intval($itemRowTitleCount) > 0) {
                 //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
+                $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
             }
         }
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "createdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_c_year}", $year, $list);
-            $list = str_ireplace("{f_c_month}", $month, $list);
-            $list = str_ireplace("{f_c_day}", $day, $list);
-        }
-        //$pos = strpos(strtolower($columnname), "title");
-        //if ($pos !== false) {
-        //    $columnvalue = Format::FormatQuote($columnvalue);
-        //}
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
-
-    /**
-     * 为documentnews 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
-     */
-    private static function FormatDocNewsColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype = "item") {
         //格式化标题
-        $pos = stripos(strtolower($columnname), "title");
-        $pos2 = stripos(strtolower($columnname), "titlepic");
+        $pos = stripos(strtolower($columnName), "title");
+        $pos2 = stripos(strtolower($columnName), "title_pic");
         if ($pos !== false && $pos2 === false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-
-            if ($itemtype == "header") {
-                if (intval($headerRowShortCount) > 0) {
+            $columnValue = Format::FormatHtmlTag($columnValue);
+            if ($itemType == "header") {
+                if (intval($headerRowTitleCount) > 0) {
                     //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $headerRowShortCount);
+                    $columnValue = Format::ToShort($columnValue, $headerRowTitleCount);
                 }
-            } else if ($itemtype == "footer") {
-                if (intval($footerRowShortCount) > 0) {
+            } else if ($itemType == "footer") {
+                if (intval($footerRowTitleCount) > 0) {
                     //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $footerRowShortCount);
+                    $columnValue = Format::ToShort($columnValue, $footerRowTitleCount);
                 }
             } else {
-                if (intval($itemRowShortCount) > 0) {
+                if (intval($itemRowTitleCount) > 0) {
                     //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
+                    $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
                 }
             }
         }
         //格式化简介
-        $pos = stripos(strtolower($columnname), "intro");
+        $pos = stripos(strtolower($columnName), "intro");
         if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
+            if (intval($itemRowIntroCount) > 0) {
                 //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
+                $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
             }
         }
-
-        $pos = stripos(strtolower($columnname), "publishdate");
+        $pos = stripos(strtolower($columnName), "publish_date");
         if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
+            $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
             $year = $date2[0];
             $month = $date2[1];
             $day = $date2[2];
 
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
+            $tempContent = str_ireplace("{f_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_day}", $day, $tempContent);
         }
 
-
-        $pos = stripos(strtolower($columnname), "showdate");
+        $pos = stripos(strtolower($columnName), "create_date");
         if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
+            $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
             $year = $date2[0];
             $month = $date2[1];
             $day = $date2[2];
 
-            $list = str_ireplace("{f_showyear}", $year, $list);
-            $list = str_ireplace("{f_showmonth}", $month, $list);
-            $list = str_ireplace("{f_showday}", $day, $list);
+            $tempContent = str_ireplace("{f_c_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_c_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_c_day}", $day, $tempContent);
         }
-
-        $pos = stripos(strtolower($columnname), "documentnewscontent");
-        if ($pos !== false) {
-            $columnvalue = str_ireplace("../upload/docnews", "/upload/docnews", $columnvalue);
-
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort(strip_tags($columnvalue), $itemRowIntroShortCount);
-            }
-            $list = str_ireplace("{f_documentnewscontent_nohtml}", strip_tags($columnvalue), $list);
-        }
-        if (strtolower($columnname) === "documentnewscontent") {
-            
-        }
-
-
-        //$columnvalue = str_ireplace("../upload/", "/upload/", $columnvalue);
-        //echo $columnvalue;
-        $columnvalue = str_ireplace("'", "&#039;", $columnvalue);
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
+        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
     /**
-     * 为documentthread 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
+     * 为资讯格式化行内容
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatDocThreadColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount) {
-        $pos = stripos(strtolower($columnname), "subject");
+    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+        $pos = stripos(strtolower($columnName), "show_date");
         if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            $list = str_ireplace("{c_titleall}", $columnvalue, $list);
-            if (intval($itemRowShortCount) > 0) {
+            $date1 = explode(' ', $columnValue);
+            $date2 = explode('-', $date1[0]);
+            $year = $date2[0];
+            $month = $date2[1];
+            $day = $date2[2];
+            $tempContent = str_ireplace("{f_show_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_show_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_show_day}", $day, $tempContent);
+        }
+        $pos = stripos(strtolower($columnName), "document_news_content");
+        if ($pos !== false) {
+            $columnValue = str_ireplace("../upload/document_news", "/upload/document_news", $columnValue);
+            if (intval($itemRowIntroCount) > 0) {
                 //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
+                $columnValue = Format::ToShort(strip_tags($columnValue), $itemRowIntroCount);
             }
+            $tempContent = str_ireplace("{f_document_news_content_no_html}", strip_tags($columnValue), $tempContent);
         }
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
-        $pos = stripos(strtolower($columnname), "createdate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{c_year}", $year, $list);
-            $list = str_ireplace("{c_month}", $month, $list);
-            $list = str_ireplace("{c_day}", $day, $list);
-        }
-        $pos = stripos(strtolower($columnname), "guestname");
-        if ($pos !== false) {
-            if (strlen($columnvalue) > 1) {
-                $list = str_ireplace("{c_name}", $columnvalue, $list);
-            } else {
-                $list = str_ireplace("{c_name}", "游客", $list);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "username");
-        if ($pos !== false) {
-            if (strlen($columnvalue) > 1) {
-                $list = str_ireplace("{c_name}", $columnvalue, $list);
-            }
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
+        $columnValue = str_ireplace("'", "&#039;", $columnValue);
+        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
     /**
-     * 为productparam 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
+     * 为document thread 格式化行内容
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatProductParamColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype = "item") {
-        //格式化标题
-        $pos = stripos(strtolower($columnname), "title");
-        $pos2 = stripos(strtolower($columnname), "titlepic");
-        if ($pos !== false && $pos2 === false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-
-            if ($itemtype == "header") {
-                if (intval($headerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $headerRowShortCount);
-                }
-            } else if ($itemtype == "footer") {
-                if (intval($footerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $footerRowShortCount);
-                }
-            } else {
-                if (intval($itemRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-                }
+    private static function FormatDocumentThreadColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+        $pos = stripos(strtolower($columnName), "user_name");
+        if ($pos !== false) {
+            if (strlen($columnValue) > 1) {
+                $tempContent = str_ireplace("{c_user_name}", $columnValue, $tempContent);
             }
         }
-        //格式化简介
-        $pos = stripos(strtolower($columnname), "intro");
-        if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
-            }
-        }
-
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
-
-
-        $pos = stripos(strtolower($columnname), "showdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_showyear}", $year, $list);
-            $list = str_ireplace("{f_showmonth}", $month, $list);
-            $list = str_ireplace("{f_showday}", $day, $list);
-        }
-
-        if (strtolower($columnname) === "documentnewscontent") {
-            $columnvalue = str_ireplace("../upload/docnews", "/upload/docnews", $columnvalue);
-        }
-
-        //$columnvalue = str_ireplace("../upload/", "/upload/", $columnvalue);
-        //echo $columnvalue;
-        $columnvalue = str_ireplace("'", "&#039;", $columnvalue);
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
+        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
     /**
-     * 为activitye 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
+     * 为产品参数格式化行内容
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatActivityColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount) {
-        $pos = stripos(strtolower($columnname), "activitysubject");
-        if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            $list = str_ireplace("{c_titleall}", $columnvalue, $list);
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        //格式化简介
-        $pos = stripos(strtolower($columnname), "activityintro");
-        if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "activitycontent");
-        if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
-            } else {
-                $columnvalue = str_replace(array('&nbsp;', "\r", "\n", '\'', '"'), '', Format::ToShort(strip_tags($columnvalue), 50));
-            }
-        }
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
+    private static function FormatProductParamColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
 
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "applybegindate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_applybeginyear}", $year, $list);
-            $list = str_ireplace("{f_applybeginmonth}", $month, $list);
-            $list = str_ireplace("{f_applybeginday}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "applyenddate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_applyendyear}", $year, $list);
-            $list = str_ireplace("{f_applyendmonth}", $month, $list);
-            $list = str_ireplace("{f_applyendday}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "begindate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_beginyear}", $year, $list);
-            $list = str_ireplace("{f_beginmonth}", $month, $list);
-            $list = str_ireplace("{f_beginday}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "enddate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_endyear}", $year, $list);
-            $list = str_ireplace("{f_endmonth}", $month, $list);
-            $list = str_ireplace("{f_endday}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "createdate");
-        if ($pos !== false) {
-
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{c_year}", $year, $list);
-            $list = str_ireplace("{c_month}", $month, $list);
-            $list = str_ireplace("{c_day}", $day, $list);
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
     }
 
     /**
-     * 替换活动报名用户相关信息
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount 
+     * 为活动格式化行内容
+     * @param string $columnName 字段名称
+     * @param string $columnValue 字段值
+     * @param string $tagId 标签id
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param int $itemRowTitleCount 主列表项目标题最大字符数
+     * @param int $itemRowIntroCount 主列表项目简介最大字符数
+     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
+     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatActivityUserListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount) {
-        $pos = stripos(strtolower($columnname), "avatar");
-        $_funcurl = $domain['func'];
-        $_posf = stripos($_funcurl, "http://");
-        if ($_posf === false) {
-            $_funcurl = "http://" . $_funcurl;
-        }
+    private static function FormatActivityColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+        $pos = stripos(strtolower($columnName), "activity_content");
         if ($pos !== false) {
-            if (strlen($columnvalue) > 10) {
-                $columnvalue = $_funcurl . $columnvalue;
-            } else {
-                $columnvalue = $_funcurl . "/upload/user/default.gif";
-            }
-        }
-
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
-
-    /**
-     * 为productparamtypeoption 格式化字段
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     * @param <type> $listName
-     * @param <type> $list
-     * @param <type> $itemRowShortCount
-     */
-    private static function FormatProductParamTypeOptionColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype = "item") {
-        //格式化标题        
-        $pos = stripos(strtolower($columnname), "title");
-        $pos2 = stripos(strtolower($columnname), "titlepic");
-        if ($pos !== false && $pos2 === false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-
-            if ($itemtype == "header") {
-                if (intval($headerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $headerRowShortCount);
-                }
-            } else if ($itemtype == "footer") {
-                if (intval($footerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $footerRowShortCount);
-                }
-            } else {
-                if (intval($itemRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-                }
-            }
-        }
-        //格式化简介
-        $pos = stripos(strtolower($columnname), "intro");
-        if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
+            if (intval($itemRowIntroCount) > 0) {
                 //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
+                $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
+            } else {
+                $columnValue = str_replace(array('&nbsp;', "\r", "\n", '\'', '"'), '', Format::ToShort(strip_tags($columnValue), 50));
             }
         }
 
-        $pos = stripos(strtolower($columnname), "publishdate");
+        $pos = stripos(strtolower($columnName), "apply_begin_date");
         if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
+
+            $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
             $year = $date2[0];
             $month = $date2[1];
             $day = $date2[2];
 
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
+            $tempContent = str_ireplace("{f_apply_begin_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_apply_begin_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_apply_begin_day}", $day, $tempContent);
         }
 
-
-        $pos = stripos(strtolower($columnname), "showdate");
+        $pos = stripos(strtolower($columnName), "apply_end_date");
         if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
+
+            $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
             $year = $date2[0];
             $month = $date2[1];
             $day = $date2[2];
 
-            $list = str_ireplace("{f_showyear}", $year, $list);
-            $list = str_ireplace("{f_showmonth}", $month, $list);
-            $list = str_ireplace("{f_showday}", $day, $list);
+            $tempContent = str_ireplace("{f_apply_end_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_apply_end_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_apply_end_day}", $day, $tempContent);
         }
 
-        if (strtolower($columnname) === "documentnewscontent") {
-            $columnvalue = str_ireplace("../upload/docnews", "/upload/docnews", $columnvalue);
+        $pos = stripos(strtolower($columnName), "begin_date");
+        if ($pos !== false) {
+
+            $date1 = explode(' ', $columnValue);
+            $date2 = explode('-', $date1[0]);
+            $year = $date2[0];
+            $month = $date2[1];
+            $day = $date2[2];
+
+            $tempContent = str_ireplace("{f_begin_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_begin_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_begin_day}", $day, $tempContent);
         }
 
-        //$columnvalue = str_ireplace("../upload/", "/upload/", $columnvalue);
-        //echo $columnvalue;
-        $columnvalue = str_ireplace("'", "&#039;", $columnvalue);
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
+        $pos = stripos(strtolower($columnName), "end_date");
+        if ($pos !== false) {
+
+            $date1 = explode(' ', $columnValue);
+            $date2 = explode('-', $date1[0]);
+            $year = $date2[0];
+            $month = $date2[1];
+            $day = $date2[2];
+
+            $tempContent = str_ireplace("{f_end_year}", $year, $tempContent);
+            $tempContent = str_ireplace("{f_end_month}", $month, $tempContent);
+            $tempContent = str_ireplace("{f_end_day}", $day, $tempContent);
+        }
+        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
     /**
@@ -877,84 +567,6 @@ class Template {
      * @param <type> $itemRowShortCount
      */
     private static function FormatProductColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount, $headerRowShortCount, $footerRowShortCount, $itemtype = "item") {
-        //格式化标题
-        $pos = stripos(strtolower($columnname), "title");
-        $pos2 = stripos(strtolower($columnname), "titlepic");
-        if ($pos !== false && $pos2 === false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-
-            if ($itemtype == "header") {
-                if (intval($headerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $headerRowShortCount);
-                }
-            } else if ($itemtype == "footer") {
-                if (intval($footerRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $footerRowShortCount);
-                }
-            } else {
-                if (intval($itemRowShortCount) > 0) {
-                    //截断字符
-                    $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-                }
-            }
-        }
-        //格式化简介
-        $pos = stripos(strtolower($columnname), "intro");
-        if ($pos !== false) {
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "productname");
-        if ($pos !== false) {
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "createdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_createyear}", $year, $list);
-            $list = str_ireplace("{f_createmonth}", $month, $list);
-            $list = str_ireplace("{f_createday}", $day, $list);
-        }
-
-        $pos = stripos(strtolower($columnname), "showdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_showyear}", $year, $list);
-            $list = str_ireplace("{f_showmonth}", $month, $list);
-            $list = str_ireplace("{f_showday}", $day, $list);
-        }
-
         $pos = stripos(strtolower($columnname), "saleprice");
         if ($pos !== false) {
             if (is_numeric($columnvalue) && $columnvalue > 0)
@@ -967,64 +579,16 @@ class Template {
             $columnvalue = str_ireplace("../upload/product", "/upload/product", $columnvalue);
         }
 
-        //$columnvalue = str_ireplace("../upload/", "/upload/", $columnvalue);
-        //echo $columnvalue;
         $columnvalue = str_ireplace("'", "&#039;", $columnvalue);
         $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
     }
 
     public static function FormatUserAlbumListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
-        if (strtolower($columnname) == "state") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        if (strtolower($columnname) == "indextop") {
-            if ($columnvalue == 1) {
-                $columnvalue = "<span style='color:blue'>是</span>";
-            } else {
-                $columnvalue = "否";
-            }
-        }
-        //Select类型替换===Ljy
-        if ((strtolower($columnname) == "tasktype") || (strtolower($columnname) == "userarea") || (strtolower($columnname) == "usertype")) {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToSelectType($columnvalue, $listName);
-        }
-
-        if (strtolower($columnname) == "threadstate") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        if (strtolower($columnname) == "threadid") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToUrl($columnvalue, $listName);
-        }
-
         if (strtolower($columnname) == "useralbumtag") {
             $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
             $columnvalue = urlencode($columnvalue);
         }
-        $pos = stripos(strtolower($columnname), "subject");
-        if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            $list = str_ireplace("{c_titleall}", $columnvalue, $list);
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
 
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
         if (strtolower($columnname) == "region") {
             $columnvalue_region = urlencode($columnvalue);
             $list = str_ireplace("{f_region_urlencode}", $columnvalue_region, $list);
@@ -1033,16 +597,6 @@ class Template {
     }
 
     public static function FormatCommentListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
-        if (strtolower($columnname) == "state") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-
-        if (strtolower($columnname) == "username") {
-            if (strlen($columnvalue) <= 0 || $columnvalue == null) {
-                $columnvalue = "游客";
-            }
-        }
 
         if (strtolower($columnname) == "avatar") {
             if (strlen($columnvalue) <= 10 || $columnvalue == null) {
@@ -1062,35 +616,6 @@ class Template {
             }
         }
 
-        $pos = stripos(strtolower($columnname), "subject");
-        if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            $list = str_ireplace("{c_titleall}", $columnvalue, $list);
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "content");
-        if ($pos !== false) {
-            $columnvalue = Format::FormatHtmlTag($columnvalue);
-            if (intval($itemRowIntroShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowIntroShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "publishdate");
-        if ($pos !== false) {
-            $date1 = explode(' ', $columnvalue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
-
-            $list = str_ireplace("{f_year}", $year, $list);
-            $list = str_ireplace("{f_month}", $month, $list);
-            $list = str_ireplace("{f_day}", $day, $list);
-        }
         $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
         $list = str_ireplace("{box}", "", $list);
         $list = str_ireplace("{/box}", "", $list);
@@ -1098,56 +623,6 @@ class Template {
         $list = str_ireplace("{/span}", "", $list);
     }
 
-    public static function FormatUserListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount) {
-        if (strtolower($columnname) == "state") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        $pos = stripos(strtolower($columnname), "username");
-        if ($pos !== false) {
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "showusername");
-        if ($pos !== false) {
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $pos = stripos(strtolower($columnname), "nickname");
-        if ($pos !== false) {
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
-
-    public static function FormatUserRoleListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount) {
-        if (strtolower($columnname) == "rolestate") {
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
-
-    public static function FormatSiteListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $itemRowIntroShortCount) {
-        if (strtolower($columnname) == "state") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = Format::ToState($columnvalue, $listName);
-        }
-        $pos = stripos(strtolower($columnname), "sitename");
-        if ($pos !== false) {
-            if (intval($itemRowShortCount) > 0) {
-                //截断字符
-                $columnvalue = Format::ToShort($columnvalue, $itemRowShortCount);
-            }
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
 
     /**
      * 替换详细信息页面
@@ -1335,47 +810,55 @@ class Template {
      * @param <type> $replacestr表示替换的值
      * @param <type> 把$arrList与$replacestr组合起来进行替换
      */
-    public static function ReplaceSelect(&$tempcontent, $arrList, $replacestr, $checked = 0) {
+    public static function ReplaceSelect(&$tempContent, $arrList, $replacestr, $checked = 0) {
         if (count($replacestr) > 0) {
             $replacestrs = explode(',', $replacestr);
             foreach ($replacestrs as $columnname => $columnvalue) {
                 if ($checked == 1) {
-                    $tempcontent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "checked", $tempcontent);
+                    $tempContent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "checked", $tempContent);
                 } else {
-                    $tempcontent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "selected=\"selected\"", $tempcontent);
+                    $tempContent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "selected=\"selected\"", $tempContent);
                 }
             }
         }
     }
 
-    public static function GetDocParamValue($doccontent, $paramname, $keyname = "cscms") {
+    /**
+     * 取得XML标签参数的值
+     * @param string $documentContent XML标签内容
+     * @param string $paramName 参数名称
+     * @param string $tagName 标签名称
+     * @return string 返回参数的值
+     */
+    public static function GetParamValue($documentContent, $paramName, $tagName = "icms") {
         if (class_exists('DOMDocument')) { //服务器是否开启了DOM
             $doc = new DOMDocument();
-            $doc->loadXML($doccontent);
-            $result = self::GetParamStringValue($doc, $keyname, $paramname);
+            $doc->loadXML($documentContent);
+            $result = self::GetParamStringValue($doc, $tagName, $paramName);
             return $result;
         } else {
             //使用SAX
-            $_p = xml_parser_create();
-            $_arrayXml = array();
-            xml_parse_into_struct($_p, $doccontent, $_arrayXml);
-            xml_parser_free($_p);
-            $paramname = strtoupper($paramname);
-            return $_arrayXml[0]['attributes'][$paramname];
+            $parser = xml_parser_create();
+            $arrayXml = array();
+            xml_parse_into_struct($parser, $documentContent, $arrayXml);
+            xml_parser_free($parser);
+            $paramName = strtoupper($paramName);
+            return $arrayXml[0]['attributes'][$paramName];
         }
     }
 
     /**
-     *
-     * @param <type> $doc
-     * @param <type> $paramName
-     * @return <type>
+     * 取得Document对象的节点内容
+     * @param DOMDocument $document document对象
+     * @param string $paramName 参数名称
+     * @param string $tagName 标签名称
+     * @return string 返回Document对象的节点内容
      */
-    private static function GetNodeValue($doc, $paramName, $keyname = "cscms") {
+    private static function GetNodeValue($document, $paramName, $tagName = "icms") {
         $result = "";
-        $cscmsNode = $doc->getElementsByTagName($keyname)->item(0);
-        if ($cscmsNode->hasChildNodes()) {
-            foreach ($cscmsNode->childNodes as $childNode) {
+        $node = $document->getElementsByTagName($tagName)->item(0);
+        if ($node->hasChildNodes()) {
+            foreach ($node->childNodes as $childNode) {
                 if (strtolower($childNode->nodeName) == strtolower($paramName)) {
                     $result = $childNode->nodeValue;
                 }
@@ -1385,9 +868,9 @@ class Template {
     }
 
     /**
-     * 取得节点的内容 SAX用
-     * @param array $arrayXml
-     * @param string $tagName
+     * 取得XML节点的内容 SAX用
+     * @param array $arrayXml XML对象数组
+     * @param string $tagName 标签名称
      * @return string 节点的内容
      */
     private static function GetNodeValueForSax($arrayXml, $tagName) {
@@ -1437,86 +920,67 @@ class Template {
 
     /**
      * 取得页面中所有的标记段，并存入数组
-     * @param string $tempContent
-     * @param string $keyName
+     * @param string $tempContent 要替换的模板内容
+     * @param string $tagName 标签名称
      * @return array 返回数组
      */
-    public static function GetAllCustomTag($tempContent, $keyName = "icms") {
-        $preg = "/\<$keyName(.*)\<\/$keyName>/imsU";
+    public static function GetAllCustomTag($tempContent, $tagName = "icms") {
+        $preg = "/\<$tagName(.*)\<\/$tagName>/imsU";
         preg_match_all($preg, $tempContent, $result, PREG_PATTERN_ORDER);
         return $result;
     }
 
     /**
-     * 把对应ID的CMS标记替换成指定内容
-     * @param string $tempcontent
-     * @param type $id
-     * @param type $replace
-     * @param type $keyName
-     * @return string
-     */
-    public static function ReplaceCMS($tempcontent, $id, $replace, $keyName = "cscms") {
-        $beginstr = '<' . $keyName . ' id="' . $id . '"';
-        $endstr = '</' . $keyName . '>';
-        $temp1 = substr($tempcontent, 0, stripos($tempcontent, $beginstr));
-        $x = stripos($tempcontent, $endstr, stripos($tempcontent, $beginstr));
-        $temp2 = substr($tempcontent, $x + strlen($keyName) + 3);
-        $tempcontent = $temp1 . $replace . $temp2;
-        return $tempcontent;
-    }
-
-    /**
-     * 把对应id的自定义标记替换成指定内容，可以识别标记的type属性
-     * @param string $tempContent 模板
-     * @param string $id 标记的id
-     * @param string $replace 要替换的内容
-     * @param string $keyName 标记名称
-     * @param string $type 标记的type
+     * 把对应id的自定义标签替换成指定内容，可以识别标记的type属性
+     * @param string $tempContent 要替换的模板内容
+     * @param string $tagId 标签的id
+     * @param string $replaceContent 要替换的内容
+     * @param string $tagName 标签名称
+     * @param string $tagType 标签的type
      * @return string 替换后的内容
      */
-    public static function ReplaceCustomTag($tempContent, $id, $replace, $keyName = "icms", $type = null)
+    public static function ReplaceCustomTag($tempContent, $tagId, $replaceContent, $tagName, $tagType = null)
     {
-        if($type != null && strlen($type)>0){
-            $beginString = '<' . $keyName . ' id="' . $id . '" type="' . $type . '"';
+        if($tagType != null && strlen($tagType)>0){
+            $beginString = '<' . $tagName . ' id="' . $tagId . '" type="' . $tagType . '"';
         }else{
-            $beginString = '<' . $keyName . ' id="' . $id . '"';
+            $beginString = '<' . $tagName . ' id="' . $tagId . '"';
         }
-        $endString = '</' . $keyName . '>';
+        $endString = '</' . $tagName . '>';
         $temp1 = substr($tempContent, 0, stripos($tempContent, $beginString));
         $x = stripos($tempContent, $endString, stripos($tempContent, $beginString));
-        $temp2 = substr($tempContent, $x + strlen($keyName) + 3);
-        $tempContent = $temp1 . $replace . $temp2;
+        $temp2 = substr($tempContent, $x + strlen($tagName) + 3);
+        $tempContent = $temp1 . $replaceContent . $temp2;
         return $tempContent;
     }
 
 
     /**
-     * 删除模板中所有cms标记或指定ID的标记
-     * @param type $tempContent
-     * @param type $id
-     * @param type $keyName
+     * 删除模板中所有自定义标签或指定ID的标签
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $tagId 替换标签的id，如果为空，则删除所有自定义标签
+     * @param string $tagName 替换标签名称
      */
-    public static function RemoveCMS(&$tempContent, $id = "", $keyName = "cscms") {
-        if (empty($id)) {
-            $patterns = "/\<$keyName(.*)\<\/$keyName>/imsU";
+    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = "icms_list") {
+        if (empty($tagId)) {
+            $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
             $tempContent = preg_replace($patterns, "", $tempContent);
         } else {
-            $patterns = "/\<$keyName id=\"$id\"(.*)\<\/$keyName>/imsU";
+            $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
     }
 
     /**
      * 替换页面中Select Checkbox Radio的选择值
-     * @param type $TempContent
-     * @param type $FieldName
-     * @param type $FieldValue 
+     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $fieldName 字段名
+     * @param string $fieldValue 字段值
      */
-    public static function ReplaceSelectControl(&$TempContent, $FieldName, $FieldValue) {
-
-        $TempContent = str_ireplace("{sel_" . $FieldName . "_" . $FieldValue . "}", "selected", $TempContent);
-        $TempContent = str_ireplace("{cb_" . $FieldName . "_" . $FieldValue . "}", "checked", $TempContent);
-        $TempContent = str_ireplace("{rd_" . $FieldName . "_" . $FieldValue . "}", "checked", $TempContent);
+    public static function ReplaceSelectControl(&$tempContent, $fieldName, $fieldValue) {
+        $tempContent = str_ireplace("{sel_" . $fieldName . "_" . $fieldValue . "}", "selected", $tempContent);
+        $tempContent = str_ireplace("{cb_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
+        $tempContent = str_ireplace("{rd_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
     }
 
 }

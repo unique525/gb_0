@@ -25,18 +25,23 @@ class ManageUserManageData extends BaseManageData
         return $result;
     }
 
-    public function Create()
+    /**
+     * 新增后台管理员
+     * @param array $httpPostData $_POST数组
+     * @return int 新增的后台管理员id
+     */
+    public function Create($httpPostData)
     {
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty);
+        $sql = parent::GetInsertSql($httpPostData, self::TableName_ManageUser, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
-    public function Modify($manageUserId)
+    public function Modify($httpPostData, $manageUserId)
     {
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $tableidvalue, $dataProperty);
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_ManageUser, self::TableId_ManageUser, $manageUserId, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
