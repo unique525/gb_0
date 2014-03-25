@@ -17,26 +17,26 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
-            case "customformcontent":
+            case "custom_form_content":
                 $customFormContentGen = new CustomFormContentManageGen();
                 $result = $customFormContentGen->Gen();
                 break;
-            case "customformrecord":
+            case "custom_form_record":
                 $customFormRecordGen = new CustomFormRecordManageGen();
                 $result = $customFormRecordGen->Gen();
                 break;
-            case "customformfield":
+            case "custom_form_field":
                 $customFormFieldGen = new CustomFormFieldManageGen();
                 $result = $customFormFieldGen->Gen();
                 break;
-            case "customformsearch":        //活动表单页面查询类
+            case "custom_form_search":        //活动表单页面查询类
                 $customFormSearchGen = new CustomFormSearchManageGen();
                 $result = $customFormSearchGen->Gen();
                 break;
             default:
                 $method = Control::GetRequest("m", "");
                 switch ($method) {
-                    case "new":
+                    case "create":
                         $result = self::GenCreate();
                         break;
                     case "edit":
@@ -88,15 +88,15 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             ////////////////////////////////////////////////////
             $replaceArray = array(
                 "{cid}" => $channelId,
-                "{siteid}" => $siteId,
-                "{channelid}" => $channelId,
-                "{manageuserid}" => $manageUserId,
+                "{site_id}" => $siteId,
+                "{channel_id}" => $channelId,
+                "{manage_user_id}" => $manageUserId,
                 "{tab}" => $tabIndex,
-                "{pageindex}" => $pageIndex
+                "{page_index}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
-            parent::ReplaceWhenAdd($tempContent, 'cst_customform');
+            parent::ReplaceWhenAdd($tempContent, 'cst_custom_form');
 
             if (!empty($_POST)) {
                 $customFormManageData = new CustomFormManageData();
@@ -145,7 +145,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($customFormId > 0) {
             $customFormManageData = new CustomFormManageData();
-            $channelId = $customFormManageData->GetChannelID($customFormId);
+            $channelId = $customFormManageData->GetChannelID($customFormId, 0);
             $channelData = new channelManageData();
             $siteId = $channelData->GetSiteId($channelId,"");
 
@@ -165,7 +165,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetManageUserID($customFormId);
+            $createUserId = $customFormManageData->GetManageUserID($customFormId,FALSE);
             if ($createUserId !== $nowManageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
@@ -182,13 +182,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
             //$channelName = $channelData->GetName($channelId);
             $replaceArray = array(
-                "{documentchannelid}" => $channelId,
+                "{document_channel_id}" => $channelId,
                 "{cid}" => $channelId,
                 "{id}" => $customFormId,
-                "{siteid}" => $siteId,
-                "{userid}" => $userId,
+                "{site_id}" => $siteId,
+                "{user_id}" => $userId,
                 "{tab}" => $tabIndex,
-                "{pageindex}" => $pageIndex
+                "{page_index}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
@@ -262,7 +262,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $type = Control::GetRequest("type", "");
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
-        $searchKey = Control::GetRequest("searchkey", "");
+        $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         if (isset($searchKey) && strlen($searchKey) > 0) {
             $can = $manageUserAuthority->CanSearch($siteId, $channelId, $manageUserId);
@@ -275,7 +275,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         if ($pageIndex > 0 && $channelId > 0) {
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $listName = "customform";
+            $listName = "custom_form";
             $allCount = 0;
             $customFormData = new CustomFormManageData();
             $arrList = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
@@ -289,11 +289,11 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $jsParamList = ",'" . urlencode($searchKey) . "','" . $type . "'";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, "", $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList);
                 $replaceArray = array(
-                    "{documentchannelid}" => 0,
+                    "{channel_id}" => 0,
                     "{cid}" => 0,
                     "{id}" => 0,
-                    "{pagerbutton}" => $pagerButton,
-                    "{siteurl}" => $siteUrl
+                    "{pager_button}" => $pagerButton,
+                    "{site_url}" => $siteUrl
                 );
                 $tempContent = strtr($tempContent, $replaceArray);
                 parent::ReplaceEnd($tempContent);
