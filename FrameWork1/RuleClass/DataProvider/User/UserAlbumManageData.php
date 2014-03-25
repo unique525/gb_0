@@ -15,14 +15,14 @@ class UserAlbumManageData extends BaseManageData {
      * @return int 影响的行数
      */
     public function Modify($httpPostData, $userAlbumId) {
-        if ($userAlbumId > 0) {
-            $dataProperty = new DataProperty();
-            $sql = parent::GetUpdateSql($httpPostData, self::TableName_UserAlbum, self::TableId_UserAlbum, $userAlbumId, $dataProperty);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-            return $result;
-        } else {
-            return null;
-        }
+            if ($userAlbumId > 0) {
+                $dataProperty = new DataProperty();
+                $sql = parent::GetUpdateSql($httpPostData, self::TableName_UserAlbum, self::TableId_UserAlbum, $userAlbumId, $dataProperty);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+                return $result;
+            } else {
+                return null;
+            }
     }
 
     /**
@@ -64,16 +64,19 @@ class UserAlbumManageData extends BaseManageData {
     /**
      * 通过相册ID获取用户名(checked)
      * @param int $userAlbumId 相册ID
+     * @param bool $withCache 是否缓存
      * @return string 用户名 
      */
-    public function GetUserName($userAlbumId) {
+    public function GetUserName($userAlbumId,$withCache) {
         if ($userAlbumId > 0) {
-            $sql = "SELECT UserName FROM " . self::TableName_User . " 
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_album_data';
+            $cacheFile = 'user_album_get_username.cache_' . $userAlbumId . '';
+            $sql = "SELECT UserName FROM " . self::TableName_User . "
                 WHERE " . self::TableId_User . " = (SELECT " . self::TableId_User . " FROM " . self::TableName_UserAlbum . " 
                 WHERE " . self::TableId_UserAlbum . "=:UserAlbumId);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
-            $result = $this->dbOperator->GetString($sql, $dataProperty);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             return $result;
         } else {
             return 0;
@@ -83,14 +86,17 @@ class UserAlbumManageData extends BaseManageData {
     /**
      * 根据UserAlbumId取得UserAlbumIntro(checked)
      * @param int $userAlbumId 相册ID
+     * @param bool $withCache 是否缓存
      * @return string 相册简介
      */
-    public function GetUserAlbumIntro($userAlbumId) {
+    public function GetUserAlbumIntro($userAlbumId,$withCache) {
         if ($userAlbumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_album_data';
+            $cacheFile = 'user_album_get_intro.cache_' . $userAlbumId . '';
             $sql = "SELECT UserAlbumIntro FROM " . self::TableName_UserAlbum . " WHERE " . self::TableId_UserAlbum . "=:UserAlbumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
-            $result = $this->dbOperator->GetString($sql, $dataProperty);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             return $result;
         } else {
             return "";
@@ -162,14 +168,17 @@ class UserAlbumManageData extends BaseManageData {
     /**
      * 获取相册名(checked)
      * @param int $userAlbumId 相册ID
+     * @param bool $withCache 是否缓存
      * @return string 相册名
      */
-    public function GetUserAlbumName($userAlbumId) {
+    public function GetUserAlbumName($userAlbumId,$withCache) {
         if ($userAlbumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_album_data';
+            $cacheFile = 'user_album_get_name.cache_' . $userAlbumId . '';
             $sql = "SELECT UserAlbumName FROM " . self::TableName_UserAlbum . " WHERE " . self::TableId_UserAlbum . " = :UserAlbumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
-            $result = $this->dbOperator->GetString($sql, $dataProperty);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             return $result;
         } else {
             return null;
@@ -179,14 +188,17 @@ class UserAlbumManageData extends BaseManageData {
     /**
      * 获取相册标签(checked)
      * @param int $userAlbumId 相册ID
+     * @param bool $withCache 是否缓存
      * @return string 相册类别
      */
-    public function GetUserAlbumTag($userAlbumId) {
+    public function GetUserAlbumTag($userAlbumId,$withCache) {
         if ($userAlbumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_album_data';
+            $cacheFile = 'user_album_get_tag.cache_' . $userAlbumId . '';
             $sql = "SELECT UserAlbumTag FROM " . self::TableName_UserAlbum . " WHERE " . self::TableId_UserAlbum . " = :UserAlbumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
-            $result = $this->dbOperator->GetString($sql, $dataProperty);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             return $result;
         } else {
             return null;
@@ -196,14 +208,17 @@ class UserAlbumManageData extends BaseManageData {
     /**
      * 获取当前相册的状态(checked)
      * @param int $userAlbumId 相册ID
+     * @param bool $withCache 是否缓存
      * @return int 相册的当前状态 0为未审核,
      */
-    public function GetState($userAlbumId) {
+    public function GetState($userAlbumId,$withCache) {
         if ($userAlbumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_album_data';
+            $cacheFile = 'user_album_get_state.cache_' . $userAlbumId . '';
             $sql = "SELECT State FROM " . self::TableName_UserAlbum . " WHERE " . self::TableId_UserAlbum . " = :UserAlbumId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             return $result;
         } else {
             return null;

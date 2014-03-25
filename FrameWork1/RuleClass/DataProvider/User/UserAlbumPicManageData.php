@@ -65,7 +65,7 @@ class UserAlbumPicManageData extends BaseManageData
     public function GetOne($userAlbumPicId)
     {
         if ($userAlbumPicId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_UserAlbumPic . " WHERE " . self::TableId_UserAlbumPic . "=:UserAlbumPicId";
+            $sql = "SELECT * FROM " . self::TableName_UserAlbumPic . " WHERE " . self::TableId_UserAlbumPic . "=:UserAlbumPicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -80,10 +80,10 @@ class UserAlbumPicManageData extends BaseManageData
      * @param int $userAlbumPicId 图片Id
      * @return int 相册Id
      */
-    public function GetUserAlbumIDByUserAlbumPicID($userAlbumPicId)
+    public function GetUserAlbumId($userAlbumPicId)
     {
         if ($userAlbumPicId > 0) {
-            $sql = "SELECT UserAlbumId FROM " . self::TableName_UserAlbumPic . " WHERE UserAlbumPicId = :UserAlbumPicId";
+            $sql = "SELECT UserAlbumId FROM " . self::TableName_UserAlbumPic . " WHERE UserAlbumPicId = :UserAlbumPicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -125,12 +125,12 @@ class UserAlbumPicManageData extends BaseManageData
         } else if ($country == 'china' && $userAlbumTag == '') { //国内的相册数 只包括已编辑 未审核 已审核的
             $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableId_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country = 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumId = uap.UserAlbumId;";
         } else if ($country == '!china' && $userAlbumTag == '') { //国外的相册数 只包括已编辑 未审核 已审核的
-            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumId = uap.UserAlbumId";
+            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumId = uap.UserAlbumId;";
         } else if ($country == 'china' && $userAlbumTag != '') { //国内的带类别的相册数 只包括已编辑 未审核 已审核的
-            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country = 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumId = uap.UserAlbumId";
+            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country = 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumId = uap.UserAlbumId;";
             $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
         } else{ //国外的带类别的相册数 只包括已编辑 未审核 已审核的
-            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumId = uap.UserAlbumId";
+            $sql = "SELECT count(uap.UserAlbumPicId) FROM ".self::TableName_UserAlbum." ua,".self::TableName_UserInfo." ui,".self::TableName_UserAlbumPic." uap WHERE ua.State < 40 AND ui.Country != 'china' AND ua.UserId = ui.UserId AND ua.UserAlbumTag = :UserAlbumTag AND ua.UserAlbumId = uap.UserAlbumId;";
             $dataProperty->AddField("UserAlbumTag", $userAlbumTag);
         }
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
@@ -146,13 +146,13 @@ class UserAlbumPicManageData extends BaseManageData
     public function ModifyIsCover($userAlbumPicId, $userAlbumId)
     {
         if ($userAlbumPicId > 0 && $userAlbumId > 0) {
-            $sqlIsNotCover = "UPDATE " . self::TableName_UserAlbumPic . " SET IsCover = 0 WHERE UserAlbumId = :UserAlbumId";
+            $sqlIsNotCover = "UPDATE " . self::TableName_UserAlbumPic . " SET IsCover = 0 WHERE UserAlbumId = :UserAlbumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);
             $isNoCoverResult = $this->dbOperator->Execute($sqlIsNotCover, $dataProperty);
 
             if ($isNoCoverResult > 0) {
-                $sqlIsCover = "UPDATE " . self::TableName_UserAlbumPic . " SET IsCover = 1 WHERE UserAlbumPicId = :UserAlbumPicId";
+                $sqlIsCover = "UPDATE " . self::TableName_UserAlbumPic . " SET IsCover = 1 WHERE UserAlbumPicId = :UserAlbumPicId;";
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
                 $result = $this->dbOperator->Execute($sqlIsCover, $dataProperty);
@@ -194,7 +194,7 @@ class UserAlbumPicManageData extends BaseManageData
     public function ModifyUserAlbumPicCompressUrl($userAlbumPicCompressUrl, $userAlbumPicId)
     {
         if ($userAlbumPicId > 0) {
-            $sql = "UPDATE " . self::TableName_UserAlbumPic . " SET UserAlbumPicCompressUrl = :UserAlbumPicCompressUrl WHERE " . self::TableId_UserAlbumPic . " = :UserAlbumPicId";
+            $sql = "UPDATE " . self::TableName_UserAlbumPic . " SET UserAlbumPicCompressUrl = :UserAlbumPicCompressUrl WHERE " . self::TableId_UserAlbumPic . " = :UserAlbumPicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumPicCompressUrl", $userAlbumPicCompressUrl);
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
@@ -205,24 +205,6 @@ class UserAlbumPicManageData extends BaseManageData
         }
     }
 
-    /**
-     * 修改图片简介
-     * @param int $userAlbumPicId 图片Id
-     * @param string $userAlbumPicIntro 图片简介
-     * @return int 影响的行数
-     */
-    public function ModifyAlbumPicIntro($userAlbumPicId, $userAlbumPicIntro) {
-        if($userAlbumPicId > 0){
-        $dataProperty = new DataProperty();
-        $sql = "UPDATE " . self::TableName_UserAlbumPic . " SET UserAlbumPicIntro = :UserAlbumPicIntro WHERE UserAlbumPicId = :UserAlbumPicId";
-        $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
-        $dataProperty->AddField("UserAlbumPicIntro", $userAlbumPicIntro);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
-        return $result;
-        }else{
-            return null;
-        }
-    }
 
     /**
      * 修改图片的路径
@@ -235,7 +217,7 @@ class UserAlbumPicManageData extends BaseManageData
         if($userAlbumPicId > 0){
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_UserAlbumPic . " SET UserAlbumPicUrl = :UserAlbumPicUrl,
-                UserAlbumPicThumbnailUrl = :UserAlbumPicThumbnailUrl WHERE UserAlbumPicId = :UserAlbumPicId";
+                UserAlbumPicThumbnailUrl = :UserAlbumPicThumbnailUrl WHERE UserAlbumPicId = :UserAlbumPicId;";
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $dataProperty->AddField("UserAlbumPicUrl", $userAlbumPicUrl);
             $dataProperty->AddField("UserAlbumPicThumbnailUrl", $userAlbumPicThumbnailUrl);
@@ -251,9 +233,9 @@ class UserAlbumPicManageData extends BaseManageData
      * @param int $userAlbumPicId 图片Id
      * @return int 影响行数
      */
-    public function DeletePic($userAlbumPicId) {
+    public function Delete($userAlbumPicId) {
         if($userAlbumPicId > 0){
-            $sql = "DELETE FROM " . self::TableName_UserAlbumPic . " WHERE UserAlbumPicId = :UserAlbumPicId";
+            $sql = "DELETE FROM " . self::TableName_UserAlbumPic . " WHERE UserAlbumPicId = :UserAlbumPicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
