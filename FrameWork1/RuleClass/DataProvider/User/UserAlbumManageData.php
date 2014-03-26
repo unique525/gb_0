@@ -32,7 +32,7 @@ class UserAlbumManageData extends BaseManageData {
      * @return int 影响行数
      */
     public function ModifyIsBest($userAlbumId,$isBest = 1) {
-        if ($userAlbumId > 0) {
+        if ($userAlbumId > 110) {
             $sql = "UPDATE " . self::TableName_UserAlbum . " SET IsBest = :IsBest WHERE " . self::TableId_UserAlbum . " = :UserAlbumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumId", $userAlbumId);

@@ -81,13 +81,20 @@ class CustomFormFieldManageData extends BaseManageData {
     /**
      * 通过字段id获取该字段的类型
      * @param int $customFormFieldId
+     * @param boolean $withCache
      * @return int 字段类型
      */
-    public function GetCustomFormFieldType($customFormFieldId) {
-        $sql = "SELECT CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId ;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
-        $result = $this->dbOperator->ReturnInt($sql, $dataProperty);
+    public function GetCustomFormFieldType($customFormFieldId, $withCache) {
+        $result=-1;
+
+        if ($customFormFieldId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'custom_form_field_data';
+            $cacheFile = 'custom_form_field_get_type.cache_' . $customFormFieldId . '.php';
+            $sql = "SELECT CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 }

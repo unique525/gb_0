@@ -47,9 +47,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
-        //$userid = Control::GetUserID();
-        //$username = Control::GetUserName();
-        //$tab_index = Control::GetRequest("tab", 0);
         $pageIndex = Control::GetRequest("p", 1);
 
         parent::ReplaceFirst($tempContent);
@@ -60,7 +57,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $siteid = $channelManageData->GetSiteId($channelId, false);
             $channelName = $channelManageData->GetChannelName($channelId, false);
 
-///////////////判断是否有操作权限///////////////////
+            ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $can = $manageUserAuthorityManageData->CanCreate($siteid, $channelId, $manageUserId);
             if (!$can) {
@@ -69,9 +66,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                 return "";
             }
-////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////
 
-            $documentNewsData = new DocumentNewsData();
+            $documentNewsManageData = new DocumentNewsManageData();
 
             $replace_arr = array(
                 "{channel_id}" => $channelId,
@@ -80,31 +77,29 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 "{site_id}" => $siteid,
                 "{manage_user_id}" => $manageUserId,
                 "{manage_user_name}" => $manageUserName,
-                "{user_id}" => $userid,
-                "{user_name}" => $username,
                 "{page_index}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replace_arr);
 
             //quick content
-            $documentQuickContentData = new DocumentQuickContentData();
-            $listName = "documentquickcontent";
-            $arrList = $documentQuickContentData->GetList();
+            $documentQuickContentManageData = new DocumentQuickContentManageData();
+            $tagId = "document_quick_content";
+            $arrList = $documentQuickContentManageData->GetList();
             if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $listName);
+                Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
-                Template::RemoveCMS($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $tagId);
             }
 
 
-            //sourcecommon
+            //source common
             $sourceCommonData = new SourceCommonData();
-            $listName = "sourcecommonlist";
+            $tagId = "sourcecommonlist";
             $arrList = $sourceCommonData->GetList();
             if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $listName);
+                Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
-                Template::RemoveCMS($tempContent, $listName);
+                Template::RemoveCMS($tempContent, $tagId);
             }
 
             parent::ReplaceWhenAdd($tempContent, 'cst_documentnews');
@@ -170,7 +165,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $commongen = new CommonGen();
                 $titlePicPath3 = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid3);
                 $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
-                $newid = $documentNewsData->Create($titlePicPath, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
+                $newid = $documentNewsManageData->Create($titlePicPath, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
 
 
 //加入操作log
@@ -182,7 +177,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                 if ($newid > 0) {
 //新增文档时修改排序号到当前频道的最大排序
-                    $documentNewsData->UpdateSortWhenAdd($channelId, $newid);
+                    $documentNewsManageData->UpdateSortWhenAdd($channelId, $newid);
 //修改上传文件的tableid;
                     $uploadfiles = Control::PostRequest("f_uploadfiles", "");
 
@@ -220,7 +215,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             case 1: //自动发布新稿
 //修改文档状态为终审
                                 $state = 14;
-                                $documentNewsData->UpdateState($newid, $state);
+                                $documentNewsManageData->UpdateState($newid, $state);
                                 $execute_ftp = 1;
                                 $pub_channel = 1;
                                 $ftpQueueData = new FtpQueueData();
@@ -262,8 +257,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $documentNewsId = Control::GetRequest("document_news_id", 0);
 
         $nowManageUserId = Control::GetManageUserId();
-        $nowUserId = Control::GetUserId();
-        //$tab_index = Control::GetRequest("tab", 1);
         $pageIndex = Control::GetRequest("p", 1);
 
         $nowManageUserName = Control::GetManageUserName();
@@ -273,9 +266,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $documentNewsManageData = new DocumentNewsManageData();
 
             //检查编辑锁
-            $lockEdit = $documentNewsManageData->GetLockEdit($documentNewsId);
-            $lockEditDate = $documentNewsManageData->GetLockEditDate($documentNewsId);
-            $lockEditManageUserId = $documentNewsManageData->GetLockEditManageUserId($documentNewsId);
+            $lockEdit = $documentNewsManageData->GetLockEdit($documentNewsId, false);
+            $lockEditDate = $documentNewsManageData->GetLockEditDate($documentNewsId, false);
+            $lockEditManageUserId = $documentNewsManageData->GetLockEditManageUserId($documentNewsId, false);
 
             $dateNowSpan = strtotime(date("Y-m-d H:i:s", time()));
             $lockEditDateSpan = strtotime(date("Y-m-d H:i:s", strtotime($lockEditDate)) . " +5 minute");
@@ -295,27 +288,42 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             $channelManageData = new ChannelManageData();
-            $channelId = $documentNewsManageData->GetChannelId($documentNewsId);
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, false);
             $withCache = FALSE;
-            $siteid = $channelManageData->GetSiteId($channelId, $withCache);
+            $siteId = $channelManageData->GetSiteId($channelId, $withCache);
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-            //编辑权限
-            $can = $manageUserAuthorityManageData->CanModify($siteid, $channelId, $nowManageUserId);
-            if (!$can) {
-                Control::ShowMessage(Language::Load('document', 26));
+            //1 编辑本频道文档权限
+            $can = $manageUserAuthorityManageData->CanModify($siteId, $channelId, $nowManageUserId);
+            if ($can) { //有编辑本频道文档权限
+                //2 检查是否有在本频道编辑他人文档的权限
+                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
+                if ($documentNewsManageUserId !== $nowManageUserId) { //发稿人与当前操作人不是同一人时才判断
+                    $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $nowManageUserId);
+                }else{
+                    //如果发稿人与当前操作人是同一人，则不处理
+                }
+                //3 检查是否有在本频道编辑同一管理组他人文档的权限
+                if(!$can){
+
+                }
+
+                //Control::ShowMessage(Language::Load('document', 26));
+                //parent::RefreshTab();
                 //$jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
                 //if ($tab_index > 0) {
                 //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
                 //}
                 //Control::RunJS($jscode);
-                return "";
+                //return "";
             }
             //操作他人的权限
-            $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId);
-            if ($documentNewsManageUserId !== $nowManageUserId) { //操作人不是发布人
-                $can = $manageUserAuthorityManageData->CanDoOthers($siteid, $channelId, $nowManageUserId);
+
+             //操作人不是发布人
+
+
+
 
                 $adminuserData = new AdminUserData(); //组内可操作他人 FOR芙蓉区食安网
                 $docAdminUserGroupId = $adminuserData->GetAdminUserGroupID($documentNewsManageUserId);
@@ -330,26 +338,18 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::RunJS($jscode);
                     return "";
                 }
-            }
-////////////////////////////////////////////////////
+
+            ////////////////////////////////////////////////////
             $documentchannelname = $channelManageData->GetName($channelId);
             $replace_arr = array(
                 "{documentchannelid}" => $channelId,
                 "{cid}" => $channelId,
                 "{id}" => $documentNewsId,
-                "{siteid}" => $siteid,
+                "{siteid}" => $siteId,
                 "{tab}" => $tab_index,
                 "{pageindex}" => $pageIndex
             );
             $tempContent = strtr($tempContent, $replace_arr);
-
-
-            //////////////////////////////////////////////////
-            //针对团结网编辑人暂时做特殊处理
-            if (stripos($_SERVER['HTTP_HOST'], "tjwang.net") == true) {
-                $tempContent = str_ireplace("{adminuserid}", $nowManageUserId, $tempContent);
-                $tempContent = str_ireplace("{adminusername}", $nowManageUserName, $tempContent);
-            }
 
             /////////////////////////////////////////////////
 //quick content
@@ -397,7 +397,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
 //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
                 if (strlen($titlePicPath) > 5) {
-                    $siteConfigData = new SiteConfigData($siteid);
+                    $siteConfigData = new SiteConfigData($siteId);
                     $documentNewsTitleMobileWidth = $siteConfigData->DocumentNewsTitleMobileWidth;
                     $documentNewsTitlePadWidth = $siteConfigData->DocumentNewsTitlePadWidth;
 
@@ -508,14 +508,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     private function GenRemoveToBin(){
-
+        $result = "";
+        return $result;
     }
 
 
-    /*
+    /**
      * 生成资讯管理列表页面
      */
-
     private function GenList() {
         $documentChannelId = Control::GetRequest("cid", 0);
         if ($documentChannelId <= 0) {
