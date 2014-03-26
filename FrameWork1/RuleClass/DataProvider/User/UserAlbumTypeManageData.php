@@ -79,7 +79,7 @@ class UserAlbumTypeManageData extends BaseManageData {
      * @return int 影响的行数
      */
     public function Delete($userAlbumTypeId){
-        if($userAlbumTypeId > 0){
+        if($userAlbumTypeId > 10){
             $sql = "DELETE FROM ".self::TableName_UserAlbumType." WHERE UserAlbumTypeId = :UserAlbumTypeId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumTypeId",$userAlbumTypeId);
