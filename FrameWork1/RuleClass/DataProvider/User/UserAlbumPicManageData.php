@@ -228,6 +228,10 @@ class UserAlbumPicManageData extends BaseManageData
         }
     }
 
+    public function RemoveBin($userAlbumPicId){
+
+    }
+
     /**
      * 删除图片
      * @param int $userAlbumPicId 图片Id
