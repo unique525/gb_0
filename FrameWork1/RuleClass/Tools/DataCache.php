@@ -10,11 +10,11 @@ class DataCache {
 
     /**
      * 写入缓冲文件
-     * @param string $cacheFile 缓冲文件名
      * @param string $cacheDir 缓冲文件夹名
+     * @param string $cacheFile 缓冲文件名
      * @param string $content 要写入的缓冲内容
      */
-    public static function Set($cacheFile, $cacheDir, $content) {
+    public static function Set($cacheDir, $cacheFile, $content) {
         $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
         FileObject::CreateFolder($cacheDir);
         file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $cacheFile, $content);

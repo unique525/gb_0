@@ -21,10 +21,10 @@ class SiteConfigManageData extends BaseManageData {
     );
     //text
     private $ArrSiteConfigTypes_2 = array(
-        "ForumTopinfo",
-        "ForumAdTopindex",
-        "ForumBotinfo",
-        "ForumAdBotindex",
+        "ForumTopInfo",
+        "ForumAdTopIndex",
+        "ForumBotInfo",
+        "ForumAdBotIndex",
         "ForumAdTopTopicList",
         "ForumAdBotTopicList",
         "ForumAdTopTopicContent",
@@ -81,7 +81,7 @@ class SiteConfigManageData extends BaseManageData {
     private $UserAlbumThumbWidth = 0; //会员相册图片缩略图宽度
     /**
      * 会员相册变成精华相册需要的支持票数
-     * @var type 
+     * @var int 会员相册变成精华相册需要的支持票数
      */
     private $UserAlbumToBestMustVoteCount = 35; //会员相册变成精华相册需要的支持票数
     //
@@ -94,10 +94,10 @@ class SiteConfigManageData extends BaseManageData {
     private $ForumBackground = ''; //论坛背景图片网址
     private $OpenRegisterWindow = 0; //是否开启注册提示窗口
     private $RegisterWindowContent = ''; //注册提示窗口文字内容
-    private $ForumTopinfo = ''; //论坛顶部信息
-    private $ForumAdTopindex = ''; //论坛首页顶部广告    
-    private $ForumBotinfo = ''; //论坛底部信息
-    private $ForumAdBotindex = ''; //论坛首页底部广告
+    private $ForumTopInfo = ''; //论坛顶部信息
+    private $ForumAdTopIndex = ''; //论坛首页顶部广告
+    private $ForumBotInfo = ''; //论坛底部信息
+    private $ForumAdBotIndex = ''; //论坛首页底部广告
     
     private $ForumAdTopTopicList = ''; //论坛帖子列表页顶部广告
     private $ForumAdBotTopicList = ''; //论坛帖子列表页底部广告
@@ -116,7 +116,7 @@ class SiteConfigManageData extends BaseManageData {
     private $UserNameLength = 50; //注册会员名的最大长度
     private $UserDefaultState = 0; //注册会员时，State初始状态值
     private $UserRecDefaultState = 0; //推荐会员时，State初始状态值
-    private $UserDefaultUserGroupIdForRole = 0; //默认的会员role表中的usergroupid
+    private $UserDefaultUserGroupIdForRole = 0; //默认的会员role表中的UserGroupId
     private $UserCommissionOwn = 0; //本人的默认提成比率 
     private $UserCommissionChild = 0; //本人的下一级默认提成比率 
     private $UserCommissionGrandson = 0; //本人的下两级默认提成比率  
@@ -171,7 +171,7 @@ class SiteConfigManageData extends BaseManageData {
     
     /**
      * 构造函数
-     * @param type $siteId 
+     * @param int $siteId 站点id，每个配置都是站点下的配置
      */
 
     public function __construct($siteId) {
@@ -180,8 +180,8 @@ class SiteConfigManageData extends BaseManageData {
 
     /**
      * get 配置值
-     * @param type $siteConfigName
-     * @return type 
+     * @param string $siteConfigName 配置名称
+     * @return type 配置值
      */
     public function __get($siteConfigName) {
         $siteConfigType = 0;
@@ -204,8 +204,8 @@ class SiteConfigManageData extends BaseManageData {
 
     /**
      * 设置配置值
-     * @param type $siteConfigName
-     * @param type $fieldValue 
+     * @param string $siteConfigName 配置名称
+     * @param string $fieldValue 配置值
      */
     public function __set($siteConfigName, $fieldValue) {
         $siteConfigType = 0;
@@ -223,13 +223,12 @@ class SiteConfigManageData extends BaseManageData {
 
     /**
      * 设置配置值
-     * @param type $siteID
-     * @param type $siteConfigName
-     * @param type $fieldValue
-     * @param type $siteConfigType 
+     * @param int $siteId 站点id
+     * @param string $siteConfigName 配置名称
+     * @param string $fieldValue 配置值
+     * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      */
-    public function SetValue($siteID, $siteConfigName, $fieldValue, $siteConfigType = 0) {
-        $fieldName = "StringNorValue";
+    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
         switch ($siteConfigType) {
             case 0:
                 $fieldName = "StringNorValue";
@@ -268,48 +267,40 @@ class SiteConfigManageData extends BaseManageData {
                 }
                 break;
         }
-        $sql = "SELECT count(*) FROM cst_siteconfig WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
+        $sql = "SELECT count(*) FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteID", $siteID);
+        $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("SiteConfigName", $siteConfigName);
-        $dbOperator = DBOperator::getInstance();
-        $hasCount = $dbOperator->ReturnInt($sql, $dataProperty);
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
         if ($hasCount > 0) { //已存在相关配置记录
-            $sql = "UPDATE cst_siteconfig SET " . $fieldName . "=:fieldvalue,SiteConfigType=:siteconfigtype WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
-            $dataProperty->AddField("fieldvalue", $fieldValue);
-            $dataProperty->AddField("siteconfigtype", $siteConfigType);
-            $dbOperator->Execute($sql, $dataProperty);
+            $sql = "UPDATE ".self::TableName_SiteConfig." SET " . $fieldName . "=:FieldValue,SiteConfigType=:SiteConfigType WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
+            $dataProperty->AddField("FieldValue", $fieldValue);
+            $dataProperty->AddField("SiteConfigType", $siteConfigType);
+            $this->dbOperator->Execute($sql, $dataProperty);
         } else {
-            $sql = "INSERT INTO cst_siteconfig (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteID,:SiteConfigName,:fieldvalue,:siteconfigtype)";
-            $dataProperty->AddField("fieldvalue", $fieldValue);
-            $dataProperty->AddField("siteconfigtype", $siteConfigType);
-            $dbOperator->Execute($sql, $dataProperty);
+            $sql = "INSERT INTO ".self::TableName_SiteConfig." (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
+            $dataProperty->AddField("FieldValue", $fieldValue);
+            $dataProperty->AddField("SiteConfigType", $siteConfigType);
+            $this->dbOperator->Execute($sql, $dataProperty);
         }
-        $cachedir = 'data' . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteID;
-        $cachefile = 'siteconfig.cache_' . strtolower($siteConfigName);
-        DataCache::Set($cachefile, $cachedir, $fieldValue);
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data'.DIRECTORY_SEPARATOR. $siteId;
+        $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
+        DataCache::Set($cacheDir, $cacheFile, $fieldValue);
     }
 
     /**
      * 取得配置值（已缓冲）
-     * @param type $siteID
-     * @param type $siteConfigName
-     * @param type $siteConfigType
-     * @param type $defaultValue
-     * @return type 
+     * @param int $siteId 站点id
+     * @param string $siteConfigName 配置名称
+     * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
+     * @param mixed $defaultValue 默认值
+     * @return mixed 配置值
      */
-    private function GetValue($siteID, $siteConfigName, $siteConfigType = 0, $defaultValue = null) {
-
-        if (intval($siteID) > 0) {
-
-            $cachedir = 'data' . DIRECTORY_SEPARATOR . 'sitedata' . DIRECTORY_SEPARATOR . $siteID;
-            $cachefile = 'siteconfig.cache_' . strtolower($siteConfigName);
-
-
-            if (strlen(DataCache::Get($cachedir . DIRECTORY_SEPARATOR . $cachefile)) <= 0) {
-
-                $fieldName = "StringNorValue";
-
+    private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null) {
+        if (intval($siteId) > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data'.DIRECTORY_SEPARATOR. $siteId;
+            $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
+            if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 switch ($siteConfigType) {
                     case 0: //varchar 200
                         $fieldName = "StringNorValue";
@@ -331,21 +322,20 @@ class SiteConfigManageData extends BaseManageData {
                         break;
                 }
 
-                $sql = "SELECT " . $fieldName . " FROM cst_siteconfig WHERE SiteID=:SiteID AND SiteConfigName=:SiteConfigName";
+                $sql = "SELECT " . $fieldName . " FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
 
                 $dataProperty = new DataProperty();
-                $dataProperty->AddField("SiteID", $siteID);
+                $dataProperty->AddField("SiteId", $siteId);
                 $dataProperty->AddField("SiteConfigName", $siteConfigName);
-                $dbOperator = DBOperator::getInstance();
-                $result = $dbOperator->ReturnString($sql, $dataProperty);
+                $result = $this->dbOperator->GetString($sql, $dataProperty);
                 if ($result == FALSE) {
-                    self::SetValue($siteID, $siteConfigName, $defaultValue, $siteConfigType);
+                    self::SetValue($siteId, $siteConfigName, $defaultValue, $siteConfigType);
                     $result = $defaultValue;
                 } else {
-                    DataCache::Set($cachefile, $cachedir, $result);
+                    DataCache::Set($cacheDir, $cacheFile, $result);
                 }
             } else {
-                $result = DataCache::Get($cachedir . DIRECTORY_SEPARATOR . $cachefile);
+                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
             }
             return $result;
         } else {
@@ -355,15 +345,14 @@ class SiteConfigManageData extends BaseManageData {
 
     /**
      * 返回某一站点下所有配置项列表
-     * @param type $SiteID
-     * @return type 
+     * @param int $siteId 站点id
+     * @return array 配置列表
      */
-    public function GetList($SiteID) {
-        $sql = "SELECT * FROM cst_siteconfig WHERE SiteID=:SiteID";
+    public function GetList($siteId) {
+        $sql = "SELECT * FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteID", $SiteID);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
+        $dataProperty->AddField("SiteId", $siteId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 }

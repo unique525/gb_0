@@ -9,32 +9,39 @@
 class FileObject {
 
     /**
-     * 创建文件夹(777权限)
-     * @param string $path
+     * 创建文件夹
+     * @param string $dirPath 要创建的文件夹路径
+     * @param int $accessMode 访问权限(默认777权限)
      */
-    public static function CreateFolder($path) {
-        if (!file_exists($path)) {
-            self::CreateFolder(dirname($path));
-            mkdir($path, 0777);
+    public static function CreateDir($dirPath, $accessMode = 0777) {
+        if(!file_exists($dirPath)){
+            $arrSeparatorDirPath = explode(DIRECTORY_SEPARATOR, $dirPath);
+            $separatorDirPath = "";
+            for ($i = 0; $i < count($arrSeparatorDirPath); $i++) {
+                $separatorDirPath .= $arrSeparatorDirPath[$i] . DIRECTORY_SEPARATOR;
+                $separatorDirPath = str_replace("//", "/", $separatorDirPath);
+                @mkdir($separatorDirPath, $accessMode);
+            }
         }
     }
 
     /**
      * 写入文件
-     * @param string $fileName 文件路径
-     * @param mixed $fileData 要写入文件的数据。可以是字符串、数组或数据流。
+     * @param string $filePath 文件路径
+     * @param mixed $fileContent 要写入文件的数据。可以是字符串、数组或数据流。
+     * @return bool 写入结果
      */
-    public static function Write($fileName, $fileData) {
-        if (!empty($fileName)) {
+    public static function Write($filePath, $fileContent) {
+        if (!empty($filePath)) {
             //目录处理
-            $dir = dirname($fileName);
-            FileObject::MkDirs($dir);
+            $dir = dirname($filePath);
+            FileObject::CreateDir($dir);
 
-            $fp = fopen($fileName, "w+"); //打开文件指针，创建文件
-            if (!is_writable($fileName)) {
-                die("文件:" . $fileName . "不可写，发布失败，请联系技术人员处理！");
+            $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
+            if (!is_writable($filePath)) {
+                die("文件:" . $filePath . "不可写，发布失败，请联系技术人员处理！");
             }
-            file_put_contents($fileName, $fileData);
+            file_put_contents($filePath, $fileContent);
             fclose($fp);
             return true;
         } else {
@@ -44,120 +51,101 @@ class FileObject {
 
     /**
      * 根据数组数据写入文件
-     * @param array $arrFileContents 写入数据信息数组 {dest,source,content}
+     * @param array $arrFileContent 写入数据信息数组 {DestinationPath,SourcePath,Content}
      * @return int 写入结果 
      */
-    public static function WriteQueue(&$arrFileContents = null) {
-        $result = 0;
-        if (empty($arrFileContents)) {
+    public static function WriteQueue(&$arrFileContent = null) {
+        if (empty($arrFileContent)) {
             $result = -5;           //上传数组为空
         } else {
-            for ($i = 0; $i < count($arrFileContents); $i++) {
-                $destPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["dest"];
+            for ($i = 0; $i < count($arrFileContent); $i++) {
+                $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContent[$i]["DestinationPath"];
 
 
-                $destPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destPath);
-                $destPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destPath);
-                $source = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContents[$i]["source"];
+                $destinationPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destinationPath);
+                $destinationPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destinationPath);
+                $sourcePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContent[$i]["SourcePath"];
 
-                $source = str_ireplace("/", DIRECTORY_SEPARATOR, $source);
-                $source = str_ireplace("\\", DIRECTORY_SEPARATOR, $source);
-                $sourceContent = $arrFileContents[$i]["content"];
+                $sourcePath = str_ireplace("/", DIRECTORY_SEPARATOR, $sourcePath);
+                $sourcePath = str_ireplace("\\", DIRECTORY_SEPARATOR, $sourcePath);
+                $sourceContent = $arrFileContent[$i]["Content"];
 
-
-                if ($destPath != $source) { //写本地文件时，目标路径和来源路径一致时，不进行操作
+                if ($destinationPath != $sourcePath) { //写本地文件时，目标路径和来源路径一致时，不进行操作
                     if (strlen($sourceContent) > 0) {     //内容
-                        $isWrite = FileObject::Write($destPath, $sourceContent);
+                        $isWrite = FileObject::Write($destinationPath, $sourceContent);
                     } else {            //附件文件
-                        $isWrite = FileObject::Move($source, $destPath);
+                        $isWrite = FileObject::Move($sourcePath, $destinationPath);
                     }
 
                     if ($isWrite) {
-                        $arrFileContents[$i]["result"] = 1;
+                        $arrFileContent[$i]["result"] = 1;
                     } else {
-                        $arrFileContents[$i]["result"] = 0;
+                        $arrFileContent[$i]["result"] = 0;
                     }
                 }
             }
-            $result = 1;    //写入成功
+            $result = 0;    //数据不为空
         }
         return $result;
     }
 
     /**
      * 根据来源文件写入目标文件
-     * @param type $destPath 目标文件路径
-     * @param type $sourcePath 来源文件路径
-     * @param type $sourceContent 写入内容
+     * @param string $destinationPath 目标文件路径
+     * @param string $sourcePath 来源文件路径
+     * @param string $sourceContent 写入内容
      * @return int 返回写入结果 $result = -5 目标为空 $result = 1 写入成功
      */
-    public static function WriteSingle($destPath, $sourcePath, $sourceContent) {
-        $result = 0;
+    public static function WriteSingle($destinationPath, $sourcePath, $sourceContent) {
         if (empty($sourcePath) && empty($sourceContent)) {
             $result = -5;           //来源为空
         } else {
-            $destPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $destPath;
-            $destPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destPath);
-            $destPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destPath);
+            $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $destinationPath;
+            $destinationPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destinationPath);
+            $destinationPath = str_ireplace("\\", DIRECTORY_SEPARATOR, $destinationPath);
 
             $sourcePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $sourcePath;
             $sourcePath = str_ireplace("/", DIRECTORY_SEPARATOR, $sourcePath);
             $sourcePath = str_ireplace("\\", DIRECTORY_SEPARATOR, $sourcePath);
 
             if (strlen($sourceContent) > 0) {     //内容
-                $isWrite = FileObject::Write($destPath, $sourceContent);
+                FileObject::Write($destinationPath, $sourceContent);
             } else {
-                $isWrite = FileObject::Move($sourcePath, $destPath);
+                FileObject::Move($sourcePath, $destinationPath);
             }
-            $result = 1;    //写入成功
+            $result = 0;    //写入成功
         }
         return $result;
     }
 
     /**
      * 移动并重命名文件
-     * @param string $sourcePath 来源文件路径
-     * @param string $destPath 目标文件路径
+     * @param string $sourceFilePath 来源文件路径
+     * @param string $destinationFilePath 目标文件路径
      * @return boolean 返回逻辑值 
      */
-    public static function Move($sourcePath, $destPath) {
-        $sourcePath = str_ireplace("//", "/", $sourcePath);
-        $destPath = str_ireplace("//", "/", $destPath);
-        if (!empty($sourcePath) && !empty($destPath) && is_file($sourcePath) && $sourcePath != $destPath) {
-
-            //self::MkDirs($destPath);
-
-            return rename($sourcePath, $destPath);
+    public static function Move($sourceFilePath, $destinationFilePath) {
+        $sourceFilePath = str_ireplace("//", "/", $sourceFilePath);
+        $destinationFilePath = str_ireplace("//", "/", $destinationFilePath);
+        if (!empty($sourceFilePath) && !empty($destinationFilePath) && is_file($sourceFilePath) && $sourceFilePath != $destinationFilePath) {
+            return rename($sourceFilePath, $destinationFilePath);
         } else {
             return false;
         }
     }
 
     /**
-     * 递归创建目录
-     * @param string $dirPath 文件夹路径
-     */
-    public static function MkDirs($dirPath) {
-        $dirPath = explode(DIRECTORY_SEPARATOR, $dirPath);
-        for ($i = 0; $i < count($dirPath); $i++) {
-            $mkdir .= $dirPath[$i] . DIRECTORY_SEPARATOR;
-            $mkdir = str_replace("//", "/", $mkdir);
-            @mkdir($mkdir, 0777);
-        }
-    }
-
-    /**
      * 复制文件到目标路径
-     * @param string $sourcePath     源文件路径
-     * @param string $destPath        目标文件路径
+     * @param string $sourceFilePath 源文件路径
+     * @param string $destinationFilePath  目标文件路径
      */
-    public static function Copy($sourcePath, $destPath) {
-        if (file_exists($sourcePath)) {       //判断源文件是否存在
-            $dir = dirname($destPath);       //判断目标文件夹是否存在
-            if (!file_exists($dir)) {           //不存在就创建
-                FileObject::MkDirs($dir);
+    public static function Copy($sourceFilePath, $destinationFilePath) {
+        if (file_exists($sourceFilePath)) {       //判断源文件是否存在
+            $destinationDirPath = dirname($destinationFilePath);       //判断目标文件夹是否存在
+            if (!file_exists($destinationDirPath)) {           //不存在就创建
+                FileObject::CreateDir($destinationDirPath);
             }
-            @copy($sourcePath, $destPath);
+            @copy($sourceFilePath, $destinationFilePath);
         }
     }
 
@@ -167,8 +155,8 @@ class FileObject {
      * @param ZipArchive $zip ZipArchive对象
      */
     public static function AddFileToZip($sourcePath, $zip) {
-        $handler = opendir($sourcePath);      //打开当前文件夹由$path指定。
-        while (($filename = readdir($handler)) !== false) {
+        $dirHandler = opendir($sourcePath);      //打开当前文件夹由$path指定。
+        while (($filename = readdir($dirHandler)) !== false) {
             if ($filename != "." && $filename != "..") {       //文件夹文件名字为'.'和‘..’，不要对他们进行操作
                 if (is_dir($sourcePath . "/" . $filename)) {          // 如果读取的某个对象是文件夹，则递归
                     FileObject::AddFileToZip($sourcePath . "/" . $filename, $zip);
@@ -177,25 +165,32 @@ class FileObject {
                 }
             }
         }
-        @closedir($sourcePath);
+        closedir($dirHandler);
     }
 
     /**
      * 递归删除目录
      * @param string $dirPath 要删除的目录路径
+     * @return bool 是否成功
      */
-    public static function RmDirs($dirPath) {
-        $dir = dir($dirPath);
-        while (false !== ($childDirPath = $dir->read())) {
+    public static function DeleteDir($dirPath) {
+        $dirPath = dirname($dirPath);
+        $dirHandler = dir($dirPath);
+        while (false !== ($childDirPath = $dirHandler->read())) {
             if ($childDirPath != '.' && $childDirPath != '..') {
-                if (is_dir($dirPath . '/' . $childDirPath))
-                    RmDirs($dirPath . '/' . $childDirPath);
-                else
+                if (is_dir($dirPath . '/' . $childDirPath)){
+                    FileObject::DeleteDir($dirPath . '/' . $childDirPath);
+                }else{
                     unlink($dirPath . '/' . $childDirPath);
+                }
             }
         }
-        $dir->close();
-        rmdir($dirPath);
+        $dirHandler->close();
+        if (rmdir($dirPath)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -203,10 +198,10 @@ class FileObject {
      * @param string $fileName 要处理的文件名
      * @return string 文件后缀名
      */
-    public static function GetEx($fileName) {
+    public static function GetFileExtensionName($fileName) {
         $index = strrpos($fileName, '.');
-        $fileEx = substr($fileName, $index + 1);
-        return $fileEx;
+        $fileExtensionName = substr($fileName, $index + 1);
+        return $fileExtensionName;
     }
 
     /**
@@ -225,7 +220,7 @@ class FileObject {
      * @param string $fileName 要处理的文件名
      * @return boolean 是否成功
      */
-    public static function DelFile($fileName) {
+    public static function DeleteFile($fileName) {
         if (file_exists($fileName)) {
             if (!is_dir($fileName)) {
                 if (unlink($fileName)) {
@@ -237,34 +232,6 @@ class FileObject {
         }
     }
 
-    /**
-     * 删除文件夹
-     * @param string $dirPath 要处理的文件夹路径
-     * @return boolean 是否成功
-     */
-    public static function DelDir($dirPath) {
-        if (is_dir($dirPath)) {
-            $dh = opendir($dirPath);
-            while ($file = readdir($dh)) {
-                if ($file != "." && $file != "..") {
-                    $fullPath = $dirPath . "/" . $file;
-                    if (!is_dir($fullPath)) {
-                        unlink($fullPath);
-                    } else {
-                        self::DelDir($fullPath);
-                    }
-                }
-            }
-
-            closedir($dh);
-
-            if (rmdir($dirPath)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
 
     /**
      * 生成缩略图

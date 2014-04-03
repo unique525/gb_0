@@ -70,15 +70,11 @@ class Control {
      */
     public static function PostRequest($paramName, $defaultValue) {
         if (isset($_POST[$paramName])) {
-            //if (is_numeric($_POST[$paramname])) { //有BUG 2011.1.13停用
-            //    return get_int($_POST[$paramname]);
-            //} else {
             if (strlen($_POST[$paramName]) <= 0) {
                 return $defaultValue;
             } else {
                 return $_POST[$paramName];
             }
-            //}
         } else {
             return $defaultValue;
         }
