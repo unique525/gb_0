@@ -596,7 +596,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         }
         if ($pageIndex > 0 && $documentChannelId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $listName = "documentnewslist";
+            $listName = "document_news_list";
             $allCount = 0;
             $isSelf = Control::GetRequest("isself", 0);
             $documentNewsManageData = new DocumentNewsManageData();

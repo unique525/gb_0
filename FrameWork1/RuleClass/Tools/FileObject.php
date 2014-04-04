@@ -218,7 +218,7 @@ class FileObject {
     /**
      * 删除文件
      * @param string $fileName 要处理的文件名
-     * @return boolean 是否成功
+     * @return bool 是否成功
      */
     public static function DeleteFile($fileName) {
         if (file_exists($fileName)) {

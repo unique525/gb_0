@@ -16,7 +16,7 @@ class DataCache {
      */
     public static function Set($cacheDir, $cacheFile, $content) {
         $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
-        FileObject::CreateFolder($cacheDir);
+        FileObject::CreateDir($cacheDir);
         file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $cacheFile, $content);
     }
 
@@ -40,7 +40,7 @@ class DataCache {
      */
     public static function Remove($cacheFile) {
         $cacheFile = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheFile;
-        FileObject::DelFile($cacheFile);
+        FileObject::DeleteFile($cacheFile);
     }
 
     /**
@@ -50,7 +50,7 @@ class DataCache {
      */
     public static function RemoveDir($cacheDir) {
         $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
-        return FileObject::DelDir($cacheDir);
+        return FileObject::DeleteDir($cacheDir);
     }
 }
 
