@@ -6,15 +6,17 @@
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class FileObject {
+class FileObject
+{
 
     /**
      * 创建文件夹
      * @param string $dirPath 要创建的文件夹路径
      * @param int $accessMode 访问权限(默认777权限)
      */
-    public static function CreateDir($dirPath, $accessMode = 0777) {
-        if(!file_exists($dirPath)){
+    public static function CreateDir($dirPath, $accessMode = 0777)
+    {
+        if (!file_exists($dirPath)) {
             $arrSeparatorDirPath = explode(DIRECTORY_SEPARATOR, $dirPath);
             $separatorDirPath = "";
             for ($i = 0; $i < count($arrSeparatorDirPath); $i++) {
@@ -31,7 +33,8 @@ class FileObject {
      * @param mixed $fileContent 要写入文件的数据。可以是字符串、数组或数据流。
      * @return bool 写入结果
      */
-    public static function Write($filePath, $fileContent) {
+    public static function Write($filePath, $fileContent)
+    {
         if (!empty($filePath)) {
             //目录处理
             $dir = dirname($filePath);
@@ -52,11 +55,12 @@ class FileObject {
     /**
      * 根据数组数据写入文件
      * @param array $arrFileContent 写入数据信息数组 {DestinationPath,SourcePath,Content}
-     * @return int 写入结果 
+     * @return int 写入结果
      */
-    public static function WriteQueue(&$arrFileContent = null) {
+    public static function WriteQueue(&$arrFileContent = null)
+    {
         if (empty($arrFileContent)) {
-            $result = -5;           //上传数组为空
+            $result = -5; //上传数组为空
         } else {
             for ($i = 0; $i < count($arrFileContent); $i++) {
                 $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContent[$i]["DestinationPath"];
@@ -71,9 +75,9 @@ class FileObject {
                 $sourceContent = $arrFileContent[$i]["Content"];
 
                 if ($destinationPath != $sourcePath) { //写本地文件时，目标路径和来源路径一致时，不进行操作
-                    if (strlen($sourceContent) > 0) {     //内容
+                    if (strlen($sourceContent) > 0) { //内容
                         $isWrite = FileObject::Write($destinationPath, $sourceContent);
-                    } else {            //附件文件
+                    } else { //附件文件
                         $isWrite = FileObject::Move($sourcePath, $destinationPath);
                     }
 
@@ -84,7 +88,7 @@ class FileObject {
                     }
                 }
             }
-            $result = 0;    //数据不为空
+            $result = 0; //数据不为空
         }
         return $result;
     }
@@ -96,9 +100,10 @@ class FileObject {
      * @param string $sourceContent 写入内容
      * @return int 返回写入结果 $result = -5 目标为空 $result = 1 写入成功
      */
-    public static function WriteSingle($destinationPath, $sourcePath, $sourceContent) {
+    public static function WriteSingle($destinationPath, $sourcePath, $sourceContent)
+    {
         if (empty($sourcePath) && empty($sourceContent)) {
-            $result = -5;           //来源为空
+            $result = -5; //来源为空
         } else {
             $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $destinationPath;
             $destinationPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destinationPath);
@@ -108,12 +113,12 @@ class FileObject {
             $sourcePath = str_ireplace("/", DIRECTORY_SEPARATOR, $sourcePath);
             $sourcePath = str_ireplace("\\", DIRECTORY_SEPARATOR, $sourcePath);
 
-            if (strlen($sourceContent) > 0) {     //内容
+            if (strlen($sourceContent) > 0) { //内容
                 FileObject::Write($destinationPath, $sourceContent);
             } else {
                 FileObject::Move($sourcePath, $destinationPath);
             }
-            $result = 0;    //写入成功
+            $result = 0; //写入成功
         }
         return $result;
     }
@@ -122,9 +127,10 @@ class FileObject {
      * 移动并重命名文件
      * @param string $sourceFilePath 来源文件路径
      * @param string $destinationFilePath 目标文件路径
-     * @return boolean 返回逻辑值 
+     * @return boolean 返回逻辑值
      */
-    public static function Move($sourceFilePath, $destinationFilePath) {
+    public static function Move($sourceFilePath, $destinationFilePath)
+    {
         $sourceFilePath = str_ireplace("//", "/", $sourceFilePath);
         $destinationFilePath = str_ireplace("//", "/", $destinationFilePath);
         if (!empty($sourceFilePath) && !empty($destinationFilePath) && is_file($sourceFilePath) && $sourceFilePath != $destinationFilePath) {
@@ -137,12 +143,13 @@ class FileObject {
     /**
      * 复制文件到目标路径
      * @param string $sourceFilePath 源文件路径
-     * @param string $destinationFilePath  目标文件路径
+     * @param string $destinationFilePath 目标文件路径
      */
-    public static function Copy($sourceFilePath, $destinationFilePath) {
-        if (file_exists($sourceFilePath)) {       //判断源文件是否存在
-            $destinationDirPath = dirname($destinationFilePath);       //判断目标文件夹是否存在
-            if (!file_exists($destinationDirPath)) {           //不存在就创建
+    public static function Copy($sourceFilePath, $destinationFilePath)
+    {
+        if (file_exists($sourceFilePath)) { //判断源文件是否存在
+            $destinationDirPath = dirname($destinationFilePath); //判断目标文件夹是否存在
+            if (!file_exists($destinationDirPath)) { //不存在就创建
                 FileObject::CreateDir($destinationDirPath);
             }
             @copy($sourceFilePath, $destinationFilePath);
@@ -154,13 +161,14 @@ class FileObject {
      * @param string $sourcePath 要打包的源文件
      * @param ZipArchive $zip ZipArchive对象
      */
-    public static function AddFileToZip($sourcePath, $zip) {
-        $dirHandler = opendir($sourcePath);      //打开当前文件夹由$path指定。
+    public static function AddFileToZip($sourcePath, $zip)
+    {
+        $dirHandler = opendir($sourcePath); //打开当前文件夹由$path指定。
         while (($filename = readdir($dirHandler)) !== false) {
-            if ($filename != "." && $filename != "..") {       //文件夹文件名字为'.'和‘..’，不要对他们进行操作
-                if (is_dir($sourcePath . "/" . $filename)) {          // 如果读取的某个对象是文件夹，则递归
+            if ($filename != "." && $filename != "..") { //文件夹文件名字为'.'和‘..’，不要对他们进行操作
+                if (is_dir($sourcePath . "/" . $filename)) { // 如果读取的某个对象是文件夹，则递归
                     FileObject::AddFileToZip($sourcePath . "/" . $filename, $zip);
-                } else {         //将文件加入zip对象
+                } else { //将文件加入zip对象
                     $zip->addFile($sourcePath . "/" . $filename);
                 }
             }
@@ -173,14 +181,15 @@ class FileObject {
      * @param string $dirPath 要删除的目录路径
      * @return bool 是否成功
      */
-    public static function DeleteDir($dirPath) {
+    public static function DeleteDir($dirPath)
+    {
         $dirPath = dirname($dirPath);
         $dirHandler = dir($dirPath);
         while (false !== ($childDirPath = $dirHandler->read())) {
             if ($childDirPath != '.' && $childDirPath != '..') {
-                if (is_dir($dirPath . '/' . $childDirPath)){
+                if (is_dir($dirPath . '/' . $childDirPath)) {
                     FileObject::DeleteDir($dirPath . '/' . $childDirPath);
-                }else{
+                } else {
                     unlink($dirPath . '/' . $childDirPath);
                 }
             }
@@ -194,33 +203,12 @@ class FileObject {
     }
 
     /**
-     * 取得文件后缀名
-     * @param string $fileName 要处理的文件名
-     * @return string 文件后缀名
-     */
-    public static function GetFileExtensionName($fileName) {
-        $index = strrpos($fileName, '.');
-        $fileExtensionName = substr($fileName, $index + 1);
-        return $fileExtensionName;
-    }
-
-    /**
-     * 取得文件名+后缀名
-     * @param string $fileName 要处理的文件名
-     * @return string 文件名+后缀名 
-     */
-    public static function GetNameAndEx($fileName) {
-        $index = strrpos($fileName, '\\');
-        $fileEx = substr($fileName, $index + 1);
-        return $fileEx;
-    }
-
-    /**
      * 删除文件
      * @param string $fileName 要处理的文件名
      * @return bool 是否成功
      */
-    public static function DeleteFile($fileName) {
+    public static function DeleteFile($fileName)
+    {
         if (file_exists($fileName)) {
             if (!is_dir($fileName)) {
                 if (unlink($fileName)) {
@@ -232,223 +220,164 @@ class FileObject {
         }
     }
 
+    /**
+     * 取得文件路径
+     * @param string $fileName 文件路径+文件名
+     * @return mixed 取得文件路径
+     */
+    public static function GetPath($fileName)
+    {
+        if (strlen($fileName) > 0) {
+            $indexOfFileName = strrpos($fileName, DIRECTORY_SEPARATOR);
+            $filePath = substr($fileName, 0, $indexOfFileName);
+            return $filePath;
+        } else {
+            return null;
+        }
+    }
+
 
     /**
-     * 生成缩略图
-     * @param string $source    原图
-     * @param int $toWidth         生成缩略图宽度
-     * @param int $toHeight         生成缩略图高度
-     * @param string $thumbFileName   
-     * @param int $isThumb     为1则处理缩略图高度,否则不处理缩略图,返回原图
-     * @return 成功 -- 新图片地址
-     *      失败 -- -1:原文件不存在, 
-     *              -2:源图片过大,需要服务器内存支持GD;, 
-     *              -3:GD库不能使用GIF格式的图片，请使用Jpeg或PNG格式;
-     *              -4:缩略图创建失败,
-     *              -5;no rewrite;
+     * 根据文件路径取得文件名
+     * @param string $filePath 文件路径
+     * @return mixed 文件名
      */
-    public static function CreatThumb($source, $toWidth = 0, $toHeight = 0, $thumbFileName = "thumb", $isThumb = 1) {
-        $error = 0;
-        $absolutelyPath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
-
-        if (!file_exists($absolutelyPath)) {
-            $error = -1;        //'源图片文件不存在!'.$source;
-            return $error;
-        }
-
-//设置memory_limit 
-        if (function_exists('ini_get')) {
-            $memorylimit = @ini_get('memory_limit');
-            if ($memorylimit && self::return_bytes($memorylimit) < 335544320 && function_exists('ini_set')) {        //320M
-                @ini_set('memory_limit', '4000m');
-            }
-        }
-
-        $imgtype = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
-        $data = @getimagesize($absolutelyPath);    //取得原文件信息
-        if ($data[0] > 8000 || $data[1] > 8000) {     //宽与高的值不能大于8000
-            $error = -2;        //源图片过大,需要服务器内存支持GD;
-            return $error;
-        }
-        $thumbname = '.' . $thumbFileName . '.' . $imgtype[$data[2]]; //缩略图名
-        $thumbname = str_ireplace("jpeg", "jpg", $thumbname);
-
-        $to_File = $absolutelyPath . $thumbname;            //要生成的缩略图路径
-
-        $func_create = "imagecreatefrom" . $imgtype[$data[2]];      //取得GD库函数类型
-        if (!function_exists($func_create)) {
-            $error = -3;        //你的GD库不能使用GIF格式的图片，请使用Jpeg或PNG格式;
-            return $error;
-        }
-
-        $absolutely_id = @$func_create($absolutelyPath);    //GD函数
-        $width = @ImageSX($absolutely_id);        //原图宽
-        $height = @ImageSY($absolutely_id);       //原图高
-        if ($toWidth > $width && $toHeight > $height && $isThumb == 0) {         //原图都小于要生成的图
-            return $source;          //直接返回原图
+    public static function GetName($filePath)
+    {
+        if (strlen($filePath) > 0) {
+            $indexOfFileName = strrpos($filePath, "/");
+            $fileName = substr($filePath, $indexOfFileName + 1);
+            $indexOfEx = strrpos($fileName, ".");
+            $fileName = substr($fileName, 0, $indexOfEx);
+            return $fileName;
         } else {
-            if ($toWidth < $width || $toHeight < $height) {
-                if ($toWidth <= 0 && $toHeight <= 0) {         //都为0则缩略图不处理大小
-                    $toWidth = $width;
-                    $toHeight = $height;
-                } else {
-                    if ($toWidth > 0 && $toHeight <= 0) {
-                        $toHeight = round($height * ($toWidth / $width));    //按宽度缩小
-                    } else if ($toHeight > 0 && $toWidth <= 0) {
-                        $toWidth = round($width * ($toHeight / $height));    //按高度缩小
-                    } else if ($toWidth > 0 && $toHeight > 0) {
-
-                        if ($width > $height) { //原图宽度大于高度 按宽度缩小
-                            $toHeight = round($height * ($toWidth / $width));
-                        } else {
-                            $toWidth = round($width * ($toHeight / $height));    //按高度缩小
-                        }
-                    }
-                }
-            } else {
-                $toWidth = $width;
-                $toHeight = $height;
-            }
+            return null;
         }
+    }
 
-//        $toWH = $toW / $toH;
-//        $srcWH = $width / $height;
-//        if ($toWH <= $srcWH) {
-//            $ftoW = $toW;
-//            $ftoH = $ftoW * ($height / $width);
-//        } else {
-//            $ftoH = $toH;
-//            $ftoW = $ftoH * ($width / $height);
-//        }
-//
-//        if ($width > $toW || $height > $toH) {
-//            $cImg = self::CreatImage($absolutely_id, $ftoW, $ftoH, 0, 0, 0, 0, $width, $height);        //创建文件流内容
-//        } else {
-//            $cImg = self::CreatImage($absolutely_id, $width, $height, 0, 0, 0, 0, $width, $height);
-//        }
-        $cImg = self::CreatImage($absolutely_id, $toWidth, $toHeight, 0, 0, 0, 0, $width, $height);        //创建文件流内容
+    /**
+     * 取得文件后缀名
+     * @param string $fileName 要处理的文件名
+     * @return string 文件后缀名
+     */
+    public static function GetFileExtensionName($fileName)
+    {
+        $index = strrpos($fileName, '.');
+        $fileExtensionName = substr($fileName, $index + 1);
+        return $fileExtensionName;
+    }
 
-        if (function_exists('imagejpeg')) {
-            $result = @ImageJpeg($cImg, $to_File, 100);           //保存文件  ImageJpeg($cImg);       输出文件流 100%的高清
-        } else {
-            $result = @ImagePNG($cImg, $to_File, 100);
-        }
-        @ImageDestroy($cImg);        //清除缓存文件流内容
 
-        if ($result == 1) {
-            if (!file_exists($to_File)) {
-                $error = -4;        //缩略图创建失败;
-                return $error;
-            }
-        } else {
-            $error = -5;        //no rewrite;
-            return $error;
-        }
-//echo $to_File . "<br>" . $result . "<br>" . $error;
-        $to_File = str_ireplace("../", "/", $to_File);
-        $to_File = str_ireplace("./", "/", $to_File);
-        $to_File = str_ireplace("//", "/", $to_File);
-
-        return $source . $thumbname;          //原图加缩略图名
+    /**
+     * 取得文件名+后缀名
+     * @param string $fileName 要处理的文件名
+     * @return string 文件名+后缀名
+     */
+    public static function GetFileNameAndExtensionName($fileName)
+    {
+        $index = strrpos($fileName, '\\');
+        $fileExtensionName = substr($fileName, $index + 1);
+        return $fileExtensionName;
     }
 
     /**
      * 题图进行缩略处理
-     * @param string $source    原文件路径
-     * @param int $toWidth      处理后的宽度；为0时表示不作处理
-     * @param int $toHeight     处理后的高度；为0时表示不作处理
+     * @param string $source 原文件路径
+     * @param int $toWidth 处理后的宽度；为0时表示不作处理
+     * @param int $toHeight 处理后的高度；为0时表示不作处理
      * @param string $thumbFileName 处理后生成图命名
      * @return string   返回处理后的路径
      */
-    public static function CreatDocumentNewsTitlePic($source, $toWidth = 0, $toHeight = 0, $thumbFileName = "thumb") {
+    public static function CreatDocumentNewsTitlePic($source, $toWidth = 0, $toHeight = 0, $thumbFileName = "thumb")
+    {
         $result = 0;
-        $absolutelyPath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);         //绝对路径
+        $absolutelyPath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source); //绝对路径
 
         if (!file_exists($absolutelyPath)) {
-            $result = -1;        //'源图片文件不存在!'.$source;
+            $result = -1; //'源图片文件不存在!'.$source;
             return $result;
         }
 
         //设置memory_limit
         if (function_exists('ini_get')) {
             $memorylimit = @ini_get('memory_limit');
-            if ($memorylimit && self::return_bytes($memorylimit) < 335544320 && function_exists('ini_set')) {        //320M
+            if ($memorylimit && self::return_bytes($memorylimit) < 335544320 && function_exists('ini_set')) { //320M
                 @ini_set('memory_limit', '4000m');
             }
         }
 
         $imgtype = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
-        $data = @getimagesize($absolutelyPath);    //取得原文件信息
-        if ($data[0] > 8000 || $data[1] > 8000) {     //宽与高的值不能大于8000 返回原图，不作任何处理
-            $result = -2;        //'源图片文件尺寸太大!'.$source;
+        $data = @getimagesize($absolutelyPath); //取得原文件信息
+        if ($data[0] > 8000 || $data[1] > 8000) { //宽与高的值不能大于8000 返回原图，不作任何处理
+            $result = -2; //'源图片文件尺寸太大!'.$source;
             return $result;
         }
         $thumbname = '.' . $thumbFileName . '.' . $imgtype[$data[2]]; //缩略图名
         $thumbname = str_ireplace("jpeg", "jpg", $thumbname);
 
-        $to_File = $absolutelyPath . $thumbname;            //要生成的缩略图路径
+        $to_File = $absolutelyPath . $thumbname; //要生成的缩略图路径
 
-        $func_create = "imagecreatefrom" . $imgtype[$data[2]];      //取得GD库函数类型
-        if (!function_exists($func_create)) {       //你的GD库不能使用GIF格式的图片，请使用Jpeg或PNG格式;
-            $result = -3;        //'服务器不支持 imagecreatefrom函数
+        $func_create = "imagecreatefrom" . $imgtype[$data[2]]; //取得GD库函数类型
+        if (!function_exists($func_create)) { //你的GD库不能使用GIF格式的图片，请使用Jpeg或PNG格式;
+            $result = -3; //'服务器不支持 imagecreatefrom函数
             return $result;
         }
 
-        $absolutely_id = @$func_create($absolutelyPath);    //GD函数
-        $width = @ImageSX($absolutely_id);        //原图宽
-        $height = @ImageSY($absolutely_id);       //原图高
-        $creatWidth = $width;               //处理后的宽度
-        $creatHeight = $height;             //处理后的高度
-        if (($toWidth > $width) && ($toHeight > $height)) {       //原图的高与宽都小于要处理的尺寸时就不作处理
+        $absolutely_id = @$func_create($absolutelyPath); //GD函数
+        $width = @ImageSX($absolutely_id); //原图宽
+        $height = @ImageSY($absolutely_id); //原图高
+        $creatWidth = $width; //处理后的宽度
+        $creatHeight = $height; //处理后的高度
+        if (($toWidth > $width) && ($toHeight > $height)) { //原图的高与宽都小于要处理的尺寸时就不作处理
             $result = -6;
-            return $result;          //直接返回原图
+            return $result; //直接返回原图
         } else {
-            if ($toWidth == 0) {        //设置宽度设置为0 表示宽度可灵活设置
-                if ($toHeight == 0) {   //设置高度设置为0 表示高度可灵活设置
+            if ($toWidth == 0) { //设置宽度设置为0 表示宽度可灵活设置
+                if ($toHeight == 0) { //设置高度设置为0 表示高度可灵活设置
                     $result = -7;
-                    return $result;          //都设置为0时，不作任何处理，直接返回原图
-                } elseif ($toHeight < $height) {     //设置宽度设置0  设置高度小于实际高度时:高度为设置高度，宽度按比例处理
-                    $creatHeight = $toHeight;      //等于设置高度
-                    $creatWidth = round($creatHeight * ($width / $height));     //宽度按比例处理
-                } else {            //设置宽度设置为0 设置高度大于实际高度时：高度与宽度都取实际值
+                    return $result; //都设置为0时，不作任何处理，直接返回原图
+                } elseif ($toHeight < $height) { //设置宽度设置0  设置高度小于实际高度时:高度为设置高度，宽度按比例处理
+                    $creatHeight = $toHeight; //等于设置高度
+                    $creatWidth = round($creatHeight * ($width / $height)); //宽度按比例处理
+                } else { //设置宽度设置为0 设置高度大于实际高度时：高度与宽度都取实际值
                     $result = -8;
-                    return $result;          //都取原图时，不作任何处理，直接返回原图
+                    return $result; //都取原图时，不作任何处理，直接返回原图
                 }
-            } elseif ($toWidth < $width) {      //设置宽度小于实际宽度时
-                $creatWidth = $toWidth;         //宽度为设置的宽度
-                if ($toHeight == 0) {           //设置宽度小于实际宽度时，设置高度为0：宽度为设置宽度，高度按比例
-                    $creatHeight = round($creatWidth * ($height / $width));      //按比例处理
-                } elseif ($toHeight < $height) {        //设置宽度小于实际宽度时，设置高度小于实际高度时，按设置处理
+            } elseif ($toWidth < $width) { //设置宽度小于实际宽度时
+                $creatWidth = $toWidth; //宽度为设置的宽度
+                if ($toHeight == 0) { //设置宽度小于实际宽度时，设置高度为0：宽度为设置宽度，高度按比例
+                    $creatHeight = round($creatWidth * ($height / $width)); //按比例处理
+                } elseif ($toHeight < $height) { //设置宽度小于实际宽度时，设置高度小于实际高度时，按设置处理
                     $creatHeight = $toHeight;
-                } else {                            //设置宽度小于实际宽度时，且设置高度大于实际高度时，宽度取设置值，高度取实际的
+                } else { //设置宽度小于实际宽度时，且设置高度大于实际高度时，宽度取设置值，高度取实际的
                     $creatHeight = $height;
                 }
-            } else {                        //设置宽度大于实际宽度，不作宽度处理
+            } else { //设置宽度大于实际宽度，不作宽度处理
                 $creatWidth = $width;
-                if ($toHeight == 0) {       //设置宽度大于实际宽度，且设置高度为0时，不作宽与高度处理,直接返回
+                if ($toHeight == 0) { //设置宽度大于实际宽度，且设置高度为0时，不作宽与高度处理,直接返回
                     $result = -9;
-                    return $result;          //都设置为0时，不作任何处理，直接返回原图
-                } elseif ($toHeight < $height) {            //设置宽度大于实际宽度，设置高度小于实际高度时，宽取实际，高度按比例处理
+                    return $result; //都设置为0时，不作任何处理，直接返回原图
+                } elseif ($toHeight < $height) { //设置宽度大于实际宽度，设置高度小于实际高度时，宽取实际，高度按比例处理
                     $creatHeight = round($creatWidth * ($height / $width));
-                } else {                                    //设置宽度大于实际宽度，设置高度大于实际高度时，宽与高都不作处理，为原图
+                } else { //设置宽度大于实际宽度，设置高度大于实际高度时，宽与高都不作处理，为原图
                     $result = -10;
-                    return $result;          //都取原图时，不作任何处理，直接返回原图
+                    return $result; //都取原图时，不作任何处理，直接返回原图
                 }
             }
         }
 
-        $cImg = self::CreatImage($absolutely_id, $creatWidth, $creatHeight, 0, 0, 0, 0, $width, $height);        //创建文件流内容
+        $cImg = self::CreatImage($absolutely_id, $creatWidth, $creatHeight, 0, 0, 0, 0, $width, $height); //创建文件流内容
 
         if (function_exists('imagejpeg')) {
-            $imageResult = @ImageJpeg($cImg, $to_File, 100);           //保存文件  ImageJpeg($cImg);       输出文件流 100%的高清
+            $imageResult = @ImageJpeg($cImg, $to_File, 100); //保存文件  ImageJpeg($cImg);       输出文件流 100%的高清
         } else {
             $imageResult = @ImagePNG($cImg, $to_File, 100);
         }
-        @ImageDestroy($cImg);        //清除缓存文件流内容
+        @ImageDestroy($cImg); //清除缓存文件流内容
 
         if ($imageResult == 1) {
             if (!file_exists($to_File)) {
-                $result = -4;        //缩略图创建失败;
+                $result = -4; //缩略图创建失败;
             } else {
                 //echo $to_File . "<br>" . $result . "<br>" . $error;
                 $to_File = str_ireplace("../", "/", $to_File);
@@ -457,10 +386,10 @@ class FileObject {
                 $result = $source . $thumbname;
             }
         } else {
-            $result = -5;        //no rewrite;
+            $result = -5; //no rewrite;
         }
 
-        return $result;          //原图加缩略图名
+        return $result; //原图加缩略图名
         //return $source . $thumbname;          //原图加缩略图名
     }
 
@@ -470,15 +399,16 @@ class FileObject {
      * @param int $maxValue 宽高限制的最大值
      * @return boolean TRUE:超过限制值,FALSE:没有超过限制值
      */
-    public static function IsOverWidthOrHeight($filePath, $maxValue = 8000) {
-        $filePath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $filePath);         //绝对路径
+    public static function IsOverWidthOrHeight($filePath, $maxValue = 8000)
+    {
+        $filePath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $filePath); //绝对路径
 
         if (!file_exists($filePath)) {
             //$error = -1;        //源图片文件不存在!
             return TRUE;
         }
-        $data = @getimagesize($filePath);    //取得原文件信息
-        if ($data[0] > $maxValue || $data[1] > $maxValue) {     //宽与高的值不能大于8000
+        $data = @getimagesize($filePath); //取得原文件信息
+        if ($data[0] > $maxValue || $data[1] > $maxValue) { //宽与高的值不能大于8000
             //源图片过大,需要服务器内存支持GD;
             return TRUE;
         } else {
@@ -497,9 +427,10 @@ class FileObject {
      * @param int $srcY
      * @param int $srcImgW
      * @param int $srcImgH
-     * @return type 
+     * @return type
      */
-    public static function CreatImage($img, $creatW, $creatH, $dstX, $dstY, $srcX, $srcY, $srcImgW, $srcImgH) {
+    public static function CreatImage($img, $creatW, $creatH, $dstX, $dstY, $srcX, $srcY, $srcImgW, $srcImgH)
+    {
         if (function_exists("imagecreatetruecolor")) {
             @$creatImg = @ImageCreateTrueColor($creatW, $creatH);
             if ($creatImg) {
@@ -520,7 +451,8 @@ class FileObject {
      * @param type $val
      * @return int
      */
-    public static function return_bytes($val) {
+    public static function return_bytes($val)
+    {
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
         switch ($last) {
@@ -541,26 +473,27 @@ class FileObject {
      * @param type $height 要截图的高度
      * @return string 截出的图的文件路径和文件名
      */
-    public static function CutImg($source, $width, $height) {
+    public static function CutImg($source, $width, $height)
+    {
         //if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $targ_w = $width;
-            $targ_h = $height;
-            $jpeg_quality = 100;
-            $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);
-            $imgtype = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
-            $data = getimagesize($src);    //取得原文件信息
+        $targ_w = $width;
+        $targ_h = $height;
+        $jpeg_quality = 100;
+        $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $source);
+        $imgtype = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
+        $data = getimagesize($src); //取得原文件信息
 //header('Content-type: image/jpeg');
-            $thumbname = '.thumb.' . $imgtype[$data[2]]; //缩略图名
+        $thumbname = '.thumb.' . $imgtype[$data[2]]; //缩略图名
 //            $thumbname = str_ireplace("jpeg", "jpg", $thumbname);
 //            $thumb_src = self::CreatThumb($source, 750, 750);
-            $to_File = $src . $thumbname;
-            $img_r = imagecreatefromjpeg($src);
-            $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
-            imagecopyresampled($dst_r, $img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
-            imagejpeg($dst_r, $to_File, $jpeg_quality);
-            imagedestroy($img_r);
-            imagedestroy($dst_r);
-            return $source . $thumbname;
+        $to_File = $src . $thumbname;
+        $img_r = imagecreatefromjpeg($src);
+        $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
+        imagecopyresampled($dst_r, $img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
+        imagejpeg($dst_r, $to_File, $jpeg_quality);
+        imagedestroy($img_r);
+        imagedestroy($dst_r);
+        return $source . $thumbname;
         //}
     }
 
@@ -581,7 +514,8 @@ class FileObject {
      *      失败 -- -1:原文件不存在, -2:水印图片不存在, -3:原文件图像对象建立失败
      *              -4:水印文件图像对象建立失败 -5:加水印后的新图片保存失败
      */
-    public static function img_water_mark($srcImg, $waterImg, $savepath = null, $savename = null, $positon = 5, $alpha = 50) {
+    public static function img_water_mark($srcImg, $waterImg, $savepath = null, $savename = null, $positon = 5, $alpha = 50)
+    {
         $temp = pathinfo($srcImg);
         $name = $temp[basename];
         $path = $temp[dirname];
@@ -591,85 +525,101 @@ class FileObject {
         $savefile = $savepath . $savename;
         $srcinfo = @getimagesize($srcImg);
         if (!$srcinfo) {
-            return -1;  //原文件不存在
+            return -1; //原文件不存在
         }
         $waterinfo = @getimagesize($waterImg);
         if (!$waterinfo) {
-            return -2;  //水印图片不存在
+            return -2; //水印图片不存在
         }
         $srcImgObj = self::image_create_from_ext($srcImg);
         if (!$srcImgObj) {
-            return -3;  //原文件图像对象建立失败
+            return -3; //原文件图像对象建立失败
         }
         $waterImgObj = self::image_create_from_ext($waterImg);
         if (!$waterImgObj) {
-            return -4;  //水印文件图像对象建立失败
+            return -4; //水印文件图像对象建立失败
         }
         switch ($positon) {
 //1顶部居左
-            case 1: $x = $y = 0;
+            case 1:
+                $x = $y = 0;
                 break;
 //2顶部居右
-            case 2: $x = $srcinfo[0] - $waterinfo[0];
+            case 2:
+                $x = $srcinfo[0] - $waterinfo[0];
                 $y = 0;
                 break;
 //3居中
-            case 3: $x = ($srcinfo[0] - $waterinfo[0]) / 2;
+            case 3:
+                $x = ($srcinfo[0] - $waterinfo[0]) / 2;
                 $y = ($srcinfo[1] - $waterinfo[1]) / 2;
                 break;
 //4底部居左
-            case 4: $x = 0;
+            case 4:
+                $x = 0;
                 $y = $srcinfo[1] - $waterinfo[1];
                 break;
 //5底部居右
-            case 5: $x = $srcinfo[0] - $waterinfo[0] - 10;
+            case 5:
+                $x = $srcinfo[0] - $waterinfo[0] - 10;
                 $y = $srcinfo[1] - $waterinfo[1] - 10;
                 break;
-            default: $x = $y = 0;
+            default:
+                $x = $y = 0;
         }
         imagecopymerge($srcImgObj, $waterImgObj, $x, $y, 0, 0, $waterinfo[0], $waterinfo[1], $alpha);
         switch ($srcinfo[2]) {
-            case 1: imagegif($srcImgObj, $savefile);
+            case 1:
+                imagegif($srcImgObj, $savefile);
                 break;
-            case 2: imagejpeg($srcImgObj, $savefile, 100);
+            case 2:
+                imagejpeg($srcImgObj, $savefile, 100);
                 break;
-            case 3: imagepng($srcImgObj, $savefile);
+            case 3:
+                imagepng($srcImgObj, $savefile);
                 break;
-            default: return -5;  //保存失败
+            default:
+                return -5; //保存失败
         }
         imagedestroy($srcImgObj);
         imagedestroy($waterImgObj);
         return $savefile;
     }
 
-    public static function image_create_from_ext($imgfile) {
+    public static function image_create_from_ext($imgfile)
+    {
         $info = getimagesize($imgfile);
         $im = null;
         switch ($info[2]) {
-            case 1: $im = imagecreatefromgif($imgfile);
+            case 1:
+                $im = imagecreatefromgif($imgfile);
                 break;
-            case 2: $im = imagecreatefromjpeg($imgfile);
+            case 2:
+                $im = imagecreatefromjpeg($imgfile);
                 break;
-            case 3: $im = imagecreatefrompng($imgfile);
+            case 3:
+                $im = imagecreatefrompng($imgfile);
                 break;
         }
         return $im;
     }
 
-    public static function DefaultImageCut() {
-        
+    public static function DefaultImageCut()
+    {
+
     }
 
     /**
      * 生成excel文件
-     * @param string $dest  保存路径
+     * @param string $dest 保存路径
      * @param <type> $headArr   表头信息
      * @param <type> $data      表内内容的
-     * @param string $fileName  Excel文件名
+     * @param string $fileName Excel文件名
      * @param string $tableName excel表名
-     * @return <type> 
+     * @return <type>
      */
-    public static function CreateExcel($dest, $headArr, $data, $fileName = "excel", $tableName = "simple") {
+    public static function CreateExcel($dest, $headArr, $data, $fileName = "excel", $tableName = "simple")
+    {
         $reSult = 0;
         include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel.php';
         include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel/Reader/Excel2007.php';
@@ -677,7 +627,7 @@ class FileObject {
         include RELATIVE_PATH . '/Rules/Plugins/PHPExcel/PHPExcel/IOFactory.php';
 
         if (empty($data) || !is_array($data)) {
-            $reSult = -2;        //数据内容为空或不符合标准    die("data must be a array");
+            $reSult = -2; //数据内容为空或不符合标准    die("data must be a array");
             return $reSult;
         }
 
@@ -686,10 +636,10 @@ class FileObject {
         }
 
         if (empty($tableName)) {
-            $tableName = "simple";      //默认表名
+            $tableName = "simple"; //默认表名
         }
 
-        if (substr($dest, strlen($dest) - 1, 1) != "/") {       //判断最后一位是否为 /
+        if (substr($dest, strlen($dest) - 1, 1) != "/") { //判断最后一位是否为 /
             $dest = $dest . "/";
         }
 
@@ -709,7 +659,7 @@ class FileObject {
         $objActSheet = $objPHPExcel->getActiveSheet();
         foreach ($data as $key => $rows) { //行写入
             $span = ord("A");
-            foreach ($rows as $keyName => $value) {// 列写入
+            foreach ($rows as $keyName => $value) { // 列写入
                 $j = chr($span);
                 $objActSheet->setCellValue($j . $column, $value);
                 $span++;
@@ -730,10 +680,10 @@ class FileObject {
 
         $objWriter->save($excelFile); //脚本方式运行，保存在当前目录
 
-        if (file_exists($excelFile)) {    //生成Excel文件成功
-            $reSult = 1;    //成功
+        if (file_exists($excelFile)) { //生成Excel文件成功
+            $reSult = 1; //成功
         } else {
-            $reSult = -1;  //生成失败
+            $reSult = -1; //生成失败
         }
         //$objWriter->save('php://output');
         return $reSult;
@@ -752,22 +702,23 @@ class FileObject {
      * @param string $filename 要存储的文件名
      * @return <type>
      */
-    public static function GrabImage($url = "", $savePath = "", $filename = "") {
-        if (!empty($url)) {     //源图片路径存在则进行本地保存
+    public static function GrabImage($url = "", $savePath = "", $filename = "")
+    {
+        if (!empty($url)) { //源图片路径存在则进行本地保存
             //处理保路径
-            if ($savePath == "") {//如果没有指定新的文件保存路径则自动保存到 images目录下
+            if ($savePath == "") { //如果没有指定新的文件保存路径则自动保存到 images目录下
                 $savePath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR;
             }
             self::CreateFolder($savePath);
             //处理新文件名
-            if ($filename == "") {//如果没有指定新的文件名
+            if ($filename == "") { //如果没有指定新的文件名
                 $ext = strtolower(strrchr($url, ".")); //得到$url的图片格式
                 if ($ext != ".gif" && $ext != ".jpg" && $ext != ".jpge"):return false;
                 endif; //如果图片格式不为.gif或者.jpg，直接退出
                 $filename = date("dMYHis") . $ext; //用天月面时分秒来命名新的文件名
             }
 
-            if (is_dir(basename($filename))) {      //The Dir was not exits
+            if (is_dir(basename($filename))) { //The Dir was not exits
                 return false;
             }
             $filename = $savePath . $filename;
@@ -797,7 +748,7 @@ class FileObject {
             fclose($fp);
             return true;
         } else {
-            return false;       //url 原图片路径为空
+            return false; //url 原图片路径为空
         }
     }
 
