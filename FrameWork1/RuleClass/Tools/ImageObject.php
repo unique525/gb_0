@@ -1,18 +1,21 @@
 <?php
+
 /**
  * 提供图片处理相关的工具方法
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class ImageObject {
+class ImageObject
+{
 
     /**
      * 获取图像信息的函数
      * @param string $imageUrl 图片路径
      * @return array 图像信息数组
      */
-    public static function GetImageInfo($imageUrl) {
+    public static function GetImageInfo($imageUrl)
+    {
         $imageType = array("", "GIF", "JPG", "PNG", "SWF", "PSD", "BMP", "TIFF(intel byte order)", "TIFF(motorola byte order)", "JPC", "JP2", "JPX", "JB2", "SWC", "IFF", "WBMP", "XBM");
         $Orientation = array("", "top left side", "top right side", "bottom right side", "bottom left side", "left side top", "right side top", "right side bottom", "left side bottom");
         $ResolutionUnit = array("", "", "英寸", "厘米");
@@ -120,11 +123,12 @@ class ImageObject {
         return $arrImageInfo;
     }
 
-    private static function GetImageInfoVal($ImageInfo, $val_arr) {
+    private static function GetImageInfoVal($ImageInfo, $val_arr)
+    {
         $InfoVal = "未知";
         foreach ($val_arr as $name => $val) {
             if ($name == $ImageInfo) {
-                $InfoVal = &$val;
+                $InfoVal = & $val;
                 break;
             }
         }
@@ -140,11 +144,12 @@ class ImageObject {
      * @param int $jpgQuality JPG图片的质量，默认100
      * @return string
      */
-    public static function GenThumb($sourceFile, $width, $height, $addFileName, $jpgQuality = 100) {
-        $sourceFilePath = strtolower(FileObject::GetPath(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceFile)));
-        $sourceFileExName = strtolower(FileObject::GetFileExtensionName($sourceFile));
+    public static function GenThumb($sourceFile, $width, $height, $addFileName, $jpgQuality = 100)
+    {
+        $sourceFilePath = strtolower(FileObject::GetDirName(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceFile)));
+        $sourceFileExName = strtolower(FileObject::GetExtension($sourceFile));
         $sourceFileName = strtolower(FileObject::GetName($sourceFile));
-        if(intval($jpgQuality)>100){
+        if (intval($jpgQuality) > 100) {
             $jpgQuality = 100;
         }
         //if($sourceFileExName !== "jpg"){
@@ -162,11 +167,11 @@ class ImageObject {
             $sourceImage = @imagecreatefromjpeg(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
         } else if (3 == $type) {
             $sourceImage = @imagecreatefrompng(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
-        }else{
+        } else {
             $sourceImage = null;
         }
 
-        if($sourceImage !== null){
+        if ($sourceImage !== null) {
             //当目标文件 宽高 小于 源文件(获取缩放比例)
             $radio = 1;
             if (($width && $sourceWidth > $width) || ($height && $sourceHeight > $height)) {
@@ -186,8 +191,7 @@ class ImageObject {
                 if ($resizeWidthTag && $resizeHeightTag) {
                     if ($widthRatio < $heightRatio) {
                         $radio = $widthRatio;
-                    }
-                    else
+                    } else
                         $radio = $heightRatio;
                 }
                 if ($resizeWidthTag && !$resizeHeightTag) {
@@ -212,8 +216,7 @@ class ImageObject {
                 if ($resizeHeightTag && $resizeWidthTag) {
                     if ($widthRatio < $heightRatio) {
                         $radio = $widthRatio;
-                    }
-                    else
+                    } else
                         $radio = $heightRatio;
                 }
                 if ($resizeWidthTag && !$heightRatio) {
@@ -248,19 +251,191 @@ class ImageObject {
                 @imagepng($newImage, PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
             }
 
-            if(is_resource($newImage)) {
+            if (is_resource($newImage)) {
                 @imagedestroy($newImage);
             }
-            if(is_resource($sourceImage)) {
+            if (is_resource($sourceImage)) {
                 @imagedestroy($sourceImage);
             }
 
-            $result = str_ireplace(DIRECTORY_SEPARATOR,"/",$sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
+            $result = str_ireplace(DIRECTORY_SEPARATOR, "/", $sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
             return $result;
-        }else{
+        } else {
             return null;
         }
 
     }
 
+
+    /**
+     * 根据指定的坐标位置和宽高截取图片
+     * @param string $sourcePath 源文件路径
+     * @param int $destinationImageWidth 要截图的宽度
+     * @param int $destinationImageHeight 要截图的高度
+     * @param int $positionX 要截图的起始X坐标
+     * @param int $positionY 要截图的起始Y坐标
+     * @param int $jpegQuality JPG图片质量，默认100
+     * @return string 截出的图的文件路径和文件名
+     */
+    public static function GenCut($sourcePath, $destinationImageWidth, $destinationImageHeight, $positionX, $positionY, $jpegQuality = 100)
+    {
+        if (!empty($sourcePath) && $destinationImageWidth > 0 && $destinationImageHeight > 0) {
+            if (stripos($sourcePath, PHYSICAL_PATH) < 0) { //不是物理路径
+                $sourcePath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $sourcePath); //进行物理路径拼接
+            }
+            //获取原图信息
+            list($sourceImageWidth, $sourceImageHeight) = GetImageSize($sourcePath);
+
+            //生成新的图片
+            $sourceImage = ImageCreateFromJpeg($sourcePath);
+            $destinationImage = ImageCreateTrueColor($destinationImageWidth, $destinationImageHeight);
+            ImageCopyResampled($destinationImage, $sourceImage, 0, 0, $positionX, $positionY, $destinationImageWidth, $destinationImageHeight, $sourceImageWidth, $sourceImageHeight);
+
+            //保存新的图片
+            $destinationImagePath = FileObject::GetDirName($sourcePath) . FileObject::GetName($sourcePath) . "_cut." . FileObject::GetExtension($sourcePath);
+            ImageJpeg($destinationImage, $destinationImagePath, $jpegQuality);
+
+            //销毁对象
+            ImageDestroy($sourceImage);
+            ImageDestroy($destinationImage);
+
+            //返回新的图片地址
+            return $destinationImagePath;
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * 图片加水印（适用于png/jpg/gif格式）
+     * @param string $sourceImagePath  原图片路径
+     * @param string $watermarkImagePath  水印图片路径
+     * @param string $saveImagePath  保存路径
+     * @param int $watermarkPosition  水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部局左, 5:底部居右
+     * @param int $alpha  透明度 -- -1:采用直接copy的方式， 0:完全透明, 100:完全不透明
+     * @return mixed 成功 -- 加水印后的新图片地址，失败 -- -1:原文件不存在, -2:水印图片不存在, -3:原文件图像对象建立失败， -4:水印文件图像对象建立失败 -5:加水印后的新图片保存失败
+     */
+    public static function GenWatermark($sourceImagePath, $watermarkImagePath, $saveImagePath = null, $watermarkPosition = 5, $alpha = -1) {
+
+        if($saveImagePath === null){
+            $saveImagePath = FileObject::GetDirName($sourceImagePath).DIRECTORY_SEPARATOR.FileObject::GetName($saveImagePath).'_watermark.'.FileObject::GetExtension($saveImagePath);
+        }
+
+        $sourceImageInfo = GetImageSize($sourceImagePath);
+        if (!$sourceImageInfo) {
+            return -1;  //原文件不存在
+        }
+        $sourceImageWidth = $sourceImageInfo[0];
+        $sourceImageHeight = $sourceImageInfo[1];
+        $sourceImageType = $sourceImageInfo[2];
+
+        $watermarkImageInfo = GetImageSize($watermarkImagePath);
+        if (!$watermarkImageInfo) {
+            return -2;  //水印图片不存在
+        }
+        $watermarkImageWidth = $watermarkImageInfo[0];
+        $watermarkImageHeight = $watermarkImageInfo[1];
+        $watermarkImageType = $watermarkImageInfo[2];
+        $sourceImage = null;
+        switch ($sourceImageType) {
+            case 1:
+                $sourceImage = ImageCreateFromGif($sourceImagePath);
+                break;
+            case 2:
+                $sourceImage = ImageCreateFromJpeg($sourceImagePath);
+                break;
+            case 3:
+                $sourceImage = ImageCreateFromPng($sourceImagePath);
+                break;
+        }
+
+        if ($sourceImage === null) {
+            return -3;  //原文件图像对象建立失败
+        }
+        $watermarkImage = null;
+        switch ($watermarkImageType) {
+            case 1:
+                $watermarkImage = ImageCreateFromGif($watermarkImagePath);
+                break;
+            case 2:
+                $watermarkImage = ImageCreateFromJpeg($watermarkImagePath);
+                break;
+            case 3:
+                $watermarkImage = ImageCreateFromPng($watermarkImagePath);
+                break;
+        }
+        if ($watermarkImage === null) {
+            return -4;  //水印文件图像对象建立失败
+        }
+        switch ($watermarkPosition) {
+            case 1: //顶部居左
+                $x = $y = 0;
+                break;
+            case 2: //2顶部居右
+                $x = $sourceImageWidth - $watermarkImageWidth;
+                $y = 0;
+                break;
+            case 3: //3居中
+                $x = ($sourceImageWidth - $watermarkImageWidth) / 2;
+                $y = ($sourceImageHeight - $watermarkImageHeight) / 2;
+                break;
+            case 4: //4底部居左
+                $x = 0;
+                $y = $sourceImageHeight - $watermarkImageHeight;
+                break;
+            case 5: //5底部居右
+                $x = $sourceImageWidth - $watermarkImageWidth - 10;
+                $y = $sourceImageHeight - $watermarkImageHeight - 10;
+                break;
+            default:
+                $x = $y = 0;
+        }
+        //半透明格式水印
+        //$alpha = 50;//水印透明度
+        if($alpha >= 0){ //设置了透明度，则使用ImageCopyMerge
+            ImageCopyMerge($sourceImage, $watermarkImage, $x, $y, 0, 0, $watermarkImageWidth, $watermarkImageHeight, $alpha);
+        }else{ //直接复制，支持png本身透明度的方式
+            ImageCopy($sourceImage,$watermarkImage,$x, $y,0,0,$watermarkImageWidth,$watermarkImageHeight);
+        }
+
+        switch ($sourceImageType) {
+            case 1: ImageGif($sourceImage, $saveImagePath);
+                break;
+            case 2: ImageJpeg($sourceImage, $saveImagePath, 100);
+                break;
+            case 3: ImagePng($sourceImage, $saveImagePath);
+                break;
+            default:
+                return -5;  //保存失败
+                break;
+        }
+        ImageDestroy($sourceImage);
+        ImageDestroy($watermarkImage);
+        return $saveImagePath;
+    }
+
+
+    /**
+     * 判断图片文件是否边长超过了限制值
+     * @param string $filePath 图片文件路径
+     * @param int $maxValue 宽高限制的最大值
+     * @return bool TRUE:超过限制值,FALSE:没有超过限制值
+     */
+    public static function IsOverWidthOrHeight($filePath, $maxValue = 8000)
+    {
+        $filePath = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $filePath); //绝对路径
+
+        if (!file_exists($filePath)) {
+            //$error = -1;        //源图片文件不存在!
+            return TRUE;
+        }
+        $data = @getimagesize($filePath); //取得原文件信息
+        if ($data[0] > $maxValue || $data[1] > $maxValue) { //宽与高的值不能大于8000
+            //源图片过大,需要服务器内存支持GD;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 } 
