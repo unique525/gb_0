@@ -24,6 +24,23 @@ class BaseData
      * 站点配置 数据表自增字段名
      */
     const TableId_SiteConfig = "SiteConfigId";
+    /**
+     * FTP 数据表名
+     */
+    const TableName_Ftp = "cst_ftp";
+    /**
+     * FTP 数据表自增字段名
+     */
+    const TableId_Ftp = "FtpId";
+    /**
+     * FTP传输日志 数据表名
+     */
+    const TableName_FtpLog = "cst_ftp_log";
+    /**
+     * FTP传输日志 数据表自增字段名
+     */
+    const TableId_FtpLog = "FtpLogId";
+
 
     /***********************************************************************/
     /***********************************************************************/

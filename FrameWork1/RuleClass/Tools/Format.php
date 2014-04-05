@@ -35,10 +35,10 @@ class Format {
      * @param string $content 要替换的内容
      * @return string 返回替换后的内容 
      */
-    public static function FormatHtmlTag($string) {
-        $string = str_replace('<', '&lt;', $string);
-        $string = str_replace(">", "&gt;", $string);
-        return $string;
+    public static function FormatHtmlTag($content) {
+        $content = str_replace('<', '&lt;', $content);
+        $content = str_replace(">", "&gt;", $content);
+        return $content;
     }
 
     /**
@@ -57,11 +57,11 @@ class Format {
      * @param string $content 要处理的内容
      * @return string 处理后的内容
      */
-    public static function RemoveScritpt($content) {
-        $content = str_ireplace("<textarea", "〈ＴＥＸＴＡＲＥ", $content);
-        $content = str_ireplace("</textarea>", "〈/ＴＥＸＴＡＲＥ〉", $content);
+    public static function RemoveScript($content) {
+        $content = str_ireplace('<textarea', "〈ＴＥＸＴＡＲＥ", $content);
+        $content = str_ireplace('</textarea>', "〈/ＴＥＸＴＡＲＥ〉", $content);
         $content = str_ireplace("<script", "〈ＳＣＲＩＰＴ", $content);
-        $content = str_ireplace("</script>", "〈/ＳＣＲＩＰＴ〉", $content);
+        $content = str_ireplace('</script>', "〈/ＳＣＲＩＰＴ〉", $content);
         $content = str_ireplace("<object", "〈ＯＢＪＥＣＴ", $content);
         $content = str_ireplace("</object>", "〈/ＯＢＪＥＣＴ〉", $content);
         return $content;
@@ -98,7 +98,6 @@ class Format {
      * @return mixed 根据给出的参数返回 Unix 时间戳(int)。如果参数非法，本函数返回 FALSE
      */
     public static function ToMkDate($date) {
-        $strDate = 0;
         $yearStr = ((int) substr($date, 0, 4)); //取得年份
         $monthStr = ((int) substr($date, 5, 2));  //取得月份
         $dayStr = ((int) substr($date, 8, 2));   //取得几号
@@ -141,37 +140,38 @@ class Format {
      * @return string 返回Json格式的字符串
      */
     public static function FixJsonEncode($arrList) {
-        if (function_exists(json_encode)) { //系统支持json_encode方法
-            return json_encode($arrList);
+        if (function_exists('json_encode')) { //系统支持json_encode方法
+            if($result = json_encode($arrList)){
+                return $result;
+            }else{
+                return json_last_error();
+            }
         } else {//系统不支持json_encode方法
-            return self::OldPhpJsonEncode($arrList);
+            return self::CustomJsonEncode($arrList);
         }
     }
 
     /**
      * 对老版本PHP使用的json封装方法
-     * @param type $arrList
-     * @return type
+     * @param array $arrList
+     * @return string 返回Json格式的字符串
      */
-    private static function OldPhpJsonEncode($arrList) {
+    private static function CustomJsonEncode($arrList) {
         if (is_array($arrList) || is_object($arrList)) {
-            $islist = is_array($arrList) && ( empty($arrList) || array_keys($arrList) === range(0, count($arrList) - 1) );
-            if ($islist) {
+            $isList = is_array($arrList) && ( empty($arrList) || array_keys($arrList) === range(0, count($arrList) - 1) );
+            if ($isList) {
                 $json = '[' . implode(',', array_map('php_json_encode', $arrList)) . ']';
             } else {
                 $items = Array();
                 foreach ($arrList as $key => $value) {
-                    $items[] = php_json_encode("$key") . ':' . php_json_encode($value);
+                    $items[] = self::CustomJsonEncode("$key") . ':' . self::CustomJsonEncode($value);
                 }
                 $json = '{' . implode(',', $items) . '}';
             }
         } elseif (is_string($arrList)) {
-            # Escape non-printable or Non-ASCII characters.
-            # I also put the \\ character first, as suggested in comments on the 'addclashes' page.
             $string = '"' . addcslashes($arrList, "\\\"\n\r\t/" . chr(8) . chr(12)) . '"';
             $json = '';
             $len = strlen($string);
-            # Convert UTF-8 to Hexadecimal Codepoints.
             for ($i = 0; $i < $len; $i++) {
                 $char = $string[$i];
                 $c1 = ord($char);
@@ -202,7 +202,7 @@ class Format {
                 }
             }
         } else {
-            # int, floats, bools, null
+            # int, floats, bool, null
             $json = strtolower(var_export($arrList, true));
         }
         return $json;
