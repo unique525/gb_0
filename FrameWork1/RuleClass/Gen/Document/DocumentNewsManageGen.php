@@ -93,16 +93,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             //source common
-            $sourceCommonData = new SourceCommonData();
-            $tagId = "sourcecommonlist";
-            $arrList = $sourceCommonData->GetList();
+            $sourceCommonManageData = new SourceCommonManageData();
+            $tagId = "source_common_list";
+            $arrList = $sourceCommonManageData->GetList();
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
-                Template::RemoveCMS($tempContent, $tagId);
+                Template::RemoveCustomTag($tempContent, $tagId);
             }
 
-            parent::ReplaceWhenAdd($tempContent, 'cst_documentnews');
+            parent::ReplaceWhenCreate($tempContent, $documentNewsManageData->GetFields());
 
             if (!empty($_POST)) {
                 //titlepic

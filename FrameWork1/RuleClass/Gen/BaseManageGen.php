@@ -12,7 +12,8 @@ class BaseManageGen extends BaseGen
     /**
      * 刷新当前的Tab页
      */
-    protected function RefreshTab(){
+    protected function RefreshTab()
+    {
         Control::RunJavascript('G_Tabs.tabs("refresh");');
     }
 
@@ -43,6 +44,22 @@ class BaseManageGen extends BaseGen
         }
         return $result;
     }
+
+    /**
+     * 替换新增时，模板里的{field}值为空，包括后台模板和模板数据库中的模板
+     * @param string $tempContent 要处理的模板内容
+     * @param array $arrField 字段数组
+     */
+    protected function ReplaceWhenCreate(&$tempContent, $arrField)
+    {
+        if (count($arrField) > 0) {
+            for ($i = 0; $i < count($arrField); $i++) {
+                $tempContent = str_ireplace("{" . $arrField[$i]['Field'] . "}", '', $tempContent);
+                $tempContent = str_ireplace("{b_" . $arrField[$i]['Field'] . "}", '', $tempContent);
+            }
+        }
+    }
+
 }
 
 ?>

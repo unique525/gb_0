@@ -183,9 +183,6 @@ class BaseManageData extends BaseData {
                 } else if (strpos($key, "c" . $preNumber . "_") === 0) { //radio checkbox类字段
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`=:" . $keyName;
-
-
-
                     if ($value == "on") {
                         $dataProperty->AddField($keyName, "1");
                     } else {
@@ -213,13 +210,25 @@ class BaseManageData extends BaseData {
             if (strpos($fieldNames, ",") === 0) {
                 $fieldNames = substr($fieldNames, 1);
             }
-            $sql = "UPDATE $tableName SET $fieldNames WHERE $tableIdName = $tableIdValue ;";
+            $sql = "UPDATE $tableName SET $fieldNames WHERE $tableIdName = $tableIdValue;";
             return $sql;
         } else {
             return null;
         }
     }
 
+    /**
+     * 取得表的字段名称数组
+     * @param string $tableName 表名
+     * @return array 表的字段名称数组
+     */
+    public function GetFields($tableName)
+    {
+        $tableName = Format::FormatSql($tableName);
+        $sql = 'SHOW FIELDS FROM '.$tableName;
+        $result = $this->dbOperator->GetArrayList($sql, null);
+        return $result;
+    }
 }
 
 ?>
