@@ -14,10 +14,10 @@ class ImageObject {
      */
     public static function GetImageInfo($imageUrl) {
         $imageType = array("", "GIF", "JPG", "PNG", "SWF", "PSD", "BMP", "TIFF(intel byte order)", "TIFF(motorola byte order)", "JPC", "JP2", "JPX", "JB2", "SWC", "IFF", "WBMP", "XBM");
-        $Orientation = array("", "top left side", "top right side", "bottom right side", "bottom left side", "left side top", "right side top", "right side bottom", "left side bottom");
-        $ResolutionUnit = array("", "", "英寸", "厘米");
-        $YCbCrPositioning = array("", "the center of pixel array", "the datum point");
-        $ExposureProgram = array("未定义", "手动", "标准程序", "光圈先决", "快门先决", "景深先决", "运动模式", "肖像模式", "风景模式");
+        $orientation = array("", "top left side", "top right side", "bottom right side", "bottom left side", "left side top", "right side top", "right side bottom", "left side bottom");
+        $resolutionUnit = array("", "", "英寸", "厘米");
+        $ycbCrPositioning = array("", "the center of pixel array", "the datum point");
+        $exposureProgram = array("未定义", "手动", "标准程序", "光圈先决", "快门先决", "景深先决", "运动模式", "肖像模式", "风景模式");
         $arrMeteringMode = array(
             "0" => "未知",
             "1" => "平均",
@@ -66,13 +66,13 @@ class ImageObject {
                     "图片说明" => $exif["IFD0"]["ImageDescription"],
                     "制造商" => $exif["IFD0"]["Make"],
                     "型号" => $exif["IFD0"]["Model"],
-                    "方向" => $Orientation[$exif["IFD0"]["Orientation"]],
-                    "水平分辨率" => $exif["IFD0"]["XResolution"] . $ResolutionUnit[$exif["IFD0"]["ResolutionUnit"]],
-                    "垂直分辨率" => $exif["IFD0"]["YResolution"] . $ResolutionUnit[$exif["IFD0"]["ResolutionUnit"]],
+                    "方向" => $orientation[$exif["IFD0"]["Orientation"]],
+                    "水平分辨率" => $exif["IFD0"]["XResolution"] . $resolutionUnit[$exif["IFD0"]["ResolutionUnit"]],
+                    "垂直分辨率" => $exif["IFD0"]["YResolution"] . $resolutionUnit[$exif["IFD0"]["ResolutionUnit"]],
                     "创建软件" => $exif["IFD0"]["Software"],
                     "修改时间" => $exif["IFD0"]["DateTime"],
                     "作者" => $exif["IFD0"]["Artist"],
-                    "YCbCr位置控制" => $YCbCrPositioning[$exif["IFD0"]["YCbCrPositioning"]],
+                    "YCbCr位置控制" => $ycbCrPositioning[$exif["IFD0"]["YCbCrPositioning"]],
                     "版权" => $exif["IFD0"]["Copyright"],
                     "摄影版权" => $exif["COMPUTED"]["Copyright . Photographer"],
                     "编辑版权" => $exif["COMPUTED"]["Copyright . Editor"],
@@ -94,7 +94,7 @@ class ImageObject {
                     "闪光灯" => ImageObject::GetImageInfoVal($exif["EXIF"]["Flash"], $arrFlash),
                     "曝光模式" => ($exif["EXIF"]["ExposureMode"] == 1 ? "手动" : "自动"),
                     "白平衡" => ($exif["EXIF"]["WhiteBalance"] == 1 ? "手动" : "自动"),
-                    "曝光程序" => $ExposureProgram[$exif["EXIF"]["ExposureProgram"]],
+                    "曝光程序" => $exposureProgram[$exif["EXIF"]["ExposureProgram"]],
                     "曝光补偿" => $exif["EXIF"]["ExposureBiasValue"] . "EV",
                     "ISO感光度" => $exif["EXIF"]["ISOSpeedRatings"],
                     "分量配置" => (bin2hex($exif["EXIF"]["ComponentsConfiguration"]) == "01020300" ? "YCbCr" : "RGB"), //'0x04,0x05,0x06,0x00'="RGB" '0x01,0x02,0x03,0x00'="YCbCr"
@@ -120,15 +120,21 @@ class ImageObject {
         return $arrImageInfo;
     }
 
-    private static function GetImageInfoVal($ImageInfo, $val_arr) {
-        $InfoVal = "未知";
-        foreach ($val_arr as $name => $val) {
-            if ($name == $ImageInfo) {
-                $InfoVal = &$val;
+    /**
+     * 从数组中取得图片信息值
+     * @param $imageInfo
+     * @param $arrValue
+     * @return string
+     */
+    private static function GetImageInfoVal($imageInfo, $arrValue) {
+        $valueInfo = "unknown";
+        foreach ($arrValue as $name => $val) {
+            if ($name == $imageInfo) {
+                $valueInfo = &$val;
                 break;
             }
         }
-        return $InfoVal;
+        return $valueInfo;
     }
 
     /**
