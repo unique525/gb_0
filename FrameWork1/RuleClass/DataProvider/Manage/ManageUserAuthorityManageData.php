@@ -22,7 +22,7 @@ class ManageUserAuthorityManageData extends BaseManageData
             `SiteId`,
             `ChannelId`,
             `ManageUserGroupId`,
-            `ManageUserID`,
+            `ManageUserId`,
             `PopedomLevel`,
             `Explore`, 
             `Create`, 

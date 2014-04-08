@@ -291,6 +291,14 @@ class DocumentNewsManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 取得表的字段名称数组
+     * @return array 表的字段名称数组
+     */
+    public function GetFields(){
+        return $this->GetFields(self::TableName_DocumentNews);
+    }
+
 }
 
 ?>

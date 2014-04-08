@@ -4,12 +4,89 @@
  * 后台管理 站点配置 后台数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
+ * @property int $OpenFtpLog
+ * @property string $MailSmtpHost
+ * @property string $MailSmtpUserName
+ * @property string $MailSmtpPassword
+ * @property int $MailSmtpPort
+ * @property string $MailFrom
+ * @property string $MailReplyTo
+ * @property string $MetaGenerator
+ * @property string $MetaAuthor
+ * @property string $MetaCopyright
+ * @property string $MetaApplicationName
+ * @property string $MetaMsApplicationTooltip
+ * @property int $UserAlbumThumbWidth
+ * @property int $UserAlbumToBestMustVoteCount
+ * @property int $OpenHomePage
+ * @property string $ForumIeTitle
+ * @property string $ForumIeKeywords
+ * @property string $ForumIeDescription
+ * @property string $ForumLogoImage
+ * @property string $ForumBackground
+ * @property int $OpenRegisterWindow
+ * @property string $RegisterWindowContent
+ * @property string $ForumTopInfo
+ * @property string $ForumAdTopIndex
+ * @property string $ForumBotInfo
+ * @property string $ForumAdBotIndex
+ * @property string $ForumAdTopTopicList
+ * @property string $ForumAdBotTopicList
+ * @property string $ForumAdTopTopicContent
+ * @property string $ForumAdBotTopicContent
+ * @property int $ForumNewPostCount
+ * @property int $ForumYesterdayPostCount
+ * @property int $ForumTopPostCount
+ * @property int $ForumTopicCount
+ * @property int $ForumReplyCount
+ * @property int $ForumPostCount
+ * @property int $ForumTopicPageSize
+ * @property int $ForumPostPageSize
+ * @property int $UserCount
+ * @property int $UserNameLength
+ * @property int $UserDefaultState
+ * @property int $UserRecDefaultState
+ * @property int $UserDefaultUserGroupIdForRole
+ * @property int $UserCommissionOwn
+ * @property int $UserCommissionChild
+ * @property int $UserCommissionGrandson
+ * @property int $NewRegisterUserId
+ * @property string $NewRegisterUserName
+ * @property string $NewUserMessageVoice
+ * @property int $ForumPicShowMode
+ * @property string $ForumMoneyName
+ * @property string $ForumCharmName
+ * @property string $ForumScoreName
+ * @property string $ForumExpName
+ * @property string $ForumPointName
+ * @property string $ForumPostCountName
+ * @property string $ForumCssDefault
+ * @property string $ForumCssDefaultWidth
+ * @property string $ForumCssDefaultFontSize
+ * @property string $PayAlipayPartnerId
+ * @property string $PayAlipayKey
+ * @property string $PayAlipaySellerEmail
+ * @property string $PayQuickMerchantAcctId
+ * @property string $PayQuickKey
+ * @property string $SmsThirdType
+ * @property string $SmsThirdUrl
+ * @property string $SmsThirdUserName
+ * @property string $SmsThirdPassword
+ * @property string $UserSmsMessageContent
+ * @property int $DocumentNewsTitlePic1WidthForMobile
+ * @property int $DocumentNewsTitlePic1WidthForPad
+ * @property int $DocumentNewsTitlePic2WidthForMobile
+ * @property int $DocumentNewsTitlePic2WidthForPad
+ * @property int $DocumentNewsTitlePic3WidthForMobile
+ * @property int $DocumentNewsTitlePic3WidthForPad
  * @author zhangchi
  */
 class SiteConfigManageData extends BaseManageData {
 
 
-    //string mid Short Message
+    /**
+     * @var array string mid Short Message
+     */
     private $ArrSiteConfigTypes_1 = array(
         "UserSmsMessageContent",
         "RegisterWindowContent",
@@ -19,7 +96,9 @@ class SiteConfigManageData extends BaseManageData {
         "SchoolService",
         "SchoolLeaderIntro"
     );
-    //text
+    /**
+     * @var array text
+     */
     private $ArrSiteConfigTypes_2 = array(
         "ForumTopInfo",
         "ForumAdTopIndex",
@@ -30,7 +109,9 @@ class SiteConfigManageData extends BaseManageData {
         "ForumAdTopTopicContent",
         "ForumAdBotTopicContent"
     );
-    //int
+    /**
+     * @var array int
+     */
     private $ArrSiteConfigTypes_3 = array(
         "OpenHomePage",
         "OpenRegisterWindow",
@@ -50,9 +131,17 @@ class SiteConfigManageData extends BaseManageData {
         "UserAlbumToBestMustVoteCount",
         "UserDefaultState",
         "UserRecDefaultState",
-        "MailSmtpPort"
+        "MailSmtpPort",
+        "DocumentNewsTitlePic1WidthForMobile",
+        "DocumentNewsTitlePic1WidthForPad",
+        "DocumentNewsTitlePic2WidthForMobile",
+        "DocumentNewsTitlePic2WidthForPad",
+        "DocumentNewsTitlePic3WidthForMobile",
+        "DocumentNewsTitlePic3WidthForPad"
     );
-    //number
+    /**
+     * @var array number
+     */
     private $ArrSiteConfigTypes_4 = array(
         "UserCommissionOwn",
         "UserCommissionChild",
@@ -61,7 +150,7 @@ class SiteConfigManageData extends BaseManageData {
     private $SiteId = 1;
     
     //公共配置
-    private $OpenFtpLog = 0; //开启FTP传输日志记录
+    private $OpenFtpLog = 0;  //开启FTP传输日志记录
     private $MailSmtpHost = ""; // SMTP 服务器 
     private $MailSmtpUserName = "";// SMTP服务器用户名  
     private $MailSmtpPassword = "";// SMTP服务器密码 
@@ -79,11 +168,607 @@ class SiteConfigManageData extends BaseManageData {
     ////////////////////////会员相册相关/////////////////////////////////
     /////////////////////////////////////////////////////////////////   
     private $UserAlbumThumbWidth = 0; //会员相册图片缩略图宽度
+    private $UserAlbumToBestMustVoteCount = 35;
+
     /**
-     * 会员相册变成精华相册需要的支持票数
-     * @var int 会员相册变成精华相册需要的支持票数
+     * @return mixed
      */
-    private $UserAlbumToBestMustVoteCount = 35; //会员相册变成精华相册需要的支持票数
+    public function getDocumentNewsTitlePic1WidthForMobile()
+    {
+        return $this->DocumentNewsTitlePic1WidthForMobile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic1WidthForPad()
+    {
+        return $this->DocumentNewsTitlePic1WidthForPad;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic2WidthForMobile()
+    {
+        return $this->DocumentNewsTitlePic2WidthForMobile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic2WidthForPad()
+    {
+        return $this->DocumentNewsTitlePic2WidthForPad;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic3WidthForMobile()
+    {
+        return $this->DocumentNewsTitlePic3WidthForMobile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic3WidthForPad()
+    {
+        return $this->DocumentNewsTitlePic3WidthForPad;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdBotIndex()
+    {
+        return $this->ForumAdBotIndex;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdBotTopicContent()
+    {
+        return $this->ForumAdBotTopicContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdBotTopicList()
+    {
+        return $this->ForumAdBotTopicList;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopIndex()
+    {
+        return $this->ForumAdTopIndex;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopTopicContent()
+    {
+        return $this->ForumAdTopTopicContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopTopicList()
+    {
+        return $this->ForumAdTopTopicList;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumBackground()
+    {
+        return $this->ForumBackground;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumBotInfo()
+    {
+        return $this->ForumBotInfo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCharmName()
+    {
+        return $this->ForumCharmName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefault()
+    {
+        return $this->ForumCssDefault;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefaultFontSize()
+    {
+        return $this->ForumCssDefaultFontSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefaultWidth()
+    {
+        return $this->ForumCssDefaultWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumExpName()
+    {
+        return $this->ForumExpName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeDescription()
+    {
+        return $this->ForumIeDescription;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeKeywords()
+    {
+        return $this->ForumIeKeywords;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeTitle()
+    {
+        return $this->ForumIeTitle;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumLogoImage()
+    {
+        return $this->ForumLogoImage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumMoneyName()
+    {
+        return $this->ForumMoneyName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumNewPostCount()
+    {
+        return $this->ForumNewPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicShowMode()
+    {
+        return $this->ForumPicShowMode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPointName()
+    {
+        return $this->ForumPointName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostCount()
+    {
+        return $this->ForumPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostCountName()
+    {
+        return $this->ForumPostCountName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostPageSize()
+    {
+        return $this->ForumPostPageSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumReplyCount()
+    {
+        return $this->ForumReplyCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumScoreName()
+    {
+        return $this->ForumScoreName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopInfo()
+    {
+        return $this->ForumTopInfo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopPostCount()
+    {
+        return $this->ForumTopPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopicCount()
+    {
+        return $this->ForumTopicCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopicPageSize()
+    {
+        return $this->ForumTopicPageSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumYesterdayPostCount()
+    {
+        return $this->ForumYesterdayPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailFrom()
+    {
+        return $this->MailFrom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailReplyTo()
+    {
+        return $this->MailReplyTo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpHost()
+    {
+        return $this->MailSmtpHost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpPassword()
+    {
+        return $this->MailSmtpPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpPort()
+    {
+        return $this->MailSmtpPort;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpUserName()
+    {
+        return $this->MailSmtpUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaApplicationName()
+    {
+        return $this->MetaApplicationName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaAuthor()
+    {
+        return $this->MetaAuthor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaCopyright()
+    {
+        return $this->MetaCopyright;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaGenerator()
+    {
+        return $this->MetaGenerator;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaMsApplicationTooltip()
+    {
+        return $this->MetaMsApplicationTooltip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewRegisterUserId()
+    {
+        return $this->NewRegisterUserId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewRegisterUserName()
+    {
+        return $this->NewRegisterUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewUserMessageVoice()
+    {
+        return $this->NewUserMessageVoice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenFtpLog()
+    {
+        return $this->OpenFtpLog;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenHomePage()
+    {
+        return $this->OpenHomePage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenRegisterWindow()
+    {
+        return $this->OpenRegisterWindow;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayAlipayKey()
+    {
+        return $this->PayAlipayKey;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayAlipayPartnerId()
+    {
+        return $this->PayAlipayPartnerId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayAlipaySellerEmail()
+    {
+        return $this->PayAlipaySellerEmail;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayQuickKey()
+    {
+        return $this->PayQuickKey;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPayQuickMerchantAcctId()
+    {
+        return $this->PayQuickMerchantAcctId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegisterWindowContent()
+    {
+        return $this->RegisterWindowContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdPassword()
+    {
+        return $this->SmsThirdPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdType()
+    {
+        return $this->SmsThirdType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdUrl()
+    {
+        return $this->SmsThirdUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdUserName()
+    {
+        return $this->SmsThirdUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumThumbWidth()
+    {
+        return $this->UserAlbumThumbWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumToBestMustVoteCount()
+    {
+        return $this->UserAlbumToBestMustVoteCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionChild()
+    {
+        return $this->UserCommissionChild;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionGrandson()
+    {
+        return $this->UserCommissionGrandson;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionOwn()
+    {
+        return $this->UserCommissionOwn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCount()
+    {
+        return $this->UserCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultState()
+    {
+        return $this->UserDefaultState;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultUserGroupIdForRole()
+    {
+        return $this->UserDefaultUserGroupIdForRole;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserNameLength()
+    {
+        return $this->UserNameLength;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserRecDefaultState()
+    {
+        return $this->UserRecDefaultState;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserSmsMessageContent()
+    {
+        return $this->UserSmsMessageContent;
+    } //会员相册变成精华相册需要的支持票数
     //
     //论坛相关
     private $OpenHomePage = 0; //开启门户站点首页
@@ -142,23 +827,6 @@ class SiteConfigManageData extends BaseManageData {
     private $PayAlipaySellerEmail = ''; //支付宝的合作者邮箱
     private $PayQuickMerchantAcctId = ''; //快钱人民币网关账户号
     private $PayQuickKey = ''; //快钱人民币网关密钥
-    /////////////////////////////////////////////////////////////////
-    ////////////////////////教育机构/////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    private $SchoolName = ''; //学校名称
-    private $SchoolIntro = ''; //学校简介
-    private $SchoolAddress = ''; //学校地址
-    private $SchoolUrl = ''; //学校网址
-    private $SchoolIdeal = ''; //办学理念
-    private $SchoolGrade = ''; //办学层次
-    private $SchoolFeature = ''; //办学特色
-    private $SchoolCapable = ''; //师资力量
-    private $SchoolService = ''; //主要课程及收费标准
-    private $SchoolQueryPhone = ''; //咨询电话
-    private $SchoolLeaderIntro = ''; //校长介绍
-    private $SchoolContactPerson = ''; //学校联系人
-    private $SchoolTopPic = ''; //学校顶部图片
-    private $SchoolQR = ''; //学校二维码图片
 
     /////////////////////////////////////////////////////////////////
     ////////////////////////第三方短信网关/////////////////////////////////
@@ -168,12 +836,23 @@ class SiteConfigManageData extends BaseManageData {
     private $SmsThirdUserName = "";//第三方短信网关接口帐号
     private $SmsThirdPassword = "";//第三方短信网关接口密码
     private $UserSmsMessageContent = "";//默认会员短信内容
-    
+
+    /////////////////////////////////////////////////////////////////
+    ////////////////////////资讯/////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
+    private $DocumentNewsTitlePic1WidthForMobile = 0; //为适配手机客户端，资讯题图1的同比缩小宽度值
+    private $DocumentNewsTitlePic1WidthForPad = 0; //为适配平板客户端，资讯题图1的同比缩小宽度值
+    private $DocumentNewsTitlePic2WidthForMobile = 0; //为适配手机客户端，资讯题图2的同比缩小宽度值
+    private $DocumentNewsTitlePic2WidthForPad = 0; //为适配平板客户端，资讯题图2的同比缩小宽度值
+    private $DocumentNewsTitlePic3WidthForMobile = 0; //为适配手机客户端，资讯题图3的同比缩小宽度值
+    private $DocumentNewsTitlePic3WidthForPad = 0; //为适配平板客户端，资讯题图3的同比缩小宽度值
+
+
     /**
      * 构造函数
      * @param int $siteId 站点id，每个配置都是站点下的配置
      */
-
     public function __construct($siteId) {
         $this->SiteId = $siteId;
     }
@@ -181,7 +860,7 @@ class SiteConfigManageData extends BaseManageData {
     /**
      * get 配置值
      * @param string $siteConfigName 配置名称
-     * @return type 配置值
+     * @return string 配置值
      */
     public function __get($siteConfigName) {
         $siteConfigType = 0;
@@ -228,7 +907,7 @@ class SiteConfigManageData extends BaseManageData {
      * @param string $fieldValue 配置值
      * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      */
-    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
+    private function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
         switch ($siteConfigType) {
             case 0:
                 $fieldName = "StringNorValue";

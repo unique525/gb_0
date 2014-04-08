@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 论坛后台数据类  
+ * 后台管理 论坛 数据类
  * @category iCMS
  * @package iCMS_Rules_DataProvider_Forum
  * @author zhangchi

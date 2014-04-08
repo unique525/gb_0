@@ -93,33 +93,33 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             //source common
-            $sourceCommonData = new SourceCommonData();
-            $tagId = "sourcecommonlist";
-            $arrList = $sourceCommonData->GetList();
+            $sourceCommonManageData = new SourceCommonManageData();
+            $tagId = "source_common_list";
+            $arrList = $sourceCommonManageData->GetList();
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
-                Template::RemoveCMS($tempContent, $tagId);
+                Template::RemoveCustomTag($tempContent, $tagId);
             }
 
-            parent::ReplaceWhenAdd($tempContent, 'cst_documentnews');
+            parent::ReplaceWhenCreate($tempContent, $documentNewsManageData->GetFields());
 
             if (!empty($_POST)) {
-                //titlepic
-                $fileElementName = "titlepic_upload";
-                $filetype = 1; //docnews
-                $commongen = new CommonGen();
-                $titlePicPath = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid);
-                $titlePicPath = str_ireplace("..", "", $titlePicPath);
+                //title pic1
+                $fileElementName = "title_pic_1_upload";
+                $uploadTableType = 1; //document news
+                $titlePic1UploadFileId = 0;
+                $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
+                $titlePic1Path = str_ireplace("..", "", $titlePic1Path);
 
-                if (!empty($titlePicPath)) {
+                if (!empty($titlePic1Path)) {
                     sleep(1);
                 }
-//有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
-                if (strlen($titlePicPath) > 5) {
-                    $siteConfigData = new SiteConfigData($siteid);
-                    $documentNewsTitleMobileWidth = $siteConfigData->DocumentNewsTitleMobileWidth;
-                    $documentNewsTitlePadWidth = $siteConfigData->DocumentNewsTitlePadWidth;
+                //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
+                if (strlen($titlePic1Path) > 5) {
+                    $siteConfigManageData = new SiteConfigManageData($siteid);
+                    $documentNewsTitleMobileWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForMobile;
+                    $documentNewsTitlePadWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForPad;
 
                     $toHeight = 0;      //缩略后的高度
                     $creatUploadFileTableId = 0;
@@ -128,7 +128,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $toWidth = $documentNewsTitleMobileWidth;      //缩略后的宽度
                         $thumbFileName = "mobile";
                         $creatUploadFileTableType = 23; //新闻题图,移动终端使用
-                        $creatDocumentNewsTitleMobile = self::CreatDocumentNewsTitlePic($titlePicPath, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFileMobileId);
+                        $creatDocumentNewsTitleMobile = self::CreatDocumentNewsTitlePic($titlePic1Path, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFileMobileId);
                         sleep(1);
                     } else {
                         $creatDocumentNewsTitleMobile = "";
@@ -139,7 +139,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $toWidth = $documentNewsTitlePadWidth;      //缩略后的宽度
                         $thumbFileName = "pad";
                         $creatUploadFileTableType = 24; //新闻题图,移动终端使用
-                        $creatDocumentNewsTitlePad = self::CreatDocumentNewsTitlePic($titlePicPath, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFilePadId);
+                        $creatDocumentNewsTitlePad = self::CreatDocumentNewsTitlePic($titlePic1Path, $toWidth, $toHeight, $thumbFileName, $creatUploadFileTableType, $creatUploadFilePadId);
                         sleep(1);
                     } else {
                         $creatDocumentNewsTitlePad = "";
@@ -165,7 +165,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $commongen = new CommonGen();
                 $titlePicPath3 = $commongen->UploadFile($fileElementName, $filetype, 1, $uploadfileid3);
                 $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
-                $newid = $documentNewsManageData->Create($titlePicPath, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
+                $newid = $documentNewsManageData->Create($titlePic1Path, $titlePicPath2, $titlePicPath3, $creatDocumentNewsTitleMobile, $creatDocumentNewsTitlePad);
 
 
 //加入操作log

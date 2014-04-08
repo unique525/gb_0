@@ -365,7 +365,7 @@ class Control {
 
     /**
      * 取得毫秒时间戳
-     * @return string 返回时间
+     * @return float 毫秒时间戳
      */
     public static function GetMicroTime() {
         $time = explode(" ", microtime());
@@ -381,7 +381,7 @@ class Control {
         if(strlen($time) == 13){
             $time = $time.'0';
         }
-        return $time;
+        return floatval($time);
     }
 
     /**
