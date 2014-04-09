@@ -165,6 +165,8 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+
+
     /**
      * 取得频道类型
      * @param int $channelId 频道id
