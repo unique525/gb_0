@@ -16,10 +16,10 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
-            case "new":
+            case "create":
                 $result = self::GenCreate();
                 break;
-            case "edit":
+            case "modify":
                 $result = self::GenModify();
                 break;
             case "list":
@@ -41,9 +41,9 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
     private function GenCreate() {
         $tempContent = Template::Load("CustomForm/CustomFormRecord_Deal.html");
         $manageUserId = Control::GetManageUserID();
-        $customFormId = Control::GetRequest("customformid", 0);
+        $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormData = new CustomFormManageData();
-        $channelId = $customFormData->GetChannelID($customFormId);
+        $channelId = $customFormData->GetChannelID($customFormId, FALSE);
         $tabIndex = Control::GetRequest("tab", 0);
         $pageIndex = Control::GetRequest("p", 1);
         $siteId = 0;
@@ -58,7 +58,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $can = $manageUserAuthority->CanCreate($siteId, $channelId, $manageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('document', 26));
-                Control::GoUrl("index.php?a=customformrecord&m=list&customformid=" . $customFormId);
+                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId);
                 return "";
             }
 
@@ -66,15 +66,15 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
             ////////////////////////////////////////////////////
             $replaceArr = array(
-                "{customformrecordid}" => '',
-                "{customformid}" => $customFormId,
+                "{custom_form_record_id}" => '',
+                "{custom_form_id}" => $customFormId,
                 "{cid}" => $channelId,
-                "{siteid}" => $siteId,
-                "{documentchannelid}" => $channelId,
-                "{adminuserid}" => $manageUserId,
+                "{site_id}" => $siteId,
+                "{channel_id}" => $channelId,
+                "{manage_user_id}" => $manageUserId,
                 "{tab}" => $tabIndex,
-                "{pageindex}" => $pageIndex,
-                "{customformcontenttable}" => $customFormContentTable
+                "{page_index}" => $pageIndex,
+                "{custom_form_content_table}" => $customFormContentTable
             );
             $tempContent = strtr($tempContent, $replaceArr);
 
@@ -119,12 +119,12 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      * @return type
      */
     private function GenModify() {
-        $tempContent = Template::Load("customform/customformrecord_deal.html");
-        $manageUserId = Control::GetAdminUserID();
+        $tempContent = Template::Load("CustomForm/custom_form_record_deal.html");
+        $manageUserId = Control::GetManageUserID();
         $customFormRecordId = Control::GetRequest("id", 0);
-        $customFormId = Control::GetRequest("customformid", 0);
+        $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId);
+        $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
         $tabIndex = Control::GetRequest("tab", 0);
         $pageIndex = Control::GetRequest("p", 1);
         $siteId = 0;
@@ -132,7 +132,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
         if ($customFormRecordId > 0) {
             $channelManageData = new ChannelManageData();
-            $siteId = $channelManageData->GetSiteID($channelId, 0);
+            $siteId = $channelManageData->GetSiteID($channelId, FALSE);
 
             ///////////////判断是否有操作权限///////////////////
 
@@ -140,12 +140,12 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $can = $manageUserAuthority->CanModify($siteId, $channelId, $manageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('document', 26));
-                Control::GoUrl("index.php?a=customformrecord&m=list&customformid=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
+                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
                 return "";
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetManageUserID($customFormId);
+            $createUserId = $customFormManageData->GetManageUserID($customFormId, FALSE);
             if ($createUserId !== $manageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $manageUserId);
                 if ($can != 1) {
@@ -165,14 +165,14 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
             ////////////////////////////////////////////////////
             $replaceArray = array(
-                "{customformid}" => $customFormId,
+                "{custom_form_id}" => $customFormId,
                 "{cid}" => $channelId,
                 "{siteid}" => $siteId,
-                "{documentchannelid}" => $channelId,
-                "{adminuserid}" => $manageUserId,
+                "{channel_id}" => $channelId,
+                "{manage_user_id}" => $manageUserId,
                 "{tab}" => $tabIndex,
-                "{pageindex}" => $pageIndex,
-                "{customformcontenttable}" => $customFormContentTable
+                "{page_index}" => $pageIndex,
+                "{custom_form_content_table}" => $customFormContentTable
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
@@ -196,7 +196,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 $operateContent = "CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
                 self::CreateManageUserLog($operateContent);
 
-                Control::GoUrl("index.php?a=customformrecord&m=list&customformid=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
+                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
             }
 
             //去掉s开头的标记 {s_xxx_xxx}
@@ -213,6 +213,10 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         return $tempContent;
     }
 
+
+
+
+    //前台
     public function GenFrontNew() {
         if (!empty($_POST)) {
             $customFormRecordData = new CustomFormRecordData();
@@ -293,86 +297,87 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
     }
 
     /**
-     *
-     * @param type $customformid
-     * @return string
+     * 取得表单记录内容表格
+     * @param int $customFormId 表单id
+     * @param array $arrContentList 表单内容数据集
+     * @return string 表单记录内容HTML表格
      */
-    private function _genCustomFormContentTable($customformid, $arrContentList = null) {
-        $_customFormContentTable = '';
+    private function _genCustomFormContentTable($customFormId, $arrContentList = null) {
+        $customFormContentTable = '';
 
         //生成字段
-        $customFormFieldData = new CustomFormFieldData();
-        $arrFieldList = $customFormFieldData->GetList($customformid);
+        $customFormFieldManageData = new CustomFormFieldManageData();
+        $arrFieldList = $customFormFieldManageData->GetList($customFormId);
 
         for ($f = 0; $f < count($arrFieldList); $f++) {
-            $_customFormFieldID = intval($arrFieldList[$f]["CustomFormFieldID"]);
-            $_customFormFieldType = intval($arrFieldList[$f]["CustomFormFieldType"]);
-            $_inputValue = "";
+            $customFormFieldID = intval($arrFieldList[$f]["CustomFormFieldID"]);
+            $customFormFieldType = intval($arrFieldList[$f]["CustomFormFieldType"]);
+            $inputValue = "";
             if (!empty($arrContentList)) {
                 for ($k = 0; $k < count($arrContentList); $k++) {
-                    if ($arrContentList[$k]["CustomFormFieldID"] == $_customFormFieldID) {
-                        switch ($_customFormFieldType) {
+                    if ($arrContentList[$k]["CustomFormFieldID"] == $customFormFieldID) {
+                        switch ($customFormFieldType) {
                             case 0:
-                                $_inputValue = $arrContentList[$k]["ContentOfInt"];
+                                $inputValue = $arrContentList[$k]["ContentOfInt"];
                                 break;
                             case 1:
-                                $_inputValue = $arrContentList[$k]["ContentOfString"];
+                                $inputValue = $arrContentList[$k]["ContentOfString"];
                                 break;
                             case 2:
-                                $_inputValue = $arrContentList[$k]["ContentOfText"];
+                                $inputValue = $arrContentList[$k]["ContentOfText"];
                                 break;
                             case 3:
-                                $_inputValue = $arrContentList[$k]["ContentOfFloat"];
+                                $inputValue = $arrContentList[$k]["ContentOfFloat"];
                                 break;
                             case 4:
-                                $_inputValue = $arrContentList[$k]["ContentOfDatetime"];
+                                $inputValue = $arrContentList[$k]["ContentOfDatetime"];
                                 break;
                             case 5:
-                                $_inputValue = $arrContentList[$k]["ContentOfBlob"];
+                                $inputValue = $arrContentList[$k]["ContentOfBlob"];
                                 break;
                         }
                     }
                 }
             }
-            $_inputName = 'cf_' . $customformid . '_' . $arrFieldList[$f]["CustomFormFieldID"];
+            $inputName = 'cf_' . $customFormId . '_' . $arrFieldList[$f]["CustomFormFieldID"];
 
-            $_addClass = '';
-            $_addStyle = '';
-            $_inputText = '';
-            switch ($_customFormFieldType) {
+            $addClass = '';
+            $addStyle = '';
+            $inputText = '';
+            switch ($customFormFieldType) {
                 case 0: //int
-                    $_addClass = 'class="inputnumber"';
-                    $_addStyle = 'style=" width: 60px;"';
-                    $_inputText = '<input name="' . $_inputName . '" id="' . $_inputName . '" value="' . $_inputValue . '" type="text" ' . $_addClass . ' ' . $_addStyle . ' />';
+                    $addClass = 'class="inputnumber"';
+                    $addStyle = 'style=" width: 60px;"';
+                    $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 1: //string
-                    $_addClass = 'class="inputbox"';
-                    $_addStyle = 'style=" width: 300px;"';
-                    $_inputText = '<input name="' . $_inputName . '" id="' . $_inputName . '" value="' . $_inputValue . '" type="text" ' . $_addClass . ' ' . $_addStyle . ' />';
+                    $addClass = 'class="inputbox"';
+                    $addStyle = 'style=" width: 300px;"';
+                    $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 2: //text
-                    $_addClass = 'class="inputbox"';
-                    $_addStyle = 'style=" width: 300px;height:100px;"';
-                    $_inputText = '<textarea name="' . $_inputName . '" id="' . $_inputName . '" ' . $_addClass . ' ' . $_addStyle . ' >' . $_inputValue . '</textarea>';
+                    $addClass = 'class="inputbox"';
+                    $addStyle = 'style=" width: 300px;height:100px;"';
+                    $inputText = '<textarea name="' . $inputName . '" id="' . $inputName . '" ' . $addClass . ' ' . $addStyle . ' >' . $inputValue . '</textarea>';
                     break;
                 case 3: //float
-                    $_addClass = 'class="inputprice"';
-                    $_addStyle = 'style=" width: 60px;"';
-                    $_inputText = '<input name="' . $_inputName . '" id="' . $_inputName . '" value="' . $_inputValue . '" type="text" ' . $_addClass . ' ' . $_addStyle . ' />';
+                    $addClass = 'class="inputprice"';
+                    $addStyle = 'style=" width: 60px;"';
+                    $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 4: //date
-                    $_addClass = 'class="inputbox"';
-                    $_addStyle = 'style=" width: 100px;"';
-                    $_inputText = '<input name="' . $_inputName . '" id="' . $_inputName . '" value="' . $_inputValue . '" type="text" ' . $_addClass . ' ' . $_addStyle . ' />';
+                    $addClass = 'class="inputbox"';
+                    $addStyle = 'style=" width: 100px;"';
+                    $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
             }
-            $_customFormContentTable .= '<tr>';
-            $_customFormContentTable .= '<td class="speline" height="30" align="right">' . $arrFieldList[$f]["CustomFormFieldName"] . '：</td>';
-            $_customFormContentTable .= '<td class="speline">' . $_inputText . '</td>';
-            $_customFormContentTable .= '</tr>';
+            $customFormContentTable .= '<tr>';
+            $customFormContentTable .= '<td class="speline" height="30" align="right">' . $arrFieldList[$f]["CustomFormFieldName"] . '：</td>';
+            $customFormContentTable .= '<td class="speline">' . $inputText . '</td>';
+            $customFormContentTable .= '</tr>';
         }
 
-        return $_customFormContentTable;
+        return $customFormContentTable;
     }
 
     /**
@@ -380,118 +385,118 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      * @return <type>
      */
     private function GenList() {
-        $adminuserid = Control::GetAdminUserID();
-        $customformid = Control::GetRequest("customformid", 0);
-        $customFormData = new CustomFormData();
-        $documentchannelid = $customFormData->GetDocumentChannelID($customformid);
-        $documentChannelData = new DocumentChannelData();
-        $siteid = $documentChannelData->GetSiteID($documentchannelid);
+        $manageUserId = Control::GetManageUserID();
+        $customFormId = Control::GetRequest("custom_form_id", 0);
+        $customFormManageData = new CustomFormManageData();
+        $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteID($channelId,1);
         ///////////////判断是否有操作权限///////////////////
-        $adminPopedomData = new AdminPopedomData();
-        $can = $adminPopedomData->CanExplore($siteid, $documentchannelid, $adminuserid);
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
         if ($can != 1) {
             Control::ShowMessage(Language::Load('document', 26));
             return "";
         }
         ////////////////////////////////////////////////////
-        $sitedata = new SiteData();
-        $siteUrl = $sitedata->GetSiteUrl($siteid);
+        $siteData = new SiteManageData();
+        $siteUrl = $siteData->GetSiteUrl($siteId);
 
 
         //$documentChannelType = $documentChannelData->GetDocumentChannelType($documentchannelid);
-        $tempContent = Template::Load("customform/customformrecord_list.html");
+        $tempContent = Template::Load("CustomForm/custom_form_record_list.html");
 
         $type = Control::GetRequest("type", "");
 
-        if ($customformid > 0) {
+        if ($customFormId > 0) {
 
-            $customFormFieldData = new CustomFormFieldData();
-            $arrFieldList = $customFormFieldData->GetListForContent($customformid);
+            $customFormFieldManageData = new CustomFormFieldManageData();
+            $arrFieldList = $customFormFieldManageData->GetListForContent($customFormId);
 
-            $customFormRecordData = new CustomFormRecordData();
+            $customFormRecordManageData = new CustomFormRecordManageData();
 
 
-            $pagesize = Control::GetRequest("ps", 20);
-            if ($documentChannelType !== 1) {
-                $pagesize = 16;
-            }
+            $pageSize = Control::GetRequest("ps", 20);
+            //if ($documentChannelType !== 1) {
+            //    $pageSize = 16;
+            //}
 
-            $pageindex = Control::GetRequest("p", 1);
-            $pagebegin = ($pageindex - 1) * $pagesize;
-            $allcount = 0;
-            $arrRecordList = $customFormRecordData->GetListPager($customformid, $pagebegin, $pagesize, $allcount);
+            $pageIndex = Control::GetRequest("p", 1);
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $allCount = 0;
+            $arrRecordList = $customFormRecordManageData->GetListPager($customFormId, $pageBegin, $pageSize, $allCount);
             $pagerTemplate = Template::Load("pager.html");
-            $isjs = false;
-            $jsfunctionname = "";
-            $jsparamlist = "";
-            $pagerurl = "?a=customformrecord&m=list&customformid=" . $customformid . "&cid=" . $documentchannelid . "&p={0}&tab=2";
-            $pagerbutton = Pager::ShowPageButton($pagerTemplate, $pagerurl, $allcount, $pagesize, $pageindex, $isjs, $jsfunctionname, $jsparamlist);
+            $isJs = false;
+            $jsFunctionName = "";
+            $jsParamList = "";
+            $pagerUrl = "?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p={0}&tab=2";
+            $pagerButton = Pager::ShowPageButton($pagerTemplate, $pagerUrl, $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList);
 
-            $customFormContentData = new CustomFormContentData();
-
+            $customFormContentManageData = new CustomFormContentManageData();
+            $listTemp="";
             if (count($arrRecordList) > 0) {
-                $listtemp = '<table width="99%" class="docgrid" cellpadding="0" cellspacing="0">';
-                $listtemp .= '<tr class="gridtitle">';
-                $listtemp .= '<td style="padding-left:2px;"></td>';
+                $listTemp = '<table width="99%" class="docgrid" cellpadding="0" cellspacing="0">';
+                $listTemp .= '<tr class="gridtitle">';
+                $listTemp .= '<td style="padding-left:2px;"></td>';
                 for ($f = 0; $f < count($arrFieldList); $f++) {
-                    $listtemp .= '<td style="padding-left:2px;">' . $arrFieldList[$f]["CustomFormFieldName"] . '</td>';
+                    $listTemp .= '<td style="padding-left:2px;">' . $arrFieldList[$f]["CustomFormFieldName"] . '</td>';
                 }
-                $listtemp .= '<td style="padding-left:2px;width:40px;">状态</td>';
-                $listtemp .= '<td style="padding-left:2px;width:180px;">时间</td>';
-                $listtemp .= '</tr>';
+                $listTemp .= '<td style="padding-left:2px;width:40px;">状态</td>';
+                $listTemp .= '<td style="padding-left:2px;width:180px;">时间</td>';
+                $listTemp .= '</tr>';
                 for ($i = 0; $i < count($arrRecordList); $i++) {
-                    $_customFormRecordID = intval($arrRecordList[$i]["CustomFormRecordID"]);
+                    $customFormRecordID = intval($arrRecordList[$i]["CustomFormRecordID"]);
 
-                    $listtemp .= '<tr class="griditem">';
-                    $listtemp .= '<td class="speline2" style="padding-left:2px;"><a href="../customform/index.php?a=customformrecord&m=edit&customformid=' . $customformid . '&id=' . $_customFormRecordID . '&cid=' . $documentchannelid . '&p=' . $pageindex . '&tab=2"><img class="edit_doc" src="../images/edit.gif" alt="编辑" title="编辑" /></a></td>';
+                    $listTemp .= '<tr class="griditem">';
+                    $listTemp .= '<td class="speline2" style="padding-left:2px;"><a href="../custom_form/index.php?a=custom_form_record&m=edit&customformid=' . $customFormId . '&id=' . $customFormRecordID . '&cid=' . $channelId . '&p=' . $pageIndex . '&tab=2"><img class="edit_doc" src="../images/edit.gif" alt="编辑" title="编辑" /></a></td>';
 
-                    $arrContentList = $customFormContentData->GetList($_customFormRecordID);
+                    $arrContentList = $customFormContentManageData->GetList($customFormRecordID);
 
                     for ($j = 0; $j < count($arrFieldList); $j++) {
-                        $_customFormFieldID = $arrFieldList[$j]["CustomFormFieldID"];
-                        $_customFormFieldName = $arrFieldList[$j]["CustomFormFieldName"];
-                        $_customFormFieldType = $arrFieldList[$j]["CustomFormFieldType"];
-                        $listtemp .= '<td class="speline2" style="padding-left:2px;">';
+                        $customFormFieldID = $arrFieldList[$j]["CustomFormFieldID"];
+                        $customFormFieldName = $arrFieldList[$j]["CustomFormFieldName"];
+                        $customFormFieldType = $arrFieldList[$j]["CustomFormFieldType"];
+                        $listTemp .= '<td class="speline2" style="padding-left:2px;">';
                         for ($k = 0; $k < count($arrContentList); $k++) {
 
-                            if ($arrContentList[$k]["CustomFormFieldID"] == $_customFormFieldID) {
-                                switch (intval($_customFormFieldType)) {
+                            if ($arrContentList[$k]["CustomFormFieldID"] == $customFormFieldID) {
+                                switch (intval($customFormFieldType)) {
                                     case 0:
-                                        $listtemp .= $arrContentList[$k]["ContentOfInt"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfInt"];
                                         break;
                                     case 1:
-                                        $listtemp .= $arrContentList[$k]["ContentOfString"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfString"];
                                         break;
                                     case 2:
-                                        $listtemp .= $arrContentList[$k]["ContentOfText"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfText"];
                                         break;
                                     case 3:
-                                        $listtemp .= $arrContentList[$k]["ContentOfFloat"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfFloat"];
                                         break;
                                     case 4:
-                                        $listtemp .= $arrContentList[$k]["ContentOfDatetime"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfDatetime"];
                                         break;
                                     case 5:
-                                        $listtemp .= $arrContentList[$k]["ContentOfBlob"];
+                                        $listTemp .= $arrContentList[$k]["ContentOfBlob"];
                                         break;
                                 }
                             }
                         }
-                        $listtemp .= '</td>';
+                        $listTemp .= '</td>';
                     }
-                    $listtemp .= '<td class="speline2" style="padding-left:2px;">' . Format::ToState($arrRecordList[$i]["State"], "customformrecord") . '</td>';
-                    $listtemp .= '<td class="speline2" style="padding-left:2px;">' . $arrRecordList[$i]["CreateDate"] . '</td>';
-                    $listtemp .= '</tr>';
+                    $listTemp .= '<td class="speline2" style="padding-left:2px;">' . Format::ToState($arrRecordList[$i]["State"], "customformrecord") . '</td>';
+                    $listTemp .= '<td class="speline2" style="padding-left:2px;">' . $arrRecordList[$i]["CreateDate"] . '</td>';
+                    $listTemp .= '</tr>';
                 }
-                $listtemp .= '</tabel>';
+                $listTemp .= '</tabel>';
             }
             $replace_arr = array(
-                "{customformid}" => $customformid,
+                "{custom_form_id}" => $customFormId,
                 "{cid}" => 0,
                 "{id}" => 0,
-                "{siteurl}" => $siteUrl,
-                "{listtemp}" => $listtemp,
-                "{pagerbutton}" => $pagerbutton
+                "{site_url}" => $siteUrl,
+                "{list_temp}" => $listTemp,
+                "{pager_button}" => $pagerButton
             );
             $tempContent = strtr($tempContent, $replace_arr);
         }
