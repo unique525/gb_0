@@ -11,7 +11,7 @@
         <script type="text/javascript" src="/system_js/common.js"></script>
         <script type="text/javascript" src="/system_js/tiny_mce/tiny_mce_src.js"></script>
         <script type="text/javascript" src="/system_js/tiny_mce/editor.js?uploadfiletype=1"></script>
-        <script type="text/javascript" src="/system_js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/system_js/tiny_mce/icolorpicker.js"></script>
         <script type="text/javascript" src="{rootpath}/js/ajaxfileupload_v2.1.js"></script>
         <link rel="stylesheet" href="/system_js/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css" type="text/css" />

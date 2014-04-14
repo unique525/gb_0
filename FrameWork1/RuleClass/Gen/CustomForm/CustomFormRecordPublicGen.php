@@ -12,7 +12,7 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
      * 主生成方法(继承接口)
      * @return string 返回输出的HTML内容
      */
-    function Gen() {
+    function GenPublic() {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {

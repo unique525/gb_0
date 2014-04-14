@@ -123,6 +123,7 @@ class Template {
                         $headerSplitterTempContent = self::GetNodeValue($doc, "header_splitter", $tagName);
                         //读取主段
                         $itemTempContent = self::GetNodeValue($doc, "item", $tagName);
+
                         $alterItemTempContent = self::GetNodeValue($doc, "alter_item", $tagName);
 
                         //读取主段的分割线
@@ -211,7 +212,7 @@ class Template {
                         $columns = $arrList[$i];
                         $list = $headerTempContent;
                         $itemType = "header";
-                        $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                        $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
                         $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
                     }
@@ -241,7 +242,7 @@ class Template {
 
                         $columns = $arrList[$i];
                         $itemType = "item";
-                        $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                        $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
                         $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
                         //每隔一定主段条数附加分割线，最底部分割线不附加
@@ -262,7 +263,8 @@ class Template {
                             $columns = $arrList[$i];
                             $list = $footerTempContent;
                             $itemType = "footer";
-                            $list = self::ReplaceListItem($i, $type, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                            $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                            $list = str_ireplace("{c_all_count}", count($arrList), $list);
                             $sb = $sb . $list;
                         }
                     }
@@ -280,7 +282,6 @@ class Template {
      * 子方法，替换数据集的每一行内容
      * @param int $i 行号
      * @param string $tagType 标签的type属性
-     * @param string $tagId 标签的id
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
@@ -290,7 +291,7 @@ class Template {
      * @param string $itemType 标签的类型 header item footer
      * @return mixed
      */
-    private static function ReplaceListItem($i, $tagType, $tagId, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType) {
+    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType) {
         $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate);        //加入输出序号
         if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
             $listTemplate = str_ireplace("{c_url}", $columns["DirectUrl"], $listTemplate); //直接输出url
@@ -299,13 +300,13 @@ class Template {
         }
         foreach ($columns as $columnName => $columnValue) {
             //公用替换
-            self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            self::FormatColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             if (strtolower($tagType) === 'document_news_list') {
-                self::FormatDocumentNewsColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+                self::FormatDocumentNewsColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'product_list') {
-                self::FormatProductColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+                self::FormatProductColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'activity_list') {
-                self::FormatActivityColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+                self::FormatActivityColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             }
         }
         return $listTemplate;
@@ -433,7 +434,6 @@ class Template {
      * 为活动格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tagId 标签id
      * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
@@ -441,7 +441,7 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatActivityColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+    private static function FormatActivityColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
         $pos = stripos(strtolower($columnName), "activity_content");
         if ($pos !== false) {
             if (intval($itemRowIntroCount) > 0) {
@@ -514,7 +514,6 @@ class Template {
      * 为product 格式化字段
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tagId 标签id
      * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
@@ -522,7 +521,7 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatProductColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+    private static function FormatProductColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
         $pos = stripos(strtolower($columnName), "sale_price");
         if ($pos !== false) {
             if (is_numeric($columnValue) && $columnValue > 0)

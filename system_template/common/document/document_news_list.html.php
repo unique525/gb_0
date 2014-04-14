@@ -9,20 +9,8 @@
         <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="/system_js/common.js"></script>
         <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/system_js/jqueryui/jquery-ui.min.js"></script>
-
-        <script type="text/javascript" src="/system_js/manage/document_news.js"></script>
-        
-
-        <style type="text/css">
-            body {
-                font-family: "微软雅黑";
-            }
-
-            input {
-                font-family: "微软雅黑";
-            }
-        </style>
+        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/manage/document_news/document_news.js"></script>
     </head>
     <body>
         <div id="rightbtns">

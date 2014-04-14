@@ -264,11 +264,13 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $sb = $sb . ']';
                 $result = 'var zNodes =' . $sb . ';';
 
-                DataCache::Set($cacheFile, $cacheDir, $result);
+                DataCache::Set($cacheDir, $cacheFile, $result);
             } else {
                 $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
             }
             return $result;
+        }else{
+            return null;
         }
     }
 

@@ -24,6 +24,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $channelManageGen = new ChannelManageGen();
                     $result = $channelManageGen->Gen();
                     break;
+                case "user_album":
+                    $userAlbumManageGen = new UserAlbumManageGen();
+                    $result = $userAlbumManageGen->Gen();
+                    break;
                 case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
@@ -94,10 +98,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{manage_menu_of_task}", $manageMenuOfTaskTemplateContent, $tempContent);
 
 
-        $listName = "select_site";
+        $tagId = "select_site";
         $siteManageData = new SiteManageData();
         $arrSiteList = $siteManageData->GetList($manageUserId);
-        Template::ReplaceList($tempContent, $arrSiteList, $listName);
+        Template::ReplaceList($tempContent, $arrSiteList, $tagId);
 
 
         parent::ReplaceEnd($tempContent);

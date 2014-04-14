@@ -21,6 +21,7 @@
         <script type="text/javascript" src="{relative_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/load_tabs.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/channel.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/load_user_manage.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/default.js"></script>
     </head>
     <body>
@@ -34,7 +35,7 @@
         <div id="div_main_content">
             <div id="div_left_panel">
                 <div id="div_select_site" class="select_site_normal">
-                    <cscms id="select_site" type="list">
+                    <icms_list id="select_site" type="list">
                         <header>
                             <![CDATA[
                             <div id="div_default_site" title="{f_SiteUrl}" idvalue="{f_SiteId}" style="display:none;height:0;padding:0;width:0;margin:0;">{f_SiteName}</div>
@@ -52,23 +53,23 @@
                             <div class="site_count" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_all_count}"></div>
                             ]]>
                         </footer>
-                    </cscms>
+                    </icms_list>
                 </div>
                 <div class="header" id="div_left_accordion">
-                    <cscms id="manage_menu_of_column" type="list">
+                    <icms_list id="manage_menu_of_column" type="list">
                         <item>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
+                            <h3 class="ha"><div class="divAccordItem" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
                             <div>{f_ManageMenuOfColumnContent}</div>
                             ]]>
                         </item>
                         <footer>
                             <![CDATA[
-                            <h3 class="ha"><div class="divAccordItem objbg" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
+                            <h3 class="ha"><div class="divAccordItem" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
                             <div>{f_ManageMenuOfColumnContent}</div>
                             ]]>
                         </footer>
-                    </cscms>
+                    </icms_list>
                     <div id="rMenu">
                         <ul>
                             <li class="cm_pub_quick_channel"><a href="javascript:publish_channel();">发布频道</a></li>

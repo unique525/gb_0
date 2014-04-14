@@ -104,25 +104,6 @@ function LoadSite(siteId, siteName, siteUrl) {
     }
 
 
-    $.ajax({
-        url: "/default.php",
-        data: {
-            secu: "manage",
-            mod: "manage_menu_of_user",
-            m: "async_list",
-            siteid: siteId
-        },
-        dataType: "jsonp",
-        jsonp: "jsonpcallback",
-        success: function (data) {
-            if (data !== undefined) {
-                var aa = "";
-                $.each(data, function (i, v) {
-                    aa = aa + '<div class="line" id="btn' + v["ManageMenuOfUserTagName"] + '">' + v["ManageMenuOfUserName"] + '</div>';
-                });
-                $("#div_user_manage").html(aa);
-            }
-        }
-    });
+
 
 }  
