@@ -9,7 +9,7 @@
 class Language {
 
     /**
-     * 使用simplexml_load_file读取XML语言包内容
+     * 使用simple_xml_load_file读取XML语言包内容
      * @param string $docName 语言包文件名
      * @param int $moduleId XML内的对应id
      * @return string 返回item内容
@@ -23,13 +23,14 @@ class Language {
 
             $result = $xml->xpath("//module[@id='" . $moduleId . "']");
             if ($result) {
-                foreach ($result[0]->children() as $key => $val) {
+                foreach ($result[0]->children() as $val) {
                     return $val;
                 }
             } else {
-                die("读取语言包出错");
+                return null;
             }
         }
+        return null;
     }
 
 }

@@ -223,7 +223,11 @@ class Template {
                         $itemSplitterCount = 0;
                     }
 
-                    for ($i = 0 + $headerRowCount; $i < count($arrList) - $footerRowCount; $i++) {
+                    if($itemRowCount<=0){ //主段显示行数，如果未设置，则默认
+                        $itemRowCount = count($arrList) - $footerRowCount;
+                    }
+
+                    for ($i = 0 + $headerRowCount; $i < $itemRowCount; $i++) {
                         //如果有交替行
                         if (strlen($alterItemTempContent) > 0) {
                             if ($i % 2 === 1) {
@@ -298,20 +302,10 @@ class Template {
             self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             if (strtolower($tagType) === 'document_news_list') {
                 self::FormatDocumentNewsColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'document_thread_list') {
-                self::FormatDocumentThreadColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'product_list') {
                 self::FormatProductColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'product_param_parent_list' || strtolower($tagType) === 'product_param_child_list') {
-                self::FormatProductParamColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'user_group_list') {
-                self::FormatColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'activity_list') {
                 self::FormatActivityColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'user_album_list') {
-                self::FormatUserAlbumListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'comment_list') {
-                self::FormatCommentListColumnValue($columnName, $columnValue, $tagId, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             }
         }
         return $listTemplate;
@@ -321,7 +315,6 @@ class Template {
      * 通用的格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tagId 标签id
      * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
@@ -329,7 +322,7 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType) {
+    private static function FormatColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType) {
         if (strtolower($columnName) == "state") {
             $tempContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $tempContent);
         }
@@ -404,7 +397,6 @@ class Template {
      * 为资讯格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tagId 标签id
      * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
@@ -412,8 +404,8 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
-        $pos = stripos(strtolower($columnName), "show_date");
+    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+        $pos = stripos(strtolower($columnName), strtolower("ShowDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
@@ -424,7 +416,7 @@ class Template {
             $tempContent = str_ireplace("{f_show_month}", $month, $tempContent);
             $tempContent = str_ireplace("{f_show_day}", $day, $tempContent);
         }
-        $pos = stripos(strtolower($columnName), "document_news_content");
+        $pos = stripos(strtolower($columnName), strtolower("DocumentNewsContent"));
         if ($pos !== false) {
             $columnValue = str_ireplace("../upload/document_news", "/upload/document_news", $columnValue);
             if (intval($itemRowIntroCount) > 0) {
@@ -435,44 +427,6 @@ class Template {
         }
         $columnValue = str_ireplace("'", "&#039;", $columnValue);
         $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
-    }
-
-    /**
-     * 为document thread 格式化行内容
-     * @param string $columnName 字段名称
-     * @param string $columnValue 字段值
-     * @param string $tagId 标签id
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
-     * @param int $itemRowTitleCount 主列表项目标题最大字符数
-     * @param int $itemRowIntroCount 主列表项目简介最大字符数
-     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
-     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
-     * @param string $itemType 标签的类型 header item footer
-     */
-    private static function FormatDocumentThreadColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
-        $pos = stripos(strtolower($columnName), "user_name");
-        if ($pos !== false) {
-            if (strlen($columnValue) > 1) {
-                $tempContent = str_ireplace("{c_user_name}", $columnValue, $tempContent);
-            }
-        }
-        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
-    }
-
-    /**
-     * 为产品参数格式化行内容
-     * @param string $columnName 字段名称
-     * @param string $columnValue 字段值
-     * @param string $tagId 标签id
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
-     * @param int $itemRowTitleCount 主列表项目标题最大字符数
-     * @param int $itemRowIntroCount 主列表项目简介最大字符数
-     * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
-     * @param int $footerRowTitleCount 底部列表项目标题最大字符数
-     * @param string $itemType 标签的类型 header item footer
-     */
-    private static function FormatProductParamColumnValue($columnName, $columnValue, $tagId, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
-
     }
 
     /**
@@ -585,245 +539,115 @@ class Template {
         $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
     }
 
-    public static function FormatUserAlbumListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
-        if (strtolower($columnname) == "useralbumtag") {
-            $list = str_ireplace("{f_" . $columnname . "_value}", $columnvalue, $list);
-            $columnvalue = urlencode($columnvalue);
-        }
-
-        if (strtolower($columnname) == "region") {
-            $columnvalue_region = urlencode($columnvalue);
-            $list = str_ireplace("{f_region_urlencode}", $columnvalue_region, $list);
-        }
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-    }
-
-    public static function FormatCommentListColumnValue($columnname, $columnvalue, $listName, &$list, $itemRowShortCount, $headerRowShortCount, $footerRowShortCount) {
-
-        if (strtolower($columnname) == "avatar") {
-            if (strlen($columnvalue) <= 10 || $columnvalue == null) {
-                $columnvalue = "/upload/user/default.gif";
-            }
-        }
-
-        if (strtolower($columnname) == "avatarsmall") {
-            if (strlen($columnvalue) <= 10 || $columnvalue == null) {
-                $columnvalue = "/upload/user/default.gif";
-            }
-        }
-
-        if (strtolower($columnname) == "avatarmedium") {
-            if (strlen($columnvalue) <= 10 || $columnvalue == null) {
-                $columnvalue = "/upload/user/default.gif";
-            }
-        }
-
-        $list = str_ireplace("{f_" . $columnname . "}", $columnvalue, $list);
-        $list = str_ireplace("{box}", "", $list);
-        $list = str_ireplace("{/box}", "", $list);
-        $list = str_ireplace("{span}", "", $list);
-        $list = str_ireplace("{/span}", "", $list);
-    }
-
-
     /**
      * 替换详细信息页面
-     * @param type $tempcontent
-     * @param type $arrList
-     * @param type $arrMathe 默认为0，使用二维数组存储数据
+     * @param string $tempContent
+     * @param array $arrInfo 要替换的数组数据
+     * @param bool $isList 默认为false，使用一维数组存储数据
+     * @param bool $isManage 默认为false，使用二维数组存储数据
      */
-    public static function ReplaceOne(&$tempcontent, $arrList, $arrMathe = 0) {
-        if (count($arrList) > 0) {
-            if ($arrMathe > 0) { //使用一维数组存储数据
-                self::_ReplaceOne($tempcontent, $arrList);
+    public static function ReplaceOne(&$tempContent, $arrInfo, $isList = false, $isManage = false) {
+        if (count($arrInfo) > 0) {
+            if ($isList > 0) { //使用一维数组存储数据
+                self::_ReplaceOne($tempContent, $arrInfo,$isManage);
             } else { //使用二维数组存储数据
-                for ($i = 0; $i < count($arrList); $i++) {
-                    $columns = $arrList[$i];
-                    self::_ReplaceOne($tempcontent, $columns);
+                for ($i = 0; $i < count($arrInfo); $i++) {
+                    $columns = $arrInfo[$i];
+                    self::_ReplaceOne($tempContent, $columns,$isManage);
                 }
             }
         }
     }
 
-    /**
-     * 替换详细信息页面(后台系统使用)
-     * @param type $tempcontent
-     * @param type $arrList
-     * @param type $arrMathe 
-     */
-    public static function ReplaceOneBack(&$tempcontent, $arrList, $arrMathe = 0) {
-        $isback = 1;
-        if (count($arrList) > 0) {
-            if ($arrMathe > 0) { //使用一维数组存储数据
-                self::_ReplaceOne($tempcontent, $arrList, $isback);
-            } else { //使用二维数组存储数据
-                for ($i = 0; $i < count($arrList); $i++) {
-                    $columns = $arrList[$i];
-                    self::_ReplaceOne($tempcontent, $columns, $isback);
-                }
-            }
-        }
-    }
 
     /**
      * 处理详细信息子方法
-     * @param type $tempcontent
-     * @param type $arrList 
+     * @param string $tempContent
+     * @param array $arrOne
+     * @param bool $isManage 是否后台使用，默认false，非后台使用
      */
-    private static function _ReplaceOne(&$tempcontent, $arrList, $isback = 0) {
-        if (!empty($arrList)) {
-            foreach ($arrList as $columnname => $columnvalue) {
+    private static function _ReplaceOne(&$tempContent, $arrOne, $isManage = false) {
+        if (!empty($arrOne)) {
+            foreach ($arrOne as $columnName => $columnValue) {
 
-                //对产品相关信息字段进行格式化处理
-                self::_ReplaceProductOne($tempcontent, $columnname, $columnvalue);
-
-                //对活动相关信息字段进行格式化处理
-                self::_ReplaceActivityOne($tempcontent, $columnname, $columnvalue);
-
-                $pos = strpos(strtolower($columnname), "content");
+                $pos = strpos(strtolower($columnName), "content");
                 if ($pos !== false) {
-                    $columnvalue = str_ireplace("<textarea", "<text_area", $columnvalue);
-                    $columnvalue = str_ireplace("</textarea>", "</text_area>", $columnvalue);
+                    $columnValue = str_ireplace("<textarea", "<text_area", $columnValue);
+                    $columnValue = str_ireplace("</textarea>", "</text_area>", $columnValue);
                 }
 
-                if (strtolower($columnname) === "documentnewscontent") {
-                    $columnvalue = str_ireplace("../upload/docnews", "/upload/docnews", $columnvalue);
+                if (strtolower($columnName) === strtolower("DocumentNewsContent")) {
+                    $columnValue = str_ireplace("../upload/document_news", "/upload/document_news", $columnValue);
                 }
 
-                if (strtolower($columnname) === "documentnewstitle") {
-                    $columnvalue = str_ireplace('"', "&quot;", $columnvalue);
+                if (strtolower($columnName) === strtolower("DocumentNewsTitle")) {
+                    $columnValue = str_ireplace('"', "&quot;", $columnValue);
                 }
 
                 //分拆处理发布时间字段
-                $pos = stripos(strtolower($columnname), "publishdate");
+                $pos = stripos(strtolower($columnName), strtolower("PublishDate"));
                 if ($pos !== false) {
-                    $date1 = explode(' ', $columnvalue);
+                    $date1 = explode(' ', $columnValue);
                     $date2 = explode('-', $date1[0]);
                     $year = $date2[0];
                     $month = $date2[1];
                     $day = $date2[2];
 
-                    $tempcontent = str_ireplace("{year}", $year, $tempcontent);
-                    $tempcontent = str_ireplace("{month}", $month, $tempcontent);
-                    $tempcontent = str_ireplace("{day}", $day, $tempcontent);
+                    $tempContent = str_ireplace("{publish_year}", $year, $tempContent);
+                    $tempContent = str_ireplace("{publish_month}", $month, $tempContent);
+                    $tempContent = str_ireplace("{publish_day}", $day, $tempContent);
                 }
 
                 //分拆处理显示时间字段
-                $pos = stripos(strtolower($columnname), "showdate");
+                $pos = stripos(strtolower($columnName), strtolower("ShowDate"));
                 if ($pos !== false) {
-                    $date1 = explode(' ', $columnvalue);
+                    $date1 = explode(' ', $columnValue);
                     $date2 = explode('-', $date1[0]);
                     $year = $date2[0];
                     $month = $date2[1];
                     $day = $date2[2];
 
-                    $tempcontent = str_ireplace("{showyear}", $year, $tempcontent);
-                    $tempcontent = str_ireplace("{showmonth}", $month, $tempcontent);
-                    $tempcontent = str_ireplace("{showday}", $day, $tempcontent);
+                    $tempContent = str_ireplace("{show_year}", $year, $tempContent);
+                    $tempContent = str_ireplace("{show_month}", $month, $tempContent);
+                    $tempContent = str_ireplace("{show_day}", $day, $tempContent);
                 }
 
 
                 //处理常规的值
-                if ($isback === 1) {//是否是后台系统使用
-                    $pre_back = "b_";
+                if ($isManage) {//是否是后台系统使用
+                    $preManage = "b_";
                 } else {
-                    $pre_back = "";
+                    $preManage = "";
                 }
 
 
-                if (strtolower($columnname) === "opencomment") {
-                    $tempcontent = str_ireplace("{" . $pre_back . "s_" . $columnname . "_" . $columnvalue . "}", "selected=\"selected\"", $tempcontent);
-                    if (intval($columnvalue) === 0) { //关闭评论
-                        $columnvalue = "display:none;";
+                if (strtolower($columnName) === strtolower("OpenComment")) {
+                    $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", "selected=\"selected\"", $tempContent);
+                    if (intval($columnValue) === 0) { //关闭评论
+                        $columnValue = "display:none;";
                     } else {
-                        $columnvalue = "";
+                        $columnValue = "";
                     }
-                    $tempcontent = str_ireplace("{" . $columnname . "}", $columnvalue, $tempcontent);
+                    $tempContent = str_ireplace("{" . $columnName . "}", $columnValue, $tempContent);
                 }
 
-                $tempcontent = str_ireplace("{" . $pre_back . $columnname . "}", $columnvalue, $tempcontent);
+                $tempContent = str_ireplace("{" . $preManage . $columnName . "}", $columnValue, $tempContent);
 
                 //处理常规去掉HTML代码的值
-                $tempcontent = str_ireplace("{" . $pre_back . $columnname . "_nohtml}", strip_tags($columnvalue), $tempcontent);
+                $tempContent = str_ireplace("{" . $preManage . $columnName . "_no_html}", strip_tags($columnValue), $tempContent);
 
                 //处理下拉菜单的默认值
-                $tempcontent = str_ireplace("{" . $pre_back . "s_" . $columnname . "_" . $columnvalue . "}", "selected=\"selected\"", $tempcontent);
+                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", 'selected="selected"', $tempContent);
 
-                $tempcontent = str_ireplace("{" . $pre_back . "r_" . $columnname . "_" . $columnvalue . "}", "checked=\"checked\"", $tempcontent);
+                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "_" . $columnValue . "}", 'checked="checked"', $tempContent);
 
-                if (intval($columnvalue) === 1) {
-                    $tempcontent = str_ireplace("{c_" . $columnname . "}", "checked=\"checked\"", $tempcontent);
+                if (intval($columnValue) === 1) {
+                    $tempContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $tempContent);
                 }
             }
         }
     }
 
-    /**
-     * 处理活动Activity内容页
-     * @param <type> $tempcontent
-     * @param <type> $columnname
-     * @param <type> $columnvalue
-     */
-    private static function _ReplaceActivityOne(&$tempcontent, $columnname, $columnvalue) {
-
-        $_icmsurl = $domain['icms'];
-        $_funcurl = $domain['func'];
-        $_pos = stripos($_icmsurl, "http://");
-        if ($_pos === false) {
-            $_icmsurl = "http://" . $_icmsurl;
-        }
-
-        $_posf = stripos($_funcurl, "http://");
-        if ($_posf === false) {
-            $_funcurl = "http://" . $_funcurl;
-        }
-        //处理titlepic,如为空时则显示指定的
-        if (strtolower($columnname) === "titlepic") {
-            if (strlen($columnvalue) < 10) {
-                $urldefault = ""; //$_icmsurl . //Language::Load('activity', 7);
-                $tempcontent = str_ireplace("{titlepic}", $urldefault, $tempcontent);
-            }
-        }
-        if (strtolower($columnname) === "avatar") {
-            if (strlen($columnvalue) < 10) {
-                $urldefault = $_funcurl . "/upload/user/default.gif";
-                $tempcontent = str_ireplace("{avatar}", $urldefault, $tempcontent);
-            } else {
-                $urldefault = $_funcurl . $columnvalue;
-                $tempcontent = str_ireplace("{avatar}", $urldefault, $tempcontent);
-            }
-        }
-    }
-
-    private static function _ReplaceProductOne(&$tempcontent) {
-        //格式化saleprice以万为单位计数
-        if (strtolower($columnname) === "saleprice") {
-            if (is_numeric($columnvalue) && $columnvalue > 0)
-                $tempcontent = str_ireplace("{" . $columnname . "_wan}", number_format($columnvalue / 10000, 2, '.', ''), $tempcontent);
-            else
-                $tempcontent = str_ireplace("{" . $columnname . "_wan}", "", $tempcontent);
-        }
-    }
-
-    /**
-     * 单个替换各表单选项
-     * @param <type> $checked为0表示替换成selected方式,为1表示替换成checked方式
-     * @param <type> $arrList表示要替换的名称
-     * @param <type> $replacestr表示替换的值
-     * @param <type> 把$arrList与$replacestr组合起来进行替换
-     */
-    public static function ReplaceSelect(&$tempContent, $arrList, $replacestr, $checked = 0) {
-        if (count($replacestr) > 0) {
-            $replacestrs = explode(',', $replacestr);
-            foreach ($replacestrs as $columnname => $columnvalue) {
-                if ($checked == 1) {
-                    $tempContent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "checked", $tempContent);
-                } else {
-                    $tempContent = str_ireplace("{t_" . $arrList . "_" . $columnvalue . "}", "selected=\"selected\"", $tempContent);
-                }
-            }
-        }
-    }
 
     /**
      * 取得XML标签参数的值
