@@ -14,5 +14,7 @@ window.G_Tabs = null;
 window.G_TabUrl = "";
 window.G_TabTitle = "";
 window.G_TabCounter = 2;
+window.G_TemplateName = "";
+window.G_PageSize = 15;
 
 

@@ -23,45 +23,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = self::GenModify();
                 break;
             case "remove_to_bin":
-                $result = self::GenRemoveBin();
-                break;
-            case "publish":
-
-                $publishedFiles = '';
-                $isPubAttach = 1;
-                $executeFtp = 1;
-                $ftpQueueData = new FtpQueueData();
-
-                $result = self::Publish($ftpQueueData, 0, $publishedFiles, $isPubAttach, $executeFtp);
-
-                break;
-            case "publishall":
-                $result = self::PublishAll();
-                break;
-            case "list_for_manage_left":
-                $result = self::GenListForManageLeft();
-                break;
-            case "tree_popedom":
-                $result = self::GenTreeForPopedom();
-                break;
-            case "tree_deal":
-                $result = self::GenTreeForDeal();
-                break;
-            case "move":
-                $result = self::GenDeal($method);
-                break;
-            case "copy":
-                $result = self::GenDeal($method);
-                break;
-            case "link":
-                $result = self::GenDeal($method);
-                break;
-            case "property":
-                $result = self::GenProperty();
-                break;
-            case "repair":
-                $documentChannelData = new DocumentChannelData();
-                $documentChannelData->Repair();
+                $result = self::GenRemoveToBin();
                 break;
         }
 
@@ -78,67 +40,69 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $parentId = Control::GetRequest("parent_id", 0);
         $tabIndex = Control::GetRequest("tab", 0);
 
-        $adminUserId = Control::GetManageUserId();
+        $manageUserId = Control::GetManageUserId();
 
-        if ($parentId > 0 && $adminUserId > 0) {
+        if ($parentId > 0 && $manageUserId > 0) {
 
             parent::ReplaceFirst($tempContent);
-            $documentChannelData = new DocumentChannelData();
-            $parentName = $documentChannelData->GetName($parentId);
-            $siteId = $documentChannelData->GetSiteID($parentId);
-            $rank = $documentChannelData->GetRank($parentId);
+            $channelManageData = new ChannelManageData();
+            $parentName = $channelManageData->GetChannelName($parentId, false);
+            $siteId = $channelManageData->GetSiteId($parentId, false);
+            $rank = $channelManageData->GetRank($parentId, false);
             if ($rank < 0) {
                 $rank = 0;
             }
             $rank++;
-            $tempContent = str_ireplace("{documentchannelintro}", "", $tempContent);
+            $tempContent = str_ireplace("{channel_intro}", "", $tempContent);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $publishPath = Control::PostRequest("f_publishpath", "");
-                $hasPublishPath = 0;
+                $publishPath = Control::PostRequest("f_PublishPath", "");
+                $hasRepeatPublishPath = false;
                 if (strlen($publishPath) > 0) {
-                    //判断publishpath是否已经有重复的了
-                    $hasPublishPath = $documentChannelData->HasPublishPath($siteId, 0, $publishPath);
-                    if ($hasPublishPath > 0) {
+                    //判断PublishPath是否已经有重复的了
+                    $channelId = 0;
+                    $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $channelId);
+                    if ($hasRepeatPublishPath) {
                         Control::ShowMessage(Language::Load('document', 9));
+                        return "";
                     }
                 }
-                if ($hasPublishPath <= 0) {
-                    //titlepic1
-                    $fileElementName = "titlepic_upload1";
-                    $fileType = 20; //docchannel
+                if (!$hasRepeatPublishPath) {
+                    //title pic1
+                    $fileElementName = "title_pic_upload1";
+                    $tableType = 20; //channel
+                    $tableId = 0;
                     $returnType = 1;
-                    $commonGen = new CommonGen();
                     $uploadFileId1 = 0;
-                    $titlePicPath1 = $commonGen->UploadFile($fileElementName, $fileType, $returnType, $uploadFileId1);
+                    $titlePicPath1 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId1);
                     $titlePicPath1 = str_ireplace("..", "", $titlePicPath1);
                     if (!empty($titlePicPath1)) {
                         sleep(1);
                     }
                     //titlepic2
                     $fileElementName = "titlepic_upload2";
-                    $fileType = 20; //docchannel
+                    $tableType = 20; //docchannel
                     $returnType = 1;
                     $commonGen = new CommonGen();
 
                     $uploadFileId2 = 0;
-                    $titlePicPath2 = $commonGen->UploadFile($fileElementName, $fileType, $returnType, $uploadFileId2);
+                    $titlePicPath2 = $commonGen->UploadFile($fileElementName, $tableType, $returnType, $uploadFileId2);
                     $titlePicPath2 = str_ireplace("..", "", $titlePicPath2);
                     if (!empty($titlePicPath2)) {
                         sleep(1);
                     }
                     //titlepic3
                     $fileElementName = "titlepic_upload3";
-                    $fileType = 20; //docchannel
+                    $tableType = 20; //docchannel
                     $returnType = 1;
                     $commonGen = new CommonGen();
 
                     $uploadFileId3 = 0;
-                    $titlePicPath3 = $commonGen->UploadFile($fileElementName, $fileType, $returnType, $uploadFileId3);
+                    $titlePicPath3 = $commonGen->UploadFile($fileElementName, $tableType, $returnType, $uploadFileId3);
                     $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
 
-                    $result = $documentChannelData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
+                    $result = $channelManageData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
                     //加入操作log
                     $operateContent = "DocumentChannel：news id ：" . $result . "；adminuserid：" . Control::GetManageUserId() . "；adminusername；" . Control::GetManageUserName() . "；result：" . $result;
                     $adminUserLogData = new AdminUserLogData();
@@ -146,9 +110,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                     if ($result > 0) {
                             //授权给创建人
-                            if ($adminUserId > 1) { //只有非ADMIN的要授权
+                            if ($manageUserId > 1) { //只有非ADMIN的要授权
                                 $adminPopedomData = new AdminPopedomData();
-                                $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
+                                $adminPopedomData->CreateForDocumentChannel($siteId, $result, $manageUserId);
                             }
                             //删除缓冲
                             $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'docdata';
@@ -165,11 +129,11 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         //授权给创建人
-                        $adminUserId = Control::GetManageUserId();
+                        $manageUserId = Control::GetManageUserId();
 
-                        if ($adminUserId > 1) { //只有非ADMIN的要授权
+                        if ($manageUserId > 1) { //只有非ADMIN的要授权
                             $adminPopedomData = new AdminPopedomData();
-                            $adminPopedomData->CreateForDocumentChannel($siteId, $result, $adminUserId);
+                            $adminPopedomData->CreateForDocumentChannel($siteId, $result, $manageUserId);
                         }
 
                         //删除缓冲
@@ -204,7 +168,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{documentchannelname}", "", $tempContent);
             $tempContent = str_ireplace("{publishpath}", "", $tempContent);
             $tempContent = str_ireplace("{sort}", "0", $tempContent);
-            $tempContent = str_ireplace("{adminuserid}", strval($adminUserId), $tempContent);
+            $tempContent = str_ireplace("{adminuserid}", strval($manageUserId), $tempContent);
             $tempContent = str_ireplace("{rank}", strval($rank), $tempContent);
             $tempContent = str_ireplace("{id}", "", $tempContent);
             $tempContent = str_ireplace("{ietitle}", "", $tempContent);

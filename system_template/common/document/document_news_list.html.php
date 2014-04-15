@@ -2,46 +2,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link id="css_font" type="text/css" href="/system_template/{templatename}/images/font14.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/manage/default.css" rel="stylesheet" />
-        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="/system_js/common.js"></script>
-        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        {common_javascript_and_css}
         <script type="text/javascript" src="/system_js/manage/document_news/document_news.js"></script>
     </head>
     <body>
-        <div id="rightbtns">
+        <div>
             <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td id="td_main_btn">
-                        <input id="btnadddoc" class="btn1" value="新建文档" title="在本频道新建资讯类的文档" type="button" />
-                        <input id="btnmovedoc" class="btn4" value="移动" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button" />
-                        <input id="btncopydoc" class="btn5" value="复制" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button" />
+                        <input id="btn_create" class="btn1" value="新建文档" title="在本频道新建资讯类的文档" type="button" />
+                        <input id="btn_move" class="btn4" value="移动" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button" />
+                        <input id="btn_copy" class="btn5" value="复制" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button" />
                     </td>
                     <td style="text-align: right; margin-right: 8px;">
-                        <div id="searchbox">
-                            <select name="searchtype_box" id="searchtype_box" style="display: none">
+                        <div id="search_box">
+                            <label for="search_type_box"></label><select name="search_type_box" id="search_type_box" style="display: none">
                                 <option value="default">基本搜索</option>
                                 <option value="source">来源搜索</option>
                             </select>
-                            <input type="text" id="searchkey" name="searchkey" class="inputbox" />
-                            <input id="searchbtn" class="btn3" value="查 询" type="button" />
-                            <span id="searchtype" style="display: none"></span>
-                            <input id="viewselfbtn" class="btn6" value="只看本人" title="只查看当前登录的管理员的文档" type="button" />
-                            <input id="viewallbtn" class="btn6" value="查看全部" title="查看全部的文档" type="button" />
+                            <label for="search_key"></label><input type="text" id="search_key" name="search_key" class="input_box" />
+                            <input id="btn_search" class="btn3" value="查 询" type="button" />
+                            <span id="search_type" style="display: none"></span>
+                            <input id="btn_view_self" class="btn6" value="只看本人" title="只查看当前登录的管理员的文档" type="button" />
+                            <input id="btn_view_all" class="btn6" value="查看全部" title="查看全部的文档" type="button" />
                         </div>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div id="doclist">
-            <table class="docgrid" cellpadding="0" cellspacing="0">
-                <tr class="gridtitle">
-                    <td style="width: 30px; text-align: center; cursor: pointer;" id="selectall">全</td>
+        <div id="div_list">
+            <table class="grid" cellpadding="0" cellspacing="0">
+                <tr class="grid_title">
+                    <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
                     <td style="width: 40px; text-align: center;">编辑</td>
                     <td style="width: 40px; text-align: right;">状态</td>
                     <td style="width: 40px;"></td>

@@ -162,6 +162,8 @@ class BaseGen {
     public function ReplaceEnd(&$tempContent) {
         $templateName = self::GetTemplateName();
         $selectTemplate = Template::Load("select_template.html","common");
+        $commonJavaScriptAndCss = Template::Load("manage/common_javascript_and_css.html","common");
+        $tempContent = str_ireplace("{common_javascript_and_css}", $commonJavaScriptAndCss, $tempContent);
         $tempContent = str_ireplace("{system_name}", SYSTEM_NAME, $tempContent);
         $tempContent = str_ireplace("{relative_path}", RELATIVE_PATH, $tempContent);
         $tempContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $tempContent);
@@ -305,11 +307,11 @@ class BaseGen {
     /**
      * 上传文件
      * @param string $fileElementName 控件名称
-     * @param int $tableType 上传文件模块类型 （0：）
-     * @param int $tableId
-     * @param int $returnType
-     * @param int $uploadFileId
-     * @return string
+     * @param int $tableType 上传文件对应的表类型
+     * @param int $tableId 上传文件对应的表id
+     * @param int $returnType 返回值的类型
+     * @param int $uploadFileId 返回新的上传文件id
+     * @return string 返回结果字符串
      */
     protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0){
         $result = "";

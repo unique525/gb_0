@@ -907,7 +907,7 @@ class SiteConfigManageData extends BaseManageData {
      * @param string $fieldValue 配置值
      * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      */
-    private function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
+    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
         switch ($siteConfigType) {
             case 0:
                 $fieldName = "StringNorValue";

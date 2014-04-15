@@ -9,18 +9,19 @@
         <link type="text/css" href="/system_template/{template_name}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/manage/default.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/ztree/ztreestyle.css" rel="stylesheet" />
-        <script type="text/javascript">
-            var G_TemplateName = "{template_name}";
-        </script>
+
         <script type="text/javascript" src="{relative_path}/system_js/manage/define_const.js"></script>
+        <script type="text/javascript">
+            window.G_TemplateName = "{template_name}";
+        </script>
         <script type="text/javascript" src="{relative_path}/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/common.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/jqueryui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/jquery_ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/splitter.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/load_tabs.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/channel.js"></script>
+        <script type="text/javascript" src="{relative_path}/system_js/manage/channel/site_and_channel.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/load_user_manage.js"></script>
         <script type="text/javascript" src="{relative_path}/system_js/manage/default.js"></script>
     </head>
@@ -49,7 +50,6 @@
                         </item>
                         <footer>
                             <![CDATA[
-                            <div class="select_site_item" idvalue="{f_SiteId}" title="{f_SiteUrl}">{f_SiteName}</div>
                             <div class="site_count" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_all_count}"></div>
                             ]]>
                         </footer>
@@ -70,15 +70,15 @@
                             ]]>
                         </footer>
                     </icms_list>
-                    <div id="rMenu">
+                    <div id="right_menu">
                         <ul>
-                            <li class="cm_pub_quick_channel"><a href="javascript:publish_channel();">发布频道</a></li>
-                            <li class="cm_edit_channel"><a href="javascript:edit_channel();">编辑频道</a></li>
-                            <li class="cm_add_channel"><a href="javascript:add_channel();">新增子频道</a></li>
-                            <li class="cm_bin_channel"><a href="javascript:temp_channel();">频道模板</a></li>
-                            <li class="cm_bin_channel"><a href="javascript:bin_channel();">删除频道</a></li>
-                            <li class="cm_bin_channel"><a href="javascript:link_channel();">频道联动</a></li>
-                            <li class="cm_pro_channel"><a href="javascript:pro_channel();">频道属性</a></li>
+                            <li class="cm_pub_channel"><span id="btn_right_pub_channel">发布频道</span></li>
+                            <li class="cm_edit_channel"><span id="btn_right_edit_channel">编辑频道</span></li>
+                            <li class="cm_add_channel"><span id="btn_right_edit_channel">新增子频道</span></li>
+                            <li class="cm_bin_channel"><span id="btn_right_view_channel_template">频道模板</span></li>
+                            <li class="cm_bin_channel"><span id="btn_right_remove_to_bin_channel">删除频道</span></li>
+                            <li class="cm_bin_channel"><span id="btn_right_relative_channel">频道联动</span></li>
+                            <li class="cm_pro_channel"><span id="btn_right_view_channel_property">频道属性</span></li>
                         </ul>
                     </div>
                 </div>

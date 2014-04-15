@@ -1,11 +1,5 @@
 /**框架初始化JS**/
 $(function () {
-    var nowTemplateName = "default";
-    if (G_TemplateName != undefined) {
-        nowTemplateName = G_TemplateName;
-    }
-    $("#btn_site_manage").attr("src", "/system_template/" + nowTemplateName + "/images/manage/site_manage.jpg");
-    $("#img_go_site_url").attr("src", "/system_template/" + nowTemplateName + "/images/manage/go.jpg");
 
     var divMainContent = jQuery('#div_main_content');
     if (divMainContent.length > 0) {
@@ -17,42 +11,6 @@ $(function () {
             cookie: "vsplitter",
             accessKey: 'I'
         });
-    }
-    //$("#accord1").tooltip();
-    //$(".btnsettemplate").tooltip();
-    var divSelectSite = $("#div_select_site");
-    divSelectSite.click(function () {
-        if ($(this).attr("class") === "select_site_normal") {
-            $(this).attr("class", "select_site_clicked");
-            var itemHeight = parseInt($(this).css("height"));
-            var siteCount = $(".site_count").attr("idvalue");
-            var newHeight = itemHeight * siteCount;
-            $(this).css("height", newHeight + "px");
-        } else {
-            $(this).attr("class", "select_site_normal");
-        }
-    });
-    var divDefaultSite = $("#div_default_site");
-    var siteId = divDefaultSite.attr("idvalue");
-    var siteName = divDefaultSite.html();
-    var siteUrl = divDefaultSite.attr("title");
-    if (siteId.length > 0) {
-        LoadSite(siteId, siteName, siteUrl);
-    }
-    //select site
-    $(".select_site_item").click(function () {
-        siteId = $(this).attr("idvalue");
-        siteName = $(this).html();
-        siteUrl = $(this).attr("title");
-        LoadSite(siteId, siteName, siteUrl);
-    });
-
-    //site name
-    //$(".site name").html($("#sel_site").find("option:selected").text());
-    //$(".site name").attr("title",$("#sel_site").val());
-    var divShowSiteList = $("#div_show_site_list");
-    if (divShowSiteList.length > 0) {
-        divShowSiteList.append(divSelectSite);
     }
 
     var objAccord = $('#div_left_accordion');
@@ -84,26 +42,9 @@ $(function () {
             }
         });
     });
+
+    var aw = $(window).height() - 108 - 35;
+    var size = aw / 28;
+    window.G_PageSize = parseInt(size) - 1;
 });
 
-function LoadSite(siteId, siteName, siteUrl) {
-
-    G_NowSiteId = parseInt(siteId);
-    G_SelectedChannelId = 0;
-
-    if (G_NowSiteId > 0) {
-        $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
-        LoadChannelListForManage(siteId);
-        //site name
-        $(".site_name").html(siteName);
-        if (siteUrl.length > 1) {
-            $("#btn_go_site_url").attr("href", siteUrl);
-        }
-    } else {
-        $("#div_manage_menu_of_column").html("请先增加一个站点");
-    }
-
-
-
-
-}  

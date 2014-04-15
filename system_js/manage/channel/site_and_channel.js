@@ -1,3 +1,79 @@
+$(function () {
+
+    var nowTemplateName = "default";
+    if (window.G_TemplateName != undefined) {
+        nowTemplateName = window.G_TemplateName;
+    }
+
+    //站点管理图标设置及事件处理
+    var btnSiteManage = $("#btn_site_manage");
+    btnSiteManage.attr("src", "/system_template/" + nowTemplateName + "/images/manage/site_manage.jpg");
+    btnSiteManage.css("cursor","pointer");
+    btnSiteManage.click(function () {
+        //打开站点管理页面
+        window.G_TabTitle = "站点管理";
+        window.G_TabUrl = '/default.php?secu=manage&mod=site&m=list';
+        addTab();
+    });
+
+
+    $("#img_go_site_url").attr("src", "/system_template/" + nowTemplateName + "/images/manage/go.jpg");
+
+    var divSelectSite = $("#div_select_site");
+    divSelectSite.click(function () {
+        if ($(this).attr("class") === "select_site_normal") {
+            $(this).attr("class", "select_site_clicked");
+            var itemHeight = parseInt($(this).css("height"));
+            var siteCount = $(".site_count").attr("idvalue");
+            var newHeight = itemHeight * siteCount;
+            $(this).css("height", newHeight + "px");
+        } else {
+            $(this).attr("class", "select_site_normal");
+        }
+    });
+    var divDefaultSite = $("#div_default_site");
+    var siteId = divDefaultSite.attr("idvalue");
+    var siteName = divDefaultSite.html();
+    var siteUrl = divDefaultSite.attr("title");
+    if (siteId.length > 0) {
+        LoadSite(siteId, siteName, siteUrl);
+    }
+    //select site
+    $(".select_site_item").click(function () {
+        siteId = $(this).attr("idvalue");
+        siteName = $(this).html();
+        siteUrl = $(this).attr("title");
+        LoadSite(siteId, siteName, siteUrl);
+    });
+
+    var divShowSiteList = $("#div_show_site_list");
+    if (divShowSiteList.length > 0) {
+        divShowSiteList.append(divSelectSite);
+    }
+
+});
+
+function LoadSite(siteId, siteName, siteUrl) {
+
+    window.G_NowSiteId = parseInt(siteId);
+    window.G_SelectedChannelId = 0;
+
+    if (window.G_NowSiteId > 0) {
+        $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
+        LoadChannelListForManage(siteId);
+        //site name
+        $(".site_name").html(siteName);
+        if (siteUrl.length > 1) {
+            $("#btn_go_site_url").attr("href", siteUrl);
+        }
+    } else {
+        $("#div_manage_menu_of_column").html("请先增加一个站点");
+    }
+}
+
+
+
+
 function LoadChannelListForManage(siteId) {
     var treeSetting = {
         data: {
@@ -19,7 +95,7 @@ function LoadChannelListForManage(siteId) {
     jsLoader.onSuccess = function() {
         $.fn.zTree.init($("#div_manage_menu_of_column"), treeSetting, zNodes);
         window.G_zTree = $.fn.zTree.getZTreeObj("div_manage_menu_of_column");
-        window.G_RightMenu = $("#rMenu");
+        window.G_RightMenu = $("#right_menu");
     };
     jsLoader.onFailure = function() {
         $("#div_manage_menu_of_column").html("导航树加载失败");
@@ -57,7 +133,7 @@ function zTreeOnRightClick(event, treeId, treeNode) {
     }
 }
 function showRMenu(type, x, y) {
-    $("#rMenu ul").show();
+    $("#right_menu ul").show();
     x = x - 10;
     y = y - 100;
     G_RightMenu.css({
@@ -76,7 +152,7 @@ function hideRMenu() {
     $("body").unbind("mousedown", onBodyMouseDown);
 }
 function onBodyMouseDown(event) {
-    if (!(event.target.id === "rMenu" || $(event.target).parents("#rMenu").length > 0)) {
+    if (!(event.target.id === "right_menu" || $(event.target).parents("#right_menu").length > 0)) {
         window.G_RightMenu.css({
             "visibility": "hidden"
         });

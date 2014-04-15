@@ -187,6 +187,31 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 检查是否设置了重复的发布路径
+     * @param int $siteId 站点id
+     * @param string $publishPath 要检查的发布路径
+     * @param int $channelId 要检查的频道编号，修改时用，新增时，此参数为0
+     * @return bool 检查结果，存在重复为是，否则为否
+     */
+    public function CheckRepeatPublishPath($siteId, $publishPath , $channelId) {
+        $dataProperty = new DataProperty();
+        if ($channelId > 0) {
+            $sql = "SELECT count(*) FROM " . self::TableName_Channel . " WHERE SiteId=:SiteId AND PublishPath=:PublishPath AND ChannelId<>:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+        } else {
+            $sql = "SELECT count(*) FROM " . self::TableName_Channel . " WHERE SiteId=:SiteId AND PublishPath=:PublishPath;";
+        }
+        $dataProperty->AddField("PublishPath", $publishPath);
+        $dataProperty->AddField("SiteId", $siteId);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        if($result>0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
 
 }
 
