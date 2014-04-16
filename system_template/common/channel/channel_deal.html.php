@@ -3,15 +3,15 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/editor.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
-        <script type="text/javascript" src="{rootpath}/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/common.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/jqueryui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/tiny_mce/tiny_mce.js"></script>
-        <script type="text/javascript" src="{rootpath}/system_js/editor.js"></script>
+        <link type="text/css" href="/system_template/{template_name}/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/editor.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/system_js/common.js"></script>
+        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
+        <script type="text/javascript" src="/system_js/editor.js"></script>
         <script type="text/javascript">
             $(function(){
                 

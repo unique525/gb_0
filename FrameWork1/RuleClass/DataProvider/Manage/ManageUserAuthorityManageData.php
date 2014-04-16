@@ -44,7 +44,7 @@ class ManageUserAuthorityManageData extends BaseManageData
 	        (
 	        :SiteId,
 	        :ChannelId,
-	            0,
+	        0,
 	        :ManageUserId,
 	        0,
 	        1,
@@ -68,12 +68,6 @@ class ManageUserAuthorityManageData extends BaseManageData
         $dataProperty->AddField("ChannelId", $channelId);
         $dataProperty->AddField("ManageUserId", $manageUserId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
-
-        if ($result > 0) {
-            //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH);
-        }
-
         return $result;
     }
 

@@ -48,9 +48,8 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
 
             $manageUserId = $manageUserManageData->Login($manageUserName, $manageUserPass);
 
-            //加入操作log
-            //$operateContent = "Manage User Login:ManageUserPass:$manageUserPass";
-            $operateContent = implode('|',$_POST);
+            //加入操作日志
+            $operateContent = 'POST FORM:'.implode('|',$_POST).';\r\nResult:manageUserId:'.$manageUserId;
             self::CreateManageUserLog($operateContent);
 
             if ($manageUserId > 0) {

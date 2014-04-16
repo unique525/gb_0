@@ -6,24 +6,23 @@
         <link type="text/css" href="/system_template/common/images/common.css" rel="stylesheet" />
         <link id="css_font" type="text/css" href="/system_template/{template_name}/images/font14.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{template_name}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{template_name}/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/manage/default.css" rel="stylesheet" />
         <link type="text/css" href="/system_template/{template_name}/images/ztree/ztreestyle.css" rel="stylesheet" />
-
-        <script type="text/javascript" src="{relative_path}/system_js/manage/define_const.js"></script>
+        <script type="text/javascript" src="/system_js/manage/define_const.js"></script>
         <script type="text/javascript">
             window.G_TemplateName = "{template_name}";
         </script>
-        <script type="text/javascript" src="{relative_path}/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/common.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/jquery_ui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/splitter.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/load_tabs.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/channel/site_and_channel.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/load_user_manage.js"></script>
-        <script type="text/javascript" src="{relative_path}/system_js/manage/default.js"></script>
+        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/system_js/common.js"></script>
+        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/manage/splitter.js"></script>
+        <script type="text/javascript" src="/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
+        <script type="text/javascript" src="/system_js/manage/load_tabs.js"></script>
+        <script type="text/javascript" src="/system_js/manage/channel/site_and_channel.js"></script>
+        <script type="text/javascript" src="/system_js/manage/load_user_manage.js"></script>
+        <script type="text/javascript" src="/system_js/manage/default.js"></script>
     </head>
     <body>
         <div id="div_top">

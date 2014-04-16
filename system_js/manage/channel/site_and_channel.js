@@ -91,7 +91,7 @@ function LoadChannelListForManage(siteId) {
     };
 
     var jsLoader = new JsLoader();
-    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&siteid=" + siteId + "&ramdom=" + Math.random());
+    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&site_id=" + siteId + "&ramdom=" + Math.random());
     jsLoader.onSuccess = function() {
         $.fn.zTree.init($("#div_manage_menu_of_column"), treeSetting, zNodes);
         window.G_zTree = $.fn.zTree.getZTreeObj("div_manage_menu_of_column");
