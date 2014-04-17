@@ -72,8 +72,8 @@
                     <div id="right_menu">
                         <ul>
                             <li class="cm_pub_channel"><span id="btn_right_pub_channel">发布频道</span></li>
-                            <li class="cm_edit_channel"><span id="btn_right_edit_channel">编辑频道</span></li>
-                            <li class="cm_add_channel"><span id="btn_right_edit_channel">新增子频道</span></li>
+                            <li class="cm_edit_channel"><span id="btn_right_modify_channel">编辑频道</span></li>
+                            <li class="cm_add_channel"><span id="btn_right_create_channel">新增子频道</span></li>
                             <li class="cm_bin_channel"><span id="btn_right_view_channel_template">频道模板</span></li>
                             <li class="cm_bin_channel"><span id="btn_right_remove_to_bin_channel">删除频道</span></li>
                             <li class="cm_bin_channel"><span id="btn_right_relative_channel">频道联动</span></li>

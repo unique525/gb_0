@@ -103,7 +103,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
 
         if (WEBAPP_DOMAIN != MANAGE_DOMAIN) {
             $webAppDomain = str_ireplace("http://", "", WEBAPP_DOMAIN);
-            Control::SetManageUserCookie($manageUserId, $manageUserName, 1, $webAppDomain);
+            Control::SetManageUserCookie($manageUserId, $manageUserName, 10000, $webAppDomain);
         }
 
         $userId = $manageUserManageData->GetUserId($manageUserId);

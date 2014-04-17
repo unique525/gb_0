@@ -1,49 +1,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link type="text/css" href="/system_template/{template_name}/images/common.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{template_name}/images/editor.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{template_name}/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
-        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="/system_js/common.js"></script>
-        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        <title></title>
+        {common_header}
         <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
-        <script type="text/javascript" src="/system_js/editor.js"></script>
         <script type="text/javascript">
             $(function(){
                 
-                $("#f_createdate").datepicker({
+                $("#f_CreateDate").datepicker({
                     dateFormat: 'yy-mm-dd',
                     numberOfMonths: 1,
                     showButtonPanel: true
                 }); 
-                
-                if(Request["id"] === undefined){
-                    var today = new Date();
-                    var month = today.getMonth()+1;
-                    var s_date = today.getFullYear()+"-"+month+"-"+today.getDate();
-                    var s_hour = today.getHours()<10?"0"+today.getHours():today.getHours();
-                    var s_minute = today.getMinutes()<10?"0"+today.getMinutes():today.getMinutes();
-                    var s_second = today.getSeconds()<10?"0"+today.getSeconds():today.getSeconds();
-                    $("#f_createdate").val(s_date + " " + s_hour + ":"+s_minute+":"+s_second ); 
-                }
-                
-                var img1 = $("#img_titlepic1");
-                var theimage1 = new Image();
-                theimage1.src = img1.attr("src");
-                var tp1 = '{titlepic1}';
-                $("#preview_titlepic1").click(function() {
-                    if(tp1 !== ''){
-                        $("#dialog_titlepic1").dialog({
-                            width : theimage1.width+30,
-                            height : theimage1.height+50
+
+                var imgTitlePic1 = $("#img_title_pic1");
+                $("#preview_title_pic1").click(function() {
+                    if(imgTitlePic1.attr("src") !== ''){
+                        var imageOfTitlePic1 = new Image();
+                        imageOfTitlePic1.src = imgTitlePic1.attr("src");
+                        $("#dialog_title_pic1").dialog({
+                            width : imageOfTitlePic1.width+30,
+                            height : imageOfTitlePic1.height+30
                         });
                     }
                     else{
-                        alert('还没有上传题图1');
+                        $("#dialog_title_pic1").dialog({width:300,height:100});
+                        $("#dialog_title_pic1_content").html("还没有上传题图1");
                     }
                 });
                 
@@ -78,8 +61,9 @@
                         alert('还没有上传题图3');
                     }
                 });
-                
-                $("#f_documentchanneltype").change(function(){
+
+                var selChannelType = $("#f_ChannelType");
+                selChannelType.change(function(){
                       $(this).css("background-color","#FFFFCC");
                       var dnt = $(this).val();
                       if(dnt == '50'){
@@ -91,73 +75,67 @@
                       }
 
                 });
-                $("#f_documentchanneltype").change();
-                
-
-            });  
+                selChannelType.change();
+            });
     
-            function sub()
+            function submitForm()
             {
-                if($('#f_documentchannelname').val() == ''){
+                if($('#f_ChannelName').val() == ''){
                     alert('请输入频道名称');
-                    return;
-                }else if($('#f_documentchannelintro').text().length>1000){
+                }else if($('#f_ChannelIntro').text().length>1000){
                     alert('频道简介不能超过1000个字符');
-                    return;
-                }else
-                {
-                    $('#mainform').submit();
+                }else{
+                    $('#mainForm').submit();
                 }
             }
 
         </script>
     </head>
     <body>
-        <form id="mainform" enctype="multipart/form-data"  action="index.php?a=docchannel&m={method}&id={id}&cid={parentid}" method="post">
+        <form id="mainForm" enctype="multipart/form-data"  action="/default.php?mod=channel&m={method}&channel_id={channel_id}&parent_id={parent_id}" method="post">
             <div>
                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td class="speline" width="20%" height="30" align="right">上级频道：</td>
-                        <td class="speline">{parentname}
-                            <input name="f_parentid" type="hidden" value="{parentid}" />
-                            <input name="f_siteid" type="hidden" value="{siteid}" />
-                            <input name="f_rank" type="hidden" value="{rank}" />
-                            <input name="f_adminuserid" type="hidden" value="{adminuserid}" />
+                        <td class="spe_line" width="20%" height="30" align="right">上级频道：</td>
+                        <td class="spe_line">{ParentName}
+                            <input name="f_ParentId" type="hidden" value="{ParentId}" />
+                            <input name="f_SiteId" type="hidden" value="{SiteId}" />
+                            <input name="f_Rank" type="hidden" value="{Rank}" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">频道名称：</td>
-                        <td class="speline"><input name="f_documentchannelname" id="f_documentchannelname" value="{documentchannelname}" type="text" class="inputbox" style=" width: 300px;" /></td>
+                        <td class="spe_line" height="30" align="right"><label for="f_ChannelName">频道名称：</label></td>
+                        <td class="spe_line"><input name="f_ChannelName" id="f_ChannelName" value="{ChannelName}" type="text" class="input_box" style="width:300px;" /></td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">创建时间：</td>
-                        <td class="speline"><input id="f_createdate" name="f_createdate" value="{createdate}" type="text" class="inputbox" style=" width: 75px;font-size:14px;" /></td>
+                        <td class="spe_line" height="30" align="right"><label for="f_CreateDate">创建时间：</label></td>
+                        <td class="spe_line"><input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:80px;" /></td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">频道类型：</td>
-                        <td class="speline">
-                            <select id="f_documentchanneltype" name="f_documentchanneltype">
-                                <option value="1" {s_documentchanneltype_1}>新闻信息类</option>
-                                <option value="2" {s_documentchanneltype_2}>咨询答复类</option>
-                                <option value="3" {s_documentchanneltype_3}>图片轮换类</option>
-                                <option value="4" {s_documentchanneltype_4}>产品类</option>
-                                <option value="5" {s_documentchanneltype_5}>频道结合产品类</option>
-                                <option value="6" {s_documentchanneltype_6}>活动类</option>
-                                <option value="7" {s_documentchanneltype_7}>投票类</option>
-                                <option value="8" {s_documentchanneltype_8}>自定义页面类</option>
-                                <option value="9" {s_documentchanneltype_9}>友情链接类</option>
-                                <option value="10" {s_documentchanneltype_10}>活动表单类</option>
-                                <option value="11" {s_documentchanneltype_11}>文字直播类</option>
-                                <option value="12" {s_documentchanneltype_12}>投票调查类</option>
-                                <option value="0" {s_documentchanneltype_0}>站点首页类</option>
-                                <option value="50" {s_documentchanneltype_50}>外部接口类</option>
+                        <td class="spe_line" height="30" align="right"><label for="f_ChannelType">频道类型：</label></td>
+                        <td class="spe_line">
+                            <select id="f_ChannelType" name="f_ChannelType">
+                                <option value="1" {s_ChannelType_1}>新闻信息类</option>
+                                <option value="2" {s_ChannelType_2}>咨询答复类</option>
+                                <option value="3" {s_ChannelType_3}>图片轮换类</option>
+                                <option value="4" {s_ChannelType_4}>产品类</option>
+                                <option value="5" {s_ChannelType_5}>频道结合产品类</option>
+                                <option value="6" {s_ChannelType_6}>活动类</option>
+                                <option value="7" {s_ChannelType_7}>投票类</option>
+                                <option value="8" {s_ChannelType_8}>自定义页面类</option>
+                                <option value="9" {s_ChannelType_9}>友情链接类</option>
+                                <option value="10" {s_ChannelType_10}>活动表单类</option>
+                                <option value="11" {s_ChannelType_11}>文字直播类</option>
+                                <option value="12" {s_ChannelType_12}>投票调查类</option>
+                                <option value="0" {s_ChannelType_0}>站点首页类</option>
+                                <option value="50" {s_ChannelType_50}>外部接口类</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">排序号：</td>
-                        <td class="speline">
-                            <input name="f_sort" type="text" value="{sort}" class="inputnumber" />
+                        <td class="spe_line" height="30" align="right"><label for="f_Sort">排序号：</label></td>
+                        <td class="spe_line">
+                            <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number" />
                         </td>
                     </tr>
                 </table>
@@ -165,32 +143,32 @@
                         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                     
                     <tr>
-                        <td class="speline" width="20%" height="30" align="right">发布方式：</td>
-                        <td class="speline">
-                            <select id="f_publishtype" name="f_publishtype">
-                                <option value="1" {s_publishtype_1}>自动发布新稿</option>
-                                <option value="0" {s_publishtype_0}>仅发布终审文档</option>
+                        <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishType">发布方式：</label></td>
+                        <td class="spe_line">
+                            <select id="f_PublishType" name="f_PublishType">
+                                <option value="1" {s_PublishType_1}>自动发布新稿</option>
+                                <option value="0" {s_PublishType_0}>仅发布终审文档</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">发布文件夹：</td>
-                        <td class="speline">
-                            <input name="f_publishpath" type="text" value="{publishpath}" class="inputbox" /> (可以为空)
+                        <td class="spe_line" height="30" align="right"><label for="f_PublishPath">发布文件夹：</label></td>
+                        <td class="spe_line">
+                            <input id="f_PublishPath" name="f_PublishPath" type="text" value="{PublishPath}" class="input_box" /> (可以为空)
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">是否有单独FTP设置：</td>
-                        <td class="speline">
-                            <select id="f_hasftp" name="f_hasftp">
-                                <option value="0" {s_hasftp_0}>无</option>
-                                <option value="1" {s_hasftp_1}>有</option>
+                        <td class="spe_line" height="30" align="right"><label for="f_HasFtp">是否有单独FTP设置：</label></td>
+                        <td class="spe_line">
+                            <select id="f_HasFtp" name="f_HasFtp">
+                                <option value="0" {s_HasFtp_0}>无</option>
+                                <option value="1" {s_HasFtp_1}>有</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">是否显示子频道数据：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right"><label for="f_ShowChildList">是否显示子频道数据：</label></td>
+                        <td class="spe_line">
                             <select id="f_ShowChildList" name="f_ShowChildList">
                                 <option value="0" {s_ShowChildList_0}>否</option>
                                 <option value="1" {s_ShowChildList_1}>是</option>
@@ -198,8 +176,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">评论：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right"><label for="f_OpenComment">评论：</label></td>
+                        <td class="spe_line">
                             <select id="f_OpenComment" name="f_OpenComment">
                                 <option value="0" {s_OpenComment_0}>不允许</option>
                                 <option value="10" {s_OpenComment_10}>允许但需要审核（先审后发）</option>
@@ -209,8 +187,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">是否在频道导航树上隐藏：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right"><label for="f_Invisible">是否在频道导航树上隐藏：</label></td>
+                        <td class="spe_line">
                             <select id="f_Invisible" name="f_Invisible">
                                 <option value="0" {s_Invisible_0}>不隐藏</option>
                                 <option value="1" {s_Invisible_1}>隐藏</option>
@@ -221,29 +199,29 @@
 
 
                     <tr>
-                        <td class="speline" height="30" align="right">IE标题：</td>
-                        <td class="speline">
-                            <input name="f_ietitle" type="text" value="{ietitle}" class="inputbox" style=" width: 400px;" maxlength="200" />
+                        <td class="spe_line" height="30" align="right"><label for="f_BrowserTitle">浏览器标题：</label></td>
+                        <td class="spe_line">
+                            <input id="f_BrowserTitle" name="f_BrowserTitle" type="text" value="{BrowserTitle}" class="input_box" style="width:400px;" maxlength="200" />
                         </td>
                     </tr>
 
 
                     <tr>
-                        <td class="speline" height="30" align="right">IE关键字：</td>
-                        <td class="speline">
-                            <input name="f_iekeywords" type="text" value="{iekeywords}" class="inputbox" style=" width: 400px;" maxlength="200" />
+                        <td class="spe_line" height="30" align="right"><label for="f_BrowserKeywords">浏览器关键字：</label></td>
+                        <td class="spe_line">
+                            <input id="f_BrowserKeywords" name="f_BrowserKeywords" type="text" value="{BrowserKeywords}" class="input_box" style="width:400px;" maxlength="200" />
                         </td>
                     </tr>
 
                     <tr>
-                        <td class="speline" height="30" align="right">IE描述文字：</td>
-                        <td class="speline">
-                            <input name="f_iedescription" type="text" value="{iedescription}" class="inputbox" style=" width: 400px;" maxlength="200" />
+                        <td class="spe_line" height="30" align="right"><label for="f_BrowserDescription">浏览器描述文字：</label></td>
+                        <td class="spe_line">
+                            <input id="f_BrowserDescription" name="f_BrowserDescription" type="text" value="{BrowserDescription}" class="input_box" style=" width: 400px;" maxlength="200" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">是否加入模板库的循环调用：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right"><label for="f_IsCircle">是否加入模板库的循环调用：</label></td>
+                        <td class="spe_line">
                             <select id="f_IsCircle" name="f_IsCircle">
                                 <option value="0" {s_IsCircle_0}>否</option>
                                 <option value="1" {s_IsCircle_1}>是</option>
@@ -251,8 +229,8 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td class="speline" height="30" align="right">是否显示在聚合页中：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right"><label for="f_IsShowIndex">是否显示在聚合页中：</label></td>
+                        <td class="spe_line">
                             <select id="f_IsShowIndex" name="f_IsShowIndex">
                                 <option value="0" {s_IsShowIndex_0}>否</option>
                                 <option value="1" {s_IsShowIndex_1}>是</option>
@@ -260,22 +238,23 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td class="speline" height="30" align="right">频道图片1：</td>
-                        <td class="speline">
-                            <input id="titlepic_upload1" name="titlepic_upload1" type="file" class="inputbox" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic1" style="cursor:pointer">[预览]</span>
-                            <div id="dialog_titlepic1" title="频道图片1预览（{titlepic1}）" style="display:none;">
-                                    <div id="pubtable">
+                        <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">频道图片1：</label></td>
+                        <td class="spe_line">
+                            <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;" /> <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
+                            <div id="dialog_title_pic1" title="频道图片1预览（{TitlePic1}）" style="display:none;">
+                                    <div id="dialog_title_pic1_content">
                                         <table>
                                             <tr>
-                                                <td><img id="img_titlepic1" src="{titlepic1}" alt="titlepic1" /></td>
-                                            </tr></table>
+                                                <td><img id="img_title_pic1" src="{TitlePic1}" alt="title_pic1" /></td>
+                                            </tr>
+                                        </table>
                                     </div>
                             </div>
                         </td>
                     </tr> 
                     <tr>
-                        <td class="speline" height="30" align="right">频道图片2：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right">频道图片2：</td>
+                        <td class="spe_line">
                             <input id="titlepic_upload2" name="titlepic_upload2" type="file" class="inputbox" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic2" style="cursor:pointer">[预览]</span>
                             <div id="dialog_titlepic2" title="频道图片2预览（{titlepic2}）" style="display:none;">
                                     <div id="pubtable">
@@ -288,8 +267,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">频道图片3：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right">频道图片3：</td>
+                        <td class="spe_line">
                             <input id="titlepic_upload3" name="titlepic_upload3" type="file" class="inputbox" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic3" style="cursor:pointer">[预览]</span>
                             <div id="dialog_titlepic3" title="频道图片3预览（{titlepic3}）" style="display:none;">
                                     <div id="pubtable">
@@ -302,8 +281,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">频道介绍：</td>
-                        <td class="speline">
+                        <td class="spe_line" height="30" align="right">频道介绍：</td>
+                        <td class="spe_line">
                             <textarea class="mceEditor" id="f_documentchannelintro" name="f_documentchannelintro" style=" width: 70%; height: 250px;">{DocumentChannelIntro}</textarea>                            
                         </td>
                     </tr>
@@ -313,16 +292,16 @@
                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                     
                <tr>
-                        <td class="speline" width="20%" height="30" align="right">发布API接口地址：</td>
-                        <td class="speline">
-                            <input name="f_PublishAPIUrl" type="text" value="{PublishAPIUrl}" class="inputbox" style=" width: 500px;" maxlength="200" />
+                        <td class="spe_line" width="20%" height="30" align="right">发布API接口地址：</td>
+                        <td class="spe_line">
+                            <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="inputbox" style=" width: 500px;" maxlength="200" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="speline" height="30" align="right">发布API接口类型：</td>
-                        <td class="speline">
-                            <select id="f_PublishAPIType" name="f_PublishAPIType">
-                                <option value="0" {s_PublishAPIType_0}>XML</option>
+                        <td class="spe_line" height="30" align="right">发布API接口类型：</td>
+                        <td class="spe_line">
+                            <select id="f_PublishApiType" name="f_PublishApiType">
+                                <option value="0" {s_PublishApiType_0}>XML</option>
                             </select> (在使用频道聚合页中时)</td>
                     </tr> 
                 </table>

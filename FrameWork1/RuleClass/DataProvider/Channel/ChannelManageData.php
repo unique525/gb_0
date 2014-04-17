@@ -8,6 +8,15 @@
 class ChannelManageData extends BaseManageData
 {
     /**
+     * 取得字段数据集
+     * @return array 字段数据集
+     */
+    public function GetFields(){
+        return parent::GetFields(self::TableName_Channel);
+    }
+
+
+    /**
      * 新增频道
      * @param array $httpPostData $_POST数组
      * @param string $titlePic1 题图1
@@ -34,18 +43,18 @@ class ChannelManageData extends BaseManageData
     /**
      * 新增站点时默认新增首页频道
      * @param int $siteId 站点id
-     * @param int $adminUserId 管理员id
+     * @param int $manageUserId 管理员id
      * @param string $channelName 新增的频道名称
      * @return int 新增的频道id
      */
-    public function CreateWhenSiteCreate($siteId, $adminUserId, $channelName)
+    public function CreateWhenSiteCreate($siteId, $manageUserId, $channelName)
     {
         $result = -1;
-        if ($siteId > 0 && $adminUserId > 0 && !empty($channelName)) {
+        if ($siteId > 0 && $manageUserId > 0 && !empty($channelName)) {
             $dataProperty = new DataProperty();
-            $sql = "INSERT INTO " . self::TableName_Channel . " (SiteId,CreateDate,AdminUserId,ChannelName) VALUES (:SiteId,now(),:AdminUserId,:ChannelName);";
+            $sql = "INSERT INTO " . self::TableName_Channel . " (SiteId,CreateDate,ManageUserId,ChannelName) VALUES (:SiteId,now(),:ManageUserId,:ChannelName);";
             $dataProperty->AddField("SiteId", $siteId);
-            $dataProperty->AddField("AdminUserId", $adminUserId);
+            $dataProperty->AddField("ManageUserId", $manageUserId);
             $dataProperty->AddField("ChannelName", $channelName);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
@@ -122,6 +131,7 @@ class ChannelManageData extends BaseManageData
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
+
         return $result;
     }
 

@@ -306,14 +306,15 @@ class BaseData
     {
         $result = "";
         if (strlen($sql) > 0) {
-            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-            if (!$withCache) {
-                $cacheContent = "";
-            }
-            if (strlen($cacheContent) <= 0) {
-                $result = $this->dbOperator->GetInt($sql, $dataProperty);
-            } else {
-                $result = $cacheContent;
+            if($withCache){
+                $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if (strlen($cacheContent) <= 0) {
+                    $result = $this->dbOperator->GetString($sql, $dataProperty);
+                } else {
+                    $result = $cacheContent;
+                }
+            }else{
+                $result = $this->dbOperator->GetString($sql, $dataProperty);
             }
         }
         return $result;

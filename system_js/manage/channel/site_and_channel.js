@@ -51,6 +51,16 @@ $(function () {
         divShowSiteList.append(divSelectSite);
     }
 
+
+    //create channel page
+    var btnRightCreateChannel = $("#btn_right_create_channel");
+    btnRightCreateChannel.click(function () {
+        window.G_TabTitle = "新增频道";
+        window.G_TabUrl = '/default.php?secu=manage&mod=channel&m=create&parent_id='+window.G_SelectedChannelId;
+        addTab();
+    });
+
+
 });
 
 function LoadSite(siteId, siteName, siteUrl) {
@@ -141,6 +151,7 @@ function showRMenu(type, x, y) {
         "left": x + "px",
         "visibility": "visible"
     });
+    //right btn
 
     $("body").bind("mousedown", onBodyMouseDown);
 }

@@ -162,8 +162,8 @@ class BaseGen {
     public function ReplaceEnd(&$tempContent) {
         $templateName = self::GetTemplateName();
         $selectTemplate = Template::Load("select_template.html","common");
-        $commonJavaScriptAndCss = Template::Load("manage/common_javascript_and_css.html","common");
-        $tempContent = str_ireplace("{common_javascript_and_css}", $commonJavaScriptAndCss, $tempContent);
+        $commonHeader = Template::Load("manage/common_header.html","common");
+        $tempContent = str_ireplace("{common_header}", $commonHeader, $tempContent);
         $tempContent = str_ireplace("{system_name}", SYSTEM_NAME, $tempContent);
         $tempContent = str_ireplace("{relative_path}", RELATIVE_PATH, $tempContent);
         $tempContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $tempContent);

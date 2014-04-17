@@ -41,11 +41,10 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate() {
         $tempContent = Template::Load("channel/channel_deal.html", "common");
         $parentId = Control::GetRequest("parent_id", 0);
-        $tabIndex = Control::GetRequest("tab", 0);
 
         $manageUserId = Control::GetManageUserId();
 
-        if ($parentId > 0 && $manageUserId > 0) {
+        if ($parentId >0 && $manageUserId > 0) {
 
             parent::ReplaceFirst($tempContent);
             $channelManageData = new ChannelManageData();
@@ -56,10 +55,11 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $rank = 0;
             }
             $rank++;
-            $tempContent = str_ireplace("{channel_intro}", "", $tempContent);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
+                print_r($httpPostData);
+                die();
                 $publishPath = Control::PostRequest("f_PublishPath", "");
                 $hasRepeatPublishPath = false;
                 if (strlen($publishPath) > 0) {
@@ -149,6 +149,17 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 
+            $tempContent = str_ireplace("{CreateDate}", strval(date('Y-m-d', time())), $tempContent);
+            $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
+            $tempContent = str_ireplace("{ParentId}", strval($parentId), $tempContent);
+            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
+            $tempContent = str_ireplace("{Rank}", strval($rank), $tempContent);
+
+            $fieldsOfChannel = $channelManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
+
+            /*
+            $tempContent = str_ireplace("{channel_id}", "0", $tempContent);
             $tempContent = str_ireplace("{parent_name}", $parentName, $tempContent);
             $tempContent = str_ireplace("{parent_id}", $parentId, $tempContent);
             $tempContent = str_ireplace("{site_id}", $siteId, $tempContent);
@@ -158,15 +169,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{manage_user_id}", strval($manageUserId), $tempContent);
             $tempContent = str_ireplace("{rank}", strval($rank), $tempContent);
             $tempContent = str_ireplace("{id}", "", $tempContent);
-            $tempContent = str_ireplace("{ie_title}", "", $tempContent);
-            $tempContent = str_ireplace("{ie_keywords}", "", $tempContent);
-            $tempContent = str_ireplace("{ie_description}", "", $tempContent);
+            $tempContent = str_ireplace("{browser_title}", "", $tempContent);
+            $tempContent = str_ireplace("{browser_keywords}", "", $tempContent);
+            $tempContent = str_ireplace("{browser_description}", "", $tempContent);
             $tempContent = str_ireplace("{tab}", strval($tabIndex), $tempContent);
             $tempContent = str_ireplace("{channel_intro}", "", $tempContent);
             $tempContent = str_ireplace("{publish_api_url}", "", $tempContent);
-            $tempContent = str_ireplace("{create_date}", "", $tempContent);
+            $tempContent = str_ireplace("{create_date}", strval(date('Ymd', time())), $tempContent);
+            */
 
-            //
             $patterns = "/\{s_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);
         }

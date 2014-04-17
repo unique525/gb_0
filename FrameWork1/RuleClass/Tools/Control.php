@@ -128,7 +128,7 @@ class Control {
      * 写入后台管理员cookie
      * @param int $manageUserId 后台帐号id
      * @param string $manageUserName 后台帐号名
-     * @param int $hour 保存时间（单位小时），默认24小时
+     * @param int $hour 保存时间（单位小时），默认1小时
      * @param string $domain 保存路径，默认""
      */
     public static function SetManageUserCookie($manageUserId, $manageUserName, $hour = 1, $domain = "") {
