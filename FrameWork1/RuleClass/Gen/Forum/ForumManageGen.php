@@ -14,10 +14,10 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
      */
     public function Gen() {
         $result = "";
-        $method = Control::GetRequest("a", "");
+        $method = Control::GetRequest("m", "");
         switch ($method) {
             case "list":
-                $result = self::GenManageList();
+                $result = self::GenList();
                 break;
             case "create":
                 $result = self::GenCreate();
@@ -25,18 +25,18 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "async_modifystate":
+            case "async_modify_state":
                 $result = self::AsyncModifyState();
         }
-        $result = str_ireplace("{action}", $method, $result);
+        $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
     /**
      * 后台版块列表
      */
-    private function GenManageList() {
-        $siteId = intval(Control::GetRequest("siteid", 0));
+    private function GenList() {
+        $siteId = intval(Control::GetRequest("site_id", 0));
 
         if ($siteId > 0) {
 
@@ -51,13 +51,13 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
             $arrRankTwoList = $forumManageData->GetListByRank($siteId, $forumRank);
             $forumRank = 2;
             $arrRankThreeList = $forumManageData->GetListByRank($siteId, $forumRank);
-
+            $resultTemplate = "";
             if (count($arrRankOneList) > 0) {
 
                 $forumManageListOneTemplate = Template::Load("forum/forum_manage_list_one.html", "common");
                 $forumManageListTwoTemplate = Template::Load("forum/forum_manage_list_two.html", "common");
 
-                $resultTemplate = "";
+
 
                 for ($i = 0; $i < count($arrRankOneList); $i++) {
                     $rankOneForumId = intval($arrRankOneList[$i]["ForumId"]);
@@ -88,7 +88,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
 
                         if ($rankOneForumId === $rankTwoParentId) {
                             $forumTwoTemplate = $forumManageListTwoTemplate;
-                            $forumTwoTemplate = str_ireplace("{f_forum_id}", $rankTwoForumId, $forumTwoTemplate);
+                            $forumTwoTemplate = str_ireplace("{f_ForumId}", $rankTwoForumId, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_ForumName}", $rankTwoForumName, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_State}", $rankTwoState, $forumTwoTemplate);
                             $forumTwoTemplate = str_ireplace("{f_Sort}", $rankTwoSort, $forumTwoTemplate);

@@ -6,59 +6,64 @@
         {common_header}
         <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
         <script type="text/javascript">
+            var editor;
             $(function(){
-                
+                editor = $('#f_ChannelIntro').xheditor();
                 $("#f_CreateDate").datepicker({
                     dateFormat: 'yy-mm-dd',
                     numberOfMonths: 1,
                     showButtonPanel: true
-                }); 
+                });
 
-                var imgTitlePic1 = $("#img_title_pic1");
                 $("#preview_title_pic1").click(function() {
-                    if(imgTitlePic1.attr("src") !== ''){
+                    var imgTitlePic1 = "{TitlePic1}";
+                    if(imgTitlePic1 !== ''){
                         var imageOfTitlePic1 = new Image();
-                        imageOfTitlePic1.src = imgTitlePic1.attr("src");
-                        $("#dialog_title_pic1").dialog({
+                        imageOfTitlePic1.src = imgTitlePic1;
+                        $("#img_title_pic").attr("src",imgTitlePic1);
+                        $("#dialog_title_pic").dialog({
                             width : imageOfTitlePic1.width+30,
                             height : imageOfTitlePic1.height+30
                         });
                     }
                     else{
-                        $("#dialog_title_pic1").dialog({width:300,height:100});
-                        $("#dialog_title_pic1_content").html("还没有上传题图1");
+                        $("#dialog_title_pic").dialog({width:300,height:100});
+                        $("#dialog_title_pic_content").html("还没有上传题图1");
                     }
                 });
-                
-                var img2 = $("#img_titlepic2");
-                var theimage2 = new Image();
-                theimage2.src = img2.attr("src");
-                var tp2 = '{titlepic2}';
-                $("#preview_titlepic2").click(function() {
-                    if(tp2 != ''){
-                        $("#dialog_titlepic2").dialog({
-                            width : theimage2.width+30,
-                            height : theimage2.height+50
+
+
+                $("#preview_title_pic2").click(function() {
+                    var imgTitlePic2 = "{TitlePic2}";
+                    if(imgTitlePic2 !== ''){
+                        var imageOfTitlePic2 = new Image();
+                        imageOfTitlePic2.src = imgTitlePic2;
+                        $("#img_title_pic").attr("src",imgTitlePic2);
+                        $("#dialog_title_pic").dialog({
+                            width : imageOfTitlePic2.width+30,
+                            height : imageOfTitlePic2.height+30
                         });
                     }
                     else{
-                        alert('还没有上传题图2');
+                        $("#dialog_title_pic").dialog({width:300,height:100});
+                        $("#dialog_title_pic_content").html("还没有上传题图2");
                     }
                 });
-                
-                var img3 = $("#img_titlepic3");
-                var theimage3 = new Image();
-                theimage3.src = img3.attr("src");
-                var tp3 = '{titlepic3}';
-                $("#preview_titlepic3").click(function() {
-                    if(tp3 != ''){
-                        $("#dialog_titlepic3").dialog({
-                            width : theimage3.width+30,
-                            height : theimage3.height+50
+
+                $("#preview_title_pic3").click(function() {
+                    var imgTitlePic3 = "{TitlePic2}";
+                    if(imgTitlePic3 !== ''){
+                        var imageOfTitlePic3 = new Image();
+                        imageOfTitlePic3.src = imgTitlePic3;
+                        $("#img_title_pic").attr("src",imgTitlePic3);
+                        $("#dialog_title_pic").dialog({
+                            width : imageOfTitlePic3.width+30,
+                            height : imageOfTitlePic3.height+30
                         });
                     }
                     else{
-                        alert('还没有上传题图3');
+                        $("#dialog_title_pic").dialog({width:300,height:100});
+                        $("#dialog_title_pic_content").html("还没有上传题图2");
                     }
                 });
 
@@ -245,7 +250,7 @@
                                     <div id="dialog_title_pic1_content">
                                         <table>
                                             <tr>
-                                                <td><img id="img_title_pic1" src="{TitlePic1}" alt="title_pic1" /></td>
+                                                <td><img id="img_title_pic" src="" alt="" /></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -255,35 +260,21 @@
                     <tr>
                         <td class="spe_line" height="30" align="right">频道图片2：</td>
                         <td class="spe_line">
-                            <input id="titlepic_upload2" name="titlepic_upload2" type="file" class="inputbox" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic2" style="cursor:pointer">[预览]</span>
-                            <div id="dialog_titlepic2" title="频道图片2预览（{titlepic2}）" style="display:none;">
-                                    <div id="pubtable">
-                                        <table>
-                                            <tr>
-                                                <td><img id="img_titlepic2" src="{titlepic2}" alt="titlepic2" /></td>
-                                            </tr></table>
-                                    </div>
-                            </div>
+                            <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
+
                         </td>
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">频道图片3：</td>
                         <td class="spe_line">
-                            <input id="titlepic_upload3" name="titlepic_upload3" type="file" class="inputbox" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic3" style="cursor:pointer">[预览]</span>
-                            <div id="dialog_titlepic3" title="频道图片3预览（{titlepic3}）" style="display:none;">
-                                    <div id="pubtable">
-                                        <table>
-                                            <tr>
-                                                <td><img id="img_titlepic3" src="{titlepic3}" alt="titlepic3" /></td>
-                                            </tr></table>
-                                    </div>
-                            </div>
+                            <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic3" style="cursor:pointer">[预览]</span>
+
                         </td>
                     </tr>
                     <tr>
-                        <td class="spe_line" height="30" align="right">频道介绍：</td>
+                        <td class="spe_line" height="30" align="right"><label for="f_ChannelIntro">频道介绍：</label></td>
                         <td class="spe_line">
-                            <textarea class="mceEditor" id="f_documentchannelintro" name="f_documentchannelintro" style=" width: 70%; height: 250px;">{DocumentChannelIntro}</textarea>                            
+                            <textarea cols="30" rows="30" id="f_ChannelIntro" name="f_ChannelIntro" style="width:70%;height:250px;">{ChannelIntro}</textarea>
                         </td>
                     </tr>
                         </table>
@@ -292,13 +283,13 @@
                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                     
                <tr>
-                        <td class="spe_line" width="20%" height="30" align="right">发布API接口地址：</td>
+                        <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishApiUrl">发布API接口地址：</label></td>
                         <td class="spe_line">
-                            <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="inputbox" style=" width: 500px;" maxlength="200" />
+                            <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="input_box" style="width: 500px;" maxlength="200" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="spe_line" height="30" align="right">发布API接口类型：</td>
+                        <td class="spe_line" height="30" align="right"><label for="f_PublishApiType">发布API接口类型：</label></td>
                         <td class="spe_line">
                             <select id="f_PublishApiType" name="f_PublishApiType">
                                 <option value="0" {s_PublishApiType_0}>XML</option>
@@ -310,7 +301,7 @@
                     
                     <tr>
                         <td height="30" align="center">
-                            <input class="btn" value="确 认" type="button" onclick="sub()" /> <input class="btn" value="取 消" type="button" onclick="cancel_tab()" />
+                            <input class="btn" value="确 认" type="button" onclick="submitForm()" /> <input class="btn" value="取 消" type="button" onclick="cancelTab()" />
                         </td>
                     </tr>
 
