@@ -16,25 +16,25 @@ class GifEncoder
     var $COL = -1;
     var $IMG = -1;
     var $ERR = Array(
-        ERR00 => "Does not supported function for only one image!",
-        ERR01 => "Source is not a GIF image!",
-        ERR02 => "Unintelligible flag ",
-        ERR03 => "Does not make animation from animated GIF source",
+        'ERR00' => "Does not supported function for only one image!",
+        'ERR01' => "Source is not a GIF image!",
+        'ERR02' => "Unintelligible flag ",
+        'ERR03' => "Does not make animation from animated GIF source",
     );
 
     /**
-     * @param $gifPath   静态gif文件路径数组
-     * @param $gifDelay   每个静态gif文件的显示时间数组，单位百分之一秒
-     * @param $gifLop   循环次数，0表示无限循环
+     * @param array $gifPath   静态gif文件路径数组
+     * @param array $gifDelay   每个静态gif文件的显示时间数组，单位百分之一秒
+     * @param int $gifLop   循环次数，0表示无限循环
      *      0:  “No disposal method”：不做任何处理直接显示下一帧；
      *      1:  “Leave alone”：和上面一项效果相同，也是不做任何处理直接显示下一帧；
      *      2:  “Background color”：在显示下一帧前先用背景色填充画面；
      *      3:  “Restore previous”：在显示下一帧前先把画面恢复为显示当前帧的上一帧；
-     * @param $gifDis
-     * @param $gifRed  指定静态gif文件上面的透明色，红色代码，如不指定则，统一为-1
-     * @param $gifGreen  指定静态gif文件上面的透明色，绿色代码，如不指定则，统一为-1
-     * @param $gifBlue  指定静态gif文件上面的透明色，蓝色代码，如不指定则，统一为-1
-     * @param $gifMod  一般采用url，指$gifPath指向了静态gif文件
+     * @param int $gifDis
+     * @param int $gifRed  指定静态gif文件上面的透明色，红色代码，如不指定则，统一为-1
+     * @param int $gifGreen  指定静态gif文件上面的透明色，绿色代码，如不指定则，统一为-1
+     * @param int $gifBlue  指定静态gif文件上面的透明色，蓝色代码，如不指定则，统一为-1
+     * @param int $gifMod  一般采用url，指$gifPath指向了静态gif文件
      * */
     public function GifEncoder($gifPath, $gifDelay, $gifLop, $gifDis, $gifRed, $gifGreen, $gifBlue, $gifMod)
     {
@@ -87,9 +87,9 @@ class GifEncoder
     private function GifAddHeader()
     {
         if (ord($this->BUF [0]{10}) & 0x80) {
-            $cmap = 3 * (2 << (ord($this->BUF [0]{10}) & 0x07));
+            $cMap = 3 * (2 << (ord($this->BUF [0]{10}) & 0x07));
             $this->GIF .= substr($this->BUF [0], 6, 7);
-            $this->GIF .= substr($this->BUF [0], 13, $cmap);
+            $this->GIF .= substr($this->BUF [0], 13, $cMap);
             $this->GIF .= "!\377\13NETSCAPE2.0\3\1" . GifEncoder::GifWord($this->LOP) . "\0";
         }
     }
@@ -122,11 +122,11 @@ class GifEncoder
 
         switch ($localsTmp{0}) {
             case "!":
-                $localsImage = substr($localsTmp, 8, 10);
+                $localImage = substr($localsTmp, 8, 10);
                 $localsTmp = substr($localsTmp, 18, strlen($localsTmp) - 18);
                 break;
             case ",":
-                $localsImage = substr($localsTmp, 0, 10);
+                $localImage = substr($localsTmp, 0, 10);
                 $localsTmp = substr($localsTmp, 10, strlen($localsTmp) - 10);
                 break;
         }
@@ -134,25 +134,25 @@ class GifEncoder
         if (ord($this->BUF [$i]{10}) & 0x80 && $this->IMG > -1) {
             if ($globalLength == $localsLength) {
                 if (GifEncoder::GifBlockCompare($globalRgb, $localsRgb, $globalLength)) {
-                    $this->GIF .= ($localsExt . $localsImage . $localsTmp);
+                    $this->GIF .= ($localsExt . $localImage . $localsTmp);
                 } else {
-                    $byte = ord($localsImage{9});
+                    $byte = ord($localImage{9});
                     $byte |= 0x80;
                     $byte &= 0xF8;
                     $byte |= (ord($this->BUF [0]{10}) & 0x07);
-                    $localsImage{9} = chr($byte);
-                    $this->GIF .= ($localsExt . $localsImage . $localsRgb . $localsTmp);
+                    $localImage{9} = chr($byte);
+                    $this->GIF .= ($localsExt . $localImage . $localsRgb . $localsTmp);
                 }
             } else {
-                $byte = ord($localsImage{9});
+                $byte = ord($localImage{9});
                 $byte |= 0x80;
                 $byte &= 0xF8;
                 $byte |= (ord($this->BUF [$i]{10}) & 0x07);
-                $localsImage{9} = chr($byte);
-                $this->GIF .= ($localsExt . $localsImage . $localsRgb . $localsTmp);
+                $localImage{9} = chr($byte);
+                $this->GIF .= ($localsExt . $localImage . $localsRgb . $localsTmp);
             }
         } else {
-            $this->GIF .= ($localsExt . $localsImage . $localsTmp);
+            $this->GIF .= ($localsExt . $localImage . $localsTmp);
         }
         $this->IMG = 1;
     }

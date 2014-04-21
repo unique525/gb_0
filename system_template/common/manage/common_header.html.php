@@ -6,3 +6,4 @@
 <script type="text/javascript" src="/system_js/common.js"></script>
 <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/system_js/manage/tabs.js"></script>

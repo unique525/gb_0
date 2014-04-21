@@ -19,7 +19,7 @@
         <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/system_js/manage/splitter.js"></script>
         <script type="text/javascript" src="/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
-        <script type="text/javascript" src="/system_js/manage/load_tabs.js"></script>
+        <script type="text/javascript" src="/system_js/manage/tabs.js"></script>
         <script type="text/javascript" src="/system_js/manage/channel/site_and_channel.js"></script>
         <script type="text/javascript" src="/system_js/manage/load_user_manage.js"></script>
         <script type="text/javascript" src="/system_js/manage/default.js"></script>

@@ -636,9 +636,18 @@ class Template {
                 $tempContent = str_ireplace("{" . $preManage . $columnName . "_no_html}", strip_tags($columnValue), $tempContent);
 
                 //处理下拉菜单的默认值
-                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", 'selected="selected"', $tempContent);
 
-                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "_" . $columnValue . "}", 'checked="checked"', $tempContent);
+                $selectedOption = '<script type="text/javascript">
+                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("selected",true);
+                </script>';
+
+                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $tempContent);
+
+                $checkedOption = '<script type="text/javascript">
+                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("checked",true);
+                </script>';
+
+                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $tempContent);
 
                 if (intval($columnValue) === 1) {
                     $tempContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $tempContent);

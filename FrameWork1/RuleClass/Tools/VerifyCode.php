@@ -85,7 +85,7 @@ class VerifyCode {
 
     /**
      * 生成Gif动画验证码图片
-     * @param $sessionName Session的名称
+     * @param string $sessionName Session的名称
      * @param string $content 要生成的内容值，默认为空
      * @param int $width 图片宽度
      * @param int $height 图片高度
