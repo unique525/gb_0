@@ -55,11 +55,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $rank = 0;
             }
             $rank++;
-
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                print_r($httpPostData);
-                die();
                 $publishPath = Control::PostRequest("f_PublishPath", "");
                 $hasRepeatPublishPath = false;
                 if (strlen($publishPath) > 0) {
@@ -73,7 +70,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 }
                 if (!$hasRepeatPublishPath) {
                     //title pic1
-                    $fileElementName = "title_pic_upload1";
+                    $fileElementName = "file_title_pic_1";
                     $tableType = 20; //channel
                     $tableId = 0;
                     $returnType = 1;
@@ -84,7 +81,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         sleep(1);
                     }
                     //title pic2
-                    $fileElementName = "title_pic_upload2";
+                    $fileElementName = "file_title_pic_2";
                     $uploadFileId2 = 0;
                     $titlePicPath2 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId2);
                     $titlePicPath2 = str_ireplace("..", "", $titlePicPath2);
@@ -92,7 +89,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         sleep(1);
                     }
                     //title pic3
-                    $fileElementName = "title_pic_upload3";
+                    $fileElementName = "file_title_pic_3";
 
                     $uploadFileId3 = 0;
                     $titlePicPath3 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId3);
@@ -123,8 +120,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data');
-
+                        DataCache::RemoveDir(CACHE_PATH . '/channel_data');
 
                         $uploadFileManageData = new UploadFileManageData();
                         //修改题图1的TableId
@@ -134,15 +130,16 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         //修改题图3的TableId
                         $uploadFileManageData->ModifyTableId($uploadFileId3, $channelId);
 
-                        /**
-                        Control::ShowMessage(Language::Load('document', 1));
-                        $jsCode = 'self.parent.loadtree(' . $siteId . ');';
-                        //$jscode = 'self.parent.loadtree(' . $siteid . ');self.parent.$("#tabs").tabs("select","#tabs-1");';
-                        //if ($tab_index > 0) {
-                        //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                        //}
-                        Control::RunJS($jsCode);
-                         */
+                        //javascript 处理
+                        //重新加载左边导航树
+                        $javascriptLoadChannel = "parent.LoadChannelListForManage(parent.G_NowSiteId);";
+                        Control::RunJavascript($javascriptLoadChannel);
+
+                        $closeTab = Control::PostRequest("CloseTab",0);
+                        if($closeTab == 1){
+                            Control::CloseTab();
+                        }
+
                     } else {
                         Control::ShowMessage(Language::Load('document', 2));
                     }
@@ -157,26 +154,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
-
-            /*
-            $tempContent = str_ireplace("{channel_id}", "0", $tempContent);
-            $tempContent = str_ireplace("{parent_name}", $parentName, $tempContent);
-            $tempContent = str_ireplace("{parent_id}", $parentId, $tempContent);
-            $tempContent = str_ireplace("{site_id}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{channel_name}", "", $tempContent);
-            $tempContent = str_ireplace("{publish_path}", "", $tempContent);
-            $tempContent = str_ireplace("{sort}", "0", $tempContent);
-            $tempContent = str_ireplace("{manage_user_id}", strval($manageUserId), $tempContent);
-            $tempContent = str_ireplace("{rank}", strval($rank), $tempContent);
-            $tempContent = str_ireplace("{id}", "", $tempContent);
-            $tempContent = str_ireplace("{browser_title}", "", $tempContent);
-            $tempContent = str_ireplace("{browser_keywords}", "", $tempContent);
-            $tempContent = str_ireplace("{browser_description}", "", $tempContent);
-            $tempContent = str_ireplace("{tab}", strval($tabIndex), $tempContent);
-            $tempContent = str_ireplace("{channel_intro}", "", $tempContent);
-            $tempContent = str_ireplace("{publish_api_url}", "", $tempContent);
-            $tempContent = str_ireplace("{create_date}", strval(date('Ymd', time())), $tempContent);
-            */
 
             $patterns = "/\{s_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);

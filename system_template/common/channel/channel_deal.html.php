@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    {common_header}
+    {common_head}
     <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
     <script type="text/javascript">
         <!--
@@ -88,7 +88,7 @@
             selChannelType.change();
         });
 
-        function submitForm() {
+        function submitForm(continueCreate) {
             if ($('#f_ChannelName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("请输入频道名称");
@@ -96,6 +96,11 @@
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("频道简介不能超过1000个字符");
             } else {
+                if(continueCreate == 1){
+                    $("#CloseTab").val("0");
+                }else{
+                    $("#CloseTab").val("1");
+                }
                 $('#mainForm').submit();
             }
         }
@@ -103,18 +108,14 @@
     </script>
 </head>
 <body>
-<div id="dialog_box" title="频道图片预览" style="display:none;">
-    <div id="dialog_content">
-
-    </div>
-</div>
-<form id="mainForm" enctype="multipart/form-data" action="/default.php?mod=channel&m={method}&channel_id={channel_id}&parent_id={parent_id}" method="post">
+{common_body_deal}
+<form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}" method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
 
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确 认" type="button" onclick="submitForm()"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 
@@ -126,6 +127,7 @@
             <input name="f_ParentId" type="hidden" value="{ParentId}"/>
             <input name="f_SiteId" type="hidden" value="{SiteId}"/>
             <input name="f_Rank" type="hidden" value="{Rank}"/>
+            <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
         </td>
     </tr>
     <tr>
@@ -321,7 +323,7 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确 认" type="button" onclick="submitForm()"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 </table>

@@ -25,6 +25,13 @@ class Control {
     }
 
     /**
+     * Javascript方法，关闭选项卡
+     */
+    public static function CloseTab(){
+        echo '<' . 'script type="text/javascript">closeTab();</script>';
+    }
+
+    /**
      * Javascript方法，转到地址
      * @param string $url 要转向到的地址
      */

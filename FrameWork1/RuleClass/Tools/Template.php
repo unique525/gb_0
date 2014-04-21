@@ -113,11 +113,11 @@ class Template {
 
                         $headerTempContent = self::GetNodeValue($doc, "header", $tagName);
                         if (strlen($headerTempContent) > 0 && $headerRowCount <= 0) {
-                            $headerRowCount = 1;
+                            $headerRowCount = 1; //找到header段时，如果没手动设置header段行数，则默认设置行数为1
                         }
                         $footerTempContent = self::GetNodeValue($doc, "footer", $tagName);
                         if (strlen($footerTempContent) > 0 && $footerRowCount <= 0) {
-                            $footerRowCount = 1;
+                            $footerRowCount = 1; //找到footer段时，如果没手动设置footer段行数，则默认设置行数为1
                         }
                         //读取头段到主段的分割线
                         $headerSplitterTempContent = self::GetNodeValue($doc, "header_splitter", $tagName);
@@ -229,6 +229,7 @@ class Template {
                     }
 
                     for ($i = 0 + $headerRowCount; $i < $itemRowCount; $i++) {
+
                         //如果有交替行
                         if (strlen($alterItemTempContent) > 0) {
                             if ($i % 2 === 1) {

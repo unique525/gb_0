@@ -19,38 +19,65 @@ $(function () {
 
     $("#img_go_site_url").attr("src", "/system_template/" + nowTemplateName + "/images/manage/go.jpg");
 
-    var divSelectSite = $("#div_select_site");
-    divSelectSite.click(function () {
-        if ($(this).attr("class") === "select_site_normal") {
-            $(this).attr("class", "select_site_clicked");
-            var itemHeight = parseInt($(this).css("height"));
-            var siteCount = $(".site_count").attr("idvalue");
-            var newHeight = itemHeight * siteCount;
-            $(this).css("height", newHeight + "px");
+
+    var divNowSelectedSite = $("#div_now_selected_site");
+    var divSelectSiteList = $("#div_select_site_list");
+    var btnSelectSite = $("#btn_select_site");
+
+    btnSelectSite.click(function () {
+        var itemHeight;
+        //alert($(this).attr("class"));
+        if ($(this).attr("class") == "btn_select_site_normal") {
+            $(this).attr("class", "btn_select_site_clicked");
+            divNowSelectedSite.css("display","none");
+            divSelectSiteList.css("display","block");
+            //itemHeight = parseInt($(".select_site_item").css("height"));
+            //var siteCount = $(".site_count").attr("idvalue");
+            //var newHeight = itemHeight * siteCount;
+            //$(this).css("height", newHeight + "px");
         } else {
-            $(this).attr("class", "select_site_normal");
+            //itemHeight = parseInt($(".select_site_item").css("height"));
+            $(this).attr("class", "btn_select_site_normal");
+            divNowSelectedSite.css("display","block");
+            divSelectSiteList.css("display","none");
+            //$(this).css("height", itemHeight + "px");
         }
     });
-    var divDefaultSite = $("#div_default_site");
-    var siteId = divDefaultSite.attr("idvalue");
-    var siteName = divDefaultSite.html();
-    var siteUrl = divDefaultSite.attr("title");
-    if (siteId.length > 0) {
-        LoadSite(siteId, siteName, siteUrl);
+
+    //初始化divNowSelectedSite
+    if(divSelectSiteList.children.length>0){
+        var firstSite = divSelectSiteList.find("div:first-child");
+        if(firstSite != undefined){
+
+            var siteId = firstSite.attr("idvalue");
+            var siteName = firstSite.html();
+            var siteUrl = firstSite.attr("title");
+
+            divNowSelectedSite.attr("idvalue",siteId);
+            divNowSelectedSite.html(siteName);
+            divNowSelectedSite.attr("title",siteUrl);
+            if (siteId.length > 0) {
+                LoadSite(siteId, siteName, siteUrl);
+            }
+        }
     }
+
+
     //select site
     $(".select_site_item").click(function () {
         siteId = $(this).attr("idvalue");
         siteName = $(this).html();
         siteUrl = $(this).attr("title");
         LoadSite(siteId, siteName, siteUrl);
+
+        divNowSelectedSite.attr("idvalue",siteId);
+        divNowSelectedSite.attr("title",siteUrl);
+        divNowSelectedSite.html(siteName);
+
+        btnSelectSite.attr("class", "btn_select_site_normal");
+        divNowSelectedSite.css("display","block");
+        divSelectSiteList.css("display","none");
     });
-
-    var divShowSiteList = $("#div_show_site_list");
-    if (divShowSiteList.length > 0) {
-        divShowSiteList.append(divSelectSite);
-    }
-
 
     //create channel page
     var btnRightCreateChannel = $("#btn_right_create_channel");
@@ -80,9 +107,6 @@ function LoadSite(siteId, siteName, siteUrl) {
         $("#div_manage_menu_of_column").html("请先增加一个站点");
     }
 }
-
-
-
 
 function LoadChannelListForManage(siteId) {
     var treeSetting = {
