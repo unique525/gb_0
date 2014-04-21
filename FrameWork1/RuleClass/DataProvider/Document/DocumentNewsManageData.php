@@ -6,7 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Document
  * @author zhangchi
  */
-class DocumentNewsManageData extends BaseManageData {
+class DocumentNewsManageData extends BaseManageData
+{
 
     /**
      * 取得后台资讯列表数据集
@@ -15,20 +16,33 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $pageSize 页大小
      * @param int $allCount 记录总数
      * @param string $searchKey 查询字符
-     * @param string $searchTypeBox 查询下拉框的类别
+     * @param int $searchType 查询下拉框的类别
      * @param int $isSelf 是否只显示当前登录的管理员录入的资讯
      * @param int $manageUserId 后台管理员id
      * @return array 资讯列表数据集
      */
-    public function GetList($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchTypeBox = "", $isSelf = 0, $manageUserId = 0) {
+    public function GetList($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $isSelf = 0, $manageUserId = 0)
+    {
         $searchSql = "";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            if ($searchTypeBox == "source") {
+            if ($searchType == 0) { //标题
+                $searchSql = " AND (DocumentNewsTitle like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else if ($searchType == 1) { //来源
                 $searchSql = " AND (SourceName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else {
+            } else if ($searchType == 2) { //发布人
+                $searchSql = " AND (ManageUserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else if ($searchType == 3) { //标签
+                $searchSql = " AND (DocumentNewsTag like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else if ($searchType == 4) { //投稿人
+                $searchSql = " AND (UserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else { //模糊
                 $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1 OR ManageUserName LIKE :SearchKey2 OR username LIKE :SearchKey3 OR DocumentNewsTag LIKE :SearchKey4)";
                 $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
@@ -38,14 +52,14 @@ class DocumentNewsManageData extends BaseManageData {
         }
         if ($isSelf === 1 && $manageUserId > 0) {
             $conditionManageUserId = ' AND ManageUserId=' . intval($manageUserId);
-        }else{
+        } else {
             $conditionManageUserId = "";
         }
 
         $sql = "
             SELECT
             DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
-            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,TitlePic,RecLevel,Hit
+            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,TitlePic1,RecLevel,Hit
             FROM
             " . self::TableName_DocumentNews . "
             WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
@@ -61,8 +75,7 @@ class DocumentNewsManageData extends BaseManageData {
             $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
             $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
         }
-
-        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql. ";";
+        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
@@ -72,7 +85,8 @@ class DocumentNewsManageData extends BaseManageData {
      * 拖动排序
      * @param array $arrDocumentNewsId 待处理的文档编号数组
      */
-    public function ModifySort($arrDocumentNewsId) {
+    public function ModifySort($arrDocumentNewsId)
+    {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
             $strDocumentNewsId = join(',', $arrDocumentNewsId);
             $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
@@ -97,7 +111,8 @@ class DocumentNewsManageData extends BaseManageData {
      * @param int $adminUserId 操作管理员id
      * @return int 操作结果
      */
-    public function ModifyLockEdit($documentNewsId, $lockEdit, $adminUserId) {
+    public function ModifyLockEdit($documentNewsId, $lockEdit, $adminUserId)
+    {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
@@ -109,14 +124,15 @@ class DocumentNewsManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
     /**
      * 修改状态
      * @param int $documentNewsId 文档id
      * @param int $state 状态
      * @return int 操作结果
      */
-    public function ModifyState($documentNewsId, $state) {
+    public function ModifyState($documentNewsId, $state)
+    {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
@@ -126,9 +142,9 @@ class DocumentNewsManageData extends BaseManageData {
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
-    }  
+    }
 
-    
+
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Get Info////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
@@ -214,14 +230,15 @@ class DocumentNewsManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
     /**
      * 取得文档锁定编辑的时间
      * @param int $documentNewsId 文档id
      * @param bool $withCache 是否从缓冲中取
      * @return string 锁定编辑的时间
      */
-    public function GetLockEditDate($documentNewsId, $withCache){
+    public function GetLockEditDate($documentNewsId, $withCache)
+    {
         $result = "";
         if ($documentNewsId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
@@ -233,14 +250,15 @@ class DocumentNewsManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
     /**
      * 取得文档锁定编辑的操作管理员id
      * @param int $documentNewsId 文档id
      * @param bool $withCache 是否从缓冲中取
      * @return int 锁定编辑的操作管理员id
      */
-    public function GetLockEditManageUserId($documentNewsId, $withCache){
+    public function GetLockEditManageUserId($documentNewsId, $withCache)
+    {
         $result = -1;
         if ($documentNewsId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
@@ -252,14 +270,15 @@ class DocumentNewsManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
     /**
      * 取得文档的发布时间
      * @param int $documentNewsId 文档id
      * @param bool $withCache 是否从缓冲中取
      * @return string 文档的发布时间
      */
-    public function GetPublishDate($documentNewsId, $withCache){
+    public function GetPublishDate($documentNewsId, $withCache)
+    {
         $result = "";
         if ($documentNewsId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
@@ -271,14 +290,15 @@ class DocumentNewsManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
     /**
      * 取得文档的内容
      * @param int $documentNewsId 文档id
      * @param bool $withCache 是否从缓冲中取
      * @return string 文档的内容
      */
-    public function GetDocumentNewsContent($documentNewsId, $withCache){
+    public function GetDocumentNewsContent($documentNewsId, $withCache)
+    {
         $result = "";
         if ($documentNewsId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
@@ -295,7 +315,8 @@ class DocumentNewsManageData extends BaseManageData {
      * 取得表的字段名称数组
      * @return array 表的字段名称数组
      */
-    public function GetFields(){
+    public function GetFields()
+    {
         return $this->GetFields(self::TableName_DocumentNews);
     }
 

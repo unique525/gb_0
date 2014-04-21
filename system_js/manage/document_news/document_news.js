@@ -1,42 +1,42 @@
 /**
- * DOC NEWS LIST
+ * DocumentNews
  */
-
 $(function() {
     $(document).tooltip();
-    $("#selectall").click(function(event) {
+    $("#btn_select_all").click(function(event) {
         event.preventDefault();
-        //alert($("[name='docinput']").prop("checked"));
-        if ($("[name='docinput']").prop("checked")) {
-            $("[name='docinput']").prop("checked", false);//取消全选
+        var inputSelect = $("[name='input_select']");
+        if (inputSelect.prop("checked")) {
+            inputSelect.prop("checked", false);//取消全选
         } else {
-            $("[name='docinput']").prop("checked", true);//全选
+            inputSelect.prop("checked", true);//全选
         }
     });
 
-    $(".edit_doc").css("cursor", "pointer");
-    $(".edit_doc").click(function(event) {
-        var docid = $(this).attr('idvalue');
+    var btnEdit = $(".btn_edit");
+    btnEdit.css("cursor", "pointer");
+    btnEdit.click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&documentnewsid=' + docid + '&p=' + pageIndex + '&cid=' + parent.G_SelectedChannelId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id=' + documentNewsId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
         parent.addTab();
     });
 
     //改变状态按钮事件捕获
-    $(".imgchangestate").click(function(event) {
-        var docid = $(this).attr('idvalue');
+    $(".btn_change_state").click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
-        ShowBox('divstate_' + docid);
+        //ShowBox('divstate_' + documentNewsId);
     });
-    $(".span_closebox").click(function(event) {
-        var docid = $(this).attr('idvalue');
+    $(".btn_close_box").click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
-        document.getElementById('divstate_' + docid).style.display = "none";
+        //document.getElementById('divstate_' + docid).style.display = "none";
     });
 
 
@@ -54,12 +54,16 @@ $(function() {
     $("#sortgrid").disableSelection();
 
     //选中时的样式变化
-    $('.griditem').click(function() {
-        if ($(this).hasClass('docselected')) {
-            $(this).removeClass('docselected');
+    $('.grid_item').click(function() {
+        if ($(this).hasClass('grid_item_selected')) {
+            $(this).removeClass('grid_item_selected');
         } else {
-            $(this).addClass('docselected');
+            $(this).addClass('grid_item_selected');
         }
+    });
+
+    $(".span_state").each(function(){
+        $(this).text(FormatState($(this).text()));
     });
 
 
@@ -69,6 +73,42 @@ $(function() {
         DocumentNewsChangeState(docid, state);
     });
 });
+
+/**
+ * 格式化状态值
+ * @return {string}
+ */
+function FormatState(state){
+    switch (state){
+        case "0":
+            return "新稿";
+            break;
+        case "1":
+            return "已编";
+            break;
+        case "2":
+            return "返工";
+            break;
+        case "11":
+            return "一审";
+            break;
+        case "12":
+            return "二审";
+            break;
+        case "13":
+            return "三审";
+            break;
+        case "14":
+            return "终审";
+            break;
+        case "20":
+            return "<"+"span style='color:#990000'>已否<"+"/span>";
+            break;
+        default :
+            return "未知";
+        break;
+    }
+}
 
 function DocumentNewsChangeState(documentNewsId, state) {
     if (state === 20) {

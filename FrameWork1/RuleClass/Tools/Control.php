@@ -32,6 +32,14 @@ class Control {
     }
 
     /**
+     * 刷新当前的Tab页
+     */
+    public static function RefreshTab()
+    {
+        echo '<' . 'script type="text/javascript">window.G_Tabs.tabs("refresh");</script>';
+    }
+
+    /**
      * Javascript方法，转到地址
      * @param string $url 要转向到的地址
      */

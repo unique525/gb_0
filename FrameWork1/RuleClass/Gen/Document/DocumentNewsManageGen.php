@@ -517,55 +517,49 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 生成资讯管理列表页面
      */
     private function GenList() {
-        $documentChannelId = Control::GetRequest("cid", 0);
-        if ($documentChannelId <= 0) {
-            return "";
+        $channelId = Control::GetRequest("channel_id", 0);
+        if ($channelId <= 0) {
+            return null;
         }
-        $adminUserId = Control::GetManageUserId();
-        $documentChannelManageData = new DocumentChannelManageData();
-        $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
+        $manageUserId = Control::GetManageUserId();
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteId($channelId, false);
+        if($siteId<=0){
+            return null;
+        }
 
         ///////////////判断是否有操作权限///////////////////
-        $adminUserPopedomManageData = new AdminUserPopedomManageData();
-        $op = "explore";
-        $hasPopedom = parent::CheckAdminUserPopedom($adminUserPopedomManageData, $adminUserId, $documentChannelId, $siteId, $op);
-        if (!$hasPopedom) {
-            Control::ShowMessage(Language::Load('document', 26));
-            return "";
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        if (!$canExplore) {
+            return Language::Load('document', 26);
         }
-        $adminUserName = Control::GetManageUserName();
-        $clientIp = Control::GetIp();
-
+/**
         $siteManageData = new SiteManageData();
         $siteUrl = $siteManageData->GetSiteUrl($siteId);
         $_pos = stripos($siteUrl, "http://");
         if ($_pos === false) {
             $siteUrl = "http://" . $siteUrl;
         }
-        //Language::Load('document', 7);
-        //
+*/
         //load template
-        $documentChannelType = $documentChannelManageData->GetDocumentChannelType($documentChannelId);
-        if ($documentChannelType === 1) {
-            $tempContent = Template::Load("document/documentnews_list.html", "common");
-        } else {
-            $tempContent = Template::Load("document/documentnews_slider_list.html", "common");
-        }
+        $tempContent = Template::Load("document/document_news_list.html", "common");
+
 
         parent::ReplaceFirst($tempContent);
 
         ////////////////////////////////////////////////////
         ///////////////输出权限到页面///////////////////
         ////////////////////////////////////////////////////
-        $canRework = $adminUserPopedomManageData->CanRework($siteId, $documentChannelId, $adminUserId);
-        $canAudit1 = $adminUserPopedomManageData->CanAudit1($siteId, $documentChannelId, $adminUserId);
-        $canAudit2 = $adminUserPopedomManageData->CanAudit2($siteId, $documentChannelId, $adminUserId);
-        $canAudit3 = $adminUserPopedomManageData->CanAudit3($siteId, $documentChannelId, $adminUserId);
-        $canAudit4 = $adminUserPopedomManageData->CanAudit4($siteId, $documentChannelId, $adminUserId);
-        $canRefused = $adminUserPopedomManageData->CanRefused($siteId, $documentChannelId, $adminUserId);
-        $canPublish = $adminUserPopedomManageData->CanPublish($siteId, $documentChannelId, $adminUserId);
-        $canModify = $adminUserPopedomManageData->CanModify($siteId, $documentChannelId, $adminUserId);
-        $canCreate = $adminUserPopedomManageData->CanCreate($siteId, $documentChannelId, $adminUserId);
+        $canRework = $manageUserAuthorityManageData->CanRework($siteId, $channelId, $manageUserId);
+        $canAudit1 = $manageUserAuthorityManageData->CanAudit1($siteId, $channelId, $manageUserId);
+        $canAudit2 = $manageUserAuthorityManageData->CanAudit2($siteId, $channelId, $manageUserId);
+        $canAudit3 = $manageUserAuthorityManageData->CanAudit3($siteId, $channelId, $manageUserId);
+        $canAudit4 = $manageUserAuthorityManageData->CanAudit4($siteId, $channelId, $manageUserId);
+        $canRefused = $manageUserAuthorityManageData->CanRefused($siteId, $channelId, $manageUserId);
+        $canPublish = $manageUserAuthorityManageData->CanPublish($siteId, $channelId, $manageUserId);
+        $canModify = $manageUserAuthorityManageData->CanModify($siteId, $channelId, $manageUserId);
+        $canCreate = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
 
 
         $tempContent = str_ireplace("{CanRework}", $canRework == 1 ? "" : "display:none", $tempContent);
@@ -578,48 +572,46 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{CanModify}", $canModify == 1 ? "" : "display:none", $tempContent);
         $tempContent = str_ireplace("{CanCreate}", $canCreate == 1 ? "" : "display:none", $tempContent);
 
-        //$type = Control::GetRequest("type", "");
         $pageSize = Control::GetRequest("ps", 20);
-        if ($documentChannelType !== 1) {
-            $pageSize = 16;
-        }
         $pageIndex = Control::GetRequest("p", 1);
-        $searchKey = Control::GetRequest("searchkey", "");
+        $searchKey = Control::GetRequest("search_key", "");
+        $searchType = Control::GetRequest("search_type", -1);
         $searchKey = urldecode($searchKey);
-        $searchTypeBox = Control::GetRequest("searchtype_box", "");
         if (isset($searchKey) && strlen($searchKey) > 0) {
-            $can = $adminUserPopedomManageData->CanSearch($siteId, $documentChannelId, $adminUserId);
-            if (!$can) {
-                Control::ShowMessage(Language::Load('document', 26));
-                return "";
+            $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
+            if (!$canSearch) {
+                return Language::Load('document', 26);
             }
         }
-        if ($pageIndex > 0 && $documentChannelId > 0) {
+
+
+        if ($pageIndex > 0 && $channelId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $listName = "document_news_list";
+            $tagId = "document_news_list";
             $allCount = 0;
-            $isSelf = Control::GetRequest("isself", 0);
+            $isSelf = Control::GetRequest("is_self", 0);
             $documentNewsManageData = new DocumentNewsManageData();
-            $arrDocumentNewsList = $documentNewsManageData->GetListForManage($documentChannelId, $pageBegin, $pageSize, $allCount, $searchKey, $searchTypeBox, $isSelf, $adminUserId);
-
+            $arrDocumentNewsList = $documentNewsManageData->GetList($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType, $isSelf, $manageUserId);
             if (count($arrDocumentNewsList) > 0) {
-                Template::ReplaceList($tempContent, $arrDocumentNewsList, $listName);
+                Template::ReplaceList($tempContent, $arrDocumentNewsList, $tagId);
 
+                /**
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("../common/pager_style$styleNumber.html");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=documentnews&m=listformanage&cid=$documentChannelId&p={0}&ps=$pageSize&isself=$isSelf";
+                $navUrl = "default.php?secu=manage&mod=documentnews&m=listformanage&cid=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
 
-                $tempContent = str_ireplace("{documentchannelid}", $documentChannelId, $tempContent);
-                $tempContent = str_ireplace("{cid}", $documentChannelId, $tempContent);
+                $tempContent = str_ireplace("{documentchannelid}", $channelId, $tempContent);
+                $tempContent = str_ireplace("{cid}", $channelId, $tempContent);
                 $tempContent = str_ireplace("{pagerbutton}", $pagerButton, $tempContent);
                 $tempContent = str_ireplace("{siteurl}", $siteUrl, $tempContent);
+                 */
             } else {
-                Template::RemoveCMS($tempContent, $listName);
-                $tempContent = str_ireplace("{pagerbutton}", Language::Load("document", 7), $tempContent);
+                Template::RemoveCustomTag($tempContent, $tagId);
+                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
             }
         }
 

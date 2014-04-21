@@ -201,10 +201,10 @@ function _ChannelClick() {
     if (window.G_SelectedChannelId > 0) {
         var aw = $(window).height() - 108 - 35;
         var size = aw / 28;
-        var ps = parseInt(size) - 1;
+        window.G_PageSize = parseInt(size) - 1;
         if (window.G_SelectedChannelType === 1) { //新闻类频道
             window.G_TabTitle = "";
-            window.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&ps=' + ps + '&channel_id=' + window.G_SelectedChannelId;
+            window.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&channel_id=' + window.G_SelectedChannelId;
             addTab();
         } else if (window.G_SelectedChannelType === 2) { //咨询回复类频道
 
