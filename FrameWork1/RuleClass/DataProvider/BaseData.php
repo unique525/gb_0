@@ -209,6 +209,31 @@ class BaseData
      */
     const TableId_Vote = "VoteId";
     /**
+     * 投票调查 题目 数据表名
+     */
+    const TableName_VoteItem = "cst_vote_item";
+    /**
+     * 投票调查 题目 数据表自增字段名
+     */
+    const TableId_VoteItem = "VoteItemId";
+    /**
+     * 投票调查 题目选项 数据表名
+     */
+    const TableName_VoteSelectItem = "cst_vote_select_item";
+    /**
+     * 投票调查 题目选项 数据表自增字段名
+     */
+    const TableId_VoteSelectItem = "VoteSelectItemId";
+    /**
+     * 投票调查 投票记录 数据表名
+     */
+    const TableName_VoteRecord = "cst_vote_record";
+    /**
+     * 投票调查 投票记录 数据表自增字段名
+     */
+    const TableId_VoteRecord = "VoteRecordId";
+
+    /**
      * 通用来源 数据表名
      */
     const TableName_SourceCommon = "cst_source_common";
