@@ -104,7 +104,7 @@ class VoteManageData extends BaseManageData
      * @param string $searchKey 查询字符
      * @return array  投票调查列表数组
      */
-    public function GetList($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    public function GetListForPager($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
     {
         $result = null;
         if ($siteId < 0 || $channelId < 0 || $pageBegin < 0 || $pageSize < 0) {
