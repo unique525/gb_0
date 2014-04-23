@@ -224,7 +224,7 @@ function _ChannelClick() {
 
         } else if (window.G_SelectedChannelType === 10) { //活动表单类
             window.G_TabTitle = "";
-            window.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=list&ps=' + ps + '&channel_id=' + window.G_SelectedChannelId;
+            window.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=list&channel_id=' + window.G_SelectedChannelId;
             addTab();
         } else if (window.G_SelectedChannelType === 11) { //文字直播类
 
