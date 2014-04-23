@@ -13,7 +13,7 @@ class VoteItemManageData extends BaseManageData
      * @param array $httpPostData $_post数组
      * @return int 返回题目Id
      */
-    public function CreateVoteItem($httpPostData) {
+    public function Create($httpPostData) {
         $dataProperty = new DataProperty();
         $sql = parent::GetInsertSql($httpPostData, self::TableName_VoteItem, $dataProperty);
         $dbOperator = DBOperator::getInstance();
@@ -36,7 +36,7 @@ class VoteItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
         $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
@@ -69,9 +69,9 @@ class VoteItemManageData extends BaseManageData
         FROM " . self::TableName_VoteItem . " " . $searchSql . "
         ORDER BY Sort DESC,VoteItemId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
         $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $sql = "SELECT count(*) FROM " . self::TableName_VoteItem . " " . $searchSql;
-        $allCount = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        $sql = "SELECT COUNT(*) FROM " . self::TableName_VoteItem . " " . $searchSql;
+        $allCount = $dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -95,7 +95,7 @@ class VoteItemManageData extends BaseManageData
      * @return int 执行结果
      */
     public function RemoveBin($voteItemId) {
-        $sql = "update " . self::TableName_VoteItem . " set State=100 WHERE VoteItemId=:VoteItemId";
+        $sql = "UPDATE " . self::TableName_VoteItem . " SET State=100 WHERE VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
         $dbOperator = DBOperator::getInstance();
@@ -105,12 +105,12 @@ class VoteItemManageData extends BaseManageData
 
     /**
      * 修改题目的加票数
-     * @param int $voteItemId  题目Id号
+     * @param int $voteItemId  题目Id
      * @param int $addCount    题目的加票数
      * @return int  执行结果
      */
     public function ModifyAddCount($voteItemId, $addCount) {
-        $sql = "update " . self::TableName_VoteItem . " set AddCount=:AddCount WHERE VoteItemId=:VoteItemId";
+        $sql = "UPDATE " . self::TableName_VoteItem . " SET AddCount=:AddCount WHERE VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
         $dataProperty->AddField("AddCount", $addCount);
@@ -125,11 +125,11 @@ class VoteItemManageData extends BaseManageData
      * @return int  返回投票调查总票数
      */
     public function GetSum($voteId) {
-        $sql = "SELECT SUM(AddCount) from " . self::TableName_VoteItem . " WHERE State=0 AND VoteId=:VoteId";
+        $sql = "SELECT SUM(AddCount) FROM " . self::TableName_VoteItem . " WHERE State=0 AND VoteId=:VoteId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
         $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -149,7 +149,7 @@ class VoteItemManageData extends BaseManageData
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("VoteId", $voteId);
         $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 
