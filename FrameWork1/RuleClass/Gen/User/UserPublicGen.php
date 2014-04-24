@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台会员生成类
+ * 前台 会员 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
  * @author zhangchi
