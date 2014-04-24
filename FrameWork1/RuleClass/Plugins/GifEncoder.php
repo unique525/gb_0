@@ -120,6 +120,7 @@ class GifEncoder
             }
         }
 
+        $localImage = null;
         switch ($localsTmp{0}) {
             case "!":
                 $localImage = substr($localsTmp, 8, 10);
@@ -185,4 +186,4 @@ class GifEncoder
     {
         return ($this->GIF);
     }
-} 
+}

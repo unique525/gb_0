@@ -313,9 +313,10 @@ class DocumentNewsManageData extends BaseManageData
 
     /**
      * 取得表的字段名称数组
+     * @param string $tableName 表名
      * @return array 表的字段名称数组
      */
-    public function GetFields()
+    public function GetFields($tableName = self::TableName_DocumentNews)
     {
         return $this->GetFields(self::TableName_DocumentNews);
     }

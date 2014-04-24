@@ -9,12 +9,12 @@
 <script type="text/javascript" src="/system_js/common.js"></script>
 <script type="text/javascript" src="/system_js/manage/login.js"></script>
     <style type="text/css">
-        body { font-family: "微软雅黑"; background:#2F6368; }
-        input { font-family: "微软雅黑";border:none;border:0;}
+        body { font-family: Microsoft YaHei,Verdana,serif; background:#2F6368; }
+        input { font-family: Microsoft YaHei,Verdana,serif;border:none;border:0;}
     </style>
 </head>
 <body onkeydown="submitKeyClick('btn_sub');" style="">
-    <form id="login_form" action="default.php?mod=manage&a=login" method="post">
+    <form id="login_form" action="/default.php?mod=manage&a=login" method="post">
         <div id="div_login_logo_bg"><div id="div_login_logo">iCMS <span>v2.0</span></div></div>
         <div id="div_login_box">
             <div id="div_manage_user_name" class="text_box">

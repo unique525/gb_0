@@ -9,9 +9,10 @@ class ChannelManageData extends BaseManageData
 {
     /**
      * 取得字段数据集
+     * @param string $tableName 表名
      * @return array 字段数据集
      */
-    public function GetFields(){
+    public function GetFields($tableName = self::TableName_DocumentNews){
         return parent::GetFields(self::TableName_Channel);
     }
 
