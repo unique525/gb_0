@@ -183,7 +183,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
 
             $siteId = $channelManageData->GetSiteId($channelId, false);
-
+            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
 
 
             if (!empty($_POST)) {
@@ -228,7 +228,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                     $result = $channelManageData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
                     //加入操作日志
-                    $operateContent = 'POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$result;
+                    $operateContent = 'Modify Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$result;
                     self::CreateManageUserLog($operateContent);
 
                     if ($result > 0) {
@@ -265,11 +265,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 
-            $tempContent = str_ireplace("{CreateDate}", strval(date('Y-m-d', time())), $tempContent);
-            $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
-            $tempContent = str_ireplace("{ParentId}", strval($parentId), $tempContent);
-            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
-            $tempContent = str_ireplace("{Rank}", strval($rank), $tempContent);
 
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
