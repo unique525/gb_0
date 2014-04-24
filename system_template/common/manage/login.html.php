@@ -18,17 +18,17 @@
         <div id="div_login_logo_bg"><div id="div_login_logo">iCMS <span>v2.0</span></div></div>
         <div id="div_login_box">
             <div id="div_manage_user_name" class="text_box">
-                帐号：<input id="manage_user_name" name="manage_user_name" class="input_box1" type="text" value="" maxlength="40" />
+                <label for="manage_user_name">帐号：</label><input id="manage_user_name" name="manage_user_name" class="input_box1" type="text" value="" maxlength="40" />
             </div>
             <div id="div_manage_user_pass" class="text_box">
-                密码：<input id="manage_user_pass" name="manage_user_pass" class="input_box1" type="password" value="" maxlength="40" />
+                <label for="manage_user_pass">密码：</label><input id="manage_user_pass" name="manage_user_pass" class="input_box1" type="password" value="" maxlength="40" />
             </div>
             <div id="div_manage_user_otp" class="text_box" style="display:none">
-                令牌：<input id="manage_user_otp_number" name="manage_user_otp_number" class="input_box1" type="text" value="" maxlength="6" />
+                <label for="manage_user_otp_number">令牌：</label><input id="manage_user_otp_number" name="manage_user_otp_number" class="input_box1" type="text" value="" maxlength="6" />
             </div>
             <div id="div_sms"></div>
             <div id="div_verify_code" class="text_box">
-                验证：<input id="txt_check_code" name="txt_check_code" class="input_box2" type="text" value="" maxlength="5" /> <img src="/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login" title="" alt="" onclick="this.setAttribute('src','/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login&n='+Math.random());" style="cursor: pointer;" />
+                <label for="txt_check_code">验证：</label><input id="txt_check_code" name="txt_check_code" class="input_box2" type="text" value="" maxlength="5" /> <img src="/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login" title="" alt="" onclick="this.setAttribute('src','/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login&n='+Math.random());" style="cursor: pointer;" />
             </div>
             
             <div class="btn_box">
