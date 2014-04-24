@@ -232,6 +232,14 @@ class BaseData
      * 投票调查 投票记录 数据表自增字段名
      */
     const TableId_VoteRecord = "VoteRecordId";
+    /**
+     * 投票调查 投票记录明细 数据表名
+     */
+    const TableName_VoteRecordDetail = "cst_vote_record_detail";
+    /**
+     * 投票调查 投票记录明细 数据表自增字段名
+     */
+    const TableId_VoteRecordDetail = "VoteRecordDetailId";
 
     /**
      * 通用来源 数据表名
