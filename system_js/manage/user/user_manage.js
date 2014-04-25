@@ -12,6 +12,10 @@ $(document).ready(function() {
         jsonp: "jsonpcallback",
         success: function (data) {
             if (data !== undefined) {
+                var aw = $(window).height() - 108 - 35;
+                var size = aw / 28;
+                window.G_PageSize = parseInt(size) - 1;
+
                 var aa = "";
                 $.each(data, function (i, v) {
                     aa = aa + '<div class="line" id="btn' + v["ManageMenuOfUserTagName"] + '">' + v["ManageMenuOfUserName"] + '</div>';
@@ -32,6 +36,7 @@ $(document).ready(function() {
                 });
                 //会员相册管理
                 $("#btnUserAlbumExplore").click(function (event) {
+                    window.G_TabTitle = '会员相册管理';
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_album&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
