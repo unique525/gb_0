@@ -58,24 +58,6 @@ class VoteManageData extends BaseManageData
         return $result;
     }
 
-//    /**
-//     * 获取投票调查列表11
-//     * @param int $state 状态
-//     * @return array 投票调查列表数组
-//     */
-//    public function GetList($state = -1) {
-//        if ($state == -1) {
-//            $sql = "SELECT VoteTitle,State,CreateDate,BeginDate FROM " . self::TableName_Vote . ";";
-//            $result = $this->dbOperator->GetArrayList($sql, null);
-//        } else {
-//            $sql = "SELECT VoteTitle,State,CreateDate,BeginDate FROM " . self::TableName_Vote . " WHERE State=:State;";
-//            $dataProperty = new DataProperty();
-//            $dataProperty->AddField("State", $state);
-//            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-//        }
-//        return $result;
-//    }
-
     /**
      * 一个投票调查的信息
      * @param int $voteId 投票调查Id
@@ -104,7 +86,7 @@ class VoteManageData extends BaseManageData
      * @param string $searchKey 查询字符
      * @return array  投票调查列表数组
      */
-    public function GetList($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    public function GetListForPager($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
     {
         $result = null;
         if ($siteId < 0 || $channelId < 0 || $pageBegin < 0 || $pageSize < 0) {
@@ -123,9 +105,11 @@ class VoteManageData extends BaseManageData
         else
             $searchSql = "WHERE SiteId=:SiteId AND ChannelId=:ChannelId";
 
-        $sql = "SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId FROM " . self::TableName_Vote . " " . $searchSql . "  ORDER BY sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+        $sql = "SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId
+        FROM " . self::TableName_Vote . " " . $searchSql . "
+        ORDER BY Sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT count(*) FROM " . self::TableName_Vote . $searchSql . ";";
+        $sql = "SELECT COUNT(*) FROM " . self::TableName_Vote . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

@@ -209,6 +209,39 @@ class BaseData
      */
     const TableId_Vote = "VoteId";
     /**
+     * 投票调查 题目 数据表名
+     */
+    const TableName_VoteItem = "cst_vote_item";
+    /**
+     * 投票调查 题目 数据表自增字段名
+     */
+    const TableId_VoteItem = "VoteItemId";
+    /**
+     * 投票调查 题目选项 数据表名
+     */
+    const TableName_VoteSelectItem = "cst_vote_select_item";
+    /**
+     * 投票调查 题目选项 数据表自增字段名
+     */
+    const TableId_VoteSelectItem = "VoteSelectItemId";
+    /**
+     * 投票调查 投票记录 数据表名
+     */
+    const TableName_VoteRecord = "cst_vote_record";
+    /**
+     * 投票调查 投票记录 数据表自增字段名
+     */
+    const TableId_VoteRecord = "VoteRecordId";
+    /**
+     * 投票调查 投票记录明细 数据表名
+     */
+    const TableName_VoteRecordDetail = "cst_vote_record_detail";
+    /**
+     * 投票调查 投票记录明细 数据表自增字段名
+     */
+    const TableId_VoteRecordDetail = "VoteRecordDetailId";
+
+    /**
      * 通用来源 数据表名
      */
     const TableName_SourceCommon = "cst_source_common";
@@ -306,14 +339,15 @@ class BaseData
     {
         $result = "";
         if (strlen($sql) > 0) {
-            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-            if (!$withCache) {
-                $cacheContent = "";
-            }
-            if (strlen($cacheContent) <= 0) {
-                $result = $this->dbOperator->GetInt($sql, $dataProperty);
-            } else {
-                $result = $cacheContent;
+            if($withCache){
+                $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if (strlen($cacheContent) <= 0) {
+                    $result = $this->dbOperator->GetString($sql, $dataProperty);
+                } else {
+                    $result = $cacheContent;
+                }
+            }else{
+                $result = $this->dbOperator->GetString($sql, $dataProperty);
             }
         }
         return $result;

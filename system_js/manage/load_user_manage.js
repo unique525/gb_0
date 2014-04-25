@@ -18,10 +18,6 @@ $(document).ready(function() {
                 });
                 $("#div_user_manage").html(aa);
 
-                var aw = $(window).height() - 108 - 35;
-                var size = aw / 28;
-                var ps = parseInt(size) - 1;
-
                 //会员管理
                 $("#btnUserExplore").click(function (event) {
 

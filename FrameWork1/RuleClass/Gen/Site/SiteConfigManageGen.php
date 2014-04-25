@@ -69,9 +69,9 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                 } else {
                     Control::ShowMessage(Language::Load("siteconfig", 1));
                     $jscode = 'self.parent.loadsitelist(1);self.parent.$("#tabs").tabs("select","#tabs-1");';
-                    if ($tab_index > 0) {
-                        $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                    }
+                    //if ($tab_index > 0) {
+                    //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
+                    //}
                     Control::RunJS($jscode);
                 }
             }
@@ -121,13 +121,13 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
 
             //去掉select开头的标记 {sel_xxx_xxx}
             $patterns = "/\{sel_(.*?)\}/";
-            $TempContent = preg_replace($patterns, "", $TempContent);
+            $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉checkbox开头的标记 {cb_xxx}
             $patterns = "/\{cb_(.*?)\}/";
-            $TempContent = preg_replace($patterns, "", $TempContent);
+            $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉radio开头的标记 {rd_xxx_xxx}
             $patterns = "/\{rd_(.*?)\}/";
-            $TempContent = preg_replace($patterns, "", $TempContent);
+            $tempContent = preg_replace($patterns, "", $tempContent);
             //替换掉{cfg XXX}的内容
             $patterns = "/\{cfg_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);

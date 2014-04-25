@@ -49,7 +49,7 @@ class DataCache {
      * @return int 处理结果
      */
     public static function RemoveDir($cacheDir) {
-        $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
+        $cacheDir = RELATIVE_PATH . '/' . $cacheDir;
         return FileObject::DeleteDir($cacheDir);
     }
 }

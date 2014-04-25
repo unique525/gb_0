@@ -3,9 +3,9 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link type="text/css" href="/system_template/{templatename}/images/common.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{relative_path}/images/common.css" rel="stylesheet" />
         <link type="text/css" href="/images/editor.css" rel="stylesheet" />
-        <link type="text/css" href="/system_template/{templatename}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link type="text/css" href="/system_template/{relative_path}/images/jqueryui/jquery-ui.min.css" rel="stylesheet" />
         <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
         <script type="text/javascript" src="/system_js/common.js"></script>

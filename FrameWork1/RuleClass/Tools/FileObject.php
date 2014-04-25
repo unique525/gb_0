@@ -183,11 +183,14 @@ class FileObject
      */
     public static function DeleteDir($dirPath)
     {
-        $dirPath = dirname($dirPath);
+        if(!is_dir($dirPath)){ //没有找到文件夹，直接返回成功
+            return true;
+        }
         $dirHandler = dir($dirPath);
         while (false !== ($childDirPath = $dirHandler->read())) {
             if ($childDirPath != '.' && $childDirPath != '..') {
                 if (is_dir($dirPath . '/' . $childDirPath)) {
+                    echo $dirPath . '/' . $childDirPath;
                     FileObject::DeleteDir($dirPath . '/' . $childDirPath);
                 } else {
                     unlink($dirPath . '/' . $childDirPath);

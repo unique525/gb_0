@@ -113,11 +113,11 @@ class Template {
 
                         $headerTempContent = self::GetNodeValue($doc, "header", $tagName);
                         if (strlen($headerTempContent) > 0 && $headerRowCount <= 0) {
-                            $headerRowCount = 1;
+                            $headerRowCount = 1; //找到header段时，如果没手动设置header段行数，则默认设置行数为1
                         }
                         $footerTempContent = self::GetNodeValue($doc, "footer", $tagName);
                         if (strlen($footerTempContent) > 0 && $footerRowCount <= 0) {
-                            $footerRowCount = 1;
+                            $footerRowCount = 1; //找到footer段时，如果没手动设置footer段行数，则默认设置行数为1
                         }
                         //读取头段到主段的分割线
                         $headerSplitterTempContent = self::GetNodeValue($doc, "header_splitter", $tagName);
@@ -229,6 +229,7 @@ class Template {
                     }
 
                     for ($i = 0 + $headerRowCount; $i < $itemRowCount; $i++) {
+
                         //如果有交替行
                         if (strlen($alterItemTempContent) > 0) {
                             if ($i % 2 === 1) {
@@ -636,9 +637,18 @@ class Template {
                 $tempContent = str_ireplace("{" . $preManage . $columnName . "_no_html}", strip_tags($columnValue), $tempContent);
 
                 //处理下拉菜单的默认值
-                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", 'selected="selected"', $tempContent);
 
-                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "_" . $columnValue . "}", 'checked="checked"', $tempContent);
+                $selectedOption = '<script type="text/javascript">
+                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("selected",true);
+                </script>';
+
+                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $tempContent);
+
+                $checkedOption = '<script type="text/javascript">
+                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("checked",true);
+                </script>';
+
+                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $tempContent);
 
                 if (intval($columnValue) === 1) {
                     $tempContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $tempContent);

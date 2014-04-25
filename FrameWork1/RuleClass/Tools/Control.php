@@ -25,6 +25,21 @@ class Control {
     }
 
     /**
+     * Javascript方法，关闭选项卡
+     */
+    public static function CloseTab(){
+        echo '<' . 'script type="text/javascript">closeTab();</script>';
+    }
+
+    /**
+     * 刷新当前的Tab页
+     */
+    public static function RefreshTab()
+    {
+        echo '<' . 'script type="text/javascript">window.G_Tabs.tabs("refresh");</script>';
+    }
+
+    /**
      * Javascript方法，转到地址
      * @param string $url 要转向到的地址
      */
@@ -128,7 +143,7 @@ class Control {
      * 写入后台管理员cookie
      * @param int $manageUserId 后台帐号id
      * @param string $manageUserName 后台帐号名
-     * @param int $hour 保存时间（单位小时），默认24小时
+     * @param int $hour 保存时间（单位小时），默认1小时
      * @param string $domain 保存路径，默认""
      */
     public static function SetManageUserCookie($manageUserId, $manageUserName, $hour = 1, $domain = "") {

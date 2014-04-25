@@ -10,13 +10,14 @@ class ManageUserLogManageData extends BaseManageData {
 
     /**
      * 物理删除
-     * @param int $adminUserLogId 后台管理员操作日志id
+     * @param int $manageUserLogId 后台管理员操作日志id
      * @return int 删除结果，大于0则成功
      */
-    public function Delete($adminUserLogId) {
-        $sql = "DELETE FROM " . self::tableName . " WHERE `" . self::tableIdName . "`=:" . self::tableIdName . "";
+    public function Delete($manageUserLogId) {
+        $sql = "DELETE FROM " . self::TableName_ManageUserLog . " WHERE `" . self::TableId_ManageUserLog . "`=:" .
+            self::TableId_ManageUserLog . "";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField(self::tableIdName, $adminUserLogId);
+        $dataProperty->AddField(self::TableId_ManageUserLog, $manageUserLogId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }

@@ -31,30 +31,31 @@ function rtrim(str) {
 }
 
 $().ready(function() {
-    $(".inputprice").keyup(function() {
+    var inputPrice = $(".input_price");
+    inputPrice.keyup(function() {
         checkPrice(this);
     });
-    $(".inputprice").blur(function() {
+    inputPrice.blur(function() {
         checkPrice(this);
     });
-    $(".inputnumber").keyup(function() {
+    var inputNumber = $(".input_number");
+    inputNumber.keyup(function() {
         checkNumber(this);
     });
-    $(".inputnumber").blur(function() {
+    inputNumber.blur(function() {
         checkNumber(this);
     });
 });
 
 function getDate() {
-    var d = new Date()
+    var d = new Date();
     var vYear = d.getFullYear();
     var vMon = d.getMonth() + 1;
     var vDay = d.getDate();
     var h = d.getHours();
     var m = d.getMinutes();
     var se = d.getSeconds();
-    var s = vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (se < 10 ? "0" + se : se);
-    return s;
+    return vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (se < 10 ? "0" + se : se);
 }
 
 function checkPrice(me) {
@@ -91,7 +92,7 @@ function JsLoader() {
         //对于其他浏览器，onLoad
         s.onload = s.onReadyStateChange = function() {
             //在此函数中this指针指的是s结点对象，而不是JsLoader实例,
-            //所以必须用self来调用onsuccess事件，下同。
+            //所以必须用self来调用onSuccess事件，下同。
             if (this.readyState && this.readyState == "loading")
                 return;
             self.onSuccess();

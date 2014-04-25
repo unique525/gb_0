@@ -87,10 +87,11 @@ function _getFileNames($dir, &$arrFileNames) {
     $dh = opendir($dir);
     while ($fileName = readdir($dh))
         if ($fileName != "." && $fileName != "..") {
-            if (is_dir($dir . '/' . $fileName))
+            if (is_dir($dir . '/' . $fileName)){
                 _getFileNames($dir . '/' . $fileName, $arrFileNames);
-            else
+            }else{
                 $arrFileNames[] = $dir . '/' . $fileName;
+            }
         }
     closedir($dh);
 }
