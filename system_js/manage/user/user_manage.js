@@ -32,7 +32,7 @@ $(document).ready(function() {
                 });
                 //会员相册管理
                 $("#btnUserAlbumExplore").click(function (event) {
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album&m=list&ps=' + ps + '&site_id=' + window.G_NowSiteId;
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
                 //会员订单管理
