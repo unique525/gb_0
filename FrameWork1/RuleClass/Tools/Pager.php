@@ -57,12 +57,12 @@ class Pager {
                 for ($i = 1; $i <= $upCount1; $i++) {
                     if ($i > 0) {
 
-                        $temp1 = str_ireplace("{index_content}", strval($i), $temp);
+                        $temp1 = str_ireplace("{IndexContent}", strval($i), $temp);
 
-                        $temp1 = str_ireplace("{index}", str_ireplace("{0}", strval($i), $navUrl), $temp1);
+                        $temp1 = str_ireplace("{Index}", str_ireplace("{0}", strval($i), $navUrl), $temp1);
 
                         if ($i == $pageIndex) {
-                            $temp1 = str_ireplace("{box_style}", "pb2", $temp1);
+                            $temp1 = str_ireplace("{BoxStyle}", "pb2", $temp1);
                         }
                         $sbIndex = $sbIndex . $temp1;
                     }
@@ -79,12 +79,12 @@ class Pager {
                 for ($i = $pageIndex - $upCount; $i < $pageIndex + $downCount; $i++) {
                     if ($allBtnCount >= $i) {
                         if ($i > 0) {
-                            $temp1 = str_ireplace("{index_content}", strval($i), $temp);
+                            $temp1 = str_ireplace("{IndexContent}", strval($i), $temp);
 
-                            $temp1 = str_ireplace("{index}", str_ireplace("{0}", strval($i), $navUrl), $temp1);
+                            $temp1 = str_ireplace("{Index}", str_ireplace("{0}", strval($i), $navUrl), $temp1);
 
                             if ($i == $pageIndex) {
-                                $temp1 = str_ireplace("{box_style}", "pb2", $temp1);
+                                $temp1 = str_ireplace("{BoxStyle}", "pb2", $temp1);
                             }
                             $sbIndex = $sbIndex . $temp1;
                         }
@@ -93,35 +93,35 @@ class Pager {
             }
 
             if ($pageIndex < $allBtnCount) {
-                $outHtml = str_ireplace("{show_next}", "", $outHtml);
+                $outHtml = str_ireplace("{ShowNext}", "", $outHtml);
             } else {
-                $outHtml = str_ireplace("{show_next}", "style=\"display:none\"", $outHtml);
+                $outHtml = str_ireplace("{ShowNext}", "style=\"display:none\"", $outHtml);
             }
-            $outHtml = str_ireplace("{next_index}", str_ireplace("{0}", strval($pageIndex + 1), $navUrl), $outHtml);
-            $outHtml = str_ireplace("{end_index}", str_ireplace("{0}", strval($allBtnCount), $navUrl), $outHtml);
-            $outHtml = str_ireplace("{next_index_c}", $pageIndex + 1, $outHtml);
-            $outHtml = str_ireplace("{end_index_c}", $allBtnCount, $outHtml);
-            $outHtml = str_ireplace("{now_index}", strval($pageIndex), $outHtml);
-            $outHtml = str_ireplace("{all_index}", strval($allBtnCount), $outHtml);
-            $outHtml = str_ireplace("{all_count}", strval($allCount), $outHtml);
-            $outHtml = str_ireplace("{page_size}", strval($pageSize), $outHtml);
-            $outHtml = str_ireplace("{page_list}", strval($sbIndex), $outHtml);
-            $outHtml = str_ireplace("{js_function_name}", $jsFunctionName, $outHtml);
-            $outHtml = str_ireplace("{param_list}", $jsParamList, $outHtml);
+            $outHtml = str_ireplace("{NextIndex}", str_ireplace("{0}", strval($pageIndex + 1), $navUrl), $outHtml);
+            $outHtml = str_ireplace("{EndIndex}", str_ireplace("{0}", strval($allBtnCount), $navUrl), $outHtml);
+            $outHtml = str_ireplace("{NextIndexC}", $pageIndex + 1, $outHtml);
+            $outHtml = str_ireplace("{EndIndexC}", $allBtnCount, $outHtml);
+            $outHtml = str_ireplace("{NowIndex}", strval($pageIndex), $outHtml);
+            $outHtml = str_ireplace("{AllIndex}", strval($allBtnCount), $outHtml);
+            $outHtml = str_ireplace("{AllCount}", strval($allCount), $outHtml);
+            $outHtml = str_ireplace("{PageSize}", strval($pageSize), $outHtml);
+            $outHtml = str_ireplace("{PageList}", strval($sbIndex), $outHtml);
+            $outHtml = str_ireplace("{JsFunctionName}", $jsFunctionName, $outHtml);
+            $outHtml = str_ireplace("{ParamList}", $jsParamList, $outHtml);
 
 
             if ($pageIndex > 1) {
-                $outHtml = str_ireplace("{show_pre}", "", $outHtml);
+                $outHtml = str_ireplace("{ShowPre}", "", $outHtml);
             } else {
-                $outHtml = str_ireplace("{show_pre}", "style=\"display:none\"", $outHtml);
+                $outHtml = str_ireplace("{ShowPre}", "style=\"display:none\"", $outHtml);
             }
-            $outHtml = str_ireplace("{pre_index}", str_ireplace("{0}", strval($pageIndex - 1), $navUrl), $outHtml);
-            $outHtml = str_ireplace("{first_index}", str_ireplace("{0}", "1", $navUrl), $outHtml);
-            $outHtml = str_ireplace("{pre_index_c}", $pageIndex - 1, $outHtml);
-            $outHtml = str_ireplace("{first_index_c}", "1", $outHtml);
-            $outHtml = str_ireplace("{rd}", str_ireplace("&p={0}", "", $navUrl), $outHtml);
-            $outHtml = str_ireplace("{url}&p=", "", $outHtml);
-            $outHtml = str_ireplace("{box_style}", "pb1", $outHtml);
+            $outHtml = str_ireplace("{PreIndex}", str_ireplace("{0}", strval($pageIndex - 1), $navUrl), $outHtml);
+            $outHtml = str_ireplace("{FirstIndex}", str_ireplace("{0}", "1", $navUrl), $outHtml);
+            $outHtml = str_ireplace("{PreIndexC}", $pageIndex - 1, $outHtml);
+            $outHtml = str_ireplace("{FirstIndexC}", "1", $outHtml);
+            $outHtml = str_ireplace("{Rd}", str_ireplace("&p={0}", "", $navUrl), $outHtml);
+            $outHtml = str_ireplace("{Url}&p=", "", $outHtml);
+            $outHtml = str_ireplace("{BoxStyle}", "pb1", $outHtml);
         }
 
         return $outHtml;

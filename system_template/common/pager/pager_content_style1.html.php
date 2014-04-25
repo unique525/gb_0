@@ -1,0 +1,1 @@
+<div class="{BoxStyle}"><a href="{Url}&p={Index}">{IndexContent}</a></div>
