@@ -45,6 +45,21 @@ class UserAlbumManageData extends BaseManageData {
     }
 
     /**
+     * 修改状态
+     * @param int $userAlbumId 相册Id
+     * @param int $state 修改后的状态
+     * @return int 影响行数
+     */
+    public function ModifyState($userAlbumId,$state){
+        $sql = "UPDATE ".self::TableName_UserAlbum." SET State = :State WHERE ". self::TableId_UserAlbum . " = :UserAlbumId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("State",$state);
+        $dataProperty->AddField("UserAlbumId",$userAlbumId);
+        $result = $this->dbOperator->Execute($sql,$dataProperty);
+        return $result;
+    }
+
+    /**
      * 通过相册ID获取用户ID(checked)
      * @param int $userAlbumId 相册ID
      * @return int 用户ID
