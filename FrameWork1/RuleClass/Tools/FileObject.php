@@ -268,6 +268,15 @@ class FileObject
         return PathInfo($filePath,PATHINFO_EXTENSION);
     }
 
+    /**
+     * 取得文件大小
+     * @param string $filePath 要处理的文件名
+     * @return int 文件大小
+     */
+    public static function  GetSize($filePath){
+        return FileSize($filePath);
+    }
+
 }
 
 ?>

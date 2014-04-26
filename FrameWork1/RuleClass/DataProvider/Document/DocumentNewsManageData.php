@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 后台管理 资讯 数据类
  * @category iCMS
@@ -8,6 +7,60 @@
  */
 class DocumentNewsManageData extends BaseManageData
 {
+    /** 文档状态定义 */
+
+    /**
+     * 新稿
+     */
+    const STATE_NEW = 0;
+
+    /**
+     * 终审
+     */
+    const STATE_FINAL_VERIFY = 0;
+
+
+
+
+
+
+
+
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_DocumentNews){
+        return parent::GetFields(self::TableName_DocumentNews);
+    }
+
+
+    /**
+     * 新增频道
+     * @param array $httpPostData $_POST数组
+     * @param string $titlePic1 题图1
+     * @param string $titlePic2 题图2
+     * @param string $titlePic3 题图3
+     * @param string $titlePicMobile 移动客户端题图
+     * @param string $titlePicPad 平板客户端题图
+     * @return int 新增的频道id
+     */
+    public function Create($httpPostData, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '', $titlePicMobile = '', $titlePicPad = '')
+    {
+        $result = -1;
+        $dataProperty = new DataProperty();
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3", "TitlePicMobile", "TitlePicPad");
+        $addFieldValues = array($titlePic1, $titlePic2, $titlePic3, $titlePicMobile, $titlePicPad);
+        if (!empty($httpPostData)) {
+            $sql = parent::GetInsertSql($httpPostData, self::TableName_DocumentNews, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 取得后台资讯列表数据集
@@ -310,17 +363,6 @@ class DocumentNewsManageData extends BaseManageData
         }
         return $result;
     }
-
-    /**
-     * 取得表的字段名称数组
-     * @param string $tableName 表名
-     * @return array 表的字段名称数组
-     */
-    public function GetFields($tableName = self::TableName_DocumentNews)
-    {
-        return $this->GetFields(self::TableName_DocumentNews);
-    }
-
 }
 
 ?>

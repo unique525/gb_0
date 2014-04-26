@@ -6,13 +6,15 @@
  * @package iCMS_FrameWork1_RuleClass_Gen
  * @author zhangchi
  */
-class BaseGen {
+class BaseGen
+{
 
     /**
      * 在模板替换前的统一替换
      * @param string $tempContent 要处理的模板
      */
-    public function ReplaceFirst(&$tempContent) {
+    public function ReplaceFirst(&$tempContent)
+    {
         ///////找出PreTemp标记/////////
         $keyName = "pre_temp";
         $arr = Template::GetAllCustomTag($tempContent, $keyName);
@@ -141,7 +143,7 @@ class BaseGen {
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
-                if(!empty($arr2)){
+                if (!empty($arr2)) {
                     $documentChannelData = new DocumentChannelData();
                     foreach ($arr2 as $val) {
                         $docContent = '<documentchannelname' . $val . '</documentchannelname>';
@@ -159,12 +161,13 @@ class BaseGen {
      * 在模板替换后的统一替换
      * @param string $tempContent 要处理的模板
      */
-    public function ReplaceEnd(&$tempContent) {
+    public function ReplaceEnd(&$tempContent)
+    {
         $templateName = self::GetTemplateName();
-        $selectTemplate = Template::Load("select_template.html","common");
-        $commonHead = Template::Load("manage/common_head.html","common");
-        $commonBodyDeal = Template::Load("manage/common_body_deal.html","common");
-        $commonBodyList = Template::Load("manage/common_body_list.html","common");
+        $selectTemplate = Template::Load("select_template.html", "common");
+        $commonHead = Template::Load("manage/common_head.html", "common");
+        $commonBodyDeal = Template::Load("manage/common_body_deal.html", "common");
+        $commonBodyList = Template::Load("manage/common_body_list.html", "common");
         $tempContent = str_ireplace("{common_head}", $commonHead, $tempContent);
         $tempContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $tempContent);
         $tempContent = str_ireplace("{common_body_list}", $commonBodyList, $tempContent);
@@ -183,9 +186,10 @@ class BaseGen {
      * 取得后台管理员使用的模板名称
      * @return string 模板名称
      */
-    private function GetTemplateName() {
+    private function GetTemplateName()
+    {
         $templateName = Control::GetManageUserTemplateName();
-        if(strlen($templateName)<=0){
+        if (strlen($templateName) <= 0) {
             $templateName = "default";
         }
         return $templateName;
@@ -193,15 +197,16 @@ class BaseGen {
 
     /**
      * 是否是安全IP
-     * @return boolean 
+     * @return boolean
      */
-    public function IsSecurityIp() {
+    public function IsSecurityIp()
+    {
         $ip = Control::GetIP();
         $isInnerIp = false; //是否安全IP
         //
         //安全登录IP，不需要短信认证
         //$SecurityIP = array('130.1.0', '20.20.20', '40.40.40');
-        $securityIp = explode('|',SECURITY_IP);
+        $securityIp = explode('|', SECURITY_IP);
         if (empty($securityIp)) { //没有设置安全IP时，默认都安全
             $isInnerIp = true;
         } else {
@@ -214,16 +219,17 @@ class BaseGen {
         }
         return $isInnerIp;
     }
-    
+
     /**
      * 返回错误内容模板
      * @param string $errorContent 错误提示内容
      * @return string 错误内容模板
      */
-    protected function ShowError($errorContent){
-        $errorTemplate = Template::Load("error.html","common");        
+    protected function ShowError($errorContent)
+    {
+        $errorTemplate = Template::Load("error.html", "common");
         $errorTemplate = str_ireplace("{error_content}", $errorContent, $errorTemplate);
-        self::ReplaceEnd($errorTemplate);        
+        self::ReplaceEnd($errorTemplate);
         return $errorTemplate;
     }
 
@@ -232,7 +238,8 @@ class BaseGen {
      * @param int $siteId 站点id
      * @param string $tempContent 模板内容
      */
-    protected function ReplaceSiteConfig($siteId, &$tempContent) {
+    protected function ReplaceSiteConfig($siteId, &$tempContent)
+    {
         $siteConfigManageData = new SiteConfigManageData($siteId);
         $arrSiteConfigOne = $siteConfigManageData->GetList($siteId);
         if (count($arrSiteConfigOne) > 0) {
@@ -271,7 +278,7 @@ class BaseGen {
                         break;
                 }
             }
-        } else {//移除掉标记
+        } else { //移除掉标记
             $patterns = "/\{cfg_(.*)\<\/}/imsU";
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
@@ -282,7 +289,8 @@ class BaseGen {
      * 取得Web客户端的综合信息
      * @return array 返回储存信息的数据集
      */
-    protected function GetWebClientInfo(){
+    protected function GetWebClientInfo()
+    {
         $arrayOfWebClientInfo = array();
 
         return $arrayOfWebClientInfo;
@@ -317,7 +325,8 @@ class BaseGen {
      * @param int $uploadFileId 返回新的上传文件id
      * @return string 返回结果字符串
      */
-    protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0){
+    protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0)
+    {
         $result = "";
         $errorMessage = self::UploadPreCheck($fileElementName);
 
@@ -329,137 +338,8 @@ class BaseGen {
             $userId = Control::GetUserId();
 
             $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
-            //根据不同的业务，构建不同的存储文件夹和文件名
-            switch ($tableType) {
-                case 1: //资讯题图1
-                    if($tableId>0){
-                        $dirPath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                        $newFileName = strval($tableId) . '_' . time() . '.' . $fileExtension;
-                    }
-                    break;
-                case 2: //管理任务上传
-                    if($manageUserId>0){
-                        $dirPath = $uploadPath . "manage_task" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                        $newFileName = time() . '.' . $fileExtension;
-                    }
-                    break;
-                case 3: //管理任务回复上传
-                    if($manageUserId>0){
-                        $dirPath = $uploadPath . "manage_task_reply" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                        $newFileName = time() . '.' . $fileExtension;
-                    }
-                    break;
-                case 4: //咨询问答上传
 
-                    break;
-                case 5:
-                    if($tableId>0){
-                        $dirPath = $uploadPath . "product" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                        $newFileName = time() . '.' . $fileExtension;
-                    }
-                    break;
-                case 6: //广告图片上传
-                    $dirPath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
-                    break;
-                case 7:         //活动类题图上传
-                    $dirPath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR . strval($userId) . "_";
-                    $newFileName = time() . '.' . $fileExtension;
-                    break;
-                case 8://产品参数类型选项
-                    $dirPath = $uploadPath . "productoption" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
-                    break;
-                case 9://用户组
-                    $dirPath = $uploadPath . "usergroup" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
-                    break;
-                case 10: //会员头像
-
-                    break;
-                case 11: //用户相册
-
-                    break;
-                case 12://产品参数类型
-                    $dirPath = $uploadPath . "productparamtype" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 13://友情链接类
-                    $dirPath = $uploadPath . "sitelink" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 14://自定义页面类
-                    $dirPath = $uploadPath . "sitecontent" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 15://用户活动花絮图片上传
-
-                    break;
-                case 16:         //站点配置图片上传
-                    $dirPath = $uploadPath . "siteconfig" . DIRECTORY_SEPARATOR . strval($siteid) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 17: //论坛帖子
-                    $dirPath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . "postcontent" . DIRECTORY_SEPARATOR . strval($_forumId) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = $_forumId . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 18://用户等级
-                    $dirPath = $uploadPath . "userlevel" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 19://自定义表单
-                    $dirPath = $uploadPath . "customform" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 20://频道图片1
-                    $dirPath = $uploadPath . "docchannel" . DIRECTORY_SEPARATOR . "parentid_" . strval($documentchannelid) . DIRECTORY_SEPARATOR;
-                    $newFileName = 'parentid_' . $documentchannelid . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 21://会员附件
-                    if ($userId == "" || $userId < 0) {
-                        $userId = Control::GetRequest("userid", 0);
-                    }
-                    $dirPath = $uploadPath . "userattachment" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
-                    $newFileName = 'useratt_' . $userId . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 22://投票选项图片
-                    $dirPath = $uploadPath . "voteitem" . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 23://新闻题图,移动终端使用
-                    break;
-                case 24://新闻题图,平板电脑使用
-                    break;
-                case 25://移动客户端投稿
-                    break;
-                case 26:        //会员心情图标
-                    $dirPath = $uploadPath . "usermood" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = $documentchannelid . '_usermood_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 27://考试类用
-                    $dirPath = $uploadPath . "exam" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 28://会员签名图标
-                    if ($userId == "" || $userId < 0) {
-                        $userId = Control::GetRequest("userid", 0);
-                    }
-                    $dirPath = $uploadPath . "usersign" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 29:  //资讯题图2
-                    $dirPath = $uploadPath . "docnews" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = $documentchannelid . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 30:   //资讯题图3
-                    $dirPath = $uploadPath . "docnews" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = $documentchannelid . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-                case 31:   //资讯内容图
-                    $dirPath = $uploadPath . "docnews" . DIRECTORY_SEPARATOR . strval($documentchannelid) . DIRECTORY_SEPARATOR . strval(date('Ymd', time())) . DIRECTORY_SEPARATOR;
-                    $newFileName = $documentchannelid . '_' . time() . '.' . strtolower(File::GetEx($_FILES[$fileElementName]['name']));
-                    break;
-            }
+            $dirPath = self::GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, $newFileName);
 
             if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
                 FileObject::CreateDir($dirPath);
@@ -467,13 +347,24 @@ class BaseGen {
 
                 if ($moveResult) {
                     //数据库操作
-                    $uploadFileData = new UploadFileData();
-                    $uploadFileId = $uploadFileData->Create(
-                        $newFileName, $_FILES[$fileElementName]['size'], $fileExtension, strtolower($_FILES[$fileElementName]['name']), str_ireplace(P_PATH, "", $dirPath), $tableType, $tableId, strval(date('Y', strtotime('-8 hour'))), strval(date('m', strtotime('-8 hour'))), strval(date('d', strtotime('-8 hour'))), $manageUserId, $userId
+                    $uploadFileManageData = new UploadFileManageData();
+                    $uploadFileId = $uploadFileManageData->Create(
+                        $newFileName,
+                        $_FILES[$fileElementName]['size'],
+                        $fileExtension,
+                        strtolower($_FILES[$fileElementName]['name']),
+                        str_ireplace(PHYSICAL_PATH, "", $dirPath),
+                        $tableType,
+                        $tableId,
+                        strval(date('Y', time())),
+                        strval(date('m', time())),
+                        strval(date('d', time())),
+                        $manageUserId,
+                        $userId
                     );
 
                     //返回值处理
-                    $returnDirPath = str_ireplace(P_PATH, "", $dirPath);
+                    $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
                     $returnFilePath = $returnDirPath . $newFileName;
                     $returnFilePath = str_ireplace("\\", "/", $returnFilePath);
@@ -483,8 +374,8 @@ class BaseGen {
                         $result .= "{";
                         $result .= "error: '" . $errorMessage . "',\n";
                         $result .= "result: '" . $resultMessage . "',\n";
-                        $result .= "fileid: '" . $uploadFileId . "',\n";
-                        $result .= "fileurl: '" . $returnFilePath . "'\n";
+                        $result .= "file_id: '" . $uploadFileId . "',\n";
+                        $result .= "file_url: '" . $returnFilePath . "'\n";
                         $result .= "}";
                     } else if ($returnType === 1) {
                         $result = $returnFilePath;
@@ -492,16 +383,171 @@ class BaseGen {
                         $result = $uploadFileId;
                     }
                 } else { //移动上传文件时失败
-                    $result = Language::Load('uploadfile', 20);
+                    $result = self::UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION;
                 }
+            }else{
+                $result = self::UPLOAD_ERROR_PATH;
             }
         } else {
             $result = $errorMessage;
         }
-        @unlink($_FILES[$fileElementName]);
+        UnLink($_FILES[$fileElementName]);
         return $result;
     }
 
+    private function GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, &$newFileName)
+    {
+        //根据不同的业务，构建不同的存储文件夹和文件名
+        $uploadFilePath = "";
+        $date = strval(date('Ymd', time()));
+        switch ($tableType) {
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1:
+                /**资讯题图1   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic1_' . time() . '.' . $fileExtension;
+                }
+                break;
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2:
+                /**资讯题图2   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic2_' . time() . '.' . $fileExtension;
+                }
+                break;
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3:
+                /**资讯题图3   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic3_' . time() . '.' . $fileExtension;
+                }
+                break;
+            case 31:
+                /**资讯内容图   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = 'document_news_content_' . time() . '.' . $fileExtension;
+                }
+                break;
+            case 2:
+                /**管理任务上传  */
+                if ($manageUserId > 0) {
+                    $uploadFilePath = $uploadPath . "manage_task" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = time() . '.' . $fileExtension;
+                }
+                break;
+            case 3:
+                /**管理任务回复上传  */
+                if ($manageUserId > 0) {
+                    $uploadFilePath = $uploadPath . "manage_task_reply" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = time() . '.' . $fileExtension;
+                }
+                break;
+            case 4: //咨询问答上传
+
+                break;
+            case 5:
+                /**产品题图   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $newFileName = time() . '.' . $fileExtension;
+                }
+                break;
+            case 6:
+                /**广告图片上传 tableId 为 siteId */
+                $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 7: //活动类题图上传
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . "_";
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 8: //产品参数类型选项
+                $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 9: //用户组
+                $uploadFilePath = $uploadPath . "user_group" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 10: //会员头像
+
+                break;
+            case 11: //用户相册
+
+                break;
+            case 12: //产品参数类型
+                $uploadFilePath = $uploadPath . "product_param_type" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 13: //友情链接类
+                $uploadFilePath = $uploadPath . "site_link" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 14: //自定义页面类
+                $uploadFilePath = $uploadPath . "site_content" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 15: //用户活动花絮图片上传
+
+                break;
+            case 16:
+                /** 站点配置图片上传 tableId 为 siteId */
+                $uploadFilePath = $uploadPath . "site_config" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 17: //论坛帖子
+                $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . "post_content" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . time() . '.' . $fileExtension;
+                break;
+            case 18: //用户等级
+                $uploadFilePath = $uploadPath . "user_level" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 19: //自定义表单
+                $uploadFilePath = $uploadPath . "custom_form" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 20:
+                /** 频道图片1 tableId 为 channelId */
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'parent_id_' . $tableId . '_' . time() . '.' . $fileExtension;
+                break;
+            case 21: //会员附件
+                if ($userId > 0) {
+                    $uploadFilePath = $uploadPath . "user_attachment" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'user_attachment_' . $userId . '_' . time() . '.' . $fileExtension;
+                }
+                break;
+            case 22: //投票选项图片
+                $uploadFilePath = $uploadPath . "vote_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE: //新闻题图,移动终端使用
+                //由系统自动生成
+                break;
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD: //新闻题图,平板电脑使用
+                //由系统自动生成
+                break;
+            case 25: //移动客户端投稿
+                break;
+            case 26: //会员心情图标 tableId 为 siteId
+                $uploadFilePath = $uploadPath . "user_mood" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_user_mood_' . time() . '.' . $fileExtension;
+                break;
+            case 27: //考试类用
+                $uploadFilePath = $uploadPath . "exam" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = time() . '.' . $fileExtension;
+                break;
+            case 28: //会员签名图标
+                if ($userId > 0) {
+                    $uploadFilePath = $uploadPath . "user_sign" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
+                    $newFileName = time() . '.' . $fileExtension;
+                }
+                break;
+        }
+        return $uploadFilePath;
+    }
 
     /**
      * 上传文件错误代码：没有错误
@@ -555,6 +601,14 @@ class BaseGen {
      * 上传文件错误：文件类型错误，不允许此类文件上传
      */
     const UPLOAD_ERROR_FILE_TYPE = -10;
+    /**
+     * 上传文件错误：生成上传文件路径和文件名时出错
+     */
+    const UPLOAD_ERROR_PATH = -11;
+    /**
+     * 上传文件错误：移动上传文件到目标路径时失败
+     */
+    const UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION = -12;
 
     /**
      * 上传文件预检查

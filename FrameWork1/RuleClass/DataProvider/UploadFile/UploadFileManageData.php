@@ -8,6 +8,27 @@
 class UploadFileManageData extends BaseManageData {
 
     /**
+     * 资讯题图1
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1 = 1;
+    /**
+     * 资讯题图2
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2 = 29;
+    /**
+     * 资讯题图3
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3 = 30;
+    /**
+     * 资讯题图,移动终端使用
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE = 23;
+    /**
+     * 资讯题图,平板电脑使用
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD = 24;
+
+    /**
      * 上传文件增加到数据表
      * @param string $uploadFileName 文件名
      * @param int $uploadFileSize 文件大小
