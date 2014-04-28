@@ -157,7 +157,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);
@@ -271,7 +271,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);

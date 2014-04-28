@@ -197,23 +197,22 @@ class DocumentNewsManageData extends BaseManageData
      * 新增文档时修改排序号到当前频道的最大排序
      * @param int $channelId
      * @param int $documentNewsId
-     *
+     * @return int 影响的记录行数
      */
     public function ModifySortWhenCreate($channelId, $documentNewsId) {
         $result = -1;
         if($channelId >0 && $documentNewsId>0){
-
+            $dataProperty = new DataProperty();
+            $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+            $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            $newSort = $maxSort + 1;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $newSort);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=:Sort WHERE DocumentNewsId=:DocumentNewsId;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
-        $dataProperty = new DataProperty();
-        $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId;";
-        $dataProperty->AddField("ChannelId", $channelId);
-        $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
-        $newSort = $maxSort + 1;
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("Sort", $newSort);
-        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
-        $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=:Sort WHERE DocumentNewsId=:DocumentNewsId;";
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -222,6 +221,19 @@ class DocumentNewsManageData extends BaseManageData
     //////////////////////////////Get Info////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * 取得一条信息
+     * @param int $documentNewsId 管理员id
+     * @return array 管理员帐号信息数组
+     */
+    public function GetOne($documentNewsId)
+    {
+        $sql = "SELECT * FROM " . self::TableName_DocumentNews . " WHERE " . self::TableId_DocumentNews. "=:" . self::TableId_DocumentNews . ";";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField(self::TableId_DocumentNews, $documentNewsId);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        return $result;
+    }
 
     /**
      * 取得文档的所属频道id

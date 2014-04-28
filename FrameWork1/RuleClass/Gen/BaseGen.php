@@ -323,14 +323,14 @@ class BaseGen
      * @param int $tableId 上传文件对应的表id
      * @param int $returnType 返回值的类型
      * @param int $uploadFileId 返回新的上传文件id
-     * @return string 返回结果字符串
+     * @return string|int 返回结果字符串，或错误代码
      */
     protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0)
     {
         $result = "";
         $errorMessage = self::UploadPreCheck($fileElementName);
 
-        if (empty($errorMessage) || strlen($errorMessage) <= 0) { //没有错误
+        if ($errorMessage > 0) { //没有错误
             sleep(1);
             $newFileName = "";
             $fileExtension = strtolower(FileObject::GetExtension($_FILES[$fileElementName]['name']));
@@ -612,10 +612,16 @@ class BaseGen
 
     /**
      * 上传文件预检查
+     * @param string $fileElementName 上传控件名称
+     * @return int 错误代码，默认返回1，没有错误
      */
     private function UploadPreCheck($fileElementName)
     {
         $errorMessage = self::UPLOAD_ERROR_NO_ERROR;
+
+        if(empty($_FILES)){
+            return self::UPLOAD_ERROR_NO_ACTION;
+        }
 
         /////////////////////////检查temp文件夹///////////////////////////
         if (empty($_FILES[$fileElementName]['tmp_name'])) {
