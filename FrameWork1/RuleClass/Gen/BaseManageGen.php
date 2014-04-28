@@ -8,6 +8,7 @@
  */
 class BaseManageGen extends BaseGen
 {
+    const PUBLISH_PATH = "h";
     /**
      * 替换新增时，模板里的{field}值为空，包括后台模板和模板数据库中的模板
      * @param string $tempContent 要处理的模板内容
@@ -28,6 +29,10 @@ class BaseManageGen extends BaseGen
     }
 
     protected function PublishDocumentNews($documentNewsId, FtpQueueManageData $ftpQueueManageData, $executeFtp, $publishChannel){
+
+    }
+
+    protected function CancelPublishDocumentNews($documentNewsId){
 
     }
 

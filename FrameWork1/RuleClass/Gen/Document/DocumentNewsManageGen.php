@@ -294,8 +294,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $nowManageUserId = Control::GetManageUserId();
         $pageIndex = Control::GetRequest("p", 1);
 
-        $nowManageUserName = Control::GetManageUserName();
-
         parent::ReplaceFirst($tempContent);
         if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
@@ -345,19 +343,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
                     $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($nowManageUserId);
 
-                    if (!$can && $documentNewsManageUserGroupId != $nowManageUserGroupId) {
-                        return Language::Load('document', 26);
+                    if ($documentNewsManageUserGroupId == $nowManageUserGroupId) {
+                        //是同一组才进行判断
+                        $can = $manageUserAuthorityManageData->CanDoSameGroupOthers($siteId, $channelId, $nowManageUserId);
                     }
                 }
-
-                //Control::ShowMessage(Language::Load('document', 26));
-                //parent::RefreshTab();
-                //$jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                //if ($tab_index > 0) {
-                //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                //}
-                //Control::RunJS($jscode);
-                //return "";
+            }
+            if(!$can){
+                return Language::Load('document', 26);
             }
 
             ////////////////////////////////////////////////////
@@ -455,7 +448,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 strval(date('Y', time())),
                                 strval(date('m', time())),
                                 strval(date('d', time())),
-                                $manageUserId,
+                                $nowManageUserId,
                                 $userId
                             );
                         }
@@ -480,7 +473,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 strval(date('Y', time())),
                                 strval(date('m', time())),
                                 strval(date('d', time())),
-                                $manageUserId,
+                                $nowManageUserId,
                                 $userId
                             );
                         }
@@ -511,13 +504,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $titlePic3Path = str_ireplace("..", "", $titlePic3Path);
                 }
 
-                $documentNewsId = $documentNewsManageData->Modify($httpPostData, $titlePic1Path, $titlePic2Path, $titlePic3Path, $titlePicMobile, $titlePicPad);
+                $result = $documentNewsManageData->Modify($httpPostData, $titlePic1Path, $titlePic2Path, $titlePic3Path, $titlePicMobile, $titlePicPad);
 
                 //加入操作日志
-                $operateContent = 'Create DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:documentNewsId:'.$documentNewsId;
+                $operateContent = 'Modify DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
                 self::CreateManageUserLog($operateContent);
 
-                if ($documentNewsId > 0) {
+                if ($result > 0) {
                     //编辑完成后，解锁
                     $lockEdit = 0;
                     $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
@@ -549,10 +542,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $uploadFileManageData->ModifyTableId($titlePicPadUploadFileId, $documentNewsId);
                     }
 
-
+                    $isBatchUpload = 0;
+                    if (isset($_POST['c_ShowPicMethod']) && $_POST['c_ShowPicMethod'] == 'on') {
+                        $isBatchUpload = 1;
+                    }
                     for ($i = 0; $i < count($arrUploadFiles); $i++) {
                         if (intval($arrUploadFiles[$i]) > 0) {
                             $uploadFileManageData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
+                            if($isBatchUpload>0){
+                                $uploadFileManageData->ModifyIsBatchUpload(intval($arrUploadFiles[$i]), $isBatchUpload);
+                            }
                         }
                     }
 
@@ -710,76 +709,78 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
-     * 修改文档状态  0 新稿 1 已编 2  返工 11 一审 12 二审 13 三审 14 终审 20 已否   
+     * 修改文档状态 状态值定义在Data类中
      */
     private function AsyncModifyState() {
-        $documentNewsId = Control::GetRequest("documentnewsid", 0);
+        $documentNewsId = Control::GetRequest("document_news_id", 0);
         $state = Control::GetRequest("state", -1);
         if ($documentNewsId > 0 && $state >= 0) {
             $documentNewsManageData = new DocumentNewsManageData();
-            $documentChannelId = $documentNewsManageData->GetDocumentChannelID($documentNewsId);
-            $adminUserId = Control::GetManageUserId();
-            $documentChannelManageData = new DocumentChannelManageData();
-            $siteId = $documentChannelManageData->GetSiteId($documentChannelId);
-////////////////////////////////////////////////////
-///////////////判断是否有操作权限///////////////////
-////////////////////////////////////////////////////
-            $adminUserPopedomManageData = new AdminUserPopedomManageData();
-            $can = TRUE;
+            $manageUserManageData = new ManageUserManageData();
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, false);
+            $manageUserId = Control::GetManageUserId();
+            $siteId = $documentNewsManageData->GetSiteId($documentNewsId, false);
+            /**********************************************************************
+             ******************************判断是否有操作权限**********************
+             **********************************************************************/
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $can = false;
             switch ($state) {
-                case 2 :
-                    $can = $adminUserPopedomManageData->CanRework($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_REDO :
+                    $can = $manageUserAuthorityManageData->CanRework($siteId, $channelId, $manageUserId);
                     break;
-                case 11 :
-                    $can = $adminUserPopedomManageData->CanAudit1($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_FIRST_VERIFY :
+                    $can = $manageUserAuthorityManageData->CanAudit1($siteId, $channelId, $manageUserId);
                     break;
-                case 12 :
-                    $can = $adminUserPopedomManageData->CanAudit2($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_SECOND_VERIFY :
+                    $can = $manageUserAuthorityManageData->CanAudit2($siteId, $channelId, $manageUserId);
                     break;
-                case 13 :
-                    $can = $adminUserPopedomManageData->CanAudit3($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_THIRD_VERIFY :
+                    $can = $manageUserAuthorityManageData->CanAudit3($siteId, $channelId, $manageUserId);
                     break;
-                case 14 :
-                    $can = $adminUserPopedomManageData->CanAudit4($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_FINAL_VERIFY :
+                    $can = $manageUserAuthorityManageData->CanAudit4($siteId, $channelId, $manageUserId);
                     break;
-                case 20 :
-                    $can = $adminUserPopedomManageData->CanRefused($siteId, $documentChannelId, $adminUserId);
+                case DocumentNewsManageData::STATE_REFUSE :
+                    $can = $manageUserAuthorityManageData->CanRefused($siteId, $channelId, $manageUserId);
                     break;
             }
-            if (!$can) {
-                return -2;
-            }
-            //操作他人的权限
-            $documentNewsAdminUserId = $documentNewsManageData->GetAdminUserId($documentNewsId);
-            if ($documentNewsAdminUserId !== $adminUserId) { //操作人不是发布人
-                $can = $adminUserPopedomManageData->CanDoOthers($siteId, $documentChannelId, $adminUserId);
-
-                if (!$can) { //不能操作他人文档时，查询是否有可以操作同组人权限
-                    $adminUserManageData = new AdminUserManageData(); //组内可操作他人 FOR芙蓉区食安网
-                    $documentNewsAdminUserGroupId = $adminUserManageData->GetAdminUserGroupId($documentNewsAdminUserId);
-                    $adminUserGroupId = $adminUserManageData->GetAdminUserGroupID($adminUserId);
-
-                    if ($documentNewsAdminUserGroupId == $adminUserGroupId) { //是同一组时才进行判断
-                        $can = $adminUserPopedomManageData->CanDoSameGroupOthers($siteId, $documentChannelId, $adminUserId);
+            if ($can) { //有修改状态权限
+                //2 检查是否有在本频道编辑他人文档的权限
+                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
+                if ($documentNewsManageUserId !== $manageUserId) { //发稿人与当前操作人不是同一人时才判断
+                    $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $manageUserId);
+                }else{
+                    //如果发稿人与当前操作人是同一人，则不处理
+                }
+                //3 检查是否有在本频道编辑同一管理组他人文档的权限
+                if(!$can){
+                    //是否是同一管理组
+                    $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
+                    $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($manageUserId);
+                    if ($documentNewsManageUserGroupId == $nowManageUserGroupId) {
+                        //是同一组才进行判断
+                        $can = $manageUserAuthorityManageData->CanDoSameGroupOthers($siteId, $channelId, $manageUserId);
                     }
                 }
-
-                if (!$can) {
-                    return -2;
-                }
             }
-////////////////////////////////////////////////////
-////////////////////////////////////////////////////
-////////////////////////////////////////////////////
-////////////////////////////////////////////////////
-            $oldState = $documentNewsManageData->GetState($documentNewsId);
-            if (($oldState === 30 || $oldState === 20) && intval($state) === 20) { //从发布状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
+            if (!$can) {
+                return -2; //没有权限
+            }
+            ////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////
+            $oldState = $documentNewsManageData->GetState($documentNewsId, false);
+            if (($oldState === DocumentNewsManageData::STATE_PUBLISHED || $oldState === DocumentNewsManageData::STATE_REFUSE) && intval($state) === DocumentNewsManageData::STATE_REFUSE) {
+                //从发布或已否状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
                 //第1步，从FTP删除文档
-                $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId);
-                $documentNewsContent = $documentNewsManageData->GetDocumentNewsContent($documentNewsId);
+                $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
+                $documentNewsContent = $documentNewsManageData->GetDocumentNewsContent($documentNewsId, false);
                 $datePath = Format::DateStringToSimple($publishDate);
                 $publishFileName = $documentNewsId . '.html';
-                $rank = $documentChannelManageData->GetRank($documentChannelId);
+                $channelManageData = new ChannelManageData();
+                $rank = $channelManageData->GetRank($channelId, false);
                 $publishPath = parent::GetPublishPath($documentChannelId, $rank);
                 $hasftp = $documentChannelManageData->GetHasFtp($documentChannelId);
                 $ftptype = 0; //HTML和相关CSS,IMAGE
@@ -827,13 +828,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 //                        $error = strval($e);
 //                    }
 //                }
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////
             }
-//修改状态
+            //修改状态
             $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
-//加入操作log
+            //加入操作log
             $operatecontent = "DocumentNews：UpdateState id ：" . $documentNewsId . "；userid：" . Control::GetManageUserId() . "；username；" . Control::GetManageUserName() . "；oldstate：" . $oldState . "；tostate：" . $state . "；result：" . $result;
             $adminuserlogData = new AdminUserLogData();
             $adminuserlogData->Insert($operatecontent);
