@@ -197,6 +197,7 @@ class DocumentNewsManageData extends BaseManageData
      * 新增文档时修改排序号到当前频道的最大排序
      * @param int $channelId
      * @param int $documentNewsId
+     *
      */
     public function ModifySortWhenCreate($channelId, $documentNewsId) {
         $result = -1;
