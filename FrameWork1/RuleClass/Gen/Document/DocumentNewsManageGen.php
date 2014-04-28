@@ -700,10 +700,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
-     * 更新文档的排序（前台拖动时使用）
+     * 更新文档的排序（拖动时使用）
      */
     private function AsyncModifySort() {
-        $arrDocumentNewsId = Control::GetRequest("docnewssort", null);
+        $arrDocumentNewsId = Control::GetRequest("sort", null);
         $documentNewsManageData = new DocumentNewsManageData();
         $documentNewsManageData->ModifySort($arrDocumentNewsId);
     }
@@ -712,6 +712,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 修改文档状态 状态值定义在Data类中
      */
     private function AsyncModifyState() {
+        $result = -1;
         $documentNewsId = Control::GetRequest("document_news_id", 0);
         $state = Control::GetRequest("state", -1);
         if ($documentNewsId > 0 && $state >= 0) {
@@ -773,75 +774,21 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             ////////////////////////////////////////////////////
             $oldState = $documentNewsManageData->GetState($documentNewsId, false);
             if (($oldState === DocumentNewsManageData::STATE_PUBLISHED || $oldState === DocumentNewsManageData::STATE_REFUSE) && intval($state) === DocumentNewsManageData::STATE_REFUSE) {
-                //从发布或已否状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
-                //第1步，从FTP删除文档
-                $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
-                $documentNewsContent = $documentNewsManageData->GetDocumentNewsContent($documentNewsId, false);
-                $datePath = Format::DateStringToSimple($publishDate);
-                $publishFileName = $documentNewsId . '.html';
-                $channelManageData = new ChannelManageData();
-                $rank = $channelManageData->GetRank($channelId, false);
-                $publishPath = parent::GetPublishPath($documentChannelId, $rank);
-                $hasftp = $documentChannelManageData->GetHasFtp($documentChannelId);
-                $ftptype = 0; //HTML和相关CSS,IMAGE
-                $despath = $publishPath . $datePath . DIRECTORY_SEPARATOR . $publishFileName;
-
-                $isDel = parent::DelFtp($despath, $documentChannelId, $hasftp, $ftptype);
-
-//有详细页面分页的，循环删除各个分页页面
-                $arrnewscontent = explode("<!-- pagebreak -->", $documentNewsContent);
-                if (count($arrnewscontent) > 0) { //有分页的内容
-                    for ($cp = 0; $cp < count($arrnewscontent); $cp++) {
-                        $publishFileName = $documentNewsId . '_' . ($cp + 1) . '.html';
-                        $despath = "/" . $publishPath . $datePath . '/' . $publishFileName;
-                        parent::DelFtp($despath, $documentChannelId, $hasftp, $ftptype);
-                    }
+                $cancelPublishResult = parent::CancelPublishDocumentNews($documentNewsId);
+                if($cancelPublishResult){
+                    //修改状态
+                    $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
                 }
-//第2步，从FTP删除上传文件
-                $ftptype = 0; //HTML和相关CSS,IMAGE
-                $uploadFileData = new UploadFileData();
-                $tabletype = 1; //docnews
-                $arrfiles = $uploadFileData->GetList($documentNewsId, $tabletype);
-//取得相关的附件文件
-                if (count($arrfiles) > 0) {
-                    for ($i = 0; $i < count($arrfiles); $i++) {
-                        $uploadFileName = $arrfiles[$i]["UploadFileName"];
-                        $uploadFilePath = $arrfiles[$i]["UploadFilePath"];
-                        parent::DelFtp($uploadFilePath . $uploadFileName, $documentChannelId, $hasftp, $ftptype);
-                    }
-                }
-//联动发布所在频道和上级频道
-                $documentChannelGen = new DocumentChannelGen();
-                $documentChannelGen->PublishMuti($documentChannelId);
-/////////////////////////////////////////////////////////////
-////////////////xunsearch全文检索引擎 索引更新///////////////
-/////////////////////////////////////////////////////////////
-//                global $xunfile;
-//                if (file_exists($xunfile)) {
-//                    require_once $xunfile;
-//                    try {
-//                        $xs = new XS('icms');
-//                        $index = $xs->index;
-//                        $index->del($documentnewsid);
-//                        $index->flush();
-//                    } catch (XSException $e) {
-//                        $error = strval($e);
-//                    }
-//                }
-                /////////////////////////////////////////////////////////
-                /////////////////////////////////////////////////////////
-                /////////////////////////////////////////////////////////
+            }else{
+                //修改状态
+                $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
             }
-            //修改状态
-            $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
-            //加入操作log
-            $operatecontent = "DocumentNews：UpdateState id ：" . $documentNewsId . "；userid：" . Control::GetManageUserId() . "；username；" . Control::GetManageUserName() . "；oldstate：" . $oldState . "；tostate：" . $state . "；result：" . $result;
-            $adminuserlogData = new AdminUserLogData();
-            $adminuserlogData->Insert($operatecontent);
-            return $result;
-        } else {
-            return -1;
+
+            //加入操作日志
+            $operateContent = 'Modify State DocumentNews,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
+            self::CreateManageUserLog($operateContent);
         }
+        return $result;
     }
 
 }

@@ -218,11 +218,11 @@ class DocumentNewsManageData extends BaseManageData
     public function ModifySort($arrDocumentNewsId)
     {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
-            $strDocumentNewsId = join(',', $arrDocumentNewsId);
+            $strDocumentNewsId = Join(',', $arrDocumentNewsId);
             $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
             $maxSort = $this->dbOperator->GetInt($sql, null);
             $arrSql = array();
-            for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
+            for ($i = 0; $i < Count($arrDocumentNewsId); $i++) {
                 $newSort = $maxSort - $i;
                 if ($newSort < 0) {
                     $newSort = 0;
