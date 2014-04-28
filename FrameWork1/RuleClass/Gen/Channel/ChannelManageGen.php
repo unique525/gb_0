@@ -138,6 +138,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
                             Control::CloseTab();
+                        }else{
+                            Control::GoUrl($_SERVER["PHP_SELF"]);
                         }
 
                     } else {

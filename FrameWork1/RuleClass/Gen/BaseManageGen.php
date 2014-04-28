@@ -23,6 +23,14 @@ class BaseManageGen extends BaseGen
         }
     }
 
+    protected function PublishChannel(){
+
+    }
+
+    protected function PublishDocumentNews($documentNewsId, FtpQueueManageData $ftpQueueManageData, $executeFtp, $publishChannel){
+
+    }
+
 }
 
 ?>

@@ -22,10 +22,6 @@ class DocumentNewsManageData extends BaseManageData
 
 
 
-
-
-
-
     /**
      * 取得字段数据集
      * @param string $tableName 表名
@@ -194,6 +190,29 @@ class DocumentNewsManageData extends BaseManageData
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
+        return $result;
+    }
+
+    /**
+     * 新增文档时修改排序号到当前频道的最大排序
+     * @param int $channelId
+     * @param int $documentNewsId
+     */
+    public function ModifySortWhenCreate($channelId, $documentNewsId) {
+        $result = -1;
+        if($channelId >0 && $documentNewsId>0){
+
+        }
+        $dataProperty = new DataProperty();
+        $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId;";
+        $dataProperty->AddField("ChannelId", $channelId);
+        $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+        $newSort = $maxSort + 1;
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("Sort", $newSort);
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+        $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=:Sort WHERE DocumentNewsId=:DocumentNewsId;";
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 

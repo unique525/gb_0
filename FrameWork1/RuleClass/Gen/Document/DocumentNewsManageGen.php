@@ -247,30 +247,31 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 $documentNewsManageData->ModifyState($documentNewsId, $state);
                                 $executeFtp = true;
                                 $publishChannel = true;
-                                $ftpQueueData = new FtpQueueData();
-                                self::Publish($documentNewsId, $ftpQueueData, $executeFtp, $publishChannel);
+                                $ftpQueueManageData = new FtpQueueManageData();
+                                self::PublishDocumentNews($documentNewsId, $ftpQueueManageData, $executeFtp, $publishChannel);
                                 break;
                         }
                     }
-///////////////////////////
-                    Control::ShowMessage(Language::Load('document', 1));
-                    $jscode = 'self.parent.loaddocnewslist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
 
-                    if ($tab_index > 0) {
-                        $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
+                    //javascript 处理
+
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    if($closeTab == 1){
+                        Control::CloseTab();
+                    }else{
+                        Control::GoUrl($_SERVER["PHP_SELF"]);
                     }
-                    Control::RunJS($jscode);
                 } else {
                     Control::ShowMessage(Language::Load('document', 2));
                 }
             }
-//去掉s开头的标记 {s_xxx_xxx}
+            //去掉s开头的标记 {s_xxx_xxx}
             $patterns = "/\{s_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);
-//去掉c开头的标记 {c_xxx}
+            //去掉c开头的标记 {c_xxx}
             $patterns = "/\{c_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);
-//去掉r开头的标记 {r_xxx_xxx}
+            //去掉r开头的标记 {r_xxx_xxx}
             $patterns = "/\{r_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
