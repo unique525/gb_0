@@ -41,6 +41,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 生成资讯管理新增页面
+     * @return mixed|string
      */
     private function GenCreate() {
         $tempContent = Template::Load("document/document_news_deal.html","common");
@@ -286,6 +287,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 生成资讯管理修改页面
+     * @return mixed|string
      */
     private function GenModify() {
         $tempContent = Template::Load("document/document_news_deal.html", "common");
@@ -615,14 +617,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if (!$canExplore) {
             return Language::Load('document', 26);
         }
-/**
-        $siteManageData = new SiteManageData();
-        $siteUrl = $siteManageData->GetSiteUrl($siteId);
-        $_pos = stripos($siteUrl, "http://");
-        if ($_pos === false) {
-            $siteUrl = "http://" . $siteUrl;
-        }
-*/
+
         //load template
         $tempContent = Template::Load("document/document_news_list.html", "common");
 

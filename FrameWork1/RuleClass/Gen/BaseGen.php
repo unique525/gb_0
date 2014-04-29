@@ -279,7 +279,7 @@ class BaseGen
                 }
             }
         } else { //移除掉标记
-            $patterns = "/\{cfg_(.*)\<\/}/imsU";
+            $patterns = '/\{cfg_(.*)\<\/}/imsU';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
     }
@@ -308,7 +308,7 @@ class BaseGen
         $ipAddress = Control::GetIp();
         $webAgent = Control::GetOs() . " and " . Control::GetBrowser();
         $refererUrl = $_SERVER["HTTP_REFERER"];
-        $refererDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $refererUrl));
+        $refererDomain = strtolower(preg_replace('/https?:\/\/([^\:\/]+).*/i', "\\1", $refererUrl));
         $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
         $userId = Control::GetUserId();
         $userName = Control::GetUserName();

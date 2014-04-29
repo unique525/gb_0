@@ -191,6 +191,26 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
+     * 取得上级频道id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 上级频道id
+     */
+    public function GetParentChannelId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_parent_channel_id.cache_' . $channelId . '';
+            $sql = "SELECT ParentId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得上级频道名称
      * @param int $channelId 频道id
      * @param bool $withCache 是否从缓冲中取

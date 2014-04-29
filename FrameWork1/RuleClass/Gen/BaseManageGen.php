@@ -24,7 +24,61 @@ class BaseManageGen extends BaseGen
         }
     }
 
-    protected function PublishChannel(){
+    /**
+     * 发布频道
+     * @param int $channelId 频道id
+     * @return int 发布结果
+     */
+    protected function PublishChannel($channelId){
+        $result = -1;
+
+        if($channelId>0){
+            /******************** 发布方式说明 ************************
+             * 1.多节点联动发布
+             * 2.优先级为Rank越高越优先
+             * 3.取消了模板类型，用发布方式完全代替了模板类型
+             *
+            *********************************************************/
+            $channelManageData = new ChannelManageData();
+            $channelTemplateManageData = new ChannelTemplateManageData();
+            $rank = $channelManageData->GetRank($channelId, false);
+            $parentChannelId = $channelId;
+            //循环Rank进行发布
+            while($rank>=0){
+                $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($parentChannelId);
+                if(!empty($arrChannelTemplateList)){
+                    for($i = 0; $i < Count($arrChannelTemplateList); $i++){
+                        //1.取得模板数据
+                        $channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
+                        $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
+                        $publishType = $arrChannelTemplateList[$i]["PublishType"];
+                        $publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
+                        //2.根据PublishType和PublishFileName生成目标文件
+                        switch($publishType){
+
+                        }
+
+
+                        //3.替换模板内容
+
+
+                        //4.推送文件到目标路径
+                    }
+
+                }
+                $parentChannelId = $channelManageData->GetParentChannelId($parentChannelId, false);
+
+                $rank--;
+            }
+        }
+
+        return $result;
+    }
+
+
+
+
+    protected function CancelPublishChannel(){
 
     }
 
@@ -35,9 +89,10 @@ class BaseManageGen extends BaseGen
     /**
      * 取消资讯的发布（删除所有发布的文件）
      * @param int $documentNewsId 资讯id
+     * @return
      */
     protected function CancelPublishDocumentNews($documentNewsId){
-//从发布或已否状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
+        //从发布或已否状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
         //第1步，从FTP删除文档
         $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
         $documentNewsContent = $documentNewsManageData->GetDocumentNewsContent($documentNewsId, false);
