@@ -8,6 +8,27 @@
 class UploadFileManageData extends BaseManageData {
 
     /**
+     * 资讯题图1
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1 = 1;
+    /**
+     * 资讯题图2
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2 = 29;
+    /**
+     * 资讯题图3
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3 = 30;
+    /**
+     * 资讯题图,移动终端使用
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE = 23;
+    /**
+     * 资讯题图,平板电脑使用
+     */
+    const UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD = 24;
+
+    /**
      * 上传文件增加到数据表
      * @param string $uploadFileName 文件名
      * @param int $uploadFileSize 文件大小
@@ -75,6 +96,25 @@ class UploadFileManageData extends BaseManageData {
     }
 
     /**
+     * 修改文件记录“是否是批量上传的文件”字段
+     * @param int $uploadFileId 上传文件id
+     * @param int $isBatchUpload 是否是批量上传的文件
+     * @return int 返回影响的行数
+     */
+    public function ModifyIsBatchUpload($uploadFileId, $isBatchUpload) {
+        if ($uploadFileId > 0) {
+            $sql = "UPDATE ".self::TableName_UploadFile." SET IsBatchUpload=:IsBatchUpload WHERE UploadFileId=:UploadFileId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        }else{
+            return -1;
+        }
+    }
+
+    /**
      * 修改文件大小
      * @param int $uploadFileId 上传文件id
      * @param int $fileSize 文件大小(单位字节 B)
@@ -86,27 +126,6 @@ class UploadFileManageData extends BaseManageData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UploadFileSize", $fileSize);
             $dataProperty->AddField("UploadFileId", $uploadFileId);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-            return $result;
-        }else{
-            return -1;
-        }
-    }
-
-    /**
-     * 修改是否批量上传的标记
-     * @param int $tableType
-     * @param int $tableId 对应表id
-     * @param int $IsBatchUpload
-     * @return int
-     */
-    public function ModifyIsBatchUpload($tableType, $tableId, $IsBatchUpload) {
-        if ($tableType > 0 && $tableId > 0) {
-            $sql = "UPDATE ".self::TableName_UploadFile." SET IsBatchUpload=:IsBatchUpload WHERE TableType=:TableType AND TableId=:TableId;";
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("IsBatchUpload", $IsBatchUpload);
-            $dataProperty->AddField("TableType", $tableType);
-            $dataProperty->AddField("TableId", $tableId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
         }else{

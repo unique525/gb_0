@@ -7,7 +7,7 @@ img{border:0;}
 iframe{border:0; margin:0;clear:both;}
 div{margin:0 auto;}
 a{color:#52596B;text-decoration:none;}
-/*ul{list-style-type:none;width:100%;margin:0;padding:0;border:0;}*/
+ul{list-style-type:none;}
 *{padding: 0; margin: 0;}
 
 .error_content{font-family:Microsoft YaHei,Verdana,serif;border:solid 3px #C8CBD5;background:#E1E2E8;margin:20px;padding:5px;font-size:14px;width:300px;}
@@ -31,7 +31,7 @@ a{color:#52596B;text-decoration:none;}
 
 
 /* pager css */
-#pager_btn{margin-top:3px;margin-left:4px;font-size:16px;}
+#pager_btn{margin-top:5px;font-size:16px;}
 #pager_btn a{font-size:16px;}
 .pb1{float:left;padding:0 12px;height:30px;line-height:30px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
 .pb1_over{float:left;padding:0 12px;height:30px;line-height:30px;background:#CEE3E6;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
@@ -48,6 +48,9 @@ a{color:#52596B;text-decoration:none;}
 .grid{margin-top:1px;}
 .grid_title{background:#C8CBD5;height:30px;}
 .grid_item_selected{background:#FDF6C1;}
+
+
+.user_item{float:left;width:18%;margin-right:5px;margin-top:5px;padding:5px;background:#efefef;border:solid 1px #C8CBD5;}
 
 .docnewsstatebox{width:400px;display:none;z-index:100;position:absolute;border: solid 1px #7A8AA2; background: #f5f5f5;}
 .docnewsstatebox div{ float: left; line-height: 18px;padding:0; text-indent: 10px; padding-right: 10px; padding-bottom: 2px; cursor: pointer;}

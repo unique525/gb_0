@@ -7,12 +7,13 @@
  */
 class ChannelManageData extends BaseManageData
 {
+
     /**
      * 取得字段数据集
      * @param string $tableName 表名
      * @return array 字段数据集
      */
-    public function GetFields($tableName = self::TableName_DocumentNews){
+    public function GetFields($tableName = self::TableName_Channel){
         return parent::GetFields(self::TableName_Channel);
     }
 
@@ -190,6 +191,26 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
+     * 取得上级频道id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 上级频道id
+     */
+    public function GetParentChannelId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_parent_channel_id.cache_' . $channelId . '';
+            $sql = "SELECT ParentId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得上级频道名称
      * @param int $channelId 频道id
      * @param bool $withCache 是否从缓冲中取
@@ -228,6 +249,33 @@ class ChannelManageData extends BaseManageData
         }
         return $result;
     }
+
+    /**
+     * 自动发布
+     */
+    const PUBLISH_TYPE_AUTO = 1;
+
+    /**
+     * 取得频道发布方式
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 站点id
+     */
+    public function GetPublishType($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_publish_type.cache_' . $channelId . '';
+            $sql = "SELECT PublishType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
 
     /**
      * 取得频道级别

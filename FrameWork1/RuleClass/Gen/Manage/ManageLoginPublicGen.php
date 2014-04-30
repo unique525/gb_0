@@ -59,7 +59,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
 
                     if (isset($openPublicLogin) && !empty($openPublicLogin)) { //允许外网登录
                         if (isset($otpVerifyLogin) && !empty($otpVerifyLogin)) { //使用了Otp认证
-                            $arrAdminUserInfo = $manageUserManageData->GetInfo($manageUserId);
+                            $arrAdminUserInfo = $manageUserManageData->GetOne($manageUserId);
                             $otpNumber = Control::PostRequest("manage_user_otp_number", "");
                             $otpAuthorityKey = $arrAdminUserInfo["OtpAuthorityKey"];
                             $otpCurrentSuccess = $arrAdminUserInfo["OtpCurrentSuccess"];

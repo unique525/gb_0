@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 后台管理 资讯 数据类
  * @category iCMS
@@ -8,6 +7,137 @@
  */
 class DocumentNewsManageData extends BaseManageData
 {
+    /** 文档状态定义 */
+
+    /**
+     * 新稿
+     */
+    const STATE_NEW = 0;
+    /**
+     * 已编
+     */
+    const STATE_MODIFY = 1;
+    /**
+     * 返工
+     */
+    const STATE_REDO = 2;
+    /**
+     * 一审
+     */
+    const STATE_FIRST_VERIFY = 11;
+    /**
+     * 二审
+     */
+    const STATE_SECOND_VERIFY = 12;
+    /**
+     * 三审
+     */
+    const STATE_THIRD_VERIFY = 13;
+    /**
+     * 终审
+     */
+    const STATE_FINAL_VERIFY = 14;
+    /**
+     * 已否
+     */
+    const STATE_REFUSE = 20;
+    /**
+     * 已发
+     */
+    const STATE_PUBLISHED = 30;
+
+
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_DocumentNews){
+        return parent::GetFields(self::TableName_DocumentNews);
+    }
+
+
+    /**
+     * 新增资讯
+     * @param array $httpPostData $_POST数组
+     * @param string $titlePic1 题图1
+     * @param string $titlePic2 题图2
+     * @param string $titlePic3 题图3
+     * @param string $titlePicMobile 移动客户端题图
+     * @param string $titlePicPad 平板客户端题图
+     * @return int 新增的频道id
+     */
+    public function Create($httpPostData, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '', $titlePicMobile = '', $titlePicPad = '')
+    {
+        $result = -1;
+        $dataProperty = new DataProperty();
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3", "TitlePicMobile", "TitlePicPad");
+        $addFieldValues = array($titlePic1, $titlePic2, $titlePic3, $titlePicMobile, $titlePicPad);
+        if (!empty($httpPostData)) {
+            $sql = parent::GetInsertSql($httpPostData, self::TableName_DocumentNews, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改资讯
+     * @param array $httpPostData $_POST数组
+     * @param int $documentNewsId 资讯id
+     * @param string $titlePic1 题图1
+     * @param string $titlePic2 题图2
+     * @param string $titlePic3 题图3
+     * @param string $titlePicMobile 移动客户端题图
+     * @param string $titlePicPad 平板客户端题图
+     * @return int 返回影响的行数
+     */
+    public function Modify($httpPostData, $documentNewsId, $titlePic1 = "", $titlePic2 = "", $titlePic3 = "", $titlePicMobile = "", $titlePicPad = "") {
+        $dataProperty = new DataProperty();
+        $addFieldNames = array();
+        $addFieldValues = array();
+        if (!empty($titlePic1)) {
+            $addFieldNames[] = "TitlePic";
+            $addFieldValues[] = $titlePic1;
+        }
+        if (!empty($titlePic2)) {
+            $addFieldNames[] = "TitlePic2";
+            $addFieldValues[] = $titlePic2;
+        }
+        if (!empty($titlePic3)) {
+            $addFieldNames[] = "TitlePic3";
+            $addFieldValues[] = $titlePic3;
+        }
+        if (!empty($titlePicMobile)) {
+            $addFieldNames[] = "TitlePicMobile";
+            $addFieldValues[] = $titlePicMobile;
+        }
+        if (!empty($titlePicPad)) {
+            $addFieldNames[] = "TitlePicPad";
+            $addFieldValues[] = $titlePicPad;
+        }
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_DocumentNews, self::TableId_DocumentNews, $documentNewsId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 删除到回收站
+     * @param int $documentNewsId 资讯id
+     * @return int 返回影响的行数
+     */
+    public function RemoveToBin($documentNewsId){
+        $result = 0;
+        if ($documentNewsId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET `State`=100 WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 取得后台资讯列表数据集
@@ -88,11 +218,11 @@ class DocumentNewsManageData extends BaseManageData
     public function ModifySort($arrDocumentNewsId)
     {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
-            $strDocumentNewsId = join(',', $arrDocumentNewsId);
+            $strDocumentNewsId = Join(',', $arrDocumentNewsId);
             $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
             $maxSort = $this->dbOperator->GetInt($sql, null);
             $arrSql = array();
-            for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
+            for ($i = 0; $i < Count($arrDocumentNewsId); $i++) {
                 $newSort = $maxSort - $i;
                 if ($newSort < 0) {
                     $newSort = 0;
@@ -144,11 +274,47 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 新增文档时修改排序号到当前频道的最大排序
+     * @param int $channelId
+     * @param int $documentNewsId
+     * @return int 影响的记录行数
+     */
+    public function ModifySortWhenCreate($channelId, $documentNewsId) {
+        $result = -1;
+        if($channelId >0 && $documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+            $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            $newSort = $maxSort + 1;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $newSort);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=:Sort WHERE DocumentNewsId=:DocumentNewsId;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Get Info////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * 取得一条信息
+     * @param int $documentNewsId 管理员id
+     * @return array 管理员帐号信息数组
+     */
+    public function GetOne($documentNewsId)
+    {
+        $sql = "SELECT * FROM " . self::TableName_DocumentNews . " WHERE " . self::TableId_DocumentNews. "=:" . self::TableId_DocumentNews . ";";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField(self::TableId_DocumentNews, $documentNewsId);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        return $result;
+    }
 
     /**
      * 取得文档的所属频道id
@@ -163,6 +329,26 @@ class DocumentNewsManageData extends BaseManageData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
             $cacheFile = 'document_news_get_channel_id.cache_' . $documentNewsId . '';
             $sql = "SELECT ChannelId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得文档的所属站点id
+     * @param int $documentNewsId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 所属频道id
+     */
+    public function GetSiteId($documentNewsId, $withCache)
+    {
+        $result = -1;
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_site_id.cache_' . $documentNewsId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -310,17 +496,6 @@ class DocumentNewsManageData extends BaseManageData
         }
         return $result;
     }
-
-    /**
-     * 取得表的字段名称数组
-     * @param string $tableName 表名
-     * @return array 表的字段名称数组
-     */
-    public function GetFields($tableName = self::TableName_DocumentNews)
-    {
-        return $this->GetFields(self::TableName_DocumentNews);
-    }
-
 }
 
 ?>

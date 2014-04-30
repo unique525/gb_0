@@ -24,6 +24,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $channelManageGen = new ChannelManageGen();
                     $result = $channelManageGen->Gen();
                     break;
+                case "user":
+                    $userManageGen = new UserManageGen();
+                    $result = $userManageGen->Gen();
+                    break;
                 case "user_album":
                     $userAlbumManageGen = new UserAlbumManageGen();
                     $result = $userAlbumManageGen->Gen();

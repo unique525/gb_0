@@ -138,6 +138,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
                             Control::CloseTab();
+                        }else{
+                            Control::GoUrl($_SERVER["PHP_SELF"]);
                         }
 
                     } else {
@@ -155,7 +157,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);
@@ -269,7 +271,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $fieldsOfChannel = $channelManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);

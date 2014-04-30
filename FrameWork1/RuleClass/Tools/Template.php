@@ -564,9 +564,9 @@ class Template {
      * 处理详细信息子方法
      * @param string $tempContent
      * @param array $arrOne
-     * @param bool $isManage 是否后台使用，默认false，非后台使用
+     * @param bool $isForTemplate 是否后台模板系统中使用，默认false，非后台模板系统中使用
      */
-    private static function _ReplaceOne(&$tempContent, $arrOne, $isManage = false) {
+    private static function _ReplaceOne(&$tempContent, $arrOne, $isForTemplate = false) {
         if (!empty($arrOne)) {
             foreach ($arrOne as $columnName => $columnValue) {
 
@@ -614,7 +614,7 @@ class Template {
 
 
                 //处理常规的值
-                if ($isManage) {//是否是后台系统使用
+                if ($isForTemplate) {//是否是后台模板系统使用
                     $preManage = "b_";
                 } else {
                     $preManage = "";
