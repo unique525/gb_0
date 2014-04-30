@@ -136,7 +136,7 @@ function DocumentNewsChangeState(documentNewsId, state) {
 }
 
 function _SetDocumentNewsState(documentNewsId, state) {
-    $.post("/default.php?secu=manage&mod=documentnews&m=async_modifystate&documentnewsid=" + documentNewsId + "&state=" + state, {
+    $.post("/default.php?secu=manage&mod=document_news&m=async_modify_state&documentnewsid=" + documentNewsId + "&state=" + state, {
         resultbox: $(this).html()
     }, function(xml) {
         if (parseInt(xml) > 0) {

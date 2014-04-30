@@ -86,6 +86,29 @@ $(function () {
         window.G_TabUrl = '/default.php?secu=manage&mod=channel&m=create&parent_id='+window.G_SelectedChannelId;
         addTab();
     });
+    var btnRightPubChannel = $("#btn_right_pub_channel");
+    btnRightPubChannel.click(function () {
+        $("#dialog_box").dialog({
+            height: 140,
+            modal: true
+        });
+        var dialogContent = $("#dialog_content");
+        dialogContent.html("开始发布");
+
+        $.post("/default.php?secu=manage&mod=channel&m=publish&channel_id=" + window.G_SelectedChannelId + "", {
+            resultbox: $(this).html()
+        }, function(result) {
+            dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
+            if (parseInt(result) > 0) {
+
+            }else if (parseInt(result) == -2) {
+
+            }else {
+
+            }
+        });
+
+    });
 
 
 });

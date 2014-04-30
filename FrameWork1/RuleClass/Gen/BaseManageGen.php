@@ -42,10 +42,10 @@ class BaseManageGen extends BaseGen
             $channelManageData = new ChannelManageData();
             $channelTemplateManageData = new ChannelTemplateManageData();
             $rank = $channelManageData->GetRank($channelId, false);
-            $parentChannelId = $channelId;
+            $nowChannelId = $channelId;
             //循环Rank进行发布
             while($rank>=0){
-                $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($parentChannelId);
+                $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($nowChannelId);
                 if(!empty($arrChannelTemplateList)){
                     for($i = 0; $i < Count($arrChannelTemplateList); $i++){
                         //1.取得模板数据
@@ -55,18 +55,26 @@ class BaseManageGen extends BaseGen
                         $publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
                         //2.根据PublishType和PublishFileName生成目标文件
                         switch($publishType){
-
+                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
+                                //联动发布，只发布在本频道下
+                                self::ReplaceAndTransfer($nowChannelId);
+                                break;
+                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
+                                self::ReplaceAndTransfer($channelId);
+                                break;
+                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
+                                self::ReplaceAndTransfer($nowChannelId);
+                                self::ReplaceAndTransfer($channelId);
+                                break;
+                            case ChannelTemplateManageData::PUBLISH_TYPE_ONLY_SELF:
+                                self::ReplaceAndTransfer($channelId);
+                                break;
                         }
 
-
-                        //3.替换模板内容
-
-
-                        //4.推送文件到目标路径
                     }
 
                 }
-                $parentChannelId = $channelManageData->GetParentChannelId($parentChannelId, false);
+                $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
 
                 $rank--;
             }
@@ -75,7 +83,16 @@ class BaseManageGen extends BaseGen
         return $result;
     }
 
+    /**
+     * 替换和传输内容到目标路径
+     * @param int $channelId 频道id
+     */
+    private function ReplaceAndTransfer($channelId){
+        //1.替换模板内容
 
+
+        //2.推送文件到目标路径
+    }
 
 
     protected function CancelPublishChannel(){

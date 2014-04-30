@@ -25,6 +25,10 @@
         <script type="text/javascript" src="/system_js/manage/default.js"></script>
     </head>
     <body>
+    <div id="dialog_box" title="提示" style="display:none;">
+        <div id="dialog_content">
+        </div>
+    </div>
         <div id="div_top">
             <div class="top_left"><img class="system_image" src="/system_template/{template_name}/images/manage/top4.jpg" alt="" /><img class="system_image" src="/system_template/{template_name}/images/manage/top5.jpg" alt="" /></div>
             <div class="top_right">字体：<span id="set_font14">大</span> <span id="set_font12">小</span> | 欢迎您：<a title="您的IP：{client_ip_address}" href="#">{manage_user_name}</a> <span id="btn_modify_admin_user_pass" style="cursor:pointer">[修改密码]</span> <a href="{relative_path}/default.php?mod=manage&a=logout">[退出]</a></div>

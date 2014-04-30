@@ -25,6 +25,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
+            case "publish":
+                $result = self::Publish();
+                break;
             case "list_for_manage_left":
                 $result = self::GenListForManageLeft();
                 break;
@@ -276,6 +279,19 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         }
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+    /**
+     * 发布频道
+     * @return int 返回发布结果
+     */
+    private function Publish(){
+        $result = -1;
+        $channelId = Control::GetRequest("channel_id", -1);
+        if($channelId>0){
+            $result = parent::PublishChannel($channelId);
+        }
+        return $result;
     }
 
     /**
