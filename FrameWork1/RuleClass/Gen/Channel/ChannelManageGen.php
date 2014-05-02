@@ -42,13 +42,13 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 模板内容页面
      */
     private function GenCreate() {
-        $tempContent = Template::Load("channel/channel_deal.html", "common");
+        $tempContent = "";
         $parentId = Control::GetRequest("parent_id", 0);
 
         $manageUserId = Control::GetManageUserId();
 
         if ($parentId >0 && $manageUserId > 0) {
-
+            $tempContent = Template::Load("channel/channel_deal.html", "common");
             parent::ReplaceFirst($tempContent);
             $channelManageData = new ChannelManageData();
             $parentName = $channelManageData->GetChannelName($parentId, false);
@@ -162,8 +162,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
+            parent::ReplaceEnd($tempContent);
         }
-        parent::ReplaceEnd($tempContent);
+
         return $tempContent;
     }
 

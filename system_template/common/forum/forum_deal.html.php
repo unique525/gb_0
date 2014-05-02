@@ -122,7 +122,7 @@
 </table>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td class="spe_line" width="20%" height="30" align="right">上级频道：</td>
+        <td class="spe_line" width="20%" height="30" align="right">上级版块：</td>
         <td class="spe_line">{ParentName}
             <input name="f_ParentId" type="hidden" value="{ParentId}"/>
             <input name="f_SiteId" type="hidden" value="{SiteId}"/>
@@ -131,33 +131,37 @@
         </td>
     </tr>
     <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ChannelName">频道名称：</label></td>
-        <td class="spe_line"><input name="f_ChannelName" id="f_ChannelName" value="{ChannelName}" type="text" class="input_box" style="width:300px;"/></td>
+        <td class="spe_line" height="30" align="right"><label for="f_ForumName">版块名称：</label></td>
+        <td class="spe_line"><input name="f_ForumName" id="f_ForumName" value="{ForumName}" type="text" class="input_box" style="width:300px;"/></td>
     </tr>
     <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_CreateDate">创建时间：</label></td>
-        <td class="spe_line"><input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:80px;"/></td>
-    </tr>
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ChannelType">频道类型：</label></td>
+        <td class="spe_line" height="30" align="right"><label for="f_ForumType">版块类型：</label></td>
         <td class="spe_line">
-            <select id="f_ChannelType" name="f_ChannelType">
-                <option value="1">新闻信息类</option>
-                <option value="2">咨询答复类</option>
-                <option value="3">图片轮换类</option>
-                <option value="4">产品类</option>
-                <option value="5">频道结合产品类</option>
-                <option value="6">活动类</option>
-                <option value="7">投票类</option>
-                <option value="8">自定义页面类</option>
-                <option value="9">友情链接类</option>
-                <option value="10">活动表单类</option>
-                <option value="11">文字直播类</option>
-                <option value="12">投票调查类</option>
-                <option value="0">站点首页类</option>
-                <option value="50">外部接口类</option>
+            <select id="f_ForumType" name="f_ForumType">
+                <option value="0">只允许会员发帖和回复</option>
+                <option value="5">只允许会员发帖、但不能回复</option>
+                <option value="10">允许会员、游客发帖和回复</option>
+                <option value="11">允许会员、游客发帖，但不能回复</option>
+                <option value="12">允许会员、游客回复，但不能发帖</option>
             </select>
-            {s_ChannelType}
+            {s_ForumType}
+        </td>
+    </tr>
+    <tr>
+        <td class="spe_line" height="30" align="right"><label for="f_ForumAccess">会员访问限制：</label></td>
+        <td class="spe_line">
+            <select id="f_ForumAccess" name="f_ForumAccess">
+                <option value="0">允许会员正常访问</option>
+                <option value="10">禁止会员访问(管理员除外)</option>
+                <option value="20">允许特定会员访问</option>
+                <option value="21">允许特定身份的会员访问</option>
+                <option value="22">允许发帖数大于设定数量的会员访问</option>
+                <option value="23">允许积分数大于设定数量的会员访问</option>
+                <option value="24">允许金钱数大于设定数量的会员访问</option>
+                <option value="25">允许魅力数大于设定数量的会员访问</option>
+                <option value="26">允许经验数大于设定数量的会员访问</option>
+            </select>
+            {s_ForumType}
         </td>
     </tr>
     <tr>

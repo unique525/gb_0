@@ -33,6 +33,30 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
+     * 新增频道
+     * @return string 模板内容页面
+     */
+    private function GenCreate(){
+        $tempContent = "";
+        $siteId = Control::GetRequest("site_id", 0);
+
+        if($siteId>0){
+            $tempContent = Template::Load("forum/forum_deal.html", "common");
+            parent::ReplaceFirst($tempContent);
+
+
+
+
+
+            parent::ReplaceEnd($tempContent);
+        }
+
+
+        return $tempContent;
+    }
+
+
+    /**
      * 后台版块列表
      */
     private function GenList() {
