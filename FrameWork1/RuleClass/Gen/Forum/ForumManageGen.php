@@ -40,9 +40,8 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($siteId > 0) {
 
-            $tempContent = Template::Load("forum/forum_manage_list.html", "common");
+            $tempContent = Template::Load("forum/forum_list.html", "common");
             parent::ReplaceFirst($tempContent);
-
 
             $forumManageData = new ForumManageData();
             $forumRank = 0;
@@ -54,8 +53,8 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
             $resultTemplate = "";
             if (count($arrRankOneList) > 0) {
 
-                $forumManageListOneTemplate = Template::Load("forum/forum_manage_list_one.html", "common");
-                $forumManageListTwoTemplate = Template::Load("forum/forum_manage_list_two.html", "common");
+                $forumManageListOneTemplate = Template::Load("forum/forum_list_one.html", "common");
+                $forumManageListTwoTemplate = Template::Load("forum/forum_list_two.html", "common");
 
 
 
@@ -112,11 +111,10 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
      * 修改论坛状态
      */
     private function AsyncModifyState() {
-        $forumId = Control::GetRequest("forumid", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
         $state = Control::GetRequest("state", -1);
         $result = -1;
         if ($forumId > 0 && $state >= 0) {
-
             $forumManageData = new ForumManageData();
             $result = $forumManageData->ModifyState($forumId, $state);
         }

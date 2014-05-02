@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
@@ -112,13 +112,11 @@
 <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}" method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-
     <tr>
         <td class="spe_line" height="40" align="right">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
-
 </table>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -169,7 +167,6 @@
 </table>
 <div class="type_0">
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-
         <tr>
             <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishType">发布方式：</label></td>
             <td class="spe_line">
@@ -327,7 +324,6 @@
         </td>
     </tr>
 </table>
-
 </div>
 </form>
 </body>

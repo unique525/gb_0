@@ -10,6 +10,7 @@ window.G_NowPageIndex = 1;
 window.G_zTree = null;
 window.G_RightMenu = null;
 window.G_NowSiteId = 0;
+window.G_NowSiteName = "";
 window.G_Tabs = null;
 window.G_TabUrl = "";
 window.G_TabTitle = "";

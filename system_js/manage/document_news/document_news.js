@@ -13,9 +13,22 @@ $(function() {
         }
     });
 
-    var btnEdit = $(".btn_edit");
-    btnEdit.css("cursor", "pointer");
-    btnEdit.click(function(event) {
+    var btnCreate = $("#btn_create");
+    btnCreate.css("cursor", "pointer");
+    btnCreate.click(function(event) {
+        event.preventDefault();
+        var pageIndex = parseInt(Request["p"]);
+        if (pageIndex <= 0) {
+            pageIndex = 1;
+        }
+        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
+        parent.G_TabTitle = parent.G_SelectedChannelName + '-新增文档';
+        parent.addTab();
+    });
+
+    var btnModify = $(".btn_modify");
+    btnModify.css("cursor", "pointer");
+    btnModify.click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);

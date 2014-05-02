@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
@@ -47,7 +47,7 @@
             <td style="width: 40px;"></td>
         </tr>
     </table>
-    <ul id="sort_grid" style="list-style: none;">
+    <ul id="sort_grid">
         <icms_list id="document_news_list" type="list">
             <item>
                 <![CDATA[
@@ -55,7 +55,7 @@
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_DocumentNewsId}"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_edit" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_DocumentNewsId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_DocumentNewsId}" alt="编辑"/></td>
                             <td class="spe_line2" style="width:40px;text-align:right;"><span class="span_state" id="{f_DocumentNewsId}">{f_state}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:left;"><img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/></td>
                             <td class="spe_line2" style="width:20px;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_DocumentNewsId}" alt="预览" title="预览文档"/></td>

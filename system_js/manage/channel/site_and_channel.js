@@ -116,6 +116,7 @@ $(function () {
 function LoadSite(siteId, siteName, siteUrl) {
 
     window.G_NowSiteId = parseInt(siteId);
+    window.G_NowSiteName = siteName;
     window.G_SelectedChannelId = 0;
 
     if (window.G_NowSiteId > 0) {

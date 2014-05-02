@@ -1,14 +1,32 @@
 <script type="text/javascript">
     $(function() {        
-        $("#forumconfig").click(function() {
-            G_TabTitle = $(this).html();
-            G_TabUrl = '/default.php?secu=manage&mod=site_config&a=set&type=1&siteid=' + G_NowSiteId;
-            addTab();
+        $("#forum_config").click(function() {
+            if(window.G_NowSiteId>0){
+                window.G_TabTitle = $(this).html();
+                window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set_forum&site_id=' + window.G_NowSiteId;
+                addTab();
+            }else{
+                $("#dialog_box").dialog({
+                    height: 140,
+                    modal: true
+                });
+                var dialogContent = $("#dialog_content");
+                dialogContent.html("站点参数不正确");
+            }
         });
-        $("#forumlist").click(function() {
-            G_TabTitle = $(this).html();
-            G_TabUrl = '/default.php?secu=manage&mod=forum&a=list&siteid=' + G_NowSiteId;
+        $("#forum_list").click(function() {
+            if(window.G_NowSiteId>0){
+            window.G_TabTitle = $(this).html();
+            window.G_TabUrl = '/default.php?secu=manage&mod=forum&m=list&site_id=' + window.G_NowSiteId;
             addTab();
+            }else{
+                $("#dialog_box").dialog({
+                    height: 140,
+                    modal: true
+                });
+                var dialogContent = $("#dialog_content");
+                dialogContent.html("站点参数不正确");
+            }
         });
     });
 </script>
