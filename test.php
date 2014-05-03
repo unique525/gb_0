@@ -1,5 +1,8 @@
 <?php
+phpinfo();
 
+die();
+Gen("ddd");
 function Gen($sessionName) {
     //将生成的验证码写入session，备验证页面使用
     Session_start();
@@ -9,8 +12,14 @@ function Gen($sessionName) {
         $_SESSION[$sessionName] = $num;
         //创建图片，定义颜色值
 
+        if(function_exists("ImageCreate")){
+            echo 111;
+        }else{
+            echo 222;
+        }
+        die();
         srand((double) microtime() * 1000000);
-        $im = imagecreate(60, 20);
+        $im = ImageCreate(60, 20);
         $black = ImageColorAllocate($im, 0, 0, 0);
         $gray = ImageColorAllocate($im, 245, 245, 245);
         imagefill($im, 0, 0, $gray);
@@ -35,10 +44,10 @@ function Gen($sessionName) {
             imagestring($im, 5, $strNum, $strPos, substr($num, $i, 1), $black);
             $strNum+=rand(8, 12);
         }
-        //echo 11;
-        header("Content-type: image/PNG");
-        ImagePNG($im);
-        ImageDestroy($im);
+        echo 11;
+        //header("Content-type: image/PNG");
+        //ImagePNG($im);
+        //ImageDestroy($im);
     }
 }
 ?>

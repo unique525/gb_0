@@ -8,10 +8,6 @@
 <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/system_js/common.js"></script>
 <script type="text/javascript" src="/system_js/manage/login.js"></script>
-    <style type="text/css">
-        body { font-family: Microsoft YaHei,Verdana,serif; background:#2F6368; }
-        input { font-family: Microsoft YaHei,Verdana,serif;border:none;border:0;}
-    </style>
 </head>
 <body onkeydown="submitKeyClick('btn_sub');" style="">
     <form id="login_form" action="/default.php?mod=manage&a=login" method="post">
