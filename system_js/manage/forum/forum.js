@@ -1,9 +1,8 @@
 $(function() {
     $(document).tooltip();
 
-    $("#selectall").click(function(event) {
+    $("#btn_select_all").click(function(event) {
         event.preventDefault();
-        //alert($("[name='docinput']").prop("checked"));
         if ($("[name='docinput']").prop("checked")) {
             $("[name='docinput']").prop("checked", false);//取消全选
         } else {
@@ -15,10 +14,11 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&site_id=' + parent.G_NowSiteId;
-        parent.G_TabTitle = parent.G_NowSiteName + '-新增论坛';
+        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&rank=0&site_id=' + parent.G_NowSiteId;
+        parent.G_TabTitle = parent.G_NowSiteName + '-新增论坛版块分区';
         parent.addTab();
     });
+
 
     $(".span_state").each(function(){
         $(this).text(FormatState($(this).text()));

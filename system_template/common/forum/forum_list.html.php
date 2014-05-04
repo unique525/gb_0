@@ -11,7 +11,7 @@
                 <tr>
                     <td id="td_main_btn">
                         <input id="btn_create" class="btn2" value="新建版块分区" title="新建版块分区，版块分区下需要建立二级版块才能正常使用" type="button"/>
-                    </td>
+                        </td>
                 </tr>
             </table>
             <table class="grid" width="100%" cellpadding="0" cellspacing="0">

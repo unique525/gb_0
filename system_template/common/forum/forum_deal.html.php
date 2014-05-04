@@ -10,7 +10,18 @@
         <!--
         var editor;
         $(function () {
-            editor = $('#f_ForumInfo').xheditor({tools:'full'});
+
+            var rank = parseInt(Request["rank"]);
+            if(rank == 0){
+                $(".rank_1").css("display", "none");
+                $(".rank_0").css("display", "");
+            }else{
+                $(".rank_1").css("display", "");
+                $(".rank_0").css("display", "none");
+            }
+
+
+            editor = $('#f_ForumInfo').xheditor();
 
             $("#preview_title_pic1").click(function () {
                 var imgTitlePic1 = "{TitlePic1}";
@@ -84,8 +95,8 @@
 
 </table>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td class="spe_line" width="20%" height="30" align="right">上级版块：</td>
+    <tr class="rank_1">
+        <td class="spe_line" height="30" align="right">上级版块：</td>
         <td class="spe_line">{ParentName}
             <input name="f_ParentId" type="hidden" value="{ParentId}"/>
             <input name="f_SiteId" type="hidden" value="{SiteId}"/>
@@ -94,10 +105,10 @@
         </td>
     </tr>
     <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ForumName">版块名称：</label></td>
+        <td class="spe_line" width="20%" height="30" align="right"><label for="f_ForumName">版块名称：</label></td>
         <td class="spe_line"><input name="f_ForumName" id="f_ForumName" value="{ForumName}" type="text" class="input_box" style="width:300px;"/></td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumType">版块类型：</label></td>
         <td class="spe_line">
             <select id="f_ForumType" name="f_ForumType">
@@ -110,7 +121,7 @@
             {s_ForumType}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumAccess">会员访问限制：</label></td>
         <td class="spe_line">
             <select id="f_ForumAccess" name="f_ForumAccess">
@@ -127,7 +138,7 @@
             {s_ForumAccess}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumGuestAccess">游客访问限制：</label></td>
         <td class="spe_line">
             <select id="f_ForumGuestAccess" name="f_ForumGuestAccess">
@@ -137,7 +148,7 @@
             {s_ForumGuestAccess}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_0">
         <td class="spe_line" height="30" align="right"><label for="f_ForumMode">显示模式：</label></td>
         <td class="spe_line">
             <select id="f_ForumMode" name="f_ForumMode">
@@ -150,7 +161,7 @@
             {s_ForumMode}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumAuditType">发帖审核设置：</label></td>
         <td class="spe_line">
             <select id="f_ForumAuditType" name="f_ForumAuditType">
@@ -167,37 +178,37 @@
             <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number"/>
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="file_forum_pic_1">版块图片1：</label></td>
         <td class="spe_line">
             <input id="file_forum_pic_1" name="file_forum_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_forum_pic1" style="cursor:pointer">[预览]</span>
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="file_forum_pic_2">版块图片2：</label></td>
         <td class="spe_line">
             <input id="file_forum_pic_2" name="file_forum_pic_2" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_forum_pic2" style="cursor:pointer">[预览]</span>
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumInfo">版块介绍：</label></td>
         <td class="spe_line">
             <textarea cols="30" rows="30" id="f_ForumInfo" name="f_ForumInfo" style="width:80%;height:150px;">{ForumInfo}</textarea>
         </td>
     </tr>
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ForumRule">版块介绍：</label></td>
+    <tr class="rank_1">
+        <td class="spe_line" height="30" align="right"><label for="f_ForumRule">版块置顶信息：</label></td>
         <td class="spe_line">
             <textarea cols="30" rows="30" id="f_ForumRule" name="f_ForumRule" style="width:80%;height:150px;">{ForumRule}</textarea>
         </td>
     </tr>
-    <tr>
+    <tr class="rank_0">
         <td class="spe_line" height="30" align="right"><label for="f_ForumAdContent">版块广告代码：</label></td>
         <td class="spe_line">
             <textarea cols="30" rows="30" id="f_ForumAdContent" name="f_ForumAdContent" style="width:80%;height:150px;">{ForumAdContent}</textarea>
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_AutoOpTopic">发帖特殊模式：</label></td>
         <td class="spe_line">
             <select id="f_AutoOpTopic" name="f_AutoOpTopic">
@@ -207,7 +218,7 @@
             {s_AutoOpTopic}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_AutoAddTopicTitlePre">自动添加主题前缀：</label></td>
         <td class="spe_line">
             <select id="f_AutoAddTopicTitlePre" name="f_AutoAddTopicTitlePre">
@@ -217,7 +228,7 @@
             {s_AutoAddTopicTitlePre}
         </td>
     </tr>
-    <tr>
+    <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_CloseUpload">关闭上传功能：</label></td>
         <td class="spe_line">
             <select id="f_CloseUpload" name="f_CloseUpload">

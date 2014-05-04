@@ -42,6 +42,8 @@
  * @property int $ForumPostCount
  * @property int $ForumTopicPageSize
  * @property int $ForumPostPageSize
+ * @property int ForumPicMobileWidth
+ * @property int ForumPicPadWidth
  * @property int $UserCount
  * @property int $UserNameLength
  * @property int $UserDefaultState
@@ -73,12 +75,8 @@
  * @property string $SmsThirdUserName
  * @property string $SmsThirdPassword
  * @property string $UserSmsMessageContent
- * @property int $DocumentNewsTitlePic1WidthForMobile
- * @property int $DocumentNewsTitlePic1WidthForPad
- * @property int $DocumentNewsTitlePic2WidthForMobile
- * @property int $DocumentNewsTitlePic2WidthForPad
- * @property int $DocumentNewsTitlePic3WidthForMobile
- * @property int $DocumentNewsTitlePic3WidthForPad
+ * @property int $DocumentNewsTitlePicMobileWidth
+ * @property int $DocumentNewsTitlePicPadWidth
  * @author zhangchi
  */
 class SiteConfigManageData extends BaseManageData {
@@ -125,6 +123,8 @@ class SiteConfigManageData extends BaseManageData {
         "UserCount",
         "NewRegisterUserId",
         "ForumPicShowMode",
+        "ForumPicMobileWidth",
+        "ForumPicPadWidth",
         "OpenFtpLog",
         "UserAlbumThumbWidth",
         "UserDefaultUserGroupIdForRole",
@@ -132,12 +132,8 @@ class SiteConfigManageData extends BaseManageData {
         "UserDefaultState",
         "UserRecDefaultState",
         "MailSmtpPort",
-        "DocumentNewsTitlePic1WidthForMobile",
-        "DocumentNewsTitlePic1WidthForPad",
-        "DocumentNewsTitlePic2WidthForMobile",
-        "DocumentNewsTitlePic2WidthForPad",
-        "DocumentNewsTitlePic3WidthForMobile",
-        "DocumentNewsTitlePic3WidthForPad"
+        "DocumentNewsTitlePicMobileWidth",
+        "DocumentNewsTitlePicPadWidth"
     );
     /**
      * @var array number
@@ -173,49 +169,17 @@ class SiteConfigManageData extends BaseManageData {
     /**
      * @return mixed
      */
-    public function getDocumentNewsTitlePic1WidthForMobile()
+    public function getDocumentNewsTitlePicMobileWidth()
     {
-        return $this->DocumentNewsTitlePic1WidthForMobile;
+        return $this->DocumentNewsTitlePicMobileWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getDocumentNewsTitlePic1WidthForPad()
+    public function getDocumentNewsTitlePicPadWidth()
     {
-        return $this->DocumentNewsTitlePic1WidthForPad;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePic2WidthForMobile()
-    {
-        return $this->DocumentNewsTitlePic2WidthForMobile;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePic2WidthForPad()
-    {
-        return $this->DocumentNewsTitlePic2WidthForPad;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePic3WidthForMobile()
-    {
-        return $this->DocumentNewsTitlePic3WidthForMobile;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePic3WidthForPad()
-    {
-        return $this->DocumentNewsTitlePic3WidthForPad;
+        return $this->DocumentNewsTitlePicPadWidth;
     }
 
     /**
@@ -464,6 +428,22 @@ class SiteConfigManageData extends BaseManageData {
     public function getForumYesterdayPostCount()
     {
         return $this->ForumYesterdayPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicMobileWidth()
+    {
+        return $this->ForumPicMobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicPadWidth()
+    {
+        return $this->ForumPicPadWidth;
     }
 
     /**
@@ -819,6 +799,8 @@ class SiteConfigManageData extends BaseManageData {
     private $ForumCssDefault = ''; //论坛默认的样式文件
     private $ForumCssDefaultWidth = ''; //论坛默认的样式宽度文件
     private $ForumCssDefaultFontSize = ''; //论坛默认的样式字体大小文件
+    private $ForumPicMobileWidth = 0; //论坛图标 移动客户端用
+    private $ForumPicPadWidth = 0; //论坛图标 平板电脑用
     /////////////////////////////////////////////////////////////////
     ////////////////////////支付相关/////////////////////////////////
     /////////////////////////////////////////////////////////////////
@@ -841,12 +823,8 @@ class SiteConfigManageData extends BaseManageData {
     ////////////////////////资讯/////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
-    private $DocumentNewsTitlePic1WidthForMobile = 0; //为适配手机客户端，资讯题图1的同比缩小宽度值
-    private $DocumentNewsTitlePic1WidthForPad = 0; //为适配平板客户端，资讯题图1的同比缩小宽度值
-    private $DocumentNewsTitlePic2WidthForMobile = 0; //为适配手机客户端，资讯题图2的同比缩小宽度值
-    private $DocumentNewsTitlePic2WidthForPad = 0; //为适配平板客户端，资讯题图2的同比缩小宽度值
-    private $DocumentNewsTitlePic3WidthForMobile = 0; //为适配手机客户端，资讯题图3的同比缩小宽度值
-    private $DocumentNewsTitlePic3WidthForPad = 0; //为适配平板客户端，资讯题图3的同比缩小宽度值
+    private $DocumentNewsTitlePicMobileWidth = 0; //为适配手机客户端，资讯题图的同比缩小宽度值
+    private $DocumentNewsTitlePicPadWidth = 0; //为适配平板客户端，资讯题图的同比缩小宽度值
 
 
     /**

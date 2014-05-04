@@ -411,7 +411,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $titlePicPadUploadFileId = -1;
                 $uploadFileManageData = new UploadFileManageData();
                 //title pic1
-                $fileElementName = "title_pic_1_upload";
+                $fileElementName = "file_title_pic_1";
                 $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
                 $titlePic1UploadFileId = 0;
                 $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
@@ -424,15 +424,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
                     if (strlen($titlePic1Path) > 5) {
                         $siteConfigManageData = new SiteConfigManageData($siteId);
-                        $documentNewsTitleMobileWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForMobile;
-                        $documentNewsTitlePadWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForPad;
+                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForMobile;
+                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForPad;
 
-                        $tableId = $channelId;
+                        $tableId = 0;
                         $userId = 0;
 
-                        if ($documentNewsTitleMobileWidth > 0) {
+                        if ($documentNewsTitlePicMobileWidth > 0) {
                             $thumbFileName = "mobile";
-                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitleMobileWidth,0,$thumbFileName);
+                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
                             sleep(1);
                             $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
                             $newFileName = FileObject::GetName($titlePicMobile);
@@ -455,9 +455,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             );
                         }
 
-                        if ($documentNewsTitlePadWidth > 0) {
+                        if ($documentNewsTitlePicPadWidth > 0) {
                             $thumbFileName = "pad";
-                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePadWidth,0,$thumbFileName);
+                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
                             sleep(1);
                             $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
                             $newFileName = FileObject::GetName($titlePicPad);
@@ -483,7 +483,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
 
                 //title pic2
-                $fileElementName = "title_pic_2_upload";
+                $fileElementName = "file_title_pic_2";
                 $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
                 $titlePic2UploadFileId = 0;
                 $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
@@ -495,7 +495,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
 
                 //title pic3
-                $fileElementName = "title_pic_3_upload";
+                $fileElementName = "file_title_pic_3";
                 $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
                 $titlePic3UploadFileId = 0;
                 $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
