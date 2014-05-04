@@ -10,12 +10,7 @@
         <!--
         var editor;
         $(function () {
-            editor = $('#f_ChannelIntro').xheditor();
-            $("#f_CreateDate").datepicker({
-                dateFormat: 'yy-mm-dd',
-                numberOfMonths: 1,
-                showButtonPanel: true
-            });
+            editor = $('#f_ForumInfo').xheditor({tools:'full'});
 
             $("#preview_title_pic1").click(function () {
                 var imgTitlePic1 = "{TitlePic1}";
@@ -187,19 +182,19 @@
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_ForumInfo">版块介绍：</label></td>
         <td class="spe_line">
-            <textarea cols="30" rows="30" id="f_ForumInfo" name="f_ForumInfo" style="width:70%;height:150px;">{ForumInfo}</textarea>
+            <textarea cols="30" rows="30" id="f_ForumInfo" name="f_ForumInfo" style="width:80%;height:150px;">{ForumInfo}</textarea>
         </td>
     </tr>
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_ForumRule">版块介绍：</label></td>
         <td class="spe_line">
-            <textarea cols="30" rows="30" id="f_ForumRule" name="f_ForumRule" style="width:70%;height:150px;">{ForumRule}</textarea>
+            <textarea cols="30" rows="30" id="f_ForumRule" name="f_ForumRule" style="width:80%;height:150px;">{ForumRule}</textarea>
         </td>
     </tr>
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_ForumAdContent">版块广告代码：</label></td>
         <td class="spe_line">
-            <textarea cols="30" rows="30" id="f_ForumAdContent" name="f_ForumAdContent" style="width:70%;height:150px;">{ForumAdContent}</textarea>
+            <textarea cols="30" rows="30" id="f_ForumAdContent" name="f_ForumAdContent" style="width:80%;height:150px;">{ForumAdContent}</textarea>
         </td>
     </tr>
     <tr>

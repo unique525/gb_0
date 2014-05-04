@@ -26,7 +26,7 @@ function addTab() {
     window.G_Tabs.find(".ui-tabs-nav").append(li);
     window.G_Tabs.append('<'+'div id="' + id + '"><'+'p>' + tabContent + '<'+'/p><'+'/div>');
     window.G_Tabs.tabs("refresh");
-    window.G_Tabs.tabs("option", "active", window.G_TabCounter - 1);
+    window.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
     window.G_TabCounter ++;
 }
 /**
@@ -34,11 +34,13 @@ function addTab() {
  */
 function closeTab(){
     var nowTabCounter = parent.G_TabCounter-1;
-    var panelId = "tabs-"+nowTabCounter;
     parent.$("#tabs_title-"+nowTabCounter).closest("li").remove();
-    parent.$("#" + panelId).remove();
+    //var panelId = "tabs-"+nowTabCounter;
+    //parent.$("#" + panelId).remove();
     parent.G_Tabs.tabs("refresh");
+    parent.G_Tabs.tabs("option", "active", nowTabCounter-1);
     parent.G_TabCounter--;
+
 }
 
 

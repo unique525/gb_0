@@ -128,10 +128,33 @@ class BaseData
      * 快捷内容录入 数据表自增字段名
      */
     const TableId_DocumentQuickContent = "DocumentQuickContentId";
+    /**
+     * 论坛版块 数据表名
+     */
     const TableName_Forum = "cst_forum";
+    /**
+     * 论坛版块 数据表自增字段名
+     */
     const TableId_Forum = "ForumId";
+    /**
+     * 论坛主题 数据表名
+     */
     const TableName_ForumTopic = "cst_forum_topic";
+    /**
+     * 论坛主题 数据表自增字段名
+     */
     const TableId_ForumTopic = "ForumTopicId";
+    /**
+     * 论坛帖子 数据表名
+     */
+    const TableName_ForumPost = "cst_forum_post";
+    /**
+     * 论坛帖子 数据表自增字段名
+     */
+    const TableId_ForumPost = "ForumPostId";
+
+
+
     /**
      * 会员 数据表名
      */

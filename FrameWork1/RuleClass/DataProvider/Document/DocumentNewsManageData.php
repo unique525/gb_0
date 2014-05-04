@@ -65,7 +65,7 @@ class DocumentNewsManageData extends BaseManageData
      * @param string $titlePic3 题图3
      * @param string $titlePicMobile 移动客户端题图
      * @param string $titlePicPad 平板客户端题图
-     * @return int 新增的频道id
+     * @return int 新增的资讯id
      */
     public function Create($httpPostData, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '', $titlePicMobile = '', $titlePicPad = '')
     {
@@ -99,7 +99,7 @@ class DocumentNewsManageData extends BaseManageData
         $addFieldNames = array();
         $addFieldValues = array();
         if (!empty($titlePic1)) {
-            $addFieldNames[] = "TitlePic";
+            $addFieldNames[] = "TitlePic1";
             $addFieldValues[] = $titlePic1;
         }
         if (!empty($titlePic2)) {

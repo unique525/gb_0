@@ -48,6 +48,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen {
 
 
 
+
             parent::ReplaceEnd($tempContent);
         }
 

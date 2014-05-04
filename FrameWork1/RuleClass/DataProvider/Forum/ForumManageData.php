@@ -7,43 +7,78 @@
  * @author zhangchi
  */
 class ForumManageData extends BaseManageData {
-    /**
-     * 表名
-     */
-    const tableName = "cst_forum";
-    /**
-     * 表关键字段名
-     */
-    const tableIdName = "ForumId";
 
     /**
-     * 新增
-     * @param string $forumPic 论坛图标网址
-     * @return int 返回新增的论坛id
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
      */
-    public function Create($forumPic = "") {
+    public function GetFields($tableName = self::TableName_Forum){
+        return parent::GetFields(self::TableName_Forum);
+    }
+
+    /**
+     * 新增论坛版块
+     * @param array $httpPostData $_POST数组
+     * @param string $forumPic1 版块图标1
+     * @param string $forumPic2 版块图标2
+     * @param string $forumPicMobile 移动客户端版块图标
+     * @param string $forumPicPad 平板客户端版块图标
+     * @return int 新增的论坛版块id
+     */
+    public function Create($httpPostData, $forumPic1 = '', $forumPic2 = '', $forumPicMobile = '', $forumPicPad = '') {
+        $result = -1;
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty, "forumpic", $forumPic);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array("ForumPic1", "ForumPic2", "ForumPicMobile", "ForumPicPad");
+        $addFieldValues = array($forumPic1, $forumPic2, $forumPicMobile, $forumPicPad);
+        if (!empty($httpPostData)) {
+            $sql = parent::GetInsertSql($httpPostData, self::TableName_Forum, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
         return $result;
     }
 
     /**
-     * 修改
-     * @param int $forumId 论坛id
-     * @param string $forumPic 论坛LOGO
-     * @return int 执行结果
+     * 修改版块
+     * @param array $httpPostData $_POST数组
+     * @param int $forumId 版块id
+     * @param string $forumPic1 版块图标1
+     * @param string $forumPic2 版块图标2
+     * @param string $forumPicMobile 移动客户端版块图标
+     * @param string $forumPicPad 平板客户端版块图标
+     * @return int 返回影响的行数
      */
-    public function Modify($forumId, $forumPic = "") {
+    public function Modify($httpPostData, $forumId, $forumPic1 = "", $forumPic2 = "", $forumPicMobile = "", $forumPicPad = "") {
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $forumId, $dataProperty, "ForumPic", $forumPic);
+        $addFieldNames = array();
+        $addFieldValues = array();
+        if (!empty($forumPic1)) {
+            $addFieldNames[] = "ForumPic1";
+            $addFieldValues[] = $forumPic1;
+        }
+        if (!empty($forumPic2)) {
+            $addFieldNames[] = "ForumPic2";
+            $addFieldValues[] = $forumPic2;
+        }
+        if (!empty($titlePicMobile)) {
+            $addFieldNames[] = "ForumPicMobile";
+            $addFieldValues[] = $forumPicMobile;
+        }
+        if (!empty($titlePicPad)) {
+            $addFieldNames[] = "ForumPicPad";
+            $addFieldValues[] = $forumPicPad;
+        }
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_Forum, self::TableId_Forum, $forumId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
     
     /**
-     * 修改状态
-     * @param int $forumId 论坛id
+     * 修改版块状态
+     * @param int $forumId 论坛版块id
      * @param int $state 状态
      * @return int 操作结果
      */
@@ -51,7 +86,7 @@ class ForumManageData extends BaseManageData {
         $result = 0;
         if ($forumId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::tableName . " SET `State`=:State WHERE ForumId=:ForumId;";
+            $sql = "UPDATE " . self::TableName_Forum . " SET `State`=:State WHERE ForumId=:ForumId;";
             $dataProperty->AddField("ForumId", $forumId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -62,14 +97,22 @@ class ForumManageData extends BaseManageData {
     
     /**
      * 取得上级版块名称
-     * @param int $forumId
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
      * @return string 上级版块名称
      */
-    public function GetParentName($forumId) {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT ForumName FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=(SELECT parentid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName . ")";
-        $dataProperty->AddField(self::tableIdName, $forumId);
-        $result = $this->dbOperator->GetString($sql, $dataProperty);
+    public function GetParentName($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_parent_name.cache_' . $forumId . '';
+            $sql = "SELECT ForumName FROM " . self::TableName_Forum . "
+                    WHERE ForumId =
+                       (SELECT ParentId FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId);";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
     
@@ -80,11 +123,14 @@ class ForumManageData extends BaseManageData {
      * @return array 版块列表
      */
     public function GetListByRank($siteId, $forumRank) {
-        $sql = "SELECT * FROM " . self::tableName . " WHERE ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY sort DESC";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ForumRank", $forumRank);
-        $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $result = null;
+        if($siteId>0 && $forumRank>=0){
+            $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumRank", $forumRank);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
         return $result;
     }
 
