@@ -1,6 +1,13 @@
 /* 
  * 后台登录js
  */
+document.onkeydown=function(event){
+    e = event ? event :(window.event ? window.event : null);
+    if(e.keyCode==13){
+        subForm();
+    }
+}
+
 $().ready(function() {
     $("#manage_user_name").blur(function() {
         $.ajax({
@@ -19,14 +26,17 @@ $().ready(function() {
         });
     });
 
+    var divTips = $("#div_tips");
     $("#txt_check_code").focus(function() {
-        $("#div_tips").css("display", "none");
-        $("#div_tips").html("");
+        divTips.css("display", "none");
+        divTips.html("");
     });
-    
-    $("#btn_sub").click(function() {
+
+    var btnSubmit = $("#btn_sub");
+    btnSubmit.click(function() {
         subForm();
     });
+
 });
 
 
@@ -40,34 +50,36 @@ function submitKeyClick(event) {
     }
 }
 function subForm() {
+    var divTips = $("#div_tips");
+    var txtCheckCode = $("#txt_check_code");
     if ($("#adminusername").val() == '') {
-        $("#div_tips").css("display", "block");
-        $("#div_tips").html("请输入帐号！");
-        $("#div_tips").insertAfter("#div_manage_user_name");
+        divTips.css("display", "block");
+        divTips.html("请输入帐号！");
+        divTips.insertAfter("#div_manage_user_name");
         return;
     }
     if ($("#adminuserpass").val() == '') {
-        $("#div_tips").css("display", "block");
-        $("#div_tips").html("请输入密码！");
-        $("#div_tips").insertAfter("#div_manage_user_pass");
+        divTips.css("display", "block");
+        divTips.html("请输入密码！");
+        divTips.insertAfter("#div_manage_user_pass");
         return;
     }
-    if ($("#txt_check_code").val() == '') {
-        $("#div_tips").css("display", "block");
-        $("#div_tips").html("请输入验证码！");
-        $("#div_tips").insertAfter("#div_verify_code");
+    if (txtCheckCode.val() == '') {
+        divTips.css("display", "block");
+        divTips.html("请输入验证码！");
+        divTips.insertAfter("#div_verify_code");
         return;
     }
 
-    var code = $("#txt_check_code").val();
+    var code = txtCheckCode.val();
     $.post("/default.php?mod=common&a=check_verify_code&sn=manage_login&vct=0&vcv=" + code, {
-        opresult: $(this).html()
+        opResult: $(this).html()
     }, function(xml) {
         var result = parseInt(xml);
         if (result == -1) {
-            $("#div_tips").css("display", "block");
-            $("#div_tips").html("验证码错误！");
-            $("#div_tips").insertAfter("#div_verify_code");
+            divTips.css("display", "block");
+            divTips.html("验证码错误！");
+            divTips.insertAfter("#div_verify_code");
         } else if (result == 1) {
             $('#login_form').submit();
         } else {
