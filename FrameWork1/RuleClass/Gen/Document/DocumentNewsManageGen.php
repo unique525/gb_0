@@ -119,15 +119,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
                     if (strlen($titlePic1Path) > 5) {
                         $siteConfigManageData = new SiteConfigManageData($siteId);
-                        $documentNewsTitleMobileWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForMobile;
-                        $documentNewsTitlePadWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForPad;
+                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
 
                         $tableId = $channelId;
                         $userId = 0;
 
-                        if ($documentNewsTitleMobileWidth > 0) {
+                        if ($documentNewsTitlePicMobileWidth > 0) {
                             $thumbFileName = "mobile";
-                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitleMobileWidth,0,$thumbFileName);
+                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
                             sleep(1);
                             $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
                             $newFileName = FileObject::GetName($titlePicMobile);
@@ -150,9 +150,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             );
                         }
 
-                        if ($documentNewsTitlePadWidth > 0) {
+                        if ($documentNewsTitlePicPadWidth > 0) {
                             $thumbFileName = "pad";
-                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePadWidth,0,$thumbFileName);
+                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
                             sleep(1);
                             $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
                             $newFileName = FileObject::GetName($titlePicPad);
@@ -424,8 +424,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
                     if (strlen($titlePic1Path) > 5) {
                         $siteConfigManageData = new SiteConfigManageData($siteId);
-                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForMobile;
-                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePic1WidthForPad;
+                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
 
                         $tableId = 0;
                         $userId = 0;
