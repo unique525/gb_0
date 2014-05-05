@@ -2,14 +2,14 @@
     <div class="left">
         <div id="div_now_selected_site" idvalue="1" title="http://">XXX</div>
         <div id="div_select_site_list" style="display:none;">
-            <icms_list id="select_site" type="list">
+            <icms id="select_site" type="list">
                 <item>
                     <![CDATA[
                     <div class="select_site_item" idvalue="{f_SiteId}" title="{f_SiteUrl}">{f_SiteName}</div>
                     <div class="site_count" style="display:none;height:0;padding:0;width:0;margin:0;" idvalue="{c_all_count}"></div>
                     ]]>
                 </item>
-            </icms_list>
+            </icms>
         </div>
 
     </div>

@@ -9,6 +9,20 @@
 class Template {
 
     /**
+     * 默认模板标签名称定义
+     */
+    const DEFAULT_TAG_NAME = "icms";
+    /**
+     * 模板标签类型：频道列表
+     */
+    const TAG_TYPE_CHANNEL_LIST = "channel_list";
+    /**
+     * 模板标签类型：资讯列表
+     */
+    const TAG_TYPE_DOCUMENT_NEWS_LIST = "document_news_list";
+
+
+    /**
      * 读取模板内容
      * @param string $templateFileUrl 模板文件路径
      * @param string $templateName 模板名称
@@ -49,7 +63,7 @@ class Template {
      * @param int $tagId 替换标签的id
      * @param string $tagName 替换标签名称
      */
-    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = "icms_list") {
+    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = self::DEFAULT_TAG_NAME) {
         if (stripos($tempContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
 
@@ -665,12 +679,11 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 返回参数的值
      */
-    public static function GetParamValue($documentContent, $paramName, $tagName = "icms") {
+    public static function GetParamValue($documentContent, $paramName, $tagName = self::DEFAULT_TAG_NAME) {
         if (class_exists('DOMDocument')) { //服务器是否开启了DOM
             $doc = new DOMDocument();
             $doc->loadXML($documentContent);
-            $result = self::GetParamStringValue($doc, $tagName, $paramName);
-            return $result;
+            return self::GetParamStringValue($doc, $tagName, $paramName);
         } else {
             //使用SAX
             $parser = xml_parser_create();
@@ -689,7 +702,7 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 返回Document对象的节点内容
      */
-    private static function GetNodeValue($document, $paramName, $tagName = "icms") {
+    private static function GetNodeValue($document, $paramName, $tagName = self::DEFAULT_TAG_NAME) {
         $result = "";
         $node = $document->getElementsByTagName($tagName)->item(0);
         if ($node->hasChildNodes()) {
@@ -708,7 +721,7 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 节点的内容
      */
-    private static function GetNodeValueForSax($arrayXml, $tagName) {
+    private static function GetNodeValueForSax($arrayXml, $tagName = self::DEFAULT_TAG_NAME) {
         $result = "";
         for ($i = 0; $i < count($arrayXml); $i++) {
             if ($arrayXml[$i]['tag'] == $tagName && $arrayXml[$i]['type'] == 'complete') {
@@ -759,7 +772,7 @@ class Template {
      * @param string $tagName 标签名称
      * @return array 返回数组
      */
-    public static function GetAllCustomTag($tempContent, $tagName = "icms") {
+    public static function GetAllCustomTag($tempContent, $tagName = self::DEFAULT_TAG_NAME) {
         $preg = "/\<$tagName(.*)\<\/$tagName>/imsU";
         preg_match_all($preg, $tempContent, $result, PREG_PATTERN_ORDER);
         return $result;
@@ -774,7 +787,7 @@ class Template {
      * @param string $tagType 标签的type
      * @return string 替换后的内容
      */
-    public static function ReplaceCustomTag($tempContent, $tagId, $replaceContent, $tagName, $tagType = null)
+    public static function ReplaceCustomTag($tempContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
     {
         if($tagType != null && strlen($tagType)>0){
             $beginString = '<' . $tagName . ' id="' . $tagId . '" type="' . $tagType . '"';
@@ -796,7 +809,7 @@ class Template {
      * @param string $tagId 替换标签的id，如果为空，则删除所有自定义标签
      * @param string $tagName 替换标签名称
      */
-    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = "icms_list") {
+    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = self::DEFAULT_TAG_NAME) {
         if (empty($tagId)) {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
             $tempContent = preg_replace($patterns, "", $tempContent);

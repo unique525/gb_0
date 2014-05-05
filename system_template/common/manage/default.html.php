@@ -39,7 +39,7 @@
         <div id="div_main_content">
             <div id="div_left_panel">
                 <div class="header" id="div_left_accordion">
-                    <icms_list id="manage_menu_of_column" type="list">
+                    <icms id="manage_menu_of_column" type="list">
                         <item>
                             <![CDATA[
                             <h3 class="ha"><div class="divAccordItem" style="background:url('/system_template/{template_name}/images/manage/{f_ManageMenuOfColumnIcon}') no-repeat left center;text-indent:30px;">{f_ManageMenuOfColumnName}</div></h3>
@@ -52,7 +52,7 @@
                             <div>{f_ManageMenuOfColumnContent}</div>
                             ]]>
                         </footer>
-                    </icms_list>
+                    </icms>
                     <div id="right_menu">
                         <ul>
                             <li class="cm_pub_channel"><span id="btn_right_pub_channel">发布频道</span></li>

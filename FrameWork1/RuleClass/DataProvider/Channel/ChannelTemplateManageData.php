@@ -114,13 +114,12 @@ class ChannelTemplateManageData extends BaseManageData
                             ".self::PUBLISH_TYPE_LINKAGE_ALL.",
                             ".self::PUBLISH_TYPE_LINKAGE_ONLY_SELF.",
                             ".self::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER.",
-                            ".self::PUBLISH_TYPE_ONLY_SELF.",
+                            ".self::PUBLISH_TYPE_ONLY_SELF."
                             );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
-
         return $result;
     }
 } 

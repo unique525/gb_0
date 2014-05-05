@@ -9,6 +9,7 @@
 class BaseManageGen extends BaseGen
 {
     const PUBLISH_PATH = "h";
+
     /**
      * 替换新增时，模板里的{field}值为空，包括后台模板和模板数据库中的模板
      * @param string $tempContent 要处理的模板内容
@@ -57,17 +58,17 @@ class BaseManageGen extends BaseGen
                         switch($publishType){
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
                                 //联动发布，只发布在本频道下
-                                self::ReplaceAndTransfer($nowChannelId);
+                                self::ReplaceAndTransfer($nowChannelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
-                                self::ReplaceAndTransfer($channelId);
+                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
-                                self::ReplaceAndTransfer($nowChannelId);
-                                self::ReplaceAndTransfer($channelId);
+                                self::ReplaceAndTransfer($nowChannelId, $channelTemplateContent, $publishFileName);
+                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_ONLY_SELF:
-                                self::ReplaceAndTransfer($channelId);
+                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                         }
 
@@ -86,12 +87,55 @@ class BaseManageGen extends BaseGen
     /**
      * 替换和传输内容到目标路径
      * @param int $channelId 频道id
+     * @param string $channelTemplateContent 模板内容
+     * @param string $publishFileName 发布文件名
      */
-    private function ReplaceAndTransfer($channelId){
-        //1.替换模板内容
+    private function ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName){
+        /** 1.替换模板内容 */
+
+        $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
+
+        if(count($arrCustomTags)>0){
+            $arrTempContents = $arrCustomTags[0];
+
+            foreach($arrTempContents as $tagContent){
+                //标签id channel_1 document_news_1
+                $tagId = Template::GetParamValue($tagContent, "id");
+                //标签类型 channel_list,document_news_list
+                $tagType = Template::GetParamValue($tagContent, "type");
+                //标签排序方式
+                $tagOrder = Template::GetParamValue($tagContent, "order");
+                //标签特殊查询条件
+                $tagWhere = Template::GetParamValue($tagContent, "where");
+                //显示条数
+                $tagTopCount = Template::GetParamValue($tagContent, "top");
+                //显示状态
+                $state = Template::GetParamValue($tagContent, "state");
+
+                switch($tagType){
+
+                    case Template::TAG_TYPE_CHANNEL_LIST :
+
+                        break;
+                    case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
+
+                        break;
 
 
-        //2.推送文件到目标路径
+                }
+
+
+            }
+
+
+
+        }
+
+        //print_r($arrCustomTags);
+
+
+
+        /** 2.推送文件到目标路径 */
     }
 
 
