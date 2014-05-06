@@ -496,6 +496,81 @@ class DocumentNewsManageData extends BaseManageData
         }
         return $result;
     }
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Get List////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * @param int $channelId
+     * @param string $topCount
+     * @param int $state
+     * @return array|null
+     */
+    public function GetNewList($channelId, $topCount, $state) {
+
+        $result = null;
+
+        if(!empty($topCount)){
+            $selectColumn = '
+            DocumentNewsId,
+            SiteId,
+            ChannelId,
+            DocumentNewsTitle,
+            DocumentNewsContent,
+            DocumentNewsSubTitle,
+            DocumentNewsCiteTitle,
+            DocumentNewsShortTitle,
+            DocumentNewsIntro,
+            CreateDate,
+            ManageUserId,
+            ManageUserName,
+            UserId,
+            UserName,
+            Author,
+            State,
+            DocumentNewsType,
+            DirectUrl,
+            PublishDate,
+            ShowDate,
+            SourceName,
+            DocumentNewsMainTag,
+            DocumentNewsTag,
+            Sort,
+            TitlePic,
+            TitlePic2,
+            TitlePic3,
+            DocumentNewsTitleColor,
+            DocumentNewsTitleBold,
+            OpenComment,
+            ShowHour,
+            ShowMinute,
+            ShowSecond,
+            UploadFiles,
+            IsHot,
+            RecLevel,
+            WaitPublish,
+            ShowPicMethod,
+            IsCopy,
+            IsAddToFullText,
+            ClosePosition,
+            Hit,
+            LockEdit,
+            LockEditDate,
+            LockEditAdminUserId';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
+                WHERE ChannelId=:ChannelId AND State=:State
+                ORDER BY Sort DESC, CreateDate DESC LIMIT " . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 }
 
 ?>

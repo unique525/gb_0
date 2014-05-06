@@ -14,8 +14,8 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
      */
     public function Gen() {
         $result = "";
-        $adminUserId = Control::GetManageUserId();
-        if ($adminUserId <= 0) {
+        $manageUserId = Control::GetManageUserId();
+        if ($manageUserId <= 0) {
             Control::GoUrl(RELATIVE_PATH . "/default.php?mod=manage&a=login");
         } else {
             $module = Control::GetRequest("mod", "");
@@ -76,7 +76,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{client_ip_address}", $clientIp, $tempContent);
 
 
-
+/**
         //manage_menu_of_column
         $tagId = "manage_menu_of_column";
         $manageMenuOfColumnManageData = new ManageMenuOfColumnManageData();
@@ -100,11 +100,13 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{manage_menu_of_system_config}", $manageMenuOfSystemConfigTemplateContent, $tempContent);
         $manageMenuOfTaskTemplateContent = Template::Load("manage/manage_menu_of_task.html","common");
         $tempContent = str_ireplace("{manage_menu_of_task}", $manageMenuOfTaskTemplateContent, $tempContent);
-
+*/
 
         $tagId = "select_site";
         $siteManageData = new SiteManageData();
         $arrSiteList = $siteManageData->GetList($manageUserId);
+        print_r($arrSiteList);
+die();
         Template::ReplaceList($tempContent, $arrSiteList, $tagId);
 
 

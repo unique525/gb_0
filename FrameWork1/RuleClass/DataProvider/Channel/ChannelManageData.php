@@ -117,59 +117,6 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
-     * 返回所有此站点下的频道列表数据集,供后台左部导航使用
-     * @param int $siteId 站点id
-     * @param int $manageUserId 管理员id
-     * @return array|null 频道列表数据集
-     */
-    public function GetListForManageLeft($siteId, $manageUserId)
-    {
-        $result = null;
-        if ($siteId > 0 && $manageUserId > 0) {
-            $dataProperty = new DataProperty();
-            if ($manageUserId == 1) {
-                $sql = "SELECT
-                        c.ChannelId,
-                        c.ParentId,
-                        c.ChannelType,
-                        c.ChannelName,
-                        c.Rank,
-                        (SELECT count(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
-                    FROM " . self::TableName_Channel . " c
-                    WHERE
-                        c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
-                    ORDER BY c.Sort DESC,c.ChannelId;";
-            } else {
-                $sql = "SELECT
-                            c.ChannelId,
-                            c.ParentId,
-                            c.ChannelType,
-                            c.ChannelName,
-                            c.Rank,
-                            (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
-                        FROM " . self::TableName_Channel . " c
-                        WHERE
-                            c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
-                            AND c.ChannelId in
-                                ( SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserId=:ManageUserId
-                                  UNION
-                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId2)
-                                  UNION
-                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId3))
-                                )
-                        ORDER BY c.Sort DESC,c.ChannelId;";
-                $dataProperty->AddField("ManageUserId", $manageUserId);
-                $dataProperty->AddField("ManageUserId2", $manageUserId);
-                $dataProperty->AddField("ManageUserId3", $manageUserId);
-            }
-            $dataProperty->AddField("SiteId", $siteId);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        }
-
-        return $result;
-    }
-
-    /**
      * 取得频道名称
      * @param int $channelId 频道id
      * @param bool $withCache 是否从缓冲中取
@@ -342,6 +289,94 @@ class ChannelManageData extends BaseManageData
         }else{
             return FALSE;
         }
+    }
+
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Get List////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 返回所有此站点下的频道列表数据集,供后台左部导航使用
+     * @param int $siteId 站点id
+     * @param int $manageUserId 管理员id
+     * @return array|null 频道列表数据集
+     */
+    public function GetListForManageLeft($siteId, $manageUserId)
+    {
+        $result = null;
+        if ($siteId > 0 && $manageUserId > 0) {
+            $dataProperty = new DataProperty();
+            if ($manageUserId == 1) {
+                $sql = "SELECT
+                        c.ChannelId,
+                        c.ParentId,
+                        c.ChannelType,
+                        c.ChannelName,
+                        c.Rank,
+                        (SELECT count(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
+                    FROM " . self::TableName_Channel . " c
+                    WHERE
+                        c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
+                    ORDER BY c.Sort DESC,c.ChannelId;";
+            } else {
+                $sql = "SELECT
+                            c.ChannelId,
+                            c.ParentId,
+                            c.ChannelType,
+                            c.ChannelName,
+                            c.Rank,
+                            (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
+                        FROM " . self::TableName_Channel . " c
+                        WHERE
+                            c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
+                            AND c.ChannelId in
+                                ( SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserId=:ManageUserId
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId2)
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId3))
+                                )
+                        ORDER BY c.Sort DESC,c.ChannelId;";
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserId2", $manageUserId);
+                $dataProperty->AddField("ManageUserId3", $manageUserId);
+            }
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 根据父id获取列表数据集
+     * @param int $channelId 频道id
+     * @param int $topCount 显示的条数
+     * @param string $order 排序方式
+     * @return array|null 列表数据集
+     */
+    public function GetListByParentId($channelId, $topCount, $order){
+        $result = null;
+        if($channelId >0){
+            switch($order){
+                default:
+                    $order = "ORDER BY Sort DESC,Createdate DESC,".self::TableId_Channel." DESC";
+                    break;
+            }
+            $sql = "SELECT
+                        *
+                        FROM ".self::TableName_Channel."
+                        WHERE State<100 AND IsCircle=1 AND ParentId=:ChannelId
+                        $order
+                        LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
     }
 
 

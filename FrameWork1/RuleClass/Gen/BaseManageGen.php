@@ -58,17 +58,20 @@ class BaseManageGen extends BaseGen
                         switch($publishType){
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
                                 //联动发布，只发布在本频道下
-                                self::ReplaceAndTransfer($nowChannelId, $channelTemplateContent, $publishFileName);
+                                self::ReplaceTemplate($nowChannelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
-                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
+                                //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
+                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
-                                self::ReplaceAndTransfer($nowChannelId, $channelTemplateContent, $publishFileName);
-                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
+                                //联动发布，发布在所有继承树关系的频道下
+                                self::ReplaceTemplate($nowChannelId, $channelTemplateContent, $publishFileName);
+                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_ONLY_SELF:
-                                self::ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName);
+                                //非联动发布，只发布在本频道下
+                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
                                 break;
                         }
 
@@ -85,16 +88,15 @@ class BaseManageGen extends BaseGen
     }
 
     /**
-     * 替换和传输内容到目标路径
+     * 替换内容
      * @param int $channelId 频道id
      * @param string $channelTemplateContent 模板内容
      * @param string $publishFileName 发布文件名
+     * @return mixed|string 内容模板
      */
-    private function ReplaceAndTransfer($channelId, $channelTemplateContent, $publishFileName){
+    private function ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName){
         /** 1.替换模板内容 */
-
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
-
         if(count($arrCustomTags)>0){
             $arrTempContents = $arrCustomTags[0];
 
@@ -109,35 +111,94 @@ class BaseManageGen extends BaseGen
                 $tagWhere = Template::GetParamValue($tagContent, "where");
                 //显示条数
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
+                $tagTopCount = Format::CheckTopCount($tagTopCount);
+                if($tagTopCount == null){
+
+                }
                 //显示状态
                 $state = Template::GetParamValue($tagContent, "state");
 
                 switch($tagType){
-
                     case Template::TAG_TYPE_CHANNEL_LIST :
-
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        $channelTemplateContent = self::ReplaceTemplateOfChannelList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder);
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
-
+                        $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
                         break;
-
-
                 }
-
-
             }
-
-
-
         }
-
-        //print_r($arrCustomTags);
-
-
-
+        return $channelTemplateContent;
         /** 2.推送文件到目标路径 */
     }
 
+    /**
+     * 替换频道列表的内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfChannelList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder){
+        if($channelId>0){
+            $arrChannelList = null;
+            switch ($tagWhere) {
+                case "parent":
+                    $channelManageData = new ChannelManageData();
+                    $arrChannelList = $channelManageData->GetListByParentId($channelId, $tagTopCount, $tagOrder);
+                    break;
+            }
+            if(!empty($arrChannelList)){
+                Template::ReplaceList($tagContent, $arrChannelList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                //替换子循环里的<![CDATA[标记
+                $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
+                $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
+                $tagContent = Template::ReplaceCustomTag($tagContent, $tagId, $tagContent);
+            }
+        }
+
+        return $tagContent;
+    }
+
+    /**
+     * 替换资讯列表的内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfDocumentNewsList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state){
+        if($channelId>0){
+            $arrDocumentNewsList = null;
+            $documentNewsManageData = new DocumentNewsManageData();
+            switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                default :
+                    //new
+                    $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                    break;
+            }
+            if(!empty($arrDocumentNewsList)){
+                Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $tagContent = Template::ReplaceCustomTag($tagContent, $tagId, $tagContent);
+            }
+        }
+
+        return $tagContent;
+    }
 
     protected function CancelPublishChannel(){
 

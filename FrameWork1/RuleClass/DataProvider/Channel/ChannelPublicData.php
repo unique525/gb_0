@@ -8,6 +8,7 @@
  */
 class ChannelPublicData extends BasePublicData {
 
+
 }
 
 ?>

@@ -14,6 +14,7 @@ class SiteManageData extends BaseManageData {
      * @return array 站点列表数据集
      */
     public function GetList($adminUserId) {
+        $dataProperty = new DataProperty();
         if ($adminUserId == 1) {
             $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<10 ORDER BY Sort DESC,convert(SiteName USING gbk);";
         } else {
@@ -24,10 +25,11 @@ class SiteManageData extends BaseManageData {
                   SELECT SiteId FROM cst_adminpopedom WHERE AdminUserGroupId IN (SELECT adminusergroupid FROM cst_adminuser WHERE adminuserid=:adminuserid2)
                  ) 
                  ORDER BY Sort DESC,convert(SiteName USING gbk);";
+
+
+            $dataProperty->AddField("adminuserid1", $adminUserId);
+            $dataProperty->AddField("adminuserid2", $adminUserId);
         }
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminuserid1", $adminUserId);
-        $dataProperty->AddField("adminuserid2", $adminUserId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }

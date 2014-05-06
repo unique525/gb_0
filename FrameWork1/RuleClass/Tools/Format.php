@@ -64,6 +64,26 @@ class Format
     }
 
     /**
+     * 检查TopCount的值是否非法，非法返回null
+     * @param string $content 要检查的内容，正确内容为 0,10 之类字符串
+     * @return null|string 返回检查后的内容，非法返回null
+     */
+    public static function CheckTopCount($content){
+        //如果可以直接转化为int型，则直接退出
+        if(is_numeric($content)){
+            return $content;
+        }
+        //把 0,10 这种转化为数组
+        $arr = explode(",",$content);
+        foreach($arr as $val){
+            if(!is_numeric($val)){
+                return null;
+            }
+        }
+        return $content;
+    }
+
+    /**
      * 截断字符串，支持中文的处理（utf-8编码）
      * @param string $content 要处理的内容
      * @param int $shortCount 截断的长度，支持中文的处理

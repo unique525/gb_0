@@ -13,11 +13,15 @@ class Template {
      */
     const DEFAULT_TAG_NAME = "icms";
     /**
-     * 模板标签类型：频道列表
+     * 模板标签类型：站点列表 type="site_list"
+     */
+    const TAG_TYPE_SITE_LIST = "site_list";
+    /**
+     * 模板标签类型：频道列表 type="channel_list"
      */
     const TAG_TYPE_CHANNEL_LIST = "channel_list";
     /**
-     * 模板标签类型：资讯列表
+     * 模板标签类型：资讯列表 type="document_news_list"
      */
     const TAG_TYPE_DOCUMENT_NEWS_LIST = "document_news_list";
 
@@ -60,7 +64,7 @@ class Template {
      * 替换列表类的模板
      * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
      * @param array $arrList 用来替换到模板中的集合内容
-     * @param int $tagId 替换标签的id
+     * @param string $tagId 替换标签的id
      * @param string $tagName 替换标签名称
      */
     public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = self::DEFAULT_TAG_NAME) {
