@@ -44,6 +44,7 @@ class BaseManageGen extends BaseGen
             $channelTemplateManageData = new ChannelTemplateManageData();
             $rank = $channelManageData->GetRank($channelId, false);
             $nowChannelId = $channelId;
+            $ftpQueueManageData = new FtpQueueManageData();
             //循环Rank进行发布
             while($rank>=0){
                 $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($nowChannelId);
@@ -54,24 +55,28 @@ class BaseManageGen extends BaseGen
                         $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
                         $publishType = $arrChannelTemplateList[$i]["PublishType"];
                         $publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
-                        //2.根据PublishType和PublishFileName生成目标文件
+
+                        //2.替换模板内容
+                        $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+
+                        //3.根据PublishType和PublishFileName生成目标文件
                         switch($publishType){
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
                                 //联动发布，只发布在本频道下
-                                self::ReplaceTemplate($nowChannelId, $channelTemplateContent, $publishFileName);
+
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
                                 //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
-                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
+                                //触发频道id $channelId
+                                $result = self::TransferTemplate($channelId, $channelTemplateContent, $publishFileName, $ftpQueueManageData);
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
                                 //联动发布，发布在所有继承树关系的频道下
-                                self::ReplaceTemplate($nowChannelId, $channelTemplateContent, $publishFileName);
-                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
+
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_ONLY_SELF:
                                 //非联动发布，只发布在本频道下
-                                self::ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName);
+
                                 break;
                         }
 
@@ -91,10 +96,9 @@ class BaseManageGen extends BaseGen
      * 替换内容
      * @param int $channelId 频道id
      * @param string $channelTemplateContent 模板内容
-     * @param string $publishFileName 发布文件名
      * @return mixed|string 内容模板
      */
-    private function ReplaceTemplate($channelId, $channelTemplateContent, $publishFileName){
+    private function ReplaceTemplate($channelId, $channelTemplateContent){
         /** 1.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
         if(count($arrCustomTags)>0){
@@ -121,10 +125,15 @@ class BaseManageGen extends BaseGen
                 switch($tagType){
                     case Template::TAG_TYPE_CHANNEL_LIST :
                         $channelId = intval(str_ireplace("channel_", "", $tagId));
-                        $channelTemplateContent = self::ReplaceTemplateOfChannelList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder);
+                        if($channelId>0){
+                            $channelTemplateContent = self::ReplaceTemplateOfChannelList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder);
+                        }
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
-                        $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
+                        $documentNewsId = intval(str_ireplace("channel_", "", $tagId));
+                        if($documentNewsId>0){
+                            $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsList($channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
                         break;
                 }
             }
@@ -200,6 +209,51 @@ class BaseManageGen extends BaseGen
         return $tagContent;
     }
 
+    /**
+     * 发布传输结果：未操作
+     */
+    const PUBLISH_TRANSFER_RESULT_NO_ACTION = -1;
+    /**
+     * 发布传输结果：频道id错误
+     */
+    const PUBLISH_TRANSFER_RESULT_CHANNEL_ID_ERROR = -5;
+    /**
+     * 发布传输结果：站点id错误
+     */
+    const PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR = -10;
+
+
+    private function TransferTemplate($channelId, $channelTemplateContent, $publishFileName, FtpQueueManageData $ftpQueueManageData){
+        $result = self::PUBLISH_TRANSFER_RESULT_NO_ACTION;
+        if($channelId>0){
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, false);
+            if($siteId>0){
+
+                $destinationPath = self::PUBLISH_PATH . '/' . strval($channelId) . '/' . $publishFileName;
+                $sourcePath = '';
+
+                $ftpManageData = new FtpManageData();
+                $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
+                //判断是用ftp方式传输还是直接写文件方式传输
+                if(!empty($ftpInfo)){ //定义了ftp配置信息，使用ftp方式传输
+                    $ftpQueueManageData->Add($destinationPath, $sourcePath, $channelTemplateContent);
+                }else{ //没有定义ftp配置信息，使用直接写文件方式传输
+                    $result = FileObject::Write($destinationPath, $channelTemplateContent);
+                }
+            }else{
+                $result = self::PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR;
+            }
+        }else{
+            $result = self::PUBLISH_TRANSFER_RESULT_CHANNEL_ID_ERROR;
+        }
+        return $result;
+
+    }
+
+
+
+
     protected function CancelPublishChannel(){
 
     }
@@ -208,70 +262,8 @@ class BaseManageGen extends BaseGen
 
     }
 
-    /**
-     * 取消资讯的发布（删除所有发布的文件）
-     * @param int $documentNewsId 资讯id
-     * @return
-     */
     protected function CancelPublishDocumentNews($documentNewsId){
-        //从发布或已否状态改为已否状态，从FTP上删除文件及相关附件，重新发布相关频道
-        //第1步，从FTP删除文档
-        $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
-        $documentNewsContent = $documentNewsManageData->GetDocumentNewsContent($documentNewsId, false);
-        $datePath = Format::DateStringToSimple($publishDate);
-        $publishFileName = $documentNewsId . '.html';
-        $channelManageData = new ChannelManageData();
-        $rank = $channelManageData->GetRank($channelId, false);
-        $publishPath = parent::GetPublishPath($documentChannelId, $rank);
-        $hasftp = $documentChannelManageData->GetHasFtp($documentChannelId);
-        $ftptype = 0; //HTML和相关CSS,IMAGE
-        $despath = $publishPath . $datePath . DIRECTORY_SEPARATOR . $publishFileName;
 
-        $isDel = parent::DelFtp($despath, $documentChannelId, $hasftp, $ftptype);
-
-//有详细页面分页的，循环删除各个分页页面
-        $arrnewscontent = explode("<!-- pagebreak -->", $documentNewsContent);
-        if (count($arrnewscontent) > 0) { //有分页的内容
-            for ($cp = 0; $cp < count($arrnewscontent); $cp++) {
-                $publishFileName = $documentNewsId . '_' . ($cp + 1) . '.html';
-                $despath = "/" . $publishPath . $datePath . '/' . $publishFileName;
-                parent::DelFtp($despath, $documentChannelId, $hasftp, $ftptype);
-            }
-        }
-//第2步，从FTP删除上传文件
-        $ftptype = 0; //HTML和相关CSS,IMAGE
-        $uploadFileData = new UploadFileData();
-        $tabletype = 1; //docnews
-        $arrfiles = $uploadFileData->GetList($documentNewsId, $tabletype);
-//取得相关的附件文件
-        if (count($arrfiles) > 0) {
-            for ($i = 0; $i < count($arrfiles); $i++) {
-                $uploadFileName = $arrfiles[$i]["UploadFileName"];
-                $uploadFilePath = $arrfiles[$i]["UploadFilePath"];
-                parent::DelFtp($uploadFilePath . $uploadFileName, $documentChannelId, $hasftp, $ftptype);
-            }
-        }
-//联动发布所在频道和上级频道
-        $documentChannelGen = new DocumentChannelGen();
-        $documentChannelGen->PublishMuti($documentChannelId);
-/////////////////////////////////////////////////////////////
-////////////////xunsearch全文检索引擎 索引更新///////////////
-/////////////////////////////////////////////////////////////
-//                global $xunfile;
-//                if (file_exists($xunfile)) {
-//                    require_once $xunfile;
-//                    try {
-//                        $xs = new XS('icms');
-//                        $index = $xs->index;
-//                        $index->del($documentnewsid);
-//                        $index->flush();
-//                    } catch (XSException $e) {
-//                        $error = strval($e);
-//                    }
-//                }
-        /////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////
     }
 
 }

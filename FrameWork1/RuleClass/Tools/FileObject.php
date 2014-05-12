@@ -28,13 +28,27 @@ class FileObject
     }
 
     /**
+     * 文件写入结果：未操作
+     */
+    const FILE_WRITE_ERROR_CAN_NO_ACTION = -1;
+    /**
+     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
+     */
+    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -5;
+    /**
+     * 文件写入结果：文件路径为空
+     */
+    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -10;
+
+    /**
      * 写入文件
      * @param string $filePath 文件路径
      * @param mixed $fileContent 要写入文件的数据。可以是字符串、数组或数据流。
-     * @return bool 写入结果
+     * @return int 写入结果
      */
     public static function Write($filePath, $fileContent)
     {
+        //$result = self::FILE_WRITE_ERROR_CAN_NO_ACTION;
         if (!empty($filePath)) {
             //目录处理
             $dir = dirname($filePath);
@@ -42,14 +56,15 @@ class FileObject
 
             $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
             if (!is_writable($filePath)) {
-                die("文件:" . $filePath . "不可写，发布失败，请联系技术人员处理！");
+                $result = self::FILE_WRITE_ERROR_CAN_NOT_WRITE;
+            }else{
+                $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
             }
-            file_put_contents($filePath, $fileContent);
             fclose($fp);
-            return true;
         } else {
-            return false;
+            $result = self::FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY;
         }
+        return $result;
     }
 
     /**
