@@ -33,13 +33,13 @@ class BaseData
      */
     const TableId_Ftp = "FtpId";
     /**
-     * FTP传输日志 数据表名
+     * 发布日志 数据表名
      */
-    const TableName_FtpLog = "cst_ftp_log";
+    const TableName_PublishLog = "cst_publish_log";
     /**
-     * FTP传输日志 数据表自增字段名
+     * 发布日志 数据表自增字段名
      */
-    const TableId_FtpLog = "FtpLogId";
+    const TableId_PublishLog = "PublishLogId";
 
 
     /***********************************************************************/

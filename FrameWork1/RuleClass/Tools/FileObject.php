@@ -48,12 +48,13 @@ class FileObject
      */
     public static function Write($filePath, $fileContent)
     {
+        $filePath = PHYSICAL_PATH . '/' . $filePath; //加上系统路径
+        $filePath = str_ireplace('/',DIRECTORY_SEPARATOR,$filePath); //适应windows平台和unix平台
         //$result = self::FILE_WRITE_ERROR_CAN_NO_ACTION;
         if (!empty($filePath)) {
             //目录处理
             $dir = dirname($filePath);
             FileObject::CreateDir($dir);
-
             $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
             if (!is_writable($filePath)) {
                 $result = self::FILE_WRITE_ERROR_CAN_NOT_WRITE;

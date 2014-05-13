@@ -6,7 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class Template {
+class Template
+{
 
     /**
      * 默认模板标签名称定义
@@ -33,7 +34,8 @@ class Template {
      * @param string $templatePath 模板路径
      * @return string 模板内容
      */
-    public static function Load($templateFileUrl, $templateName = "", $templatePath = "system_template") {
+    public static function Load($templateFileUrl, $templateName = "", $templatePath = "system_template")
+    {
         $filePath = RELATIVE_PATH . '/' . self::GetTempLateUrl($templateName, $templatePath) . '/' . $templateFileUrl . '.php';
         if (!file_exists($filePath)) {
             die("can not found template file:" . $filePath);
@@ -52,7 +54,8 @@ class Template {
      * @param string $templatePath 模板路径
      * @return string 系统模板路径
      */
-    private static function GetTempLateUrl($templateName, $templatePath = "system_template") {
+    private static function GetTempLateUrl($templateName, $templatePath = "system_template")
+    {
         if (!empty($templateName)) {
             return $templatePath . '/' . $templateName;
         } else {
@@ -67,7 +70,8 @@ class Template {
      * @param string $tagId 替换标签的id
      * @param string $tagName 替换标签名称
      */
-    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = self::DEFAULT_TAG_NAME) {
+    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = self::DEFAULT_TAG_NAME)
+    {
         if (stripos($tempContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
 
@@ -242,7 +246,7 @@ class Template {
                         $itemSplitterCount = 0;
                     }
 
-                    if($itemRowCount<=0){ //主段显示行数，如果未设置，则默认
+                    if ($itemRowCount <= 0) { //主段显示行数，如果未设置，则默认
                         $itemRowCount = count($arrList) - $footerRowCount;
                     }
 
@@ -310,8 +314,9 @@ class Template {
      * @param string $itemType 标签的类型 header item footer
      * @return mixed
      */
-    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType) {
-        $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate);        //加入输出序号
+    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType)
+    {
+        $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate); //加入输出序号
         if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
             $listTemplate = str_ireplace("{c_url}", $columns["DirectUrl"], $listTemplate); //直接输出url
         } else {
@@ -342,7 +347,8 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType) {
+    private static function FormatColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType)
+    {
         if (strtolower($columnName) == "state") {
             $tempContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $tempContent);
         }
@@ -424,7 +430,8 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    {
         $pos = stripos(strtolower($columnName), strtolower("ShowDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
@@ -460,7 +467,8 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatActivityColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+    private static function FormatActivityColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    {
         $pos = stripos(strtolower($columnName), "activity_content");
         if ($pos !== false) {
             if (intval($itemRowIntroCount) > 0) {
@@ -540,7 +548,8 @@ class Template {
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatProductColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item") {
+    private static function FormatProductColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    {
         $pos = stripos(strtolower($columnName), "sale_price");
         if ($pos !== false) {
             if (is_numeric($columnValue) && $columnValue > 0)
@@ -564,14 +573,15 @@ class Template {
      * @param bool $isList 默认为false，使用一维数组存储数据
      * @param bool $isManage 默认为false，使用二维数组存储数据
      */
-    public static function ReplaceOne(&$tempContent, $arrInfo, $isList = false, $isManage = false) {
+    public static function ReplaceOne(&$tempContent, $arrInfo, $isList = false, $isManage = false)
+    {
         if (count($arrInfo) > 0) {
             if ($isList > 0) { //使用一维数组存储数据
-                self::_ReplaceOne($tempContent, $arrInfo,$isManage);
+                self::_ReplaceOne($tempContent, $arrInfo, $isManage);
             } else { //使用二维数组存储数据
                 for ($i = 0; $i < count($arrInfo); $i++) {
                     $columns = $arrInfo[$i];
-                    self::_ReplaceOne($tempContent, $columns,$isManage);
+                    self::_ReplaceOne($tempContent, $columns, $isManage);
                 }
             }
         }
@@ -584,7 +594,8 @@ class Template {
      * @param array $arrOne
      * @param bool $isForTemplate 是否后台模板系统中使用，默认false，非后台模板系统中使用
      */
-    private static function _ReplaceOne(&$tempContent, $arrOne, $isForTemplate = false) {
+    private static function _ReplaceOne(&$tempContent, $arrOne, $isForTemplate = false)
+    {
         if (!empty($arrOne)) {
             foreach ($arrOne as $columnName => $columnValue) {
 
@@ -632,7 +643,7 @@ class Template {
 
 
                 //处理常规的值
-                if ($isForTemplate) {//是否是后台模板系统使用
+                if ($isForTemplate) { //是否是后台模板系统使用
                     $preManage = "b_";
                 } else {
                     $preManage = "";
@@ -657,13 +668,13 @@ class Template {
                 //处理下拉菜单的默认值
 
                 $selectedOption = '<script type="text/javascript">
-                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("selected",true);
+                    $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("selected",true);
                 </script>';
 
                 $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $tempContent);
 
                 $checkedOption = '<script type="text/javascript">
-                    $("#f_'.$columnName.'").find("option[value=\''.$columnValue.'\']").attr("checked",true);
+                    $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("checked",true);
                 </script>';
 
                 $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $tempContent);
@@ -683,7 +694,8 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 返回参数的值
      */
-    public static function GetParamValue($documentContent, $paramName, $tagName = self::DEFAULT_TAG_NAME) {
+    public static function GetParamValue($documentContent, $paramName, $tagName = self::DEFAULT_TAG_NAME)
+    {
         if (class_exists('DOMDocument')) { //服务器是否开启了DOM
             $doc = new DOMDocument();
             $doc->loadXML($documentContent);
@@ -706,7 +718,8 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 返回Document对象的节点内容
      */
-    private static function GetNodeValue($document, $paramName, $tagName = self::DEFAULT_TAG_NAME) {
+    private static function GetNodeValue($document, $paramName, $tagName = self::DEFAULT_TAG_NAME)
+    {
         $result = "";
         $node = $document->getElementsByTagName($tagName)->item(0);
         if ($node->hasChildNodes()) {
@@ -725,7 +738,8 @@ class Template {
      * @param string $tagName 标签名称
      * @return string 节点的内容
      */
-    private static function GetNodeValueForSax($arrayXml, $tagName = self::DEFAULT_TAG_NAME) {
+    private static function GetNodeValueForSax($arrayXml, $tagName = self::DEFAULT_TAG_NAME)
+    {
         $result = "";
         for ($i = 0; $i < count($arrayXml); $i++) {
             if ($arrayXml[$i]['tag'] == $tagName && $arrayXml[$i]['type'] == 'complete') {
@@ -744,7 +758,8 @@ class Template {
      * @param string $defaultValue 默认值
      * @return string 参数的值
      */
-    private static function GetParamStringValue($domDocument, $tagName, $attrName, $defaultValue = "") {
+    private static function GetParamStringValue($domDocument, $tagName, $attrName, $defaultValue = "")
+    {
         $result = $defaultValue;
         $node = $domDocument->getElementsByTagName($tagName)->item(0);
         if ($node->hasAttributes()) {
@@ -765,7 +780,8 @@ class Template {
      * @param int $defaultValue 默认值
      * @return int 参数的值
      */
-    private static function GetParamIntValue($domDocument, $tagName, $attrName, $defaultValue = 0) {
+    private static function GetParamIntValue($domDocument, $tagName, $attrName, $defaultValue = 0)
+    {
         $result = intval(self::GetParamStringValue($domDocument, $tagName, $attrName, strval($defaultValue)));
         return $result;
     }
@@ -776,7 +792,8 @@ class Template {
      * @param string $tagName 标签名称
      * @return array 返回数组
      */
-    public static function GetAllCustomTag($tempContent, $tagName = self::DEFAULT_TAG_NAME) {
+    public static function GetAllCustomTag($tempContent, $tagName = self::DEFAULT_TAG_NAME)
+    {
         $preg = "/\<$tagName(.*)\<\/$tagName>/imsU";
         preg_match_all($preg, $tempContent, $result, PREG_PATTERN_ORDER);
         return $result;
@@ -793,17 +810,31 @@ class Template {
      */
     public static function ReplaceCustomTag($tempContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
     {
-        if($tagType != null && strlen($tagType)>0){
-            $beginString = '<' . $tagName . ' id="' . $tagId . '" type="' . $tagType . '"';
-        }else{
-            $beginString = '<' . $tagName . ' id="' . $tagId . '"';
+        /**
+         * if($tagType != null && strlen($tagType)>0){
+         * $beginString = '<' . $tagName . ' id="' . $tagId . '" type="' . $tagType . '"';
+         * }else{
+         * $beginString = '<' . $tagName . ' id="' . $tagId . '"';
+         * }
+         * $endString = '</' . $tagName . '>';
+         * $temp1 = substr($tempContent, 0, stripos($tempContent, $beginString));
+         * $x = stripos($tempContent, $endString, stripos($tempContent, $beginString));
+         * $temp2 = substr($tempContent, $x + strlen($tagName) + 3);
+         * $tempContent = $temp1 . $replaceContent . $temp2;
+         * return $tempContent;
+         */
+        if (!empty($tagId) && !empty($tagType)) {
+            $patterns = "/\<$tagName id=\"$tagId\" type=\"$tagType\"(.*)\<\/$tagName>/imsU";
+            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
+        } else if (!empty($tagId)) {
+            $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
+            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
+        } else {
+            $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
+            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
         }
-        $endString = '</' . $tagName . '>';
-        $temp1 = substr($tempContent, 0, stripos($tempContent, $beginString));
-        $x = stripos($tempContent, $endString, stripos($tempContent, $beginString));
-        $temp2 = substr($tempContent, $x + strlen($tagName) + 3);
-        $tempContent = $temp1 . $replaceContent . $temp2;
         return $tempContent;
+
     }
 
 
@@ -813,7 +844,8 @@ class Template {
      * @param string $tagId 替换标签的id，如果为空，则删除所有自定义标签
      * @param string $tagName 替换标签名称
      */
-    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = self::DEFAULT_TAG_NAME) {
+    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = self::DEFAULT_TAG_NAME)
+    {
         if (empty($tagId)) {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -829,7 +861,8 @@ class Template {
      * @param string $fieldName 字段名
      * @param string $fieldValue 字段值
      */
-    public static function ReplaceSelectControl(&$tempContent, $fieldName, $fieldValue) {
+    public static function ReplaceSelectControl(&$tempContent, $fieldName, $fieldValue)
+    {
         $tempContent = str_ireplace("{sel_" . $fieldName . "_" . $fieldValue . "}", "selected", $tempContent);
         $tempContent = str_ireplace("{cb_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
         $tempContent = str_ireplace("{rd_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
