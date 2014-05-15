@@ -58,8 +58,9 @@ class BaseManageGen extends BaseGen
             $channelManageData = new ChannelManageData();
             $channelTemplateManageData = new ChannelTemplateManageData();
             $rank = $channelManageData->GetRank($channelId, false);
+            $siteId = $channelManageData->GetSiteId($channelId, false);
             $nowChannelId = $channelId;
-            $ftpQueueManageData = new FtpQueueManageData();
+            $publishQueueManageData = new PublishQueueManageData();
             //循环Rank进行发布
             while($rank>=0){
                 $timeStart = Control::GetMicroTime();
@@ -75,12 +76,11 @@ class BaseManageGen extends BaseGen
                     $timeEnd - $timeStart,
                     "get template list"
                 );
-//print_r($arrChannelTemplateList);die();
                 if(!empty($arrChannelTemplateList)){
                     for($i = 0; $i < Count($arrChannelTemplateList); $i++){
                         //1.取得模板数据
 
-                        $channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
+                        //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
                         $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
                         $publishType = $arrChannelTemplateList[$i]["PublishType"];
                         $publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
@@ -108,7 +108,18 @@ class BaseManageGen extends BaseGen
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
                                 //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
                                 //触发频道id $channelId
-                                $result = self::TransferTemplate($channelId, $channelTemplateContent, $publishFileName, $ftpQueueManageData);
+                                $timeStart = Control::GetMicroTime();
+                                $result = self::AddToPublishQueue($channelId, $rank, $channelTemplateContent, $publishFileName, $publishQueueManageData);
+                                $timeEnd = Control::GetMicroTime();
+                                $publishLogManageData->Create(
+                                    PublishLogManageData::PUBLISH_TYPE_NO_DEFINE,
+                                    PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                    $channelId,
+                                    "",
+                                    "",
+                                    $timeEnd - $timeStart,
+                                    "now channel id:$nowChannelId add to publish queue"
+                                );
                                 break;
                             case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
                                 //联动发布，发布在所有继承树关系的频道下
@@ -119,14 +130,27 @@ class BaseManageGen extends BaseGen
 
                                 break;
                         }
-
                     }
-
                 }
                 $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
 
                 $rank--;
             }
+
+            print_r($publishQueueManageData->Queue);
+
+            $timeStart = Control::GetMicroTime();
+            self::TransferPublishQueue($publishQueueManageData, $siteId);
+            $timeEnd = Control::GetMicroTime();
+            $publishLogManageData->Create(
+                PublishLogManageData::PUBLISH_TYPE_NO_DEFINE,
+                PublishLogManageData::TABLE_TYPE_CHANNEL,
+                $channelId,
+                "",
+                "",
+                $timeEnd - $timeStart,
+                "now channel id:$nowChannelId transfer publish queue"
+            );
         }
 
         return $result;
@@ -263,24 +287,21 @@ class BaseManageGen extends BaseGen
     const PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR = -10;
 
 
-    private function TransferTemplate($channelId, $channelTemplateContent, $publishFileName, FtpQueueManageData $ftpQueueManageData){
+    private function AddToPublishQueue($channelId, $rank, $channelTemplateContent, $publishFileName, PublishQueueManageData $publishQueueManageData){
         $result = self::PUBLISH_TRANSFER_RESULT_NO_ACTION;
 
         if($channelId>0){
             $channelManageData = new ChannelManageData();
             $siteId = $channelManageData->GetSiteId($channelId, false);
             if($siteId>0){
-                $destinationPath = self::PUBLISH_PATH . '/' . strval($channelId) . '/' . $publishFileName;
-                $sourcePath = '';
-
-                $ftpManageData = new FtpManageData();
-                $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
-                //判断是用ftp方式传输还是直接写文件方式传输
-                if(!empty($ftpInfo)){ //定义了ftp配置信息，使用ftp方式传输
-                    $ftpQueueManageData->Add($destinationPath, $sourcePath, $channelTemplateContent);
-                }else{ //没有定义ftp配置信息，使用直接写文件方式传输
-                    $result = FileObject::Write($destinationPath, $channelTemplateContent);
+                if($rank == 0){ //如果是根结节，则不需要拼接h
+                    $destinationPath = '/' . $publishFileName;
+                }else{
+                    $destinationPath = self::PUBLISH_PATH . '/' . strval($channelId) . '/' . $publishFileName;
                 }
+
+                $sourcePath = '';
+                $publishQueueManageData->Add($destinationPath, $sourcePath, $channelTemplateContent);
             }else{
                 $result = self::PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR;
             }
@@ -292,14 +313,31 @@ class BaseManageGen extends BaseGen
 
     }
 
+    private function TransferPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId){
+        $ftpManageData = new FtpManageData();
+        $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
+        //判断是用ftp方式传输还是直接写文件方式传输
+        if(!empty($ftpInfo)){ //定义了ftp配置信息，使用ftp方式传输
 
+        }else{ //没有定义ftp配置信息，使用直接写文件方式传输
+            if(!empty($publishQueueManageData->Queue)){
+                for($i = 0; $i< count($publishQueueManageData->Queue); $i++){
+                    $destinationPath = $publishQueueManageData->Queue["DestinationPath"][$i];
+                    $channelTemplateContent = $publishQueueManageData->Queue["Content"][$i];
+                    $result = FileObject::Write($destinationPath, $channelTemplateContent);
+                    $publishQueueManageData->Queue["Result"][$i] = $result;
+                }
+            }
+
+        }
+    }
 
 
     protected function CancelPublishChannel(){
 
     }
 
-    protected function PublishDocumentNews($documentNewsId, FtpQueueManageData $ftpQueueManageData, $executeFtp, $publishChannel){
+    protected function PublishDocumentNews($documentNewsId, PublishQueueManageData $publishQueueManageData, $executeFtp, $publishChannel){
 
     }
 

@@ -1,16 +1,16 @@
 <?php
 /**
- * 后台管理 FTP 传输队列 数据类
+ * 后台管理 发布队列 数据类
  * @category iCMS
- * @package iCMS_Rules_DataProvider_Ftp
+ * @package iCMS_Rules_DataProvider_Publish
  * @author zhangchi
  */
-class FtpQueueManageData extends BaseManageData {
+class PublishQueueManageData extends BaseManageData {
 
     /**
      * @var array FTP上传队列数组
      */
-    public $ArrayUpload = array();
+    public $Queue = array();
 
     /**
      * 增加一条FTP队列信息
@@ -20,8 +20,8 @@ class FtpQueueManageData extends BaseManageData {
      */
     public function Add($destinationPath, $sourcePath, $content) {
         if (!empty($destinationPath)) {
-            $arr_tmp = array("DestinationPath" => $destinationPath, "SourcePath" => $sourcePath, "Content" => $content, "Result" => 0);
-            array_push($this->ArrayUpload, $arr_tmp);
+            $arrTemp = array("DestinationPath" => $destinationPath, "SourcePath" => $sourcePath, "Content" => $content, "Result" => 0);
+            array_push($this->Queue, $arrTemp);
         }
     }
 
@@ -29,6 +29,6 @@ class FtpQueueManageData extends BaseManageData {
      * 清空对象数组
      */
     public function Clear() {
-        unset($this->ArrayUpload);
+        unset($this->Queue);
     }
 } 
