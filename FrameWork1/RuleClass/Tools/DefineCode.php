@@ -8,11 +8,26 @@
  */
 class DefineCode {
 
-    const FTP_CODE = -104000;
     /**
-     * 会员相册 后台管理 返回值前缀
+     * FTP 返回值前缀
      */
-    const USER_ALBUM_MANAGE = 208;
+    const FTP_CODE = -101000;
+
+    /**
+     * 文件类 返回值前缀
+     */
+    const FILE_CODE = -102000;
+
+    /**
+     * 图片类　返回值前缀
+     */
+    const  IMAGE_CODE = -103000;
+
+    /**
+     * 数据缓存类 返回值前缀
+     */
+    const  DATA_CACHE_CODE = -104000;
+
 
 
 } 
