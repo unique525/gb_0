@@ -21,12 +21,12 @@ class DefineCode {
     /**
      * 图片类　返回值前缀
      */
-    const  IMAGE_OBJECT = -103000;
+    const IMAGE_OBJECT = -103000;
 
     /**
      * 数据缓存类 返回值前缀
      */
-    const  DATA_CACHE = -104000;
+    const DATA_CACHE = -104000;
 
     /**
      * 发布类 返回值前缀
@@ -41,52 +41,52 @@ class DefineCode {
     /**
      * 会员 前台 生成类
      */
-    const USER_PUBLIC = -131000;
+    const USER_PUBLIC = -160000;
 
     /**
      * 会员 客户端 返回值前缀
      */
-    const USER_CLIENT = -203000;
+    const USER_CLIENT = -190000;
 
     /**
      * 会员相册 后台管理 返回值前缀
      */
-    const USER_ALBUM_MANAGE = -204000;
+    const USER_ALBUM_MANAGE = -220000;
 
    /**
      * 会员相册 客户端 返回值前缀
      */
-    const USER_ALBUM_CLIENT = -205000;
+    const USER_ALBUM_CLIENT = -250000;
 
     /**
      * 会员相册 前台 返回值前缀
      */
-    const USER_ALBUM_PUBLIC = -206000;
+    const USER_ALBUM_PUBLIC = -280000;
 
     /**
      * 会员相册 照片 后台管理 返回值前缀
      */
-    const USER_ALBUM_PIC_MANAGE = -207000;
+    const USER_ALBUM_PIC_MANAGE = -310000;
 
     /**
      * 会员相册 照片 客户端 返回值前缀
      */
-    const USER_ALBUM_PIC_CLIENT = -208000;
+    const USER_ALBUM_PIC_CLIENT = -340000;
 
     /**
      * 会员相册 照片 前台 返回值前缀
      */
-    const USER_ALBUM_PIC_PUBLIC = -209000;
+    const USER_ALBUM_PIC_PUBLIC = -370000;
 
     /**
      * 频道 后台管理 返回值前缀
      */
-    const CHANNEL_MANAGE = -301000;
+    const CHANNEL_MANAGE = -400000;
 
     /**
      * 频道 前台 返回值前缀
      */
-    const CHANNEL_PUBLIC = -302000;
+    const CHANNEL_PUBLIC = -430000;
 
     /**
      * 文档 后台管理 返回值前缀
@@ -101,25 +101,25 @@ class DefineCode {
     /**
      * 活动表单页面  后台管理 返回值前缀
      */
-    const  CUSTOM_FORM_FIELD_MANAGE = -502000;
+    const CUSTOM_FORM_FIELD_MANAGE = -502000;
 
     /**
      * 活动表单记录 后台管理 返回值前缀
      */
-    const  CUSTOM_FORM_RECORD_MANAGE = -503000;
+    const CUSTOM_FORM_RECORD_MANAGE = -503000;
 
     /**
      * 活动表单记录 前台 返回值前缀
      */
-    const  CUSTOM_FORM_RECORD_PUBLIC = -504000;
+    const CUSTOM_FORM_RECORD_PUBLIC = -504000;
 
     /**
      * 活动表单记录 前台 返回值前缀字段
      */
-    const  CUSTOM_FORM_CONTENT_MANAGE = -504000;
+    const CUSTOM_FORM_CONTENT_MANAGE = -504000;
 
 
-    const  CUSTOM_FORM_CONTENT_MANAGEss = -101000;
+    const CUSTOM_FORM_CONTENT_MANAGEss = -101000;
 
 
 
