@@ -60,7 +60,7 @@
 
             <tr>
                 <td colspan="2" height="30" align="center">
-                    <input class="btn" value="确 认" type="button" onclick="sub()" />
+                    <input class="btn" value="确认" type="button" onclick="sub()" />
                 </td>
             </tr>
 
