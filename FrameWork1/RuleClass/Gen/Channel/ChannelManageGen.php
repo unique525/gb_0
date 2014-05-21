@@ -296,7 +296,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
                     $publishQueueManageData->Queue[$i]["Content"] = "";
                 }
-                //print_r($publishQueueManageData->Queue);
+                print_r($publishQueueManageData->Queue);
             }
         }
         return $result;

@@ -8,7 +8,38 @@
  */
 class BaseManageGen extends BaseGen
 {
+    /**
+     * 系统静态页面的根目录
+     */
     const PUBLISH_PATH = "h";
+
+    /**
+     * 发布频道 返回值 未操作
+     */
+    const PUBLISH_CHANNEL_RESULT_NO_ACTION = -101;
+    /**
+     * 发布频道 返回值 频道id少于0
+     */
+    const PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR = -102;
+    /**
+     * 发布频道 返回值 操作完成，结果存储于结果数组中
+     */
+    const PUBLISH_CHANNEL_RESULT_FINISHED = 101;
+
+
+    /**
+     * 加入发布队列 返回值 未操作
+     */
+    const ADD_TO_PUBLISH_QUEUE_RESULT_NO_ACTION = -105;
+    /**
+     * 加入发布队列 返回值 频道id错误
+     */
+    const ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR = -106;
+    /**
+     * 加入发布队列 返回值 操作完成
+     */
+    const ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED = 105;
+
 
     /**
      * 替换新增时，模板里的{field}值为空，包括后台模板和模板数据库中的模板
@@ -24,19 +55,6 @@ class BaseManageGen extends BaseGen
             }
         }
     }
-
-    /**
-     * 发布频道 返回值 未操作
-     */
-    const PUBLISH_CHANNEL_RESULT_NO_ACTION = -105001;
-    /**
-     * 发布频道 返回值 频道id少于0
-     */
-    const PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR = -105002;
-    /**
-     * 发布频道 返回值 操作完成，结果存储于结果数组中
-     */
-    const PUBLISH_CHANNEL_RESULT_FINISHED = 105001;
 
     /**
      * 发布频道
@@ -164,9 +182,9 @@ class BaseManageGen extends BaseGen
                 $timeEnd - $timeStart,
                 "now channel id:$nowChannelId transfer publish queue"
             );
-            $result = self::PUBLISH_CHANNEL_RESULT_FINISHED;
+            $result = abs(DefineCode::PUBLISH) + self::PUBLISH_CHANNEL_RESULT_FINISHED;
         } else {
-            $result = self::PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR;
+            $result = DefineCode::PUBLISH + self::PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR;
         }
 
         return $result;
@@ -301,19 +319,6 @@ class BaseManageGen extends BaseGen
         return $channelTemplateContent;
     }
 
-    /**
-     * 加入发布队列 返回值 未操作
-     */
-    const ADD_TO_PUBLISH_QUEUE_RESULT_NO_ACTION = -106002;
-    /**
-     * 加入发布队列 返回值 频道id错误
-     */
-    const ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR = -106003;
-    /**
-     * 加入发布队列 返回值 操作完成
-     */
-    const ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED = 106001;
-
 
     private function AddToPublishQueue(
         $channelId,
@@ -385,8 +390,10 @@ class BaseManageGen extends BaseGen
                     $channelTemplateContent = $publishQueueManageData->Queue[$i]["Content"];
                     $result = FileObject::Write($destinationPath, $channelTemplateContent);
                     //echo '$$'.$result.'$$';
-                    if($result>0){
+                    if($result>0){ //成功返回成功码
                         $publishQueueManageData->Queue[$i]["Result"] = self::PUBLISH_TRANSFER_RESULT_SUCCESS;
+                    }else{ //错误则返回FileObject::Write中的错误码
+                        $publishQueueManageData->Queue[$i]["Result"] = $result;
                     }
                 }
             }
