@@ -11,22 +11,27 @@ class DefineCode {
     /**
      * FTP 返回值前缀
      */
-    const FTP_CODE = -101000;
+    const FTP = -101000;
 
     /**
      * 文件类 返回值前缀
      */
-    const FILE_CODE = -102000;
+    const FILE_OBJECT = -102000;
 
     /**
      * 图片类　返回值前缀
      */
-    const  IMAGE_CODE = -103000;
+    const  IMAGE_OBJECT = -103000;
 
     /**
      * 数据缓存类 返回值前缀
      */
-    const  DATA_CACHE_CODE = -104000;
+    const  DATA_CACHE = -104000;
+
+    /**
+     * 发布类 返回值前缀
+     */
+    const PUBLISH = -105000;
 
     /**
      * 会员 后台管理 生成类
@@ -48,11 +53,7 @@ class DefineCode {
      */
     const USER_ALBUM_MANAGE = -204000;
 
-
-
-
-
-    /**
+   /**
      * 会员相册 客户端 返回值前缀
      */
     const USER_ALBUM_CLIENT = -205000;
@@ -77,7 +78,45 @@ class DefineCode {
      */
     const USER_ALBUM_PIC_PUBLIC = -209000;
 
+    /**
+     * 频道 后台管理 返回值前缀
+     */
+    const CHANNEL_MANAGE = -301000;
 
+    /**
+     * 频道 前台 返回值前缀
+     */
+    const CHANNEL_PUBLIC = -302000;
+
+    /**
+     * 文档 后台管理 返回值前缀
+     */
+    const DOCUMENT_NEWS_MANAGE = -401000;
+
+    /**
+     * 活动表单 后台管理 返回值前缀
+     */
+    const CUSTOM_FORM_MANAGE = -501000;
+
+    /**
+     * 活动表单页面  后台管理 返回值前缀
+     */
+    const  CUSTOM_FORM_FIELD_MANAGE = -502000;
+
+    /**
+     * 活动表单记录 后台管理 返回值前缀
+     */
+    const  CUSTOM_FORM_RECORD_MANAGE = -503000;
+
+    /**
+     * 活动表单记录 前台 返回值前缀
+     */
+    const  CUSTOM_FORM_RECORD_PUBLIC = -504000;
+
+    /**
+     * 活动表单记录 前台 返回值前缀字段
+     */
+    const  CUSTOM_FORM_CONTENT_MANAGE = -504000;
 
 
 
