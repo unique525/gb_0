@@ -96,9 +96,9 @@
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("频道简介不能超过1000个字符");
             } else {
-                if(continueCreate == 1){
+                if (continueCreate == 1) {
                     $("#CloseTab").val("0");
-                }else{
+                } else {
                     $("#CloseTab").val("1");
                 }
                 $('#mainForm').submit();
@@ -109,12 +109,16 @@
 </head>
 <body>
 {common_body_deal}
-<form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}" method="post">
+<form id="mainForm" enctype="multipart/form-data"
+      action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}"
+      method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
+            <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 </table>
@@ -130,7 +134,9 @@
     </tr>
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_ChannelName">频道名称：</label></td>
-        <td class="spe_line"><input name="f_ChannelName" id="f_ChannelName" value="{ChannelName}" type="text" class="input_box" style="width:300px;"/></td>
+        <td class="spe_line">
+            <input name="f_ChannelName" id="f_ChannelName" value="{ChannelName}" type="text" class="input_box" style="width:300px;"/>
+        </td>
     </tr>
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_CreateDate">创建时间：</label></td>
@@ -180,7 +186,8 @@
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_PublishPath">发布文件夹：</label></td>
             <td class="spe_line">
-                <input id="f_PublishPath" name="f_PublishPath" type="text" value="{PublishPath}" class="input_box"/> (可以为空)
+                <input id="f_PublishPath" name="f_PublishPath" type="text" value="{PublishPath}" class="input_box"/>
+                (可以为空)
             </td>
         </tr>
         <tr>
@@ -230,7 +237,8 @@
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_BrowserTitle">浏览器标题：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserTitle" name="f_BrowserTitle" type="text" value="{BrowserTitle}" class="input_box" style="width:400px;" maxlength="200"/>
+                <input id="f_BrowserTitle" name="f_BrowserTitle" type="text" value="{BrowserTitle}" class="input_box"
+                       style="width:400px;" maxlength="200"/>
             </td>
         </tr>
 
@@ -238,14 +246,16 @@
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_BrowserKeywords">浏览器关键字：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserKeywords" name="f_BrowserKeywords" type="text" value="{BrowserKeywords}" class="input_box" style="width:400px;" maxlength="200"/>
+                <input id="f_BrowserKeywords" name="f_BrowserKeywords" type="text" value="{BrowserKeywords}"
+                       class="input_box" style="width:400px;" maxlength="200"/>
             </td>
         </tr>
 
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_BrowserDescription">浏览器描述文字：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserDescription" name="f_BrowserDescription" type="text" value="{BrowserDescription}" class="input_box" style=" width: 400px;" maxlength="200"/>
+                <input id="f_BrowserDescription" name="f_BrowserDescription" type="text" value="{BrowserDescription}"
+                       class="input_box" style=" width: 400px;" maxlength="200"/>
             </td>
         </tr>
         <tr>
@@ -271,21 +281,25 @@
         <tr>
             <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">频道图片1：</label></td>
             <td class="spe_line">
-                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
+                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
+                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
+                                                                                      style="cursor:pointer">[预览]</span>
 
             </td>
         </tr>
         <tr>
             <td class="spe_line" height="30" align="right">频道图片2：</td>
             <td class="spe_line">
-                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
-
+                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;"/>
+                <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
             </td>
         </tr>
         <tr>
             <td class="spe_line" height="30" align="right">频道图片3：</td>
             <td class="spe_line">
-                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3" style="cursor:pointer">[预览]</span>
+                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
+                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
+                                                                                          style="cursor:pointer">[预览]</span>
 
             </td>
         </tr>
@@ -301,9 +315,11 @@
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
 
         <tr>
-            <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishApiUrl">发布API接口地址：</label></td>
+            <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishApiUrl">发布API接口地址：</label>
+            </td>
             <td class="spe_line">
-                <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="input_box" style="width: 500px;" maxlength="200"/>
+                <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="input_box"
+                       style="width: 500px;" maxlength="200"/>
             </td>
         </tr>
         <tr>
@@ -320,7 +336,10 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增"
+                                                                                            type="button"
+                                                                                            onclick="submitForm(1)"/>
+            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 </table>

@@ -29,7 +29,29 @@ class ChannelTemplateManageData extends BaseManageData
      * 不发布
      */
     const PUBLISH_TYPE_NOT_PUBLISH = 20;
+    /**
+     * 资讯详细页模板
+     */
+    const PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL = 30;
+    /**
+     * 活动详细页模板
+     */
+    const PUBLISH_TYPE_ACTIVITY_DETAIL = 31;
 
+    /**
+     * 普通模板
+     */
+    //const CHANNEL_TEMPLATE_TYPE_NORMAL = 0;
+
+    /**
+     * 资讯详细页模板
+     */
+    //const CHANNEL_TEMPLATE_TYPE_DOCUMENT_NEWS_DETAIL = 1;
+
+    /**
+     * 活动详细页模板
+     */
+    //const CHANNEL_TEMPLATE_TYPE_ACTIVITY_DETAIL = 2;
 
     /**
      * 状态：正常
