@@ -466,5 +466,36 @@ class Control {
             return false;
 
     }
+
+    /**
+     * 发送GET请求
+     * @param string $url 请求地址
+     * @return string 返回结果
+     */
+    public static function SendGet($url){
+        return file_get_contents($url);
+    }
+
+    /**
+     * 发送POST请求
+     * @param string $url 请求地址
+     * @param array $postData POST数组数据
+     * @return string 返回结果
+     */
+    public static function SendPost($url, $postData) {
+        $content = http_build_query($postData);
+        $options = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => 'Content-type:application/x-www-form-urlencoded',
+                'content' => $content,
+                'timeout' => 15 * 60 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+
+        return $result;
+    }
 }
 ?>
