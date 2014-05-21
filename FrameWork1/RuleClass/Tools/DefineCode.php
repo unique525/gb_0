@@ -91,35 +91,48 @@ class DefineCode {
     /**
      * 文档 后台管理 返回值前缀
      */
-    const DOCUMENT_NEWS_MANAGE = -401000;
+    const DOCUMENT_NEWS_MANAGE = -460000;
 
     /**
      * 活动表单 后台管理 返回值前缀
      */
-    const CUSTOM_FORM_MANAGE = -501000;
+    const CUSTOM_FORM_MANAGE = -490000;
 
     /**
      * 活动表单页面  后台管理 返回值前缀
      */
-    const CUSTOM_FORM_FIELD_MANAGE = -502000;
+    const CUSTOM_FORM_FIELD_MANAGE = -520000;
 
     /**
      * 活动表单记录 后台管理 返回值前缀
      */
-    const CUSTOM_FORM_RECORD_MANAGE = -503000;
+    const CUSTOM_FORM_RECORD_MANAGE = -550000;
 
     /**
      * 活动表单记录 前台 返回值前缀
      */
-    const CUSTOM_FORM_RECORD_PUBLIC = -504000;
+    const CUSTOM_FORM_RECORD_PUBLIC = -580000;
 
     /**
      * 活动表单记录 前台 返回值前缀字段
      */
-    const CUSTOM_FORM_CONTENT_MANAGE = -504000;
+    const CUSTOM_FORM_CONTENT_MANAGE = -610000;
 
+    /**
+     * 站点 后台管理 返回值前缀字段
+     */
+    const SITE_MANAGE = -640000;
 
-    const CUSTOM_FORM_CONTENT_MANAGEss = -101000;
+    /**
+     * 站点配置 后台管理 返回值前缀字段
+     */
+    const SITE_CONGIF_MANAGE = -670000;
+
+    /**
+     * 站点配置 前台 返回值前缀字段
+     */
+    const SITE_CONFIG_PUBLIC = -700000;
+
 
 
 
