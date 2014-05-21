@@ -93,4 +93,17 @@ class UserInfoManageData extends BaseManageData {
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
+
+    /**
+     * 获取一个会员的真实姓名
+     * @param $userId
+     * @return string 会员的真实姓名
+     */
+    public function GetRealName($userId){
+        $sql = "SELECT RealName FROM ".self::TableName_UserInfo." WHERE UserId = :UserId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserId",$userId);
+        $result = $this->dbOperator->GetString($sql,$dataProperty);
+        return $result;
+    }
 }
