@@ -34,11 +34,11 @@ class FileObject
     /**
      * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
      */
-    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -5;
+    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -1001;
     /**
      * 文件写入结果：文件路径为空
      */
-    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -10;
+    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -1002;
 
     /**
      * 写入文件

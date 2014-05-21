@@ -121,6 +121,32 @@ class BaseData
      */
     const TableId_DocumentNews = "DocumentNewsId";
     /**
+     * 活动 数据表名
+     */
+    const TableName_Activity = "cst_activity";
+    /**
+     * 活动 数据表自增字段名
+     */
+    const TableId_Activity = "ActivityId";
+    /**
+     * 活动相册 数据表名
+     */
+    const TableName_ActivityAlbum = "cst_activity_album";
+    /**
+     * 活动相册 数据表自增字段名
+     */
+    const TableId_ActivityAlbum = "ActivityAlbumId";
+    /**
+     * 活动会员 数据表名
+     */
+    const TableName_ActivityUser = "cst_activity_user";
+    /**
+     * 活动会员 数据表自增字段名
+     */
+    const TableId_ActivityUser = "ActivityUserId";
+
+
+    /**
      * 快捷内容录入 数据表名
      */
     const TableName_DocumentQuickContent = "cst_document_quick_content";
