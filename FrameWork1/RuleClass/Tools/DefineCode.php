@@ -48,6 +48,8 @@ class DefineCode {
      */
     const USER_ALBUM_MANAGE = -204000;
 
+
+
     /**
      * 会员相册 客户端 返回值前缀
      */
