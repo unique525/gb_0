@@ -9,6 +9,20 @@
 class FileObject
 {
 
+
+    /**
+     * 文件写入结果：未操作
+     */
+    const FILE_WRITE_ERROR_CAN_NO_ACTION = -101;
+    /**
+     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
+     */
+    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -102;
+    /**
+     * 文件写入结果：文件路径为空
+     */
+    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -103;
+
     /**
      * 创建文件夹
      * @param string $dirPath 要创建的文件夹路径
@@ -26,19 +40,6 @@ class FileObject
             }
         }
     }
-
-    /**
-     * 文件写入结果：未操作
-     */
-    const FILE_WRITE_ERROR_CAN_NO_ACTION = -1;
-    /**
-     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
-     */
-    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -1001;
-    /**
-     * 文件写入结果：文件路径为空
-     */
-    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -1002;
 
     /**
      * 写入文件
