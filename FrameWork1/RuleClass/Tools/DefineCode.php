@@ -36,12 +36,12 @@ class DefineCode {
     /**
      * 会员 后台管理 生成类
      */
-    const USER_MANAGE = -201000;
+    const USER_MANAGE = -130000;
 
     /**
      * 会员 前台 生成类
      */
-    const USER_PUBLIC = -202000;
+    const USER_PUBLIC = -131000;
 
     /**
      * 会员 客户端 返回值前缀
@@ -117,6 +117,9 @@ class DefineCode {
      * 活动表单记录 前台 返回值前缀字段
      */
     const  CUSTOM_FORM_CONTENT_MANAGE = -504000;
+
+
+    const  CUSTOM_FORM_CONTENT_MANAGEss = -101000;
 
 
 
