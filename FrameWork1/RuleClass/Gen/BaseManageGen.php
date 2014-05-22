@@ -38,7 +38,25 @@ class BaseManageGen extends BaseGen
     /**
      * 加入发布队列 返回值 操作完成
      */
-    const ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED = 105;
+    const ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED = 107;
+
+
+    /**
+     * 发布传输结果：未操作
+     */
+    const PUBLISH_TRANSFER_RESULT_NO_ACTION = -110;
+    /**
+     * 发布传输结果：频道id错误
+     */
+    const PUBLISH_TRANSFER_RESULT_CHANNEL_ID_ERROR = -111;
+    /**
+     * 发布传输结果：站点id错误
+     */
+    const PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR = -112;
+    /**
+     * 发布传输结果：传输成功
+     */
+    const PUBLISH_TRANSFER_RESULT_SUCCESS = 110;
 
 
     /**
@@ -320,6 +338,17 @@ class BaseManageGen extends BaseGen
     }
 
 
+    /**
+     * 加入到发布队列
+     * @param int $channelId 频道id
+     * @param int $rank 频道级别
+     * @param string $channelTemplateContent 模板内容
+     * @param int $publishType 发布方式
+     * @param string $publishFileName 发布文件名
+     * @param PublishQueueManageData $publishQueueManageData 发布队列对象
+     * @param string $publishPath 发布路径，一般为空，详细页模板才需要使用
+     * @return int|number 发布结果
+     */
     private function AddToPublishQueue(
         $channelId,
         $rank,
@@ -350,31 +379,14 @@ class BaseManageGen extends BaseGen
             }
             $sourcePath = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $channelTemplateContent);
-            $result = self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
+            $result = abs(DefineCode::PUBLISH) + self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
         } else {
-            $result = self::ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR;
+            $result = DefineCode::PUBLISH + self::ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR;
         }
         return $result;
 
     }
 
-
-    /**
-     * 发布传输结果：未操作
-     */
-    const PUBLISH_TRANSFER_RESULT_NO_ACTION = -1;
-    /**
-     * 发布传输结果：频道id错误
-     */
-    const PUBLISH_TRANSFER_RESULT_CHANNEL_ID_ERROR = -5;
-    /**
-     * 发布传输结果：站点id错误
-     */
-    const PUBLISH_TRANSFER_RESULT_SITE_ID_ERROR = -10;
-    /**
-     * 发布传输结果：传输成功
-     */
-    const PUBLISH_TRANSFER_RESULT_SUCCESS = 1;
 
     private function TransferPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
     {
@@ -383,21 +395,23 @@ class BaseManageGen extends BaseGen
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
 
+
+
+
+
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
                 for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
                     $destinationPath = $publishQueueManageData->Queue[$i]["DestinationPath"];
                     $channelTemplateContent = $publishQueueManageData->Queue[$i]["Content"];
                     $result = FileObject::Write($destinationPath, $channelTemplateContent);
-                    //echo '$$'.$result.'$$';
                     if($result>0){ //成功返回成功码
-                        $publishQueueManageData->Queue[$i]["Result"] = self::PUBLISH_TRANSFER_RESULT_SUCCESS;
+                        $publishQueueManageData->Queue[$i]["Result"] = abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;
                     }else{ //错误则返回FileObject::Write中的错误码
                         $publishQueueManageData->Queue[$i]["Result"] = $result;
                     }
                 }
             }
-
         }
     }
 
