@@ -46,4 +46,70 @@ class UserManageData extends BaseManageData {
 
         return $result;
     }
+
+    /**
+     * 修改会员
+     * @param array $httpPostData $_POST数组
+     * @param int $userId 会员id
+     * @return int 返回影响的行数
+     */
+    public function Modify($httpPostData, $userId)
+    {
+        $result = -1;
+        if($userId >0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetUpdateSql($httpPostData, self::TableName_ManageUser, self::TableId_ManageUser, $userId, $dataProperty);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 编辑会员时，检查同名帐号是否存在
+     * @param string $userName 会员名称
+     * @param int $userId 会员id
+     * @return array 会员列表数据集
+     */
+    public function CheckExistNameForModify($userName, $userId)
+    {
+        $sql = "SELECT Count(*) FROM  " . self::TableName_User . " WHERE UserName=:UserName AND UserId<>:UserId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserName", $userName);
+        $dataProperty->AddField("UserId", $userId);
+        $dbOperator = DBOperator::getInstance();
+        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 根据userid取得username
+     * @param int $userId 会员id
+     * @return string 返回会员名称
+     */
+    public function GetUserName($userId)
+    {
+        if ($userId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "SELECT username FROM " . self::TableName_User . " WHERE userid=:userid";
+            $dataProperty->AddField("userid", $userId);
+            $dboperator = DBOperator::getInstance();
+            $result = $dboperator->ReturnString($sql, $dataProperty);
+            return $result;
+        }
+    }
+
+    /**
+     * 根据userid得到一行信息信息
+     * @param int $userId 会员id
+     * @return array 会员列表数据集
+     */
+    public function GetRow($userId)
+    {
+        $dataProperty = new DataProperty();
+        $sql = "SELECT userid,username,uid,userarea,siteid,userpass,state,regip,createdate,parentid FROM " . self::TableName_User . " WHERE userid=:userid";
+        $dataProperty->AddField("userid", $userId);
+        $dboperator = DBOperator::getInstance();
+        $result = $dboperator->ReturnRow($sql, $dataProperty);
+        return $result;
+    }
 } 
