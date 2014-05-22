@@ -34,12 +34,12 @@ class DefineCode {
     const PUBLISH = -105000;
 
     /**
-     * 会员 后台管理 生成类
+     * 会员 后台管理 返回值前缀
      */
     const USER_MANAGE = -130000;
 
     /**
-     * 会员 前台 生成类
+     * 会员 前台 返回值前缀
      */
     const USER_PUBLIC = -160000;
 
@@ -114,22 +114,22 @@ class DefineCode {
     const CUSTOM_FORM_RECORD_PUBLIC = -580000;
 
     /**
-     * 活动表单记录 前台 返回值前缀字段
+     * 活动表单记录 前台 返回值前缀
      */
     const CUSTOM_FORM_CONTENT_MANAGE = -610000;
 
     /**
-     * 站点 后台管理 返回值前缀字段
+     * 站点 后台管理 返回值前缀
      */
     const SITE_MANAGE = -640000;
 
     /**
-     * 站点配置 后台管理 返回值前缀字段
+     * 站点配置 后台管理 返回值前缀
      */
     const SITE_CONFIG_MANAGE = -670000;
 
     /**
-     * 站点配置 前台 返回值前缀字段
+     * 站点配置 前台 返回值前缀
      */
     const SITE_CONFIG_PUBLIC = -700000;
 
