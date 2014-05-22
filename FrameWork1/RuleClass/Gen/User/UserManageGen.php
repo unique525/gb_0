@@ -167,11 +167,11 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                 $nowUserGroupId = $userRoleManageData->GetUserGroupID($userId, $siteId, $channelId);
                 $tempContent = str_ireplace("{x_usergroupid_$nowUserGroupId}", "selected=selected", $tempContent);
 
-                $arrList = $userManageData->GetRow($userId);
+                $arrList = $userManageData->GetOne($userId);
                 if ($arrList["parentid"] <= 0) {
                     $parentName = "";
                 } else {
-                    $parentName = $userManageData->GetUserName($arrList["parentid"]);
+                    $parentName = $userManageData->GetUserName($arrList["parentid"],false);
                 }
 
                 $replace_arr = array(
