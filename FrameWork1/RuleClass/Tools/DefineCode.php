@@ -126,7 +126,7 @@ class DefineCode {
     /**
      * 站点配置 后台管理 返回值前缀字段
      */
-    const SITE_CONGIF_MANAGE = -670000;
+    const SITE_CONFIG_MANAGE = -670000;
 
     /**
      * 站点配置 前台 返回值前缀字段
