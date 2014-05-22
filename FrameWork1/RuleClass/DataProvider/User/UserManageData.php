@@ -57,9 +57,11 @@ class UserManageData extends BaseManageData {
     {
         $result = -1;
         if($userId >0){
-            $dataProperty = new DataProperty();
-            $sql = parent::GetUpdateSql($httpPostData, self::TableName_ManageUser, self::TableId_ManageUser, $userId, $dataProperty);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            if (!empty($httpPostData)) {
+                $dataProperty = new DataProperty();
+                $sql = parent::GetUpdateSql($httpPostData, self::TableName_ManageUser, self::TableId_ManageUser, $userId, $dataProperty);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+            }
         }
         return $result;
     }
@@ -72,30 +74,33 @@ class UserManageData extends BaseManageData {
      */
     public function CheckExistNameForModify($userName, $userId)
     {
-        $sql = "SELECT Count(*) FROM  " . self::TableName_User . " WHERE UserName=:UserName AND UserId<>:UserId";
+        $sql = "SELECT Count(*) FROM  " . self::TableName_User . " WHERE UserName=:UserName AND UserId<>:UserId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("UserName", $userName);
         $dataProperty->AddField("UserId", $userId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 根据userid取得username
      * @param int $userId 会员id
+     * @param bool $withCache 是否从缓冲中取
      * @return string 返回会员名称
      */
-    public function GetUserName($userId)
+
+    public function GetUserName($userId, $withCache)
     {
+        $result = null;
         if ($userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data';
+            $cacheFile = 'user_get_user_name.cache_' . $userId . '';
+            $sql = "SELECT username FROM " . self::TableName_User . " WHERE userId=:userId;";
             $dataProperty = new DataProperty();
-            $sql = "SELECT username FROM " . self::TableName_User . " WHERE userid=:userid";
-            $dataProperty->AddField("userid", $userId);
-            $dboperator = DBOperator::getInstance();
-            $result = $dboperator->ReturnString($sql, $dataProperty);
-            return $result;
+            $dataProperty->AddField("userId", $userId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
+        return $result;
     }
 
     /**
@@ -103,13 +108,16 @@ class UserManageData extends BaseManageData {
      * @param int $userId 会员id
      * @return array 会员列表数据集
      */
-    public function GetRow($userId)
+    public function GetOne($userId)
     {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT userid,username,uid,userarea,siteid,userpass,state,regip,createdate,parentid FROM " . self::TableName_User . " WHERE userid=:userid";
-        $dataProperty->AddField("userid", $userId);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnRow($sql, $dataProperty);
+        $result = null;
+        if($userId>0){
+            $sql = "SELECT userid,username,uid,userarea,siteid,userpass,state,regip,createdate,parentid FROM " . self::TableName_User . " WHERE userId=:userId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("userId", $userId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
         return $result;
     }
+
 } 
