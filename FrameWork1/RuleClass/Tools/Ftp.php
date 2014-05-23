@@ -11,11 +11,11 @@ class Ftp
     /**
      * 未操作
      */
-    const FTP_NO_ACTION = 0;
+    const FTP_NO_ACTION = -101;
     /**
      * 不支持FTP
      */
-    const FTP_NOT_SUPPORT = -1;
+    const FTP_NOT_SUPPORT = 002;
     /**
      * 连接失败
      */
@@ -78,7 +78,7 @@ class Ftp
     public static function Upload($ftpInfo, $destinationPath, $sourcePath = null, $sourceContent = null, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
     {
         //进行连接
-        $result = self::FTP_NO_ACTION;
+        $result = DefineCode::FTP_CODE + self::FTP_NO_ACTION;
         $ftpConnect = self::Connect($ftpInfo);
         if (!$ftpConnect) { //连接失败
             $result = self::FTP_CONNECT_FAILURE; //连接失败

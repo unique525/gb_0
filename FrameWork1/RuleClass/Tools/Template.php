@@ -475,7 +475,7 @@ class Template
                 //截断字符
                 $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
             } else {
-                $columnValue = str_replace(array('&nbsp;', "\r", "\n", '\'', '"'), '', Format::ToShort(strip_tags($columnValue), 50));
+                $columnValue = str_replace(array('&nbsp;', "\r", "\n", '\'', '"'), '', Format::ToShort(strip_tags($columnValue), $itemRowIntroCount));
             }
         }
 

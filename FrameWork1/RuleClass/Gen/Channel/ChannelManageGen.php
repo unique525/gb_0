@@ -290,7 +290,14 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $result = -1;
         $channelId = Control::GetRequest("channel_id", -1);
         if($channelId>0){
-            $result = parent::PublishChannel($channelId);
+            $publishQueueManageData = new PublishQueueManageData();
+            $result = parent::PublishChannel($channelId, $publishQueueManageData);
+            if($result == BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED){
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+                    $publishQueueManageData->Queue[$i]["Content"] = "";
+                }
+                print_r($publishQueueManageData->Queue);
+            }
         }
         return $result;
     }

@@ -9,6 +9,56 @@
 class FileObject
 {
 
+
+    /**
+     * 文件写入结果：未操作
+     */
+    const FILE_WRITE_RESULT_NO_ACTION = -101;
+    /**
+     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
+     */
+    const FILE_WRITE_RESULT_CAN_NOT_WRITE = -102;
+    /**
+     * 文件写入结果：文件路径为空
+     */
+    const FILE_WRITE_RESULT_FILE_PATH_IS_EMPTY = -103;
+
+
+
+    /**
+     * 文件写入结果：未操作
+     */
+    const FILE_WRITE_QUEUE_RESULT_NO_ACTION = -105;
+    /**
+     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
+     */
+    const FILE_WRITE_QUEUE_RESULT_FINISHED = 106;
+    /**
+     * 文件写入结果：文件路径为空
+     */
+    const FILE_WRITE_QUEUE_RESULT_FILE_ARRAY_EMPTY = -107;
+    /**
+     * 文件写入结果：成功
+     */
+    const FILE_WRITE_QUEUE_RESULT_SUCCESS = 105;
+
+    /**
+     * 文件移动结果：来源文件路径为空
+     */
+    const FILE_MOVE_RESULT_SOURCE_PATH_EMPTY = -110;
+    /**
+     * 文件移动结果：目标文件路径为空
+     */
+    const FILE_MOVE_RESULT_DESTINATION_PATH_EMPTY = -110;
+    /**
+     * 文件移动结果：不是文件
+     */
+    const FILE_MOVE_RESULT_IS_NOT_FILE = -111;
+    /**
+     * 文件移动结果：目标路径和来源路径相同
+     */
+    const FILE_MOVE_RESULT_SAME_SOURCE_PATH_AND_DESTINATION_PATH = -112;
+
     /**
      * 创建文件夹
      * @param string $dirPath 要创建的文件夹路径
@@ -28,19 +78,6 @@ class FileObject
     }
 
     /**
-     * 文件写入结果：未操作
-     */
-    const FILE_WRITE_ERROR_CAN_NO_ACTION = -1;
-    /**
-     * 文件写入结果：文件不可写，发布失败，请联系技术人员处理！
-     */
-    const FILE_WRITE_ERROR_CAN_NOT_WRITE = -5;
-    /**
-     * 文件写入结果：文件路径为空
-     */
-    const FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY = -10;
-
-    /**
      * 写入文件
      * @param string $filePath 文件路径
      * @param mixed $fileContent 要写入文件的数据。可以是字符串、数组或数据流。
@@ -57,13 +94,13 @@ class FileObject
             FileObject::CreateDir($dir);
             $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
             if (!is_writable($filePath)) {
-                $result = self::FILE_WRITE_ERROR_CAN_NOT_WRITE;
+                $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
             }else{
                 $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
             }
             fclose($fp);
         } else {
-            $result = self::FILE_WRITE_ERROR_CAN_FILE_PATH_IS_EMPTY;
+            $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_FILE_PATH_IS_EMPTY;
         }
         return $result;
     }
@@ -76,7 +113,7 @@ class FileObject
     public static function WriteQueue(&$arrFileContent = null)
     {
         if (empty($arrFileContent)) {
-            $result = -5; //上传数组为空
+            $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_QUEUE_RESULT_FILE_ARRAY_EMPTY; //上传数组为空
         } else {
             for ($i = 0; $i < count($arrFileContent); $i++) {
                 $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $arrFileContent[$i]["DestinationPath"];
@@ -92,19 +129,19 @@ class FileObject
 
                 if ($destinationPath != $sourcePath) { //写本地文件时，目标路径和来源路径一致时，不进行操作
                     if (strlen($sourceContent) > 0) { //内容
-                        $isWrite = FileObject::Write($destinationPath, $sourceContent);
+                        $writeResult = FileObject::Write($destinationPath, $sourceContent);
                     } else { //附件文件
-                        $isWrite = FileObject::Move($sourcePath, $destinationPath);
+                        $writeResult = FileObject::Move($sourcePath, $destinationPath);
                     }
 
-                    if ($isWrite) {
-                        $arrFileContent[$i]["result"] = 1;
+                    if ($writeResult > 0) {
+                        $arrFileContent[$i]["result"] = abs(DefineCode::FILE_OBJECT) + self::FILE_WRITE_QUEUE_RESULT_SUCCESS;
                     } else {
-                        $arrFileContent[$i]["result"] = 0;
+                        $arrFileContent[$i]["result"] = $writeResult;
                     }
                 }
             }
-            $result = 0; //数据不为空
+            $result = abs(DefineCode::FILE_OBJECT) + self::FILE_WRITE_QUEUE_RESULT_FINISHED; //操作完成
         }
         return $result;
     }
@@ -114,12 +151,12 @@ class FileObject
      * @param string $destinationPath 目标文件路径
      * @param string $sourcePath 来源文件路径
      * @param string $sourceContent 写入内容
-     * @return int 返回写入结果 $result = -5 目标为空 $result = 1 写入成功
+     * @return int 返回写入结果
      */
-    public static function WriteSingle($destinationPath, $sourcePath, $sourceContent)
+    public static function WriteSingle($destinationPath, $sourcePath, $sourceContent = '')
     {
         if (empty($sourcePath) && empty($sourceContent)) {
-            $result = -5; //来源为空
+            $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_FILE_PATH_IS_EMPTY; //来源为空
         } else {
             $destinationPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . $destinationPath;
             $destinationPath = str_ireplace("/", DIRECTORY_SEPARATOR, $destinationPath);
@@ -130,11 +167,17 @@ class FileObject
             $sourcePath = str_ireplace("\\", DIRECTORY_SEPARATOR, $sourcePath);
 
             if (strlen($sourceContent) > 0) { //内容
-                FileObject::Write($destinationPath, $sourceContent);
+                $writeResult = FileObject::Write($destinationPath, $sourceContent);
             } else {
-                FileObject::Move($sourcePath, $destinationPath);
+                $writeResult = FileObject::Move($sourcePath, $destinationPath);
             }
-            $result = 0; //写入成功
+
+            if($writeResult > 0){
+                $result = abs(DefineCode::FILE_OBJECT) + self::FILE_WRITE_QUEUE_RESULT_SUCCESS;
+            }else{
+                $result = $writeResult;
+            }
+
         }
         return $result;
     }
@@ -147,13 +190,21 @@ class FileObject
      */
     public static function Move($sourceFilePath, $destinationFilePath)
     {
+        if(empty($sourceFilePath)){
+            return DefineCode::FILE_OBJECT + self::FILE_MOVE_RESULT_SOURCE_PATH_EMPTY;
+        }
+        if(empty($destinationFilePath)){
+            return DefineCode::FILE_OBJECT + self::FILE_MOVE_RESULT_SOURCE_PATH_EMPTY;
+        }
+        if(!is_file($sourceFilePath)){
+            return DefineCode::FILE_OBJECT + self::FILE_MOVE_RESULT_IS_NOT_FILE;
+        }
+        if($sourceFilePath == $destinationFilePath){
+            return DefineCode::FILE_OBJECT + self::FILE_MOVE_RESULT_SAME_SOURCE_PATH_AND_DESTINATION_PATH;
+        }
         $sourceFilePath = str_ireplace("//", "/", $sourceFilePath);
         $destinationFilePath = str_ireplace("//", "/", $destinationFilePath);
-        if (!empty($sourceFilePath) && !empty($destinationFilePath) && is_file($sourceFilePath) && $sourceFilePath != $destinationFilePath) {
-            return rename($sourceFilePath, $destinationFilePath);
-        } else {
-            return false;
-        }
+        return rename($sourceFilePath, $destinationFilePath);
     }
 
     /**

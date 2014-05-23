@@ -51,6 +51,22 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $forumManageGen = new ForumManageGen();
                     $result = $forumManageGen->Gen();
                     break;
+                case "custom_form":
+                    $customFormManageGen = new CustomFormManageGen();
+                    $result = $customFormManageGen->Gen();
+                    break;
+                case "custom_form_field":
+                    $customFormFieldManageGen = new CustomFormFieldManageGen();
+                    $result = $customFormFieldManageGen->Gen();
+                    break;
+                case "custom_form_record":
+                    $customFormRecordManageGen = new CustomFormRecordManageGen();
+                    $result = $customFormRecordManageGen->Gen();
+                    break;
+                case "custom_form_content":
+                    $customFormContentManageGen = new CustomFormContentManageGen();
+                    $result = $customFormContentManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
