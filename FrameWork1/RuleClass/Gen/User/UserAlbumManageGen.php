@@ -40,8 +40,48 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     private function GenModify() {
-        $userAlbumId = Control::GetRequest("user_album_id",0);
+        $tempContent = Template::Load("user/user_album_pic_list.html");
 
+        $userAlbumId = Control::GetRequest("user_album_id",0);
+        $activityId = Control::GetRequest("activity_id", 0);
+        $productId = Control::GetRequest("product_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($userAlbumId > 0) {
+
+        } else if ($activityId > 0) {
+            $userId = Control::GetRequest("user_id", 0);
+            $activityAlbumData = new ActivityAlbumData();
+            $userAlbumId = $activityAlbumData->GetUserAlbumID($userId, $activityId);
+        } else if ($productId > 0) {
+
+        }
+        $pageIndex = Control::GetRequest("p1", 1);
+        $listPageIndex = Control::GetRequest("p", 1);
+        $pageSize = 15;
+        $pageBegin = ($pageIndex - 1) * $pageSize;
+        $allCount = 0;
+        $replaceArr = array(
+            "{user_album_id}" => $userAlbumId,
+            "{page_index}" => $listPageIndex
+        );
+        $tempContent = strtr($tempContent, $replaceArr);
+        $userAlbumpicData = new UserAlbumPicManageData();
+        $arrList = $userAlbumpicData->GetPagerPic($pageBegin, $pageSize, $allCount, $userAlbumId, "useralbumpicid");
+
+        for ($i = 0; $i < count($arrList); $i++) {
+            $compressUrl = $arrList[$i]["UserAlbumPicCompressUrl"];
+            if ($compressUrl == 0 || strlen($compressUrl)) {
+                $arrList[$i]["UserAlbumPicCompressUrl"] = $arrList[$i]["UserAlbumPicThumbnailUrl"];
+            }
+        }
+        $listName = "user_album_pic_list";
+        Template::ReplaceList($tempContent, $arrList, $listName);
+        $userAlbumTagList = "user_album_tag_list";
+        $userAlbumManageData = new UserAlbumManageData();
+        $userAlbumTagArray = $userAlbumManageData->GetAllUserAlbumTag($siteId);
+        Template::ReplaceList($tempContent, $userAlbumTagArray, $userAlbumTagList);
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
     }
 
     private function GenListForManage() {
@@ -115,15 +155,6 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
                 $jsParamList = ",'',undefined,'" . $state . "'";
             }
 
-//            $pagerTemplate = Template::Load("pager/pager_style1.html","common");
-//            $isJs = true;
-//            $jsFunctionName = "load_user_album_list";
-//            $pagerButton = Pager::ShowPageButton($pagerTemplate, "", $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList);
-//            $replaceArr = array(
-//                "{pager_button}" => $pagerButton
-//            );
-//            $tempContent = strtr($tempContent, $replaceArr);
-
             for ($i = 0; $i < count($result); $i++) {
                 if ($result[$i]["NickName"] == "" || strlen($result[$i]["NickName"]) == 0) {
                     $result[$i]["NickName"] = $result[$i]["RealName"];
@@ -131,7 +162,6 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
             }
         }
         parent::ReplaceEnd($tempContent);
-//        return $tempContent;
         return $tempContent;
     }
 
