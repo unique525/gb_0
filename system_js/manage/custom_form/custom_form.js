@@ -28,9 +28,9 @@ $("document").ready(function(){
     });
 
 
-    var btnOpenCustomformfield = $(".btn_open_custom_form_field");
-    btnOpenCustomformfield.css("cursor", "pointer");
-    btnOpenCustomformfield.click(function(event) {
+    var btnOpenCustomFormField = $(".btn_open_custom_form_field");
+    btnOpenCustomFormField.css("cursor", "pointer");
+    btnOpenCustomFormField.click(function(event) {
         var customFormId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
@@ -43,9 +43,9 @@ $("document").ready(function(){
     });
 
 
-    var btnOpenCustomformRecord = $(".btn_open_custom_form_record");
-    btnOpenCustomformRecord.css("cursor", "pointer");
-    btnOpenCustomformRecord.click(function(event) {
+    var btnOpenCustomFormRecord = $(".btn_open_custom_form_record");
+    btnOpenCustomFormRecord.css("cursor", "pointer");
+    btnOpenCustomFormRecord.click(function(event) {
         var customFormId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
@@ -59,10 +59,6 @@ $("document").ready(function(){
 
     $("#btn_create").click(function(event) {
         event.preventDefault();
-        var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
-            pageIndex = 1;
-        }
         parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=create' + '&channel_id=' +  parent.G_SelectedChannelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-新建表单';
         parent.addTab();
