@@ -5,7 +5,8 @@
     {common_head}
 </head>
 <body>
-<script type="text/javascript" src="/system_js/manage/custom_form/custom_form.js"></script>
+{common_body_deal}
+<script type="text/javascript" src="/system_js/manage/custom_form/custom_form_list.js"></script>
 <div  class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
