@@ -197,6 +197,18 @@ class BaseData
      * 会员角色 数据表名
      */
     const TableName_UserRole = "cst_user_role";
+    /**
+     * 会员等级定义 数据表名
+     */
+    const TableName_UserLevel = "cst_user_level";
+    /**
+     * 会员等级定义 数据表自增字段名
+     */
+    const TableId_UserLevel = "UserLevelId";
+    /**
+     * 会员在对应站点的等级 数据表名
+     */
+    const TableName_UserSiteLevel = "cst_user_site_level";
 
 
     /**
