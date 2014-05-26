@@ -5,21 +5,28 @@
         {common_head}
         <style type="text/css">
             body{font-family: "微软雅黑";font-size:14px}
-            .image_div{width:240px;height:320px;border:1px #CCC solid;margin:2px;float:left;}
-            .pic_div{width:100%;height:320px;position: absolute;}
-            .op_div{word-wrap:break-word;margin-top:280px}
+            .photo { position:relative; font-family:arial; margin:2px 1px; text-align:center; overflow:hidden; border:1px solid #CCC; width:240px; height:320px; float:left}
+            .photo .heading, .photo .caption { position:absolute; background:#000; height:30px; width:240px; opacity:0.6; filter:alpha(opacity=60)}
+            .photo .heading { top:-30px; }
+            .photo .caption { bottom:-70px; left:0px;height:70px }
+            .photo .heading span { color:#26c3e5; top:-30px; font-weight:bold; display:block; padding:5px 0 0 10px; }
+            .photo .caption span { color:#999; font-size:9px; display:block; padding:5px 10px 0 10px; }
+            .photo img{width:240px;height:320px}
         </style>
         <script type="text/javascript">
-            $(function(){
-                $(".image_div").mouseenter(function(){
-                    //$(this).find(".pic_div").stop();
-                    $(this).find(".op_div").slideUp(800);
-                });
-                $(".image_div").mouseleave(function(){
-                    //$(this).find(".pic_div").stop();
-                    $(this).find(".op_div").slideDown(800);
-                });
-            })
+            $(document).ready(function () {
+                style = 'easeOutQuart';
+                $('.photo').hover(
+                    function() {
+                        $(this).children('div:first').stop(false,true).animate({top:0},{duration:200, easing: style});
+                        $(this).children('div:last').stop(false,true).animate({bottom:0},{duration:200, easing: style});
+                    },
+                    function() {
+                        $(this).children('div:first').stop(false,true).animate({top:-30},{duration:200, easing: style});
+                        $(this).children('div:last').stop(false,true).animate({bottom:-70},{duration:200, easing: style});
+                    }
+                );
+            });
         </script>
     </head>
     <body>
@@ -41,42 +48,58 @@
                 </form>
             </div>
             <div id="list_div" style="width:100%;height:auto;margin:1px;border: 1px #CCC solid">
-                <div class="image_div" id_value="1">
-                    <div class="pic_div">
-                        <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" style="width:240px;height:320px"/>
-                    </div>
-                    <div class="op_div">
-                            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                    </div>
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="2">
-                    <div class="pic_div">
-                        <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" style="width:240px;height:320px"/>
-                    </div>
-                    <div class="op_div">
-                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                    </div>
-                </div>
-                <div class="image_div" id_value="3">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="4">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg"  alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="5">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="6">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="7">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="8">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
-                <div class="image_div" id_value="9">
 
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
+                </div>
+
+                <div class="photo">
+                    <div class="heading"><span>源码爱好者网站</span></div>
+                    <img src="http://www.image1.cn/upload/user/4417/album_194406/p18o2k0f6e4k7165mn101slj1uv2e.jpg.temp.jpg.thumb.jpg" alt="" />
+                    <div class="caption"><span>提供精品开源源码、网页特效、教程文章等建站资源和素材。</span></div>
                 </div>
                 <div style="clear:left"></div>
             </div>
