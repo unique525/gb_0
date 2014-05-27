@@ -274,8 +274,6 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $tempContent = strtr($tempContent, $replaceArray);
                 parent::ReplaceEnd($tempContent);
                 $result = $tempContent;
-            }else{
-                $result = DefineCode::CUSTOM_FORM_MANAGE+self::SELECT_CUSTOM_FORM_LIST_RESULT_NULL;
             }
         }
         return $result;
