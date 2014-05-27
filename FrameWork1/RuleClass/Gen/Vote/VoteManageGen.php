@@ -304,7 +304,10 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         //模板参数替换
         if ($arrPar['{ItemMarginLeft}'] == null)
             $arrPar['{ItemMarginLeft}'] = "40px";
-        $tempContent = strtr($tempContent, $arrPar);
+        foreach ($arrPar as $key=>$value)
+        {
+          $tempContent = str_ireplace(strval($key), strval($value), $tempContent);
+        }
         $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
         $tempContent = str_ireplace("{Type}", strval($type), $tempContent);
         //根据是否启用验证码，决定是否显示验证码
