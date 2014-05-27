@@ -333,7 +333,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         $tagId = "vote_item_content";
         $tagName = "icms_vote_item";
         $voteItemManageData = new VoteItemManageData();
-        $arrItem = $voteItemManageData->GetOne($voteId, 0); //读取投票调查题目
+        $arrItem = $voteItemManageData->GetList($voteId, 0); //读取投票调查题目
         Template::ReplaceList($tempContent, $arrItem, $tagId, $tagName);
         //把对应ID的题目标记替换成题目列表
         //替换子循环里的<![CDATA[标记
