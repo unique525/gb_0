@@ -38,16 +38,15 @@ class UserRoleManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteID", $siteId);
         $dataProperty->AddField("UserID", $userId);
-        $dbOperator = DBOperator::getInstance();
-        $hasCount = $dbOperator->ReturnInt($sql, $dataProperty);
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
         if ($hasCount > 0) { //modify
             $dataProperty->AddField("UserGroupId", $userGroupId);
             $sql = "UPDATE ".self::TableName_UserRole." SET UserGroupId=:UserGroupId WHERE UserID=:UserID AND SiteID=:SiteID;";
-            $result = $dbOperator->Execute($sql, $dataProperty);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         } else { //INSERT
             $dataProperty->AddField("UserGroupId", $userGroupId);
             $sql = "INSERT INTO ".self::TableName_UserRole." (UserGroupId,UserID,SiteID) VALUES (:UserGroupId,:UserID,:SiteID);";
-            $result = $dbOperator->Execute($sql, $dataProperty);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
