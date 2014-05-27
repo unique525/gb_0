@@ -32,10 +32,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 break;
         }
 
-        $replaceArr = array(
-            "{method}" => $method
-        );
-        $result = strtr($result, $replaceArr);
+        $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
@@ -308,11 +305,8 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         if ($arrPar['{ItemMarginLeft}'] == null)
             $arrPar['{ItemMarginLeft}'] = "40px";
         $tempContent = strtr($tempContent, $arrPar);
-        $replaceArr = array(
-            "{VoteId}" => $voteId,
-            "{Type}" => $type
-        );
-        $tempContent = strtr($tempContent, $replaceArr);
+        $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
+        $tempContent = str_ireplace("{Type}", strval($type), $tempContent);
         //根据是否启用验证码，决定是否显示验证码
         $isCheckCode = $result['IsCheckCode'];
         if ($isCheckCode != 1) {
