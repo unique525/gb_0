@@ -48,7 +48,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         $manageUserId = Control::GetManageUserId();
         $siteId = Control::GetRequest("site_id", 0);
         $documentChannelId = Control::GetRequest("channel_id", 0);
-        $tempContent = Template::Load("vote/vote_deal.html");
+        $tempContent = Template::Load("vote/vote_deal.html", "common");
         if ($manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
             $voteManageData = new VoteManageData();
@@ -73,14 +73,11 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                     Control::ShowMessage(Language::Load('vote', 14));
                 }
             }
-            $replaceArr = array(
-                "{Sort}" => 0,
-                "{ManageUserId}" => $manageUserId,
-                "{SiteId}" => $siteId,
-                "{DocumentChannelId}" => $documentChannelId,
-                "{IpMaxCount}" => 10
-            );
-            $tempContent = strtr($tempContent, $replaceArr);
+            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
+            $tempContent = str_ireplace("{ManageUserId}", strval($manageUserId), $tempContent);
+            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
+            $tempContent = str_ireplace("{DocumentChannelId}", strval($documentChannelId), $tempContent);
+            $tempContent = str_ireplace("{IpMaxCount}", "10", $tempContent);
             $fieldsOfVote = $voteManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfVote);
 
@@ -135,7 +132,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
-        $tempContent = Template::Load("vote/vote_deal.html");
+        $tempContent = Template::Load("vote/vote_deal.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
@@ -164,10 +161,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             }
             $arrList = $voteManageData->GetOne($voteId);
             Template::ReplaceOne($tempContent, $arrList, 1);
-            $replaceArr = array(
-                "{PageIndex}" => $pageIndex
-            );
-            $tempContent = strtr($tempContent, $replaceArr);
+            $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
         //替换掉{s XXX}的内容
         $patterns = '/\{s_(.*?)\}/';
@@ -182,7 +176,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList()
     {
 
-        $tempContent = Template::Load("vote/vote_list.html");
+        $tempContent = Template::Load("vote/vote_list.html", "common");
 
         $sId = Control::GetRequest("site_id", 0);
         $cId = Control::GetRequest("channel_id", 0);
@@ -239,7 +233,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 if (!empty($arr[1])) {
                     $voteManageGen = new VoteManageGen();
                     $arr2 = $arr[1];
-                    foreach ($arr2 as $key => $value) {
+                    foreach ($arr2 as $value) {
                         $docContent = '<' . $tagName . '' . $value . '</' . $tagName . '>';
                         $voteId = Template::GetParamValue($docContent, "id", $tagName);
                         $type = Template::GetParamValue($docContent, "type", $tagName);
@@ -305,7 +299,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 $type = "normal";
         }
         //加载对应类型模板
-        $tempContent = Template::Load("vote/vote_front_" . $type . ".html");
+        $tempContent = Template::Load("vote/vote_front_" . $type . ".html", "common");
         //生成题目
         $tempContent = self::GenSubVoteItem($tempContent, $voteId);
         //生成题目选项
@@ -361,7 +355,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             if (count($arr) > 1) {
                 $voteSelectItemManageData = new VoteSelectItemManageData();
                 $arr2 = $arr[1];
-                foreach ($arr2 as $key => $value) {
+                foreach ($arr2 as $value) {
                     $docContent = '<' . $tagName . '' . $value . '</' . $tagName . '>';
                     //题目ID
                     $id = Template::GetParamValue($docContent, "id", $tagName);
