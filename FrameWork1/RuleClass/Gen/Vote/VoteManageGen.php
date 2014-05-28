@@ -32,10 +32,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 break;
         }
 
-        $replaceArr = array(
-            "{method}" => $method
-        );
-        $result = strtr($result, $replaceArr);
+        $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
@@ -307,12 +304,12 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         //模板参数替换
         if ($arrPar['{ItemMarginLeft}'] == null)
             $arrPar['{ItemMarginLeft}'] = "40px";
-        $tempContent = strtr($tempContent, $arrPar);
-        $replaceArr = array(
-            "{VoteId}" => $voteId,
-            "{Type}" => $type
-        );
-        $tempContent = strtr($tempContent, $replaceArr);
+        foreach ($arrPar as $key=>$value)
+        {
+          $tempContent = str_ireplace(strval($key), strval($value), $tempContent);
+        }
+        $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
+        $tempContent = str_ireplace("{Type}", strval($type), $tempContent);
         //根据是否启用验证码，决定是否显示验证码
         $isCheckCode = $result['IsCheckCode'];
         if ($isCheckCode != 1) {
@@ -333,7 +330,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         $tagId = "vote_item_content";
         $tagName = "icms_vote_item";
         $voteItemManageData = new VoteItemManageData();
-        $arrItem = $voteItemManageData->GetOne($voteId, 0); //读取投票调查题目
+        $arrItem = $voteItemManageData->GetList($voteId, 0); //读取投票调查题目
         Template::ReplaceList($tempContent, $arrItem, $tagId, $tagName);
         //把对应ID的题目标记替换成题目列表
         //替换子循环里的<![CDATA[标记

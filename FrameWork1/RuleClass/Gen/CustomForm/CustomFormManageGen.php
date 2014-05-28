@@ -260,9 +260,9 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             $listName = "custom_form";
             $allCount = 0;
             $customFormData = new CustomFormManageData();
-            $arrListOfCustomFormRecord = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
-            if (count($arrListOfCustomFormRecord) > 0) {
-                Template::ReplaceList($tempContent, $arrListOfCustomFormRecord, $listName,"icms_list");
+            $arrListOfCustomForm = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
+            if (count($arrListOfCustomForm) > 0) {
+                Template::ReplaceList($tempContent, $arrListOfCustomForm, $listName,"icms_list");
 
                 $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
                 $replaceArray = array(
@@ -272,11 +272,14 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     "{pager_button}" => $pagerButton
                 );
                 $tempContent = strtr($tempContent, $replaceArray);
-                parent::ReplaceEnd($tempContent);
-                $result = $tempContent;
             }else{
-                $result = DefineCode::CUSTOM_FORM_MANAGE+self::SELECT_CUSTOM_FORM_LIST_RESULT_NULL;
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("custom_form", 4), $tempContent);
+
             }
+
+            parent::ReplaceEnd($tempContent);
+            $result = $tempContent;
         }
         return $result;
     }

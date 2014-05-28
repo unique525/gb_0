@@ -15,7 +15,7 @@ class BaseGen
      */
     public function ReplaceFirst(&$tempContent)
     {
-        ///////找出PreTemp标记/////////
+        ///////找出PreTemp标记/////////  <pre_temp id="2"></pre_temp>
         $keyName = "pre_temp";
         $arr = Template::GetAllCustomTag($tempContent, $keyName);
         if (isset($arr)) {
@@ -25,8 +25,8 @@ class BaseGen
                     $docContent = "<$keyName$val</$keyName>";
                     //模板ID
                     $channelTemplateId = Template::GetParamValue($docContent, "id", $keyName);
-                    $channelTemplateData = new ChannelTemplateData();
-                    $preTempContent = $channelTemplateData->GetChannelTemplateContent($channelTemplateId);
+                    $channelTemplateManageData = new ChannelTemplateManageData();
+                    $preTempContent = $channelTemplateManageData->GetChannelTemplateContent($channelTemplateId, false);
                     $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $keyName);
                 }
             }
