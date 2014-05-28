@@ -109,13 +109,13 @@
         <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr style="display: none">
-                <td class="spe_line" height="30" align="right">ID：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_UserId">会员Id：</label></td>
                 <td class="spe_line">
                     <input name="f_UserId" id="f_UserId" value="{UserId}" type="text" style="width: 60px;"/>
                  </td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">帐号：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_UserName">会员帐号：</label></td>
                 <td class="spe_line">
                     <input name="f_UserName" id="f_UserName" value="{UserName}" maxlength="100" type="text" class="inputbox" style=" width: 300px;"/></td>
             </tr>
@@ -134,7 +134,7 @@
             <tr>
                 <td class="spe_line" height="30" align="right">注册IP：</td>
                 <td class="spe_line">
-                    <input name="f_RegIp" id="f_RegIp" value="{RegIp}" type="text"  class="inputbox" style=" width: 300px;"/></td>
+                    <input name="f_RegIp" id="f_RegIp" value="{RegIp}" type="text"  class="input_box" style=" width: 300px;"/></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right">推荐用户名：</td>

@@ -118,7 +118,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                     if (!empty($_POST)) { //提交
                         $httpPostData = $_POST;
                         //老帐号名和新帐号名不同时，要检查是否已经存在
-                        $oldUserName = Control::PostRequest("oldusername", "");
+                        $oldUserName = Control::PostRequest("OldUserName", "");
                         $newUserName = Control::PostRequest("f_UserName", "");
                         if ($oldUserName != $newUserName) {
                             $hasCount = $userManageData->CheckExistNameForModify($newUserName, $userId);
@@ -166,11 +166,14 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                     $nowUserGroupId = $userRoleManageData->GetUserGroupID($userId, $siteId, $channelId);
                     $tempContent = str_ireplace("{x_usergroupid_$nowUserGroupId}", "selected=selected", $tempContent);
 
-                    $arrList = $userManageData->GetOne($userId);
-                    if ($arrList["parentid"] <= 0) {
-                        $parentName = "";
-                    } else {
-                        $parentName = $userManageData->GetUserName($arrList["parentid"],false);
+                    $arrOne = $userManageData->GetOne($userId);
+                    $parentName = "";
+                    if(count($arrOne)>0){
+                        //var_dump($arrOne["ParentId"]);
+                        $parentId = intval($arrOne["ParentId"]);
+                        if($parentId>0){
+                            $parentName = $userManageData->GetUserName($parentId,false);
+                        }
                     }
 
                     $replace_arr = array(
@@ -178,7 +181,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                     );
                     $tempContent = strtr($tempContent, $replace_arr);
 
-                    Template::ReplaceOne($tempContent, $arrList, 1);
+                    Template::ReplaceOne($tempContent, $arrOne);
 
             }
             //x XXX

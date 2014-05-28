@@ -25,6 +25,14 @@ class BaseData
      */
     const TableId_SiteConfig = "SiteConfigId";
     /**
+     * 站点自定义页面 数据表名
+     */
+    const TableName_SiteContent = "cst_site_content";
+    /**
+     * 站点自定义页面 数据表自增字段名
+     */
+    const TableId_SiteContent = "SiteContentId";
+    /**
      * FTP 数据表名
      */
     const TableName_Ftp = "cst_ftp";
