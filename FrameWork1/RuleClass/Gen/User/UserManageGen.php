@@ -119,7 +119,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         $httpPostData = $_POST;
                         //老帐号名和新帐号名不同时，要检查是否已经存在
                         $oldUserName = Control::PostRequest("oldusername", "");
-                        $newUserName = Control::PostRequest("f_username", "");
+                        $newUserName = Control::PostRequest("f_UserName", "");
                         if ($oldUserName != $newUserName) {
                             $hasCount = $userManageData->CheckExistNameForModify($newUserName, $userId);
                             if ($hasCount > 0) {//同站点下不许存在相同的用户名
@@ -174,7 +174,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                     }
 
                     $replace_arr = array(
-                        "{parentname}" => $parentName,
+                        "{ParentName}" => $parentName,
                     );
                     $tempContent = strtr($tempContent, $replace_arr);
 
