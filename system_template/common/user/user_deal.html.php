@@ -104,7 +104,6 @@
         }
     </script>
     <style type="text/css">
-
         #userlist {
             border: solid 1px #F1F1F1;
             padding: 3px;
@@ -135,49 +134,50 @@
 </head>
 <body>
 <div style="margin: 0 auto;">
-    <form id="mainForm" enctype="multipart/form-data" action="index.php?a={action}&m={method}&userid={userid}&siteid={siteid}&pageindex={pageindex}"
+    <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=user&m={method}&user_id={userid}&site_id={siteid}"
           method="post">
         <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr style="display: none">
-                <td class="speline" height="30" align="right">ID：</td>
-                <td class="speline">
-                    <input name="f_userid" id="f_userid" value="{userid}" type="text" style=" width: 60px;"/></td>
+                <td class="spe_line" height="30" align="right">ID：</td>
+                <td class="spe_line">
+                    <input name="f_userid" id="f_userid" value="{userid}" type="text" style="width: 60px;"/>
+                 </td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">帐号：</td>
-                <td class="speline">
+                <td class="spe_line" height="30" align="right">帐号：</td>
+                <td class="spe_line">
                     <input name="f_username" id="f_username" value="{username}" maxlength="100" type="text" class="inputbox" style=" width: 300px;"/></td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">会员密码：</td>
-                <td class="speline" title="{userpass}">
+                <td class="spe_line" height="30" align="right">会员密码：</td>
+                <td class="spe_line" title="{userpass}">
                     <input name="f_userpass" id="f_userpass" value="{userpass}" type="text" class="inputbox" style=" width: 300px;"/>(注:不能少于6位)
                 </td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">注册时间：</td>
-                <td class="speline">
+                <td class="spe_line" height="30" align="right">注册时间：</td>
+                <td class="spe_line">
                     <input class="Wdate" id="f_createdate" name="f_createdate" type="text" onClick="WdatePicker()" value="{createdate}" style=" width: 210px;font-size:14px;">
                 </td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">注册IP：</td>
-                <td class="speline" title="{userpass}">
+                <td class="spe_line" height="30" align="right">注册IP：</td>
+                <td class="spe_line" title="{userpass}">
                     <input name="f_regip" id="f_regip" value="{regip}" type="text"  class="inputbox" style=" width: 300px;"/></td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">推荐用户名：</td>
-                <td class="speline" title="{parentid}">
+                <td class="spe_line" height="30" align="right">推荐用户名：</td>
+                <td class="spe_line" title="{parentid}">
                     <input name="parentname" id="parentname" value="{parentname}" type="text" class="inputbox" style=" width: 300px;"/>
                     <input name="f_parentid" id="f_parentid" value="{parentid}" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input class="btn" value="修改推荐人" type="button"  onclick="editparent()"/></td>
             </tr>
             <tr>
-                <td class="speline">
+                <td class="spe_line">
 
                 </td>
-                <td class="speline">
+                <td class="spe_line">
                     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0" id="searchparent"
                            style="display:none;">
                         <tr>
@@ -198,8 +198,8 @@
                 </td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">会员状态：</td>
-                <td class="speline">
+                <td class="spe_line" height="30" align="right">会员状态：</td>
+                <td class="spe_line">
                     <select id="f_state" name="f_state">
                         <option value="0"
                         {s_state_0}>开启</option>
