@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台Gen频道生成类
+ * 后台管理 频道 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi

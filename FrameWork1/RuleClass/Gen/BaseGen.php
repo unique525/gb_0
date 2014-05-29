@@ -321,16 +321,16 @@ class BaseGen
      * @param string $fileElementName 控件名称
      * @param int $tableType 上传文件对应的表类型
      * @param int $tableId 上传文件对应的表id
-     * @param int $returnType 返回值的类型
+     * @param string $returnJson 返回的JSON
      * @param int $uploadFileId 返回新的上传文件id
      * @return string|int 返回结果字符串，或错误代码
      */
-    protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0)
+    protected function Upload($fileElementName = "file_upload", $tableType = 0, $tableId = 0, &$returnJson = "", &$uploadFileId = 0)
     {
-        $result = "";
         $errorMessage = self::UploadPreCheck($fileElementName);
-
-        if ($errorMessage > 0) { //没有错误
+        $resultMessage = "";
+        $uploadFilePath = "";
+        if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
             sleep(1);
             $newFileName = "";
             $fileExtension = strtolower(FileObject::GetExtension($_FILES[$fileElementName]['name']));
@@ -366,31 +366,36 @@ class BaseGen
                     //返回值处理
                     $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
-                    $returnFilePath = $returnDirPath . $newFileName;
-                    $returnFilePath = str_ireplace("\\", "/", $returnFilePath);
+                    $uploadFilePath = $returnDirPath . $newFileName;
+                    $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
 
-                    $resultMessage = Format::FormatUploadFileToHtml($returnFilePath, $fileExtension, $uploadFileId, $_FILES[$fileElementName]['name']);
-                    if ($returnType === 0) {
-                        $result .= "{";
-                        $result .= "error: '" . $errorMessage . "',\n";
-                        $result .= "result: '" . $resultMessage . "',\n";
-                        $result .= "file_id: '" . $uploadFileId . "',\n";
-                        $result .= "file_url: '" . $returnFilePath . "'\n";
-                        $result .= "}";
-                    } else if ($returnType === 1) {
-                        $result = $returnFilePath;
-                    } else if ($returnType === 2) {
-                        $result = $uploadFileId;
-                    }
+                    $resultMessage = Format::FormatUploadFileToHtml($uploadFilePath, $fileExtension, $uploadFileId, $_FILES[$fileElementName]['name']);
+                    //取消了返回类型，只返回JSON结果
+                    //if ($returnType === 0) {
+
+                    //} else if ($returnType === 1) {
+                    //    $result = $returnFilePath;
+                    //} else if ($returnType === 2) {
+                    //    $result = $uploadFileId;
+                    //}
+                    $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
                 } else { //移动上传文件时失败
-                    $result = self::UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION;
+                    $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
                 }
             } else {
-                $result = self::UPLOAD_ERROR_PATH;
+                $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
             }
         } else {
             $result = $errorMessage;
         }
+
+        $returnJson = "{";
+        $returnJson .= "error: '" . $errorMessage . "',\n";
+        $returnJson .= "result: '" . $resultMessage . "',\n";
+        $returnJson .= "upload_file_id: '" . $uploadFileId . "',\n";
+        $returnJson .= "upload_file_url: '" . $uploadFilePath . "'\n";
+        $returnJson .= "}";
+
         UnLink($_FILES[$fileElementName]);
         return $result;
     }
@@ -571,65 +576,73 @@ class BaseGen
     }
 
     /**
-     * 上传文件错误代码：没有错误
+     * 上传文件预检查：成功
      */
-    const UPLOAD_ERROR_NO_ERROR = 1;
+    const UPLOAD_PRE_CHECK_SUCCESS = 100;
     /**
-     * 上传文件错误代码：未操作
+     * 上传文件结果：没有错误
      */
-    const UPLOAD_ERROR_NO_ACTION = 0;
+    const UPLOAD_RESULT_SUCCESS = 101;
     /**
-     * 上传文件错误：PHP temp文件夹未设置
+     * 上传文件结果：未操作
      */
-    const UPLOAD_ERROR_TMP_IS_NULL = -5;
+    const UPLOAD_RESULT_NO_ACTION = -100;
     /**
-     * 上传文件错误：文件太大
+     * 上传文件结果：$_FILE为空
      */
-    const UPLOAD_ERROR_TOO_LARGE_FOR_SERVER = -1;
+    const UPLOAD_RESULT_FILE_IS_EMPTY = -121;
     /**
-     * 上传文件错误：文件太大，超出了HTML表单的限制
+     * 上传文件结果：PHP temp文件夹未设置
      */
-    const UPLOAD_ERROR_TOO_LARGE_FOR_HTML = -2;
+    const UPLOAD_RESULT_TMP_IS_NULL = -120;
     /**
-     * 上传文件错误：文件中只有一部分内容完成了上传
+     * 上传文件结果：文件太大
      */
-    const UPLOAD_ERROR_ONLY_PARTIALLY_UPLOADED = -3;
+    const UPLOAD_RESULT_TOO_LARGE_FOR_SERVER = -101;
     /**
-     * 上传文件错误：没有找到要上传的文件
+     * 上传文件结果：文件太大，超出了HTML表单的限制
      */
-    const UPLOAD_ERROR_NO_FILE = -4;
+    const UPLOAD_RESULT_TOO_LARGE_FOR_HTML = -102;
     /**
-     * 上传文件错误：服务器临时文件夹丢失
+     * 上传文件结果：文件中只有一部分内容完成了上传
      */
-    const UPLOAD_ERROR_TEMPORARY_FOLDER_IS_MISSING = -5;
+    const UPLOAD_RESULT_ONLY_PARTIALLY_UPLOADED = -103;
     /**
-     * 上传文件错误： 文件写入到临时文件夹出错
+     * 上传文件结果：没有找到要上传的文件
      */
-    const UPLOAD_ERROR_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER = -6;
+    const UPLOAD_RESULT_NO_FILE = -104;
     /**
-     * 上传文件错误：文件夹没有写入权限
+     * 上传文件结果：服务器临时文件夹丢失
      */
-    const UPLOAD_ERROR_NO_RIGHT_TO_WRITE_TEMPORARY = -7;
+    const UPLOAD_RESULT_TEMPORARY_FOLDER_IS_MISSING = -105;
     /**
-     * 上传文件错误：扩展使文件上传停止
+     * 上传文件结果： 文件写入到临时文件夹出错
      */
-    const UPLOAD_ERROR_PLUGINS_MADE_UPLOAD_STOP = -8;
+    const UPLOAD_RESULT_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER = -106;
     /**
-     * 上传文件错误：没有可以显示的错误信息
+     * 上传文件结果：文件夹没有写入权限
      */
-    const UPLOAD_ERROR_NO_MESSAGE = -9;
+    const UPLOAD_RESULT_NO_RIGHT_TO_WRITE_TEMPORARY = -107;
     /**
-     * 上传文件错误：文件类型错误，不允许此类文件上传
+     * 上传文件结果：扩展使文件上传停止
      */
-    const UPLOAD_ERROR_FILE_TYPE = -10;
+    const UPLOAD_RESULT_PLUGINS_MADE_UPLOAD_STOP = -108;
     /**
-     * 上传文件错误：生成上传文件路径和文件名时出错
+     * 上传文件结果：没有可以显示的错误信息
      */
-    const UPLOAD_ERROR_PATH = -11;
+    const UPLOAD_RESULT_NO_MESSAGE = -109;
     /**
-     * 上传文件错误：移动上传文件到目标路径时失败
+     * 上传文件结果：文件类型错误，不允许此类文件上传
      */
-    const UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION = -12;
+    const UPLOAD_RESULT_FILE_TYPE = -110;
+    /**
+     * 上传文件结果：生成上传文件路径和文件名时出错
+     */
+    const UPLOAD_RESULT_PATH = -111;
+    /**
+     * 上传文件结果：移动上传文件到目标路径时失败
+     */
+    const UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION = -112;
 
     /**
      * 上传文件预检查
@@ -638,48 +651,48 @@ class BaseGen
      */
     private function UploadPreCheck($fileElementName)
     {
-        $errorMessage = self::UPLOAD_ERROR_NO_ERROR;
+        $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
 
         if (empty($_FILES)) {
-            return self::UPLOAD_ERROR_NO_ACTION;
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_IS_EMPTY;
         }
 
         /////////////////////////检查temp文件夹///////////////////////////
         if (empty($_FILES[$fileElementName]['tmp_name'])) {
-            return self::UPLOAD_ERROR_TMP_IS_NULL;
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
         if ($_FILES[$fileElementName]['tmp_name'] == 'none') {
-            return self::UPLOAD_ERROR_TMP_IS_NULL;
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
         /////////////////////////检查错误信息///////////////////////////
         if (!empty($_FILES[$fileElementName]['error'])) {
             switch ($_FILES[$fileElementName]['error']) {
                 case '1':
-                    $errorMessage = self::UPLOAD_ERROR_TOO_LARGE_FOR_SERVER;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_SERVER;
                     break;
                 case '2':
-                    $errorMessage = self::UPLOAD_ERROR_TOO_LARGE_FOR_HTML;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_HTML;
                     break;
                 case '3':
-                    $errorMessage = self::UPLOAD_ERROR_ONLY_PARTIALLY_UPLOADED;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ONLY_PARTIALLY_UPLOADED;
                     break;
                 case '4':
-                    $errorMessage = self::UPLOAD_ERROR_NO_FILE;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_FILE;
                     break;
                 case '5':
-                    $errorMessage = self::UPLOAD_ERROR_TEMPORARY_FOLDER_IS_MISSING;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TEMPORARY_FOLDER_IS_MISSING;
                     break;
                 case '6':
-                    $errorMessage = self::UPLOAD_ERROR_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER;
                     break;
                 case '7':
-                    $errorMessage = self::UPLOAD_ERROR_NO_RIGHT_TO_WRITE_TEMPORARY;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_RIGHT_TO_WRITE_TEMPORARY;
                     break;
                 case '8':
-                    $errorMessage = self::UPLOAD_ERROR_PLUGINS_MADE_UPLOAD_STOP;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_PLUGINS_MADE_UPLOAD_STOP;
                     break;
                 default:
-                    $errorMessage = self::UPLOAD_ERROR_NO_MESSAGE;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_MESSAGE;
             }
             return $errorMessage;
         }
@@ -706,7 +719,7 @@ class BaseGen
             $fileExtension == "jpeg"
         ) {
         } else {
-            $errorMessage = self::UPLOAD_ERROR_FILE_TYPE;
+            $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_TYPE;
         }
         return $errorMessage;
     }

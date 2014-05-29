@@ -10,7 +10,7 @@
         <script type="text/javascript" src="/system_js/common.js"></script>
         <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
         <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="/system_js/ajaxfileupload.js"></script>
+        <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
         <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
 
         <script type="text/javascript">

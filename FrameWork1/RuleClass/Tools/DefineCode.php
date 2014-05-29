@@ -19,6 +19,11 @@ class DefineCode {
     const FILE_OBJECT = -110000;
 
     /**
+     * 文件上传类 返回值前缀
+     */
+    const UPLOAD = -115000;
+
+    /**
      * 图片类　返回值前缀
      */
     const IMAGE_OBJECT = -120000;
