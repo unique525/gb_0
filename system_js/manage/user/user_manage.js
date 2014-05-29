@@ -72,5 +72,65 @@ $(document).ready(function() {
         }
     });
 
+    //按用户名进行查找
+    $("#SearchSub").click(function () {
+        var userNameStr = $("#UserName").val();
+        if (userNameStr.length < 1) {
+            alert("用户名长度需大于或等于2！");
+        } else {
+            userNameStr = encodeURIComponent(userNameStr);
+            $.ajax({
+                url: "default.php",
+                data: {secu: "manage", mod: "user", m: "searchForJson", site_id: window.G_NowSiteId, user_name: userNameStr},
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function (data) {
+                    var listContent = '';
+                    $.each(data, function (i, v) {
+                        if (parseInt(v["UserId"]) > 0) {
+                            listContent = listContent + '<span class="span_css" onclick=changeParent("' + v["UserId"] + '","' + v["UserName"] + '")>' + v["UserName"] + ' </span><br>';
+                        }
+                    });
+                    $("#ParentIdList").html(listContent);
+                }
+            });
+        }
+    });
+
+
+
+
 });
+
+
+//显示用户名查找内容
+function editParent() {
+    $("#searchParent").css("display", "inline");
+}
+
+//更改用户名推荐人
+function changeParent(userId, userName) {
+    //alert(userid+"@@"+username);
+    $('#ParentName').val(userName);
+    $('#f_ParentId').val(userId);
+    $('#ParentName').attr("disabled");
+    $('#ParentName').removeAttr("disabled");
+
+}
+function submitForm(continueCreate) {
+    if ($('#f_UserName').val() == '') {
+        $("#dialog_box").dialog({width: 300, height: 100});
+        $("#dialog_content").html("请输入会员账号");
+    } else if ($('#f_UserPass').val().length < 6) {
+        $("#dialog_box").dialog({width: 300, height: 100});
+        $("#dialog_content").html("会员账号密码不能少于6位");
+    } else {
+        if (continueCreate == 1) {
+            $("#CloseTab").val("0");
+        } else {
+            $("#CloseTab").val("1");
+        }
+        $('#mainForm').submit();
+    }
+}
 
