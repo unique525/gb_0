@@ -103,18 +103,17 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
 
         $adminUserId = Control::GetManageUserId();
 
-        if ($userId > 0 && $adminUserId > 0) {
+        if (intval($userId) > 0 && intval($adminUserId) > 0) {
             ///////////////判断是否有操作权限///////////////////
-            $adminPopedomData = new AdminPopedomData();
-            $can = $adminPopedomData->CanUserEdit($siteId, 0, $adminUserId);
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $channelId = 0;
+            $can = $manageUserAuthorityManageData->CanUserEdit($siteId, $channelId, $adminUserId);
             ////////////////////////////////////////////////////
             if (!$can) {
                 $tempContent = Language::Load('user', 28);
             } else {
                 parent::ReplaceFirst($tempContent);
                     $userManageData = new UserManageData();
-
-                    $userRoleManageData = new UserRoleManageData();
                     if (!empty($_POST)) { //提交
                         $httpPostData = $_POST;
                         //老帐号名和新帐号名不同时，要检查是否已经存在
@@ -123,7 +122,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         if ($oldUserName != $newUserName) {
                             $hasCount = $userManageData->CheckExistNameForModify($newUserName, $userId);
                             if ($hasCount > 0) {//同站点下不许存在相同的用户名
-                                $result = -20;
                                 Control::ShowMessage(Language::Load('user', 20));
                                 return $tempContent;
                             }
@@ -132,13 +130,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         $result = $userManageData->Modify($httpPostData, $userId);
                         if ($result > 0) {
                             Control::ShowMessage(Language::Load('user', 7));
-
-                            //编辑会员组
-                            $userGroupId = Control::PostRequest("usergroupid", 0);
-                            if ($userGroupId > 0) {
-                                $userRoleManageData->CreateOrModify($userId, $userGroupId, $siteId);
-                            }
-                            //
                         } else {
                             Control::ShowMessage(Language::Load('user', 8));
                         }
@@ -148,46 +139,23 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         }
                         return "";
                     }
-                    $replace_arr = array(
-                        "{userid}" => $userId,
-                        "{siteid}" => $siteId
-                    );
-                    $tempContent = strtr($tempContent, $replace_arr);
-                    //用户组列表读取
-                    $listName = "usergrouplist";
-                    $state = 0;             //0为取正常状态下的用户组,-1为取所有的用户组
-
-                    $userGroupManageData = new UserGroupManageData();
-                    $arrUserGroupList = $userGroupManageData->GetList($siteId, $state);
-                    Template::ReplaceList($tempContent, $arrUserGroupList, $listName);
-                    //加载当前所属会员组
-
-                    $channelId = 0;
-                    $nowUserGroupId = $userRoleManageData->GetUserGroupID($userId, $siteId, $channelId);
-                    $tempContent = str_ireplace("{x_usergroupid_$nowUserGroupId}", "selected=selected", $tempContent);
 
                     $arrOne = $userManageData->GetOne($userId);
                     $parentName = "";
                     if(count($arrOne)>0){
-                        //var_dump($arrOne["ParentId"]);
                         $parentId = intval($arrOne["ParentId"]);
                         if($parentId>0){
                             $parentName = $userManageData->GetUserName($parentId,false);
                         }
                     }
 
-                    $replace_arr = array(
-                        "{ParentName}" => $parentName,
-                    );
-                    $tempContent = strtr($tempContent, $replace_arr);
-
-                    Template::ReplaceOne($tempContent, $arrOne);
+                $tempContent = str_ireplace("{UserId}", $userId, $tempContent);
+                $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
+                $isList = false;
+                $isManage = false;
+                Template::ReplaceOne($tempContent, $arrOne, $isList, $isManage);
 
             }
-            //x XXX
-            $patterns = "/\{x_(.*?)\}/";
-            $tempContent = preg_replace($patterns, "", $tempContent);
-            parent::ReplaceEnd($tempContent);
             return $tempContent;
         }else{
             return null;
