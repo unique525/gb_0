@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台Gen频道生成类
+ * 后台管理 频道 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi
@@ -232,7 +232,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $titlePicPath3 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId3);
                     $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
 
-                    $result = $channelManageData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
+                    $result = $channelManageData->Modify($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
                     //加入操作日志
                     $operateContent = 'Modify Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$result;
                     self::CreateManageUserLog($operateContent);

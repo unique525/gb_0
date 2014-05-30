@@ -24,8 +24,7 @@ class UserGroupManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableId_ManageUserGroup . " WHERE State=:State AND SiteId=:SiteId";
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("SiteId", $siteId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 }

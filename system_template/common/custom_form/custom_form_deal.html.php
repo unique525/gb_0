@@ -1,56 +1,43 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {common_head}    <script type="text/javascript">
-        $(function(){
-            if(!Request["custom_form_id"]){
-                var today = new Date();
-                var month = today.getMonth()+1;
-                var s_date = today.getFullYear()+"-"+month+"-"+today.getDate();
-                var s_hour = today.getHours()<10?"0"+today.getHours():today.getHours();
-                var s_minute = today.getMinutes()<10?"0"+today.getMinutes():today.getMinutes();
-                var s_second = today.getSeconds()<10?"0"+today.getSeconds():today.getSeconds();
-
-                $("#f_createdate").val(s_date + " " + s_hour + ":"+s_minute+":"+s_second );
-            }
-        });
-        function sub()
-        {
-            if($('#f_custom_Form_Subject').val() == ''){
-                alert('请输入表单名称');
-                return;
-            }
-            else
-            {
-                $('#mainform').submit();
-            }
-        }
-
-    </script>
+    {common_head}
+    <script type="text/javascript" src="/system_js/manage/custom_form/custom_form_deal.js"></script>
 </head>
 
 <body>
-<form id="mainform" action="default.php?secu=manage&mod=custom_form&m={method}&site_id={site_id}&channel_id={channel_id}&id={custom_form_id}&tab={tab}" method="post">
+{common_body_deal}
+<form id="main_form" action="/default.php?secu=manage&mod=custom_form&m={method}&site_id={SiteId}&channel_id={ChannelId}&custom_form_id={CustomFormId}" method="post">
     <div style="margin:10px auto;margin-left: 10px;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="speline" height="30" align="right">表单名称：</td>
-                <td class="speline">
-                    <input name="f_customFormSubject" id="f_custom_Form_Subject" value="{customFormSubject}" type="text" class="inputbox" style=" width: 300px;" />
-                    <input type="hidden" id="f_custom_form_id" name="f_customFormId" value="{custom_form_id}" />
-                    <input type="hidden" id="f_channel_id" name="f_channelId" value="{channel_id}" />
-                    <input type="hidden" id="f_manage_user_id" name="f_manageUserId" value="{manage_user_id}" />
-                    <input type="hidden" id="f_createdate" name="f_createdate" value="{createdate}" />
+                <td class="spe_line" height="40" align="right">
+                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
+                    <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+                </td>
+            </tr>
+        </table>
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="spe_line" height="30" align="right">表单名称：</td>
+                <td class="spe_line">
+                    <input type="text" name="f_CustomFormSubject" id="f_CustomFormSubject" value="{CustomFormSubject}" class="input_box" style=" width: 300px;" />
+                    <input type="hidden" id="f_CustomFormId" name="f_CustomFormId" value="{CustomFormId}" />
+                    <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
+                    <input type="hidden" id="f_ManageUserId" name="f_ManageUserId" value="{ManageUserId}" />
+                    <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
+                    <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
                 </td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">排序：</td>
-                <td class="speline"><input name="f_sort" id="f_sort" value="{sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
+                <td class="spe_line" height="30" align="right">排序：</td>
+                <td class="spe_line"><input name="f_Sort" id="f_Sort" value="{Sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
             </tr>
             <tr>
-                <td class="speline" height="30" align="right">是否启用：</td>
-                <td class="speline">
+                <td class="spe_line" height="30" align="right">是否启用：</td>
+                <td class="spe_line">
                     <select id="f_state" name="f_state" >
                         <option value="0" {s_state_0}>启用</option>
                         <option value="100" {s_state_100}>停用</option>
@@ -60,7 +47,9 @@
 
             <tr>
                 <td colspan="2" height="30" align="center">
-                    <input class="btn" value="确认" type="button" onclick="sub()" />
+                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
+                    <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
                 </td>
             </tr>
 

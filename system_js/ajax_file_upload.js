@@ -1,7 +1,15 @@
-
 jQuery.extend({
-	
+    handleError: function( s, xhr, status, e )      {
+        // If a local callback was specified, fire it
+        if ( s.error ) {
+            s.error.call( s.context || s, xhr, status, e );
+        }
 
+        // Fire the global callback
+        if ( s.global ) {
+            (s.context ? jQuery(s.context) : jQuery.event).trigger( "ajaxError", [xhr, s, e] );
+        }
+    },
     createUploadIframe: function(id, uri)
     {
         //create frame
@@ -53,7 +61,7 @@ jQuery.extend({
         s = jQuery.extend({}, jQuery.ajaxSettings, s);
         var id = new Date().getTime()        
         var form = jQuery.createUploadForm(id, s.fileElementId);
-        var io = jQuery.createUploadIframe(id, s.secureuri);
+        var io = jQuery.createUploadIframe(id, s.secureUri);
         var frameId = 'jUploadFrame' + id;
         var formId = 'jUploadForm' + id;
         // Watch for a new set of requests

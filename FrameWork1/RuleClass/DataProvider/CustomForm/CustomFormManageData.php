@@ -57,10 +57,9 @@ class CustomFormManageData extends BaseManageData {
             *
             FROM
             " . self::TableName_CustomForm . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+            WHERE ChannelId=:ChannelId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
-
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sqlCount = "SELECT count(*) FROM " . self::TableName_CustomForm . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
         $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
@@ -95,7 +94,7 @@ class CustomFormManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
-        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

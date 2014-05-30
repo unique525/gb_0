@@ -59,7 +59,7 @@ class UserManageData extends BaseManageData {
         if($userId >0){
             if (!empty($httpPostData)) {
                 $dataProperty = new DataProperty();
-                $sql = parent::GetUpdateSql($httpPostData, self::TableName_ManageUser, self::TableId_ManageUser, $userId, $dataProperty);
+                $sql = parent::GetUpdateSql($httpPostData, self::TableName_User, self::TableId_User, $userId, $dataProperty);
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             }
         }
@@ -67,10 +67,10 @@ class UserManageData extends BaseManageData {
     }
 
     /**
-     * 编辑会员时，检查同名帐号是否存在
+     * 编辑会员时，检查同名帐号是否存在 GetCountByUserNameNotNowUserId
      * @param string $userName 会员名称
      * @param int $userId 会员id
-     * @return array 会员列表数据集
+     * @return int 返回统计数据
      */
     public function CheckExistNameForModify($userName, $userId)
     {
@@ -83,7 +83,7 @@ class UserManageData extends BaseManageData {
     }
 
     /**
-     * 根据userid取得username
+     * 根据会员id取得会员帐号
      * @param int $userId 会员id
      * @param bool $withCache 是否从缓冲中取
      * @return string 返回会员名称
@@ -106,13 +106,13 @@ class UserManageData extends BaseManageData {
     /**
      * 根据userid得到一行信息信息
      * @param int $userId 会员id
-     * @return array 会员列表数据集
+     * @return array 会员信息列表数据集
      */
     public function GetOne($userId)
     {
         $result = null;
         if($userId>0){
-            $sql = "SELECT userid,username,uid,userarea,siteid,userpass,state,regip,createdate,parentid FROM " . self::TableName_User . " WHERE userId=:userId;";
+            $sql = "SELECT * FROM " . self::TableName_User . " WHERE userId=:userId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("userId", $userId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);

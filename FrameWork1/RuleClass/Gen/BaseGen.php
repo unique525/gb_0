@@ -15,35 +15,35 @@ class BaseGen
      */
     public function ReplaceFirst(&$tempContent)
     {
-        ///////找出PreTemp标记/////////
-        $keyName = "pre_temp";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                $arr2 = $arr[1];
-                foreach ($arr2 as $val) {
-                    $docContent = "<$keyName$val</$keyName>";
+        ///////找出PreTemp标记/////////  <pre_temp id="2"></pre_temp>
+        $tagName = "pre_temp";
+        $arrSimpleCustomTags = Template::GetAllCustomTag($tempContent, $tagName);
+        if (isset($arrSimpleCustomTags)) {
+            if (count($arrSimpleCustomTags) > 1) {
+                $arrTempContents = $arrSimpleCustomTags[1];
+                foreach ($arrTempContents as $val) {
+                    $docContent = "<$tagName$val</$tagName>";
                     //模板ID
-                    $channelTemplateId = Template::GetParamValue($docContent, "id", $keyName);
-                    $channelTemplateData = new ChannelTemplateData();
-                    $preTempContent = $channelTemplateData->GetChannelTemplateContent($channelTemplateId);
-                    $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $keyName);
+                    $channelTemplateId = Template::GetParamValue($docContent, "id", $tagName);
+                    $channelTemplateManageData = new ChannelTemplateManageData();
+                    $preTempContent = $channelTemplateManageData->GetChannelTemplateContent($channelTemplateId, false);
+                    $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $tagName);
                 }
             }
         }
         ///////找出site_content标记/////////
-        $keyName = "site_content";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                $arr2 = $arr[1];
-                foreach ($arr2 as $key => $val) {
-                    $docContent = "<$keyName$val</$keyName>";
+        $tagName = "site_content";
+        $arrSimpleCustomTags = Template::GetAllCustomTag($tempContent, $tagName);
+        if (isset($arrSimpleCustomTags)) {
+            if (count($arrSimpleCustomTags) > 1) {
+                $arrTempContents = $arrSimpleCustomTags[1];
+                foreach ($arrTempContents as $val) {
+                    $docContent = "<$tagName$val</$tagName>";
                     //模板ID
-                    $siteContentId = Template::GetParamValue($docContent, "id", $keyName);
-                    $siteContentData = new SiteContentData();
-                    $siteContent = $siteContentData->GetSiteContentValue($siteContentId);
-                    $tempContent = Template::ReplaceSiteContent($tempContent, $siteContentId, $siteContent);
+                    $siteContentId = Template::GetParamValue($docContent, "id", $tagName);
+                    $siteContentManageData = new SiteContentManageData();
+                    $siteContent = $siteContentManageData->GetSiteContentValue($siteContentId, false);
+                    $tempContent = Template::ReplaceCustomTag($tempContent, $siteContentId, $siteContent, $tagName);
                 }
             }
         }
@@ -321,16 +321,16 @@ class BaseGen
      * @param string $fileElementName 控件名称
      * @param int $tableType 上传文件对应的表类型
      * @param int $tableId 上传文件对应的表id
-     * @param int $returnType 返回值的类型
+     * @param string $returnJson 返回的JSON
      * @param int $uploadFileId 返回新的上传文件id
      * @return string|int 返回结果字符串，或错误代码
      */
-    protected function Upload($fileElementName = "fileToUpload", $tableType = 0, $tableId = 0, $returnType = 0, &$uploadFileId = 0)
+    protected function Upload($fileElementName = "file_upload", $tableType = 0, $tableId = 0, &$returnJson = "", &$uploadFileId = 0)
     {
-        $result = "";
         $errorMessage = self::UploadPreCheck($fileElementName);
-
-        if ($errorMessage > 0) { //没有错误
+        $resultMessage = "";
+        $uploadFilePath = "";
+        if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
             sleep(1);
             $newFileName = "";
             $fileExtension = strtolower(FileObject::GetExtension($_FILES[$fileElementName]['name']));
@@ -366,31 +366,36 @@ class BaseGen
                     //返回值处理
                     $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
-                    $returnFilePath = $returnDirPath . $newFileName;
-                    $returnFilePath = str_ireplace("\\", "/", $returnFilePath);
+                    $uploadFilePath = $returnDirPath . $newFileName;
+                    $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
 
-                    $resultMessage = Format::FormatUploadFileToHtml($returnFilePath, $fileExtension, $uploadFileId, $_FILES[$fileElementName]['name']);
-                    if ($returnType === 0) {
-                        $result .= "{";
-                        $result .= "error: '" . $errorMessage . "',\n";
-                        $result .= "result: '" . $resultMessage . "',\n";
-                        $result .= "file_id: '" . $uploadFileId . "',\n";
-                        $result .= "file_url: '" . $returnFilePath . "'\n";
-                        $result .= "}";
-                    } else if ($returnType === 1) {
-                        $result = $returnFilePath;
-                    } else if ($returnType === 2) {
-                        $result = $uploadFileId;
-                    }
+                    $resultMessage = Format::FormatUploadFileToHtml($uploadFilePath, $fileExtension, $uploadFileId, $_FILES[$fileElementName]['name']);
+                    //取消了返回类型，只返回JSON结果
+                    //if ($returnType === 0) {
+
+                    //} else if ($returnType === 1) {
+                    //    $result = $returnFilePath;
+                    //} else if ($returnType === 2) {
+                    //    $result = $uploadFileId;
+                    //}
+                    $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
                 } else { //移动上传文件时失败
-                    $result = self::UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION;
+                    $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
                 }
-            }else{
-                $result = self::UPLOAD_ERROR_PATH;
+            } else {
+                $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
             }
         } else {
             $result = $errorMessage;
         }
+
+        $returnJson = "{";
+        $returnJson .= "error: '" . $errorMessage . "',\n";
+        $returnJson .= "result: '" . $resultMessage . "',\n";
+        $returnJson .= "upload_file_id: '" . $uploadFileId . "',\n";
+        $returnJson .= "upload_file_url: '" . $uploadFilePath . "'\n";
+        $returnJson .= "}";
+
         UnLink($_FILES[$fileElementName]);
         return $result;
     }
@@ -405,42 +410,42 @@ class BaseGen
                 /**资讯题图1   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = 'title_pic1_' . time() . '.' . $fileExtension;
+                    $newFileName = 'title_pic1_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2:
                 /**资讯题图2   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = 'title_pic2_' . time() . '.' . $fileExtension;
+                    $newFileName = 'title_pic2_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3:
                 /**资讯题图3   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = 'title_pic3_' . time() . '.' . $fileExtension;
+                    $newFileName = 'title_pic3_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT:
                 /**资讯内容图   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = 'document_news_content_' . time() . '.' . $fileExtension;
+                    $newFileName = 'document_news_content_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_MANAGE_TASK:
                 /**管理任务上传  */
                 if ($manageUserId > 0) {
                     $uploadFilePath = $uploadPath . "manage_task" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
+                    $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_MANAGE_TASK_REPLY:
                 /**管理任务回复上传  */
                 if ($manageUserId > 0) {
                     $uploadFilePath = $uploadPath . "manage_task_reply" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
+                    $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_QUESTION: //咨询问答上传
@@ -450,28 +455,28 @@ class BaseGen
                 /**产品题图   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
+                    $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION:
                 //产品参数类型选项
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE:
                 //产品参数类型
                 $uploadFilePath = $uploadPath . "product_param_type" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC:
                 //活动类题图上传
                 $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . "_";
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传
@@ -480,7 +485,7 @@ class BaseGen
             case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_GROUP:
                 //会员组
                 $uploadFilePath = $uploadPath . "user_group" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_AVATAR:
                 //会员头像
@@ -493,56 +498,56 @@ class BaseGen
             case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_LINK:
                 //友情链接类
                 $uploadFilePath = $uploadPath . "site_link" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_CONTENT: //自定义页面类
                 $uploadFilePath = $uploadPath . "site_content" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_CONFIG:
                 /** 站点配置图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "site_config" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_1:
                 /** 论坛版块图标1 */
                 $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . time() . '.' . $fileExtension;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_2:
                 /** 论坛版块图标2 */
                 $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . time() . '.' . $fileExtension;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
                 /** 论坛帖子内容 */
                 $uploadFilePath = $uploadPath . "forum_post" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . time() . '.' . $fileExtension;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
             case 19: //自定义表单
                 $uploadFilePath = $uploadPath . "custom_form" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case 20:
                 /** 频道图片1 tableId 为 channelId */
                 $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = 'parent_id_' . $tableId . '_' . time() . '.' . $fileExtension;
+                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_LEVEL:
                 /** 会员等级 */
                 $uploadFilePath = $uploadPath . "user_level" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_ATTACHMENT:
                 /** 会员附件 */
                 if ($userId > 0) {
                     $uploadFilePath = $uploadPath . "user_attachment" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
-                    $newFileName = 'user_attachment_' . $userId . '_' . time() . '.' . $fileExtension;
+                    $newFileName = 'user_attachment_' . $userId . '_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
             case 22: //投票选项图片
                 $uploadFilePath = $uploadPath . "vote_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE: //新闻题图,移动终端使用
                 //由系统自动生成
@@ -554,16 +559,16 @@ class BaseGen
                 break;
             case 26: //会员心情图标 tableId 为 siteId
                 $uploadFilePath = $uploadPath . "user_mood" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_user_mood_' . time() . '.' . $fileExtension;
+                $newFileName = $tableId . '_user_mood_' . uniqid() . '.' . $fileExtension;
                 break;
             case 27: //考试类用
                 $uploadFilePath = $uploadPath . "exam" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = time() . '.' . $fileExtension;
+                $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case 28: //会员签名图标
                 if ($userId > 0) {
                     $uploadFilePath = $uploadPath . "user_sign" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
-                    $newFileName = time() . '.' . $fileExtension;
+                    $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
         }
@@ -571,65 +576,73 @@ class BaseGen
     }
 
     /**
-     * 上传文件错误代码：没有错误
+     * 上传文件预检查：成功
      */
-    const UPLOAD_ERROR_NO_ERROR = 1;
+    const UPLOAD_PRE_CHECK_SUCCESS = 100;
     /**
-     * 上传文件错误代码：未操作
+     * 上传文件结果：没有错误
      */
-    const UPLOAD_ERROR_NO_ACTION = 0;
+    const UPLOAD_RESULT_SUCCESS = 101;
     /**
-     * 上传文件错误：PHP temp文件夹未设置
+     * 上传文件结果：未操作
      */
-    const UPLOAD_ERROR_TMP_IS_NULL = -5;
+    const UPLOAD_RESULT_NO_ACTION = -100;
     /**
-     * 上传文件错误：文件太大
+     * 上传文件结果：$_FILE为空
      */
-    const UPLOAD_ERROR_TOO_LARGE_FOR_SERVER = -1;
+    const UPLOAD_RESULT_FILE_IS_EMPTY = -121;
     /**
-     * 上传文件错误：文件太大，超出了HTML表单的限制
+     * 上传文件结果：PHP temp文件夹未设置
      */
-    const UPLOAD_ERROR_TOO_LARGE_FOR_HTML = -2;
+    const UPLOAD_RESULT_TMP_IS_NULL = -120;
     /**
-     * 上传文件错误：文件中只有一部分内容完成了上传
+     * 上传文件结果：文件太大
      */
-    const UPLOAD_ERROR_ONLY_PARTIALLY_UPLOADED = -3;
+    const UPLOAD_RESULT_TOO_LARGE_FOR_SERVER = -101;
     /**
-     * 上传文件错误：没有找到要上传的文件
+     * 上传文件结果：文件太大，超出了HTML表单的限制
      */
-    const UPLOAD_ERROR_NO_FILE = -4;
+    const UPLOAD_RESULT_TOO_LARGE_FOR_HTML = -102;
     /**
-     * 上传文件错误：服务器临时文件夹丢失
+     * 上传文件结果：文件中只有一部分内容完成了上传
      */
-    const UPLOAD_ERROR_TEMPORARY_FOLDER_IS_MISSING = -5;
+    const UPLOAD_RESULT_ONLY_PARTIALLY_UPLOADED = -103;
     /**
-     * 上传文件错误： 文件写入到临时文件夹出错
+     * 上传文件结果：没有找到要上传的文件
      */
-    const UPLOAD_ERROR_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER = -6;
+    const UPLOAD_RESULT_NO_FILE = -104;
     /**
-     * 上传文件错误：文件夹没有写入权限
+     * 上传文件结果：服务器临时文件夹丢失
      */
-    const UPLOAD_ERROR_NO_RIGHT_TO_WRITE_TEMPORARY = -7;
+    const UPLOAD_RESULT_TEMPORARY_FOLDER_IS_MISSING = -105;
     /**
-     * 上传文件错误：扩展使文件上传停止
+     * 上传文件结果： 文件写入到临时文件夹出错
      */
-    const UPLOAD_ERROR_PLUGINS_MADE_UPLOAD_STOP = -8;
+    const UPLOAD_RESULT_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER = -106;
     /**
-     * 上传文件错误：没有可以显示的错误信息
+     * 上传文件结果：文件夹没有写入权限
      */
-    const UPLOAD_ERROR_NO_MESSAGE = -9;
+    const UPLOAD_RESULT_NO_RIGHT_TO_WRITE_TEMPORARY = -107;
     /**
-     * 上传文件错误：文件类型错误，不允许此类文件上传
+     * 上传文件结果：扩展使文件上传停止
      */
-    const UPLOAD_ERROR_FILE_TYPE = -10;
+    const UPLOAD_RESULT_PLUGINS_MADE_UPLOAD_STOP = -108;
     /**
-     * 上传文件错误：生成上传文件路径和文件名时出错
+     * 上传文件结果：没有可以显示的错误信息
      */
-    const UPLOAD_ERROR_PATH = -11;
+    const UPLOAD_RESULT_NO_MESSAGE = -109;
     /**
-     * 上传文件错误：移动上传文件到目标路径时失败
+     * 上传文件结果：文件类型错误，不允许此类文件上传
      */
-    const UPLOAD_ERROR_MOVE_FILE_TO_DESTINATION = -12;
+    const UPLOAD_RESULT_FILE_TYPE = -110;
+    /**
+     * 上传文件结果：生成上传文件路径和文件名时出错
+     */
+    const UPLOAD_RESULT_PATH = -111;
+    /**
+     * 上传文件结果：移动上传文件到目标路径时失败
+     */
+    const UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION = -112;
 
     /**
      * 上传文件预检查
@@ -638,48 +651,48 @@ class BaseGen
      */
     private function UploadPreCheck($fileElementName)
     {
-        $errorMessage = self::UPLOAD_ERROR_NO_ERROR;
+        $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
 
-        if(empty($_FILES)){
-            return self::UPLOAD_ERROR_NO_ACTION;
+        if (empty($_FILES)) {
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_IS_EMPTY;
         }
 
         /////////////////////////检查temp文件夹///////////////////////////
         if (empty($_FILES[$fileElementName]['tmp_name'])) {
-            return self::UPLOAD_ERROR_TMP_IS_NULL;
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
         if ($_FILES[$fileElementName]['tmp_name'] == 'none') {
-            return self::UPLOAD_ERROR_TMP_IS_NULL;
+            return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
         /////////////////////////检查错误信息///////////////////////////
         if (!empty($_FILES[$fileElementName]['error'])) {
             switch ($_FILES[$fileElementName]['error']) {
                 case '1':
-                    $errorMessage = self::UPLOAD_ERROR_TOO_LARGE_FOR_SERVER;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_SERVER;
                     break;
                 case '2':
-                    $errorMessage = self::UPLOAD_ERROR_TOO_LARGE_FOR_HTML;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_HTML;
                     break;
                 case '3':
-                    $errorMessage = self::UPLOAD_ERROR_ONLY_PARTIALLY_UPLOADED;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ONLY_PARTIALLY_UPLOADED;
                     break;
                 case '4':
-                    $errorMessage = self::UPLOAD_ERROR_NO_FILE;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_FILE;
                     break;
                 case '5':
-                    $errorMessage = self::UPLOAD_ERROR_TEMPORARY_FOLDER_IS_MISSING;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TEMPORARY_FOLDER_IS_MISSING;
                     break;
                 case '6':
-                    $errorMessage = self::UPLOAD_ERROR_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FAILED_TO_WRITE_TO_THE_TEMPORARY_FOLDER;
                     break;
                 case '7':
-                    $errorMessage = self::UPLOAD_ERROR_NO_RIGHT_TO_WRITE_TEMPORARY;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_RIGHT_TO_WRITE_TEMPORARY;
                     break;
                 case '8':
-                    $errorMessage = self::UPLOAD_ERROR_PLUGINS_MADE_UPLOAD_STOP;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_PLUGINS_MADE_UPLOAD_STOP;
                     break;
                 default:
-                    $errorMessage = self::UPLOAD_ERROR_NO_MESSAGE;
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NO_MESSAGE;
             }
             return $errorMessage;
         }
@@ -706,7 +719,7 @@ class BaseGen
             $fileExtension == "jpeg"
         ) {
         } else {
-            $errorMessage = self::UPLOAD_ERROR_FILE_TYPE;
+            $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_TYPE;
         }
         return $errorMessage;
     }

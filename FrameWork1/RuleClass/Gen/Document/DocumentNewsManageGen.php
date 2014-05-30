@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台Gen总引导类
+ * 后台管理 资讯 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Document
  * @author zhangchi

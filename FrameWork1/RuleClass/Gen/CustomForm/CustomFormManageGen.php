@@ -9,31 +9,36 @@
 class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
+     * 节点表单查询结果 空
+     */
+    const SELECT_CUSTOM_FORM_LIST_RESULT_NULL = -1;
+    /**
+     * 表单字段名查询结果 空
+     */
+    const SELECT_CUSTOM_FORM_TABLE_NAME_LIST_RESULT_NULL = -2;
+    /**
+     * 新增表单写入数据库失败
+     */
+    const CREATE_NEW_CUSTOM_FORM_FAILED = -3;
+    /**
+     * 获取被修改表单原属性结果 空
+     */
+    const GET_CUSTOM_FORM_ATTRIBUTE_RESULT_NULL = -4;
+    /**
+     * 修改表单属性写入数据库失败
+     */
+    const INSERT_CUSTOM_FORM_ATTRIBUTE_FAIL = -5;
+
+
+
+
+
+    /**
      * 引导方法
      * @return string 返回执行结果
      */
     function Gen() {
         $result = "";
-
-        $action = Control::GetRequest("a", "");
-        switch ($action) {
-            case "custom_form_content":
-                $customFormContentGen = new CustomFormContentManageGen();
-                $result = $customFormContentGen->Gen();
-                break;
-            case "custom_form_record":
-                $customFormRecordGen = new CustomFormRecordManageGen();
-                $result = $customFormRecordGen->Gen();
-                break;
-            case "custom_form_field":
-                $customFormFieldGen = new CustomFormFieldManageGen();
-                $result = $customFormFieldGen->Gen();
-                break;
-            case "custom_form_search":        //活动表单页面查询类
-                $customFormSearchGen = new CustomFormSearchManageGen();
-                $result = $customFormSearchGen->Gen();
-                break;
-            default:
                 $method = Control::GetRequest("m", "");
                 switch ($method) {
                     case "create":
@@ -50,8 +55,6 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     "{method}" => $method
                 );
                 $result = strtr($result, $replaceArray);
-                break;
-        }
         return $result;
     }
 
@@ -64,9 +67,6 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = Template::Load("custom_form/custom_form_deal.html","common");
         $manageUserId = Control::GetManageUserId();
         $channelId = Control::GetRequest("channel_id", 0);
-        $tabIndex = Control::GetRequest("tab_count", 0);
-        $pageIndex = Control::GetRequest("p", 1);
-        $siteId = 0;
         parent::ReplaceFirst($tempContent);
 
         if ($channelId > 0) {
@@ -77,49 +77,50 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             $manageUserAuthority = new ManageUserAuthorityManageData();
             $can = $manageUserAuthority->CanCreate($siteId, $channelId, $manageUserId);
             if ($can != 1) {
-                Control::ShowMessage(Language::Load('document', 26));
-                /*$jsCode = 'self.parent.loadcustomformlist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                if ($tabIndex > 0) {
-                    $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                }
-                Control::RunJS($jsCode);*/
+                Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
             }
+
+            if (!empty($_POST)) {
+                $customFormManageData = new CustomFormManageData();
+                $newId = $customFormManageData->Create($_POST);
+                if($newId>0){
+                    //加入操作log
+                    $operateContent = "CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
+                    self::CreateManageUserLog($operateContent);
+
+                    Control::ShowMessage(Language::Load('document', 1));
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    if($closeTab == 1){
+                        Control::CloseTab();
+                    }else{
+                        echo $closeTab;
+                        Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
+                    }
+
+                }else{
+                    return DefineCode::CUSTOM_FORM_MANAGE+self::CREATE_NEW_CUSTOM_FORM_FAILED;
+                }
+
+            }
             ////////////////////////////////////////////////////
+            $crateDate=date('Y-m-d H:i:s');
             $replaceArray = array(
-                "{site_id}" => $siteId,
-                "{channel_id}" => $channelId,
-                "{manage_user_id}" => $manageUserId,
-                "{tab}" => $tabIndex,
-                "{page_index}" => $pageIndex
+                "{SiteId}" => $siteId,
+                "{ChannelId}" => $channelId,
+                "{ManageUserId}" => $manageUserId,
+                "{CreateDate}" => $crateDate
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
             $sourceCommonManageData = new SourceCommonManageData();
             $arrayOfTableNameList = $sourceCommonManageData->GetFields("cst_custom_form");
-            parent::ReplaceWhenCreate($tempContent, $arrayOfTableNameList);
-
-            if (!empty($_POST)) {
-                $customFormManageData = new CustomFormManageData();
-                $newId = $customFormManageData->Create($_POST);
-
-                if($newId>0){
-                    //加入操作log
-                    $operateContent = "CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_customformsubject", "");
-                    self::CreateManageUserLog($operateContent);
-
-                    Control::ShowMessage(Language::Load('document', 1));
-                    /*$jsCode = 'self.parent.loadcustomformlist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-
-                    if ($tabIndex > 0) {
-                        $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                    }
-
-                    Control::RunJS($jsCode);*/
-
-                }
-
+            if($arrayOfTableNameList>0){
+                parent::ReplaceWhenCreate($tempContent, $arrayOfTableNameList);
+            }else{
+                return DefineCode::CUSTOM_FORM_MANAGE+self::SELECT_CUSTOM_FORM_TABLE_NAME_LIST_RESULT_NULL;
             }
+
 
             //去掉s开头的标记 {s_xxx_xxx}
             $patterns = "/\{s_(.*?)\}/";
@@ -142,11 +143,8 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenModify() {
         $tempContent = Template::Load("custom_form/custom_form_deal.html","common");
-        $customFormId = Control::GetRequest("custom_form_id", 0);
-        $userId = Control::GetUserID();
-        $tabIndex = Control::GetRequest("tab", 1);
-        $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
+        $customFormId = Control::GetRequest("custom_form_id", 0);
 
         if ($customFormId > 0) {
             $customFormManageData = new CustomFormManageData();
@@ -161,11 +159,6 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             $can = $manageUserAuthority->CanModify($siteId, $channelId, $nowManageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('document', 26));
-                /*$jsCode = 'self.parent.loadcustomformlist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                if ($tabIndex > 0) {
-                    $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                }
-                Control::RunJS($jsCode);*/
                 return "";
             }
             //操作他人的权限
@@ -175,25 +168,16 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
                     Control::ShowMessage(Language::Load('document', 26));
-                    /*$jsCode = 'self.parent.loadcustomformlist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                    if ($tabIndex > 0) {
-                        $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                    }
-                    Control::RunJS($jsCode);*/
                     return "";
                 }
             }
             ////////////////////////////////////////////////////
 
-            //$channelName = $channelData->GetName($channelId);
             $replaceArray = array(
-                "{document_channel_id}" => $channelId,
-                "{channel_id}" => $channelId,
-                "{custom_form_id}" => $customFormId,
-                "{site_id}" => $siteId,
-                "{user_id}" => $userId,
-                "{tab}" => $tabIndex,
-                "{page_index}" => $pageIndex
+                "{SiteId}" => $siteId,
+                "{ChannelId}" => $channelId,
+                "{ManageUserId}" => $createUserId,
+                "{CustomFormId}" => $customFormId
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
@@ -213,27 +197,24 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             if (!empty($_POST)) {
                 $result = $customFormManageData->Modify($_POST,$customFormId);
 
-                if ($result > 0) {
-
-                }
-
-                //加入操作log
-                $operateContent = "CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
-                self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
-                    Control::ShowMessage(Language::Load('document', 3));
-                    /*$jsCode = 'self.parent.loadcustomformlist(' . $pageIndex . ',"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
 
-                    if ($tabIndex > 0) {
-                        $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                    }
+                    //加入操作log
+                    $operateContent = "CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
+                    self::CreateManageUserLog($operateContent);
 
-                    Control::RunJS($jsCode);*/
+                    Control::ShowMessage(Language::Load('document', 1));
+
+                        Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=list&site_id='.$siteId.'&channel_id='.$channelId);
                 } else {
-                    Control::ShowMessage(Language::Load('document', 4));
+
+                    Control::ShowMessage(Language::Load('document', 2));
+                    return DefineCode::CUSTOM_FORM_MANAGE+self::INSERT_CUSTOM_FORM_ATTRIBUTE_FAIL;
                 }
             }
+        }else{
+            return DefineCode::CUSTOM_FORM_MANAGE+self::GET_CUSTOM_FORM_ATTRIBUTE_RESULT_NULL;
         }
 
         parent::ReplaceEnd($tempContent);
@@ -254,14 +235,9 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
         if ($can != 1) {
             Control::ShowMessage(Language::Load('custom_form', 3));//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
-            return $can;
+            return "";
         }
-        ////////////////////////////////////////////////////
-        //$siteData = new SiteManageData();
-        //$siteUrl = $siteData->GetSiteUrl($siteId);
-        $result = Language::Load('document', 7);
-
-        //$documentChannelType = $documentChannelData->GetDocumentChannelType($documentChannelId);
+        $result = Language::Load('custom_form', 4);
         $tempContent = Template::Load("custom_form/custom_form_list.html","common");
 
         $type = Control::GetRequest("type", "");
@@ -270,9 +246,10 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         if (isset($searchKey) && strlen($searchKey) > 0) {
+            ///////////////判断是否有操作权限///////////////////
             $can = $manageUserAuthority->CanSearch($siteId, $channelId, $manageUserId);
             if ($can != 1) {
-                Control::ShowMessage(Language::Load('document', 26));
+                Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
             }
         }
@@ -283,14 +260,9 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             $listName = "custom_form";
             $allCount = 0;
             $customFormData = new CustomFormManageData();
-            $arrListOfCustomFormRecord = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
-            if (count($arrListOfCustomFormRecord) > 0) {
-                Template::ReplaceList($tempContent, $arrListOfCustomFormRecord, $listName,"icms_list");
-
-                /*$pagerTemplate = Template::Load("pager_js.html");
-                $isJs = true;
-                $jsFunctionName = "loadcustomformlist";
-                $jsParamList = ",'" . urlencode($searchKey) . "','" . $type . "'";*/
+            $arrListOfCustomForm = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
+            if (count($arrListOfCustomForm) > 0) {
+                Template::ReplaceList($tempContent, $arrListOfCustomForm, $listName,"icms_list");
 
                 $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
                 $replaceArray = array(
@@ -298,12 +270,16 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     "{cid}" => 0,
                     "{id}" => 0,
                     "{pager_button}" => $pagerButton
-                   // "{site_url}" => $siteUrl
                 );
                 $tempContent = strtr($tempContent, $replaceArray);
-                parent::ReplaceEnd($tempContent);
-                $result = $tempContent;
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("custom_form", 4), $tempContent);
+
             }
+
+            parent::ReplaceEnd($tempContent);
+            $result = $tempContent;
         }
         return $result;
     }

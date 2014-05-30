@@ -216,7 +216,11 @@ class BaseManageGen extends BaseGen
      */
     private function ReplaceTemplate($channelId, $channelTemplateContent)
     {
-        /** 1.替换模板内容 */
+        /** 1.处理预加载模板 */
+
+
+
+        /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
         if (count($arrCustomTags) > 0) {
             $arrTempContents = $arrCustomTags[0];

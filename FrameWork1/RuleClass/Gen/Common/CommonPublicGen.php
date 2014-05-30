@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 公开访问 通用 生成类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_Gen_Common
+ * @author zhangchi
+ */
 class CommonPublicGen extends BasePublicGen implements IBasePublicGen {
 
     /**

@@ -44,14 +44,14 @@ class ChannelManageData extends BaseManageData
 
     /**
      * 修改频道
-     * @param int $channelId 频道id
      * @param array $httpPostData $_POST数组
+     * @param int $channelId 频道id
      * @param string $titlePic1 题图1，默认为空，不修改
      * @param string $titlePic2 题图2，默认为空，不修改
      * @param string $titlePic3 题图3，默认为空，不修改
      * @return int 返回影响的行数
      */
-    public function Modify($channelId, $httpPostData, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '')
+    public function Modify($httpPostData, $channelId, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '')
     {
         $result = -1;
         $dataProperty = new DataProperty();

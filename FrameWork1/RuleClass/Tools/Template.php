@@ -576,7 +576,7 @@ class Template
     public static function ReplaceOne(&$tempContent, $arrInfo, $isList = false, $isManage = false)
     {
         if (count($arrInfo) > 0) {
-            if ($isList > 0) { //使用一维数组存储数据
+            if (!$isList) { //使用一维数组存储数据
                 self::_ReplaceOne($tempContent, $arrInfo, $isManage);
             } else { //使用二维数组存储数据
                 for ($i = 0; $i < count($arrInfo); $i++) {
