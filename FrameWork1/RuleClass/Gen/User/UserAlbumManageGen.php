@@ -22,8 +22,8 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "list_for_manage":
-                $result = self::GenListForManage();
+            case "list":
+                $result = self::GenList();
                 break;
             case "remove_bin":
                 $result = self::GenRemoveBin();
@@ -75,7 +75,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
-    private function GenListForManage() {
+    private function GenList() {
         $tempContent = Template::Load("user/user_album_list.html","common");
         $pageIndex = Control::GetRequest("p",1);
         $siteId = Control::GetRequest("site_id",0);
