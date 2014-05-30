@@ -1,11 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: zcoffice
+ * User: yin
  * Date: 14-5-30
- * Time: 下午12:14
- */
-
-class UserAlbumTypeManageGen {
-
-} 
+ * Time: 下午12:09
+ */ 
