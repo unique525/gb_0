@@ -49,7 +49,7 @@ class UserManageData extends BaseManageData
     }
 
     /**
-     * 修改会员
+     * 根据会员id修改会员
      * @param array $httpPostData $_POST数组
      * @param int $userId 会员id
      * @return int 返回影响的行数
@@ -68,7 +68,7 @@ class UserManageData extends BaseManageData
     }
 
     /**
-     * 编辑会员时，检查同名帐号是否存在 GetCountByUserNameNotNowUserId
+     * 编辑会员时，检查同名帐号是否存在
      * @param string $userName 会员名称
      * @param int $userId 会员id
      * @return int 返回统计数据
