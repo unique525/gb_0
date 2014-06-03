@@ -6,7 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * @author zhangchi
  */
-class UserManageData extends BaseManageData {
+class UserManageData extends BaseManageData
+{
 
     /**
      * 取得后台会员列表数据集
@@ -36,12 +37,12 @@ class UserManageData extends BaseManageData {
             u.*,
             ui.Avatar
             FROM
-            " . self::TableName_User . " u,". self::TableName_UserInfo ." ui
+            " . self::TableName_User . " u," . self::TableName_UserInfo . " ui
             WHERE u.UserId=ui.UserId AND u.SiteId=:SiteId " . $searchSql . " ORDER BY u.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-        $sql = "SELECT count(*) FROM " . self::TableName_User . " u,". self::TableName_UserInfo ." ui WHERE u.UserId=ui.UserId AND u.SiteId=:SiteId " . $searchSql . ";";
+        $sql = "SELECT count(*) FROM " . self::TableName_User . " u," . self::TableName_UserInfo . " ui WHERE u.UserId=ui.UserId AND u.SiteId=:SiteId " . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
@@ -56,7 +57,7 @@ class UserManageData extends BaseManageData {
     public function Modify($httpPostData, $userId)
     {
         $result = -1;
-        if($userId >0){
+        if ($userId > 0) {
             if (!empty($httpPostData)) {
                 $dataProperty = new DataProperty();
                 $sql = parent::GetUpdateSql($httpPostData, self::TableName_User, self::TableId_User, $userId, $dataProperty);
@@ -72,13 +73,16 @@ class UserManageData extends BaseManageData {
      * @param int $userId 会员id
      * @return int 返回统计数据
      */
-    public function CheckExistNameForModify($userName, $userId)
+    public function GetCountByUserNameNotNowUserId($userName, $userId)
     {
-        $sql = "SELECT Count(*) FROM  " . self::TableName_User . " WHERE UserName=:UserName AND UserId<>:UserId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("UserName", $userName);
-        $dataProperty->AddField("UserId", $userId);
-        $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        $result = null;
+        if ($userId > 0) {
+            $sql = "SELECT Count(*) FROM  " . self::TableName_User . " WHERE UserName=:UserName AND UserId<>:UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserName", $userName);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
         return $result;
     }
 
@@ -111,7 +115,7 @@ class UserManageData extends BaseManageData {
     public function GetOne($userId)
     {
         $result = null;
-        if($userId>0){
+        if ($userId > 0) {
             $sql = "SELECT * FROM " . self::TableName_User . " WHERE userId=:userId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("userId", $userId);
