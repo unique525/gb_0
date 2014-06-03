@@ -4,11 +4,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         {common_head}
         <style type="text/css">
-            body{font-family: "微软雅黑";font-size:14px}
-            .photo { position:relative; font-family:arial; margin:2px 1px; text-align:center; overflow:hidden; border:1px solid #CCC; width:240px; height:320px; float:left}
+            .photo { position:relative;margin:2px 1px; text-align:center; overflow:hidden; border:1px solid #CCC; width:240px; height:320px; float:left}
             .photo .heading, .photo .caption { position:absolute; background:#000; height:50px; width:240px; opacity:0.6; filter:alpha(opacity=60)}
             .photo .heading { top:-30px; }
-            .photo .caption { bottom:-70px; left:0px;height:70px }
+            .photo .caption { bottom:-70px; left:0;height:70px }
             .photo .heading span { color:#26c3e5; top:-30px; font-weight:bold; display:block; padding:5px 0 0 10px; }
             .photo .caption span { color:#999; font-size:9px; display:block; padding:5px 10px 0 10px; }
             .photo img{width:240px;height:320px}
@@ -24,6 +23,11 @@
                         $(this).children('div:last').stop(false,true).animate({bottom:-70},{duration:200, easing: style});
                     }
                 );
+
+                $("#btnSearch").click(function(){
+                    var param = $("#search_form").serialize();
+                    window.location.href = window.location.href + "&" + param;
+                });
             });
         </script>
     </head>
@@ -41,8 +45,9 @@
                             </item>
                         </icms_list>
                     </select>
-                    <span>作者:<input type="text" id="author" name="author" value=""/></span>
+                    <span>作者:<input type="text" id="author" name="author" value="{author}"/></span>
                     <span>作品名:<input type="text" id="album_name" name="album_name" value=""/></span>
+                    <input type="button" value="ss" id="btnSearch" />
                 </form>
             </div>
             <div id="list_div" style="width:100%;height:auto;margin:1px;border: 1px #CCC solid">
