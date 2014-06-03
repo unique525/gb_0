@@ -109,9 +109,33 @@ $(document).ready(function() {
             });
         }
     });
+    //确认并关闭
+    $("#btn_ConfirmClose").click(function() {
+        var confirmId = $(this).attr('idvalue');
+        submitForm(confirmId);
+    });
 
+    //确认并继续
+    $("#btn_ConfirmGoOn").click(function() {
+        var confirmId = $(this).attr('idvalue');
+        submitForm(confirmId);
+    });
 
+    //取消
+    $("#btn_Remove").click(function() {
+        closeTab();
+    });
 
+    //确认并关闭
+    $("#btn_ConfirmCloseTwo").click(function() {
+        var confirmId = $(this).attr('idvalue');
+        submitForm(confirmId);
+    });
+
+    //取消
+    $("#btn_RemoveTwo").click(function() {
+        closeTab();
+    });
 
 });
 
