@@ -120,7 +120,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         $oldUserName = Control::PostRequest("OldUserName", "");
                         $newUserName = Control::PostRequest("f_UserName", "");
                         if ($oldUserName != $newUserName) {
-                            $hasCount = $userManageData->CheckExistNameForModify($newUserName, $userId);
+                            $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
                             if ($hasCount > 0) {//同站点下不许存在相同的用户名
                                 Control::ShowMessage(Language::Load('user', 20));
                                 return $tempContent;
