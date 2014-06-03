@@ -16,9 +16,6 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
-            case "create":
-                $result = self::GenCreate();
-                break;
             case "modify":
                 $result = self::GenModify();
                 break;
