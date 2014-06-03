@@ -12,10 +12,10 @@ class UserAlbumTypeManageData extends BaseManageData {
      * 新增一个相册类别
      * @return int 最后插入的Id
      */
-    public function Create(){
+    public function Create($siteId){
         $dataProperty = new DataProperty();
         if (!empty($httpPostData)) {
-            $sql = parent::GetInsertSql($httpPostData, self::TableName_UserAlbumType, $dataProperty);
+            $sql = parent::GetInsertSql($httpPostData, self::TableName_UserAlbumType, $dataProperty,"siteid",$siteId);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
             return $result;
         }else{
