@@ -235,6 +235,14 @@ class BaseData
      * 会员相册图片 数据表自增字段名
      */
     const TableId_UserAlbumPic = "UserAlbumPicId";
+    /**
+     * 会员相册分类 数据表名
+     */
+    const TableName_UserAlbumType = "cst_user_album_type";
+    /**
+     * 会员相册分类 数据表自增字段名
+     */
+    const TableId_UserAlbumType = "UserAlbumTypeId";
 
     /**
      * 自定义表单 数据表名
