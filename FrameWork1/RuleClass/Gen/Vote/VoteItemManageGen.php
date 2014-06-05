@@ -129,7 +129,7 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = $voteItemManageData->Modify($httpPostData, $voteItemId);
 
                 //加入操作日志
-                $operateContent = 'Modify VoteItem,POST FORM:' . implode('|', $_POST) . ';\r\nResult:voteId:' . $voteItemId;
+                $operateContent = 'Modify VoteItem,POST FORM:' . implode('|', $_POST) . ';\r\nVoteItemId:' . $voteItemId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
