@@ -7,8 +7,6 @@
     <script type="text/javascript" src="/system_js/manage/user/user_manage.js"></script>
     <script type="text/javascript">
         $(function () {
-            var siteId = {SiteId};
-
             $("#f_CreateDate").datepicker({
                 dateFormat: 'yy-mm-dd',
                 numberOfMonths: 1,
@@ -53,15 +51,12 @@
 <div style="margin: 0 auto;">
     <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=user&m={method}&user_id={UserId}&site_id={SiteId}"
           method="post">
-        <input id="oldUserName" name="oldUserName" type="hidden" value="{UserName}"/>
-        <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
-
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
-                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="确认并继续" type="button" onclick="submitForm(1)"/>
-                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+                    <input id="btn_ConfirmClose"  class="btn" value="确认并关闭" type="button" idvalue="0"/>
+                    <input id="btn_ConfirmGoOn" class="btn" value="确认并继续" type="button" idvalue="1"/>
+                    <input id="btn_Remove" class="btn" value="取 消" type="button"/>
                 </td>
             </tr>
         </table>
@@ -71,6 +66,9 @@
                 <td class="spe_line" height="30" align="right"><label for="f_UserId">会员Id：</label></td>
                 <td class="spe_line">
                     <input name="f_UserId" id="f_UserId" value="{UserId}" type="text" style="width: 60px;"/>
+                    <input id="OldUserName" name="OldUserName" type="hidden" value="{UserName}"/>
+                    <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+
                  </td>
             </tr>
             <tr>
@@ -142,15 +140,15 @@
 
             <tr>
                 <td colspan="2" height="30" align="center">
-                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+                    <input id="btn_ConfirmCloseTwo" class="btn" value="确认并关闭" type="button" idvalue="0"/>
+                    <input id="btn_RemoveTwo" class="btn" value="取 消" type="button"/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" height="30" align="left">
-                    <a href="../user/index.php?a=userinfo&m=edit&user_id={UserId}&site_id={SiteId}">[编辑此会员详细信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="../user/index.php?a=smsthird&m=sendsms&user_id={UserId}&site_id={SiteId}">[发送手机短信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="../user/index.php?a=usermail&m=sendmail&user_id={UserId}&site_id={SiteId}">[发送电子邮件]</a>
+                    <a href="/default.php?secu=manage&mod=userinfo&m=edit&user_id={UserId}&site_id={SiteId}">[编辑此会员详细信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="/default.php?secu=manage&mod=smsthird&m=sendsms&user_id={UserId}&site_id={SiteId}">[发送手机短信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="/default.php?secu=manage&mod=usermail&m=sendmail&user_id={UserId}&site_id={SiteId}">[发送电子邮件]</a>
                 </td>
             </tr>
         </table>
