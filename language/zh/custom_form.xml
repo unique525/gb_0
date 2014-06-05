@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<module id="1"><content><![CDATA[提交成功!]]></content></module>
+<module id="2"><content><![CDATA[提交失败!]]></content></module>
+<module id="3"><content><![CDATA[您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！]]></content></module>
+<module id="4"><content><![CDATA[<div style="padding:5px;">此频道目前还没有表单，或者没有查询到相关表单</div>]]></content></module>
+<module id="5"><content><![CDATA[<div style="padding:5px;">此表单目前还没有字段，或者没有查询到相关字段</div>]]></content></module>
+
+</root>

@@ -7,6 +7,14 @@
  */
 class VoteItemManageData extends BaseManageData
 {
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_VoteItem){
+        return parent::GetFields(self::TableName_VoteItem);
+    }
 
     /**
      * 新增题目

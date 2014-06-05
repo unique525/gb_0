@@ -14,7 +14,7 @@
             <tr>
                 <td class="spe_line" height="40" align="right">
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
                 </td>
             </tr>
@@ -48,7 +48,7 @@
             <tr>
                 <td colspan="2" height="30" align="center">
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
                 </td>
             </tr>

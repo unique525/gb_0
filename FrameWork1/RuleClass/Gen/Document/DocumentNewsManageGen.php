@@ -253,8 +253,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 $documentNewsManageData->ModifyState($documentNewsId, $state);
                                 $executeFtp = true;
                                 $publishChannel = true;
-                                $ftpQueueManageData = new FtpQueueManageData();
-                                self::PublishDocumentNews($documentNewsId, $ftpQueueManageData, $executeFtp, $publishChannel);
+                                $publishQueueManageData = new PublishQueueManageData();
+                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
                                 break;
                         }
                     }

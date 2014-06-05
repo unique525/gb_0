@@ -169,6 +169,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
     /**
      * 投票调查管理列表页面
+     * @return mixed|string
      */
     private function GenList()
     {
@@ -187,7 +188,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             $tagId = "vote_list";
             $allCount = 0;
             $voteManageData = new VoteManageData();
-            $arrList = $voteManageData->GetListForPager($sId, $cId, $pageBegin, $pageSize, $allCount, $searchKey); //获取数据
+            $arrList = $voteManageData->GetListForPager($sId, $cId, $pageBegin, $pageSize, $allCount, $searchKey);
 
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
