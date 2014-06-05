@@ -118,7 +118,7 @@ class VoteSelectItemManageData extends BaseManageData
      * @param string $searchKey   查询字符
      * @return array  选项列表数组
      */
-    public function GetListPager($pageBegin, $pageSize, &$allCount, $voteItemId = 0, $searchKey = "") {
+    public function GetListForPager($pageBegin, $pageSize, &$allCount, $voteItemId = 0, $searchKey = "") {
         $dataProperty = new DataProperty();
         $searchSql = "WHERE";
         if ($voteItemId > 0) {
