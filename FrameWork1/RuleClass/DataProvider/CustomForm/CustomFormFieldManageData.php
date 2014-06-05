@@ -47,7 +47,7 @@ class CustomFormFieldManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC ;";
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 
@@ -73,7 +73,7 @@ class CustomFormFieldManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableName_CustomFormField . " WHERE CustomFormFieldId = :CustomFormFieldId ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
-        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

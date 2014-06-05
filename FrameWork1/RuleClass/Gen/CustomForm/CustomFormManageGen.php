@@ -94,11 +94,11 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     if($closeTab == 1){
                         Control::CloseTab();
                     }else{
-                        echo $closeTab;
                         Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
                     }
 
                 }else{
+                    Control::ShowMessage(Language::Load('document', 2));
                     return DefineCode::CUSTOM_FORM_MANAGE+self::CREATE_NEW_CUSTOM_FORM_FAILED;
                 }
 
@@ -109,7 +109,8 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 "{SiteId}" => $siteId,
                 "{ChannelId}" => $channelId,
                 "{ManageUserId}" => $manageUserId,
-                "{CreateDate}" => $crateDate
+                "{CreateDate}" => $crateDate,
+                "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
@@ -177,12 +178,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 "{SiteId}" => $siteId,
                 "{ChannelId}" => $channelId,
                 "{ManageUserId}" => $createUserId,
-                "{CustomFormId}" => $customFormId
+                "{CustomFormId}" => $customFormId,
+                "{display}" => "none"
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
             $arrayOfEditingData = $customFormManageData->GetOne($customFormId);
-            Template::ReplaceOne($tempContent, $arrayOfEditingData, 1);
+            Template::ReplaceOne($tempContent, $arrayOfEditingData, 0);
 
             //去掉s开头的标记 {s_xxx_xxx}
             $patterns = "/\{s_(.*?)\}/";
@@ -204,12 +206,12 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     $operateContent = "CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
-                    Control::ShowMessage(Language::Load('document', 1));
+                    Control::ShowMessage(Language::Load('custom_form', 1));
 
                         Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=list&site_id='.$siteId.'&channel_id='.$channelId);
                 } else {
 
-                    Control::ShowMessage(Language::Load('document', 2));
+                    Control::ShowMessage(Language::Load('custom_form', 2));
                     return DefineCode::CUSTOM_FORM_MANAGE+self::INSERT_CUSTOM_FORM_ATTRIBUTE_FAIL;
                 }
             }
