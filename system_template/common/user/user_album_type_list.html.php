@@ -62,13 +62,9 @@
 </div>
 <table class="grid" width="100%" cellpadding="0" cellspacing="0">
     <tr  class="grid_title">
-        <td style="width:1px;background:#ffffff"></td>
         <td style="width:50px;text-align: center">ID</td>
-        <td style="width:1px;background:#ffffff"></td>
         <td style="width:100px;text-align: center">类别名</td>
-        <td style="width:1px;background:#ffffff"></td>
         <td  style="width:200px;text-align: center">操作</td>
-        <td style="width:1px;background:#ffffff"></td>
         <td></td>
     </tr>
 </table>
@@ -79,17 +75,13 @@
             <li>
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <tr class="grid_item">
-                        <td style="width:1px;background:#ffffff"></td>
                         <td class="spe_line2" style="width:50px;text-align: center">{f_UserAlbumTypeId}</td>
-                        <td style="width:1px;background:#ffffff"></td>
                         <td class="spe_line2" style="width:100px;text-align: center">{f_UserAlbumTypeName}</td>
-                        <td style="width:1px;background:#ffffff"></td>
                         <td class="spe_line2" style="width:200px;text-align: center">
                             <span style="cursor:pointer" class="btn2">启用</span>&nbsp;&nbsp;&nbsp;&nbsp;
                             <span style="cursor:pointer" class="btn2">停用</span>&nbsp;&nbsp;&nbsp;&nbsp;
                             <span style="cursor:pointer" class="btn2">修改</span>
                         </td>
-                        <td style="width:1px;background:#ffffff"></td>
                         <td></td>
                     </tr>
                 </table>
