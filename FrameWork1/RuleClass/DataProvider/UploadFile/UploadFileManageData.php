@@ -154,7 +154,7 @@ class UploadFileManageData extends BaseManageData {
     /**
      * 投票选项图标
      */
-    const UPLOAD_TABLE_TYPE_VOTE_Select_ITEM = 110;
+    const UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM = 110;
     /**
      * 考试试题内容图
      */
