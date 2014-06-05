@@ -14,7 +14,8 @@ window.G_NowSiteName = "";
 window.G_Tabs = null;
 window.G_TabUrl = "";
 window.G_TabTitle = "";
-window.G_TabCounter = 2;
+window.G_TabCounter = 1;
+window.G_TabIndex = 1;
 window.G_TemplateName = "";
 window.G_PageSize = 15;
 
