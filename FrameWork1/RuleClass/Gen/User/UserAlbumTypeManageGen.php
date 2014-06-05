@@ -14,6 +14,9 @@ class UserAlbumTypeManageGen extends BaseManageGen{
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "list":
+                $result = self::GenList();
+                break;
         }
         return $result;
     }
@@ -34,6 +37,20 @@ class UserAlbumTypeManageGen extends BaseManageGen{
         return $templateContent;
     }
 
+    public function GenList(){
+        $siteId = Control::GetRequest("site_id",0);
+        $templateContent = Template::Load("user/user_album_type_list.html","common");
+        if($siteId > 0){
+            $userAlbumTypeManageData = new UserAlbumTypeManageData();
 
+            $arrUserAlbumTypeList = $userAlbumTypeManageData->GetList($siteId);
+            $tagId = "user_album_type_list";
+            Template::ReplaceList($templateContent,$arrUserAlbumTypeList,$tagId);
+
+
+            parent::ReplaceEnd($templateContent);
+        }
+        return $templateContent;
+    }
 }
 ?>
