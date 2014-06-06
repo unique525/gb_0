@@ -92,7 +92,7 @@
                     <tr class="grid_item2">
                         <td class="spe_line2" style="width:50px;text-align: center">{f_UserAlbumTypeId}</td>
                         <td class="spe_line2" style="width:50px;text-align: center">
-                            <img src="/system_template/{template_name}/images/manage/edit.gif" class="modify" idvalue="{f_UserAlbumTypeId}"/>
+                            <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="modify" idvalue="{f_UserAlbumTypeId}"/>
                         </td>
                         <td class="spe_line2" style="width:100px;text-align: center">
                             <div class="normal_operation_{f_UserAlbumTypeId}">
