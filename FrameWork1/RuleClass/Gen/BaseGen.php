@@ -8,7 +8,6 @@
  */
 class BaseGen
 {
-
     /**
      * 在模板替换前的统一替换
      * @param string $tempContent 要处理的模板
@@ -144,13 +143,12 @@ class BaseGen
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
                 if (!empty($arr2)) {
-                    $documentChannelData = new DocumentChannelData();
+                    $channelManageData = new ChannelManageData();
                     foreach ($arr2 as $val) {
-                        $docContent = '<documentchannelname' . $val . '</documentchannelname>';
-                        $keyName = "documentchannelname";
+                        $docContent = "<$keyName$val</$keyName>";
                         $channelId = Template::GetParamValue($docContent, "id", $keyName);
-                        $documentChannelName = $documentChannelData->GetName($channelId);
-                        $tempContent = Template::ReplaceCMS($tempContent, $channelId, $documentChannelName, $keyName);
+                        $channelName = $channelManageData->GetChannelName($channelId, false);
+                        $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $channelName, $tagName);
                     }
                 }
             }
