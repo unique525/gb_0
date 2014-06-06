@@ -47,9 +47,16 @@ ul{list-style-type:none;}
 .div_list{overflow:auto;margin:8px;}
 .grid{margin-top:1px;}
 .grid_title{background:#C8CBD5;height:30px;}
-.grid_title td{border-right:solid 1px #ffffff;}
-.grid_item td{border-right:solid 1px #ffffff;}
+.grid_title td{border-right:solid 0 #ffffff;}
+.grid_item td{border-right:solid 0 #ffffff;}
 .grid_item_selected{background:#FDF6C1;}
+
+.div_list2{overflow:auto;margin:8px;}
+.grid2{margin-top:1px;}
+.grid_title2{background:#C8CBD5;height:30px;}
+.grid_title2 td{border-right:solid 1px #ffffff;}
+.grid_item2 td{border-right:solid 1px #ffffff;}
+.grid_item2_selected{background:#FDF6C1;}
 
 
 .user_item{float:left;width:18%;margin-right:5px;margin-top:5px;padding:5px;background:#efefef;border:solid 1px #C8CBD5;}
