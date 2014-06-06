@@ -44,8 +44,8 @@
 
             $(".modify").click(function(){
                 var id_value= $(this).attr("idvalue");
-                $(".normal_operation_"+id_value).css("display","none");
                 $(".modify_operation_"+id_value).css("display","block");
+                $(".normal_operation_"+id_value).css("display","none");
             });
 
             $(".modify_cancel").click(function(){
@@ -73,11 +73,14 @@
         </tr>
     </table>
 <table class="grid" width="100%" cellpadding="0" cellspacing="0">
-    <tr  class="grid_title">
+    <tr  class="grid_title2">
         <td style="width:50px;text-align: center">ID</td>
+        <td style="width:50px;text-align: center">编辑</td>
         <td style="width:100px;text-align: center">类别名</td>
-        <td  style="width:200px;text-align: center">操作</td>
-        <td></td>
+        <td style="width:200px;text-align: center">所属站点</td>
+        <td style="width:80px;text-align: center">状态</td>
+        <td  style="width:50px;text-align: center">启用</td>
+        <td  style="width:50px;text-align: center">停用</td>
     </tr>
 </table>
 <ul id="type_list">
@@ -86,28 +89,33 @@
         <![CDATA[
             <li>
                 <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr class="grid_item">
+                    <tr class="grid_item2">
                         <td class="spe_line2" style="width:50px;text-align: center">{f_UserAlbumTypeId}</td>
+                        <td class="spe_line2" style="width:50px;text-align: center">
+                            <img src="/system_template/{template_name}/images/manage/edit.gif" class="modify" idvalue="{f_UserAlbumTypeId}"/>
+                        </td>
                         <td class="spe_line2" style="width:100px;text-align: center">
                             <div class="normal_operation_{f_UserAlbumTypeId}">
                                 {f_UserAlbumTypeName}
                             </div>
                             <div class="modify_operation_{f_UserAlbumTypeId}" style="display:none">
-                                <input type="text" value="" style="width:90px" id="new_type_name_{f_UserAlbumTypeId}"/>
-                            </div>
-                        </td>
-                        <td class="spe_line2" style="width:200px;text-align: center">
-                            <div class="normal_operation_{f_UserAlbumTypeId}">
-                                <span style="cursor:pointer" class="btn2">启用</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span style="cursor:pointer" class="btn2">停用</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span style="cursor:pointer" class="btn2 modify" idvalue="{f_UserAlbumTypeId}">修改</span>
-                            </div>
-                            <div class="modify_operation_{f_UserAlbumTypeId}" style="display:none">
-                                <span style="cursor:pointer" class="btn2 modify_confirm" idvalue="{f_UserAlbumTypeId}">确定</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" value="{f_UserAlbumTypeName}" style="width:90px;text-align: center" id="new_type_name_{f_UserAlbumTypeId}"/>&nbsp;&nbsp;
+                                <span style="cursor:pointer" class="btn2 modify_confirm" idvalue="{f_UserAlbumTypeId}">确定</span>&nbsp;&nbsp;
                                 <span style="cursor:pointer" class="btn2 modify_cancel" idvalue="{f_UserAlbumTypeId}">取消</span>
                             </div>
                         </td>
-                        <td></td>
+                        <td class="spe_line2" style="width:200px;text-align: center">
+
+                        </td>
+                        <td class="spe_line2" style="width:80px;text-align: center">
+
+                        </td>
+                        <td class="spe_line2" style="width:50px;text-align: center">
+                            <img src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
+                        </td>
+                        <td class="spe_line2" style="width:50px;text-align: center">
+                            <img src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
+                        </td>
                     </tr>
                 </table>
             </li>
