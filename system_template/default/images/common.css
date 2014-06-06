@@ -47,6 +47,8 @@ ul{list-style-type:none;}
 .div_list{overflow:auto;margin:8px;}
 .grid{margin-top:1px;}
 .grid_title{background:#C8CBD5;height:30px;}
+.grid_title td{border-right:solid 1px #ffffff;}
+.grid_item td{border-right:solid 1px #ffffff;}
 .grid_item_selected{background:#FDF6C1;}
 
 
