@@ -13,16 +13,12 @@
                     $("#type_list").append('<li id="new_type_li">' +
                             '<table width="100%" cellpadding="0" cellspacing="0">'+
                             '<tr class="grid_item">'+
-                            '<td style="width:1px;background:#ffffff"></td>'+
                             '<td class="spe_line2" style="width:50px;text-align: center"></td>'+
-                            '<td style="width:1px;background:#ffffff"></td>'+
                             '<td class="spe_line2" style="width:100px;text-align: center"><input type="text" style="width:90px"  id="new_type_name"/></td>'+
-                            '<td style="width:1px;background:#ffffff"></td>'+
                             '<td class="spe_line2" style="width:200px;text-align: center">'+
                                '<input type="button" value="确定" class="btn2" id="confirm"/>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                '<input type="button" value="取消" class="btn2" id="cancel"/>'+
                             '</td>'+
-                            '<td style="width:1px;background:#ffffff"></td>'+
                             '<td></td>'+
                             '</tr>'+
                             '</table>' +
@@ -45,21 +41,37 @@
                 var type_name = $("#new_type_name").val();
                 alert(type_name);
             });
+
+            $(".modify").click(function(){
+                var id_value= $(this).attr("idvalue");
+                $(".normal_operation_"+id_value).css("display","none");
+                $(".modify_operation_"+id_value).css("display","block");
+            });
+
+            $(".modify_cancel").click(function(){
+                var id_value= $(this).attr("idvalue");
+                $(".modify_operation_"+id_value).css("display","none");
+                $(".normal_operation_"+id_value).css("display","block");
+            });
+
+            $(".modify_confirm").click(function(){
+                $.ajax({
+
+                });
+            });
         });
     </script>
 </head>
 <body>
-<div style="margin-top: 1px;">
+<div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
-            <td style="width:1px"></td>
             <td  id="td_main_btn" style="width:80px;">
                 <div class="btn2" id="add">新增类别</div>
             </td>
             <td></td>
         </tr>
     </table>
-</div>
 <table class="grid" width="100%" cellpadding="0" cellspacing="0">
     <tr  class="grid_title">
         <td style="width:50px;text-align: center">ID</td>
@@ -76,11 +88,24 @@
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <tr class="grid_item">
                         <td class="spe_line2" style="width:50px;text-align: center">{f_UserAlbumTypeId}</td>
-                        <td class="spe_line2" style="width:100px;text-align: center">{f_UserAlbumTypeName}</td>
+                        <td class="spe_line2" style="width:100px;text-align: center">
+                            <div class="normal_operation_{f_UserAlbumTypeId}">
+                                {f_UserAlbumTypeName}
+                            </div>
+                            <div class="modify_operation_{f_UserAlbumTypeId}" style="display:none">
+                                <input type="text" value="" style="width:90px" id="new_type_name_{f_UserAlbumTypeId}"/>
+                            </div>
+                        </td>
                         <td class="spe_line2" style="width:200px;text-align: center">
-                            <span style="cursor:pointer" class="btn2">启用</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span style="cursor:pointer" class="btn2">停用</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span style="cursor:pointer" class="btn2">修改</span>
+                            <div class="normal_operation_{f_UserAlbumTypeId}">
+                                <span style="cursor:pointer" class="btn2">启用</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="cursor:pointer" class="btn2">停用</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="cursor:pointer" class="btn2 modify" idvalue="{f_UserAlbumTypeId}">修改</span>
+                            </div>
+                            <div class="modify_operation_{f_UserAlbumTypeId}" style="display:none">
+                                <span style="cursor:pointer" class="btn2 modify_confirm" idvalue="{f_UserAlbumTypeId}">确定</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span style="cursor:pointer" class="btn2 modify_cancel" idvalue="{f_UserAlbumTypeId}">取消</span>
+                            </div>
                         </td>
                         <td></td>
                     </tr>
@@ -91,5 +116,6 @@
 
 </icms>
 </ul>
+</div>
 </body>
 </html>
