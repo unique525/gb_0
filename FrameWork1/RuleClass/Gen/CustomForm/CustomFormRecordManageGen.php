@@ -8,6 +8,39 @@
  */
 class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen {
 
+
+    /**
+     * 表单ID错误
+     */
+    const FALSE_CUSTOM_FORM_ID = -1;
+    /**
+     * 数据字段取回结果 空
+     */
+    const SELECT_CUSTOM_FORM_RECORD_TABLE_NAME_LIST_RESULT_NULL = -2;
+    /**
+     * 新增记录写入数据库失败
+     */
+    const DATABASE_INPUT_FAILED = -3;
+    /**
+     * 表单记录ID错误
+     */
+    const FALSE_CUSTOM_FORM_RECORD_ID = -4;
+    /**
+     * 修改记录写入数据库失败
+     */
+    const DATABASE_UPDATE_FAILED = -5;
+    /**
+     * 新增记录时 记录字段内容写入数据库失败
+     */
+    const DATABASE_CREATE_FAILED_WHEN_CONTENT_CREATING = -6;
+    /**
+     * 修改记录时 记录字段内容写入数据库失败
+     */
+    const DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING = -7;
+
+
+
+
     /**
      * 主生成方法(继承接口)
      * @return string 返回输出的HTML内容
@@ -25,6 +58,9 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             case "list":
                 $result = self::GenList();
                 break;
+            case "search":
+                $result = self::GenSearch();
+                break;
         }
         $replace_arr = array(
             "{method}" => $method
@@ -39,15 +75,71 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      * @return string 新增表单记录字段内容表的html页面
      */
     private function GenCreate() {
-        $tempContent = Template::Load("CustomForm/CustomFormRecord_Deal.html");
+        $tempContent = Template::Load("custom_form/custom_form_record_deal.html","common");
         $manageUserId = Control::GetManageUserID();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormData = new CustomFormManageData();
         $channelId = $customFormData->GetChannelID($customFormId, FALSE);
-        $tabIndex = Control::GetRequest("tab", 0);
-        $pageIndex = Control::GetRequest("p", 1);
-        $siteId = 0;
         parent::ReplaceFirst($tempContent);
+
+
+        if (!empty($_POST)) {
+            $customFormRecordManageData = new CustomFormRecordManageData();
+            $newId = $customFormRecordManageData->Create($_POST);
+
+            if ($newId > 0) {
+
+                //新增内容表
+                $customFormContentManageData = new CustomFormContentManageData();
+                $customFormFieldManageData = new CustomFormFieldManageData();
+                //先删除旧数据
+                $customFormContentManageData->Delete($newId);
+                    //读取表单 cf_CustomFormId_CustomFormFieldId
+                    foreach ($_POST as $key => $value) {
+                        if (strpos($key, "cf_") === 0) { //
+                            $arr = Format::ToSplit($key, '_');
+                            if (count($arr) == 3) {
+                                $customFormId = $arr[1];
+                                $customFormFieldId = $arr[2];
+                                //为数组则转化为逗号分割字符串,对应checkbox应用
+                                if (is_array($value)) {
+                                    $value = implode(",", $value);
+                                }
+                                $value = stripslashes($value);
+
+                                $customFormFieldType = $customFormFieldManageData->GetCustomFormFieldType($customFormFieldId,FALSE);
+                                $contentId=$customFormContentManageData->Create($newId, $customFormId, $customFormFieldId, $manageUserId, $value, $customFormFieldType);
+                                if($contentId<0){
+                                    return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_CREATE_FAILED_WHEN_CONTENT_CREATING."field_id:".$customFormFieldId;
+                                }
+                            }
+                        }
+                    }
+
+                //加入操作log
+
+                $operateContent = "CustomFormRecord：CustomFormRecordD：" . $newId . "；result：" . $newId;
+                self::CreateManageUserLog($operateContent);
+
+
+                Control::ShowMessage(Language::Load('custom_form', 1));
+                $closeTab = Control::PostRequest("CloseTab",0);
+                if($closeTab == 1){
+                    Control::CloseTab();
+                }else{
+                    Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form_record&m=create&custom_form_id='.$customFormId);
+                }
+
+            }else{
+                Control::ShowMessage(Language::Load('custom_form', 2));
+                return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_INPUT_FAILED;
+            }
+
+
+        }
+
+
+
 
         if ($customFormId > 0) {
             $channelData = new ChannelManageData();
@@ -57,48 +149,35 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $manageUserAuthority = new ManageUserAuthorityManageData();
             $can = $manageUserAuthority->CanCreate($siteId, $channelId, $manageUserId);
             if ($can != 1) {
-                Control::ShowMessage(Language::Load('document', 26));
-                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId);
+                Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
             }
 
             $customFormContentTable = self::_genCustomFormContentTable($customFormId);
 
             ////////////////////////////////////////////////////
+            $crateDate=date('Y-m-d H:i:s');
             $replaceArr = array(
-                "{custom_form_record_id}" => '',
-                "{custom_form_id}" => $customFormId,
-                "{cid}" => $channelId,
-                "{site_id}" => $siteId,
-                "{channel_id}" => $channelId,
-                "{manage_user_id}" => $manageUserId,
-                "{tab}" => $tabIndex,
-                "{page_index}" => $pageIndex,
-                "{custom_form_content_table}" => $customFormContentTable
+                "{CustomFormRecordId}" => '',
+                "{CustomFormId}" => $customFormId,
+                "{ManageUserId}" => $manageUserId,
+                "{CreateDate}" => $crateDate,
+                "{CustomFormContentTable}" => $customFormContentTable,
+                "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replaceArr);
 
-            parent::ReplaceWhenAdd($tempContent, 'cst_customformfield');
 
-            if (!empty($_POST)) {
-                $customFormRecordManageData = new CustomFormRecordManageData();
-                $newId = $customFormRecordManageData->Create($_POST);
-
-                if ($newId > 0) {
-
-                    //新增内容表
-                    $customFormContentManageData = new CustomFormContentManageData();
-                    $customFormContentManageData->CreateOrModify($_POST,$newId);
-                }
-
-                //加入操作log
-
-                $operateContent = "CustomFormRecord：CustomFormRecordD：" . $newId . "；result：" . $newId;
-                self::CreateManageUserLog($operateContent);
-
-                Control::ShowMessage(Language::Load('document', 1));
-                Control::GoUrl("index.php?a=customformrecord&m=list&customformid=" . $customFormId);
+            $sourceCommonManageData = new SourceCommonManageData();
+            $arrayOfTableNameList = $sourceCommonManageData->GetFields("cst_custom_form_record");
+            if($arrayOfTableNameList>0){
+                parent::ReplaceWhenCreate($tempContent, $arrayOfTableNameList);
+            }else{
+                return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::SELECT_CUSTOM_FORM_RECORD_TABLE_NAME_LIST_RESULT_NULL;
             }
+            parent::ReplaceWhenCreate($tempContent,$arrayOfTableNameList);
+
+
 
             //去掉s开头的标记 {s_xxx_xxx}
             $patterns = "/\{s_(.*?)\}/";
@@ -116,18 +195,15 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
     /**
      * 后台修改表单记录字段内容
-     * @return type
+     * @return string 修改表单记录字段内容表的html页面
      */
     private function GenModify() {
-        $tempContent = Template::Load("CustomForm/custom_form_record_deal.html");
+        $tempContent = Template::Load("custom_form/custom_form_record_deal.html","common");
         $manageUserId = Control::GetManageUserID();
-        $customFormRecordId = Control::GetRequest("id", 0);
+        $customFormRecordId = Control::GetRequest("custom_form_record_id", 0);
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormManageData = new CustomFormManageData();
         $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
-        $tabIndex = Control::GetRequest("tab", 0);
-        $pageIndex = Control::GetRequest("p", 1);
-        $siteId = 0;
         parent::ReplaceFirst($tempContent);
 
         if ($customFormRecordId > 0) {
@@ -139,8 +215,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $manageUserAuthority = new ManageUserAuthorityManageData();
             $can = $manageUserAuthority->CanModify($siteId, $channelId, $manageUserId);
             if ($can != 1) {
-                Control::ShowMessage(Language::Load('document', 26));
-                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
+                Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
             }
             //操作他人的权限
@@ -149,12 +224,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             if ($createUserId !== $manageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $manageUserId);
                 if ($can != 1) {
-                    Control::ShowMessage(Language::Load('document', 26));
-                    $jsCode = 'self.parent.loadcustomformlist(1,"","");self.parent.$("#tabs").tabs("select","#tabs-1");';
-                    if ($tabIndex > 0) {
-                        $jsCode = $jsCode . 'self.parent.$("#tabs").tabs("remove",' . ($tabIndex - 1) . ');';
-                    }
-                    Control::RunJS($jsCode);
+                    Control::ShowMessage(Language::Load('custom_form', 3));
                     return "";
                 }
             }
@@ -165,21 +235,19 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
             ////////////////////////////////////////////////////
             $replaceArray = array(
-                "{custom_form_id}" => $customFormId,
-                "{cid}" => $channelId,
-                "{siteid}" => $siteId,
-                "{channel_id}" => $channelId,
-                "{manage_user_id}" => $manageUserId,
-                "{tab}" => $tabIndex,
-                "{page_index}" => $pageIndex,
-                "{custom_form_content_table}" => $customFormContentTable
+                "{CustomFormRecordId}" => $customFormRecordId,
+                "{CustomFormId}" => $customFormId,
+                "{ChannelId}" => $channelId,
+                "{ManageUserId}" => $manageUserId,
+                "{CustomFormContentTable}" => $customFormContentTable,
+                "{display}" => "none"
             );
             $tempContent = strtr($tempContent, $replaceArray);
 
             $customFormRecordData = new CustomFormRecordManageData();
 
             $arrList = $customFormRecordData->GetOne($customFormRecordId);
-            Template::ReplaceOne($tempContent, $arrList, 1);
+            Template::ReplaceOne($tempContent, $arrList, 0);
 
             if (!empty($_POST)) {
 
@@ -188,15 +256,52 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 if ($result > 0) {
 
                     //修改内容表
+                    $customFormContentManageData = new CustomFormContentManageData();
+                    $customFormFieldManageData = new CustomFormFieldManageData();
+                    //先删除旧数据
+                    $customFormContentManageData->Delete($customFormRecordId);
+                    //读取表单 cf_CustomFormId_CustomFormFieldId
+                    foreach ($_POST as $key => $value) {
+                        if (strpos($key, "cf_") === 0) { //
+                            $arr = Format::ToSplit($key, '_');
+                            if (count($arr) == 3) {
+                                $customFormId = $arr[1];
+                                $customFormFieldId = $arr[2];
+                                //为数组则转化为逗号分割字符串,对应checkbox应用
+                                if (is_array($value)) {
+                                    $value = implode(",", $value);
+                                }
+                                $value = stripslashes($value);
 
-                    $customFormContentData->CreateOrModify($_POST,$customFormRecordId);
+                                $customFormFieldType = $customFormFieldManageData->GetCustomFormFieldType($customFormFieldId,FALSE);
+                                $contentId=$customFormContentManageData->Create($customFormRecordId, $customFormId, $customFormFieldId, $manageUserId, $value, $customFormFieldType);
+                                if($contentId<0){
+                                    return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING."field_id:".$customFormFieldId;
+                                }
+                            }
+                        }
+                    }
+
+                    //加入操作log
+
+                    $operateContent = "CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
+                    self::CreateManageUserLog($operateContent);
+
+
+                    Control::ShowMessage(Language::Load('custom_form', 1));
+                    Control::CloseTab();
+
+
+
+                }else{
+                    return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_UPDATE_FAILED;
                 }
 
                 //加入操作log
                 $operateContent = "CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
                 self::CreateManageUserLog($operateContent);
 
-                Control::GoUrl("index.php?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p=" . $pageIndex . "&tab=" . $tabIndex);
+                Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form_record&m=list&custom_form_id='.$customFormId);
             }
 
             //去掉s开头的标记 {s_xxx_xxx}
@@ -208,6 +313,8 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             //去掉r开头的标记 {r_xxx_xxx}
             $patterns = "/\{r_(.*?)\}/";
             $tempContent = preg_replace($patterns, "", $tempContent);
+        }else{
+            return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::FALSE_CUSTOM_FORM_RECORD_ID;
         }
         parent::ReplaceEnd($tempContent);
         return $tempContent;
@@ -216,85 +323,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
 
 
-    //前台
-    public function GenFrontNew() {
-        if (!empty($_POST)) {
-            $customFormRecordData = new CustomFormRecordData();
-            $newid = $customFormRecordData->Create();
 
-            if ($newid > 0) {
-                //新增内容表
-                $customFormContentData = new CustomFormContentData();
-                //$customFormContentData->CreateOrModify($newid);
-                $CustomFormRecordID = $newid;
-                if (!empty($_POST) && !empty($CustomFormRecordID)) {
-                    //先删除旧数据
-                    $customFormContentData->Delete($CustomFormRecordID);
-                    $_userId = Control::GetUserID();
-                    //读取表单 cf_customformid_customformfieldid
-                    foreach ($_POST as $key => $value) {
-                        if (strpos($key, "cf_") === 0) { //
-                            $arr = Format::ToSplit($key, '_');
-                            if (count($arr) == 3) {
-                                $_customFormId = $arr[1];
-                                $_customFormFieldId = $arr[2];
-                                //为数组则转化为逗号分割字符串,对应checkbox应用
-                                if (is_array($value)) {
-                                    $value = implode(",", $value);
-                                }
-                                $value = stripslashes($value);
-                                $customFormContentData->Create($CustomFormRecordID, $_customFormId, $_customFormFieldId, $_userId, $value);
-                            }
-                        }
-                    }
-                }
-                Control::ShowMessage(Language::Load('customform', 1));
-                $jscode = 'javascript:history.go(-1);';
-                Control::RunJS('window.close(true);');
-                //return $newid;
-            } else {
-                Control::ShowMessage(Language::Load('customform', 0));
-                Control::RunJS('history.go(-1);');
-                return -10;
-            }
-        }
-        if (!empty($_FILES)) {
-            foreach ($_FILES as $key => $value) {
-                if (strpos($key, "cf_") === 0) { //
-                    $arr = Format::ToSplit($key, '_');
-                    if (count($arr) == 3) {
-                        $_customFormId = $arr[1];
-                        $_customFormFieldId = $arr[2];
-                        //为数组则转化为逗号分割字符串,对应checkbox应用
-                        if (is_array($value)) {
-                            $value = implode(",", $value);
-                        }
-                        $value = stripslashes($value);
-                        $customFormContentData->Create($CustomFormRecordID, $_customFormId, $_customFormFieldId, $_userId, $value);
-                    }
-                }
-                if (strpos($key, "cff_") === 0) { //
-                    $commonGen = new CommonGen();
-                    $type = 19; //customform file
-                    $returntype = 1;
-                    $uploadfileid = 0;
-                    $filePath = $commonGen->UploadFile($key, $type, $returntype, $uploadfileid);
-                    $arr = Format::ToSplit($key, '_');
-                    if (count($arr) == 3) {
-                        $_customFormId = $arr[1];
-                        $_customFormFieldId = $arr[2];
-                        //为数组则转化为逗号分割字符串,对应checkbox应用
-                        $value = $filePath;
-                        if (is_array($value)) {
-                            $value = implode(",", $value);
-                        }
-                        $value = stripslashes($value);
-                        $customFormContentData->Create($CustomFormRecordID, $_customFormId, $_customFormFieldId, $_userId, $value);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * 取得表单记录内容表格
@@ -307,15 +336,15 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
         //生成字段
         $customFormFieldManageData = new CustomFormFieldManageData();
-        $arrFieldList = $customFormFieldManageData->GetList($customFormId);
+        $arrayOfFieldList = $customFormFieldManageData->GetList($customFormId);
 
-        for ($f = 0; $f < count($arrFieldList); $f++) {
-            $customFormFieldID = intval($arrFieldList[$f]["CustomFormFieldID"]);
-            $customFormFieldType = intval($arrFieldList[$f]["CustomFormFieldType"]);
+        for ($f = 0; $f < count($arrayOfFieldList); $f++) {
+            $customFormFieldId = intval($arrayOfFieldList[$f]["CustomFormFieldId"]);
+            $customFormFieldType = intval($arrayOfFieldList[$f]["CustomFormFieldType"]);
             $inputValue = "";
             if (!empty($arrContentList)) {
                 for ($k = 0; $k < count($arrContentList); $k++) {
-                    if ($arrContentList[$k]["CustomFormFieldID"] == $customFormFieldID) {
+                    if ($arrContentList[$k]["CustomFormFieldId"] == $customFormFieldId) {
                         switch ($customFormFieldType) {
                             case 0:
                                 $inputValue = $arrContentList[$k]["ContentOfInt"];
@@ -339,41 +368,39 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                     }
                 }
             }
-            $inputName = 'cf_' . $customFormId . '_' . $arrFieldList[$f]["CustomFormFieldID"];
+            $inputName = 'cf_' . $customFormId . '_' . $arrayOfFieldList[$f]["CustomFormFieldId"];
 
-            $addClass = '';
-            $addStyle = '';
             $inputText = '';
             switch ($customFormFieldType) {
                 case 0: //int
-                    $addClass = 'class="inputnumber"';
+                    $addClass = 'class="input_number"';
                     $addStyle = 'style=" width: 60px;"';
                     $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 1: //string
-                    $addClass = 'class="inputbox"';
+                    $addClass = 'class="input_box"';
                     $addStyle = 'style=" width: 300px;"';
                     $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 2: //text
-                    $addClass = 'class="inputbox"';
+                    $addClass = 'class="input_box"';
                     $addStyle = 'style=" width: 300px;height:100px;"';
                     $inputText = '<textarea name="' . $inputName . '" id="' . $inputName . '" ' . $addClass . ' ' . $addStyle . ' >' . $inputValue . '</textarea>';
                     break;
                 case 3: //float
-                    $addClass = 'class="inputprice"';
+                    $addClass = 'class="input_price"';
                     $addStyle = 'style=" width: 60px;"';
                     $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
                 case 4: //date
-                    $addClass = 'class="inputbox"';
+                    $addClass = 'class="input_box"';
                     $addStyle = 'style=" width: 100px;"';
                     $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
                     break;
             }
             $customFormContentTable .= '<tr>';
-            $customFormContentTable .= '<td class="speline" height="30" align="right">' . $arrFieldList[$f]["CustomFormFieldName"] . '：</td>';
-            $customFormContentTable .= '<td class="speline">' . $inputText . '</td>';
+            $customFormContentTable .= '<td class="spe_line" height="30" align="right">' . $arrayOfFieldList[$f]["CustomFormFieldName"] . '：</td>';
+            $customFormContentTable .= '<td class="spe_line">' . $inputText . '</td>';
             $customFormContentTable .= '</tr>';
         }
 
@@ -381,8 +408,8 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
     }
 
     /**
-     * 列表
-     * @return <type>
+     * 取得表单记录列表
+     * @return string 表单列表页面html
      */
     private function GenList() {
         $manageUserId = Control::GetManageUserID();
@@ -391,122 +418,159 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
         $channelManageData = new ChannelManageData();
         $siteId = $channelManageData->GetSiteID($channelId,1);
+        $numberOfSearchKey = Control::GetRequest("number_of_search_key", 0);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
         $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
         if ($can != 1) {
-            Control::ShowMessage(Language::Load('document', 26));
+            Control::ShowMessage(Language::Load('custom_form', 3));
             return "";
         }
         ////////////////////////////////////////////////////
-        $siteData = new SiteManageData();
-        $siteUrl = $siteData->GetSiteUrl($siteId);
 
 
-        //$documentChannelType = $documentChannelData->GetDocumentChannelType($documentchannelid);
-        $tempContent = Template::Load("CustomForm/custom_form_record_list.html");
+        $tempContent = Template::Load("custom_form/custom_form_record_list.html", "common");
 
-        $type = Control::GetRequest("type", "");
 
         if ($customFormId > 0) {
 
             $customFormFieldManageData = new CustomFormFieldManageData();
-            $arrFieldList = $customFormFieldManageData->GetListForContent($customFormId);
-
+            $listOfFieldArray = $customFormFieldManageData->GetListForContent($customFormId);
             $customFormRecordManageData = new CustomFormRecordManageData();
 
 
             $pageSize = Control::GetRequest("ps", 20);
-            //if ($documentChannelType !== 1) {
-            //    $pageSize = 16;
-            //}
 
             $pageIndex = Control::GetRequest("p", 1);
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $allCount = 0;
-            $arrRecordList = $customFormRecordManageData->GetListPager($customFormId, $pageBegin, $pageSize, $allCount);
-            $pagerTemplate = Template::Load("pager.html");
-            $isJs = false;
-            $jsFunctionName = "";
-            $jsParamList = "";
-            $pagerUrl = "?a=custom_form_record&m=list&custom_form_id=" . $customFormId . "&cid=" . $channelId . "&p={0}&tab=2";
-            $pagerButton = Pager::ShowPageButton($pagerTemplate, $pagerUrl, $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList);
 
-            $customFormContentManageData = new CustomFormContentManageData();
-            $listTemp="";
-            if (count($arrRecordList) > 0) {
-                $listTemp = '<table width="99%" class="docgrid" cellpadding="0" cellspacing="0">';
-                $listTemp .= '<tr class="gridtitle">';
-                $listTemp .= '<td style="padding-left:2px;"></td>';
-                for ($f = 0; $f < count($arrFieldList); $f++) {
-                    $listTemp .= '<td style="padding-left:2px;">' . $arrFieldList[$f]["CustomFormFieldName"] . '</td>';
-                }
-                $listTemp .= '<td style="padding-left:2px;width:40px;">状态</td>';
-                $listTemp .= '<td style="padding-left:2px;width:180px;">时间</td>';
-                $listTemp .= '</tr>';
-                for ($i = 0; $i < count($arrRecordList); $i++) {
-                    $customFormRecordID = intval($arrRecordList[$i]["CustomFormRecordID"]);
-
-                    $listTemp .= '<tr class="griditem">';
-                    $listTemp .= '<td class="speline2" style="padding-left:2px;"><a href="../custom_form/index.php?a=custom_form_record&m=edit&customformid=' . $customFormId . '&id=' . $customFormRecordID . '&cid=' . $channelId . '&p=' . $pageIndex . '&tab=2"><img class="edit_doc" src="../images/edit.gif" alt="编辑" title="编辑" /></a></td>';
-
-                    $arrContentList = $customFormContentManageData->GetList($customFormRecordID);
-
-                    for ($j = 0; $j < count($arrFieldList); $j++) {
-                        $customFormFieldID = $arrFieldList[$j]["CustomFormFieldID"];
-                        $customFormFieldName = $arrFieldList[$j]["CustomFormFieldName"];
-                        $customFormFieldType = $arrFieldList[$j]["CustomFormFieldType"];
-                        $listTemp .= '<td class="speline2" style="padding-left:2px;">';
-                        for ($k = 0; $k < count($arrContentList); $k++) {
-
-                            if ($arrContentList[$k]["CustomFormFieldID"] == $customFormFieldID) {
-                                switch (intval($customFormFieldType)) {
-                                    case 0:
-                                        $listTemp .= $arrContentList[$k]["ContentOfInt"];
-                                        break;
-                                    case 1:
-                                        $listTemp .= $arrContentList[$k]["ContentOfString"];
-                                        break;
-                                    case 2:
-                                        $listTemp .= $arrContentList[$k]["ContentOfText"];
-                                        break;
-                                    case 3:
-                                        $listTemp .= $arrContentList[$k]["ContentOfFloat"];
-                                        break;
-                                    case 4:
-                                        $listTemp .= $arrContentList[$k]["ContentOfDatetime"];
-                                        break;
-                                    case 5:
-                                        $listTemp .= $arrContentList[$k]["ContentOfBlob"];
-                                        break;
-                                }
-                            }
-                        }
-                        $listTemp .= '</td>';
+            ////////// 处理搜索 ////////////
+            if($numberOfSearchKey>0){
+                $searchKeyContent=Control::GetRequest("content_1", "");
+                $searchKeyField=Control::GetRequest("field_1", 0);
+                $searchArray=array(array("type"=>1,"content"=>$searchKeyContent,"field"=>$searchKeyField));
+                for($i=2;$i<=$numberOfSearchKey;$i++){
+                    $searchKeyContent=Control::GetRequest("content_".$i, "");
+                    $searchKeyField=Control::GetRequest("field_".$i, 0);
+                    if($searchKeyContent!=""){
+                        array_push($searchArray,array("type"=>1,"content"=>$searchKeyContent,"field"=>$searchKeyField));
                     }
-                    $listTemp .= '<td class="speline2" style="padding-left:2px;">' . Format::ToState($arrRecordList[$i]["State"], "customformrecord") . '</td>';
-                    $listTemp .= '<td class="speline2" style="padding-left:2px;">' . $arrRecordList[$i]["CreateDate"] . '</td>';
-                    $listTemp .= '</tr>';
                 }
-                $listTemp .= '</tabel>';
+                $listOfRecordArray = $customFormRecordManageData->GetListPagerOfContentSearch($customFormId,$pageBegin,$pageSize,$allCount,$searchArray);
+            }else{
+                $listOfRecordArray = $customFormRecordManageData->GetListPager($customFormId, $pageBegin, $pageSize, $allCount);
+            }
+
+
+            $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
+
+            $listTable="";
+            $fieldSelectionForSearch="";
+            if (count($listOfRecordArray) > 0) {
+                $listTable = self::GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray);
+                ////搜索字段选择框////
+                foreach($listOfFieldArray as $value){
+                    $fieldSelectionForSearch.='<option value = "'.$value["CustomFormFieldId"].'" >'.$value["CustomFormFieldName"].'</option>';
+                }
+            }else{
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("custom_form", 4), $tempContent);
             }
             $replace_arr = array(
-                "{custom_form_id}" => $customFormId,
-                "{cid}" => 0,
-                "{id}" => 0,
-                "{site_url}" => $siteUrl,
-                "{list_temp}" => $listTemp,
-                "{pager_button}" => $pagerButton
+                "{CustomFormId}" => $customFormId,
+                "{ListTable}" => $listTable,
+                "{PagerButton}" => $pagerButton,
+                "{CustomFormFieldCount}"=> count($listOfFieldArray),
+                "{FieldSelection}"=>$fieldSelectionForSearch
             );
             $tempContent = strtr($tempContent, $replace_arr);
+        }else{
+            return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::FALSE_CUSTOM_FORM_ID;
         }
 
 
         parent::ReplaceEnd($tempContent);
-        Template::RemoveCMS($tempContent);
+        //Template::RemoveCMS($tempContent);
         return $tempContent;
     }
 
+
+    /**
+     * 取得表单记录列表的html表格代码
+     * @param array $listOfFieldArray 表单字段ID数据
+     * @param array $listOfRecordArray 表单记录ID数据
+     * @return string 表单列表页面html
+     */
+    private function GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray){
+
+        $listTable = '<table width="99%" class="doc_grid" cellpadding="0" cellspacing="0">';
+        $listTable .= '<tr class="grid_title">';
+        $listTable .= '<td style="padding-left:2px;"></td>';
+        for ($f = 0; $f < count($listOfFieldArray); $f++) {
+            $listTable .= '<td style="padding-left:2px;">' . $listOfFieldArray[$f]["CustomFormFieldName"] . '</td>';
+        }
+        $listTable .= '<td style="padding-left:2px;width:40px;">状态</td>';
+        $listTable .= '<td style="padding-left:2px;width:180px;">时间</td>';
+        $listTable .= '</tr>';
+        for ($i = 0; $i < count($listOfRecordArray); $i++) {
+            $customFormRecordId = intval($listOfRecordArray[$i]["CustomFormRecordId"]);
+
+            $listTable .= '<tr class="grid_item">';
+            $listTable .= '<td class="spe_line" style="padding-left:2px;"><img idvalue="'. $customFormRecordId.'" class="btn_edit_custom_form_record" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="编辑" /></td>';
+
+            $customFormContentManageData=new CustomFormContentManageData();
+            $listOfContentArray = $customFormContentManageData->GetList($customFormRecordId);
+
+            for ($j = 0; $j < count($listOfFieldArray); $j++) {
+                $customFormFieldId = $listOfFieldArray[$j]["CustomFormFieldId"];
+                $customFormFieldType = $listOfFieldArray[$j]["CustomFormFieldType"];
+                $listTable .= '<td class="spe_line" style="padding-left:2px;">';
+                for ($k = 0; $k < count($listOfContentArray); $k++) {
+
+                    if ($listOfContentArray[$k]["CustomFormFieldId"] == $customFormFieldId) {
+                        switch (intval($customFormFieldType)) {
+                            case 0:
+                                $listTable .= $listOfContentArray[$k]["ContentOfInt"];
+                                break;
+                            case 1:
+                                $listTable .= $listOfContentArray[$k]["ContentOfString"];
+                                break;
+                            case 2:
+                                $listTable .= $listOfContentArray[$k]["ContentOfText"];
+                                break;
+                            case 3:
+                                $listTable .= $listOfContentArray[$k]["ContentOfFloat"];
+                                break;
+                            case 4:
+                                $listTable .= $listOfContentArray[$k]["ContentOfDatetime"];
+                                break;
+                            case 5:
+                                $listTable .= $listOfContentArray[$k]["ContentOfBlob"];
+                                break;
+                        }
+                    }
+                }
+                $listTable .= '</td>';
+            }
+            $listTable .= '<td class="spe_line" style="padding-left:2px;">' . $listOfRecordArray[$i]["State"] . '</td>';
+            $listTable .= '<td class="spe_line" style="padding-left:2px;">' . $listOfRecordArray[$i]["CreateDate"] . '</td>';
+            $listTable .= '</tr>';
+        }
+        $listTable .= '</tabel>';
+        return $listTable;
+    }
+
+    /**
+     * 通过表单字段关键字搜索并取得表单记录列表
+     * @return string 表单列表页面html
+     */
+    private function GenSearch() {
+        $customFormRecordManageData=new CustomFormRecordManageData();
+       // $array=array(array("type"=>1, "content"=>"姓名或单位名称"));
+        //print_r($array);
+       // $customFormRecordManageData->GetListPagerOfContentSearch(2,0,20,$allCount,$array);
+
+    }
 }
 
 ?>

@@ -28,11 +28,12 @@
 </head>
 <body>
 {common_body_deal}
-<div style="margin:5px auto;">
+<div class="div_list">
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td align="left" style="padding: 3px 0;">
                 <input id="btn_create_custom_form_field" class="btn2" value="新建字段" title="在本表单新建一个字段" type="button"/>
+            </td>
         </tr>
     </table>
     <table width="99%" class="doc_grid" cellpadding="0" cellspacing="0">

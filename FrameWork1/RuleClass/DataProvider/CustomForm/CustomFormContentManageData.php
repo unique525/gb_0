@@ -8,38 +8,6 @@
  * @author 525
  */
 class CustomFormContentManageData extends BaseManageData {
-    /**
-     * 新增或修改表单记录的内容
-     * @param array $httpPostData $_post数组
-     * @param int $customFormRecordId 被操作的表单记录的id
-     * @param int $userId 操作用户的id 缺省为0
-     * @return int 执行结果
-     */
-    public function CreateOrModify($httpPostData,$customFormRecordId,$userId=0) {
-        $result=-1;
-        if (!empty($httpPostData) && !empty($customFormRecordId)) {
-            //先删除旧数据
-            self::Delete($customFormRecordId);
-            //读取表单 cf_CustomFormId_CustomFormFieldId
-            foreach ($httpPostData as $key => $value) {
-                if (strpos($key, "cf_") === 0) { //
-                    $arr = Format::ToSplit($key, '_');
-                    if (count($arr) == 3) {
-                        $customFormId = $arr[1];
-                        $customFormFieldId = $arr[2];
-                        //为数组则转化为逗号分割字符串,对应checkbox应用
-                        if (is_array($value)) {
-                            $value = implode(",", $value);
-                        }
-                        $value = stripslashes($value);
-
-                        $result=self::Create($customFormRecordId, $customFormId, $customFormFieldId, $userId, $value);
-                    }
-                }
-            }
-        }
-        return $result;
-    }
 
     /**
      * 新增表单记录的内容
@@ -48,9 +16,10 @@ class CustomFormContentManageData extends BaseManageData {
      * @param int $customFormFieldId 被操作的表单字段id
      * @param int $userId 操作用户的id
      * @param mixed $content 新增的内容
+     * @param int $customFormFieldType 字段类型
      * @return int 执行结果
      */
-    public function Create($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content) {
+    public function Create($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content, $customFormFieldType = 1) {
         $result=-1;
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
@@ -58,8 +27,7 @@ class CustomFormContentManageData extends BaseManageData {
         $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
         $dataProperty->AddField("UserId", $userId);
 
-        $customFormFieldManageData = new CustomFormFieldManageData();
-        $customFormFieldType = $customFormFieldManageData->GetCustomFormFieldType($customFormFieldId);
+
 
         switch ($customFormFieldType) {
             case 0:
@@ -110,13 +78,13 @@ class CustomFormContentManageData extends BaseManageData {
     /**
      * 按$customFormRecordId获取表单记录下所有记录内容的列表
      * @param int $customFormRecordId 表单记录id
-     * @return array 表单记录数据集
+     * @return array 表单记录数据
      */
     public function GetList($customFormRecordId) {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
         $sql = "SELECT * FROM " . self::TableName_CustomFormContent . " WHERE CustomFormRecordId=:CustomFormRecordId ORDER BY Sort DESC ;";
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 

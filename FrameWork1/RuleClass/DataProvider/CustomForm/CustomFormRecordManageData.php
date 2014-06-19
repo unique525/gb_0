@@ -51,10 +51,10 @@ class CustomFormRecordManageData extends BaseManageData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormId", $customFormId);
         $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
-        $result = $this->dbOperator->ReturnArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord." WHERE CustomFormId=:CustomFormId ;";
-        $allCount = $this->dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
 
         return $result;
     }
@@ -70,9 +70,99 @@ class CustomFormRecordManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormRecordID = :CustomFormRecordID ;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("CustomFormRecordID", $customFormRecordId);
-        $result = $this->dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
+
+    /**
+     * 获取表单记录分页列表
+     * @param int $customFormId 表单id
+     * @param int $pageBegin 起始页码
+     * @param int $pageSize 每页大小
+     * @param int $allCount 总大小
+     * @param array $searchArray 搜索字段内容数据集
+     * @return array 表单记录数据集
+     */
+    public function GetListPagerOfContentSearch($customFormId, $pageBegin, $pageSize, &$allCount, $searchArray) {
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("CustomFormId", $customFormId);
+        $sqlSearch="";
+        if($searchArray>0&&$searchArray!=""){
+            foreach($searchArray as $value){
+                switch ($value["type"]) {
+                    case 0:
+                        $dataProperty->AddField("ContentOfInt", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfInt LIKE :ContentOfInt ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                    case 1:
+                        $dataProperty->AddField("ContentOfString", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfString LIKE :ContentOfString ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                    case 2:
+                        $dataProperty->AddField("ContentOfText", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfText LIKE :ContentOfText ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                    case 3:
+                        $dataProperty->AddField("ContentOfFloat", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfFloat LIKE :ContentOfFloat ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                    case 4:
+                        $dataProperty->AddField("ContentOfDatetime", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfDatetime LIKE :ContentOfDatetime ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                    case 5:
+                        $dataProperty->AddField("ContentOfBlob", $value["content"]);
+                        $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfBlob LIKE :ContentOfBlob ";
+                        if($value["field"]>0&&$value["field"]!=""){
+                            $dataProperty->AddField("CustomFormFieldId", $value["field"]);
+                            $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
+                        }
+                        $sqlSearch.=" ) ";
+                        break;
+                }
+
+
+            }
+
+        }
+        $sql="SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
+              (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
+                .$sqlSearch. ") ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+
+        $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
+              (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
+                .$sqlSearch. ");";
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        return $result;
+    }
+
 }
 
 ?>
