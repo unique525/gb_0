@@ -41,7 +41,7 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserInfo.".ComeFrom,
             ".self::TableName_UserInfo.".Honor,
             ".self::TableName_UserInfo.".FansCount,
-            ".self::TableName_UserInfo.".Gendar,
+            ".self::TableName_UserInfo.".Gender,
             ".self::TableName_UserInfo.".Province,
             ".self::TableName_UserInfo.".City,
             ".self::TableName_UserInfo.".Hit,

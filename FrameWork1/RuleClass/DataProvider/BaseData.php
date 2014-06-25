@@ -197,6 +197,15 @@ class BaseData
      * 会员 数据表自增字段名
      */
     const TableId_User = "UserId";
+
+    /**
+     * 会员组 数据表名
+     */
+    const TableName_UserGroup = "cst_user_group";
+    /**
+     * 会员组 数据表自增字段名
+     */
+    const TableId_UserGroup = "UserGroupId";
     /**
      * 会员详细信息 数据表名
      */
