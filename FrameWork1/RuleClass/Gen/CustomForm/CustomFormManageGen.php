@@ -89,7 +89,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     $operateContent = "CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
-                    Control::ShowMessage(Language::Load('document', 1));
+                    Control::ShowMessage(Language::Load('custom_form', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         Control::CloseTab();
@@ -98,7 +98,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     }
 
                 }else{
-                    Control::ShowMessage(Language::Load('document', 2));
+                    Control::ShowMessage(Language::Load('custom_form', 2));
                     return DefineCode::CUSTOM_FORM_MANAGE+self::CREATE_NEW_CUSTOM_FORM_FAILED;
                 }
 
@@ -159,7 +159,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             //编辑权限
             $can = $manageUserAuthority->CanModify($siteId, $channelId, $nowManageUserId);
             if ($can != 1) {
-                Control::ShowMessage(Language::Load('document', 26));
+                Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
             }
             //操作他人的权限
@@ -168,7 +168,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             if ($createUserId !== $nowManageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
-                    Control::ShowMessage(Language::Load('document', 26));
+                    Control::ShowMessage(Language::Load('custom_form', 3));
                     return "";
                 }
             }
@@ -225,7 +225,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 取得表单列表
-     * @return array 表单列表数据集
+     * @return string 表单列表数据集页面html
      */
     private function GenList() {
         $channelId = Control::GetRequest("channel_id", 0);
@@ -271,7 +271,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     "{channel_id}" => 0,
                     "{cid}" => 0,
                     "{id}" => 0,
-                    "{pager_button}" => $pagerButton
+                    "{PagerButton}" => $pagerButton
                 );
                 $tempContent = strtr($tempContent, $replaceArray);
             }else{
