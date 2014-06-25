@@ -25,7 +25,7 @@ $(function () {
     var btnSelectSite = $("#btn_select_site");
 
     btnSelectSite.click(function () {
-        var itemHeight;
+        //var itemHeight;
         //alert($(this).attr("class"));
         if ($(this).attr("class") == "btn_select_site_normal") {
             $(this).attr("class", "btn_select_site_clicked");
@@ -121,7 +121,7 @@ function LoadSite(siteId, siteName, siteUrl) {
 
     if (window.G_NowSiteId > 0) {
         $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
-        LoadChannelListForManage(siteId);
+        _LoadChannelListForManage(siteId);
         //site name
         $(".site_name").html(siteName);
         if (siteUrl.length > 1) {
@@ -132,7 +132,7 @@ function LoadSite(siteId, siteName, siteUrl) {
     }
 }
 
-function LoadChannelListForManage(siteId) {
+function _LoadChannelListForManage(siteId) {
     var treeSetting = {
         data: {
             simpleData: {
@@ -148,16 +148,21 @@ function LoadChannelListForManage(siteId) {
         }
     };
 
-    var jsLoader = new JsLoader();
-    jsLoader.load("/default.php?secu=manage&mod=channel&m=list_for_manage_left&site_id=" + siteId + "&ramdom=" + Math.random());
-    jsLoader.onSuccess = function() {
-        $.fn.zTree.init($("#div_manage_menu_of_column"), treeSetting, zNodes);
-        window.G_zTree = $.fn.zTree.getZTreeObj("div_manage_menu_of_column");
-        window.G_RightMenu = $("#right_menu");
-    };
-    jsLoader.onFailure = function() {
-        $("#div_manage_menu_of_column").html("导航树加载失败");
-    };
+    var url = "/default.php?secu=manage&mod=channel&m=list_for_manage_left&site_id=" + siteId + "&ramdom=" + Math.random();
+
+    $.post(url, {
+        resultbox: $(this).html()
+    }, function(result) {
+        if(result.length>0){
+            var zNodes = eval(result); //将json字符串转换成json对象
+            $.fn.zTree.init($("#div_manage_menu_of_column"), treeSetting, zNodes);
+            window.G_zTree = $.fn.zTree.getZTreeObj("div_manage_menu_of_column");
+            window.G_RightMenu = $("#right_menu");
+        }else{
+            //error
+            $("#div_manage_menu_of_column").html("加载失败");
+        }
+    });
 }
 function zTreeOnClick(event, treeId, treeNode) {
     window.G_SelectedChannelId = treeNode.id;
