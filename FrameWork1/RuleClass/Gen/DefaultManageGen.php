@@ -75,6 +75,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $customFormContentManageGen = new CustomFormContentManageGen();
                     $result = $customFormContentManageGen->Gen();
                     break;
+                case "vote":
+                    $voteManageGen = new VoteManageGen();
+                    $result = $voteManageGen->Gen();
+                    break;
+                case "vote_item":
+                    $voteItemManageGen = new VoteItemManageGen();
+                    $result = $voteItemManageGen->Gen();
+                    break;
+                case "vote_select_item":
+                    $voteSelectItemManageGen = new VoteSelectItemManageGen();
+                    $result = $voteSelectItemManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
