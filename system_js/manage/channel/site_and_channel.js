@@ -258,7 +258,9 @@ function _ChannelClick() {
         } else if (window.G_SelectedChannelType === 11) { //文字直播类
 
         } else if (window.G_SelectedChannelType === 12) { //投票调查类
-
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=vote&m=list&site_id='+ window.G_NowSiteId +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
         } else if (window.G_SelectedChannelType === 13) { //试题类
 
         } else if (window.G_SelectedChannelType === 0) { //站点首页
