@@ -139,14 +139,14 @@ class UserAlbumManageData extends BaseManageData {
 
     /**
      * 获取站点内的所有相册(checked)
+     * @param int $siteId 站点ID
      * @param int $pageBegin 从pageBegin开始查询
      * @param int $pageSize 取pageSize条数据
      * @param int $allCount 总行数
      * @param int $state 取状态为state的相册
-     * @param int $siteId 站点ID
      * @return array 相册列表的数组
      */
-    public function GetList($pageBegin, $pageSize, &$allCount, $state, $siteId) {
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state) {
         if ($state == 100) {
             //CountPic 用于统计相册有多少图片
             $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ua.UserAlbumId,ua.UserAlbumName,ua.State,ua.SupportCount,ua.HitCount,

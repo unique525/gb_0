@@ -139,7 +139,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = "";
                 }
             }else{
-                $result = $userAlbumManageData->GetList($pageBegin, $pageSize, $allCount, $state, $siteId);
+                $result = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount, $state);
                 $jsParamList = ",'',undefined,'" . $state . "'";
             }
 

@@ -36,18 +36,50 @@ class UserGroupManageData extends BaseManageData
     }
 
     /**
-     * 返回对应siteid和state的会员组列表
+     * 获取会员组分页列表
      * @param int $siteId 站点ID
-     * @param int $state 数据状态
-     * @return array 会员数组列表数据集
+     * @param int $pageBegin 从pageBegin开始查询
+     * @param int $pageSize 取pageSize条数据
+     * @param int $allCount 所有行数
+     * @return array|null 相册列表的数组
      */
-    public function GetList($siteId = 0, $state = 0)
+    public function GetList($siteId,$pageBegin, $pageSize, &$allCount)
     {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT * FROM " . self::TableId_ManageUserGroup . " WHERE State=:State AND SiteId=:SiteId";
-        $dataProperty->AddField("State", $state);
-        $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        return $result;
+        if($siteId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT * FROM " . self::TableName_UserGroup ." WHERE SiteId = :SiteId ORDER BY UserGroupId LIMIT " . $pageBegin . "," . $pageSize .";";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserGroup . " WHERE SiteId = :SiteId;";
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    public function GetParentIdByGroupId($userGroupId){
+        if($userGroupId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT ParentId FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId";
+            $dataProperty->AddField("UserGroupId",$userGroupId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    public function GetOne($userGroupId,$siteId){
+        if($userGroupId > 0 && $siteId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId";
+            $dataProperty->AddField("UserGroupId",$userGroupId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
     }
 }
