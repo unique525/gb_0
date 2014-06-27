@@ -341,7 +341,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     }
                 }
                 $sb = $sb . ']';
-                $result = 'var zNodes =' . $sb . ';';
+                $result = '' . $sb . '';
 
                 DataCache::Set($cacheDir, $cacheFile, $result);
             } else {
