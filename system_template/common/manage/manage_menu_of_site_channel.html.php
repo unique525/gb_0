@@ -14,7 +14,7 @@
 
     </div>
     <div class="mid"><div id="btn_select_site" class="btn_select_site_normal" title="选择站点"></div></div>
-    <div class="right"><a id="btn_go_site_url" href="#" target="_blank"><img id="img_go_site_url" alt="访问站点"/></a><img
-            id="btn_site_manage" alt="站点管理"/></div>
+    <div class="right"><a id="btn_go_site_url" href="#" target="_blank"><img src="" id="img_go_site_url" alt="访问站点"/></a><img
+            id="btn_site_manage" alt="站点管理" src="" /></div>
 </div>
 <ul id="div_manage_menu_of_column" class="ztree"></ul>
