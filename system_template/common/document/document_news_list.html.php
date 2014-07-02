@@ -56,7 +56,7 @@
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_DocumentNewsId}"/></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_DocumentNewsId}" alt="编辑"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_DocumentNewsId}">{f_state}</span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_DocumentNewsId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_DocumentNewsId}" alt="预览" title="预览文档"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_publish" src="/system_template/{template_name}/images/manage/publish.gif" idvalue="{f_DocumentNewsId}" title="发布文档" alt="发布"/></td>

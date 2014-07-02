@@ -88,7 +88,7 @@
             selChannelType.change();
         });
 
-        function submitForm(continueCreate) {
+        function submitForm(closeTab) {
             if ($('#f_ChannelName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("请输入频道名称");
@@ -96,10 +96,10 @@
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("频道简介不能超过1000个字符");
             } else {
-                if (continueCreate == 1) {
-                    $("#CloseTab").val("0");
-                } else {
+                if (closeTab == 1) {
                     $("#CloseTab").val("1");
+                } else {
+                    $("#CloseTab").val("0");
                 }
                 $('#mainForm').submit();
             }
@@ -116,8 +116,8 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-            <input class="btn" value="确认并继续" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
@@ -336,9 +336,9 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续"
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续"
                                                                                             type="button"
-                                                                                            onclick="submitForm(1)"/>
+                                                                                            onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>

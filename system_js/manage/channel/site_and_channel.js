@@ -272,6 +272,36 @@ function _ChannelClick() {
 
 }
 
+/**
+ * 处理站点列表页的js
+ */
+$(function () {
+
+    //格式化站点状态
+    $(".span_state").each(function(){
+        $(this).text(FormatSiteState($(this).text()));
+    });
+
+});
+
+/**
+ * 格式化站点状态值
+ * @return {string}
+ */
+function FormatSiteState(state){
+    switch (state){
+        case "0":
+            return "启用";
+            break;
+        case "100":
+            return "<"+"span style='color:#990000'>停用<"+"/span>";
+            break;
+        default :
+            return "未知";
+            break;
+    }
+}
+
 
 
 
