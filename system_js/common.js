@@ -58,6 +58,42 @@ function getDate() {
     return vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (se < 10 ? "0" + se : se);
 }
 
+/**
+ * 时间对象的格式化
+ * @param date 时间对象
+ * @param format 时间格式
+ * @return string dateStr 格式化后的时间对象字符串
+ */
+function formatDate(date,format) {
+    var dateStr="";
+    var o = {
+        "M+" : date.getMonth() + 1,
+        "d+" : date.getDate(),
+        "h+" : date.getHours(),
+        "m+" : date.getMinutes(),
+        "s+" : date.getSeconds(),
+        "q+" : Math.floor((date.getMonth() + 3) / 3),
+        "S" : date.getMilliseconds()
+    }
+
+    if (/(y+)/.test(format))
+    {
+        dateStr = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4
+            - RegExp.$1.length));
+    }
+
+    for (var k in o)
+    {
+        if (new RegExp("(" + k + ")").test(format))
+        {
+            dateStr = format.replace(RegExp.$1, RegExp.$1.length == 1
+                ? o[k]
+                : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return dateStr;
+}
+
 function checkPrice(me) {
     var reg = /[a-z]/ig;
     me.value = me.value.replace(reg, '');
