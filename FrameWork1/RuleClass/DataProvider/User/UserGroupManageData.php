@@ -9,6 +9,20 @@
 class UserGroupManageData extends BaseManageData
 {
 
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_UserGroup){
+        return parent::GetFields(self::TableName_UserGroup);
+    }
+
+    /**
+     * @param array $httpPostData $_POST数组
+     * @param int $siteId 站点ID
+     * @return int|null 最后插入的ID
+     */
     public function Create($httpPostData,$siteId){
         if($siteId > 0){
             $dataProperty = new DataProperty();
@@ -36,6 +50,11 @@ class UserGroupManageData extends BaseManageData
         }
     }
 
+    /**
+     * @param int $userGroupId 用户组ID
+     * @param int $state 状态
+     * @return int 影响的行数
+     */
     public function ModifyState($userGroupId,$state){
         if($userGroupId > 0){
             $dataProperty = new DataProperty();
@@ -53,7 +72,7 @@ class UserGroupManageData extends BaseManageData
      * 返回是否锁定等级
      * @param int $userGroupId 会员组id
      * @param bool $withCache 是否缓存
-     * @return int
+     * @return int 是否锁定
      */
     public function GetIsLock($userGroupId, $withCache)
     {

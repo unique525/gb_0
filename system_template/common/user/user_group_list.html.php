@@ -62,7 +62,7 @@
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td  id="td_main_btn" style="width:80px;">
-                    <div class="btn2" id="add">新增分组</div>
+                    <div class="btn2" id="add"><a href="/default.php?secu=manage&mod=user_group&m=create&site_id={SiteId}">新增分组</a></div>
                 </td>
                 <td></td>
             </tr>

@@ -33,12 +33,23 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         $templateContent = Template::Load("user/user_group_deal.html","common");
         $siteId = Control::GetRequest("site_id",0);
         if($siteId > 0){
+            $userGroupManageData = new UserGroupManageData();
+            $returnUrl = $_SERVER['HTTP_REFERER'];
             if(!empty($_POST)){
                 $httpPostData = $_POST;
-                $userGroupManageData = new UserGroupManageData();
                 $result = $userGroupManageData->Create($httpPostData,$siteId);
-
+                if($result > 0){
+                    $returnUrl = $httpPostData["return_url"];
+                    Control::GoUrl($returnUrl);
+                }
             }
+            $replace_arr = array(
+                "{ReturnUrl}" => $returnUrl,
+                "{UserGroupId}" => "1",
+                "{SiteId}" => $siteId
+            );
+            $templateContent = strtr($templateContent,$replace_arr);
+            parent::ReplaceWhenCreate($templateContent,$userGroupManageData->GetFields());
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
@@ -121,7 +132,10 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                 Template::RemoveCustomTag($templateContent, $tagId);
                 $templateContent = str_ireplace("{pagerButton}","", $templateContent);
             }
-
+            $replace_arr = array(
+                "{SiteId}" => $siteId
+            );
+            $templateContent = strtr($templateContent,$replace_arr);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
