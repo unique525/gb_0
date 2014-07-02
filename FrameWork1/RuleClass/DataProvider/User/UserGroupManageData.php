@@ -9,6 +9,45 @@
 class UserGroupManageData extends BaseManageData
 {
 
+    public function Create($httpPostData,$siteId){
+        if($siteId > 0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetInsertSql($httpPostData,self::TableName_UserGroup,$dataProperty,"SiteId",$siteId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * @param array $httpPostData  $_POST数组
+     * @param int $userGroupId 会员组ID
+     * @return int|null 返回影响的行数
+     */
+    public function Modify($httpPostData,$userGroupId){
+        if($userGroupId > 0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserGroup,self::TableId_UserGroup,$userGroupId,$dataProperty);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    public function ModifyState($userGroupId,$state){
+        if($userGroupId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE ".self::TableName_UserGroup." SET State = :State WHERE UserGroupId = :UserGroupId";
+            $dataProperty->AddField("State",$state);
+            $dataProperty->AddField("UserGroupId",$userGroupId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
 
     /**
      * 返回是否锁定等级
@@ -47,7 +86,7 @@ class UserGroupManageData extends BaseManageData
     {
         if($siteId > 0){
             $dataProperty = new DataProperty();
-            $sql = "SELECT * FROM " . self::TableName_UserGroup ." WHERE SiteId = :SiteId ORDER BY UserGroupId LIMIT " . $pageBegin . "," . $pageSize .";";
+            $sql = "SELECT * FROM " . self::TableName_UserGroup ." WHERE SiteId = :SiteId ORDER BY Sort,UserGroupId LIMIT " . $pageBegin . "," . $pageSize .";";
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserGroup . " WHERE SiteId = :SiteId;";
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
