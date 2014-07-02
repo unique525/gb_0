@@ -61,7 +61,7 @@ function getDate() {
 /**
  * 时间对象的格式化
  * @param date 时间对象
- * @param format 时间格式
+ * @param format 时间格式字符串
  * @return string dateStr 格式化后的时间对象字符串
  */
 function formatDate(date,format) {
@@ -78,7 +78,7 @@ function formatDate(date,format) {
 
     if (/(y+)/.test(format))
     {
-        dateStr = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4
+        format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4
             - RegExp.$1.length));
     }
 
@@ -86,11 +86,12 @@ function formatDate(date,format) {
     {
         if (new RegExp("(" + k + ")").test(format))
         {
-            dateStr = format.replace(RegExp.$1, RegExp.$1.length == 1
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1
                 ? o[k]
                 : ("00" + o[k]).substr(("" + o[k]).length));
         }
     }
+    dateStr=format;
     return dateStr;
 }
 
