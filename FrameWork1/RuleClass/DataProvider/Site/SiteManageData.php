@@ -72,15 +72,12 @@ class SiteManageData extends BaseManageData {
         return $result;
     }
 
-
-
-
     /**
-     * 根据后台管理员id返回此管理员可以管理的站点列表数据集
+     * 根据后台管理员id返回此管理员可以管理的站点列表数据集，下拉站点菜单使用
      * @param int $manageUserId 后台管理员id
      * @return array 站点列表数据集
      */
-    public function GetList($manageUserId) {
+    public function GetListForSelect($manageUserId) {
         $dataProperty = new DataProperty();
         if ($manageUserId == 1) {
             $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<100 ORDER BY Sort DESC,convert(SiteName USING gbk);";
@@ -103,6 +100,79 @@ class SiteManageData extends BaseManageData {
             $dataProperty->AddField("ManageUserId2", $manageUserId);
         }
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 根据后台管理员id返回此管理员可以管理的站点列表数据集
+     * @param int $pageBegin 分页起始位置
+     * @param int $pageSize 分页大小
+     * @param int $allCount 记录总数（输出参数）
+     * @param string $searchKey 查询关键字
+     * @param int $searchType 查询字段类型
+     * @param int $manageUserId 后台管理员id
+     * @return array 站点列表数据集
+     */
+    public function GetList($pageBegin, $pageSize, &$allCount, $searchKey, $searchType, $manageUserId) {
+        $dataProperty = new DataProperty();
+        $searchSql = "";
+        if ($manageUserId == 1) {
+            //查询
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                if ($searchType == 0) { //站点名称
+                    $searchSql = " AND (s.SiteName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else { //站点名称
+                    $searchSql = " AND (s.SiteName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                }
+            }
+            $sql = "SELECT s.*,mu.ManageUserName FROM ".self::TableName_Site." s,".self::TableName_ManageUser." mu
+                        WHERE s.State<100 AND s.ManageUserId=mu.ManageUserId $searchSql
+                        ORDER BY s.Sort DESC,convert(s.SiteName USING gbk)
+                        LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site."s,".self::TableName_ManageUser." mu
+                        WHERE s.ManageUserId=mu.ManageUserId $searchSql;";
+        } else {
+
+            //自己创建的站点和自己后台帐号分组有权限的站点
+
+            //查询
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                if ($searchType == 0) { //站点名称
+                    $searchSql = " AND (SiteName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else { //站点名称
+                    $searchSql = " AND (SiteName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                }
+            }
+
+            $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<100 AND
+                SiteId IN
+                ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
+                  UNION
+                  SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
+                    WHERE ManageUserGroupId IN
+                        (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
+                 ) $searchSql
+                 ORDER BY Sort DESC,convert(SiteName USING gbk)
+                 LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site." WHERE State<100 AND
+                SiteId IN
+                ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
+                  UNION
+                  SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
+                    WHERE ManageUserGroupId IN
+                        (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
+                 ) $searchSql
+                 ;";
+
+            $dataProperty->AddField("ManageUserId1", $manageUserId);
+            $dataProperty->AddField("ManageUserId2", $manageUserId);
+        }
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
