@@ -173,7 +173,10 @@ class DocumentNewsManageData extends BaseManageData
                 $searchSql = " AND (UserName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else { //模糊
-                $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1 OR ManageUserName LIKE :SearchKey2 OR username LIKE :SearchKey3 OR DocumentNewsTag LIKE :SearchKey4)";
+                $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1
+                                    OR ManageUserName LIKE :SearchKey2
+                                    OR username LIKE :SearchKey3
+                                    OR DocumentNewsTag LIKE :SearchKey4)";
                 $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
@@ -189,10 +192,12 @@ class DocumentNewsManageData extends BaseManageData
         $sql = "
             SELECT
             DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
-            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,TitlePic1,RecLevel,Hit
+            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,
+            TitlePic1,RecLevel,Hit
             FROM
             " . self::TableName_DocumentNews . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
+            ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 

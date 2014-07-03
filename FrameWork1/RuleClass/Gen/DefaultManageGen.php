@@ -144,7 +144,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
 
         $tagId = "select_site";
         $siteManageData = new SiteManageData();
-        $arrSiteList = $siteManageData->GetList($manageUserId);
+        $arrSiteList = $siteManageData->GetListForSelect($manageUserId);
         Template::ReplaceList($tempContent, $arrSiteList, $tagId);
 
 

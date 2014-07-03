@@ -98,9 +98,10 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
      * @param ManageUserManageData $manageUserManageData 管理员后台数据类
      */
     private function DoLogin($manageUserId,$manageUserName,ManageUserManageData $manageUserManageData){
-        Control::SetManageUserCookie($manageUserId, $manageUserName);
-        //后台管理中func域名和icms同步登录cookie
 
+        Control::SetManageUserCookie($manageUserId, $manageUserName, 10000);
+
+        //后台管理中func域名和icms同步登录cookie
         if (WEBAPP_DOMAIN != MANAGE_DOMAIN) {
             $webAppDomain = str_ireplace("http://", "", WEBAPP_DOMAIN);
             Control::SetManageUserCookie($manageUserId, $manageUserName, 10000, $webAppDomain);

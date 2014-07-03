@@ -48,7 +48,7 @@
         </tr>
     </table>
     <ul id="sort_grid">
-        <icms_list id="document_news_list" type="list">
+        <icms id="document_news_list" type="list">
             <item>
                 <![CDATA[
                 <li id="sort_{f_DocumentNewsId}">
@@ -73,7 +73,7 @@
                 </li>
                 ]]>
             </item>
-        </icms_list>
+        </icms>
     </ul>
     <div>{pager_button}</div>
 </div>

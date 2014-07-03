@@ -63,12 +63,12 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "site_list";
             $allCount = 0;
             $siteManageData = new SiteManageData();
-            $arrSiteList = $siteManageData->GetList($pageBegin, $pageSize, $allCount, $searchKey, $searchType, $manageUserId);
-            if (count($arrSiteList) > 0) {
-                Template::ReplaceList($tempContent, $arrSiteList, $tagId);
+            $arrList = $siteManageData->GetList($pageBegin, $pageSize, $allCount, $searchKey, $searchType, $manageUserId);
+            if (count($arrList) > 0) {
+                Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+                //$tempContent = str_ireplace("{pager_button}", Language::Load("site", 7), $tempContent);
             }
         }
 

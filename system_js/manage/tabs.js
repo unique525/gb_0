@@ -12,6 +12,9 @@ $().ready(function() {
     });
 });
 
+/**
+ * 新增一个标签
+ */
 function addTab() {
     window.G_TabIndex++;
     window.G_TabCounter++;
@@ -29,9 +32,8 @@ function addTab() {
     window.G_Tabs.append('<'+'div id="' + id + '"><'+'p>' + tabContent + '<'+'/p><'+'/div>');
     window.G_Tabs.tabs("refresh");
     window.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
-
-
 }
+
 /**
  * 用于子页面中关闭标签页的按钮事件
  */
