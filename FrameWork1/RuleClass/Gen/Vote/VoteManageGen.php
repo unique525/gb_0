@@ -44,7 +44,8 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
     {
         $manageUserId = Control::GetManageUserId();
         $siteId = Control::GetRequest("site_id", 0);
-        $documentChannelId = Control::GetRequest("channel_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
+        $pageIndex = Control::GetRequest("p", 0);
         $tempContent = Template::Load("vote/vote_deal.html", "common");
         if ($manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
@@ -59,21 +60,20 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($voteId > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 13));
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    Control::ShowMessage(Language::Load('vote', 1));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 14));
+                    Control::ShowMessage(Language::Load('vote', 2));
                 }
+                return "";
             }
+            $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
             $tempContent = str_ireplace("{Sort}", "0", $tempContent);
+            $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
             $tempContent = str_ireplace("{ManageUserId}", strval($manageUserId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
-            $tempContent = str_ireplace("{DocumentChannelId}", strval($documentChannelId), $tempContent);
+            $tempContent = str_ireplace("{ChannelId}", strval($channelId), $tempContent);
             $tempContent = str_ireplace("{IpMaxCount}", "10", $tempContent);
             $fieldsOfVote = $voteManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfVote);
@@ -145,19 +145,15 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //javascript 处理
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::ShowMessage(Language::Load('vote', 15));
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    Control::ShowMessage(Language::Load('vote', 15));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('vote', 16));
                 }
             }
             $arrList = $voteManageData->GetOne($voteId);
-            Template::ReplaceOne($tempContent, $arrList, 1);
+            Template::ReplaceOne($tempContent, $arrList, false, false);
             $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
         //替换掉{s XXX}的内容
@@ -176,8 +172,8 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
         $tempContent = Template::Load("vote/vote_list.html", "common");
 
-        $sId = Control::GetRequest("site_id", 0);
-        $cId = Control::GetRequest("channel_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
         $searchKey = Control::GetRequest("search_key", "");
@@ -188,8 +184,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             $tagId = "vote_list";
             $allCount = 0;
             $voteManageData = new VoteManageData();
-            $arrList = $voteManageData->GetListForPager($sId, $cId, $pageBegin, $pageSize, $allCount, $searchKey);
-
+            $arrList = $voteManageData->GetListForPager($siteId, $channelId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
                 /**
