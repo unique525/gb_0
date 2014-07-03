@@ -50,6 +50,16 @@ $(function() {
         });
     });
 
+    //投票调查题目管理
+    $(".btn_open_vote_item_list").click(function(event) {
+        event.preventDefault();
+        var voteId=$(this).attr('title');
+        var voteTitle=$(this).attr('alt');
+        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_item&m=list&vote_id=' + voteId;
+        parent.G_TabTitle = voteTitle + '-编辑题目';
+        parent.addTab();
+    });
+
     //选中时的样式变化
     $('.grid_item').click(function() {
         if ($(this).hasClass('grid_item_selected')) {
