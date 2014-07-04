@@ -69,7 +69,6 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
-            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
             $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
             $tempContent = str_ireplace("{ManageUserId}", strval($manageUserId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
@@ -145,11 +144,11 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 15));
+                    Control::ShowMessage(Language::Load('vote', 3));
                     $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 16));
+                    Control::ShowMessage(Language::Load('vote', 4));
                 }
             }
             $arrList = $voteManageData->GetOne($voteId);

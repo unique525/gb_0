@@ -41,7 +41,9 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
-        $tempContent = Template::Load("vote/vote_item_deal.html");
+        $voteId = Control::GetRequest("vote_id", 0);
+        $pageIndex = Control::GetRequest("p", 0);
+        $tempContent = Template::Load("vote/vote_item_deal.html", "common");
         if ($manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
             $voteItemManageData = new VoteItemManageData();
@@ -56,20 +58,18 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
                 if ($voteItemId > 0) {
                     //javascript 处理
                     Control::ShowMessage(Language::Load('vote', 1));
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('vote', 2));
                 }
+                return "";
             }
+            $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
+            $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
+
             $fieldsOfVoteItem = $voteItemManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfVoteItem);
-            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
-            $tempContent = str_ireplace("{VoteId}", strval($manageUserId), $tempContent);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -118,7 +118,7 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
      * @return mixed|string
      */
     private function GenModify() {
-        $tempContent = Template::Load("vote/vote_item_deal.html");
+        $tempContent = Template::Load("vote/vote_item_deal.html", "common");
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
         parent::ReplaceFirst($tempContent);
@@ -134,19 +134,15 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
 
                 if ($result > 0) {
                     //javascript 处理
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::ShowMessage(Language::Load('vote', 3));
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    Control::ShowMessage(Language::Load('vote', 3));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('vote', 4));
                 }
             }
             $arrList = $voteItemManageData->GetOne($voteItemId);
-            Template::ReplaceOne($tempContent, $arrList, 1);
+            Template::ReplaceOne($tempContent, $arrList, false, false);
             $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
         //替换掉{s XXX}的内容
@@ -161,7 +157,7 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
      * @return mixed|string
      */
     private function GenList() {
-        $tempContent = Template::Load("vote/vote_item_list.html");
+        $tempContent = Template::Load("vote/vote_item_list.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $searchKey = Control::GetRequest("search_key", "");
