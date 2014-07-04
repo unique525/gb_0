@@ -31,19 +31,21 @@ class VoteManageData extends BaseManageData
     }
 
     /**
-     * 停用投票调查
-     * @param int $voteId 投票调查Id
+     * 异步修改状态
+     * @param string $voteId 投票调查Id
+     * @param string $state 状态
      * @return int 执行结果
      */
-    public function RemoveToBin($voteId)
+    public function AsyncModifyState($voteId,$state)
     {
         $result = -1;
         if ($voteId < 0) {
             return $result;
         }
-        $sql = "UPDATE " . self::TableName_Vote . " SET State=100 WHERE VoteId=:VoteId;";
+        $sql = "UPDATE " . self::TableName_Vote . " SET State=:State WHERE VoteId=:VoteId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
+        $dataProperty->AddField("State", $state);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }

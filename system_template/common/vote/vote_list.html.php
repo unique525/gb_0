@@ -44,8 +44,8 @@
 <td class="spe_line2" style="text-align:center;">{f_CreateDate}</td>
 <td class="spe_line2" style="text-align:center;">{f_BeginDate}</td>
 <td class="spe_line2" style="text-align:center;">{f_EndDate}</td>
-<td class="spe_line2" style="text-align:center;"><span class="span_state" id="{f_VoteId}">{f_State}</span></td>
-<td class="spe_line2" style="text-align: center;"><img src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
+<td class="spe_line2" style="text-align:center;"><span class="span_state" title="{f_State}" id="span_state_{f_VoteId}">{f_State}</span></td>
+<td class="spe_line2" style="text-align: center;"><img class="div_start" idvalue="{f_VoteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img class="div_stop" idvalue="{f_VoteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
 </tr>
 ]]>
 </item>
