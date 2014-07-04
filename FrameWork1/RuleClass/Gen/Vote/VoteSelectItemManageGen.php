@@ -46,7 +46,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
-        $tempContent = Template::Load("vote/vote_select_item_deal.html");
+        $tempContent = Template::Load("vote/vote_select_item_deal.html", "common");
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
         if ($manageUserId > 0) {
@@ -66,24 +66,22 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
                 $operateContent = 'Create VoteSelectItem,POST FORM:' . implode('|', $_POST) . ';\r\nResult:documentNewsId:' . $voteSelectItemId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($voteSelectItemId > 0) {
+                if ($voteItemId > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 7));
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    Control::ShowMessage(Language::Load('vote', 1));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 8));
+                    Control::ShowMessage(Language::Load('vote', 2));
                 }
+                return "";
             }
-            $fieldsOfVoteSelectItem = $voteSelectItemManageData->GetFields();
-            parent::ReplaceWhenCreate($tempContent, $fieldsOfVoteSelectItem);
-            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
+
             $tempContent = str_ireplace("{voteItemId}", strval($voteItemId), $tempContent);
             $tempContent = str_ireplace("{pageIndex}", strval($pageIndex), $tempContent);
+
+            $fieldsOfVoteSelectItem = $voteSelectItemManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfVoteSelectItem);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -134,7 +132,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
-        $tempContent = Template::Load("vote/vote_select_item_deal.html");
+        $tempContent = Template::Load("vote/vote_select_item_deal.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $voteSelectItemId = Control::GetRequest("vote_select_item_id", 0);
@@ -169,22 +167,16 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //javascript 处理
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::ShowMessage(Language::Load('vote', 9));
-                        Control::CloseTab();
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
+                    Control::ShowMessage(Language::Load('vote', 3));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 10));
+                    Control::ShowMessage(Language::Load('vote', 4));
                 }
             }
-
             $arrList = $voteSelectItemManageData->GetOne($voteSelectItemId);
-            Template::ReplaceOne($tempContent, $arrList, 1);
+            Template::ReplaceOne($tempContent, $arrList, false, false);
             $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
-            $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
         }
         //替换掉{s XXX}的内容
         $patterns = '/\{s_(.*?)\}/';
@@ -199,7 +191,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenList()
     {
-        $tempContent = Template::Load("vote/vote_select_item_list.html");
+        $tempContent = Template::Load("vote/vote_select_item_list.html", "common");
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $searchKey = Control::GetRequest("search_key", "");
@@ -248,7 +240,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenAddCountWithRatio()
     {
-        $tempContent = Template::Load("vote/vote_select_item_add_count_together.html");
+        $tempContent = Template::Load("vote/vote_select_item_add_count_ratio.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $tagId = "vote_select_item_list";
