@@ -37,10 +37,10 @@
 <![CDATA[
 <tr class="grid_item">
 <td class="spe_line2" style="text-align: center;"><input name="vote_input" class="input_select" type="checkbox" value="" /></td>
-<td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" title="{f_VoteId}" /></td>
+<td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_VoteId}" /></td>
 <td class="spe_line2" style="text-align: center;">{f_VoteTitle}</td>
 <td class="spe_line2" style="text-align: center;">{f_VoteId}</td>
-<td class="spe_line2" style="text-align: center;"><span class="btn_open_vote_item_list" style="cursor:pointer;"  title="{f_VoteId}" alt="{f_VoteTitle}" >编辑题目</span></td>
+<td class="spe_line2" style="text-align: center;"><span class="btn_open_vote_item_list" style="cursor:pointer;"  idvalue="{f_VoteId}" title="{f_VoteTitle}" >编辑题目</span></td>
 <td class="spe_line2" style="text-align:center;">{f_CreateDate}</td>
 <td class="spe_line2" style="text-align:center;">{f_BeginDate}</td>
 <td class="spe_line2" style="text-align:center;">{f_EndDate}</td>
