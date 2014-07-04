@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
@@ -7,8 +7,8 @@
 </head>
 <body>
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
-    <div id="resulttable" style="font-size: 14px;">
-        <iframe id="dialogiframe" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="500px"></iframe>
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="500px"></iframe>
     </div>
 </div>
 <div id="div_list">

@@ -30,7 +30,7 @@
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">题目名称：</td>
-                        <td class="spe_line" title="{VoteItemTitle}"><input name="f_VoteItemTitle" id="f_VoteItemTitle" value="{VoteItemTitle}" type="text" class="inputbox" style=" width: 300px;" /></td>
+                        <td class="spe_line" title="{VoteItemTitle}"><input name="f_VoteItemTitle" id="f_VoteItemTitle" value="{VoteItemTitle}" type="text" class="input_box" style=" width: 300px;" /></td>
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">排序：</td>
@@ -38,7 +38,7 @@
                     </tr>
                     <tr>
                         <td class="spe_line" height="60" align="right">题目简介：</td>
-                        <td class="spe_line" title="{voteIntro}"><input name="f_voteIntro" id="f_voteIntro" value="{voteIntro}" type="text" class="inputbox" style=" width: 300px;" /></td>
+                        <td class="spe_line" title="{voteIntro}"><input name="f_voteIntro" id="f_voteIntro" value="{voteIntro}" type="text" class="input_box" style=" width: 300px;" /></td>
                     </tr>
                     
                     <tr>

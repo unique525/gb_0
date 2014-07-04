@@ -56,7 +56,7 @@
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">标题：</td>
-                         <td class="spe_line" title="{VoteTitle}"><input name="f_VoteTitle" id="f_VoteTitle" value="{VoteTitle}" type="text" class="inputbox" style=" width: 300px;" /></td>
+                         <td class="spe_line" title="{VoteTitle}"><input name="f_VoteTitle" id="f_VoteTitle" value="{VoteTitle}" type="text" class="input_box" style=" width: 300px;" /></td>
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">排序：</td>
@@ -65,13 +65,13 @@
                     <tr>
                         <td class="spe_line" height="30" align="right">开始时间：</td>
                         <td class="spe_line">
-                            <input type="text" class="inputbox" id="f_BeginDate" name="f_BeginDate" value="{BeginDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" />
+                            <input type="text" class="input_box" id="f_BeginDate" name="f_BeginDate" value="{BeginDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" />
                         </td>
                     </tr>
                     <tr>
                         <td class="spe_line" height="30" align="right">到期时间：</td>
                         <td class="spe_line">
-                            <input type="text" class="inputbox" id="f_EndDate" name="f_EndDate" value="{EndDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" />
+                            <input type="text" class="input_box" id="f_EndDate" name="f_EndDate" value="{EndDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" />
                         </td>
                     </tr>
                                         <tr>

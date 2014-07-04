@@ -7,8 +7,8 @@
 </head>
 <body>
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
-    <div id="resulttable" style="font-size: 14px;">
-        <iframe id="dialogiframe" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="500px"></iframe>
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
     </div>
 </div>
 <div id="div_list">
