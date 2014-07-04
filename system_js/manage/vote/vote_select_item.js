@@ -7,14 +7,13 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var siteId = Request["site_id"];
-        var channelId = Request["channel_id"];
+        var voteId = Request["vote_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote&m=create&site_id='+siteId+'&channel_id='+channelId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=vote_item&m=create&vote_id='+voteId+'&p=' + pageIndex;
         $("#dialogiframe").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -22,7 +21,7 @@ $(function() {
             height:560,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'投票调查新增',
+            title:'题目新增',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -31,13 +30,13 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
-        var voteId = $(this).attr('idvalue');
+        var voteItemId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote&m=modify&vote_id=' + voteId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=vote_item&m=modify&vote_item_id=' + voteItemId + '&p=' + pageIndex;
         $("#dialogiframe").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -50,13 +49,13 @@ $(function() {
         });
     });
 
-    //投票调查题目管理
-    $(".btn_open_vote_item_list").click(function(event) {
+    //投票调查题目选项管理
+    $(".btn_open_vote_select_item_list").click(function(event) {
         event.preventDefault();
-        var voteId=$(this).attr('idvalue');
-        var voteTitle=$(this).attr('title');
-        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_item&m=list&vote_id=' + voteId;
-        parent.G_TabTitle = voteTitle + '-编辑题目';
+        var voteItemId=$(this).attr('idvalue');
+        var voteItemTitle=$(this).attr('title');
+        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_select_item&m=list&vote_item_id=' + voteItemId;
+        parent.G_TabTitle = voteItemTitle + '-编辑题目';
         parent.addTab();
     });
 
