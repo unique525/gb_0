@@ -7,21 +7,21 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var voteId = Request["vote_id"];
+        var voteItemId = Request["vote_item_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote_item&m=create&vote_id='+voteId+'&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        var url='/default.php?secu=manage&mod=vote_select_item&m=create&vote_item_id='+voteItemId+'&p=' + pageIndex;
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:360,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'题目新增',
+            title:'新增题目选项',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -30,33 +30,48 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
+        var voteSelectItemId = $(this).attr('idvalue');
+        var pageIndex = Request["p"]==null?1:Request["p"];
+        pageIndex =  parseInt(pageIndex);
+        if (pageIndex <= 0) {
+            pageIndex = 1;
+        }
+        var url='/default.php?secu=manage&mod=vote_select_item&m=modify&vote_select_item_id=' + voteSelectItemId + '&p=' + pageIndex;
+        $("#dialog_frame").attr("src",url);
+        $("#dialog_resultbox").dialog({
+            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:360,
+            width:800,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'编辑题目选项',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+    });
+
+
+    //维持比例加票数
+    var btnAddCountRatio = $(".btn_add_count_ratio");
+    btnAddCountRatio.css("cursor", "pointer");
+    btnAddCountRatio.click(function(event) {
+        event.preventDefault();
         var voteItemId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote_item&m=modify&vote_item_id=' + voteItemId + '&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        var url='/default.php?secu=manage&mod=vote_item&m=add_count_ratio&vote_item_id=' + voteItemId + '&p=' + pageIndex;
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:360,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'投票调查编辑',
+            title:'维持比例加票数',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
-    });
-
-    //投票调查题目选项管理
-    $(".btn_open_vote_select_item_list").click(function(event) {
-        event.preventDefault();
-        var voteItemId=$(this).attr('idvalue');
-        var voteItemTitle=$(this).attr('title');
-        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_select_item&m=list&vote_item_id=' + voteItemId;
-        parent.G_TabTitle = voteItemTitle + '-编辑题目';
-        parent.addTab();
     });
 
     //选中时的样式变化

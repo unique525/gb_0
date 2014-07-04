@@ -14,11 +14,11 @@ $(function() {
             pageIndex = 1;
         }
         var url='/default.php?secu=manage&mod=vote_item&m=create&vote_id='+voteId+'&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:450,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'题目新增',
@@ -37,11 +37,11 @@ $(function() {
             pageIndex = 1;
         }
         var url='/default.php?secu=manage&mod=vote_item&m=modify&vote_item_id=' + voteItemId + '&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:450,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'投票调查编辑',

@@ -15,7 +15,7 @@ $(function() {
             pageIndex = 1;
         }
         var url='/default.php?secu=manage&mod=vote&m=create&site_id='+siteId+'&channel_id='+channelId+'&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
@@ -38,7 +38,7 @@ $(function() {
             pageIndex = 1;
         }
         var url='/default.php?secu=manage&mod=vote&m=modify&vote_id=' + voteId + '&p=' + pageIndex;
-        $("#dialogiframe").attr("src",url);
+        $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
