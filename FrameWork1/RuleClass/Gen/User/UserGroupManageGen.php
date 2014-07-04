@@ -31,7 +31,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
 
     /**
      * 新增
-     * @return null|string
+     * @return null|string 模板内容页面
      */
     private function GenCreate(){
         $templateContent = Template::Load("user/user_group_deal.html","common");
@@ -74,7 +74,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
 
     /**
      * 修改
-     * @return null|string
+     * @return null|string 模板内容页面
      */
     private function GenModify(){
         $templateContent = Template::Load("user/user_group_deal.html","common");
@@ -124,7 +124,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
 
     /**
      * 异步修改状态
-     * @return null|string
+     * @return null|string Jsonp结果
      */
     private function AsyncModifyState(){
         $userGroupId = Control::GetRequest("user_group_id",0);
@@ -141,7 +141,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
 
     /**
      * 获取会员组列表
-     * @return mixed|null|string
+     * @return mixed|null|string 模板内容页面
      */
     private function GenList(){
         $templateContent = Template::Load("user/user_group_list.html","common");

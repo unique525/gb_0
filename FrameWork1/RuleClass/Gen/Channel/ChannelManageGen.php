@@ -38,7 +38,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
-     * 新增频道
+     * 新增
      * @return string 模板内容页面
      */
     private function GenCreate() {
@@ -104,18 +104,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     self::CreateManageUserLog($operateContent);
 
                     if ($channelId > 0) {
-
-                        /**
-                        //活动类的默认添加Class分类====Ljy
-                        $channelType = Control::PostRequest("f_channeltype", 1);
-                        if ($channelType == 6) {
-                            $activityClassName = "默认";
-                            $state = 0;
-                            $activityType = 0;     //0为线下活动
-                            $activityClsaaData = new ActivityClassData();
-                            $activityClsaaData->CreateInt($siteId, $channelId, $activityClassName, $state, $activityType);
-                        }
-                        */
                         //授权给创建人
                         if ($manageUserId > 1) { //只有非ADMIN的要授权
                             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();

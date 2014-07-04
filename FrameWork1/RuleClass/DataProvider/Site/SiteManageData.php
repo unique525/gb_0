@@ -73,6 +73,25 @@ class SiteManageData extends BaseManageData {
     }
 
     /**
+     * 修改状态
+     * @param int $siteId 站点id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($siteId, $state)
+    {
+        $result = 0;
+        if ($siteId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Site . " SET `State`=:State WHERE ".self::TableId_Site."=:".self::TableId_Site.";";
+            $dataProperty->AddField(self::TableId_Site, $siteId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 根据后台管理员id返回此管理员可以管理的站点列表数据集，下拉站点菜单使用
      * @param int $manageUserId 后台管理员id
      * @return array 站点列表数据集

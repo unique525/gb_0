@@ -51,8 +51,8 @@
                             <td class="spe_line2" style="width:70px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:150px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_SiteId}">{f_State}</span></td>
-                            <td class="spe_line2" style="width:80px;text-align:center;"><img src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
+                            <td class="spe_line2" style="width:80px;text-align:center;"><img class="img_open_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img class="img_close_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
                             <td class="spe_line2" style="width:400px;text-align:center;"></td>
                         </tr>
                     </table>

@@ -29,7 +29,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = self::GenList();
                 break;
             case "async_modify_sort":
-                self::AsyncModifySort();
+                $result = self::AsyncModifySort();
                 break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
@@ -695,16 +695,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
-     * 更新文档的排序（拖动时使用）
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
      */
     private function AsyncModifySort() {
         $arrDocumentNewsId = Control::GetRequest("sort", null);
         $documentNewsManageData = new DocumentNewsManageData();
-        $documentNewsManageData->ModifySort($arrDocumentNewsId);
+        $result = $documentNewsManageData->ModifySort($arrDocumentNewsId);
+        return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
     }
 
     /**
      * 修改文档状态 状态值定义在Data类中
+     * @return string 返回Jsonp修改结果
      */
     private function AsyncModifyState() {
         $result = -1;
@@ -761,7 +764,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
             if (!$can) {
-                return -2; //没有权限
+                $result = -2; //没有权限
             }
             ////////////////////////////////////////////////////
             ////////////////////////////////////////////////////
@@ -783,7 +786,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $operateContent = 'Modify State DocumentNews,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
             self::CreateManageUserLog($operateContent);
         }
-        return $result;
+        return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
     }
 
 }
