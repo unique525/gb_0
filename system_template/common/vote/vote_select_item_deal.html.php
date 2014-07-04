@@ -10,7 +10,7 @@
                 var previewImage = new Image();
                 previewImage.src = img.attr("src");
                 var tp = '{TitlePic}';
-                $("#preview_titlepic").click(function() {
+                $("#preview_title_pic").click(function() {
                     if(tp != ''){
 
                         $("#dialog_title_pic").dialog({
