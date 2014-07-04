@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: yin
- * Date: 14-6-25
- * Time: 下午3:21
+ * 后台管理 会员组  生成类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_User
+ * @author zhangchi
  */
 
 class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
@@ -22,30 +22,45 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                 $result = self::GenModify();
                 break;
             case "modify_state":
-                $result = self::GenModifyState();
+                $result = self::AsyncModifyState();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
+    /**
+     * 新增
+     * @return null|string
+     */
     private function GenCreate(){
         $templateContent = Template::Load("user/user_group_deal.html","common");
         $siteId = Control::GetRequest("site_id",0);
+        $pageSize = Control::GetRequest("ps",0);
+        $tabIndex = Control::GetRequest("tab_index",0);
+        $pageIndex = Control::GetRequest("p",1);
         if($siteId > 0){
             $userGroupManageData = new UserGroupManageData();
-            $returnUrl = $_SERVER['HTTP_REFERER'];
             if(!empty($_POST)){
                 $httpPostData = $_POST;
                 $result = $userGroupManageData->Create($httpPostData,$siteId);
                 if($result > 0){
-                    $returnUrl = $httpPostData["return_url"];
-                    Control::GoUrl($returnUrl);
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    $tabIndex = Control::GetRequest("TabIndex",0);
+                    $pageSize = Control::GetRequest("PageSize",27);
+                    $pageIndex  = Control::GetRequest("PageIndex",1);
+                    if($closeTab == 1){
+                        Control::GoUrl("/default.php?secu=manage&mod=user_group&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
+                    }else{
+                        Control::GoUrl($_SERVER["HTTP_SELF"]);
+                    }
                 }
             }
             $replace_arr = array(
-                "{ReturnUrl}" => $returnUrl,
-                "{UserGroupId}" => "1",
+                "{TabIndex}" => $tabIndex,
+                "{PageSize}" => $pageSize,
+                "{PageIndex}" => $pageIndex,
+                "{UserGroupId}" => "0",
                 "{SiteId}" => $siteId
             );
             $templateContent = strtr($templateContent,$replace_arr);
@@ -57,10 +72,17 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         }
     }
 
+    /**
+     * 修改
+     * @return null|string
+     */
     private function GenModify(){
         $templateContent = Template::Load("user/user_group_deal.html","common");
         $userGroupId = Control::GetRequest("user_group_id",0);
         $siteId = Control::GetRequest("site_id",0);
+        $pageSize = Control::GetRequest("ps",0);
+        $tabIndex = Control::GetRequest("tab_index",0);
+        $pageIndex = Control::GetRequest("p",1);
 
         if($userGroupId > 0 && $siteId > 0){
             $userGroupManageData = new UserGroupManageData();
@@ -69,14 +91,24 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                 $httpPostData = $_POST;
                 $result = $userGroupManageData->Modify($httpPostData,$userGroupId);
                 if($result > 0){
-                    $returnUrl = $httpPostData["return_url"];
-                    Control::GoUrl($returnUrl);
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    $tabIndex = Control::GetRequest("TabIndex",0);
+                    $pageSize = Control::GetRequest("PageSize",27);
+                    $pageIndex  = Control::GetRequest("PageIndex",1);
+                    if($closeTab == 1){
+                        Control::GoUrl("/default.php?secu=manage&mod=user_group&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
+                    }else{
+                        Control::GoUrl($_SERVER["HTTP_SELF"]);
+                    }
                 }
             }
             $arrUserGroupOne = $userGroupManageData->GetOne($userGroupId,$siteId);
             Template::ReplaceOne($templateContent,$arrUserGroupOne);
 
             $replace_arr = array(
+                "{TabIndex}" => $tabIndex,
+                "{PageSize}" => $pageSize,
+                "{PageIndex}" => $pageIndex,
                 "{UserGroupId}" => $userGroupId,
                 "{SiteId}" => $siteId,
                 "{ReturnUrl}" => $returnUrl
@@ -90,28 +122,33 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         }
     }
 
-    private function GenModifyState(){
+    /**
+     * 异步修改状态
+     * @return null|string
+     */
+    private function AsyncModifyState(){
         $userGroupId = Control::GetRequest("user_group_id",0);
         $state = Control::GetRequest("state",0);
 
         if($userGroupId > 0){
             $userGroupManageData = new UserGroupManageData();
             $result = $userGroupManageData->ModifyState($userGroupId,$state);
-            if($result > 0){
-                return $_GET['JsonpCallBack'].'({"result":1})';
-            }else{
-                return $_GET['JsonpCallBack'].'({"result":0})';
-            }
+                return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
         }else{
             return null;
         }
     }
 
+    /**
+     * 获取会员组列表
+     * @return mixed|null|string
+     */
     private function GenList(){
         $templateContent = Template::Load("user/user_group_list.html","common");
         $siteId = Control::GetRequest("site_id",0);
         $pageIndex = Control::GetRequest("p",1);
         $pageSize = Control::GetRequest("ps",0);
+
         if($siteId > 0){
             $allCount = 0;
             $pageBegin = ($pageIndex - 1) * $pageSize;
@@ -122,7 +159,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html","common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=user_group&m=list&p={0}&ps=$pageSize";
+                $navUrl = "/default.php?secu=manage&mod=user_group&m=list&site_id=$siteId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

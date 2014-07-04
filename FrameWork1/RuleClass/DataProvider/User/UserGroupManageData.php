@@ -19,6 +19,7 @@ class UserGroupManageData extends BaseManageData
     }
 
     /**
+     * 新增
      * @param array $httpPostData $_POST数组
      * @param int $siteId 站点ID
      * @return int|null 最后插入的ID
@@ -35,6 +36,7 @@ class UserGroupManageData extends BaseManageData
     }
 
     /**
+     * 修改
      * @param array $httpPostData  $_POST数组
      * @param int $userGroupId 会员组ID
      * @return int|null 返回影响的行数
@@ -51,6 +53,7 @@ class UserGroupManageData extends BaseManageData
     }
 
     /**
+     * 修改状态
      * @param int $userGroupId 用户组ID
      * @param int $state 状态
      * @return int 影响的行数
@@ -58,7 +61,7 @@ class UserGroupManageData extends BaseManageData
     public function ModifyState($userGroupId,$state){
         if($userGroupId > 0){
             $dataProperty = new DataProperty();
-            $sql = "UPDATE ".self::TableName_UserGroup." SET State = :State WHERE UserGroupId = :UserGroupId";
+            $sql = "UPDATE ".self::TableName_UserGroup." SET State = :State WHERE UserGroupId = :UserGroupId;";
             $dataProperty->AddField("State",$state);
             $dataProperty->AddField("UserGroupId",$userGroupId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
@@ -99,7 +102,7 @@ class UserGroupManageData extends BaseManageData
      * @param int $pageBegin 从pageBegin开始查询
      * @param int $pageSize 取pageSize条数据
      * @param int $allCount 所有行数
-     * @return array|null 相册列表的数组
+     * @return array|null 多个会员组的数组
      */
     public function GetList($siteId,$pageBegin, $pageSize, &$allCount)
     {
@@ -116,22 +119,16 @@ class UserGroupManageData extends BaseManageData
         }
     }
 
-    public function GetParentIdByGroupId($userGroupId){
-        if($userGroupId > 0){
-            $dataProperty = new DataProperty();
-            $sql = "SELECT ParentId FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId";
-            $dataProperty->AddField("UserGroupId",$userGroupId);
-            $result = $this->dbOperator->GetInt($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
-        }
-    }
-
+    /**
+     * 获取一个用户组的信息
+     * @param int $userGroupId 用户组ID
+     * @param int $siteId 站点ID
+     * @return array|null 单个用户组信息
+     */
     public function GetOne($userGroupId,$siteId){
         if($userGroupId > 0 && $siteId > 0){
             $dataProperty = new DataProperty();
-            $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId";
+            $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId;";
             $dataProperty->AddField("UserGroupId",$userGroupId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
