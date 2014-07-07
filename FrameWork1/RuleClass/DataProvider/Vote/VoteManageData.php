@@ -119,7 +119,7 @@ class VoteManageData extends BaseManageData
         FROM " . self::TableName_Vote . " " . $searchSql . "
         ORDER BY Sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_Vote . $searchSql . ";";
+        $sql = "SELECT COUNT(*) FROM " . self::TableName_Vote . " ". $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
