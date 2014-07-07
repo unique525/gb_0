@@ -41,7 +41,7 @@
         </script>
     </head>
     <body>
-        <form id="mainForm" action="default.php?secu=manage&mod=vote&m={method}&vote_id={VoteId}&p={PageIndex}" method="post">
+        <form id="mainForm" action="/default.php?secu=manage&mod=vote&m={method}&vote_id={VoteId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>

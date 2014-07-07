@@ -37,7 +37,7 @@
         </script>
     </head>
     <body>
-        <form id="mainForm" enctype="multipart/form-data"  action="default.php?secu=manage&mod=vote_select_item&m={method}&vote_id={VoteId}&vote_item_id={VoteItemId}&vote_select_item_id={VoteSelectItemId}&p={PageIndex}" method="post">
+        <form id="mainForm" enctype="multipart/form-data"  action="/default.php?secu=manage&mod=vote_select_item&m={method}&vote_id={VoteId}&vote_item_id={VoteItemId}&vote_select_item_id={VoteSelectItemId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>
