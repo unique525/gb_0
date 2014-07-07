@@ -110,13 +110,14 @@ function SetVoteState(idvalue, state) {
 
     //多行操作
     var id = "";
-    $('input[name=vote_input]').each(function() {
+    var voteInput = $('input[name=vote_input]');
+    voteInput.each(function() {
         if (this.checked) {
             id = id + ',' + $(this).val();
         }
     });
     if (id.length > 0) {
-        $('input[name=vote_input]').each(function() {
+        voteInput.each(function() {
             if (this.checked) {
                 _SetVoteState($(this).val(), state);
             }
