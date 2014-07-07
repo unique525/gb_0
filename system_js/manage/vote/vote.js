@@ -70,19 +70,19 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).html(FormatState($(this).attr("title")));
+        $(this).html(FormatVoteState($(this).attr("title")));
     });
 
     $(".div_start").click(function(){
         var idvalue = $(this).attr("idvalue");
         var state = "0";
-        SetVoteState(idvalue,state);
+        ModifyVoteState(idvalue,state);
     });
 
     $(".div_stop").click(function(){
         var idvalue = $(this).attr("idvalue");
         var state = "100";
-        SetVoteState(idvalue,state);
+        ModifyVoteState(idvalue,state);
     });
 });
 
@@ -91,7 +91,7 @@ $(function() {
  * @param state 状态
  * @return {string}
  */
-function FormatState(state){
+function FormatVoteState(state){
     switch (state){
         case "0":
             return "启用";
@@ -105,7 +105,7 @@ function FormatState(state){
     }
 }
 
-function SetVoteState(idvalue, state) {
+function ModifyVoteState(idvalue, state) {
     $("#span_state_" + idvalue).html("<img src='/system_template/common/images/loading1.gif' />");
 
     //多行操作
@@ -124,11 +124,11 @@ function SetVoteState(idvalue, state) {
         });
     }
     else {
-        _SetVoteState(idvalue, state);
+        _ModifyVoteState(idvalue, state);
     }
 }
 
-function _SetVoteState(idvalue, state) {
+function _ModifyVoteState(idvalue, state) {
     $.ajax({
         url:"/default.php?secu=manage&mod=vote&m=modify_state",
         data:{state:state,vote_id:idvalue},
@@ -136,7 +136,7 @@ function _SetVoteState(idvalue, state) {
         jsonp:"jsonpcallback",
         success:function(data){
         if (parseInt(data["result"]) > 0) {
-            $("#span_state_" + idvalue).html(FormatState(state));
+            $("#span_state_" + idvalue).html(FormatVoteState(state));
         }
         else alert("修改失败，请联系管理员");
         }
