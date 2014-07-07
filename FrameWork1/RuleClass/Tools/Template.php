@@ -568,20 +568,20 @@ class Template
 
     /**
      * 替换详细信息页面
-     * @param string $tempContent
+     * @param string $tempContent 要处理的模板
      * @param array $arrInfo 要替换的数组数据
      * @param bool $isArrayList 默认为false，使用一维数组存储数据
-     * @param bool $isManage 是否后台模板系统中使用，默认false，非后台模板系统中使用
+     * @param bool $isForTemplateManage 是否后台模板管理中使用，默认false，非后台模板管理使用
      */
-    public static function ReplaceOne(&$tempContent, $arrInfo, $isArrayList = false, $isManage = false)
+    public static function ReplaceOne(&$tempContent, $arrInfo, $isArrayList = false, $isForTemplateManage = false)
     {
         if (count($arrInfo) > 0) {
             if (!$isArrayList) { //使用一维数组存储数据
-                self::_ReplaceOne($tempContent, $arrInfo, $isManage);
+                self::_ReplaceOne($tempContent, $arrInfo, $isForTemplateManage);
             } else { //使用二维数组存储数据
                 for ($i = 0; $i < count($arrInfo); $i++) {
                     $columns = $arrInfo[$i];
-                    self::_ReplaceOne($tempContent, $columns, $isManage);
+                    self::_ReplaceOne($tempContent, $columns, $isForTemplateManage);
                 }
             }
         }
@@ -590,11 +590,11 @@ class Template
 
     /**
      * 处理详细信息子方法
-     * @param string $tempContent
-     * @param array $arrOne
-     * @param bool $isManage 是否后台模板系统中使用，默认false，非后台模板系统中使用
+     * @param string $tempContent 要处理的模板
+     * @param array $arrOne 要替换的数组数据
+     * @param bool $isForTemplateManage 是否后台模板管理中使用，默认false，非后台模板管理使用
      */
-    private static function _ReplaceOne(&$tempContent, $arrOne, $isManage = false)
+    private static function _ReplaceOne(&$tempContent, $arrOne, $isForTemplateManage = false)
     {
         if (!empty($arrOne)) {
             foreach ($arrOne as $columnName => $columnValue) {
@@ -643,7 +643,7 @@ class Template
 
 
                 //处理常规的值
-                if ($isManage) { //是否是后台模板系统使用
+                if ($isForTemplateManage) { //是否是后台模板系统使用
                     $preManage = "b_";
                 } else {
                     $preManage = "";
