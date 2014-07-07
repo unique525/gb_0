@@ -36,9 +36,7 @@
 <item>
 <![CDATA[
 <tr class="grid_item">
-<td class="spe_line2" style="text-align: center;"><label>
-        <input name="vote_input" class="input_select" type="checkbox" value=""/>
-    </label></td>
+<td class="spe_line2" style="text-align: center;"><label><input name="vote_input" class="input_select" type="checkbox" value=""/></label></td>
 <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_VoteId}" /></td>
 <td class="spe_line2" style="text-align: center;">{f_VoteTitle}</td>
 <td class="spe_line2" style="text-align: center;">{f_VoteId}</td>

@@ -29,7 +29,7 @@
             });
             function sub()
             {
-                var voteTitle=$('#f_VoteTitle').val();
+                var voteTitle= $('#f_VoteTitle').val();
                 if(voteTitle == ''){
                     alert('请定义标题！');
                 }
