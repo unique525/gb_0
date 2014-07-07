@@ -36,7 +36,7 @@ class VoteManageData extends BaseManageData
      * @param string $state 状态
      * @return int 执行结果
      */
-    public function AsyncModifyState($voteId,$state)
+    public function ModifyState($voteId,$state)
     {
         $result = -1;
         if ($voteId < 0) {
