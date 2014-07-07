@@ -67,7 +67,7 @@ class VoteSelectItemManageData extends BaseManageData
      * @param int $voteSelectItemId  选项Id
      * @return int  返回执行结果
      */
-    public function RemoveBin($voteSelectItemId) {
+    public function ModifyState($voteSelectItemId) {
         $sql = "UPDATE " . self::TableName_VoteSelectItem . " SET State=100 WHERE VoteSelectItemId=:VoteSelectItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);

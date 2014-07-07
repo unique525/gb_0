@@ -19,8 +19,8 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
             case "create":
                 $result = self::GenCreate();
                 break;
-            case "remove_to_bin":
-                $result = self::GenRemoveToBin();
+            case "modify_state":
+                $result = self::AsyncModifyState();
                 break;
             case "modify":
                 $result = self::GenModify();
@@ -82,35 +82,20 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
      * 停用投票调查题目
      * @return mixed|string
      */
-    private function GenRemoveToBin() {
-        /**
-        $uId = Control::GetRequest("adminuserid", 0);
-        $voteId = Control::GetRequest("voteid", 0);
-        $voteItemId = Control::GetRequest("voteitemid", 0);
-
+    private function AsyncModifyState() {
+        //$result = -1;
+        $voteItemId = Control::GetRequest("vote_item_id", 0);
+        $state = Control::GetRequest("state",0);
         if ($voteItemId > 0) {
             $voteItemData = new VoteItemManageData();
-            $result = $voteItemData->RemoveBin($voteItemId);
-            //加入操作log
-            $operateContent = "AdminUser：RemoveBin id ：" . $uId . "；userid：" . Control::GetAdminUserID() . "；username；" . Control::GetAdminUserName() . "；result：" . $result;
-            $adminuserLogData = new AdminUserLogData();
-            $adminuserLogData->Insert($operateContent);
-
-            if ($result > 0) {
-                Control::ShowMessage(Language::Load('vote', 5));
-                Control::GoUrl(ROOTPATH . '/vote/index.php?a=voteitemmanage&m=list&voteid=' . $voteId . '&height=&width=&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true');
-                return "";
-            } else {
-                Control::ShowMessage(Language::Load('vote', 6));
-                Control::GoUrl(ROOTPATH . '/vote/index.php?a=voteitemmanage&m=edit&voteid=' . $voteId . '&height=&width=&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true');
-                return "";
-            }
+            $result = $voteItemData->ModifyState($voteItemId,$state);
+            //加入操作日志
+            $operateContent = 'ModifyState VoteItem,Get FORM:' . implode('|', $_GET) . ';\r\nResult:voteItemId:' . $voteItemId;
+            self::CreateManageUserLog($operateContent);
         } else {
-            Control::ShowMessage(Language::Load('vote', 3));
-            $jsCode = 'javascript:history.go(-1);';
-            Control::RunJS($jsCode);
-            return "";
-        }**/
+            $result = -1;
+        }
+        return $_GET['jsonpcallback'] . '({"result":"'.$result.'"})';
     }
 
     /**
@@ -157,7 +142,7 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
      * @return mixed|string
      */
     private function GenList() {
-        $tempContent = Template::Load("vote/vote_item_list.html", "common");
+        $templateContent = Template::Load("vote/vote_item_list.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $searchKey = Control::GetRequest("search_key", "");
@@ -169,34 +154,25 @@ class VoteItemManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "vote_item_list";
             $allCount = 0;
             $voteItemManageData = new VoteItemManageData();
-            $arrList = $voteItemManageData->GetListForPager($pageBegin, $pageSize, $allCount, $voteId, $searchKey);
-
+            $arrList = $voteItemManageData->GetListForPager($voteId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
-                /**
-                $pagerTemplate = Template::Load("pager.html");
-                $isJs = false;
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?secu=manage&mod=vote_item&m=list&vote_id=$voteId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
-                $pagerUrl = "/vote/index.php?a=voteitemmanage&m=list&voteid=" . $voteId . "&state=" . $state . "&searchkey=" . $searchKey . "&ps=" . $pageSize . "&p={0}";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $pagerUrl, $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList);
-
-                $replaceArr = array(
-                    "{voteid}" => $voteId,
-                    "{pageindex}" => $pageIndex,
-                    "{pagerbutton}" => $pagerButton
-                );
-                $tempContent = strtr($tempContent, $replaceArr);
-                parent::ReplaceEnd($tempContent);
-                $result = $tempContent;
-                **/
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                Template::ReplaceList($templateContent,$arrList,$tagId);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("vote", 101), $tempContent);
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("vote", 101), $templateContent);
             }
         }
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
 }

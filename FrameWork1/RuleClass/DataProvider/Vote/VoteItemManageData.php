@@ -57,7 +57,7 @@ class VoteItemManageData extends BaseManageData
      * @param string $searchKey   查询字符
      * @return array  题目列表数组
      */
-    public function GetListForPager($pageBegin, $pageSize, &$allCount, $voteId = 0, $searchKey = "") {
+    public function GetListForPager($voteId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
         $dataProperty = new DataProperty();
         $searchSql = "WHERE";
         if ($voteId > 0) {
@@ -102,7 +102,7 @@ class VoteItemManageData extends BaseManageData
      * @param int $voteItemId  题目Id
      * @return int 执行结果
      */
-    public function RemoveBin($voteItemId) {
+    public function ModifyState($voteItemId) {
         $sql = "UPDATE " . self::TableName_VoteItem . " SET State=100 WHERE VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
