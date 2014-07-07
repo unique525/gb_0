@@ -40,6 +40,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userGroupManageGen = new UserGroupManageGen();
                     $result = $userGroupManageGen->Gen();
                     break;
+                case "user_level":
+                    $userLevelManageGen = new UserLevelManageGen();
+                    $result = $userLevelManageGen->Gen();
+                    break;
                 case "user_album_type":
                     $userAlbumTypeManageGen = new UserAlbumTypeManageGen();
                     $result = $userAlbumTypeManageGen->Gen();
