@@ -6,6 +6,116 @@
  * @author zhangchi
  */
 class UserLevelManageData extends BaseManageData {
+
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_UserLevel){
+        return parent::GetFields(self::TableName_UserLevel);
+    }
+
+    /**
+     * 新增
+     * @param array $httpPostData POST数组
+     * @param int $siteId 站点ID
+     * @return int|null 最后插入的会员等级ID
+     */
+    public function Create($httpPostData,$siteId){
+        if($siteId){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetInsertSql($httpPostData,self::TableName_UserLevel,$dataProperty,"SiteId",$siteId);
+            $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 修改
+     * @param array $httpPostData  $_POST数组
+     * @param int $userLevelId 会员等级ID
+     * @return int|null 返回影响的行数
+     */
+    public function Modify($httpPostData,$userLevelId){
+        if($userLevelId > 0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserLevel,self::TableName_UserLevel,$userLevelId,$dataProperty);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 修改状态
+     * @param int $userLevelId 会员等级ID
+     * @param int $state 状态
+     * @return int 影响的行数
+     */
+    public function ModifyState($userLevelId,$state){
+        if($userLevelId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE ".self::TableName_UserLevel." SET State = :State WHERE UserLevelId = :UserLevelId;";
+            $dataProperty->AddField("State",$state);
+            $dataProperty->AddField("UserLevelId",$userLevelId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 获取SiteId下的所有会员等级信息
+     * @param int $siteId 站点ID
+     * @param int $pageBegin 从pageBegin开始取
+     * @param int $pageSize 去pageSize条
+     * @param int $allCount 所有数据的行数
+     * @return array|null 所有数据信息
+     */
+    public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
+        if($siteId > 0){
+            $sql = "SELECT * FROM ".self::TableName_UserLevel." WHERE SiteId = :SiteId ORDER BY UserLevelId LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserLevel." WHERE SiteId = :SiteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 获取一个会员等级的信息
+     * @param int $userGroupId 用户组ID
+     * @param int $siteId 站点ID
+     * @return array|null 单个用户组信息
+     */
+    public function GetOne($userGroupId,$siteId){
+        if($userGroupId > 0 && $siteId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId;";
+            $dataProperty->AddField("UserGroupId",$userGroupId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 更新会员等级
+     * @param int $userId 用户ID
+     * @param int $siteId 站点ID
+     * @return int 影响的行数
+     */
     public function Update($userId,$siteId){
         $result = 0;
         if ($userId > 0 && $siteId > 0) {
@@ -121,7 +231,7 @@ class UserLevelManageData extends BaseManageData {
                 if ($canDegrade) {
                     //进行降级
                     $sql = "SELECT * FROM " . self::TableName_UserLevel . " WHERE UserLevel<:UserLevel AND SiteId=:SiteId ORDER BY UserLevel DESC LIMIT 1;";
-                    $arrPreUserLevel = $dbOperator->GetArray($sql, $dataProperty);
+                    $arrPreUserLevel = $this->dbOperator->GetArray($sql, $dataProperty);
                     if (count($arrPreUserLevel) > 0) { //有上一级
                         $preUserLevelId = intval($arrPreUserLevel["UserLevelID"]);
                         $preUserGroupId = intval($arrPreUserLevel["UpdateToUserGroupId"]);
@@ -132,7 +242,7 @@ class UserLevelManageData extends BaseManageData {
                             $userRoleManageData = new UserRoleManageData();
                             $nowUserGroupId = $userRoleManageData->GetUserGroupId($userId, $siteId);
                             $userGroupManageData = new UserGroupManageData();
-                            $isLock = $userGroupManageData->GetIsLock($nowUserGroupId);
+                            $isLock = $userGroupManageData->GetIsLock($nowUserGroupId,true);
 
                             if ($isLock <= 0 && $preUserGroupId > 0 && $siteId > 0) { //当前身份未锁定时才操作等级
                                 $userRoleManageData->CreateOrModify($userId, $preUserGroupId, $siteId);
@@ -146,7 +256,7 @@ class UserLevelManageData extends BaseManageData {
                 //********升级********//
                 //查询下一级的各种限制条件参数
                 $sql = "SELECT * FROM " . self::TableName_UserLevel . " WHERE UserLevel>:UserLevel AND SiteId=:SiteId ORDER BY UserLevel LIMIT 1;";
-                $arrNextUserLevel = $dbOperator->ReturnRow($sql, $dataProperty);
+                $arrNextUserLevel = $this->dbOperator->ReturnRow($sql, $dataProperty);
 
                 if (count($arrNextUserLevel) > 0) {//还有下一级，可以升级
                     $limitForumPost = intval($arrNextUserLevel["LimitForumPost"]);
@@ -244,7 +354,7 @@ class UserLevelManageData extends BaseManageData {
                             $userRoleManageData = new UserRoleManageData();
                             $nowUserGroupId = $userRoleManageData->GetUserGroupID($userId, $siteId);
                             $userGroupManageData = new UserGroupManageData();
-                            $isLock = $userGroupManageData->GetIsLock($nowUserGroupId);
+                            $isLock = $userGroupManageData->GetIsLock($nowUserGroupId,true);
 
                             if ($isLock <= 0 && $nextUserGroupId>0 && $siteId>0) { //当前身份未锁定时才操作等级
                                 $userRoleManageData->CreateOrModify($userId, $nextUserGroupId, $siteId);
@@ -271,7 +381,7 @@ class UserLevelManageData extends BaseManageData {
     /**
      * 取得等级数字
      * @param int $userLevelId 等级Id
-     * @return  等级数字
+     * @return  int 等级数字
      */
     public function GetUserLevel($userLevelId){
         $sql = "SELECT UserLevel FROM " . self::TableName_UserLevel . " WHERE UserLevelId=:UserLevelId;";

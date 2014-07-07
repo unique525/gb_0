@@ -54,7 +54,7 @@ class UserGroupManageData extends BaseManageData
 
     /**
      * 修改状态
-     * @param int $userGroupId 用户组ID
+     * @param int $userGroupId 会员组ID
      * @param int $state 状态
      * @return int 影响的行数
      */
@@ -120,10 +120,10 @@ class UserGroupManageData extends BaseManageData
     }
 
     /**
-     * 获取一个用户组的信息
-     * @param int $userGroupId 用户组ID
+     * 获取一个会员组的信息
+     * @param int $userGroupId 会员组ID
      * @param int $siteId 站点ID
-     * @return array|null 单个用户组信息
+     * @return array|null 单个会员组信息
      */
     public function GetOne($userGroupId,$siteId){
         if($userGroupId > 0 && $siteId > 0){

@@ -56,6 +56,28 @@ class Control {
     }
 
     /**
+     * 返回Jqeury的执行代码
+     * @param string $jsCode 要执行的Jqeury代码
+     * @return string Jqeury的执行代码
+     */
+    public static function GetJquery($jsCode){
+        return '<script type="text/javascript">$(function () {' . $jsCode . '});</script>';
+    }
+
+    /**
+     * 返回Jqeury的消息框
+     * @param string $message 消息内容
+     * @param int $boxHeight 消息框高度(px)
+     * @return string Jqeury的执行代码
+     */
+    public static function GetJqueryMessage($message, $boxHeight = 140){
+        $jsCode = '$("#dialog_box").dialog({height: '.$boxHeight.',modal: true});
+                var dialogContent = $("#dialog_content");
+                dialogContent.html("'.$message.'");';
+        return self::GetJquery($jsCode);
+    }
+
+    /**
      * 返回Get方式得到的传参数据
      * @param string $paramName 参数名称
      * @param mixed $defaultValue 参数默认值，支持string,int,float

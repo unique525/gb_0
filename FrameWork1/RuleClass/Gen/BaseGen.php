@@ -238,48 +238,50 @@ class BaseGen
      */
     protected function ReplaceSiteConfig($siteId, &$tempContent)
     {
-        $siteConfigManageData = new SiteConfigManageData($siteId);
-        $arrSiteConfigOne = $siteConfigManageData->GetList($siteId);
-        if (count($arrSiteConfigOne) > 0) {
-            for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
-                $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
-                $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
-                $stringMidValue = $arrSiteConfigOne[$i]["StringMidValue"];
-                $textValue = $arrSiteConfigOne[$i]["TextValue"];
-                $intValue = $arrSiteConfigOne[$i]["IntValue"];
-                $numValue = $arrSiteConfigOne[$i]["NumValue"];
-                $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
-                switch ($siteConfigType) {
-                    case 0:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
-                        break;
-                    case 1:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
-                        break;
-                    case 2:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
-                        break;
-                    case 3:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
-                        break;
-                    case 4:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
-                        break;
-                    default:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
-                        break;
-                }
-            }
-        } else { //移除掉标记
-            $patterns = '/\{cfg_(.*)\<\/}/imsU';
-            $tempContent = preg_replace($patterns, "", $tempContent);
-        }
+        /**
+         * $siteConfigManageData = new SiteConfigManageData($siteId);
+         * $arrSiteConfigOne = $siteConfigManageData->GetList($siteId);
+         * if (count($arrSiteConfigOne) > 0) {
+         * for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
+         * $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
+         * $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
+         * $stringMidValue = $arrSiteConfigOne[$i]["StringMidValue"];
+         * $textValue = $arrSiteConfigOne[$i]["TextValue"];
+         * $intValue = $arrSiteConfigOne[$i]["IntValue"];
+         * $numValue = $arrSiteConfigOne[$i]["NumValue"];
+         * $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
+         * switch ($siteConfigType) {
+         * case 0:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+         * break;
+         * case 1:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
+         * break;
+         * case 2:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
+         * break;
+         * case 3:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
+         * break;
+         * case 4:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
+         * break;
+         * default:
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+         * break;
+         * }
+         * }
+         * } else { //移除掉标记
+         * $patterns = '/\{cfg_(.*)\<\/}/imsU';
+         * $tempContent = preg_replace($patterns, "", $tempContent);
+         * }
+         */
     }
 
 
@@ -319,11 +321,17 @@ class BaseGen
      * @param string $fileElementName 控件名称
      * @param int $tableType 上传文件对应的表类型
      * @param int $tableId 上传文件对应的表id
-     * @param string $returnJson 返回的JSON
+     * @param UploadResult $uploadResult 返回的上传结果对象
      * @param int $uploadFileId 返回新的上传文件id
-     * @return string|int 返回结果字符串，或错误代码
+     * @return int 返回成功或错误代码
      */
-    protected function Upload($fileElementName = "file_upload", $tableType = 0, $tableId = 0, &$returnJson = "", &$uploadFileId = 0)
+    protected function Upload(
+        $fileElementName = "file_upload",
+        $tableType = 0,
+        $tableId = 0,
+        UploadResult &$uploadResult,
+        &$uploadFileId = 0
+    )
     {
         $errorMessage = self::UploadPreCheck($fileElementName);
         $resultMessage = "";
@@ -387,14 +395,21 @@ class BaseGen
             $result = $errorMessage;
         }
 
+        $uploadResult = new UploadResult($errorMessage,$resultMessage,$uploadFileId,$uploadFilePath);
+
+        /**
         $returnJson = "{";
         $returnJson .= "error: '" . $errorMessage . "',\n";
         $returnJson .= "result: '" . $resultMessage . "',\n";
         $returnJson .= "upload_file_id: '" . $uploadFileId . "',\n";
         $returnJson .= "upload_file_url: '" . $uploadFilePath . "'\n";
         $returnJson .= "}";
+         */
 
-        UnLink($_FILES[$fileElementName]);
+        //if(!empty($_FILES[$fileElementName])){
+        //    unlink($_FILES[$fileElementName]);
+        //}
+
         return $result;
     }
 

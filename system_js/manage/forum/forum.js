@@ -1,12 +1,13 @@
 $(function() {
-    $(document).tooltip();
+    //$(document).tooltip();
 
     $("#btn_select_all").click(function(event) {
         event.preventDefault();
-        if ($("[name='docinput']").prop("checked")) {
-            $("[name='docinput']").prop("checked", false);//取消全选
+        var docInput = $("[name='doc_input']");
+        if (docInput.prop("checked")) {
+            docInput.prop("checked", false);//取消全选
         } else {
-            $("[name='docinput']").prop("checked", true);//全选
+            docInput.prop("checked", true);//全选
         }
     });
 
@@ -20,9 +21,6 @@ $(function() {
     });
 
 
-    $(".span_state").each(function(){
-        $(this).text(FormatState($(this).text()));
-    });
 
 
 
@@ -40,31 +38,37 @@ $(function() {
         parent.addTab();
     });
 
-    //改变状态按钮事件捕获
-    $(".imgchangestate").click(function(event) {
-        var docid = $(this).attr('idvalue');
-        event.preventDefault();
-        ShowBox('divstate_' + docid);
+
+
+    //格式化站点状态
+    $(".span_state").each(function(){
+        $(this).text(FormatForumState($(this).text()));
     });
-    $(".forumstate").click(function(event) {
+    //改变状态按钮事件捕获
+    $(".img_modify_state").click(function(event) {
         var forumId = $(this).attr('idvalue');
-        var state = $(this).attr('statevalue');
+        event.preventDefault();
+        ShowBox('div_state_' + forumId);
+    });
+    $(".forum_state").click(function(event) {
+        var forumId = $(this).attr('idvalue');
+        var state = $(this).attr('title');
 
         event.preventDefault();
-        $.post("/default.php?secu=manage&mod=forum&a=async_modifystate&forumid=" + forumId + "&state=" + state, {
+        $.post("/default.php?secu=manage&mod=forum&a=async_modify_state&forum_id=" + forumId + "&state=" + state, {
             resultbox: $(this).html()
         }, function(result) {
             //操作完成后触发的命令
             var resultInt = parseInt(result);
             if (resultInt > 0) {
-                FormatState($("#spanState_" + forumId), parseInt(state));
+                $("#span_state_" + forumId).text(FormatForumState(parseInt(state)));
             }
         });
     });
-    $(".span_closebox").click(function(event) {
-        var docid = $(this).attr('idvalue');
+    $(".span_close_box").click(function(event) {
+        var forumId = $(this).attr('idvalue');
         event.preventDefault();
-        document.getElementById('divstate_' + docid).style.display = "none";
+        document.getElementById('div_state_' + forumId).style.display = "none";
     });
 
 
@@ -73,7 +77,7 @@ $(function() {
     $("#sortgrid").bind("sortstop", function(event, ui) {
         var siteId = parent.G_NowSiteId;
         var sortlist = $("#sortgrid").sortable("serialize");
-        $.post("/default.php?secu=manage&mod=forum&siteid=" + siteId + "&a=async_modifysort&" + sortlist, {
+        $.post("/default.php?secu=manage&mod=forum&siteid=" + siteId + "&a=async_modify_sort&" + sortlist, {
             resultbox: $(this).html()
         }, function() {
             //操作完成后触发的命令
@@ -83,11 +87,11 @@ $(function() {
     $("#sortgrid").disableSelection();
 
     //选中时的样式变化
-    $('.griditem').click(function() {
-        if ($(this).hasClass('docselected')) {
-            $(this).removeClass('docselected');
+    $('.grid_item').click(function() {
+        if ($(this).hasClass('grid_item_selected')) {
+            $(this).removeClass('grid_item_selected');
         } else {
-            $(this).addClass('docselected');
+            $(this).addClass('grid_item_selected');
         }
     });
 });
@@ -96,7 +100,7 @@ $(function() {
  * 格式化状态值
  * @return {string}
  */
-function FormatState(state) {
+function FormatForumState(state) {
     switch (state) {
         case 0:
             return "正常";

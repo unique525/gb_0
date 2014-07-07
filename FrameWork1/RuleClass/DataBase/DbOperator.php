@@ -226,6 +226,7 @@ class DbOperator {
      */
     public function ExecuteBatch($sqlList, $arrDataProperty) {
         try {
+            $result = -1;
             $this->pdo->beginTransaction();
             for ($i = 0; $i < count($sqlList); $i++) {
                 $sql = $sqlList[$i];
