@@ -98,7 +98,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             $voteData = new VoteManageData();
             $result = $voteData->ModifyState($voteId,$state);
             //加入操作日志
-            $operateContent = 'RemoveToBin Vote,Get FORM:' . implode('|', $_GET) . ';\r\nResult:voteId:' . $voteId;
+            $operateContent = 'ModifyState Vote,Get FORM:' . implode('|', $_GET) . ';\r\nResult:voteId:' . $voteId;
             self::CreateManageUserLog($operateContent);
         } else {
             $result = -1;
