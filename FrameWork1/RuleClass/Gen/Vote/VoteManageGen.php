@@ -136,7 +136,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 }
             }
             $arrList = $voteManageData->GetOne($voteId);
-            Template::ReplaceOne($tempContent, $arrList, false, false);
+            Template::ReplaceOne($tempContent, $arrList, false);
             $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
         //替换掉{s XXX}的内容
