@@ -106,7 +106,7 @@ function FormatState(state){
 }
 
 function SetVoteState(idvalue, state) {
-    $("#span_state_" + idvalue).html("<img src='../system_images/manage/loading1.gif' />");
+    $("#span_state_" + idvalue).html("<img src='/system_template/common/images/loading1.gif' />");
 
     //多行操作
     var id = "";
