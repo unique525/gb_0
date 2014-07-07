@@ -61,12 +61,11 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
                 $titlePicPath = str_ireplace("..", "", $titlePicPath);
                 $httpPostData = $_POST;
                 $voteSelectItemId = $voteSelectItemManageData->Create($httpPostData, $titlePicPath);
-
                 //加入操作日志
                 $operateContent = 'Create VoteSelectItem,POST FORM:' . implode('|', $_POST) . ';\r\nResult:documentNewsId:' . $voteSelectItemId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($voteItemId > 0) {
+                if ($voteSelectItemId > 0) {
                     //javascript 处理
                     Control::ShowMessage(Language::Load('vote', 1));
                     $jsCode = 'parent.location.href=parent.location.href';

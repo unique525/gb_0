@@ -35,14 +35,14 @@
 <item>
 <![CDATA[
 <tr class="grid_item">
-<td class="spe_line2" style="text-align: center;"><input name="vote_select_item_input" class="input_select" type="checkbox" value="" /></td>
+<td class="spe_line2" style="text-align: center;"><label><input name="vote_select_item_input" class="input_select" type="checkbox" value="" /></label></td>
 <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_VoteSelectItemId}" /></td>
 <td class="spe_line2" style="text-align: center;">{f_VoteSelectItemTitle}</td>
 <td class="spe_line2" style="text-align: center;">{f_RecordCount}</td>
 <td class="spe_line2" style="text-align: center;">{f_AddCount}</td>
 <td class="spe_line2" style="text-align: center;">{f_VoteSelectItemId}</td>
-<td class="spe_line2" style="text-align: center;">{f_state}</td>
-<td class="spe_line2" style="text-align: center;" ><img src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
+<td class="spe_line2" style="text-align: center;"><span class="span_state" title="{f_State}" id="span_state_{f_VoteSelectItemId}">{f_State}</span></td>
+<td class="spe_line2" style="text-align: center;" ><img alt="" class="div_start" idvalue="{f_VoteSelectItemId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_VoteSelectItemId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
 </tr>
 ]]>
 </item>

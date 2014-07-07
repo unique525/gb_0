@@ -73,7 +73,7 @@
                         <input type="text" class="input_box" id="f_EndDate" name="f_EndDate" value="{EndDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" />
                     </td>
                 </tr>
-                                    <tr>
+                <tr>
                     <td class="spe_line" height="30" align="right"><label for="f_TemplateName">显示模式：</label></td>
                     <td class="spe_line">
                         <select id="f_TemplateName" name="f_TemplateName">

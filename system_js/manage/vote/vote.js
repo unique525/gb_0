@@ -119,7 +119,7 @@ function ModifyVoteState(idvalue, state) {
     if (id.length > 0) {
         voteInput.each(function() {
             if (this.checked) {
-                _SetVoteState($(this).val(), state);
+                _ModifyVoteState($(this).val(), state);
             }
         });
     }

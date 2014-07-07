@@ -24,8 +24,7 @@ class VoteItemManageData extends BaseManageData
     public function Create($httpPostData) {
         $dataProperty = new DataProperty();
         $sql = parent::GetInsertSql($httpPostData, self::TableName_VoteItem, $dataProperty);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->LastInsertId($sql, $dataProperty);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
@@ -43,8 +42,7 @@ class VoteItemManageData extends BaseManageData
         " WHERE VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
@@ -76,10 +74,9 @@ class VoteItemManageData extends BaseManageData
         SELECT VoteItemId,VoteId,VoteItemTitle,Sort,State,VoteItemType,RecordCount
         FROM " . self::TableName_VoteItem . " " . $searchSql . "
         ORDER BY Sort DESC,VoteItemId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "SELECT COUNT(*) FROM " . self::TableName_VoteItem . " " . $searchSql;
-        $allCount = $dbOperator->GetInt($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -92,22 +89,26 @@ class VoteItemManageData extends BaseManageData
     public function Modify($httpPostData,$voteItemId) {
         $dataProperty = new DataProperty();
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_VoteItem, self::TableId_VoteItem, $voteItemId, $dataProperty);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 停用题目
-     * @param int $voteItemId  题目Id
+     * 异步修改状态
+     * @param string $voteItemId 题目Id
+     * @param string $state 状态
      * @return int 执行结果
      */
-    public function ModifyState($voteItemId) {
-        $sql = "UPDATE " . self::TableName_VoteItem . " SET State=100 WHERE VoteItemId=:VoteItemId";
+    public function ModifyState($voteItemId,$state) {
+        $result = -1;
+        if ($voteItemId < 0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_VoteItem . " SET State=:State WHERE VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -122,8 +123,7 @@ class VoteItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $voteItemId);
         $dataProperty->AddField("AddCount", $addCount);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -136,8 +136,7 @@ class VoteItemManageData extends BaseManageData
         $sql = "SELECT SUM(AddCount) FROM " . self::TableName_VoteItem . " WHERE State=0 AND VoteId=:VoteId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -156,8 +155,7 @@ class VoteItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("VoteId", $voteId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 

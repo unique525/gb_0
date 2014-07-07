@@ -26,8 +26,7 @@ class VoteSelectItemManageData extends BaseManageData
     public function Create($httpPostData,$titlePicPath = "") {
         $dataProperty = new DataProperty();
         $sql = parent::GetInsertSql($httpPostData, self::TableName_VoteSelectItem, $dataProperty,"titlePic", $titlePicPath);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->LastInsertId($sql, $dataProperty);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
@@ -42,8 +41,7 @@ class VoteSelectItemManageData extends BaseManageData
         WHERE voteSelectItemId=:voteSelectItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("voteSelectItemId", $voteSelectItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
@@ -57,22 +55,26 @@ class VoteSelectItemManageData extends BaseManageData
     public function Modify($httpPostData,$voteSelectItemId,$titlePicPath = "") {
         $dataProperty = new DataProperty();
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_VoteSelectItem, self::TableId_VoteSelectItem, $voteSelectItemId, $dataProperty,"titlePic", $titlePicPath);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 停用选项
-     * @param int $voteSelectItemId  选项Id
-     * @return int  返回执行结果
+     * 异步修改状态
+     * @param string $voteSelectItemId 选项Id
+     * @param string $state 状态
+     * @return int 执行结果
      */
-    public function ModifyState($voteSelectItemId) {
-        $sql = "UPDATE " . self::TableName_VoteSelectItem . " SET State=100 WHERE VoteSelectItemId=:VoteSelectItemId";
+    public function ModifyState($voteSelectItemId,$state) {
+        $result = -1;
+        if ($voteSelectItemId < 0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_VoteSelectItem . " SET State=:State WHERE VoteSelectItemId=:VoteSelectItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -90,8 +92,7 @@ class VoteSelectItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("VoteItemId", $voteItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 
@@ -104,8 +105,7 @@ class VoteSelectItemManageData extends BaseManageData
         $sql = "SELECT SUM(AddCount) FROM " . self::TableName_VoteSelectItem . " WHERE State=0 AND VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $VoteItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -118,7 +118,7 @@ class VoteSelectItemManageData extends BaseManageData
      * @param string $searchKey   查询字符
      * @return array  选项列表数组
      */
-    public function GetListForPager($pageBegin, $pageSize, &$allCount, $voteItemId = 0, $searchKey = "") {
+    public function GetListForPager($voteItemId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
         $dataProperty = new DataProperty();
         $searchSql = "WHERE";
         if ($voteItemId > 0) {
@@ -137,10 +137,9 @@ class VoteSelectItemManageData extends BaseManageData
         FROM " . self::TableName_VoteSelectItem . " " . $searchSql . "
         ORDER BY Sort DESC,VoteSelectItemId ASC
         LIMIT " . $pageBegin . "," . $pageSize . "";
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "SELECT COUNT(*) FROM " . self::TableName_VoteSelectItem . " " . $searchSql;
-        $allCount = $dbOperator->GetInt($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -155,8 +154,7 @@ class VoteSelectItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
         $dataProperty->AddField("AddCount", $addCount);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 }

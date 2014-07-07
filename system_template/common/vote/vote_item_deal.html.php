@@ -7,10 +7,11 @@
         <script type="text/javascript">
             function sub()
             {
-                if($('#f_VoteItemTitle').val() == ''){
+                var voteItemTitle= $('#f_VoteItemTitle').val();
+                if(voteItemTitle == ''){
                     alert('请填写题目名称！');
                 }
-                else if($('#f_VoteItemTitle').val().length>500){
+                else if(voteItemTitle.length>500){
                     alert('题目名称长度不能超过500个字节！');
                 }
                 else {$('#mainForm').submit();}
@@ -28,43 +29,45 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right">题目名称：</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_VoteItemTitle">题目名称：</label></td>
                     <td class="spe_line" title="{VoteItemTitle}"><input name="f_VoteItemTitle" id="f_VoteItemTitle" value="{VoteItemTitle}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right">排序：</td>
-                    <td class="spe_line"><input name="f_sort" id="f_sort" value="{sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_Sort">排序：</label></td>
+                    <td class="spe_line"><input name="f_Sort" id="f_Sort" value="{Sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="60" align="right">题目简介：</td>
-                    <td class="spe_line" title="{voteIntro}"><input name="f_voteIntro" id="f_voteIntro" value="{voteIntro}" type="text" class="input_box" style=" width: 300px;" /></td>
+                    <td class="spe_line" height="60" align="right"><label for="f_VoteIntro">题目简介：</label></td>
+                    <td class="spe_line" title="{voteIntro}"><input name="f_VoteIntro" id="f_VoteIntro" value="{VoteIntro}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
 
                 <tr>
-                    <td class="spe_line" height="30" align="right">状态：</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_State">状态：</label></td>
                     <td class="spe_line">
-                        <select id="f_state" name="f_state">
-                            <option value="0" {s_state_0}>启用</option>
-                            <option value="100" {s_state_100}>停用</option>
+                        <select id="f_State" name="f_State">
+                            <option value="0">启用</option>
+                            <option value="100">停用</option>
                         </select>
+                        {s_State}
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="spe_line" height="30" align="right">是否多选：</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_VoteItemType">是否多选：</label></td>
                     <td class="spe_line">
                         <select id="f_VoteItemType" name="f_VoteItemType">
-                            <option value="0" {s_VoteItemType_0}>单选</option>
-                            <option value="1" {s_VoteItemType_1}>多选</option>
+                            <option value="0">单选</option>
+                            <option value="1">多选</option>
                         </select>
+                        {s_VoteItemType}
                     </td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right">最小选择数：</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_SelectNumMin">最小选择数：</label></td>
                     <td class="spe_line"><input name="f_SelectNumMin" id="f_SelectNumMin" value="{SelectNumMin}" type="text" class="input_number" style=" width: 60px;" />(注:为0表示不限制)</td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right">最大选择数：</td>
+                    <td class="spe_line" height="30" align="right"><label for="f_SelectNumMax">最大选择数：</label></td>
                     <td class="spe_line"><input name="f_SelectNumMax" id="f_SelectNumMax" value="{SelectNumMax}" type="text" class="input_number" style=" width: 60px;" />(注:为0表示不限制)</td>
                 </tr>
                 <tr>

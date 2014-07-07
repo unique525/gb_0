@@ -26,8 +26,7 @@ class VoteRecordData extends BasePublicData {
         $dataProperty->AddField("CreateDate", $createDate);
         $dataProperty->AddField("IpAddress", $ipAddress);
         $dataProperty->AddField("Agent", $agent);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->LastInsertId($sql, $dataProperty);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
@@ -47,8 +46,7 @@ class VoteRecordData extends BasePublicData {
             $dataProperty->ArrayField = $Row;
             $dataPropertyList[] = $dataProperty;
         }
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ExecuteBatch($sql, $dataPropertyList);
+        $result = $this->dbOperator->ExecuteBatch($sql, $dataPropertyList);
         return $result;
     }
 
@@ -67,8 +65,7 @@ class VoteRecordData extends BasePublicData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
         $dataProperty->AddField("IpAddress", $ipAddress);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -86,8 +83,7 @@ class VoteRecordData extends BasePublicData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
         $dataProperty->AddField("UserId", $userId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->GetInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 

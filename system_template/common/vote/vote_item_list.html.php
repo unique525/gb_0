@@ -28,20 +28,20 @@
 <td style="width:100px; text-align:center;">编辑题目选项</td>
 <td style="width:100px; text-align:center;">题目类型</td>
 <td style="width:60px; text-align:center;">状态</td>
-<td style="width:80px; text-align: center;">停用</td>
+<td style="width:80px; text-align: center;">启用|停用</td>
 </tr>
 <icms id="vote_item_list" type="list">
 <item>
 <![CDATA[
 <tr class="grid_item">
-<td class="spe_line2" style="text-align: center;"><input name="vote_item_input" class="input_select" type="checkbox" value="" /></td>
+<td class="spe_line2" style="text-align: center;"><label><input name="vote_item_input" class="input_select" type="checkbox" value=""/></label></td>
 <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_VoteItemId}" /></td>
 <td class="spe_line2" style="text-align: center;">{f_VoteItemTitle}</td>
 <td class="spe_line2" style="text-align: center;">{f_VoteItemId}</td>
 <td class="spe_line2" style="text-align: center;"><span class="btn_open_vote_select_item_list" style="cursor:pointer;"  idvalue="{f_VoteItemId}" title="{f_VoteItemTitle}" >编辑题目选项</span></td>
 <td class="spe_line2" style="text-align: center;">{f_VoteItemType}</td>
-<td class="spe_line2" style="text-align: center;"><span class="span_state" id="{f_VoteId}">{f_State}</span></td>
-<td class="spe_line2" style="text-align: center;" ><img src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
+<td class="spe_line2" style="text-align: center;"><span class="span_state" title="{f_State}" id="span_state_{f_VoteItemId}">{f_State}</span></td>
+<td class="spe_line2" style="text-align: center;" ><img alt="" class="div_start" idvalue="{f_VoteItemId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_VoteItemId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
 </tr>
 ]]>
 </item>

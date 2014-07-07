@@ -69,14 +69,19 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).text(FormatState($(this).text()));
+        $(this).html(FormatVoteItemState($(this).attr("title")));
     });
 
+    $(".div_start").click(function(){
+        var idvalue = $(this).attr("idvalue");
+        var state = "0";
+        ModifyVoteItemState(idvalue,state);
+    });
 
-    $(".docnewssetstate").click(function() {
-        var docid = $(this).attr('idvalue');
-        var state = $(this).attr('statevalue');
-        VoteChangeState(docid, state);
+    $(".div_stop").click(function(){
+        var idvalue = $(this).attr("idvalue");
+        var state = "100";
+        ModifyVoteItemState(idvalue,state);
     });
 });
 
@@ -84,7 +89,7 @@ $(function() {
  * 格式化状态值
  * @return {string}
  */
-function FormatState(state){
+function FormatVoteItemState(state){
     switch (state){
         case "0":
             return "启用";
@@ -98,57 +103,42 @@ function FormatState(state){
     }
 }
 
-function VoteChangeState(voteId, state) {
-    if (state === 20) {
-        $("#dialog_docnewsdelete").dialog({});
-    }
-    $("#spanstate_" + voteId).html("<img src='../system_images/manage/loading1.gif' />");
+function ModifyVoteItemState(idvalue, state) {
+    $("#span_state_" + idvalue).html("<img src='/system_template/common/images/loading1.gif' />");
 
-    //多文档操作
-    var docid = "";
-    $('input[name=vote_input]').each(function(i) {
+    //多行操作
+    var id = "";
+    var voteItemInput = $('input[name=vote_item_input]');
+    voteItemInput.each(function() {
         if (this.checked) {
-            docid = docid + ',' + $(this).val();
+            id = id + ',' + $(this).val();
         }
     });
-    if (docid.length > 0) {
-        $('input[name=vote_input]').each(function(i) {
+    if (id.length > 0) {
+        voteItemInput.each(function() {
             if (this.checked) {
-                _SetVoteState($(this).val(), state);
+                _ModifyVoteItemState($(this).val(), state);
             }
         });
     }
     else {
-        _SetVoteState(voteId, state);
+        _ModifyVoteItemState(idvalue, state);
     }
 }
 
-function _SetVoteState(voteId, state) {
-    $.post("/default.php?secu=manage&mod=vote&m=remove_to_bin&vote_id=" + voteId + "&state=" + state, {
-        resultbox: $(this).html()
-    }, function(xml) {
-        if (parseInt(xml) > 0) {
-            switch (state)
-            {
-                case 0:
-                    $("#spanstate_" + voteId).text("启用");
-                    break;
-                case 100:
-                    $('#dialog_docnewsdelete').dialog('close');
-                    $("#spanstate_" + voteId).html("<span style='color:#990000'>停用</span>");
-                    break;
-                default:
-                    $("#spanstate_" + voteId).text("错误");
-                    break;
+function _ModifyVoteItemState(idvalue, state) {
+    $.ajax({
+        url:"/default.php?secu=manage&mod=vote_item&m=modify_state",
+        data:{state:state,vote_item_id:idvalue},
+        dataType:"jsonp",
+        jsonp:"jsonpcallback",
+        success:function(data){
+            if (parseInt(data["result"]) > 0) {
+                $("#span_state_" + idvalue).html(FormatVoteItemState(state));
             }
-        } else if (parseInt(xml) == -2) {
-            alert("设置失败，您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！");
-        }
-        else {
-            alert("设置失败");
+            else alert("修改失败，请联系管理员");
         }
     });
-    document.getElementById('divstate_' + voteId).style.display = "none";
 }
 
 
