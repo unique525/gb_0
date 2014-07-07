@@ -41,12 +41,10 @@ class ForumPublicGen extends BasePublicGen implements IBasePublicGen {
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdBySubDomain();
         }
-
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
 
         parent::ReplaceFirstForForum($tempContent);
 
@@ -59,11 +57,11 @@ class ForumPublicGen extends BasePublicGen implements IBasePublicGen {
         $templateForumBoardFileUrl = "forum/forum_default_list.html";
         $templateForumBoard = Template::Load($templateForumBoardFileUrl, $templateName, $templatePath);
 
-        $forumData = new ForumData();
+        $forumPublicData = new ForumPublicData();
         $forumRank = 0;
-        $arrRankOneList = $forumData->GetListByRank($siteId, $forumRank);
+        $arrRankOneList = $forumPublicData->GetListByRank($siteId, $forumRank);
         $forumRank = 1;
-        $arrRankTwoList = $forumData->GetListByRank($siteId, $forumRank);
+        $arrRankTwoList = $forumPublicData->GetListByRank($siteId, $forumRank);
 
         if (count($arrRankOneList) > 0) {
 

@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-<module id="1"><content><![CDATA[新增题目成功!]]></content></module>
-<module id="2"><content><![CDATA[新增题目失败!]]></content></module>
-<module id="3"><content><![CDATA[编辑题目成功!]]></content></module>
-<module id="4"><content><![CDATA[编辑题目失败!]]></content></module>
-<module id="5"><content><![CDATA[删除题目成功!]]></content></module>
-<module id="6"><content><![CDATA[删除题目失败!]]></content></module>
-<module id="7"><content><![CDATA[新增选项成功!]]></content></module>
-<module id="8"><content><![CDATA[新增选项失败!]]></content></module>
-<module id="9"><content><![CDATA[编辑选项成功!]]></content></module>
-<module id="10"><content><![CDATA[编辑选项失败!]]></content></module>
-<module id="11"><content><![CDATA[删除选项成功!]]></content></module>
-<module id="12"><content><![CDATA[删除选项失败!]]></content></module>
-<module id="13"><content><![CDATA[新建投票成功!]]></content></module>
-<module id="14"><content><![CDATA[新建投票失败!]]></content></module>
-<module id="15"><content><![CDATA[编辑投票成功!]]></content></module>
-<module id="16"><content><![CDATA[编辑投票失败!]]></content></module>
-<module id="17"><content><![CDATA[删除投票成功!]]></content></module>
-<module id="18"><content><![CDATA[删除投票失败!]]></content></module>
-<module id="101"><content><![CDATA[此频道无相关问卷!]]></content></module>
+<module id="1"><content><![CDATA[添加成功!]]></content></module>
+<module id="2"><content><![CDATA[添加失败!]]></content></module>
+<module id="3"><content><![CDATA[编辑成功!]]></content></module>
+<module id="4"><content><![CDATA[编辑失败!]]></content></module>
+<module id="5"><content><![CDATA[删除成功!]]></content></module>
+<module id="6"><content><![CDATA[删除失败!]]></content></module>
+<module id="101"><content><![CDATA[没有任何记录!]]></content></module>
 </root>

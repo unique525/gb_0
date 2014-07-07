@@ -7,22 +7,21 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var siteId = Request["site_id"];
-        var channelId = Request["channel_id"];
+        var voteId = Request["vote_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote&m=create&site_id='+siteId+'&channel_id='+channelId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=vote_item&m=create&vote_id='+voteId+'&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:450,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'投票调查新增',
+            title:'题目新增',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -31,18 +30,18 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
-        var voteId = $(this).attr('idvalue');
+        var voteItemId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote&m=modify&vote_id=' + voteId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=vote_item&m=modify&vote_item_id=' + voteItemId + '&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:450,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'投票调查编辑',
@@ -50,13 +49,13 @@ $(function() {
         });
     });
 
-    //投票调查题目管理
-    $(".btn_open_vote_item_list").click(function(event) {
+    //投票调查题目选项管理
+    $(".btn_open_vote_select_item_list").click(function(event) {
         event.preventDefault();
-        var voteId=$(this).attr('idvalue');
-        var voteTitle=$(this).attr('title');
-        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_item&m=list&vote_id=' + voteId;
-        parent.G_TabTitle = voteTitle + '-编辑题目';
+        var voteItemId=$(this).attr('idvalue');
+        var voteItemTitle=$(this).attr('title');
+        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_select_item&m=list&vote_item_id=' + voteItemId;
+        parent.G_TabTitle = voteItemTitle + '-编辑题目';
         parent.addTab();
     });
 
@@ -70,25 +69,19 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).html(FormatState($(this).attr("title")));
+        $(this).text(FormatState($(this).text()));
     });
 
-    $(".div_start").click(function(){
-        var idvalue = $(this).attr("idvalue");
-        var state = "0";
-        SetVoteState(idvalue,state);
-    });
 
-    $(".div_stop").click(function(){
-        var idvalue = $(this).attr("idvalue");
-        var state = "100";
-        SetVoteState(idvalue,state);
+    $(".docnewssetstate").click(function() {
+        var docid = $(this).attr('idvalue');
+        var state = $(this).attr('statevalue');
+        VoteChangeState(docid, state);
     });
 });
 
 /**
  * 格式化状态值
- * @param state 状态
  * @return {string}
  */
 function FormatState(state){
@@ -105,41 +98,57 @@ function FormatState(state){
     }
 }
 
-function SetVoteState(idvalue, state) {
-    $("#span_state_" + idvalue).html("<img src='../system_images/manage/loading1.gif' />");
+function VoteChangeState(voteId, state) {
+    if (state === 20) {
+        $("#dialog_docnewsdelete").dialog({});
+    }
+    $("#spanstate_" + voteId).html("<img src='../system_images/manage/loading1.gif' />");
 
-    //多行操作
-    var id = "";
-    $('input[name=vote_input]').each(function() {
+    //多文档操作
+    var docid = "";
+    $('input[name=vote_input]').each(function(i) {
         if (this.checked) {
-            id = id + ',' + $(this).val();
+            docid = docid + ',' + $(this).val();
         }
     });
-    if (id.length > 0) {
-        $('input[name=vote_input]').each(function() {
+    if (docid.length > 0) {
+        $('input[name=vote_input]').each(function(i) {
             if (this.checked) {
                 _SetVoteState($(this).val(), state);
             }
         });
     }
     else {
-        _SetVoteState(idvalue, state);
+        _SetVoteState(voteId, state);
     }
 }
 
-function _SetVoteState(idvalue, state) {
-    $.ajax({
-        url:"/default.php?secu=manage&mod=vote&m=modify_state",
-        data:{state:state,vote_id:idvalue},
-        dataType:"jsonp",
-        jsonp:"jsonpcallback",
-        success:function(data){
-        if (parseInt(data["result"]) > 0) {
-            $("#span_state_" + idvalue).html(FormatState(state));
+function _SetVoteState(voteId, state) {
+    $.post("/default.php?secu=manage&mod=vote&m=remove_to_bin&vote_id=" + voteId + "&state=" + state, {
+        resultbox: $(this).html()
+    }, function(xml) {
+        if (parseInt(xml) > 0) {
+            switch (state)
+            {
+                case 0:
+                    $("#spanstate_" + voteId).text("启用");
+                    break;
+                case 100:
+                    $('#dialog_docnewsdelete').dialog('close');
+                    $("#spanstate_" + voteId).html("<span style='color:#990000'>停用</span>");
+                    break;
+                default:
+                    $("#spanstate_" + voteId).text("错误");
+                    break;
+            }
+        } else if (parseInt(xml) == -2) {
+            alert("设置失败，您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！");
         }
-        else alert("修改失败，请联系管理员");
+        else {
+            alert("设置失败");
         }
     });
+    document.getElementById('divstate_' + voteId).style.display = "none";
 }
 
 

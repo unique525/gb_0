@@ -63,7 +63,7 @@
 
         });
 
-        function submitForm(continueCreate) {
+        function submitForm(closeTab) {
             if ($('#f_ForumName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("请输入版块名称");
@@ -71,11 +71,13 @@
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("版块简介不能超过250个字符");
             } else {
-                if(continueCreate == 1){
-                    $("#CloseTab").val("0");
-                }else{
+                if(closeTab == 1){
                     $("#CloseTab").val("1");
+                }else{
+                    $("#CloseTab").val("0");
                 }
+
+                $("#mainForm").attr("action","/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&rank={Rank}&parent_id={ParentId}&tab_index="+parent.G_TabIndex+"");
                 $('#mainForm').submit();
             }
         }
@@ -84,12 +86,12 @@
 </head>
 <body>
 {common_body_deal}
-<form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&parent_id={ParentId}" method="post">
+<form id="mainForm" enctype="multipart/form-data" method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(0)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 
@@ -242,11 +244,10 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(1)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(0)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
 </table>
-
 </div>
 </form>
 </body>

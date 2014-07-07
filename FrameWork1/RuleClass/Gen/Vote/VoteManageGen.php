@@ -21,8 +21,8 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             case "create":
                 $result = self::GenCreate();
                 break;
-            case "remove_to_bin":
-                $result = self::GenRemoveToBin();
+            case "modify_state":
+                $result = self::AsyncModifyState();
                 break;
             case "modify":
                 $result = self::GenModify();
@@ -69,7 +69,6 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
                 return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
-            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
             $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
             $tempContent = str_ireplace("{ManageUserId}", strval($manageUserId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
@@ -87,40 +86,24 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 停用投票
-     * @return string 生成HTML
+     * 修改投票状态
+     * @return string 修改结果
      */
-    private function GenRemoveToBin()
+    private function AsyncModifyState()
     {
-        /**
+        $result = -1;
         $voteId = Control::GetRequest("vote_id", 0);
-        $pageIndex = Control::GetRequest("p", 0);
-
+        $state = Control::GetRequest("state",0);
         if ($voteId > 0) {
             $voteData = new VoteManageData();
-            $result = $voteData->RemoveToBin($voteId);
-
+            $result = $voteData->AsyncModifyState($voteId,$state);
             //加入操作日志
-            $operateContent = 'RemoveToBin Vote,Get FORM:'.implode('|',$_GET).';\r\nResult:voteId:'.$voteId;
+            $operateContent = 'RemoveToBin Vote,Get FORM:' . implode('|', $_GET) . ';\r\nResult:voteId:' . $voteId;
             self::CreateManageUserLog($operateContent);
-
-            if ($result > 0) {
-                Control::ShowMessage(Language::Load('vote', 17));
-                $jsCode = 'self.parent.loadvotelist(' . $pageIndex . ',"");self.parent.tb_remove();';
-                Control::RunJS($jsCode);
-                return "";
-            } else {
-                Control::ShowMessage(Language::Load('vote', 18));
-                $jsCode = 'javascript:history.go(-1);';
-                Control::RunJS($jsCode);
-                return "";
-            }
         } else {
-            Control::ShowMessage(Language::Load('vote', 3));
-            $jsCode = 'javascript:history.go(-1);';
-            Control::RunJS($jsCode);
-            return "";
-        }*/
+            $result = -1;
+        }
+        return $_GET['jsonpcallback'] . '({"result":"'.$result.'"})';
     }
 
     /**
@@ -145,11 +128,11 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 15));
+                    Control::ShowMessage(Language::Load('vote', 3));
                     $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 16));
+                    Control::ShowMessage(Language::Load('vote', 4));
                 }
             }
             $arrList = $voteManageData->GetOne($voteId);

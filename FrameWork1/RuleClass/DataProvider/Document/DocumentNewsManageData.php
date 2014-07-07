@@ -219,6 +219,7 @@ class DocumentNewsManageData extends BaseManageData
     /**
      * 拖动排序
      * @param array $arrDocumentNewsId 待处理的文档编号数组
+     * @return int 操作结果
      */
     public function ModifySort($arrDocumentNewsId)
     {
@@ -235,7 +236,9 @@ class DocumentNewsManageData extends BaseManageData
                 $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=$newSort WHERE DocumentNewsId=$arrDocumentNewsId[$i];";
                 $arrSql[] = $sql;
             }
-            $this->dbOperator->ExecuteBatch($arrSql, null);
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
         }
     }
 

@@ -63,8 +63,12 @@ ul{list-style-type:none;}
 
 
 .docnewsstatebox{width:400px;display:none;z-index:100;position:absolute;border: solid 1px #7A8AA2; background: #f5f5f5;}
-.docnewsstatebox div{ float: left; line-height: 18px;padding:0; text-indent: 10px; padding-right: 10px; padding-bottom: 2px; cursor: pointer;}
+.docnewsstatebox div{ float: left; line-height: 18px;text-indent: 10px;
+    padding: 0 10px 2px 0;
+    cursor: pointer;}
 
-.forumstatebox{width:400px;display:none;z-index:100;position:absolute;border: solid 1px #7A8AA2; background: #f5f5f5;}
-.forumstatebox .forumstate{float:left;width:24%;line-height:24px;padding:0; text-indent: 10px; padding-right: 10px; padding-bottom: 2px; cursor: pointer;}
-.span_closebox{cursor:pointer;}
+.forum_state_box{width:400px;display:none;z-index:100;position:absolute;border: solid 1px #7A8AA2; background: #f5f5f5;}
+.forum_state_box .forum_state{float:left;width:24%;line-height:24px;text-indent: 10px;
+    padding: 0 10px 2px 0;
+    cursor: pointer;}
+.span_close_box{cursor:pointer;}

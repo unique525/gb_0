@@ -35,7 +35,16 @@ class ForumManageData extends BaseManageData {
         $addFieldNames = array("ForumPic1", "ForumPic2", "ForumPicMobile", "ForumPicPad");
         $addFieldValues = array($forumPic1, $forumPic2, $forumPicMobile, $forumPicPad);
         if (!empty($httpPostData)) {
-            $sql = parent::GetInsertSql($httpPostData, self::TableName_Forum, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
+            $sql = parent::GetInsertSql(
+                $httpPostData,
+                self::TableName_Forum,
+                $dataProperty,
+                $addFieldName,
+                $addFieldValue,
+                $preNumber,
+                $addFieldNames,
+                $addFieldValues
+            );
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
         return $result;

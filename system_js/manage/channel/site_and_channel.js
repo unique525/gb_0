@@ -282,6 +282,27 @@ $(function () {
         $(this).text(FormatSiteState($(this).text()));
     });
 
+    //开启站点
+    $(".img_open_site").click(function(){
+        var siteId = parseInt($(this).attr("idvalue"));
+        var state = 0; //开启状态
+        if(siteId>0){
+            $.ajax({
+                type: "get",
+                url: "default.php?secu=manage&mod=site&m=async_modify_state",
+                data: {
+                    site_id: siteId,
+                    state:state
+                },
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function(data) {
+                    alert(data);
+                }
+            });
+        }
+    });
+
 });
 
 /**

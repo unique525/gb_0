@@ -79,9 +79,8 @@
  * @property int $DocumentNewsTitlePicPadWidth
  * @author zhangchi
  */
-class SiteConfigManageData extends BaseManageData {
-
-
+class SiteConfigManageData extends BaseManageData
+{
     /**
      * @var array string mid Short Message
      */
@@ -144,15 +143,15 @@ class SiteConfigManageData extends BaseManageData {
         "UserCommissionGrandson"
     );
     private $SiteId = 1;
-    
+
     //公共配置
-    private $OpenFtpLog = 0;  //开启FTP传输日志记录
+    private $OpenFtpLog = 0; //开启FTP传输日志记录
     private $MailSmtpHost = ""; // SMTP 服务器 
-    private $MailSmtpUserName = "";// SMTP服务器用户名  
-    private $MailSmtpPassword = "";// SMTP服务器密码 
-    private $MailSmtpPort = 465;// SMTP服务器的端口号   
-    private $MailFrom = "";//发件人地址
-    private $MailReplyTo = "";//邮件回复地址
+    private $MailSmtpUserName = ""; // SMTP服务器用户名
+    private $MailSmtpPassword = ""; // SMTP服务器密码
+    private $MailSmtpPort = 465; // SMTP服务器的端口号
+    private $MailFrom = ""; //发件人地址
+    private $MailReplyTo = ""; //邮件回复地址
 
     private $MetaGenerator = "SenseCMS";
     private $MetaAuthor = "Sense Inc.";
@@ -755,7 +754,7 @@ class SiteConfigManageData extends BaseManageData {
     private $ForumIeTitle = ''; //论坛的IE标题
     private $ForumIeKeywords = ''; //论坛的IE keywords
     private $ForumIeDescription = ''; //论坛的IE Description
-    private $ForumLogoImage = '';//论坛LOGO图片网址
+    private $ForumLogoImage = ''; //论坛LOGO图片网址
     private $ForumBackground = ''; //论坛背景图片网址
     private $OpenRegisterWindow = 0; //是否开启注册提示窗口
     private $RegisterWindowContent = ''; //注册提示窗口文字内容
@@ -763,7 +762,7 @@ class SiteConfigManageData extends BaseManageData {
     private $ForumAdTopIndex = ''; //论坛首页顶部广告
     private $ForumBotInfo = ''; //论坛底部信息
     private $ForumAdBotIndex = ''; //论坛首页底部广告
-    
+
     private $ForumAdTopTopicList = ''; //论坛帖子列表页顶部广告
     private $ForumAdBotTopicList = ''; //论坛帖子列表页底部广告
     private $ForumAdTopTopicContent = ''; //论坛帖子内容页顶部广告
@@ -785,7 +784,7 @@ class SiteConfigManageData extends BaseManageData {
     private $UserCommissionOwn = 0; //本人的默认提成比率 
     private $UserCommissionChild = 0; //本人的下一级默认提成比率 
     private $UserCommissionGrandson = 0; //本人的下两级默认提成比率  
- 
+
     private $NewRegisterUserId = 0; //新注册的会员Id
     private $NewRegisterUserName = ''; //新注册的会员名
     private $NewUserMessageVoice = ''; //新短消息提示音文件网址
@@ -793,7 +792,7 @@ class SiteConfigManageData extends BaseManageData {
     private $ForumMoneyName = ''; //论坛中金钱的别名
     private $ForumCharmName = ''; //论坛中魅力的别名
     private $ForumScoreName = ''; //论坛中积分的别名
-    private $ForumExpName = '';   //论坛中经验的别名
+    private $ForumExpName = ''; //论坛中经验的别名
     private $ForumPointName = ''; //论坛中点券的别名
     private $ForumPostCountName = ''; //论坛中会员发帖数的别名
     private $ForumCssDefault = ''; //论坛默认的样式文件
@@ -815,9 +814,9 @@ class SiteConfigManageData extends BaseManageData {
     /////////////////////////////////////////////////////////////////
     private $SmsThirdType = ""; //第三方短信网关接口商名称
     private $SmsThirdUrl = ""; //第三方短信网关接口网址
-    private $SmsThirdUserName = "";//第三方短信网关接口帐号
-    private $SmsThirdPassword = "";//第三方短信网关接口密码
-    private $UserSmsMessageContent = "";//默认会员短信内容
+    private $SmsThirdUserName = ""; //第三方短信网关接口帐号
+    private $SmsThirdPassword = ""; //第三方短信网关接口密码
+    private $UserSmsMessageContent = ""; //默认会员短信内容
 
     /////////////////////////////////////////////////////////////////
     ////////////////////////资讯/////////////////////////////////
@@ -831,7 +830,8 @@ class SiteConfigManageData extends BaseManageData {
      * 构造函数
      * @param int $siteId 站点id，每个配置都是站点下的配置
      */
-    public function __construct($siteId) {
+    public function __construct($siteId)
+    {
         $this->SiteId = $siteId;
     }
 
@@ -840,7 +840,8 @@ class SiteConfigManageData extends BaseManageData {
      * @param string $siteConfigName 配置名称
      * @return string 配置值
      */
-    public function __get($siteConfigName) {
+    public function __get($siteConfigName)
+    {
         $siteConfigType = 0;
         $defaultValue = '';
 
@@ -864,7 +865,8 @@ class SiteConfigManageData extends BaseManageData {
      * @param string $siteConfigName 配置名称
      * @param string $fieldValue 配置值
      */
-    public function __set($siteConfigName, $fieldValue) {
+    public function __set($siteConfigName, $fieldValue)
+    {
         $siteConfigType = 0;
         if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
             $siteConfigType = 1;
@@ -885,7 +887,8 @@ class SiteConfigManageData extends BaseManageData {
      * @param string $fieldValue 配置值
      * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      */
-    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0) {
+    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0)
+    {
         switch ($siteConfigType) {
             case 0:
                 $fieldName = "StringNorValue";
@@ -924,23 +927,23 @@ class SiteConfigManageData extends BaseManageData {
                 }
                 break;
         }
-        $sql = "SELECT count(*) FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
+        $sql = "SELECT count(*) FROM " . self::TableName_SiteConfig . " WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("SiteConfigName", $siteConfigName);
         $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
         if ($hasCount > 0) { //已存在相关配置记录
-            $sql = "UPDATE ".self::TableName_SiteConfig." SET " . $fieldName . "=:FieldValue,SiteConfigType=:SiteConfigType WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
+            $sql = "UPDATE " . self::TableName_SiteConfig . " SET " . $fieldName . "=:FieldValue,SiteConfigType=:SiteConfigType WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
             $dataProperty->AddField("FieldValue", $fieldValue);
             $dataProperty->AddField("SiteConfigType", $siteConfigType);
             $this->dbOperator->Execute($sql, $dataProperty);
         } else {
-            $sql = "INSERT INTO ".self::TableName_SiteConfig." (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
+            $sql = "INSERT INTO " . self::TableName_SiteConfig . " (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
             $dataProperty->AddField("FieldValue", $fieldValue);
             $dataProperty->AddField("SiteConfigType", $siteConfigType);
             $this->dbOperator->Execute($sql, $dataProperty);
         }
-        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data'.DIRECTORY_SEPARATOR. $siteId;
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data' . DIRECTORY_SEPARATOR . $siteId;
         $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
         DataCache::Set($cacheDir, $cacheFile, $fieldValue);
     }
@@ -953,9 +956,10 @@ class SiteConfigManageData extends BaseManageData {
      * @param mixed $defaultValue 默认值
      * @return mixed 配置值
      */
-    private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null) {
+    private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null)
+    {
         if (intval($siteId) > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data'.DIRECTORY_SEPARATOR. $siteId;
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 switch ($siteConfigType) {
@@ -979,7 +983,7 @@ class SiteConfigManageData extends BaseManageData {
                         break;
                 }
 
-                $sql = "SELECT " . $fieldName . " FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
+                $sql = "SELECT " . $fieldName . " FROM " . self::TableName_SiteConfig . " WHERE SiteId=:SiteId AND SiteConfigName=:SiteConfigName;";
 
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("SiteId", $siteId);
@@ -1005,12 +1009,17 @@ class SiteConfigManageData extends BaseManageData {
      * @param int $siteId 站点id
      * @return array 配置列表
      */
-    public function GetList($siteId) {
-        $sql = "SELECT * FROM ".self::TableName_SiteConfig." WHERE SiteId=:SiteId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        return $result;
+    public function GetList($siteId)
+    {
+        if ($siteId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_SiteConfig . " WHERE SiteId=:SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            return $result;
+        } else {
+            return null;
+        }
     }
 }
 
