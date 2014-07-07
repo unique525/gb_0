@@ -91,7 +91,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function AsyncModifyState()
     {
-        $result = -1;
+        //$result = -1;
         $voteId = Control::GetRequest("vote_id", 0);
         $state = Control::GetRequest("state",0);
         if ($voteId > 0) {
@@ -153,7 +153,7 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList()
     {
 
-        $tempContent = Template::Load("vote/vote_list.html", "common");
+        $templateContent = Template::Load("vote/vote_list.html", "common");
 
         $siteId = Control::GetRequest("site_id", 0);
         $channelId = Control::GetRequest("channel_id", 0);
@@ -170,26 +170,22 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             $arrList = $voteManageData->GetListForPager($siteId, $channelId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
-                /**
-                 * $pagerTemplate = Template::Load("pager_js.html");
-                 * $isJs = true;
-                 * $jsFunctionName = "loadvotelist";
-                 * $jsParamList = ",'" . urlencode($searchKey) . "'";
-                 * $pagerButton = Pager::ShowPageButton($pagerTemplate, "", $allCount, $pageSize, $pageIndex, $isJs, $jsFunctionName, $jsParamList); //填入
-                 * $replaceArr = array(
-                 * "{pagerbutton}" => $pagerButton
-                 * );
-                 * $tempContent = strtr($tempContent, $replaceArr);
-                 * parent::ReplaceEnd($tempContent);
-                 * $result = $tempContent;
-                 */
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?secu=manage&mod=vote&m=list&site_id=$siteId&channel_id=$channelId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                Template::ReplaceList($templateContent,$arrList,$tagId);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("vote", 101), $tempContent);
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("vote", 101), $templateContent);
             }
         }
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     /**
