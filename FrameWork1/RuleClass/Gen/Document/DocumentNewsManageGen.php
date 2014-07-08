@@ -49,7 +49,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
         $pageIndex = Control::GetRequest("p", 1);
-
+        $resultJavaScript = "";
         parent::ReplaceFirst($tempContent);
 
         if ($channelId > 0) {
@@ -62,226 +62,231 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $can = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
             if (!$can) {
-                Control::ShowMessage(Language::Load('document', 26));
-                return "";
+                $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 26));
+                //Control::ShowMessage(Language::Load('document', 26));
+                //return "";
+            }else{
+                $documentNewsManageData = new DocumentNewsManageData();
+                $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+                $tempContent = str_ireplace("{ChannelName}", $channelName, $tempContent);
+                $tempContent = str_ireplace("{DocumentNewsId}", "", $tempContent);
+                $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+                $tempContent = str_ireplace("{ManageUserId}", $manageUserId, $tempContent);
+                $tempContent = str_ireplace("{ManageUserName}", $manageUserName, $tempContent);
+                $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
+
+                //quick content
+                $documentQuickContentManageData = new DocumentQuickContentManageData();
+                $tagId = "document_quick_content";
+                $arrList = $documentQuickContentManageData->GetList();
+                if (count($arrList) > 0) {
+                    Template::ReplaceList($tempContent, $arrList, $tagId);
+                } else {
+                    Template::RemoveCustomTag($tempContent, $tagId);
+                }
+
+                //source common
+                $sourceCommonManageData = new SourceCommonManageData();
+                $tagId = "source_common_list";
+                $arrList = $sourceCommonManageData->GetList();
+                if (count($arrList) > 0) {
+                    Template::ReplaceList($tempContent, $arrList, $tagId);
+                } else {
+                    Template::RemoveCustomTag($tempContent, $tagId);
+                }
+
+                parent::ReplaceWhenCreate($tempContent, $documentNewsManageData->GetFields());
+
+                if (!empty($_POST)) {
+                    $httpPostData = $_POST;
+                    $titlePicMobile = '';
+                    $titlePicPad = '';
+                    $titlePicMobileUploadFileId = -1;
+                    $titlePicPadUploadFileId = -1;
+                    $uploadFileManageData = new UploadFileManageData();
+                    //title pic1
+                    $fileElementName = "title_pic_1_upload";
+                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
+                    $titlePic1UploadFileId = 0;
+                    $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
+
+                    if(intval($titlePic1Path)<=0){
+                        //上传出错或没有选择文件上传
+
+                    }else{
+                        $titlePic1Path = str_ireplace("..", "", $titlePic1Path);
+                        //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
+                        if (strlen($titlePic1Path) > 5) {
+                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                            $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
+
+                            $tableId = $channelId;
+                            $userId = 0;
+
+                            if ($documentNewsTitlePicMobileWidth > 0) {
+                                $thumbFileName = "mobile";
+                                $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
+                                sleep(1);
+                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
+                                $newFileName = FileObject::GetName($titlePicMobile);
+                                $fileExtension = FileObject::GetExtension($titlePicMobile);
+                                $filePath = FileObject::GetDirName($titlePicMobile);
+                                $fileSize = FileObject::GetSize($titlePicMobile);
+                                $titlePicMobileUploadFileId = $uploadFileManageData->Create(
+                                    $newFileName,
+                                    $fileSize,
+                                    $fileExtension,
+                                    $titlePic1Path,
+                                    $filePath,
+                                    $tableType,
+                                    $tableId,
+                                    strval(date('Y', time())),
+                                    strval(date('m', time())),
+                                    strval(date('d', time())),
+                                    $manageUserId,
+                                    $userId
+                                );
+                            }
+
+                            if ($documentNewsTitlePicPadWidth > 0) {
+                                $thumbFileName = "pad";
+                                $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
+                                sleep(1);
+                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
+                                $newFileName = FileObject::GetName($titlePicPad);
+                                $fileExtension = FileObject::GetExtension($titlePicPad);
+                                $filePath = FileObject::GetDirName($titlePicPad);
+                                $fileSize = FileObject::GetSize($titlePicPad);
+                                $titlePicPadUploadFileId = $uploadFileManageData->Create(
+                                    $newFileName,
+                                    $fileSize,
+                                    $fileExtension,
+                                    $titlePic1Path,
+                                    $filePath,
+                                    $tableType,
+                                    $tableId,
+                                    strval(date('Y', time())),
+                                    strval(date('m', time())),
+                                    strval(date('d', time())),
+                                    $manageUserId,
+                                    $userId
+                                );
+                            }
+                        }
+                    }
+
+                    //title pic2
+                    $fileElementName = "title_pic_2_upload";
+                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
+                    $titlePic2UploadFileId = 0;
+                    $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
+
+                    if(intval($titlePic2Path) <= 0){
+                        //上传出错或没有选择文件上传
+                    }else{
+                        $titlePic2Path = str_ireplace("..", "", $titlePic2Path);
+                    }
+
+                    //title pic3
+                    $fileElementName = "title_pic_3_upload";
+                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
+                    $titlePic3UploadFileId = 0;
+                    $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
+
+                    if(intval($titlePic3Path) <= 0){
+                        //上传出错或没有选择文件上传
+                    }else{
+                        $titlePic3Path = str_ireplace("..", "", $titlePic3Path);
+                    }
+
+                    $documentNewsId = $documentNewsManageData->Create($httpPostData, $titlePic1Path, $titlePic2Path, $titlePic3Path, $titlePicMobile, $titlePicPad);
+
+                    //加入操作日志
+                    $operateContent = 'Create DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:documentNewsId:'.$documentNewsId;
+                    self::CreateManageUserLog($operateContent);
+
+                    if ($documentNewsId > 0) {
+                        //新增文档时修改排序号到当前频道的最大排序
+                        $documentNewsManageData->ModifySortWhenCreate($channelId, $documentNewsId);
+                        //修改上传文件的tableId;
+                        $uploadFiles = Control::PostRequest("f_UploadFiles", "");
+
+                        $arrUploadFiles = explode(",", $uploadFiles);
+
+                        //修改题图1的tableId
+                        if($titlePic1UploadFileId>0){
+                            $uploadFileManageData->ModifyTableId($titlePic1UploadFileId, $documentNewsId);
+                        }
+                        //修改题图2的tableId
+                        if($titlePic2UploadFileId>0){
+                            $uploadFileManageData->ModifyTableId($titlePic2UploadFileId, $documentNewsId);
+                        }
+                        //修改题图3的tableId
+                        if($titlePic3UploadFileId>0){
+                            $uploadFileManageData->ModifyTableId($titlePic3UploadFileId, $documentNewsId);
+                        }
+                        //修改移动客户端题图的tableId
+                        if($titlePicMobileUploadFileId>0){
+                            $uploadFileManageData->ModifyTableId($titlePicMobileUploadFileId, $documentNewsId);
+                        }
+                        //修改平板客户端题图的tableId
+                        if($titlePicPadUploadFileId>0){
+                            $uploadFileManageData->ModifyTableId($titlePicPadUploadFileId, $documentNewsId);
+                        }
+
+
+                        for ($i = 0; $i < count($arrUploadFiles); $i++) {
+                            if (intval($arrUploadFiles[$i]) > 0) {
+                                $uploadFileManageData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
+                            }
+                        }
+
+                        //发布模式处理
+                        $publishType = $channelManageData->GetPublishType($channelId, false);
+                        if ($publishType > 0) {
+                            switch ($publishType) {
+                                case ChannelManageData::PUBLISH_TYPE_AUTO: //自动发布新稿
+                                    //修改文档状态为终审
+                                    $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
+                                    $documentNewsManageData->ModifyState($documentNewsId, $state);
+                                    $executeFtp = true;
+                                    $publishChannel = true;
+                                    $publishQueueManageData = new PublishQueueManageData();
+                                    self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
+                                    break;
+                            }
+                        }
+
+                        //javascript 处理
+
+                        $closeTab = Control::PostRequest("CloseTab",0);
+                        if($closeTab == 1){
+                            Control::CloseTab();
+                        }else{
+                            Control::GoUrl($_SERVER["PHP_SELF"]);
+                        }
+                    } else {
+                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 2));
+                        //Control::ShowMessage(Language::Load('document', 2));
+                    }
+                }
+                //去掉s开头的标记 {s_xxx_xxx}
+                $patterns = '/\{s_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
+                //去掉c开头的标记 {c_xxx}
+                $patterns = '/\{c_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
+                //去掉r开头的标记 {r_xxx_xxx}
+                $patterns = '/\{r_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
             }
             ////////////////////////////////////////////////////
 
-            $documentNewsManageData = new DocumentNewsManageData();
-            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
-            $tempContent = str_ireplace("{ChannelName}", $channelName, $tempContent);
-            $tempContent = str_ireplace("{DocumentNewsId}", "", $tempContent);
-            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{ManageUserId}", $manageUserId, $tempContent);
-            $tempContent = str_ireplace("{ManageUserName}", $manageUserName, $tempContent);
-            $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
 
-            //quick content
-            $documentQuickContentManageData = new DocumentQuickContentManageData();
-            $tagId = "document_quick_content";
-            $arrList = $documentQuickContentManageData->GetList();
-            if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $tagId);
-            } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-            }
-
-            //source common
-            $sourceCommonManageData = new SourceCommonManageData();
-            $tagId = "source_common_list";
-            $arrList = $sourceCommonManageData->GetList();
-            if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $tagId);
-            } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-            }
-
-            parent::ReplaceWhenCreate($tempContent, $documentNewsManageData->GetFields());
-
-            if (!empty($_POST)) {
-                $httpPostData = $_POST;
-                $titlePicMobile = '';
-                $titlePicPad = '';
-                $titlePicMobileUploadFileId = -1;
-                $titlePicPadUploadFileId = -1;
-                $uploadFileManageData = new UploadFileManageData();
-                //title pic1
-                $fileElementName = "title_pic_1_upload";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
-                $titlePic1UploadFileId = 0;
-                $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
-
-                if(intval($titlePic1Path)<=0){
-                    //上传出错或没有选择文件上传
-
-                }else{
-                    $titlePic1Path = str_ireplace("..", "", $titlePic1Path);
-                    //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
-                    if (strlen($titlePic1Path) > 5) {
-                        $siteConfigManageData = new SiteConfigManageData($siteId);
-                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
-                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
-
-                        $tableId = $channelId;
-                        $userId = 0;
-
-                        if ($documentNewsTitlePicMobileWidth > 0) {
-                            $thumbFileName = "mobile";
-                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
-                            sleep(1);
-                            $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
-                            $newFileName = FileObject::GetName($titlePicMobile);
-                            $fileExtension = FileObject::GetExtension($titlePicMobile);
-                            $filePath = FileObject::GetDirName($titlePicMobile);
-                            $fileSize = FileObject::GetSize($titlePicMobile);
-                            $titlePicMobileUploadFileId = $uploadFileManageData->Create(
-                                $newFileName,
-                                $fileSize,
-                                $fileExtension,
-                                $titlePic1Path,
-                                $filePath,
-                                $tableType,
-                                $tableId,
-                                strval(date('Y', time())),
-                                strval(date('m', time())),
-                                strval(date('d', time())),
-                                $manageUserId,
-                                $userId
-                            );
-                        }
-
-                        if ($documentNewsTitlePicPadWidth > 0) {
-                            $thumbFileName = "pad";
-                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
-                            sleep(1);
-                            $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
-                            $newFileName = FileObject::GetName($titlePicPad);
-                            $fileExtension = FileObject::GetExtension($titlePicPad);
-                            $filePath = FileObject::GetDirName($titlePicPad);
-                            $fileSize = FileObject::GetSize($titlePicPad);
-                            $titlePicPadUploadFileId = $uploadFileManageData->Create(
-                                $newFileName,
-                                $fileSize,
-                                $fileExtension,
-                                $titlePic1Path,
-                                $filePath,
-                                $tableType,
-                                $tableId,
-                                strval(date('Y', time())),
-                                strval(date('m', time())),
-                                strval(date('d', time())),
-                                $manageUserId,
-                                $userId
-                            );
-                        }
-                    }
-                }
-
-                //title pic2
-                $fileElementName = "title_pic_2_upload";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
-                $titlePic2UploadFileId = 0;
-                $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
-
-                if(intval($titlePic2Path) <= 0){
-                    //上传出错或没有选择文件上传
-                }else{
-                    $titlePic2Path = str_ireplace("..", "", $titlePic2Path);
-                }
-
-                //title pic3
-                $fileElementName = "title_pic_3_upload";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
-                $titlePic3UploadFileId = 0;
-                $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
-
-                if(intval($titlePic3Path) <= 0){
-                    //上传出错或没有选择文件上传
-                }else{
-                    $titlePic3Path = str_ireplace("..", "", $titlePic3Path);
-                }
-
-                $documentNewsId = $documentNewsManageData->Create($httpPostData, $titlePic1Path, $titlePic2Path, $titlePic3Path, $titlePicMobile, $titlePicPad);
-
-                //加入操作日志
-                $operateContent = 'Create DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:documentNewsId:'.$documentNewsId;
-                self::CreateManageUserLog($operateContent);
-
-                if ($documentNewsId > 0) {
-                    //新增文档时修改排序号到当前频道的最大排序
-                    $documentNewsManageData->ModifySortWhenCreate($channelId, $documentNewsId);
-                    //修改上传文件的tableId;
-                    $uploadFiles = Control::PostRequest("f_UploadFiles", "");
-
-                    $arrUploadFiles = explode(",", $uploadFiles);
-
-                    //修改题图1的tableId
-                    if($titlePic1UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic1UploadFileId, $documentNewsId);
-                    }
-                    //修改题图2的tableId
-                    if($titlePic2UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic2UploadFileId, $documentNewsId);
-                    }
-                    //修改题图3的tableId
-                    if($titlePic3UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic3UploadFileId, $documentNewsId);
-                    }
-                    //修改移动客户端题图的tableId
-                    if($titlePicMobileUploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePicMobileUploadFileId, $documentNewsId);
-                    }
-                    //修改平板客户端题图的tableId
-                    if($titlePicPadUploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePicPadUploadFileId, $documentNewsId);
-                    }
-
-
-                    for ($i = 0; $i < count($arrUploadFiles); $i++) {
-                        if (intval($arrUploadFiles[$i]) > 0) {
-                            $uploadFileManageData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
-                        }
-                    }
-
-                    //发布模式处理
-                    $publishType = $channelManageData->GetPublishType($channelId, false);
-                    if ($publishType > 0) {
-                        switch ($publishType) {
-                            case ChannelManageData::PUBLISH_TYPE_AUTO: //自动发布新稿
-                                //修改文档状态为终审
-                                $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
-                                $documentNewsManageData->ModifyState($documentNewsId, $state);
-                                $executeFtp = true;
-                                $publishChannel = true;
-                                $publishQueueManageData = new PublishQueueManageData();
-                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
-                                break;
-                        }
-                    }
-
-                    //javascript 处理
-
-                    $closeTab = Control::PostRequest("CloseTab",0);
-                    if($closeTab == 1){
-                        Control::CloseTab();
-                    }else{
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
-                    }
-                } else {
-                    Control::ShowMessage(Language::Load('document', 2));
-                }
-            }
-            //去掉s开头的标记 {s_xxx_xxx}
-            $patterns = '/\{s_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
-            //去掉c开头的标记 {c_xxx}
-            $patterns = '/\{c_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
-            //去掉r开头的标记 {r_xxx_xxx}
-            $patterns = '/\{r_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 

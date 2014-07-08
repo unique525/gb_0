@@ -69,6 +69,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
             $tempContent = str_ireplace("{Rank}", $rank, $tempContent);
             $tempContent = str_ireplace("{ParentId}", $parentId, $tempContent);
+            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;

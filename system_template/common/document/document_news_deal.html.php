@@ -289,29 +289,32 @@
             }
 
 
-            function submitForm()
-            {
-                $("#btnConfirm").attr("disabled",true);
-                if($('#f_documentnewstitle').val() == ''){
-                    alert('请输入标题');
-                    return;
+        function submitForm(closeTab) {
+            if ($('#f_DocumentNewsTitle').val() == '') {
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("请输入文档标题");
+            } else {
+                if(closeTab == 1){
+                    $("#CloseTab").val("1");
+                }else{
+                    $("#CloseTab").val("0");
                 }
-                else
-                {
-                    $('#mainform').submit();
-                }
+
+                $("#mainForm").attr("action","/default.php?secu=manage&mod=document_news&m={method}&channel_id={ChannelId}&document_news_id={DocumentNewsId}&tab_index="+parent.G_TabIndex+"");
+                $('#mainForm').submit();
             }
+        }
         -->
         </script>
     </head>
     <body>
     {common_body_deal}
-        <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=document_news&m={method}&id={id}&channel_id={ChannelId}" method="post">
+        <form id="mainForm" enctype="multipart/form-data" method="post">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
-                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="确认并继续" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+                    <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
                 </td>
             </tr>
@@ -390,7 +393,9 @@
                                             <td class="spe_line" align="left" style="line-height:20px;">
                                                 <icms id="quick_add_pre" type="list">
                                                     <item>
-                                                        <![CDATA[<span style="cursor: pointer;" onclick="insertcontent('{f_documentquickcontent}');">{f_documentquickcontent}</span><br />]]>
+                                                        <![CDATA[
+                                                        <span style="cursor: pointer;" class="AddQuickContent" title="{f_DocumentQuickContent}">{f_DocumentQuickContent}</span><br />
+                                                        ]]>
                                                     </item>
                                                 </icms>
                                             </td>
@@ -402,9 +407,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="height:35px;">附加水印：</td>
+                                            <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
                                             <td align="left">
-                                                <input type="checkbox" id="attachwatermark" name="attachwatermark" /> (只支持jpg或jpeg图片)  
+                                                <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" /> (只支持jpg或jpeg图片)
                                             </td>
                                         </tr>
                                     </table>
@@ -421,62 +426,44 @@
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图1：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                                      style="cursor:pointer">[预览]</span>
+                                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图2：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="titlepic_upload2" name="titlepic_upload2" type="file" class="input_box" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic2" style="cursor:pointer">[预览]</span>
-                                <div id="dialog_titlepic2" title="题图2预览（{titlepic2}）" style="display:none;">
-                                    <div id="pubtable">
-                                        <table>
-                                            <tr>
-                                                <td><img id="img_titlepic2" src="{titlepic2}" alt="titlepic2" /></td>
-                                            </tr></table>
-                                    </div>
-                                </div>
+                                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图3：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="titlepic_upload3" name="titlepic_upload3" type="file" class="input_box" style="width:610px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic3" style="cursor:pointer">[预览]</span>
-                                <div id="dialog_titlepic3" title="题图3预览（{titlepic3}）" style="display:none;">
-                                    <div id="pubtable">
-                                        <table>
-                                            <tr>
-                                                <td><img id="img_titlepic3" src="{titlepic3}" alt="titlepic3" /></td>
-                                            </tr></table>
-                                    </div>
-                                </div>
+                                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic3" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">短标题：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_documentnewsshorttitle" name="f_documentnewsshorttitle" value="{documentnewsshorttitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DocumentNewsShortTitle">短标题：</label></td>
+                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DocumentNewsShortTitle" name="f_DocumentNewsShortTitle" value="{DocumentNewsShortTitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">副标题：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_documentnewssubtitle" name="f_documentnewssubtitle" value="{documentnewssubtitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
-                        </tr>
-
-                        <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">引题：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_documentnewscitetitle" name="f_documentnewscitetitle" value="{documentnewscitetitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DocumentNewsSubTitle">副标题：</label></td>
+                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DocumentNewsSubTitle" name="f_DocumentNewsSubTitle" value="{DocumentNewsSubTitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
                         </tr>
 
                         <tr>
-                            <td class="spe_line" style="width:200px;height:65px;text-align: right;">摘要：<br /><br />
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DocumentNewsCiteTitle">引题：</label></td>
+                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DocumentNewsCiteTitle" name="f_DocumentNewsCiteTitle" value="{DocumentNewsCiteTitle}" style=" width: 600px;font-size:14px;" maxlength="100" /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="spe_line" style="width:200px;height:65px;text-align: right;"><label for="f_DocumentNewsIntro">摘要：</label><br /><br />
                                 <input type="button" class="btn4" value="编写" onclick='showModalDialog("/js/plugins/editabstract.html", window, "dialogWidth:850px;dialogHeight:400px;help:no;scroll:no;status:no");'/>&nbsp;
                             </td>
-                            <td class="spe_line" style="text-align: left"><textarea class="input_box" id="f_documentnewsintro" name="f_documentnewsintro" style=" width: 600px; height: 80px;font-size:14px;">{documentnewsintro}</textarea></td>
+                            <td class="spe_line" style="text-align: left"><textarea class="input_box" id="f_DocumentNewsIntro" name="f_DocumentNewsIntro" style="width: 600px; height: 80px;font-size:14px;">{DocumentNewsIntro}</textarea></td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">直接转向网址：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_directurl" name="f_directurl" value="{directurl}" style=" width: 600px;font-size:14px;" maxlength="200" /> (设置直接转向网址后，文档将直接转向到该网址)</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DirectUrl">直接转向网址：</label></td>
+                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DirectUrl" name="f_DirectUrl" value="{DirectUrl}" style=" width: 600px;font-size:14px;" maxlength="200" /> (设置直接转向网址后，文档将直接转向到该网址)</td>
                         </tr>
                     </table>
                 </div>
@@ -484,13 +471,14 @@
                     <div id="uploader">
                         <p>您的浏览器不支持 Flash, Silverlight, Gears, BrowserPlus 或 HTML5，不能使用组图上传功能</p>
                     </div>
-                    <div class="spe_line" style=" line-height: 30px;"> 使用组图控件展示内容中的图片 
+                    <div class="spe_line" style=" line-height: 30px;"><label for="f_ShowPicMethod">使用组图控件展示内容中的图片</label>
                         <select id="f_ShowPicMethod" name="f_ShowPicMethod">
-                            <option value="0" {s_ShowPicMethod_0}>关闭</option>
-                            <option value="1" {s_ShowPicMethod_1}>开启</option>
+                            <option value="0">关闭</option>
+                            <option value="1" >开启</option>
                         </select>
+                        {s_ShowPicMethod}
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        附加水印：<input type="checkbox" id="batchattachwatermark" name="batchattachwatermark" /> (只支持jpg或jpeg图片)                         
+                        <label for="batchAttachWatermark">附加水印：</label><input type="checkbox" id="batchAttachWatermark" name="batchAttachWatermark" /> (只支持jpg或jpeg图片)
                     </div>
                 </div>
                 <div id="tabs-4">
@@ -498,8 +486,8 @@
                     <table width="99%" border="0" cellspacing="0" cellpadding="0">
 
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">排序数字：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="inputnumber" id="f_sort" name="f_sort" value="{sort}" style=" width: 60px;font-size:14px;" maxlength="10" /> (输入数字，越大越靠前)</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_Sort">排序数字：</label></td>
+                            <td class="spe_line" style="text-align: left"><input type="text" class="input_number" id="f_Sort" name="f_Sort" value="{Sort}" style=" width: 60px;font-size:14px;" maxlength="10" /> (输入数字，越大越靠前)</td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">是否热门：</td>
@@ -584,9 +572,9 @@
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td height="60" align="center">
-                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/> <input class="btn" value="确认并继续"
+                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续"
                                                                                                     type="button"
-                                                                                                    onclick="submitForm(1)"/>
+                                                                                                    onclick="submitForm(0)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
                 </td>
             </tr>
