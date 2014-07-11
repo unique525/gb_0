@@ -40,7 +40,13 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
         $tabIndex = Control::GetRequest("tab_index",0);
         $pageIndex = Control::GetRequest("p",1);
         if($siteId > 0){
+            parent::ReplaceFirst($templateContent);
             $userLevelManageData = new UserLevelManageData();
+            $userGroupManageData = new UserGroupManageData();
+            $userGroupAllCount = 0;
+            $arrUserGroupList = $userGroupManageData->GetList($siteId,0,1000,$userGroupAllCount);
+            $tagId = "user_group_list";
+            Template::ReplaceList($templateContent,$arrUserGroupList,$tagId);
             if(!empty($_POST)){
                 $httpPostData = $_POST;
                 $result = $userLevelManageData->Create($httpPostData,$siteId);
@@ -78,7 +84,7 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
      */
     private function GenModify(){
         $templateContent = Template::Load("user/user_level_deal.html","common");
-        $userLevelId = Control::GetRequest("user_group_id",0);
+        $userLevelId = Control::GetRequest("user_level_id",0);
         $siteId = Control::GetRequest("site_id",0);
         $pageSize = Control::GetRequest("ps",0);
         $tabIndex = Control::GetRequest("tab_index",0);
@@ -92,9 +98,9 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
                 $result = $userLevelManageData->Modify($httpPostData,$userLevelId);
                 if($result > 0){
                     $closeTab = Control::PostRequest("CloseTab",0);
-                    $tabIndex = Control::GetRequest("TabIndex",0);
-                    $pageSize = Control::GetRequest("PageSize",27);
-                    $pageIndex  = Control::GetRequest("PageIndex",1);
+                    $tabIndex = Control::PostRequest("TabIndex",0);
+                    $pageSize = Control::PostRequest("PageSize",27);
+                    $pageIndex  = Control::PostRequest("PageIndex",1);
                     if($closeTab == 1){
                         Control::GoUrl("/default.php?secu=manage&mod=user_level&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
                     }else{
@@ -102,9 +108,6 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
                     }
                 }
             }
-            $arrUserLevelOne = $userLevelManageData->GetOne($userLevelId,$siteId);
-            Template::ReplaceOne($templateContent,$arrUserLevelOne);
-
             $replace_arr = array(
                 "{TabIndex}" => $tabIndex,
                 "{PageSize}" => $pageSize,
@@ -113,8 +116,16 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
                 "{SiteId}" => $siteId,
                 "{ReturnUrl}" => $returnUrl
             );
-
             $templateContent = strtr($templateContent,$replace_arr);
+
+            $userGroupManageData = new UserGroupManageData();
+            $arrUserGroupList = $userGroupManageData->GetList($siteId,0,1000,$userGroupAllCount);
+            $tagId = "user_group_list";
+            Template::ReplaceList($templateContent,$arrUserGroupList,$tagId);
+
+            $arrUserLevelOne = $userLevelManageData->GetOne($userLevelId,$siteId);
+            Template::ReplaceOne($templateContent,$arrUserLevelOne);
+
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
@@ -133,7 +144,7 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
         if($userLevelId > 0){
             $userLevelManageData = new UserLevelManageData();
             $result = $userLevelManageData->ModifyState($userLevelId,$state);
-            return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
+            return $_GET['JsonpCallBack'].'({"result":"'.$result.'"})';
         }else{
             return null;
         }

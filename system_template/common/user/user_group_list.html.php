@@ -36,11 +36,9 @@
                                         <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="edit" idvalue="{f_UserGroupId}"/>
                                 </td>
                                 <td class="spe_line2" style="text-align: left">
-                                    <div class="normal_operation_{f_UserGroupId}">
                                         {f_UserGroupName}
-                                    </div>
                                 </td>
-                                <td class="spe_line2" style="width:60px;text-align: center"><span class="span_state">{f_State}</span></td>
+                                <td class="spe_line2" style="width:60px;text-align: center"><span class="span_state" idvalue="{f_UserGroupId}">{f_State}</span></td>
                                 <td class="spe_line2" style="width:80px;text-align: center">
                                     <img class="div_start" idvalue="{f_UserGroupId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
                                     &nbsp;&nbsp;

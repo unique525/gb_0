@@ -37,12 +37,13 @@ class UserLevelManageData extends BaseManageData {
      * 修改
      * @param array $httpPostData  $_POST数组
      * @param int $userLevelId 会员等级ID
+     * @param string $userLevelPic 会员等级图片
      * @return int|null 返回影响的行数
      */
-    public function Modify($httpPostData,$userLevelId){
+    public function Modify($httpPostData,$userLevelId,$userLevelPic=""){
         if($userLevelId > 0){
             $dataProperty = new DataProperty();
-            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserLevel,self::TableName_UserLevel,$userLevelId,$dataProperty);
+            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserLevel,self::TableId_UserLevel,$userLevelId,$dataProperty,"UserLevelPic",$userLevelPic);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
             return $result;
         }else{
@@ -79,8 +80,9 @@ class UserLevelManageData extends BaseManageData {
      */
     public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
         if($siteId > 0){
-            $sql = "SELECT * FROM ".self::TableName_UserLevel." WHERE SiteId = :SiteId ORDER BY UserLevelId LIMIT ".$pageBegin.",".$pageSize.";";
-            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserLevel." WHERE SiteId = :SiteId";
+            $sql = "SELECT ul.*,ug.UserGroupName AS UserGroupName FROM ".self::TableName_UserLevel." ul,".self::TableName_UserGroup." ug
+                WHERE ul.SiteID = :SiteId AND ul.UpdateToUserGroupId = ug.UserGroupId ORDER BY UserLevelId LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) AS UserGroupName FROM ".self::TableName_UserLevel." ul,".self::TableName_UserGroup." ug WHERE ul.SiteId = :SiteId AND ul.UpdateToUserGroupId = ug.UserGroupId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
@@ -97,11 +99,11 @@ class UserLevelManageData extends BaseManageData {
      * @param int $siteId 站点ID
      * @return array|null 单个用户组信息
      */
-    public function GetOne($userGroupId,$siteId){
-        if($userGroupId > 0 && $siteId > 0){
+    public function GetOne($userLevelId,$siteId){
+        if($userLevelId > 0 && $siteId > 0){
             $dataProperty = new DataProperty();
-            $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId;";
-            $dataProperty->AddField("UserGroupId",$userGroupId);
+            $sql = "SELECT ul.*,ug.UserGroupId AS UserGroupId FROM ".self::TableName_UserLevel." ul,".self::TableName_UserGroup." ug WHERE ul.UserLevelId = :UserLevelId AND ul.UpdateToUserGroupId = ug.UserGroupId AND ul.SiteId = :SiteId;";
+            $dataProperty->AddField("UserLevelId",$userLevelId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
             return $result;
@@ -379,7 +381,7 @@ class UserLevelManageData extends BaseManageData {
     }
 
     /**
-     * 取得等级数字
+     * 取得会员等级级别
      * @param int $userLevelId 等级Id
      * @return  int 等级数字
      */
