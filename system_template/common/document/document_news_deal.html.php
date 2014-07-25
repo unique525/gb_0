@@ -283,8 +283,7 @@
                     {
                         alert(e);
                     }
-                })
-                return false;
+                });
 
             }
 
@@ -469,7 +468,7 @@
                 </div>
                 <div id="tabs-3">
                     <div id="uploader">
-                        <p>您的浏览器不支持 Flash, Silverlight, Gears, BrowserPlus 或 HTML5，不能使用组图上传功能</p>
+                        <p>您的浏览器不支持 Flash, SilverLight, Gears, BrowserPlus 或 HTML5，不能使用组图上传功能</p>
                     </div>
                     <div class="spe_line" style=" line-height: 30px;"><label for="f_ShowPicMethod">使用组图控件展示内容中的图片</label>
                         <select id="f_ShowPicMethod" name="f_ShowPicMethod">
@@ -492,74 +491,121 @@
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">是否热门：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input type="radio"  name="f_ishot" value="0" {r_ishot_0} /> 否
-                                <input type="radio"  name="f_ishot" value="1" {r_ishot_1} /> 是     
+                                <label>
+                                    <input type="radio" name="f_IsHot" value="0"/>
+                                    否
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_IsHot" value="1"/>
+                                    是
+                                </label>
+                                {r_IsHot}
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">推荐级别：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input type="radio"  name="f_reclevel" value="0" {r_reclevel_0} /> 0
-                                <input type="radio"  name="f_reclevel" value="1" {r_reclevel_1} /> 1
-                                <input type="radio"  name="f_reclevel" value="2" {r_reclevel_2} /> 2
-                                <input type="radio"  name="f_reclevel" value="3" {r_reclevel_3} /> 3
-                                <input type="radio"  name="f_reclevel" value="4" {r_reclevel_4} /> 4
-                                <input type="radio"  name="f_reclevel" value="5" {r_reclevel_5} /> 5  
-                                <input type="radio"  name="f_reclevel" value="6" {r_reclevel_6} /> 6  
-                                <input type="radio"  name="f_reclevel" value="7" {r_reclevel_7} /> 7 
-                                <input type="radio"  name="f_reclevel" value="8" {r_reclevel_8} /> 8  
-                                <input type="radio"  name="f_reclevel" value="9" {r_reclevel_9} /> 9
-                                <input type="radio"  name="f_reclevel" value="10" {r_reclevel_10} /> 10   
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="0"/>
+                                    0
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="1"/>
+                                    1
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="2"/>
+                                    2
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="3"/>
+                                    3
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="4"/>
+                                    4
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="5"/>
+                                    5
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="6"/>
+                                    6
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="7"/>
+                                    7
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="8"/>
+                                    8
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="9"/>
+                                    9
+                                </label>
+                                <label>
+                                    <input type="radio" name="f_RecLevel" value="10"/>
+                                    10
+                                </label>
+                                {r_RecLevel}
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">显示时间：</td>
-                            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_showdate" name="f_showdate" value="{showdate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" /> <input type="text" class="inputnumber" style=" width:20px;font-size:14px;" id="f_showhour" name="f_showhour" value="{showhour}" maxlength="2" value="00" />:<input type="text" class="inputnumber" style=" width:20px;font-size:14px;" id="f_showminute" name="f_showminute" value="{showminute}" maxlength="2" value="00" />:<input type="text" class="inputnumber" style=" width:20px;font-size:14px;" id="f_showsecond" name="f_showsecond" value="{showsecond}" maxlength="2" value="00" /> (在文档中显示出来的时间，可任意设置)
+                            <td class="spe_line" style="text-align: left">
+                                <input type="text" class="input_box" id="f_ShowDate" name="f_ShowDate" value="{ShowDate}" style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly" /><label for="f_ShowDate"> </label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ShowHour" name="f_ShowHour" value="{ShowHour}" maxlength="2" /><label for="f_ShowHour">:</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ShowMinute" name="f_ShowMinute" value="{ShowMinute}" maxlength="2" /><label for="f_ShowMinute">:</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ShowSecond" name="f_ShowSecond" value="{ShowSecond}" maxlength="2" /><label for="f_ShowSecond"> (在文档中显示出来的时间，可任意设置)</label>
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">新闻类型：</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DocumentNewsType">新闻类型：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <select id="f_documentnewstype" name="f_documentnewstype">
-                                    <option value="0" {s_documentnewstype_0}>常规新闻</option>
-                                    <option value="5" {s_documentnewstype_5}>推送新闻</option>
-                                </select>
+                                <select id="f_DocumentNewsType" name="f_DocumentNewsType">
+                                    <option value="0">常规新闻</option>
+                                </select>{s_DocumentNewsType}
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">当前状态：</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_State">当前状态：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <select id="f_state" name="f_state">
-                                    <option value="0" {s_state_0}>新稿</option>
-                                    <option value="1" {s_state_1}>已编</option>
-                                    <option value="2" {s_state_2}>返工</option>
-                                    <option value="11" {s_state_11}>一审</option>
-                                    <option value="12" {s_state_12}>二审</option>
-                                    <option value="13" {s_state_13}>三审</option>
-                                    <option value="14" {s_state_14}>终审</option>
-                                    <option value="127" {s_state_127}> </option>
+                                <select id="f_State" name="f_state">
+                                    <option value="0">新稿</option>
+                                    <option value="1">已编</option>
+                                    <option value="2">返工</option>
+                                    <option value="11">一审</option>
+                                    <option value="12">二审</option>
+                                    <option value="13">三审</option>
+                                    <option value="14">终审</option>
+                                    <option value="127"> </option>
                                 </select>
+                                {s_state}
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">新闻评论：</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_OpenComment">新闻评论：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <select id="f_opencomment" name="f_opencomment">
-                                    <option value="40" {s_opencomment_40}>根据频道设置而定</option>
-                                    <option value="20" {s_opencomment_20}>允许但需要审核（先发后审）</option>
-                                    <option value="10" {s_opencomment_10}>允许但需要审核（先审后发）</option>
-                                    <option value="30" {s_opencomment_30}>自由评论</option>
-                                    <option value="0" {s_opencomment_0}>不允许</option>
+                                <select id="f_OpenComment" name="f_OpenComment">
+                                    <option value="40">根据频道设置而定</option>
+                                    <option value="20">允许但需要审核（先发后审）</option>
+                                    <option value="10">允许但需要审核（先审后发）</option>
+                                    <option value="30">自由评论</option>
+                                    <option value="0">不允许</option>
                                 </select>
+                                {s_OpenComment}
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style="width:200px;height:35px;text-align: right;">心情表态：</td>
+                            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_ClosePosition">心情表态：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <select id="f_closeposition" name="f_closeposition">
-                                    <option value="0" {s_closeposition_0}>开启</option>
-                                    <option value="1" {s_closeposition_1}>关闭</option>
+                                <select id="f_ClosePosition" name="f_ClosePosition">
+                                    <option value="0">开启</option>
+                                    <option value="1">关闭</option>
                                 </select>
+                                {s_ClosePosition}
                             </td>
                         </tr>
                     </table>
