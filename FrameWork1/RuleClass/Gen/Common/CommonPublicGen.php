@@ -51,8 +51,8 @@ class CommonPublicGen extends BasePublicGen implements IBasePublicGen {
      */
     private function CheckVerifyCode() {
         $sessionName = Control::GetRequest("sn", "");
-        $verifyCodeType = Control::GetRequest("vct", 0);  //0:int  1:json
-        $verifyCodeValue = Control::GetRequest("vcv", 0);
+        $verifyCodeType = Control::GetRequest("verify_code_type", 0);  //0:int  1:json
+        $verifyCodeValue = Control::GetRequest("verify_code_value", 0);
         $result = VerifyCode::Check($sessionName, $verifyCodeType, $verifyCodeValue);
         return $result;
     }

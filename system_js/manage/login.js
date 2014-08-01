@@ -12,7 +12,7 @@ $().ready(function() {
     $("#manage_user_name").blur(function() {
         $.ajax({
             type: "get",
-            url: "default.php?mod=manage&a=get_verify_type",
+            url: "default.php?mod=manage&a=async_get_verify_type",
             data: {
                 manage_user_name: $("#manage_user_name").val()
             },
@@ -72,7 +72,7 @@ function subForm() {
     }
 
     var code = txtCheckCode.val();
-    $.post("/default.php?mod=common&a=check_verify_code&sn=manage_login&vct=0&vcv=" + code, {
+    $.post("/default.php?mod=common&a=check_verify_code&sn=manage_login&verify_code_type=0&verify_code_value=" + code, {
         opResult: $(this).html()
     }, function(xml) {
         var result = parseInt(xml);
@@ -81,7 +81,47 @@ function subForm() {
             divTips.html("验证码错误！");
             divTips.insertAfter("#div_verify_code");
         } else if (result == 1) {
-            $('#login_form').submit();
+            //ajax submit
+            $.ajax({
+                type: "post",
+                url: "default.php?mod=manage&a=async_do_login",
+                data: {
+                    manage_user_name: $("#manage_user_name").val(),
+                    manage_user_pass: $("#manage_user_pass").val(),
+                    manage_user_otp_number : $("#manage_user_otp_number").val()
+                },
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function(data) {
+                    if(data != undefined){
+                        var result = parseInt(data["result"]);
+                        switch (result){
+                            case -1:
+                                divTips.css("display", "block");
+                                divTips.html("参数错误，请重试！");
+                                divTips.insertAfter("#btn_box");
+                                break;
+                            case -3:
+                                divTips.css("display", "block");
+                                divTips.html("登录失败，原因可能是帐号密码错误，或者您的帐号已经停用或过期！");
+                                divTips.insertAfter("#btn_box");
+                                break;
+                            case -6:
+                                divTips.css("display", "block");
+                                divTips.html("登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码！");
+                                divTips.insertAfter("#btn_box");
+                                break;
+                            case 1:
+                                window.location.href = "default.php?secu=manage";
+                                //divTips.css("display", "block");
+                                //divTips.html("登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码！");
+                                //divTips.insertAfter("#btn_box");
+                                break;
+                        }
+                    }
+                }
+            });
+            //$('#login_form').submit();
         } else {
 
         }

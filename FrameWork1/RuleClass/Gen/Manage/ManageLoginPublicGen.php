@@ -24,8 +24,11 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
             case "logout":
                 self::Logout();
                 break;
-            case "get_verify_type":
+            case "async_get_verify_type":
                 $result = self::AsyncGetVerifyType();
+                break;
+            case "async_do_login":
+                $result = self::AsyncDoLogin();
                 break;
         }
 
@@ -39,7 +42,43 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
     private function Login()
     {
         $tempContent = Template::Load("manage/login.html", "common");
+        parent::ReplaceEnd($tempContent);
+        $result = $tempContent;
+        return $result;
+    }
 
+
+
+    /**
+     * 登录成功
+     */
+    const MANAGE_LOGIN_RESULT_SUCCESS = 1;
+
+    /**
+     * 登录失败，参数错误
+     */
+    const MANAGE_LOGIN_RESULT_PARAM_ERROR = -1;
+
+    /**
+     * 登录失败，原因可能是帐号密码错误，或者您的帐号已经停用或过期
+     */
+    const MANAGE_LOGIN_RESULT_PASSWORD_ERROR_OR_ACCOUNT_EXPIRED = -3;
+
+    /**
+     * 登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码
+     */
+    const MANAGE_LOGIN_RESULT_OPT_FAILURE = -6;
+
+    /**
+     * 登录失败，因为此帐号不允许外网使用，请联系管理人员
+     */
+    const MANAGE_LOGIN_RESULT_INTERNET_FORBIDDEN = -8;
+
+    /**
+     * Ajax登录
+     * @return string 返回登录结果编码
+     */
+    private function AsyncDoLogin(){
         if (!empty($_POST)) {
             $isSecurityIp = parent::IsSecurityIp();
             $manageUserManageData = new ManageUserManageData();
@@ -68,27 +107,36 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
                                 //验证成功写入成功值和漂移值
                                 $manageUserManageData->ModifyForOtp($manageUserId, $otpCurrentSuccess, $otpCurrentDrift);
                                 self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
+                                $result = self::MANAGE_LOGIN_RESULT_SUCCESS;
                             } else {
-                                Control::ShowMessage(Language::Load('common', 6));
+                                //登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码!
+                                $result = self::MANAGE_LOGIN_RESULT_OPT_FAILURE;
+                                //Control::ShowMessage(Language::Load('common', 6));
                             }
                         } else {
                             //口令牌和短信验证方式都未开启的话默认登录
                             self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
+                            $result = self::MANAGE_LOGIN_RESULT_SUCCESS;
                         }
                     } else {
-                        Control::ShowMessage(Language::Load('common', 8));
+                        //登录失败，因为此帐号不允许外网使用，请联系管理人员!
+                        $result = self::MANAGE_LOGIN_RESULT_INTERNET_FORBIDDEN;
+                        //Control::ShowMessage(Language::Load('common', 8));
                     }
                 } else {
                     self::DoLogin($manageUserId, $manageUserName, $manageUserManageData);
+                    $result = self::MANAGE_LOGIN_RESULT_SUCCESS;
                 }
             } else {
-                Control::ShowMessage(Language::Load('common', 3));
+                //登录失败，原因可能是帐号密码错误，或者您的帐号已经停用或过期!
+                $result = self::MANAGE_LOGIN_RESULT_PASSWORD_ERROR_OR_ACCOUNT_EXPIRED;
+                //Control::ShowMessage(Language::Load('common', 3));
             }
+        }else{
+            //参数错误，请重试
+            $result = self::MANAGE_LOGIN_RESULT_PARAM_ERROR;
         }
-
-        parent::ReplaceEnd($tempContent);
-        $result = $tempContent;
-        return $result;
+        return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
     }
 
     /**
@@ -112,7 +160,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0) {
             Control::SetUserCookie($userId, $userName);
         }
-        Control::GoUrl("default.php?secu=manage");
+        //Control::GoUrl("default.php?secu=manage");
     }
 
     /**
@@ -151,12 +199,12 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
         $arrVerifyType = array("open_public_login" => "0", "otp_verify_login" => "0");
         if (!$isSecurityIp) { //不是内网IP再判断是否需要额外验证
             $manageUserName = Control::GetRequest("manage_user_name", "");
-            $manageUserData = new ManageUserData();
-            $openPublicLogin = $manageUserData->GetOpenENLogin($manageUserName);
+            $manageUserManageData = new ManageUserManageData();
+            $openPublicLogin = $manageUserManageData->GetOpenPublicLogin($manageUserName);
             //允许外网登陆
             if ($openPublicLogin === 1) {
                 $arrVerifyType["open_public_login"] = "1";
-                $otpVerifyLogin = $manageUserData->GetOtpVerifyLogin($manageUserName);
+                $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLogin($manageUserName);
                 if ($otpVerifyLogin === 1) { //开启了口令牌认证
                     $arrVerifyType["otp_verify_login"] = "1";
                 }

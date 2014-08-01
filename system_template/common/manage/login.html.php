@@ -27,7 +27,7 @@
                 <label for="txt_check_code">验证：</label><input id="txt_check_code" name="txt_check_code" class="input_box2" type="text" value="" maxlength="5" /> <img src="/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login" title="" alt="" onclick="this.setAttribute('src','/default.php?mod=common&a=gen_gif_verify_code&sn=manage_login&n='+Math.random());" style="cursor: pointer;" />
             </div>
             
-            <div class="btn_box">
+            <div id="btn_box" class="btn_box">
                 <input type="button" id="btn_sub" class="btn_login1" value="登 录" />
             </div>
         
