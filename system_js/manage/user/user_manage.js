@@ -60,7 +60,7 @@ $(document).ready(function() {
                 //会员订单管理
                 $("#btnUserOrderExplore").click(function (event) {
                     event.preventDefault();
-                    window.G_TabTitle = '会员管理';
+                    window.G_TabTitle = '会员订单管理';
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_order&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });

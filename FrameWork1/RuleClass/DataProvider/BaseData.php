@@ -211,6 +211,10 @@ class BaseData
      */
     const TableName_UserInfo = "cst_user_info";
     /**
+     * 会员详细信息 数据表名
+     */
+    const TableName_UserOrder = "cst_user_order";
+    /**
      * 会员角色 数据表名
      */
     const TableName_UserRole = "cst_user_role";
