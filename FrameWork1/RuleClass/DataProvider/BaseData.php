@@ -211,9 +211,13 @@ class BaseData
      */
     const TableName_UserInfo = "cst_user_info";
     /**
-     * 会员详细信息 数据表名
+     * 会员订单信息 数据表名
      */
     const TableName_UserOrder = "cst_user_order";
+    /**
+     * 会员订单产品信息 数据表名
+     */
+    const TableName_UserOrderProduct = "cst_user_order_product";
     /**
      * 会员角色 数据表名
      */
@@ -347,6 +351,11 @@ class BaseData
      * 上传文件 数据表自增字段名
      */
     const TableId_UploadFile = "UploadFileId";
+
+    /**
+     * 产品 数据表明
+     */
+    const TableName_Product = "cst_product";
 
     /**
      * 数据库操作对象的实例

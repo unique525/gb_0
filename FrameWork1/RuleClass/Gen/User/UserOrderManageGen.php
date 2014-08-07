@@ -26,8 +26,20 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
 
     private function GenModify(){
         $userOrderId = Control::GetRequest("user_order_id",0);
-        if($userOrderId > 0){
+        $siteId = Control::GetRequest("site_id",0);
+        if($userOrderId > 0 && $siteId > 0){
             $templateContent = Template::Load("user/user_order_deal.html","common");
+            parent::ReplaceFirst($templateContent);
+            $userOrderManageData = new UserOrderManageData();
+            $userOrderProductManageData = new UserOrderProductManageData();
+
+            $arrUserOrderOne = $userOrderManageData->GetOne($userOrderId,$siteId);
+            $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId);
+
+            $result = $userOrderManageData->Modify($userOrderId,$siteId);
+            //加入操作日志
+            $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+            self::CreateManageUserLog($operateContent);
             return $templateContent;
         }else{
             return null;
@@ -61,6 +73,8 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             $replace_arr = array(
                 "{SiteId}" => $siteId
             );
+
+
             $templateContent = strtr($templateContent,$replace_arr);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
@@ -73,6 +87,7 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
         if($siteId > 0 && $userOrderId >0){
+            $state = Control::GetRequest("state",0);
             return $_GET['jsonpcallback'].'';
         }else{
             return $_GET['jsonpcallback'].'';

@@ -6,7 +6,10 @@
  * Time: 下午4:13
  */
 
-class UserAlbumPicPublicGen {
+class UserAlbumPicPublicGen extends BasePublicGen implements IBasePublicGen{
 
+    public function GenPublic(){
+
+    }
 }
 ?>
