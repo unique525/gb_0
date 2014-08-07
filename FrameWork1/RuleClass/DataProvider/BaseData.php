@@ -215,9 +215,17 @@ class BaseData
      */
     const TableName_UserOrder = "cst_user_order";
     /**
+     * 会员订单信息 数据表自增字段名
+     */
+    const TableId_UserOrder = "UserOrderId";
+    /**
      * 会员订单产品信息 数据表名
      */
     const TableName_UserOrderProduct = "cst_user_order_product";
+    /**
+     * 会员订单产品信息 数据表自增字段名
+     */
+    const TableId_UserOrderProduct = "UserOrderProductId";
     /**
      * 会员角色 数据表名
      */
@@ -353,9 +361,13 @@ class BaseData
     const TableId_UploadFile = "UploadFileId";
 
     /**
-     * 产品 数据表明
+     * 产品 数据表名
      */
     const TableName_Product = "cst_product";
+    /**
+     * 产品 数据表自增字段名
+     */
+    const TableId_Product = "ProductId";
 
     /**
      * 数据库操作对象的实例
