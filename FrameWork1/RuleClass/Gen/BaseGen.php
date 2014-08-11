@@ -558,7 +558,7 @@ class BaseGen
                     $newFileName = 'user_attachment_' . $userId . '_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case 22: //投票选项图片
+            case UploadFileManageData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM: //投票选项图片
                 $uploadFilePath = $uploadPath . "vote_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
