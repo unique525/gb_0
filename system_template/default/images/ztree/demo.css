@@ -13,7 +13,7 @@ input.empty {color: lightgray;}
 code {color: #2f332a;}
 .highlight_red {color:#A60000;}
 .highlight_green {color:#A7F43D;}
-li {list-style: circle;font-size: 12px;}
+li {list-style: none;font-size: 12px;}
 li.title {list-style: none;}
 ul.list {margin-left: 17px;}
 
