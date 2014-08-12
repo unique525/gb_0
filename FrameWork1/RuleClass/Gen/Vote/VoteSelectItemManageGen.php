@@ -55,7 +55,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
             if (!empty($_POST)) {
                 //title_pic
                 $fileElementName = "title_pic_upload";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM;
                 $titlePic1UploadFileId = 0;
                 $titlePicPath = self::Upload($fileElementName, $uploadTableType, 1, $titlePic1UploadFileId);
                 $titlePicPath = str_ireplace("..", "", $titlePicPath);
@@ -126,7 +126,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
             if (!empty($_POST)) {
                 //title_pic
                 $fileElementName = "title_pic_upload";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM;
                 $titlePic1UploadFileId = 0;
                 $titlePicPath = self::Upload($fileElementName, $uploadTableType, 1, $titlePic1UploadFileId);
                 $titlePicPath = str_ireplace("..", "", $titlePicPath);

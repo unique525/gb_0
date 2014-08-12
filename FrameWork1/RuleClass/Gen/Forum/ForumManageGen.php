@@ -80,12 +80,18 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 $uploadFileManageData = new UploadFileManageData();
                 //title pic1
                 $fileElementName = "file_forum_pic_1";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_1;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1;
                 $forumPic1UploadFileId = 0;
                 $uploadResult = new UploadResult();
                 $forumPic1Path = "";
 
-                $forumPic1UploadResult = self::Upload($fileElementName, $uploadTableType, 0, $uploadResult, $forumPic1UploadFileId);
+                $forumPic1UploadResult = self::Upload(
+                    $fileElementName,
+                    $uploadTableType,
+                    0,
+                    $uploadResult,
+                    $forumPic1UploadFileId
+                );
 
                 //echo $returnJson;
 
@@ -93,12 +99,11 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                     //上传出错或没有选择文件上传
                 } else {
                     if (isset($uploadResult)) {
-                        $forumPic1Path = $uploadResult->getUploadFilePath();
+                        $forumPic1Path = $uploadResult->UploadFilePath;
 
                         $forumPic1Path = str_ireplace("..", "", $forumPic1Path);
                         //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
                         if (strlen($forumPic1Path) > 0) {
-                            echo $forumPic1Path;
                             $siteConfigManageData = new SiteConfigManageData($siteId);
                             $forumPicMobileWidth = $siteConfigManageData->ForumPicMobileWidth;
                             $forumPicPadWidth = $siteConfigManageData->ForumPicPadWidth;
@@ -110,7 +115,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                                 $thumbFileName = "mobile";
                                 $forumPicMobile = ImageObject::GenThumb($forumPic1Path, $forumPicMobileWidth, 0, $thumbFileName);
                                 sleep(1);
-                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
+                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
                                 $newFileName = FileObject::GetName($forumPicMobile);
                                 $fileExtension = FileObject::GetExtension($forumPicMobile);
                                 $filePath = FileObject::GetDirName($forumPicMobile);
@@ -135,7 +140,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                                 $thumbFileName = "pad";
                                 $forumPicPad = ImageObject::GenThumb($forumPic1Path, $forumPicPadWidth, 0, $thumbFileName);
                                 sleep(1);
-                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
+                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
                                 $newFileName = FileObject::GetName($forumPicPad);
                                 $fileExtension = FileObject::GetExtension($forumPicPad);
                                 $filePath = FileObject::GetDirName($forumPicPad);
@@ -163,14 +168,20 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 //title pic2
                 //title pic1
                 $fileElementName = "file_forum_pic_2";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
                 $forumPic2UploadFileId = 0;
-                $forumPic2UploadResult = self::Upload($fileElementName, $uploadTableType, 0, $uploadResult, $forumPic2UploadFileId);
+                $forumPic2UploadResult = self::Upload(
+                    $fileElementName,
+                    $uploadTableType,
+                    0,
+                    $uploadResult,
+                    $forumPic2UploadFileId
+                );
                 $forumPic2Path = "";
                 if (intval($forumPic2UploadResult) <= 0) {
                     //上传出错或没有选择文件上传
                 } else {
-                    $forumPic2Path = $uploadResult->getUploadFilePath();
+                    $forumPic2Path = $uploadResult->UploadFilePath;
                     $forumPic2Path = str_ireplace("..", "", $forumPic2Path);
                 }
 

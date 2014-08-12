@@ -419,166 +419,168 @@ class BaseGen
         $uploadFilePath = "";
         $date = strval(date('Ymd', time()));
         switch ($tableType) {
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1:
+            case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1:
                 /**资讯题图1   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = 'title_pic1_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2:
+            case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2:
                 /**资讯题图2   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = 'title_pic2_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3:
+            case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3:
                 /**资讯题图3   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = 'title_pic3_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT:
+            case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT:
                 /**资讯内容图   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = 'document_news_content_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_MANAGE_TASK:
+            case UploadFileData::UPLOAD_TABLE_TYPE_MANAGE_TASK:
                 /**管理任务上传  */
                 if ($manageUserId > 0) {
                     $uploadFilePath = $uploadPath . "manage_task" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_MANAGE_TASK_REPLY:
+            case UploadFileData::UPLOAD_TABLE_TYPE_MANAGE_TASK_REPLY:
                 /**管理任务回复上传  */
                 if ($manageUserId > 0) {
                     $uploadFilePath = $uploadPath . "manage_task_reply" . DIRECTORY_SEPARATOR . strval($manageUserId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_QUESTION: //咨询问答上传
+            case UploadFileData::UPLOAD_TABLE_TYPE_QUESTION: //咨询问答上传
 
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC:
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC:
                 /**产品题图   tableId 为 channelId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                     $newFileName = uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION:
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION:
                 //产品参数类型选项
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE:
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE:
                 //产品参数类型
                 $uploadFilePath = $uploadPath . "product_param_type" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_AD_CONTENT:
+            case UploadFileData::UPLOAD_TABLE_TYPE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC:
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC:
                 //活动类题图上传
                 $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . "_";
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传
 
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_GROUP:
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_GROUP:
                 //会员组
                 $uploadFilePath = $uploadPath . "user_group" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_AVATAR:
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR:
                 //会员头像
 
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_ALBUM_COVER:
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_COVER:
                 //会员相册封面
 
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_LINK:
+            case UploadFileData::UPLOAD_TABLE_TYPE_SITE_LINK:
                 //友情链接类
                 $uploadFilePath = $uploadPath . "site_link" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_CONTENT: //自定义页面类
+            case UploadFileData::UPLOAD_TABLE_TYPE_SITE_CONTENT: //自定义页面类
                 $uploadFilePath = $uploadPath . "site_content" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_SITE_CONFIG:
+            case UploadFileData::UPLOAD_TABLE_TYPE_SITE_CONFIG:
                 /** 站点配置图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "site_config" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_1:
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1:
                 /** 论坛版块图标1 */
                 $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_PIC_2:
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2:
                 /** 论坛版块图标2 */
                 $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
                 /** 论坛帖子内容 */
                 $uploadFilePath = $uploadPath . "forum_post" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
-            case 19: //自定义表单
+            case UploadFileData::UPLOAD_TABLE_TYPE_CUSTOM_FORM: //自定义表单
                 $uploadFilePath = $uploadPath . "custom_form" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case 20:
+            case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1:
                 /** 频道图片1 tableId 为 channelId */
                 $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_LEVEL:
+            case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2:
+                /** 频道图片1 tableId 为 channelId */
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3:
+                /** 频道图片1 tableId 为 channelId */
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_LEVEL:
                 /** 会员等级 */
                 $uploadFilePath = $uploadPath . "user_level" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_USER_ATTACHMENT:
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_ATTACHMENT:
                 /** 会员附件 */
                 if ($userId > 0) {
                     $uploadFilePath = $uploadPath . "user_attachment" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
                     $newFileName = 'user_attachment_' . $userId . '_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM: //投票选项图片
+            case UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM: //投票选项图片
                 $uploadFilePath = $uploadPath . "vote_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE: //新闻题图,移动终端使用
-                //由系统自动生成
-                break;
-            case UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD: //新闻题图,平板电脑使用
-                //由系统自动生成
-                break;
-            case 25: //移动客户端投稿
-                break;
-            case 26: //会员心情图标 tableId 为 siteId
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_MOOD: //会员心情图标 tableId 为 siteId
                 $uploadFilePath = $uploadPath . "user_mood" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = $tableId . '_user_mood_' . uniqid() . '.' . $fileExtension;
                 break;
-            case 27: //考试类用
+            case UploadFileData::UPLOAD_TABLE_TYPE_EXAM_QUESTION: //考试类用
                 $uploadFilePath = $uploadPath . "exam" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case 28: //会员签名图标
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_SIGN: //会员签名图标
                 if ($userId > 0) {
                     $uploadFilePath = $uploadPath . "user_sign" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
                     $newFileName = uniqid() . '.' . $fileExtension;
@@ -737,6 +739,43 @@ class BaseGen
         return $errorMessage;
     }
 
+
+
+    public function GenUploadFileMobile($uploadFileId, $width, $height = 0){
+
+    }
+
+    public function GenUploadFilePad($uploadFileId, $width, $height = 0){
+
+    }
+
+    public function GenUploadFileThumb1($uploadFileId){
+
+    }
+
+    public function GenUploadFileThumb2($uploadFileId){
+
+    }
+
+    public function GenUploadFileThumb3($uploadFileId){
+
+    }
+
+    public function GenUploadFileWatermark1($uploadFileId){
+
+    }
+
+    public function GenUploadFileWatermark2($uploadFileId){
+
+    }
+
+    public function GenUploadFileCompress1($uploadFileId){
+
+    }
+
+    public function GenUploadFileCompress2($uploadFileId){
+
+    }
 }
 
 ?>

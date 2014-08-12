@@ -74,31 +74,75 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 if (!$hasRepeatPublishPath) {
                     //title pic1
                     $fileElementName = "file_title_pic_1";
-                    $tableType = 20; //channel
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
                     $tableId = 0;
-                    $returnType = 1;
+                    $uploadResult1 = new UploadResult();
                     $uploadFileId1 = 0;
-                    $titlePicPath1 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId1);
-                    $titlePicPath1 = str_ireplace("..", "", $titlePicPath1);
-                    if (!empty($titlePicPath1)) {
-                        sleep(1);
+                    $titlePic1Path = "";
+                    $titlePic1Result = self::Upload(
+                        $fileElementName,
+                        $tableType,
+                        $tableId,
+                        $uploadResult1,
+                        $uploadFileId1
+                    );
+
+                    if (intval($titlePic1Result) <=0){
+                        //上传出错或没有选择文件上传
+                    }else{
+                        $titlePic1Path = $uploadResult1->UploadFilePath;
+                        $titlePic1Path = str_ireplace("..", "", $titlePic1Path);
                     }
+                    sleep(1);
+
                     //title pic2
                     $fileElementName = "file_title_pic_2";
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
                     $uploadFileId2 = 0;
-                    $titlePicPath2 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId2);
-                    $titlePicPath2 = str_ireplace("..", "", $titlePicPath2);
-                    if (!empty($titlePicPath2)) {
-                        sleep(1);
+                    $titlePic2Path = "";
+                    $uploadResult2 = new UploadResult();
+                    $titlePic2Result = self::Upload(
+                        $fileElementName,
+                        $tableType,
+                        $tableId,
+                        $uploadResult2,
+                        $uploadFileId2
+                    );
+                    if (intval($titlePic2Result) <=0){
+                        //上传出错或没有选择文件上传
+                    }else{
+                        $titlePic2Path = $uploadResult2->UploadFilePath;
+                        $titlePic2Path = str_ireplace("..", "", $titlePic2Path);
                     }
                     //title pic3
                     $fileElementName = "file_title_pic_3";
 
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
                     $uploadFileId3 = 0;
-                    $titlePicPath3 = $this->Upload($fileElementName, $tableType, $tableId, $returnType, $uploadFileId3);
-                    $titlePicPath3 = str_ireplace("..", "", $titlePicPath3);
 
-                    $channelId = $channelManageData->Create($httpPostData, $titlePicPath1, $titlePicPath2, $titlePicPath3);
+                    $titlePic3Path = "";
+                    $uploadResult3 = new UploadResult();
+
+                    $titlePic3Result = self::Upload(
+                        $fileElementName,
+                        $tableType,
+                        $tableId,
+                        $uploadResult3,
+                        $uploadFileId3)
+                    ;
+                    if (intval($titlePic3Result) <=0){
+                        //上传出错或没有选择文件上传
+                    }else{
+                        $titlePic3Path = $uploadResult3->UploadFilePath;
+                        $titlePic3Path = str_ireplace("..", "", $titlePic3Path);
+                    }
+
+                    $channelId = $channelManageData->Create(
+                        $httpPostData,
+                        $titlePic1Path,
+                        $titlePic2Path,
+                        $titlePic3Path
+                    );
                     //加入操作日志
                     $operateContent = 'Create Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$channelId;
                     self::CreateManageUserLog($operateContent);

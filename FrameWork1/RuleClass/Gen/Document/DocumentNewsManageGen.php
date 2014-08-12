@@ -104,11 +104,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $titlePicMobileUploadFileId = -1;
                     $titlePicPadUploadFileId = -1;
                     $uploadFileManageData = new UploadFileManageData();
+                    $uploadResult = new UploadResult();
                     //title pic1
                     $fileElementName = "title_pic_1_upload";
-                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
+                    $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
+                    $uploadTableId = 0;
                     $titlePic1UploadFileId = 0;
-                    $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
+                    $titlePic1Path = self::Upload(
+                        $fileElementName,
+                        $uploadTableType,
+                        $uploadTableId,
+                        $uploadResult,
+                        $titlePic1UploadFileId
+                    );
 
                     if(intval($titlePic1Path)<=0){
                         //上传出错或没有选择文件上传
@@ -128,7 +136,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 $thumbFileName = "mobile";
                                 $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
                                 sleep(1);
-                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
+                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
                                 $newFileName = FileObject::GetName($titlePicMobile);
                                 $fileExtension = FileObject::GetExtension($titlePicMobile);
                                 $filePath = FileObject::GetDirName($titlePicMobile);
@@ -153,7 +161,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 $thumbFileName = "pad";
                                 $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
                                 sleep(1);
-                                $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
+                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
                                 $newFileName = FileObject::GetName($titlePicPad);
                                 $fileExtension = FileObject::GetExtension($titlePicPad);
                                 $filePath = FileObject::GetDirName($titlePicPad);
@@ -178,7 +186,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                     //title pic2
                     $fileElementName = "title_pic_2_upload";
-                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
+                    $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
                     $titlePic2UploadFileId = 0;
                     $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
 
@@ -190,7 +198,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                     //title pic3
                     $fileElementName = "title_pic_3_upload";
-                    $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
+                    $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
                     $titlePic3UploadFileId = 0;
                     $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
 
@@ -417,7 +425,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $uploadFileManageData = new UploadFileManageData();
                 //title pic1
                 $fileElementName = "file_title_pic_1";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
                 $titlePic1UploadFileId = 0;
                 $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
 
@@ -439,7 +447,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $thumbFileName = "mobile";
                             $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
                             sleep(1);
-                            $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
                             $newFileName = FileObject::GetName($titlePicMobile);
                             $fileExtension = FileObject::GetExtension($titlePicMobile);
                             $filePath = FileObject::GetDirName($titlePicMobile);
@@ -464,7 +472,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $thumbFileName = "pad";
                             $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
                             sleep(1);
-                            $tableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
                             $newFileName = FileObject::GetName($titlePicPad);
                             $fileExtension = FileObject::GetExtension($titlePicPad);
                             $filePath = FileObject::GetDirName($titlePicPad);
@@ -489,7 +497,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                 //title pic2
                 $fileElementName = "file_title_pic_2";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
                 $titlePic2UploadFileId = 0;
                 $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
 
@@ -501,7 +509,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                 //title pic3
                 $fileElementName = "file_title_pic_3";
-                $uploadTableType = UploadFileManageData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
+                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
                 $titlePic3UploadFileId = 0;
                 $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
 
