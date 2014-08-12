@@ -147,6 +147,9 @@ class ImageObject {
      * @return string
      */
     public static function GenThumb($sourceFile, $width, $height, $addFileName, $jpgQuality = 100) {
+
+        sleep(1);
+
         $sourceFilePath = strtolower(FileObject::GetDirName(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceFile)));
         $sourceFileExName = strtolower(FileObject::GetExtension($sourceFile));
         $sourceFileName = strtolower(FileObject::GetName($sourceFile));

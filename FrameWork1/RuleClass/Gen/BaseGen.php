@@ -353,18 +353,15 @@ class BaseGen
 
                 if ($moveResult) {
                     //数据库操作
-                    $uploadFileManageData = new UploadFileManageData();
-                    $uploadFileId = $uploadFileManageData->Create(
+                    $uploadFileData = new UploadFileData();
+                    $uploadFileId = $uploadFileData->Create(
                         $newFileName,
-                        $_FILES[$fileElementName]['size'],
+                        $_FILES[$fileElementName]['size'], //文件大小，字节
                         $fileExtension,
-                        strtolower($_FILES[$fileElementName]['name']),
-                        str_ireplace(PHYSICAL_PATH, "", $dirPath),
+                        $_FILES[$fileElementName]['name'], //原始文件名
+                        str_ireplace(PHYSICAL_PATH, "", $dirPath).$newFileName, //文件路径+文件名
                         $tableType,
                         $tableId,
-                        strval(date('Y', time())),
-                        strval(date('m', time())),
-                        strval(date('d', time())),
                         $manageUserId,
                         $userId
                     );
@@ -488,7 +485,7 @@ class BaseGen
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC:
                 //活动类题图上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . "_";
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
@@ -740,12 +737,37 @@ class BaseGen
     }
 
 
-
-    public function GenUploadFileMobile($uploadFileId, $width, $height = 0){
-
+    /**
+     * 生成移动客户端使用的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $mobileWidth 移动客户端使用的图片的宽度
+     * @param int $mobileHeight 移动客户端使用的图片的高度，默认为0，不按高度缩放
+     * @return int 操作结果
+     */
+    public function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0){
+        $result = -1;
+        if($uploadFileId>0 && ($mobileWidth >0 || $mobileHeight>0)){
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if(!empty($uploadFilePath)){
+                $thumbFileName = "mobile";
+                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$mobileWidth,$mobileHeight,$thumbFileName);
+                if(!empty($uploadFileMobilePath)){
+                    //3.修改数据表
+                    $result = $$uploadFileData->ModifyUploadFileMobilePath(
+                        $uploadFileId,
+                        $uploadFileMobilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFilePad($uploadFileId, $width, $height = 0){
+    public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0){
 
     }
 
