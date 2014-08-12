@@ -8,6 +8,23 @@
 class UserOrderManageData extends BaseManageData{
 
     /**
+     * 修改
+     * @param array $httpPostData $_POST数组
+     * @param int $userOrderId 会员订单Id
+     * @param int $siteId 站点Id
+     * @return int 影响的行数
+     */
+    public function Modify($httpPostData,$userOrderId,$siteId){
+        if($userOrderId > 0 && $siteId > 0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserOrder,self::TableId_UserOrder,$userOrderId,$dataProperty,"SiteId",$siteId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+            return $result;
+        }else{
+            return null;
+        }
+    }
+    /**
      * 获取订单列表
      * @param int $siteId 站点Id
      * @param int $pageBegin 从pageBegin开始查询
@@ -17,7 +34,7 @@ class UserOrderManageData extends BaseManageData{
      */
     public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
         if($siteId > 0){
-            $sql = "SELECT * FROM ".self::TableName_UserOrder." WHERE SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sql = "SELECT uo.*,ui.NickName AS UserName FROM ".self::TableName_UserOrder." uo,".self::TableName_UserInfo." ui WHERE uo.UserId = ui.UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." WHERE SiteId = :SiteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId",$siteId);
@@ -37,7 +54,7 @@ class UserOrderManageData extends BaseManageData{
      */
     public function GetOne($userOrderId,$siteId){
         if($userOrderId > 0 && $siteId > 0){
-            $sql = "SELECT * FROM ".self::TableName_UserOrder." WHERE UserOrderId = :UserOrderId AND SiteId = :SiteId;";
+            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM ".self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $dataProperty->AddField("SiteId",$siteId);

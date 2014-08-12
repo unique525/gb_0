@@ -180,10 +180,10 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
                 Template::RemoveCustomTag($templateContent, $tagId);
                 $templateContent = str_ireplace("{pagerButton}","", $templateContent);
             }
-            $replace_arr = array(
+            $arrReplace = array(
                 "{SiteId}" => $siteId
             );
-            $templateContent = strtr($templateContent,$replace_arr);
+            $templateContent = strtr($templateContent,$arrReplace);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

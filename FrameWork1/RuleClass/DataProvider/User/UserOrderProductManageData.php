@@ -14,7 +14,11 @@ class UserOrderProductManageData extends BaseManageData{
      */
     public function GetList($userOrderId){
         if($userOrderId > 0){
-            $sql = "SELECT uop.*,p.ProductName,p.TitlePic FROM ".self::TableName_UserOrderProduct." uop,".self::TableName_Product." p WHERE uop.ProductId = p.ProductID";
+            $sql = "SELECT uop.*,p.ProductName,p.ProductIntro,pp.ProductUnit,pp.ProductCount
+                FROM ".self::TableName_UserOrderProduct." uop,".self::TableName_Product." p,".self::TableName_ProductPrice." pp
+                WHERE uop.ProductId = p.ProductId
+                AND uop.ProductPriceId = pp.ProductPriceId
+                AND uop.UserOrderId = :UserOrderId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);

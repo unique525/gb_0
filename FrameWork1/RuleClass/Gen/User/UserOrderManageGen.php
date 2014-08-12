@@ -36,10 +36,20 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             $arrUserOrderOne = $userOrderManageData->GetOne($userOrderId,$siteId);
             $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId);
 
-            $result = $userOrderManageData->Modify($userOrderId,$siteId);
-            //加入操作日志
-            $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
-            self::CreateManageUserLog($operateContent);
+            $tagId = "user_order_product_list";
+            if(count($arrUserOrderProductList) > 0){
+                Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagId);
+            }
+
+            Template::ReplaceOne($templateContent,$arrUserOrderOne);
+            if(!empty($_POST)){
+                $httpPostData = $_POST;
+                $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
+                //加入操作日志
+                $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                self::CreateManageUserLog($operateContent);
+            }
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return null;
@@ -69,13 +79,16 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
                 Template::ReplaceList($templateContent,$arrUserOrderList,$tagId);
                 $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
+            }else{
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pagerButton}","", $templateContent);
             }
-            $replace_arr = array(
+            $arrReplace = array(
                 "{SiteId}" => $siteId
             );
 
 
-            $templateContent = strtr($templateContent,$replace_arr);
+            $templateContent = strtr($templateContent,$arrReplace);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

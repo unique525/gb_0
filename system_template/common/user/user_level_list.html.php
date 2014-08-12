@@ -78,6 +78,7 @@
                 ]]>
             </item>
         </icms>
+        </ul>
         {pagerButton}
 </div>
 </body>

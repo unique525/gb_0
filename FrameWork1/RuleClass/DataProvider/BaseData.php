@@ -268,6 +268,14 @@ class BaseData
      * 会员相册分类 数据表自增字段名
      */
     const TableId_UserAlbumType = "UserAlbumTypeId";
+    /**
+     * 会员相册分类 数据表名
+     */
+    const TableName_UserReceiveInfo = "cst_user_receive_info";
+    /**
+     * 会员相册分类 数据表自增字段名
+     */
+    const TableId_UserReceiveInfo = "UserReceiveInfoId";
 
     /**
      * 自定义表单 数据表名
@@ -368,6 +376,14 @@ class BaseData
      * 产品 数据表自增字段名
      */
     const TableId_Product = "ProductId";
+    /**
+     * 产品价格 数据表名
+     */
+    const TableName_ProductPrice = "cst_product_price";
+    /**
+     * 产品价格 数据表自增字段名
+     */
+    const TableId_ProductPrice = "ProductPriceId";
 
     /**
      * 数据库操作对象的实例
