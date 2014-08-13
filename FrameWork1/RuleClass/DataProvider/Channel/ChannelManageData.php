@@ -21,20 +21,20 @@ class ChannelManageData extends BaseManageData
     /**
      * 新增频道
      * @param array $httpPostData $_POST数组
-     * @param string $titlePic1 题图1
-     * @param string $titlePic2 题图2
-     * @param string $titlePic3 题图3
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
      * @return int 新增的频道id
      */
-    public function Create($httpPostData, $titlePic1, $titlePic2, $titlePic3)
+    public function Create($httpPostData, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3");
-        $addFieldValues = array($titlePic1, $titlePic2, $titlePic3);
+        $addFieldNames = array("TitlePic1UploadFileId", "TitlePic2UploadFileId", "TitlePic3UploadFileId");
+        $addFieldValues = array($titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId);
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql($httpPostData, self::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
@@ -46,12 +46,12 @@ class ChannelManageData extends BaseManageData
      * 修改频道
      * @param array $httpPostData $_POST数组
      * @param int $channelId 频道id
-     * @param string $titlePic1 题图1，默认为空，不修改
-     * @param string $titlePic2 题图2，默认为空，不修改
-     * @param string $titlePic3 题图3，默认为空，不修改
+     * @param int $titlePic1UploadFileId 题图1上传文件id，默认为0，不修改
+     * @param int $titlePic2UploadFileId 题图2上传文件id，默认为0，不修改
+     * @param int $titlePic3UploadFileId 题图3上传文件id，默认为0，不修改
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $channelId, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '')
+    public function Modify($httpPostData, $channelId, $titlePic1UploadFileId = 0, $titlePic2UploadFileId = 0, $titlePic3UploadFileId = 0)
     {
         $result = -1;
         $dataProperty = new DataProperty();
@@ -60,17 +60,17 @@ class ChannelManageData extends BaseManageData
         $preNumber = "";
         $addFieldNames = array();
         $addFieldValues = array();
-        if (!empty($titlePic1)) {
-            $addFieldNames[] = "TitlePic1";
-            $addFieldValues[] = $titlePic1;
+        if (intval($titlePic1UploadFileId)>0) {
+            $addFieldNames[] = "TitlePic1UploadFileId";
+            $addFieldValues[] = $titlePic1UploadFileId;
         }
-        if (!empty($titlePic2)) {
-            $addFieldNames[] = "TitlePic2";
-            $addFieldValues[] = $titlePic2;
+        if (intval($titlePic2UploadFileId)>0) {
+            $addFieldNames[] = "TitlePic2UploadFileId";
+            $addFieldValues[] = $titlePic2UploadFileId;
         }
-        if (!empty($titlePic3)) {
-            $addFieldNames[] = "TitlePic3";
-            $addFieldValues[] = $titlePic3;
+        if (intval($titlePic3UploadFileId)>0) {
+            $addFieldNames[] = "TitlePic3UploadFileId";
+            $addFieldValues[] = $titlePic3UploadFileId;
         }
         if (!empty($httpPostData)) {
             $sql = parent::GetUpdateSql($httpPostData, self::TableName_Channel, self::TableId_Channel, $channelId, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
