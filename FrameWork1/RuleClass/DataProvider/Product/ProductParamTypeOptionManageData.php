@@ -36,10 +36,16 @@ class ProductParamTypeOptionManageData extends BaseManageData
      * @param int $uploadFileId 附件id
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $productParamTypeOptionId,$uploadFileId = 0)
+    public function Modify($httpPostData, $productParamTypeOptionId,$titlePicUploadFileId = 0)
     {
         $result=-1;
         $dataProperty = new DataProperty();
+        $addFieldName = "";
+        $addFieldValue = "";
+        if (intval($titlePicUploadFileId)>0) {
+            $addFieldName = "TitlePic1UploadFileId";
+            $addFieldValue = $titlePicUploadFileId;
+        }
         if (!empty($httpPostData)) {
             $sql = parent::GetUpdateSql(
                 $httpPostData,
@@ -47,8 +53,8 @@ class ProductParamTypeOptionManageData extends BaseManageData
                 self::TableId_ProductParamTypeOption,
                 $productParamTypeOptionId,
                 $dataProperty,
-                "uploadFileId",
-                $uploadFileId
+                $addFieldName,
+                $addFieldValue
             );
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
