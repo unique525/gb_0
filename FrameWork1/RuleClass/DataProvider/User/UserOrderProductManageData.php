@@ -13,6 +13,7 @@ class UserOrderProductManageData extends BaseManageData{
      * @return array 多个会员订单的数组
      */
     public function GetList($userOrderId){
+        $result = null;
         if($userOrderId > 0){
             $sql = "SELECT uop.*,p.ProductName,p.ProductIntro,pp.ProductUnit,pp.ProductCount
                 FROM ".self::TableName_UserOrderProduct." uop,".self::TableName_Product." p,".self::TableName_ProductPrice." pp
@@ -22,9 +23,7 @@ class UserOrderProductManageData extends BaseManageData{
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 }

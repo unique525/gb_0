@@ -15,14 +15,13 @@ class UserOrderManageData extends BaseManageData{
      * @return int 影响的行数
      */
     public function Modify($httpPostData,$userOrderId,$siteId){
-        if($userOrderId > 0 && $siteId > 0){
+        $result = -1;
+        if($userOrderId > 0 && $siteId > 0 && !empty($httpPostData)){
             $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserOrder,self::TableId_UserOrder,$userOrderId,$dataProperty,"SiteId",$siteId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
     /**
      * 获取订单列表
@@ -33,6 +32,7 @@ class UserOrderManageData extends BaseManageData{
      * @return array 多个会员订单的数组
      */
     public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
+        $result = null;
         if($siteId > 0){
             $sql = "SELECT uo.*,ui.NickName AS UserName FROM ".self::TableName_UserOrder." uo,".self::TableName_UserInfo." ui WHERE uo.UserId = ui.UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." WHERE SiteId = :SiteId";
@@ -40,10 +40,8 @@ class UserOrderManageData extends BaseManageData{
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
             $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
-        return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 
     /**
@@ -53,15 +51,14 @@ class UserOrderManageData extends BaseManageData{
      * @return array|null 一个会员订单的数组
      */
     public function GetOne($userOrderId,$siteId){
+        $result = null;
         if($userOrderId > 0 && $siteId > 0){
             $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM ".self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 }

@@ -25,14 +25,13 @@ class UserGroupManageData extends BaseManageData
      * @return int|null 最后插入的ID
      */
     public function Create($httpPostData,$siteId){
+        $result = -1;
         if($siteId > 0){
             $dataProperty = new DataProperty();
             $sql = parent::GetInsertSql($httpPostData,self::TableName_UserGroup,$dataProperty,"SiteId",$siteId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 
     /**
@@ -42,14 +41,13 @@ class UserGroupManageData extends BaseManageData
      * @return int|null 返回影响的行数
      */
     public function Modify($httpPostData,$userGroupId){
+        $result = -1;
         if($userGroupId > 0){
             $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserGroup,self::TableId_UserGroup,$userGroupId,$dataProperty);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 
     /**
@@ -59,16 +57,15 @@ class UserGroupManageData extends BaseManageData
      * @return int 影响的行数
      */
     public function ModifyState($userGroupId,$state){
+        $result = -1;
         if($userGroupId > 0){
             $dataProperty = new DataProperty();
             $sql = "UPDATE ".self::TableName_UserGroup." SET State = :State WHERE UserGroupId = :UserGroupId;";
             $dataProperty->AddField("State",$state);
             $dataProperty->AddField("UserGroupId",$userGroupId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 
     /**
@@ -106,6 +103,7 @@ class UserGroupManageData extends BaseManageData
      */
     public function GetList($siteId,$pageBegin, $pageSize, &$allCount)
     {
+        $result = null;
         if($siteId > 0){
             $dataProperty = new DataProperty();
             $sql = "SELECT * FROM " . self::TableName_UserGroup ." WHERE SiteId = :SiteId ORDER BY Sort,UserGroupId LIMIT " . $pageBegin . "," . $pageSize .";";
@@ -113,10 +111,8 @@ class UserGroupManageData extends BaseManageData
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 
     /**
@@ -126,15 +122,14 @@ class UserGroupManageData extends BaseManageData
      * @return array|null 单个会员组信息
      */
     public function GetOne($userGroupId,$siteId){
+        $result = -1;
         if($userGroupId > 0 && $siteId > 0){
             $dataProperty = new DataProperty();
             $sql = "SELECT * FROM ".self::TableName_UserGroup." WHERE UserGroupId = :UserGroupId AND SiteId = :SiteId;";
             $dataProperty->AddField("UserGroupId",$userGroupId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
-            return $result;
-        }else{
-            return null;
         }
+        return $result;
     }
 }
