@@ -8,15 +8,26 @@
 class UserOrderPublicData extends BasePublicData{
 
     public function Create($httpPostData,$siteId){
-        $sql = "";
-
+        $result = -1;
+        if(!empty($httpPostData) && $siteId > 0){
+            $sql = "";
+        }
+        return $result;
     }
 
     public function Modify($httpPostData,$userOrderId,$userId){
-        $sql = "";
+        $result = -1;
+        if(!empty($httpPostData) && $userOrderId > 0 && $userId > 0){
+            $sql = "";
+        }
+        return $result;
     }
 
     public function GetList($userId,$pageBegin,$pageSize,$allCount){
-        $sql = "";
+        $result = null;
+        if($userId > 0){
+            $sql = "";
+        }
+        return $result;
     }
 }
