@@ -4,7 +4,7 @@
  *
  * @author hongyi
  */
-class ProductParamTypeOptionData extends BaseManageData
+class ProductParamTypeOptionManageData extends BaseManageData
 {
     /**
      * 新增产品参数类型选项

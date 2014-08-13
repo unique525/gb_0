@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Product
  * @author hy
  */
-class ProductParamTypeData extends BaseManageData {
+class ProductParamTypeManageData extends BaseManageData {
     /**
      * 新增产品参数类型
      * @param array $httpPostData $_POST数组
