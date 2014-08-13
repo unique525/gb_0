@@ -19,7 +19,8 @@ class ProductParamTypeData extends BaseManageData {
             $sql = parent::GetInsertSql(
                 $httpPostData,
                 self::TableName_ProductParamType,
-                $dataProperty,"uploadFileId",
+                $dataProperty,
+                "uploadFileId",
                 $uploadFileId
             );
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
