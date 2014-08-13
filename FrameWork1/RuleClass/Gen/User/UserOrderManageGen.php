@@ -39,6 +39,8 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             $tagId = "user_order_product_list";
             if(count($arrUserOrderProductList) > 0){
                 Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagId);
+            }else{
+                Template::RemoveCustomTag($templateContent);
             }
 
             Template::ReplaceOne($templateContent,$arrUserOrderOne);
