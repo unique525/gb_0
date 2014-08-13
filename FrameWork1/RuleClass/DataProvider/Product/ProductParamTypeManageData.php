@@ -32,13 +32,19 @@ class ProductParamTypeManageData extends BaseManageData {
      * 修改产品参数类型
      * @param array $httpPostData $_POST数组
      * @param int $productParamTypeId 产品参数类型id
-     * @param int $uploadFileId 附件id
+     * @param int $titlePicUploadFileId 附件id
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $productParamTypeId,$uploadFileId = 0)
+    public function Modify($httpPostData, $productParamTypeId,$titlePicUploadFileId = 0)
     {
         $result=-1;
         $dataProperty = new DataProperty();
+        $addFieldName = "";
+        $addFieldValue = "";
+        if (intval($titlePicUploadFileId)>0) {
+            $addFieldName = "TitlePic1UploadFileId";
+            $addFieldValue = $titlePicUploadFileId;
+        }
         if (!empty($httpPostData)) {
             $sql = parent::GetUpdateSql(
                 $httpPostData,
@@ -46,8 +52,8 @@ class ProductParamTypeManageData extends BaseManageData {
                 self::TableId_ProductParamType,
                 $productParamTypeId,
                 $dataProperty,
-                "uploadFileId",
-                $uploadFileId
+                $addFieldName,
+                $addFieldValue
             );
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
