@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Product
  * @author hy
  */
-class ProductParamTypeGen extends BaseManageGen implements IBaseManageGen
+class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
 {
 
     /**
