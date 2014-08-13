@@ -53,6 +53,28 @@ class ProductParamTypeData extends BaseManageData {
         return $result;
     }
 
+
+    /**
+     * 修改产品参数类型状态
+     * @param string $productParamTypeId 产品参数类型Id
+     * @param string $state 状态
+     * @return int 执行结果
+     */
+    public function ModifyState($productParamTypeId, $state)
+    {
+        $result = -1;
+        if ($productParamTypeId > 0) {
+            $sql = "update " . self::TableName_ProductParamType
+                . " set state=:state"
+                . " where " . self::TableId_ProductParamType . "=:".self::TableId_ProductParamType;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
+            $dataProperty->AddField("state", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 删除产品参数类型
      * @param int $productParamTypeId 产品参数类型id
@@ -80,7 +102,7 @@ class ProductParamTypeData extends BaseManageData {
     public function Drag($productParamTypeId, $parentId)
     {
         $result = -1;
-        if ($productParamTypeId > 0 && $parentId > 0) {
+        if ($productParamTypeId > 0 && $parentId > -1) {
             $sql = "update " . self::TableName_ProductParamType
                 . " set parentId=:parentId"
                 . " where " . self::TableName_ProductParamType . "=:" . self::TableId_ProductParamType;
@@ -129,10 +151,9 @@ class ProductParamTypeData extends BaseManageData {
                     $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ParamTypeName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
                     break;
             }
-            $sql = "SELECT
-                        *
-                        FROM " . self::TableName_ProductParamType
-                . " WHERE ParentId=:ChannelId"
+            $sql = "SELECT *"
+                . " FROM " . self::TableName_ProductParamType
+                . " WHERE ChannelId=:ChannelId"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
