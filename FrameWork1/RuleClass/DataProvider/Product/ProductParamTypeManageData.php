@@ -32,7 +32,7 @@ class ProductParamTypeManageData extends BaseManageData {
      * 修改产品参数类型
      * @param array $httpPostData $_POST数组
      * @param int $productParamTypeId 产品参数类型id
-     * @param int $titlePicUploadFileId 附件id
+     * @param int $titlePicUploadFileId 题图所在附件id
      * @return int 返回影响的行数
      */
     public function Modify($httpPostData, $productParamTypeId,$titlePicUploadFileId = 0)
