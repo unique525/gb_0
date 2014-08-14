@@ -178,6 +178,7 @@ class BaseGen
         $tempContent = str_ireplace("{template_selected_$templateName}", "_selected", $tempContent);
         $tempContent = str_ireplace("{template_selected_default}", "", $tempContent);
         $tempContent = str_ireplace("{template_selected_deepblue}", "", $tempContent);
+        $tempContent = str_ireplace("{result_javascript}", "", $tempContent);
     }
 
     /**
