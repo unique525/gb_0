@@ -47,7 +47,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate() {
         $tempContent = "";
         $parentId = Control::GetRequest("parent_id", 0);
-
+        $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
         if ($parentId >0 && $manageUserId > 0) {
@@ -62,6 +62,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             }
             $rank++;
             if (!empty($_POST)) {
+
                 $httpPostData = $_POST;
                 $publishPath = Control::PostRequest("f_PublishPath", "");
                 $hasRepeatPublishPath = false;
@@ -70,81 +71,93 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $channelId = 0;
                     $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $channelId);
                     if ($hasRepeatPublishPath) {
-                        Control::ShowMessage(Language::Load('document', 9));
-                        return "";
+                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('channel', 2)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
+                        //Control::ShowMessage(Language::Load('document', 9));
                     }
                 }
+
                 if (!$hasRepeatPublishPath) {
-                    //title pic1
-                    $fileElementName = "file_title_pic_1";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
-                    $tableId = 0;
-                    $uploadResult1 = new UploadResult();
-                    $uploadFileId1 = 0;
-                    $titlePic1Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult1,
-                        $uploadFileId1
-                    );
 
-                    if (intval($titlePic1Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-
-                    //title pic2
-                    $fileElementName = "file_title_pic_2";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
-                    $uploadFileId2 = 0;
-                    $uploadResult2 = new UploadResult();
-                    $titlePic2Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult2,
-                        $uploadFileId2
-                    );
-                    if (intval($titlePic2Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-                    //title pic3
-                    $fileElementName = "file_title_pic_3";
-
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
-                    $uploadFileId3 = 0;
-
-                    $uploadResult3 = new UploadResult();
-
-                    $titlePic3Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult3,
-                        $uploadFileId3)
-                    ;
-                    if (intval($titlePic3Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-                    $channelId = $channelManageData->Create(
-                        $httpPostData,
-                        $uploadFileId1,
-                        $uploadFileId2,
-                        $uploadFileId3
-                    );
+                    $channelId = $channelManageData->Create($httpPostData);
                     //加入操作日志
                     $operateContent = 'Create Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$channelId;
                     self::CreateManageUserLog($operateContent);
 
                     if ($channelId > 0) {
+                        if( !empty($_FILES)){
+                            //title pic1
+                            $fileElementName = "file_title_pic_1";
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
+                            $tableId = $channelId;
+                            $uploadResult1 = new UploadResult();
+                            $uploadFileId1 = 0;
+                            $titlePic1Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadResult1,
+                                $uploadFileId1
+                            );
+
+                            if (intval($titlePic1Result) <=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+
+                            }
+
+                            //title pic2
+                            $fileElementName = "file_title_pic_2";
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
+                            $uploadFileId2 = 0;
+                            $uploadResult2 = new UploadResult();
+                            $titlePic2Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadResult2,
+                                $uploadFileId2
+                            );
+                            if (intval($titlePic2Result) <=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+
+                            }
+                            //title pic3
+                            $fileElementName = "file_title_pic_3";
+
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
+                            $uploadFileId3 = 0;
+
+                            $uploadResult3 = new UploadResult();
+
+                            $titlePic3Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadResult3,
+                                $uploadFileId3)
+                            ;
+                            if (intval($titlePic3Result) <=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+
+                            }
+
+                            if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
+                                $channelManageData->ModifyTitlePic($channelId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
+                            }
+
+                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            if($uploadFileId1>0){
+                                $channelTitlePic1MobileWidth = $siteConfigManageData->ChannelTitlePic1MobileWidth;
+                                if($channelTitlePic1MobileWidth<=0){
+                                    $channelTitlePic1MobileWidth  = 320; //默认320宽
+                                }
+                                self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
+                            }
+                        }
+
+
                         //授权给创建人
                         if ($manageUserId > 1) { //只有非ADMIN的要授权
                             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -154,28 +167,22 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
 
-                        $uploadFileData = new UploadFileData();
-                        //修改题图1的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId1, $channelId);
-                        //修改题图2的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId2, $channelId);
-                        //修改题图3的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId3, $channelId);
 
                         //javascript 处理
                         //重新加载左边导航树
-                        $javascriptLoadChannel = "parent.LoadChannelListForManage(parent.G_NowSiteId);";
+                        $javascriptLoadChannel = "parent._LoadChannelListForManage(parent.G_NowSiteId);";
                         Control::RunJavascript($javascriptLoadChannel);
 
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
-                            Control::CloseTab();
+                            //Control::CloseTab();
+                            $resultJavaScript .= Control::GetCloseTab();
                         }else{
                             Control::GoUrl($_SERVER["PHP_SELF"]);
                         }
-
                     } else {
-                        Control::ShowMessage(Language::Load('document', 2));
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel', 3)); //新增失败！
+                        //Control::ShowMessage(Language::Load('document', 2));
                     }
                 }
             }
@@ -191,8 +198,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
+
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+
         }
+
 
         return $tempContent;
     }

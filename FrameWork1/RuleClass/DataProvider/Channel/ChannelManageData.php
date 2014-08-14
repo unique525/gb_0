@@ -21,20 +21,17 @@ class ChannelManageData extends BaseManageData
     /**
      * 新增频道
      * @param array $httpPostData $_POST数组
-     * @param int $titlePic1UploadFileId 题图1上传文件id
-     * @param int $titlePic2UploadFileId 题图2上传文件id
-     * @param int $titlePic3UploadFileId 题图3上传文件id
      * @return int 新增的频道id
      */
-    public function Create($httpPostData, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
+    public function Create($httpPostData)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("TitlePic1UploadFileId", "TitlePic2UploadFileId", "TitlePic3UploadFileId");
-        $addFieldValues = array($titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId);
+        $addFieldNames = array();
+        $addFieldValues = array();
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql($httpPostData, self::TableName_Channel, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
@@ -76,6 +73,37 @@ class ChannelManageData extends BaseManageData
             $sql = parent::GetUpdateSql($httpPostData, self::TableName_Channel, self::TableId_Channel, $channelId, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
+        return $result;
+    }
+
+    /**
+     * 修改频道题图的上传文件id
+     * @param int $channelId 频道id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic($channelId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
+    {
+        $result = -1;
+        if($channelId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Channel . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId,
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId,
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
+
+                    WHERE ChannelId = :ChannelId
+
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
         return $result;
     }
 

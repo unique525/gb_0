@@ -309,10 +309,10 @@ class FileObject
      */
     public static function GetName($filePath)
     {
-        $fileName = PathInfo($filePath,PATHINFO_BASENAME);
-        $extension = PathInfo($filePath,PATHINFO_EXTENSION);
-        str_ireplace(".".$extension,"",$fileName);
-        return ;
+        $fileName = pathinfo($filePath,PATHINFO_BASENAME);
+        $extension = pathinfo($filePath,PATHINFO_EXTENSION);
+        $fileName = str_ireplace(".".$extension,"",$fileName);
+        return $fileName;
     }
 
     /**
@@ -322,7 +322,7 @@ class FileObject
      */
     public static function GetNameAndExtension($filePath)
     {
-        return PathInfo($filePath,PATHINFO_BASENAME);
+        return pathinfo($filePath,PATHINFO_BASENAME);
     }
 
     /**
@@ -332,7 +332,7 @@ class FileObject
      */
     public static function GetExtension($filePath)
     {
-        return PathInfo($filePath,PATHINFO_EXTENSION);
+        return pathinfo($filePath,PATHINFO_EXTENSION);
     }
 
     /**

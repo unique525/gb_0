@@ -293,8 +293,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
 
         }
-        $tempContent = str_ireplace("{result_javascript}", $resultJavaScript, $tempContent);
+
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 

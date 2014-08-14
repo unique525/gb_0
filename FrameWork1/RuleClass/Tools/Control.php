@@ -32,6 +32,14 @@ class Control {
     }
 
     /**
+     * Javascript方法，调用关闭选项卡
+     * @return string
+     */
+    public static function GetCloseTab(){
+        return '<' . 'script type="text/javascript">closeTab();</script>';
+    }
+
+    /**
      * 刷新当前的Tab页
      */
     public static function RefreshTab()

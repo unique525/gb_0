@@ -2,4 +2,4 @@
     <div id="dialog_content">
     </div>
 </div>
-{result_javascript}
+{ResultJavascript}
