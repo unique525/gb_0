@@ -3,7 +3,7 @@
  * 后台管理 会员订单产品 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
- * Time: 下午12:09
+ * @author yin
  */
 class UserOrderProductManageData extends BaseManageData{
 
@@ -15,7 +15,7 @@ class UserOrderProductManageData extends BaseManageData{
     public function GetList($userOrderId){
         $result = null;
         if($userOrderId > 0){
-            $sql = "SELECT uop.*,p.ProductName,p.ProductIntro,pp.ProductUnit,pp.ProductCount
+            $sql = "SELECT uop.*,p.ProductName,p.ProductIntro,pp.ProductUnit
                 FROM ".self::TableName_UserOrderProduct." uop,".self::TableName_Product." p,".self::TableName_ProductPrice." pp
                 WHERE uop.ProductId = p.ProductId
                 AND uop.ProductPriceId = pp.ProductPriceId

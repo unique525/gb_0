@@ -16,11 +16,22 @@ function FormatState(state,idvalue){
         case "40":
             result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
             break;
-        default:
-            result = '<span class="span_state" id="State_'+idvalue+'">启用</span>';
-            break;
     }
     return result;
+}
+
+function submitForm(continueCreate) {
+    if ($('#UserOrderName').val() == '') {
+        $("#dialog_box").dialog({width: 300, height: 100});
+        $("#dialog_content").html("请输入会员订单名称");
+    } else {
+        if (continueCreate == 1) {
+            $("#CloseTab").val("0");
+        } else {
+            $("#CloseTab").val("1");
+        }
+        $('#mainForm').submit();
+    }
 }
 
 $(document).ready(function(){

@@ -3,7 +3,7 @@
  * 后台管理 会员订单 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
- * Time: 下午12:09
+ * @Author yin
  */
 class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
     public function Gen(){
@@ -28,29 +28,65 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $userOrderId = Control::GetRequest("user_order_id",0);
         $siteId = Control::GetRequest("site_id",0);
         if($userOrderId > 0 && $siteId > 0){
-            $templateContent = Template::Load("user/user_order_deal.html","common");
-            parent::ReplaceFirst($templateContent);
+            $pageSize = Control::GetRequest("ps",0);
+            $tabIndex = Control::GetRequest("tab_index",0);
+            $pageIndex = Control::GetRequest("p",1);
+
             $userOrderManageData = new UserOrderManageData();
             $userOrderProductManageData = new UserOrderProductManageData();
+            $userReceiveInfoManageData = new UserReceiveInfoManageData();
+
+            if(!empty($_POST)){
+                $httpPostData = $_POST;
+                $closeTab = Control::PostRequest("CloseTab",0);
+                $tabIndex = Control::GetRequest("TabIndex",0);
+                $pageSize = Control::GetRequest("PageSize",27);
+                $pageIndex  = Control::GetRequest("PageIndex",1);
+                $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
+                //加入操作日志
+                $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                self::CreateManageUserLog($operateContent);
+
+                if($closeTab == 1){
+                    Control::GoUrl("/default.php?secu=manage&mod=user_order&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
+                }else{
+                    Control::GoUrl($_SERVER["HTTP_SELF"]);
+                }
+            }
+            $templateContent = Template::Load("user/user_order_deal.html","common");
+            parent::ReplaceFirst($templateContent);
 
             $arrUserOrderOne = $userOrderManageData->GetOne($userOrderId,$siteId);
             $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId);
 
-            $tagId = "user_order_product_list";
+            if($arrUserOrderOne["UserId"] > 0){
+                $userId = $arrUserOrderOne["UserId"];
+                $arrUserReceiveInfoList = $userReceiveInfoManageData->GetList($userId);
+                $tagUserReceiveInfoListId = "user_receive_info_list";
+                if(count($arrUserReceiveInfoList) > 0){
+                    Template::ReplaceList($templateContent,$arrUserReceiveInfoList,$tagUserReceiveInfoListId);
+                }else{
+                    Template::RemoveCustomTag($templateContent);
+                }
+            }
+
+            $tagUserOrderProductListId = "user_order_product_list";
             if(count($arrUserOrderProductList) > 0){
-                Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagId);
+                Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagUserOrderProductListId);
             }else{
                 Template::RemoveCustomTag($templateContent);
             }
 
             Template::ReplaceOne($templateContent,$arrUserOrderOne);
-            if(!empty($_POST)){
-                $httpPostData = $_POST;
-                $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
-                //加入操作日志
-                $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
-                self::CreateManageUserLog($operateContent);
-            }
+
+            $replace_arr = array(
+                "{TabIndex}" => $tabIndex,
+                "{PageSize}" => $pageSize,
+                "{PageIndex}" => $pageIndex,
+                "{SiteId}" => $siteId
+            );
+
+            $templateContent = strtr($templateContent,$replace_arr);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

@@ -27,8 +27,8 @@
             <tr  class="grid_title2">
                 <td style="width:40px;text-align: center">ID</td>
                 <td style="width:50px;text-align: center">编辑</td>
-                <td style="width:150px;text-align: center">订单编号</td>
-                <td style="width:60px;text-align: center">会员名</td>
+                <td style="text-align: center">订单编号</td>
+                <td style="width:100px;text-align: center">会员名</td>
                 <td style="width:80px;text-align: center">订单总价</td>
                 <td style="width:80px;text-align: center">运费</td>
                 <td  style="width:80px;text-align: center">状态</td>
@@ -45,10 +45,10 @@
                             <td class="spe_line2" style="width:50px;text-align: center">
                                 <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="edit" idvalue="{f_UserOrderId}"/>
                             </td>
-                            <td class="spe_line2" style="width:150px;text-align: center">
+                            <td class="spe_line2" style="text-align: center">
                                 {f_UserOrderNumber}
                             </td>
-                            <td class="spe_line2" style="width:60px;text-align: center">
+                            <td class="spe_line2" style="width:100px;text-align: center">
                                 <span>{f_UserName}</span>
                             </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
