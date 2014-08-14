@@ -3,7 +3,7 @@
  * 后台管理 会员等级 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
- * @author zhangchi
+ *  @author yin
  */
 class UserLevelManageData extends BaseManageData {
 
