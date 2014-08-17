@@ -166,6 +166,10 @@ class BaseGen
         $commonHead = Template::Load("manage/common_head.html", "common");
         $commonBodyDeal = Template::Load("manage/common_body_deal.html", "common");
         $commonBodyList = Template::Load("manage/common_body_list.html", "common");
+
+        $tabIndex = Control::GetRequest("tab_index",0);
+
+        $tempContent = str_ireplace("{tab_index}", $tabIndex, $tempContent);
         $tempContent = str_ireplace("{common_head}", $commonHead, $tempContent);
         $tempContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $tempContent);
         $tempContent = str_ireplace("{common_body_list}", $commonBodyList, $tempContent);
@@ -334,6 +338,7 @@ class BaseGen
     )
     {
         $errorMessage = self::UploadPreCheck($fileElementName);
+
         $resultMessage = "";
         $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
@@ -540,18 +545,18 @@ class BaseGen
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1:
                 /** 频道图片1 tableId 为 channelId */
-                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "channel_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'channel_title_pic_1_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2:
                 /** 频道图片1 tableId 为 channelId */
-                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "channel_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'channel_title_pic_2_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3:
                 /** 频道图片1 tableId 为 channelId */
-                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "parent_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = 'parent_id_' . $tableId . '_' . uniqid() . '.' . $fileExtension;
+                $uploadFilePath = $uploadPath . "channel" . DIRECTORY_SEPARATOR . "channel_id_" . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'channel_title_pic_3_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_LEVEL:
                 /** 会员等级 */
@@ -663,7 +668,7 @@ class BaseGen
      */
     private function UploadPreCheck($fileElementName)
     {
-        $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
+        $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS;
 
         if (empty($_FILES)) {
             return DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_IS_EMPTY;
@@ -755,9 +760,10 @@ class BaseGen
             if(!empty($uploadFilePath)){
                 $thumbFileName = "mobile";
                 $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$mobileWidth,$mobileHeight,$thumbFileName);
+
                 if(!empty($uploadFileMobilePath)){
                     //3.修改数据表
-                    $result = $$uploadFileData->ModifyUploadFileMobilePath(
+                    $result = $uploadFileData->ModifyUploadFileMobilePath(
                         $uploadFileId,
                         $uploadFileMobilePath
                     );

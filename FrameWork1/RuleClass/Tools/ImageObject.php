@@ -149,7 +149,6 @@ class ImageObject {
     public static function GenThumb($sourceFile, $width, $height, $addFileName, $jpgQuality = 100) {
 
         sleep(1);
-
         $sourceFilePath = strtolower(FileObject::GetDirName(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceFile)));
         $sourceFileExName = strtolower(FileObject::GetExtension($sourceFile));
         $sourceFileName = strtolower(FileObject::GetName($sourceFile));
@@ -159,6 +158,8 @@ class ImageObject {
         //if($sourceFileExName !== "jpg"){
         //    return -1;//只处理jpg图像,非jpg图像返回错误代码-1
         //}
+
+
         if ($sourceFileName === "") {
             return ""; //文件名错误
         }

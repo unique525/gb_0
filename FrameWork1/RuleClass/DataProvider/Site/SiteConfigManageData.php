@@ -77,6 +77,12 @@
  * @property string $UserSmsMessageContent
  * @property int $DocumentNewsTitlePicMobileWidth
  * @property int $DocumentNewsTitlePicPadWidth
+ * @property int $ChannelTitlePic1MobileWidth
+ * @property int $ChannelTitlePic1PadWidth
+ * @property int $ChannelTitlePic2MobileWidth
+ * @property int $ChannelTitlePic2PadWidth
+ * @property int $ChannelTitlePic3MobileWidth
+ * @property int $ChannelTitlePic3PadWidth
  * @author zhangchi
  */
 class SiteConfigManageData extends BaseManageData
@@ -132,7 +138,15 @@ class SiteConfigManageData extends BaseManageData
         "UserRecDefaultState",
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
-        "DocumentNewsTitlePicPadWidth"
+        "DocumentNewsTitlePicPadWidth",
+
+        "ChannelTitlePic1MobileWidth",
+        "ChannelTitlePic1PadWidth",
+        "ChannelTitlePic2MobileWidth",
+        "ChannelTitlePic2PadWidth",
+        "ChannelTitlePic3MobileWidth",
+        "ChannelTitlePic3PadWidth"
+
     );
     /**
      * @var array number
@@ -825,13 +839,117 @@ class SiteConfigManageData extends BaseManageData
     private $DocumentNewsTitlePicMobileWidth = 0; //为适配手机客户端，资讯题图的同比缩小宽度值
     private $DocumentNewsTitlePicPadWidth = 0; //为适配平板客户端，资讯题图的同比缩小宽度值
 
+    private $ChannelTitlePic1MobileWidth = 0;  //为适配手机客户端，频道题图1的同比缩小宽度值
+    private $ChannelTitlePic1PadWidth = 0;     //为适配平板客户端，频道题图1的同比缩小宽度值
+    private $ChannelTitlePic2MobileWidth = 0;  //为适配手机客户端，频道题图2的同比缩小宽度值
+    private $ChannelTitlePic2PadWidth = 0;     //为适配平板客户端，频道题图2的同比缩小宽度值
+    private $ChannelTitlePic3MobileWidth = 0;  //为适配手机客户端，频道题图3的同比缩小宽度值
+    private $ChannelTitlePic3PadWidth = 0;     //为适配平板客户端，频道题图3的同比缩小宽度值
 
+    /**
+     * @param mixed $ChannelTitlePic1MobileWidth
+     */
+    public function setChannelTitlePic1MobileWidth($ChannelTitlePic1MobileWidth)
+    {
+        $this->ChannelTitlePic1MobileWidth = $ChannelTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic1MobileWidth()
+    {
+        return $this->ChannelTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic1PadWidth
+     */
+    public function setChannelTitlePic1PadWidth($ChannelTitlePic1PadWidth)
+    {
+        $this->ChannelTitlePic1PadWidth = $ChannelTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic1PadWidth()
+    {
+        return $this->ChannelTitlePic1PadWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic2MobileWidth
+     */
+    public function setChannelTitlePic2MobileWidth($ChannelTitlePic2MobileWidth)
+    {
+        $this->ChannelTitlePic2MobileWidth = $ChannelTitlePic2MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic2MobileWidth()
+    {
+        return $this->ChannelTitlePic2MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic2PadWidth
+     */
+    public function setChannelTitlePic2PadWidth($ChannelTitlePic2PadWidth)
+    {
+        $this->ChannelTitlePic2PadWidth = $ChannelTitlePic2PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic2PadWidth()
+    {
+        return $this->ChannelTitlePic2PadWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic3MobileWidth
+     */
+    public function setChannelTitlePic3MobileWidth($ChannelTitlePic3MobileWidth)
+    {
+        $this->ChannelTitlePic3MobileWidth = $ChannelTitlePic3MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic3MobileWidth()
+    {
+        return $this->ChannelTitlePic3MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic3PadWidth
+     */
+    public function setChannelTitlePic3PadWidth($ChannelTitlePic3PadWidth)
+    {
+        $this->ChannelTitlePic3PadWidth = $ChannelTitlePic3PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic3PadWidth()
+    {
+        return $this->ChannelTitlePic3PadWidth;
+    }
+
+    protected $dbOperator = null;
     /**
      * 构造函数
      * @param int $siteId 站点id，每个配置都是站点下的配置
      */
     public function __construct($siteId)
     {
+        $this->dbOperator = DbOperator::getInstance();
         $this->SiteId = $siteId;
     }
 

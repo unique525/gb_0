@@ -212,6 +212,8 @@ class UploadFileData extends BaseData {
         $uploadFilePath = str_ireplace("../", "/", $uploadFilePath);
         $uploadFilePath = str_ireplace("./", "/", $uploadFilePath);
 
+        $uploadFilePath = str_ireplace(DIRECTORY_SEPARATOR, "/", $uploadFilePath);
+
         $dataProperty = new DataProperty();
         $dataProperty->AddField("UploadFileName", $uploadFileName);
         $dataProperty->AddField("UploadFileSize", $uploadFileSize);

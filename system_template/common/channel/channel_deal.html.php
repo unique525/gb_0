@@ -110,7 +110,7 @@
 <body>
 {common_body_deal}
 <form id="mainForm" enctype="multipart/form-data"
-      action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}"
+      action="/default.php?secu=manage&mod=channel&m={method}&channel_id={ChannelId}&parent_id={ParentId}&tab_index={tab_index}"
       method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">

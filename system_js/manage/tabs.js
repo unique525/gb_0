@@ -38,14 +38,18 @@ function addTab() {
  * 用于子页面中关闭标签页的按钮事件
  */
 function closeTab(){
+
     if(Request["tab_index"] != undefined){
-        parent.G_TabCounter--;
         var nowTableIndex = parseInt(Request["tab_index"]);
-        parent.$("#tabs_title-"+nowTableIndex).closest("li").remove();
-        //var panelId = "tabs-"+nowTabCounter;
-        //parent.$("#" + panelId).remove();
-        parent.G_Tabs.tabs("refresh");
-        parent.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
+        if(nowTableIndex >=0){
+            parent.G_TabCounter--;
+            parent.$("#tabs_title-"+nowTableIndex).closest("li").remove();
+            //var panelId = "tabs-"+nowTabCounter;
+            //parent.$("#" + panelId).remove();
+            parent.G_Tabs.tabs("refresh");
+            parent.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
+        }
+
     }
 }
 
