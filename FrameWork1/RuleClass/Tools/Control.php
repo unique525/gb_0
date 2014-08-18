@@ -13,7 +13,7 @@ class Control {
      * @param string $message 提示信息的内容
      */
     public static function ShowMessage($message) {
-        echo '<!--<script type="text/javascript">alert("' . $message . '");</script>-->';
+        echo '<script type="text/javascript">alert("' . $message . '");</script>';
     }
 
     /**
