@@ -58,7 +58,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
 
         $manageUserId = Control::GetManageUserId();
 
-        if ($parentId > 0 && $manageUserId > 0) {
+        if ($parentId > -1 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $productParamTypeData = new ProductParamTypeManageData();
@@ -67,18 +67,18 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
                 $tableId = 0;
                 $uploadResult = new UploadResult();
-                $uploadFileId = 0;
+                $titlePicUploadFileId = 0;
                 self::Upload(
                     $fileElementName,
                     $tableType,
                     $tableId,
                     $uploadResult,
-                    $uploadFileId
+                    $titlePicUploadFileId
                 );
 
                 sleep(1);
 
-                $productParamTypeId = $productParamTypeData->Create($httpPostData,$uploadFileId);
+                $productParamTypeId = $productParamTypeData->Create($httpPostData,$titlePicUploadFileId);
                 //加入操作日志
                 $operateContent = 'Create ProductParamType,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeId:'.$productParamTypeId;
                 self::CreateManageUserLog($operateContent);
@@ -86,10 +86,10 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
                 if ($productParamTypeId > 0) {
                     $uploadFileData = new UploadFileData();
                     //修改题图的TableId
-                    $uploadFileData->ModifyTableID($uploadFileId, $productParamTypeId);
+                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeId);
 
                     Control::ShowMessage(Language::Load('document', 1));
-                    $jsCode = 'parent.AddNodeByID("' . $productParamTypeId . '","' . $parentId . '","' . $paramTypeName . '","' . $paramValueType . '");';
+                    $jsCode = 'parent.AddNodeById("' . $productParamTypeId . '","' . $parentId . '","' . $paramTypeName . '","' . $paramValueType . '");';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('document', 2));
@@ -140,29 +140,29 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
                 $tableId = 0;
                 $uploadResult = new UploadResult();
-                $uploadFileId = 0;
+                $titlePicUploadFileId = 0;
                 self::Upload(
                     $fileElementName,
                     $tableType,
                     $tableId,
                     $uploadResult,
-                    $uploadFileId
+                    $titlePicUploadFileId
                 );
 
                 sleep(1);
 
-                $productParamTypeId = $productParamTypeData->Modify($httpPostData,$productParamTypeId,$uploadFileId);
+                $result = $productParamTypeData->Modify($httpPostData,$productParamTypeId,$titlePicUploadFileId);
                 //加入操作日志
                 $operateContent = 'Create ProductParamType,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeId:'.$productParamTypeId;
                 self::CreateManageUserLog($operateContent);
-                if ($productParamTypeId > 0) {
+                if ($result > 0) {
 
                     $uploadFileData = new UploadFileData();
                     //修改题图的TableId
-                    $uploadFileData->ModifyTableID($uploadFileId, $productParamTypeId);
+                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeId);
 
                     Control::ShowMessage(Language::Load('document', 3));
-                    $jsCode = 'parent.EditNodeByID("' . $productParamTypeId . '","' . $parentId . '","' . $paramTypeName . '","' . $paramValueType . '");';
+                    $jsCode = 'parent.EditNodeById("' . $productParamTypeId . '","' . $parentId . '","' . $paramTypeName . '","' . $paramValueType . '");';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('document', 4));
@@ -200,14 +200,14 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
     public function GenListForManageTree()
     {
         $tempContent = Template::Load("product/product_param_type_list.html", "common");
-        $documentChannelId = Control::GetRequest("channel_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
         $adminUserId = Control::GetManageUserId();
-        if ($documentChannelId > 0 && $adminUserId > 0) {
+        if ($channelId > 0 && $adminUserId > 0) {
             $productParamTypeData = new ProductParamTypeManageData();
-            $arrList = $productParamTypeData->GetList($documentChannelId, "", -1);
+            $arrList = $productParamTypeData->GetList($channelId, "", -1);
             $treeNodes = '{ id:0, pId:-1,name:"根节点", valueType:0,open:true},';
             for ($i = 0; $i < count($arrList); $i++) {
-                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductParamTypeID"] . ', pId:' . $arrList[$i]["ParentID"] . ', name:"' . $arrList[$i]["ParamTypeName"] . '", valueType:"' . $arrList[$i]["ParamValueType"] . '"},';
+                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductParamTypeId"] . ', pId:' . $arrList[$i]["ParentId"] . ', name:"' . $arrList[$i]["ParamTypeName"] . '", valueType:"' . $arrList[$i]["ParamValueType"] . '"},';
             }
             $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
             $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);

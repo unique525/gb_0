@@ -9,10 +9,10 @@ class ProductParamTypeManageData extends BaseManageData {
     /**
      * 新增产品参数类型
      * @param array $httpPostData $_POST数组
-     * @param int $uploadFileId 附件id
+     * @param int $titlePicUploadFileId 附件id
      * @return int 新增的产品参数类型id
      */
-    public function Create($httpPostData,$uploadFileId = 0){
+    public function Create($httpPostData,$titlePicUploadFileId = 0){
         $result = -1;
         $dataProperty = new DataProperty();
         if (!empty($httpPostData)) {
@@ -20,8 +20,8 @@ class ProductParamTypeManageData extends BaseManageData {
                 $httpPostData,
                 self::TableName_ProductParamType,
                 $dataProperty,
-                "uploadFileId",
-                $uploadFileId
+                "TitlePicUploadFileId",
+                $titlePicUploadFileId
             );
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
@@ -42,7 +42,7 @@ class ProductParamTypeManageData extends BaseManageData {
         $addFieldName = "";
         $addFieldValue = "";
         if (intval($titlePicUploadFileId)>0) {
-            $addFieldName = "TitlePic1UploadFileId";
+            $addFieldName = "TitlePicUploadFileId";
             $addFieldValue = $titlePicUploadFileId;
         }
         if (!empty($httpPostData)) {
