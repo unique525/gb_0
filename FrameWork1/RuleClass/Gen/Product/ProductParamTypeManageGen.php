@@ -61,7 +61,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         if ($parentId > 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $productParamTypeData = new ProductParamTypeData();
+                $productParamTypeData = new ProductParamTypeManageData();
                 //title_pic
                 $fileElementName = "file_title_pic";
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
@@ -108,7 +108,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $manageUserId = Control::GetManageUserId();
         if ($productParamTypeId > 0 && $manageUserId > 0) {
-            $productParamTypeData = new ProductParamTypeData();
+            $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->Delete($productParamTypeId);
             //加入操作日志
             $operateContent = 'Delete ProductParamType,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
@@ -134,7 +134,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         if ($productParamTypeId > 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $productParamTypeData = new ProductParamTypeData();
+                $productParamTypeData = new ProductParamTypeManageData();
                 //title_pic
                 $fileElementName = "file_title_pic";
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
@@ -182,7 +182,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         $manageUserId = Control::GetManageUserId();
         $state = Control::GetRequest("state", -1);
         if ($productParamTypeId > 0 && $manageUserId>0 && $state >= 0) {
-            $productParamTypeData = new ProductParamTypeData();
+            $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->ModifyState($productParamTypeId, $state);
             //加入操作日志
             $operateContent = 'ModifyState ProductParamType,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
@@ -199,11 +199,11 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
      */
     public function GenListForManageTree()
     {
-        $tempContent = Template::Load("product/product_param_type_list.html");
-        $documentChannelId = Control::GetRequest("cid", 0);
+        $tempContent = Template::Load("product/product_param_type_list.html", "common");
+        $documentChannelId = Control::GetRequest("channel_id", 0);
         $adminUserId = Control::GetManageUserId();
         if ($documentChannelId > 0 && $adminUserId > 0) {
-            $productParamTypeData = new ProductParamTypeData();
+            $productParamTypeData = new ProductParamTypeManageData();
             $arrList = $productParamTypeData->GetList($documentChannelId, "", -1);
             $treeNodes = '{ id:0, pId:-1,name:"根节点", valueType:0,open:true},';
             for ($i = 0; $i < count($arrList); $i++) {
@@ -224,7 +224,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
     {
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         if ($productParamTypeId > 0) {
-            $productParamTypeData = new ProductParamTypeData();
+            $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->GetOne($productParamTypeId);
             $result = json_encode($result);
             return $_GET['jsonpcallback'] . "(" . $result . ")";
@@ -242,7 +242,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $parentId = Control::GetRequest("parent_id", -2);
         if ($productParamTypeId > 0 && $parentId >= 0) {
-            $productParamTypeData = new ProductParamTypeData();
+            $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->Drag($productParamTypeId, $parentId);
             return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
         } else {

@@ -99,6 +99,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $voteSelectItemManageGen = new VoteSelectItemManageGen();
                     $result = $voteSelectItemManageGen->Gen();
                     break;
+                case "product":
+                    $productManageGen = new ProductManageGen();
+                    $result = $productManageGen->Gen();
+                    break;
+                case "product_param_type":
+                    $productParamTypeManageGen = new ProductParamTypeManageGen();
+                    $result = $productParamTypeManageGen->Gen();
+                    break;
+                case "product_param_type_option":
+                    $productParamTypeOptionManageGen = new ProductParamTypeOptionManageGen();
+                    $result = $productParamTypeOptionManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
