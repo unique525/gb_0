@@ -197,11 +197,12 @@ function removeTreeNode() {
     var id=treeNode.id;
     var channelId=Request['channel_id'];
     if (treeNode) {
-        if (treeNode.nodes && treeNode.nodes.length > 0) {
+        if (treeNode.childs && treeNode.childs.length > 0) {
             var msg = "要删除的节点是父节点，只允许删除叶节点";
             alert(msg);
         } else {
-            $.ajax({
+            removeTreeNodeByNode(treeNode);
+            /*$.ajax({
                 url:"/default.php?secu=manage&mod=product_param_type",
                 async: false,
                 data:{m:"param_count_by_id",channel_id:channelId,product_param_type_id:id},
@@ -221,7 +222,7 @@ function removeTreeNode() {
                         removeTreeNodeByNode(treeNode);
                     }
                 }
-            });
+            }); */
         }
     }
 }
@@ -242,8 +243,8 @@ function removeTreeNodeByNode(treeNode)
     });
 }
 
-function zTreeBeforeDrop(treeId, treeNode, targetNode, moveType) {
-    var id = treeNode.id;
+function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
+    var id = treeNodes[0].id;
     var pId="";
     if(moveType=="inner") pId=targetNode.id; else pId=targetNode.pId;
     $.ajax({
@@ -257,8 +258,8 @@ function zTreeBeforeDrop(treeId, treeNode, targetNode, moveType) {
             if(data['result']>0)
             {
                 var parentNode = zTree1.getNodeByParam("id", pId);
-                zTree1.removeNode(treeNode);
-                zTree1.addNodes(parentNode,treeNode);
+                zTree1.removeNode(treeNodes[0]);
+                zTree1.addNodes(parentNode,treeNodes[0]);
             }
             else {alert("节点移动失败")}
         }

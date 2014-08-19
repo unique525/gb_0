@@ -92,7 +92,7 @@ class ProductParamTypeManageData extends BaseManageData {
         $result = -1;
         if ($productParamTypeId > 0) {
             $sql = "delete from " . self::TableName_ProductParamType
-                . " where " . self::TableName_ProductParamType . "=:" . self::TableId_ProductParamType;
+                . " where " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -109,13 +109,13 @@ class ProductParamTypeManageData extends BaseManageData {
     public function Drag($productParamTypeId, $parentId)
     {
         $result = -1;
-        if ($productParamTypeId > 0 && $parentId > -1) {
+        if ($productParamTypeId > 0 && $parentId >= -1) {
             $sql = "update " . self::TableName_ProductParamType
-                . " set parentId=:parentId"
-                . " where " . self::TableName_ProductParamType . "=:" . self::TableId_ProductParamType;
+                . " set ParentId=:ParentId"
+                . " where " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
-            $dataProperty->AddField("parentId", $parentId);
+            $dataProperty->AddField("ParentId", $parentId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;

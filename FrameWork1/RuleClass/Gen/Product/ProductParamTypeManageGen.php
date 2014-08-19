@@ -240,8 +240,8 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
     public function AsyncDrag()
     {
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
-        $parentId = Control::GetRequest("parent_id", -2);
-        if ($productParamTypeId > 0 && $parentId >= 0) {
+        $parentId = Control::GetRequest("parent_id", -1);
+        if ($productParamTypeId > 0 && $parentId >= -1) {
             $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->Drag($productParamTypeId, $parentId);
             return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
