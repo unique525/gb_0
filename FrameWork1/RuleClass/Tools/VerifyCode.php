@@ -70,12 +70,12 @@ class VerifyCode {
                 }
             }
         } else { //返回json
-            $result = $_GET['jsonpcallback'] . '([{result:-1}])';
+            $result = Control::GetRequest("JsonpCallBack","") . '([{result:-1}])';
             if (strlen($verifyCodeValue) > 0 && strlen($sessionName) > 0) {
                 Session_start();
                 $num = $_SESSION[$sessionName];
                 if ($verifyCodeValue == $num) {
-                    $result = $_GET['jsonpcallback'] . '([{result:1}])';
+                    $result = Control::GetRequest("JsonpCallBack","") . '([{result:1}])';
                 }
             }
         }

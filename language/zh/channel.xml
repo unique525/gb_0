@@ -3,4 +3,5 @@
     <module id="1"><content><![CDATA[首页]]></content></module>
     <module id="2"><content><![CDATA[同一站点内已经有重复的发布文件夹了，请修改发布文件夹！]]></content></module>
     <module id="3"><content><![CDATA[新增失败]]></content></module>
+    <module id="4"><content><![CDATA[您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！]]></content></module>
 </root>

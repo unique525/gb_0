@@ -136,7 +136,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
             //参数错误，请重试
             $result = self::MANAGE_LOGIN_RESULT_PARAM_ERROR;
         }
-        return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
+        return Control::GetRequest("JsonpCallBack","") . '({"result":"' . $result . '"})';
     }
 
     /**
@@ -211,7 +211,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
             }
         }
         $arrVerifyType = Format::FixJsonEncode($arrVerifyType);
-        return $_GET['jsonpcallback'] . "(" . $arrVerifyType . ")";
+        return Control::GetRequest("JsonpCallBack","") . "(" . $arrVerifyType . ")";
     }
 
     /*

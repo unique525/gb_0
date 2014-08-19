@@ -60,22 +60,17 @@ class DocumentNewsManageData extends BaseManageData
     /**
      * 新增资讯
      * @param array $httpPostData $_POST数组
-     * @param string $titlePic1 题图1
-     * @param string $titlePic2 题图2
-     * @param string $titlePic3 题图3
-     * @param string $titlePicMobile 移动客户端题图
-     * @param string $titlePicPad 平板客户端题图
      * @return int 新增的资讯id
      */
-    public function Create($httpPostData, $titlePic1 = '', $titlePic2 = '', $titlePic3 = '', $titlePicMobile = '', $titlePicPad = '')
+    public function Create($httpPostData)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("TitlePic1", "TitlePic2", "TitlePic3", "TitlePicMobile", "TitlePicPad");
-        $addFieldValues = array($titlePic1, $titlePic2, $titlePic3, $titlePicMobile, $titlePicPad);
+        $addFieldNames = array();
+        $addFieldValues = array();
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql($httpPostData, self::TableName_DocumentNews, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
@@ -120,6 +115,37 @@ class DocumentNewsManageData extends BaseManageData
         }
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_DocumentNews, self::TableId_DocumentNews, $documentNewsId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 修改频道题图的上传文件id
+     * @param int $documentNewsId 频道id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic($documentNewsId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
+    {
+        $result = -1;
+        if($documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId,
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId,
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
+
+                    WHERE DocumentNewsId = :DocumentNewsId
+
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
         return $result;
     }
 
@@ -175,7 +201,7 @@ class DocumentNewsManageData extends BaseManageData
             } else { //模糊
                 $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1
                                     OR ManageUserName LIKE :SearchKey2
-                                    OR username LIKE :SearchKey3
+                                    OR UserName LIKE :SearchKey3
                                     OR DocumentNewsTag LIKE :SearchKey4)";
                 $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
@@ -201,16 +227,8 @@ class DocumentNewsManageData extends BaseManageData
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ChannelId", $channelId);
-        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1 OR ManageUserName LIKE :SearchKey2 OR username LIKE :SearchKey3 OR DocumentNewsTag LIKE :SearchKey4)";
-            $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
-        }
-        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql . ";";
+        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . "
+                WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
