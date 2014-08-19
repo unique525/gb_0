@@ -73,142 +73,72 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $forumPicMobile = '';
-                $forumPicPad = '';
-                $forumPicMobileUploadFileId = -1;
-                $forumPicPadUploadFileId = -1;
-                $uploadFileManageData = new UploadFileManageData();
-                //title pic1
-                $fileElementName = "file_forum_pic_1";
-                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1;
-                $forumPic1UploadFileId = 0;
-                $uploadResult = new UploadResult();
-                $forumPic1Path = "";
 
-                $forumPic1UploadResult = self::Upload(
-                    $fileElementName,
-                    $uploadTableType,
-                    0,
-                    $uploadResult,
-                    $forumPic1UploadFileId
-                );
-
-                //echo $returnJson;
-
-                if (intval($forumPic1UploadResult) <= 0) {
-                    //上传出错或没有选择文件上传
-                } else {
-                    if (isset($uploadResult)) {
-                        $forumPic1Path = $uploadResult->UploadFilePath;
-
-                        $forumPic1Path = str_ireplace("..", "", $forumPic1Path);
-                        //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
-                        if (strlen($forumPic1Path) > 0) {
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
-                            $forumPicMobileWidth = $siteConfigManageData->ForumPicMobileWidth;
-                            $forumPicPadWidth = $siteConfigManageData->ForumPicPadWidth;
-
-                            $tableId = 0;
-                            $userId = 0;
-
-                            if ($forumPicMobileWidth > 0) {
-                                $thumbFileName = "mobile";
-                                $forumPicMobile = ImageObject::GenThumb($forumPic1Path, $forumPicMobileWidth, 0, $thumbFileName);
-                                sleep(1);
-                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
-                                $newFileName = FileObject::GetName($forumPicMobile);
-                                $fileExtension = FileObject::GetExtension($forumPicMobile);
-                                $filePath = FileObject::GetDirName($forumPicMobile);
-                                $fileSize = FileObject::GetSize($forumPicMobile);
-                                $forumPicMobileUploadFileId = $uploadFileManageData->Create(
-                                    $newFileName,
-                                    $fileSize,
-                                    $fileExtension,
-                                    $forumPic1Path,
-                                    $filePath,
-                                    $tableType,
-                                    $tableId,
-                                    strval(date('Y', time())),
-                                    strval(date('m', time())),
-                                    strval(date('d', time())),
-                                    $nowManageUserId,
-                                    $userId
-                                );
-                            }
-
-                            if ($forumPicPadWidth > 0) {
-                                $thumbFileName = "pad";
-                                $forumPicPad = ImageObject::GenThumb($forumPic1Path, $forumPicPadWidth, 0, $thumbFileName);
-                                sleep(1);
-                                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
-                                $newFileName = FileObject::GetName($forumPicPad);
-                                $fileExtension = FileObject::GetExtension($forumPicPad);
-                                $filePath = FileObject::GetDirName($forumPicPad);
-                                $fileSize = FileObject::GetSize($forumPicPad);
-                                $forumPicPadUploadFileId = $uploadFileManageData->Create(
-                                    $newFileName,
-                                    $fileSize,
-                                    $fileExtension,
-                                    $forumPic1Path,
-                                    $filePath,
-                                    $tableType,
-                                    $tableId,
-                                    strval(date('Y', time())),
-                                    strval(date('m', time())),
-                                    strval(date('d', time())),
-                                    $nowManageUserId,
-                                    $userId
-                                );
-                            }
-                        }
-                    }
-
-                }
-
-                //title pic2
-                //title pic1
-                $fileElementName = "file_forum_pic_2";
-                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
-                $forumPic2UploadFileId = 0;
-                $forumPic2UploadResult = self::Upload(
-                    $fileElementName,
-                    $uploadTableType,
-                    0,
-                    $uploadResult,
-                    $forumPic2UploadFileId
-                );
-                $forumPic2Path = "";
-                if (intval($forumPic2UploadResult) <= 0) {
-                    //上传出错或没有选择文件上传
-                } else {
-                    $forumPic2Path = $uploadResult->UploadFilePath;
-                    $forumPic2Path = str_ireplace("..", "", $forumPic2Path);
-                }
-
-                $newForumId = $forumManageData->Create(
-                    $httpPostData, $forumPic1Path, $forumPic2Path, $forumPicMobile, $forumPicPad);
+                $forumId = $forumManageData->Create($httpPostData);
 
                 //加入操作日志
-                $operateContent = 'Create Forum,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $newForumId;
+                $operateContent = 'Create Forum,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $forumId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($newForumId > 0) {
-                    //修改版块图片1的tableId
-                    if ($forumPic1UploadFileId > 0) {
-                        $uploadFileManageData->ModifyTableId($forumPic1UploadFileId, $newForumId);
+                if ($forumId > 0) {
+
+                    //title pic1
+                    $fileElementName = "file_forum_pic_1";
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1; //
+                    $tableId = $forumId;
+                    $uploadResult1 = new UploadResult();
+                    $uploadFileId1 = 0;
+                    $titlePic1Result = self::Upload(
+                        $fileElementName,
+                        $tableType,
+                        $tableId,
+                        $uploadResult1,
+                        $uploadFileId1
+                    );
+
+                    if (intval($titlePic1Result) <=0){
+                        //上传出错或没有选择文件上传
+                    }else{
+
                     }
-                    //修改版块图片2的tableId
-                    if ($forumPic2Path > 0) {
-                        $uploadFileManageData->ModifyTableId($forumPic2Path, $newForumId);
+
+                    //title pic2
+                    $fileElementName = "file_forum_pic_2";
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
+                    $uploadFileId2 = 0;
+                    $uploadResult2 = new UploadResult();
+                    $titlePic2Result = self::Upload(
+                        $fileElementName,
+                        $tableType,
+                        $tableId,
+                        $uploadResult2,
+                        $uploadFileId2
+                    );
+                    if (intval($titlePic2Result) <=0){
+                        //上传出错或没有选择文件上传
+                    }else{
+
                     }
-                    //修改移动客户端题图的tableId
-                    if ($forumPicMobileUploadFileId > 0) {
-                        $uploadFileManageData->ModifyTableId($forumPicMobileUploadFileId, $newForumId);
+
+                    if($uploadFileId1>0 || $uploadFileId2>0){
+                        $forumManageData->ModifyForumPic($forumId, $uploadFileId1, $uploadFileId2);
                     }
-                    //修改平板客户端题图的tableId
-                    if ($forumPicPadUploadFileId > 0) {
-                        $uploadFileManageData->ModifyTableId($forumPicPadUploadFileId, $newForumId);
+
+                    $siteConfigManageData = new SiteConfigManageData($siteId);
+                    if($uploadFileId1>0){
+                        $forumPicMobileWidth = $siteConfigManageData->ForumPicMobileWidth;
+                        if($forumPicMobileWidth<=0){
+                            $forumPicMobileWidth  = 320; //默认320宽
+                        }
+                        self::GenUploadFileMobile($uploadFileId1,$forumPicMobileWidth);
+
+                        $forumPicPadWidth = $siteConfigManageData->ForumPicPadWidth;
+                        if($forumPicPadWidth<=0){
+                            $forumPicPadWidth  = 1024; //默认1024宽
+                        }
+                        self::GenUploadFilePad($uploadFileId1,$forumPicPadWidth);
                     }
+
 
                     //javascript 处理
 

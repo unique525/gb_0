@@ -104,6 +104,34 @@ class ForumManageData extends BaseManageData {
     }
 
     /**
+     * 修改版块图片的上传文件id
+     * @param int $forumId 频道id
+     * @param int $forumPic1UploadFileId 题图1上传文件id
+     * @param int $forumPic2UploadFileId 题图2上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyForumPic($forumId, $forumPic1UploadFileId, $forumPic2UploadFileId)
+    {
+        $result = -1;
+        if($forumId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Forum . " SET
+                    ForumPic1UploadFileId = :ForumPic1UploadFileId,
+                    ForumPic2UploadFileId = :ForumPic2UploadFileId
+
+                    WHERE ForumId = :ForumId
+
+                    ;";
+            $dataProperty->AddField("ForumPic1UploadFileId", $forumPic1UploadFileId);
+            $dataProperty->AddField("ForumPic1UploadFileId", $forumPic2UploadFileId);
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得上级版块名称
      * @param int $forumId 论坛版块id
      * @param bool $withCache 是否从缓冲中取

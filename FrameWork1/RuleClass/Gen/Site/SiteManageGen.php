@@ -84,7 +84,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen {
                 self::CreateManageUserLog($operateContent);
             }
         }
-        return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
+        return Control::GetRequest("JsonpCallBack","").'({"result":'.$result.'})';
     }
 
 
