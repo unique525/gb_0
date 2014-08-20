@@ -35,6 +35,7 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $userOrderId = intval(Control::GetRequest("user_order_id",0));
         $siteId = intval(Control::GetRequest("site_id",0));
         parent::ReplaceFirst($templateContent);
+        $resultJavaScript = "";
 
         if($userOrderId > 0 && $siteId > 0){
             $pageSize = intval(Control::GetRequest("ps",0));
@@ -53,9 +54,13 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 $pageIndex  = intval(Control::GetRequest("PageIndex",1));
                 $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
                 //加入操作日志
-                $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
-                self::CreateManageUserLog($operateContent);
-
+                if($result > 0){
+                    $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                    self::CreateManageUserLog($operateContent);
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 3));
+                }else{
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 4));
+                }
                 if($closeTab == 1){
                     Control::GoUrl("/default.php?secu=manage&mod=user_order&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
                 }else{
@@ -95,7 +100,9 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
 
             $templateContent = strtr($templateContent,$replace_arr);
         }
+
         parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
         return $templateContent;
     }
 
@@ -106,6 +113,7 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = intval(Control::GetRequest("site_id",0));
 
         parent::ReplaceFirst($templateContent);
+        $resultJavaScript = "";
         if($userOrderProductId > 0 && $userOrderId > 0){
             $userOrderProductManageData = new UserOrderProductManageData();
 
@@ -114,11 +122,11 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 $result = $userOrderProductManageData->Modify($httpPostData,$userOrderProductId,$userOrderId);
 
                 if($result > 0){
-                    Control::ShowMessage(Language::Load('user_order', 3));
                     $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 3));
                 }else{
-                    Control::ShowMessage(Language::Load('user_order', 4));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 4));
                 }
             }
             $arrUserOrderProductOne = $userOrderProductManageData->GetOne($userOrderProductId,$siteId);
@@ -127,6 +135,7 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         }
 
         parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
         return $templateContent;
     }
 
