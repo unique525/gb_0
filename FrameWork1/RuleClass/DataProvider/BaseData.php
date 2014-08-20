@@ -387,7 +387,7 @@ class BaseData
     /**
      * 产品参数类型选项 数据表名
      */
-    const TableName_ProductParamTypeOption = "cst_product_param_type";
+    const TableName_ProductParamTypeOption = "cst_product_param_type_option";
     /**
      * 产品参数类型选项 数据表自增字段名
      */
