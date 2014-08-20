@@ -25,7 +25,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
                 $result = self::AsyncDelete();
                 break;
             case "modify":
-                $result = self::GenEdit();
+                $result = self::GenModify();
                 break;
             case "modify_state":
                 $result = self::AsyncModifyState();
@@ -123,7 +123,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
      * 修改产品参数类型
      * @return mixed|string
      */
-    public function GenEdit()
+    public function GenModify()
     {
         $tempContent = "";
         $parentId = Control::PostRequest("f_ParentId", "");
@@ -174,7 +174,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
 
     /**
      * 修改产品参数类型状态
-     * @return string 删除结果
+     * @return string 修改结果
      */
     public function AsyncModifyState()
     {
