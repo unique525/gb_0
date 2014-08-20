@@ -13,11 +13,17 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             case "modify":
                 $result = self::GenModify();
                 break;
+            case "modify_order_product":
+                $result = self::GenModifyOrderProduct();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
             case "modify_state":
                 $result = self::AsyncModifyState();
+                break;
+            case "user_order_pay_list":
+                $result = self::GenUserOrderPayList();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -25,12 +31,15 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
     }
 
     private function GenModify(){
-        $userOrderId = Control::GetRequest("user_order_id",0);
-        $siteId = Control::GetRequest("site_id",0);
+        $templateContent = Template::Load("user/user_order_deal.html","common");
+        $userOrderId = intval(Control::GetRequest("user_order_id",0));
+        $siteId = intval(Control::GetRequest("site_id",0));
+        parent::ReplaceFirst($templateContent);
+
         if($userOrderId > 0 && $siteId > 0){
-            $pageSize = Control::GetRequest("ps",0);
-            $tabIndex = Control::GetRequest("tab_index",0);
-            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = intval(Control::GetRequest("ps",0));
+            $tabIndex = intval(Control::GetRequest("tab_index",0));
+            $pageIndex = intval(Control::GetRequest("p",1));
 
             $userOrderManageData = new UserOrderManageData();
             $userOrderProductManageData = new UserOrderProductManageData();
@@ -38,10 +47,10 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
 
             if(!empty($_POST)){
                 $httpPostData = $_POST;
-                $closeTab = Control::PostRequest("CloseTab",0);
-                $tabIndex = Control::GetRequest("TabIndex",0);
-                $pageSize = Control::GetRequest("PageSize",27);
-                $pageIndex  = Control::GetRequest("PageIndex",1);
+                $closeTab = intval(Control::PostRequest("CloseTab",0));
+                $tabIndex = intval(Control::GetRequest("TabIndex",0));
+                $pageSize = intval(Control::GetRequest("PageSize",27));
+                $pageIndex  = intval(Control::GetRequest("PageIndex",1));
                 $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
                 //加入操作日志
                 $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
@@ -53,13 +62,11 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                     Control::GoUrl($_SERVER["HTTP_SELF"]);
                 }
             }
-            $templateContent = Template::Load("user/user_order_deal.html","common");
-            parent::ReplaceFirst($templateContent);
 
             $arrUserOrderOne = $userOrderManageData->GetOne($userOrderId,$siteId);
-            $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId);
+            $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId,$siteId);
 
-            if($arrUserOrderOne["UserId"] > 0){
+            if(intval($arrUserOrderOne["UserId"]) > 0){
                 $userId = $arrUserOrderOne["UserId"];
                 $arrUserReceiveInfoList = $userReceiveInfoManageData->GetList($userId);
                 $tagUserReceiveInfoListId = "user_receive_info_list";
@@ -87,11 +94,40 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             );
 
             $templateContent = strtr($templateContent,$replace_arr);
-            parent::ReplaceEnd($templateContent);
-            return $templateContent;
-        }else{
-            return null;
         }
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
+    }
+
+    private function GenModifyOrderProduct(){
+        $templateContent = Template::Load("user/user_order_product_deal.html","common");
+        $userOrderProductId = intval(Control::GetRequest("user_order_product_id",0));
+        $userOrderId = intval(Control::GetRequest("user_order_id",0));
+        $siteId = intval(Control::GetRequest("site_id",0));
+
+        parent::ReplaceFirst($templateContent);
+        if($userOrderProductId > 0 && $userOrderId > 0){
+            $userOrderProductManageData = new UserOrderProductManageData();
+
+            if(!empty($_POST)){
+                $httpPostData = $_POST;
+                $result = $userOrderProductManageData->Modify($httpPostData,$userOrderProductId,$userOrderId);
+
+                if($result > 0){
+                    Control::ShowMessage(Language::Load('user_order', 3));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
+                }else{
+                    Control::ShowMessage(Language::Load('user_order', 4));
+                }
+            }
+            $arrUserOrderProductOne = $userOrderProductManageData->GetOne($userOrderProductId,$siteId);
+
+            Template::ReplaceOne($templateContent,$arrUserOrderProductOne);
+        }
+
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     private function GenList(){
@@ -139,9 +175,21 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $userOrderId = Control::GetRequest("user_order_id",0);
         if($siteId > 0 && $userOrderId >0){
             $state = Control::GetRequest("state",0);
-            return $_GET['jsonpcallback'].'';
+            return Control::GetRequest("jsonpcallback","").'';
         }else{
-            return $_GET['jsonpcallback'].'';
+            return Control::GetRequest("jsonpcallback","").'';
+        }
+    }
+
+    private function GenUserOrderPayList(){
+        $userOrderId = intval(Control::GetRequest("user_order_id",0));
+        if($userOrderId > 0){
+            $templateContent = Template::Load("user/user_order_pay_list.html","common");
+
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            return null;
         }
     }
 }

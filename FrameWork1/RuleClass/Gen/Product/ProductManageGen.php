@@ -45,6 +45,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = "";
         $siteId = Control::GetRequest("site_id", 0);
         $manageUserId = Control::GetManageUserId();
+        $resultJavaScript = "";
 
         if ($siteId > 0 && $manageUserId > 0) {
             $tempContent = Template::Load("product/product_deal.html", "common");
@@ -54,27 +55,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
-                //title pic
-                $fileElementName = "file_title_pic";
-                $tableType = 20; //channel
-                $tableId = 0;
-                $returnType = 1;
-                $uploadFileId1 = 0;
-                $titlePicPath = $this->Upload(
-                    $fileElementName,
-                    $tableType,
-                    $tableId,
-                    $returnType,
-                    $uploadFileId1
-                );
-                $titlePicPath = str_ireplace("..", "", $titlePicPath);
-                if (!empty($titlePicPath)) {
-                    sleep(1);
-                }
-
-                $productId = $productManageData->Create(
-                    $httpPostData,
-                    $titlePicPath, $titlePicPath2, $titlePicPath3);
+                $productId = $productManageData->Create($httpPostData);
                 //加入操作日志
                 $operateContent = 'Create Product,POST FORM:'
                     . implode('|', $_POST) . ';\r\nResult:productId:' . $productId;
@@ -90,21 +71,17 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/product_data');
 
-                    $uploadFileManageData = new UploadFileManageData();
-                    //修改题图1的TableId
-                    $uploadFileManageData->ModifyTableId($uploadFileId1, $productId);
-
                     //javascript 处理
 
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        Control::CloseTab();
-                    } else {
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    if($closeTab == 1){
+                        //Control::CloseTab();
+                        $resultJavaScript .= Control::GetCloseTab();
+                    }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]);
                     }
-
                 } else {
-                    Control::ShowMessage(Language::Load('document', 2));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1)); //新增失败！
                 }
 
             }
@@ -118,6 +95,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         }
 
         return $tempContent;
@@ -168,13 +146,33 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tagId = "product_list";
             $allCount = 0;
             $isSelf = Control::GetRequest("is_self", 0);
-            $documentNewsManageData = new DocumentNewsManageData();
-            $arrDocumentNewsList = $documentNewsManageData->GetList($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType, $isSelf, $manageUserId);
-            if (count($arrDocumentNewsList) > 0) {
-                Template::ReplaceList($tempContent, $arrDocumentNewsList, $tagId);
+            $productManageData = new ProductManageData();
+            $arrProductList = $productManageData->GetList(
+                $channelId,
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $searchKey,
+                $searchType,
+                $isSelf,
+                $manageUserId
+            );
+            if (count($arrProductList) > 0) {
+                Template::ReplaceList($tempContent, $arrProductList, $tagId);
+
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=product&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+                $tempContent = str_ireplace("{pager_button}", Language::Load('channel', 5), $tempContent);
             }
         }
 

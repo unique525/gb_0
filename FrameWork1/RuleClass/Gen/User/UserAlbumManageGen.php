@@ -178,7 +178,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         }
         $userInfoManageData = new UserInfoManageData();
         $userInfoManageData->ReCountUserAlbumCount();
-        return $_GET["jsonpcallback"] . "()";
+        return Control::GetRequest("jsonpcallback","") . "()";
     }
 
     /**
@@ -196,7 +196,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         }
         $userInfoManageData = new UserInfoManageData();
         $userInfoManageData->ReCountUserAlbumCount();
-        return $_GET['jsonpcallback'] . "()";
+        return Control::GetRequest("jsonpcallback","") . "()";
     }
 
     private function GenCreateMainPic() {

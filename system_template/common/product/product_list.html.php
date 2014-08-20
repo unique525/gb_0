@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
-    <script type="text/javascript" src="/system_js/manage/document_news/document_news.js"></script>
+    <script type="text/javascript" src="/system_js/manage/product/product.js"></script>
 </head>
 <body>
 <div class="div_list">
@@ -36,9 +36,12 @@
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 40px;"></td>
             <td style="width: 20px;"></td>
+            <td style="width: 100px;">产品编号</td>
             <td>产品名称</td>
             <td style="width: 36px;"></td>
-            <td style="width: 50px; text-align: center;">产品编号</td>
+            <td style="width: 50px; text-align: center;">排序</td>
+            <td style="width: 100px;">显示售价</td>
+            <td style="width: 100px;">销售数量</td>
             <td style="width: 50px; text-align: center;">热门</td>
             <td style="width: 50px; text-align: center;">新品</td>
             <td style="width: 180px;">创建时间</td>
@@ -61,9 +64,12 @@
                             <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_ProductId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_ProductId}" title="改变产品状态" alt="改变状态"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_ProductId}" alt="预览" title="预览文档"/></td>
+                            <td class="spe_line2"><a target="_blank" href="{view_url}"><span style="">{f_ProductNumber}</span></a></td>
                             <td class="spe_line2"><a target="_blank" href="{view_url}"><span style="">{f_ProductName}</span></a></td>
                             <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductId}" title="向上移动" alt="向上"/><img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="排序数字，越大越靠前">{f_Sort}</td>
+                            <td class="spe_line2" style="width:100px;" title="">{f_SalePrice}</td>
+                            <td class="spe_line2" style="width:100px;" title="">{f_SaleCount}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="是否热门，用在特定的模板中">{f_IsHot}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="是否最新，用在特定的模板中">{f_IsNew}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="文档创建时间">{f_CreateDate}</td>

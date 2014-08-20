@@ -19,20 +19,17 @@ class ProductManageData extends BaseManageData {
     /**
      * 新增产品
      * @param array $httpPostData $_POST数组
-     * @param string $titlePic 题图
-     * @param string $titlePicMobile 题图-客户端
-     * @param string $titlePicPad 题图-平板
      * @return int 新增的产品id
      */
-    public function Create($httpPostData, $titlePic, $titlePicMobile, $titlePicPad)
+    public function Create($httpPostData)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("TitlePic", "TitlePicMobile", "TitlePicPad");
-        $addFieldValues = array($titlePic, $titlePicMobile, $titlePicPad);
+        $addFieldNames = array();
+        $addFieldValues = array();
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,
@@ -53,12 +50,9 @@ class ProductManageData extends BaseManageData {
      * 修改产品
      * @param array $httpPostData $_POST数组
      * @param int $productId 产品id
-     * @param string $titlePic 题图1，默认为空，不修改
-     * @param string $titlePicMobile 题图-客户端，默认为空，不修改
-     * @param string $titlePicPad 题图-平板，默认为空，不修改
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $productId, $titlePic = '', $titlePicMobile = '', $titlePicPad = '')
+    public function Modify($httpPostData, $productId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
@@ -67,18 +61,6 @@ class ProductManageData extends BaseManageData {
         $preNumber = "";
         $addFieldNames = array();
         $addFieldValues = array();
-        if (!empty($titlePic)) {
-            $addFieldNames[] = "TitlePic";
-            $addFieldValues[] = $titlePic;
-        }
-        if (!empty($titlePicMobile)) {
-            $addFieldNames[] = "TitlePicMobile";
-            $addFieldValues[] = $titlePicMobile;
-        }
-        if (!empty($titlePicPad)) {
-            $addFieldNames[] = "TitlePicPad";
-            $addFieldValues[] = $titlePicPad;
-        }
         if (!empty($httpPostData)) {
             $sql = parent::GetUpdateSql(
                 $httpPostData,

@@ -133,7 +133,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         if($userGroupId > 0){
             $userGroupManageData = new UserGroupManageData();
             $result = $userGroupManageData->ModifyState($userGroupId,$state);
-                return $_GET['JsonpCallBack'].'({"result":'.$result.'})';
+                return Control::GetRequest("jsonpcallback","") .'({"result":'.$result.'})';
         }else{
             return null;
         }
