@@ -144,7 +144,7 @@ class UserLevelManageGen extends BaseManageGen implements IBaseManageGen{
         if($userLevelId > 0){
             $userLevelManageData = new UserLevelManageData();
             $result = $userLevelManageData->ModifyState($userLevelId,$state);
-            return $_GET['JsonpCallBack'].'({"result":"'.$result.'"})';
+            return Control::GetRequest("jsonpcallback","") .'({"result":"'.$result.'"})';
         }else{
             return null;
         }
