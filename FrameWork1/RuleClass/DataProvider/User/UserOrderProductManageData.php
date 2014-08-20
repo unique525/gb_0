@@ -17,7 +17,7 @@ class UserOrderProductManageData extends BaseManageData
                 $userOrderProductId,$dataPropertyUserOrderProduct);
             $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
                 (uo.SendPrice + (SELECT SUM(uop.subtotal) FROM ".self::TableName_UserOrderProduct." uop
-                WHERE uop.UserOrderId1 = :UserOrderId1 GROUP BY uop.UserOrderId))
+                WHERE uop.UserOrderId = :UserOrderId1 GROUP BY uop.UserOrderId))
                 WHERE uo.UserOrderId = :UserOrderId2";
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
