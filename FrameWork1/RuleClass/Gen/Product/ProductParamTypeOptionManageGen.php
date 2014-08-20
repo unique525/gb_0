@@ -52,13 +52,13 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     {
         $tempContent = "";
         $parentId = Control::PostRequest("f_ParentId", "");
-        $productParamTypeId = Control::PostRequest("f_productParamTypeId", "");
+        $productParamTypeId = Control::PostRequest("f_ProductParamTypeId", "");
         $name = Control::PostRequest("f_OptionName", "");
         $eName = Control::PostRequest("f_OptionName2", "");
 
         $manageUserId = Control::GetManageUserId();
 
-        if ($parentId >= 0 && $manageUserId > 0) {
+        if ($parentId >= 0 && $productParamTypeId>0 && $manageUserId > 0) {
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
@@ -123,7 +123,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     {
         $tempContent = "";
         $parentId = Control::PostRequest("f_ParentId", "");
-        $productParamTypeId = Control::PostRequest("f_productParamTypeId", "");
+        $productParamTypeId = Control::PostRequest("f_ProductParamTypeId", "");
         $name = Control::PostRequest("f_OptionName", "");
         $eName = Control::PostRequest("f_OptionName2", "");
         $productParamTypeOptionId = Control::PostRequest("f_productParamTypeOptionId", "");
@@ -195,16 +195,16 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     public function GenListForManageTree()
     {
 
-        $tempContent = Template::Load("product/productParamTypeOption_list.html");
-        $channelId = Control::GetRequest("channel_id", 0);
+        $tempContent = Template::Load("product/product_param_type_option_list.html", "common");
+        $product_param_type_id = Control::GetRequest("product_param_type_id", 0);
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $adminUserId = Control::GetManageUserId();
-        if ($channelId > 0 && $adminUserId > 0) {
+        if ($product_param_type_id > 0 && $adminUserId > 0) {
             $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
             $arrList = $productParamTypeOptionManageData->GetList($productParamTypeId, "", -1);
             $treeNodes = '{ id:0, pId:-1,productParamTypeId:-1,name:"根节点", eName:"根节点",open:true},';
             for ($i = 0; $i < count($arrList); $i++) {
-                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductParamTypeOptionID"] . ', pId:' . $arrList[$i]["ParentID"] . ', productParamTypeId:' . $arrList[$i]["ProductParamTypeID"] . ', name:"' . $arrList[$i]["OptionName"] . '", eName:"' . $arrList[$i]["OptionName2"] . '"},';
+                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductParamTypeOptionId"] . ', pId:' . $arrList[$i]["ParentId"] . ', productParamTypeId:' . $arrList[$i]["ProductParamTypeId"] . ', name:"' . $arrList[$i]["OptionName"] . '", eName:"' . $arrList[$i]["OptionName2"] . '"},';
             }
             $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
             $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);
