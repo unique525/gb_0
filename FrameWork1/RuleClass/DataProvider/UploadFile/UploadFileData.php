@@ -68,11 +68,15 @@ class UploadFileData extends BaseData {
     /**
      * 产品参数
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION = 42;
+    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM = 42;
     /**
      * 产品参数类型
      */
     const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE = 43;
+    /**
+     * 产品参数类型选项
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 44;
 
 
     /**
