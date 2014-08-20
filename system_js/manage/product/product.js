@@ -30,13 +30,13 @@ $(function () {
     var btnModify = $(".btn_modify");
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
-        var documentNewsId = $(this).attr('idvalue');
+        var productId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=product&m=modify&product_id=' + documentNewsId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=product&m=modify&product_id=' + productId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑产品';
         parent.addTab();
     });

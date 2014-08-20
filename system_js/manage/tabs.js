@@ -23,8 +23,10 @@ function addTab() {
     if (window.G_TabTitle.length <= 0) {
         window.G_TabTitle = window.G_SelectedChannelName + "[" + window.G_SelectedChannelId + "]";
     }
-    var tabContent = '<'+'iframe id="iframeNewTab" frameborder="0" marginwidth="0" marginheight="0" width="100%" height="' + tabHeight + 'px" src="' + url + '"><'+'/iframe>';
-    var tabTemplate = '<'+'li><'+'a id="tabs_title-'+window.G_TabIndex+'" href="#{href}">#{label}<'+'/a> <'+'span class="ui-icon ui-icon-close" role="presentation">Remove Tab<'+'/span><'+'/li>';
+    var tabContent = '<'+'iframe id="iframeNewTab" frameborder="0" marginwidth="0" marginheight="0" width="100%" height="'
+        + tabHeight + 'px" src="' + url + '"><'+'/iframe>';
+    var tabTemplate = '<'+'li><'+'a id="tabs_title-'+window.G_TabIndex+'" href="#{href}">#{label}<'+'/a> <'
+        +'span class="ui-icon ui-icon-close" role="presentation">Remove Tab<'+'/span><'+'/li>';
 
     var id = "tabs-" + window.G_TabIndex;
     var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, window.G_TabTitle));
@@ -46,8 +48,12 @@ function closeTab(){
             parent.$("#tabs_title-"+nowTableIndex).closest("li").remove();
             //var panelId = "tabs-"+nowTabCounter;
             //parent.$("#" + panelId).remove();
-            parent.G_Tabs.tabs("refresh");
+            //parent.G_Tabs.tabs("refresh");
             parent.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
+            parent.G_Tabs.tabs( "refresh" );
+            //刷新内容
+            parent.$("#iframeNewTab").attr("src",parent.$("#iframeNewTab").attr("src"));
+            //alert(parent.$("#iframeNewTab").attr("src"));
         }
 
     }

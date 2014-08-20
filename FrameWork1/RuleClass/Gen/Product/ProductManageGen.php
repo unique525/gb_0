@@ -43,14 +43,17 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
     private function GenCreate()
     {
         $tempContent = "";
-        $siteId = Control::GetRequest("site_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $resultJavaScript = "";
 
-        if ($siteId > 0 && $manageUserId > 0) {
+        if ($channelId > 0 && $manageUserId > 0) {
             $tempContent = Template::Load("product/product_deal.html", "common");
             parent::ReplaceFirst($tempContent);
             $productManageData = new ProductManageData();
+
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, false);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
@@ -62,6 +65,8 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($productId > 0) {
+
+
                     //授权给创建人
                     if ($manageUserId > 1) { //只有非ADMIN的要授权
                         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -87,7 +92,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             }
 
             $tempContent = str_ireplace("{CreateDate}", strval(date('Y-m-d', time())), $tempContent);
+            $tempContent = str_ireplace("{ChannelId}", strval($channelId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
+
 
             $fieldsOfChannel = $productManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
