@@ -33,7 +33,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
                 $result = self::GenListForManageTree();
                 break;
             case "drag":
-                $result = self::GenDrag();
+                $result = self::AsyncDrag();
                 break;
             case "one":
                 $result = self::AsyncOne();
@@ -235,9 +235,9 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
      * 拖动产品参数类型选项到指定结点
      * @return string 拖动结果
      */
-    public function GenDrag() {
-        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", -2);
-        $parentId = Control::GetRequest("parentId", -2);
+    public function AsyncDrag() {
+        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
+        $parentId = Control::GetRequest("parent_id", 0);
         if ($productParamTypeOptionId > 0 && $parentId >= 0) {
             $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
             $result = $productParamTypeOptionManageData->Drag($productParamTypeOptionId, $parentId);
