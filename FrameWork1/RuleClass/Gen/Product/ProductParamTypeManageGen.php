@@ -58,13 +58,13 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
 
         $manageUserId = Control::GetManageUserId();
 
-        if ($parentId > -1 && $manageUserId > 0) {
+        if ($parentId >= 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $productParamTypeData = new ProductParamTypeManageData();
                 //title_pic
                 $fileElementName = "file_title_pic";
-                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
+                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE; //productParamType
                 $tableId = 0;
                 $uploadResult = new UploadResult();
                 $titlePicUploadFileId = 0;
@@ -137,7 +137,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
                 $productParamTypeData = new ProductParamTypeManageData();
                 //title_pic
                 $fileElementName = "file_title_pic";
-                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION; //productParamType
+                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE; //productParamType
                 $tableId = 0;
                 $uploadResult = new UploadResult();
                 $titlePicUploadFileId = 0;
@@ -153,7 +153,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
 
                 $result = $productParamTypeData->Modify($httpPostData,$productParamTypeId,$titlePicUploadFileId);
                 //加入操作日志
-                $operateContent = 'Create ProductParamType,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeId:'.$productParamTypeId;
+                $operateContent = 'Modify ProductParamType,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeId:'.$productParamTypeId;
                 self::CreateManageUserLog($operateContent);
                 if ($result > 0) {
 
