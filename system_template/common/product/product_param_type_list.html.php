@@ -114,7 +114,7 @@ function zTreeOnClick(event, treeId, treeNode) {
             if(data['ParamValueType']==6)
             {
                 optionHref.css("display","");
-                optionHref.attr("href","/default.php?secu=manage&mod=product_param_type_option&m=list&channel_id="+data['ChannelId']+"&product_param_type_id="+data['ProductParamTypeId']+"&parentId="+data['ParentId']);
+                optionHref.attr("href","/default.php?secu=manage&mod=product_param_type_option&m=list&channel_id="+data['ChannelId']+"&product_param_type_id="+data['ProductParamTypeId']+"&parent_id="+data['ParentId']);
             }
             else
             {
