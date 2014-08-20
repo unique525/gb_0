@@ -669,7 +669,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if(!empty($arrDocumentNewsId)){
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifySort($arrDocumentNewsId);
-            return Control::GetRequest("JsonpCallBack","").'({"result":'.$result.'})';
+            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
         }  else{
             return "";
         }
@@ -756,7 +756,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $operateContent = 'Modify State DocumentNews,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
             self::CreateManageUserLog($operateContent);
         }
-        return Control::GetRequest("JsonpCallBack","").'({"result":'.$result.'})';
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 
 }

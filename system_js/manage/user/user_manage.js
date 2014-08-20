@@ -11,6 +11,7 @@ $(document).ready(function() {
         dataType: "jsonp",
         jsonp: "jsonpcallback",
         success: function (data) {
+            alert(data);
             if (data !== undefined) {
                 var aw = $(window).height() - 108 - 35;
                 var size = aw / 28;

@@ -46,7 +46,7 @@ class ManageMenuOfUserManageGen extends BaseManageGen implements IBaseManageGen 
                 unset($arrList[$arrWaitForDelete[$j]]);
             }
         }
-        return Control::GetRequest("JsonpCallBack","") . "(" . Format::FixJsonEncode($arrList) . ")";
+        return Control::GetRequest("jsonpcallback","") . "(" . Format::FixJsonEncode($arrList) . ")";
     }
 
 }

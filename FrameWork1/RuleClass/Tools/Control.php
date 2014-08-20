@@ -92,6 +92,7 @@ class Control {
      * @return mixed 返回值
      */
     public static function GetRequest($paramName, $defaultValue) {
+        $paramName = strtolower($paramName);
         if (isset($_GET[$paramName])) {
             if (is_float($_GET[$paramName])) {
                 return floatval($_GET[$paramName]);
