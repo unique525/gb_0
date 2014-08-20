@@ -128,6 +128,8 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 }else{
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 4));
                 }
+                $operateContent = 'Modify UserOrderProduct,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
+                self::CreateManageUserLog($operateContent);
             }
             $arrUserOrderProductOne = $userOrderProductManageData->GetOne($userOrderProductId,$siteId);
 
