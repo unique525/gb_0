@@ -240,7 +240,9 @@ function _ChannelClick() {
         } else if (window.G_SelectedChannelType === 3) { //图片轮换类频道
 
         } else if (window.G_SelectedChannelType === 4) { //产品类频道
-
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=product&m=list&channel_id=' + window.G_SelectedChannelId;
+            addTab();
         } else if (window.G_SelectedChannelType === 5) { //频道产品类频道
 
         } else if (window.G_SelectedChannelType === 6) { //活动类

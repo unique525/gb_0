@@ -76,7 +76,7 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).text(FormatState($(this).text()));
+        $(this).text(FormatDocumentNewsState($(this).text()));
     });
 
 
@@ -91,7 +91,7 @@ $(function() {
  * 格式化状态值
  * @return {string}
  */
-function FormatState(state){
+function FormatDocumentNewsState(state){
     switch (state){
         case "0":
             return "新稿";

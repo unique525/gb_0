@@ -581,7 +581,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
         $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
-            return Language::Load('document', 26);
+            return Language::Load('channel', 4);
         }
 
         //load template
@@ -622,7 +622,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if (isset($searchKey) && strlen($searchKey) > 0) {
             $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
-                return Language::Load('document', 26);
+                return Language::Load('channel', 4);
             }
         }
 
