@@ -7,124 +7,136 @@
  */
 class ProductParamManageData extends BaseManageData {
 
-    public function Create($titlepicpath = ""){
-        $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::tablename,$dataProperty,"titlepic",$titlepicpath);
-//        echo $sql;
-//        die();
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->LastInsertId($sql, $dataProperty);
-        return $result;
-    }
-
-    public function Modify($tableidvalue,$titlepicpath = ""){
-        $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tablename,self::tableidname,$tableidvalue,$dataProperty,"titlepic",$titlepicpath);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    public function Move($documentchannelid,$ids){
-        $sql = "UPDATE ".self::tablename." SET `documentchannelid`=:documentchannelid where productid in (".$ids.")";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("documentchannelid", $documentchannelid);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    public function GetDelete($productid){
-        $sql = "delete from ".self::tablename." where productid=:productid";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("productid", $productid);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnRow($sql, $dataProperty);
-        return $result;
-    }
-
-    public function UpdateState($productid,$state){
-        $sql = "update ".self::tablename." set state=:state where productid=:productid";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("productid", $productid);
-        $dataProperty->AddField("state", $state);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    public function GetList($sqlwhere,$dataProperty,$order,$topcount=-1){
-        $limitcount = "";
-        if ($topcount != -1)
-            $limitcount = " limit " . $topcount;
-        $sql = "select t.*
-            from cst_productparam t
-            left outer join cst_productparamtype t1
-            on t.productparamtypeid=t1.productparamtypeid
-	    where " . $sqlwhere . " " . $order . $limitcount;
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnArray($sql, $dataProperty);
-        return $result;
-    }
-
-    //取得对应参数数据
-    public function GetDetailList($productid,$rankid=-1,$parentid=-1,$topcount){
-        $dataProperty = new DataProperty();
-        $limitcount = "";
-        $addconditon = "";
-        if ($rankid != -1)
-        {
-            $addconditon = " and t1.rankid =:rankid";
-            $dataProperty->AddField("rankid", $rankid);
+    /**
+     * 获取产品参数记录
+     * @param int $productId 产品Id
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetList($productId,$order,$topCount=-1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($productId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY t.ProductID DESC,t.ProductParamTypeID DESC";
+                    break;
+            }
+            $sql = "SELECT t.*"
+                . " FROM " . self::TableName_ProductParam ." t"
+                . " LEFT OUTER JOIN" . self::TableName_ProductParamType ." t1"
+                . " ON t.".self::TableId_ProductParamType."=t1.".self::TableId_ProductParamType
+                . " WHERE t.ProductId=:ProductId"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
-        if ($parentid != -1) {
-            $addconditon = $addconditon . " and t1.parentid =:parentid";
-            $dataProperty->AddField("parentid", $parentid);
+        return $result;
+    }
+
+    /**
+     * 根据产品Id和产品参数类型父Id获取产品参数记录
+     * @param int $productId 产品Id
+     * @param int $parentId 产品参数类型parentId
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetListByParentId($productId, $parentId=-1, $order = "", $topCount=-1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        $dataProperty = new DataProperty();
+        $searchSql = "";
+        if ($parentId != -1) {
+            $searchSql = $searchSql . " AND t1.ParentId =:ParentId";
+            $dataProperty->AddField("ParentId", $parentId);
         }
-        if ($topcount != -1)
-            $limitcount = " limit " . $topcount;
-        $sql = "select t.*,t1.productparamtypeid,t1.paramtypename
-            from cst_productparam t
-            left outer join cst_productparamtype t1
-            on t.productparamtypeid=t1.productparamtypeid
-	    where t.productid=:productid"  . $addconditon . $limitcount;
-        
-        $dataProperty->AddField("productid", $productid);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnArray($sql, $dataProperty);
+        if ($productId > 0) {
+            $sql = "SELECT t.*,t1." . self::TableId_ProductParamType . ",t1.ParamTypeName"
+                . " FROM " . self::TableName_ProductParam . " t"
+                . " LEFT OUTER JOIN" . self::TableName_ProductParamType . " t1"
+                . " ON t." . self::TableId_ProductParamType . "=t1." . self::TableId_ProductParamType
+                . " WHERE t.ProductId=:ProductId"
+                . $searchSql
+                . $order
+                . $topCount;
+            $dataProperty->AddField("productId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
         return $result;
     }
 
-    public function GetParamCount($productparamtypeid, $productparamtypeoptionid){
-        $sql = "select count(*) from ".self::tablename." where productparamtypeid=:productparamtypeid and shortstringvalue=:shortstringvalue";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("productparamtypeid", $productparamtypeid);
-        $dataProperty->AddField("shortstringvalue", $productparamtypeoptionid);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnInt($sql, $dataProperty);
+    /**
+     * 根据产品参数类型Id获取产品参数条数
+     * @param int $productParamTypeId 产品参数类型Id
+     * @return int 产品参数条数
+     */
+    public function GetParamCount($productParamTypeId)
+    {
+        $result = -1;
+        if ($productParamTypeId > 0) {
+            $sql = "SELECT COUNT(*)"
+                . " FROM " . self::TableName_ProductParam
+                . " WHERE " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("productParamTypeId", $productParamTypeId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
         return $result;
     }
 
-    public function GetParamCountByID($productparamtypeid){
-        $sql = "select count(*) from ".self::tablename." where productparamtypeid=:productparamtypeid";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("productparamtypeid", $productparamtypeid);
-        $dboperator = DBOperator::getInstance();
-        $result = $dboperator->ReturnInt($sql, $dataProperty);
-        return $result;
-    }
-    public function Merge($sourceid,$targetid,$paramtypeid){
-        $sql = "update ".self::tablename." set shortstringvalue=:targetid where shortstringvalue=:sourceid and productparamtypeid=:paramtypeid";
-        $dataProperty = new DataProperty();        
-        $dataProperty->AddField("sourceid", $sourceid);
-        $dataProperty->AddField("targetid", $targetid);
-        $dataProperty->AddField("paramtypeid", $paramtypeid);
-        $dboperator = DBOperator::getInstance();
-        //echo $sql;echo $id;echo $parentid;die();
-        $result = $dboperator->Execute($sql, $dataProperty);
+    /**
+     * 根据产品参数类型Id和产品参数类型选项Id获取产品参数条数
+     * @param int $productParamTypeId 产品参数类型Id
+     * @param int $productParamTypeOptionId 产品参数类型选项Id
+     * @return int 产品参数条数
+     */
+    public function GetParamCountByOptionID($productParamTypeId, $productParamTypeOptionId)
+    {
+        $result = -1;
+        if ($productParamTypeId > 0 && $productParamTypeOptionId>0) {
+            $sql = "SELECT COUNT(*)"
+                . " FROM " . self::TableName_ProductParam
+                . " WHERE " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType . " AND ShortStringValue=:ShortStringValue";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("productParamTypeId", $productParamTypeId);
+            $dataProperty->AddField("ShortStringValue", $productParamTypeOptionId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
         return $result;
     }
 
+    /**
+     * 批量修改产品表中产品参数类型选项值
+     * @param int $sourceId 产品参数类型源选项值
+     * @param int $targetId 产品参数类型目标选项值
+     * @param int $productParamTypeId 产品参数类型id
+     * @return int 执行结果
+     */
+    public function UpdateShortStringValue($sourceId, $targetId, $productParamTypeId)
+    {
+        $result = -1;
+        if ($sourceId > 0 && $targetId > 0 && $productParamTypeId > 0) {
+            $sql = "UPDATE " . self::TableName_ProductParam
+                . " set ShortStringValue=:targetId"
+                . " WHERE ShortStringValue=:sourceId AND " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("sourceId", $sourceId);
+            $dataProperty->AddField("targetId", $targetId);
+            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 }
 ?>
