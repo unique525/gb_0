@@ -347,11 +347,11 @@ function sub()
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" >类型：</td>
+                            <td class="spe_line" ><label for="f_ParamValueType">类型：</label></td>
                             <td class="spe_line">
                                 <select id="f_ParamValueType" name="f_ParamValueType">
-                                    <option value="0" {s_ParamValueType_0}>默认</option>
-                                    <option value="6" {s_ParamValueType_6}>选项</option>
+                                    <option value="0">默认</option>
+                                    <option value="6">选项</option>
                                 </select>
                                 &nbsp;&nbsp;<a id="optionHref" href="#" target="_self" style="display:none">修改参数类型选项</a>
                             </td>
