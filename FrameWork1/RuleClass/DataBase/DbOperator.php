@@ -226,7 +226,6 @@ class DbOperator {
      */
     public function ExecuteBatch($sqlList, $arrDataProperty) {
         try {
-            $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);//这个是通过设置属性方法进行关闭自动提交和上面的功能一样
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE,  PDO::ERRMODE_EXCEPTION);//开启异常处理
 
 
@@ -250,11 +249,9 @@ class DbOperator {
 
             $this->pdo->commit();
             $stmt = null;
-            $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
             return $result;
         } catch (PDOException $e) {
             $this->pdo->rollBack();
-            $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
             return -1;
         }
     }
