@@ -12,7 +12,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
      * @param int $uploadFileId 附件id
      * @return int 新增的产品参数类型选项id
      */
-    public function Create($httpPostData,$uploadFileId = 0)
+    public function Create($httpPostData,$titlePicUploadFileId = 0)
     {
         $result = -1;
         $dataProperty = new DataProperty();
@@ -21,8 +21,8 @@ class ProductParamTypeOptionManageData extends BaseManageData
                 $httpPostData,
                 self::TableName_ProductParamTypeOption,
                 $dataProperty,
-                "uploadFileId",
-                $uploadFileId
+                "TitlePicUploadFileId",
+                $titlePicUploadFileId
             );
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
@@ -92,7 +92,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
         $result = -1;
         if ($productParamTypeOptionId > 0) {
             $sql = "delete from " . self::TableName_ProductParamTypeOption
-                . " where " . self::TableName_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
+                . " where " . self::TableId_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductParamTypeOption, $productParamTypeOptionId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -112,7 +112,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
         if ($productParamTypeOptionId > 0 && $parentId > -1) {
             $sql = "update " . self::TableName_ProductParamTypeOption
                 . " set parentId=:parentId"
-                . " where " . self::TableName_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
+                . " where " . self::TableId_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductParamTypeOption, $productParamTypeOptionId);
             $dataProperty->AddField("parentId", $parentId);

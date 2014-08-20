@@ -101,7 +101,7 @@ function zTreeOnClick(event, treeId, treeNode) {
             $("#f_ParentId").val(data['ParentId']);
             $("#f_ProductParamTypeOptionId").val(data['ProductParamTypeOptionId']);
             $("#s_ProductParamTypeOptionId").text(data['ProductParamTypeOptionId']);
-            $("#f_ProductParamTypeId").val(data['ProductParamTypeID']);
+            $("#f_ProductParamTypeId").val(data['ProductParamTypeId']);
             $("#f_OptionName").val(data['OptionName']);
             $("#f_OptionName2").val(data['OptionName2']);
             $("#f_Sort").val(data['Sort']);
@@ -160,18 +160,19 @@ function addTreeNode() {
 }
 
 //用于新增返回时调用同步树节点
-function AddNodeById(sourceId,targetId,productParamTypeid,name,eName)
+function AddNodeById(sourceId,targetId,productParamTypeId,name,eName)
 {
     var parentNode = zTree1.getNodeByParam("id", targetId);
-    zTree1.addNodes(parentNode,[{ id:""+sourceId,pid:""+targetId,productParamTypeId:""+productParamTypeid,name:""+name,eName:""+eName}]);
+    zTree1.addNodes(parentNode,[{ id:""+sourceId,pid:""+targetId,productParamTypeId:""+productParamTypeId,name:""+name,eName:""+eName}]);
 }
 
 //用于修改时调用同步树节点
-function EditNodeById(sourceId,targetId,name,eName)
+function EditNodeById(sourceId,targetId,productParamTypeId,name,eName)
 {
     var sourceNode = zTree1.getNodeByParam("id", sourceId);
     sourceNode.id=sourceId;
     sourceNode.pId=targetId;
+    sourceNode.productParamTypeId=productParamTypeId;
     sourceNode.name=name;
     sourceNode.eName=eName;
     zTree1.updateNode(sourceNode, true);
@@ -383,6 +384,7 @@ function mergeNode()
                             <td class="spe_line">
                                 <input type="text" class="input_box" id="f_OptionName" name="f_OptionName" value="" style=" width: 200px;font-size:14px;" maxlength="50" /><label id="s_ProductParamTypeOptionId" ></label>
                                 <input type="hidden" id="f_ProductParamTypeOptionId" name="f_ProductParamTypeOptionId" value="" />
+                                <input type="hidden" id="f_ProductParamTypeId" name="f_ProductParamTypeId" value="" />
                             </td>
                         </tr>
                         <tr>
