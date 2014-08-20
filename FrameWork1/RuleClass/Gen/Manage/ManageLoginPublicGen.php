@@ -136,7 +136,7 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
             //参数错误，请重试
             $result = self::MANAGE_LOGIN_RESULT_PARAM_ERROR;
         }
-        return Control::GetRequest("JsonpCallBack","") . '({"result":"' . $result . '"})';
+        return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
     }
 
     /**

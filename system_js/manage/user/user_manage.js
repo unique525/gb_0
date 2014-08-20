@@ -32,14 +32,14 @@ $(document).ready(function() {
                 //会员组管理
                 $("#btnUserGroupExplore").click(function (event) {
                     event.preventDefault();
-                    window.G_TabTitle = '会员管理';
+                    window.G_TabTitle = '会员组管理';
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_group&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
                 //会员等级管理
                 $("#btnUserLevelExplore").click(function (event) {
                     event.preventDefault();
-                    window.G_TabTitle = '会员管理';
+                    window.G_TabTitle = '会员等级管理';
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_level&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
@@ -67,7 +67,7 @@ $(document).ready(function() {
                 //会员站点角色管理
                 $("#btnUserRoleExplore").click(function (event) {
                     event.preventDefault();
-                    window.G_TabTitle = '会员管理';
+                    window.G_TabTitle = '会员角色管理';
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_role&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });

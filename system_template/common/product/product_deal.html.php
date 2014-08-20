@@ -5,6 +5,7 @@
     <title></title>
     {common_head}
     <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
+    <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
     <script type="text/javascript">
         <!--
         var editor;
@@ -72,20 +73,6 @@
                 }
             });
 
-            var selChannelType = $("#f_ChannelType");
-            selChannelType.change(function () {
-                $(this).css("background-color", "#FFFFCC");
-                var dnt = $(this).val();
-                if (dnt == '50') {
-                    $(".type_0").css("display", "none");
-                    $(".type_1").css("display", "");
-                } else {
-                    $(".type_0").css("display", "");
-                    $(".type_1").css("display", "none");
-                }
-
-            });
-            selChannelType.change();
         });
 
         function submitForm(closeTab) {
@@ -110,7 +97,7 @@
 <body>
 {common_body_deal}
 <form id="mainForm" enctype="multipart/form-data"
-      action="/default.php?secu=manage&mod=product&m={method}&channel_id={ChannelId}&parent_id={ParentId}&tab_index={tab_index}"
+      action="/default.php?secu=manage&mod=product&m={method}&channel_id={ChannelId}&tab_index={tab_index}"
       method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
@@ -122,210 +109,218 @@
         </td>
     </tr>
 </table>
-<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ProductName">产品名称：</label></td>
-        <td class="spe_line">
-            <input name="f_SiteId" type="hidden" value="{SiteId}"/>
-            <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
-            <input name="f_ProductName" id="f_ProductName" value="{ProductName}" type="text" class="input_box" style="width:300px;"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_CreateDate">创建时间：</label></td>
-        <td class="spe_line"><input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:80px;"/></td>
-    </tr>
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_ChannelType">频道类型：</label></td>
-        <td class="spe_line">
-            <select id="f_ChannelType" name="f_ChannelType">
-                <option value="1">新闻信息类</option>
-                <option value="2">咨询答复类</option>
-                <option value="3">图片轮换类</option>
-                <option value="4">产品类</option>
-                <option value="5">频道结合产品类</option>
-                <option value="6">活动类</option>
-                <option value="7">投票类</option>
-                <option value="8">自定义页面类</option>
-                <option value="9">友情链接类</option>
-                <option value="10">活动表单类</option>
-                <option value="11">文字直播类</option>
-                <option value="12">投票调查类</option>
-                <option value="0">站点首页类</option>
-                <option value="50">外部接口类</option>
-            </select>
-            {s_ChannelType}
-        </td>
-    </tr>
-    <tr>
-        <td class="spe_line" height="30" align="right"><label for="f_Sort">排序号：</label></td>
-        <td class="spe_line">
-            <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number"/>
-        </td>
-    </tr>
-</table>
-<div class="type_0">
-    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishType">发布方式：</label></td>
-            <td class="spe_line">
-                <select id="f_PublishType" name="f_PublishType">
-                    <option value="1">自动发布新稿</option>
-                    <option value="0">仅发布终审文档</option>
-                </select>
-                {s_PublishType}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_PublishPath">发布文件夹：</label></td>
-            <td class="spe_line">
-                <input id="f_PublishPath" name="f_PublishPath" type="text" value="{PublishPath}" class="input_box"/>
-                (可以为空)
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_HasFtp">是否有单独FTP设置：</label></td>
-            <td class="spe_line">
-                <select id="f_HasFtp" name="f_HasFtp">
-                    <option value="0">无</option>
-                    <option value="1">有</option>
-                </select>
-                {s_HasFtp}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_ShowChildList">是否显示子频道数据：</label></td>
-            <td class="spe_line">
-                <select id="f_ShowChildList" name="f_ShowChildList">
-                    <option value="0">否</option>
-                    <option value="1">是</option>
-                </select> (在显示列表数据时)
-                {s_ShowChildList}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_OpenComment">评论：</label></td>
-            <td class="spe_line">
-                <select id="f_OpenComment" name="f_OpenComment">
-                    <option value="0">不允许</option>
-                    <option value="10">允许但需要审核（先审后发）</option>
-                    <option value="20">允许但需要审核（先发后审）</option>
-                    <option value="30">自由评论</option>
-                </select>
-                {s_OpenComment}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_Invisible">是否在频道导航树上隐藏：</label></td>
-            <td class="spe_line">
-                <select id="f_Invisible" name="f_Invisible">
-                    <option value="0">不隐藏</option>
-                    <option value="1">隐藏</option>
-                </select>
-                {s_Invisible}
-            </td>
-        </tr>
 
 
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserTitle">浏览器标题：</label></td>
-            <td class="spe_line">
-                <input id="f_BrowserTitle" name="f_BrowserTitle" type="text" value="{BrowserTitle}" class="input_box"
-                       style="width:400px;" maxlength="200"/>
-            </td>
-        </tr>
+<div id="tabs" style="margin-left:4px;">
+    <ul>
+        <li><a href="#tabs-1">基本属性</a></li>
+        <li><a href="#tabs-2">价格相关</a></li>
+        <li><a href="#tabs-3">产品参数</a></li>
+        <li><a href="#tabs-4">发货相关</a></li>
+        <li><a href="#tabs-5">其他属性</a></li>
+    </ul>
+    <div id="tabs-1">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductName">产品名称：</label></td>
+                <td class="spe_line">
+                    <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
+                    <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
+                    <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+                    <input name="f_ProductName" id="f_ProductName" value="{ProductName}" type="text" class="input_box" style="width:300px;"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_ProductNumber">产品编号：</label></td>
+                <td class="spe_line">
+                    <input id="f_ProductNumber" name="f_ProductNumber" type="text" value="{ProductNumber}" maxlength="100" style="width:300px;" class="input_box"/>
+                    （可以为空）</td>
+            </tr>
 
 
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_State">状态：</label></td>
+                <td class="spe_line">
+                    <select id="f_State" name="f_State">
+                        <option value="0">正常</option>
+                        <option value="100">停用</option>
+                    </select>
+                    {s_State}
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_SaleState">上架情况：</label></td>
+                <td class="spe_line">
+                    <select id="f_SaleState" name="f_SaleState">
+                        <option value="0">正常上架</option>
+                        <option value="50">召回处理</option>
+                        <option value="100">已经下架</option>
+                    </select>
+                    {s_SaleState}
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">产品题图1：</label></td>
+                <td class="spe_line">
+                    <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
+                           style="width:400px;background:#ffffff;margin-top:3px;"/>
+                    <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="file_title_pic_2">产品题图2：</label></td>
+                <td class="spe_line">
+                    <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
+                           style="width:400px; background: #ffffff; margin-top: 3px;"/>
+                    <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="file_title_pic_3">产品题图3：</label></td>
+                <td class="spe_line">
+                    <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
+                           style="width:400px; background: #ffffff; margin-top: 3px;"/>
+                    <span id="preview_title_pic3" style="cursor:pointer">[预览]</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="file_title_pic_4">产品题图4：</label></td>
+                <td class="spe_line">
+                    <input id="file_title_pic_4" name="file_title_pic_4" type="file" class="input_box"
+                           style="width:400px; background: #ffffff; margin-top: 3px;"/>
+                    <span id="preview_title_pic4" style="cursor:pointer">[预览]</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_ProductIntro">产品介绍：</label></td>
+                <td class="spe_line">
+                    <textarea cols="30" rows="30" id="f_ProductIntro" name="f_ProductIntro" style="width:70%;height:100px;">{ProductIntro}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_ProductContent">产品内容：</label></td>
+                <td class="spe_line">
+                    <textarea cols="30" rows="30" id="f_ProductContent" name="f_ProductContent" style="width:70%;height:250px;">{ProductContent}</textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="tabs-2">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserKeywords">浏览器关键字：</label></td>
+            <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_SalePrice">显示售价：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserKeywords" name="f_BrowserKeywords" type="text" value="{BrowserKeywords}"
-                       class="input_box" style="width:400px;" maxlength="200"/>
+                <input id="f_SalePrice" name="f_SalePrice" type="text" value="{SalePrice}" maxlength="10" style="width:80px;" class="input_price"/>
             </td>
         </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_MarketPrice">市面售价：</label></td>
+            <td class="spe_line">
+                <input id="f_MarketPrice" name="f_MarketPrice" type="text" value="{MarketPrice}" maxlength="10" style="width:80px;" class="input_price"/>
+            </td>
+        </tr>
+        </table>
+    </div>
+    <div id="tabs-3">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
 
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserDescription">浏览器描述文字：</label></td>
-            <td class="spe_line">
-                <input id="f_BrowserDescription" name="f_BrowserDescription" type="text" value="{BrowserDescription}"
-                       class="input_box" style=" width: 400px;" maxlength="200"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_IsCircle">是否加入模板库的循环调用：</label></td>
-            <td class="spe_line">
-                <select id="f_IsCircle" name="f_IsCircle">
-                    <option value="0">否</option>
-                    <option value="1">是</option>
-                </select> (在使用模板库调用频道数据时)
-                {s_IsCircle}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_IsShowIndex">是否显示在聚合页中：</label></td>
-            <td class="spe_line">
-                <select id="f_IsShowIndex" name="f_IsShowIndex">
-                    <option value="0">否</option>
-                    <option value="1">是</option>
-                </select> (在使用频道聚合页中时)
-                {s_IsShowIndex}
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">频道图片1：</label></td>
-            <td class="spe_line">
-                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                      style="cursor:pointer">[预览]</span>
+        </table>
+    </div>
+    <div id="tabs-4">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_SendPrice">发货费用：</label></td>
+                <td class="spe_line">
+                    <input id="f_SendPrice" name="f_SendPrice" type="text" value="{SendPrice}" maxlength="10" style="width:80px;" class="input_price"/>
+                </td>
+            </tr>
 
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right">频道图片2：</td>
-            <td class="spe_line">
-                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;"/>
-                <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right">频道图片3：</td>
-            <td class="spe_line">
-                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
-                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
-                                                                                          style="cursor:pointer">[预览]</span>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_SendPriceAdd">发货续重费用：</label></td>
+                <td class="spe_line">
+                    <input id="f_SendPriceAdd" name="f_SendPriceAdd" type="text" value="{SendPriceAdd}" maxlength="10" style="width:80px;" class="input_price"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="tabs-5">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductShortName">产品简称：</label></td>
+                <td class="spe_line">
+                    <input id="f_ProductShortName" name="f_ProductShortName" type="text" value="{ProductShortName}" maxlength="100" style="width:300px;" class="input_box"/>
+                    （可以为空）</td>
+            </tr>
 
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_ChannelIntro">频道介绍：</label></td>
-            <td class="spe_line">
-                <textarea cols="30" rows="30" id="f_ChannelIntro" name="f_ChannelIntro" style="width:70%;height:250px;">{ChannelIntro}</textarea>
-            </td>
-        </tr>
-    </table>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_ProductTag">关键字（标签）：</label></td>
+                <td class="spe_line">
+                    <input id="f_ProductTag" name="f_ProductTag" type="text" value="{ProductTag}" maxlength="200" style="width:300px;" class="input_box"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_Sort">排序号：</label></td>
+                <td class="spe_line">
+                    <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" style="width:80px;" class="input_number"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_RecLevel">推荐级别：</label></td>
+                <td class="spe_line">
+                    <select id="f_RecLevel" name="f_RecLevel">
+                        <option value="0">未推荐</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    {s_RecLevel}
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_IsHot">是否热门产品：</label></td>
+                <td class="spe_line">
+                    <select id="f_IsHot" name="f_IsHot">
+                        <option value="0">无</option>
+                        <option value="1">有</option>
+                    </select>
+                    {s_IsHot}
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_IsNew">是否最新产品：</label></td>
+                <td class="spe_line">
+                    <select id="f_IsNew" name="f_IsNew">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    {s_IsNew}
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_GetScore">赠送积分：</label></td>
+                <td class="spe_line">
+                    <input id="f_GetScore" name="f_GetScore" type="text" value="{GetScore}" maxlength="10" style="width:80px;" class="input_number"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_DirectUrl">直接转向网址：</label></td>
+                <td class="spe_line">
+                    <input id="f_DirectUrl" name="f_DirectUrl" type="text" value="{DirectUrl}" maxlength="200" style="width:600px;" class="input_box"/>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-<div class="type_1" style="display: none;">
-    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
 
-        <tr>
-            <td class="spe_line" width="20%" height="30" align="right"><label for="f_PublishApiUrl">发布API接口地址：</label>
-            </td>
-            <td class="spe_line">
-                <input id="f_PublishApiUrl" name="f_PublishApiUrl" type="text" value="{PublishApiUrl}" class="input_box"
-                       style="width: 500px;" maxlength="200"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_PublishApiType">发布API接口类型：</label></td>
-            <td class="spe_line">
-                <select id="f_PublishApiType" name="f_PublishApiType">
-                    <option value="0">XML</option>
-                </select> (在使用频道聚合页中时)
-                {s_PublishApiType}
-            </td>
-        </tr>
-    </table>
-</div>
+
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
