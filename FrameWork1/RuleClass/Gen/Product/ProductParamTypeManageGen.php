@@ -113,9 +113,9 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
             //加入操作日志
             $operateContent = 'Delete ProductParamType,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
             self::CreateManageUserLog($operateContent);
-            return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
         } else {
-            return $_GET['jsonpcallback'] . '({"result":"-1"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-1"})';
         }
     }
 
@@ -187,9 +187,9 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
             //加入操作日志
             $operateContent = 'ModifyState ProductParamType,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
             self::CreateManageUserLog($operateContent);
-            return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
         } else {
-            return $_GET['jsonpcallback'] . '({"result":"-1"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-1"})';
         }
     }
 
@@ -227,9 +227,9 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
             $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->GetOne($productParamTypeId);
             $result = json_encode($result);
-            return $_GET['jsonpcallback'] . "(" . $result . ")";
+            return Control::GetRequest("jsonpcallback","") . "(" . $result . ")";
         } else {
-            return $_GET['jsonpcallback'] . '([{"result":"0"}])';
+            return Control::GetRequest("jsonpcallback","") . '([{"result":"0"}])';
         }
     }
 
@@ -244,9 +244,9 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
         if ($productParamTypeId > 0 && $parentId >= 0) {
             $productParamTypeData = new ProductParamTypeManageData();
             $result = $productParamTypeData->Drag($productParamTypeId, $parentId);
-            return $_GET['jsonpcallback'] . '({"result":"' . $result . '"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
         } else {
-            return $_GET['jsonpcallback'] . '({"result":"0"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
         }
     }
 
