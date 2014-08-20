@@ -55,6 +55,8 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                         Control::GoUrl($_SERVER["HTTP_SELF"]);
                     }
                 }
+                $operateContent = 'Create UserGroup,POST FORM:'.implode('|',$_POST).';\r\nResultUserGroupId::'.$result;
+                self::CreateManageUserLog($operateContent);
             }
             $replace_arr = array(
                 "{TabIndex}" => $tabIndex,
@@ -101,6 +103,8 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                         Control::GoUrl($_SERVER["HTTP_SELF"]);
                     }
                 }
+                $operateContent = 'Modify UserGroup,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
+                self::CreateManageUserLog($operateContent);
             }
             $arrUserGroupOne = $userGroupManageData->GetOne($userGroupId,$siteId);
             Template::ReplaceOne($templateContent,$arrUserGroupOne);
@@ -133,7 +137,10 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         if($userGroupId > 0){
             $userGroupManageData = new UserGroupManageData();
             $result = $userGroupManageData->ModifyState($userGroupId,$state);
+            if($result > 0){
                 return Control::GetRequest("jsonpcallback","") .'({"result":'.$result.'})';
+            }
+            $operateContent = 'Modify UserGroupState,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
         }else{
             return null;
         }
