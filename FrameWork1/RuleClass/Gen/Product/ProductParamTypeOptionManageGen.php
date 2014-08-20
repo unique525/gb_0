@@ -81,7 +81,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
 
                 $productParamTypeOptionId = $productParamTypeOptionManageData->Create($httpPostData, $titlePicUploadFileId);
                 //加入操作日志
-                $operateContent = 'Create ProductParamType,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
+                $operateContent = 'Create ProductParamTypeOption,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeOptionId:' . $productParamTypeOptionId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($productParamTypeOptionId > 0) {
@@ -90,7 +90,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
                     $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeOptionId);
 
                     Control::ShowMessage(Language::Load('document', 1));
-                    $jsCode = 'parent.AddNodeByID("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
+                    $jsCode = 'parent.AddNodeById("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('document', 2));
@@ -126,11 +126,11 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
         $productParamTypeId = Control::PostRequest("f_ProductParamTypeId", "");
         $name = Control::PostRequest("f_OptionName", "");
         $eName = Control::PostRequest("f_OptionName2", "");
-        $productParamTypeOptionId = Control::PostRequest("f_productParamTypeOptionId", "");
+        $productParamTypeOptionId = Control::PostRequest("f_ProductParamTypeOptionId", "");
 
         $manageUserId = Control::GetManageUserId();
 
-        if ($productParamTypeId > 0 && $manageUserId > 0) {
+        if ($productParamTypeOptionId > 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
@@ -153,16 +153,16 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
 
                 $result = $productParamTypeOptionManageData->Modify($httpPostData,$productParamTypeOptionId,$titlePicUploadFileId);
                 //加入操作日志
-                $operateContent = 'Modify ProductParamType,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeId:'.$productParamTypeId;
+                $operateContent = 'Modify ProductParamTypeOption,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeOptionId:'.$productParamTypeOptionId;
                 self::CreateManageUserLog($operateContent);
                 if ($result > 0) {
 
                     $uploadFileData = new UploadFileData();
                     //修改题图的TableId
-                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeId);
+                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeOptionId);
 
                     Control::ShowMessage(Language::Load('document', 3));
-                    $jsCode = 'parent.EditNodeByID("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
+                    $jsCode = 'parent.EditNodeById("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('document', 4));

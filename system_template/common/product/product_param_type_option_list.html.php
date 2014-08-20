@@ -101,7 +101,7 @@ function zTreeOnClick(event, treeId, treeNode) {
             $("#f_ParentId").val(data['ParentId']);
             $("#f_ProductParamTypeOptionId").val(data['ProductParamTypeOptionId']);
             $("#s_ProductParamTypeOptionId").text(data['ProductParamTypeOptionId']);
-            $("#f_ProductParamTypeId").val(data['ProductParamTypeID']);
+            $("#f_ProductParamTypeId").val(data['ProductParamTypeId']);
             $("#f_OptionName").val(data['OptionName']);
             $("#f_OptionName2").val(data['OptionName2']);
             $("#f_Sort").val(data['Sort']);
@@ -167,11 +167,12 @@ function AddNodeById(sourceId,targetId,productParamTypeId,name,eName)
 }
 
 //用于修改时调用同步树节点
-function EditNodeById(sourceId,targetId,name,eName)
+function EditNodeById(sourceId,targetId,productParamTypeId,name,eName)
 {
     var sourceNode = zTree1.getNodeByParam("id", sourceId);
     sourceNode.id=sourceId;
     sourceNode.pId=targetId;
+    sourceNode.productParamTypeId=productParamTypeId;
     sourceNode.name=name;
     sourceNode.eName=eName;
     zTree1.updateNode(sourceNode, true);
