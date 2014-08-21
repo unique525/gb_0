@@ -9,7 +9,7 @@ class ProductParamTypeManageData extends BaseManageData {
     /**
      * 新增产品参数类型
      * @param array $httpPostData $_POST数组
-     * @param int $titlePicUploadFileId 附件id
+     * @param int $titlePicUploadFileId 题图附件id
      * @return int 新增的产品参数类型id
      */
     public function Create($httpPostData,$titlePicUploadFileId = 0){
@@ -77,24 +77,6 @@ class ProductParamTypeManageData extends BaseManageData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
             $dataProperty->AddField("state", $state);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-        }
-        return $result;
-    }
-
-    /**
-     * 删除产品参数类型
-     * @param int $productParamTypeId 产品参数类型id
-     * @return int 返回影响的行数
-     */
-    public function Delete($productParamTypeId)
-    {
-        $result = -1;
-        if ($productParamTypeId > 0) {
-            $sql = "delete from " . self::TableName_ProductParamType
-                . " where " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;

@@ -100,16 +100,17 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 删除产品参数类型
+     * 删除产品参数类型(软删除)
      * @return string 删除结果
      */
     public function AsyncDelete()
     {
+        $state=100;
         $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $manageUserId = Control::GetManageUserId();
         if ($productParamTypeId > 0 && $manageUserId > 0) {
             $productParamTypeData = new ProductParamTypeManageData();
-            $result = $productParamTypeData->Delete($productParamTypeId);
+            $result = $productParamTypeData->ModifyState($productParamTypeId,$state);
             //加入操作日志
             $operateContent = 'Delete ProductParamType,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeId;
             self::CreateManageUserLog($operateContent);

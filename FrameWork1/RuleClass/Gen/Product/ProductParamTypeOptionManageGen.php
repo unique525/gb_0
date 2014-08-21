@@ -101,14 +101,16 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     }
 
     /**
-     * 删除产品参数类型选项
+     * 删除产品参数类型选项(软删除)
      * @return string 删除结果
      */
-    public function GenDelete() {
+    public function GenDelete()
+    {
+        $state=100;
         $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
         if ($productParamTypeOptionId > 0) {
             $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $result = $productParamTypeOptionManageData->Delete($productParamTypeOptionId);
+            $result = $productParamTypeOptionManageData->ModifyState($productParamTypeOptionId,$state);
             return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
         } else {
             return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
