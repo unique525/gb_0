@@ -30,7 +30,7 @@ class ProductParamManageData extends BaseManageData {
                 . " FROM " . self::TableName_ProductParam ." t"
                 . " LEFT OUTER JOIN" . self::TableName_ProductParamType ." t1"
                 . " ON t.".self::TableId_ProductParamType."=t1.".self::TableId_ProductParamType
-                . " WHERE t.ProductId=:ProductId"
+                . " WHERE t.ProductId=:ProductId and State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();

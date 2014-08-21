@@ -142,7 +142,7 @@ class ProductParamTypeManageData extends BaseManageData {
             }
             $sql = "SELECT *"
                 . " FROM " . self::TableName_ProductParamType
-                . " WHERE ChannelId=:ChannelId"
+                . " WHERE ChannelId=:ChannelId and State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();

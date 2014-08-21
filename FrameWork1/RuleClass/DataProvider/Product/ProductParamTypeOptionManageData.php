@@ -142,7 +142,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
             }
             $sql = "SELECT *"
                 . " FROM " . self::TableName_ProductParamTypeOption
-                . " WHERE ProductParamTypeId=:ProductParamTypeId"
+                . " WHERE ProductParamTypeId=:ProductParamTypeId and State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
