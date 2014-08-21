@@ -106,7 +106,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
         } else {
             $result = -1;
         }
-        return $_GET['jsonpcallback'] . '({"result":"'.$result.'"})';
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
     }
 
     /**

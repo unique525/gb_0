@@ -9,7 +9,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
     /**
      * 新增产品参数类型选项
      * @param array $httpPostData $_POST数组
-     * @param int $uploadFileId 附件id
+     * @param int $titlePicUploadFileId 题图附件id
      * @return int 新增的产品参数类型选项id
      */
     public function Create($httpPostData,$titlePicUploadFileId = 0)
@@ -83,24 +83,6 @@ class ProductParamTypeOptionManageData extends BaseManageData
     }
 
     /**
-     * 删除产品参数类型选项
-     * @param int $productParamTypeOptionId 产品参数类型选项id
-     * @return int 返回影响的行数
-     */
-    public function Delete($productParamTypeOptionId)
-    {
-        $result = -1;
-        if ($productParamTypeOptionId > 0) {
-            $sql = "delete from " . self::TableName_ProductParamTypeOption
-                . " where " . self::TableId_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamTypeOption, $productParamTypeOptionId);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-        }
-        return $result;
-    }
-
-    /**
      * 移动产品参数类型选项
      * @param int $productParamTypeOptionId 产品参数类型选项id
      * @param int $parentId 产品参数类型选项父id
@@ -160,7 +142,7 @@ class ProductParamTypeOptionManageData extends BaseManageData
             }
             $sql = "SELECT *"
                 . " FROM " . self::TableName_ProductParamTypeOption
-                . " WHERE ProductParamTypeId=:ProductParamTypeId"
+                . " WHERE ProductParamTypeId=:ProductParamTypeId AND State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();

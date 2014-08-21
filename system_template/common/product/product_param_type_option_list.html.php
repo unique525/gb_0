@@ -180,53 +180,26 @@ function EditNodeById(sourceId,targetId,productParamTypeId,name,eName)
 function removeTreeNode() {
     hideRMenu();
     var treeNode = zTree1.getSelectedNodes()[0];
-    var id=treeNode.id;
+    var product_param_type_option_id=treeNode.id;
     var productParamTypeId=treeNode.productParamTypeId;
     if (treeNode) {
         if (treeNode.childs && treeNode.childs.length > 0) {
             var msg = "要删除的节点是父节点，只允许删除叶节点";
             alert(msg);
         } else {
-            removeTreeNodeByNode(treeNode);
-            /*$.ajax({
-                url: "/product/index.php?a=product_param",
+            $.ajax({
+                url:"/default.php?secu=manage&mod=product_param_type_option",
                 async: false,
-                data: {m: "paramcount", optionid: id, paramTypeId: paramTypeId},
-                dataType: "jsonp",
-                jsonp: "jsonpcallback",
-                success: function (data) {
-                    var count = data['result'];
-                    if (count < 0) {
-                        msg = "节点数据有错，请联系管理员";
-                        alert(msg);
-                    }
-                    else if (count > 0) {
-                        msg = "该节点被不止一个参数引用，不能删除，如果跟某个节点重复，建议用合并节点的方法处理";
-                        alert(msg);
-                    }
-                    else {
-                        removeTreeNodeByNode(treeNode);
-                    }
+                data:{m:"delete",product_param_type_option_id:product_param_type_option_id},
+                dataType:"jsonp",
+                jsonp:"jsonpcallback",
+                success:function(data){
+                    zTree1.removeNode(treeNode);
+                    alert("删除结点成功");
                 }
-            });*/
+            });
         }
     }
-}
-
-function removeTreeNodeByNode(treeNode)
-{
-    var product_param_type_option_id=treeNode.id;
-    $.ajax({
-        url:"/default.php?secu=manage&mod=product_param_type_option",
-        async: false,
-        data:{m:"delete",product_param_type_option_id:product_param_type_option_id},
-        dataType:"jsonp",
-        jsonp:"jsonpcallback",
-        success:function(data){
-            zTree1.removeNode(treeNode);
-            alert("删除结点成功");
-        }
-    });
 }
 
 function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
