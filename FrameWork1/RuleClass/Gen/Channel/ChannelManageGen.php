@@ -154,7 +154,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                                     $channelTitlePic1MobileWidth  = 320; //默认320宽
                                 }
                                 self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
+
+                                $channelTitlePic1PadWidth = $siteConfigManageData->ChannelTitlePic1PadWidth;
+                                if($channelTitlePic1PadWidth<=0){
+                                    $channelTitlePic1PadWidth  = 1024; //默认1024宽
+                                }
+                                self::GenUploadFilePad($uploadFileId1,$channelTitlePic1PadWidth);
                             }
+
+
                         }
 
 

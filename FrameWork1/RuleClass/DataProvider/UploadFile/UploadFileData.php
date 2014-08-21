@@ -58,25 +58,40 @@ class UploadFileData extends BaseData {
     const UPLOAD_TABLE_TYPE_QUESTION = 30;
 
     /**
-     * 产品题图
+     * 产品题图1
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC = 40;
+    const UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1 = 40;
+
+    /**
+     * 产品题图2
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_2 = 41;
+
+    /**
+     * 产品题图3
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_3 = 42;
+
+    /**
+     * 产品题图4
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_4 = 43;
     /**
      * 产品内容图
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_CONTENT = 41;
+    const UPLOAD_TABLE_TYPE_PRODUCT_CONTENT = 44;
     /**
      * 产品参数
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM = 42;
+    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM = 45;
     /**
      * 产品参数类型
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE = 43;
+    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE = 46;
     /**
      * 产品参数类型选项
      */
-    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 44;
+    const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 47;
 
 
     /**

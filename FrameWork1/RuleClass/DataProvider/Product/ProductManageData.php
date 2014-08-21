@@ -81,6 +81,40 @@ class ProductManageData extends BaseManageData {
 
 
     /**
+     * 修改产品题图的上传文件id
+     * @param int $productId 产品id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
+     * @param int $titlePic4UploadFileId 题图3上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic($productId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId, $titlePic4UploadFileId)
+    {
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId,
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId,
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId,
+                    TitlePic4UploadFileId = :TitlePic4UploadFileId
+
+                    WHERE ProductId = :ProductId
+
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
+            $dataProperty->AddField("TitlePic4UploadFileId", $titlePic4UploadFileId);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得后台产品列表数据集
      * @param int $channelId 频道id
      * @param int $pageBegin 起始记录行

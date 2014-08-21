@@ -83,6 +83,8 @@
  * @property int $ChannelTitlePic2PadWidth
  * @property int $ChannelTitlePic3MobileWidth
  * @property int $ChannelTitlePic3PadWidth
+ * @property int $ProductTitlePic1MobileWidth
+ * @property int $ProductTitlePic1PadWidth
  * @author zhangchi
  */
 class SiteConfigManageData extends BaseManageData
@@ -145,9 +147,44 @@ class SiteConfigManageData extends BaseManageData
         "ChannelTitlePic2MobileWidth",
         "ChannelTitlePic2PadWidth",
         "ChannelTitlePic3MobileWidth",
-        "ChannelTitlePic3PadWidth"
+        "ChannelTitlePic3PadWidth",
+
+        "ProductTitlePic1MobileWidth",
+        "ProductTitlePic1PadWidth"
 
     );
+
+    /**
+     * @param mixed $ProductTitlePic1MobileWidth
+     */
+    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
+    {
+        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1MobileWidth()
+    {
+        return $this->ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1PadWidth
+     */
+    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
+    {
+        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1PadWidth()
+    {
+        return $this->ProductTitlePic1PadWidth;
+    }
     /**
      * @var array number
      */
@@ -846,6 +883,8 @@ class SiteConfigManageData extends BaseManageData
     private $ChannelTitlePic3MobileWidth = 0;  //为适配手机客户端，频道题图3的同比缩小宽度值
     private $ChannelTitlePic3PadWidth = 0;     //为适配平板客户端，频道题图3的同比缩小宽度值
 
+    private $ProductTitlePic1MobileWidth = 0;  //为适配手机客户端，产品题图1的同比缩小宽度值
+    private $ProductTitlePic1PadWidth = 0;  //为适配平板客户端，产品题图1的同比缩小宽度值
     /**
      * @param mixed $ChannelTitlePic1MobileWidth
      */

@@ -2,15 +2,15 @@ function QueryString()
 {
     var name, value, i;
     var str = location.href;
-    var num = str.indexOf("?")
+    var num = str.indexOf("?");
     if (num >= 0) {
         str = str.substr(num + 1);
-        var arrtmp = str.split("&");
-        for (i = 0; i < arrtmp.length; i++) {
-            num = arrtmp[i].indexOf("=");
+        var arrTmp = str.split("&");
+        for (i = 0; i < arrTmp.length; i++) {
+            num = arrTmp[i].indexOf("=");
             if (num > 0) {
-                name = arrtmp[i].substring(0, num);
-                value = arrtmp[i].substr(num + 1);
+                name = arrTmp[i].substring(0, num);
+                value = arrTmp[i].substr(num + 1);
                 this[name] = value;
             }
         }
@@ -45,6 +45,11 @@ $().ready(function() {
     inputNumber.blur(function() {
         checkNumber(this);
     });
+
+    //格式化价格
+    $(".show_price").each(function(){
+        $(this).text(formatPrice($(this).text()));
+    });
 });
 
 function getDate() {
@@ -56,6 +61,20 @@ function getDate() {
     var m = d.getMinutes();
     var se = d.getSeconds();
     return vYear + "-" + (vMon < 10 ? "0" + vMon : vMon) + "-" + (vDay < 10 ? "0" + vDay : vDay) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (se < 10 ? "0" + se : se);
+}
+
+function formatPrice(price){
+    if(price != undefined){
+        if(parseFloat(price)>0){
+            return "￥"+parseFloat(price).toFixed(3);
+        }else{
+            return "￥0.000";
+        }
+
+    }else{
+        return "";
+    }
+
 }
 
 /**
@@ -73,7 +92,7 @@ function formatDate(date,format) {
         "s+" : date.getSeconds(),
         "q+" : Math.floor((date.getMonth() + 3) / 3),
         "S" : date.getMilliseconds()
-    }
+    };
 
     if (/(y+)/.test(format))
     {
@@ -147,28 +166,28 @@ function JsLoader() {
 
 function UrlEncode(string) {
     string = string.replace(/\r\n/g, "\n");
-    var utftext = "";
+    var uftText = "";
 
     for (var n = 0; n < string.length; n++) {
 
         var c = string.charCodeAt(n);
 
         if (c < 128) {
-            utftext += String.fromCharCode(c);
+            uftText += String.fromCharCode(c);
         }
         else if ((c > 127) && (c < 2048)) {
-            utftext += String.fromCharCode((c >> 6) | 192);
-            utftext += String.fromCharCode((c & 63) | 128);
+            uftText += String.fromCharCode((c >> 6) | 192);
+            uftText += String.fromCharCode((c & 63) | 128);
         }
         else {
-            utftext += String.fromCharCode((c >> 12) | 224);
-            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-            utftext += String.fromCharCode((c & 63) | 128);
+            uftText += String.fromCharCode((c >> 12) | 224);
+            uftText += String.fromCharCode(((c >> 6) & 63) | 128);
+            uftText += String.fromCharCode((c & 63) | 128);
         }
 
     }
 
-    return utftext;
+    return uftText;
 }
 
 function UrlDecode(utftext) {

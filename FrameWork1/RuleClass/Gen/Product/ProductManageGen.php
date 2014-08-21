@@ -65,7 +65,105 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($productId > 0) {
+                    if( !empty($_FILES)){
+                        //title pic1
+                        $fileElementName = "file_title_pic_1";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1;
+                        $tableId = $channelId;
+                        $uploadResult1 = new UploadResult();
+                        $uploadFileId1 = 0;
+                        $titlePic1Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadResult1,
+                            $uploadFileId1
+                        );
 
+                        if (intval($titlePic1Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+
+                        //title pic2
+                        $fileElementName = "file_title_pic_2";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_2;
+                        $uploadFileId2 = 0;
+                        $uploadResult2 = new UploadResult();
+                        $titlePic2Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadResult2,
+                            $uploadFileId2
+                        );
+                        if (intval($titlePic2Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+                        //title pic3
+                        $fileElementName = "file_title_pic_3";
+
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_3;
+                        $uploadFileId3 = 0;
+
+                        $uploadResult3 = new UploadResult();
+
+                        $titlePic3Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadResult3,
+                            $uploadFileId3)
+                        ;
+                        if (intval($titlePic3Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+                        //title pic4
+                        $fileElementName = "file_title_pic_4";
+
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_4;
+                        $uploadFileId4 = 0;
+
+                        $uploadResult4 = new UploadResult();
+
+                        $titlePic4Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadResult4,
+                            $uploadFileId4)
+                        ;
+                        if (intval($titlePic4Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+
+                        if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0 || $uploadFileId4>0){
+                            $productManageData->ModifyTitlePic($productId, $uploadFileId1, $uploadFileId2, $uploadFileId3, $uploadFileId4);
+                        }
+
+                        $siteConfigManageData = new SiteConfigManageData($siteId);
+                        if($uploadFileId1>0){
+                            $productTitlePic1MobileWidth = $siteConfigManageData->ProductTitlePic1MobileWidth;
+                            if($productTitlePic1MobileWidth<=0){
+                                $productTitlePic1MobileWidth  = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId1,$productTitlePic1MobileWidth);
+
+
+                            $productTitlePic1PadWidth = $siteConfigManageData->ProductTitlePic1PadWidth;
+                            if($productTitlePic1PadWidth<=0){
+                                $productTitlePic1PadWidth  = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId1,$productTitlePic1PadWidth);
+                        }
+                    }
 
                     //授权给创建人
                     if ($manageUserId > 1) { //只有非ADMIN的要授权
