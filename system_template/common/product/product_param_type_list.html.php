@@ -194,53 +194,25 @@ function EditNodeById(sourceId,targetId,name,eName)
 function removeTreeNode() {
     hideRMenu();
     var treeNode = zTree1.getSelectedNodes()[0];
-    var id=treeNode.id;
-    var channelId=Request['channel_id'];
+    var product_param_type_id=treeNode.id;
     if (treeNode) {
         if (treeNode.childs && treeNode.childs.length > 0) {
             var msg = "要删除的节点是父节点，只允许删除叶节点";
             alert(msg);
         } else {
-            removeTreeNodeByNode(treeNode);
-            /*$.ajax({
+            $.ajax({
                 url:"/default.php?secu=manage&mod=product_param_type",
                 async: false,
-                data:{m:"param_count_by_id",channel_id:channelId,product_param_type_id:id},
+                data:{m:"delete",product_param_type_id:product_param_type_id},
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
-                    var count=data['result'];
-                    if(count<0){
-                        msg="节点数据有错，请联系管理员";
-                        alert(msg);
-                    }
-                    else if(count>0){
-                        msg="该节点被不止一个参数引用，不能删除";
-                        alert(msg);
-                    }
-                    else  {
-                        removeTreeNodeByNode(treeNode);
-                    }
+                    zTree1.removeNode(treeNode);
+                    alert("删除结点成功");
                 }
-            }); */
+            });
         }
     }
-}
-
-function removeTreeNodeByNode(treeNode)
-{
-    var product_param_type_id=treeNode.id;
-    $.ajax({
-        url:"/default.php?secu=manage&mod=product_param_type",
-        async: false,
-        data:{m:"delete",product_param_type_id:product_param_type_id},
-        dataType:"jsonp",
-        jsonp:"jsonpcallback",
-        success:function(data){
-            zTree1.removeNode(treeNode);
-            alert("删除结点成功");
-        }
-    });
 }
 
 function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
