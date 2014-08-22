@@ -1,19 +1,18 @@
 <?php
+
 /**
  * 公共 上传文件 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_UploadFile
  * @author zhangchi
  */
-class UploadFileData extends BaseData {
-
+class UploadFileData extends BaseData
+{
 
     /**
      * 站点题图
      */
     const UPLOAD_TABLE_TYPE_SITE = 1;
-
-
     /**
      * 频道题图1
      */
@@ -106,7 +105,6 @@ class UploadFileData extends BaseData {
      * 活动花絮
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_PIC = 61;
-
 
 
     /**
@@ -213,8 +211,9 @@ class UploadFileData extends BaseData {
         $uploadFileTitle = '',
         $uploadFileInfo = '',
         $isBatchUpload = 0
-    ) {
-        $sql = "INSERT INTO ".self::TableName_UploadFile."
+    )
+    {
+        $sql = "INSERT INTO " . self::TableName_UploadFile . "
             (UploadFileName,UploadFileSize,UploadFileExtentionName,
             UploadFileOrgName,UploadFilePath,TableType,
             TableId,ManageUserId,UserId,CreateDate,UploadFileTitle,
@@ -256,9 +255,10 @@ class UploadFileData extends BaseData {
      * @param int $uploadFileMobilePath 上传文件路径（移动客户端使用）（文件夹+文件名）
      * @return int 操作结果
      */
-    public function ModifyUploadFileMobilePath($uploadFileId, $uploadFileMobilePath) {
+    public function ModifyUploadFileMobilePath($uploadFileId, $uploadFileMobilePath)
+    {
         if ($uploadFileId > 0 && !empty($uploadFileMobilePath)) {
-            $sql = "UPDATE ".self::TableName_UploadFile."
+            $sql = "UPDATE " . self::TableName_UploadFile . "
                         SET UploadFileMobilePath=:UploadFileMobilePath
                         WHERE UploadFileId=:UploadFileId;";
 
@@ -267,7 +267,30 @@ class UploadFileData extends BaseData {
             $dataProperty->AddField("UploadFileId", $uploadFileId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
-        }else{
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 修改上传文件路径（平板客户端使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFilePadPath 上传文件路径（平板客户端使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFilePadPath($uploadFileId, $uploadFilePadPath)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFilePadPath)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFilePadPath=:UploadFilePadPath
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFilePadPath", $uploadFilePadPath);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
             return -1;
         }
     }
@@ -278,15 +301,16 @@ class UploadFileData extends BaseData {
      * @param int $tableId 对应表id
      * @return int 操作结果
      */
-    public function ModifyTableId($uploadFileId, $tableId) {
+    public function ModifyTableId($uploadFileId, $tableId)
+    {
         if ($uploadFileId > 0 && $tableId > 0) {
-            $sql = "UPDATE ".self::TableName_UploadFile." SET TableId=:TableId WHERE UploadFileId=:UploadFileId;";
+            $sql = "UPDATE " . self::TableName_UploadFile . " SET TableId=:TableId WHERE UploadFileId=:UploadFileId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("TableId", $tableId);
             $dataProperty->AddField("UploadFileId", $uploadFileId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
-        }else{
+        } else {
             return -1;
         }
     }
@@ -297,15 +321,16 @@ class UploadFileData extends BaseData {
      * @param int $isBatchUpload 是否是批量上传的文件
      * @return int 返回影响的行数
      */
-    public function ModifyIsBatchUpload($uploadFileId, $isBatchUpload) {
+    public function ModifyIsBatchUpload($uploadFileId, $isBatchUpload)
+    {
         if ($uploadFileId > 0) {
-            $sql = "UPDATE ".self::TableName_UploadFile." SET IsBatchUpload=:IsBatchUpload WHERE UploadFileId=:UploadFileId;";
+            $sql = "UPDATE " . self::TableName_UploadFile . " SET IsBatchUpload=:IsBatchUpload WHERE UploadFileId=:UploadFileId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
             $dataProperty->AddField("UploadFileId", $uploadFileId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
-        }else{
+        } else {
             return -1;
         }
     }
@@ -316,15 +341,16 @@ class UploadFileData extends BaseData {
      * @param int $fileSize 文件大小(单位字节 B)
      * @return int 操作结果
      */
-    public function ModifyFileSize($uploadFileId, $fileSize) {
+    public function ModifyFileSize($uploadFileId, $fileSize)
+    {
         if ($uploadFileId > 0 && $fileSize > 0) {
-            $sql = "UPDATE ".self::TableName_UploadFile." SET UploadFileSize=:UploadFileSize WHERE UploadFileId=:UploadFileId;";
+            $sql = "UPDATE " . self::TableName_UploadFile . " SET UploadFileSize=:UploadFileSize WHERE UploadFileId=:UploadFileId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UploadFileSize", $fileSize);
             $dataProperty->AddField("UploadFileId", $uploadFileId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
             return $result;
-        }else{
+        } else {
             return -1;
         }
     }
@@ -914,10 +940,33 @@ class UploadFileData extends BaseData {
                 $cacheDir,
                 $cacheFile
             );
-            if(intval($result)>0){
+            if (intval($result) > 0) {
                 $result = true;
             }
         }
         return $result;
     }
+
+    /**
+     * 取得一条上传文件记录，返回上传文件对象
+     * @param int $uploadFileId 上传文件id
+     * @return UploadFile 返回上传文件对象
+     */
+    public function GetOne($uploadFileId)
+    {
+        $uploadFile = new UploadFile();
+        if ($uploadFileId > 0) {
+
+            $sql = "SELECT * FROM " . self::TableName_UploadFile . "
+                    WHERE " . self::TableId_UploadFile . "=:" . self::TableId_UploadFile . ";";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableName_UploadFile, $uploadFileId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+            $uploadFile->FillUploadFile($result, $uploadFile);
+        }
+
+        return $uploadFile;
+    }
+
 } 

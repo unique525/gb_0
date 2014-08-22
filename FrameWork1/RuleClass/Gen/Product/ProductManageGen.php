@@ -156,7 +156,6 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                             }
                             self::GenUploadFileMobile($uploadFileId1,$productTitlePic1MobileWidth);
 
-
                             $productTitlePic1PadWidth = $siteConfigManageData->ProductTitlePic1PadWidth;
                             if($productTitlePic1PadWidth<=0){
                                 $productTitlePic1PadWidth  = 1024; //默认1024宽
@@ -192,7 +191,6 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tempContent = str_ireplace("{CreateDate}", strval(date('Y-m-d', time())), $tempContent);
             $tempContent = str_ireplace("{ChannelId}", strval($channelId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
-
 
             $fieldsOfChannel = $productManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);

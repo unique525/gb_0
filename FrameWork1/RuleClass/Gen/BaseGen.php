@@ -325,7 +325,7 @@ class BaseGen
      * @param string $fileElementName 控件名称
      * @param int $tableType 上传文件对应的表类型
      * @param int $tableId 上传文件对应的表id
-     * @param UploadResult $uploadResult 返回的上传结果对象
+     * @param UploadFile $uploadFile 返回的上传文件对象
      * @param int $uploadFileId 返回新的上传文件id
      * @return int 返回成功或错误代码
      */
@@ -333,14 +333,12 @@ class BaseGen
         $fileElementName = "file_upload",
         $tableType = 0,
         $tableId = 0,
-        UploadResult &$uploadResult,
+        UploadFile &$uploadFile,
         &$uploadFileId = 0
     )
     {
         $errorMessage = self::UploadPreCheck($fileElementName);
 
-        $resultMessage = "";
-        $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
             sleep(1);
             $newFileName = "";
@@ -371,21 +369,23 @@ class BaseGen
                         $userId
                     );
 
-                    //返回值处理
-                    $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
+                    if($uploadFileId>0){
+                        //返回值处理
+                        $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
-                    $uploadFilePath = $returnDirPath . $newFileName;
-                    $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
+                        $uploadFilePath = $returnDirPath . $newFileName;
+                        $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
 
-                    $resultMessage = Format::FormatUploadFileToHtml($uploadFilePath, $fileExtension, $uploadFileId, $_FILES[$fileElementName]['name']);
-                    //取消了返回类型，只返回JSON结果
-                    //if ($returnType === 0) {
+                        $resultMessage = Format::FormatUploadFileToHtml(
+                            $uploadFilePath,
+                            $fileExtension,
+                            $uploadFileId,
+                            $_FILES[$fileElementName]['name']
+                        );
 
-                    //} else if ($returnType === 1) {
-                    //    $result = $returnFilePath;
-                    //} else if ($returnType === 2) {
-                    //    $result = $uploadFileId;
-                    //}
+                        $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+                    }
+
                     $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
                 } else { //移动上传文件时失败
                     $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
@@ -396,21 +396,6 @@ class BaseGen
         } else {
             $result = $errorMessage;
         }
-
-        $uploadResult = new UploadResult($errorMessage,$resultMessage,$uploadFileId,$uploadFilePath);
-
-        /**
-        $returnJson = "{";
-        $returnJson .= "error: '" . $errorMessage . "',\n";
-        $returnJson .= "result: '" . $resultMessage . "',\n";
-        $returnJson .= "upload_file_id: '" . $uploadFileId . "',\n";
-        $returnJson .= "upload_file_url: '" . $uploadFilePath . "'\n";
-        $returnJson .= "}";
-         */
-
-        //if(!empty($_FILES[$fileElementName])){
-        //    unlink($_FILES[$fileElementName]);
-        //}
 
         return $result;
     }
@@ -466,14 +451,39 @@ class BaseGen
             case UploadFileData::UPLOAD_TABLE_TYPE_QUESTION: //咨询问答上传
 
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC:
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1:
                 /**产品题图   tableId 为 channelId  */
                 if ($tableId > 0) {
-                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                    $newFileName = uniqid() . '.' . $fileExtension;
+                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
+                        . strval($tableId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_OPTION:
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_2:
+                /**产品题图   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
+                        . strval($tableId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic_2_' . uniqid() . '.' . $fileExtension;
+                }
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_3:
+                /**产品题图   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
+                        . strval($tableId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic_3_' . uniqid() . '.' . $fileExtension;
+                }
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_4:
+                /**产品题图   tableId 为 channelId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
+                        . strval($tableId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'title_pic_4_' . uniqid() . '.' . $fileExtension;
+                }
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION:
                 //产品参数类型选项
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
@@ -759,7 +769,8 @@ class BaseGen
             //2.制作缩略图
             if(!empty($uploadFilePath)){
                 $thumbFileName = "mobile";
-                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$mobileWidth,$mobileHeight,$thumbFileName);
+                $jpgQuality = 90;
+                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$mobileWidth,$mobileHeight,$thumbFileName,$jpgQuality);
 
                 if(!empty($uploadFileMobilePath)){
                     //3.修改数据表
@@ -774,7 +785,28 @@ class BaseGen
     }
 
     public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0){
+        $result = -1;
+        if($uploadFileId>0 && ($padWidth >0 || $padHeight>0)){
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if(!empty($uploadFilePath)){
+                $thumbFileName = "pad";
+                $jpgQuality = 90;
+                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$padWidth,$padHeight,$thumbFileName,$jpgQuality);
 
+                if(!empty($uploadFileMobilePath)){
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFilePadPath(
+                        $uploadFileId,
+                        $uploadFileMobilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
     public function GenUploadFileThumb1($uploadFileId){
@@ -802,6 +834,49 @@ class BaseGen
     }
 
     public function GenUploadFileCompress2($uploadFileId){
+
+    }
+
+    /**
+     * 删除上传文件记录和物理文件
+     * @param int $uploadFileId 上传文件id
+     */
+    public function DeleteUploadFile($uploadFileId){
+
+        $uploadFileData = new UploadFileData();
+
+        $uploadFile = $uploadFileData->GetOne($uploadFileId);
+
+        if(strlen($uploadFile->UploadFilePath)){
+            FileObject::DeleteFile($uploadFile->UploadFilePath);
+        }
+        if(strlen($uploadFile->UploadFileMobilePath)){
+            FileObject::DeleteFile($uploadFile->UploadFileMobilePath);
+        }
+        if(strlen($uploadFile->UploadFilePadPath)){
+            FileObject::DeleteFile($uploadFile->UploadFilePadPath);
+        }
+        if(strlen($uploadFile->UploadFileThumbPath1)){
+            FileObject::DeleteFile($uploadFile->UploadFileThumbPath1);
+        }
+        if(strlen($uploadFile->UploadFileThumbPath2)){
+            FileObject::DeleteFile($uploadFile->UploadFileThumbPath2);
+        }
+        if(strlen($uploadFile->UploadFileThumbPath3)){
+            FileObject::DeleteFile($uploadFile->UploadFileThumbPath3);
+        }
+        if(strlen($uploadFile->UploadFileWatermarkPath1)){
+            FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath1);
+        }
+        if(strlen($uploadFile->UploadFileWatermarkPath2)){
+            FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath2);
+        }
+        if(strlen($uploadFile->UploadFileCompressPath1)){
+            FileObject::DeleteFile($uploadFile->UploadFileCompressPath1);
+        }
+        if(strlen($uploadFile->UploadFileCompressPath2)){
+            FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
+        }
 
     }
 }

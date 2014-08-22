@@ -89,13 +89,13 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             $fileElementName = "file_title_pic_1";
                             $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
                             $tableId = $channelId;
-                            $uploadResult1 = new UploadResult();
+                            $uploadFile1 = new UploadFile();
                             $uploadFileId1 = 0;
                             $titlePic1Result = self::Upload(
                                 $fileElementName,
                                 $tableType,
                                 $tableId,
-                                $uploadResult1,
+                                $uploadFile1,
                                 $uploadFileId1
                             );
 
@@ -109,12 +109,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             $fileElementName = "file_title_pic_2";
                             $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
                             $uploadFileId2 = 0;
-                            $uploadResult2 = new UploadResult();
+                            $uploadFile2 = new UploadFile();
                             $titlePic2Result = self::Upload(
                                 $fileElementName,
                                 $tableType,
                                 $tableId,
-                                $uploadResult2,
+                                $uploadFile2,
                                 $uploadFileId2
                             );
                             if (intval($titlePic2Result) <=0){
@@ -128,15 +128,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
                             $uploadFileId3 = 0;
 
-                            $uploadResult3 = new UploadResult();
+                            $uploadFile3 = new UploadFile();
 
                             $titlePic3Result = self::Upload(
                                 $fileElementName,
                                 $tableType,
                                 $tableId,
-                                $uploadResult3,
-                                $uploadFileId3)
-                            ;
+                                $uploadFile3,
+                                $uploadFileId3
+                            );
                             if (intval($titlePic3Result) <=0){
                                 //上传出错或没有选择文件上传
                             }else{
@@ -165,7 +165,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                         }
 
-
                         //授权给创建人
                         if ($manageUserId > 1) { //只有非ADMIN的要授权
                             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -174,7 +173,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
-
 
                         //javascript 处理
                         //重新加载左边导航树
@@ -254,87 +252,102 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     }
                 }
                 if (!$hasRepeatPublishPath) {
-                    //title pic1
-                    $fileElementName = "file_title_pic_1";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
-                    $tableId = 0;
-                    $uploadResult1 = new UploadResult();
-                    $uploadFileId1 = 0;
-                    $titlePic1Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult1,
-                        $uploadFileId1
-                    );
-
-                    if (intval($titlePic1Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-
-                    //title pic2
-                    $fileElementName = "file_title_pic_2";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
-                    $uploadFileId2 = 0;
-                    $uploadResult2 = new UploadResult();
-                    $titlePic2Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult2,
-                        $uploadFileId2
-                    );
-                    if (intval($titlePic2Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-                    //title pic3
-                    $fileElementName = "file_title_pic_3";
-
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
-                    $uploadFileId3 = 0;
-
-                    $uploadResult3 = new UploadResult();
-
-                    $titlePic3Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadResult3,
-                        $uploadFileId3)
-                    ;
-                    if (intval($titlePic3Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-                    $result = $channelManageData->Modify($httpPostData, $uploadFileId1, $uploadFileId2, $uploadFileId3);
+                    $result = $channelManageData->Modify($httpPostData, $channelId);
                     //加入操作日志
                     $operateContent = 'Modify Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$result;
                     self::CreateManageUserLog($operateContent);
 
                     if ($result > 0) {
-                        //授权给创建人
-                        if ($manageUserId > 1) { //只有非ADMIN的要授权
-                            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-                            $manageUserAuthorityManageData->CreateForChannel($siteId, $result, $manageUserId);
+                        //题图操作
+                        if( !empty($_FILES)){
+                            //title pic1
+                            $fileElementName = "file_title_pic_1";
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
+                            $tableId = $channelId;
+                            $uploadFile1 = new UploadFile();
+                            $uploadFileId1 = 0;
+                            $titlePic1Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadFile1,
+                                $uploadFileId1
+                            );
+
+                            if (intval($titlePic1Result) <=0 && $uploadFileId1<=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+                                //删除原有题图
+                                $oldUploadFileId1 = $channelManageData->GetTitlePic1UploadFileId($channelId);
+                                parent::DeleteUploadFile($oldUploadFileId1);
+
+                                //修改题图
+                                $channelManageData->ModifyTitlePic1UploadFileId($channelId, $uploadFileId1);
+                            }
+
+                            //title pic2
+                            $fileElementName = "file_title_pic_2";
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
+                            $uploadFileId2 = 0;
+                            $uploadFile2 = new UploadFile();
+                            $titlePic2Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadFile2,
+                                $uploadFileId2
+                            );
+                            if (intval($titlePic2Result) <=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+
+                            }
+                            //title pic3
+                            $fileElementName = "file_title_pic_3";
+
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
+                            $uploadFileId3 = 0;
+
+                            $uploadFile3 = new UploadFile();
+
+                            $titlePic3Result = self::Upload(
+                                $fileElementName,
+                                $tableType,
+                                $tableId,
+                                $uploadFile3,
+                                $uploadFileId3
+                            );
+                            if (intval($titlePic3Result) <=0){
+                                //上传出错或没有选择文件上传
+                            }else{
+                            }
+
+                            if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
+                                $channelManageData->ModifyTitlePic($channelId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
+                            }
+
+                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            if($uploadFileId1>0){
+                                $channelTitlePic1MobileWidth = $siteConfigManageData->ChannelTitlePic1MobileWidth;
+                                if($channelTitlePic1MobileWidth<=0){
+                                    $channelTitlePic1MobileWidth  = 320; //默认320宽
+                                }
+                                self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
+
+                                $channelTitlePic1PadWidth = $siteConfigManageData->ChannelTitlePic1PadWidth;
+                                if($channelTitlePic1PadWidth<=0){
+                                    $channelTitlePic1PadWidth  = 1024; //默认1024宽
+                                }
+                                self::GenUploadFilePad($uploadFileId1,$channelTitlePic1PadWidth);
+                            }
+
+
                         }
+
 
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
 
-                        $uploadFileData = new UploadFileData();
-                        //修改题图1的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId1, $channelId);
-                        //修改题图2的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId2, $channelId);
-                        //修改题图3的TableId
-                        $uploadFileData->ModifyTableId($uploadFileId3, $channelId);
 
                         //javascript 处理
                         //重新加载左边导航树
