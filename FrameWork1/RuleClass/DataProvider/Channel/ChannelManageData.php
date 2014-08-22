@@ -244,6 +244,66 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
+     * 取得题图1的上传文件id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图1的上传文件id
+     */
+    public function GetTitlePic1UploadFileId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_title_pic_1_upload_file_id.cache_' . $channelId . '';
+            $sql = "SELECT TitlePic1UploadFileId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得题图2的上传文件id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图2的上传文件id
+     */
+    public function GetTitlePic2UploadFileId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_title_pic_2_upload_file_id.cache_' . $channelId . '';
+            $sql = "SELECT TitlePic2UploadFileId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得题图3的上传文件id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图3的上传文件id
+     */
+    public function GetTitlePic3UploadFileId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_title_pic_3_upload_file_id.cache_' . $channelId . '';
+            $sql = "SELECT TitlePic3UploadFileId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得上级频道名称
      * @param int $channelId 频道id
      * @param bool $withCache 是否从缓冲中取

@@ -221,7 +221,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenModify() {
         $tempContent = Template::Load("channel/channel_deal.html", "common");
         $channelId = Control::GetRequest("channel_id", 0);
-
+        $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
         if ($channelId >0 && $manageUserId > 0) {
@@ -238,6 +238,11 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
 
 
+            //加载原有数据
+            $arrOne = $channelManageData->GetOne($channelId);
+            Template::ReplaceOne($tempContent, $arrOne);
+
+
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $publishPath = Control::PostRequest("f_PublishPath", "");
@@ -247,7 +252,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = 0;
                     $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $result);
                     if ($hasRepeatPublishPath) {
-                        Control::ShowMessage(Language::Load('document', 9));
+                        Control::ShowMessage(Language::Load('document', 9)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
                         return "";
                     }
                 }
@@ -278,7 +283,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                                 //上传出错或没有选择文件上传
                             }else{
                                 //删除原有题图
-                                $oldUploadFileId1 = $channelManageData->GetTitlePic1UploadFileId($channelId);
+                                $oldUploadFileId1 = $channelManageData->GetTitlePic1UploadFileId($channelId, false);
                                 parent::DeleteUploadFile($oldUploadFileId1);
 
                                 //修改题图
@@ -300,7 +305,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             if (intval($titlePic2Result) <=0){
                                 //上传出错或没有选择文件上传
                             }else{
+                                //删除原有题图
+                                $oldUploadFileId2 = $channelManageData->GetTitlePic2UploadFileId($channelId, false);
+                                parent::DeleteUploadFile($oldUploadFileId2);
 
+                                //修改题图
+                                $channelManageData->ModifyTitlePic2UploadFileId($channelId, $uploadFileId2);
                             }
                             //title pic3
                             $fileElementName = "file_title_pic_3";
@@ -320,6 +330,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             if (intval($titlePic3Result) <=0){
                                 //上传出错或没有选择文件上传
                             }else{
+                                //删除原有题图
+                                $oldUploadFileId3 = $channelManageData->GetTitlePic3UploadFileId($channelId, false);
+                                parent::DeleteUploadFile($oldUploadFileId3);
+
+                                //修改题图
+                                $channelManageData->ModifyTitlePic3UploadFileId($channelId, $uploadFileId3);
                             }
 
                             if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
@@ -340,14 +356,10 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                                 }
                                 self::GenUploadFilePad($uploadFileId1,$channelTitlePic1PadWidth);
                             }
-
-
                         }
-
 
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
-
 
                         //javascript 处理
                         //重新加载左边导航树
@@ -360,19 +372,16 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                     } else {
-                        Control::ShowMessage(Language::Load('document', 2));
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel', 6)); //编辑失败！
                     }
                 }
             }
-
-
-            $fieldsOfChannel = $channelManageData->GetFields();
-            parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 

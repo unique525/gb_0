@@ -86,6 +86,14 @@ $(function () {
         window.G_TabUrl = '/default.php?secu=manage&mod=channel&m=create&parent_id='+window.G_SelectedChannelId;
         addTab();
     });
+    //modify channel page
+    var btnRightModifyChannel = $("#btn_right_modify_channel");
+    btnRightModifyChannel.click(function () {
+        window.G_TabTitle = "编辑频道";
+        window.G_TabUrl = '/default.php?secu=manage&mod=channel&m=modify&channel_id='+window.G_SelectedChannelId;
+        addTab();
+    });
+
     var btnRightPubChannel = $("#btn_right_pub_channel");
     btnRightPubChannel.click(function () {
         $("#dialog_box").dialog({
