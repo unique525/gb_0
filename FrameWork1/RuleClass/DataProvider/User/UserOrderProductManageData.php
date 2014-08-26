@@ -23,9 +23,9 @@ class UserOrderProductManageData extends BaseManageData
             $sqlUserOrderProduct = parent::GetUpdateSql($httpPostData,self::TableName_UserOrderProduct,self::TableId_UserOrderProduct,
                 $userOrderProductId,$dataPropertyUserOrderProduct);
             $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
-                (uo.SendPrice + (SELECT SUM(uop.subtotal) FROM ".self::TableName_UserOrderProduct." uop
-                WHERE uop.UserOrderId = :UserOrderId1 GROUP BY uop.UserOrderId))
-                WHERE uo.UserOrderId = :UserOrderId2";
+                (uo.SendPrice + (SELECT SUM(uop.Subtotal) FROM ".self::TableName_UserOrderProduct." uop
+                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < 40 GROUP BY uop.UserOrderId))
+                WHERE uo.UserOrderId = :UserOrderId2;";
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
             $arrSql = Array(
@@ -54,6 +54,7 @@ class UserOrderProductManageData extends BaseManageData
                 FROM " . self::TableName_UserOrderProduct . " uop,".self::TableName_Product." p,".self::TableName_ProductPrice." pp
                 WHERE uop.UserOrderProductId = :UserOrderProductId
                 AND uop.SiteId = :SiteId
+                AND uop.State < 40
                 AND p.ProductId = uop.ProductId
                 AND pp.ProductPriceId = uop.ProductPriceId;";
             $dataProperty = new DataProperty();
@@ -77,6 +78,7 @@ class UserOrderProductManageData extends BaseManageData
             $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit
                 FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp
                 WHERE uop.ProductId = p.ProductId
+                AND uop.State < 40
                 AND uop.ProductPriceId = pp.ProductPriceId
                 AND uop.UserOrderId = :UserOrderId
                 AND uop.SiteId = :SiteId;";

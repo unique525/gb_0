@@ -52,6 +52,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userOrderManageGen = new UserOrderManageGen();
                     $result = $userOrderManageGen->Gen();
                     break;
+                case "user_order_product":
+                    $userOrderProductManageGen = new UserOrderProductManageGen();
+                    $result = $userOrderProductManageGen->Gen();
+                    break;
+                case "user_order_pay":
+                    $userOrderPayManageGen = new UserOrderPayManageGen();
+                    $result = $userOrderPayManageGen->Gen();
+                    break;
+                case "user_order_send":
+                    $userOrderSendManageGen = new UserOrderSendManageGen();
+                    $result = $userOrderSendManageGen->Gen();
+                    break;
                 case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();

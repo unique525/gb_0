@@ -63,7 +63,7 @@ function confirmPay(idvalue){
     var confirm_way = $("#confirm_way_input_"+idvalue).val();
     var confirm_price = $("#confirm_price_input_"+idvalue).val();
     $.ajax({
-        url:"/default.php?secu=manage&mod=user_order&m=confirm_pay",
+        url:"/default.php?secu=manage&mod=user_order_pay&m=confirm",
         data:{user_order_pay_id:idvalue,confirm_way:confirm_way,confirm_price:confirm_price},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
@@ -129,7 +129,7 @@ $(document).ready(function(){
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=user_order&m=modify_order_product&user_order_product_id=' + userOrderProductId
+        var url='/default.php?secu=manage&mod=user_order_product&m=modify&user_order_product_id=' + userOrderProductId
             + '&user_order_id='+userOrderId+'&site_id='+parent.G_NowSiteId+'&p=' + pageIndex;
         $("#user_order_product_dialog_frame").attr("src",url);
         $("#dialog_user_order_product_box").dialog({
@@ -146,7 +146,7 @@ $(document).ready(function(){
     $("#btn_user_order_pay").click(function(){
         var userOrderId = $(this).attr("idvalue");
         var pageIndex = Request["p"]==null?1:Request["p"];
-        var url='/default.php?secu=manage&mod=user_order&m=user_order_pay_list&user_order_id=' + userOrderId + '&site_id='
+        var url='/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=' + userOrderId + '&site_id='
             +parent.G_NowSiteId+'&p=' + pageIndex;
         $("#user_order_pay_dialog_frame").attr("src",url);
         $("#dialog_user_order_pay_box").dialog({
