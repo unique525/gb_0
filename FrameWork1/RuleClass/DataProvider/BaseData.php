@@ -385,6 +385,14 @@ class BaseData
      */
     const TableId_ProductParam = "ProductParamId";
     /**
+     * 产品参数类型类别 数据表名
+     */
+    const TableName_ProductParamTypeClass = "cst_product_param_type_class";
+    /**
+     * 产品参数类型类别 数据表自增字段名
+     */
+    const TableId_ProductParamTypeClass = "ProductParamTypeClassId";
+    /**
      * 产品参数类型 数据表名
      */
     const TableName_ProductParamType = "cst_product_param_type";
