@@ -40,6 +40,12 @@ foreach ($arrFiles as $fileName) {
     include_once($fileName);
 }
 
+$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
+$arrFiles = getFileNames($dir);
+foreach ($arrFiles as $fileName) {
+    include_once($fileName);
+}
+
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
