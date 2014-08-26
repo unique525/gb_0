@@ -67,7 +67,7 @@ class ProductParamTypeManageData extends BaseManageData
      */
     public function GetOne($productParamTypeId) {
         $sql = "
-        SELECT ProductParamTypeId,productParamTypeClassId,ParamTypeName,Sort,State,CreateDate
+        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,Sort,State,CreateDate
         FROM
         " . self::TableName_ProductParamType .
             " WHERE ProductParamTypeId=:ProductParamTypeId";
@@ -82,19 +82,19 @@ class ProductParamTypeManageData extends BaseManageData
      * @param int $pageBegin   起始页码
      * @param int $pageSize    每页记录数
      * @param int $allCount    记录总数
-     * @param int $productParamTypeId  产品参数类型Id
+     * @param int $productParamTypeClassId  产品参数类型类别Id
      * @param string $searchKey   查询字符
      * @return array  产品参数类型列表数组
      */
-    public function GetListForPager($productParamTypeId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
+    public function GetListForPager($productParamTypeClassId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
         $dataProperty = new DataProperty();
         $searchSql = "WHERE";
-        if ($productParamTypeId > 0) {
-            $searchSql .= " productParamTypeClassId=:productParamTypeClassId AND";
-            $dataProperty->AddField("productParamTypeClassId", $productParamTypeId);
+        if ($productParamTypeClassId > 0) {
+            $searchSql .= " ProductParamTypeClassId=:ProductParamTypeClassId AND";
+            $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
         }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " (VoteTitle like :searchKey1) AND";
+            $searchSql .= " (ParamTypeName like :searchKey1) AND";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
         if (strlen($searchSql) > 5)
@@ -102,7 +102,7 @@ class ProductParamTypeManageData extends BaseManageData
         else
             $searchSql = "";
         $sql = "
-        SELECT ProductParamTypeId,productParamTypeClassId,ProductParamTypeName,Sort,State,CreateDate
+        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,Sort,State,CreateDate
         FROM " . self::TableName_ProductParamType . " " . $searchSql . "
         ORDER BY Sort DESC,ProductParamTypeId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

@@ -8,7 +8,7 @@
 <body>
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
     <div id="result_table" style="font-size: 14px;">
-        <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
+        <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="200px"></iframe>
     </div>
 </div>
 <div class="div_list">
@@ -30,11 +30,11 @@
             <td style="width:60px; text-align:center;">状态</td>
             <td style="width:80px; text-align: center;">启用|停用</td>
         </tr>
-        <icms id="vote_item_list" type="list">
+        <icms id="product_param_type_list" type="list">
             <item>
                 <![CDATA[
                 <tr class="grid_item">
-                    <td class="spe_line2" style="text-align: center;"><label><input name="vote_item_input" class="input_select" type="checkbox" value=""/></label></td>
+                    <td class="spe_line2" style="text-align: center;"><label><input name="product_param_type_input" class="input_select" type="checkbox" value=""/></label></td>
                     <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_ProductParamTypeId}" /></td>
                     <td class="spe_line2" style="text-align: center;">{f_ParamTypeName}</td>
                     <td class="spe_line2" style="text-align: center;">{f_ProductParamTypeId}</td>

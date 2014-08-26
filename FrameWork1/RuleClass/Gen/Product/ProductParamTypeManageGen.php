@@ -66,7 +66,8 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen 
                 return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
-            $tempContent = str_ireplace("{VoteId}", strval($productParamTypeClassId), $tempContent);
+            $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
+            $tempContent = str_ireplace("{ProductParamTypeClassId}", strval($productParamTypeClassId), $tempContent);
 
             $fieldsOfProductParamType = $productParamTypeManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfProductParamType);

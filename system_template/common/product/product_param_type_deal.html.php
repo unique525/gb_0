@@ -26,6 +26,7 @@
                     <td class="spe_line">
                         <input type="hidden" id="f_ProductParamTypeClassId" name="f_ProductParamTypeClassId" value="{ProductParamTypeClassId}" />
                         <input type="hidden" id="f_ProductParamTypeId" name="f_ProductParamTypeId" value="{ProductParamTypeId}" />
+                        <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
                     </td>
                 </tr>
                 <tr>
@@ -48,7 +49,7 @@
                 </tr>
 
                 <tr>
-                    <td class="spe_line" height="30" align="right"><label for="f_ParamValueType">是否多选：</label></td>
+                    <td class="spe_line" height="30" align="right"><label for="f_ParamValueType">参数类型：</label></td>
                     <td class="spe_line">
                         <select id="f_ParamValueType" name="f_ParamValueType">
                             <option value="0">文本框</option>

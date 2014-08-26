@@ -18,7 +18,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:450,
+            height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'题目新增',
@@ -41,7 +41,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:450,
+            height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'产品编辑',

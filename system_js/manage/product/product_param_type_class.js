@@ -56,7 +56,7 @@ $(function() {
         var productParamTypeClassId=$(this).attr('idvalue');
         var productParamTypeClassName=$(this).attr('title');
         parent.G_TabUrl = '/default.php?secu=manage&mod=product_param_type&m=list&product_param_type_class_id=' + productParamTypeClassId;
-        parent.G_TabTitle = productParamTypeClassName + '-编辑产品参数类型';
+        parent.G_TabTitle = productParamTypeClassName + '-编辑产品参数';
         parent.addTab();
     });
 
