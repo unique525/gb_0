@@ -8,6 +8,13 @@
  */
 class UserOrderProductManageData extends BaseManageData
 {
+    /**
+     * 修改
+     * @param array $httpPostData $_POST数组
+     * @param int $userOrderProductId 会员订单产品Id
+     * @param int $userOrderId 会员订单Id
+     * @return int 执行结果
+     */
     public function Modify($httpPostData,$userOrderProductId,$userOrderId){
         $result = 0;
         if(!empty($httpPostData) && $userOrderProductId > 0){

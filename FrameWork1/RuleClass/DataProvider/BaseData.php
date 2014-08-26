@@ -227,6 +227,14 @@ class BaseData
      */
     const TableId_UserOrderProduct = "UserOrderProductId";
     /**
+     * 会员订单产品信息 数据表名
+     */
+    const TableName_UserOrderPay= "cst_user_order_pay";
+    /**
+     * 会员订单产品信息 数据表自增字段名
+     */
+    const TableId_UserOrderPay = "UserOrderPayId";
+    /**
      * 会员角色 数据表名
      */
     const TableName_UserRole = "cst_user_role";

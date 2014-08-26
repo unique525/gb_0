@@ -16,7 +16,7 @@
 </div>
 <div id="dialog_user_order_pay_box" title="提示信息" style="display: none;">
     <div id="user_order_pay__table" style="font-size: 14px;">
-        <iframe id="user_order_pay_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
+        <iframe id="user_order_pay_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="650"></iframe>
     </div>
 </div>
 <div class="div_list">
@@ -80,7 +80,7 @@
             <tr>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">支付信息：</td>
                 <td colspan="3" class="spe_line" height="30" style="text-align: left">
-                    <div class="btn2" id="btn_user_order_pay" style="width:80px;text-align: center;float:left" idvalue="{f_UserOrderId}">点击查看</div>
+                    <div class="btn2" id="btn_user_order_pay" style="width:80px;text-align: center;float:left" idvalue="{UserOrderId}">点击查看</div>
                     <div style="clear:left"></div>
                 </td>
             </tr>
@@ -132,7 +132,7 @@
         <input name="PageIndex" type="hidden" value="{PageIndex}"/>
         <input name="PageSize" type="hidden" value="{PageSize}"/>
         <input name="TabIndex" type="hidden" value="{TabIndex}"/>
-        <input name="f_AllPrice" id="AllPrice" type="hidden" value=""/>
+        <input name="f_AllPrice" id="AllPrice" type="hidden" value="{AllPrice}"/>
     </form>
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
