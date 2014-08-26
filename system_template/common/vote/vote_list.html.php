@@ -11,7 +11,7 @@
         <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="500px"></iframe>
     </div>
 </div>
-<div id="div_list">
+<div class="div_list">
 <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td id="td_main_btn">
