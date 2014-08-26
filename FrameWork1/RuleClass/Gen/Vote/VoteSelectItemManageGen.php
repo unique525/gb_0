@@ -248,7 +248,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
                     Control::ShowMessage(Language::Load('vote', 9));
                     Control::CloseTab();
                 } else {
-                    Control::GoUrl($_SERVER["PHP_SELF"]);
+                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                 }
             } else {
                 Control::ShowMessage(Language::Load('vote', 10));
