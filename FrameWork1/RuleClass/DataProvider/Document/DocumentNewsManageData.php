@@ -82,45 +82,36 @@ class DocumentNewsManageData extends BaseManageData
      * 修改资讯
      * @param array $httpPostData $_POST数组
      * @param int $documentNewsId 资讯id
-     * @param string $titlePic1 题图1
-     * @param string $titlePic2 题图2
-     * @param string $titlePic3 题图3
-     * @param string $titlePicMobile 移动客户端题图
-     * @param string $titlePicPad 平板客户端题图
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $documentNewsId, $titlePic1 = "", $titlePic2 = "", $titlePic3 = "", $titlePicMobile = "", $titlePicPad = "") {
-        $dataProperty = new DataProperty();
-        $addFieldNames = array();
-        $addFieldValues = array();
-        if (!empty($titlePic1)) {
-            $addFieldNames[] = "TitlePic1";
-            $addFieldValues[] = $titlePic1;
+    public function Modify($httpPostData, $documentNewsId) {
+        $result = -1;
+        if($documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $addFieldNames = array();
+            $addFieldValues = array();
+            $sql = parent::GetUpdateSql(
+                $httpPostData,
+                self::TableName_DocumentNews,
+                self::TableId_DocumentNews,
+                $documentNewsId,
+                $dataProperty,
+                "",
+                "",
+                "",
+                $addFieldNames,
+                $addFieldValues
+            );
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
         }
-        if (!empty($titlePic2)) {
-            $addFieldNames[] = "TitlePic2";
-            $addFieldValues[] = $titlePic2;
-        }
-        if (!empty($titlePic3)) {
-            $addFieldNames[] = "TitlePic3";
-            $addFieldValues[] = $titlePic3;
-        }
-        if (!empty($titlePicMobile)) {
-            $addFieldNames[] = "TitlePicMobile";
-            $addFieldValues[] = $titlePicMobile;
-        }
-        if (!empty($titlePicPad)) {
-            $addFieldNames[] = "TitlePicPad";
-            $addFieldValues[] = $titlePicPad;
-        }
-        $sql = parent::GetUpdateSql($httpPostData, self::TableName_DocumentNews, self::TableId_DocumentNews, $documentNewsId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
+
     /**
-     * 修改频道题图的上传文件id
-     * @param int $documentNewsId 频道id
+     * 修改题图的上传文件id
+     * @param int $documentNewsId 资讯id
      * @param int $titlePic1UploadFileId 题图1上传文件id
      * @param int $titlePic2UploadFileId 题图2上传文件id
      * @param int $titlePic3UploadFileId 题图3上传文件id
@@ -150,6 +141,78 @@ class DocumentNewsManageData extends BaseManageData
     }
 
     /**
+     * 修改题图1的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic1UploadFileId($documentNewsId, $titlePic1UploadFileId)
+    {
+        $result = -1;
+        if($documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId
+
+                    WHERE DocumentNewsId = :DocumentNewsId
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改题图2的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic2UploadFileId($documentNewsId, $titlePic2UploadFileId)
+    {
+        $result = -1;
+        if($documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId
+
+                    WHERE DocumentNewsId = :DocumentNewsId
+                    ;";
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改题图3的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic3UploadFileId($documentNewsId, $titlePic3UploadFileId)
+    {
+        $result = -1;
+        if($documentNewsId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
+
+                    WHERE DocumentNewsId = :DocumentNewsId
+                    ;";
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 删除到回收站
      * @param int $documentNewsId 资讯id
      * @return int 返回影响的行数
@@ -161,6 +224,67 @@ class DocumentNewsManageData extends BaseManageData
             $sql = "UPDATE " . self::TableName_DocumentNews . " SET `State`=100 WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得题图1的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图1的上传文件id
+     */
+    public function GetTitlePic1UploadFileId($documentNewsId, $withCache)
+    {
+        $result = -1;
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_title_pic_1_upload_file_id.cache_' . $documentNewsId . '';
+            $sql = "SELECT TitlePic1UploadFileId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得题图2的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图2的上传文件id
+     */
+    public function GetTitlePic2UploadFileId($documentNewsId, $withCache)
+    {
+        $result = -1;
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_title_pic_2_upload_file_id.cache_' . $documentNewsId . '';
+            $sql = "SELECT TitlePic2UploadFileId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得题图3的上传文件id
+     * @param int $documentNewsId 资讯id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图3的上传文件id
+     */
+    public function GetTitlePic3UploadFileId($documentNewsId, $withCache)
+    {
+        $result = -1;
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_title_pic_3_upload_file_id.cache_' . $documentNewsId . '';
+            $sql = "SELECT TitlePic3UploadFileId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }
