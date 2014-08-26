@@ -25,7 +25,7 @@
             <td style="width:60px;text-align:center;">排序</td>
             <td style="width:40px;text-align:center;">状态</td>
         </tr>
-        <icms_list id="custom_form" type="list">
+        <icms id="custom_form" type="list">
             <item>
                 <![CDATA[
                 <tr class="grid_item">
@@ -39,7 +39,7 @@
                 </tr>
                 ]]>
             </item>
-        </icms_list>
+        </icms>
     </table>
 </div>
 {PagerButton}

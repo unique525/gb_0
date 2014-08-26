@@ -53,7 +53,6 @@
                 }
                 url="/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id={CustomFormId}&number_of_search_key=" + numberOfSearchKey + url;
                 event.preventDefault();
-                alert(url);
                 parent.G_TabUrl = url + '&channel_id=' + parent.G_SelectedChannelId;
                 parent.G_TabTitle = parent.G_SelectedChannelName + '搜索记录';
                 parent.addTab();

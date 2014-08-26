@@ -19,7 +19,7 @@ $("document").ready(function(){
         var customFormId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex <= 0||!pageIndex) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=modify&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
@@ -34,7 +34,7 @@ $("document").ready(function(){
         var customFormId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex <= 0||!pageIndex) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=modify&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
@@ -49,7 +49,7 @@ $("document").ready(function(){
         var customFormId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex <= 0||!pageIndex) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;

@@ -45,7 +45,7 @@
             <td style="width:120px;">表单字段类型</td>
             <td style="width:60px;text-align:center;">排序</td>
         </tr>
-        <icms_list id="custom_form_field" type="list">
+        <icms id="custom_form_field" type="list">
             <item>
                 <![CDATA[
                 <tr class="grid_item">
@@ -58,7 +58,7 @@
                 </tr>
                 ]]>
             </item>
-        </icms_list>
+        </icms>
     </table>
 {NoField}
 </div>

@@ -19,7 +19,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 新增表单写入数据库失败
      */
-    const CREATE_NEW_CUSTOM_FORM_FAILED = -3;
+    const INSERT_NEW_CUSTOM_FORM_FAILED = -3;
     /**
      * 获取被修改表单原属性结果 空
      */
@@ -27,7 +27,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 修改表单属性写入数据库失败
      */
-    const INSERT_CUSTOM_FORM_ATTRIBUTE_FAIL = -5;
+    const UPDATE_CUSTOM_FORM_ATTRIBUTE_FAIL = -5;
 
 
 
@@ -99,7 +99,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
                 }else{
                     Control::ShowMessage(Language::Load('custom_form', 2));
-                    return DefineCode::CUSTOM_FORM_MANAGE+self::CREATE_NEW_CUSTOM_FORM_FAILED;
+                    return DefineCode::CUSTOM_FORM_MANAGE+self::INSERT_NEW_CUSTOM_FORM_FAILED;
                 }
 
             }
@@ -212,7 +212,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 } else {
 
                     Control::ShowMessage(Language::Load('custom_form', 2));
-                    return DefineCode::CUSTOM_FORM_MANAGE+self::INSERT_CUSTOM_FORM_ATTRIBUTE_FAIL;
+                    return DefineCode::CUSTOM_FORM_MANAGE+self::UPDATE_CUSTOM_FORM_ATTRIBUTE_FAIL;
                 }
             }
         }else{
@@ -264,7 +264,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             $customFormData = new CustomFormManageData();
             $arrListOfCustomForm = $customFormData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $type);
             if (count($arrListOfCustomForm) > 0) {
-                Template::ReplaceList($tempContent, $arrListOfCustomForm, $listName,"icms_list");
+                Template::ReplaceList($tempContent, $arrListOfCustomForm, $listName);
 
                 $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
                 $replaceArray = array(
