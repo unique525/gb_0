@@ -241,7 +241,6 @@ class DbOperator {
                         $this->BindStmt($stmt, $dataProperty);
                     }
                     $result = $stmt->execute();
-                    echo $result."-";
                     if(intval($result)<=0){
                         throw new PDOException("affected_rows<=0");//抛出异常
                     }

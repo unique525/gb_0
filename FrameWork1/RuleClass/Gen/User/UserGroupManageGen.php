@@ -100,7 +100,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                     if($closeTab == 1){
                         Control::GoUrl("/default.php?secu=manage&mod=user_group&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
                     }else{
-                        Control::GoUrl($_SERVER["HTTP_SELF"]);
+                        Control::GoUrl($_SERVER["PHP_SELF"]);
                     }
                 }
                 $operateContent = 'Modify UserGroup,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
