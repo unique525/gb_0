@@ -9,22 +9,22 @@
             {
                 var productParamTypeClassName= $('#f_ProductParamTypeClassName').val();
                 if(productParamTypeClassName == ''){
-                    alert('请输入产品参数类型类别名称！');
+                    alert('请输入产品参数类别名称！');
                 }
                 else if(productParamTypeClassName.length>100){
-                    alert('产品参数类型类别名称不能超过100个字节！');
+                    alert('产品参数类别名称不能超过100个字节！');
                 }
                 else {$('#mainForm').submit();}
             }
         </script>
     </head>
     <body>
-        <form id="mainForm" action="/default.php?secu=manage&mod=vote&m={method}&vote_id={VoteId}&p={PageIndex}" method="post">
+        <form id="mainForm" action="/default.php?secu=manage&mod=product_param_type_class&m={method}&product_param_type_class_id={ProductParamTypeClassId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>
                     <td class="spe_line">
-                        <input type="hidden" id="f_AdminUserId" name="f_AdminUserId" value="{AdminUserId}" />
+                        <input type="hidden" id="f_ManageUserId" name="f_ManageUserId" value="{ManageUserId}" />
                         <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
                         <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
                         <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />

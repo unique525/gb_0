@@ -19,10 +19,10 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:260,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'产品参数类型类别新增',
+            title:'产品参数类别新增',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -42,10 +42,10 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:560,
+            height:260,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'产品参数类型类别编辑',
+            title:'产品参数类别编辑',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });

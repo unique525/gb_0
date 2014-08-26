@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 产品参数类型类别后台管理生成类
+ * 产品参数类别后台管理生成类
  * @category iCMS
  * @package iCMS_Rules_Gen_Product
  * @author yanjiuyuan
@@ -37,7 +37,7 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 生成产品参数类型类别管理新增页面
+     * 生成产品参数类别管理新增页面
      * @return mixed|string
      */
     private function GenCreate()
@@ -86,7 +86,7 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 修改产品参数类型类别状态
+     * 修改产品参数类别状态
      * @return string 修改结果
      */
     private function AsyncModifyState()
@@ -107,13 +107,13 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 生成产品参数类型类别修改页面
+     * 生成产品参数类别修改页面
      * @return mixed|string
      */
     private function GenModify()
     {
         $tempContent = Template::Load("product/product_param_type_class_deal.html", "common");
-        $productParamTypeClassId = Control::GetRequest("product_id", 0);
+        $productParamTypeClassId = Control::GetRequest("product_param_type_class_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
         $productManageData = new ProductParamTypeClassManageData();
@@ -147,7 +147,7 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 产品参数类型类别管理列表页面
+     * 产品参数类别管理列表页面
      * @return mixed|string
      */
     private function GenList()

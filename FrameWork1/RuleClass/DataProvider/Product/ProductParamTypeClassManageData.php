@@ -18,7 +18,7 @@ class ProductParamTypeClassManageData extends BaseManageData
     }
 
     /**
-     * 新增产品参数类型类别
+     * 新增产品参数类别
      * @param array $httpPostData $_post数组
      * @return int 投票调查Id
      */
@@ -32,7 +32,7 @@ class ProductParamTypeClassManageData extends BaseManageData
 
     /**
      * 异步修改状态
-     * @param string $voteId 产品参数类型类别Id
+     * @param string $voteId 产品参数类别Id
      * @param string $state 状态
      * @return int 执行结果
      */
@@ -51,9 +51,9 @@ class ProductParamTypeClassManageData extends BaseManageData
     }
 
     /**
-     * 修改产品参数类型类别
+     * 修改产品参数类别
      * @param array $httpPostData $_post数组
-     * @param int $voteId 产品参数类型类别Id
+     * @param int $voteId 产品参数类别Id
      * @return int 执行结果
      */
     public function Modify($httpPostData, $voteId)
@@ -69,9 +69,9 @@ class ProductParamTypeClassManageData extends BaseManageData
     }
 
     /**
-     * 一个产品参数类型类别的信息
-     * @param int $voteId 产品参数类型类别Id
-     * @return array 产品参数类型类别一维数组
+     * 一个产品参数类别的信息
+     * @param int $voteId 产品参数类别Id
+     * @return array 产品参数类别一维数组
      */
     public function GetOne($voteId)
     {
@@ -79,7 +79,7 @@ class ProductParamTypeClassManageData extends BaseManageData
         if ($voteId < 0) {
             return $result;
         }
-        $sql = "SELECT ProductParamTypeClassId,SiteId,ChannelId,ProductParamTypeClassTitle,State,CreateDate,BeginDate,EndDate,Sort,RecordCount,AddCount,IsCheckCode,IpMaxCount,UserMaxCount,UserScoreNum,TemplateName FROM " . self::TableName_ProductParamTypeClass . " WHERE ProductParamTypeClassId=:ProductParamTypeClassId;";
+        $sql = "SELECT ProductParamTypeClassId,SiteId,ChannelId,ProductParamTypeClassName,State,CreateDate,Sort FROM " . self::TableName_ProductParamTypeClass . " WHERE ProductParamTypeClassId=:ProductParamTypeClassId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductParamTypeClassId", $voteId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -87,14 +87,14 @@ class ProductParamTypeClassManageData extends BaseManageData
     }
 
     /**
-     * 获取产品参数类型类别分页列表
+     * 获取产品参数类别分页列表
      * @param int $siteId 站点Id
      * @param int $channelId 频道Id
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页记录数
      * @param int $allCount 记录总数
      * @param string $searchKey 查询字符
-     * @return array  产品参数类型类别列表数组
+     * @return array  产品参数类别列表数组
      */
     public function GetListForPager($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
     {
@@ -107,7 +107,7 @@ class ProductParamTypeClassManageData extends BaseManageData
         $dataProperty->AddField("ChannelId", $channelId);
         $searchSql = "WHERE";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " SiteId=:SiteId AND ChannelId=:ChannelId AND (ProductParamTypeClassTitle like :searchKey1) AND";
+            $searchSql .= " SiteId=:SiteId AND ChannelId=:ChannelId AND (ProductParamTypeClassName like :searchKey1) AND";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
         if (strlen($searchSql) > 5)
@@ -115,7 +115,7 @@ class ProductParamTypeClassManageData extends BaseManageData
         else
             $searchSql = "WHERE SiteId=:SiteId AND ChannelId=:ChannelId";
 
-        $sql = "SELECT ProductParamTypeClassId,ProductParamTypeClassTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId
+        $sql = "SELECT ProductParamTypeClassId,ProductParamTypeClassName,State,CreateDate,SiteId,ChannelId
         FROM " . self::TableName_ProductParamTypeClass . " " . $searchSql . "
         ORDER BY Sort DESC,ProductParamTypeClassId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
