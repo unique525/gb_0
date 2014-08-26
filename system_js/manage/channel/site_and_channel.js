@@ -94,6 +94,17 @@ $(function () {
         addTab();
     });
 
+
+    //property channel page
+    var btnRightViewChannelProperty = $("#btn_right_view_channel_property");
+    btnRightViewChannelProperty.click(function () {
+        window.G_TabTitle = "频道属性";
+        window.G_TabUrl = '/default.php?secu=manage&mod=channel&m=property&channel_id='+window.G_SelectedChannelId;
+        addTab();
+    });
+
+
+
     var btnRightPubChannel = $("#btn_right_pub_channel");
     btnRightPubChannel.click(function () {
         $("#dialog_box").dialog({

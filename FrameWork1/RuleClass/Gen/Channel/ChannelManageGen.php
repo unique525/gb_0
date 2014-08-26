@@ -34,6 +34,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "list_for_manage_left":
                 $result = self::GenListForManageLeft();
                 break;
+            case "property":
+                $result = self::GenProperty();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -389,7 +392,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 模板内容页面
      */
     private function GenRemoveToBin(){
-        $tempContent = "";
+        $tempContent = Template::Load("channel/channel_remove_to_bin.html", "common");
+        $channelId = Control::GetRequest("channel_id", 0);
+
+        return $tempContent;
+    }
+
+    private function GenProperty(){
+        $tempContent = Template::Load("channel/channel_property.html", "common");
+        $channelId = Control::GetRequest("channel_id", 0);
 
         return $tempContent;
     }
