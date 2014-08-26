@@ -137,10 +137,11 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         if($userGroupId > 0){
             $userGroupManageData = new UserGroupManageData();
             $result = $userGroupManageData->ModifyState($userGroupId,$state);
+            $operateContent = 'Modify UserGroupState,POST FORM:'.implode('|',$_GET).';\r\nResult::'.$result;
+            self::CreateManageUserLog($operateContent);
             if($result > 0){
                 return Control::GetRequest("jsonpcallback","") .'({"result":'.$result.'})';
             }
-            $operateContent = 'Modify UserGroupState,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
         }else{
             return null;
         }

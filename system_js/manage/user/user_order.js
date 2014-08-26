@@ -1,4 +1,4 @@
-function FormatState(state,idvalue){
+function FormatOrderState(state,idvalue){
     var result;
     switch(state){
         case "0":
@@ -15,6 +15,19 @@ function FormatState(state,idvalue){
             break;
         case "40":
             result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
+            break;
+    }
+    return result;
+}
+
+function FormatOrderPayState(state,idvalue){
+    var result;
+    switch(state){
+        case "0":
+            result = '<span class="span_state" id="State_'+idvalue+'">未确认</span>';
+            break;
+        case "10":
+            result = '<span class="span_state" id="State_'+idvalue+'">已确认</span>';
             break;
     }
     return result;
@@ -46,6 +59,37 @@ function submitUserProductForm(){
     }
 }
 
+function confirmPay(idvalue){
+    var confirm_way = $("#confirm_way_input_"+idvalue).val();
+    var confirm_price = $("#confirm_price_input_"+idvalue).val();
+    $.ajax({
+        url:"/default.php?secu=manage&mod=user_order&m=confirm_pay",
+        data:{user_order_pay_id:idvalue,confirm_way:confirm_way,confirm_price:confirm_price},
+        dataType:"jsonp",
+        jsonp:"jsonpcallback",
+        success:function(data){
+            if(data["result"] > 0){
+                $("#confirm_pay_way_"+idvalue).html(data["confirm_way"]);
+                $("#confirm_pay_price_"+idvalue).html(data["confirm_price"]);
+                $("#confirm_pay_date_"+idvalue).html(data["confirm_date"]);
+                $("#manage_username_"+idvalue).html(data["manage_username"]);
+                $("#span_order_pay_state_"+idvalue).html("已确认");
+                $("#span_order_pay_"+idvalue+"_button").html('' +
+                    '<div class="btn2 modify_pay" idvalue="'+idvalue+'" style="width:45px;height:25px" onclick="ModifyPay('+idvalue+')">修改</div>'
+                );
+            }else{
+                alert("修改失败");
+            }
+        }
+    });
+}
+
+function ModifyPay(idvalue){
+    $("#confirm_pay_way_"+idvalue).html('<input id="confirm_way_input_'+idvalue+'" type="text" class="input_box" value="" style="width:70px"/>');
+    $("#confirm_pay_price_"+idvalue).html('<input id="confirm_price_input_'+idvalue+'" type="text" class="input_price" value="" style="width:70px"/>');
+    $("#span_order_pay_"+idvalue+"_button").html('<div class="btn2 confirm_pay" idvalue="'+idvalue+'" style="width:45px;height:25px" onclick="confirmPay('+idvalue+');">确认</div>');
+}
+
 $(document).ready(function(){
     $(".edit").click(function(){
         var userOrderId = $(this).attr("idvalue");
@@ -56,7 +100,22 @@ $(document).ready(function(){
     $(".span_state").each(function(){
         var state = $(this).html();
         var idvalue = $(this).attr("idvalue");
-        $(this).html(FormatState(state,idvalue));
+        $(this).html(FormatOrderState(state,idvalue));
+    });
+
+    $(".span_order_pay_state").each(function(){
+        var state = $(this).html();
+        var idvalue = $(this).attr("idvalue");
+        $(this).html(FormatOrderPayState(state,idvalue));
+        if(state == 0){
+            $("#confirm_pay_way_"+idvalue).html('<input id="confirm_way_input_'+idvalue+'" type="text" class="input_box" value="" style="width:70px"/>');
+            $("#confirm_pay_price_"+idvalue).html('<input id="confirm_price_input_'+idvalue+'" type="text" class="input_price" value="" style="width:70px"/>');
+            $("#confirm_pay_date_"+idvalue).html('');
+            $("#span_order_pay_"+idvalue+"_button").html('<div class="btn2 confirm_pay" idvalue="'+idvalue+'" style="width:45px;height:25px" onclick="confirmPay('+idvalue+');">确认</div>');
+        }else{
+            $("#span_order_pay_"+idvalue+"_button").html('<div class="btn2 modify_pay" idvalue="'+idvalue+'" style="width:45px;height:25px" onclick="ModifyPay('+idvalue+');">修改</div>');
+        }
+
     });
 
     var btnOrderProductEdit = $(".btn_order_product_edit");
@@ -93,8 +152,8 @@ $(document).ready(function(){
         $("#dialog_user_order_pay_box").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:450,
-            width:800,
+            height:650,
+            width:1250,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'订单中的支付信息',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}

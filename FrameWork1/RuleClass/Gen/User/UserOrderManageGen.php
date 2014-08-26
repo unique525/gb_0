@@ -19,11 +19,14 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             case "list":
                 $result = self::GenList();
                 break;
-            case "modify_state":
-                $result = self::AsyncModifyState();
+            case "confirm_pay":
+                $result = self::AsyncConfirmPay();
                 break;
             case "user_order_pay_list":
                 $result = self::GenUserOrderPayList();
+                break;
+            case "delete_user_order_product":
+                $result = self::GenDeleteUserOrderProduct();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -181,26 +184,75 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         }
     }
 
-    private function AsyncModifyState(){
-        $siteId = Control::GetRequest("site_id",0);
-        $userOrderId = Control::GetRequest("user_order_id",0);
-        if($siteId > 0 && $userOrderId >0){
-            $state = Control::GetRequest("state",0);
-            return Control::GetRequest("jsonpcallback","").'';
+    public function AsyncConfirmPay(){
+        $userOrderPayId = Control::GetRequest("user_order_pay_id",0);
+        if($userOrderPayId > 0){
+            $confirmWay = Control::GetRequest("confirm_way","");
+            $confirmPrice = Control::GetRequest("confirm_price",0);
+            $confirmDate = date("Y-m-d");
+            $manageUserId = Control::GetManageUserId();
+            $manageUserName = Control::GetManageUserName();
+
+            if($confirmWay == "" || $manageUserId == 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":-4})';
+            }
+
+            $userOrderPayManageData = new UserOrderPayManageData();
+            $result = $userOrderPayManageData->ModifyConfirmPay($userOrderPayId,$confirmWay,$confirmPrice,$confirmDate,$manageUserId);
+
+            $operateContent = 'Modify UserOrderPay,Get FORM:'.implode('|',$_GET).';\r\nResult::'.$result;
+            self::CreateManageUserLog($operateContent);
+
+            if($result > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'","confirm_way":"'.$confirmWay.'","confirm_price":"'
+                    .$confirmPrice.'","confirm_date":"'.$confirmDate.'","manage_username":"'.$manageUserName.'"})';
+            }else{
+                return Control::GetRequest("jsonpcallback","").'({"result":-2})';
+            }
         }else{
-            return Control::GetRequest("jsonpcallback","").'';
+            return Control::GetRequest("jsonpcallback","").'({"result":-3})';
         }
     }
+
+//    private function AsyncModifyState(){
+//        $siteId = Control::GetRequest("site_id",0);
+//        $userOrderId = Control::GetRequest("user_order_id",0);
+//        if($siteId > 0 && $userOrderId >0){
+//            $state = Control::GetRequest("state",0);
+//            return Control::GetRequest("jsonpcallback","").'';
+//        }else{
+//            return Control::GetRequest("jsonpcallback","").'';
+//        }
+//    }
 
     private function GenUserOrderPayList(){
         $userOrderId = intval(Control::GetRequest("user_order_id",0));
         if($userOrderId > 0){
             $templateContent = Template::Load("user/user_order_pay_list.html","common");
+            parent::ReplaceFirst($templateContent);
+
+            $userOrderPayManageData = new UserOrderPayManageData();
+
+            $arrUserOrderPayList = $userOrderPayManageData->GetList($userOrderId);
+            $tagId = "user_order_pay_list";
+            if(!empty($arrUserOrderPayList)){
+                Template::ReplaceList($templateContent,$arrUserOrderPayList,$tagId);
+            }else{
+                Template::RemoveCustomTag($templateContent,$tagId);
+            }
 
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return null;
+        }
+    }
+
+    private function GenDeleteUserOrderProduct(){
+        $userOrderProductId = Control::GetRequest("user_order_pay_id",0);
+
+        if($userOrderProductId > 0){
+
         }
     }
 }
