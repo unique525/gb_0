@@ -2,122 +2,112 @@
 /**
  * 后台管理 产品参数类型 数据类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_Product
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Vote
  * @author hy
  */
-class ProductParamTypeManageData extends BaseManageData {
+class ProductParamTypeManageData extends BaseManageData
+{
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ProductParamType){
+        return parent::GetFields(self::TableName_ProductParamType);
+    }
+
     /**
      * 新增产品参数类型
-     * @param array $httpPostData $_POST数组
-     * @param int $titlePicUploadFileId 题图附件id
-     * @return int 新增的产品参数类型id
+     * @param array $httpPostData $_post数组
+     * @return int 返回产品参数类型Id
      */
-    public function Create($httpPostData,$titlePicUploadFileId = 0){
-        $result = -1;
+    public function Create($httpPostData) {
         $dataProperty = new DataProperty();
-        if (!empty($httpPostData)) {
-            $sql = parent::GetInsertSql(
-                $httpPostData,
-                self::TableName_ProductParamType,
-                $dataProperty,
-                "TitlePicUploadFileId",
-                $titlePicUploadFileId
-            );
-            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
-        }
+        $sql = parent::GetInsertSql($httpPostData, self::TableName_ProductParamType, $dataProperty);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 修改产品参数类型
-     * @param array $httpPostData $_POST数组
-     * @param int $productParamTypeId 产品参数类型id
-     * @param int $titlePicUploadFileId 题图所在附件id
-     * @return int 返回影响的行数
+     * @param array $httpPostData $_post数组
+     * @param int $productParamTypeId  产品参数类型Id
+     * @return int 执行结果
      */
-    public function Modify($httpPostData, $productParamTypeId,$titlePicUploadFileId = 0)
-    {
-        $result=-1;
+    public function Modify($httpPostData,$productParamTypeId) {
         $dataProperty = new DataProperty();
-        $addFieldName = "";
-        $addFieldValue = "";
-        if (intval($titlePicUploadFileId)>0) {
-            $addFieldName = "TitlePicUploadFileId";
-            $addFieldValue = $titlePicUploadFileId;
-        }
-        if (!empty($httpPostData)) {
-            $sql = parent::GetUpdateSql(
-                $httpPostData,
-                self::TableName_ProductParamType,
-                self::TableId_ProductParamType,
-                $productParamTypeId,
-                $dataProperty,
-                $addFieldName,
-                $addFieldValue
-            );
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-        }
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_ProductParamType, self::TableId_ProductParamType, $productParamTypeId, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
-
     /**
-     * 修改产品参数类型状态
+     * 异步修改状态
      * @param string $productParamTypeId 产品参数类型Id
      * @param string $state 状态
      * @return int 执行结果
      */
-    public function ModifyState($productParamTypeId, $state)
-    {
+    public function ModifyState($productParamTypeId,$state) {
         $result = -1;
-        if ($productParamTypeId > 0) {
-            $sql = "update " . self::TableName_ProductParamType
-                . " set state=:state"
-                . " where " . self::TableId_ProductParamType . "=:".self::TableId_ProductParamType;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
-            $dataProperty->AddField("state", $state);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        if ($productParamTypeId < 0) {
+            return $result;
         }
+        $sql = "UPDATE " . self::TableName_ProductParamType . " SET State=:State WHERE ProductParamTypeId=:ProductParamTypeId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 移动产品参数类型
-     * @param int $productParamTypeId 产品参数类型id
-     * @param int $parentId 产品参数类型父id
-     * @return int 返回影响的行数
+     * 获取一个产品参数类型的数据
+     * @param int $productParamTypeId  产品参数类型Id
+     * @return array 产品参数类型一维数组
      */
-    public function Drag($productParamTypeId, $parentId)
-    {
-        $result = -1;
-        if ($productParamTypeId > 0 && $parentId >= -1) {
-            $sql = "update " . self::TableName_ProductParamType
-                . " set ParentId=:ParentId"
-                . " where " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
-            $dataProperty->AddField("ParentId", $parentId);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-        }
+    public function GetOne($productParamTypeId) {
+        $sql = "
+        SELECT ProductParamTypeId,productParamTypeClassId,ParamTypeName,Sort,State,CreateDate
+        FROM
+        " . self::TableName_ProductParamType .
+            " WHERE ProductParamTypeId=:ProductParamTypeId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 一行产品参数记录
-     * @param int $productParamTypeId 产品参数类型Id
-     * @return array|null 取得对应数组
+     * 获取产品参数类型分页列表
+     * @param int $pageBegin   起始页码
+     * @param int $pageSize    每页记录数
+     * @param int $allCount    记录总数
+     * @param int $productParamTypeId  产品参数类型Id
+     * @param string $searchKey   查询字符
+     * @return array  产品参数类型列表数组
      */
-    public function GetOne($productParamTypeId)
-    {
-        $result = null;
+    public function GetListForPager($productParamTypeId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
+        $dataProperty = new DataProperty();
+        $searchSql = "WHERE";
         if ($productParamTypeId > 0) {
-            $sql = "select * from " . self::TableName_ProductParamType
-                . " where " . self::TableId_ProductParamType . "=:" . self::TableId_ProductParamType;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamType, $productParamTypeId);
-            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+            $searchSql .= " productParamTypeClassId=:productParamTypeClassId AND";
+            $dataProperty->AddField("productParamTypeClassId", $productParamTypeId);
         }
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            $searchSql .= " (VoteTitle like :searchKey1) AND";
+            $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
+        }
+        if (strlen($searchSql) > 5)
+            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
+        else
+            $searchSql = "";
+        $sql = "
+        SELECT ProductParamTypeId,productParamTypeClassId,ProductParamTypeName,Sort,State,CreateDate
+        FROM " . self::TableName_ProductParamType . " " . $searchSql . "
+        ORDER BY Sort DESC,ProductParamTypeId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamType . " " . $searchSql;
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -151,6 +141,7 @@ class ProductParamTypeManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
 }
+
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 投票调查数据类
+ * 后台管理 产品参数类型类别 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_ProductParamTypeClass
  * @author hy
@@ -121,6 +121,37 @@ class ProductParamTypeClassManageData extends BaseManageData
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeClass . " ". $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 获取产品参数类型类别记录
+     * @param int $channelId 频道Id
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetList($channelId, $order = "", $topCount = -1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($channelId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ParamTypeName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
+                    break;
+            }
+            $sql = "SELECT *"
+                . " FROM " . self::TableName_ProductParamTypeClass
+                . " WHERE ChannelId=:ChannelId AND State<100"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
         return $result;
     }
 
