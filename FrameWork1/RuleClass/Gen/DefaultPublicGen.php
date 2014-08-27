@@ -21,16 +21,20 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $result = $manageLoginGen->GenPublic();
                 break;
             case "common":
-                $commonFrontGen = new CommonPublicGen();
-                $result = $commonFrontGen->GenPublic();
+                $commonPublicGen = new CommonPublicGen();
+                $result = $commonPublicGen->GenPublic();
                 break;
             case "forum":
-                $forumGen = new ForumPublicGen();
-                $result = $forumGen->GenPublic();
+                $forumPublicGen = new ForumPublicGen();
+                $result = $forumPublicGen->GenPublic();
                 break;
-            case "forumtopic":
-                $forumTopicGen = new ForumTopicPublicGen();
-                $result = $forumTopicGen->GenPublic();
+            case "forum_topic":
+                $forumTopicPublicGen = new ForumTopicPublicGen();
+                $result = $forumTopicPublicGen->GenPublic();
+                break;
+            case "upload_file":
+                $uploadFilePublicGen = new UploadFilePublicGen();
+                $result = $uploadFilePublicGen->GenPublic();
                 break;
         }
         return $result;

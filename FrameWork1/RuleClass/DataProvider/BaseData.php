@@ -447,14 +447,13 @@ class BaseData
         $nowMonth = date('m');
 
         $tableName = $sourceTableName . "_" . $nowYear . $nowMonth;
-        $dbOperator = DBOperator::getInstance();
         $sqlHasCount = "SELECT count(*) FROM information_schema.TABLES WHERE TABLE_NAME='$tableName'";
 
-        $hasCount = $dbOperator->ReturnInt($sqlHasCount, null);
+        $hasCount = $this->dbOperator->GetInt($sqlHasCount, null);
 
         if ($hasCount <= 0) {
             $sql = "CREATE TABLE if not exists $tableName LIKE $sourceTableName;";
-            $dbOperator->Execute($sql, null);
+            $this->dbOperator->Execute($sql, null);
         }
 
         return $tableName;

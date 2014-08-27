@@ -74,6 +74,38 @@ class UploadFile {
     }
 
     /**
+     * 取得属性值
+     * @param string $name 属性字段名称
+     * @return mixed 属性值
+     */
+    public function __get($name)
+    {
+        if (method_exists($this, ($method = 'get'.$name)))
+        {
+            return $this->$method();
+        }
+        else return NULL;
+    }
+
+    /**
+     * 设置属性值
+     * @param string $name 属性字段名称
+     * @param string $value 属性值
+     */
+    public function __set($name, $value)
+    {
+        if (method_exists($this, ($method = 'set'.$name)))
+        {
+            //format value
+
+            $value = str_ireplace('"', '', $value);
+            $value = str_ireplace('\\', '', $value);
+
+            $this->$method($value);
+        }
+    }
+
+    /**
      * @param int $UploadFileId
      */
     public function setUploadFileId($UploadFileId)
@@ -468,32 +500,32 @@ class UploadFile {
      */
     public function FormatToJson(){
 
-        $returnJson = "{";
-        $returnJson .= "error: '" . $this->ErrorMessage . "',";
-        $returnJson .= "result_html: '" . $this->ResultHtml . "',";
-        $returnJson .= "upload_file_id: '" . $this->UploadFileId . "',";
-        $returnJson .= "upload_file_url: '" . $this->UploadFilePath . "'";
-        $returnJson .= "}";
+        $returnJson = '{';
+        $returnJson .= 'error:"' . $this->ErrorMessage . '",';
+        $returnJson .= 'result_html:"' . $this->ResultHtml . '",';
+        $returnJson .= 'upload_file_id:"' . $this->UploadFileId . '",';
+        $returnJson .= 'upload_file_url:"' . $this->UploadFilePath . '"';
+        $returnJson .= '}';
 
         return $returnJson;
     }
 
     /**
-     * 将数组中的内容填
-     * @param $arr
-     * @param $uploadFile
+     * 返回对象的Json格式字符串
+     * @return string 对象的Json格式字符串
      */
-    public function FillUploadFile($arr, $uploadFile)
-    {
-        if (!empty($arr)) {
+    public function GetJson(){
+        $returnJson = '{';
+        if($this->UploadFileId>0){
+            $returnJson .= '"upload_file_id":"' . $this->UploadFileId . '"';
 
-            if (!empty($arr["UploadFileId"])) {
-                $uploadFile->UploadFileId = intval($arr["UploadFileId"]);
-            }
-            if (!empty($arr["UploadFilePath"])) {
-                $uploadFile->UploadFilePath = strval($arr["UploadFilePath"]);
+            if(!empty($this->UploadFilePath)){
+                $returnJson .= ',"upload_file_path":"'. $this->UploadFilePath . '"';
             }
 
         }
+        $returnJson .= '}';
+        return $returnJson;
     }
+
 } 

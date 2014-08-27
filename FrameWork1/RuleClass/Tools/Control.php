@@ -95,17 +95,19 @@ class Control {
         $paramName = strtolower($paramName);
         if (isset($_GET[$paramName])) {
             if (is_float($_GET[$paramName])) {
-                return floatval($_GET[$paramName]);
+                $result = floatval($_GET[$paramName]);
             } else if (is_int($_GET[$paramName])) {
-                return intval($_GET[$paramName]);
+                $result = intval($_GET[$paramName]);
             } else if (is_array($_GET[$paramName])) {
-                return $_GET[$paramName];
+                $result = $_GET[$paramName];
             } else {
-                return stripslashes($_GET[$paramName]);
+                $result = stripslashes($_GET[$paramName]);
             }
         } else {
-            return $defaultValue;
+            $result = $defaultValue;
         }
+        $result = Format::RemoveXSS($result);
+        return $result;
     }
 
     /**
