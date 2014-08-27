@@ -63,7 +63,7 @@ function confirmPay(idvalue){
     var confirm_way = $("#confirm_way_input_"+idvalue).val();
     var confirm_price = $("#confirm_price_input_"+idvalue).val();
     $.ajax({
-        url:"/default.php?secu=manage&mod=user_order_pay&m=confirm",
+        url:"/default.php?secu=manage&mod=user_order_pay&m=async_confirm",
         data:{user_order_pay_id:idvalue,confirm_way:confirm_way,confirm_price:confirm_price},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
@@ -144,6 +144,23 @@ $(document).ready(function(){
     });
 
     $("#btn_user_order_pay").click(function(){
+        var userOrderId = $(this).attr("idvalue");
+        var pageIndex = Request["p"]==null?1:Request["p"];
+        var url='/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=' + userOrderId + '&site_id='
+            +parent.G_NowSiteId+'&p=' + pageIndex;
+        $("#user_order_pay_dialog_frame").attr("src",url);
+        $("#dialog_user_order_pay_box").dialog({
+            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:650,
+            width:1250,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'订单中的支付信息',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+    });
+
+    $(".btn_user_order_list_pay_info").click(function(){
         var userOrderId = $(this).attr("idvalue");
         var pageIndex = Request["p"]==null?1:Request["p"];
         var url='/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=' + userOrderId + '&site_id='

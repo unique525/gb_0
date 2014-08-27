@@ -13,7 +13,7 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
             case "list":
                 $result = self::GenList();
                 break;
-            case "confirm":
+            case "async_confirm":
                 $result = self::AsyncConfirm();
                 break;
         }

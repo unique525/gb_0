@@ -18,6 +18,11 @@
     </style>
 </head>
 <body>
+    <div id="dialog_user_order_pay_box" title="提示信息" style="display: none;">
+        <div id="user_order_pay__table" style="font-size: 14px;">
+            <iframe id="user_order_pay_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
+        </div>
+    </div>
     <div class="div_list">
         <div class="search" style="width:99%;height:30px"></div>
         <div class="advance_search" style="width:99%;height:150px;border:1px #CCC solid;display: none">
@@ -31,7 +36,9 @@
                 <td style="width:100px;text-align: center">会员名</td>
                 <td style="width:80px;text-align: center">订单总价</td>
                 <td style="width:80px;text-align: center">运费</td>
+                <td style="width:150px;text-align: center">创建日期</td>
                 <td  style="width:80px;text-align: center">状态</td>
+                <td  style="width:150px;text-align: center">相关信息</td>
             </tr>
         </table>
         <ul id="type_list">
@@ -57,8 +64,14 @@
                             <td class="spe_line2" style="width:80px;text-align: center">
                                 <span>{f_SendPrice}</span>
                             </td>
+                            <td class="spe_line2" style="width:150px;text-align: center">
+                                <span>{f_CreateDate}</span>
+                            </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
                                 <span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span>
+                            </td>
+                            <td class="spe_line2" style="width:150px;text-align: center">
+                                <div class="btn2 btn_user_order_list_pay_info" idvalue="{f_UserOrderId}" style="width:80px;">支付信息</div>
                             </td>
                         </tr>
                     </table>
