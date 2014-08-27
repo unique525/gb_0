@@ -6,6 +6,10 @@
  * @Author yin
  */
 class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
+    /**
+     * 引导方法
+     * @return mixed|null|string 执行结果
+     */
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m", "");
@@ -21,6 +25,10 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         return $result;
     }
 
+    /**
+     * 修改
+     * @return mixed|string
+     */
     private function GenModify(){
         $templateContent = Template::Load("user/user_order_deal.html","common");
         $userOrderId = intval(Control::GetRequest("user_order_id",0));
@@ -97,6 +105,10 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         return $templateContent;
     }
 
+    /**
+     * 获取会员订单列表
+     * @return mixed|null|string
+     */
     private function GenList(){
         $siteId = Control::GetRequest("site_id",0);
         if($siteId > 0){

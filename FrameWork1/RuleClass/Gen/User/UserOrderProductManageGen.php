@@ -6,6 +6,10 @@
  * @Author yin
  */
 class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
+    /**
+     * 引导方法
+     * @return mixed|string 执行结果
+     */
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m", "");
@@ -22,6 +26,10 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
     }
 
 
+    /**
+     * 会员订单中的产品修改
+     * @return mixed|string
+     */
     private function GenModify(){
         $templateContent = Template::Load("user/user_order_product_deal.html","common");
         $userOrderProductId = intval(Control::GetRequest("user_order_product_id",0));
@@ -56,13 +64,28 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
         return $templateContent;
     }
 
+    /**
+     * AJAX 修改订单中产品的状态 0:正常，40:删除
+     * @return mixed|string
+     */
     private function AsyncModifyState(){
-        $userOrderProductId = Control::GetRequest("user_order_product_id",0);
+        $userOrderProductId = intval(Control::GetRequest("user_order_product_id",0));
+        $state = Control::GetRequest("state",0);
+        $userOrderId = Control::GetRequest("user_order_id",0);
 
-        if($userOrderProductId > 0){
+        if($userOrderProductId > 0 && $state >= 0 && $userOrderId > 0){
             $userOrderProductManageData = new UserOrderProductManageData();
-            $userOrderProductManageData->ModifyState($userOrderProductId);
-            return Control::GetRequest("jsonpcallback","");
+            $userOrderManageData = new UserOrderManageData();
+            $result = $userOrderProductManageData->ModifyState($userOrderId,$userOrderProductId,$state);
+            $allPrice = floatval($userOrderManageData->GetAllPrice($userOrderId));
+
+            $operateContent = 'Modify UserOrderProduct,GET FORM:'.implode('|',$_GET).';\r\nResult::'.$result;
+            self::CreateManageUserLog($operateContent);
+            if($result > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'","all_price":"'.$allPrice.'"})';
+            }else{
+                return Control::GetRequest("jsonpcallback","").'({"result":-1})';
+            }
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":-1})';
         }

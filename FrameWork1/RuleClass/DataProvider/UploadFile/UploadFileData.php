@@ -952,7 +952,7 @@ class UploadFileData extends BaseData
      * @param int $uploadFileId 上传文件id
      * @return UploadFile 返回上传文件对象
      */
-    public function GetOne($uploadFileId)
+    public function Fill($uploadFileId)
     {
         $uploadFile = new UploadFile();
         if ($uploadFileId > 0) {
@@ -960,13 +960,33 @@ class UploadFileData extends BaseData
             $sql = "SELECT * FROM " . self::TableName_UploadFile . "
                     WHERE " . self::TableId_UploadFile . "=:" . self::TableId_UploadFile . ";";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableName_UploadFile, $uploadFileId);
+            $dataProperty->AddField(self::TableId_UploadFile, $uploadFileId);
+
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
 
-            $uploadFile->FillUploadFile($result, $uploadFile);
+            self::FillUploadFile($result, $uploadFile);
         }
 
         return $uploadFile;
+    }
+
+    /**
+     * 将数组中的内容填充到对象中
+     * @param $arr
+     * @param $uploadFile
+     */
+    public function FillUploadFile($arr, &$uploadFile)
+    {
+        if (!empty($arr)) {
+
+            if (!empty($arr["UploadFileId"])) {
+                $uploadFile->UploadFileId = intval($arr["UploadFileId"]);
+            }
+            if (!empty($arr["UploadFilePath"])) {
+                $uploadFile->UploadFilePath = strval($arr["UploadFilePath"]);
+            }
+
+        }
     }
 
 } 

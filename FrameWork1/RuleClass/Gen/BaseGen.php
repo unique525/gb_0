@@ -845,7 +845,7 @@ class BaseGen
 
         $uploadFileData = new UploadFileData();
 
-        $uploadFile = $uploadFileData->GetOne($uploadFileId);
+        $uploadFile = $uploadFileData->Fill($uploadFileId);
 
         if(strlen($uploadFile->UploadFilePath)){
             FileObject::DeleteFile($uploadFile->UploadFilePath);

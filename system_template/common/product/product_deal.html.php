@@ -165,7 +165,7 @@
                 <td class="spe_line">
                     <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
                            style="width:400px;background:#ffffff;margin-top:3px;"/>
-                    <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
+                    <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
                 </td>
             </tr>
             <tr>

@@ -16,61 +16,6 @@
                 showButtonPanel: true
             });
 
-            $("#preview_title_pic1").click(function () {
-                var imgTitlePic1 = "{TitlePic1}";
-                if (imgTitlePic1 !== '') {
-                    var imageOfTitlePic1 = new Image();
-                    imageOfTitlePic1.src = imgTitlePic1;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic1.width + 30,
-                        height: imageOfTitlePic1.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic1 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图1");
-                }
-            });
-
-
-            $("#preview_title_pic2").click(function () {
-                var imgTitlePic2 = "{TitlePic2}";
-                if (imgTitlePic2 !== '') {
-                    var imageOfTitlePic2 = new Image();
-                    imageOfTitlePic2.src = imgTitlePic2;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic2.width + 30,
-                        height: imageOfTitlePic2.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic2 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图2");
-                }
-            });
-
-            $("#preview_title_pic3").click(function () {
-                var imgTitlePic3 = "{TitlePic2}";
-                if (imgTitlePic3 !== '') {
-                    var imageOfTitlePic3 = new Image();
-                    imageOfTitlePic3.src = imgTitlePic3;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic3.width + 30,
-                        height: imageOfTitlePic3.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic3 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图2");
-                }
-            });
 
             var selChannelType = $("#f_ChannelType");
             selChannelType.change(function () {
@@ -282,8 +227,7 @@
             <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">频道图片1：</label></td>
             <td class="spe_line">
                 <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                      style="cursor:pointer">[预览]</span>
+                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
 
             </td>
         </tr>
@@ -291,15 +235,14 @@
             <td class="spe_line" height="30" align="right">频道图片2：</td>
             <td class="spe_line">
                 <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;"/>
-                <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
+                <span id="preview_title_pic2" class="show_title_pic" idvalue="{TitlePic2UploadFileId}" style="cursor:pointer">[预览]</span>
             </td>
         </tr>
         <tr>
             <td class="spe_line" height="30" align="right">频道图片3：</td>
             <td class="spe_line">
                 <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
-                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
-                                                                                          style="cursor:pointer">[预览]</span>
+                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3" class="show_title_pic" idvalue="{TitlePic3UploadFileId}" style="cursor:pointer">[预览]</span>
 
             </td>
         </tr>
