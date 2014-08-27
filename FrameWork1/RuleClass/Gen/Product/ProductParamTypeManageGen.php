@@ -57,11 +57,11 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen 
 
                 if ($productParamTypeId > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 1));
+                    Control::ShowMessage(Language::Load('product', 1));
                     $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 2));
+                    Control::ShowMessage(Language::Load('product', 2));
                 }
                 return "";
             }
@@ -120,11 +120,11 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen 
 
                 if ($result > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('vote', 3));
+                    Control::ShowMessage(Language::Load('product', 3));
                     $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('vote', 4));
+                    Control::ShowMessage(Language::Load('product', 4));
                 }
             }
             $arrList = $productParamTypeManageData->GetOne($productParamTypeId);
@@ -169,7 +169,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen 
                 $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{pager_button}", Language::Load("vote", 101), $templateContent);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("product", 101), $templateContent);
             }
         }
         parent::ReplaceEnd($templateContent);

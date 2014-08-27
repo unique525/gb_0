@@ -1,5 +1,5 @@
 /**
- * Vote
+ * ProductParamType
  */
 $(function() {
     //$(document).tooltip()会使title属性失效;
@@ -7,13 +7,13 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var voteId = Request["product_param_type_class_id"];
+        var productParamTypeClassId = Request["product_param_type_class_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_param_type&m=create&product_param_type_class_id='+voteId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_param_type&m=create&product_param_type_class_id='+productParamTypeClassId+'&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -30,16 +30,16 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
-        var voteItemId = $(this).attr('idvalue');
+        var productParamTypeId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_param_type&m=modify&product_param_type_id=' + voteItemId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_param_type&m=modify&product_param_type_id=' + productParamTypeId + '&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
-            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
             height:250,
             width:800,
@@ -49,13 +49,17 @@ $(function() {
         });
     });
 
-    //产品题目参数类型管理
-    $(".btn_open_vote_select_item_list").click(function(event) {
+    //产品参数类型管理
+    var btnOptionList=$(".btn_open_product_param_type_option_list");
+    btnOptionList.each(function(){
+        $(this).html(FormatParamTypeOption($(this).attr("title")));
+    });
+    btnOptionList.click(function(event) {
         event.preventDefault();
-        var voteItemId=$(this).attr('idvalue');
-        var voteItemTitle=$(this).attr('title');
-        parent.G_TabUrl = '/default.php?secu=manage&mod=vote_select_item&m=list&product_param_type_id=' + voteItemId;
-        parent.G_TabTitle = voteItemTitle + '-编辑题目';
+        var productParamTypeId=$(this).attr('idvalue');
+        var ParamTypeName=$(this).attr('idname');
+        parent.G_TabUrl = '/default.php?secu=manage&mod=product_param_type_option&m=list&product_param_type_id=' + productParamTypeId;
+        parent.G_TabTitle = ParamTypeName + '-编辑参数选项';
         parent.addTab();
     });
 
@@ -70,6 +74,10 @@ $(function() {
 
     $(".span_state").each(function(){
         $(this).html(FormatVoteItemState($(this).attr("title")));
+    });
+
+    $(".span_param_value_type").each(function(){
+        $(this).html(FormatParamValueType($(this).attr("title")));
     });
 
     $(".div_start").click(function(){
@@ -100,6 +108,42 @@ function FormatVoteItemState(state){
         default :
             return "未知";
         break;
+    }
+}
+
+/**
+ * 格式化产品参数类型名称
+ * @return {string}
+ */
+function FormatParamValueType(paramValueType){
+    switch (paramValueType){
+        case "0":
+            return "文本框";
+            break;
+        case "6":
+            return "下拉选择";
+            break;
+        default :
+            return "文本框";
+            break;
+    }
+}
+
+/**
+ * 根据产品参数类型选择是否生成参数类型选项链接
+ * @return {string}
+ */
+function FormatParamTypeOption(paramValueType){
+    switch (paramValueType){
+        case "0":
+            return "";
+            break;
+        case "6":
+            return "编辑参数选项";
+            break;
+        default :
+            return "";
+            break;
     }
 }
 

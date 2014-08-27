@@ -38,7 +38,7 @@
 <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_ProductParamTypeClassId}" /></td>
 <td class="spe_line2" style="text-align: center;">{f_ProductParamTypeClassName}</td>
 <td class="spe_line2" style="text-align: center;">{f_ProductParamTypeClassId}</td>
-<td class="spe_line2" style="text-align: center;"><span class="btn_open_product_param_type_list" style="cursor:pointer;"  idvalue="{f_ProductParamTypeClassId}" title="{f_ProductParamTypeClassName}" >编辑题目</span></td>
+<td class="spe_line2" style="text-align: center;"><span class="btn_open_product_param_type_list" style="cursor:pointer;"  idvalue="{f_ProductParamTypeClassId}" title="{f_ProductParamTypeClassName}" >编辑参数</span></td>
 <td class="spe_line2" style="text-align:center;">{f_CreateDate}</td>
 <td class="spe_line2" style="text-align:center;"><span class="span_state" title="{f_State}" id="span_state_{f_ProductParamTypeClassId}">{f_State}</span></td>
 <td class="spe_line2" style="text-align: center;"><img alt="" class="div_start" idvalue="{f_ProductParamTypeClassId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_ProductParamTypeClassId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>

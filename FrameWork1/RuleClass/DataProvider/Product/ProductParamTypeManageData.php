@@ -67,7 +67,7 @@ class ProductParamTypeManageData extends BaseManageData
      */
     public function GetOne($productParamTypeId) {
         $sql = "
-        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,Sort,State,CreateDate
+        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,ParamValueType,Sort,State,CreateDate
         FROM
         " . self::TableName_ProductParamType .
             " WHERE ProductParamTypeId=:ProductParamTypeId";
@@ -102,7 +102,7 @@ class ProductParamTypeManageData extends BaseManageData
         else
             $searchSql = "";
         $sql = "
-        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,Sort,State,CreateDate
+        SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,ParamValueType,Sort,State,CreateDate
         FROM " . self::TableName_ProductParamType . " " . $searchSql . "
         ORDER BY Sort DESC,ProductParamTypeId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

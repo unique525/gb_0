@@ -38,8 +38,8 @@
                     <td class="spe_line2" style="text-align: center;"><img class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="{f_ProductParamTypeId}" /></td>
                     <td class="spe_line2" style="text-align: center;">{f_ParamTypeName}</td>
                     <td class="spe_line2" style="text-align: center;">{f_ProductParamTypeId}</td>
-                    <td class="spe_line2" style="text-align: center;"><span class="btn_open_product_param_type_option_list" style="cursor:pointer;"  idvalue="{f_ProductParamTypeId}" title="{f_ParamTypeName}" >编辑参数选项</span></td>
-                    <td class="spe_line2" style="text-align: center;">{f_ParamValueType}</td>
+                    <td class="spe_line2" style="text-align: center;"><span class="btn_open_product_param_type_option_list" style="cursor:pointer;" idvalue="{f_ProductParamTypeId}" idname="{f_ParamTypeName}" title="{f_ParamValueType}" lang="" ></span></td>
+                    <td class="spe_line2" style="text-align: center;"><span class="span_param_value_type" title="{f_ParamValueType}" id="span_param_value_type_{f_ParamValueType}">{f_ParamValueType}</span></td>
                     <td class="spe_line2" style="text-align: center;"><span class="span_state" title="{f_State}" id="span_state_{f_ProductParamTypeId}">{f_State}</span></td>
                     <td class="spe_line2" style="text-align: center;" ><img alt="" class="div_start" idvalue="{f_ProductParamTypeId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_ProductParamTypeId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>
                 </tr>
