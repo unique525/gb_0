@@ -113,13 +113,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $fileElementName = "file_title_pic_1";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1; //
                         $tableId = $documentNewsId;
-                        $uploadResult1 = new UploadResult();
+                        $uploadFile1 = new UploadFile();
                         $uploadFileId1 = 0;
                         $titlePic1Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult1,
+                            $uploadFile1,
                             $uploadFileId1
                         );
 
@@ -133,12 +133,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $fileElementName = "file_title_pic_2";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
                         $uploadFileId2 = 0;
-                        $uploadResult2 = new UploadResult();
+                        $uploadFile2 = new UploadFile();
                         $titlePic2Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult2,
+                            $uploadFile2,
                             $uploadFileId2
                         );
                         if (intval($titlePic2Result) <=0){
@@ -152,13 +152,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
                         $uploadFileId3 = 0;
 
-                        $uploadResult3 = new UploadResult();
+                        $uploadFile3 = new UploadFile();
 
                         $titlePic3Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult3,
+                            $uploadFile3,
                             $uploadFileId3)
                         ;
                         if (intval($titlePic3Result) <=0){
@@ -166,7 +166,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         }else{
 
                         }
-
 
                         if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
                             $documentNewsManageData->ModifyTitlePic($documentNewsId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
@@ -222,9 +221,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
-                            Control::CloseTab();
+                            $resultJavaScript .= Control::GetCloseTab();
                         }else{
-                            Control::GoUrl($_SERVER["PHP_SELF"]);
+                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                         }
                     } else {
                         $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 2));
@@ -322,13 +321,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
             ////////////////////////////////////////////////////
-            $replace_arr = array(
-                "{ChannelId}" => $channelId,
-                "{DocumentNewsId}" => $documentNewsId,
-                "{SiteId}" => $siteId,
-                "{PageIndex}" => $pageIndex
-            );
-            $tempContent = strtr($tempContent, $replace_arr);
+
             $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
             $tempContent = str_ireplace("{DocumentNewsId}", $documentNewsId, $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
@@ -371,108 +364,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             if (!empty($_POST)) {
 
                 $httpPostData = $_POST;
-                $titlePicMobile = '';
-                $titlePicPad = '';
-                $titlePicMobileUploadFileId = -1;
-                $titlePicPadUploadFileId = -1;
-                $uploadFileManageData = new UploadFileManageData();
-                //title pic1
-                $fileElementName = "file_title_pic_1";
-                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1;
-                $titlePic1UploadFileId = 0;
-                $titlePic1Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic1UploadFileId);
 
-                if(intval($titlePic1Path)<=0){
-                    //上传出错或没有选择文件上传
-
-                }else{
-                    $titlePic1Path = str_ireplace("..", "", $titlePic1Path);
-                    //有题图时，再生成两张小图，生成移动题图（移动客户端）及平板电脑上使用的
-                    if (strlen($titlePic1Path) > 5) {
-                        $siteConfigManageData = new SiteConfigManageData($siteId);
-                        $documentNewsTitlePicMobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
-                        $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
-
-                        $tableId = 0;
-                        $userId = 0;
-
-                        if ($documentNewsTitlePicMobileWidth > 0) {
-                            $thumbFileName = "mobile";
-                            $titlePicMobile = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicMobileWidth,0,$thumbFileName);
-                            sleep(1);
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_MOBILE;
-                            $newFileName = FileObject::GetName($titlePicMobile);
-                            $fileExtension = FileObject::GetExtension($titlePicMobile);
-                            $filePath = FileObject::GetDirName($titlePicMobile);
-                            $fileSize = FileObject::GetSize($titlePicMobile);
-                            $titlePicMobileUploadFileId = $uploadFileManageData->Create(
-                                $newFileName,
-                                $fileSize,
-                                $fileExtension,
-                                $titlePic1Path,
-                                $filePath,
-                                $tableType,
-                                $tableId,
-                                strval(date('Y', time())),
-                                strval(date('m', time())),
-                                strval(date('d', time())),
-                                $nowManageUserId,
-                                $userId
-                            );
-                        }
-
-                        if ($documentNewsTitlePicPadWidth > 0) {
-                            $thumbFileName = "pad";
-                            $titlePicPad = ImageObject::GenThumb($titlePic1Path,$documentNewsTitlePicPadWidth,0,$thumbFileName);
-                            sleep(1);
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_PAD;
-                            $newFileName = FileObject::GetName($titlePicPad);
-                            $fileExtension = FileObject::GetExtension($titlePicPad);
-                            $filePath = FileObject::GetDirName($titlePicPad);
-                            $fileSize = FileObject::GetSize($titlePicPad);
-                            $titlePicPadUploadFileId = $uploadFileManageData->Create(
-                                $newFileName,
-                                $fileSize,
-                                $fileExtension,
-                                $titlePic1Path,
-                                $filePath,
-                                $tableType,
-                                $tableId,
-                                strval(date('Y', time())),
-                                strval(date('m', time())),
-                                strval(date('d', time())),
-                                $nowManageUserId,
-                                $userId
-                            );
-                        }
-                    }
-                }
-
-                //title pic2
-                $fileElementName = "file_title_pic_2";
-                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
-                $titlePic2UploadFileId = 0;
-                $titlePic2Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic2UploadFileId);
-
-                if(intval($titlePic2Path) <= 0){
-                    //上传出错或没有选择文件上传
-                }else{
-                    $titlePic2Path = str_ireplace("..", "", $titlePic2Path);
-                }
-
-                //title pic3
-                $fileElementName = "file_title_pic_3";
-                $uploadTableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
-                $titlePic3UploadFileId = 0;
-                $titlePic3Path = self::Upload($fileElementName, $uploadTableType, 0, $titlePic3UploadFileId);
-
-                if(intval($titlePic3Path) <= 0){
-                    //上传出错或没有选择文件上传
-                }else{
-                    $titlePic3Path = str_ireplace("..", "", $titlePic3Path);
-                }
-
-                $result = $documentNewsManageData->Modify($httpPostData, $titlePic1Path, $titlePic2Path, $titlePic3Path, $titlePicMobile, $titlePicPad);
+                $result = $documentNewsManageData->Modify($httpPostData, $documentNewsId);
 
                 //加入操作日志
                 $operateContent = 'Modify DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
@@ -484,41 +377,117 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
 
 
+                    //题图操作
+                    if( !empty($_FILES)){
+
+                        $tableId = $documentNewsId;
+
+                        //title pic1
+                        $fileElementName = "file_title_pic_1";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1; //channel
+
+                        $uploadFile1 = new UploadFile();
+                        $uploadFileId1 = 0;
+                        $titlePic1Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile1,
+                            $uploadFileId1
+                        );
+
+                        if (intval($titlePic1Result) <=0 && $uploadFileId1<=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId1 = $documentNewsManageData->GetTitlePic1UploadFileId($documentNewsId, false);
+                            parent::DeleteUploadFile($oldUploadFileId1);
+
+                            //修改题图
+                            $documentNewsManageData->ModifyTitlePic1UploadFileId($documentNewsId, $uploadFileId1);
+                        }
+
+                        //title pic2
+                        $fileElementName = "file_title_pic_2";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_2;
+                        $uploadFileId2 = 0;
+                        $uploadFile2 = new UploadFile();
+                        $titlePic2Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile2,
+                            $uploadFileId2
+                        );
+                        if (intval($titlePic2Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId2 = $documentNewsManageData->GetTitlePic2UploadFileId($documentNewsId, false);
+                            parent::DeleteUploadFile($oldUploadFileId2);
+
+                            //修改题图
+                            $documentNewsManageData->ModifyTitlePic2UploadFileId($documentNewsId, $uploadFileId2);
+                        }
+                        //title pic3
+                        $fileElementName = "file_title_pic_3";
+
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_3;
+                        $uploadFileId3 = 0;
+
+                        $uploadFile3 = new UploadFile();
+
+                        $titlePic3Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile3,
+                            $uploadFileId3
+                        );
+                        if (intval($titlePic3Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId3 = $documentNewsManageData->GetTitlePic3UploadFileId($documentNewsId, false);
+                            parent::DeleteUploadFile($oldUploadFileId3);
+
+                            //修改题图
+                            $documentNewsManageData->ModifyTitlePic3UploadFileId($documentNewsId, $uploadFileId3);
+                        }
+
+                        //重新制作题图1的相关图片
+                        $siteConfigManageData = new SiteConfigManageData($siteId);
+                        if($uploadFileId1>0){
+                            $documentNewsTitlePic1MobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                            if($documentNewsTitlePic1MobileWidth<=0){
+                                $documentNewsTitlePic1MobileWidth  = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId1,$documentNewsTitlePic1MobileWidth);
+
+                            $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
+                            if($documentNewsTitlePicPadWidth<=0){
+                                $documentNewsTitlePicPadWidth  = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId1,$documentNewsTitlePicPadWidth);
+                        }
+                    }
+
+
+
+
                     //修改上传文件的tableId;
+                    $uploadFileData = new UploadFileData();
                     $uploadFiles = Control::PostRequest("f_UploadFiles", "");
-
                     $arrUploadFiles = explode(",", $uploadFiles);
-
-                    //修改题图1的tableId
-                    if($titlePic1UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic1UploadFileId, $documentNewsId);
-                    }
-                    //修改题图2的tableId
-                    if($titlePic2UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic2UploadFileId, $documentNewsId);
-                    }
-                    //修改题图3的tableId
-                    if($titlePic3UploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePic3UploadFileId, $documentNewsId);
-                    }
-                    //修改移动客户端题图的tableId
-                    if($titlePicMobileUploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePicMobileUploadFileId, $documentNewsId);
-                    }
-                    //修改平板客户端题图的tableId
-                    if($titlePicPadUploadFileId>0){
-                        $uploadFileManageData->ModifyTableId($titlePicPadUploadFileId, $documentNewsId);
-                    }
-
                     $isBatchUpload = 0;
                     if (isset($_POST['c_ShowPicMethod']) && $_POST['c_ShowPicMethod'] == 'on') {
                         $isBatchUpload = 1;
                     }
                     for ($i = 0; $i < count($arrUploadFiles); $i++) {
                         if (intval($arrUploadFiles[$i]) > 0) {
-                            $uploadFileManageData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
+                            $uploadFileData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
                             if($isBatchUpload>0){
-                                $uploadFileManageData->ModifyIsBatchUpload(intval($arrUploadFiles[$i]), $isBatchUpload);
+                                $uploadFileData->ModifyIsBatchUpload(intval($arrUploadFiles[$i]), $isBatchUpload);
                             }
                         }
                     }
@@ -533,8 +502,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 $documentNewsManageData->ModifyState($documentNewsId, $state);
                                 $executeFtp = true;
                                 $publishChannel = true;
-                                $ftpQueueManageData = new FtpQueueManageData();
-                                self::PublishDocumentNews($documentNewsId, $ftpQueueManageData, $executeFtp, $publishChannel);
+                                $publishQueueManageData = new PublishQueueManageData();
+                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
                                 break;
                         }
                     }
@@ -545,7 +514,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     if($closeTab == 1){
                         Control::CloseTab();
                     }else{
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
                 } else {
                     Control::ShowMessage(Language::Load('document', 2));

@@ -180,7 +180,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         //Control::CloseTab();
                         $resultJavaScript .= Control::GetCloseTab();
                     }else{
-                        Control::GoUrl($_SERVER["PHP_SELF"]);
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
                 } else {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1)); //新增失败！

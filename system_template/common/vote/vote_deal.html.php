@@ -46,7 +46,7 @@
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>
                     <td class="spe_line">
-                        <input type="hidden" id="f_AdminUserId" name="f_AdminUserId" value="{AdminUserId}" />
+                        <input type="hidden" id="f_ManageUserId" name="f_ManageUserId" value="{ManageUserId}" />
                         <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
                         <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
                         <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />

@@ -34,6 +34,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "list_for_manage_left":
                 $result = self::GenListForManageLeft();
                 break;
+            case "property":
+                $result = self::GenProperty();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -184,7 +187,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             //Control::CloseTab();
                             $resultJavaScript .= Control::GetCloseTab();
                         }else{
-                            Control::GoUrl($_SERVER["PHP_SELF"]);
+                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                         }
                     } else {
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel', 3)); //新增失败！
@@ -252,7 +255,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = 0;
                     $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $result);
                     if ($hasRepeatPublishPath) {
-                        Control::ShowMessage(Language::Load('document', 9)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
+                        Control::ShowMessage(Language::Load('channel', 2)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
                         return "";
                     }
                 }
@@ -338,10 +341,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                                 $channelManageData->ModifyTitlePic3UploadFileId($channelId, $uploadFileId3);
                             }
 
-                            if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
-                                $channelManageData->ModifyTitlePic($channelId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
-                            }
-
+                            //重新制作题图1的相关图片
                             $siteConfigManageData = new SiteConfigManageData($siteId);
                             if($uploadFileId1>0){
                                 $channelTitlePic1MobileWidth = $siteConfigManageData->ChannelTitlePic1MobileWidth;
@@ -363,12 +363,14 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                         //javascript 处理
                         //重新加载左边导航树
-                        $javascriptLoadChannel = "parent.LoadChannelListForManage(parent.G_NowSiteId);";
+                        $javascriptLoadChannel = "parent._LoadChannelListForManage(parent.G_NowSiteId);";
                         Control::RunJavascript($javascriptLoadChannel);
 
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
-                            Control::CloseTab();
+                            $resultJavaScript .= Control::GetCloseTab();
+                        }else{
+                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                         }
 
                     } else {
@@ -390,7 +392,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 模板内容页面
      */
     private function GenRemoveToBin(){
-        $tempContent = "";
+        $tempContent = Template::Load("channel/channel_remove_to_bin.html", "common");
+        $channelId = Control::GetRequest("channel_id", 0);
+
+        return $tempContent;
+    }
+
+    private function GenProperty(){
+        $tempContent = Template::Load("channel/channel_property.html", "common");
+        $channelId = Control::GetRequest("channel_id", 0);
 
         return $tempContent;
     }
