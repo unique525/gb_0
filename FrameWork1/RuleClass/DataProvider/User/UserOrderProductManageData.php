@@ -41,6 +41,11 @@ class UserOrderProductManageData extends BaseManageData
         return $result;
     }
 
+    public function ModifyState($userOrderProductId){
+        $result = -1;
+        return $result;
+    }
+
     /**
      * @param int $userOrderProductId 会员订单商品Id
      * @param int $siteId 站点Id

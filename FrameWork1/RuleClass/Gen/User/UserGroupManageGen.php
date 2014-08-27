@@ -39,6 +39,8 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         $pageSize = Control::GetRequest("ps",0);
         $tabIndex = Control::GetRequest("tab_index",0);
         $pageIndex = Control::GetRequest("p",1);
+        $resultJavaScript = "";
+
         if($siteId > 0){
             $userGroupManageData = new UserGroupManageData();
             if(!empty($_POST)){
@@ -52,8 +54,11 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                     if($closeTab == 1){
                         Control::GoUrl("/default.php?secu=manage&mod=user_group&m=list&site_id=".$siteId."&ps=".$pageSize."&p=".$pageIndex."&tab_index=".$tabIndex);
                     }else{
-                        Control::GoUrl($_SERVER["HTTP_SELF"]);
+                        Control::GoUrl($_SERVER["PHP_SELF"]);
                     }
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_group', 1));
+                }else{
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_group', 2));
                 }
                 $operateContent = 'Create UserGroup,POST FORM:'.implode('|',$_POST).';\r\nResultUserGroupId::'.$result;
                 self::CreateManageUserLog($operateContent);
@@ -68,6 +73,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
             $templateContent = strtr($templateContent,$replace_arr);
             parent::ReplaceWhenCreate($templateContent,$userGroupManageData->GetFields());
             parent::ReplaceEnd($templateContent);
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
             return $templateContent;
         }else{
             return null;
@@ -85,6 +91,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
         $pageSize = Control::GetRequest("ps",0);
         $tabIndex = Control::GetRequest("tab_index",0);
         $pageIndex = Control::GetRequest("p",1);
+        $resultJavaScript = "";
 
         if($userGroupId > 0 && $siteId > 0){
             $userGroupManageData = new UserGroupManageData();
@@ -102,6 +109,9 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]);
                     }
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_group', 3));
+                }else{
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_group', 4));
                 }
                 $operateContent = 'Modify UserGroup,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
                 self::CreateManageUserLog($operateContent);
@@ -120,6 +130,7 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
 
             $templateContent = strtr($templateContent,$replace_arr);
             parent::ReplaceEnd($templateContent);
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
             return $templateContent;
         }else{
             return null;

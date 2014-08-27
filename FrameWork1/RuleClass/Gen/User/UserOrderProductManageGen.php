@@ -13,13 +13,14 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "delete":
-                $result = self::GenDelete();
+            case "async_modify_state":
+                $result = self::AsyncModifyState();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
+
 
     private function GenModify(){
         $templateContent = Template::Load("user/user_order_product_deal.html","common");
@@ -55,11 +56,15 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
         return $templateContent;
     }
 
-    private function GenDelete(){
-        $userOrderProductId = Control::GetRequest("user_order_pay_id",0);
+    private function AsyncModifyState(){
+        $userOrderProductId = Control::GetRequest("user_order_product_id",0);
 
         if($userOrderProductId > 0){
-
+            $userOrderProductManageData = new UserOrderProductManageData();
+            $userOrderProductManageData->ModifyState($userOrderProductId);
+            return Control::GetRequest("jsonpcallback","");
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":-1})';
         }
     }
 }
