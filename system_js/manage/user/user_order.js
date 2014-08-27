@@ -70,7 +70,7 @@ function confirmPay(idvalue){
         success:function(data){
             if(data["result"] > 0){
                 $("#confirm_pay_way_"+idvalue).html(data["confirm_way"]);
-                $("#confirm_pay_price_"+idvalue).html(data["confirm_price"]);
+                $("#confirm_pay_price_"+idvalue).html(parseFloat(data["confirm_price"]));
                 $("#confirm_pay_date_"+idvalue).html(data["confirm_date"]);
                 $("#manage_username_"+idvalue).html(data["manage_username"]);
                 $("#span_order_pay_state_"+idvalue).html("已确认");
@@ -93,8 +93,10 @@ function ModifyPay(idvalue){
 $(document).ready(function(){
     $(".edit").click(function(){
         var userOrderId = $(this).attr("idvalue");
-        window.location.href="/default.php?secu=manage&mod=user_order&user_order_id="+userOrderId+"&m=modify&site_id="+ parent.G_NowSiteId
+        parent.G_TabUrl = "/default.php?secu=manage&mod=user_order&user_order_id="+userOrderId+"&m=modify&site_id="+ parent.G_NowSiteId
             +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+        parent.G_TabTitle = '编辑第'+userOrderId+'号订单';
+        parent.addTab();
     });
 
     $(".span_state").each(function(){
@@ -204,5 +206,26 @@ $(document).ready(function(){
         var AllPrice = AllSaleProductPrice+SendPrice;
         $("#display_AllPrice").html(AllPrice+"元");
         $("#AllPrice").val(AllPrice);
+    });
+
+    $(".delete_order_product").click(function(){
+        var user_order_product_id = $(this).attr("idvalue");
+        var user_order_id = $(this).attr("title");
+
+        $.ajax({
+            url:"/default.php?secu=manage&mod=user_order_product&m=async_modify_state",
+            data:{user_order_id:user_order_id,user_order_product_id:user_order_product_id,state:40},
+            dataType:"jsonp",
+            jsonp:"jsonpcallback",
+            success:function(data){
+                if(data["result"] > 0){
+                    $("#user_order_product_"+user_order_product_id).remove();
+                    $("#display_AllPrice").html(data["all_price"]+"元");
+                    $("#AllPrice").val(data["all_price"]);
+                }else{
+                    alert("修改失败,请联系管理员");
+                }
+            }
+        });
     });
 });

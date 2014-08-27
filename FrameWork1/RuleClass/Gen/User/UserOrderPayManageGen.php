@@ -6,6 +6,10 @@
  * @Author yin
  */
 class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
+    /**
+     * 引导方法
+     * @return string 返回执行结果
+     */
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m", "");
@@ -21,8 +25,12 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
         return $result;
     }
 
-    public function AsyncConfirm(){
-        $userOrderPayId = Control::GetRequest("user_order_pay_id",0);
+    /**
+     * AJAX 会员支付信息确认
+     * @return string
+     */
+    private function AsyncConfirm(){
+        $userOrderPayId = intval(Control::GetRequest("user_order_pay_id",0));
         if($userOrderPayId > 0){
             $confirmWay = Control::GetRequest("confirm_way","");
             $confirmPrice = Control::GetRequest("confirm_price",0);
@@ -51,6 +59,10 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
         }
     }
 
+    /**
+     * 获取会员订单支付信息列表
+     * @return null|string
+     */
     private function GenList(){
         $userOrderId = intval(Control::GetRequest("user_order_id",0));
         if($userOrderId > 0){
