@@ -7,6 +7,15 @@
 class ProductParamTypeOptionManageData extends BaseManageData
 {
     /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ProductParamTypeOption){
+        return parent::GetFields(self::TableName_ProductParamTypeOption);
+    }
+
+    /**
      * 新增产品参数类型选项
      * @param array $httpPostData $_POST数组
      * @param int $titlePicUploadFileId 题图附件id
@@ -83,27 +92,6 @@ class ProductParamTypeOptionManageData extends BaseManageData
     }
 
     /**
-     * 移动产品参数类型选项
-     * @param int $productParamTypeOptionId 产品参数类型选项id
-     * @param int $parentId 产品参数类型选项父id
-     * @return int 返回影响的行数
-     */
-    public function Drag($productParamTypeOptionId, $parentId)
-    {
-        $result = -1;
-        if ($productParamTypeOptionId > 0 && $parentId > -1) {
-            $sql = "update " . self::TableName_ProductParamTypeOption
-                . " set parentId=:parentId"
-                . " where " . self::TableId_ProductParamTypeOption . "=:" . self::TableId_ProductParamTypeOption;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField(self::TableId_ProductParamTypeOption, $productParamTypeOptionId);
-            $dataProperty->AddField("parentId", $parentId);
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-        }
-        return $result;
-    }
-
-    /**
      * 一行产品参数类型选项记录
      * @param int $productParamTypeOptionId 产品参数类型选项Id
      * @return array|null 取得对应数组
@@ -149,6 +137,41 @@ class ProductParamTypeOptionManageData extends BaseManageData
             $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
+        return $result;
+    }
+
+
+    /**
+     * 获取选项分页列表
+     * @param int $pageBegin   起始页码
+     * @param int $pageSize    每页记录数
+     * @param int $allCount    记录总数
+     * @param int $productParamTypeId  产品参数类型Id
+     * @param string $searchKey   查询字符
+     * @return array  选项列表数组
+     */
+    public function GetListForPager($productParamTypeId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
+        $dataProperty = new DataProperty();
+        $searchSql = "WHERE";
+        if ($productParamTypeId > 0) {
+            $searchSql .= " ProductParamTypeId=:ProductParamTypeId AND";
+            $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        }
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            $searchSql .= " (OptionName LIKE :searchKey1) AND";
+            $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
+        }
+        if (strlen($searchSql) > 5)
+            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
+        else
+            $searchSql = "";
+        $sql = "SELECT ProductParamTypeId,ProductParamTypeOptionId,OptionName,Sort,State
+        FROM " . self::TableName_ProductParamTypeOption . " " . $searchSql . "
+        ORDER BY Sort DESC,ProductParamTypeOptionId ASC
+        LIMIT " . $pageBegin . "," . $pageSize . "";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeOption . " " . $searchSql;
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 }
