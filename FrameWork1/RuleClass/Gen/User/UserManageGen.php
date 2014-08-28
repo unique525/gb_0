@@ -54,10 +54,9 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
             return Language::Load('document', 26);
         }
         //load template
-        $tempContent = Template::Load("user/user_list.html", "common");
+        $templateContent = Template::Load("user/user_list.html", "common");
 
-
-        parent::ReplaceFirst($tempContent);
+        parent::ReplaceFirst($templateContent);
 
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
@@ -72,7 +71,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
             $userManageData = new UserManageData();
             $arrUserList = $userManageData->GetList($siteId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType, $manageUserId);
             if (count($arrUserList) > 0) {
-                Template::ReplaceList($tempContent, $arrUserList, $tagId);
+                Template::ReplaceList($templateContent, $arrUserList, $tagId);
 
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
@@ -81,15 +80,15 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
             }
         }
 
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     /**
@@ -97,7 +96,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 模板内容页面
      */
     private function GenModify() {
-        $tempContent = Template::Load("user/user_deal.html", "common");
+        $templateContent = Template::Load("user/user_deal.html", "common");
         $userId = Control::GetRequest("user_id", 0);
         $siteId = Control::GetRequest("site_id", 0);
 
@@ -110,9 +109,9 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
             $can = $manageUserAuthorityManageData->CanUserEdit($siteId, $channelId, $adminUserId);
             ////////////////////////////////////////////////////
             if (!$can) {
-                $tempContent = Language::Load('user', 28);
+                $templateContent = Language::Load('user', 28);
             } else {
-                parent::ReplaceFirst($tempContent);
+                parent::ReplaceFirst($templateContent);
                     $userManageData = new UserManageData();
                     if (!empty($_POST)) { //提交
                         $httpPostData = $_POST;
@@ -123,7 +122,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                             $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
                             if ($hasCount > 0) {//同站点下不许存在相同的用户名
                                 Control::ShowMessage(Language::Load('user', 20));
-                                return $tempContent;
+                                return $templateContent;
                             }
                         }
 
@@ -149,14 +148,14 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen {
                         }
                     }
 
-                $tempContent = str_ireplace("{UserId}", $userId, $tempContent);
-                $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
+                $templateContent = str_ireplace("{UserId}", $userId, $templateContent);
+                $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
                 $isList = false;
                 $isManage = false;
-                Template::ReplaceOne($tempContent, $arrOne, $isList, $isManage);
+                Template::ReplaceOne($templateContent, $arrOne, $isList, $isManage);
 
             }
-            return $tempContent;
+            return $templateContent;
         }else{
             return null;
         }

@@ -7,6 +7,7 @@
         <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
         <script type="text/javascript" src="/system_js/color_picker.js"></script>
         <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+        <script type="text/javascript" src="/system_js/upload_file.js"></script>
         <script type="text/javascript">
         <!--
         var editor;
@@ -30,61 +31,6 @@
                     showButtonPanel: true
                 });
 
-
-                $("#preview_title_pic1").click(function () {
-                    var imgTitlePic1 = "{TitlePic1}";
-                    if (imgTitlePic1 !== '') {
-                        var imageOfTitlePic1 = new Image();
-                        imageOfTitlePic1.src = imgTitlePic1;
-                        $("#dialog_box").dialog({
-                            width: imageOfTitlePic1.width + 30,
-                            height: imageOfTitlePic1.height + 30
-                        });
-                        var imgHtml = '<' + 'img src="' + imgTitlePic1 + '" alt="" />';
-                        $("#dialog_content").html(imgHtml);
-
-                    }
-                    else {
-                        $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("还没有上传题图1");
-                    }
-                });
-                
-                $("#preview_title_pic2").click(function () {
-                    var imgTitlePic2 = "{TitlePic2}";
-                    if (imgTitlePic2 !== '') {
-                        var imageOfTitlePic2 = new Image();
-                        imageOfTitlePic2.src = imgTitlePic2;
-                        $("#dialog_box").dialog({
-                            width: imageOfTitlePic2.width + 30,
-                            height: imageOfTitlePic2.height + 30
-                        });
-                        var imgHtml = '<' + 'img src="' + imgTitlePic2 + '" alt="" />';
-                        $("#dialog_content").html(imgHtml);
-                    }
-                    else {
-                        $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("还没有上传题图2");
-                    }
-                });
-
-                $("#preview_title_pic3").click(function () {
-                    var imgTitlePic3 = "{TitlePic2}";
-                    if (imgTitlePic3 !== '') {
-                        var imageOfTitlePic3 = new Image();
-                        imageOfTitlePic3.src = imgTitlePic3;
-                        $("#dialog_box").dialog({
-                            width: imageOfTitlePic3.width + 30,
-                            height: imageOfTitlePic3.height + 30
-                        });
-                        var imgHtml = '<' + 'img src="' + imgTitlePic3 + '" alt="" />';
-                        $("#dialog_content").html(imgHtml);
-                    }
-                    else {
-                        $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("还没有上传题图2");
-                    }
-                });
 
                 ///////////////////加粗/////////////////////////
                 var cbTitleBold = $("#cbTitleBold");
@@ -242,40 +188,40 @@
                     $( "#loading" ).hide();
                 });
 
-                var attachwatermark = 0;
+                var attachWatermark = 0;
                 if($("#attachwatermark").attr("checked")==true){
-                    attachwatermark = 1;
+                    attachWatermark = 1;
                 }
 
+                var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
+
                 $.ajaxFileUpload({
-                    url:'/default.php?secu=manage&mod=upload&m=async_upload&table_type=1&attachwatermark='+attachwatermark,
+                    url:'/default.php?mod=upload_file&a=async_upload&file_element_name=file_upload_to_content&table_type='+tableType+'&attach_watermark='+attachWatermark,
                     secureUri:false,
-                    fileElementId:'file_upload',
+                    fileElementId:'file_upload_to_content',
                     dataType: 'json',
                     success: function (data, status)
                     {
-
                         if(typeof(data.error) != 'undefined')
                         {
-                            if(data.error != ''){
-                                //$("#resulttable").html(data.error);
-                                //$("#dialog_resultbox").dialog({
-                                //});
+                            if(parseInt(data.error)>0){ //ok
+                                var fUploadFile = $("#f_UploadFiles");
+                                var uploadFiles = fUploadFile.val();
+                                uploadFiles = uploadFiles + "," + data.upload_file_id;
+                                fUploadFile.val(uploadFiles);
                                 alert(data.error);
-                            }
-                            else{
-                                alert(data.result);
-                                /**
-                                var uploadfiles = $("#f_uploadfiles").val();
-                                uploadfiles = uploadfiles + "," + data.fileid;
-                                $("#f_uploadfiles").val(uploadfiles);
-                                //tinyMCE.get('f_documentnewscontent').restoreSelection();
-                                var contentfile = tofile_html(data.msg);                                
-                                tinyMCE.get('f_documentnewscontent').execCommand('mceInsertContent', false, contentfile);
-                                //var htmlContent = tinyMCE.get('f_documentnewscontent').getContent();
-                                //htmlContent = htmlContent + data.msg;
-                                //tinyMCE.get('f_documentnewscontent').setContent(htmlContent);
-                                 */
+                                alert(data.upload_file_id);
+                                alert(data.result_html);
+                                if(editor != undefined){
+
+                                    editor.pasteHTML(data.result_html);
+
+                                }
+
+                            }else{
+
+                                alert(FormatResultMessage(parseInt(data.error)));
+
                             }
                         }
                     },
@@ -425,19 +371,19 @@
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图1：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" style="cursor:pointer">[预览]</span>
+                                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图2：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic2" style="cursor:pointer">[预览]</span>
+                                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic2" class="show_title_pic" idvalue="{TitlePic2UploadFileId}" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图3：</td>
                             <td class="spe_line" style="text-align: left">
-                                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic3" style="cursor:pointer">[预览]</span>
+                                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box" style="width:400px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic3" class="show_title_pic" idvalue="{TitlePic3UploadFileId}" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>

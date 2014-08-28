@@ -27,23 +27,22 @@
     </table>
 
     <ul id="sort_grid">
-        <icms_list id="user_list" type="list">
+        <icms id="user_list">
             <item>
                 <![CDATA[
-                <li class="user_item">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                        <td width="60"><img class="img_avatar" src="{f_Avatar}" alt="会员头像"/></td>
-                        <td>
-                            <div>{f_UserName}</div>
-
-                        </td>
-                        </tr>
-                    </table>
-                </li>
+                    <li class="user_item">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                            <td width="60"><img class="img_avatar" width="60" height="60" src="/upload/Desert.jpg" alt="会员头像"/></td>
+                            <td>
+                                <div>{f_UserName}</div>
+                            </td>
+                            </tr>
+                        </table>
+                    </li>
                 ]]>
             </item>
-        </icms_list>
+        </icms>
     </ul>
     <div class="spe">{pager_button}</div>
 </div>

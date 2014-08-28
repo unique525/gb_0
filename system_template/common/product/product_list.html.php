@@ -68,7 +68,7 @@
                             <td class="spe_line2" style="text-align:left;"><a target="_blank" href="{view_url}"><span style="">{f_ProductName}</span></a></td>
                             <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductId}" title="向上移动" alt="向上"/><img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="排序数字，越大越靠前">{f_Sort}</td>
-                            <td class="spe_line2" style="width:150px;" title=""><span class="show_price">{f_SalePrice}</span></td>
+                            <td class="spe_line2" style="width:150px;" title="">￥<span class="show_price">{f_SalePrice}</span></td>
                             <td class="spe_line2" style="width:100px;" title="">{f_SaleCount}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="是否热门，用在特定的模板中">{f_IsHot}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="是否最新，用在特定的模板中">{f_IsNew}</td>

@@ -59,10 +59,10 @@
                                 <span>{f_UserName}</span>
                             </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
-                                <span>{f_AllPrice}</span>
+                                ￥<span class="show_price">{f_AllPrice}</span>
                             </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
-                                <span>{f_SendPrice}</span>
+                                ￥<span class="show_price">{f_SendPrice}</span>
                             </td>
                             <td class="spe_line2" style="width:150px;text-align: center">
                                 <span>{f_CreateDate}</span>

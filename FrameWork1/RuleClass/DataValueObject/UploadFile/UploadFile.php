@@ -501,10 +501,10 @@ class UploadFile {
     public function FormatToJson(){
 
         $returnJson = '{';
-        $returnJson .= 'error:"' . $this->ErrorMessage . '",';
-        $returnJson .= 'result_html:"' . $this->ResultHtml . '",';
-        $returnJson .= 'upload_file_id:"' . $this->UploadFileId . '",';
-        $returnJson .= 'upload_file_url:"' . $this->UploadFilePath . '"';
+        $returnJson .= '"error":"' . $this->ErrorMessage . '",';
+        $returnJson .= '"result_html":"' . $this->ResultHtml . '",';
+        $returnJson .= '"upload_file_id":"' . $this->UploadFileId . '",';
+        $returnJson .= '"upload_file_url":"' . $this->UploadFilePath . '"';
         $returnJson .= '}';
 
         return $returnJson;

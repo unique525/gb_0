@@ -58,13 +58,15 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">送货价格：</td>
-                <td class="spe_line" height="30"><input type="text" class="input_price" id="SendPrice" name="f_SendPrice" value="{SendPrice}"/></td>
+                <td class="spe_line" height="30">￥<input type="text" class="input_price" id="SendPrice" name="f_SendPrice" value="{SendPrice}"/></td>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">送货时间：</td>
                 <td class="spe_line" height="30">{SendTime}</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">订单总价：</td>
-                <td class="spe_line" height="30" id="display_AllPrice">{AllPrice}元</td>
+                <td class="spe_line" height="30">
+                    ￥<span id="display_AllPrice" class="show_price">{AllPrice}</span>
+                </td>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">订单状态：</td>
                 <td class="spe_line" height="30">
                     <select name="f_State" id="f_State">
@@ -91,11 +93,12 @@
                 <td class="spe_line" height="30" style="width:50px;text-align: center">编辑</td>
                 <td class="spe_line" height="30" style="text-align: center">商品名</td>
                 <td class="spe_line" height="30" style="text-align: center">商品描述</td>
-                <td class="spe_line" height="30" style="width:150px">商品单价</td>
-                <td class="spe_line" height="30" style="width:150px">购买价</td>
-                <td class="spe_line" height="30" style="width:150px">数量</td>
-                <td class="spe_line" height="30" style="width:150px">小计</td>
-                <td class="spe_line" height="30" style="width:150px;text-align: center"></td>
+                <td class="spe_line" height="30" style="width:100px">商品单价</td>
+                <td class="spe_line" height="30" style="width:100px">购买价</td>
+                <td class="spe_line" height="30" style="width:80px">数量</td>
+                <td class="spe_line" height="30" style="width:50px">单位</td>
+                <td class="spe_line" height="30" style="width:100px">小计</td>
+                <td class="spe_line" height="30" style="width:80px;text-align: center"></td>
             </tr>
             <icms id="user_order_product_list">
                 <item>
@@ -104,17 +107,24 @@
                         <td class="spe_line" height="30" style="text-align: center">
                             <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="btn_order_product_edit" idvalue="{f_UserOrderProductId}" title={f_UserOrderId}/>
                         </td>
-                        <td class="spe_line" height="30" style="width:100px;text-align: center">{f_ProductName}</td>
-                        <td class="spe_line" height="30" style="width:300px;text-align: center">{f_ProductPriceIntro}</td>
-                        <td class="spe_line" height="30" style="width:150px">{f_ProductPrice}元/{f_ProductUnit}</td>
-                        <td class="spe_line" height="30" style="width:150px">
-                            {f_SalePrice}元/{f_ProductUnit}
+                        <td class="spe_line" height="30" style="text-align: center">{f_ProductName}</td>
+                        <td class="spe_line" height="30" style="text-align: center">{f_ProductPriceIntro}</td>
+                        <td class="spe_line " height="30">
+                            ￥<span class="show_price">{f_ProductPrice}</span>
                         </td>
-                        <td class="spe_line" height="30" style="width:150px">
-                            {f_SaleCount}{f_ProductUnit}
+                        <td class="spe_line" height="30">
+                            ￥<span class="show_price">{f_SalePrice}</span>
                         </td>
-                        <td class="spe_line UserOrderSubtotal" height="30" style="width:150px">{f_Subtotal}元</td>
-                        <td class="spe_line height="30"">
+                        <td class="spe_line" height="30">
+                            {f_SaleCount}
+                        </td>
+                        <td class="spe_line" height="30">
+                            {f_ProductUnit}
+                        </td>
+                        <td class="spe_line" height="30">
+                            ￥<span class="UserOrderSubtotal">{f_Subtotal}</span>
+                        </td>
+                        <td class="spe_line" height="30">
                             <div class="btn2 delete_order_product" idvalue="{f_UserOrderProductId}" title="{f_UserOrderId}" style="cursor:pointer;width:50px;text-align: center">删除</div>
                         </td>
                     </tr>
@@ -123,8 +133,8 @@
             </icms>
             <tr class="grid_item2">
                 <td class="spe_line" height="30" colspan="6" align="right">总计：</td>
-                <td class="spe_line" colspan="2" height="30" id="AllSaleProductPrice" align="left">
-
+                <td class="spe_line" colspan="2" height="30" align="left">
+                    ￥<span class="show_price" id="AllSaleProductPrice"></span>
                 </td>
             </tr>
         </table>

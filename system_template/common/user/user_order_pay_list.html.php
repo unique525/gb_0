@@ -19,7 +19,7 @@
             <td class="spe_line" height="30" width="80" align="center">支付编号</td>
             <td class="spe_line" height="30" width="150" align="center">订单编号</td>
             <td class="spe_line" height="30" width="100" align="center">支付方式</td>
-            <td class="spe_line" height="30" width="100">支付价格</td>
+            <td class="spe_line" height="30" width="100" align="center">支付价格</td>
             <td class="spe_line" height="30" width="160" align="center">支付日期</td>
             <td class="spe_line" height="30" width="100" align="center">确认收款方式</td>
             <td class="spe_line" height="30" width="100" align="center">确认收款金额</td>
@@ -39,14 +39,28 @@
                             <td class="spe_line" height="30" width="80" align="center">{f_UserOrderPayId}</td>
                             <td class="spe_line" height="30" width="150" align="center">{f_UserOrderNumber}</td>
                             <td class="spe_line" height="30" width="100" align="center">{f_PayWay}</td>
-                            <td class="spe_line" height="30" width="100">{f_PayPrice}</td>
+                            <td class="spe_line" height="30" width="100" align="center">
+                                ￥<span class="show_price">{f_PayPrice}</span>
+                            </td>
                             <td class="spe_line" height="30" width="160" align="center">{f_PayDate}</td>
-                            <td id="confirm_pay_way_{f_UserOrderPayId}" class="spe_line" height="30" width="100" align="center">{f_ConfirmWay}</td>
-                            <td id="confirm_pay_price_{f_UserOrderPayId}" class="spe_line" height="30" width="100" align="center">{f_ConfirmPrice}</td>
-                            <td id="confirm_pay_date_{f_UserOrderPayId}" class="spe_line" height="30" width="160" align="center">{f_ConfirmDate}</td>
-                            <td id="span_order_pay_{f_UserOrderPayId}_button" class="spe_line" height="30" width="80" align="center"></td>
-                            <td id="span_order_pay_state_{f_UserOrderPayId}" class="spe_line span_order_pay_state" idvalue="{f_UserOrderPayId}"  height="30" width="80" align="center">{f_State}</td>
-                            <td id="manage_username_{f_UserOrderPayId}" class="spe_line" height="30" width="80" align="center">{f_ManageUserName}</td>
+                            <td class="spe_line" height="30" width="100" align="center">
+                                <span id="confirm_pay_way_{f_UserOrderPayId}">{f_ConfirmWay}</span>
+                            </td>
+                            <td class="spe_line" height="30" width="100" align="center">
+                                ￥<span class="show_price" id="confirm_pay_price_{f_UserOrderPayId}">{f_ConfirmPrice}</span>
+                            </td>
+                            <td class="spe_line" height="30" width="160" align="center">
+                                <span id="confirm_pay_date_{f_UserOrderPayId}">{f_ConfirmDate}</span>
+                            </td>
+                            <td class="spe_line" height="30" width="80" align="center">
+                                <span id="span_order_pay_{f_UserOrderPayId}_button"></span>
+                            </td>
+                            <td class="spe_line" height="30" width="80" align="center">
+                                <span id="span_order_pay_state_{f_UserOrderPayId}" class="span_order_pay_state" idvalue="{f_UserOrderPayId}">{f_State}</span>
+                            </td>
+                            <td class="spe_line" height="30" width="80" align="center">
+                               <span id="manage_username_{f_UserOrderPayId}"> {f_ManageUserName}</span>
+                            </td>
                         </tr>
                     </table>
                 </li>
