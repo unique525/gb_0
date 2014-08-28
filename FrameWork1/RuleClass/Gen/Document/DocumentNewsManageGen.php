@@ -473,8 +473,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     }
 
 
-
-
                     //修改上传文件的tableId;
                     $uploadFileData = new UploadFileData();
                     $uploadFiles = Control::PostRequest("f_UploadFiles", "");

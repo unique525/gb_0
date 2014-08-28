@@ -20,6 +20,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_get_one":
                 $result = self::AsyncGetOne();
                 break;
+            case "async_upload":
+                $result = self::AsyncUpload();
+                break;
         }
 
         return $result;
@@ -30,6 +33,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function AsyncGetOne(){
+
         $result = "";
 
         $uploadFileId = Control::GetRequest("upload_file_id", 0);
@@ -40,6 +44,37 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
         }
 
         return $result;
+
+
     }
 
+    /**
+     *
+     */
+    private function AsyncUpload(){
+        $result = "";
+
+        $fileElementName = Control::GetRequest("file_element_name", "");
+        $tableType = Control::GetRequest("table_type", 0);
+        $tableId = Control::GetRequest("table_id", 0);
+        if(!empty($fileElementName) && $tableType>0){
+
+            $uploadFile = new UploadFile();
+            $uploadFileId = 0;
+            parent::Upload($fileElementName,$tableType,$tableId,$uploadFile,$uploadFileId);
+
+            $result = $uploadFile->FormatToJson();
+        }else{
+            $result = '{';
+            $result .= '"error":"param error",';
+            $result .= '"result_html":"",';
+            $result .= '"upload_file_id":"",';
+            $result .= '"upload_file_url":""';
+            $result .= '}';
+        }
+
+
+
+        return $result;
+    }
 } 

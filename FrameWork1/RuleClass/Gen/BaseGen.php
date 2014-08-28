@@ -338,7 +338,8 @@ class BaseGen
     )
     {
         $errorMessage = self::UploadPreCheck($fileElementName);
-
+        $resultMessage = "";
+        $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
             sleep(1);
             $newFileName = "";
@@ -383,23 +384,39 @@ class BaseGen
                             $_FILES[$fileElementName]['name']
                         );
 
-                        $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+
                     }
 
                     $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
+                    $errorMessage = $result;
                 } else { //移动上传文件时失败
                     $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
+                    $errorMessage = $result;
                 }
             } else {
                 $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
+                $errorMessage = $result;
             }
         } else {
             $result = $errorMessage;
         }
 
+        $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+
         return $result;
     }
 
+    /**
+     * 根据不同的业务，构建不同的存储文件夹和文件名
+     * @param int $tableType 对应表类型
+     * @param int $tableId 对应表id
+     * @param int $manageUserId 后台管理员id
+     * @param int $userId 会员id
+     * @param string $uploadPath 上传文件夹路径
+     * @param string $fileExtension 上传文件扩展名
+     * @param string $newFileName 新文件名
+     * @return string 存储文件夹和文件名
+     */
     private function GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, &$newFileName)
     {
         //根据不同的业务，构建不同的存储文件夹和文件名
