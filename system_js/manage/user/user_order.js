@@ -70,7 +70,7 @@ function confirmPay(idvalue){
         success:function(data){
             if(data["result"] > 0){
                 $("#confirm_pay_way_"+idvalue).html(data["confirm_way"]);
-                $("#confirm_pay_price_"+idvalue).html(parseFloat(data["confirm_price"]));
+                $("#confirm_pay_price_"+idvalue).html(formatPrice(data["confirm_price"]));
                 $("#confirm_pay_date_"+idvalue).html(data["confirm_date"]);
                 $("#manage_username_"+idvalue).html(data["manage_username"]);
                 $("#span_order_pay_state_"+idvalue).html("已确认");
@@ -85,8 +85,10 @@ function confirmPay(idvalue){
 }
 
 function ModifyPay(idvalue){
-    $("#confirm_pay_way_"+idvalue).html('<input id="confirm_way_input_'+idvalue+'" type="text" class="input_box" value="" style="width:70px"/>');
-    $("#confirm_pay_price_"+idvalue).html('<input id="confirm_price_input_'+idvalue+'" type="text" class="input_price" value="" style="width:70px"/>');
+    var pay_way = $("#confirm_pay_way_"+idvalue).html();
+    var pay_price = $("#confirm_pay_price_"+idvalue).html();
+    $("#confirm_pay_way_"+idvalue).html('<input id="confirm_way_input_'+idvalue+'" type="text" class="input_box" value="'+pay_way+'" style="width:70px"/>');
+    $("#confirm_pay_price_"+idvalue).html('<input id="confirm_price_input_'+idvalue+'" type="text" class="input_price" value="'+pay_price+'" style="width:70px"/>');
     $("#span_order_pay_"+idvalue+"_button").html('<div class="btn2 confirm_pay" idvalue="'+idvalue+'" style="width:45px;height:25px" onclick="confirmPay('+idvalue+');">确认</div>');
 }
 
@@ -95,7 +97,7 @@ $(document).ready(function(){
         var userOrderId = $(this).attr("idvalue");
         parent.G_TabUrl = "/default.php?secu=manage&mod=user_order&user_order_id="+userOrderId+"&m=modify&site_id="+ parent.G_NowSiteId
             +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
-        parent.G_TabTitle = '编辑第'+userOrderId+'号订单';
+        parent.G_TabTitle = '编辑订单';
         parent.addTab();
     });
 
@@ -162,6 +164,7 @@ $(document).ready(function(){
         });
     });
 
+    //在订单列表页打开支付信息
     $(".btn_user_order_list_pay_info").click(function(){
         var userOrderId = $(this).attr("idvalue");
         var pageIndex = Request["p"]==null?1:Request["p"];
@@ -199,12 +202,12 @@ $(document).ready(function(){
         var ProductPrice = parseFloat($(this).html());
         AllSaleProductPrice = ProductPrice+AllSaleProductPrice;
     });
-    $("#AllSaleProductPrice").html(AllSaleProductPrice+"元");
+    $("#AllSaleProductPrice").html(formatPrice(AllSaleProductPrice));
 
     $("#SendPrice").blur(function(){
         var SendPrice = parseFloat($("#SendPrice").val());
         var AllPrice = AllSaleProductPrice+SendPrice;
-        $("#display_AllPrice").html(AllPrice+"元");
+        $("#display_AllPrice").html(AllPrice);
         $("#AllPrice").val(AllPrice);
     });
 
@@ -220,7 +223,7 @@ $(document).ready(function(){
             success:function(data){
                 if(data["result"] > 0){
                     $("#user_order_product_"+user_order_product_id).remove();
-                    $("#display_AllPrice").html(data["all_price"]+"元");
+                    $("#display_AllPrice").html("￥"+data["all_price"]);
                     $("#AllPrice").val(data["all_price"]);
                 }else{
                     alert("修改失败,请联系管理员");
