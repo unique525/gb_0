@@ -100,7 +100,7 @@
             <icms id="user_order_product_list">
                 <item>
                     <![CDATA[
-                    <tr class="grid_item2" style="height:30px">
+                    <tr class="grid_item2" style="height:30px" id="user_order_product_{f_UserOrderProductId}">
                         <td class="spe_line" height="30" style="text-align: center">
                             <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="btn_order_product_edit" idvalue="{f_UserOrderProductId}" title={f_UserOrderId}/>
                         </td>
@@ -115,7 +115,7 @@
                         </td>
                         <td class="spe_line UserOrderSubtotal" height="30" style="width:150px">{f_Subtotal}元</td>
                         <td class="spe_line height="30"">
-                            <div class="btn2" style="cursor:pointer;width:50px;text-align: center">删除</div>
+                            <div class="btn2 delete_order_product" idvalue="{f_UserOrderProductId}" title="{f_UserOrderId}" style="cursor:pointer;width:50px;text-align: center">删除</div>
                         </td>
                     </tr>
                     ]]>

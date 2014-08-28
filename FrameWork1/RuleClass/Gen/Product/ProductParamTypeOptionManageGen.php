@@ -1,42 +1,32 @@
 <?php
 
 /**
- * 后台管理 产品参数类型选项 生成类
+ * 产品参数类型选项管理生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_Product
- * @author hy
+ * @package iCMS_Rules_Gen_Vote
+ * @author yanjiuyuan
  */
-class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseManageGen
-{
+class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
-     * 引导方法
-     * @return string 返回执行结果
+     * 主生成方法(继承接口)
+     * @return string 返回输出的HTML内容
      */
-    public function Gen() {
+    function Gen() {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
             case "create":
                 $result = self::GenCreate();
                 break;
-            case "delete":
-                $result = self::GenDelete();
+            case "modify_state":
+                $result = self::AsyncModifyState();
                 break;
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "modify_state":
-                $result = self::AsyncModifyState();
-                break;
-            case "list_for_manage_tree":
-                $result = self::GenListForManageTree();
-                break;
-            case "drag":
-                $result = self::AsyncDrag();
-                break;
-            case "one":
-                $result = self::AsyncOne();
+            case "list":
+                $result = self::GenList();
                 break;
         }
 
@@ -45,209 +35,145 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     }
 
     /**
-     * 新增产品参数类型选项
+     * 生成产品管理参数类型选项新增页面
      * @return mixed|string
      */
-    public function GenCreate()
+    private function GenCreate()
     {
-        $tempContent = "";
-        $parentId = Control::PostRequest("f_ParentId", "");
-        $productParamTypeId = Control::PostRequest("f_ProductParamTypeId", "");
-        $name = Control::PostRequest("f_OptionName", "");
-        $eName = Control::PostRequest("f_OptionName2", "");
-
         $manageUserId = Control::GetManageUserId();
-
-        if ($parentId >= 0 && $productParamTypeId>0 && $manageUserId > 0) {
-
+        $productParamTypeClassId = Control::GetRequest("product_param_type_option_id", 0);
+        $pageIndex = Control::GetRequest("p", 0);
+        $tempContent = Template::Load("product/product_param_type_option_deal.html", "common");
+        if ($manageUserId > 0) {
+            parent::ReplaceFirst($tempContent);
+            $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-                //title_pic
-                $fileElementName = "file_title_pic";
-                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION; //productParamType
-                $tableId = 0;
-                $uploadResult = new UploadResult();
-                $titlePicUploadFileId = 0;
-                self::Upload(
-                    $fileElementName,
-                    $tableType,
-                    $tableId,
-                    $uploadResult,
-                    $titlePicUploadFileId
-                );
+                $productParamTypeOptionId = $productParamTypeOptionManageData->Create($httpPostData);
 
-                sleep(1);
-
-                $productParamTypeOptionId = $productParamTypeOptionManageData->Create($httpPostData, $titlePicUploadFileId);
                 //加入操作日志
-                $operateContent = 'Create ProductParamTypeOption,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeOptionId:' . $productParamTypeOptionId;
+                $operateContent = 'Create ProductParamTypeOption,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeId:' . $productParamTypeOptionId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($productParamTypeOptionId > 0) {
-                    $uploadFileData = new UploadFileData();
-                    //修改题图的TableId
-                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeOptionId);
-
-                    Control::ShowMessage(Language::Load('document', 1));
-                    $jsCode = 'parent.AddNodeById("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
+                    //javascript 处理
+                    Control::ShowMessage(Language::Load('product', 1));
+                    $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('document', 2));
+                    Control::ShowMessage(Language::Load('product', 2));
                 }
+                return "";
             }
+            $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
+            $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
+            $tempContent = str_ireplace("{ProductParamTypeOptionClassId}", strval($productParamTypeClassId), $tempContent);
+
+            $fieldsOfProductParamTypeOption = $productParamTypeOptionManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfProductParamTypeOption);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+            parent::ReplaceEnd($tempContent);
         }
         return $tempContent;
     }
 
     /**
-     * 删除产品参数类型选项(软删除)
-     * @return string 删除结果
-     */
-    public function GenDelete()
-    {
-        $state=100;
-        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
-        if ($productParamTypeOptionId > 0) {
-            $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $result = $productParamTypeOptionManageData->ModifyState($productParamTypeOptionId,$state);
-            return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
-        } else {
-            return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
-        }
-    }
-
-    /**
-     * 修改产品参数类型选项
+     * 停用产品参数类型选项
      * @return mixed|string
      */
-    public function GenModify()
-    {
-        $tempContent = "";
-        $parentId = Control::PostRequest("f_ParentId", "");
-        $productParamTypeId = Control::PostRequest("f_ProductParamTypeId", "");
-        $name = Control::PostRequest("f_OptionName", "");
-        $eName = Control::PostRequest("f_OptionName2", "");
-        $productParamTypeOptionId = Control::PostRequest("f_ProductParamTypeOptionId", "");
+    private function AsyncModifyState() {
+        //$result = -1;
+        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
+        $state = Control::GetRequest("state",0);
+        if ($productParamTypeOptionId > 0) {
+            $productParamTypeData = new ProductParamTypeOptionManageData();
+            $result = $productParamTypeData->ModifyState($productParamTypeOptionId,$state);
+            //加入操作日志
+            $operateContent = 'ModifyState ProductParamTypeOption,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeId:' . $productParamTypeOptionId;
+            self::CreateManageUserLog($operateContent);
+        } else {
+            $result = -1;
+        }
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
 
-        $manageUserId = Control::GetManageUserId();
-
-        if ($productParamTypeOptionId > 0 && $manageUserId > 0) {
+    /**
+     * 生成产品参数类型选项修改页面
+     * @return mixed|string
+     */
+    private function GenModify() {
+        $tempContent = Template::Load("product/product_param_type_option_deal.html", "common");
+        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
+        $pageIndex = Control::GetRequest("p", 0);
+        parent::ReplaceFirst($tempContent);
+        $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
+        if ($productParamTypeOptionId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
+                $result = $productParamTypeOptionManageData->Modify($httpPostData, $productParamTypeOptionId);
 
-                //title_pic
-                $fileElementName = "file_title_pic";
-                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION; //productParamType
-                $tableId = 0;
-                $uploadResult = new UploadResult();
-                $titlePicUploadFileId = 0;
-                self::Upload(
-                    $fileElementName,
-                    $tableType,
-                    $tableId,
-                    $uploadResult,
-                    $titlePicUploadFileId
-                );
-
-                sleep(1);
-
-                $result = $productParamTypeOptionManageData->Modify($httpPostData,$productParamTypeOptionId,$titlePicUploadFileId);
                 //加入操作日志
-                $operateContent = 'Modify ProductParamTypeOption,POST FORM:'.implode('|',$_POST).';\r\nResult:productParamTypeOptionId:'.$productParamTypeOptionId;
+                $operateContent = 'Modify ProductParamTypeOption,POST FORM:' . implode('|', $_POST) . ';\r\nProductParamTypeOptionId:' . $productParamTypeOptionId;
                 self::CreateManageUserLog($operateContent);
+
                 if ($result > 0) {
-
-                    $uploadFileData = new UploadFileData();
-                    //修改题图的TableId
-                    $uploadFileData->ModifyTableId($titlePicUploadFileId, $productParamTypeOptionId);
-
-                    Control::ShowMessage(Language::Load('document', 3));
-                    $jsCode = 'parent.EditNodeById("' . $productParamTypeOptionId . '","' . $parentId . '","' . $productParamTypeId . '","' . $name . '","' . $eName . '");';
+                    //javascript 处理
+                    Control::ShowMessage(Language::Load('product', 3));
+                    $jsCode = 'parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
                 } else {
-                    Control::ShowMessage(Language::Load('document', 4));
+                    Control::ShowMessage(Language::Load('product', 4));
                 }
             }
+            $arrList = $productParamTypeOptionManageData->GetOne($productParamTypeOptionId);
+            Template::ReplaceOne($tempContent, $arrList, false, false);
+            $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
+        //替换掉{s XXX}的内容
+        $patterns = '/\{s_(.*?)\}/';
+        $tempContent = preg_replace($patterns, "", $tempContent);
+        parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
 
     /**
-     * 修改产品参数类型选项状态
-     * @return string 修改结果
+     * 产品参数类型选项管理列表页面
+     * @return mixed|string
      */
-    public function AsyncModifyState() {
-        $productParamTypeOptionId = Control::GetRequest("id", 0);
-        $state = Control::GetRequest("state", -1);
-        if ($productParamTypeOptionId > 0 && $state >= 0) {
-            $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $result = $productParamTypeOptionManageData->ModifyState($productParamTypeOptionId, $state);
-            return $result;
-        } else {
-            return -1;
-        }
-    }
+    private function GenList() {
+        $templateContent = Template::Load("product/product_param_type_option_list.html", "common");
+        $productParamTypeClassId = Control::GetRequest("product_param_type_option_id", 0);
+        $pageSize = Control::GetRequest("ps", 20);
+        $searchKey = Control::GetRequest("search_key", "");
+        $searchKey = urldecode($searchKey);
+        $pageIndex = Control::GetRequest("p", 1);
 
-    /**
-     * 产品参数类型选项管理树页面
-     * @return string 返回zTree的JSON数据结构
-     */
-    public function GenListForManageTree()
-    {
-
-        $tempContent = Template::Load("product/product_param_type_option_list.html", "common");
-        $product_param_type_id = Control::GetRequest("product_param_type_id", 0);
-        $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
-        $adminUserId = Control::GetManageUserId();
-        if ($product_param_type_id > 0 && $adminUserId > 0) {
+        if ($pageIndex > 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $tagId = "product_param_type_option_list";
+            $allCount = 0;
             $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $arrList = $productParamTypeOptionManageData->GetList($productParamTypeId, "", -1);
-            $treeNodes = '{ id:0, pId:-1,productParamTypeId:-1,name:"根节点", eName:"根节点",open:true},';
-            for ($i = 0; $i < count($arrList); $i++) {
-                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductParamTypeOptionId"] . ', pId:' . $arrList[$i]["ParentId"] . ', productParamTypeId:' . $arrList[$i]["ProductParamTypeId"] . ', name:"' . $arrList[$i]["OptionName"] . '", eName:"' . $arrList[$i]["OptionName2"] . '"},';
+            $arrList = $productParamTypeOptionManageData->GetListForPager($productParamTypeClassId, $pageBegin, $pageSize, $allCount, $searchKey);
+            if (count($arrList) > 0) {
+                Template::ReplaceList($tempContent, $arrList, $tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?secu=manage&mod=product_param_type_option&m=list&product_param_type_option_id=$productParamTypeClassId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                Template::ReplaceList($templateContent,$arrList,$tagId);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
+            } else {
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("product", 101), $templateContent);
             }
-            $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
-            $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);
-            parent::ReplaceEnd($tempContent);
-            $result = $tempContent;
-            return $result;
-        } else return "";
-    }
-
-
-    /**
-     * 获取一行产品参数类型选项信息
-     * @return array 产品参数类型选项一维数组
-     */
-    public function AsyncOne() {
-        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", -2);
-        if ($productParamTypeOptionId > 0) {
-            $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $result = $productParamTypeOptionManageData->GetOne($productParamTypeOptionId);
-            $result = json_encode($result);
-            return Control::GetRequest("jsonpcallback","") . "(" . $result . ")";
-        } else {
-            return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
         }
-    }
-
-    /**
-     * 拖动产品参数类型选项到指定结点
-     * @return string 拖动结果
-     */
-    public function AsyncDrag() {
-        $productParamTypeOptionId = Control::GetRequest("product_param_type_option_id", 0);
-        $parentId = Control::GetRequest("parent_id", 0);
-        if ($productParamTypeOptionId > 0 && $parentId >= 0) {
-            $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $result = $productParamTypeOptionManageData->Drag($productParamTypeOptionId, $parentId);
-            //$result=json_encode($result);
-            return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
-        } else {
-            return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
-        }
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
 }

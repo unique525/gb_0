@@ -18,14 +18,14 @@ class UserOrderProductManageData extends BaseManageData
     public function Modify($httpPostData,$userOrderProductId,$userOrderId){
         $result = 0;
         if(!empty($httpPostData) && $userOrderProductId > 0){
-            $dataPropertyUserOrderProduct = new DataProperty();
-            $dataPropertyUserOrder = new DataProperty();
+            $dataPropertyUserOrderProduct = new DataProperty();//会员订单产品表DataProperty
+            $dataPropertyUserOrder = new DataProperty();//会员订单表DataProperty
             $sqlUserOrderProduct = parent::GetUpdateSql($httpPostData,self::TableName_UserOrderProduct,self::TableId_UserOrderProduct,
-                $userOrderProductId,$dataPropertyUserOrderProduct);
+                $userOrderProductId,$dataPropertyUserOrderProduct);//修改会员订单产品的信息
             $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
                 (uo.SendPrice + (SELECT SUM(uop.Subtotal) FROM ".self::TableName_UserOrderProduct." uop
                 WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < 40 GROUP BY uop.UserOrderId))
-                WHERE uo.UserOrderId = :UserOrderId2;";
+                WHERE uo.UserOrderId = :UserOrderId2;";//重新计算会员订单的总价
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
             $arrSql = Array(
@@ -36,13 +36,46 @@ class UserOrderProductManageData extends BaseManageData
                 $dataPropertyUserOrderProduct,
                 $dataPropertyUserOrder
             );
-            $result = $this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);
+            $result = $this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);//批量执行
         }
         return $result;
     }
 
-    public function ModifyState($userOrderProductId){
+    /**
+     * 修改会员订单产品的状态
+     * @param int $userOrderId 会员订单Id
+     * @param int $userOrderProductId 会员订单产品Id
+     * @param int $state 状态
+     * @return int 执行结果
+     */
+    public function ModifyState($userOrderId,$userOrderProductId,$state){
         $result = -1;
+        if($userOrderProductId > 0 && $state >= 0){
+            $dataPropertyUserOrderProduct = new DataProperty();//会员订单产品表DataProperty
+            $dataPropertyUserOrder = new DataProperty();//会员订单表DataProperty
+            $sqlUserOrderProduct = "UPDATE ".self::TableName_UserOrderProduct." SET State = :State
+                WHERE UserOrderProductId = :UserOrderProductId;";//修改会员订单产品的状态
+            $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
+                (uo.SendPrice + (SELECT SUM(uop.Subtotal) FROM ".self::TableName_UserOrderProduct." uop
+                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < 40 GROUP BY uop.UserOrderId))
+                WHERE uo.UserOrderId = :UserOrderId2;";//重新计算会员订单的总价
+
+            $dataPropertyUserOrderProduct->AddField("State",$state);
+            $dataPropertyUserOrderProduct->AddField("UserOrderProductId",$userOrderProductId);
+            $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
+            $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
+
+            $arrSql = Array(
+                $sqlUserOrderProduct,
+                $sqlUserOrder
+            );
+            $arrDataProperty = Array(
+                $dataPropertyUserOrderProduct,
+                $dataPropertyUserOrder
+            );
+
+            $result = $this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);//批量执行
+        }
         return $result;
     }
 

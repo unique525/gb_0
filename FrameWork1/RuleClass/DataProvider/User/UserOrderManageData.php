@@ -62,4 +62,20 @@ class UserOrderManageData extends BaseManageData{
         }
         return $result;
     }
+
+    /**
+     * 查询会员订单的总价
+     * @param int $userOrderId 会员订单Id
+     * @return float|int 会员订单的总价
+     */
+    public function GetAllPrice($userOrderId){
+        $result = -1;
+        if($userOrderId > 0){
+            $sql = "SELECT AllPrice FROM ".self::TableName_UserOrder." WHERE UserOrderId = :UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId",$userOrderId);
+            $result = $this->dbOperator->GetFloat($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
