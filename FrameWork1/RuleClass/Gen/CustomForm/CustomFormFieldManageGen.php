@@ -56,6 +56,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreate() {
         $tempContent = Template::Load("custom_form/custom_form_field_deal.html","common");
+        $resultJavaScript="";
         $manageUserId = Control::GetManageUserID();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormManageData = new CustomFormManageData();
@@ -83,13 +84,17 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
                 self::CreateManageUserLog($operateContent);
 
 
+
                 Control::ShowMessage(Language::Load('custom_form', 1));
                 $closeTab = Control::PostRequest("CloseTab",0);
                 if($closeTab == 1){
-                    Control::CloseTab();
+                    $resultJavaScript .= Control::GetCloseTab();
                 }else{
-                    Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
+                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    //Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
                 }
+
+
             }else{
                 Control::ShowMessage(Language::Load('custom_form', 2));
                 return DefineCode::CUSTOM_FORM_FIELD_MANAGE+self::INSERT_OR_UPDATE_FAILED;
@@ -119,6 +124,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             return DefineCode::CUSTOM_FORM_FIELD_MANAGE+self::FALSE_CUSTOM_FORM_ID;
         }
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
@@ -128,6 +134,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenModify() {
         $tempContent = Template::Load("custom_form/custom_form_field_deal.html","common");
+        $resultJavaScript="";
         $customFormFieldId = Control::GetRequest("custom_form_field_id", 0);
 
         if (!empty($_POST)) {
@@ -142,7 +149,13 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
                 self::CreateManageUserLog($operateContent);
 
                 Control::ShowMessage(Language::Load('custom_form', 1));
-                Control::CloseTab();
+                $closeTab = Control::PostRequest("CloseTab",0);
+                if($closeTab == 1){
+                    $resultJavaScript .= Control::GetCloseTab();
+                }else{
+                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                }
+
             }else{
                 Control::ShowMessage(Language::Load('custom_form', 2));
                 return DefineCode::CUSTOM_FORM_FIELD_MANAGE+self::INSERT_OR_UPDATE_FAILED;
@@ -209,6 +222,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
         }
 
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 

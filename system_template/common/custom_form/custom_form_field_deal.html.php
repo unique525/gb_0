@@ -26,7 +26,9 @@
 </head>
 <body>
 {common_body_deal}
-<form id="main_form" action="/default.php?secu=manage&mod=custom_form_field&m={method}&custom_form_field_id={CustomFormFieldId}&custom_form_id={CustomFormId}" method="post">
+<form id="main_form" enctype="multipart/form-data"
+      action="/default.php?secu=manage&mod=custom_form_field&m={method}&custom_form_field_id={CustomFormFieldId}&custom_form_id={CustomFormId}&tab_index={tab_index}"
+      method="post">
     <div style="margin:10px auto;margin-left: 10px;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
