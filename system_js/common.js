@@ -66,9 +66,9 @@ function getDate() {
 function formatPrice(price){
     if(price != undefined){
         if(parseFloat(price)>0){
-            return "￥"+parseFloat(price).toFixed(3);
+            return parseFloat(price).toFixed(3);
         }else{
-            return "￥0.000";
+            return "0.000";
         }
 
     }else{
