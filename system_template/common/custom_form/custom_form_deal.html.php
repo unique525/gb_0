@@ -3,12 +3,28 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
-    <script type="text/javascript" src="/system_js/manage/custom_form/custom_form_deal.js"></script>
+    <script type="text/javascript">
+        function submitForm(continueCreate) {
+            if ($('#f_CustomFormSubject').val() == '') {
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("请输入表单名称");
+            } else {
+                if (continueCreate == 1) {
+                    $("#CloseTab").val("0");
+                } else {
+                    $("#CloseTab").val("1");
+                }
+                $('#main_form').submit();
+            }
+        }
+    </script>
 </head>
 
 <body>
 {common_body_deal}
-<form id="main_form" action="/default.php?secu=manage&mod=custom_form&m={method}&site_id={SiteId}&channel_id={ChannelId}&custom_form_id={CustomFormId}" method="post">
+<form id="main_form"
+      action="/default.php?secu=manage&mod=custom_form&m={method}&site_id={SiteId}&channel_id={ChannelId}&custom_form_id={CustomFormId}&tab_index={tab_index}"
+      method="post">
     <div style="margin:10px auto;margin-left: 10px;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>

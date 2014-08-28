@@ -31,7 +31,7 @@ class CustomFormManageData extends BaseManageData {
      */
     public function Modify($httpPostData,$customFormId) {
         $result=-1;
-        if(!empty($httpPostData)){
+        if(!empty($httpPostData)&&$customFormId>0){
             $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_CustomForm, self::TableId_CustomForm, $customFormId, $dataProperty);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -48,20 +48,23 @@ class CustomFormManageData extends BaseManageData {
      * @return array 表单数据集
      */
     public function GetListPager($channelId, $pageBegin, $pageSize, &$allCount) {
-        $searchSql = "";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ChannelId", $channelId);
+        $result=-1;
+        if($channelId>0){
+            $searchSql = "";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
 
-        $sql = "
-            SELECT
-            *
-            FROM
-            " . self::TableName_CustomForm . "
-            WHERE ChannelId=:ChannelId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+            $sql = "
+                SELECT
+                *
+                FROM
+                " . self::TableName_CustomForm . "
+                WHERE ChannelId=:ChannelId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sqlCount = "SELECT count(*) FROM " . self::TableName_CustomForm . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
-        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_CustomForm . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        }
         return $result;
     }
 
@@ -91,10 +94,13 @@ class CustomFormManageData extends BaseManageData {
      * @return array 表单数据
      */
     public function GetOne($customFormId) {
-        $sql = "SELECT * FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("CustomFormId", $customFormId);
-        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        $result=-1;
+        if($customFormId>0){
+            $sql = "SELECT * FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
         return $result;
     }
 
@@ -106,11 +112,14 @@ class CustomFormManageData extends BaseManageData {
      */
 
     public function ModifyState($customFormId, $state) {
-        $sql = "UPDATE " . self::TableName_CustomForm . " SET State = :State WHERE CustomFormId = :CustomFormId ;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("State", $state);
-        $dataProperty->AddField("CustomFormId", $customFormId);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        $result=-1;
+        if($customFormId>0){
+            $sql = "UPDATE " . self::TableName_CustomForm . " SET State = :State WHERE CustomFormId = :CustomFormId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
         return $result;
     }
 

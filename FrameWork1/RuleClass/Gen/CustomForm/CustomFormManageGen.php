@@ -65,6 +65,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreate() {
         $tempContent = Template::Load("custom_form/custom_form_deal.html","common");
+        $resultJavaScript="";
         $manageUserId = Control::GetManageUserId();
         $channelId = Control::GetRequest("channel_id", 0);
         parent::ReplaceFirst($tempContent);
@@ -89,12 +90,16 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     $operateContent = "CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
+
+
+
                     Control::ShowMessage(Language::Load('custom_form', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        Control::CloseTab();
+                        $resultJavaScript .= Control::GetCloseTab();
                     }else{
-                        Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                        //Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
                     }
 
                 }else{
@@ -135,6 +140,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         }
 
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
@@ -144,6 +150,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenModify() {
         $tempContent = Template::Load("custom_form/custom_form_deal.html","common");
+        $resultJavaScript="";
         parent::ReplaceFirst($tempContent);
         $customFormId = Control::GetRequest("custom_form_id", 0);
 
@@ -206,9 +213,17 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                     $operateContent = "CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
-                    Control::ShowMessage(Language::Load('custom_form', 1));
 
-                        Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=list&site_id='.$siteId.'&channel_id='.$channelId);
+                    Control::ShowMessage(Language::Load('custom_form', 1));
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    if($closeTab == 1){
+                        $resultJavaScript .= Control::GetCloseTab();
+                    }else{
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                        //Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=list&site_id='.$siteId.'&channel_id='.$channelId);
+                    }
+
+
                 } else {
 
                     Control::ShowMessage(Language::Load('custom_form', 2));
@@ -220,6 +235,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         }
 
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
