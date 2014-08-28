@@ -7,13 +7,13 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var productParamTypeId = Request["product_param_type_option_id"];
+        var productParamTypeId = Request["product_param_type_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_param_type_option&m=create&product_param_type_option_id='+productParamTypeId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_param_type_option&m=create&product_param_type_id='+productParamTypeId+'&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -44,7 +44,7 @@ $(function() {
             height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'产品编辑',
+            title:'产品参数选项编辑',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });

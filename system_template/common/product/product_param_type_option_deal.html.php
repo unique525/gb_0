@@ -7,31 +7,30 @@
     <script type="text/javascript">
         function sub()
         {
-            var paramTypeName= $('#f_ParamTypeName').val();
-            if(paramTypeName == ''){
-                alert('请填写产品参数名称！');
+            var optionName= $('#f_OptionName').val();
+            if(optionName == ''){
+                alert('请填写产品参数选项名称！');
             }
-            else if(paramTypeName.length>50){
-                alert('产品参数名称长度不能超过50个字节！');
+            else if(optionName.length>100){
+                alert('产品参数选项名称长度不能超过100个字节！');
             }
             else {$('#mainForm').submit();}
         }
     </script>
 </head>
 <body>
-<form id="mainForm" action="/default.php?secu=manage&mod=product_param_type&m={method}&product_param_type_class_id={ProductParamTypeClassId}&product_param_type_id={ProductParamTypeId}&p={PageIndex}" method="post">
+<form id="mainForm" action="/default.php?secu=manage&mod=product_param_type_option&m={method}&product_param_type_id={ProductParamTypeId}&product_param_type_option_id={ProductParamTypeOptionId}&p={PageIndex}" method="post">
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr style="display: none">
             <td class="spe_line" height="30" align="right"></td>
             <td class="spe_line">
-                <input type="hidden" id="f_ProductParamTypeClassId" name="f_ProductParamTypeClassId" value="{ProductParamTypeClassId}" />
                 <input type="hidden" id="f_ProductParamTypeId" name="f_ProductParamTypeId" value="{ProductParamTypeId}" />
-                <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
+                <input type="hidden" id="f_ProductParamTypeOptionId" name="f_ProductParamTypeOptionId" value="{ProductParamTypeOptionId}" />
             </td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_ParamTypeName">产品参数名称：</label></td>
-            <td class="spe_line" title="{ParamTypeName}"><input name="f_ParamTypeName" id="f_ParamTypeName" value="{ParamTypeName}" type="text" class="input_box" style=" width: 300px;" /></td>
+            <td class="spe_line" height="30" align="right"><label for="f_OptionName">产品参数选项名称：</label></td>
+            <td class="spe_line" title="{OptionName}"><input name="f_OptionName" id="f_OptionName" value="{OptionName}" type="text" class="input_box" style=" width: 300px;" /></td>
         </tr>
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_Sort">排序：</label></td>
@@ -45,17 +44,6 @@
                     <option value="100">停用</option>
                 </select>
                 {s_State}
-            </td>
-        </tr>
-
-        <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_ParamValueType">参数类型：</label></td>
-            <td class="spe_line">
-                <select id="f_ParamValueType" name="f_ParamValueType">
-                    <option value="0">文本框</option>
-                    <option value="6">下拉框</option>
-                </select>
-                {s_ParamValueType}
             </td>
         </tr>
         <tr>

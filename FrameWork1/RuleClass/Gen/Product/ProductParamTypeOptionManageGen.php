@@ -41,7 +41,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
-        $productParamTypeClassId = Control::GetRequest("product_param_type_option_id", 0);
+        $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
         $tempContent = Template::Load("product/product_param_type_option_deal.html", "common");
         if ($manageUserId > 0) {
@@ -66,8 +66,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
                 return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
-            $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
-            $tempContent = str_ireplace("{ProductParamTypeOptionClassId}", strval($productParamTypeClassId), $tempContent);
+            $tempContent = str_ireplace("{ProductParamTypeId}", strval($productParamTypeId), $tempContent);
 
             $fieldsOfProductParamTypeOption = $productParamTypeOptionManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfProductParamTypeOption);
@@ -144,7 +143,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
      */
     private function GenList() {
         $templateContent = Template::Load("product/product_param_type_option_list.html", "common");
-        $productParamTypeClassId = Control::GetRequest("product_param_type_option_id", 0);
+        $productParamTypeId = Control::GetRequest("product_param_type_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
@@ -155,13 +154,13 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
             $tagId = "product_param_type_option_list";
             $allCount = 0;
             $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
-            $arrList = $productParamTypeOptionManageData->GetListForPager($productParamTypeClassId, $pageBegin, $pageSize, $allCount, $searchKey);
+            $arrList = $productParamTypeOptionManageData->GetListForPager($productParamTypeId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
                 $isJs = FALSE;
-                $navUrl = "/default.php?secu=manage&mod=product_param_type_option&m=list&product_param_type_option_id=$productParamTypeClassId&p={0}&ps=$pageSize";
+                $navUrl = "/default.php?secu=manage&mod=product_param_type_option&m=list&product_param_type_id=$productParamTypeId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
