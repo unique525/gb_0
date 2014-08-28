@@ -52,8 +52,13 @@
                     <td class="spe_line" height="30" align="right"><label for="f_ParamValueType">参数类型：</label></td>
                     <td class="spe_line">
                         <select id="f_ParamValueType" name="f_ParamValueType">
-                            <option value="0">文本框</option>
-                            <option value="6">下拉框</option>
+                            <option value="0" selected>短字符串</option>
+                            <option value="1">长字符串</option>
+                            <option value="2">文本</option>
+                            <option value="3">单精度</option>
+                            <option value="4">双精度</option>
+                            <option value="5">超链接</option>
+                            <option value="6">下拉选择框</option>
                         </select>
                         {s_ParamValueType}
                     </td>

@@ -118,13 +118,28 @@ function FormatVoteItemState(state){
 function FormatParamValueType(paramValueType){
     switch (paramValueType){
         case "0":
-            return "文本框";
+            return "短字符串";
+            break;
+        case "1":
+            return "长字符串";
+            break;
+        case "2":
+            return "文本";
+            break;
+        case "3":
+            return "单精度";
+            break;
+        case "4":
+            return "双精度";
+            break;
+        case "5":
+            return "超链接";
             break;
         case "6":
-            return "下拉选择";
+            return "下拉选择框";
             break;
         default :
-            return "文本框";
+            return "短字符串";
             break;
     }
 }
