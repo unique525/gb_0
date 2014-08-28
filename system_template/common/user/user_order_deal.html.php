@@ -96,6 +96,7 @@
                 <td class="spe_line" height="30" style="width:100px">商品单价</td>
                 <td class="spe_line" height="30" style="width:100px">购买价</td>
                 <td class="spe_line" height="30" style="width:80px">数量</td>
+                <td class="spe_line" height="30" style="width:50px">单位</td>
                 <td class="spe_line" height="30" style="width:100px">小计</td>
                 <td class="spe_line" height="30" style="width:80px;text-align: center"></td>
             </tr>
@@ -115,7 +116,10 @@
                             ￥<span class="show_price">{f_SalePrice}</span>
                         </td>
                         <td class="spe_line" height="30">
-                            {f_SaleCount}{f_ProductUnit}
+                            {f_SaleCount}
+                        </td>
+                        <td class="spe_line" height="30">
+                            {f_ProductUnit}
                         </td>
                         <td class="spe_line" height="30">
                             ￥<span class="UserOrderSubtotal">{f_Subtotal}</span>
