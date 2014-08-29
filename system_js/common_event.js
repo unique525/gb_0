@@ -54,6 +54,9 @@ $().ready(function() {
                     }
                 }
             });
+        }else{
+            $("#dialog_box").dialog({width: 300, height: 100});
+            $("#dialog_content").html("还没有上传题图");
         }
 
     });

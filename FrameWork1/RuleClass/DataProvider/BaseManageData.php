@@ -217,6 +217,7 @@ class BaseManageData extends BaseData {
         }
     }
 
+
     /**
      * 取得表的字段名称数组
      * @param string $tableName 表名
