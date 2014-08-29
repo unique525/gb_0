@@ -140,7 +140,7 @@ class ProductParamTypeClassManageData extends BaseManageData
         if ($channelId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ParamTypeName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
+                    $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ProductParamTypeClassName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
                     break;
             }
             $sql = "SELECT *"

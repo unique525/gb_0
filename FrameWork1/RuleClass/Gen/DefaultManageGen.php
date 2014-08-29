@@ -115,6 +115,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $productManageGen = new ProductManageGen();
                     $result = $productManageGen->Gen();
                     break;
+                case "product_param":
+                    $productParamManageGen = new ProductParamManageGen();
+                    $result = $productParamManageGen->Gen();
+                    break;
                 case "product_param_type":
                     $productParamTypeManageGen = new ProductParamTypeManageGen();
                     $result = $productParamTypeManageGen->Gen();

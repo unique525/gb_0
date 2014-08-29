@@ -118,13 +118,13 @@ class ProductParamTypeManageData extends BaseManageData
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetList($channelId, $order = "", $topCount = -1)
+    public function GetList($productParamTypeClassId, $order = "", $topCount = -1)
     {
         $result = null;
         if ($topCount != -1)
             $topCount = " limit " . $topCount;
         else $topCount = "";
-        if ($channelId > 0) {
+        if ($productParamTypeClassId > 0) {
             switch ($order) {
                 default:
                     $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ParamTypeName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
@@ -132,11 +132,11 @@ class ProductParamTypeManageData extends BaseManageData
             }
             $sql = "SELECT *"
                 . " FROM " . self::TableName_ProductParamType
-                . " WHERE ChannelId=:ChannelId AND State<100"
+                . " WHERE ProductParamTypeClassId=:ProductParamTypeClassId AND State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
