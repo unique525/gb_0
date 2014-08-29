@@ -13,10 +13,20 @@
                 showButtonPanel: true
             });
 
+            $("#btn_modify_user_info").click(function(){
+                var url='/default.php?secu=manage&mod=user_info&m=modify&user_id={UserId}&site_id='+parent.G_NowSiteId;
+                $("#user_info_dialog_frame").attr("src",url);
+                $("#dialog_user_info_box").dialog({
+                    hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                    autoOpen:true,
+                    height:650,
+                    width:1250,
+                    modal:true, //蒙层（弹出会影响页面大小）
+                    title:'会员详细信息',
+                    overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                });
+            });
         });
-
-
-
     </script>
     <style type="text/css">
         #UserList {
@@ -27,28 +37,16 @@
             OVERFLOW: auto;
         }
 
-        #UserList .span_css {
-            border-bottom: solid 1px #8F8FBD;
-            cursor: pointer;
-            font-size: 13px;
-            LINE-HEIGHT: 30px;
-            text-decoration: none;
-            padding-left: 6px;
-        }
-
-        .span_css {
-            border-bottom: solid 1px #8F8FBD;
-            cursor: pointer;
-            font-size: 13px;
-            LINE-HEIGHT: 30px;
-            text-decoration: none;
-            padding-left: 6px;
-        }
-
     </style>
 </head>
 <body>
-<div style="margin: 0 auto;">
+<div id="dialog_user_info_box" title="提示信息" style="display: none;">
+    <div id="user_info_table" style="font-size: 14px;">
+        <iframe id="user_info_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="650"></iframe>
+    </div>
+</div>
+<div class="div_list">
+    {common_body_deal}
     <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=user&m={method}&user_id={UserId}&site_id={SiteId}"
           method="post">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
@@ -93,13 +91,13 @@
                 <td class="spe_line">
                     <input name="f_RegIp" id="f_RegIp" value="{RegIp}" type="text"  class="input_box" style=" width: 300px;"/></td>
             </tr>
-            <tr>
+            <!--<tr>
                 <td class="spe_line" height="30" align="right"><label for="f_ParentName">会员推荐用户名：</label></td>
                 <td class="spe_line" title="{ParentId}">
                     <input name="ParentName" id="ParentName" value="{ParentName}" type="text" class="input_box" style=" width: 300px;"/>
                     <input name="f_ParentId" id="f_ParentId" value="{ParentId}" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input class="btn" value="修改推荐人" type="button"  onclick="editParent()"/></td>
-            </tr>
+            </tr>-->
             <tr>
                 <td class="spe_line">
 
@@ -137,18 +135,16 @@
                     </select>
                 </td>
             </tr>
-
+            <tr>
+                <td class="spe_line" height="30" align="right"  {display_by_method}>
+                    <span id="btn_modify_user_info" class="btn2">编辑此会员详细信息</span>
+                </td>
+                <td class="spe_line"></td>
+            </tr>
             <tr>
                 <td colspan="2" height="30" align="center">
                     <input id="btn_ConfirmCloseTwo" class="btn" value="确认并关闭" type="button" idvalue="0"/>
                     <input id="btn_RemoveTwo" class="btn" value="取 消" type="button"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" height="30" align="left">
-                    <a href="/default.php?secu=manage&mod=userinfo&m=edit&user_id={UserId}&site_id={SiteId}">[编辑此会员详细信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="/default.php?secu=manage&mod=smsthird&m=sendsms&user_id={UserId}&site_id={SiteId}">[发送手机短信息]</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="/default.php?secu=manage&mod=usermail&m=sendmail&user_id={UserId}&site_id={SiteId}">[发送电子邮件]</a>
                 </td>
             </tr>
         </table>

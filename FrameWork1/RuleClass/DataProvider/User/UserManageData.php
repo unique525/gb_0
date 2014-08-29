@@ -9,6 +9,31 @@
 class UserManageData extends BaseManageData
 {
 
+    public function GetFields(){
+        return parent::GetFields(self::TableName_User);
+    }
+
+    public function Create($httpPostData,$siteId){
+        $result = -1;
+        if(!empty($httpPostData) && $siteId > 0){
+            $userDataProperty = new DataProperty();
+            $userInfoDataProperty = new DataProperty();
+            $sqlInsertToUser = parent::GetInsertSql($httpPostData,self::TableName_User,$userDataProperty,"SiteId",$siteId);
+            $sqlInsertToUserInfo = "INSERT INTO ".self::TableName_UserInfo." (UserId) VALUES (:UserId);";
+
+            $arrSql = Array(
+                $sqlInsertToUser,
+                $sqlInsertToUserInfo
+            );
+            $arrDataProperty = Array(
+                $userDataProperty,
+                $userInfoDataProperty
+            );
+            $result = $this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);//批量执行
+        }
+        return $result;
+    }
+
     /**
      * 取得后台会员列表数据集
      * @param int $siteId 站点id
@@ -108,7 +133,7 @@ class UserManageData extends BaseManageData
     }
 
     /**
-     * 根据userid得到一行信息信息
+     * 根据userId得到一行信息信息
      * @param int $userId 会员id
      * @return array 会员信息列表数据集
      */
