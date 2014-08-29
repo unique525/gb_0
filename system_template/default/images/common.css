@@ -45,6 +45,7 @@ ul{list-style-type:none;}
 .pager_input{color:#999;ime-mode:disabled;width:68px;border:0;height:24px;padding-top:3px;padding-bottom:3px;font-size: 16px;}
 
 .div_list{overflow:auto;margin:8px;}
+.div_deal{overflow:auto;margin:8px;}
 .grid{margin-top:1px;}
 .grid_title{background:#C8CBD5;height:30px;}
 .grid_title td{border-right:solid 0 #ffffff;}

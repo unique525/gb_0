@@ -429,6 +429,12 @@ class BaseData
      */
     const TableId_ProductPrice = "ProductPriceId";
 
+
+    /**
+     * 调试 数据表名
+     */
+    const TableName_DebugLog = "cst_debug_log";
+
     /**
      * 数据库操作对象的实例
      * @var DbOperator 返回数据库操作对象

@@ -239,3 +239,178 @@ function FormatResultMessage(resultMessage){
     return result;
 
 }
+
+/**
+ * ajax上传
+ * @param fileElementId
+ * @param tableType
+ * @param tableId
+ * @param editor
+ * @param fUploadFile
+ * @param attachWatermark
+ */
+function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark)
+{
+    $(document).ajaxStart(function() {
+        $( "#loading" ).show();
+    });
+    $(document).ajaxComplete(function() {
+        $( "#loading" ).hide();
+    });
+
+
+    $.ajaxFileUpload({
+        url:'/default.php?mod=upload_file&a=async_upload&file_element_name=file_upload_to_content&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
+        secureUri:false,
+        fileElementId:fileElementId,
+        dataType: 'json',
+        success: function (data, status)
+        {
+            if(typeof(data.error) != 'undefined')
+            {
+                if(parseInt(data.error)>0){ //ok
+                    var uploadFiles = fUploadFile.val();
+                    uploadFiles = uploadFiles + "," + data.upload_file_id;
+                    fUploadFile.val(uploadFiles);
+                    if(editor != undefined){
+
+                        var uploadFilePath = UploadFileFormatHtml(data.upload_file_path);
+
+                        editor.pasteHTML("<br /><br />"+uploadFilePath);
+
+                    }
+
+                }else{
+
+                    alert(FormatResultMessage(parseInt(data.error)));
+
+                }
+            }
+        },
+        error: function (data, status, e)
+        {
+            alert(e);
+        }
+    });
+}
+function UploadFileFormatHtml(fileName){
+    fileName = fileName.toLowerCase();
+    var fileEx = fileName.substr(fileName.lastIndexOf(".")+1);
+    var url = '';
+    switch(fileEx){
+        case "jpg":
+            url =  '<img src="'+fileName+'" />';
+            break;
+        case "jpeg":
+            url =  '<img src="'+fileName+'" />';
+            break;
+        case "gif":
+            url =  '<img src="'+fileName+'" />';
+            break;
+        case "bmp":
+            url =  '<img src="'+fileName+'" />';
+            break;
+        case "png":
+            url =  '<img src="'+fileName+'" />';
+            break;
+        case "swf":
+            url = '';
+            //return '<embed src="'+ filename + '" id="' + filename + '_SWF" width="200" height="100" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>';
+            url += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="400" height="400">';
+            url += '<param name="movie" value="' + fileName + '">';
+            url += '</object>';
+            break;
+        case "flv":
+            url = '';
+            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<div id="mediaspace"></div>';
+            url += '<scr'+'ipt type="text/javascript">';
+            url += 'jwplayer("mediaspace").setup({';
+            url += '"flashplayer": "/public_js/jwplayer.swf",';
+            url += 'type:"http",';
+            url += '"file": "'+fileName+'",';
+            url += '"image": "",';
+            url += '"streamer": "start",';
+            url += '"autostart": "true",';
+            url += '"controlbar": "bottom",';
+            url += '"width": "500",';
+            url += '"height": "430"';
+            url += '});';
+            url += '</scr'+'ipt>';
+            break;
+        case "mp4":
+            url = '';
+            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<div id="mediaspace"></div>';
+            url += '<scr'+'ipt type="text/javascript">';
+            url += 'jwplayer("mediaspace").setup({';
+            url += '"flashplayer": "/public_js/jwplayer.swf",';
+            url += 'type:"http",';
+            url += '"file": "'+fileName+'",';
+            url += '"image": "",';
+            url += '"streamer": "start",';
+            url += '"autostart": "true",';
+            url += '"controlbar": "bottom",';
+            url += '"width": "500",';
+            url += '"height": "430"';
+            url += '});';
+            url += '</scr'+'ipt>';
+            break;
+        case "wmv":
+            url = '';
+            url += '<object classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701" type="application/x-oleobject" width="400" height="300" id="MediaPlayer">';
+            url += '<param name="URL" value="' + fileName + '">';
+            url += '<param name="UIMode" value="full">';
+            url += '<param name="AutoStart" value="true">';
+            url += '<param name="Enabled" value="true">';
+            url += '<param name="enableContextMenu" value="true">';
+            url += '</object>';
+            break;
+        case "rmvb":
+            url = '';
+            url += '<object width="400" height="300" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">';
+            url += '<param name="CONTROLS" value="ImageWindow">';
+            url += '<param name="CONSOLE" value="Video">';
+            url += '<param name="CENTER" value="TRUE">';
+            url += '<param name="MAINTAINSPECT"  value="TRUE">';
+            url += '</object>'; //定义播放界面
+            url += '<object width="400" height="30" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">';
+            url += '<param name="CONTROLS" value="StatusBar">';
+            url += '<param name="CONSOLE" value="Video">';
+            url += '</object>'; //定义状态栏
+            url += '<object width="400" height="30"  classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">';
+            url += '<param name="CONTROLS" value="ControlPanel">';
+            url += '<param name="CONSOLE" value="Video">';
+            url += '<param name="SRC" value="' + fileName + '>';
+            url += '<param name="AUTOSTART" value="true">';
+            url += '<param name="PREFETCH" value="0">';
+            url += '<param name="NUMLOOP" value="0">';
+            url += '</object>';
+            break;
+        case "rm":
+            url = '';
+            url += "<object width=\"400\" height=\"300\" classid=\"clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA\">";
+            url += "<param name=\"CONTROLS\" value=\"ImageWindow\">";
+            url += "<param name=\"CONSOLE\" value=\"Video\">";
+            url += '<param name="CENTER" value="TRUE">';
+            url += '<param name="MAINTAINSPECT"  value="TRUE">';
+            url += '</object>'; //定义播放界面
+            url += '<object width="400" height="30" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">';
+            url += '<param name="CONTROLS" value="StatusBar">';
+            url += '<param name="CONSOLE" value="Video">';
+            url += '</object>'; //定义状态栏
+            url += '<object width="400" height="30"  classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">';
+            url += '<param name="CONTROLS" value="ControlPanel">';
+            url += '<param name="CONSOLE" value="Video">';
+            url += '<param name="SRC" value="' + fileName + '>';
+            url += '<param name="AUTOSTART" value="true">';
+            url += '<param name="PREFETCH" value="0">';
+            url += "<param name=\"NUMLOOP\" value=\"0\">";
+            url += "</object>";
+            break;
+        default:
+            url = fileName;
+            break;
+    }
+    return url;
+}

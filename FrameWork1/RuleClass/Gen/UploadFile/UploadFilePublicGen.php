@@ -61,15 +61,17 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
 
             $uploadFile = new UploadFile();
             $uploadFileId = 0;
+
             parent::Upload($fileElementName,$tableType,$tableId,$uploadFile,$uploadFileId);
 
             $result = $uploadFile->FormatToJson();
+
         }else{
             $result = '{';
             $result .= '"error":"param error",';
             $result .= '"result_html":"",';
             $result .= '"upload_file_id":"",';
-            $result .= '"upload_file_url":""';
+            $result .= '"upload_file_path":""';
             $result .= '}';
         }
 
