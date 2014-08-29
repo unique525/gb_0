@@ -211,6 +211,10 @@ class BaseData
      */
     const TableName_UserInfo = "cst_user_info";
     /**
+     * 会员详细信息 数据表自增字段名
+     */
+    const TableId_UserInfo = "UserId";
+    /**
      * 会员订单信息 数据表名
      */
     const TableName_UserOrder = "cst_user_order";
@@ -424,6 +428,12 @@ class BaseData
      * 产品价格 数据表自增字段名
      */
     const TableId_ProductPrice = "ProductPriceId";
+
+
+    /**
+     * 调试 数据表名
+     */
+    const TableName_DebugLog = "cst_debug_log";
 
     /**
      * 数据库操作对象的实例

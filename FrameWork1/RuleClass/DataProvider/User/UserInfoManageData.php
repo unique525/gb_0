@@ -8,6 +8,16 @@
 
 class UserInfoManageData extends BaseManageData {
 
+    public function Modify($httpPostData,$userId){
+        $result = -1;
+        if(!empty($httpPostData) && $userId > 0){
+            $dataProperty = new DataProperty();
+            $sql = parent::GetUpdateSql($httpPostData,self::TableName_UserInfo,self::TableId_UserInfo,$userId,$dataProperty);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 获取一个用户的信息
      * @param int $userId 用户Id
@@ -42,7 +52,9 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserInfo.".Honor,
             ".self::TableName_UserInfo.".FansCount,
             ".self::TableName_UserInfo.".Gender,
+            ".self::TableName_UserInfo.".Occupational,
             ".self::TableName_UserInfo.".Province,
+            ".self::TableName_UserInfo.".Country,
             ".self::TableName_UserInfo.".City,
             ".self::TableName_UserInfo.".Hit,
             ".self::TableName_UserInfo.".MessageCount,
@@ -62,7 +74,7 @@ class UserInfoManageData extends BaseManageData {
             LEFT JOIN ".self::TableName_UserSiteLevel." ON (".self::TableName_User.".UserID = ".self::TableName_UserSiteLevel.".UserId) AND ".self::TableName_UserSiteLevel.".SiteId=:SiteId
             LEFT JOIN ".self::TableName_UserRole." ON (".self::TableName_User.".UserID = ".self::TableName_UserRole.".UserID) AND ".self::TableName_UserRole.".SiteID = :SiteId2
             LEFT JOIN ".self::TableName_UserLevel." ON (".self::TableName_UserSiteLevel.".SiteId = ".self::TableName_UserLevel.".SiteID) AND (".self::TableName_UserSiteLevel.".UserLevelId = ".self::TableName_UserLevel.".UserLevelID)
-            LEFT JOIN ".self::TableName_ManageUserGroup." ON (".self::TableName_UserRole.".UserGroupID = ".self::TableName_ManageUserGroup.".UserGroupID) AND (".self::TableName_UserRole.".SiteID = ".self::TableName_UserRole.".SiteID)
+            LEFT JOIN ".self::TableName_ManageUserGroup." ON (".self::TableName_UserRole.".UserGroupID = ".self::TableName_ManageUserGroup.".ManageUserGroupID) AND (".self::TableName_UserRole.".SiteID = ".self::TableName_UserRole.".SiteID)
             WHERE ".self::TableName_User.".UserId=:UserId AND ".self::TableName_User.".State<100;";
         $dataProperty->AddField("UserId", $userId);
         $dataProperty->AddField("SiteId", $siteId);

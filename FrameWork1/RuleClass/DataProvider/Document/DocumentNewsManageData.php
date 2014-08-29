@@ -69,8 +69,8 @@ class DocumentNewsManageData extends BaseManageData
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array();
-        $addFieldValues = array();
+        $addFieldNames = array("CreateDate");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()));
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql($httpPostData, self::TableName_DocumentNews, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);

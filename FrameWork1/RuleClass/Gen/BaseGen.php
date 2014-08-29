@@ -447,7 +447,10 @@ class BaseGen
             case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT:
                 /**资讯内容图   tableId 为 channelId  */
                 if ($tableId > 0) {
-                    $uploadFilePath = $uploadPath . "document_news" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                    $uploadFilePath = $uploadPath . "document_news" .
+                        DIRECTORY_SEPARATOR . strval($tableId) .
+                        DIRECTORY_SEPARATOR . $date .
+                        DIRECTORY_SEPARATOR;
                     $newFileName = 'document_news_content_' . uniqid() . '.' . $fileExtension;
                 }
                 break;

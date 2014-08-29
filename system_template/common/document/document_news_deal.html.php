@@ -15,7 +15,7 @@
 
             $(function(){
 
-                var editorHeight = $(window).height() - 200;
+                var editorHeight = $(window).height() - 220;
                 editorHeight = parseInt(editorHeight);
                 editor = $('#f_DocumentNewsContent').xheditor({
                     tools:'full',
@@ -60,7 +60,18 @@
 
                 var btnUploadToContent = $("#btnUploadToContent");
                 btnUploadToContent.click(function(){
-                    AjaxFileUpload();
+
+                    var fileElementId = 'file_upload_to_content';
+                    var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
+                    var tableId = '{ChannelId}';
+                    var fUploadFile = $("#f_UploadFiles");
+
+                    var attachWatermark = 0;
+                    if($("#attachwatermark").attr("checked")==true){
+                        attachWatermark = 1;
+                    }
+
+                    AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
                 });
 
                 /**
@@ -176,62 +187,7 @@
                 
             }
             
-            /**
-             * ajax上传
-             */
-            function AjaxFileUpload()
-            {
-                $(document).ajaxStart(function() {
-                    $( "#loading" ).show();
-                });
-                $(document).ajaxComplete(function() {
-                    $( "#loading" ).hide();
-                });
 
-                var attachWatermark = 0;
-                if($("#attachwatermark").attr("checked")==true){
-                    attachWatermark = 1;
-                }
-
-                var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
-
-                $.ajaxFileUpload({
-                    url:'/default.php?mod=upload_file&a=async_upload&file_element_name=file_upload_to_content&table_type='+tableType+'&attach_watermark='+attachWatermark,
-                    secureUri:false,
-                    fileElementId:'file_upload_to_content',
-                    dataType: 'json',
-                    success: function (data, status)
-                    {
-                        if(typeof(data.error) != 'undefined')
-                        {
-                            if(parseInt(data.error)>0){ //ok
-                                var fUploadFile = $("#f_UploadFiles");
-                                var uploadFiles = fUploadFile.val();
-                                uploadFiles = uploadFiles + "," + data.upload_file_id;
-                                fUploadFile.val(uploadFiles);
-                                alert(data.error);
-                                alert(data.upload_file_id);
-                                alert(data.result_html);
-                                if(editor != undefined){
-
-                                    editor.pasteHTML(data.result_html);
-
-                                }
-
-                            }else{
-
-                                alert(FormatResultMessage(parseInt(data.error)));
-
-                            }
-                        }
-                    },
-                    error: function (data, status, e)
-                    {
-                        alert(e);
-                    }
-                });
-
-            }
 
 
         function submitForm(closeTab) {
@@ -254,8 +210,9 @@
     </head>
     <body>
     {common_body_deal}
+    <div class="div_deal">
         <form id="mainForm" enctype="multipart/form-data" method="post">
-        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
@@ -561,7 +518,7 @@
         </tr>
         </table>
 
-        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td height="60" align="center">
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续"
@@ -571,6 +528,8 @@
                 </td>
             </tr>
         </table>
+
         </form>
+    </div>
     </body>
 </html>

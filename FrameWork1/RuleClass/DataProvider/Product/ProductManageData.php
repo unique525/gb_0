@@ -114,6 +114,229 @@ class ProductManageData extends BaseManageData {
         return $result;
     }
 
+
+    /**
+     * 修改题图1的上传文件id
+     * @param int $productId 产品id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic1UploadFileId($productId, $titlePic1UploadFileId)
+    {
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId
+
+                    WHERE ProductId = :ProductId
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 修改题图2的上传文件id
+     * @param int $productId 产品id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic2UploadFileId($productId, $titlePic2UploadFileId)
+    {
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId
+
+                    WHERE ProductId = :ProductId
+                    ;";
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 修改题图3的上传文件id
+     * @param int $productId 产品id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic3UploadFileId($productId, $titlePic3UploadFileId)
+    {
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
+
+                    WHERE ProductId = :ProductId
+                    ;";
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 修改题图4的上传文件id
+     * @param int $productId 产品id
+     * @param int $titlePic4UploadFileId 题图4上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic4UploadFileId($productId, $titlePic4UploadFileId)
+    {
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
+                    TitlePic4UploadFileId = :TitlePic4UploadFileId
+
+                    WHERE ProductId = :ProductId
+                    ;";
+            $dataProperty->AddField("TitlePic4UploadFileId", $titlePic4UploadFileId);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 取得题图1的上传文件id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图1的上传文件id
+     */
+    public function GetTitlePic1UploadFileId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_title_pic_1_upload_file_id.cache_' . $productId . '';
+            $sql = "SELECT TitlePic1UploadFileId FROM " . self::TableName_Product . " WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得题图2的上传文件id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图2的上传文件id
+     */
+    public function GetTitlePic2UploadFileId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_title_pic_2_upload_file_id.cache_' . $productId . '';
+            $sql = "SELECT TitlePic2UploadFileId FROM " . self::TableName_Product . " WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得题图3的上传文件id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图3的上传文件id
+     */
+    public function GetTitlePic3UploadFileId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_title_pic_3_upload_file_id.cache_' . $productId . '';
+            $sql = "SELECT TitlePic3UploadFileId FROM " . self::TableName_Product . " WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得题图4的上传文件id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图4的上传文件id
+     */
+    public function GetTitlePic4UploadFileId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_title_pic_4_upload_file_id.cache_' . $productId . '';
+            $sql = "SELECT TitlePic4UploadFileId FROM " . self::TableName_Product . " WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得产品所属站点id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 站点id
+     */
+    public function GetSiteId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_site_id.cache_' . $productId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 返回一行数据
+     * @param int $productId 产品id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($productId){
+        $result = null;
+        if($productId>0){
+            $sql = "SELECT * FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
     /**
      * 取得后台产品列表数据集
      * @param int $channelId 频道id

@@ -32,6 +32,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userManageGen = new UserManageGen();
                     $result = $userManageGen->Gen();
                     break;
+                case "user_info":
+                    $userInfoManageGen = new UserInfoManageGen();
+                    $result = $userInfoManageGen->Gen();
+                    break;
                 case "user_album":
                     $userAlbumManageGen = new UserAlbumManageGen();
                     $result = $userAlbumManageGen->Gen();

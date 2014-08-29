@@ -4,6 +4,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
     <script type="text/javascript" src="/system_js/manage/user/user_manage.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#btn_create").click(function(){
+                parent.G_TabUrl = "/default.php?secu=manage&mod=user&m=create&site_id="+ parent.G_NowSiteId
+                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+                parent.G_TabTitle = '新增会员';
+                parent.addTab();
+            });
+            $(".modify_user_info").click(function(){
+                var userId = $(this).attr("idvalue");
+                parent.G_TabUrl = "/default.php?secu=manage&mod=user&user_id="+userId+"&m=modify&site_id="+ parent.G_NowSiteId
+                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+                parent.G_TabTitle = '编辑会员信息';
+                parent.addTab();
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="div_list">
@@ -33,10 +50,21 @@
                     <li class="user_item">
                         <table width="100%" cellpadding="0" cellspacing="0">
                             <tr>
-                            <td width="60"><img class="img_avatar" width="60" height="60" src="/upload/Desert.jpg" alt="会员头像"/></td>
-                            <td>
-                                <div>{f_UserName}</div>
-                            </td>
+                                <td width="60">
+                                    <img class="img_avatar" width="60" height="60" src="{f_Avatar}" alt="会员头像"/>
+                                </td>
+                                <td width="5"></td>
+                                <td align="left" valign="top">
+                                    <div>{f_UserName}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" height="5"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改会员信息</span>
+                                </td>
                             </tr>
                         </table>
                     </li>

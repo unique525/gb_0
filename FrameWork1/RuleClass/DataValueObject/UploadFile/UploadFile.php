@@ -500,11 +500,13 @@ class UploadFile {
      */
     public function FormatToJson(){
 
+        $uploadFilePath = $this->UploadFilePath;
+        $uploadFilePath = str_ireplace('"',"",$uploadFilePath);
+
         $returnJson = '{';
         $returnJson .= '"error":"' . $this->ErrorMessage . '",';
-        $returnJson .= '"result_html":"' . $this->ResultHtml . '",';
         $returnJson .= '"upload_file_id":"' . $this->UploadFileId . '",';
-        $returnJson .= '"upload_file_url":"' . $this->UploadFilePath . '"';
+        $returnJson .= '"upload_file_path":"' .$uploadFilePath. '"';
         $returnJson .= '}';
 
         return $returnJson;
