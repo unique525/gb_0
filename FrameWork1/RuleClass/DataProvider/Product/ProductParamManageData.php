@@ -86,14 +86,12 @@ class ProductParamManageData extends BaseManageData {
     public function CreateProductParam($httpPostData,$productId) {
         $result=-1;
         $arrDataProperty = array();
-        $arrAddField=array();
-        $arrAddField["ProductID"]=$productId;
         if (!empty($httpPostData)) {
             $arrSql = self::GetInsertSqlForProductParam(
                 $httpPostData,
                 self::TableName_ProductParam,
-                $arrDataProperty,
-                $arrAddField
+                $productId,
+                $arrDataProperty
             );
             $result = $this->dbOperator->ExecuteBatch($arrSql, $arrDataProperty);
         }
@@ -104,11 +102,12 @@ class ProductParamManageData extends BaseManageData {
      * 根据POST和附加字段生成产品参数表的INSERT SQL
      * @param array $httpPostData $_POST数组
      * @param string $tableName 表名
+     * @param string $productId 产品ID
      * @param array $arrDataProperty 数据对象数组
      * @param array $arrAddField 附加字段键值对数组
      * @return string SQL数组
      */
-    public function GetInsertSqlForProductParam($httpPostData, $tableName, &$arrDataProperty, $arrAddField = null)
+    public function GetInsertSqlForProductParam($httpPostData, $tableName, $productId, &$arrDataProperty, $arrAddField = null)
     {
         if (!empty($httpPostData)) {
             $arrSql = array();
@@ -136,6 +135,14 @@ class ProductParamManageData extends BaseManageData {
                         $fieldNames = $fieldNames . ",`" . $keyName . "`";
                         $fieldValues = $fieldValues . ",:" . $keyName;
                         $dataProperty->AddField($keyName, stripslashes($value));
+                        //产品参数类型选项Id字段插入SQL
+                        $productParamTypeOptionIdFieldName = "ProductParamTypeOptionId";
+                        $productParamTypeOptionId = self::GetProductParamTypeOptionId($productParamTypeId, $value);
+                        if ($productParamTypeOptionId > 0) {
+                            $fieldNames = $fieldNames . ",`" . $productParamTypeOptionIdFieldName . "`";
+                            $fieldValues = $fieldValues . ",:" . $productParamTypeOptionIdFieldName;
+                            $dataProperty->AddField($productParamTypeOptionIdFieldName, stripslashes($productParamTypeOptionId));
+                        }
                     } else if ($controlType === "ppr") { //radio checkbox类字段
                         $fieldNames = $fieldNames . ",`" . $keyName . "`";
                         $fieldValues = $fieldValues . ",:" . $keyName;
@@ -144,6 +151,13 @@ class ProductParamManageData extends BaseManageData {
                         } else {
                             $dataProperty->AddField($keyName, "0");
                         }
+                    }
+                    //产品ID字段插入SQL
+                    $productIdFieldName = "ProductID";
+                    if (strlen($productId) > 0) {
+                        $fieldNames = $fieldNames . "," . $productIdFieldName;
+                        $fieldValues = $fieldValues . ",:" . $productIdFieldName;
+                        $dataProperty->AddField($productIdFieldName, stripslashes($productId));
                     }
                     //产品参数类型字段插入SQL
                     $productParamTypeFieldName = "ProductParamTypeId";
@@ -162,6 +176,7 @@ class ProductParamManageData extends BaseManageData {
                             }
                         }
                     }
+
                     //去掉字符串开头多余的逗号
                     if (strpos($fieldNames, ",") === 0) {
                         $fieldNames = substr($fieldNames, 1);
@@ -190,14 +205,12 @@ class ProductParamManageData extends BaseManageData {
     public function ModifyProductParam($httpPostData,$productId) {
         $result=-1;
         $arrDataProperty = array();
-        $arrAddField=array();
-        $arrAddField["ProductID"]=$productId;
         if (!empty($httpPostData)) {
             $arrSql = self::GetInsertSqlForProductParam(
                 $httpPostData,
                 self::TableName_ProductParam,
-                $arrDataProperty,
-                $arrAddField
+                $productId,
+                $arrDataProperty
             );
             //先删除产品id对应所有参数再重新新增实现修改
             $sqlDelete = "DELETE FROM ".self::TableName_ProductParam
@@ -208,6 +221,24 @@ class ProductParamManageData extends BaseManageData {
             array_unshift($arrDataProperty, $dataProperty);
             $result = $this->dbOperator->ExecuteBatch($arrSql, $arrDataProperty);
         }
+        return $result;
+    }
+
+    /**
+     * 根据参数类型ID和参数值获取产品参数选项ID
+     * @param int $productParamTypeId 产品参数类型id
+     * @param string $OptionName 产品参数值
+     * @return string 产品参数选项ID
+     */
+    public function GetProductParamTypeOptionId($productParamTypeId, $OptionName)
+    {
+        $sql = "SELECT ProductParamTypeOptionId"
+            . " FROM " . self::TableName_ProductParamTypeOption . " t"
+            . " WHERE ProductParamTypeId=:ProductParamTypeId AND OptionName=:OptionName";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        $dataProperty->AddField("OptionName", $OptionName);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
