@@ -41,7 +41,7 @@
 <body>
 {common_body_deal}
 <form id="mainForm" enctype="multipart/form-data"
-      action="/default.php?secu=manage&mod=product&m={method}&channel_id={ChannelId}&tab_index={tab_index}"
+      action="/default.php?secu=manage&mod=product&m={method}&channel_id={ChannelId}&product_id={ProductId}&tab_index={tab_index}"
       method="post">
 <div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
