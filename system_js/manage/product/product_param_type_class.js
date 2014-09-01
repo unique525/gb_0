@@ -130,7 +130,7 @@ function ModifyProductParamTypeClassState(idvalue, state) {
 
 function _ModifyProductParamTypeClassState(idvalue, state) {
     $.ajax({
-        url:"/default.php?secu=manage&mod=product_param_type_class&m=modify_state",
+        url:"/default.php?secu=manage&mod=product_param_type_class&m=async_modify_state",
         data:{state:state,product_param_type_class_id:idvalue},
         dataType:"jsonp",
         jsonp:"jsonpcallback",

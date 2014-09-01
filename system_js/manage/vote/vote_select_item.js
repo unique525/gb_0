@@ -143,7 +143,7 @@ function ModifyVoteSelectItemState(idvalue, state) {
 
 function _ModifyVoteSelectItemState(idvalue, state) {
     $.ajax({
-        url:"/default.php?secu=manage&mod=vote_select_item&m=modify_state",
+        url:"/default.php?secu=manage&mod=vote_select_item&m=async_modify_state",
         data:{state:state,vote_select_item_id:idvalue},
         dataType:"jsonp",
         jsonp:"jsonpcallback",

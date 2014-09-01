@@ -119,26 +119,27 @@ class VoteSelectItemManageData extends BaseManageData
      * @return array  选项列表数组
      */
     public function GetListForPager($voteItemId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
-        $dataProperty = new DataProperty();
-        $searchSql = "WHERE";
-        if ($voteItemId > 0) {
-            $searchSql .= " VoteItemId=:VoteItemId AND";
-            $dataProperty->AddField("VoteItemId", $voteItemId);
+        $result = null;
+        if ($voteItemId < 0) {
+            return $result;
         }
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("VoteItemId", $voteItemId);
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " (VoteTitle LIKE :searchKey1) AND";
+            $searchSql .= " AND (VoteTitle LIKE :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "";
-        $sql = "SELECT VoteItemId,VoteSelectItemId,VoteSelectItemTitle,Sort,State,AddCount,RecordCount
-        FROM " . self::TableName_VoteSelectItem . " " . $searchSql . "
+        $sql = "
+        SELECT VoteItemId,VoteSelectItemId,VoteSelectItemTitle,Sort,State,AddCount,RecordCount
+        FROM " . self::TableName_VoteSelectItem . "
+        WHERE VoteItemId=:VoteItemId" . $searchSql . "
         ORDER BY Sort DESC,VoteSelectItemId ASC
         LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_VoteSelectItem . " " . $searchSql;
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_VoteSelectItem . "
+        WHERE  VoteItemId=:VoteItemId" . $searchSql;
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

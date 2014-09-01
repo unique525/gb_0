@@ -105,21 +105,19 @@ class ProductParamTypeClassManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
-        $searchSql = "WHERE";
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " SiteId=:SiteId AND ChannelId=:ChannelId AND (ProductParamTypeClassName like :searchKey1) AND";
+            $searchSql = " AND ProductParamTypeClassName like :searchKey1) AND";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "WHERE SiteId=:SiteId AND ChannelId=:ChannelId";
-
         $sql = "SELECT ProductParamTypeClassId,ProductParamTypeClassName,State,CreateDate,SiteId,ChannelId
-        FROM " . self::TableName_ProductParamTypeClass . " " . $searchSql . "
-        ORDER BY Sort DESC,ProductParamTypeClassId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+                FROM " . self::TableName_ProductParamTypeClass . "
+                WHERE SiteId=:SiteId AND ChannelId=:ChannelId" . $searchSql . "
+                ORDER BY Sort DESC,ProductParamTypeClassId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeClass . " ". $searchSql . ";";
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeClass . "
+        WHERE SiteId=:SiteId AND ChannelId=:ChannelId". $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

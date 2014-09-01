@@ -56,26 +56,26 @@ class VoteItemManageData extends BaseManageData
      * @return array  题目列表数组
      */
     public function GetListForPager($voteId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
-        $dataProperty = new DataProperty();
-        $searchSql = "WHERE";
-        if ($voteId > 0) {
-            $searchSql .= " VoteId=:VoteId AND";
-            $dataProperty->AddField("VoteId", $voteId);
+        $result = null;
+        if ($voteId < 0) {
+            return $result;
         }
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("VoteId", $voteId);
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " (VoteTitle like :searchKey1) AND";
+            $searchSql .= " AND (VoteTitle like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "";
         $sql = "
         SELECT VoteItemId,VoteId,VoteItemTitle,Sort,State,VoteItemType,RecordCount
-        FROM " . self::TableName_VoteItem . " " . $searchSql . "
+        FROM " . self::TableName_VoteItem . "
+        WHERE VoteId=:VoteId" . $searchSql . "
         ORDER BY Sort DESC,VoteItemId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_VoteItem . " " . $searchSql;
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_VoteItem . "
+        WHERE VoteId=:VoteId"  . $searchSql;
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

@@ -87,33 +87,33 @@ class ProductParamTypeManageData extends BaseManageData
      * @return array  产品参数类型列表数组
      */
     public function GetListForPager($productParamTypeClassId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
-        $dataProperty = new DataProperty();
-        $searchSql = "WHERE";
-        if ($productParamTypeClassId > 0) {
-            $searchSql .= " ProductParamTypeClassId=:ProductParamTypeClassId AND";
-            $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
+        $result = null;
+        if ($productParamTypeClassId < 0) {
+            return $result;
         }
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " (ParamTypeName like :searchKey1) AND";
+            $searchSql .= " AND (ParamTypeName like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "";
         $sql = "
         SELECT ProductParamTypeId,ProductParamTypeClassId,ParamTypeName,ParamValueType,Sort,State,CreateDate
-        FROM " . self::TableName_ProductParamType . " " . $searchSql . "
+        FROM " . self::TableName_ProductParamType ."
+        WHERE ProductParamTypeClassId=:ProductParamTypeClassId" . $searchSql . "
         ORDER BY Sort DESC,ProductParamTypeId ASC LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamType . " " . $searchSql;
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_ProductParamType . "
+        WHERE ProductParamTypeClassId=:ProductParamTypeClassId" . $searchSql;
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
     /**
      * 获取产品参数类型记录
-     * @param int $channelId 频道Id
+     * @param int $productParamTypeClassId 产品参数类型ID
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组

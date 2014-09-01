@@ -151,26 +151,28 @@ class ProductParamTypeOptionManageData extends BaseManageData
      * @return array  选项列表数组
      */
     public function GetListForPager($productParamTypeId, $pageBegin, $pageSize, &$allCount, $searchKey = "") {
-        $dataProperty = new DataProperty();
-        $searchSql = "WHERE";
-        if ($productParamTypeId > 0) {
-            $searchSql .= " ProductParamTypeId=:ProductParamTypeId AND";
-            $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        $result = null;
+        if ($productParamTypeId < 0) {
+            return $result;
         }
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " (OptionName LIKE :searchKey1) AND";
+            $searchSql .= " AND (OptionName LIKE :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "";
-        $sql = "SELECT ProductParamTypeId,ProductParamTypeOptionId,OptionName,Sort,State
-        FROM " . self::TableName_ProductParamTypeOption . " " . $searchSql . "
+
+        $sql = "
+        SELECT ProductParamTypeId,ProductParamTypeOptionId,OptionName,Sort,State
+        FROM " . self::TableName_ProductParamTypeOption . "
+        WHERE ProductParamTypeId=:ProductParamTypeId" . $searchSql . "
         ORDER BY Sort DESC,ProductParamTypeOptionId ASC
         LIMIT " . $pageBegin . "," . $pageSize . "";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeOption . " " . $searchSql;
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_ProductParamTypeOption . "
+        WHERE ProductParamTypeId=:ProductParamTypeId" . $searchSql;
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

@@ -99,27 +99,26 @@ class VoteManageData extends BaseManageData
     public function GetListForPager($siteId, $channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
     {
         $result = null;
-        if ($siteId < 0 || $channelId < 0 || $pageBegin < 0 || $pageSize < 0) {
+        if ($siteId < 0 || $channelId < 0) {
             return $result;
         }
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
-        $searchSql = "WHERE";
+        $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " SiteId=:SiteId AND ChannelId=:ChannelId AND (VoteTitle like :searchKey1) AND";
+            $searchSql .= " AND (VoteTitle like :searchKey1) AND";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
-        if (strlen($searchSql) > 5)
-            $searchSql = substr($searchSql, 0, strlen($searchSql) - 3);
-        else
-            $searchSql = "WHERE SiteId=:SiteId AND ChannelId=:ChannelId";
 
-        $sql = "SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId
+        $sql = "
+        SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId
         FROM " . self::TableName_Vote . " " . $searchSql . "
         ORDER BY Sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        $sql = "SELECT COUNT(*) FROM " . self::TableName_Vote . " ". $searchSql . ";";
+        $sql = "
+        SELECT COUNT(*) FROM " . self::TableName_Vote . "
+        WHERE SiteId=:SiteId AND ChannelId=:ChannelId ". $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

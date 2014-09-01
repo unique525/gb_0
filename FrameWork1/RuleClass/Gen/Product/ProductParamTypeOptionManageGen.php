@@ -19,7 +19,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
             case "create":
                 $result = self::GenCreate();
                 break;
-            case "modify_state":
+            case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
             case "modify":
