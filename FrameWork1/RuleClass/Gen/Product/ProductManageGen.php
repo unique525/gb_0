@@ -70,13 +70,13 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $fileElementName = "file_title_pic_1";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1;
                         $tableId = $channelId;
-                        $uploadResult1 = new UploadResult();
+                        $uploadFile1 = new UploadFile();
                         $uploadFileId1 = 0;
                         $titlePic1Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult1,
+                            $uploadFile1,
                             $uploadFileId1
                         );
 
@@ -90,12 +90,12 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $fileElementName = "file_title_pic_2";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_2;
                         $uploadFileId2 = 0;
-                        $uploadResult2 = new UploadResult();
+                        $uploadFile2 = new UploadFile();
                         $titlePic2Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult2,
+                            $uploadFile2,
                             $uploadFileId2
                         );
                         if (intval($titlePic2Result) <=0){
@@ -109,13 +109,13 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_3;
                         $uploadFileId3 = 0;
 
-                        $uploadResult3 = new UploadResult();
+                        $uploadFile3 = new UploadFile();
 
                         $titlePic3Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult3,
+                            $uploadFile3,
                             $uploadFileId3)
                         ;
                         if (intval($titlePic3Result) <=0){
@@ -129,13 +129,13 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_4;
                         $uploadFileId4 = 0;
 
-                        $uploadResult4 = new UploadResult();
+                        $uploadFile4 = new UploadFile();
 
                         $titlePic4Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadResult4,
+                            $uploadFile4,
                             $uploadFileId4)
                         ;
                         if (intval($titlePic4Result) <=0){
