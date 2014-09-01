@@ -45,16 +45,16 @@
             border-bottom: #d5d5d5 1px dashed; text-align: left
         }
         #main_content .main_line_content {
-            float: left; width: 490px; text-align: left
+            float: left; width: 390px; text-align: left
         }
         #main_content .main_line_content_left {
-            float: left; width: 180px; line-height: 30px; text-align: right
+            float: left; width: 80px; line-height: 30px; text-align: right
         }
         #main_content .main_line_content_right {
             float: left; width: 310px; line-height: 30px
         }
         #main_content .main_line_title {
-            clear: both; padding-right: 10px; font-weight: bold; padding-bottom: 10px; vertical-align: top; padding-top: 10px; border-bottom: #d5d5d5 1px dashed
+            text-align:left;clear: both; padding-right: 10px; font-weight: bold; padding-bottom: 10px; vertical-align: top; padding-top: 10px; border-bottom: #d5d5d5 1px dashed
         }
     </style>
 </head>
@@ -198,7 +198,7 @@
                                 [CDATA]
                                 <div class="main_line_content">
                                     <div class="main_line_content_left">{f_ParamTypeName}：</div>
-                                    <div class="main_line_content_right"><icms_control id="{f_ProductParamTypeId}" product_id="{ProductId}" type="{f_ParamValueType}"></icms_control></div>
+                                    <div class="main_line_content_right"><icms_control id="{f_ProductParamTypeId}" product_id="{ProductId}" type="{f_ParamValueType}" input_class="input_box" ></icms_control></div>
                                 </div>
                                 [/CDATA]
                             </item_child>
