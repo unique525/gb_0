@@ -37,6 +37,26 @@
         }
         -->
     </script>
+    <style type="text/css">
+        #main_content {
+            width:99%; text-align: center;
+        }
+        #main_content .main_line_body {
+            border-bottom: #d5d5d5 1px dashed; text-align: left
+        }
+        #main_content .main_line_content {
+            float: left; width: 490px; text-align: left
+        }
+        #main_content .main_line_content_left {
+            float: left; width: 180px; line-height: 30px; text-align: right
+        }
+        #main_content .main_line_content_right {
+            float: left; width: 310px; line-height: 30px
+        }
+        #main_content .main_line_title {
+            clear: both; padding-right: 10px; font-weight: bold; padding-bottom: 10px; vertical-align: top; padding-top: 10px; border-bottom: #d5d5d5 1px dashed
+        }
+    </style>
 </head>
 <body>
 {common_body_deal}
@@ -167,9 +187,28 @@
         </table>
     </div>
     <div id="tabs-3">
-        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-
-        </table>
+        <div id="main_content">
+            <icms id="{ChannelId}" type="product_param_type_class_list">
+                <item>
+                    <![CDATA[
+                    <div class="main_line_title" style="font-size:14px">{f_ProductParamTypeClassName}</div>
+                    <div class="main_line_body">
+                        <icms_child id="{f_ProductParamTypeClassId}" type="product_param_type_list">
+                            <item_child>
+                                [CDATA]
+                                <div class="main_line_content">
+                                    <div class="main_line_content_left">{f_ParamTypeName}：</div>
+                                    <div class="main_line_content_right"><icms_control id="{f_ProductParamTypeId}" product_id="{ProductId}" type="{f_ParamValueType}"></icms_control></div>
+                                </div>
+                                [/CDATA]
+                            </item_child>
+                        </icms_child>
+                        <div class="spe"></div>
+                    </div>
+                    ]]>
+                </item>
+            </icms>
+        </div>
     </div>
     <div id="tabs-4">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">

@@ -51,13 +51,14 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tempContent = Template::Load("product/product_deal.html", "common");
             parent::ReplaceFirst($tempContent);
             $productManageData = new ProductManageData();
-
+            $productParamManageData = new ProductParamManageData();
             $channelManageData = new ChannelManageData();
             $siteId = $channelManageData->GetSiteId($channelId, false);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
+                //产品新增
                 $productId = $productManageData->Create($httpPostData);
                 //加入操作日志
                 $operateContent = 'Create Product,POST FORM:'
@@ -65,6 +66,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($productId > 0) {
+
+                    //产品参数新增
+                    $productParamManageData->CreateProductParam($httpPostData, $productId);
                     if( !empty($_FILES)){
                         //title pic1
                         $fileElementName = "file_title_pic_1";
@@ -192,8 +196,24 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tempContent = str_ireplace("{ChannelId}", strval($channelId), $tempContent);
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
 
+            //生成产品新增界面
             $fieldsOfChannel = $productManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
+
+            //生成产品参数新增界面
+            self::SubGenProductParamTypeClass($tempContent);
+            //把对应ID的CMS标记替换成指定内容
+            //替换子循环里的<![CDATA[标记
+            $tempContent = str_ireplace("<icms_child", "<icms", $tempContent);
+            $tempContent = str_ireplace("</icms_child>", "</icms>", $tempContent);
+            $tempContent = str_ireplace("<item_child", "<item", $tempContent);
+            $tempContent = str_ireplace("</item_child>", "</item>", $tempContent);
+            $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
+            $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
+            $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
+            $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
+            self::SubGenProductParamType($tempContent);
+            self::SubGenProductParamTypeControl($tempContent);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -226,20 +246,42 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
 
 
-            //加载原有数据
+            //加载产品表数据
             $arrOne = $productManageData->GetOne($productId);
             Template::ReplaceOne($tempContent, $arrOne);
+
+            //生成产品参数界面并加载产品参数数据
+            self::SubGenProductParamTypeClass($tempContent);
+            //把对应ID的CMS标记替换成指定内容
+            //替换子循环里的<![CDATA[标记
+            $tempContent = str_ireplace("<icms_child", "<icms", $tempContent);
+            $tempContent = str_ireplace("</icms_child>", "</icms>", $tempContent);
+            $tempContent = str_ireplace("<item_child", "<item", $tempContent);
+            $tempContent = str_ireplace("</item_child>", "</item>", $tempContent);
+            $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
+            $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
+            $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
+            $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
+            self::SubGenProductParamType($tempContent);
+            //取产品参数表数据
+            $productParamManageData = new ProductParamManageData();
+            $arrProductParam = $productParamManageData->GetList($productId);
+            self::SubGenProductParamTypeControl($tempContent,$arrProductParam);
 
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
+                    //产品表数据修改
                     $result = $productManageData->Modify($httpPostData, $productId);
+
                     //加入操作日志
                     $operateContent = 'Modify Product,POST FORM:'.implode('|',$_POST).';\r\nResult:ProductId:'.$result;
                     self::CreateManageUserLog($operateContent);
 
                     if ($result > 0) {
+                        //产品参数表数据修改
+                        $productParamManageData->ModifyProductParam($httpPostData, $productId);
                         //题图操作
                         if( !empty($_FILES)){
                             //title pic1
@@ -458,6 +500,217 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+    ///////////////////////////// 以下为产品参数表处理方法/////////////////////////////////
+
+    /**
+     * 替换模板中的产品参数类别标记生成产品参数类别列表
+     * @param string $tempContent 模板字符串
+     */
+    public function SubGenProductParamTypeClass(&$tempContent)
+    {
+        $keyName = "icms";
+        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        if (isset($arr)) {
+            if (count($arr) > 1) {
+                if (!empty($arr[1])) {
+                    $productParamTypeClassData = new ProductParamTypeClassManageData();
+                    $arr2 = $arr[1];
+                    foreach ($arr2 as $val) {
+                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
+                        $channelId = Template::GetParamValue($content, "id", $keyName);
+                        $type = Template::GetParamValue($content, "type", $keyName);
+                        if ($type == 'product_param_type_class_list') {
+                            $arrProductParamTypeClassList = $productParamTypeClassData->GetList($channelId);
+                            Template::ReplaceList($content, $arrProductParamTypeClassList, $channelId, $keyName);
+                            $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 替换模板中的产品参数类别标记生成产品参数类别列表
+     * @param string $tempContent 模板字符串
+     */
+    public function SubGenProductParamType(&$tempContent)
+    {
+        $keyName = "icms";
+        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        if (isset($arr)) {
+            if (count($arr) > 1) {
+                if (!empty($arr[1])) {
+                    $productParamTypeData = new ProductParamTypeManageData();
+                    $arr2 = $arr[1];
+                    foreach ($arr2 as $val) {
+                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
+                        $productParamTypeClassId = Template::GetParamValue($content, "id", $keyName);
+                        $type = Template::GetParamValue($content, "type", $keyName);
+                        if ($type == 'product_param_type_list') {
+                            $arrProductParamTypeList = $productParamTypeData->GetList($productParamTypeClassId);
+                            Template::ReplaceList($content, $arrProductParamTypeList, $productParamTypeClassId, $keyName);
+                            $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeClassId, $content, $keyName);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 替换模板中的控件标记按类别生成控件
+     * @param string $tempContent 模板字符串
+     * @param array $arrProductParam 产品参数值数组
+     */
+    public function SubGenProductParamTypeControl(&$tempContent,$arrProductParam=null)
+    {
+        $keyName = "icms_control";
+        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        if (isset($arr)) {
+            if (count($arr) > 1) {
+                if (!empty($arr[1])) {
+                    $arr2 = $arr[1];
+                    foreach ($arr2 as $val) {
+                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
+                        $productParamTypeId = Template::GetParamValue($content, "id", $keyName);
+                        $paramValueType = Template::GetParamValue($content, "type", $keyName);
+                        $inputClass = Template::GetParamValue($content, "input_class", $keyName);
+                        $selectClass = Template::GetParamValue($content, "select_class", $keyName);
+                        $content = self::GenControl($productParamTypeId, $paramValueType, $inputClass, $selectClass ,$arrProductParam);
+                        $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeId, $content, $keyName);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 根据参数类型生成控件
+     * @param string $productParamTypeId 参数类型Id
+     * @param string $paramValueType 参数类型值
+     * @param string $inputClass 文本输入框控件样式名称
+     * @param string $selectClass 下拉控件控件样式名称
+     * @param array $arrProductParam 产品参数值数组
+     * @return string 输入框html
+     */
+    public function GenControl($productParamTypeId, $paramValueType, $inputClass, $selectClass,$arrProductParam)
+    {
+        switch ($paramValueType) {
+            case "0":
+                $columnName="ShortStringValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "1":
+                $columnName="LongStringValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "2":
+                $columnName="MaxStringValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "3":
+                $columnName="FloatValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "4":
+                $columnName="MoneyValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "5":
+                $columnName="UrlValue";
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+            case "6":
+                $columnName="ShortStringValue";
+                $controlName = "pps_".$columnName."_" . $productParamTypeId;
+                $controlId = "pps_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $productParamTypeOptionManageData = new ProductParamTypeOptionManageData();
+                $arrProductParamTypeOption = $productParamTypeOptionManageData->GetList($productParamTypeId);
+                $result = self::GenSelectControl($controlId, $controlName, $selectClass, $arrProductParamTypeOption,$controlValue);
+                break;
+            default:
+                $columnName="ShortStringValue";
+                $controlName = "pps_".$columnName."_" . $productParamTypeId;
+                $controlId = "pps_".$columnName."_" . $productParamTypeId;
+                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
+                $result = self::GenInputControl($controlId, $controlName, $inputClass,$controlValue);
+                break;
+
+        }
+        return $result;
+    }
+
+    /**
+     * 生成产品参数输入框
+     * @param string $name 输入框name
+     * @param string $id 输入框id
+     * @param string $inputClass 输入框样式类名称
+     * @param string $value 输入框的值
+     * @return string 输入框html
+     */
+    public function GenInputControl($id, $name, $inputClass, $value = "")
+    {
+        $result = '<input type="text" name="' . $name . '" id="' . $id . '" class="' . $inputClass . '" value="' . $value . '" />';
+        return $result;
+    }
+
+    /**
+     * 生成产品参数选项下拉框
+     * @param string $name 下拉控件name
+     * @param string $id 下拉控件id
+     * @param string $selectClass 下拉控件样式类名称
+     * @param array $arrProductParamTypeOption 产品参数选项数组
+     * @param string $value 产品参数下拉控件选中值
+     * @return string 下拉框html
+     */
+    public function GenSelectControl($id, $name, $selectClass, $arrProductParamTypeOption, $value = "")
+    {
+        $result = '<select name="' . $name . '" id="' . $id . '" class="' . $selectClass . '">';
+        for ($i = 0; $i < count($arrProductParamTypeOption); $i++) {
+            if (!empty($value) && $value === $arrProductParamTypeOption[$i]["OptionName"])
+                $result = $result . '<option value="' . $arrProductParamTypeOption[$i]["OptionName"] . '" selected>' . $arrProductParamTypeOption[$i]["OptionName"] . '</option>';
+            else $result = $result . '<option value="' . $arrProductParamTypeOption[$i]["OptionName"] . '">' . $arrProductParamTypeOption[$i]["OptionName"] . '</option>';
+        }
+        $result = $result . "</select>";
+        return $result;
+    }
+
+    /**
+     * 根据产品参数类型ID和产品参数类型对应值字段名称得到产品参数值
+     * @param array $arrProductParam 产品参数数组
+     * @param string $productParamTypeId 产品参数类型Id
+     * @param string $productParamColumnName 产品参数类型对应值字段名称
+     * @return string 产品参数值
+     */
+    public function GetProductParamValue($arrProductParam,$productParamTypeId,$productParamColumnName){
+        $productParamValue="";
+        for ($i = 0; $i < count($arrProductParam); $i++) {
+            if($productParamTypeId===$arrProductParam[$i]["ProductParamTypeId"])
+                $productParamValue=$arrProductParam[$i][$productParamColumnName];
+        }
+        return $productParamValue;
     }
 
 } 
