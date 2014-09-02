@@ -4,19 +4,19 @@ class Remote {
 
     /**
      * 根据URL抓数据
-     * @param $sUrl
+     * @param string $url 要抓取的网址
      * @param int $jumpNumber
      * @return array|bool|string
      */
-    public static function GetUrl($sUrl,$jumpNumber=0){
-        $arrUrl = parse_url(trim($sUrl));
+    public static function GetUrl($url,$jumpNumber=0){
+        $arrUrl = parse_url(trim($url));
         if(!$arrUrl)return false;
         $host=$arrUrl['host'];
         $port=isset($arrUrl['port'])?$arrUrl['port']:80;
         $path=$arrUrl['path'].(isset($arrUrl['query'])?"?".$arrUrl['query']:"");
         $fp = @fsockopen($host,$port,$errorNumber, $errorString, 30);
         if(!$fp)return false;
-        $output="GET $path HTTP/1.0\r\nHost: $host\r\nReferer: $sUrl\r\nConnection: close\r\n\r\n";
+        $output="GET $path HTTP/1.0\r\nHost: $host\r\nReferer: $url\r\nConnection: close\r\n\r\n";
         stream_set_timeout($fp, 60);
         @fputs($fp,$output);
         $Content='';

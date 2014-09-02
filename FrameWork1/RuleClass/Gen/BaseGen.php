@@ -690,6 +690,14 @@ class BaseGen
      * 上传文件结果：移动上传文件到目标路径时失败
      */
     const UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION = -112;
+    /**
+     * 抓取文件结果：数据不正确
+     */
+    const UPLOAD_RESULT_ERROR_DATA = -113;
+    /**
+     * MIME不是图片
+     */
+    const UPLOAD_RESULT_NOT_IMAGE = -114;
 
     /**
      * 上传文件预检查
@@ -898,6 +906,104 @@ class BaseGen
             FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
         }
 
+    }
+
+
+    /**
+     * 保存远程图片
+     * @param string $url 要抓取的网址
+     * @param int $tableType 对应表类型
+     * @param int $tableId 对应表id
+     * @param UploadFile $uploadFile 返回的上传文件对象
+     * @param int $maxSize 文件最大大小(默认2M)
+     * @param string $allowExt 允许的扩展名（默认jpg,jpeg,gif,png）
+     * @return bool|string 返回结果代码
+     */
+    public function SaveRemoteImage($url,$tableType,$tableId,UploadFile &$uploadFile,$maxSize = 2097152,$allowExt = "jpg,jpeg,gif,png"){
+        $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS;
+
+        $reExt='('.str_replace(',','|',$allowExt).')';
+        if(substr($url,0,10)=='data:image'){//base64编码的图片，可能出现在firefox粘贴，或者某些网站上，例如google图片
+            if(!preg_match('/^data:image\/'.$reExt.'/i',$url,$sExt)){
+                $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ERROR_DATA;
+                return $errorMessage;
+            }
+            $fileExtension=$sExt[1];
+            $imgContent=base64_decode(substr($url,strpos($url,'base64,')+7));
+        }
+        else{
+            if(!preg_match('/\.'.$reExt.'$/i',$url,$sExt)){
+                $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ERROR_DATA;
+                return $errorMessage;
+            }
+            $fileExtension=$sExt[1];
+            $imgContent = Remote::GetUrl($url);
+        }
+        if(strlen($imgContent)>$maxSize){
+            $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_HTML;
+            return $errorMessage;
+        }
+
+        $newFileName = "";
+        $fileExtension = strtolower($fileExtension);
+        $manageUserId = Control::GetManageUserId();
+        $userId = Control::GetUserId();
+
+        $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
+
+
+        $dirPath = self::GetUploadFilePath(
+            $tableType,
+            $tableId,
+            $manageUserId,
+            $userId,
+            $uploadPath,
+            $fileExtension,
+            $newFileName
+        );
+        if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
+            $filePath = $dirPath.$newFileName;
+            file_put_contents($filePath,$imgContent);
+            //检查mime是否为图片，需要php.ini中开启gd2扩展
+            $fileInfo= @getimagesize($filePath);
+            if(!$fileInfo||!preg_match("/image\/".$reExt."/i",$fileInfo['mime'])){
+                @unlink($filePath);
+
+                //MIME不是图片
+                $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NOT_IMAGE;
+                return $errorMessage;
+            }
+
+            //数据库操作
+            $uploadFileData = new UploadFileData();
+            $uploadFileId = $uploadFileData->Create(
+                $newFileName,
+                strlen($imgContent), //文件大小，字节
+                $fileExtension,
+                "", //原始文件名
+                str_ireplace(PHYSICAL_PATH, "", $dirPath).$newFileName, //文件路径+文件名
+                $tableType,
+                $tableId,
+                $manageUserId,
+                $userId
+            );
+
+            $resultMessage = "";
+
+            //返回值处理
+            $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
+
+            $uploadFilePath = $returnDirPath . $newFileName;
+            $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
+
+            $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+
+        } else {
+            $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
+            $errorMessage = $result;
+        }
+
+        return $errorMessage;
     }
 }
 
