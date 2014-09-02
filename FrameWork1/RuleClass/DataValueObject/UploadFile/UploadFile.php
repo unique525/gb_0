@@ -504,9 +504,9 @@ class UploadFile {
         $uploadFilePath = str_ireplace('"',"",$uploadFilePath);
 
         $returnJson = '{';
-        $returnJson .= '"error":"' . $this->ErrorMessage . '",';
-        $returnJson .= '"upload_file_id":"' . $this->UploadFileId . '",';
-        $returnJson .= '"upload_file_path":"' .$uploadFilePath. '"';
+        $returnJson .= '"error":"' . Format::FormatJson($this->ErrorMessage) . '",';
+        $returnJson .= '"upload_file_id":"' . Format::FormatJson($this->UploadFileId) . '",';
+        $returnJson .= '"upload_file_path":"' .Format::FormatJson($uploadFilePath). '"';
         $returnJson .= '}';
 
         return $returnJson;

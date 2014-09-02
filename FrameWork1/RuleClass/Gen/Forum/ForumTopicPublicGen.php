@@ -23,9 +23,6 @@ class ForumTopicPublicGen extends BasePublicGen implements IBasePublicGen {
             case "create":
                 $result = self::GenCreate();
                 break;
-            default:
-                $result = self::GenList();
-                break;
         }
 
         return $result;
@@ -36,13 +33,13 @@ class ForumTopicPublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string 论坛主题列表页html
      */
     private function GenList() {
-        $siteId = Control::GetRequest("siteid", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdBySubDomain();
         }
-        $forumId = Control::GetRequest("forumid", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
-            return;
+            return "";
         }
 
         $templateFileUrl = "forum/forum_topic_list.html";
@@ -58,13 +55,13 @@ class ForumTopicPublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
     private function GenCreate() {
-        $siteId = Control::GetRequest("siteid", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdBySubDomain();
         }
-        $forumId = Control::GetRequest("forumid", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
-            return;
+            return "";
         }
 
         $templateFileUrl = "forum/forum_topic_create.html";

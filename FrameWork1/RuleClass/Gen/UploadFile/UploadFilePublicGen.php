@@ -23,6 +23,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_upload":
                 $result = self::AsyncUpload();
                 break;
+            case "async_save_remote_image":
+                $result = self::AsyncSaveRemoteImage();
+                break;
         }
 
         return $result;
@@ -49,10 +52,10 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
     /**
-     *
+     * Ajax上传文件
+     * @return string 返回Json结果
      */
     private function AsyncUpload(){
-        $result = "";
 
         $fileElementName = Control::GetRequest("file_element_name", "");
         $tableType = Control::GetRequest("table_type", 0);
@@ -75,8 +78,11 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen {
             $result .= '}';
         }
 
-
-
         return $result;
+    }
+
+
+    private function AsyncSaveRemoteImage(){
+
     }
 } 

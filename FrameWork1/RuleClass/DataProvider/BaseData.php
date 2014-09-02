@@ -157,11 +157,11 @@ class BaseData
     /**
      * 快捷内容录入 数据表名
      */
-    const TableName_DocumentQuickContent = "cst_document_quick_content";
+    const TableName_DocumentPreContent = "cst_document_pre_content";
     /**
      * 快捷内容录入 数据表自增字段名
      */
-    const TableId_DocumentQuickContent = "DocumentQuickContentId";
+    const TableId_DocumentPreContent = "DocumentPreContentId";
     /**
      * 论坛版块 数据表名
      */
