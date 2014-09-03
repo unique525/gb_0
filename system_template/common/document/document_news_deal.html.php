@@ -13,17 +13,21 @@
         var editor;
             var batchAttachWatermark = "0";
 
+            var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
+            var tableId = '{ChannelId}';
+
             $(function(){
 
                 var editorHeight = $(window).height() - 220;
                 editorHeight = parseInt(editorHeight);
+
                 editor = $('#f_DocumentNewsContent').xheditor({
                     tools:'full',
                     height:editorHeight,
                     upImgUrl:"upload.php",
                     upImgExt:"jpg,jpeg,gif,png",
-                    localUrlTest:/^https?:\/\/[^\/]*?(xheditor\.com)\//i,
-                    remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image'
+                    localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                    remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image&table_type='+tableType+'&table_id='+tableId
                 });
 
 
@@ -65,8 +69,6 @@
                 btnUploadToContent.click(function(){
 
                     var fileElementId = 'file_upload_to_content';
-                    var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
-                    var tableId = '{ChannelId}';
                     var fUploadFile = $("#f_UploadFiles");
 
                     var attachWatermark = 0;

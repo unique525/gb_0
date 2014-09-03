@@ -169,6 +169,10 @@ class BaseGen
 
         $tabIndex = Control::GetRequest("tab_index",0);
 
+        $manageDomainForRex = str_ireplace("http://","",MANAGE_DOMAIN);
+        $manageDomainForRex = str_ireplace("https://","",$manageDomainForRex);
+        $manageDomainForRex = str_ireplace(".","\.",$manageDomainForRex);
+
         $tempContent = str_ireplace("{tab_index}", $tabIndex, $tempContent);
         $tempContent = str_ireplace("{common_head}", $commonHead, $tempContent);
         $tempContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $tempContent);
@@ -176,6 +180,7 @@ class BaseGen
         $tempContent = str_ireplace("{system_name}", SYSTEM_NAME, $tempContent);
         $tempContent = str_ireplace("{relative_path}", RELATIVE_PATH, $tempContent);
         $tempContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $tempContent);
+        $tempContent = str_ireplace("{manage_domain_rex}", $manageDomainForRex, $tempContent);
         $tempContent = str_ireplace("{webapp_domain}", WEBAPP_DOMAIN, $tempContent);
         $tempContent = str_ireplace("{template_name}", $templateName, $tempContent);
         $tempContent = str_ireplace("{select_template}", $selectTemplate, $tempContent);
@@ -698,6 +703,10 @@ class BaseGen
      * MIME不是图片
      */
     const UPLOAD_RESULT_NOT_IMAGE = -114;
+    /**
+     * 写入失败
+     */
+    const UPLOAD_RESULT_WRITE_FAILURE = -115;
 
     /**
      * 上传文件预检查
@@ -944,12 +953,15 @@ class BaseGen
             return $errorMessage;
         }
 
+
+
+
         $newFileName = "";
         $fileExtension = strtolower($fileExtension);
         $manageUserId = Control::GetManageUserId();
         $userId = Control::GetUserId();
 
-        $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
+        $uploadPath = "upload" . DIRECTORY_SEPARATOR;
 
 
         $dirPath = self::GetUploadFilePath(
@@ -961,42 +973,55 @@ class BaseGen
             $fileExtension,
             $newFileName
         );
+
+
+
         if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
             $filePath = $dirPath.$newFileName;
-            file_put_contents($filePath,$imgContent);
-            //检查mime是否为图片，需要php.ini中开启gd2扩展
-            $fileInfo= @getimagesize($filePath);
-            if(!$fileInfo||!preg_match("/image\/".$reExt."/i",$fileInfo['mime'])){
-                @unlink($filePath);
 
-                //MIME不是图片
-                $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NOT_IMAGE;
-                return $errorMessage;
+            $isWriteFile = FileObject::Write($filePath, $imgContent);
+
+            if($isWriteFile){
+                //检查mime是否为图片，需要php.ini中开启gd2扩展
+                $fileInfo= @getimagesize($filePath);
+                if(!$fileInfo||!preg_match("/image\/".$reExt."/i",$fileInfo['mime'])){
+                    @unlink($filePath);
+
+                    //MIME不是图片
+                    $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_NOT_IMAGE;
+                    return $errorMessage;
+                }
+
+                $filePath = "/".$filePath;
+
+                //数据库操作
+                $uploadFileData = new UploadFileData();
+                $uploadFileId = $uploadFileData->Create(
+                    $newFileName,
+                    strlen($imgContent), //文件大小，字节
+                    $fileExtension,
+                    "", //原始文件名
+                    $filePath, //文件路径+文件名
+                    $tableType,
+                    $tableId,
+                    $manageUserId,
+                    $userId
+                );
+
+                $resultMessage = "";
+
+                //返回值处理
+                $returnDirPath = "/".str_ireplace(PHYSICAL_PATH, "", $dirPath);
+
+                $uploadFilePath = $returnDirPath . $newFileName;
+                $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
+
+                $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+            }else{
+                //写入失败
+                $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_WRITE_FAILURE;
             }
 
-            //数据库操作
-            $uploadFileData = new UploadFileData();
-            $uploadFileId = $uploadFileData->Create(
-                $newFileName,
-                strlen($imgContent), //文件大小，字节
-                $fileExtension,
-                "", //原始文件名
-                str_ireplace(PHYSICAL_PATH, "", $dirPath).$newFileName, //文件路径+文件名
-                $tableType,
-                $tableId,
-                $manageUserId,
-                $userId
-            );
-
-            $resultMessage = "";
-
-            //返回值处理
-            $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
-
-            $uploadFilePath = $returnDirPath . $newFileName;
-            $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
-
-            $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
 
         } else {
             $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;

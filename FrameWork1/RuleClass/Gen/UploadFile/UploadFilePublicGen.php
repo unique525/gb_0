@@ -96,11 +96,14 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         $urlCount = count($arrUrls);
         $tableType = Control::GetRequest("table_type", 0);
         $tableId = Control::GetRequest("table_id", 0);
+
         if (!empty($arrUrls) && $tableType > 0) {
             for ($i = 0; $i < $urlCount; $i++) {
                 $uploadFile = new UploadFile();
+
                 parent::SaveRemoteImage($arrUrls[$i], $tableType, $tableId, $uploadFile);
-                if (!empty($uploadFile->UploadFilePath)) {
+
+                if (strlen($uploadFile->UploadFilePath)>0) {
                     $arrUrls[$i] = $uploadFile->UploadFilePath;
                 }
             }
