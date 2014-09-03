@@ -75,10 +75,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $tempContent = str_ireplace("{ManageUserName}", $manageUserName, $tempContent);
                 $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
 
-                //quick content
-                $documentQuickContentManageData = new DocumentQuickContentManageData();
-                $tagId = "document_quick_content";
-                $arrList = $documentQuickContentManageData->GetList();
+                //pre content
+                $documentPreContentManageData = new DocumentPreContentManageData();
+                $tagId = "document_pre_content";
+                $arrList = $documentPreContentManageData->GetList();
                 if (count($arrList) > 0) {
                     Template::ReplaceList($tempContent, $arrList, $tagId);
                 } else {

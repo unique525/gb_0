@@ -209,6 +209,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = preg_replace($patterns, "", $tempContent);
 
             parent::ReplaceEnd($tempContent);
+
+
+
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
 
         }

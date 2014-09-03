@@ -64,6 +64,16 @@ class Format
     }
 
     /**
+     * 格式化JSON内容
+     * @param string $content 要格式化的JSON内容
+     * @return string 格式化后的JSON内容
+     */
+    public static function FormatJson($content){
+        $content = preg_replace("/([\\\\\/'])/",'\\\$1',$content);
+        return $content;
+    }
+
+    /**
      * 检查TopCount的值是否非法，非法返回null
      * @param string $content 要检查的内容，正确内容为 0,10 之类字符串
      * @return null|string 返回检查后的内容，非法返回null
@@ -337,11 +347,19 @@ class Format
     }
 
     /**
-     * @去除XSS（跨站脚本攻击）的函数
-     * @par $val 字符串参数，可能包含恶意的脚本代码如<script language="javascript">alert("hello world");</script>
-     * @return
+     * 替换二唯数组中的XSS攻击代码
+     * @param array $arr 二唯数组
+     * @return array 返回新的二唯数组
      */
+    public static function RemoveXSSForArray($arr){
+        $newArray = array();
+        foreach($arr as $key=>$val){
+            $val = self::RemoveXSS($val);
+            $newArray[$key] = $val;
+        }
 
+        return $newArray;
+    }
 
     /**
      * 去除XSS（跨站脚本攻击）的函数

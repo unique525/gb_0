@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
         {common_head}
-        <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
+        <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
         <script type="text/javascript" src="/system_js/color_picker.js"></script>
         <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
         <script type="text/javascript" src="/system_js/upload_file.js"></script>
@@ -21,8 +21,11 @@
                     tools:'full',
                     height:editorHeight,
                     upImgUrl:"upload.php",
-                    upImgExt:"jpg,jpeg,gif,png"
+                    upImgExt:"jpg,jpeg,gif,png",
+                    localUrlTest:/^https?:\/\/[^\/]*?(xheditor\.com)\//i,
+                    remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image'
                 });
+
 
                 $('#tabs').tabs();
                 $("#f_ShowDate").datepicker({
@@ -74,6 +77,16 @@
                     AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
                 });
 
+                var btnAddPreContent = $(".btn_add_pre_content");
+                btnAddPreContent.click(function(){
+
+                    var addContent = $(this).text();
+                    var editorContent = editor.getSource();
+                    editorContent = "　　" + addContent + editorContent;
+                    editor.setSource(editorContent);
+
+                });
+
                 /**
                 $("#select_source").css("cursor","pointer");
                 $("#select_source").click(function() {
@@ -81,23 +94,7 @@
                     var h = 500;
                     tb_show("", "../document/index.php?a=source&m=select&height=" + h + "&width=" + w + "&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true", false);
                 });
-                
-                $("#batchattachwatermark").change(function() {
-                    if($("#batchattachwatermark").attr("checked")){
-                        batchattachwatermark = "1";
-                    }else{
-                        batchattachwatermark = "0";
-                    }
-                    
-                });
 
-                $("#btnclose").click(function() {
-                    var tab = parseInt(Request['tab'])-1;
-                    self.parent.$('#tabs').tabs('remove',tab);
-                });                
-                
-
-                
               
                 //组图上传                              
                 
@@ -293,10 +290,10 @@
                                         <tr>
                                             <td class="spe_line" style="height:35px;text-align: right;">加前缀：</td>
                                             <td class="spe_line" align="left" style="line-height:20px;">
-                                                <icms id="quick_add_pre" type="list">
+                                                <icms id="document_pre_content" type="list">
                                                     <item>
                                                         <![CDATA[
-                                                        <span style="cursor: pointer;" class="AddQuickContent" title="{f_DocumentQuickContent}">{f_DocumentQuickContent}</span><br />
+                                                        <span style="cursor: pointer;" class="btn_add_pre_content" title="{f_DocumentPreContent}">{f_DocumentPreContent}</span><br />
                                                         ]]>
                                                     </item>
                                                 </icms>

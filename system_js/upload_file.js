@@ -242,12 +242,12 @@ function FormatResultMessage(resultMessage){
 
 /**
  * ajax上传
- * @param fileElementId
- * @param tableType
- * @param tableId
- * @param editor
- * @param fUploadFile
- * @param attachWatermark
+ * @param {string} fileElementId 上传文件控件name
+ * @param {int} tableType 表类型
+ * @param {int} tableId 表id
+ * @param {object} editor 编辑控制对象
+ * @param {object} fUploadFile 存储上传文件id列表的控件对象
+ * @param {int} attachWatermark 是否加水印
  */
 function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark)
 {

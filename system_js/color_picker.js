@@ -21,18 +21,22 @@ function iColorShow(id,id2){
     var hxs=jQuery('#iColorPicker');
     for(i=0;i<hxs.length;i++){
         var tbl=document.getElementById('hexSection'+i);
-        var tblChilds=tbl.childNodes;
-        for(j=0;j<tblChilds.length;j++){
-            var tblCells=tblChilds[j].childNodes;
+        var tblChild=tbl.childNodes;
+        for(j=0;j<tblChild.length;j++){
+            var tblCells=tblChild[j].childNodes;
             for(k=0;k<tblCells.length;k++){
-                jQuery(tblChilds[j].childNodes[k]).unbind().mouseover(function(a){
+                jQuery(tblChild[j].childNodes[k]).unbind().mouseover(function(a){
                     var aaa="#"+jQuery(this).attr('hx');
                     jQuery('#colorPreview').css('background',aaa);
                     //jQuery('#colorPreview span').text(aaa);
                 }).click(function(){
                     var aaa="#"+jQuery(this).attr('hx');
                     jQuery("#"+id).css("color",aaa);
-                    $("#f_documentnewstitlecolor").val(aaa);
+                    var documentNewsTitleColor = $("#f_DocumentNewsTitleColor");
+                    if(documentNewsTitleColor!= undefined){
+                        documentNewsTitleColor.val(aaa);
+                    }
+
                     jQuery("#iColorPickerBg").hide();
                     jQuery("#iColorPicker").fadeOut();
                     jQuery(this);
@@ -55,7 +59,7 @@ this.iColorPicker=function(){
                 'border':'1px solid #000',
                 'cursor':'pointer'
             });
-            jQuery('#iColorPicker table.pickerTable').css({
+            jQuery('#iColorPicker').find('table.pickerTable').css({
                 'border-collapse':'collapse'
             });
             jQuery('#iColorPicker').css({
