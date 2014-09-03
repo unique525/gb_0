@@ -29,7 +29,7 @@
 <form id="main_form" enctype="multipart/form-data"
       action="/default.php?secu=manage&mod=custom_form_field&m={method}&custom_form_field_id={CustomFormFieldId}&custom_form_id={CustomFormId}&tab_index={tab_index}"
       method="post">
-    <div style="margin:10px auto;margin-left: 10px;">
+    <div style="margin:10px auto;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
@@ -41,7 +41,7 @@
         </table>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="spe_line" height="30" align="right">表单字段名称：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_CustomFormFieldName">表单字段名称：</label></td>
                 <td class="spe_line">
                     <input name="f_CustomFormFieldName" id="f_CustomFormFieldName" value="{CustomFormFieldName}" type="text" class="input_box" style=" width: 300px;" />
                     <input type="hidden" id="f_CustomFormId" name="f_CustomFormId" value="{CustomFormId}" />
@@ -49,7 +49,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">表单字段类型：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_CustomFormFieldType">表单字段类型：</label></td>
                 <td class="spe_line">
                     <select id="f_CustomFormFieldType" name="f_CustomFormFieldType">
                         <option value="1">文字</option>
@@ -63,11 +63,11 @@
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">排序：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_sort">排序：</label></td>
                 <td class="spe_line"><input name="f_sort" id="f_sort" value="{sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">是否启用：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_state">是否启用：</label></td>
                 <td class="spe_line">
                     <select id="f_state" name="f_state">
                         <option value="0">启用</option>
@@ -77,7 +77,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">是否显示在列表中：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_ShowInList">是否显示在列表中：</label></td>
                 <td class="spe_line">
                     <select id="f_ShowInList" name="f_ShowInList">
                         <option value="1">显示</option>

@@ -20,7 +20,7 @@
 <body>
 {common_body_deal}
 <form id="main_form" action="/default.php?secu=manage&mod=custom_form_record&m={method}&custom_form_id={CustomFormId}&custom_form_record_id={CustomFormRecordId}" method="post">
-    <div style="margin:10px auto;margin-left: 10px;">
+    <div style="margin:10px auto;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
@@ -33,11 +33,11 @@
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             {CustomFormContentTable}
             <tr>
-                <td class="spe_line" height="30" align="right">排序：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_sort">排序：</label></td>
                 <td class="spe_line"><input name="f_sort" id="f_sort" value="{sort}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right">是否启用：</td>
+                <td class="spe_line" height="30" align="right"><label for="f_state">是否启用：</label></td>
                 <td class="spe_line">
                     <input type="hidden" id="f_CustomFormId" name="f_CustomFormId" value="{CustomFormId}" />
                     <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
