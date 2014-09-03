@@ -245,6 +245,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenList() {
         $channelId = Control::GetRequest("channel_id", 0);
+        $resultJavaScript="";
         $manageUserId = Control::GetManageUserId();
         $channelData = new ChannelManageData();
         $siteId = $channelData->GetSiteId($channelId,FALSE);
@@ -297,6 +298,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
             $result = $tempContent;
         }
         return $result;

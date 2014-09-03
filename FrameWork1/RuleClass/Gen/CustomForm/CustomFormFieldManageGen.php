@@ -233,6 +233,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenList() {
         $manageUserId = Control::GetManageUserID();
         $customFormId = Control::GetRequest("custom_form_id", 0);
+        $resultJavaScript="";
         $customFormManageData = new CustomFormManageData();
         $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
         $channelData = new ChannelManageData();
@@ -269,6 +270,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = strtr($tempContent, $replace_arr);
 
         parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
         }else{
             return DefineCode::CUSTOM_FORM_FIELD_MANAGE+self::FALSE_CUSTOM_FORM_FIELD_ID;

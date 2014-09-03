@@ -49,6 +49,7 @@ class CustomFormContentManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList() {
         $manageUserId = Control::GetManageUserID();
         $customFormId = Control::GetRequest("custom_form_id", 0);
+        $resultJavaScript="";
         $customFormManageData = new CustomFormManageData();
         $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
         $channelData = new ChannelManageData();
@@ -92,6 +93,7 @@ class CustomFormContentManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = strtr($tempContent, $replace_arr);
 
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         Template::RemoveCMS($tempContent);
         return $tempContent;
     }
