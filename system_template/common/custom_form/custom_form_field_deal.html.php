@@ -52,13 +52,14 @@
                 <td class="spe_line" height="30" align="right">表单字段类型：</td>
                 <td class="spe_line">
                     <select id="f_CustomFormFieldType" name="f_CustomFormFieldType">
-                        <option value="1" {s_CustomFormFieldType_1}>文字</option>
-                        <option value="0" {s_CustomFormFieldType_0}>整数</option>
-                        <option value="2" {s_CustomFormFieldType_2}>内容较大的文本</option>
-                        <option value="3" {s_CustomFormFieldType_3}>数字（含小数）</option>
-                        <option value="4" {s_CustomFormFieldType_4}>日期时间</option>
-                        <option value="5" {s_CustomFormFieldType_5}>二进制文件</option>
+                        <option value="1">文字</option>
+                        <option value="0">整数</option>
+                        <option value="2">内容较大的文本</option>
+                        <option value="3">数字（含小数）</option>
+                        <option value="4">日期时间</option>
+                        <option value="5">二进制文件</option>
                     </select>
+                    {s_CustomFormFieldType}
                 </td>
             </tr>
             <tr>
@@ -69,18 +70,20 @@
                 <td class="spe_line" height="30" align="right">是否启用：</td>
                 <td class="spe_line">
                     <select id="f_state" name="f_state">
-                        <option value="0" {s_state_0}>启用</option>
-                        <option value="100" {s_state_100}>停用</option>
+                        <option value="0">启用</option>
+                        <option value="100">停用</option>
                     </select>
+                    {s_state}
                 </td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right">是否显示在列表中：</td>
                 <td class="spe_line">
                     <select id="f_ShowInList" name="f_ShowInList">
-                        <option value="1" {s_ShowInList_1}>显示</option>
-                        <option value="0" {s_ShowInList_0}>不显示</option>
+                        <option value="1">显示</option>
+                        <option value="0">不显示</option>
                     </select>
+                    {s_ShowInList}
                 </td>
             </tr>
 

@@ -43,10 +43,11 @@
                     <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
                     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
                     <select id="f_state" name="f_state">
-                        <option value="0" {s_state_0}>未审</option>
-                        <option value="1" {s_state_1}>已审</option>
-                        <option value="100" {s_state_100}>停用</option>
+                        <option value="0">未审</option>
+                        <option value="1">已审</option>
+                        <option value="100">停用</option>
                     </select>
+                    {s_state}
                 </td>
             </tr>
 

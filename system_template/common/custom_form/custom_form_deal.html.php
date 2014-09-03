@@ -55,9 +55,10 @@
                 <td class="spe_line" height="30" align="right">是否启用：</td>
                 <td class="spe_line">
                     <select id="f_state" name="f_state" >
-                        <option value="0" {s_state_0}>启用</option>
-                        <option value="100" {s_state_100}>停用</option>
+                        <option value="0">启用</option>
+                        <option value="100">停用</option>
                     </select>
+                    {s_state}
                 </td>
             </tr>
 
