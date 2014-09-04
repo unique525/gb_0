@@ -41,26 +41,28 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
     {
         $siteId = Control::GetRequest("site_id", 0);
         $manageUserId = Control::GetManageUserId();
-        if ($siteId > 0) {
-            if (intval($siteId) > 0 && intval($manageUserId) > 0) {
-                $templateContent = Template::Load("user/user_deal.html", "common");
+        if (intval($siteId) > 0 && intval($manageUserId) > 0) {
+            $templateContent = Template::Load("user/user_deal.html", "common");
 
-                parent::ReplaceFirst($templateContent);
-                $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
-                $resultJavaScript = "";
+            parent::ReplaceFirst($templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $resultJavaScript = "";
 
-                $userManageData = new UserManageData();
-                $userInfoManageData = new UserInfoManageData();
+            $userManageData = new UserManageData();
+            $userInfoManageData = new UserInfoManageData();
 
-                parent::ReplaceWhenCreate($templateContent, $userManageData->GetFields());
-                if (!empty($_POST)) {
-                    $httpPostData = Format::FormatHtmlTagInPost($_POST);
-                    $newUserName = Control::PostRequest("f_UserName", "");
-                    $isExistSameUserName = $userManageData->CheckSameUserName($newUserName);//检查是否有重名的
+            parent::ReplaceWhenCreate($templateContent, $userManageData->GetFields());
+            if (!empty($_POST)) {
+                $httpPostData = Format::FormatHtmlTagInPost($_POST);
+                $userName = Control::PostRequest("f_UserName", "");
+                $userPass = Control::PostRequest("f_UserPass", "");
+                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
+                    $isExistSameUserName = $userManageData->CheckSameUserName($userName); //检查是否有重名的
 
-                    if ($isExistSameUserName != 0) {
+
+                    if ($isExistSameUserName != 0) { //如果有重名的
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 20));
-                    } else {
+                    } else { //没有重名的
                         $result = $userManageData->Create($httpPostData, $siteId);
 
                         //加入操作日志
@@ -76,25 +78,27 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                             self::CreateManageUserLog($operateContent);
 
                             if ($resultCreateUserInfo > 0) {
-                                $closeTab = Control::PostRequest("CloseTab",0);
-                                if($closeTab == 1){
-                                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 30) ).Control::GetCloseTab();
-                                }else{
-                                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                                $closeTab = Control::PostRequest("CloseTab", 0);
+                                if ($closeTab == 1) {
+                                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 30)) . Control::GetCloseTab();
+                                } else {
+                                    Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                                 }
                             } else {
-                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31) );
+                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31));
                             }
                         } else {
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31) );
+                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31));
                         }
                     }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
                 }
                 parent::ReplaceEnd($templateContent);
                 $templateContent = str_ireplace("{display_by_method}", 'style="display:none"', $templateContent);
                 $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
                 return $templateContent;
-            }else{
+            } else {
                 return null;
             }
         } else {
@@ -183,37 +187,43 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                 $userManageData = new UserManageData();
                 if (!empty($_POST)) { //提交
                     $httpPostData = Format::FormatHtmlTagInPost($_POST);
-                    //老帐号名和新帐号名不同时，要检查是否已经存在
-                    $oldUserName = Control::PostRequest("OldUserName", "");
-                    $newUserName = Control::PostRequest("f_UserName", "");
-                    if ($oldUserName != $newUserName) {
-                        $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
-                        if ($hasCount > 0) { //同站点下不许存在相同的用户名
-                            Control::ShowMessage(Language::Load('user', 20));
-                            return $templateContent;
+                    $userName = Control::PostRequest("f_UserName", "");
+                    $userPass = Control::PostRequest("f_UserPass", "");
+                        if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
+                        //老帐号名和新帐号名不同时，要检查是否已经存在
+                        $oldUserName = Control::PostRequest("OldUserName", "");
+                        $newUserName = Control::PostRequest("f_UserName", "");
+                        if ($oldUserName != $newUserName) {
+                            $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
+                            if ($hasCount > 0) { //同站点下不许存在相同的用户名
+                                Control::ShowMessage(Language::Load('user', 20));
+                                return $templateContent;
+                            }
                         }
-                    }
 
-                    $result = $userManageData->Modify($httpPostData, $userId);
-                    if ($result > 0) {
-                        //加入操作日志
-                        $operateContent = 'Modify User,POST FORM:'.implode('|',$_POST).';\r\nResult:UserId:'.$result;
-                        self::CreateManageUserLog($operateContent);
+                        $result = $userManageData->Modify($httpPostData, $userId);
+                        if ($result > 0) {
+                            //加入操作日志
+                            $operateContent = 'Modify User,POST FORM:' . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
+                            self::CreateManageUserLog($operateContent);
 
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
-                        $closeTab = Control::PostRequest("CloseTab",0);
-                        if($closeTab == 1){
-                            //Control::CloseTab();
-                            $resultJavaScript .= Control::GetCloseTab();
-                        }else{
-                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
+                            $closeTab = Control::PostRequest("CloseTab", 0);
+                            if ($closeTab == 1) {
+                                //Control::CloseTab();
+                                $resultJavaScript .= Control::GetCloseTab();
+                            } else {
+                                Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                            }
+                        } else {
+                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
+                        }
+                        $closeTab = Control::PostRequest("CloseTab", 1);
+                        if ($closeTab == 1) {
+                            Control::CloseTab();
                         }
                     } else {
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
-                    }
-                    $closeTab = Control::PostRequest("CloseTab", 1);
-                    if ($closeTab == 1) {
-                        Control::CloseTab();
+                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
                     }
                 }
 
