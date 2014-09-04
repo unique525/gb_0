@@ -46,11 +46,13 @@ class UserInfoManageGen extends BaseManageGen implements IBaseManageGen {
                 $userInfoManageData->Create($userId);
             }
             $arrUserInfoOne = $userInfoManageData->GetOne($userId,$siteId);
-            if(count($arrUserInfoOne) > 0){
+            if(!empty($arrUserInfoOne) > 0){
                 Template::ReplaceOne($templateContent,$arrUserInfoOne);
             }else{
-                parent::ReplaceWhenCreate($templateContent,$userInfoManageData->GetFields());
+                $templateContent =Language::Load('user_info', 7);
+                return $templateContent;
             }
+
             if(!empty($_POST)){
                 $httpPostData = Format::FormatHtmlTagInPost($_POST);
 

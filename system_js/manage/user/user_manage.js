@@ -1,3 +1,19 @@
+function FormatOrderState(state){
+    var result;
+    switch(state){
+        case "0":
+            result = '开启';
+            break;
+        case "10":
+            result = '未激活';
+            break;
+        case "100":
+            result = '停用';
+            break;
+    }
+    return result;
+}
+
 $(document).ready(function() {
     //load user manage
     $.ajax({
@@ -108,6 +124,12 @@ $(document).ready(function() {
             });
         }
     });
+
+    $(".span_state").each(function(){
+        var state = $(this).attr("idvalue");
+        $(this).html(FormatOrderState(state));
+    });
+
     //确认并关闭
     $("#btn_ConfirmClose").click(function() {
         var confirmId = $(this).attr('idvalue');
