@@ -283,7 +283,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             if (count($arrListOfCustomForm) > 0) {
                 Template::ReplaceList($tempContent, $arrListOfCustomForm, $listName);
 
-                $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=custom_form&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
                 $replaceArray = array(
                     "{channel_id}" => 0,
                     "{cid}" => 0,
