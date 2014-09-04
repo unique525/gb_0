@@ -9,6 +9,14 @@
 class UserOrderProductManageData extends BaseManageData
 {
     /**
+     * 获取会员订单产品表的字段
+     * @return array
+     */
+    public function GetFields(){
+        return parent::GetFields(self::TableName_UserOrderProduct);
+    }
+
+    /**
      * 修改
      * @param array $httpPostData $_POST数组
      * @param int $userOrderProductId 会员订单产品Id

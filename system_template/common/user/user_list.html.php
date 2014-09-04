@@ -6,16 +6,18 @@
     <script type="text/javascript" src="/system_js/manage/user/user_manage.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#btn_create").click(function(){
+            $("#btn_create").click(function(event){
+                event.preventDefault();
                 parent.G_TabUrl = "/default.php?secu=manage&mod=user&m=create&site_id="+ parent.G_NowSiteId
-                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;
                 parent.G_TabTitle = '新增会员';
                 parent.addTab();
             });
-            $(".modify_user_info").click(function(){
+            $(".modify_user_info").click(function(event){
+                event.preventDefault();
                 var userId = $(this).attr("idvalue");
                 parent.G_TabUrl = "/default.php?secu=manage&mod=user&user_id="+userId+"&m=modify&site_id="+ parent.G_NowSiteId
-                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;
                 parent.G_TabTitle = '编辑会员信息';
                 parent.addTab();
             });

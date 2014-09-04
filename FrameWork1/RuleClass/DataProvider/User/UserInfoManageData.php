@@ -8,6 +8,21 @@
 
 class UserInfoManageData extends BaseManageData {
 
+    public function GetFields(){
+        return parent::GetFields(self::TableName_User);
+    }
+
+    public function Create($userId){
+        $result = -1;
+        if($userId > 0){
+            $sql = "INSERT INTO ".self::TableName_UserInfo." (UserId) VALUES (:UserId);";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     public function Modify($httpPostData,$userId){
         $result = -1;
         if(!empty($httpPostData) && $userId > 0){
@@ -47,6 +62,8 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserInfo.".UserCharm,
             ".self::TableName_UserInfo.".UserExp,
             ".self::TableName_UserInfo.".UserPoint,
+            ".self::TableName_UserInfo.".Question,
+            ".self::TableName_UserInfo.".Answer,
             ".self::TableName_UserInfo.".Sign,
             ".self::TableName_UserInfo.".ComeFrom,
             ".self::TableName_UserInfo.".Honor,
@@ -65,6 +82,10 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserInfo.".UserBestAlbumCount,
             ".self::TableName_UserInfo.".UserRecAlbumCount,
             ".self::TableName_UserInfo.".UserAlbumCommentCount,
+            ".self::TableName_UserInfo.".BankName,
+            ".self::TableName_UserInfo.".BankOpenAddress,
+            ".self::TableName_UserInfo.".BankUserName,
+            ".self::TableName_UserInfo.".BankAccount,
             ".self::TableName_UserLevel.".UserLevelName,
             ".self::TableName_UserLevel.".UserLevelPic,
             ".self::TableName_UserLevel.".UserLevel,
@@ -88,7 +109,7 @@ class UserInfoManageData extends BaseManageData {
      * @return int 影响行数
      */
     public function ReCountUserAlbumCount() {
-        $sql = "UPDATE ".self::TableName_UserInfo." SET UserAlbumCount=(SELECT count(*) FROM ".self::TableName_UserAlbum." WHERE State<40 AND UserId=".self::TableName_UserInfo.".UserId)";
+        $sql = "UPDATE ".self::TableName_UserInfo." SET UserAlbumCount=(SELECT count(*) FROM ".self::TableName_UserAlbum." WHERE State<40 AND UserId=".self::TableName_UserInfo.".UserId);";
         $result = $this->dbOperator->Execute($sql, null);
         return $result;
     }
@@ -99,7 +120,7 @@ class UserInfoManageData extends BaseManageData {
      * @return int 影响行数
      */
     public function MinusUserAlbumCount($userId){
-        $sql = "UPDATE " . self::TableName_UserInfo . " SET UserAlbumCount=UserAlbumCount-1 WHERE UserId=:UserId";
+        $sql = "UPDATE " . self::TableName_UserInfo . " SET UserAlbumCount=UserAlbumCount-1 WHERE UserId=:UserId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("UserId", $userId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -108,14 +129,29 @@ class UserInfoManageData extends BaseManageData {
 
     /**
      * 获取一个会员的真实姓名
-     * @param $userId
+     * @param int $userId 会员Id
      * @return string 会员的真实姓名
      */
     public function GetRealName($userId){
-        $sql = "SELECT RealName FROM ".self::TableName_UserInfo." WHERE UserId = :UserId";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("UserId",$userId);
-        $result = $this->dbOperator->GetString($sql,$dataProperty);
+        $result = "";
+        if($userId > 0){
+            $sql = "SELECT RealName FROM ".self::TableName_UserInfo." WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $result = $this->dbOperator->GetString($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function CheckIsExist($userId,$siteId){
+        $result = -1;
+        if($userId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserInfo." WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
         return $result;
     }
 }

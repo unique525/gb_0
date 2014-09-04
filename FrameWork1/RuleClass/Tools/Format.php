@@ -63,6 +63,17 @@ class Format
         return $content;
     }
 
+    public static function FormatHtmlTagInPost($arr)
+    {
+        $newArray = array();
+        foreach($arr as $key=>$val){
+            $val = htmlspecialchars($val);
+            $newArray[$key] = $val;
+        }
+
+        return $newArray;
+    }
+
     /**
      * 格式化JSON内容
      * @param string $content 要格式化的JSON内容

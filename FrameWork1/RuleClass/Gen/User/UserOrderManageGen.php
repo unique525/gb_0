@@ -88,7 +88,11 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 Template::RemoveCustomTag($templateContent);
             }
 
-            Template::ReplaceOne($templateContent,$arrUserOrderOne);
+            if(count($arrUserOrderOne) > 0){
+                Template::ReplaceOne($templateContent,$arrUserOrderOne);
+            }else{
+                parent::ReplaceWhenCreate($templateContent,$userOrderManageData->GetFields());
+            }
 
             $replace_arr = array(
                 "{TabIndex}" => $tabIndex,

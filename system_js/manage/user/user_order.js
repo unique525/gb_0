@@ -96,7 +96,7 @@ $(document).ready(function(){
     $(".edit").click(function(){
         var userOrderId = $(this).attr("idvalue");
         parent.G_TabUrl = "/default.php?secu=manage&mod=user_order&user_order_id="+userOrderId+"&m=modify&site_id="+ parent.G_NowSiteId
-            +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize+"&tab_index="+parent.G_TabIndex;
+            +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;
         parent.G_TabTitle = '编辑订单';
         parent.addTab();
     });

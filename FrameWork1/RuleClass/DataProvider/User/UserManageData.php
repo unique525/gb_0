@@ -16,20 +16,9 @@ class UserManageData extends BaseManageData
     public function Create($httpPostData,$siteId){
         $result = -1;
         if(!empty($httpPostData) && $siteId > 0){
-            $userDataProperty = new DataProperty();
-            $userInfoDataProperty = new DataProperty();
-            $sqlInsertToUser = parent::GetInsertSql($httpPostData,self::TableName_User,$userDataProperty,"SiteId",$siteId);
-            $sqlInsertToUserInfo = "INSERT INTO ".self::TableName_UserInfo." (UserId) VALUES (:UserId);";
-
-            $arrSql = Array(
-                $sqlInsertToUser,
-                $sqlInsertToUserInfo
-            );
-            $arrDataProperty = Array(
-                $userDataProperty,
-                $userInfoDataProperty
-            );
-            $result = $this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);//批量执行
+            $dataProperty = new DataProperty();
+            $sql = parent::GetInsertSql($httpPostData,self::TableName_User,$dataProperty,"SiteId",$siteId);
+            $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
         }
         return $result;
     }
@@ -88,6 +77,17 @@ class UserManageData extends BaseManageData
                 $sql = parent::GetUpdateSql($httpPostData, self::TableName_User, self::TableId_User, $userId, $dataProperty);
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             }
+        }
+        return $result;
+    }
+
+    public function CheckSameUserName($newUserName){
+        $result = -1;
+        if(isset($newUserName)){
+            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserName = :UserName;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserName",$newUserName);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
     }

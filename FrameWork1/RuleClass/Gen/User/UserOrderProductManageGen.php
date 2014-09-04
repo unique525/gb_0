@@ -56,7 +56,11 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
             }
             $arrUserOrderProductOne = $userOrderProductManageData->GetOne($userOrderProductId,$siteId);
 
-            Template::ReplaceOne($templateContent,$arrUserOrderProductOne);
+            if(count($arrUserOrderProductOne) > 0){
+                Template::ReplaceOne($templateContent,$arrUserOrderProductOne);
+            }else{
+                parent::ReplaceWhenCreate($templateContent,$userOrderProductManageData->GetFields());
+            }
         }
 
         parent::ReplaceEnd($templateContent);

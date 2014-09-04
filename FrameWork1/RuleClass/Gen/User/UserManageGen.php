@@ -46,26 +46,56 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                 $templateContent = Template::Load("user/user_deal.html", "common");
 
                 parent::ReplaceFirst($templateContent);
-                $templateContent = str_ireplace("{SiteId}",$siteId,$templateContent);
+                $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
                 $resultJavaScript = "";
 
                 $userManageData = new UserManageData();
+                $userInfoManageData = new UserInfoManageData();
 
                 parent::ReplaceWhenCreate($templateContent, $userManageData->GetFields());
-                if(!empty($_POST)){
-                    $httpPostData = $_POST;
-                    $result = $userManageData->Create($httpPostData,$siteId);
-                    if($result > 0){
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 30));
-                        $resultJavaScript .= Control::GetCloseTab();
-                    }else{
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31));
+                if (!empty($_POST)) {
+                    $httpPostData = Format::FormatHtmlTagInPost($_POST);
+                    $newUserName = Control::PostRequest("f_UserName", "");
+                    $isExistSameUserName = $userManageData->CheckSameUserName($newUserName);//检查是否有重名的
+
+                    if ($isExistSameUserName != 0) {
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 20));
+                    } else {
+                        $result = $userManageData->Create($httpPostData, $siteId);
+
+                        //加入操作日志
+                        $operateContent = 'Create User,POST FORM:'
+                            . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
+                        self::CreateManageUserLog($operateContent);
+
+                        if ($result > 0) {
+                            $resultCreateUserInfo = $userInfoManageData->Create($result);
+                            //加入操作日志
+                            $operateContent = 'Create UserInfo,POST FORM:'
+                                . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
+                            self::CreateManageUserLog($operateContent);
+
+                            if ($resultCreateUserInfo > 0) {
+                                $closeTab = Control::PostRequest("CloseTab",0);
+                                if($closeTab == 1){
+                                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 30) ).Control::GetCloseTab();
+                                }else{
+                                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                                }
+                            } else {
+                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31) );
+                            }
+                        } else {
+                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31) );
+                        }
                     }
                 }
                 parent::ReplaceEnd($templateContent);
-                $templateContent = str_ireplace("{display_by_method}",'style="display:none"',$templateContent);
-                $templateContent = str_ireplace("{ResultJavascript}",$resultJavaScript,$templateContent);
+                $templateContent = str_ireplace("{display_by_method}", 'style="display:none"', $templateContent);
+                $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
                 return $templateContent;
+            }else{
+                return null;
             }
         } else {
             return null;
@@ -133,7 +163,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
-        $templateContent = Template::Load("user/user_deal.html", "common");
         $userId = Control::GetRequest("user_id", 0);
         $siteId = Control::GetRequest("site_id", 0);
 
@@ -141,6 +170,8 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
 
         $resultJavaScript = "";
         if (intval($userId) > 0 && intval($adminUserId) > 0) {
+            $templateContent = Template::Load("user/user_deal.html", "common");
+            parent::ReplaceFirst($templateContent);
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = 0;
@@ -149,10 +180,9 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
             if (!$can) {
                 $templateContent = Language::Load('user', 28);
             } else {
-                parent::ReplaceFirst($templateContent);
                 $userManageData = new UserManageData();
                 if (!empty($_POST)) { //提交
-                    $httpPostData = $_POST;
+                    $httpPostData = Format::FormatHtmlTagInPost($_POST);
                     //老帐号名和新帐号名不同时，要检查是否已经存在
                     $oldUserName = Control::PostRequest("OldUserName", "");
                     $newUserName = Control::PostRequest("f_UserName", "");
@@ -166,7 +196,18 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
 
                     $result = $userManageData->Modify($httpPostData, $userId);
                     if ($result > 0) {
+                        //加入操作日志
+                        $operateContent = 'Modify User,POST FORM:'.implode('|',$_POST).';\r\nResult:UserId:'.$result;
+                        self::CreateManageUserLog($operateContent);
+
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
+                        $closeTab = Control::PostRequest("CloseTab",0);
+                        if($closeTab == 1){
+                            //Control::CloseTab();
+                            $resultJavaScript .= Control::GetCloseTab();
+                        }else{
+                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                        }
                     } else {
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
                     }
@@ -193,7 +234,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
 
             }
             parent::ReplaceEnd($templateContent);
-            $templateContent = strtr($templateContent,"{display_by_method}",'');
+            $templateContent = strtr($templateContent, "{display_by_method}", '');
             $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
             return $templateContent;
         } else {

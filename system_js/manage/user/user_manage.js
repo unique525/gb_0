@@ -76,7 +76,6 @@ $(document).ready(function() {
         }
     });
 
-
     /***会员管理页面js***/
     $(".img_avatar").each(function(){
         var avatar = $(this).attr("src");
@@ -132,6 +131,12 @@ $(document).ready(function() {
         submitForm(confirmId);
     });
 
+    //确认并继续
+    $("#btn_ConfirmGoOnTwo").click(function() {
+        var confirmId = $(this).attr('idvalue');
+        submitForm(confirmId);
+    });
+
     //取消
     $("#btn_RemoveTwo").click(function() {
         closeTab();
@@ -141,19 +146,19 @@ $(document).ready(function() {
 
 
 //显示用户名查找内容
-function editParent() {
-    $("#searchParent").css("display", "inline");
-}
+//function editParent() {
+//    $("#searchParent").css("display", "inline");
+//}
 
 //更改用户名推荐人
-function changeParent(userId, userName) {
-    //alert(userid+"@@"+username);
-    $('#ParentName').val(userName);
-    $('#f_ParentId').val(userId);
-    $('#ParentName').attr("disabled");
-    $('#ParentName').removeAttr("disabled");
-
-}
+//function changeParent(userId, userName) {
+//    //alert(userId+"@@"+userName);
+//    $('#ParentName').val(userName);
+//    $('#f_ParentId').val(userId);
+//    $('#ParentName').attr("disabled");
+//    $('#ParentName').removeAttr("disabled");
+//
+//}
 function submitForm(continueCreate) {
     if ($('#f_UserName').val() == '') {
         $("#dialog_box").dialog({width: 300, height: 100});

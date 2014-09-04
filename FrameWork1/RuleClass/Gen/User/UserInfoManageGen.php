@@ -15,9 +15,6 @@ class UserInfoManageGen extends BaseManageGen implements IBaseManageGen {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
-            case "create":
-                $result = self::GenCreate();
-                break;
             case "modify":
                 $result = self::GenModify();
                 break;
@@ -43,11 +40,26 @@ class UserInfoManageGen extends BaseManageGen implements IBaseManageGen {
             $resultJavaScript = "";
             $userInfoManageData = new UserInfoManageData();
 
+            $isExist = $userInfoManageData->CheckIsExist($userId,$siteId);
+
+            if($isExist == 0){//检查这个会员是否创建了会员详细信息，如果没有 就创建
+                $userInfoManageData->Create($userId);
+            }
             $arrUserInfoOne = $userInfoManageData->GetOne($userId,$siteId);
-            Template::ReplaceOne($templateContent,$arrUserInfoOne);
+            if(count($arrUserInfoOne) > 0){
+                Template::ReplaceOne($templateContent,$arrUserInfoOne);
+            }else{
+                parent::ReplaceWhenCreate($templateContent,$userInfoManageData->GetFields());
+            }
             if(!empty($_POST)){
-                $httpPostData = $_POST;
+                $httpPostData = Format::FormatHtmlTagInPost($_POST);
+
                 $result = $userInfoManageData->Modify($httpPostData,$userId);
+
+                //加入操作日志
+                $operateContent = 'Modify User,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                self::CreateManageUserLog($operateContent);
+
                 if($result > 0){
                     $jsCode = 'alert("修改成功");parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
@@ -57,8 +69,6 @@ class UserInfoManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::RunJavascript($jsCode);
                     //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
                 }
-                $operateContent = 'Modify UserInfo,POST FORM:'.implode('|',$_POST).';\r\nResult::'.$result;
-                self::CreateManageUserLog($operateContent);
             }
             $templateContent = str_ireplace("{UserId}", $userId, $templateContent);
             $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);

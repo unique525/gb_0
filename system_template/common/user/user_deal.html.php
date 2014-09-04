@@ -14,17 +14,22 @@
             });
 
             $("#btn_modify_user_info").click(function(){
-                var url='/default.php?secu=manage&mod=user_info&m=modify&user_id={UserId}&site_id='+parent.G_NowSiteId;
-                $("#user_info_dialog_frame").attr("src",url);
-                $("#dialog_user_info_box").dialog({
-                    hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
-                    autoOpen:true,
-                    height:650,
-                    width:1250,
-                    modal:true, //蒙层（弹出会影响页面大小）
-                    title:'会员详细信息',
-                    overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
-                });
+                var state = $("#f_State").val();
+                if(state < 100){
+                    var url='/default.php?secu=manage&mod=user_info&m=modify&user_id={UserId}&site_id='+parent.G_NowSiteId;
+                    $("#user_info_dialog_frame").attr("src",url);
+                    $("#dialog_user_info_box").dialog({
+                        hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                        autoOpen:true,
+                        height:650,
+                        width:1250,
+                        modal:true, //蒙层（弹出会影响页面大小）
+                        title:'会员详细信息',
+                        overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                    });
+                }else{
+                    alert("用户为停用状态，请修改为非停用状态再编辑用户详细信息");
+                }
             });
         });
     </script>
@@ -40,14 +45,15 @@
     </style>
 </head>
 <body>
+{common_body_deal}
 <div id="dialog_user_info_box" title="提示信息" style="display: none;">
     <div id="user_info_table" style="font-size: 14px;">
         <iframe id="user_info_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="650"></iframe>
     </div>
 </div>
 <div class="div_list">
-    {common_body_deal}
-    <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=user&m={method}&user_id={UserId}&site_id={SiteId}"
+    <form id="mainForm" enctype="multipart/form-data"
+          action="/default.php?secu=manage&mod=user&m={method}&user_id={UserId}&site_id={SiteId}&tab_index={tab_index}"
           method="post">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -135,7 +141,7 @@
                     </select>
                 </td>
             </tr>
-            <tr>
+            <tr id="edit_info_tr">
                 <td class="spe_line" height="30" align="right"  {display_by_method}>
                     <span id="btn_modify_user_info" class="btn2">编辑此会员详细信息</span>
                 </td>
@@ -144,6 +150,7 @@
             <tr>
                 <td colspan="2" height="30" align="center">
                     <input id="btn_ConfirmCloseTwo" class="btn" value="确认并关闭" type="button" idvalue="0"/>
+                    <input id="btn_ConfirmGoOnTwo" class="btn" value="确认并继续" type="button" idvalue="1"/>
                     <input id="btn_RemoveTwo" class="btn" value="取 消" type="button"/>
                 </td>
             </tr>
