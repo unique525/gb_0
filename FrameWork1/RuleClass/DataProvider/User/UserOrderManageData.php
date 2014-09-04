@@ -8,6 +8,14 @@
 class UserOrderManageData extends BaseManageData{
 
     /**
+     * 获取会员订单表中的字段
+     * @return array
+     */
+    public function GetFields(){
+        return parent::GetFields(self::TableName_UserOrder);
+    }
+
+    /**
      * 修改
      * @param array $httpPostData $_POST数组
      * @param int $userOrderId 会员订单Id

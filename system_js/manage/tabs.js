@@ -54,8 +54,11 @@ function closeTab(){
             //刷新内容
             parent.$("#iframeNewTab").attr("src",parent.$("#iframeNewTab").attr("src"));
             //alert(parent.$("#iframeNewTab").attr("src"));
+        }else{
+            alert("nowTableIndex小于0");
         }
-
+    }else{
+        alert("tab_index未定义");
     }
 }
 

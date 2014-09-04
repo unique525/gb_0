@@ -38,5 +38,6 @@
 <module id="37"><content><![CDATA[对不起！该信息还不属于您所在部门的处理范畴内！！！]]></content></module>
 <module id="38"><content><![CDATA[<div style="padding:5px;">同一频道内已经有重复的心情配置了</div>]]></content></module>
 <module id="39"><content><![CDATA[<div style="padding:5px;">对不起！您只能修改自己发布的并且是处于未审状态下的稿子</div>]]></content></module>
-<module id="40"><content><![CDATA[<div style="padding:5px;">对不起！数据提交处理出错</div>]]></content></module> 
+<module id="40"><content><![CDATA[<div style="padding:5px;">对不起！数据提交处理出错</div>]]></content></module>
+<module id="41"><content><![CDATA[用户名或密码含有非法字符]]></content></module>
 </root>
