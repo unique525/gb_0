@@ -135,6 +135,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $productParamTypeOptionManageGen = new ProductParamTypeOptionManageGen();
                     $result = $productParamTypeOptionManageGen->Gen();
                     break;
+                case "product_price":
+                    $productPriceManageGen = new ProductPriceManageGen();
+                    $result = $productPriceManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
