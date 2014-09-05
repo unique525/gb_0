@@ -29,13 +29,13 @@
             <item>
                 <![CDATA[
                 <tr class="grid_item">
-                    <td class="spe_line" style="text-align:center;"><input id="doc_input" class="doc_input" type="checkbox" name="doc_input" value="{f_CustomFormId}" /></td>
-                    <td class="spe_line" style="text-align:center;"><img class="btn_edit" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="{f_CustomFormId}" idvalue="{f_CustomFormId}"/></td>
-                    <td class="spe_line"><a target="_blank"  title="{f_CustomFormId}" ><span style="color:black;font-weight:inherit;">{f_CustomFormSubject}</span></a> <span class="btn_open_custom_form_record" title="{f_CustomFormId}" idvalue="{f_CustomFormId}" style="cursor:pointer;">【查看数据】</span></td>
-                    <td class="spe_line" style="text-align:center;"><span class="btn_open_custom_form_field" title="{f_CustomFormId}"  idvalue="{f_CustomFormId}" style="cursor:pointer;">管理</span></td>
-                    <td class="spe_line"><img class="img_publish" style="cursor: pointer" src="/system_template/default/images/manage/publish.gif" title="{f_SiteContentId}" alt="发布" /></td>
-                    <td class="spe_line" style="text-align:center;">{f_sort}</td>
-                    <td class="spe_line" style="text-align:center;">{f_state}</td>
+                    <td class="spe_line2" style="text-align:center;"><input id="doc_input" class="doc_input" type="checkbox" name="doc_input" value="{f_CustomFormId}" /></td>
+                    <td class="spe_line2" style="text-align:center;"><img class="btn_edit" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="{f_CustomFormId}" idvalue="{f_CustomFormId}"/></td>
+                    <td class="spe_line2"><a target="_blank"  title="{f_CustomFormId}" ><span style="color:black;font-weight:inherit;">{f_CustomFormSubject}</span></a> <span class="btn_open_custom_form_record" title="{f_CustomFormId}" idvalue="{f_CustomFormId}" style="cursor:pointer;">【查看数据】</span></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="btn_open_custom_form_field" title="{f_CustomFormId}"  idvalue="{f_CustomFormId}" style="cursor:pointer;">管理</span></td>
+                    <td class="spe_line2"><img class="img_publish" style="cursor: pointer" src="/system_template/default/images/manage/publish.gif" title="{f_SiteContentId}" alt="发布" /></td>
+                    <td class="spe_line2" style="text-align:center;">{f_sort}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_state}</td>
                 </tr>
                 ]]>
             </item>

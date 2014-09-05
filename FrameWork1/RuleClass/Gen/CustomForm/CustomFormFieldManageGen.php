@@ -207,13 +207,13 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             Template::ReplaceOne($tempContent, $arrayList);
 
             //去掉s开头的标记 {s_xxx_xxx}
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉c开头的标记 {c_xxx}
-            $patterns = "/\{c_(.*?)\}/";
+            $patterns = '/\{c_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉r开头的标记 {r_xxx_xxx}
-            $patterns = "/\{r_(.*?)\}/";
+            $patterns = '/\{r_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
 
 

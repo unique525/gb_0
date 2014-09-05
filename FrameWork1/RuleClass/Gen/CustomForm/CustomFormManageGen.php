@@ -129,13 +129,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             //去掉s开头的标记 {s_xxx_xxx}
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉c开头的标记 {c_xxx}
-            $patterns = "/\{c_(.*?)\}/";
+            $patterns = '/\{c_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉r开头的标记 {r_xxx_xxx}
-            $patterns = "/\{r_(.*?)\}/";
+            $patterns = '/\{r_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
 
@@ -194,13 +194,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             Template::ReplaceOne($tempContent, $arrayOfEditingData, 0);
 
             //去掉s开头的标记 {s_xxx_xxx}
-            $patterns = "/\{s_(.*?)\}/";
+            $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉c开头的标记 {c_xxx}
-            $patterns = "/\{c_(.*?)\}/";
+            $patterns = '/\{c_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             //去掉r开头的标记 {r_xxx_xxx}
-            $patterns = "/\{r_(.*?)\}/";
+            $patterns = '/\{r_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
 
             if (!empty($_POST)) {
@@ -286,13 +286,13 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=custom_form&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $navUrl = "default.php?secu=manage&mod=custom_form&m=list&channel_id=$channelId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
                 $replaceArray = array(
-                    "{channel_id}" => 0,
-                    "{cid}" => 0,
+                    "{channel_id}" => $channelId,
+                    "{cid}" => $channelId,
                     "{id}" => 0,
                     "{PagerButton}" => $pagerButton
                 );

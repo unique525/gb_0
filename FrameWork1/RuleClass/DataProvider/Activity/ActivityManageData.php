@@ -15,13 +15,15 @@ class ActivityManageData extends BaseManageData{
      */
     public function Create($httpPostData) {
         $result=-1;
+        $dataProperty = new DataProperty();
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array();
+        $addFieldValues = array();
         if (!empty($httpPostData)) {
-            print_r($httpPostData);
-            $dataProperty = new DataProperty();
-            $sql = parent::GetInsertSql($httpPostData,self::TableName_Activity, $dataProperty);
+            $sql = parent::GetInsertSql($httpPostData,self::TableName_Activity, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
-            echo '<br>'.$sql;
-            echo '<br>'.$result;die();
         }
         return $result;
     }
@@ -67,5 +69,55 @@ class ActivityManageData extends BaseManageData{
         return $result;
     }
 
+    /**
+     * 通过ID获取一条记录
+     * @param int $activityId 活动id
+     * @return array 活动数据
+     */
+    public function GetOne($activityId) {
+        $result=-1;
+        if($activityId>0){
+            $sql = "SELECT * FROM " . self::TableName_Activity . " WHERE ActivityId = :ActivityId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_Activity){
+        return parent::GetFields(self::TableName_Activity);
+    }
+
+
+    /**
+     * 修改活动题图的上传文件id
+     * @param int $activityId 活动id
+     * @param int $titlePicUploadFileId 题图上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic($activityId, $titlePicUploadFileId)
+    {
+        $result = -1;
+        if($activityId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Activity . " SET
+                    TitlePicUploadFileId = :TitlePicUploadFileId
+
+                    WHERE ActivityId = :ActivityId
+
+                    ;";
+            $dataProperty->AddField("TitlePicUploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 }
 ?>

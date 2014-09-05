@@ -66,6 +66,11 @@
                 return;
             }*/
             if(submit==1) {
+                //处理时间
+                SetTimes("StartTime");
+                SetTimes("EndTime");
+                SetTimes("SignUpStartTime");
+                SetTimes("SignUpDeadLine");
                 if (continueCreate == 1) {
                     $("#CloseTab").val("0");
                 } else {
@@ -74,13 +79,19 @@
                 $('#main_form').submit();
             }
         }
+
+        function SetTimes(timeName){
+            var Time = $("#f_"+timeName);
+            Time.val(Time.val().substr(0,10)+' '+$("#f_"+timeName+"ShowHour").val()+':'+$("#f_"+timeName+"ShowMinute").val()+':'+$("#f_"+timeName+"ShowSecond").val())
+            alert(Time.val());
+        }
     </script>
 
     </head>
     <body>
     {common_body_deal}
         <form id="main_form" enctype="multipart/form-data"
-              action="/default.php?secu=manage&mod=activity&m={method}&channel_id={ChannelId}&id={ActivityId}&activity_type={ActivityType}&tab_index={TabIndex}"
+              action="/default.php?secu=manage&mod=activity&m={method}&channel_id={ChannelId}&activity_id={ActivityId}&activity_type={ActivityType}&tab_index={TabIndex}"
               method="post">
             <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
             <input type="hidden" id="f_ActivityType" name="f_ActivityType" value="{ActivityType}" />
@@ -89,7 +100,7 @@
             <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
             <input type="hidden" id="f_UserId" name="f_UserId" value="{UserId}" />
             <input type="hidden" id="f_UserName" name="f_UserName" value="{UserName}" />
-            <input type="hidden" id="f_TitlePic" name="f_TitlePic" value="{TitlePic}" />
+            <input type="hidden" id="f_TitlePicUploadFileId" name="f_TitlePicUploadFileId" value="{TitlePicUploadFileId}" />
             <input type="hidden" id="f_UploadFile" name="f_UploadFile" value="{UploadFile}" />
             <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
@@ -126,8 +137,8 @@
                             <tr>
                                 <td>介绍图片网址：</td>
                                 <td>
-                                    <input id="FileToUpload" name="FileToUpload" type="file" class="input_box" style="width:60%; background: #ffffff;" />
-                                    <span id="preview" class="show_title_pic" idvalue="{TitlePicUploadFileId}" style="cursor:pointer">[预览]</span>
+                                    <input id="file_title_pic" name="file_title_pic" type="file" class="input_box" style="width:60%; background: #ffffff;" />
+                                    <span id="preview_title_pic" class="show_title_pic" idvalue="{TitlePicUploadFileId}" style="cursor:pointer">[预览]</span>
 
                                 </td>
                             </tr>
@@ -192,36 +203,36 @@
                         <tr>
                             <td class="spe_line" style="height:35px;text-align: right;width:160px;"><label for="f_StartTime">活动开始时间：</label></td>
                             <td class="spe_line" colspan="3" style="text-align: left;width:550px;">
-                                <input type="text" class="WDate" id="f_StartTime" name="f_StartTime" value="{StartTime}" onClick="WdatePicker()" style=" width: 75px;font-size:14px;" maxlength="20"  />
-                                <!--<input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowHour" name="f_StartTimeShowHour" maxlength="2" value="{StartTimeShowHour}"/><label for="f_StartTimeShowHour">时</label>
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowMinute" name="f_StartTimeShowMinute"  maxlength="2" value="{StartTimeShowMinute}"  /><label for="f_StartTimeShowMinute">分</label>
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowSecond" name="f_StartTimeShowSecond"  maxlength="2" value="{StartTimeShowSecond}"  /><label for="f_StartTimeShowSecond">秒</label>
-                                -->
+                                <input type="text" class="WDate" id="f_StartTime" name="f_StartTime" value="{StartTime}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowHour"  maxlength="2" value=""/><label for="f_StartTimeShowHour">时</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowMinute"   maxlength="2" value=""  /><label for="f_StartTimeShowMinute">分</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_StartTimeShowSecond"   maxlength="2" value=""  /><label for="f_StartTimeShowSecond">秒</label>
+
                                 <label for="f_EndTime">至</label>
-                                <input type="text" class="WDate" id="f_EndTime" name="f_EndTime" value="{EndTime}" onClick="WdatePicker()" style=" width: 75px;font-size:14px;" maxlength="20"  />
-                                <!--<input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowHour" name="f_EndTimeShowHour" maxlength="2" value="{EndTimeShowHour}" /><label for="f_EndTimeShowHour">时</label>
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowMinute" name="f_EndTimeShowMinute"  maxlength="2" value="{EndTimeShowMinute}" /><label for="f_EndTimeShowMinute">分</label>
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowSecond" name="f_EndTimeShowSecond"  maxlength="2" value="{EndTimeShowSecond}" /><label for="f_EndTimeShowSecond">秒</label>
-                                -->
+                                <input type="text" class="WDate" id="f_EndTime" name="f_EndTime" value="{EndTime}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                  <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowHour"  maxlength="2"    value="" />  <label for="f_EndTimeShowHour">时</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowMinute"   maxlength="2" value="" /><label for="f_EndTimeShowMinute">分</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndTimeShowSecond"   maxlength="2" value="" /><label for="f_EndTimeShowSecond">秒</label>
+
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:160px;height:35px;text-align: right;"><label for="f_SignUpStartTime">活动报名开始时间：</label></td>
                             <td colspan="3" class="spe_line" style="text-align: left;width:400px;">
-                                <input type="text" class="WDate" id="f_SignUpStartTime" name="f_SignUpStartTime" value="{SignUpStartTime}" onClick="WdatePicker()" style=" width: 120px;font-size:14px;" maxlength="20"  />
-                                <!--<input type="text" class="input_number" style=" width:20px;font-size:14px;" id="applybegin_showhour" name="applybegin_showhour" maxlength="2" value="{applybegin_showhour}"  />时
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="applybegin_showminute" name="applybegin_showminute"  maxlength="2" value="{applybegin_showminute}"   />分
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="applybegin_showsecond" name="applybegin_showsecond"  maxlength="2" value="{applybegin_showsecond}"  />秒(时间为24小时制)
-                            -->
+                                <input type="text" class="WDate" id="f_SignUpStartTime" name="f_SignUpStartTime" value="{SignUpStartTime}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpStartTimeShowHour"  maxlength="2"    value="" />  <label for="f_SignUpStartTimeShowHour">时</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpStartTimeShowMinute"   maxlength="2" value="" /><label for="f_SignUpStartTimeShowMinute">分</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpStartTimeShowSecond"   maxlength="2" value="" /><label for="f_SignUpStartTimeShowSecond">秒</label>
+
                                 </td>
                         </tr>
                         <tr>
                             <td class="spe_line" style="width:160px;height:35px;text-align: right;"><label for="f_SignUpDeadLine">活动报名截止时间：</label></td>
                             <td colspan="3" class="spe_line" style="text-align: left">
-                                <input type="text" class="WDate" id="f_SignUpDeadLine" name="f_SignUpDeadLine" value="{SignUpDeadLine}" onClick="WdatePicker()" style=" width: 120px;font-size:14px;" maxlength="20"  />
-                                <!--<input type="text" class="input_number" style=" width:20px;font-size:14px;" id="apply_showhour" name="apply_showhour" maxlength="2" value="{apply_showhour}"  />时
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="apply_showminute" name="apply_showminute"  maxlength="2" value="{apply_showminute}"   />分
-                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="apply_showsecond" name="apply_showsecond"  maxlength="2" value="{apply_showsecond}"  />秒(时间为24小时制)
+                                <input type="text" class="WDate" id="f_SignUpDeadLine" name="f_SignUpDeadLine" value="{SignUpDeadLine}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpDeadLineShowHour"  maxlength="2"    value="" />  <label for="f_SignUpDeadLineShowHour">时</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpDeadLineShowMinute"   maxlength="2" value="" /><label for="f_SignUpDeadLineShowMinute">分</label>
+                                <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_SignUpDeadLineShowSecond"   maxlength="2" value="" /><label for="f_SignUpDeadLineShowSecond">秒</label>
                                 -->
                             </td>
                         </tr>
