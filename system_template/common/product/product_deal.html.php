@@ -228,13 +228,18 @@
             </td>
         </tr>
         </table>
-        <table width="60%" cellpadding="0" cellspacing="0" align="left">
+        <table width="60%" cellpadding="0" cellspacing="0" border="1" style="border-collapse: collapse" align="left">
             <tr>
-                <td align="left">产品价格列表</td>
-                <td align="right"><input type="button" value="增加" onclick="ProductPriceCreate()"; /></td>
+                <td align="left"><span style="font-size:14px; font-weight: bold; margin-left: 12px">产品价格列表</span>
+                <input style="margin-left: 40px" type="button" value="增加价格" onclick="ProductPriceCreate()"; />
+                </td>
             </tr>
-        </table>
-        <table id="product_price_list" width="60%" cellpadding="0" cellspacing="0" align="left">
+            <tr>
+                <td>
+                    <table id="product_price_list" width="100%" cellpadding="0" cellspacing="0" align="left">
+                    </table>
+                </td>
+            </tr>
         </table>
     </div>
     <div id="tabs-3">
