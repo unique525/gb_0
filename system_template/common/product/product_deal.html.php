@@ -10,12 +10,7 @@
         <!--
         var editor;
         $(function () {
-            editor = $('#f_ProductContent').xheditor();
-            $("#f_CreateDate").datepicker({
-                dateFormat: 'yy-mm-dd',
-                numberOfMonths: 1,
-                showButtonPanel: true
-            });
+            getProductPriceList();
 
         });
 
@@ -36,7 +31,50 @@
             }
         }
         -->
+        function closeProductPriceDialog()
+        {
+            $('#dialog_resultbox').dialog('close');
+        }
+        function getProductPriceList() {
+            var productId=Request['product_id'];
+            var productPriceHtml=
+                '<tr class="grid_title">'
+                    +'<td style="width:40px;text-align:center;">编辑</td>'
+                    +'<td>价格说明</td>'
+                    +'<td style="width:60px;text-align:center">价格</td>'
+                    +'<td style="width:60px;text-align:center">数量</td>'
+                    +'<td style="width:60px;text-align:center;">单位</td>'
+                    +'<td style="width:60px;text-align:center;">状态</td>'
+                    +'<td style="width:80px;text-align:center;">启用|停用</td>'
+                    +'</tr>';
+            if (productId > 0) {
+                $.ajax({
+                    url: "/default.php?secu=manage&mod=product_price&m=async_list&p=NaN",
+                    data: {secu: "manage", mod: "product_price", m: "async_list", product_id: productId},
+                    dataType: "jsonp",
+                    async: false,
+                    jsonp: "jsonpcallback",
+                    success: function (data) {
+                        var result = data["result"];
+                        $.each(result, function (i, v) {
+                            productPriceHtml =productPriceHtml
+                               +'<tr>'
+                               +'<td class="spe_line2" style="text-align: center;"><img onclick="ProductPriceEdit(this)" class="btn_modify" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="'+v["ProductPriceId"]+'" /></td>'
+                               +'<td class="spe_line2">'+v["ProductPriceIntro"]+'</td>'
+                               +'<td class="spe_line2" style="text-align: center;">'+v["ProductPriceValue"]+'</td>'
+                               +'<td class="spe_line2" style="text-align: center;">'+v["ProductCount"]+'</td>'
+                               +'<td class="spe_line2" style="text-align: center;">'+v["ProductUnit"]+'</td>'
+                               +'<td class="spe_line2" style="text-align: center;"><span class="span_state" id="span_state_'+v["ProductPriceId"]+'">'+FormatProductPriceState(v["State"])+'</span></td>'
+                               +'<td class="spe_line2" style="text-align: center;"><img onclick=\'ModifyProductPriceState('+v["ProductPriceId"]+',"0")\' alt="" class="div_start" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img onclick=\'ModifyProductPriceState('+v["ProductPriceId"]+',"100")\' alt="" class="div_stop" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></td>'
+                               +'</tr>';
+                        });
+                        $("#product_price_list").html(productPriceHtml);
+                    }
+                });
+            }
+        }
     </script>
+    <script type="text/javascript" src="/system_js/manage/product/product_price.js"></script>
     <style type="text/css">
         #main_content {
             width:99%; text-align: center;
@@ -60,6 +98,11 @@
 </head>
 <body>
 {common_body_deal}
+<div id="dialog_resultbox" title="提示信息" style="display: none;">
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src=""  style="border: 0; " width="100%" height="220px"></iframe>
+    </div>
+</div>
 <form id="mainForm" enctype="multipart/form-data"
       action="/default.php?secu=manage&mod=product&m={method}&channel_id={ChannelId}&product_id={ProductId}&tab_index={tab_index}"
       method="post">
@@ -184,6 +227,14 @@
                 <input id="f_MarketPrice" name="f_MarketPrice" type="text" value="{MarketPrice}" maxlength="10" style="width:80px;" class="input_price"/>
             </td>
         </tr>
+        </table>
+        <table width="60%" cellpadding="0" cellspacing="0" align="left">
+            <tr>
+                <td align="left">产品价格列表</td>
+                <td align="right"><input type="button" value="增加" onclick="ProductPriceCreate()"; /></td>
+            </tr>
+        </table>
+        <table id="product_price_list" width="60%" cellpadding="0" cellspacing="0" align="left">
         </table>
     </div>
     <div id="tabs-3">

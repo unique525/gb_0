@@ -87,6 +87,38 @@ class ProductPriceManageData extends BaseManageData
     }
 
     /**
+     * 获取产品价格数组通用
+     * @param int $productId   产品ID
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array  返回查询题目数组
+     */
+    public function GetList($productId, $order = "", $topCount = -1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($productId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY Sort DESC,ProductId ASC";
+                    break;
+            }
+            $sql = "
+            SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
+            FROM " . self::TableName_ProductPrice . "
+            WHERE ProductId=:ProductId"
+            . $order
+            . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 获取产品价格分页列表
      * @param int $productId 产品Id
      * @param int $pageBegin 起始页码

@@ -27,8 +27,8 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "list":
-                $result = self::GenList();
+            case "async_list":
+                $result = self::AsyncList();
                 break;
         }
 
@@ -46,6 +46,7 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
         $productId = Control::GetRequest("product_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
         $tempContent = Template::Load("product/product_price_deal.html", "common");
+        $resultJavaScript = "";
         if ($manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
             $productPriceManageData = new ProductPriceManageData();
@@ -59,13 +60,11 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($ProductPriceId > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('product', 1));
-                    $jsCode = 'parent.location.href=parent.location.href';
-                    Control::RunJavascript($jsCode);
+                    //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1));
+                    $resultJavaScript .= '<' . 'script type="text/javascript">window.parent.closeProductPriceDialog();window.parent.getProductPriceList();</script>';
                 } else {
-                    Control::ShowMessage(Language::Load('product', 2));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 2)); //新增失败！
                 }
-                return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
             $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
@@ -77,6 +76,7 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
 
         }
         return $tempContent;
@@ -110,6 +110,7 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
     private function GenModify()
     {
         $tempContent = Template::Load("product/product_price_deal.html", "common");
+        $resultJavaScript="";
         $ProductPriceId = Control::GetRequest("product_price_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
@@ -125,11 +126,9 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('product', 3));
-                    $jsCode = 'parent.location.href=parent.location.href';
-                    Control::RunJavascript($jsCode);
+                    $resultJavaScript .= '<' . 'script type="text/javascript">window.parent.closeProductPriceDialog();window.parent.getProductPriceList();</script>';
                 } else {
-                    Control::ShowMessage(Language::Load('product', 4));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 4)); //修改失败！
                 }
             }
             $arrList = $productPriceManageData->GetOne($ProductPriceId);
@@ -140,48 +139,27 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
         $patterns = '/\{s_(.*?)\}/';
         $tempContent = preg_replace($patterns, "", $tempContent);
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
     /**
-     * 产品价格管理列表页面
+     * 获取产品价格json数组
      * @return mixed|string
      */
-    private function GenList()
+    private function AsyncList()
     {
-
-        $templateContent = Template::Load("product/product_price_list.html", "common");
-
+        $result=array();
         $productId = Control::GetRequest("product_id", 0);
-        $pageSize = Control::GetRequest("ps", 20);
-        $pageIndex = Control::GetRequest("p", 1);
-        $searchKey = Control::GetRequest("search_key", "");
-        $searchKey = urldecode($searchKey);
+        $pageSize = Control::GetRequest("ps", -1);
+        $order = Control::GetRequest("order", "");
 
-        if ($pageIndex > 0) {
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "product_price_list";
-            $allCount = 0;
+        if ($productId > 0) {
             $productManageData = new ProductPriceManageData();
-            $arrList = $productManageData->GetListForPager($productId, $pageBegin, $pageSize, $allCount, $searchKey);
-            if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $tagId);
-                $styleNumber = 1;
-                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
-                $isJs = FALSE;
-                $navUrl = "/default.php?secu=manage&mod=product&m=list&product_id=$productId&p={0}&ps=$pageSize";
-                $jsFunctionName = "";
-                $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                Template::ReplaceList($templateContent,$arrList,$tagId);
-                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
-            } else {
-                Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{pager_button}", Language::Load("product", 101), $templateContent);
-            }
+            $result = $productManageData->GetList($productId, $order ,$pageSize);
+            $result = json_encode($result);
         }
-        parent::ReplaceEnd($templateContent);
-        return $templateContent;
+        return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . '})';
     }
 
 }

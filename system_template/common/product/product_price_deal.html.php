@@ -13,18 +13,26 @@
             function sub()
             {
                 var productPriceValue= $('#f_ProductPriceValue').val();
+                var productCount= $('#f_ProductPriceCount').val();
+                var productUnit= $('#f_ProductUnit').val();
                 if(productPriceValue == ''){
-                    alert('请输入产品价格！');
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("请输入产品价格");
                 }
-                else if(productPriceValue.length>10){
-                    alert('产品价格过长请不要超过10个字节！');
+                else if(productCount == ''){
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("请输入产品数量");
+                }
+                else if(productUnit == ''){
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("请输入产品单位");
                 }
                 else {$('#mainForm').submit();}
             }
         </script>
     </head>
     <body>
-    {common_body_deal}
+        {common_body_deal}
         <form id="mainForm" action="/default.php?secu=manage&mod=product_price&m={method}&product_price_id={ProductPriceId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
@@ -37,19 +45,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right"><label for="f_ProductCount">数量：</label></td>
-                    <td class="spe_line" title="{ProductCount}"><input name="f_ProductCount" id="f_ProductCount" value="{ProductCount}" type="text" class="input_box" style=" width: 300px;" /></td>
-                </tr>
-                <tr>
                     <td class="spe_line" height="30" align="right"><label for="f_ProductPriceValue">价格：</label></td>
                      <td class="spe_line" title="{ProductPriceValue}"><input name="f_ProductPriceValue" id="f_ProductPriceValue" value="{ProductPriceValue}" type="text" class="input_box" style=" width: 300px;" /></td>
+                </tr>
+                <tr>
+                    <td class="spe_line" height="30" align="right"><label for="f_ProductCount">数量：</label></td>
+                    <td class="spe_line" title="{ProductCount}"><input name="f_ProductCount" id="f_ProductCount" value="{ProductCount}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
                 <tr>
                     <td class="spe_line" height="30" align="right"><label for="f_ProductUnit">单位：</label></td>
                     <td class="spe_line" title="{ProductUnit}"><input name="f_ProductUnit" id="f_ProductUnit" value="{ProductUnit}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right"><label for="f_ProductPriceIntro">价格简介：</label></td>
+                    <td class="spe_line" height="30" align="right"><label for="f_ProductPriceIntro">价格说明：</label></td>
                     <td class="spe_line" title="{ProductPriceIntro}"><input name="f_ProductPriceIntro" id="f_ProductPriceIntro" value="{ProductPriceIntro}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
                 <tr>
