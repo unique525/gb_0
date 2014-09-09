@@ -18,16 +18,25 @@
 
             $(function(){
 
+                if ($.browser.msie) {
+                    $('input:checkbox').click(function () {
+                        this.blur();
+                        this.focus();
+                    });
+                };
+
                 var editorHeight = $(window).height() - 220;
                 editorHeight = parseInt(editorHeight);
 
-                editor = $('#f_DocumentNewsContent').xheditor({
+                var f_DocumentNewsContent = $('#f_DocumentNewsContent');
+
+                editor = f_DocumentNewsContent.xheditor({
                     tools:'full',
                     height:editorHeight,
                     upImgUrl:"upload.php",
                     upImgExt:"jpg,jpeg,gif,png",
                     localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
-                    remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image&table_type='+tableType+'&table_id='+tableId
+                    remoteImgSaveUrl:''
                 });
 
 
@@ -63,6 +72,36 @@
                 btnSetSourceName.css("cursor","pointer");
                 btnSetSourceName.click(function(){
                     $("#f_SourceName").val($(this).text());
+                });
+
+                var cbSaveRemoteImage = $("#cbSaveRemoteImage");
+                cbSaveRemoteImage.change(function(){
+                    if(cbSaveRemoteImage.prop("checked")==true){
+
+                        f_DocumentNewsContent.xheditor(false);
+
+                        editor = f_DocumentNewsContent.xheditor({
+                            tools:'full',
+                            height:editorHeight,
+                            upImgUrl:"upload.php",
+                            upImgExt:"jpg,jpeg,gif,png",
+                            localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                            remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image&table_type='+tableType+'&table_id='+tableId
+                        });
+
+                    }else{
+
+                        f_DocumentNewsContent.xheditor(false);
+
+                        editor = $('#f_DocumentNewsContent').xheditor({
+                            tools:'full',
+                            height:editorHeight,
+                            upImgUrl:"upload.php",
+                            upImgExt:"jpg,jpeg,gif,png",
+                            localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                            remoteImgSaveUrl:''
+                        });
+                    }
                 });
 
                 var btnUploadToContent = $("#btnUploadToContent");
@@ -311,6 +350,12 @@
                                             <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
                                             <td align="left">
                                                 <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" /> (只支持jpg或jpeg图片)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
+                                            <td align="left">
+                                                <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" /> (只支持jpg、jpeg、gif、png图片)
                                             </td>
                                         </tr>
                                     </table>

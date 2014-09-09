@@ -603,20 +603,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             if (count($arrDocumentNewsList) > 0) {
                 Template::ReplaceList($tempContent, $arrDocumentNewsList, $tagId);
 
-                /**
                 $styleNumber = 1;
-                $pagerTemplate = Template::Load("../common/pager_style$styleNumber.html");
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=documentnews&m=listformanage&cid=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
+                $navUrl = "default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
 
-                $tempContent = str_ireplace("{documentchannelid}", $channelId, $tempContent);
-                $tempContent = str_ireplace("{cid}", $channelId, $tempContent);
-                $tempContent = str_ireplace("{pagerbutton}", $pagerButton, $tempContent);
-                $tempContent = str_ireplace("{siteurl}", $siteUrl, $tempContent);
-                 */
+                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
                 $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);

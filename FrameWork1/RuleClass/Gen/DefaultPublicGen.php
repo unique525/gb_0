@@ -13,7 +13,6 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string 返回执行结果
      */
     public function GenPublic() {
-        $result = "";
         $module = Control::GetRequest("mod", "");
         switch ($module) {
             case "manage":                
@@ -36,8 +35,15 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $uploadFilePublicGen = new UploadFilePublicGen();
                 $result = $uploadFilePublicGen->GenPublic();
                 break;
+            default:
+                $result = self::GenDefaultPublic();
+                break;
         }
         return $result;
+    }
+
+    private function GenDefaultPublic(){
+        return "";
     }
 
 }
