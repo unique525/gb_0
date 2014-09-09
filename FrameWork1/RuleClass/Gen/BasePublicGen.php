@@ -56,6 +56,12 @@ class BasePublicGen extends BaseGen {
         return $siteId;
     }
 
+    protected function GenProduct(&$tempContent){
+
+
+
+    }
+
 }
 
 ?>
