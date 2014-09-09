@@ -47,7 +47,7 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
         $pageIndex = Control::GetRequest("p", 0);
         $tempContent = Template::Load("product/product_price_deal.html", "common");
         $resultJavaScript = "";
-        if ($manageUserId > 0) {
+        if ($productId > 0 && $manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
             $productPriceManageData = new ProductPriceManageData();
             if (!empty($_POST)) {
@@ -109,13 +109,14 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
+        $manageUserId = Control::GetManageUserId();
         $tempContent = Template::Load("product/product_price_deal.html", "common");
         $resultJavaScript="";
         $ProductPriceId = Control::GetRequest("product_price_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
         $productPriceManageData = new ProductPriceManageData();
-        if ($ProductPriceId > 0) {
+        if ($ProductPriceId >0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $result = $productPriceManageData->Modify($httpPostData, $ProductPriceId);
