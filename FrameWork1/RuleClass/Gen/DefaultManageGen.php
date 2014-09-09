@@ -140,6 +140,11 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $productPriceManageGen->Gen();
                     break;
                 default :
+                case "activity":
+                    $ActivityManageGen = new ActivityManageGen();
+                    $result = $ActivityManageGen->Gen();
+                    break;
+                default :
                     $result = self::GenDefault();
                     break;
             }

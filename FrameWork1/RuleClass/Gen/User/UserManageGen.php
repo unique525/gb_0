@@ -56,7 +56,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                 $httpPostData = Format::FormatHtmlTagInPost($_POST);
                 $userName = Control::PostRequest("f_UserName", "");
                 $userPass = Control::PostRequest("f_UserPass", "");
-                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
+                if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
                     $isExistSameUserName = $userManageData->CheckSameUserName($userName); //检查是否有重名的
 
 
@@ -94,13 +94,11 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                 } else {
                     $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
                 }
-                parent::ReplaceEnd($templateContent);
-                $templateContent = str_ireplace("{display_by_method}", 'style="display:none"', $templateContent);
-                $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
-                return $templateContent;
-            } else {
-                return null;
             }
+            parent::ReplaceEnd($templateContent);
+            $templateContent = str_ireplace("{display_by_method}", 'style="display:none"', $templateContent);
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+            return $templateContent;
         } else {
             return null;
         }
@@ -189,7 +187,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                     $httpPostData = Format::FormatHtmlTagInPost($_POST);
                     $userName = Control::PostRequest("f_UserName", "");
                     $userPass = Control::PostRequest("f_UserPass", "");
-                        if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
+                    if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
                         //老帐号名和新帐号名不同时，要检查是否已经存在
                         $oldUserName = Control::PostRequest("OldUserName", "");
                         $newUserName = Control::PostRequest("f_UserName", "");
@@ -217,10 +215,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                             }
                         } else {
                             $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
-                        }
-                        $closeTab = Control::PostRequest("CloseTab", 1);
-                        if ($closeTab == 1) {
-                            Control::CloseTab();
                         }
                     } else {
                         $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
