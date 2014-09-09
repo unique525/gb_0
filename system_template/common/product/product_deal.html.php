@@ -228,7 +228,7 @@
             </td>
         </tr>
         </table>
-        <table width="60%" cellpadding="0" cellspacing="0" border="1" style="border-collapse: collapse" align="left">
+        <table width="60%" cellpadding="0" cellspacing="0" style="border:1px solid #cccccc; margin-top: 10px" align="left">
             <tr>
                 <td align="left"><span style="font-size:14px; font-weight: bold; margin-left: 12px">产品价格列表</span>
                 <input style="margin-left: 40px" type="button" value="增加价格" onclick="ProductPriceCreate()"; />
