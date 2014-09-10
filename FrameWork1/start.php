@@ -12,8 +12,8 @@ date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 require RELATIVE_PATH . "/FrameWork1/include_all.php";
 $security = Control::GetRequest("secu", "");
 if ($security === "manage") {
-    $adminUserId = Control::GetManageUserId();
-    if ($adminUserId <= 0) {
+    $manageUserId = Control::GetManageUserId();
+    if ($manageUserId <= 0) {
         die("<script>window.location.href='" . RELATIVE_PATH . "/default.php?mod=manage&a=login';</script>");
     } else {
         echo getManageHtml(new DefaultManageGen());

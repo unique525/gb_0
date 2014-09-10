@@ -103,7 +103,7 @@
 <div class="state_box" style="display: none;" id="div_state_box" title="">
     <div style="float:right;"><img class="btn_close_box" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
     <div style="clear:both;">
-        <div style="{CanCreate}" class="docnewssetstate" statevalue="0" idvalue="{f_documentnewsid}">新稿</div>
+        <div style="{CanCreate}" class="document_news_set_state" statevalue="0" idvalue="{f_documentnewsid}">新稿</div>
         <div style="{CanModify}" class="docnewssetstate" statevalue="1" idvalue="{f_documentnewsid}">已编</div>
         <div style="{CanRework}" class="docnewssetstate" statevalue="2" idvalue="{f_documentnewsid}">返工</div>
         <div style="{CanAudit1}" class="docnewssetstate" statevalue="11" idvalue="{f_documentnewsid}">一审</div>
