@@ -830,6 +830,13 @@ class BaseGen
         return $result;
     }
 
+    /**
+     * 生成平板客户端使用的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $padWidth 图片的宽度
+     * @param int $padHeight 图片的高度，默认为0，不按高度缩放
+     * @return int
+     */
     public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0){
         $result = -1;
         if($uploadFileId>0 && ($padWidth >0 || $padHeight>0)){

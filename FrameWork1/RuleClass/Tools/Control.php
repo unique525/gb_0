@@ -128,10 +128,41 @@ class Control {
         }
     }
 
+
+    /**
+     * 从POST请求取数据，如果没找到则从GET请求里找
+     * @param string $paramName
+     * @param mixed $defaultValue
+     * @return float|int|string 请求数据值
+     */
+    public static function PostOrGetRequest($paramName, $defaultValue) {
+
+        if (isset($_POST[$paramName])) {
+            if (strlen($_POST[$paramName]) <= 0) {
+            } else {
+                return $_POST[$paramName];
+            }
+        } else {
+
+        }
+
+        if (isset($_GET[$paramName])) {
+            if (is_float($_GET[$paramName])) {
+                return floatval($_GET[$paramName]);
+            } else if (is_int($_GET[$paramName])) {
+                return intval($_GET[$paramName]);
+            } else {
+                return Format::RemoveXSS($_GET[$paramName]);
+            }
+        } else {
+            return $defaultValue;
+        }
+    }
+
     /**
      * 写入会员cookie
-     * @param int $userId
-     * @param string $userName
+     * @param int $userId 会员id
+     * @param string $userName 会员帐号
      * @param int $hour 保存时间（单位小时），默认24小时
      */
     public static function SetUserCookie($userId, $userName, $hour = 24) {

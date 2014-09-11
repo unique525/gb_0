@@ -104,13 +104,13 @@
     <div style="float:right;"><img class="btn_close_box" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
     <div style="clear:both;">
         <div style="{CanCreate}" class="document_news_set_state" statevalue="0" idvalue="{f_documentnewsid}">新稿</div>
-        <div style="{CanModify}" class="docnewssetstate" statevalue="1" idvalue="{f_documentnewsid}">已编</div>
-        <div style="{CanRework}" class="docnewssetstate" statevalue="2" idvalue="{f_documentnewsid}">返工</div>
-        <div style="{CanAudit1}" class="docnewssetstate" statevalue="11" idvalue="{f_documentnewsid}">一审</div>
-        <div style="{CanAudit2}" class="docnewssetstate" statevalue="12" idvalue="{f_documentnewsid}">二审</div>
-        <div style="{CanAudit3}" class="docnewssetstate" statevalue="13" idvalue="{f_documentnewsid}">三审</div>
-        <div style="{CanAudit4}" class="docnewssetstate" statevalue="14" idvalue="{f_documentnewsid}">终审</div>
-        <div style="{CanRefused}" class="docnewssetstate" statevalue="20" idvalue="{f_documentnewsid}">已否</div>
+        <div style="{CanModify}" class="document_news_set_state" statevalue="1" idvalue="{f_documentnewsid}">已编</div>
+        <div style="{CanRework}" class="document_news_set_state" statevalue="2" idvalue="{f_documentnewsid}">返工</div>
+        <div style="{CanAudit1}" class="document_news_set_state" statevalue="11" idvalue="{f_documentnewsid}">一审</div>
+        <div style="{CanAudit2}" class="document_news_set_state" statevalue="12" idvalue="{f_documentnewsid}">二审</div>
+        <div style="{CanAudit3}" class="document_news_set_state" statevalue="13" idvalue="{f_documentnewsid}">三审</div>
+        <div style="{CanAudit4}" class="document_news_set_state" statevalue="14" idvalue="{f_documentnewsid}">终审</div>
+        <div style="{CanRefused}" class="document_news_set_state" statevalue="20" idvalue="{f_documentnewsid}">已否</div>
         <div class="spe"></div>
     </div>
 </div>
