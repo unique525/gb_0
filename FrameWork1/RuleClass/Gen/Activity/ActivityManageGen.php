@@ -93,34 +93,73 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         if ($activityId > 0) {
             $activityManageData = new ActivityManageData();
             if (!empty($_POST)) {
-                $newId = $activityManageData->Modify($_POST, $activityId);
-                if ($newId > 0) {
+                $modifySuccess = $activityManageData->Modify($_POST, $activityId);
+                if ($modifySuccess > 0) {
 
                     //处理titlePic
 
                     if(!empty($_FILES)){
-                        $fileElementName = "file_title_pic";
-                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC; //activity 60
-                        $tableId = $newId;
-                        $uploadFile = new UploadFile();
-                        $uploadFileId = 0;
-                        $titlePicResult = self::Upload(
+
+                        //titlePic1
+                        $fileElementName = "file_title_pic_1";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1; //activity_1 60
+                        $tableId = $activityId;
+                        $uploadFile1 = new UploadFile();
+                        $uploadFileId1 = 0;
+                        $titlePic1Result = self::Upload(
                             $fileElementName,
                             $tableType,
                             $tableId,
-                            $uploadFile,
-                            $uploadFileId
+                            $uploadFile1,
+                            $uploadFileId1
                         );
+                        if (intval($titlePic1Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
 
-                        if (intval($titlePicResult) <=0){
+                        }
+
+                        //title pic2
+                        $fileElementName = "file_title_pic_2";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2;//activity_2 61
+                        $uploadFileId2 = 0;
+                        $uploadFile2 = new UploadFile();
+                        $titlePic2Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile2,
+                            $uploadFileId2
+                        );
+                        if (intval($titlePic2Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+                        //title pic3
+                        $fileElementName = "file_title_pic_3";
+
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3;//activity_3 62
+                        $uploadFileId3 = 0;
+
+                        $uploadFile3 = new UploadFile();
+
+                        $titlePic3Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile3,
+                            $uploadFileId3
+                        );
+                        if (intval($titlePic3Result) <=0){
                             //上传出错或没有选择文件上传
                         }else{
 
                         }
 
 
-                        if($uploadFileId>0){
-                            $activityManageData->ModifyTitlePic($newId, $uploadFileId);
+                        if($uploadFileId1>0||$uploadFileId2>0||$uploadFileId3>0){
+                            $activityManageData->ModifyTitlePic($activityId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
 
                             //图片多平台处理
                             $channelManageData=new ChannelManageData();
@@ -130,13 +169,13 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                             if($activityTitlePicMobileWidth<=0){
                                 $activityTitlePicMobileWidth  = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId,$activityTitlePicMobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1,$activityTitlePicMobileWidth);
 
                             $activityTitlePicPadWidth = $siteConfigManageData->$activityTitlePicPadWidth;
                             if($activityTitlePicPadWidth<=0){
                                 $activityTitlePicPadWidth  = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId,$activityTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1,$activityTitlePicPadWidth);
                         }
                     }
 
@@ -167,10 +206,34 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     return DefineCode::ACTIVITY_MANAGE + self::INSERT_OR_UPDATE_FAILED;
                 }
                 //加入操作log
-                $operateContent = "activity：ActivityID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_ActivityName", "");
+                $operateContent = "activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityName", "");
                 self::CreateManageUserLog($operateContent);
 
             }
+
+            //取活动class
+            $activityClassManageData = new ActivityClassManageData();
+            $listName = "activity_class_list";
+            $listOfClassArray = $activityClassManageData->GetList($channelId, $activityType);
+            //没有找到就默认增加分类
+            if (count($listOfClassArray) <= 0) {
+                $channelManageData = new ChannelManageData();
+                $siteid = $channelManageData->GetSiteId($channelId,FALSE);
+                $activityClassName = "默认";
+                $state = 0;
+                $InsertArray=array(
+                    "f_SiteId" => $siteid,
+                    "f_ChannelId" => $channelId,
+                    "f_ActivityClassName" => $activityClassName,
+                    "f_State" => $state,
+                    "f_ActivityType" => $activityType
+                );
+                $classId=$activityClassManageData->Create($InsertArray);
+                if($classId<0)
+                    Control::GetJqueryMessage(Language::Load('activity', 6));//警告：新增活动类别失败！
+                $listOfClassArray = $activityClassManageData->GetList($channelId, $activityType);
+            }
+            Template::ReplaceList($tempContent, $listOfClassArray, $listName);
 
 
             $activityManageData = new ActivityManageData();
