@@ -5,7 +5,7 @@
 <module id="3"><content><![CDATA[移动成功!]]></content></module>
 <module id="4"><content><![CDATA[移动失败!]]></content></module>
 <module id="5"><content><![CDATA[活动分类增加成功!]]></content></module>.
-<module id="6"><content><![CDATA[活动分类增加失败,在同一频道,同一分类下已存在相同的分类名称!]]></content></module>
+<module id="6"><content><![CDATA[活动分类增加失败!]]></content></module>
 <module id="7"><content><![CDATA[]]></content></module>
 <module id="8"><content><![CDATA[对不起，该活动还未通过审核!]]></content></module>
 <module id="9"><content><![CDATA[对不起，该活动还未开始!]]></content></module>
