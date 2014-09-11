@@ -35,6 +35,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $uploadFilePublicGen = new UploadFilePublicGen();
                 $result = $uploadFilePublicGen->GenPublic();
                 break;
+            case "product":
+                $productPublicGen = new ProductPublicGen();
+                $result = $productPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;
