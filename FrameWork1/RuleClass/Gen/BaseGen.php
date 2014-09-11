@@ -355,7 +355,6 @@ class BaseGen
             $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
 
             $dirPath = self::GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, $newFileName);
-
             if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
                 FileObject::CreateDir($dirPath);
                 $moveResult = move_uploaded_file($_FILES[$fileElementName]['tmp_name'], $dirPath . $newFileName);
@@ -523,10 +522,20 @@ class BaseGen
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC:
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1:
                 //活动类题图上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
-                $newFileName = uniqid() . '.' . $fileExtension;
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2:
+                //活动类题图上传
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'title_pic_2_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3:
+                //活动类题图上传
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'title_pic_3_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传

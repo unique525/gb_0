@@ -20,10 +20,6 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
-                case "upload":
-                    $uploadManageGen = new UploadManageGen();
-                    $result = $uploadManageGen->Gen();
-                    break;
                 case "channel":
                     $channelManageGen = new ChannelManageGen();
                     $result = $channelManageGen->Gen();

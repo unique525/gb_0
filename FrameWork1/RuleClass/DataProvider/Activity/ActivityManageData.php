@@ -95,28 +95,168 @@ class ActivityManageData extends BaseManageData{
     }
 
 
+
+
     /**
      * 修改活动题图的上传文件id
-     * @param int $activityId 活动id
-     * @param int $titlePicUploadFileId 题图上传文件id
+     * @param int $activityId 频道id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @param int $titlePic2UploadFileId 题图2上传文件id
+     * @param int $titlePic3UploadFileId 题图3上传文件id
      * @return int 操作结果
      */
-    public function ModifyTitlePic($activityId, $titlePicUploadFileId)
+    public function ModifyTitlePic($activityId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
     {
         $result = -1;
         if($activityId>0){
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Activity . " SET
-                    TitlePicUploadFileId = :TitlePicUploadFileId
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId,
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId,
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
 
                     WHERE ActivityId = :ActivityId
 
                     ;";
-            $dataProperty->AddField("TitlePicUploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePic2UploadFileId);
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePic3UploadFileId);
             $dataProperty->AddField("ActivityId", $activityId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
 
+        return $result;
+    }
+
+
+    /**
+     * 修改活动题图1的上传文件id
+     * @param int $activityId 活动id
+     * @param int $titlePicUploadFileId 题图上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic1($activityId, $titlePicUploadFileId)
+    {
+        $result = -1;
+        if($activityId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Activity . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId
+
+                    WHERE ActivityId = :ActivityId
+
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改活动题图2的上传文件id
+     * @param int $activityId 活动id
+     * @param int $titlePicUploadFileId 题图上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic2($activityId, $titlePicUploadFileId)
+    {
+        $result = -1;
+        if($activityId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Activity . " SET
+                    TitlePic2UploadFileId = :TitlePic2UploadFileId
+
+                    WHERE ActivityId = :ActivityId
+
+                    ;";
+            $dataProperty->AddField("TitlePic2UploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改活动题图3的上传文件id
+     * @param int $activityId 活动id
+     * @param int $titlePicUploadFileId 题图上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic3($activityId, $titlePicUploadFileId)
+    {
+        $result = -1;
+        if($activityId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Activity . " SET
+                    TitlePic3UploadFileId = :TitlePic3UploadFileId
+
+                    WHERE ActivityId = :ActivityId
+
+                    ;";
+            $dataProperty->AddField("TitlePic3UploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改活动状态
+     * @param string $activityId 题目Id
+     * @param string $state 状态
+     * @return int 执行结果
+     */
+    public function ModifyState($activityId,$state) {
+        $result = -1;
+        if ($activityId < 0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_Activity . " SET State=:State WHERE ActivityId=:ActivityId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ActivityId", $activityId);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 更新报名人数
+     * @param int $activityId 活动Id
+     * @param int $numberOfSignUp 报名人数
+     * @return int 执行结果
+     */
+    public function UpdateNumberOfSignUp($activityId,$numberOfSignUp) {
+        $result = -1;
+        if ($activityId < 0||$numberOfSignUp<0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_Activity . " SET NumberOfSignUp=:NumberOfSignUp WHERE ActivityId=:ActivityId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ActivityId", $activityId);
+        $dataProperty->AddField("NumberOfSignUp", $numberOfSignUp);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+    /**
+     * 更新参加人数
+     * @param int $activityId 活动Id
+     * @param int $userCount 参加人数
+     * @return int 执行结果
+     */
+    public function UpdateUserCount($activityId,$userCount) {
+        $result = -1;
+        if ($activityId < 0||$userCount<0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_Activity . " SET UserCount=:UserCount WHERE ActivityId=:ActivityId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ActivityId", $activityId);
+        $dataProperty->AddField("UserCount", $userCount);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 }

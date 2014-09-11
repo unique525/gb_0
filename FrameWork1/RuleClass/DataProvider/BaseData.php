@@ -137,6 +137,14 @@ class BaseData
      */
     const TableId_Activity = "ActivityId";
     /**
+     * 活动类型 数据表名
+     */
+    const TableName_ActivityClass = "cst_activity_class";
+    /**
+     * 活动类型 数据表自增字段名
+     */
+    const TableId_ActivityClass = "ActivityClassId";
+    /**
      * 活动相册 数据表名
      */
     const TableName_ActivityAlbum = "cst_activity_album";

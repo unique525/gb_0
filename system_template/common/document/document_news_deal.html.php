@@ -33,7 +33,7 @@
                 editor = f_DocumentNewsContent.xheditor({
                     tools:'full',
                     height:editorHeight,
-                    upImgUrl:"upload.php",
+                    upImgUrl:"",
                     upImgExt:"jpg,jpeg,gif,png",
                     localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
                     remoteImgSaveUrl:''
@@ -83,7 +83,7 @@
                         editor = f_DocumentNewsContent.xheditor({
                             tools:'full',
                             height:editorHeight,
-                            upImgUrl:"upload.php",
+                            upImgUrl:"",
                             upImgExt:"jpg,jpeg,gif,png",
                             localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
                             remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image&table_type='+tableType+'&table_id='+tableId
@@ -96,7 +96,7 @@
                         editor = $('#f_DocumentNewsContent').xheditor({
                             tools:'full',
                             height:editorHeight,
-                            upImgUrl:"upload.php",
+                            upImgUrl:"",
                             upImgExt:"jpg,jpeg,gif,png",
                             localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
                             remoteImgSaveUrl:''

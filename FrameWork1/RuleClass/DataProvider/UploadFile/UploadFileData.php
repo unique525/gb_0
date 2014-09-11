@@ -100,11 +100,19 @@ class UploadFileData extends BaseData
     /**
      * 活动内容图
      */
-    const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC = 60;
+    const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1 = 60;
+    /**
+     * 活动内容图
+     */
+    const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2 = 61;
+    /**
+     * 活动内容图
+     */
+    const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3 = 62;
     /**
      * 活动花絮
      */
-    const UPLOAD_TABLE_TYPE_ACTIVITY_PIC = 61;
+    const UPLOAD_TABLE_TYPE_ACTIVITY_PIC = 63;
 
 
     /**
