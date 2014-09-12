@@ -177,6 +177,10 @@ class DefineCode {
      * 活动 后台管理 返回值前缀
      */
     const ACTIVITY_MANAGE = - 315000;
+    /**
+     * 活动类型 后台管理 返回值前缀
+     */
+    const ACTIVITY_CLASS_MANAGE = - 320000;
 
 
 }
