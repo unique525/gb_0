@@ -539,7 +539,8 @@ class BaseGen
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传
-
+                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'activity_content_pic' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_GROUP:
                 //会员组
