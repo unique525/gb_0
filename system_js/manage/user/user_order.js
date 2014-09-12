@@ -217,7 +217,7 @@ $(document).ready(function(){
 
         $.ajax({
             url:"/default.php?secu=manage&mod=user_order_product&m=async_modify_state",
-            data:{user_order_id:user_order_id,user_order_product_id:user_order_product_id,state:40},
+            data:{user_order_id:user_order_id,user_order_product_id:user_order_product_id,state:100},
             dataType:"jsonp",
             jsonp:"jsonpcallback",
             success:function(data){

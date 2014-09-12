@@ -10,7 +10,10 @@ class UserPublicData extends BasePublicData {
 
     public function Create($siteId,$userPass,$regIp,$userName="",$userEmail="",$userMobile=""){
         $result = -1;
-        if($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)){
+        if($siteId > 0
+            && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass)
+            && !empty($regIp)
+        ){
             $dataProperty = new DataProperty();
             $sql = "INSERT INTO ".self::TableName_User." (UserName,UserEmail,UserMobile,UserPass,SiteId,CreateDate,RegIp)
                 VALUES (:UserName,:UserEmail,:UserMobile,:UserPass,:SiteId,now(),:RegIp);";
@@ -51,13 +54,12 @@ class UserPublicData extends BasePublicData {
      * @param int $siteId 站点Id
      * @return int 查询结果
      */
-    public function CheckSameName($userName,$siteId){
+    public function CheckRepeatUserName($userName){
         $result = -1;
         if(!empty($userName)){
-            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserName = :UserName AND SiteId = :SiteId;";
+            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserName = :UserName;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userName);
-            $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
@@ -69,13 +71,12 @@ class UserPublicData extends BasePublicData {
      * @param int $siteId 站点Id
      * @return int 查询结果
      */
-    public function CheckSameEmail($userEmail,$siteId){
+    public function CheckRepeatUserEmail($userEmail){
         $result = -1;
         if(!empty($userEmail)){
-            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserEmail = :UserEmail AND SiteId = :SiteId;";
+            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserEmail = :UserEmail;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserEmail",$userEmail);
-            $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
@@ -87,13 +88,12 @@ class UserPublicData extends BasePublicData {
      * @param int $siteId 站点Id
      * @return int 查询结果
      */
-    public function CheckSameMobile($userMobile,$siteId){
+    public function CheckRepeatUserMobile($userMobile){
         $result = -1;
         if(!empty($userMobile)){
-            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserMobile = :UserMobile AND SiteId = :SiteId;";
+            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE UserMobile = :UserMobile;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserMobile",$userMobile);
-            $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;

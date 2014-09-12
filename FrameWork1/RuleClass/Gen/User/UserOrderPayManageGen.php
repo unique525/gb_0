@@ -6,6 +6,10 @@
  * @Author yin
  */
 class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
+
+    const ERROR_PARAMETER = -4;
+
+    const ERROR_FAIL_CONFIRM = -2;
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -39,7 +43,7 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
             $manageUserName = Control::GetManageUserName();
 
             if($confirmWay == "" || $manageUserId == 0){
-                return Control::GetRequest("jsonpcallback","").'({"result":-4})';
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_PARAMETER.'})';
             }
 
             $userOrderPayManageData = new UserOrderPayManageData();
@@ -52,10 +56,10 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
                 return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'","confirm_way":"'.$confirmWay.'","confirm_price":"'
                 .$confirmPrice.'","confirm_date":"'.$confirmDate.'","manage_username":"'.$manageUserName.'"})';
             }else{
-                return Control::GetRequest("jsonpcallback","").'({"result":-2})';
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_FAIL_CONFIRM.'})';
             }
         }else{
-            return Control::GetRequest("jsonpcallback","").'({"result":-3})';
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_PARAMETER.'})';
         }
     }
 

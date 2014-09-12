@@ -8,6 +8,7 @@
  */
 class UserOrderProductManageData extends BaseManageData
 {
+    const STATE_REMOVED = 100;
     /**
      * 获取会员订单产品表的字段
      * @return array
@@ -32,10 +33,11 @@ class UserOrderProductManageData extends BaseManageData
                 $userOrderProductId,$dataPropertyUserOrderProduct);//修改会员订单产品的信息
             $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
                 (uo.SendPrice + (SELECT SUM(uop.Subtotal) FROM ".self::TableName_UserOrderProduct." uop
-                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < 40 GROUP BY uop.UserOrderId))
+                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < :State GROUP BY uop.UserOrderId))
                 WHERE uo.UserOrderId = :UserOrderId2;";//重新计算会员订单的总价
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
+            $dataPropertyUserOrder->AddField("State",self::STATE_REMOVED);
             $arrSql = Array(
                 $sqlUserOrderProduct,
                 $sqlUserOrder
@@ -65,10 +67,11 @@ class UserOrderProductManageData extends BaseManageData
                 WHERE UserOrderProductId = :UserOrderProductId;";//修改会员订单产品的状态
             $sqlUserOrder = "UPDATE ".self::TableName_UserOrder." uo SET uo.AllPrice =
                 (uo.SendPrice + (SELECT SUM(uop.Subtotal) FROM ".self::TableName_UserOrderProduct." uop
-                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < 40 GROUP BY uop.UserOrderId))
+                WHERE uop.UserOrderId = :UserOrderId1 AND uop.State < :State2 GROUP BY uop.UserOrderId))
                 WHERE uo.UserOrderId = :UserOrderId2;";//重新计算会员订单的总价
 
             $dataPropertyUserOrderProduct->AddField("State",$state);
+            $dataPropertyUserOrderProduct->AddField("State2",self::STATE_REMOVED);
             $dataPropertyUserOrderProduct->AddField("UserOrderProductId",$userOrderProductId);
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
@@ -100,11 +103,12 @@ class UserOrderProductManageData extends BaseManageData
                 FROM " . self::TableName_UserOrderProduct . " uop,".self::TableName_Product." p,".self::TableName_ProductPrice." pp
                 WHERE uop.UserOrderProductId = :UserOrderProductId
                 AND uop.SiteId = :SiteId
-                AND uop.State < 40
+                AND uop.State < :State
                 AND p.ProductId = uop.ProductId
                 AND pp.ProductPriceId = uop.ProductPriceId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("State", self::STATE_REMOVED);
             $dataProperty->AddField("UserOrderProductId", $userOrderProductId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
         }
@@ -124,12 +128,13 @@ class UserOrderProductManageData extends BaseManageData
             $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit
                 FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp
                 WHERE uop.ProductId = p.ProductId
-                AND uop.State < 40
+                AND uop.State < :State
                 AND uop.ProductPriceId = pp.ProductPriceId
                 AND uop.UserOrderId = :UserOrderId
                 AND uop.SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId", $userOrderId);
+            $dataProperty->AddField("State", self::STATE_REMOVED);
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }

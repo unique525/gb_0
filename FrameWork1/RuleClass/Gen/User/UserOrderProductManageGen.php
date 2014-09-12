@@ -6,6 +6,8 @@
  * @Author yin
  */
 class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
+
+    const ERROR_FAIL= -1;
     /**
      * 引导方法
      * @return mixed|string 执行结果
@@ -69,7 +71,7 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
     }
 
     /**
-     * AJAX 修改订单中产品的状态 0:正常，40:删除
+     * AJAX 修改订单中产品的状态 0:正常，100:删除
      * @return mixed|string
      */
     private function AsyncModifyState(){
@@ -88,10 +90,10 @@ class UserOrderProductManageGen extends BaseManageGen implements IBaseManageGen{
             if($result > 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'","all_price":"'.$allPrice.'"})';
             }else{
-                return Control::GetRequest("jsonpcallback","").'({"result":-1})';
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_FAIL.'})';
             }
         }else{
-            return Control::GetRequest("jsonpcallback","").'({"result":-1})';
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_FAIL.'})';
         }
     }
 }

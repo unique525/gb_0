@@ -8,15 +8,26 @@
  */
 class UserOrderPayManageData extends BaseManageData
 {
+    const STATE_CONFIRM = 10;
+    /**
+     * 修改订单的确认支付信息
+     * @param int $userOrderPayId 会员订单支付信息Id
+     * @param string $confirmWay 确认支付方式
+     * @param float $confirmPrice 确认支付价格
+     * @param string $confirmDate 确认时间
+     * @param int $manageUserId 管理员Id
+     * @return int 影响的行数
+     */
     public function ModifyConfirmPay($userOrderPayId,$confirmWay,$confirmPrice,$confirmDate,$manageUserId){
         $result = -1;
         if($userOrderPayId > 0 && $confirmWay != "" && $confirmDate != "" && $manageUserId > 0){
             $sql = "UPDATE ".self::TableName_UserOrderPay." SET ConfirmWay = :ConfirmWay,ConfirmPrice = :ConfirmPrice,
-                ConfirmDate=:ConfirmDate,State = 10,ConfirmManageUserId = :ConfirmManageUserId WHERE UserOrderPayId = :UserOrderPayId;";
+                ConfirmDate=:ConfirmDate,State = :State,ConfirmManageUserId = :ConfirmManageUserId WHERE UserOrderPayId = :UserOrderPayId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ConfirmWay",$confirmWay);
             $dataProperty->AddField("ConfirmPrice",$confirmPrice);
             $dataProperty->AddField("ConfirmDate",$confirmDate);
+            $dataProperty->AddField("State",self::STATE_CONFIRM);
             $dataProperty->AddField("ConfirmManageUserId",$manageUserId);
             $dataProperty->AddField("UserOrderPayId",$userOrderPayId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
