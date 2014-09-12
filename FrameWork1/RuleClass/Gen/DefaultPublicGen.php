@@ -23,6 +23,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $commonPublicGen = new CommonPublicGen();
                 $result = $commonPublicGen->GenPublic();
                 break;
+            case "user":
+                $userPublicGen = new UserPublicGen();
+                $result = $userPublicGen->GenPublic();
+                break;
             case "forum":
                 $forumPublicGen = new ForumPublicGen();
                 $result = $forumPublicGen->GenPublic();
