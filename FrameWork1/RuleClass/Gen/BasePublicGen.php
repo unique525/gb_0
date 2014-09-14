@@ -9,31 +9,6 @@
 class BasePublicGen extends BaseGen {
 
     /**
-     * 替换论坛前部公共模板
-     * @param string $tempContent 模板内容
-     */
-    protected function ReplaceFirstForForum(&$tempContent) {
-        $templateFileUrl = "forum/forum_topnav.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $forumTopNavTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-        $tempContent = str_ireplace("{forum_topnav}", $forumTopNavTemplate, $tempContent);
-    }
-
-    /**
-     * 替换论坛底部公共模板
-     * @param string $tempContent 模板内容
-     */
-    protected function ReplaceEndForForum(&$tempContent) {
-        //$templateFileUrl = "forum/forum_topnav.html";
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$forumTopNavTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
-        //$tempContent = str_ireplace("{forum_topnav}", $forumTopNavTemplate, $tempContent);
-    }
-
-    /**
      * 通过子域名取得站点id
      * @return int 站点id
      */

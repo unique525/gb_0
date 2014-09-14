@@ -52,22 +52,38 @@ class Format
     }
 
     /**
-     * 格式化HTML标记<、>为&lt;、&gt;
+     * 格式化HTML标记
+     * & （和号） 成为 &amp;
+     * " （双引号） 成为 &quot;
+     * ' （单引号） 成为 &#039;
+     * < （小于） 成为 &lt;
+     * > （大于） 成为 &gt;
      * @param string $content 要替换的内容
      * @return string 返回替换后的内容
      */
     public static function FormatHtmlTag($content)
     {
-        $content = str_replace('<', '&lt;', $content);
-        $content = str_replace(">", "&gt;", $content);
+        //$content = str_replace('<', '&lt;', $content);
+        //$content = str_replace(">", "&gt;", $content);
+        $content = htmlspecialchars($content);
         return $content;
     }
 
+    /**
+     * 格式化数组中的HTML标记
+     * & （和号） 成为 &amp;
+     * " （双引号） 成为 &quot;
+     * ' （单引号） 成为 &#039;
+     * < （小于） 成为 &lt;
+     * > （大于） 成为 &gt;
+     * @param array $arr 要替换的数组
+     * @return array 返回替换后的数组
+     */
     public static function FormatHtmlTagInPost($arr)
     {
         $newArray = array();
         foreach($arr as $key=>$val){
-            $val = htmlspecialchars($val);
+            $val = self::FormatHtmlTag($val);
             $newArray[$key] = $val;
         }
 

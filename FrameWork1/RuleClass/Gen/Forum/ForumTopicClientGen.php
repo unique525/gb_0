@@ -1,23 +1,23 @@
 <?php
-
 /**
- * 后台论坛生成类 
+ * 客户端 论坛主题 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Forum
+ * @package iCMS_FrameWork1_RuleClass_Gen_Forum
  * @author zhangchi
  */
-class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
-    
+class ForumTopicClientGen extends BaseClientGen implements IBaseClientGen {
+
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function Gen() {
+    public function GenClient()
+    {
         $result = "";
-        $method = Control::GetRequest("a", "");
+        $method = Control::GetRequest("m", "");
         switch ($method) {
             case "list":
-                $result = self::GenManageList();
+                $result = self::GenList();
                 break;
             case "create":
                 $result = self::GenCreate();
@@ -25,13 +25,8 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "async_modify_state":
-                $result = self::AsyncModifyState();
-                break;
         }
-        $result = str_ireplace("{action}", $method, $result);
+        $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
-}
-
-?>
+} 

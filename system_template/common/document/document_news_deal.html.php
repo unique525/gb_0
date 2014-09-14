@@ -225,9 +225,6 @@
                 
             }
             
-
-
-
         function submitForm(closeTab) {
             if ($('#f_DocumentNewsTitle').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});

@@ -36,6 +36,10 @@ function iColorShow(id,id2){
                     if(documentNewsTitleColor!= undefined){
                         documentNewsTitleColor.val(aaa);
                     }
+                    var titleColor = $("#f_TitleColor");
+                    if(titleColor!= undefined){
+                        titleColor.val(aaa);
+                    }
 
                     jQuery("#iColorPickerBg").hide();
                     jQuery("#iColorPicker").fadeOut();

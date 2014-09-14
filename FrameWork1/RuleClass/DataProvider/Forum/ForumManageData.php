@@ -3,7 +3,7 @@
 /**
  * 后台管理 论坛 数据类
  * @category iCMS
- * @package iCMS_Rules_DataProvider_Forum
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Forum
  * @author zhangchi
  */
 class ForumManageData extends BaseManageData {
@@ -20,20 +20,16 @@ class ForumManageData extends BaseManageData {
     /**
      * 新增论坛版块
      * @param array $httpPostData $_POST数组
-     * @param string $forumPic1 版块图标1
-     * @param string $forumPic2 版块图标2
-     * @param string $forumPicMobile 移动客户端版块图标
-     * @param string $forumPicPad 平板客户端版块图标
      * @return int 新增的论坛版块id
      */
-    public function Create($httpPostData, $forumPic1 = '', $forumPic2 = '', $forumPicMobile = '', $forumPicPad = '') {
+    public function Create($httpPostData) {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("ForumPic1", "ForumPic2", "ForumPicMobile", "ForumPicPad");
-        $addFieldValues = array($forumPic1, $forumPic2, $forumPicMobile, $forumPicPad);
+        $addFieldNames = array();
+        $addFieldValues = array();
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 前台论坛生成类 
+ * 前台 论坛 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Forum
+ * @package iCMS_FrameWork1_RuleClass_Gen_Forum
  * @author zhangchi
  */
-class ForumPublicGen extends BasePublicGen implements IBasePublicGen {
+class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
     /**
      * 引导方法
@@ -17,12 +17,6 @@ class ForumPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
-            case "login":
-                $result = self::Login();
-                break;
-            case "logout":
-                self::Logout();
-                break;
             default:
                 $result = self::GenDefault();
                 break;
@@ -59,9 +53,9 @@ class ForumPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
-        $arrRankOneList = $forumPublicData->GetListByRank($siteId, $forumRank);
+        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
         $forumRank = 1;
-        $arrRankTwoList = $forumPublicData->GetListByRank($siteId, $forumRank);
+        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
         if (count($arrRankOneList) > 0) {
 
