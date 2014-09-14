@@ -170,17 +170,25 @@
         <div id="forum_topic">
             <div class="content">
 
-                <div id="tabs" style="margin-left:4px;">
-                    <ul>
-                        <li><a href="#tabs-1">主题内容</a></li>
-                        <li><a href="#tabs-2">高级参数</a></li>
+                <div id="tabs">
+                    <ul style="padding:0">
+                        <li class="ui-tabs-nav-custom"><a href="#tabs-1">主题内容</a></li>
+                        <li class="ui-tabs-nav-custom"><a href="#tabs-2">高级参数</a></li>
                     </ul>
                     <div id="tabs-1">
                         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
                             <tr>
+                                <td style="width: 80px;">
+                                    <div class="topic_type_select">
+                                    <select style="border:none;width:80px;" name="">
+                                        <option value="">[原创]</option>
+                                    </select>
+                                    </div>
+                                </td>
                                 <td style="padding:4px 0;">
+
                                     <label for="f_ForumTopicTitle"></label>
-                                    <input type="text" class="iColorPicker input_box" id="f_ForumTopicTitle" name="f_ForumTopicTitle" value="{ForumTopicTitle}" style="width:70%;font-size:16px;padding:4px;background-color: #ffffff;" maxlength="300" />
+                                    <input type="text" class="iColorPicker input_box_topic_title" id="f_ForumTopicTitle" name="f_ForumTopicTitle" value="{ForumTopicTitle}" style="width:70%;font-size:16px;padding:4px;background-color: #ffffff;" maxlength="300" />
                                     <input type="hidden" id="f_TitleColor" name="f_TitleColor" value="{TitleColor}"  />
                                     <input type="hidden" id="f_TitleBold" name="f_TitleBold" value="{TitleBold}"  />
                                     <input type="hidden" id="f_ForumId" name="f_ForumId" value="{ForumId}" />
@@ -195,7 +203,7 @@
                             <tr>
                                 <td width="75%"><label for="f_ForumPostContent"></label><textarea class="mceEditor" id="f_ForumPostContent" name="f_ForumPostContent" style=" width: 100%;">{ForumPostContent}</textarea></td>
                                 <td style="vertical-align:top;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-left: 3px; padding: 2px;">
                                             <tr>
                                             <td style="height:35px;">文件上传：</td>
                                             <td align="left">

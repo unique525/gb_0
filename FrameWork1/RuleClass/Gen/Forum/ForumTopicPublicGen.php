@@ -82,6 +82,20 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         if(!empty($_POST)){
 
+/**
+        $forumTopicTypeId ,
+        $forumTopicTypeName,
+        $forumTopicAudit,
+        $forumTopicAccess,
+        $postTime,
+        $userId,
+        $userName,
+        $forumTopicMood,
+        $forumTopicAttach,
+        $titleBold,
+        $titleColor,
+        $titleBgImage
+*/
 
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
@@ -95,9 +109,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
 
 
-
-
-        $tempContent = Template::Load("{f_ForumPostContent}", "", $templatePath);
+        $tempContent = str_ireplace("{ForumPostContent}", "", $tempContent);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
