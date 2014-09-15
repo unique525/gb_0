@@ -74,6 +74,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $productId = Control::GetRequest("product_id", 0);
         $tempContent = self::loadDetailTemp($temp,$channelId);
         parent::SubGenProduct($tempContent);
+
+        //加载产品表数据
+        $productManageData = new ProductManageData();
+        $arrOne = $productManageData->GetOne($productId);
+        Template::ReplaceOne($tempContent, $arrOne);
+
         //生成产品参数新增界面
         parent::SubGenProductParamTypeClass($tempContent);
         //把对应ID的CMS标记替换成指定内容
@@ -102,6 +108,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     private function loadDetailTemp($temp,$channelId)
     {
         $result ='
+            <div>{ProductName}</div>
             <icms id="{ChannelId}" type="product_param_type_class_list">
                 <item>
                     <![CDATA[
