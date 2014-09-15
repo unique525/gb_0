@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Product
  * @author zhangchi
  */
-class ProductData extends BasePublicData {
+class ProductPublicData extends BasePublicData {
 
 
 
@@ -38,6 +38,37 @@ class ProductData extends BasePublicData {
     {
         $result = null;
         if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($channelId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+            }
+            $sql = "SELECT *"
+                . " FROM " . self::TableName_Product
+                . " WHERE ChannelId=:ChannelId AND State<100"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据频道ID获取产品记录
+     * @param int $channelId 频道Id
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetListByChannelId($channelId, $order = "", $topCount = null)
+    {
+        $result = null;
+        if ($topCount != null)
             $topCount = " limit " . $topCount;
         else $topCount = "";
         if ($channelId > 0) {
