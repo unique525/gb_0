@@ -152,15 +152,15 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                             $productManageData->ModifyTitlePic($productId, $uploadFileId1, $uploadFileId2, $uploadFileId3, $uploadFileId4);
                         }
 
-                        $siteConfigManageData = new SiteConfigManageData($siteId);
+                        $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId1>0){
-                            $productTitlePic1MobileWidth = $siteConfigManageData->ProductTitlePic1MobileWidth;
+                            $productTitlePic1MobileWidth = $siteConfigData->ProductTitlePic1MobileWidth;
                             if($productTitlePic1MobileWidth<=0){
                                 $productTitlePic1MobileWidth  = 320; //默认320宽
                             }
                             self::GenUploadFileMobile($uploadFileId1,$productTitlePic1MobileWidth);
 
-                            $productTitlePic1PadWidth = $siteConfigManageData->ProductTitlePic1PadWidth;
+                            $productTitlePic1PadWidth = $siteConfigData->ProductTitlePic1PadWidth;
                             if($productTitlePic1PadWidth<=0){
                                 $productTitlePic1PadWidth  = 1024; //默认1024宽
                             }
@@ -383,15 +383,15 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                             }
 
                             //重新制作题图1的相关图片
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            $siteConfigData = new SiteConfigData($siteId);
                             if($uploadFileId1>0){
-                                $productTitlePic1MobileWidth = $siteConfigManageData->ProductTitlePic1MobileWidth;
+                                $productTitlePic1MobileWidth = $siteConfigData->ProductTitlePic1MobileWidth;
                                 if($productTitlePic1MobileWidth<=0){
                                     $productTitlePic1MobileWidth  = 320; //默认320宽
                                 }
                                 self::GenUploadFileMobile($uploadFileId1,$productTitlePic1MobileWidth);
 
-                                $productTitlePic1PadWidth = $siteConfigManageData->ProductTitlePic1PadWidth;
+                                $productTitlePic1PadWidth = $siteConfigData->ProductTitlePic1PadWidth;
                                 if($productTitlePic1PadWidth<=0){
                                     $productTitlePic1PadWidth  = 1024; //默认1024宽
                                 }

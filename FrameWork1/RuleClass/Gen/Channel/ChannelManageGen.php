@@ -150,15 +150,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                                 $channelManageData->ModifyTitlePic($channelId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
                             }
 
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            $siteConfigData = new SiteConfigData($siteId);
                             if($uploadFileId1>0){
-                                $channelTitlePic1MobileWidth = $siteConfigManageData->ChannelTitlePic1MobileWidth;
+                                $channelTitlePic1MobileWidth = $siteConfigData->ChannelTitlePic1MobileWidth;
                                 if($channelTitlePic1MobileWidth<=0){
                                     $channelTitlePic1MobileWidth  = 320; //默认320宽
                                 }
                                 self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
 
-                                $channelTitlePic1PadWidth = $siteConfigManageData->ChannelTitlePic1PadWidth;
+                                $channelTitlePic1PadWidth = $siteConfigData->ChannelTitlePic1PadWidth;
                                 if($channelTitlePic1PadWidth<=0){
                                     $channelTitlePic1PadWidth  = 1024; //默认1024宽
                                 }
@@ -345,15 +345,15 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             }
 
                             //重新制作题图1的相关图片
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
+                            $siteConfigData = new SiteConfigData($siteId);
                             if($uploadFileId1>0){
-                                $channelTitlePic1MobileWidth = $siteConfigManageData->ChannelTitlePic1MobileWidth;
+                                $channelTitlePic1MobileWidth = $siteConfigData->ChannelTitlePic1MobileWidth;
                                 if($channelTitlePic1MobileWidth<=0){
                                     $channelTitlePic1MobileWidth  = 320; //默认320宽
                                 }
                                 self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
 
-                                $channelTitlePic1PadWidth = $siteConfigManageData->ChannelTitlePic1PadWidth;
+                                $channelTitlePic1PadWidth = $siteConfigData->ChannelTitlePic1PadWidth;
                                 if($channelTitlePic1PadWidth<=0){
                                     $channelTitlePic1PadWidth  = 1024; //默认1024宽
                                 }

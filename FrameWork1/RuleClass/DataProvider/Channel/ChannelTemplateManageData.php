@@ -119,7 +119,7 @@ class ChannelTemplateManageData extends BaseManageData
     }
 
     /**
-     * 取得当前频道下所有发布模板
+     * 取得当前频道下所有非详细页发布模板
      * @param int $channelId 频道id
      * @return array|null 发布模板
      */
@@ -143,5 +143,31 @@ class ChannelTemplateManageData extends BaseManageData
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
+    }
+
+    /**
+     * 取得当前频道下对应发布方式的模板
+     * @param int $channelId 频道id
+     * @param int $publishType 发布方式
+     * @return array|null 发布模板
+     */
+    public function GetListByPublishType($channelId, $publishType){
+
+        $result = null;
+
+        if($channelId>0){
+            $sql = "SELECT * FROM " . self::TableName_ChannelTemplate . "
+             WHERE ChannelId=:ChannelId
+                AND
+                   State<".self::STATE_REMOVED."
+                AND
+                   PublishType = :PublishType;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("PublishType", $publishType);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+
     }
 } 

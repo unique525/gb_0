@@ -171,15 +171,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $documentNewsManageData->ModifyTitlePic($documentNewsId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
                         }
 
-                        $siteConfigManageData = new SiteConfigManageData($siteId);
+                        $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId1>0){
-                            $documentNewsTitlePic1MobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                            $documentNewsTitlePic1MobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
                             if($documentNewsTitlePic1MobileWidth<=0){
                                 $documentNewsTitlePic1MobileWidth  = 320; //默认320宽
                             }
                             self::GenUploadFileMobile($uploadFileId1,$documentNewsTitlePic1MobileWidth);
 
-                            $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
                             if($documentNewsTitlePicPadWidth<=0){
                                 $documentNewsTitlePicPadWidth  = 1024; //默认1024宽
                             }
@@ -209,10 +209,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                     //修改文档状态为终审
                                     $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
                                     $documentNewsManageData->ModifyState($documentNewsId, $state);
-                                    $executeFtp = true;
-                                    $publishChannel = true;
+                                    $executeTransfer = true; //是否执行发布
+                                    $publishChannel = true; //是否同时发布频道
                                     $publishQueueManageData = new PublishQueueManageData();
-                                    self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
+                                    self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
                                     break;
                             }
                         }
@@ -456,15 +456,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         //重新制作题图1的相关图片
-                        $siteConfigManageData = new SiteConfigManageData($siteId);
+                        $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId1>0){
-                            $documentNewsTitlePic1MobileWidth = $siteConfigManageData->DocumentNewsTitlePicMobileWidth;
+                            $documentNewsTitlePic1MobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
                             if($documentNewsTitlePic1MobileWidth<=0){
                                 $documentNewsTitlePic1MobileWidth  = 320; //默认320宽
                             }
                             self::GenUploadFileMobile($uploadFileId1,$documentNewsTitlePic1MobileWidth);
 
-                            $documentNewsTitlePicPadWidth = $siteConfigManageData->DocumentNewsTitlePicPadWidth;
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
                             if($documentNewsTitlePicPadWidth<=0){
                                 $documentNewsTitlePicPadWidth  = 1024; //默认1024宽
                             }
@@ -498,10 +498,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                                 //修改文档状态为终审
                                 $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
                                 $documentNewsManageData->ModifyState($documentNewsId, $state);
-                                $executeFtp = true;
-                                $publishChannel = true;
+                                $executeTransfer = true; //是否执行发布
+                                $publishChannel = true; //是否同时发布频道
                                 $publishQueueManageData = new PublishQueueManageData();
-                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeFtp, $publishChannel);
+                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
                                 break;
                         }
                     }
@@ -528,6 +528,26 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         return $result;
     }
 
+
+    /**
+     * 发布资讯详细页面
+     * @return int 返回发布结果
+     */
+    private function Publish(){
+        $result = -1;
+        $documentNewsId = Control::GetRequest("document_news_id", -1);
+        if($documentNewsId>0){
+            $publishQueueManageData = new PublishQueueManageData();
+            $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData);
+            if($result == BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED){
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+                    $publishQueueManageData->Queue[$i]["Content"] = "";
+                }
+                print_r($publishQueueManageData->Queue);
+            }
+        }
+        return $result;
+    }
 
     /**
      * 生成资讯管理列表页面

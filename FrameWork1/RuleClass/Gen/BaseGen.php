@@ -980,7 +980,6 @@ class BaseGen
 
         $uploadPath = "upload" . DIRECTORY_SEPARATOR;
 
-
         $dirPath = self::GetUploadFilePath(
             $tableType,
             $tableId,
@@ -990,7 +989,6 @@ class BaseGen
             $fileExtension,
             $newFileName
         );
-
 
 
         if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
