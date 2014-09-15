@@ -266,7 +266,7 @@ function _ChannelClick() {
 
         } else if (window.G_SelectedChannelType === 6) { //活动类
             window.G_TabTitle = "";
-            window.G_TabUrl = '/default.php?secu=manage&mod=activity&m=list&&site_id='+ window.G_NowSiteId + 'channel_id=' + window.G_SelectedChannelId;
+            window.G_TabUrl = '/default.php?secu=manage&mod=activity&m=list&channel_id=' + window.G_SelectedChannelId;
             addTab();
 
         } else if (window.G_SelectedChannelType === 7) { //厂商品牌类
