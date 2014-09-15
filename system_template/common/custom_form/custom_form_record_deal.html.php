@@ -19,7 +19,7 @@
 </head>
 <body>
 {common_body_deal}
-<form id="main_form" action="/default.php?secu=manage&mod=custom_form_record&m={method}&custom_form_id={CustomFormId}&custom_form_record_id={CustomFormRecordId}" method="post">
+<form id="main_form" action="/default.php?secu=manage&mod=custom_form_record&m={method}&custom_form_id={CustomFormId}&custom_form_record_id={CustomFormRecordId}&tab_index={TabIndex}" method="post">
     <div style="margin:10px auto;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>

@@ -80,7 +80,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             $new_id = $customFormFieldManageData->Create($_POST);
             if($new_id>0){
                 //加入操作log
-                $operateContent = "CustomFormField：CustomFormFieldID：" . $new_id . "；result：" . $new_id . "；title：" . Control::PostRequest("f_custom_form_field_name", "");
+                $operateContent = "Create CustomFormField：CustomFormFieldID：" . $new_id . "；result：" . $new_id . "；title：" . Control::PostRequest("f_custom_form_field_name", "");
                 self::CreateManageUserLog($operateContent);
 
 
@@ -145,7 +145,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             if ($result > 0) {
 
                 //加入操作log
-                $operateContent = "CustomFormFieldId：" . $customFormFieldId . "；result：" . $customFormFieldId;
+                $operateContent = "Modify CustomFormFieldId：" . $customFormFieldId . "；result：" . $customFormFieldId;
                 self::CreateManageUserLog($operateContent);
 
                 Control::ShowMessage(Language::Load('custom_form', 1));

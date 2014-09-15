@@ -10,7 +10,7 @@
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
-                <input id="btn_create" class="btn2" value="新建文档" title="在本频道新建资讯类的文档" type="button"/>
+                <input id="btn_create" class="btn2" idvalue="{ChannelId}" value="新建文档" title="在本频道新建资讯类的文档" type="button"/>
                 <input id="btn_move" class="btn2" value="移动" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
                 <input id="btn_copy" class="btn2" value="复制" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button"/>
             </td>
@@ -80,24 +80,9 @@
     </ul>
     <div>{pager_button}</div>
 </div>
-<div id="dialog_publish" title="发布文档" style="display:none;">
-    <div id="div_publish">
-        <table>
-            <tr>
-                <td><img src="/system_template/common/images/spinner2.gif" alt="loading..."/></td>
-                <td>正在发布，请稍候！</td>
-            </tr>
-        </table>
-    </div>
-</div>
-<div id="dialog_delete" title="撤掉文档" style="display:none;">
-    <div id="div_delete">
-        <table>
-            <tr>
-                <td><img src="/system_template/common/images/spinner2.gif" alt="deleting..."/></td>
-                <td>正在撤掉文档，请稍候！</td>
-            </tr>
-        </table>
+<div id="dialog_box" title="" style="display:none;">
+    <div id="dialog_content">
+
     </div>
 </div>
 <div class="state_box" style="display: none;" id="div_state_box" title="">

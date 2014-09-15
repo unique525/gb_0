@@ -65,7 +65,7 @@ class ActivityClassManageData extends BaseManageData{
                 *
                 FROM
                 " . self::TableName_ActivityClass . "
-                WHERE ChannelId=:ChannelId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+                WHERE ChannelId=:ChannelId " . $searchSql . " LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
             $sqlCount = "SELECT count(*) FROM " . self::TableName_ActivityClass . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
@@ -82,7 +82,6 @@ class ActivityClassManageData extends BaseManageData{
     public function GetList($channelId,$activityType) {
         $result=-1;
         if($channelId>0){
-            $searchSql = "";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("ActivityType", $activityType);
@@ -92,7 +91,7 @@ class ActivityClassManageData extends BaseManageData{
                 *
                 FROM
                 " . self::TableName_ActivityClass . "
-                WHERE ChannelId=:ChannelId AND ActivityType=:ActivityType " . $searchSql . " ;";
+                WHERE ChannelId=:ChannelId AND ActivityType=:ActivityType AND State=0 ;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
@@ -114,5 +113,61 @@ class ActivityClassManageData extends BaseManageData{
         return $result;
     }
 
+    /**
+     * 根据id获取name
+     * @param int $activityClassId  活动类型id
+     * @return string 活动类型名
+     */
+    public function GetActivityClassName($activityClassId) {
+        $sql = "SELECT ActivityClassName FROM " . self::TableName_ActivityClass . " WHERE ActivityClassId=:ActivityClassId ;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ActivityClassId", $activityClassId);
+        $result = $this->dbOperator->GetString($sql, $dataProperty);
+        return $result;
+    }
 
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ActivityClass){
+        return parent::GetFields(self::TableName_ActivityClass);
+    }
+
+
+    /**
+     * 修改活动类型状态
+     * @param string $activityClassId 类型Id
+     * @param string $state 状态
+     * @return int 执行结果
+     */
+    public function ModifyState($activityClassId,$state) {
+        $result = -1;
+        if ($activityClassId < 0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_ActivityClass . " SET State=:State WHERE ActivityClassId=:ActivityClassId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ActivityClassId", $activityClassId);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 通过ID获取一条记录
+     * @param int $activityClassId 活动类型id
+     * @return array 活动数据
+     */
+    public function GetOne($activityClassId) {
+        $result=-1;
+        if($activityClassId>0){
+            $sql = "SELECT * FROM " . self::TableName_ActivityClass . " WHERE ActivityClassId = :ActivityClassId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityClassId", $activityClassId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
