@@ -134,8 +134,7 @@ class BasePublicGen extends BaseGen {
                         $productParamTypeId = Template::GetParamValue($content, "id", $keyName);
                         $paramValueType = Template::GetParamValue($content, "type", $keyName);
                         $spanClass = Template::GetParamValue($content, "span_class", $keyName);
-                        $selectClass = Template::GetParamValue($content, "select_class", $keyName);
-                        $content = self::GenControl($productParamTypeId, $paramValueType, $spanClass, $selectClass ,$arrProductParam);
+                        $content = self::GenControl($productParamTypeId, $paramValueType, $spanClass ,$arrProductParam);
                         $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeId, $content, $keyName);
                     }
                 }
@@ -148,11 +147,10 @@ class BasePublicGen extends BaseGen {
      * @param string $productParamTypeId 参数类型Id
      * @param string $paramValueType 参数类型值
      * @param string $spanClass 文本显示框样式名称
-     * @param string $selectClass 文本选择框样式名称
      * @param array $arrProductParam 产品参数值数组
      * @return string 输入框html
      */
-    public function GenControl($productParamTypeId, $paramValueType, $spanClass, $selectClass,$arrProductParam)
+    public function GenControl($productParamTypeId, $paramValueType, $spanClass, $arrProductParam)
     {
         switch ($paramValueType) {
             case "0":
@@ -206,8 +204,8 @@ class BasePublicGen extends BaseGen {
                 break;
             default:
                 $columnName="ShortStringValue";
-                $controlName = "pps_".$columnName."_" . $productParamTypeId;
-                $controlId = "pps_".$columnName."_" . $productParamTypeId;
+                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
+                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
                 $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
                 $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
                 break;
