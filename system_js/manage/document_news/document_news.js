@@ -1,6 +1,24 @@
 /**
  * DocumentNews
  */
+
+
+
+/**
+ * 发布资讯详细页 返回值 资讯id小于0
+ */
+window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR = -130201;
+/**
+ * 发布资讯详细页 返回值 频道id小于0
+ */
+window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR = -130202;
+
+/**
+ * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中
+ */
+window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED = 130201;
+
+
 $(function() {
     $(document).tooltip();
     $("#btn_select_all").click(function(event) {
@@ -53,6 +71,35 @@ $(function() {
     });
 
 
+    var btnPublish = $("#btn_publish");
+    btnPublish.css("cursor", "pointer");
+    btnPublish.click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
+        event.preventDefault();
+        $("#dialog_box").dialog({
+            height: 140,
+            modal: true
+        });
+        var dialogContent = $("#dialog_content");
+        dialogContent.html("开始发布");
+
+        $.post("/default.php?secu=manage&mod=document_news&m=publish&document_news_id=" + documentNewsId + "", {
+            resultbox: $(this).html()
+        }, function(result) {
+            dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
+            if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED) {
+                dialogContent.html('发布完成');
+            }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR) {
+                dialogContent.html('资讯id小于0');
+            }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR) {
+                dialogContent.html('频道id小于0');
+            }else {
+                dialogContent.html('未知结果');
+            }
+        });
+    });
+
+
     //排序变化
     $("#sortgrid").sortable();
     $("#sortgrid").bind("sortstop", function(event, ui) {
@@ -62,7 +109,6 @@ $(function() {
         }, function() {
             //操作完成后触发的命令
         });
-
     });
     $("#sortgrid").disableSelection();
 

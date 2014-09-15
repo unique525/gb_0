@@ -14,7 +14,7 @@
             var batchAttachWatermark = "0";
 
             var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
-            var tableId = '{ChannelId}';
+            var tableId = parseInt('{ChannelId}');
 
             $(function(){
 

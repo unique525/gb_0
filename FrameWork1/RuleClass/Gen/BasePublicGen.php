@@ -32,6 +32,148 @@ class BasePublicGen extends BaseGen {
     }
 
 
+
+    /**
+     * 替换内容
+     * @param int $channelId 频道id
+     * @param string $templateContent 模板内容
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplate($channelId, $templateContent)
+    {
+        /** 1.处理预加载模板 */
+
+
+
+        /** 2.替换模板内容 */
+        $arrCustomTags = Template::GetAllCustomTag($templateContent);
+        if (count($arrCustomTags) > 0) {
+            $arrTempContents = $arrCustomTags[0];
+
+            foreach ($arrTempContents as $tagContent) {
+                //标签id channel_1 document_news_1
+                $tagId = Template::GetParamValue($tagContent, "id");
+                //标签类型 channel_list,document_news_list
+                $tagType = Template::GetParamValue($tagContent, "type");
+                //标签排序方式
+                $tagOrder = Template::GetParamValue($tagContent, "order");
+                //标签特殊查询条件
+                $tagWhere = Template::GetParamValue($tagContent, "where");
+                //显示条数
+                $tagTopCount = Template::GetParamValue($tagContent, "top");
+                $tagTopCount = Format::CheckTopCount($tagTopCount);
+                if ($tagTopCount == null) {
+
+                }
+                //显示状态
+                $state = Template::GetParamValue($tagContent, "state");
+
+                switch ($tagType) {
+                    case Template::TAG_TYPE_CHANNEL_LIST :
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($channelId > 0) {
+                            $templateContent = self::ReplaceTemplateOfChannelList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder);
+                        }
+                        break;
+                    case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
+                        $documentNewsId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($documentNewsId > 0) {
+                            $templateContent = self::ReplaceTemplateOfDocumentNewsList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                }
+            }
+        }
+        return $templateContent;
+    }
+
+    /**
+     * 替换频道列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfChannelList(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder
+    )
+    {
+        if ($channelId > 0) {
+            $arrChannelList = null;
+            switch ($tagWhere) {
+                case "parent":
+                    $channelManageData = new ChannelManageData();
+                    $arrChannelList = $channelManageData->GetListByParentId($channelId, $tagTopCount, $tagOrder);
+                    break;
+            }
+            if (!empty($arrChannelList)) {
+                Template::ReplaceList($tagContent, $arrChannelList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                //替换子循环里的<![CDATA[标记
+                $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
+                $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+    /**
+     * 替换资讯列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfDocumentNewsList(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($channelId > 0) {
+            $arrDocumentNewsList = null;
+            $documentNewsManageData = new DocumentNewsManageData();
+            switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                default :
+                    //new
+                    $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+            }
+            if (!empty($arrDocumentNewsList)) {
+                Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
     /**
      * 替换模板中的产品标记生成产品列表
      * @param string $tempContent 模板字符串

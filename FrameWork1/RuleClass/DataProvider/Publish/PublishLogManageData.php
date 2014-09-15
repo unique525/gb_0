@@ -11,15 +11,15 @@ class PublishLogManageData extends BaseManageData
     /**
      * 发布类型：未定义
      */
-    const PUBLISH_TYPE_NO_DEFINE = 0;
+    const TRANSFER_TYPE_NO_DEFINE = 0;
     /**
      * 发布类型：FTP
      */
-    const PUBLISH_TYPE_FTP = 1;
+    const TRANSFER_TYPE_FTP = 1;
     /**
-     * 发布类型：FTP
+     * 发布类型：FILE
      */
-    const PUBLISH_TYPE_FILE = 2;
+    const TRANSFER_TYPE_FILE = 2;
     /**
      * 对应表类型：未定义
      */
@@ -28,11 +28,15 @@ class PublishLogManageData extends BaseManageData
      * 对应表类型：频道
      */
     const TABLE_TYPE_CHANNEL = 1;
+    /**
+     * 对应表类型：资讯
+     */
+    const TABLE_TYPE_DOCUMENT_NEWS = 2;
 
 
     /**
      * 新增发布日志
-     * @param int $publishType 发布类型
+     * @param int $transferType 发布类型
      * @param int $tableType 对应表类型
      * @param int $tableId 对应表id
      * @param string $destinationPath 目标文件夹
@@ -41,11 +45,14 @@ class PublishLogManageData extends BaseManageData
      * @param int $transferResult 传输结果
      * @return int 新增结果
      */
-    public function Create($publishType, $tableType, $tableId, $destinationPath, $sourcePath, $transferTime, $transferResult)
+    public function Create($transferType, $tableType, $tableId, $destinationPath, $sourcePath, $transferTime, $transferResult)
     {
-        $sql = "INSERT INTO " . self::TableName_PublishLog . " (PublishType,TableType,TableId,DestinationPath,SourcePath,TransferTime,TransferResult,CreateDate) VALUES (:PublishType, :TableType,:TableId ,:DestinationPath, :SourcePath, :TransferTime, :TransferResult, now());";
+        $sql = "INSERT INTO " . self::TableName_PublishLog . "
+                (TransferType,TableType,TableId,DestinationPath,SourcePath,TransferTime,TransferResult,CreateDate)
+                VALUES
+                (:TransferType, :TableType,:TableId ,:DestinationPath, :SourcePath, :TransferTime, :TransferResult, now());";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("PublishType", $publishType);
+        $dataProperty->AddField("TransferType", $transferType);
         $dataProperty->AddField("TableType", $tableType);
         $dataProperty->AddField("TableId", $tableId);
         $dataProperty->AddField("DestinationPath", $destinationPath);
