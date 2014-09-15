@@ -1,12 +1,14 @@
 <?php
 
 /**
- * 前台论坛数据类  
+ * 前台 论坛 数据类
  * @category iCMS
- * @package iCMS_Rules_DataProvider_Forum
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Forum
  * @author zhangchi
  */
 class ForumPublicData extends BasePublicData {
+
+
 
     /**
      * 更新版块的最后回复信息（发表主题时）
@@ -44,39 +46,44 @@ class ForumPublicData extends BasePublicData {
      * 根据版块等级取得版块列表
      * @param int $siteId 站点id
      * @param int $forumRank 版块等级
-     * @return array 版块列表
+     * @return array|null 版块列表
      */
-    public function GetListByRank($siteId, $forumRank) {
-        $sql = "SELECT 
-                ForumId, 
-                SiteId, 
-                ForumName, 
-                ForumType, 
-                ForumMode, 
-                ForumAuditType, 
-                ForumPic, 
+    public function GetListByForumRank($siteId, $forumRank) {
+        $result = null;
+
+        if($siteId>0 && $forumRank>=0){
+            $sql = "SELECT
+                ForumId,
+                SiteId,
+                ForumName,
+                ForumType,
+                ForumMode,
+                ForumAuditType,
                 ForumInfo,
                 ForumAdContent,
                 ParentId,
-                LastTopicId,
-                LastTopicTitle,
+                LastForumTopicId,
+                LastForumTopicTitle,
                 LastUserName,
                 LastUserId,
                 LastPostTime,
                 LastPostInfo,
-                NewCount, 
-                TopicCount, 
+                NewCount,
+                TopicCount,
                 PostCount,
                 State,
-                ShowColumnCount,
                 ForumNameFontColor,
                 ForumNameFontBold,
                 ForumNameFontSize
-            FROM " . self::TableName_Forum . " WHERE State<100 AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ForumRank", $forumRank);
-        $dataProperty->AddField("SiteId", $siteId);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            FROM " . self::TableName_Forum . " WHERE State<".ForumData::STATE_REMOVED." AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumRank", $forumRank);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+
         return $result;
     }
 

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 后台论坛生成类
+ * 后台管理 论坛 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Forum
+ * @package iCMS_FrameWork1_RuleClass_Gen_Forum
  * @author zhangchi
  */
 class ForumManageGen extends BaseManageGen implements IBaseManageGen
@@ -29,6 +29,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -42,10 +43,10 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
     {
         $tempContent = "";
         $siteId = Control::GetRequest("site_id", 0);
-        $rank = Control::GetRequest("rank", -1);
+        $forumRank = Control::GetRequest("forum_rank", -1);
         $parentId = Control::GetRequest("parent_id", 0);
 
-        if ($siteId > 0 && $rank >= 0) {
+        if ($siteId > 0 && $forumRank >= 0) {
             $tempContent = Template::Load("forum/forum_deal.html", "common");
             $resultJavaScript = "";
             parent::ReplaceFirst($tempContent);
@@ -54,7 +55,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $forumManageData = new ForumManageData();
-            if ($rank > 0) {
+            if ($forumRank > 0) {
 
                 if ($parentId > 0) {
                     $parentName = $forumManageData->GetForumName($parentId, false);
@@ -67,7 +68,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{Rank}", $rank, $tempContent);
+            $tempContent = str_ireplace("{ForumRank}", $forumRank, $tempContent);
             $tempContent = str_ireplace("{ParentId}", $parentId, $tempContent);
             $tempContent = str_ireplace("{Sort}", "0", $tempContent);
 
@@ -86,13 +87,13 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                     $fileElementName = "file_forum_pic_1";
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1; //
                     $tableId = $forumId;
-                    $uploadResult1 = new UploadResult();
+                    $uploadFile1 = new UploadFile();
                     $uploadFileId1 = 0;
                     $titlePic1Result = self::Upload(
                         $fileElementName,
                         $tableType,
                         $tableId,
-                        $uploadResult1,
+                        $uploadFile1,
                         $uploadFileId1
                     );
 
@@ -106,12 +107,12 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                     $fileElementName = "file_forum_pic_2";
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
                     $uploadFileId2 = 0;
-                    $uploadResult2 = new UploadResult();
+                    $uploadFile2 = new UploadFile();
                     $titlePic2Result = self::Upload(
                         $fileElementName,
                         $tableType,
                         $tableId,
-                        $uploadResult2,
+                        $uploadFile2,
                         $uploadFileId2
                     );
                     if (intval($titlePic2Result) <=0){
@@ -124,15 +125,15 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                         $forumManageData->ModifyForumPic($forumId, $uploadFileId1, $uploadFileId2);
                     }
 
-                    $siteConfigManageData = new SiteConfigManageData($siteId);
+                    $siteConfigData = new SiteConfigData($siteId);
                     if($uploadFileId1>0){
-                        $forumPicMobileWidth = $siteConfigManageData->ForumPicMobileWidth;
+                        $forumPicMobileWidth = $siteConfigData->ForumPicMobileWidth;
                         if($forumPicMobileWidth<=0){
                             $forumPicMobileWidth  = 320; //默认320宽
                         }
                         self::GenUploadFileMobile($uploadFileId1,$forumPicMobileWidth);
 
-                        $forumPicPadWidth = $siteConfigManageData->ForumPicPadWidth;
+                        $forumPicPadWidth = $siteConfigData->ForumPicPadWidth;
                         if($forumPicPadWidth<=0){
                             $forumPicPadWidth  = 1024; //默认1024宽
                         }
@@ -144,7 +145,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        Control::CloseTab();
+                        $resultJavaScript .= Control::GetCloseTab();
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }

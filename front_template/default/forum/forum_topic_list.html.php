@@ -18,19 +18,19 @@
         <script type="text/javascript" src="/system_js/common.js"></script>
     </head>
     <body>
-        {forum_topnav}
+        {forum_top_nav}
         <div id="forum_nav">
             <div class="content">
-                <div class="left"><a href="default.php?mod=forum">首页</a></div>
-                <div class="right"></div>
+                <div class="left"><a href="/default.php?mod=forum">首页</a></div>
+                <div class="right"><a href="/default.php?mod=forum_topic&a=create&forum_id={ForumId}">发表主题</a></div>
                 <div class="spe"></div>
             </div>
         </div>      
         <div id="forum_topic_list">
             <div class="content">
-                <table>
+        <table>
         <tr>
-            <td class=""><img src="/front_template/default/skins/gray/noavatar_small.gif" /></td>
+            <td class=""><img src="/front_template/default/skins/gray/no_avatar_small.gif" /></td>
             <td class=""></td>
             <td class=""></td>
             <td class=""></td>

@@ -25,8 +25,9 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "async_modifystate":
+            case "async_modify_state":
                 $result = self::AsyncModifyState();
+                break;
         }
         $result = str_ireplace("{action}", $method, $result);
         return $result;

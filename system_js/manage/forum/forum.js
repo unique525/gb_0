@@ -15,7 +15,7 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&rank=0&site_id=' + parent.G_NowSiteId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&forum_rank=0&site_id=' + parent.G_NowSiteId;
         parent.G_TabTitle = parent.G_NowSiteName + '-新增论坛版块分区';
         parent.addTab();
     });

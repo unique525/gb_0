@@ -49,8 +49,10 @@ foreach ($arrFiles as $fileName) {
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseClientGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseClientGen.php");
 //include once rule class
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
 $arrFiles = getFileNames($dir);

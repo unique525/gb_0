@@ -11,8 +11,8 @@
         var editor;
         $(function () {
 
-            var rank = parseInt(Request["rank"]);
-            if(rank == 0){
+            var forumRank = parseInt(Request["forum_rank"]);
+            if(forumRank == 0){
                 $(".rank_1").css("display", "none");
                 $(".rank_0").css("display", "");
             }else{
@@ -23,43 +23,6 @@
 
             editor = $('#f_ForumInfo').xheditor();
 
-            $("#preview_title_pic1").click(function () {
-                var imgTitlePic1 = "{TitlePic1}";
-                if (imgTitlePic1 !== '') {
-                    var imageOfTitlePic1 = new Image();
-                    imageOfTitlePic1.src = imgTitlePic1;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic1.width + 30,
-                        height: imageOfTitlePic1.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic1 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图1");
-                }
-            });
-
-
-            $("#preview_title_pic2").click(function () {
-                var imgTitlePic2 = "{TitlePic2}";
-                if (imgTitlePic2 !== '') {
-                    var imageOfTitlePic2 = new Image();
-                    imageOfTitlePic2.src = imgTitlePic2;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic2.width + 30,
-                        height: imageOfTitlePic2.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic2 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图2");
-                }
-            });
 
         });
 
@@ -77,7 +40,7 @@
                     $("#CloseTab").val("0");
                 }
 
-                $("#mainForm").attr("action","/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&rank={Rank}&parent_id={ParentId}&tab_index="+parent.G_TabIndex+"");
+                $("#mainForm").attr("action","/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&forum_rank={ForumRank}&parent_id={ParentId}&tab_index="+parent.G_TabIndex+"");
                 $('#mainForm').submit();
             }
         }
@@ -102,7 +65,7 @@
         <td class="spe_line">{ParentName}
             <input name="f_ParentId" type="hidden" value="{ParentId}"/>
             <input name="f_SiteId" type="hidden" value="{SiteId}"/>
-            <input name="f_Rank" type="hidden" value="{Rank}"/>
+            <input name="f_ForumRank" type="hidden" value="{ForumRank}"/>
             <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
         </td>
     </tr>

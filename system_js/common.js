@@ -121,6 +121,15 @@ function checkNumber(me) {
     me.value = me.value.replace(reg, '');
 }
 
+function checkEmail(me) {
+    var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+    if(reg.test(me)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function JsLoader() {
     this.load = function(url) {
         //获取所有的<script>标记

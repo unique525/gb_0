@@ -7,6 +7,7 @@
  */
 class UserOrderManageData extends BaseManageData{
 
+    const STATE_REMOVED = 100;
     /**
      * 获取会员订单表中的字段
      * @return array
