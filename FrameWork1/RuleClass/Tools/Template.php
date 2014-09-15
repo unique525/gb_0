@@ -26,17 +26,17 @@ class Template
      */
     const TAG_TYPE_DOCUMENT_NEWS_LIST = "document_news_list";
     /**
-     * 模板标签类型：根据频道ID取产品列表 type="product_list_by_channel_id"
+     * 模板标签类型：产品列表 type="product_list"
      */
-    const TAG_TYPE_Product_LIST_BY_CHANNEL_ID = "product_list_by_channel_id";
+    const TAG_TYPE_PRODUCT_LIST = "product_list";
     /**
      * 模板标签类型：产品参数类别列表 type="product_param_type_class_list"
      */
-    const TAG_TYPE_Product_PARAM_TYPE_CLASS_LIST = "product_param_type_class_list";
+    const TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST = "product_param_type_class_list";
     /**
      * 模板标签类型：产品参数类型列表 type="product_param_type_list"
      */
-    const TAG_TYPE_Product_PARAM_TYPE_LIST = "product_param_type_list";
+    const TAG_TYPE_PRODUCT_PARAM_TYPE_LIST = "product_param_type_list";
 
 
     /**
