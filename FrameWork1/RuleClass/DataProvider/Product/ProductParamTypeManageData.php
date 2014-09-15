@@ -127,7 +127,7 @@ class ProductParamTypeManageData extends BaseManageData
         if ($productParamTypeClassId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ParamTypeName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
+                    $order = " ORDER BY Sort DESC,Createdate ASC";
                     break;
             }
             $sql = "SELECT *"
@@ -136,6 +136,40 @@ class ProductParamTypeManageData extends BaseManageData
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取产品对应参数类型并且带参数值记录
+     * @param int $productParamTypeClassId 产品参数类型ID
+     * @param int $productId 产品ID
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetListWithValue($productParamTypeClassId, $productId, $order = "", $topCount = -1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($productParamTypeClassId > 0&&$productId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY t.Sort DESC,t.Createdate ASC";
+                    break;
+            }
+            $sql = "SELECT t.ParamTypeName,t.ParamValueType,t1.*"
+                . " FROM " . self::TableName_ProductParamType . " t LEFT OUTER JOIN ". self::TableName_ProductParam ." t1"
+                . " ON t1.ProductId=:ProductId AND t.ProductParamTypeId=t1.ProductParamTypeId"
+                . " WHERE t.ProductParamTypeClassId=:ProductParamTypeClassId AND t.State<100"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
             $dataProperty->AddField("ProductParamTypeClassId", $productParamTypeClassId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
