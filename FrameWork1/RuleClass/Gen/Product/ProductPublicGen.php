@@ -41,7 +41,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $tempContent = self::loadListTemp($temp,$channelId);
-        parent::SubGenProduct($tempContent);
+        parent::GenProduct($tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
@@ -73,7 +73,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $channelId = Control::GetRequest("channel_id", 0);
         $productId = Control::GetRequest("product_id", 0);
         $tempContent = self::loadDetailTemp($temp,$channelId);
-        parent::SubGenProduct($tempContent);
+        parent::GenProduct($tempContent);
 
         //加载产品表数据
         $productManageData = new ProductManageData();
@@ -81,7 +81,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         Template::ReplaceOne($tempContent, $arrOne);
 
         //生成产品参数新增界面
-        parent::SubGenProductParamTypeClass($tempContent);
+        parent::GenProductParamTypeClass($tempContent);
         //把对应ID的CMS标记替换成指定内容
         //替换子循环里的<![CDATA[标记
         $tempContent = str_ireplace("<icms_child", "<icms", $tempContent);
@@ -90,13 +90,8 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $tempContent = str_ireplace("</item_child>", "</item>", $tempContent);
         $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
         $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
-        $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
-        $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
-        parent::SubGenProductParamType($tempContent);
-        //取产品参数表数据
-        $productParamManageData = new ProductParamManageData();
-        $arrProductParam = $productParamManageData->GetList($productId);
-        parent::SubGenProductParamTypeControl($tempContent,$arrProductParam);
+        parent::GenProductParamType($tempContent);
+
 
         $patterns = '/\{s_(.*?)\}/';
         $tempContent = preg_replace($patterns, "", $tempContent);
@@ -114,12 +109,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                     <![CDATA[
                     <div class="main_line_title" style="font-size:14px">{f_ProductParamTypeClassName}</div>
                     <div class="main_line_body">
-                        <icms_child id="{f_ProductParamTypeClassId}" type="product_param_type_list">
+                        <icms_child id="{f_ProductParamTypeClassId}" product_id="{ProductId}" type="product_param_type_list">
                             <item_child>
                                 [CDATA]
                                 <div class="main_line_content">
                                     <div class="main_line_content_left">{f_ParamTypeName}：</div>
-                                    <div class="main_line_content_right"><icms_control id="{f_ProductParamTypeId}" product_id="{ProductId}" type="{f_ParamValueType}" input_class="input_box" ></icms_control></div>
+                                    <div class="main_line_content_right">{f_ParamTypeValue}</div>
                                 </div>
                                 [/CDATA]
                             </item_child>
