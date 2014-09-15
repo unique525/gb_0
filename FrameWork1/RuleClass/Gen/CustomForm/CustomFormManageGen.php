@@ -87,7 +87,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $newId = $customFormManageData->Create($_POST);
                 if($newId>0){
                     //加入操作log
-                    $operateContent = "CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
+                    $operateContent = "Create CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
 
@@ -210,7 +210,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 if ($result > 0) {
 
                     //加入操作log
-                    $operateContent = "CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
+                    $operateContent = "Modify CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
                     self::CreateManageUserLog($operateContent);
 
 

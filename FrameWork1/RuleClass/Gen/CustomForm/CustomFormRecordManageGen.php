@@ -81,6 +81,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormData = new CustomFormManageData();
         $channelId = $customFormData->GetChannelID($customFormId, FALSE);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         parent::ReplaceFirst($tempContent);
 
 
@@ -119,16 +120,18 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
                 //加入操作log
 
-                $operateContent = "CustomFormRecord：CustomFormRecordD：" . $newId . "；result：" . $newId;
+                $operateContent = "Create CustomFormRecord：CustomFormRecordD：" . $newId . "；result：" . $newId;
                 self::CreateManageUserLog($operateContent);
+
 
 
                 Control::ShowMessage(Language::Load('custom_form', 1));
                 $closeTab = Control::PostRequest("CloseTab",0);
                 if($closeTab == 1){
-                    Control::CloseTab();
+                    $resultJavaScript .= Control::GetCloseTab();
                 }else{
-                    Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form_record&m=create&custom_form_id='.$customFormId);
+                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    //Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=list&site_id='.$siteId.'&channel_id='.$channelId);
                 }
 
             }else{
@@ -164,6 +167,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 "{ManageUserId}" => $manageUserId,
                 "{CreateDate}" => $crateDate,
                 "{CustomFormContentTable}" => $customFormContentTable,
+                "{TabIndex}" => $tabIndex,
                 "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replaceArr);
@@ -205,6 +209,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         $manageUserId = Control::GetManageUserID();
         $customFormRecordId = Control::GetRequest("custom_form_record_id", 0);
         $customFormId = Control::GetRequest("custom_form_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $customFormManageData = new CustomFormManageData();
         $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
         parent::ReplaceFirst($tempContent);
@@ -243,6 +248,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 "{ChannelId}" => $channelId,
                 "{ManageUserId}" => $manageUserId,
                 "{CustomFormContentTable}" => $customFormContentTable,
+                "{TabIndex}" => $tabIndex,
                 "{display}" => "none"
             );
             $tempContent = strtr($tempContent, $replaceArray);
@@ -287,7 +293,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
                     //加入操作log
 
-                    $operateContent = "CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
+                    $operateContent = "Modify CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
                     self::CreateManageUserLog($operateContent);
 
 
@@ -304,12 +310,6 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 }else{
                     return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_UPDATE_FAILED;
                 }
-
-                //加入操作log
-                $operateContent = "CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
-                self::CreateManageUserLog($operateContent);
-
-                Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form_record&m=list&custom_form_id='.$customFormId);
             }
 
             //去掉s开头的标记 {s_xxx_xxx}
