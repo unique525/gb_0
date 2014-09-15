@@ -73,6 +73,12 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
 
             if(!empty($_POST)){
                 $activityClassManageData=new ActivityClassManageData();
+
+
+                $activityClassName=Control::PostRequest("f_ActivityClassName",FALSE);
+                $hasOne=$activityClassManageData->GetCount($activityClassName,$channelId);
+                if($hasOne<=0){
+
                 $newActivityClassId=$activityClassManageData->Create($_POST);
                 if($newActivityClassId>0){
 
@@ -91,6 +97,9 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                     return DefineCode::ACTIVITY_CLASS_MANAGE+self::ACTIVITY_CLASS_INSERT_OR_UPDATE_FAILED;
                 }
 
+                }else{
+                    $resultJavaScript.=Control::GetJqueryMessage(Language::Load('activity', 1));//失败，活动类型已存在!
+                }
             }
 
             $channelManageData=new ChannelManageData();
@@ -99,6 +108,7 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                 "{ChannelName}" => $channelName,
                 "{ChannelId}" => $channelId,
                 "{TabIndex}" => $tabIndex,
+                "{SiteId}" => $siteId,
                 "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replace_arr);
@@ -123,6 +133,7 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = Template::Load("activity/activity_class_deal.html","common");
         $resultJavaScript="";
         $channelId = Control::GetRequest("channel_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $tabIndex = Control::GetRequest("tab_index", 1);
         $activityClassId=Control::GetRequest("activity_class_id", 1);
         $activityClassManageData=new ActivityClassManageData();
@@ -132,6 +143,9 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                 parent::ReplaceFirst($tempContent);
 
                 if(!empty($_POST)){
+                    $activityClassName=Control::PostRequest("f_ActivityClassName",FALSE);
+                    $hasOne=$activityClassManageData->GetCount($activityClassName,$channelId);
+                    if($hasOne<=0){
                     $newActivityClassId=$activityClassManageData->Modify($_POST,$activityClassId);
                     if($newActivityClassId>0){
 
@@ -149,7 +163,9 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                     }else{
                         return DefineCode::ACTIVITY_CLASS_MANAGE+self::ACTIVITY_CLASS_INSERT_OR_UPDATE_FAILED;
                     }
-
+                    }else{
+                        $resultJavaScript.=Control::GetJqueryMessage(Language::Load('activity', 1));//失败，活动类型已存在!
+                    }
                 }
 
                 //加载原数据
@@ -166,6 +182,7 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                     "{ChannelName}" => $channelName,
                     "{ChannelId}" => $channelId,
                     "{TabIndex}" => $tabIndex,
+                    "{SiteId}" => $siteId,
                     "{display}" => "none"
                 );
                 $tempContent = strtr($tempContent, $replace_arr);
