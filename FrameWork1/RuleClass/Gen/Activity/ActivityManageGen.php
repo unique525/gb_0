@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 活动表单页面生成类
+ * 活动管理类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Activity
  * @author 525
@@ -12,19 +12,19 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 活动id错误
      */
-    const FALSE_ACTIVITY_ID = -1;
+    const ACTIVITY_FALSE_ACTIVITY_ID = -1;
     /**
      * 写入、修改数据库操作失败
      */
-    const INSERT_OR_UPDATE_FAILED = -2;
+    const ACTIVITY_INSERT_OR_UPDATE_FAILED = -2;
     /**
      * 活动type错误
      */
-    const FALSE_ACTIVITY_TYPE = -3;
+    const ACTIVITY_FALSE_ACTIVITY_TYPE = -3;
     /**
      * 查询单条活动结果为空
      */
-    const GET_ONE_RESULT_NULL = -4;
+    const ACTIVITY_GET_ONE_RESULT_NULL = -4;
 
 
     /**
@@ -68,23 +68,41 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             //    $result = self::GenNew_ActivityType_1($activityType);
             //    break;
             default:
-                $result = self::CreateDefaultActivity(0);
+                $result = self::CreateForActivityType0(0);
+                break;
+
+        }
+        return $result;
+    }
+    /**
+     * 编辑活动
+     * @return string 执行结果
+     */
+    private function GenModify(){
+        $result = -1;
+        $activityType = Control::GetRequest("activity_type", 0);
+        switch ($activityType) {
+            //case 0:
+            //    $result = self::GenNew_ActivityType_1($activityType);
+            //    break;
+            default:
+                $result = self::ModifyForActivityType0(0);
                 break;
 
         }
         return $result;
     }
 
-    private function GenModify(){
+    private function ModifyForActivityType0(){
         $activityId=Control::GetRequest("activity_id",-1);
         $activityType=Control::GetRequest("activity_type",-1);
         $tabIndex = Control::GetRequest("tab_index", 1);
         $channelId=Control::GetRequest("channel_id",0);
         if ($activityType < 0) {
-            return DefineCode::ACTIVITY_MANAGE + self::FALSE_ACTIVITY_TYPE;
+            return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_FALSE_ACTIVITY_TYPE;
         }
         if ($activityId <= 0) {
-            return DefineCode::ACTIVITY_MANAGE + self::FALSE_ACTIVITY_ID;
+            return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_FALSE_ACTIVITY_ID;
         }
         $tempContent = Template::Load("activity/activity_".$activityType."_deal.html","common");
         $resultJavaScript="";
@@ -203,10 +221,10 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                         //Control::GoUrl($_SERVER["PHP_SELF"].'?secu=manage&mod=custom_form&m=create');
                     }
                 } else {
-                    return DefineCode::ACTIVITY_MANAGE + self::INSERT_OR_UPDATE_FAILED;
+                    return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_INSERT_OR_UPDATE_FAILED;
                 }
                 //加入操作log
-                $operateContent = "activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityName", "");
+                $operateContent = "Modify activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityName", "");
                 self::CreateManageUserLog($operateContent);
 
             }
@@ -241,7 +259,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             if(!empty($arrOne)){
                 Template::ReplaceOne($tempContent, $arrOne);
             }else{
-                return DefineCode::ACTIVITY_MANAGE + self::GET_ONE_RESULT_NULL . "id=" . $activityId;
+                return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_GET_ONE_RESULT_NULL . "id=" . $activityId;
             }
 
             $replace_arr = array(
@@ -283,6 +301,13 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             $activityData = new ActivityManageData();
             $arrList = $activityData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $activityClass, $state);
             if ($arrList != null && count($arrList) > 0) {
+
+                $activityClassManageData=new ActivityClassManageData();//取得ActivityClassName 并加入数组
+                foreach($arrList as $key => $oneActivity){
+                    $activityClassName=$activityClassManageData->GetActivityClassName($oneActivity["ActivityClassId"]);
+                    $arrList[$key]["ActivityClassName"]=$activityClassName;
+                }
+
                 Template::ReplaceList($tempContent, $arrList, $listName);
 
                 $styleNumber = 1;
@@ -306,13 +331,13 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         return $result;
     }
 
-    private function CreateDefaultActivity($activityType){
+    private function CreateForActivityType0($activityType){
             $tempContent = Template::Load("activity/activity_".$activityType."_deal.html","common");
             $resultJavaScript="";
             $manageUserId = Control::GetManageUserID();
             $manageUsername = Control::GetManageUserName();
             $channelId = Control::GetRequest("channel_id", 0);
-            $tab_index = Control::GetRequest("tab_index", 1);
+            $tabIndex = Control::GetRequest("tab_index", 1);
             parent::ReplaceFirst($tempContent);
             if (intval($channelId) > 0) {
                 if (!empty($_POST)) {
@@ -321,10 +346,10 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     if($newActivityId>0){
 
                         //记入操作log
-                        $operateContent = "Activity：ActivityID：" . $newActivityId . "；result：" . $newActivityId . "；title：" . Control::PostRequest("f_ActivityName", "");
+                        $operateContent = "Create Activity：ActivityID：" . $newActivityId . "；result：" . $newActivityId . "；title：" . Control::PostRequest("f_ActivityName", "");
                         self::CreateManageUserLog($operateContent);
 
-                        Control::ShowMessage(Language::Load('document', 1));
+                        Control::ShowMessage(Language::Load('activity', 18));
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
                             $resultJavaScript .= Control::GetCloseTab();
@@ -415,7 +440,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                             }
                         }
                     }else{
-                        return DefineCode::ACTIVITY_MANAGE + self::INSERT_OR_UPDATE_FAILED;
+                        return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_INSERT_OR_UPDATE_FAILED;
                     }
 
 
@@ -500,7 +525,8 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     "{UserName}" => $userName,
                     "{ManageUserId}" => $manageUserId,
                     "{ManageUserName}" => $manageUsername,
-                    "{TabIndex}" => $tab_index
+                    "{TabIndex}" => $tabIndex,
+                    "{display}" => ""
                 );
                 $tempContent = strtr($tempContent, $replace_arr);
 
@@ -526,7 +552,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
     private function ModifyState()
     {
         //$result = -1;
-        $activityId = Control::GetRequest("activity_id", 0);
+        $activityId = Control::GetRequest("table_id", 0);
         $state = Control::GetRequest("state",0);
         if ($activityId > 0) {
             $activityManageData = new ActivityManageData();
