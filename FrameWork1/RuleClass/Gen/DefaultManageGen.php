@@ -139,6 +139,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $ActivityManageGen = new ActivityManageGen();
                     $result = $ActivityManageGen->Gen();
                     break;
+                case "activity_class":
+                    $ActivityClassManageGen = new ActivityClassManageGen();
+                    $result = $ActivityClassManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
