@@ -36,7 +36,7 @@ class BasePublicGen extends BaseGen {
      * 替换模板中的产品标记生成产品列表
      * @param string $tempContent 模板字符串
      */
-    public function SubGenProduct(&$tempContent)
+    public function GenProduct(&$tempContent)
     {
         $keyName = "icms";
         $arr = Template::GetAllCustomTag($tempContent, $keyName);
@@ -64,7 +64,7 @@ class BasePublicGen extends BaseGen {
      * 替换模板中的产品参数类别标记生成产品参数类别列表
      * @param string $tempContent 模板字符串
      */
-    public function SubGenProductParamTypeClass(&$tempContent)
+    public function GenProductParamTypeClass(&$tempContent)
     {
         $keyName = "icms";
         $arr = Template::GetAllCustomTag($tempContent, $keyName);
@@ -92,7 +92,7 @@ class BasePublicGen extends BaseGen {
      * 替换模板中的产品参数类别标记生成产品参数类别列表
      * @param string $tempContent 模板字符串
      */
-    public function SubGenProductParamType(&$tempContent)
+    public function GenProductParamType(&$tempContent)
     {
         $keyName = "icms";
         $arr = Template::GetAllCustomTag($tempContent, $keyName);
@@ -104,9 +104,11 @@ class BasePublicGen extends BaseGen {
                     foreach ($arr2 as $val) {
                         $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
                         $productParamTypeClassId = Template::GetParamValue($content, "id", $keyName);
+                        $productId = Template::GetParamValue($content, "product_id", $keyName);
                         $type = Template::GetParamValue($content, "type", $keyName);
                         if ($type == 'product_param_type_list') {
-                            $arrProductParamTypeList = $productParamTypeData->GetList($productParamTypeClassId);
+                            $arrProductParamTypeList = $productParamTypeData->GetListWithValue($productParamTypeClassId,$productId);
+                            self::MappingParamTypeValue($arrProductParamTypeList);
                             Template::ReplaceList($content, $arrProductParamTypeList, $productParamTypeClassId, $keyName);
                             $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeClassId, $content, $keyName);
                         }
@@ -117,131 +119,41 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
-     * 替换模板中的控件标记按类别生成控件
-     * @param string $tempContent 模板字符串
-     * @param array $arrProductParam 产品参数值数组
-     */
-    public function SubGenProductParamTypeControl(&$tempContent,$arrProductParam=null)
-    {
-        $keyName = "icms_control";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $productParamTypeId = Template::GetParamValue($content, "id", $keyName);
-                        $paramValueType = Template::GetParamValue($content, "type", $keyName);
-                        $spanClass = Template::GetParamValue($content, "span_class", $keyName);
-                        $content = self::GenControl($productParamTypeId, $paramValueType, $spanClass ,$arrProductParam);
-                        $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeId, $content, $keyName);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 根据参数类型生成控件
-     * @param string $productParamTypeId 参数类型Id
-     * @param string $paramValueType 参数类型值
-     * @param string $spanClass 文本显示框样式名称
-     * @param array $arrProductParam 产品参数值数组
-     * @return string 输入框html
-     */
-    public function GenControl($productParamTypeId, $paramValueType, $spanClass, $arrProductParam)
-    {
-        switch ($paramValueType) {
-            case "0":
-                $columnName="ShortStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "1":
-                $columnName="LongStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "2":
-                $columnName="MaxStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "3":
-                $columnName="FloatValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "4":
-                $columnName="MoneyValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "5":
-                $columnName="UrlValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "6":
-                $columnName="ShortStringValue";
-                $controlName = "pps_".$columnName."_" . $productParamTypeId;
-                $controlId = "pps_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            default:
-                $columnName="ShortStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-
-        }
-        return $result;
-    }
-
-    /**
-     * 生成产品参数显示框
-     * @param string $name 显示框name
-     * @param string $id 显示框id
-     * @param string $spanClass 显示框样式类名称
-     * @param string $value 显示框的值
-     * @return string 显示框html
-     */
-    public function GenSpanControl($id, $name, $spanClass, $value = "")
-    {
-        $result = '<span name="' . $name . '" id="' . $id . '" class="' . $spanClass . '" >'.$value.'</span>';
-        return $result;
-    }
-
-    /**
-     * 根据产品参数类型ID和产品参数类型对应值字段名称得到产品参数值
-     * @param array $arrProductParam 产品参数数组
-     * @param string $productParamTypeId 产品参数类型Id
-     * @param string $productParamColumnName 产品参数类型对应值字段名称
+     * 根据产品参数类型ID映射产品参数对应值到指定字段ParamTypeValue
+     * @param array $arrProductParamTypeList 产品参数原始数组
      * @return string 产品参数值
      */
-    public function GetProductParamValue($arrProductParam,$productParamTypeId,$productParamColumnName){
-        $productParamValue="";
-        for ($i = 0; $i < count($arrProductParam); $i++) {
-            if($productParamTypeId===$arrProductParam[$i]["ProductParamTypeId"])
-                $productParamValue=$arrProductParam[$i][$productParamColumnName];
+    public function MappingParamTypeValue(&$arrProductParamTypeList){
+        for ($i = 0; $i < count($arrProductParamTypeList); $i++) {
+            $paramValueType=$arrProductParamTypeList[$i]["ParamValueType"];
+            switch ($paramValueType) {
+                case "0":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["ShortStringValue"];
+                    break;
+                case "1":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["LongStringValue"];
+                    break;
+                case "2":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["MaxStringValue"];
+                    break;
+                case "3":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["FloatValue"];
+                    break;
+                case "4":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["MoneyValue"];
+                    break;
+                case "5":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["UrlValue"];
+                    break;
+                case "6":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["ShortStringValue"];
+                    break;
+                default:
+                    $paramTypeMappingValue = "";
+                    break;
+            }
+            $arrProductParamTypeList[$i]["ParamTypeValue"]=$paramTypeMappingValue;
         }
-        return $productParamValue;
     }
 
 }
