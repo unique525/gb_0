@@ -504,9 +504,10 @@ class BaseManageGen extends BaseGen
                 while ($rank >= 0) {
                     $timeStart = Control::GetMicroTime();
                     $publishType = ChannelTemplateManageData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL;
+
                     $arrChannelTemplateList = $channelTemplateManageData->GetListByPublishType($nowChannelId, $publishType);
                     $timeEnd = Control::GetMicroTime();
-
+print_r($arrChannelTemplateList);
                     //传输日志 取得模板
                     $publishLogManageData->Create(
                         PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
