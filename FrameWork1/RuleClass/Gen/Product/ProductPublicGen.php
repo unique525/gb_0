@@ -40,17 +40,17 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
-        $tempContent = self::loadListTemp($temp,$channelId);
-        parent::SubGenProduct($tempContent);
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        $templateContent = self::loadListTemp($temp,$channelId);
+        $templateContent = parent::ReplaceTemplate($templateContent);
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     private function loadListTemp($temp,$channelId)
     {
 
         $result='
-            <icms id="{ChannelId}" type="product_list_by_channel_id">
+            <icms id="product_{ChannelId}" type="product_list" where="channel">
                 <item>
                     <![CDATA[
                     <div class="main_line_title" style="font-size:14px">{f_ProductName}</div>
@@ -72,36 +72,31 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $productId = Control::GetRequest("product_id", 0);
-        $tempContent = self::loadDetailTemp($temp,$channelId);
-        parent::SubGenProduct($tempContent);
+        $templateContent = self::loadDetailTemp($temp,$channelId);
 
         //加载产品表数据
         $productManageData = new ProductManageData();
         $arrOne = $productManageData->GetOne($productId);
-        Template::ReplaceOne($tempContent, $arrOne);
+        Template::ReplaceOne($templateContent, $arrOne);
 
-        //生成产品参数新增界面
-        parent::SubGenProductParamTypeClass($tempContent);
+        //父模板替换
+        $templateContent = parent::ReplaceTemplate($templateContent);
         //把对应ID的CMS标记替换成指定内容
         //替换子循环里的<![CDATA[标记
-        $tempContent = str_ireplace("<icms_child", "<icms", $tempContent);
-        $tempContent = str_ireplace("</icms_child>", "</icms>", $tempContent);
-        $tempContent = str_ireplace("<item_child", "<item", $tempContent);
-        $tempContent = str_ireplace("</item_child>", "</item>", $tempContent);
-        $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
-        $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
-        $tempContent = str_ireplace("[CDATA]", "<![CDATA[", $tempContent);
-        $tempContent = str_ireplace("[/CDATA]", "]]>", $tempContent);
-        parent::SubGenProductParamType($tempContent);
-        //取产品参数表数据
-        $productParamManageData = new ProductParamManageData();
-        $arrProductParam = $productParamManageData->GetList($productId);
-        parent::SubGenProductParamTypeControl($tempContent,$arrProductParam);
+        $templateContent = str_ireplace("<icms_child", "<icms", $templateContent);
+        $templateContent = str_ireplace("</icms_child>", "</icms>", $templateContent);
+        $templateContent = str_ireplace("<item_child", "<item", $templateContent);
+        $templateContent = str_ireplace("</item_child>", "</item>", $templateContent);
+        $templateContent = str_ireplace("[CDATA]", "<![CDATA[", $templateContent);
+        $templateContent = str_ireplace("[/CDATA]", "]]>", $templateContent);
+        //子模板替换
+        $templateContent = parent::ReplaceTemplate($templateContent);
+
 
         $patterns = '/\{s_(.*?)\}/';
-        $tempContent = preg_replace($patterns, "", $tempContent);
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        $templateContent = preg_replace($patterns, "", $templateContent);
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
 
@@ -109,17 +104,17 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $result ='
             <div>{ProductName}</div>
-            <icms id="{ChannelId}" type="product_param_type_class_list">
+            <icms id="product_param_type_class_{ChannelId}" type="product_param_type_class_list">
                 <item>
                     <![CDATA[
                     <div class="main_line_title" style="font-size:14px">{f_ProductParamTypeClassName}</div>
                     <div class="main_line_body">
-                        <icms_child id="{f_ProductParamTypeClassId}" type="product_param_type_list">
+                        <icms_child id="product_param_type_{f_ProductParamTypeClassId}" relation_id="{ProductId}" type="product_param_type_list">
                             <item_child>
                                 [CDATA]
                                 <div class="main_line_content">
                                     <div class="main_line_content_left">{f_ParamTypeName}：</div>
-                                    <div class="main_line_content_right"><icms_control id="{f_ProductParamTypeId}" product_id="{ProductId}" type="{f_ParamValueType}" input_class="input_box" ></icms_control></div>
+                                    <div class="main_line_content_right">{f_ParamTypeValue}</div>
                                 </div>
                                 [/CDATA]
                             </item_child>

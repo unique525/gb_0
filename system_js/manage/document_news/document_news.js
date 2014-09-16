@@ -20,7 +20,7 @@ window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED = 130201;
 
 
 $(function() {
-    $(document).tooltip();
+    //$(document).tooltip();
     $("#btn_select_all").click(function(event) {
         event.preventDefault();
         var inputSelect = $("[name='input_select']");
@@ -36,10 +36,11 @@ $(function() {
     btnCreate.click(function(event) {
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
+        var channelId = parseInt($(this).attr('idvalue'));
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-新增文档';
         parent.addTab();
     });
@@ -71,15 +72,19 @@ $(function() {
     });
 
 
-    var btnPublish = $("#btn_publish");
+    var btnPublish = $(".btn_publish");
     btnPublish.css("cursor", "pointer");
     btnPublish.click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
-        $("#dialog_box").dialog({
+
+        var dialogBox = $("#dialog_box");
+        dialogBox.attr("title","发布文档");
+        dialogBox.dialog({
             height: 140,
             modal: true
         });
+
         var dialogContent = $("#dialog_content");
         dialogContent.html("开始发布");
 

@@ -1,64 +1,12 @@
 <?php
 /**
- * 后台管理 产品参数类型 数据类
+ * 前台 产品参数类型 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Vote
  * @author hy
  */
-class ProductParamTypeManageData extends BaseManageData
+class ProductParamTypePublicData extends BasePublicData
 {
-    /**
-     * 取得字段数据集
-     * @param string $tableName 表名
-     * @return array 字段数据集
-     */
-    public function GetFields($tableName = self::TableName_ProductParamType){
-        return parent::GetFields(self::TableName_ProductParamType);
-    }
-
-    /**
-     * 新增产品参数类型
-     * @param array $httpPostData $_post数组
-     * @return int 返回产品参数类型Id
-     */
-    public function Create($httpPostData) {
-        $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql($httpPostData, self::TableName_ProductParamType, $dataProperty);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
-        return $result;
-    }
-
-    /**
-     * 修改产品参数类型
-     * @param array $httpPostData $_post数组
-     * @param int $productParamTypeId  产品参数类型Id
-     * @return int 执行结果
-     */
-    public function Modify($httpPostData,$productParamTypeId) {
-        $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql($httpPostData, self::TableName_ProductParamType, self::TableId_ProductParamType, $productParamTypeId, $dataProperty);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    /**
-     * 异步修改状态
-     * @param string $productParamTypeId 产品参数类型Id
-     * @param string $state 状态
-     * @return int 执行结果
-     */
-    public function ModifyState($productParamTypeId,$state) {
-        $result = -1;
-        if ($productParamTypeId < 0) {
-            return $result;
-        }
-        $sql = "UPDATE " . self::TableName_ProductParamType . " SET State=:State WHERE ProductParamTypeId=:ProductParamTypeId";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ProductParamTypeId", $productParamTypeId);
-        $dataProperty->AddField("State", $state);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
-        return $result;
-    }
 
     /**
      * 获取一个产品参数类型的数据
@@ -150,10 +98,10 @@ class ProductParamTypeManageData extends BaseManageData
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetListWithValue($productParamTypeClassId, $productId, $order = "", $topCount = -1)
+    public function GetListWithValue($productParamTypeClassId, $productId, $order = "", $topCount = null)
     {
         $result = null;
-        if ($topCount != -1)
+        if ($topCount != null)
             $topCount = " limit " . $topCount;
         else $topCount = "";
         if ($productParamTypeClassId > 0&&$productId > 0) {

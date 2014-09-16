@@ -25,6 +25,18 @@ class Template
      * 模板标签类型：资讯列表 type="document_news_list"
      */
     const TAG_TYPE_DOCUMENT_NEWS_LIST = "document_news_list";
+    /**
+     * 模板标签类型：产品列表 type="product_list"
+     */
+    const TAG_TYPE_PRODUCT_LIST = "product_list";
+    /**
+     * 模板标签类型：产品参数类别列表 type="product_param_type_class_list"
+     */
+    const TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST = "product_param_type_class_list";
+    /**
+     * 模板标签类型：产品参数类型列表 type="product_param_type_list"
+     */
+    const TAG_TYPE_PRODUCT_PARAM_TYPE_LIST = "product_param_type_list";
 
 
     /**

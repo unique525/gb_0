@@ -34,12 +34,11 @@ class BasePublicGen extends BaseGen {
 
 
     /**
-     * 替换内容
-     * @param int $channelId 频道id
+     * 替换模板内容
      * @param string $templateContent 模板内容
      * @return mixed|string 内容模板
      */
-    private function ReplaceTemplate($channelId, $templateContent)
+    public function ReplaceTemplate($templateContent)
     {
         /** 1.处理预加载模板 */
 
@@ -53,6 +52,8 @@ class BasePublicGen extends BaseGen {
             foreach ($arrTempContents as $tagContent) {
                 //标签id channel_1 document_news_1
                 $tagId = Template::GetParamValue($tagContent, "id");
+                //关联id
+                $relationId = Template::GetParamValue($tagContent, "relation_id");
                 //标签类型 channel_list,document_news_list
                 $tagType = Template::GetParamValue($tagContent, "type");
                 //标签排序方式
@@ -79,6 +80,25 @@ class BasePublicGen extends BaseGen {
                         $documentNewsId = intval(str_ireplace("channel_", "", $tagId));
                         if ($documentNewsId > 0) {
                             $templateContent = self::ReplaceTemplateOfDocumentNewsList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                    case Template::TAG_TYPE_PRODUCT_LIST :
+                        $channelId = intval(str_ireplace("product_", "", $tagId));
+                        if ($channelId > 0) {
+                            $templateContent = self::ReplaceTemplateOfProductList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                    case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST :
+                        $channelId = intval(str_ireplace("product_param_type_class_", "", $tagId));
+                        if ($channelId > 0) {
+                            $templateContent = self::ReplaceTemplateOfProductParamTypeClassList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                    case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_LIST :
+                        $productParamTypeClassId = intval(str_ireplace("product_param_type_", "", $tagId));
+                        $productId=$relationId;
+                        if ($productParamTypeClassId > 0) {
+                            $templateContent = self::ReplaceTemplateOfProductParamTypeList($templateContent, $productParamTypeClassId, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         }
                         break;
                 }
@@ -130,17 +150,17 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
-     * 替换资讯列表的内容
-     * @param string $channelTemplateContent 要处理的模板内容
-     * @param int $channelId 频道id
-     * @param string $tagId 标签id
-     * @param string $tagContent 标签内容
-     * @param int $tagTopCount 显示条数
-     * @param string $tagWhere 查询方式
-     * @param string $tagOrder 排序方式
-     * @param int $state 状态
-     * @return mixed|string 内容模板
-     */
+ * 替换资讯列表的内容
+ * @param string $channelTemplateContent 要处理的模板内容
+ * @param int $channelId 频道id
+ * @param string $tagId 标签id
+ * @param string $tagContent 标签内容
+ * @param int $tagTopCount 显示条数
+ * @param string $tagWhere 查询方式
+ * @param string $tagOrder 排序方式
+ * @param int $state 状态
+ * @return mixed|string 内容模板
+ */
     private function ReplaceTemplateOfDocumentNewsList(
         $channelTemplateContent,
         $channelId,
@@ -175,215 +195,179 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
-     * 替换模板中的产品标记生成产品列表
-     * @param string $tempContent 模板字符串
+     * 替换产品列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
      */
-    public function SubGenProduct(&$tempContent)
+    private function ReplaceTemplateOfProductList(
+        $templateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
     {
-        $keyName = "icms";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $productData = new ProductData();
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $channelId = Template::GetParamValue($content, "id", $keyName);
-                        $type = Template::GetParamValue($content, "type", $keyName);
-                        if ($type == 'product_list_by_channel_id') {
-                            $arrProductList = $productData->GetList($channelId);
-                            Template::ReplaceList($content, $arrProductList, $channelId, $keyName);
-                            $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
-                        }
-                    }
-                }
+        if ($channelId > 0) {
+            $arrProductList = null;
+            $productPublicData = new ProductPublicData();
+            switch ($tagWhere) {
+                case "channel":
+                    $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                    break;
+                default :
+                    //new
+                    $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                    break;
+            }
+            if (!empty($arrProductList)) {
+                Template::ReplaceList($tagContent, $arrProductList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
         }
+
+        return $templateContent;
     }
 
     /**
-     * 替换模板中的产品参数类别标记生成产品参数类别列表
-     * @param string $tempContent 模板字符串
+     * 替换产品参数类别列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
      */
-    public function SubGenProductParamTypeClass(&$tempContent)
+    private function ReplaceTemplateOfProductParamTypeClassList(
+        $templateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
     {
-        $keyName = "icms";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $productParamTypeClassData = new ProductParamTypeClassManageData();
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $channelId = Template::GetParamValue($content, "id", $keyName);
-                        $type = Template::GetParamValue($content, "type", $keyName);
-                        if ($type == 'product_param_type_class_list') {
-                            $arrProductParamTypeClassList = $productParamTypeClassData->GetList($channelId);
-                            Template::ReplaceList($content, $arrProductParamTypeClassList, $channelId, $keyName);
-                            $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
-                        }
-                    }
-                }
+        if ($channelId > 0) {
+            $arrProductParamTypeClassList = null;
+            $productParamTypeClassPublicData = new ProductParamTypeClassPublicData();
+            switch ($tagWhere) {
+                case "new":
+                    $arrProductParamTypeClassList = $productParamTypeClassPublicData->GetList($channelId, $tagOrder, $tagTopCount);
+                    break;
+                default :
+                    //new
+                    $arrProductParamTypeClassList = $productParamTypeClassPublicData->GetList($channelId, $tagOrder, $tagTopCount);
+                    break;
+            }
+            if (!empty($arrProductParamTypeClassList)) {
+                Template::ReplaceList($tagContent, $arrProductParamTypeClassList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
         }
+
+        return $templateContent;
     }
 
     /**
-     * 替换模板中的产品参数类别标记生成产品参数类别列表
-     * @param string $tempContent 模板字符串
+     * 替换产品参数类型列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $productParamTypeClassId 产品参数类别ID
+     * @param int $productId 产品ID
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
      */
-    public function SubGenProductParamType(&$tempContent)
+    private function ReplaceTemplateOfProductParamTypeList(
+        $templateContent,
+        $productParamTypeClassId,
+        $productId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
     {
-        $keyName = "icms";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $productParamTypeData = new ProductParamTypeManageData();
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $productParamTypeClassId = Template::GetParamValue($content, "id", $keyName);
-                        $type = Template::GetParamValue($content, "type", $keyName);
-                        if ($type == 'product_param_type_list') {
-                            $arrProductParamTypeList = $productParamTypeData->GetList($productParamTypeClassId);
-                            Template::ReplaceList($content, $arrProductParamTypeList, $productParamTypeClassId, $keyName);
-                            $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeClassId, $content, $keyName);
-                        }
-                    }
-                }
+        if ($productParamTypeClassId > 0 && $productId > 0) {
+            $arrProductParamTypeList = null;
+            $productParamTypePublicData = new ProductParamTypePublicData();
+            switch ($tagWhere) {
+                case "new":
+                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId,$productId, $tagOrder, $tagTopCount);
+                    break;
+                default :
+                    //new
+                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId,$productId, $tagOrder, $tagTopCount);
+                    break;
+            }
+            if (!empty($arrProductParamTypeList)) {
+                self::MappingParamTypeValue($arrProductParamTypeList);
+                Template::ReplaceList($tagContent, $arrProductParamTypeList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
         }
+
+        return $templateContent;
     }
 
     /**
-     * 替换模板中的控件标记按类别生成控件
-     * @param string $tempContent 模板字符串
-     * @param array $arrProductParam 产品参数值数组
-     */
-    public function SubGenProductParamTypeControl(&$tempContent,$arrProductParam=null)
-    {
-        $keyName = "icms_control";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $productParamTypeId = Template::GetParamValue($content, "id", $keyName);
-                        $paramValueType = Template::GetParamValue($content, "type", $keyName);
-                        $spanClass = Template::GetParamValue($content, "span_class", $keyName);
-                        $content = self::GenControl($productParamTypeId, $paramValueType, $spanClass ,$arrProductParam);
-                        $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeId, $content, $keyName);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 根据参数类型生成控件
-     * @param string $productParamTypeId 参数类型Id
-     * @param string $paramValueType 参数类型值
-     * @param string $spanClass 文本显示框样式名称
-     * @param array $arrProductParam 产品参数值数组
-     * @return string 输入框html
-     */
-    public function GenControl($productParamTypeId, $paramValueType, $spanClass, $arrProductParam)
-    {
-        switch ($paramValueType) {
-            case "0":
-                $columnName="ShortStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "1":
-                $columnName="LongStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "2":
-                $columnName="MaxStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "3":
-                $columnName="FloatValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "4":
-                $columnName="MoneyValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "5":
-                $columnName="UrlValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            case "6":
-                $columnName="ShortStringValue";
-                $controlName = "pps_".$columnName."_" . $productParamTypeId;
-                $controlId = "pps_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-            default:
-                $columnName="ShortStringValue";
-                $controlName = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlId = "ppi_".$columnName."_" . $productParamTypeId;
-                $controlValue = self::GetProductParamValue($arrProductParam,$productParamTypeId,$columnName);
-                $result = self::GenSpanControl($controlId, $controlName, $spanClass,$controlValue);
-                break;
-
-        }
-        return $result;
-    }
-
-    /**
-     * 生成产品参数显示框
-     * @param string $name 显示框name
-     * @param string $id 显示框id
-     * @param string $spanClass 显示框样式类名称
-     * @param string $value 显示框的值
-     * @return string 显示框html
-     */
-    public function GenSpanControl($id, $name, $spanClass, $value = "")
-    {
-        $result = '<span name="' . $name . '" id="' . $id . '" class="' . $spanClass . '" >'.$value.'</span>';
-        return $result;
-    }
-
-    /**
-     * 根据产品参数类型ID和产品参数类型对应值字段名称得到产品参数值
-     * @param array $arrProductParam 产品参数数组
-     * @param string $productParamTypeId 产品参数类型Id
-     * @param string $productParamColumnName 产品参数类型对应值字段名称
+     * 根据产品参数类型ID映射产品参数对应值到指定字段ParamTypeValue
+     * @param array $arrProductParamTypeList 产品参数原始数组
      * @return string 产品参数值
      */
-    public function GetProductParamValue($arrProductParam,$productParamTypeId,$productParamColumnName){
-        $productParamValue="";
-        for ($i = 0; $i < count($arrProductParam); $i++) {
-            if($productParamTypeId===$arrProductParam[$i]["ProductParamTypeId"])
-                $productParamValue=$arrProductParam[$i][$productParamColumnName];
+    public function MappingParamTypeValue(&$arrProductParamTypeList){
+        for ($i = 0; $i < count($arrProductParamTypeList); $i++) {
+            $paramValueType=$arrProductParamTypeList[$i]["ParamValueType"];
+            switch ($paramValueType) {
+                case "0":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["ShortStringValue"];
+                    break;
+                case "1":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["LongStringValue"];
+                    break;
+                case "2":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["MaxStringValue"];
+                    break;
+                case "3":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["FloatValue"];
+                    break;
+                case "4":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["MoneyValue"];
+                    break;
+                case "5":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["UrlValue"];
+                    break;
+                case "6":
+                    $paramTypeMappingValue = $arrProductParamTypeList[$i]["ShortStringValue"];
+                    break;
+                default:
+                    $paramTypeMappingValue = "";
+                    break;
+            }
+            $arrProductParamTypeList[$i]["ParamTypeValue"]=$paramTypeMappingValue;
         }
-        return $productParamValue;
     }
 
 }

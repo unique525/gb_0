@@ -41,17 +41,12 @@ class ChannelTemplateManageData extends BaseManageData
     /**
      * 普通模板
      */
-    //const CHANNEL_TEMPLATE_TYPE_NORMAL = 0;
+    const CHANNEL_TEMPLATE_TYPE_NORMAL = 0;
 
     /**
-     * 资讯详细页模板
+     * 动态模板
      */
-    //const CHANNEL_TEMPLATE_TYPE_DOCUMENT_NEWS_DETAIL = 1;
-
-    /**
-     * 活动详细页模板
-     */
-    //const CHANNEL_TEMPLATE_TYPE_ACTIVITY_DETAIL = 2;
+    const CHANNEL_TEMPLATE_TYPE_DYNAMIC = 1;
 
     /**
      * 状态：正常
@@ -149,9 +144,10 @@ class ChannelTemplateManageData extends BaseManageData
      * 取得当前频道下对应发布方式的模板
      * @param int $channelId 频道id
      * @param int $publishType 发布方式
+     * @param int $channelTemplateType 模板类型 0普通 1动态
      * @return array|null 发布模板
      */
-    public function GetListByPublishType($channelId, $publishType){
+    public function GetListByPublishType($channelId, $publishType, $channelTemplateType = ChannelTemplateManageData::CHANNEL_TEMPLATE_TYPE_NORMAL){
 
         $result = null;
 
@@ -161,10 +157,13 @@ class ChannelTemplateManageData extends BaseManageData
                 AND
                    State<".self::STATE_REMOVED."
                 AND
-                   PublishType = :PublishType;";
+                   PublishType = :PublishType
+                   ChannelTemplateType = :ChannelTemplateType
+                   ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("PublishType", $publishType);
+            $dataProperty->AddField("ChannelTemplateType", $channelTemplateType);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;

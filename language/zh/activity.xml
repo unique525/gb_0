@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root> 
-<module id="1"><content><![CDATA[失败，参数传递出错!]]></content></module>
+<module id="1"><content><![CDATA[失败，活动类型已存在!]]></content></module>
 <module id="2"><content><![CDATA[对不起，该活动您已报过名，请勿重复报名!]]></content></module>
 <module id="3"><content><![CDATA[移动成功!]]></content></module>
 <module id="4"><content><![CDATA[移动失败!]]></content></module>

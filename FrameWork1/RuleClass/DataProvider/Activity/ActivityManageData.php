@@ -36,8 +36,7 @@ class ActivityManageData extends BaseManageData{
     public function Modify($httpPostData,$activityId) {
         $dataProperty = new DataProperty();
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_Activity, self::TableId_Activity, $activityId, $dataProperty);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
     /**
@@ -46,14 +45,20 @@ class ActivityManageData extends BaseManageData{
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页大小
      * @param int $allCount 总大小
+     * @param string $searchKey 搜索关键字
      * @return array 活动数据集
      */
-    public function GetListPager($channelId, $pageBegin, $pageSize, &$allCount) {
+    public function GetListPager($channelId, $pageBegin, $pageSize, &$allCount, $searchKey) {
         $result=-1;
         if($channelId>0){
             $searchSql = "";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
+
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                $searchSql.=" AND ActivityTitle LIKE :SearchKey ";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
 
             $sql = "
                 SELECT

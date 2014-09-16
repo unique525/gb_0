@@ -28,6 +28,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "publish":
+                $result = self::AsyncPublish();
+                break;
             case "async_modify_sort":
                 $result = self::AsyncModifySort();
                 break;
@@ -533,13 +536,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 发布资讯详细页面
      * @return int 返回发布结果
      */
-    private function Publish(){
+    private function AsyncPublish(){
         $result = -1;
         $documentNewsId = Control::GetRequest("document_news_id", -1);
         if($documentNewsId>0){
             $publishQueueManageData = new PublishQueueManageData();
             $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData);
-            if($result == BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED){
+            if($result == BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED){
                 for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
                     $publishQueueManageData->Queue[$i]["Content"] = "";
                 }

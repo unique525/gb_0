@@ -6,7 +6,74 @@
 </head>
 <body>
 {common_body_deal}
-<script type="text/javascript" src="/system_js/manage/custom_form/custom_form_list.js"></script>
+<script type="text/javascript">
+    $("document").ready(function(){
+
+        var channelId = Request["channel_id"];
+        var channelName = Request["channel_name"];
+
+        $("#btn_select_all").click(function(event) {
+            event.preventDefault();
+            var inputSelect = $("[name='docinput']");
+            if (inputSelect.prop("checked")) {
+                inputSelect.prop("checked", false);//取消全选
+            } else {
+                inputSelect.prop("checked", true);//全选
+            }
+        });
+
+        var btnEdit = $(".btn_edit");
+        btnEdit.css("cursor", "pointer");
+        btnEdit.click(function(event) {
+            var customFormId = $(this).attr('idvalue');
+            event.preventDefault();
+            var pageIndex = parseInt(Request["p"]);
+            if (pageIndex <= 0) {
+                pageIndex = 1;
+            }
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=modify&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
+            parent.G_TabTitle = channelName + '-编辑表单';
+            parent.addTab();
+        });
+
+
+        var btnOpenCustomFormField = $(".btn_open_custom_form_field");
+        btnOpenCustomFormField.css("cursor", "pointer");
+        btnOpenCustomFormField.click(function(event) {
+            var customFormId = $(this).attr('idvalue');
+            event.preventDefault();
+            var pageIndex = parseInt(Request["p"]);
+            if (pageIndex <= 0||!pageIndex) {
+                pageIndex = 1;
+            }
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
+            parent.G_TabTitle = channelName + '-管理字段';
+            parent.addTab();
+        });
+
+
+        var btnOpenCustomFormRecord = $(".btn_open_custom_form_record");
+        btnOpenCustomFormRecord.css("cursor", "pointer");
+        btnOpenCustomFormRecord.click(function(event) {
+            var customFormId = $(this).attr('idvalue');
+            event.preventDefault();
+            var pageIndex = parseInt(Request["p"]);
+            if (pageIndex <= 0||!pageIndex) {
+                pageIndex = 1;
+            }
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
+            parent.G_TabTitle = channelName + '-查看数据';
+            parent.addTab();
+        });
+
+        $("#btn_create").click(function(event) {
+            event.preventDefault();
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=create' + '&channel_id=' +  channelId;
+            parent.G_TabTitle = channelName + '-新建表单';
+            parent.addTab();
+        });
+    });
+</script>
 <div  class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
