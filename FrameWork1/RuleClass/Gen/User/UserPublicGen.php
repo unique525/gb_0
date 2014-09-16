@@ -31,7 +31,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     public function GenPublic()
     {
         $result = "";
-        $method = Control::GetRequest("m", "");
+        $method = Control::GetRequest("a", "");
         switch ($method) {
             case "register":
                 $result = self::GenRegister();
