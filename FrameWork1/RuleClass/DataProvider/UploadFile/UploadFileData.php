@@ -91,6 +91,10 @@ class UploadFileData extends BaseData
      * 产品参数类型选项
      */
     const UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 47;
+    /**
+     * 产品组图
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_PIC = 48;
 
 
     /**
