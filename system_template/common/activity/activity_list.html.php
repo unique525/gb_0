@@ -17,8 +17,8 @@
 
         var channelId = Request["channel_id"];
         var siteId = Request["site_id"];
-        var channelName = Request["site_name"];
-        var siteName = parent.G_NowSiteName;
+        var channelName = Request["channel_name"];
+        var siteName = Request["site_name"];
         $("#btn_select_all").click(function (event) {
             event.preventDefault();
             var inputSelect = $("[name='doc_input']");
