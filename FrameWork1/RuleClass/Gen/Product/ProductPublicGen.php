@@ -79,8 +79,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $arrOne = $productManageData->GetOne($productId);
         Template::ReplaceOne($templateContent, $arrOne);
 
-        //参数类别列表模板替换
-        parent::ReplaceTemplate($templateContent);
+        //父模板替换
         $templateContent = parent::ReplaceTemplate($templateContent);
         //把对应ID的CMS标记替换成指定内容
         //替换子循环里的<![CDATA[标记
@@ -90,7 +89,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = str_ireplace("</item_child>", "</item>", $templateContent);
         $templateContent = str_ireplace("[CDATA]", "<![CDATA[", $templateContent);
         $templateContent = str_ireplace("[/CDATA]", "]]>", $templateContent);
-        //产品参数列表模板替换
+        //子模板替换
         $templateContent = parent::ReplaceTemplate($templateContent);
 
 
