@@ -5,10 +5,13 @@
     {common_head}
     <script type="text/javascript">
         $("document").ready(function(){
+            var channelId = Request["channel_id"];
+            var channelName = Request["channel_name"];
+
             $("#btn_create_custom_form_record").click(function(event) {
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=create&custom_form_id={CustomFormId}';
-                parent.G_TabTitle = parent.G_SelectedChannelName + '-新增记录';
+                parent.G_TabTitle = channelName + '-新增记录';
                 parent.addTab();
             });
 
@@ -17,8 +20,8 @@
             btnEdit.click(function(event) {
                 var customFormRecordId = $(this).attr('idvalue');
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=modify&custom_form_id={CustomFormId}&custom_form_record_id=' + customFormRecordId + '&channel_id=' + parent.G_SelectedChannelId;
-                parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑记录';
+                parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=modify&custom_form_id={CustomFormId}&custom_form_record_id=' + customFormRecordId + '&channel_id=' + channelId;
+                parent.G_TabTitle = channelName + '-编辑记录';
                 parent.addTab();
             });
 
