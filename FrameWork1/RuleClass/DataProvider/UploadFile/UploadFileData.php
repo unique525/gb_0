@@ -195,6 +195,16 @@ class UploadFileData extends BaseData
 
 
     /**
+     * 分类信息 题图1
+     */
+    const UPLOAD_TABLE_TYPE_INFORMATION_TITLE_PIC_1 = 130;
+    /**
+     * 分类信息 内容图
+     */
+    const UPLOAD_TABLE_TYPE_INFORMATION_CONTENT = 135;
+
+
+    /**
      * 上传文件增加到数据表
      * @param string $uploadFileName 文件名
      * @param int $uploadFileSize 文件大小
