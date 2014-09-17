@@ -457,9 +457,9 @@ class BaseData
      */
     const TableName_ProductPic = "cst_product_pic";
     /**
-     * 产品送货价格 数据表自增字段名
+     * 产品图片 数据表自增字段名
      */
-    const TableId_ProductPic = "ProductSendPic";
+    const TableId_ProductPic = "ProductPicId";
 
 
     /**
