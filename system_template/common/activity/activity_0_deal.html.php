@@ -199,7 +199,7 @@ function submitForm(continueCreate) {
                                         <tr>
                                             <td style="height:35px;">文件上传：</td>
                                             <td align="left">
-                                                <input id="file_upload_to_content" name="file_upload_to_content" type="file" class="input_box" size="7" style="width:60%; background: #ffffff;" /> <img id="loading" src="/system_template/common/images/loading1.gif" style="display:none;" /><input id="btnUploadToContent" type="button" value="上传" />
+                                                <input id="file_upload_to_content" name="file_upload_to_content" type="file" class="input_box" size="7" style="width:60%; background: #ffffff;" /> <img id="loading" src="/system_template/common/images/spinner2.gif" style="display:none;" /><input id="btnUploadToContent" type="button" value="上传" />
                                             </td>
                                         </tr>
                                         <tr>
