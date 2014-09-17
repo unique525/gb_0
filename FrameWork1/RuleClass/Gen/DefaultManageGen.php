@@ -135,6 +135,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $productPriceManageGen = new ProductPriceManageGen();
                     $result = $productPriceManageGen->Gen();
                     break;
+                case "product_pic":
+                    $productPicManageGen = new ProductPicManageGen();
+                    $result = $productPicManageGen->Gen();
+                    break;
                 case "activity":
                     $ActivityManageGen = new ActivityManageGen();
                     $result = $ActivityManageGen->Gen();
