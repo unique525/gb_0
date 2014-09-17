@@ -156,8 +156,8 @@ class ProductPriceManageGen extends BaseManageGen implements IBaseManageGen
         $order = Control::GetRequest("order", "");
 
         if ($productId > 0) {
-            $productManageData = new ProductPriceManageData();
-            $result = $productManageData->GetList($productId, $order ,$pageSize);
+            $productPriceManageData = new ProductPriceManageData();
+            $result = $productPriceManageData->GetList($productId, $order ,$pageSize);
             $result = json_encode($result);
         }
         return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . '})';

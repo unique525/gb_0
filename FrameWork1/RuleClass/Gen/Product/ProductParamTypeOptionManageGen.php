@@ -149,7 +149,7 @@ class ProductParamTypeOptionManageGen extends BaseManageGen implements IBaseMana
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
 
-        if ($pageIndex > 0) {
+        if ($pageIndex > 0 && $productParamTypeId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "product_param_type_option_list";
             $allCount = 0;

@@ -1,5 +1,5 @@
 /**
- * ProductParamTypeOption
+ * ProductPic
  */
 $(function() {
     //$(document).tooltip()会使title属性失效;
@@ -7,13 +7,13 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        var productParamTypeId = Request["product_param_type_id"];
+        var productId = Request["product_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_param_type_option&m=create&product_param_type_id='+productParamTypeId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_pic&m=create&product_id='+productId+'&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -21,7 +21,7 @@ $(function() {
             height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'题目新增',
+            title:'图片新增',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -30,13 +30,13 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
-        var productParamTypeId = $(this).attr('idvalue');
+        var productPicId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_param_type_option&m=modify&product_param_type_option_id=' + productParamTypeId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_pic&m=modify&product_pic_id=' + productPicId + '&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -59,19 +59,19 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).html(FormatProductParamTypeOptionState($(this).attr("title")));
+        $(this).html(FormatProductPicState($(this).attr("title")));
     });
 
     $(".div_start").click(function(){
         var idvalue = $(this).attr("idvalue");
         var state = "0";
-        ModifyProductParamTypeOptionState(idvalue,state);
+        ModifyProductPicState(idvalue,state);
     });
 
     $(".div_stop").click(function(){
         var idvalue = $(this).attr("idvalue");
         var state = "100";
-        ModifyProductParamTypeOptionState(idvalue,state);
+        ModifyProductPicState(idvalue,state);
     });
 });
 
@@ -79,7 +79,7 @@ $(function() {
  * 格式化状态值
  * @return {string}
  */
-function FormatProductParamTypeOptionState(state){
+function FormatProductPicState(state){
     switch (state){
         case "0":
             return "启用";
@@ -93,12 +93,12 @@ function FormatProductParamTypeOptionState(state){
     }
 }
 
-function ModifyProductParamTypeOptionState(idvalue, state) {
+function ModifyProductPicState(idvalue, state) {
     $("#span_state_" + idvalue).html("<img src='/system_template/common/images/loading1.gif' />");
 
     //多行操作
     var id = "";
-    var voteItemInput = $('input[name=product_param_type_option_input]');
+    var voteItemInput = $('input[name=product_pic_input]');
     voteItemInput.each(function() {
         if (this.checked) {
             id = id + ',' + $(this).val();
@@ -107,24 +107,24 @@ function ModifyProductParamTypeOptionState(idvalue, state) {
     if (id.length > 0) {
         voteItemInput.each(function() {
             if (this.checked) {
-                _ModifyProductParamTypeOptionState($(this).val(), state);
+                _ModifyProductPicState($(this).val(), state);
             }
         });
     }
     else {
-        _ModifyProductParamTypeOptionState(idvalue, state);
+        _ModifyProductPicState(idvalue, state);
     }
 }
 
-function _ModifyProductParamTypeOptionState(idvalue, state) {
+function _ModifyProductPicState(idvalue, state) {
     $.ajax({
-        url:"/default.php?secu=manage&mod=product_param_type_option&m=async_modify_state",
-        data:{state:state,product_param_type_option_id:idvalue},
+        url:"/default.php?secu=manage&mod=product_pic&m=async_modify_state",
+        data:{state:state,product_pic_id:idvalue},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
             if (parseInt(data["result"]) > 0) {
-                $("#span_state_" + idvalue).html(FormatProductParamTypeOptionState(state));
+                $("#span_state_" + idvalue).html(FormatProductPicState(state));
             }
             else alert("修改失败，请联系管理员");
         }
