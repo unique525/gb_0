@@ -210,11 +210,11 @@ class BaseManageGen extends BaseGen
 
     /**
      * 替换内容
-     * @param int $channelId 频道id
+     * @param int $siteId 频道id
      * @param string $channelTemplateContent 模板内容
      * @return mixed|string 内容模板
      */
-    private function ReplaceTemplate($channelId, $channelTemplateContent)
+    private function ReplaceTemplate($siteId, $channelTemplateContent)
     {
         /** 1.处理预加载模板 */
 
@@ -245,15 +245,32 @@ class BaseManageGen extends BaseGen
 
                 switch ($tagType) {
                     case Template::TAG_TYPE_CHANNEL_LIST :
-                        $channelId = intval(str_ireplace("channel_", "", $tagId));
-                        if ($channelId > 0) {
-                            $channelTemplateContent = self::ReplaceTemplateOfChannelList($channelTemplateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder);
+                        $siteId = intval(str_ireplace("site_", "", $tagId));
+                        if ($siteId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfChannelList(
+                                $channelTemplateContent,
+                                $siteId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder
+                            );
                         }
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
-                        $documentNewsId = intval(str_ireplace("channel_", "", $tagId));
-                        if ($documentNewsId > 0) {
-                            $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsList($channelTemplateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($channelId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsList(
+                                $channelTemplateContent,
+                                $channelId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
                         }
                         break;
                 }
@@ -265,7 +282,7 @@ class BaseManageGen extends BaseGen
     /**
      * 替换频道列表的内容
      * @param string $channelTemplateContent 要处理的模板内容
-     * @param int $channelId 频道id
+     * @param int $siteId 站点id
      * @param string $tagId 标签id
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
@@ -275,7 +292,7 @@ class BaseManageGen extends BaseGen
      */
     private function ReplaceTemplateOfChannelList(
         $channelTemplateContent,
-        $channelId,
+        $siteId,
         $tagId,
         $tagContent,
         $tagTopCount,
@@ -283,12 +300,12 @@ class BaseManageGen extends BaseGen
         $tagOrder
     )
     {
-        if ($channelId > 0) {
+        if ($siteId > 0) {
             $arrChannelList = null;
             switch ($tagWhere) {
                 case "parent":
                     $channelManageData = new ChannelManageData();
-                    $arrChannelList = $channelManageData->GetListByParentId($channelId, $tagTopCount, $tagOrder);
+                    $arrChannelList = $channelManageData->GetListByParentId($siteId, $tagTopCount, $tagOrder);
                     break;
             }
             if (!empty($arrChannelList)) {
@@ -367,7 +384,7 @@ class BaseManageGen extends BaseGen
         $channelTemplateContent,
         $publishType,
         $publishFileName,
-        PublishQueueManageData $publishQueueManageData,
+        PublishQueueManageData &$publishQueueManageData,
         $publishPath = ''
     )
     {
@@ -375,6 +392,7 @@ class BaseManageGen extends BaseGen
 
         if ($channelId > 0) {
             switch ($publishType) {
+
                 case ChannelTemplateManageData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL: //资讯详细页模板
                     $destinationPath = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName;
                     break;
@@ -411,9 +429,6 @@ class BaseManageGen extends BaseGen
         $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
-
-
-
 
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
@@ -502,12 +517,13 @@ class BaseManageGen extends BaseGen
 
                 //循环Rank进行发布
                 while ($rank >= 0) {
+
                     $timeStart = Control::GetMicroTime();
                     $publishType = ChannelTemplateManageData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL;
 
                     $arrChannelTemplateList = $channelTemplateManageData->GetListByPublishType($nowChannelId, $publishType);
                     $timeEnd = Control::GetMicroTime();
-print_r($arrChannelTemplateList);
+
                     //传输日志 取得模板
                     $publishLogManageData->Create(
                         PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
@@ -575,12 +591,14 @@ print_r($arrChannelTemplateList);
                             );
                         }
                     }
-                    $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
 
+
+                    $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
                     $rank--;
                 }
 
                 if($executeTransfer){
+
                     $timeStart = Control::GetMicroTime();
                     self::TransferPublishQueue($publishQueueManageData, $siteId);
                     $timeEnd = Control::GetMicroTime();

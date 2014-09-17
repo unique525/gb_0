@@ -52,7 +52,7 @@ $(function() {
     //产品参数类型管理
     var btnOptionList=$(".btn_open_product_param_type_option_list");
     btnOptionList.each(function(){
-        $(this).html(FormatParamTypeOption($(this).attr("title")));
+        $(this).html(FormatParamType($(this).attr("title")));
     });
     btnOptionList.click(function(event) {
         event.preventDefault();
@@ -148,7 +148,7 @@ function FormatParamValueType(paramValueType){
  * 根据产品参数类型选择是否生成参数类型选项链接
  * @return {string}
  */
-function FormatParamTypeOption(paramValueType){
+function FormatParamType(paramValueType){
     switch (paramValueType){
         case "0":
             return "";

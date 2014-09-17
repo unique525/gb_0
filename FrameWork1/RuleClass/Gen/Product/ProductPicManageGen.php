@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 产品参数类别后台管理生成类
+ * 产品价格后台管理生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Product
+ * @package iCMS_Rules_Gen_ProductPic
  * @author yanjiuyuan
  */
-class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManageGen
+class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
 {
 
     /**
@@ -37,68 +37,65 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 生成产品参数类别管理新增页面
+     * 生成产品价格管理新增页面
      * @return mixed|string
      */
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
-        $siteId = Control::GetRequest("site_id", 0);
-        $channelId = Control::GetRequest("channel_id", 0);
+        $productId = Control::GetRequest("product_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
-        $tempContent = Template::Load("product/product_param_type_class_deal.html", "common");
-        if ($manageUserId > 0) {
+        $tempContent = Template::Load("product/product_pic_deal.html", "common");
+        $resultJavaScript = "";
+        if ($productId > 0 && $manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
-            $productManageData = new ProductParamTypeClassManageData();
+            $productPicManageData = new ProductPicManageData();
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $productParamTypeClassId = $productManageData->Create($httpPostData);
+                $ProductPicId = $productPicManageData->Create($httpPostData);
 
                 //加入操作日志
-                $operateContent = 'Create ProductParamTypeClass,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeClassId:' . $productParamTypeClassId;
+                $operateContent = 'Create ProductPic,POST FORM:' . implode('|', $_POST) . ';\r\nResult:ProductPicId:' . $ProductPicId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($productParamTypeClassId > 0) {
+                if ($ProductPicId > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('product', 1));
-                    $jsCode = 'parent.location.href=parent.location.href';
-                    Control::RunJavascript($jsCode);
+                    //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1));
+                    $resultJavaScript .= '<' . 'script type="text/javascript">parent.location.href=parent.location.href;</script>';
                 } else {
-                    Control::ShowMessage(Language::Load('product', 2));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 2)); //新增失败！
                 }
-                return "";
             }
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
             $tempContent = str_ireplace("{CreateDate}",date("Y-m-d H:i:s"), $tempContent);
             $tempContent = str_ireplace("{ManageUserId}", strval($manageUserId), $tempContent);
-            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
-            $tempContent = str_ireplace("{ChannelId}", strval($channelId), $tempContent);
-            $tempContent = str_ireplace("{IpMaxCount}", "10", $tempContent);
-            $fieldsOfProduct = $productManageData->GetFields();
-            parent::ReplaceWhenCreate($tempContent, $fieldsOfProduct);
+            $tempContent = str_ireplace("{ProductId}", strval($productId), $tempContent);
+            $fieldsOfProductPic = $productPicManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfProductPic);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
 
         }
         return $tempContent;
     }
 
     /**
-     * 修改产品参数类别状态
+     * 修改投票状态
      * @return string 修改结果
      */
     private function AsyncModifyState()
     {
         //$result = -1;
-        $productParamTypeClassId = Control::GetRequest("product_param_type_class_id", 0);
+        $ProductPicId = Control::GetRequest("product_pic_id", 0);
         $state = Control::GetRequest("state",0);
-        if ($productParamTypeClassId > 0) {
-            $productData = new ProductParamTypeClassManageData();
-            $result = $productData->ModifyState($productParamTypeClassId,$state);
+        if ($ProductPicId > 0) {
+            $productData = new ProductPicManageData();
+            $result = $productData->ModifyState($ProductPicId,$state);
             //加入操作日志
-            $operateContent = 'ModifyState ProductParamTypeClass,Get FORM:' . implode('|', $_GET) . ';\r\nResult:productParamTypeClassId:' . $productParamTypeClassId;
+            $operateContent = 'ModifyState ProductPic,Get FORM:' . implode('|', $_GET) . ';\r\nResult:ProductPicId:' . $ProductPicId;
             self::CreateManageUserLog($operateContent);
         } else {
             $result = -1;
@@ -107,35 +104,35 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
     }
 
     /**
-     * 生成产品参数类别修改页面
+     * 生成产品价格修改页面
      * @return mixed|string
      */
     private function GenModify()
     {
-        $tempContent = Template::Load("product/product_param_type_class_deal.html", "common");
-        $productParamTypeClassId = Control::GetRequest("product_param_type_class_id", 0);
+        $manageUserId = Control::GetManageUserId();
+        $tempContent = Template::Load("product/product_pic_deal.html", "common");
+        $resultJavaScript="";
+        $ProductPicId = Control::GetRequest("product_pic_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         parent::ReplaceFirst($tempContent);
-        $productManageData = new ProductParamTypeClassManageData();
-        if ($productParamTypeClassId > 0) {
+        $productPicManageData = new ProductPicManageData();
+        if ($ProductPicId >0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
-                $result = $productManageData->Modify($httpPostData, $productParamTypeClassId);
+                $result = $productPicManageData->Modify($httpPostData, $ProductPicId);
 
                 //加入操作日志
-                $operateContent = 'Modify ProductParamTypeClass,POST FORM:' . implode('|', $_POST) . ';\r\nResult:productParamTypeClassId:' . $productParamTypeClassId;
+                $operateContent = 'Modify ProductPic,POST FORM:' . implode('|', $_POST) . ';\r\nResult:ProductPicId:' . $ProductPicId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
                     //javascript 处理
-                    Control::ShowMessage(Language::Load('product', 3));
-                    $jsCode = 'parent.location.href=parent.location.href';
-                    Control::RunJavascript($jsCode);
+                    $resultJavaScript .= '<' . 'script type="text/javascript">parent.location.href=parent.location.href;</script>';
                 } else {
-                    Control::ShowMessage(Language::Load('product', 4));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 4)); //修改失败！
                 }
             }
-            $arrList = $productManageData->GetOne($productParamTypeClassId);
+            $arrList = $productPicManageData->GetOne($ProductPicId);
             Template::ReplaceOne($tempContent, $arrList, false);
             $tempContent = str_ireplace("{PageIndex}", strval($pageIndex), $tempContent);
         }
@@ -143,37 +140,34 @@ class ProductParamTypeClassManageGen extends BaseManageGen implements IBaseManag
         $patterns = '/\{s_(.*?)\}/';
         $tempContent = preg_replace($patterns, "", $tempContent);
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
     /**
-     * 产品参数类别管理列表页面
+     * 产品图片管理列表页面
      * @return mixed|string
      */
-    private function GenList()
-    {
-
-        $templateContent = Template::Load("product/product_param_type_class_list.html", "common");
-
-        $siteId = Control::GetRequest("site_id", 0);
-        $channelId = Control::GetRequest("channel_id", 0);
+    private function GenList() {
+        $templateContent = Template::Load("product/product_pic_list.html", "common");
+        $ProductId = Control::GetRequest("product_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
-        $pageIndex = Control::GetRequest("p", 1);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
+        $pageIndex = Control::GetRequest("p", 1);
 
-        if ($pageIndex > 0 && $channelId > 0) {
+        if ($pageIndex > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "product_param_type_class_list";
+            $tagId = "product_pic_list";
             $allCount = 0;
-            $productManageData = new ProductParamTypeClassManageData();
-            $arrList = $productManageData->GetListForPager($siteId, $channelId, $pageBegin, $pageSize, $allCount, $searchKey);
+            $productPicManageData = new ProductPicManageData();
+            $arrList = $productPicManageData->GetListForPager($ProductId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
                 $isJs = FALSE;
-                $navUrl = "/default.php?secu=manage&mod=product_param_type_class&m=list&site_id=$siteId&channel_id=$channelId&p={0}&ps=$pageSize";
+                $navUrl = "/default.php?secu=manage&mod=product_pic&m=list&product_id=$ProductId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

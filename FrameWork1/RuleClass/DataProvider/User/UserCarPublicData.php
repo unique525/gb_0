@@ -11,7 +11,7 @@ class UserCarPublicData extends BasePublicData
     public function GetList($userId){
         $result = null;
         if($userId > 0){
-            $sql = "SELECT uc.*,p.ProductName,pp.ProductPriceValue,pp.ProductUnit,pp.ProductPriceIntro,psp.SendPrice
+            $sql = "SELECT uc.*,(uc.BuyCount*pp.ProductPriceValue+psp.SendPrice) AS BuyPrice,p.ProductName,pp.ProductPriceValue,pp.ProductUnit,pp.ProductPriceIntro,psp.SendPrice
                     FROM ".self::TableName_UserCar." uc,".self::TableName_ProductPrice." pp,"
                     .self::TableName_Product." p,".self::TableName_ProductSendPrice." psp
                     WHERE uc.ProductPriceId = pp.ProductPriceId

@@ -150,7 +150,7 @@ class ProductParamTypeManageGen extends BaseManageGen implements IBaseManageGen 
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
 
-        if ($pageIndex > 0) {
+        if ($pageIndex > 0 && $productParamTypeClassId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "product_param_type_list";
             $allCount = 0;

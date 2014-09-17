@@ -3,17 +3,25 @@
  * 前台管理 会员购物车 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
- * Time: 下午12:09
+ * @author yin
  */
 class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
 
-    //修改购买数量成功
+    /**
+     * 修改购买数量成功
+     */
     const MODIFY_BuyCount_SUCCESS = 1;
-    //修改购买数量失败
+    /**
+     * 修改购买数量失败
+     */
     const MODIFY_BuyCount_FAIL = -1;
-    //删除购物车产品成功
+    /**
+     * 删除购物车产品成功
+     */
     const DELETE_SUCCESS = 1;
-    //删除购物车产品失败
+    /**
+     * 删除购物车产品失败
+     */
     const DELETE_FAIL = -1;
     /**
      * 引导方法
@@ -43,7 +51,6 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateFileUrl = "user/user_car.html";
         $templateName = "default";
         $templatePath = "front_template";
-        Control::SetUserCookie(1,"test");
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
         if($userId > 0){
@@ -51,7 +58,11 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
             $tagId = "user_car";
 
-            Template::ReplaceList($templateContent,$arrUserCarProductList,$tagId);
+            if(count($arrUserCarProductList) > 0){
+                Template::ReplaceList($templateContent,$arrUserCarProductList,$tagId);
+            }else{
+                Template::RemoveCustomTag($templateContent, $tagId);
+            }
         }else{
 
         }
@@ -76,7 +87,6 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function AsyncModifyBuyCount(){
-        Control::SetUserCookie(1,"test");
         $userCarId = intval(Control::GetRequest("user_car_id",0));
         $buyCount = intval(Control::GetRequest("buy_count",0));
         $userId = intval(Control::GetUserId());

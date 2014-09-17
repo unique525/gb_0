@@ -23,10 +23,14 @@
                         jsonp:"jsonpcallback",
                         success:function(data){
                             if(data["result"] == -1){
-                                alert("失败");
+                                //失败
                             }else{
-                                alert("成功");
+                                //成功
                                 $("#buy_count_"+user_car_id).val(buy_count);
+                                var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                                var send_price = parseFloat($("#send_price_"+user_car_id).html());
+                                var buy_price = buy_count*product_price+send_price;
+                                $("#buy_price_"+user_car_id).html(formatPrice(buy_price));
                             }
                         }
                     });
@@ -44,10 +48,14 @@
                     jsonp:"jsonpcallback",
                     success:function(data){
                         if(data["result"] == -1){
-                            alert("失败");
+                            //失败
                         }else{
-                            alert("成功");
+                            //成功
                             $("#buy_count_"+user_car_id).val(buy_count);
+                            var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                            var send_price = parseFloat($("#send_price_"+user_car_id).html());
+                            var buy_price = buy_count*product_price+send_price;
+                            $("#buy_price_"+user_car_id).html(formatPrice(buy_price));
                         }
                     }
                 });
@@ -63,10 +71,14 @@
                     jsonp:"jsonpcallback",
                     success:function(data){
                         if(data["result"] == -1){
-                            alert("失败");
+                            //失败
                         }else{
-                            alert("成功");
+                            //成功
                             $("#buy_count_"+user_car_id).val(buy_count);
+                            var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                            var send_price = parseFloat($("#send_price_"+user_car_id).html());
+                            var buy_price = buy_count*product_price+send_price;
+                            $("#buy_price_"+user_car_id).html(formatPrice(buy_price));
                         }
                     }
                 });
@@ -81,9 +93,10 @@
                     jsonp:"jsonpcallback",
                     success:function(data){
                         if(data["result"] == -1){
-                            alert("失败");
+                            //失败
                         }else{
-                            alert("成功");
+                            //成功
+                            location.replace(location);
                         }
                 }
             });
@@ -99,10 +112,12 @@
             <img src=""/>|
             {f_ProductName}|
             {f_ProductPriceIntro}|
-            {f_ProductPriceValue}|
+            <span id="product_price_value_{f_UserCarId}">{f_ProductPriceValue}|</span>
             <span class="minus_count" id="minus_{f_UserCarId}" idvalue="{f_UserCarId}" style="cursor:pointer">-</span>
             <input class="input_buy_count" id="buy_count_{f_UserCarId}" idvalue="{f_UserCarId}" type="text" size="2" value="{f_BuyCount}"/>
             <span class="add_count" id="add_{f_UserCarId}" idvalue="{f_UserCarId}" style="cursor:pointer">+</span>|
+            <span id="send_price_{f_UserCarId}">{f_SendPrice}</span>|
+            <span id="buy_price_{f_UserCarId}">{f_BuyPrice}</span>|
             <span class="delete_product" idvalue="{f_UserCarId}" style="cursor:pointer">删除</span>
             <br/>
             -------------<br/>

@@ -158,8 +158,10 @@ class ChannelTemplateManageData extends BaseManageData
                    State<".self::STATE_REMOVED."
                 AND
                    PublishType = :PublishType
+                AND
                    ChannelTemplateType = :ChannelTemplateType
                    ;";
+
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("PublishType", $publishType);
