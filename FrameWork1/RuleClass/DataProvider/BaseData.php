@@ -436,6 +436,14 @@ class BaseData
      * 产品价格 数据表自增字段名
      */
     const TableId_ProductPrice = "ProductPriceId";
+    /**
+     * 产品图片表 数据表名
+     */
+    const TableName_ProductPic = "cst_product_pic";
+    /**
+     * 产品价格 数据表自增字段名
+     */
+    const TableId_ProductPic = "ProductPicId";
 
 
     /**
