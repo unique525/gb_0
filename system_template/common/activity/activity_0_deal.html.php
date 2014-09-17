@@ -3,9 +3,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 {common_head}
-    <script type="text/javascript" src="/system_js/manage/Activity/city.js" ></script>
-    <script type="text/javascript" src="/system_js/manage/Activity/datepicker/Wdatepicker.js" ></script>
-    <script type="text/javascript" src="/system_js/manage/Activity/Activity.js" ></script>
+    <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
+    <script type="text/javascript" src="/system_js/color_picker.js"></script>
+    <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+    <script type="text/javascript" src="/system_js/upload_file.js"></script>
+
+    <script type="text/javascript" src="/system_js/manage/activity/city.js" ></script>
+    <script type="text/javascript" src="/system_js/manage/activity/activity.js" ></script>
     <script type="text/javascript">
 
 
@@ -15,8 +19,130 @@
             GetTimes("ApplyEndDate","{ApplyEndDate}");
 
         });
-    </script>
 
+
+    </script>
+<script type="text/javascript">
+<!--
+var editor;
+var batchAttachWatermark = "0";
+
+var tableType = window.UPLOAD_TABLE_TYPE_ACTIVITY_PIC;
+var tableId = '{ChannelId}';
+
+$(function(){
+
+    if ($.browser.msie) {
+        $('input:checkbox').click(function () {
+            this.blur();
+            this.focus();
+        });
+    }
+
+    var editorHeight = $(window).height() - 220;
+    editorHeight = parseInt(editorHeight);
+
+    var f_ActivityContent = $('#f_ActivityContent');
+
+    editor = f_ActivityContent.xheditor({
+        tools:'full',
+        height:editorHeight,
+        upImgUrl:"",
+        upImgExt:"jpg,jpeg,gif,png",
+        localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+        remoteImgSaveUrl:''
+    });
+
+
+    $('#tabs').tabs();
+
+    //日期控件
+    $(".GetDate").datepicker({
+        dateFormat: 'yy-mm-dd',
+        numberOfMonths: 3,
+        showButtonPanel: true
+    });
+
+
+
+
+
+
+//远程抓图
+    var cbSaveRemoteImage = $("#cbSaveRemoteImage");
+    cbSaveRemoteImage.change(function(){
+        if(cbSaveRemoteImage.prop("checked")==true){
+
+            f_ActivityContent.xheditor(false);
+
+            editor = f_ActivityContent.xheditor({
+                tools:'full',
+                height:editorHeight,
+                upImgUrl:"",
+                upImgExt:"jpg,jpeg,gif,png",
+                localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl:'/default.php?mod=upload_file&a=async_save_remote_image&table_type='+tableType+'&table_id='+tableId
+            });
+
+        }else{
+
+            f_ActivityContent.xheditor(false);
+
+            editor = $('#f_ActivityContent').xheditor({
+                tools:'full',
+                height:editorHeight,
+                upImgUrl:"",
+                upImgExt:"jpg,jpeg,gif,png",
+                localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl:''
+            });
+        }
+    });
+
+//文件上传
+    var btnUploadToContent = $("#btnUploadToContent");
+    btnUploadToContent.click(function(){
+
+        var fileElementId = 'file_upload_to_content';
+        var fUploadFile = $("#f_UploadFiles");
+
+        var attachWatermark = 0;
+        if($("#attachwatermark").attr("checked")==true){
+            attachWatermark = 1;
+        }
+        AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+    });
+
+
+
+
+});
+
+
+//提交
+function submitForm(continueCreate) {
+    var submit=1;
+    if ($('#f_ActivityTitle').val() == '') {
+        $("#dialog_box").dialog({width: 300, height: 100});
+        $("#dialog_content").html("请输入活动名称");
+        submit=0;
+    }
+    if(submit==1) {
+        //处理时间
+        SetTimes("BeginDate");
+        SetTimes("EndDate");
+        SetTimes("ApplyBeginDate");
+        SetTimes("ApplyEndDate");
+        if (continueCreate == 1) {
+            $("#CloseTab").val("0");
+        } else {
+            $("#CloseTab").val("1");
+        }
+        $('#main_form').submit();
+    }
+}
+-->
+</script>
     </head>
     <body>
     {common_body_deal}
@@ -29,8 +155,8 @@
             <input type="hidden" id="f_ManageUserName" name="f_ManageUserName" value="{ManageUserName}" />
             <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
             <input type="hidden" id="f_UserId" name="f_UserId" value="{UserId}" />
-            <input type="hidden" id="f_UserName" name="f_UserName" value="{UserName}" />
             <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+            <input type="hidden" id="f_UploadFiles" name="UploadFiles" value="" />
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class="spe_line" height="40" align="right">
@@ -48,31 +174,52 @@
                 </ul>
                 <div id="tabs-1">
                     <div class="spe_line" style="line-height: 40px;text-align: left;">
-                        <table width="750px" border="0" cellspacing="0" cellpadding="0">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                                <td style="width:100px;"><label for="f_ActivityTitle">活动标题：</label></td>
-                                <td>
-                                    <input type="text" class="input_box" id="f_ActivityTitle" name="f_ActivityTitle" value="{ActivityTitle}" style=" width: 350px;font-size:14px;" maxlength="200" />
-                                </td>
-                                <td style="width:300px;" colspan="2"><div id="CustomWidget" style="display:none;">
-                                        <div id="ColorSelector2"><div style="background-color: #000000"></div></div>
-                                        <div id="ColorPickerHolder2">
-                                        </div>
-                                    </div>
+                                <td style=" width: 60px;"><label for="f_ActivityTitle">标题：</label></td>
+                                <td style=" width: 600px;">
+                                    <input type="text" class="input_box" id="f_ActivityTitle" name="f_ActivityTitle" value="{ActivityTitle}" style="width:480px;font-size:14px; background-color: #ffffff;" maxlength="200" />
                                 </td>
                             </tr>
+
                         </table>
                     </div>
-                    <div  class="spe_line" style="line-height: 40px;text-align: left;">
-                        <table width="750px" border="0" cellspacing="0" cellpadding="0">
+                    <div style=" margin-top:3px;">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                                <td><label for="f_ActivityContent">活动内容：</label></td>
-                            </tr>
-                            <tr>
-                                <td width="98%"><textarea id="f_ActivityContent" name="f_ActivityContent" style=" width: 100%;">{ActivityContent}</textarea></td>
+                                <td width="75%"><label for="f_ActivityContent"></label><textarea class="mceEditor" id="f_ActivityContent" name="f_ActivityContent" style=" width: 100%;">{ActivityContent}</textarea></td>
+                                <td style="vertical-align:top;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
+                                        <tr>
+                                            <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label for="f_UserName">发布人：</label></td>
+                                            <td class="spe_line" style="text-align: left">
+                                                <input type="text" class="input_box" id="f_UserName" name="f_UserName" value="{UserName}" style="width:95%;font-size:14px;" maxlength="50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:35px;">文件上传：</td>
+                                            <td align="left">
+                                                <input id="file_upload_to_content" name="file_upload_to_content" type="file" class="input_box" size="7" style="width:60%; background: #ffffff;" /> <img id="loading" src="/system_template/common/images/loading1.gif" style="display:none;" /><input id="btnUploadToContent" type="button" value="上传" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
+                                            <td align="left">
+                                                <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" /> (只支持jpg或jpeg图片)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
+                                            <td align="left">
+                                                <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" /> (只支持jpg、jpeg、gif、png图片)
+                                            </td>
+                                        </tr>
+                                    </table>
+
+
+                                </td>
                             </tr>
                         </table>
-
                     </div>
                 </div>
                 <div id="tabs-2">
@@ -154,13 +301,13 @@
                         <tr>
                             <td class="spe_line" style="height:35px;text-align: right;width:160px;"><label for="f_BeginDate">活动开始时间：</label></td>
                             <td class="spe_line" colspan="3" style="text-align: left;width:550px;">
-                                <input type="text" class="WDate" id="f_BeginDate" name="f_BeginDate" value="{BeginDate}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="GetDate" id="f_BeginDate" name="f_BeginDate" value="{BeginDate}"  style=" width: 85px;font-size:14px;" maxlength="20"  />
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_BeginDateShowHour"  maxlength="2" value=""/><label for="f_BeginDateShowHour">时</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_BeginDateShowMinute"   maxlength="2" value=""  /><label for="f_BeginDateShowMinute">分</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_BeginDateShowSecond"   maxlength="2" value=""  /><label for="f_BeginDateShowSecond">秒</label>
 
                                 <label for="f_EndDate">至</label>
-                                <input type="text" class="WDate" id="f_EndDate" name="f_EndDate" value="{EndDate}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="GetDate" id="f_EndDate" name="f_EndDate" value="{EndDate}"  style=" width: 85px;font-size:14px;" maxlength="20"  />
                                   <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndDateShowHour"  maxlength="2"    value="" />  <label for="f_EndDateShowHour">时</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndDateShowMinute"   maxlength="2" value="" /><label for="f_EndDateShowMinute">分</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_EndDateShowSecond"   maxlength="2" value="" /><label for="f_EndDateShowSecond">秒</label>
@@ -170,7 +317,7 @@
                         <tr>
                             <td class="spe_line" style="width:160px;height:35px;text-align: right;"><label for="f_ApplyEndDate">活动报名截止时间：</label></td>
                             <td colspan="3" class="spe_line" style="text-align: left">
-                                <input type="text" class="WDate" id="f_ApplyEndDate" name="f_ApplyEndDate" value="{ApplyEndDate}" onClick="WdatePicker()" style=" width: 85px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="GetDate" id="f_ApplyEndDate" name="f_ApplyEndDate" value="{ApplyEndDate}"  style=" width: 85px;font-size:14px;" maxlength="20"  />
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ApplyEndDateShowHour"  maxlength="2"    value="" />  <label for="f_ApplyEndDateShowHour">时</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ApplyEndDateShowMinute"   maxlength="2" value="" /><label for="f_ApplyEndDateShowMinute">分</label>
                                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ApplyEndDateShowSecond"   maxlength="2" value="" /><label for="f_ApplyEndDateShowSecond">秒</label>
@@ -212,15 +359,15 @@
                         </tr>
                     </table>
 
-                </div>
-                <div class="spe_line" style="line-height:35px">
-                    <div style="height:35px;float:left;margin-left:333px"><label for="f_IsGroupPic">比赛类活动时，评图是否以组图方式评选：</label></div>
-                    <div style="">
-                        <select id="f_IsGroupPic" name="f_IsGroupPic">
-                            <option value="0" >否</option>
-                            <option value="1" >是</option>
-                        </select>
-                        {s_IsGroupPic}
+                    <div class="spe_line" style="line-height:35px">
+                        <div style="height:35px;float:left;margin-left:333px"><label for="f_IsGroupPic">比赛类活动时，评图是否以组图方式评选：</label></div>
+                        <div style="">
+                            <select id="f_IsGroupPic" name="f_IsGroupPic">
+                                <option value="0" >否</option>
+                                <option value="1" >是</option>
+                            </select>
+                            {s_IsGroupPic}
+                        </div>
                     </div>
                 </div>
                 <!--<div id="tabs-3">

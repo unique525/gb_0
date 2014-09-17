@@ -231,6 +231,14 @@ class BaseData
      */
     const TableId_UserOrder = "UserOrderId";
     /**
+     * 会员订单信息 数据表名
+     */
+    const TableName_UserCar = "cst_user_car";
+    /**
+     * 会员订单信息 数据表自增字段名
+     */
+    const TableId_UserCar = "UserCarId";
+    /**
      * 会员订单产品信息 数据表名
      */
     const TableName_UserOrderProduct = "cst_user_order_product";
@@ -437,13 +445,13 @@ class BaseData
      */
     const TableId_ProductPrice = "ProductPriceId";
     /**
-     * 产品图片表 数据表名
+     * 产品送货价格 数据表名
      */
-    const TableName_ProductPic = "cst_product_pic";
+    const TableName_ProductSendPrice = "cst_product_send_price";
     /**
-     * 产品价格 数据表自增字段名
+     * 产品送货价格 数据表自增字段名
      */
-    const TableId_ProductPic = "ProductPicId";
+    const TableId_ProductSendPrice = "ProductSendPriceId";
 
 
     /**
