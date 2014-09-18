@@ -11,6 +11,24 @@
         .tools{height:30px;border-top:0 #CCC solid; padding-top: 4px;}
         .tools span{height:30px;text-align: center; line-height: 25px}
     </style>
+    <script type="text/javascript ">
+        $(function() {
+            var tag=Request["tag"];
+            if(tag.length>0)
+            {
+                tag=decodeURIComponent(tag);
+                $("#select_tag").val(tag);
+            }
+        });
+        function GetProductPicByTag()
+        {
+            var tag=($("#select_tag").val());
+            tag=encodeURIComponent(tag);
+            var ps=Request["ps"];
+            var tabIndex = Request["tab_index"];
+            window.location.href='/default.php?secu=manage&mod=product_pic&m=list&product_id={ProductId}&tag='+tag+'&tab_index='+tabIndex+'&ps='+ps;
+        }
+    </script>
 </head>
 <body>
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
@@ -23,11 +41,22 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新增图片" title="新增图片" type="button"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;按产品图片类别查看：
+                <select id="select_tag" onchange="GetProductPicByTag()">
+                    <option value="">全部</option>
+                    <icms id="product_pic_tag_list">
+                        <item>
+                            <![CDATA[
+                            <option value="{f_ProductPicTag}">{f_ProductPicTag}</option>
+                            ]]>
+                        </item>
+                    </icms>
+                </select>
             </td>
         </tr>
     </table>
 </div>
-<div id="grid_list" style="height:890px">
+<div id="grid_list">
     <icms id="product_pic_list" type="list">
         <item>
             <![CDATA[

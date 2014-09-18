@@ -124,10 +124,11 @@ class ProductPicManageData extends BaseManageData
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页记录数
      * @param int $allCount 记录总数
+     * @param string $tag 图片类别
      * @param string $searchKey 查询字符
      * @return array  产品图片列表数组
      */
-    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $tag = "", $searchKey = "")
     {
         $result = null;
         if ($productId < 0) {
@@ -136,8 +137,12 @@ class ProductPicManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductId", $productId);
         $searchSql = "";
+        if (strlen($tag) > 0 && $tag != "undefined") {
+            $searchSql .= " AND (ProductPicTag=:ProductPicTag)";
+            $dataProperty->AddField("ProductPicTag", $tag);
+        }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " AND (ProductPicIntro like :searchKey1) AND";
+            $searchSql .= " AND (ProductPicIntro like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
 
@@ -193,6 +198,39 @@ class ProductPicManageData extends BaseManageData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductPicId", $productPicId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取产品图片类别数组
+     * @param int $productId   产品ID
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array  返回查询题目数组
+     */
+    public function GetPicTagList($productId, $order = "", $topCount = -1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($productId > 0) {
+            switch ($order) {
+                default:
+                    $order = "  ORDER BY CONVERT( ProductPicTag USING GBK ) COLLATE GBK_CHINESE_CI ASC";
+                    break;
+            }
+            $sql = "
+            SELECT ProductPicTag
+            FROM " . self::TableName_ProductPic . "
+            WHERE ProductId=:ProductId AND State=0
+            GROUP BY ProductPicTag"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }

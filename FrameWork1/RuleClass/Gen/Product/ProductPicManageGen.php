@@ -202,16 +202,25 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
         $templateContent = Template::Load("product/product_pic_list.html", "common");
         $ProductId = Control::GetRequest("product_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
+        $tag = Control::GetRequest("tag", "");
+        $tag = urldecode($tag);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
 
-        if ($pageIndex > 0) {
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "product_pic_list";
-            $allCount = 0;
+        if ($pageIndex > 0 && $ProductId > 0) {
+            //生成产品图片类别下拉列表
+            $templateContent = str_ireplace("{ProductId}", $ProductId, $templateContent);
             $productPicManageData = new ProductPicManageData();
-            $arrList = $productPicManageData->GetListForPager($ProductId, $pageBegin, $pageSize, $allCount, $searchKey);
+            $tagId = "product_pic_tag_list";
+            $arrProductPicTagList = $productPicManageData->GetPicTagList($ProductId);
+            Template::ReplaceList($templateContent, $arrProductPicTagList, $tagId, "icms");
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $allCount = 0;
+            //生成产品图片列表
+            $tagId = "product_pic_list";
+            $productPicManageData = new ProductPicManageData();
+            $arrList = $productPicManageData->GetListForPager($ProductId, $pageBegin, $pageSize, $allCount, $tag, $searchKey);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
                 $styleNumber = 1;
