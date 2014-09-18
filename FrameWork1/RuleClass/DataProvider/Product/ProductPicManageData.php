@@ -197,6 +197,38 @@ class ProductPicManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 获取产品图片类别数组
+     * @param int $productId   产品ID
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array  返回查询题目数组
+     */
+    public function GetPicTagList($productId, $order = "", $topCount = -1)
+    {
+        $result = null;
+        if ($topCount != -1)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($productId > 0) {
+            switch ($order) {
+                default:
+                    $order = "  ORDER BY CONVERT( ProductPicTag USING GBK ) COLLATE GBK_CHINESE_CI ASC";
+                    break;
+            }
+            $sql = "
+            SELECT ProductPicTag
+            FROM " . self::TableName_ProductPic . "
+            WHERE ProductId=:ProductId AND State=0"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 }
 
 ?>

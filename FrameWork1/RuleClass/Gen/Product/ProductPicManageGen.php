@@ -206,10 +206,14 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
 
-        if ($pageIndex > 0) {
+        if ($pageIndex > 0 && $ProductId > 0) {
+            //生成产品图片类别下拉列表
+            $templateContent = str_ireplace("{ProductId}", $ProductId, $templateContent);
+            self::GenProductPicTag($templateContent);
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "product_pic_list";
             $allCount = 0;
+            //生成产品图片列表
             $productPicManageData = new ProductPicManageData();
             $arrList = $productPicManageData->GetListForPager($ProductId, $pageBegin, $pageSize, $allCount, $searchKey);
             if (count($arrList) > 0) {
@@ -230,6 +234,34 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
         }
         parent::ReplaceEnd($templateContent);
         return $templateContent;
+    }
+
+    /**
+     * 替换模板中的图片类别标记生成图片类别列表
+     * @param string $tempContent 模板字符串
+     */
+    public function GenProductPicTag(&$tempContent)
+    {
+        $keyName = "icms";
+        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        if (isset($arr)) {
+            if (count($arr) > 1) {
+                if (!empty($arr[1])) {
+                    $productPicManageData = new ProductPicManageData();
+                    $arr2 = $arr[1];
+                    foreach ($arr2 as $val) {
+                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
+                        $productPicId = Template::GetParamValue($content, "id", $keyName);
+                        $type = Template::GetParamValue($content, "type", $keyName);
+                        if ($type == 'product_pic_tag_list') {
+                            $arrProductPicTagList = $productPicManageData->GetPicTagList($productPicId);
+                            Template::ReplaceList($content, $arrProductPicTagList, $productPicId, $keyName);
+                            $tempContent = Template::ReplaceCustomTag($tempContent, $productPicId, $content, $keyName);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

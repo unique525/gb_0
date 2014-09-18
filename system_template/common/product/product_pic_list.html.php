@@ -23,11 +23,22 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新增图片" title="新增图片" type="button"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;按产品图片类别查看：
+                <select id="select_tag">
+                    <option value="0">全部</option>
+                    <icms id="{ProductId}" type="product_pic_tag_list">
+                        <item>
+                            <![CDATA[
+                            <option value="{f_ProductPicTag}">{f_ProductPicTag}</option>
+                            ]]>
+                        </item>
+                    </icms>
+                </select>
             </td>
         </tr>
     </table>
 </div>
-<div id="grid_list" style="height:890px">
+<div id="grid_list">
     <icms id="product_pic_list" type="list">
         <item>
             <![CDATA[
