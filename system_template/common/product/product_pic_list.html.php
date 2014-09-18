@@ -12,6 +12,14 @@
         .tools span{height:30px;text-align: center; line-height: 25px}
     </style>
     <script type="text/javascript ">
+        $(function() {
+            var tag=Request["tag"];
+            if(tag.length>0)
+            {
+                tag=decodeURIComponent(tag);
+                $("#select_tag").val(tag);
+            }
+        });
         function GetProductPicByTag()
         {
             var tag=($("#select_tag").val());
@@ -35,7 +43,7 @@
                 <input id="btn_create" class="btn2" value="新增图片" title="新增图片" type="button"/>
                 &nbsp;&nbsp;&nbsp;&nbsp;按产品图片类别查看：
                 <select id="select_tag" onchange="GetProductPicByTag()">
-                    <option value="0">全部</option>
+                    <option value="">全部</option>
                     <icms id="{ProductId}" type="product_pic_tag_list">
                         <item>
                             <![CDATA[

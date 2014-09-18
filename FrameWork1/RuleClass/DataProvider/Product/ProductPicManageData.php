@@ -224,7 +224,8 @@ class ProductPicManageData extends BaseManageData
             $sql = "
             SELECT ProductPicTag
             FROM " . self::TableName_ProductPic . "
-            WHERE ProductId=:ProductId AND State=0"
+            WHERE ProductId=:ProductId AND State=0
+            GROUP BY ProductPicTag"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
