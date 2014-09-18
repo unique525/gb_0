@@ -44,7 +44,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;按产品图片类别查看：
                 <select id="select_tag" onchange="GetProductPicByTag()">
                     <option value="">全部</option>
-                    <icms id="{ProductId}" type="product_pic_tag_list">
+                    <icms id="product_pic_tag_list">
                         <item>
                             <![CDATA[
                             <option value="{f_ProductPicTag}">{f_ProductPicTag}</option>
