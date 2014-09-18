@@ -33,6 +33,10 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         return $result;
     }
 
+    /**
+     * 新增
+     * @return string
+     */
     private function GenCreate(){
         $tableId = intval(Control::GetRequest("table_id",0));
         $tableType = intval(Control::GetRequest("table_type",0));
@@ -49,6 +53,10 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         }
     }
 
+    /**
+     * 获取列表
+     * @return string
+     */
     private function GenList() {
         Control::SetUserCookie(1,"test");
         $templateFileUrl = "user/user_favorite.html";
@@ -71,6 +79,10 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         }
     }
 
+    /**
+     * 删除
+     * @return string
+     */
     private function AsyncRemoveBin(){
         $userFavoriteId = Control::GetRequest("user_favorite_id",0);
         $userId = Control::GetUserId();

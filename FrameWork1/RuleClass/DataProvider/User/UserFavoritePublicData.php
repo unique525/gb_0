@@ -61,7 +61,7 @@ class UserFavoritePublicData extends BasePublicData
     public function Delete($userFavoriteId,$userId){
         $result = -1;
         if($userFavoriteId > 0 && $userId > 0){
-            $sql = "DELETE FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId AND UserFavoriteId = :UserFavoriteId";
+            $sql = "DELETE FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId AND UserFavoriteId = :UserFavoriteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("UserFavoriteId",$userFavoriteId);
