@@ -3,6 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
+
+    <script type="text/javascript" src="/system_js/manage/information/information.js" ></script>
     <style>
         img {
             vertical-align: middle;

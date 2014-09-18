@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
+    <script type="text/javascript" src="/system_js/manage/custom_form/custom_form.js"></script>
     <script type="text/javascript">
         $("document").ready(function(){
             var channelId = Request["channel_id"];

@@ -1,6 +1,15 @@
 
 
-
+$().ready(function(){
+    //选中时的样式变化
+    $('.grid_item').click(function() {
+        if ($(this).hasClass('grid_item_selected')) {
+            $(this).removeClass('grid_item_selected');
+        } else {
+            $(this).addClass('grid_item_selected');
+        }
+    });
+});
 /**
  * 时间按单位分割
  * @param timeName 时间dom id
