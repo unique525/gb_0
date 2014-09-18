@@ -507,6 +507,14 @@ class BaseGen
                     $newFileName = 'title_pic_4_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PIC:
+                /**产品组图   tableId 为 productId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product_pic" . DIRECTORY_SEPARATOR
+                        . strval($tableId) . DIRECTORY_SEPARATOR;
+                    $newFileName = uniqid() . '.' . $fileExtension;
+                }
+                break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION:
                 //产品参数类型选项
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;

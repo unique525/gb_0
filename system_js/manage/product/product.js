@@ -67,6 +67,19 @@ $(function () {
         }
     });
 
+
+    //打开产品组图列表
+    var btnManagePic = $(".btn_manage_pic");
+    btnManagePic.css("cursor", "pointer");
+    btnManagePic.click(function(event) {
+        event.preventDefault();
+        var productId=$(this).attr('idvalue');
+        var productName=$(this).attr('alt');
+        parent.G_TabUrl = '/default.php?secu=manage&mod=product_pic&m=list&product_id=' + productId;
+        parent.G_TabTitle = productName + '-图片管理';
+        parent.addTab();
+    });
+
 });
 
 /**

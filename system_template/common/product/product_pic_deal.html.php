@@ -20,7 +20,7 @@
     </head>
     <body>
     {common_body_deal}
-        <form id="mainForm" action="/default.php?secu=manage&mod=product_pic&m={method}&product_id={ProductId}&product_pic_id={ProductPicId}&p={PageIndex}" method="post">
+        <form id="mainForm" enctype="multipart/form-data" action="/default.php?secu=manage&mod=product_pic&m={method}&product_id={ProductId}&product_pic_id={ProductPicId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>
@@ -34,6 +34,14 @@
                 <tr>
                     <td class="spe_line" height="30" align="right"><label for="f_ProductPicTag">类别：</label></td>
                      <td class="spe_line" title="{ProductPicTag}"><input name="f_ProductPicTag" id="f_ProductPicTag" value="{ProductPicTag}" type="text" class="input_box" style=" width: 300px;" /></td>
+                </tr>
+                <tr>
+                    <td class="spe_line" height="30" align="right"><label for="file_pic">图片</label></td>
+                    <td class="spe_line">
+                        <input id="file_pic" name="file_pic" type="file" class="input_box"
+                               style="width:400px;background:#ffffff;margin-top:3px;"/>
+                        <span id="preview_title_pic" class="show_title_pic" idvalue="{UploadFileId}" style="cursor:pointer">[预览]</span>
+                    </td>
                 </tr>
                 <tr>
                     <td class="spe_line" height="30" align="right"><label for="f_Sort">排序：</label></td>

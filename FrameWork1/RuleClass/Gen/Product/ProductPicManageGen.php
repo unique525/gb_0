@@ -59,6 +59,30 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($ProductPicId > 0) {
+                    if( !empty($_FILES)){
+                        //file pic
+                        $fileElementName = "file_pic";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PIC;
+                        $tableId = $ProductPicId;
+                        $uploadFile = new UploadFile();
+                        $uploadFileId = 0;
+                        $titlePicResult = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile,
+                            $uploadFileId
+                        );
+
+                        if (intval($titlePicResult) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+
+                        }
+                        if($uploadFileId>0){
+                            $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                        }
+                    }
                     //javascript 处理
                     //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1));
                     $resultJavaScript .= '<' . 'script type="text/javascript">parent.location.href=parent.location.href;</script>';
@@ -126,6 +150,32 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
+                    if( !empty($_FILES)){
+                        //file pic
+                        $fileElementName = "file_pic";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PIC;
+                        $tableId = $ProductPicId;
+                        $uploadFile = new UploadFile();
+                        $uploadFileId = 0;
+                        $titlePic1Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile,
+                            $uploadFileId
+                        );
+
+                        if (intval($titlePic1Result) <=0 && $uploadFileId<=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId = $productPicManageData->GetPicUploadFileId($ProductPicId, false);
+                            parent::DeleteUploadFile($oldUploadFileId);
+
+                            //修改题图
+                            $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                        }
+                    }
                     //javascript 处理
                     $resultJavaScript .= '<' . 'script type="text/javascript">parent.location.href=parent.location.href;</script>';
                 } else {
