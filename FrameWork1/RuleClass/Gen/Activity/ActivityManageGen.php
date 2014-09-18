@@ -224,7 +224,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_INSERT_OR_UPDATE_FAILED;
                 }
                 //加入操作log
-                $operateContent = "Modify activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityName", "");
+                $operateContent = "Modify activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityTitle", "");
                 self::CreateManageUserLog($operateContent);
 
             }
@@ -346,7 +346,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     if($newActivityId>0){
 
                         //记入操作log
-                        $operateContent = "Create Activity：ActivityID：" . $newActivityId . "；result：" . $newActivityId . "；title：" . Control::PostRequest("f_ActivityName", "");
+                        $operateContent = "Create Activity：ActivityID：" . $newActivityId . "；result：" . $newActivityId . "；title：" . Control::PostRequest("f_ActivityTitle", "");
                         self::CreateManageUserLog($operateContent);
 
                         Control::ShowMessage(Language::Load('activity', 18));
@@ -531,8 +531,8 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 $tempContent = strtr($tempContent, $replace_arr);
 
                 $activityManageData=new ActivityManageData();
-                $fieldsOfVote = $activityManageData->GetFields();
-                parent::ReplaceWhenCreate($tempContent, $fieldsOfVote);
+                $fieldsOfActivity = $activityManageData->GetFields();
+                parent::ReplaceWhenCreate($tempContent, $fieldsOfActivity);
 
                 //替换掉{s XXX}的内容
                 $patterns = '/\{s_(.*?)\}/';

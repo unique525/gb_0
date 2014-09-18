@@ -471,6 +471,15 @@ class BaseData
 
 
     /**
+     * 分类信息 数据表名
+     */
+    const TableName_Information = "cst_Information";
+    /**
+     * 分类信息 数据表自增字段名
+     */
+    const TableId_Information = "InformationId";
+
+    /**
      * 调试 数据表名
      */
     const TableName_DebugLog = "cst_debug_log";

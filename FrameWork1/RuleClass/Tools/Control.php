@@ -107,6 +107,7 @@ class Control {
             $result = $defaultValue;
         }
         $result = Format::RemoveXSS($result);
+        $result = Format::FormatHtmlTag($result);
         return $result;
     }
 

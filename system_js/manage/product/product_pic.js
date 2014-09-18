@@ -21,7 +21,7 @@ $(function() {
             height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'图片新增',
+            title:'产品组图新增',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -44,7 +44,7 @@ $(function() {
             height:250,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
-            title:'产品参数选项编辑',
+            title:'产品组图编辑',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
