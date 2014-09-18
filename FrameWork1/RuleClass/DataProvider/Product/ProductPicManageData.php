@@ -124,10 +124,11 @@ class ProductPicManageData extends BaseManageData
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页记录数
      * @param int $allCount 记录总数
+     * @param string $tag 图片类别
      * @param string $searchKey 查询字符
      * @return array  产品图片列表数组
      */
-    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $tag = "", $searchKey = "")
     {
         $result = null;
         if ($productId < 0) {
@@ -136,8 +137,12 @@ class ProductPicManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductId", $productId);
         $searchSql = "";
+        if (strlen($tag) > 0 && $tag != "undefined") {
+            $searchSql .= " AND (ProductPicTag=:ProductPicTag)";
+            $dataProperty->AddField("ProductPicTag", $tag);
+        }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " AND (ProductPicIntro like :searchKey1) AND";
+            $searchSql .= " AND (ProductPicIntro like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
 
