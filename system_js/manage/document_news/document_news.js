@@ -19,6 +19,45 @@ window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR = -130202;
 window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED = 130201;
 
 
+
+/**
+ * 新稿
+ */
+window.DOCUMENT_NEWS_STATE_NEW = 0;
+/**
+ * 已编
+ */
+window.DOCUMENT_NEWS_STATE_MODIFY = 1;
+/**
+ * 返工
+ */
+window.DOCUMENT_NEWS_STATE_REDO = 2;
+/**
+ * 一审
+ */
+window.DOCUMENT_NEWS_STATE_FIRST_VERIFY = 11;
+/**
+ * 二审
+ */
+window.DOCUMENT_NEWS_STATE_SECOND_VERIFY = 12;
+/**
+ * 三审
+ */
+window.DOCUMENT_NEWS_STATE_THIRD_VERIFY = 13;
+/**
+ * 终审
+ */
+window.DOCUMENT_NEWS_STATE_FINAL_VERIFY = 14;
+/**
+ * 已否
+ */
+window.DOCUMENT_NEWS_STATE_REFUSE = 20;
+/**
+ * 已发
+ */
+window.DOCUMENT_NEWS_STATE_PUBLISHED = 30;
+
+
 $(function() {
     //$(document).tooltip();
     $("#btn_select_all").click(function(event) {
@@ -60,15 +99,17 @@ $(function() {
     });
 
     //改变状态按钮事件捕获
-    $(".btn_change_state").click(function(event) {
+    var btnChangeState = $(".btn_change_state");
+    btnChangeState.css("cursor", "pointer");
+    btnChangeState.click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
-        //ShowBox('divstate_' + documentNewsId);
+        ShowBox('div_state_box_' + documentNewsId);
     });
     $(".btn_close_box").click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
-        //document.getElementById('divstate_' + docid).style.display = "none";
+        document.getElementById('div_state_box_' + documentNewsId).style.display = "none";
     });
 
 
@@ -127,14 +168,15 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).text(FormatDocumentNewsState($(this).text()));
+        $(this).text(formatDocumentNewsState($(this).text()));
     });
 
-
-    $(".docnewssetstate").click(function() {
-        var docid = $(this).attr('idvalue');
+    var documentNewsSetState = $(".document_news_set_state");
+    documentNewsSetState.css("cursor", "pointer");
+    documentNewsSetState.click(function() {
+        var documentNewsId = $(this).attr('idvalue');
         var state = $(this).attr('statevalue');
-        DocumentNewsChangeState(docid, state);
+        documentNewsChangeState(documentNewsId, state);
     });
 });
 
@@ -142,7 +184,7 @@ $(function() {
  * 格式化状态值
  * @return {string}
  */
-function FormatDocumentNewsState(state){
+function formatDocumentNewsState(state){
     switch (state){
         case "0":
             return "新稿";
@@ -174,65 +216,48 @@ function FormatDocumentNewsState(state){
     }
 }
 
-function DocumentNewsChangeState(documentNewsId, state) {
-    if (state === 20) {
-        $("#dialog_docnewsdelete").dialog({});
-    }
-    $("#spanstate_" + documentNewsId).html("<img src='../system_images/manage/loading1.gif' />");
+/**
+ *
+ * @param {int} documentNewsId 资讯id
+ * @param {int} state 状态
+ * @constructor
+ */
+function documentNewsChangeState(documentNewsId, state) {
+    $("#span_state" + documentNewsId).html("<img src='/system_template/common/images/loading1.gif' />");
 
-    //多文档操作
-    var docid = "";
-    $('input[name=docinput]').each(function(i) {
-        if (this.checked) {
-            docid = docid + ',' + $(this).val();
-        }
-    });
-    if (docid.length > 0) {
-        $('input[name=docinput]').each(function(i) {
-            if (this.checked) {
-                _SetDocumentNewsState($(this).val(), state);
-            }
-        });
-    }
-    else {
-        _SetDocumentNewsState(documentNewsId, state);
-    }
-}
-
-function _SetDocumentNewsState(documentNewsId, state) {
-    $.post("/default.php?secu=manage&mod=document_news&m=async_modify_state&documentnewsid=" + documentNewsId + "&state=" + state, {
+    $.post("/default.php?secu=manage&mod=document_news&m=async_modify_state&document_news_id=" + documentNewsId + "&state=" + state, {
         resultbox: $(this).html()
     }, function(xml) {
         if (parseInt(xml) > 0) {
+            var spanState = $("#span_state_" + documentNewsId);
             switch (state)
             {
                 case 0:
-                    $("#spanstate_" + documentNewsId).text("新稿");
+                    spanState.text("新稿");
                     break;
                 case 1:
-                    $("#spanstate_" + documentNewsId).text("已编");
+                    spanState.text("已编");
                     break;
                 case 2:
-                    $("#spanstate_" + documentNewsId).text("返工");
+                    spanState.text("返工");
                     break;
                 case 11:
-                    $("#spanstate_" + documentNewsId).text("一审");
+                    spanState.text("一审");
                     break;
                 case 12:
-                    $("#spanstate_" + documentNewsId).text("二审");
+                    spanState.text("二审");
                     break;
                 case 13:
-                    $("#spanstate_" + documentNewsId).text("三审");
+                    spanState.text("三审");
                     break;
                 case 14:
-                    $("#spanstate_" + documentNewsId).text("终审");
+                    spanState.text("终审");
                     break;
                 case 20:
-                    $('#dialog_docnewsdelete').dialog('close');
-                    $("#spanstate_" + documentNewsId).html("<span style='color:#990000'>已否</span>");
+                    spanState.html("<span style='color:#990000'>已否</span>");
                     break;
                 default:
-                    $("#spanstate_" + documentNewsId).text("错误");
+                    spanState.text("错误");
                     break;
             }
         } else if (parseInt(xml) == -2) {
@@ -242,10 +267,9 @@ function _SetDocumentNewsState(documentNewsId, state) {
             alert("设置失败");
         }
     });
-    if (state !== 20) {
-        document.getElementById('divstate_' + documentNewsId).style.display = "none";
-    }
+    document.getElementById('div_state_box_' + documentNewsId).style.display = "none";
 }
+
 
 
 

@@ -60,7 +60,23 @@
                                 </label></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_DocumentNewsId}" alt="编辑"/></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_DocumentNewsId}">{f_State}</span></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">
+                                <img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/>
+                                <div class="state_box" style="display: none;" id="div_state_box_{f_DocumentNewsId}" title="">
+                                    <div style="float:right;"><img class="btn_close_box" idvalue="{f_DocumentNewsId}" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
+                                    <div style="clear:both;">
+                                        <div style="{CanCreate}" class="document_news_set_state" statevalue="0" idvalue="{f_DocumentNewsId}">新稿</div>
+                                        <div style="{CanModify}" class="document_news_set_state" statevalue="1" idvalue="{f_DocumentNewsId}">已编</div>
+                                        <div style="{CanRework}" class="document_news_set_state" statevalue="2" idvalue="{f_DocumentNewsId}">返工</div>
+                                        <div style="{CanAudit1}" class="document_news_set_state" statevalue="11" idvalue="{f_DocumentNewsId}">一审</div>
+                                        <div style="{CanAudit2}" class="document_news_set_state" statevalue="12" idvalue="{f_DocumentNewsId}">二审</div>
+                                        <div style="{CanAudit3}" class="document_news_set_state" statevalue="13" idvalue="{f_DocumentNewsId}">三审</div>
+                                        <div style="{CanAudit4}" class="document_news_set_state" statevalue="14" idvalue="{f_DocumentNewsId}">终审</div>
+                                        <div style="{CanRefused}" class="document_news_set_state" statevalue="20" idvalue="{f_DocumentNewsId}">已否</div>
+                                        <div class="spe"></div>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_DocumentNewsId}" alt="预览" title="预览文档"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_publish" src="/system_template/{template_name}/images/manage/publish.gif" idvalue="{f_DocumentNewsId}" title="发布文档" alt="发布"/></td>
                             <td class="spe_line2" style="padding-left:10px;"><a target="_blank" href="{view_url}"><span style="color:{f_DocumentNewsTitleColor};font-weight:{f_DocumentNewsTitleBold};">{f_DocumentNewsTitle}</span></a></td>
@@ -83,20 +99,6 @@
 <div id="dialog_box" title="" style="display:none;">
     <div id="dialog_content">
 
-    </div>
-</div>
-<div class="state_box" style="display: none;" id="div_state_box" title="">
-    <div style="float:right;"><img class="btn_close_box" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
-    <div style="clear:both;">
-        <div style="{CanCreate}" class="document_news_set_state" statevalue="0" idvalue="{f_documentnewsid}">新稿</div>
-        <div style="{CanModify}" class="document_news_set_state" statevalue="1" idvalue="{f_documentnewsid}">已编</div>
-        <div style="{CanRework}" class="document_news_set_state" statevalue="2" idvalue="{f_documentnewsid}">返工</div>
-        <div style="{CanAudit1}" class="document_news_set_state" statevalue="11" idvalue="{f_documentnewsid}">一审</div>
-        <div style="{CanAudit2}" class="document_news_set_state" statevalue="12" idvalue="{f_documentnewsid}">二审</div>
-        <div style="{CanAudit3}" class="document_news_set_state" statevalue="13" idvalue="{f_documentnewsid}">三审</div>
-        <div style="{CanAudit4}" class="document_news_set_state" statevalue="14" idvalue="{f_documentnewsid}">终审</div>
-        <div style="{CanRefused}" class="document_news_set_state" statevalue="20" idvalue="{f_documentnewsid}">已否</div>
-        <div class="spe"></div>
     </div>
 </div>
 </body>
