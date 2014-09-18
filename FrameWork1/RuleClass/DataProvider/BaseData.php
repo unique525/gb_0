@@ -239,6 +239,14 @@ class BaseData
      */
     const TableId_UserCar = "UserCarId";
     /**
+     * 会员订单信息 数据表名
+     */
+    const TableName_UserFavorite= "cst_user_favorite";
+    /**
+     * 会员订单信息 数据表自增字段名
+     */
+    const TableId_UserFavorite = "UserFavoriteId";
+    /**
      * 会员订单产品信息 数据表名
      */
     const TableName_UserOrderProduct = "cst_user_order_product";

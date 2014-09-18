@@ -30,6 +30,9 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
         $method = Control::GetRequest("a",0);
         $result = "";
         switch($method){
+            case "add":
+                $result = self::GenCreate();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
@@ -44,7 +47,17 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenCreate(){
-
+        $userId = Control::GetUserId();
+        $siteId = Control::GetRequest("site_id",0);
+        $productId = Control::GetRequest("product_id",0);
+        $buyCount = Control::GetRequest("buy_count",0);
+        $productPriceId = Control::GetRequest("product_price_id",0);
+        $activityProductId = Control::GetRequest("activity_product_id",0);
+        if($userId > 0 && $productPriceId > 0){
+            $userCarPublicData = new UserCarPublicData();
+            $userCarPublicData->Create($userId,$siteId,$productId,$productPriceId,$buyCount,$activityProductId);
+        }
+        return null;
     }
 
     private function GenList(){
