@@ -8,7 +8,6 @@
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
 
-    <script type="text/javascript" src="/system_js/manage/information/information.js" ></script>
 
 
     <script type="text/javascript">
