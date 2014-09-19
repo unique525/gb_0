@@ -66,7 +66,7 @@
                     <span><img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductPicId}" title="向上移动" alt="向上"/><img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductPicId}" title="向下移动" alt="向下"/></span>
                     <span title="排序数字，越大越靠前">{f_Sort}</span>
                     <span class="span_state" title="{f_State}" id="span_state_{f_ProductPicId}">{f_State}</span>
-                    <span><img alt="" class="div_start" idvalue="{f_ProductParamTypeOptionId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_ProductParamTypeOptionId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></span>
+                    <span><img alt="" class="div_start" idvalue="{f_ProductPicId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_ProductPicId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></span>
                 </div>
                 <div class="image"><img alt="" src="{rootpath}/{f_titlepic}" width="280px" height="150px"/></div>
                 <div class="pic_title">{f_ProductPicTag}</div>
