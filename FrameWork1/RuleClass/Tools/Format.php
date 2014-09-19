@@ -65,7 +65,14 @@ class Format
     {
         //$content = str_replace('<', '&lt;', $content);
         //$content = str_replace(">", "&gt;", $content);
-        $content = htmlspecialchars($content);
+        if(is_array($content)){
+            for($i = 0; $i<count($content); $i++){
+                $content[$i] = htmlspecialchars($content[$i]);
+            }
+        }else{
+            $content = htmlspecialchars($content);
+        }
+
         return $content;
     }
 

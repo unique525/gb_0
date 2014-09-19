@@ -41,31 +41,84 @@ $(function () {
         parent.addTab();
     });
 
-    //格式化站点状态
+    //格式化状态
     $(".span_state").each(function(){
         $(this).text(FormatProductState($(this).text()));
     });
 
-    //开启站点
-    $(".img_open_site").click(function(){
-        var siteId = parseInt($(this).attr("idvalue"));
-        var state = 0; //开启状态
-        if(siteId>0){
-            $.ajax({
-                type: "get",
-                url: "default.php?secu=manage&mod=site&m=async_modify_state",
-                data: {
-                    site_id: siteId,
-                    state:state
-                },
-                dataType: "jsonp",
-                jsonp: "jsonpcallback",
-                success: function(data) {
-                    alert(data);
-                }
-            });
+    /****************** 顶部排序按钮 ***************************/
+
+    var gridCanSort = $(".grid_can_sort");
+    gridCanSort.css("cursor", "pointer");
+    gridCanSort.mouseover(function(){
+        $(this).attr("class","grid_can_sort_selected");
+    });
+    gridCanSort.mouseleave(function(){
+        $(this).attr("class","grid_can_sort");
+    });
+
+    var btnSortDown = $("#btn_sort_down");
+    var btnSortUp = $("#btn_sort_up");
+    if(Request["sort"] == "up"){
+        btnSortDown.css("display","none");
+        btnSortUp.css("display","");
+    }else{
+        btnSortDown.css("display","");
+        btnSortUp.css("display","none");
+    }
+
+    $("#btn_sort").click(function(){
+        var url = window.location.href;
+        url = url.replaceAll("&sort=up","");
+        url = url.replaceAll("&sort=down","");
+        url = url.replaceAll("&sale_count=up","");
+        url = url.replaceAll("&sale_count=down","");
+
+        var btnSortDown = $("#btn_sort_down");
+        var btnSortUp = $("#btn_sort_up");
+        if(btnSortDown.css("display") != "none"){ //当前是降序,改成升序
+            btnSortDown.css("display","none");
+            btnSortUp.css("display","");
+            window.location.href = url + "&sort=up";
+        }else{
+            btnSortDown.css("display","");
+            btnSortUp.css("display","none");
+            window.location.href = url + "&sort=down";
         }
     });
+
+
+    var btnSortBySaleCountDown = $("#btn_sort_by_sale_count_down");
+    var btnSortBySaleCountUp = $("#btn_sort_by_sale_count_up");
+    if(Request["sale_count"] == "up"){
+        btnSortBySaleCountDown.css("display","none");
+        btnSortBySaleCountUp.css("display","");
+    }else{
+        btnSortBySaleCountDown.css("display","");
+        btnSortBySaleCountUp.css("display","none");
+    }
+
+    $("#btn_sort_by_sale_count").click(function(){
+
+        var url = window.location.href;
+        url = url.replaceAll("&sort=up","");
+        url = url.replaceAll("&sort=down","");
+        url = url.replaceAll("&sale_count=up","");
+        url = url.replaceAll("&sale_count=down","");
+
+        var btnSortBySaleCountDown = $("#btn_sort_by_sale_count_down");
+        var btnSortBySaleCountUp = $("#btn_sort_by_sale_count_up");
+        if(btnSortBySaleCountDown.css("display") != "none"){ //当前是降序,改成升序
+            btnSortBySaleCountDown.css("display","none");
+            btnSortBySaleCountUp.css("display","");
+            window.location.href = url + "&sale_count=up";
+        }else{
+            btnSortBySaleCountDown.css("display","");
+            btnSortBySaleCountUp.css("display","none");
+            window.location.href = url + "&sale_count=down";
+        }
+    });
+    /*********************************************/
 
 
     //打开产品组图列表

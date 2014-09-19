@@ -12,7 +12,10 @@ window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR = -130201;
  * 发布资讯详细页 返回值 频道id小于0
  */
 window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR = -130202;
-
+/**
+ * 发布资讯详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
+ */
+window.PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR = -130203;
 /**
  * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中
  */
@@ -21,41 +24,45 @@ window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED = 130201;
 
 
 /**
- * 新稿
+ * 新稿 0
  */
 window.DOCUMENT_NEWS_STATE_NEW = 0;
 /**
- * 已编
+ * 已编 1
  */
 window.DOCUMENT_NEWS_STATE_MODIFY = 1;
 /**
- * 返工
+ * 返工 2
  */
 window.DOCUMENT_NEWS_STATE_REDO = 2;
 /**
- * 一审
+ * 一审 11
  */
 window.DOCUMENT_NEWS_STATE_FIRST_VERIFY = 11;
 /**
- * 二审
+ * 二审 12
  */
 window.DOCUMENT_NEWS_STATE_SECOND_VERIFY = 12;
 /**
- * 三审
+ * 三审 13
  */
 window.DOCUMENT_NEWS_STATE_THIRD_VERIFY = 13;
 /**
- * 终审
+ * 终审 14
  */
 window.DOCUMENT_NEWS_STATE_FINAL_VERIFY = 14;
 /**
- * 已否
+ * 已否 20
  */
 window.DOCUMENT_NEWS_STATE_REFUSE = 20;
 /**
- * 已发
+ * 已发 30
  */
 window.DOCUMENT_NEWS_STATE_PUBLISHED = 30;
+/**
+ * 已删除 100
+ */
+window.DOCUMENT_NEWS_STATE_REMOVED = 100;
 
 
 $(function() {
@@ -135,11 +142,15 @@ $(function() {
             dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
             if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED) {
                 dialogContent.html('发布完成');
+                var spanState = $("#span_state_" + documentNewsId);
+                spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
             }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR) {
                 dialogContent.html('资讯id小于0');
             }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR) {
                 dialogContent.html('频道id小于0');
-            }else {
+            }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR) {
+                dialogContent.html('状态不正确，必须为[终审]或[已发]状态的文档才能发布!');
+            }else{
                 dialogContent.html('未知结果');
             }
         });
@@ -147,16 +158,93 @@ $(function() {
 
 
     //排序变化
-    $("#sortgrid").sortable();
-    $("#sortgrid").bind("sortstop", function(event, ui) {
-        var sortlist = $("#sortgrid").sortable("serialize");
-        $.post("/default.php?secu=manage&mod=documentnews&m=async_modifysort&" + sortlist, {
+    var sortGrid = $("#sort_grid");
+    sortGrid.sortable();
+    sortGrid.bind("sortstop", function(event, ui) {
+        var sortList = $("#sort_grid").sortable("serialize");
+        $.post("/default.php?secu=manage&mod=document_news&m=async_modify_sort&" + sortList, {
             resultbox: $(this).html()
         }, function() {
             //操作完成后触发的命令
         });
     });
-    $("#sortgrid").disableSelection();
+    sortGrid.disableSelection();
+
+    /****************** 顶部排序按钮 ***************************/
+
+    var gridCanSort = $(".grid_can_sort");
+    gridCanSort.css("cursor", "pointer");
+    gridCanSort.mouseover(function(){
+       $(this).attr("class","grid_can_sort_selected");
+    });
+    gridCanSort.mouseleave(function(){
+        $(this).attr("class","grid_can_sort");
+    });
+
+    var btnSortDown = $("#btn_sort_down");
+    var btnSortUp = $("#btn_sort_up");
+    if(Request["sort"] == "up"){
+        btnSortDown.css("display","none");
+        btnSortUp.css("display","");
+    }else{
+        btnSortDown.css("display","");
+        btnSortUp.css("display","none");
+    }
+
+
+
+    $("#btn_sort").click(function(){
+        var url = window.location.href;
+        url = url.replaceAll("&sort=up","");
+        url = url.replaceAll("&sort=down","");
+        url = url.replaceAll("&hit=up","");
+        url = url.replaceAll("&hit=down","");
+
+        var btnSortDown = $("#btn_sort_down");
+        var btnSortUp = $("#btn_sort_up");
+        if(btnSortDown.css("display") != "none"){ //当前是降序,改成升序
+            btnSortDown.css("display","none");
+            btnSortUp.css("display","");
+            window.location.href = url + "&sort=up";
+        }else{
+            btnSortDown.css("display","");
+            btnSortUp.css("display","none");
+            window.location.href = url + "&sort=down";
+        }
+    });
+
+
+    var btnSortByHitDown = $("#btn_sort_by_hit_down");
+    var btnSortByHitUp = $("#btn_sort_by_hit_up");
+    if(Request["hit"] == "up"){
+        btnSortByHitDown.css("display","none");
+        btnSortByHitUp.css("display","");
+    }else{
+        btnSortByHitDown.css("display","");
+        btnSortByHitUp.css("display","none");
+    }
+
+    $("#btn_sort_by_hit").click(function(){
+
+        var url = window.location.href;
+        url = url.replaceAll("&sort=up","");
+        url = url.replaceAll("&sort=down","");
+        url = url.replaceAll("&hit=up","");
+        url = url.replaceAll("&hit=down","");
+
+        var btnSortByHitDown = $("#btn_sort_by_hit_down");
+        var btnSortByHitUp = $("#btn_sort_by_hit_up");
+        if(btnSortByHitDown.css("display") != "none"){ //当前是降序,改成升序
+            btnSortByHitDown.css("display","none");
+            btnSortByHitUp.css("display","");
+            window.location.href = url + "&hit=up";
+        }else{
+            btnSortByHitDown.css("display","");
+            btnSortByHitUp.css("display","none");
+            window.location.href = url + "&hit=down";
+        }
+    });
+    /*********************************************/
 
     //选中时的样式变化
     $('.grid_item').click(function() {
@@ -168,7 +256,7 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).text(formatDocumentNewsState($(this).text()));
+        $(this).html(formatDocumentNewsState($(this).text()));
     });
 
     var documentNewsSetState = $(".document_news_set_state");
@@ -176,7 +264,7 @@ $(function() {
     documentNewsSetState.click(function() {
         var documentNewsId = $(this).attr('idvalue');
         var state = $(this).attr('statevalue');
-        documentNewsChangeState(documentNewsId, state);
+        new documentNewsChangeState(documentNewsId, state);
     });
 });
 
@@ -185,30 +273,34 @@ $(function() {
  * @return {string}
  */
 function formatDocumentNewsState(state){
+    state = parseInt(state);
     switch (state){
-        case "0":
+        case window.DOCUMENT_NEWS_STATE_NEW:
             return "新稿";
             break;
-        case "1":
+        case window.DOCUMENT_NEWS_STATE_MODIFY:
             return "已编";
             break;
-        case "2":
+        case window.DOCUMENT_NEWS_STATE_REDO:
             return "返工";
             break;
-        case "11":
+        case window.DOCUMENT_NEWS_STATE_FIRST_VERIFY:
             return "一审";
             break;
-        case "12":
+        case window.DOCUMENT_NEWS_STATE_SECOND_VERIFY:
             return "二审";
             break;
-        case "13":
+        case window.DOCUMENT_NEWS_STATE_THIRD_VERIFY:
             return "三审";
             break;
-        case "14":
+        case window.DOCUMENT_NEWS_STATE_FINAL_VERIFY:
             return "终审";
             break;
-        case "20":
+        case window.DOCUMENT_NEWS_STATE_REFUSE:
             return "<"+"span style='color:#990000'>已否<"+"/span>";
+            break;
+        case window.DOCUMENT_NEWS_STATE_PUBLISHED:
+            return "<"+"span style='color:#006600'>已发<"+"/span>";
             break;
         default :
             return "未知";
@@ -229,35 +321,37 @@ function documentNewsChangeState(documentNewsId, state) {
         resultbox: $(this).html()
     }, function(xml) {
         if (parseInt(xml) > 0) {
+            state = parseInt(state);
+
             var spanState = $("#span_state_" + documentNewsId);
             switch (state)
             {
-                case 0:
-                    spanState.text("新稿");
+                case window.DOCUMENT_NEWS_STATE_NEW:
+                    spanState.html("新稿");
                     break;
-                case 1:
-                    spanState.text("已编");
+                case window.DOCUMENT_NEWS_STATE_MODIFY:
+                    spanState.html("已编");
                     break;
-                case 2:
-                    spanState.text("返工");
+                case window.DOCUMENT_NEWS_STATE_REDO:
+                    spanState.html("返工");
                     break;
-                case 11:
-                    spanState.text("一审");
+                case window.DOCUMENT_NEWS_STATE_FIRST_VERIFY:
+                    spanState.html("一审");
                     break;
-                case 12:
-                    spanState.text("二审");
+                case window.DOCUMENT_NEWS_STATE_SECOND_VERIFY:
+                    spanState.html("二审");
                     break;
-                case 13:
-                    spanState.text("三审");
+                case window.DOCUMENT_NEWS_STATE_THIRD_VERIFY:
+                    spanState.html("三审");
                     break;
-                case 14:
-                    spanState.text("终审");
+                case window.DOCUMENT_NEWS_STATE_FINAL_VERIFY:
+                    spanState.html("终审");
                     break;
-                case 20:
+                case window.DOCUMENT_NEWS_STATE_REFUSE:
                     spanState.html("<span style='color:#990000'>已否</span>");
                     break;
                 default:
-                    spanState.text("错误");
+                    spanState.html("未知");
                     break;
             }
         } else if (parseInt(xml) == -2) {
