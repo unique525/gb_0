@@ -124,11 +124,9 @@
 <body>
 {common_body_deal}
 <form id="main_form" enctype="multipart/form-data"
-      action="/default.php?secu=manage&mod=activity&m={method}&channel_id={ChannelId}&Information_id={InformationId}&tab_index={TabIndex}"
+      action="/default.php?secu=manage&mod=information&m={method}&channel_id={ChannelId}&Information_id={InformationId}&tab_index={TabIndex}"
       method="post">
 <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
-<input type="hidden" id="f_ManageUserId" name="f_ManageUserId" value="{ManageUserId}" />
-<input type="hidden" id="f_ManageUserName" name="f_ManageUserName" value="{ManageUserName}" />
 <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
 <input type="hidden" id="f_UserId" name="f_UserId" value="{UserId}" />
 <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
@@ -152,13 +150,13 @@
     <div class="spe_line" style="line-height: 40px;text-align: left;">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td style=" width: 60px;text-align: right;"><label for="f_InformationTitle">标题：</label></td>
+                <td style="width:20px;text-align: left;"><label for="f_InformationTitle">标题：</label></td>
                 <td style=" width: 600px;text-align: left">
                     <input type="text" class="input_box" id="f_InformationTitle" name="f_InformationTitle" value="{InformationTitle}" style="width:480px;font-size:14px; background-color: #ffffff;" maxlength="200" />
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" style="width:160px;height:40px;text-align: right;">题图：</td>
+                <td class="spe_line" style="width:20px;height:40px;text-align: left;">题图：</td>
                 <td colspan="3" class="spe_line" style="text-align: left">
                     <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px; background: #ffffff;" />
                     <span id="preview_title_pic" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
@@ -176,7 +174,7 @@
                         <tr>
                             <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label for="f_UserName">发布人：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <input type="text" class="input_box" id="f_UserName" name="f_UserName" value="{UserName}" style="width:95%;font-size:14px;" maxlength="50" />
+                                <input type="text" readonly="true" class="input_box" id="f_UserName" name="f_UserName" value="{UserName}" style="width:95%;font-size:14px;" maxlength="50" />
                             </td>
                         </tr>
                         <tr>

@@ -80,12 +80,11 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                 if($hasOne<=0){
 
                 $newActivityClassId=$activityClassManageData->Create($_POST);
-                if($newActivityClassId>0){
-
                     //记入操作log
-                    $operateContent = "Create Activity_class：ActivityClassID：" . $newActivityClassId . "；result：" . $newActivityClassId . "；title：" . Control::PostRequest("f_ActivityClassName", "");
+                    $operateContent = "Create Activity_class：ActivityClassId：" . $newActivityClassId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newActivityClassId;
                     self::CreateManageUserLog($operateContent);
 
+                if($newActivityClassId>0){
                     Control::ShowMessage(Language::Load('activity', 18));
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
@@ -147,11 +146,11 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
                     $hasOne=$activityClassManageData->GetCount($activityClassName,$channelId);
                     if($hasOne<=0){
                     $newActivityClassId=$activityClassManageData->Modify($_POST,$activityClassId);
+                        //记入操作log
+                        $operateContent = "Modify ActivityClass：ActivityClassId：" . $newActivityClassId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newActivityClassId;
+                        self::CreateManageUserLog($operateContent);
                     if($newActivityClassId>0){
 
-                        //记入操作log
-                        $operateContent = "Modify ActivityClass：ActivityClassID：" . $newActivityClassId . "；result：" . $newActivityClassId . "；title：" . Control::PostRequest("f_ActivityClassName", "");
-                        self::CreateManageUserLog($operateContent);
 
                         Control::ShowMessage(Language::Load('activity', 18));
                         $closeTab = Control::PostRequest("CloseTab",0);

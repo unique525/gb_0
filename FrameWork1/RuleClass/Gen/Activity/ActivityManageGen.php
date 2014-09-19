@@ -112,6 +112,11 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             $activityManageData = new ActivityManageData();
             if (!empty($_POST)) {
                 $modifySuccess = $activityManageData->Modify($_POST, $activityId);
+
+                //加入操作log
+                $operateContent = "Modify activity：ActivityId：" . $activityId . ",POST FORM:".implode("|",$_POST).";\r\nResult:".$modifySuccess;
+                self::CreateManageUserLog($operateContent);
+
                 if ($modifySuccess > 0) {
 
                     //处理titlePic
@@ -223,9 +228,6 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 } else {
                     return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_INSERT_OR_UPDATE_FAILED;
                 }
-                //加入操作log
-                $operateContent = "Modify activity：ActivityID：" . $activityId . "；result：" . $activityId . "；title：" . Control::PostRequest("f_ActivityTitle", "");
-                self::CreateManageUserLog($operateContent);
 
             }
 
@@ -335,7 +337,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
     private function CreateForActivityType0($activityType){
             $tempContent = Template::Load("activity/activity_".$activityType."_deal.html","common");
             $resultJavaScript="";
-            $manageUserId = Control::GetManageUserID();
+            $manageUserId = Control::GetManageUserId();
             $manageUsername = Control::GetManageUserName();
             $channelId = Control::GetRequest("channel_id", 0);
             $tabIndex = Control::GetRequest("tab_index", 1);
@@ -344,11 +346,12 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 if (!empty($_POST)) {
                     $activityManageData = new ActivityManageData();
                     $newActivityId = $activityManageData->Create($_POST);
+                    $operateContent = "Create Activity：ActivityId：" . $newActivityId .",POST FORM:".implode("|",$_POST).";\r\nResult:".$newActivityId;
+                    //记入操作log
+                    self::CreateManageUserLog($operateContent);
+
                     if($newActivityId>0){
 
-                        //记入操作log
-                        $operateContent = "Create Activity：ActivityID：" . $newActivityId . "；result：" . $newActivityId . "；title：" . Control::PostRequest("f_ActivityTitle", "");
-                        self::CreateManageUserLog($operateContent);
 
                         Control::ShowMessage(Language::Load('activity', 18));
                         $closeTab = Control::PostRequest("CloseTab",0);
@@ -511,7 +514,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
 
                 $manageUserData = new ManageUserManageData();
-                $userId = $manageUserData->GetUserID($manageUserId); //取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId); //取后台管理员挂接的USERId号
                 if (intval($userId) <= 0) {
                     $resultJavaScript .= Control::GetCloseTab();
                 }

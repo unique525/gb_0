@@ -123,7 +123,7 @@ class InformationManageData extends BaseManageData{
         $result = -1;
         if($informationId>0){
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_Activity . " SET
+            $sql = "UPDATE " . self::TableName_Information . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId,
 
                     WHERE InformationId = :InformationId
@@ -149,7 +149,7 @@ class InformationManageData extends BaseManageData{
         $result = -1;
         if($informationId>0){
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_Activity . " SET
+            $sql = "UPDATE " . self::TableName_Information . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId
 
                     WHERE InformationId = :InformationId
@@ -174,7 +174,7 @@ class InformationManageData extends BaseManageData{
         if ($informationId < 0) {
             return $result;
         }
-        $sql = "UPDATE " . self::TableName_Activity . " SET State=:State WHERE InformationId=:InformationId";
+        $sql = "UPDATE " . self::TableName_Information . " SET State=:State WHERE InformationId=:InformationId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("InformationId", $informationId);
         $dataProperty->AddField("State", $state);

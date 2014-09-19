@@ -85,10 +85,12 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             if (!empty($_POST)) {
                 $customFormManageData = new CustomFormManageData();
                 $newId = $customFormManageData->Create($_POST);
+
+                //记入操作log
+                $operateContent = "Create CustomForm：CustomFormId：" . $newId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newId;
+                self::CreateManageUserLog($operateContent);
+
                 if($newId>0){
-                    //加入操作log
-                    $operateContent = "Create CustomForm：CustomFormID：" . $newId . "；result：" . $newId . "；title：" . Control::PostRequest("f_CustomFormSubject", "");
-                    self::CreateManageUserLog($operateContent);
 
 
 
@@ -156,7 +158,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($customFormId > 0) {
             $customFormManageData = new CustomFormManageData();
-            $channelId = $customFormManageData->GetChannelID($customFormId, 0);
+            $channelId = $customFormManageData->GetChannelId($customFormId, 0);
             $channelData = new channelManageData();
             $siteId = $channelData->GetSiteId($channelId,"");
 
@@ -171,7 +173,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetManageUserID($customFormId,FALSE);
+            $createUserId = $customFormManageData->GetManageUserId($customFormId,FALSE);
             if ($createUserId !== $nowManageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
@@ -207,12 +209,11 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = $customFormManageData->Modify($_POST,$customFormId);
 
 
+                //记入操作log
+                $operateContent = "Create CustomForm：CustomFormId：" . $customFormId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
+                self::CreateManageUserLog($operateContent);
+
                 if ($result > 0) {
-
-                    //加入操作log
-                    $operateContent = "Modify CustomForm：CustomFormId：" . $customFormId . "; result：" . $customFormId . "；title：" . Control::PostRequest("f_customFormSubject", "");
-                    self::CreateManageUserLog($operateContent);
-
 
                     Control::ShowMessage(Language::Load('custom_form', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);

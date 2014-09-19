@@ -47,7 +47,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
         $tempContent = Template::Load("information/information_deal.html","common");
         $resultJavaScript="";
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $userId = Control::GetUserId();
         $userName = Control::GetUserName();
         $channelId = Control::GetRequest("channel_id", 0);
@@ -118,7 +118,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                         }
                     }
                 }else{
-                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 2));
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 2));//提交失败!插入或修改数据库错误！
                 }
             }
 
@@ -127,10 +127,9 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userQQ="";
             $userEmail="";
             $manageUserData = new ManageUserManageData();
-            if(!$userId){
+            if(!$userId||intval($userId)<=0){
                 $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
-
             if (intval($userId) <= 0) {
                 $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 3));//用户数据获取失败！继续操作可能会对信息记录造成影响！
             }else{
@@ -179,7 +178,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
         $tempContent = Template::Load("information/information_deal.html","common");
         $resultJavaScript="";
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $userId = Control::GetUserId();
         $userName = Control::GetUserName();
         $channelId = Control::GetRequest("channel_id", 0);
@@ -271,7 +270,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userQQ="";
             $userEmail="";
             $manageUserData = new ManageUserManageData();
-            if(!$userId){
+            if(!$userId||intval($userId)<=0){
                 $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
 
@@ -332,12 +331,11 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($pageIndex > 0 && $channelId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $listName = "Information";
+            $listName = "information";
             $allCount = 0;
             $informationManageData = new InformationManageData();
             $listOfInformationArray = $informationManageData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey);
             if ($listOfInformationArray != null && count($listOfInformationArray) > 0) {
-
                 Template::ReplaceList($tempContent, $listOfInformationArray, $listName);
 
                 $styleNumber = 1;
@@ -378,7 +376,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $informationManageData = new InformationManageData();
             $result = $informationManageData->ModifyState($informationId,$state);
             //加入操作日志
-            $operateContent = 'ModifyState Information,Get FORM:' . implode('|', $_GET) . ';\r\nResult:Information:' . $informationId;
+            $operateContent = 'ModifyState Information,Get FORM:' . implode('|', $_GET) . ';\r\nResult:Information:' . $result;
             self::CreateManageUserLog($operateContent);
         } else {
             $result = -1;
