@@ -37,7 +37,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 生成产品价格管理新增页面
+     * 生成产品图片管理新增页面
      * @return mixed|string
      */
     private function GenCreate()
@@ -107,7 +107,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 修改投票状态
+     * 修改状态
      * @return string 修改结果
      */
     private function AsyncModifyState()
@@ -128,7 +128,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 生成产品价格修改页面
+     * 生成产品图片修改页面
      * @return mixed|string
      */
     private function GenModify()
