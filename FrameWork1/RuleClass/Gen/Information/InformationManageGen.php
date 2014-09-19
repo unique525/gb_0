@@ -9,23 +9,6 @@
 class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
 
-    /**
-     * 活动id错误
-     */
-    const ACTIVITY_FALSE_ACTIVITY_ID = -1;
-    /**
-     * 写入、修改数据库操作失败
-     */
-    const ACTIVITY_INSERT_OR_UPDATE_FAILED = -2;
-    /**
-     * 活动type错误
-     */
-    const ACTIVITY_FALSE_ACTIVITY_TYPE = -3;
-    /**
-     * 查询单条活动结果为空
-     */
-    const ACTIVITY_GET_ONE_RESULT_NULL = -4;
-
 
     /**
      * 主生成方法(继承接口)
@@ -143,7 +126,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userEmail="";
             $manageUserData = new ManageUserManageData();
             if(!$userId){
-                $userId = $manageUserData->GetUserID($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
 
             if (intval($userId) <= 0) {
@@ -230,7 +213,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                         //titlePic1
                         $fileElementName = "file_title_pic_1";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_INFORMATION_TITLE_PIC_1; //information_1 130
-                        $tableId = $newInformationId;
+                        $tableId = $informationId;
                         $uploadFile1 = new UploadFile();
                         $uploadFileId1 = 0;
                         $titlePic1Result = self::Upload(
@@ -248,7 +231,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
 
                         if($uploadFileId1>0){
-                            $informationManageData->ModifyTitlePic($newInformationId, $uploadFileId1);
+                            $informationManageData->ModifyTitlePic($informationId, $uploadFileId1);
 
                             //图片多平台处理
                             $channelManageData=new ChannelManageData();
