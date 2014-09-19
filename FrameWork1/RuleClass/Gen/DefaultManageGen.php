@@ -144,12 +144,16 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $productPicManageGen->Gen();
                     break;
                 case "activity":
-                    $ActivityManageGen = new ActivityManageGen();
-                    $result = $ActivityManageGen->Gen();
+                    $activityManageGen = new ActivityManageGen();
+                    $result = $activityManageGen->Gen();
                     break;
                 case "activity_class":
-                    $ActivityClassManageGen = new ActivityClassManageGen();
-                    $result = $ActivityClassManageGen->Gen();
+                    $activityClassManageGen = new ActivityClassManageGen();
+                    $result = $activityClassManageGen->Gen();
+                    break;
+                case "information":
+                    $informationManageGen = new InformationManageGen();
+                    $result = $informationManageGen->Gen();
                     break;
                 default :
                     $result = self::GenDefault();
