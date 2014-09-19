@@ -210,7 +210,7 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 列表页面html
      */
     private function GenList(){
-        $result = -1;
+        $result=-1;
         $resultJavaScript="";
         $tempContent = Template::Load("activity/activity_class_list.html","common");
         $channelId = Control::GetRequest("channel_id", 0);
@@ -224,24 +224,29 @@ class ActivityClassManageGen extends BaseManageGen implements IBaseManageGen {
             $activityClassManageData = new ActivityClassManageData();
             $listOfClassArray = $activityClassManageData->GetListPager($channelId, $pageBegin, $pageSize, $allCount);
 
-            Template::ReplaceList($tempContent, $listOfClassArray, $listName);
+            if(count($listOfClassArray)>0){
+                Template::ReplaceList($tempContent, $listOfClassArray, $listName);
 
-            $styleNumber = 1;
-            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
-            $isJs = FALSE;
-            $navUrl = "default.php?secu=manage&mod=activity&m=list&channel_id=$channelId&p={0}&ps=$pageSize";
-            $jsFunctionName = "";
-            $jsParamList = "";
-            $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=activity&m=list&channel_id=$channelId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
 
 
-            $replace_arr = array(
-                "{PagerButton}" => $pagerButton
-            );
-            $tempContent = strtr($tempContent, $replace_arr);
+                $replace_arr = array(
+                    "{PagerButton}" => $pagerButton
+                );
+                $tempContent = strtr($tempContent, $replace_arr);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
+            };
             parent::ReplaceEnd($tempContent);
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
-            $result = $tempContent;
+            $result=$tempContent;
         }else{
             $result = DefineCode::ACTIVITY_CLASS_MANAGE + self::ACTIVITY_CLASS_FALSE_CHANNEL_OR_SITE_ID;
         }

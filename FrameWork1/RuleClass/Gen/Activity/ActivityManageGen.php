@@ -283,7 +283,6 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 列表页面html
      */
     private function GenList(){
-        $result = Language::Load('document', 7);
         $resultJavaScript="";
         $tempContent = Template::Load("activity/activity_list.html","common");
         $channelId = Control::GetRequest("channel_id", 0);
@@ -323,12 +322,14 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     "{PagerButton}" => $pagerButton
                 );
                 $tempContent = strtr($tempContent, $replace_arr);
-                parent::ReplaceEnd($tempContent);
-                $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
-                $result = $tempContent;
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
             }
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         }
-        return $result;
+        return $tempContent;
     }
 
     private function CreateForActivityType0($activityType){
