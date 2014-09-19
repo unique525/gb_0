@@ -11,7 +11,7 @@
         .tools{height:30px;border-top:0 #CCC solid; padding-top: 4px;}
         .tools span{height:30px;text-align: center; line-height: 25px}
     </style>
-    <script type="text/javascript ">
+    <script type="text/javascript">
         $(function() {
             var tag=Request["tag"];
             if(tag.length>0)
@@ -22,7 +22,7 @@
         });
         function GetProductPicByTag()
         {
-            var tag=($("#select_tag").val());
+            var tag=$("#select_tag").val();
             tag=encodeURIComponent(tag);
             var ps=Request["ps"];
             var tabIndex = Request["tab_index"];

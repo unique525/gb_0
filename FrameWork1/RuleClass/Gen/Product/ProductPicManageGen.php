@@ -226,7 +226,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
                 $isJs = FALSE;
-                $navUrl = "/default.php?secu=manage&mod=product_pic&m=list&product_id=$ProductId&p={0}&ps=$pageSize";
+                $navUrl = "/default.php?secu=manage&mod=product_pic&m=list&product_id=".$ProductId."&"."tag=".urlencode($tag)."&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
