@@ -97,7 +97,7 @@
             <td style="width:40px;text-align:center;">审核</td>
             <td style="width:40px;text-align:center;">删除</td>
         </tr>
-        <icms id="activity" type="list" subjectlen="60">
+        <icms id="information" type="list" subjectlen="60">
             <item>
                 <![CDATA[
                 <tr class="grid_item">
