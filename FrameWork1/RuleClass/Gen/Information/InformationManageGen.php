@@ -57,11 +57,13 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             if (!empty($_POST)) {
                 $informationManageData = new InformationManageData();
                 $newInformationId = $informationManageData->Create($_POST);
-                if($newInformationId>0){
 
-                    //记入操作log
-                    $operateContent = "Create Information：InformationID：" . $newInformationId . "；result：" . $newInformationId . "；title：" . Control::PostRequest("f_InformationTitle", "");
-                    self::CreateManageUserLog($operateContent);
+
+                //记入操作log
+                $operateContent = "Create Information：InformationId：" . $newInformationId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newInformationId;
+                self::CreateManageUserLog($operateContent);
+
+                if($newInformationId>0){
 
                     Control::ShowMessage(Language::Load('information', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -192,11 +194,13 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
         if (intval($channelId) > 0) {
             if (!empty($_POST)) {
                 $modifySuccess = $informationManageData->Modify($_POST, $informationId);
+
+                //记入操作log
+                $operateContent = "Create Information：InformationId：" . $informationId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $modifySuccess;
+                self::CreateManageUserLog($operateContent);
+
                 if ($modifySuccess > 0) {
 
-                    //记入操作log
-                    $operateContent = "Modify Information：InformationID：" . $informationId . "；result：" . $informationId . "；title：" . Control::PostRequest("f_InformationTitle", "");
-                    self::CreateManageUserLog($operateContent);
 
                     Control::ShowMessage(Language::Load('information', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -268,7 +272,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userEmail="";
             $manageUserData = new ManageUserManageData();
             if(!$userId){
-                $userId = $manageUserData->GetUserID($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
 
             if (intval($userId) <= 0) {
@@ -321,7 +325,6 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
         $resultJavaScript="";
         $tempContent = Template::Load("information/information_list.html","common");
         $channelId = Control::GetRequest("channel_id", 0);
-        $state = Control::GetRequest("state", -1);
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
         $searchKey = Control::GetRequest("search_key", "");
