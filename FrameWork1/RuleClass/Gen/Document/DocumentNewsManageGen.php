@@ -210,7 +210,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             switch ($publishType) {
                                 case ChannelManageData::PUBLISH_TYPE_AUTO: //自动发布新稿
                                     //修改文档状态为终审
-                                    $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
+                                    $state = DocumentNewsData::STATE_FINAL_VERIFY;
                                     $documentNewsManageData->ModifyState($documentNewsId, $state);
                                     $executeTransfer = true; //是否执行发布
                                     $publishChannel = true; //是否同时发布频道
@@ -244,8 +244,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $tempContent = preg_replace($patterns, "", $tempContent);
             }
             ////////////////////////////////////////////////////
-
-
         }
 
         parent::ReplaceEnd($tempContent);
@@ -499,7 +497,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         switch ($publishType) {
                             case ChannelManageData::PUBLISH_TYPE_AUTO: //自动发布新稿
                                 //修改文档状态为终审
-                                $state = DocumentNewsManageData::STATE_FINAL_VERIFY;
+                                $state = DocumentNewsData::STATE_FINAL_VERIFY;
                                 $documentNewsManageData->ModifyState($documentNewsId, $state);
                                 $executeTransfer = true; //是否执行发布
                                 $publishChannel = true; //是否同时发布频道
@@ -573,7 +571,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
         $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
-            return Language::Load('channel', 4);
+            die(Language::Load('channel', 4));
         }
 
         //load template
@@ -614,11 +612,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if (isset($searchKey) && strlen($searchKey) > 0) {
             $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
-                return Language::Load('channel', 4);
+                die(Language::Load('channel', 4));
             }
         }
 
         if ($pageIndex > 0 && $channelId > 0) {
+
+            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "document_news_list";
             $allCount = 0;
@@ -683,22 +684,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $can = false;
             switch ($state) {
-                case DocumentNewsManageData::STATE_REDO :
+                case DocumentNewsData::STATE_REDO :
                     $can = $manageUserAuthorityManageData->CanRework($siteId, $channelId, $manageUserId);
                     break;
-                case DocumentNewsManageData::STATE_FIRST_VERIFY :
+                case DocumentNewsData::STATE_FIRST_VERIFY :
                     $can = $manageUserAuthorityManageData->CanAudit1($siteId, $channelId, $manageUserId);
                     break;
-                case DocumentNewsManageData::STATE_SECOND_VERIFY :
+                case DocumentNewsData::STATE_SECOND_VERIFY :
                     $can = $manageUserAuthorityManageData->CanAudit2($siteId, $channelId, $manageUserId);
                     break;
-                case DocumentNewsManageData::STATE_THIRD_VERIFY :
+                case DocumentNewsData::STATE_THIRD_VERIFY :
                     $can = $manageUserAuthorityManageData->CanAudit3($siteId, $channelId, $manageUserId);
                     break;
-                case DocumentNewsManageData::STATE_FINAL_VERIFY :
+                case DocumentNewsData::STATE_FINAL_VERIFY :
                     $can = $manageUserAuthorityManageData->CanAudit4($siteId, $channelId, $manageUserId);
                     break;
-                case DocumentNewsManageData::STATE_REFUSE :
+                case DocumentNewsData::STATE_REFUSE :
                     $can = $manageUserAuthorityManageData->CanRefused($siteId, $channelId, $manageUserId);
                     break;
             }
@@ -729,7 +730,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             ////////////////////////////////////////////////////
             ////////////////////////////////////////////////////
             $oldState = $documentNewsManageData->GetState($documentNewsId, false);
-            if (($oldState === DocumentNewsManageData::STATE_PUBLISHED || $oldState === DocumentNewsManageData::STATE_REFUSE) && intval($state) === DocumentNewsManageData::STATE_REFUSE) {
+            if (($oldState === DocumentNewsData::STATE_PUBLISHED
+                    || $oldState === DocumentNewsData::STATE_REFUSE
+                )
+                && intval($state) === DocumentNewsData::STATE_REFUSE)
+            {
                 $cancelPublishResult = parent::CancelPublishDocumentNews($documentNewsId);
                 if($cancelPublishResult){
                     //修改状态
