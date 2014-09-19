@@ -473,7 +473,7 @@ class BaseData
     /**
      * 分类信息 数据表名
      */
-    const TableName_Information = "cst_Information";
+    const TableName_Information = "cst_information";
     /**
      * 分类信息 数据表自增字段名
      */
