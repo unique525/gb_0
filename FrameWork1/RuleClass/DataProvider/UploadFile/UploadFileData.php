@@ -101,22 +101,28 @@ class UploadFileData extends BaseData
      * 广告内容图
      */
     const UPLOAD_TABLE_TYPE_AD_CONTENT = 50;
+
+
     /**
-     * 活动内容图
+     * 活动题图1
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1 = 60;
     /**
-     * 活动内容图
+     * 活动题图2
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2 = 61;
     /**
-     * 活动内容图
+     * 活动题图3
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3 = 62;
     /**
      * 活动花絮
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_PIC = 63;
+    /**
+     * 活动内容图
+     */
+    const UPLOAD_TABLE_TYPE_ACTIVITY_CONTENT = 64;
 
 
     /**
