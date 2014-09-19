@@ -142,7 +142,7 @@
         </td>
     </tr>
 </table>
-<div id="tabs">
+<div id="tabs" style="width:99%">
 <ul>
     <li><a href="#tabs-1">分类信息内容</a></li>
     <li><a href="#tabs-2">管理</a></li>

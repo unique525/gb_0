@@ -166,7 +166,7 @@ function submitForm(continueCreate) {
                     </td>
                 </tr>
             </table>
-            <div id="tabs">
+            <div id="tabs" style="width:99%">
                 <ul>
                     <li><a href="#tabs-1">活动内容</a></li>
                     <li><a href="#tabs-2">属性</a></li>
