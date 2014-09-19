@@ -9,7 +9,7 @@
             {
                 var ProductPicTag= $('#f_ProductPicTag').val();
                 if(ProductPicTag == ''){
-                    alert('产品图片类别！');
+                    alert('请输入产品图片类别！');
                 }
                 else if(ProductPicTag.length>50){
                     alert('产品图片类别字符长度不能超过50个字节！');
