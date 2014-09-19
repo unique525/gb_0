@@ -133,7 +133,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                 $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 3));//用户数据获取失败！继续操作可能会对信息记录造成影响！
             }else{
                 $userData = new UserManageData();
-                $userName= $userData->GetOne($userId,FALSE);
+                $userName= $userData->GetUserName($userId,FALSE);
 
                 $userInfoManageData= new UserInfoManageData();
                 $oneUserInfoArray=$userInfoManageData->GetOne($userId,FALSE);
@@ -350,10 +350,13 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                     "{PagerButton}" => $pagerButton
                 );
                 $tempContent = strtr($tempContent, $replace_arr);
-                parent::ReplaceEnd($tempContent);
-                $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
-                $result = $tempContent;
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
             }
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+            $result = $tempContent;
         }
         return $result;
     }
