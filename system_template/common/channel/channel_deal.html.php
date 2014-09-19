@@ -91,20 +91,22 @@
         <td class="spe_line" height="30" align="right"><label for="f_ChannelType">频道类型：</label></td>
         <td class="spe_line">
             <select id="f_ChannelType" name="f_ChannelType">
-                <option value="1">新闻信息类</option>
-                <option value="2">咨询答复类</option>
-                <option value="3">图片轮换类</option>
-                <option value="4">产品类</option>
-                <option value="5">频道结合产品类</option>
-                <option value="6">活动类</option>
-                <option value="7">投票类</option>
-                <option value="8">自定义页面类</option>
-                <option value="9">友情链接类</option>
-                <option value="10">活动表单类</option>
-                <option value="11">文字直播类</option>
-                <option value="12">投票调查类</option>
-                <option value="0">站点首页类</option>
-                <option value="50">外部接口类</option>
+                <option value="1">新闻资讯</option>
+                <option value="2">咨询答复</option>
+                <option value="3">图片轮换</option>
+                <option value="4">产品</option>
+                <option value="5">频道结合产品</option>
+                <option value="6">活动</option>
+                <option value="7">在线调查</option>
+                <option value="8">自定义页面</option>
+                <option value="9">友情链接</option>
+                <option value="10">活动表单</option>
+                <option value="11">文字直播</option>
+                <option value="12">投票</option>
+                <option value="13">在线测试</option>
+                <option value="14">分类信息</option>
+                <option value="0">站点首页</option>
+                <option value="50">外部接口</option>
             </select>
             {s_ChannelType}
         </td>
