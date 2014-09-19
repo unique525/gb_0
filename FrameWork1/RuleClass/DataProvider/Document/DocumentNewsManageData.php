@@ -260,10 +260,23 @@ class DocumentNewsManageData extends BaseManageData
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
      * @param int $isSelf 是否只显示当前登录的管理员录入的资讯
-     * @param int $manageUserId 后台管理员id
+     * @param int $manageUserId 查显示某个后台管理员id
+     * @param string $sort 排序方式（默认降序）
+     * @param string $hit 按HIT排序方式（默认不按hit排）
      * @return array 资讯列表数据集
      */
-    public function GetList($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $isSelf = 0, $manageUserId = 0)
+    public function GetList($channelId,
+                            $pageBegin,
+                            $pageSize,
+                            &$allCount,
+                            $searchKey = "",
+                            $searchType = 0,
+                            $isSelf = 0,
+                            $manageUserId = 0,
+                            $sort = "down",
+                            $hit = ""
+
+    )
     {
         $searchSql = "";
         $dataProperty = new DataProperty();
@@ -301,6 +314,20 @@ class DocumentNewsManageData extends BaseManageData
             $conditionManageUserId = "";
         }
 
+        if ($sort == "up"){
+            $sortMethod = "ASC";
+        }else{
+            $sortMethod = "DESC";
+        }
+
+        if ($hit == "up"){
+            $hitSortMethod = "Hit ASC,";
+        }elseif($hit == "down"){
+            $hitSortMethod = "Hit DESC,";
+        }else{
+            $hitSortMethod = "";
+        }
+
         $sql = "
             SELECT
             DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
@@ -309,7 +336,7 @@ class DocumentNewsManageData extends BaseManageData
             FROM
             " . self::TableName_DocumentNews . "
             WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
-            ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY $hitSortMethod Sort $sortMethod, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
@@ -328,16 +355,19 @@ class DocumentNewsManageData extends BaseManageData
     public function ModifySort($arrDocumentNewsId)
     {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
-            $strDocumentNewsId = Join(',', $arrDocumentNewsId);
-            $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId)";
+            $strDocumentNewsId = join(',', $arrDocumentNewsId);
+            $strDocumentNewsId = Format::FormatSql($strDocumentNewsId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId IN ($strDocumentNewsId);";
             $maxSort = $this->dbOperator->GetInt($sql, null);
             $arrSql = array();
-            for ($i = 0; $i < Count($arrDocumentNewsId); $i++) {
+            for ($i = 0; $i < count($arrDocumentNewsId); $i++) {
                 $newSort = $maxSort - $i;
                 if ($newSort < 0) {
                     $newSort = 0;
                 }
-                $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=$newSort WHERE DocumentNewsId=$arrDocumentNewsId[$i];";
+                $newSort = intval($newSort);
+                $documentNewsId = intval($arrDocumentNewsId[$i]);
+                $sql = "UPDATE " . self::TableName_DocumentNews . " SET Sort=$newSort WHERE DocumentNewsId=$documentNewsId;";
                 $arrSql[] = $sql;
             }
             return $this->dbOperator->ExecuteBatch($arrSql, null);

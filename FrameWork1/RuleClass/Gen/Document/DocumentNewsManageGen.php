@@ -608,7 +608,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $pageIndex = Control::GetRequest("p", 1);
         $searchKey = Control::GetRequest("search_key", "");
         $searchType = Control::GetRequest("search_type", -1);
+
         $searchKey = urldecode($searchKey);
+        $sort = Control::GetRequest("sort", "");
+        $hit = Control::GetRequest("hit", "");
+
         if (isset($searchKey) && strlen($searchKey) > 0) {
             $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
@@ -625,7 +629,18 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $allCount = 0;
             $isSelf = Control::GetRequest("is_self", 0);
             $documentNewsManageData = new DocumentNewsManageData();
-            $arrDocumentNewsList = $documentNewsManageData->GetList($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType, $isSelf, $manageUserId);
+            $arrDocumentNewsList = $documentNewsManageData->GetList(
+                $channelId,
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $searchKey,
+                $searchType,
+                $isSelf,
+                $manageUserId,
+                $sort,
+                $hit
+            );
             if (count($arrDocumentNewsList) > 0) {
                 Template::ReplaceList($tempContent, $arrDocumentNewsList, $tagId);
 
@@ -749,7 +764,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $operateContent = 'Modify State DocumentNews,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
             self::CreateManageUserLog($operateContent);
         }
-        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+        return $result;
     }
 
 }

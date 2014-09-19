@@ -39,12 +39,16 @@
             <td style="width: 20px;"></td>
             <td style="padding-left:10px;">标题</td>
             <td style="width: 36px;"></td>
-            <td style="width: 60px; text-align: center;">排序</td>
+            <td id="btn_sort" class="grid_can_sort" title="点击更改排序" style="width: 60px; text-align: center;">
+                排序<img id="btn_sort_down" src="/system_template/{template_name}/images/manage/arrow1.gif" alt="down" /><img id="btn_sort_up" style="display:none;" src="/system_template/{template_name}/images/manage/arrow2.gif" alt="up" />
+            </td>
             <td style="width: 50px; text-align: center;">推荐</td>
-            <td style="width: 50px; text-align: center;">点击</td>
+            <td id="btn_sort_by_hit" class="grid_can_sort" title="按点击排序" style="width: 50px; text-align: center;">
+                点击<img id="btn_sort_by_hit_down" src="/system_template/{template_name}/images/manage/arrow1.gif" alt="down" /><img id="btn_sort_by_hit_up" style="display:none;" src="/system_template/{template_name}/images/manage/arrow2.gif" alt="up" />
+            </td>
             <td style="width: 180px;">创建时间</td>
             <td style="width: 100px;">发稿人</td>
-            <td style="width: 40px;"></td>
+            <td style="width: 40px;"><img src="/system_template/{template_name}/images/manage/pic.gif" alt="图片管理" title="本类别全部文档中上传的图片管理"/> <img src="/system_template/{template_name}/images/manage/comment.gif" alt="评论管理" title="本类别全部评论管理"/></td>
         </tr>
     </table>
     <ul id="sort_grid">
@@ -59,7 +63,7 @@
                                     <input class="input_select" type="checkbox" name="input_select" value="{f_DocumentNewsId}"/>
                                 </label></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_DocumentNewsId}" alt="编辑"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_DocumentNewsId}">{f_State}</span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="span_state_{f_DocumentNewsId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:center;">
                                 <img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/>
                                 <div class="state_box" style="display: none;" id="div_state_box_{f_DocumentNewsId}" title="">

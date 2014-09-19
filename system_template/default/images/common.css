@@ -64,7 +64,9 @@ ul{list-style-type:none;}
 .grid_title2 td{border-right:solid 1px #ffffff;}
 .grid_item2 td{border-right:solid 1px #ffffff;}
 .grid_item2_selected{background:#FDF6C1;}
-
+.grid_can_sort_selected{background:#F6F6F6;}
+.grid_can_sort img{margin-left:3px;}
+.grid_can_sort_selected img{margin-left:3px;}
 
 .user_item{float:left;width:18%;margin-right:5px;margin-top:5px;padding:5px;background:#efefef;border:solid 1px #C8CBD5;}
 
