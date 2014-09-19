@@ -87,7 +87,13 @@ $(document).ready(function() {
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_role&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
-
+                //会员收藏管理
+                $("#btnUserFavoriteExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员收藏管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_favorite&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
             }
         }
     });

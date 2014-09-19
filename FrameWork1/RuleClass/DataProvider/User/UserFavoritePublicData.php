@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台管理 会员购物车 数据类
+ * 前台管理 会员收藏 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * @author yin

@@ -20,7 +20,7 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         $result = "";
         $method = Control::GetRequest("a", "");
         switch ($method) {
-            case "create":
+            case "add":
                 $result = self::GenCreate();
                 break;
             case "list":

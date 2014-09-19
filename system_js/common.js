@@ -122,7 +122,7 @@ function checkNumber(me) {
 }
 
 function checkEmail(me) {
-    var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+    var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]{2,4})*\.[A-Za-z0-9]{2,3}$/;
     if(reg.test(me)){
         return true;
     }else{

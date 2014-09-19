@@ -8,6 +8,21 @@
  */
 class UserPublicData extends BasePublicData {
 
+    public function CheckLogin($userName,$userPass,$siteId){
+        $result = -1;
+        if(!empty($userName) && !empty($userPass) && $siteId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_User." WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile) AND UserPass = :UserPass AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserName",$userName);
+            $dataProperty->AddField("UserEmail",$userName);
+            $dataProperty->AddField("UserMobile",$userName);
+            $dataProperty->AddField("UserPass",$userPass);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     public function Create($siteId,$userPass,$regIp,$userName="",$userEmail="",$userMobile=""){
         $result = -1;
         if($siteId > 0
@@ -51,7 +66,6 @@ class UserPublicData extends BasePublicData {
     /**
      * 检查相同的用户名
      * @param string $userName 用户名
-     * @param int $siteId 站点Id
      * @return int 查询结果
      */
     public function CheckRepeatUserName($userName){
@@ -68,7 +82,6 @@ class UserPublicData extends BasePublicData {
     /**
      * 检查相同的伊妹儿
      * @param string $userEmail 用户登录的伊妹儿
-     * @param int $siteId 站点Id
      * @return int 查询结果
      */
     public function CheckRepeatUserEmail($userEmail){
@@ -85,7 +98,6 @@ class UserPublicData extends BasePublicData {
     /**
      * 检查相同的手机号码
      * @param string $userMobile 用户登录的手机号码
-     * @param int $siteId 站点Id
      * @return int 查询结果
      */
     public function CheckRepeatUserMobile($userMobile){

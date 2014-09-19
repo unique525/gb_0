@@ -33,6 +33,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $result = "";
         $method = Control::GetRequest("a", "");
         switch ($method) {
+            case "async_login":
+                $result = self::AsyncLogin();
+                break;
             case "register":
                 $result = self::GenRegister();
                 break;
@@ -44,6 +47,26 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $result = str_ireplace("{method}", $method, $result);
 
         return $result;
+    }
+
+    private function AsyncLogin(){
+        $userName = Control::GetRequest("user_name", "");
+        $userPass = Control::GetRequest("user_pass", "");
+        $siteId = Control::GetRequest("site_id",0);
+
+        $debug = new DebugLogManageData();
+        $debug->Create($userName."---".$userPass."---".$siteId);
+        if(!empty($userName) && !empty($userPass) && $siteId > 0){
+            $userPublicData = new UserPublicData();
+            $result = $userPublicData->CheckLogin($userName, $userPass, $siteId);
+            if($result < 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":-1})';
+            }else {
+                return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+            }
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":-2})';
+        }
     }
 
     /**
@@ -61,15 +84,15 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $isSameName = self::IsRepeatUserName($userName);
             $isSameEmail = self::IsRepeatUserEmail($userEmail);
             $isSameMobile = self::IsRepeatUserMobile($userMobile);
-            if ($isSameName) {
+            if (!empty($userName)  && $isSameName) {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_NAME.'})';
             }
 
-            if ($isSameEmail) {
+            if (!empty($userEmail) && $isSameEmail) {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_EMAIL.'})';
             }
 
-            if ($isSameMobile) {
+            if (!empty($userMobile) && $isSameMobile) {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
             }
 
@@ -117,14 +140,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
             if (!empty($userMobile)) {
-                if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
-                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
-                    if ($isSameMobile) { //检查是否有相同的手机号码
-                        return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
-                    }
-                } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
-                }
+//                if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
+//                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
+//                    if ($isSameMobile) { //检查是否有相同的手机号码
+//                        return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
+//                    }
+//                } else {
+//                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+//                }
             }
             //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
             $userPublicData = new UserPublicData();
