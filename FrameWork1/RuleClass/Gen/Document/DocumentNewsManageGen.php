@@ -608,8 +608,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $pageIndex = Control::GetRequest("p", 1);
         $searchKey = Control::GetRequest("search_key", "");
         $searchType = Control::GetRequest("search_type", -1);
-
         $searchKey = urldecode($searchKey);
+
         $sort = Control::GetRequest("sort", "");
         $hit = Control::GetRequest("hit", "");
 
@@ -647,7 +647,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
+                $navUrl = "default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf&sort=$sort&hit=$hit";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

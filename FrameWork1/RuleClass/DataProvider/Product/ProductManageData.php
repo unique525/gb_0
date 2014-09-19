@@ -1,18 +1,21 @@
 <?php
+
 /**
  * 后台管理 产品 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Product
  * @author zhangchi
  */
-class ProductManageData extends BaseManageData {
+class ProductManageData extends BaseManageData
+{
 
     /**
      * 取得字段数据集
      * @param string $tableName 表名
      * @return array 字段数据集
      */
-    public function GetFields($tableName = self::TableName_Product){
+    public function GetFields($tableName = self::TableName_Product)
+    {
         return parent::GetFields(self::TableName_Product);
     }
 
@@ -92,7 +95,7 @@ class ProductManageData extends BaseManageData {
     public function ModifyTitlePic($productId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId, $titlePic4UploadFileId)
     {
         $result = -1;
-        if($productId>0){
+        if ($productId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Product . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId,
@@ -124,7 +127,7 @@ class ProductManageData extends BaseManageData {
     public function ModifyTitlePic1UploadFileId($productId, $titlePic1UploadFileId)
     {
         $result = -1;
-        if($productId>0){
+        if ($productId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Product . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId
@@ -149,7 +152,7 @@ class ProductManageData extends BaseManageData {
     public function ModifyTitlePic2UploadFileId($productId, $titlePic2UploadFileId)
     {
         $result = -1;
-        if($productId>0){
+        if ($productId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Product . " SET
                     TitlePic2UploadFileId = :TitlePic2UploadFileId
@@ -174,7 +177,7 @@ class ProductManageData extends BaseManageData {
     public function ModifyTitlePic3UploadFileId($productId, $titlePic3UploadFileId)
     {
         $result = -1;
-        if($productId>0){
+        if ($productId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Product . " SET
                     TitlePic3UploadFileId = :TitlePic3UploadFileId
@@ -199,7 +202,7 @@ class ProductManageData extends BaseManageData {
     public function ModifyTitlePic4UploadFileId($productId, $titlePic4UploadFileId)
     {
         $result = -1;
-        if($productId>0){
+        if ($productId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Product . " SET
                     TitlePic4UploadFileId = :TitlePic4UploadFileId
@@ -325,9 +328,10 @@ class ProductManageData extends BaseManageData {
      * @param int $productId 产品id
      * @return array|null 取得对应数组
      */
-    public function GetOne($productId){
+    public function GetOne($productId)
+    {
         $result = null;
-        if($productId>0){
+        if ($productId > 0) {
             $sql = "SELECT * FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
@@ -346,10 +350,24 @@ class ProductManageData extends BaseManageData {
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
      * @param int $isSelf 是否只显示当前登录的管理员录入的产品
-     * @param int $manageUserId 后台管理员id
+     * @param int $manageUserId 查显示某个后台管理员id
+     * @param string $sort 排序方式（默认降序）
+     * @param string $saleCount 按HIT排序方式（默认不按hit排）
      * @return array 产品列表数据集
      */
-    public function GetList($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $isSelf = 0, $manageUserId = 0)
+    public function GetList(
+        $channelId,
+        $pageBegin,
+        $pageSize,
+        &$allCount,
+        $searchKey = "",
+        $searchType = 0,
+        $isSelf = 0,
+        $manageUserId = 0,
+        $sort = "down",
+        $saleCount = ""
+
+    )
     {
         $searchSql = "";
         $dataProperty = new DataProperty();
@@ -384,6 +402,21 @@ class ProductManageData extends BaseManageData {
             $conditionManageUserId = "";
         }
 
+
+        if ($sort == "up") {
+            $sortMethod = "ASC";
+        } else {
+            $sortMethod = "DESC";
+        }
+
+        if ($saleCount == "up") {
+            $saleCountSortMethod = "SaleCount ASC,";
+        } elseif ($saleCount == "down") {
+            $saleCountSortMethod = "SaleCount DESC,";
+        } else {
+            $saleCountSortMethod = "";
+        }
+
         $sql = "
             SELECT
             ProductId,ProductNumber,ProductName,SiteId,ChannelId,
@@ -395,7 +428,7 @@ class ProductManageData extends BaseManageData {
             FROM
             " . self::TableName_Product . "
             WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
-            ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY $saleCountSortMethod Sort $sortMethod, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 

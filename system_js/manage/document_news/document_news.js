@@ -170,7 +170,8 @@ $(function() {
     });
     sortGrid.disableSelection();
 
-    //顶部排序按钮
+    /****************** 顶部排序按钮 ***************************/
+
     var gridCanSort = $(".grid_can_sort");
     gridCanSort.css("cursor", "pointer");
     gridCanSort.mouseover(function(){
@@ -193,7 +194,6 @@ $(function() {
 
 
     $("#btn_sort").click(function(){
-
         var url = window.location.href;
         url = url.replaceAll("&sort=up","");
         url = url.replaceAll("&sort=down","");
@@ -244,7 +244,7 @@ $(function() {
             window.location.href = url + "&hit=down";
         }
     });
-
+    /*********************************************/
 
     //选中时的样式变化
     $('.grid_item').click(function() {

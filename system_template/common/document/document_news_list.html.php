@@ -48,7 +48,6 @@
             </td>
             <td style="width: 180px;">创建时间</td>
             <td style="width: 100px;">发稿人</td>
-            <td style="width: 40px;"><img src="/system_template/{template_name}/images/manage/pic.gif" alt="图片管理" title="本类别全部文档中上传的图片管理"/> <img src="/system_template/{template_name}/images/manage/comment.gif" alt="评论管理" title="本类别全部评论管理"/></td>
         </tr>
     </table>
     <ul id="sort_grid">

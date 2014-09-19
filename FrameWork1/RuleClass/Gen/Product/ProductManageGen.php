@@ -456,6 +456,10 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $searchKey = Control::GetRequest("search_key", "");
         $searchType = Control::GetRequest("search_type", -1);
         $searchKey = urldecode($searchKey);
+
+        $sort = Control::GetRequest("sort", "");
+        $saleCount = Control::GetRequest("sale_count", "");
+
         if (isset($searchKey) && strlen($searchKey) > 0) {
             $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
@@ -468,6 +472,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $tagId = "product_list";
             $allCount = 0;
             $isSelf = Control::GetRequest("is_self", 0);
+
+
+
             $productManageData = new ProductManageData();
             $arrProductList = $productManageData->GetList(
                 $channelId,
@@ -477,7 +484,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 $searchKey,
                 $searchType,
                 $isSelf,
-                $manageUserId
+                $manageUserId,
+                $sort,
+                $saleCount
             );
             if (count($arrProductList) > 0) {
                 Template::ReplaceList($tempContent, $arrProductList, $tagId);
@@ -485,7 +494,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=product&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
+                $navUrl = "default.php?secu=manage&mod=product&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf&sort=$sort&sale_count=$saleCount";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
