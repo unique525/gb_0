@@ -77,10 +77,10 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
     private function GenCreate() {
         $tempContent = Template::Load("custom_form/custom_form_record_deal.html","common");
         $resultJavaScript="";
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormData = new CustomFormManageData();
-        $channelId = $customFormData->GetChannelID($customFormId, FALSE);
+        $channelId = $customFormData->GetChannelId($customFormId, FALSE);
         $tabIndex = Control::GetRequest("tab_index", 0);
         parent::ReplaceFirst($tempContent);
 
@@ -111,6 +111,11 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
                                 $customFormFieldType = $customFormFieldManageData->GetCustomFormFieldType($customFormFieldId,FALSE);
                                 $contentId=$customFormContentManageData->Create($newId, $customFormId, $customFormFieldId, $manageUserId, $value, $customFormFieldType);
+
+                                //记入操作log
+                                $operateContent = "Create CustomFormRecord：CustomFormRecord：" . $newId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $contentId;
+                                self::CreateManageUserLog($operateContent);
+
                                 if($contentId<0){
                                     return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_CREATE_FAILED_WHEN_CONTENT_CREATING."field_id:".$customFormFieldId;
                                 }
@@ -118,10 +123,6 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                         }
                     }
 
-                //加入操作log
-
-                $operateContent = "Create CustomFormRecord：CustomFormRecordD：" . $newId . "；result：" . $newId;
-                self::CreateManageUserLog($operateContent);
 
 
 
@@ -147,7 +148,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
         if ($customFormId > 0) {
             $channelData = new ChannelManageData();
-            $siteId = $channelData->GetSiteID($channelId, 0);
+            $siteId = $channelData->GetSiteId($channelId, 0);
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthority = new ManageUserAuthorityManageData();
@@ -206,17 +207,17 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
     private function GenModify() {
         $tempContent = Template::Load("custom_form/custom_form_record_deal.html","common");
         $resultJavaScript="";
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormRecordId = Control::GetRequest("custom_form_record_id", 0);
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $tabIndex = Control::GetRequest("tab_index", 0);
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
+        $channelId = $customFormManageData->GetChannelId($customFormId, FALSE);
         parent::ReplaceFirst($tempContent);
 
         if ($customFormRecordId > 0) {
             $channelManageData = new ChannelManageData();
-            $siteId = $channelManageData->GetSiteID($channelId, FALSE);
+            $siteId = $channelManageData->GetSiteId($channelId, FALSE);
 
             ///////////////判断是否有操作权限///////////////////
 
@@ -228,7 +229,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetManageUserID($customFormId, FALSE);
+            $createUserId = $customFormManageData->GetManageUserId($customFormId, FALSE);
             if ($createUserId !== $manageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $manageUserId);
                 if ($can != 1) {
@@ -284,17 +285,17 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
                                 $customFormFieldType = $customFormFieldManageData->GetCustomFormFieldType($customFormFieldId,FALSE);
                                 $contentId=$customFormContentManageData->Create($customFormRecordId, $customFormId, $customFormFieldId, $manageUserId, $value, $customFormFieldType);
+
+                                //记入操作log
+                                $operateContent = "Create CustomFormRecord：CustomFormRecord：" . $customFormRecordId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $contentId;
+                                self::CreateManageUserLog($operateContent);
+
                                 if($contentId<0){
                                     return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING."field_id:".$customFormFieldId;
                                 }
                             }
                         }
                     }
-
-                    //加入操作log
-
-                    $operateContent = "Modify CustomFormRecord：CustomFormRecordD：" . $customFormRecordId . "；result：" . $customFormRecordId;
-                    self::CreateManageUserLog($operateContent);
 
 
                     Control::ShowMessage(Language::Load('custom_form', 1));
@@ -421,13 +422,13 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      * @return string 表单列表页面html
      */
     private function GenList() {
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $resultJavaScript="";
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId, FALSE);
+        $channelId = $customFormManageData->GetChannelId($customFormId, FALSE);
         $channelManageData = new ChannelManageData();
-        $siteId = $channelManageData->GetSiteID($channelId,1);
+        $siteId = $channelManageData->GetSiteId($channelId,1);
         $numberOfSearchKey = Control::GetRequest("number_of_search_key", 0);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();

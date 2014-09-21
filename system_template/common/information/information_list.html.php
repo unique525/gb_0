@@ -97,7 +97,7 @@
             <td style="width:40px;text-align:center;">审核</td>
             <td style="width:40px;text-align:center;">删除</td>
         </tr>
-        <icms id="information" type="list" subjectlen="60">
+        <icms id="information" type="list">
             <item>
                 <![CDATA[
                 <tr class="grid_item">
@@ -116,12 +116,12 @@
                                                                                       title="{f_InformationId}"><img
                                 style=" cursor: pointer" alt="点击启用或审核该信息"
                                 src="/system_template/default/images/manage/start.jpg"
-                                onclick="ModifyState('Information', '{f_InformationId}', '0')"/></span></td>
+                                onclick="ModifyState('information', '{f_InformationId}', '0')"/></span></td>
                     <td class="spe_line2" style="width:40px;text-align:center;"><span class="stop_Information_id_list"
                                                                                       title="{f_InformationId}"><img
                                 style=" cursor: pointer" alt="停用或删除"
                                 src="/system_template/default/images/manage/stop.jpg"
-                                onclick="ModifyState('Information', '{f_InformationId}', '100')"/></span></td>
+                                onclick="ModifyState('information', '{f_InformationId}', '100')"/></span></td>
                     <td class="spe_line2"
                         style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
                         title="{f_InformationTitle}">{f_InformationTitle}

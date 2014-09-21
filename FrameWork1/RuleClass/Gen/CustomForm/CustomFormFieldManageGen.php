@@ -57,15 +57,15 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate() {
         $tempContent = Template::Load("custom_form/custom_form_field_deal.html","common");
         $resultJavaScript="";
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
+        $channelId = $customFormManageData->GetChannelId($customFormId,FALSE);
 
 
         if ($customFormId > 0) {
         $channelManageData = new ChannelManageData();
-        $siteId = $channelManageData->GetSiteID($channelId, FALSE);
+        $siteId = $channelManageData->GetSiteId($channelId, FALSE);
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
@@ -78,10 +78,11 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
         if (!empty($_POST)) {
             $customFormFieldManageData = new CustomFormFieldManageData();
             $new_id = $customFormFieldManageData->Create($_POST);
+
+            //记入操作log
+            $operateContent = "Create CustomFormField：CustomFormFieldId：" . $new_id .",POST FORM:".implode("|",$_POST).";\r\nResult:". $new_id;
+            self::CreateManageUserLog($operateContent);
             if($new_id>0){
-                //加入操作log
-                $operateContent = "Create CustomFormField：CustomFormFieldID：" . $new_id . "；result：" . $new_id . "；title：" . Control::PostRequest("f_custom_form_field_name", "");
-                self::CreateManageUserLog($operateContent);
 
 
 
@@ -142,11 +143,11 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             $customFormFieldManageData = new CustomFormFieldManageData();
             $result = $customFormFieldManageData->Modify($_POST,$customFormFieldId);
 
-            if ($result > 0) {
+            //记入操作log
+            $operateContent = "Modify CustomFormField：CustomFormFieldId：" . $customFormFieldId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
+            self::CreateManageUserLog($operateContent);
 
-                //加入操作log
-                $operateContent = "Modify CustomFormFieldId：" . $customFormFieldId . "；result：" . $customFormFieldId;
-                self::CreateManageUserLog($operateContent);
+            if ($result > 0) {
 
                 Control::ShowMessage(Language::Load('custom_form', 1));
                 $closeTab = Control::PostRequest("CloseTab",0);
@@ -169,11 +170,11 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             $customFormFieldManageData = new CustomFormFieldManageData();
             $customFormId = Control::GetRequest("custom_form_id", 0);
             $customFormManageData = new CustomFormManageData();
-            $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
+            $channelId = $customFormManageData->GetChannelId($customFormId,FALSE);
             $channelManageData = new ChannelManageData();
-            $siteId = $channelManageData->GetSiteID($channelId, FALSE);
+            $siteId = $channelManageData->GetSiteId($channelId, FALSE);
 
-            $manageUserId = Control::GetManageUserID();
+            $manageUserId = Control::GetManageUserId();
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthority = new ManageUserAuthorityManageData();
             //编辑权限
@@ -184,7 +185,7 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             }
             //操作他人的权限
 
-            $createUserId = $customFormManageData->GetManageUserID($customFormId, FALSE);
+            $createUserId = $customFormManageData->GetManageUserId($customFormId, FALSE);
             if ($createUserId !== $manageUserId) { //操作人不是发布人
                 $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $manageUserId);
                 if ($can != 1) {
@@ -231,13 +232,13 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 表单字段列表页面
      */
     private function GenList() {
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $resultJavaScript="";
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
+        $channelId = $customFormManageData->GetChannelId($customFormId,FALSE);
         $channelData = new ChannelManageData();
-        $siteId = $channelData->GetSiteID($channelId,FALSE);
+        $siteId = $channelData->GetSiteId($channelId,FALSE);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
         $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
