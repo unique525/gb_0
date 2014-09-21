@@ -445,6 +445,14 @@ class BaseData
      */
     const TableId_ProductParamTypeOption = "ProductParamTypeOptionId";
     /**
+     * 产品品牌 数据表名
+     */
+    const TableName_ProductBrand = "cst_product_brand";
+    /**
+     * 产品品牌 数据表自增字段名
+     */
+    const TableId_ProductBrand = "ProductBrandId";
+    /**
      * 产品价格 数据表名
      */
     const TableName_ProductPrice = "cst_product_price";
