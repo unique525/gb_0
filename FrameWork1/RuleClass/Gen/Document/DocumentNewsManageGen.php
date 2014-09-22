@@ -261,7 +261,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
         $nowManageUserId = Control::GetManageUserId();
         $pageIndex = Control::GetRequest("p", 1);
-
+        $resultJavaScript = "";
         parent::ReplaceFirst($tempContent);
         if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
@@ -329,10 +329,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
 
             /////////////////////////////////////////////////
-            //quick content
-            $documentQuickContentManageData = new DocumentQuickContentManageData();
-            $tagId = "document_quick_content";
-            $arrList = $documentQuickContentManageData->GetList();
+            //pre content
+            $documentPreContentManageData = new DocumentPreContentManageData();
+            $tagId = "document_pre_content";
+            $arrList = $documentPreContentManageData->GetList();
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
             } else {
@@ -377,6 +377,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $lockEdit = 0;
                     $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
 
+                    $state = DocumentNewsData::STATE_MODIFY; //修改状态为已编
+                    $documentNewsManageData->ModifyState($documentNewsId, $state);
 
                     //题图操作
                     if( !empty($_FILES)){
@@ -521,6 +523,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             }
         }
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
