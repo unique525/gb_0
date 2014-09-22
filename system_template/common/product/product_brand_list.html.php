@@ -94,12 +94,12 @@ function zTreeOnClick(event, treeId, treeNode) {
     $("#s_ParentName").text(parentName);
     $.ajax({
         url:"default.php?secu=manage&mod=product_brand",
-        data:{m:"one",product_brand_id:id},
+        data:{m:"async_one",product_brand_id:id},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
             $("#f_ParentId").val(data['ParentId']);
-            $("#f_ProductBrandId").val(data['ProductBrandId']);
+            $("#s_ProductBrandId").text(data['ProductBrandId']);
             $("#f_Rank").val(data['Rank']);
             $("#f_ProductBrandName").val(data['ProductBrandName']);
             $("#f_Sort").val(data['Sort']);
@@ -145,7 +145,6 @@ function addTreeNode() {
     $("#s_ParentName").text(parentName);
     $("#f_ParentId").val(parentId);
     $("#s_ProductBrandId").text("");
-    $("#f_ProductBrandId").val("");
     $("#f_Rank").val("0");
     $("#f_ProductBrandName").val("");
     $("#f_Sort").val('0');
@@ -234,9 +233,10 @@ function sub()
     }
     if(message!="") alert(message);
     else{
+        var productBrandId=$('#s_ProductBrandId').text();
         var methodName=$("#btnSubmit").attr('value');
         var actionUrl="";
-        if(methodName=="修改") actionUrl="/default.php?secu=manage&mod=product_brand&m=modify";
+        if(methodName=="修改") actionUrl="/default.php?secu=manage&mod=product_brand&m=modify&product_brand_id="+productBrandId;
         else if(methodName=="新增") actionUrl="/default.php?secu=manage&mod=product_brand&m=create";
         else {alert("错误的操作类型");}
         mainForm.attr("action",actionUrl);
@@ -284,24 +284,16 @@ function sub()
                             <td class="spe_line" ><label for="f_ProductBrandName">名称：</label></td>
                             <td class="spe_line">
                                 <input type="text" class="input_box" id="f_ProductBrandName" name="f_ProductBrandName" value="" style=" width: 200px;font-size:14px;" maxlength="50" /><label id="s_ProductBrandId" ></label>
-                                <input type="hidden" id="f_ProductBrandId" name="f_ProductBrandId" value="" />
-                                <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="" />
+                                <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
                                 <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="" />
                             </td>
                         </tr>
                         <tr>
                             <td class="spe_line">题图：</td>
                             <td class="spe_line">
-                                <input id="titlepic_upload" name="titlepic_upload" type="file" class="input_box" style="width:200px; background: #ffffff; margin-top: 3px;" /> <span id="preview_titlepic">[预览]</span>
-                                <div id="dialog_titlepic" title="题图预览（{titlepic}）" style="display:none;">
-                                    <div id="pubtable">
-                                        <table>
-                                            <tr>
-                                                <td><img id="img_titlepic" src="{titlepic}" alt="titlepic" /></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
+                                <input id="file_pic" name="file_pic" type="file" class="input_box"
+                                       style="width:400px;background:#ffffff;margin-top:3px;"/>
+                                <span id="preview_title_pic" class="show_title_pic" idvalue="{LogoUploadFileId}" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>

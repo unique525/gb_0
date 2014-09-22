@@ -100,18 +100,18 @@ class ProductBrandManageData extends BaseManageData {
 
     /**
      * 获取产品品牌记录
-     * @param int $channelId 频道Id
+     * @param int $siteId 站点Id
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetList($channelId, $order = "", $topCount = -1)
+    public function GetList($siteId, $order = "", $topCount = -1)
     {
         $result = null;
         if ($topCount != -1)
             $topCount = " limit " . $topCount;
         else $topCount = "";
-        if ($channelId > 0) {
+        if ($siteId > 0) {
             switch ($order) {
                 default:
                     $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ProductBrandName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
@@ -119,10 +119,11 @@ class ProductBrandManageData extends BaseManageData {
             }
             $sql = "SELECT *"
                 . " FROM " . self::TableName_ProductBrand
-                . " WHERE State<100"
+                . " WHERE SiteId=:SiteId AND State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
