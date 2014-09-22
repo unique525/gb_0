@@ -53,7 +53,7 @@
                             <td class="spe_line2" style="width:150px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;"><img class="img_open_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img class="img_close_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
-                            <td class="spe_line2" style="width:400px;text-align:center;"></td>
+                            <td class="spe_line2" style="width:400px;text-align:center;"><a href="/default.php?secu=manage&mod=product_brand&&m=list_for_manage_tree&site_id={f_SiteId}">产品品牌管理</a></td>
                         </tr>
                     </table>
                 </li>

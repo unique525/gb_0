@@ -7,6 +7,5 @@
 </head>
 <body>
 <a href="/default.php?secu=manage&mod=product_param_type_class&&m=list&site_id=1&channel_id=94">产品参数类型管理</a>
-<a href="/default.php?secu=manage&mod=product_brand&&m=list_for_manage_tree&site_id=1&channel_id=94">产品品牌管理</a>
 </body>
 </html>

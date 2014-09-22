@@ -26,7 +26,7 @@
 <!--
 var zTree1;
 var setting;
-var zNodes =[{ id:0, pId:-1,name:"品牌", rank:0,open:true},{treeNodes}];
+var zNodes =[{ id:0, pId:-1,name:"品牌",rank:0,open:true},{treeNodes}];
 setting = {
     data: {
         simpleData: {
@@ -125,11 +125,12 @@ function addTreeNode() {
     hideRMenu();
     var selectNode = zTree1.getSelectedNodes()[0];
     var parentId=selectNode.id;
+    var rank=selectNode.rank;
     var parentName = selectNode.name;
     $("#s_ParentName").text(parentName);
     $("#f_ParentId").val(parentId);
     $("#s_ProductBrandId").text("");
-    $("#f_Rank").val("0");
+    $("#f_Rank").val(parseInt(rank)+1);
     $("#f_ProductBrandName").val("");
     $("#f_ProductBrandIntro").val("");
     $("#f_Sort").val('0');
@@ -145,20 +146,20 @@ function addTreeNode() {
 }
 
 //用于新增返回时调用同步树节点
-function AddNodeById(sourceId,targetId,name,eName)
+function AddNodeById(sourceId,targetId,name,rank)
 {
     var parentNode = zTree1.getNodeByParam("id", targetId);
-    zTree1.addNodes(parentNode,[{ id:""+sourceId,pid:""+targetId,name:""+name,valueType:""+eName}]);
+    zTree1.addNodes(parentNode,[{ id:""+sourceId,pid:""+targetId,name:""+name,rank:""+rank}]);
 }
 
 //用于修改时调用同步树节点
-function EditNodeById(sourceId,targetId,name,eName)
+function EditNodeById(sourceId,targetId,name,rank)
 {
     var sourceNode = zTree1.getNodeByParam("id", sourceId);
     sourceNode.id=sourceId;
     sourceNode.pId=targetId;
     sourceNode.name=name;
-    sourceNode.eName=eName;
+    sourceNode.rank=rank;
     zTree1.updateNode(sourceNode, true);
 }
 function removeTreeNode() {
@@ -173,7 +174,7 @@ function removeTreeNode() {
             $.ajax({
                 url:"/default.php?secu=manage&mod=product_brand",
                 async: false,
-                data:{m:"delete",product_brand_id:product_brand_id},
+                data:{m:"async_modify_state",product_brand_id:product_brand_id,state:100},
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
@@ -188,11 +189,18 @@ function removeTreeNode() {
 function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
     var id = treeNodes[0].id;
     var pId="";
-    if(moveType=="inner") pId=targetNode.id; else pId=targetNode.pId;
+    var rank=0;
+    if(moveType=="inner")
+    {
+        pId=targetNode.id;rank=parseInt(targetNode.rank)+1;
+    }
+    else {
+        pId=targetNode.pId;rank=targetNode.rank;
+    }
     $.ajax({
         url:"/default.php?secu=manage&mod=product_brand",
         async: false,
-        data:{m:"async_drag",product_brand_id:id,parent_id:pId,rank:1},
+        data:{m:"async_drag",product_brand_id:id,parent_id:pId,rank:rank},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
@@ -254,6 +262,7 @@ function sub()
                             <td class="spe_line">
                                 <label id="s_ParentName" style=" width: 200px;font-size:14px;"></label>
                                 <input type="hidden" id="f_ParentId" name="f_ParentId" value="" />
+                                <input type="hidden" id="f_Rank" name="f_Rank" value="" />
                             </td>
                         </tr>
                         <tr>

@@ -197,7 +197,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     {
         $productBrandId = Control::GetRequest("product_brand_id", 0);
         $manageUserId = Control::GetManageUserId();
-        $state = Control::GetRequest("state", -1);
+        $state = Control::GetRequest("state", 100);
         if ($productBrandId > 0 && $manageUserId>0 && $state >= 0) {
             $productBrandManageData = new ProductBrandManageData();
             $result = $productBrandManageData->ModifyState($productBrandId, $state);
@@ -260,9 +260,10 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     {
         $productBrandId = Control::GetRequest("product_brand_id", 0);
         $parentId = Control::GetRequest("parent_id", 0);
+        $rank= Control::GetRequest("rank", 0);
         if ($productBrandId > 0 && $parentId >= 0) {
             $productBrandManageData = new ProductBrandManageData();
-            $result = $productBrandManageData->Drag($productBrandId, $parentId);
+            $result = $productBrandManageData->Drag($productBrandId, $parentId, $rank);
             return Control::GetRequest("jsonpcallback","") . '({"result":"' . $result . '"})';
         } else {
             return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';

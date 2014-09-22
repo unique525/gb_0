@@ -63,18 +63,20 @@ class ProductBrandManageData extends BaseManageData {
      * 移动产品品牌
      * @param int $productBrandId 产品品牌id
      * @param int $parentId 产品品牌父id
+     * @param int $rank rank值
      * @return int 返回影响的行数
      */
-    public function Drag($productBrandId, $parentId)
+    public function Drag($productBrandId, $parentId, $rank)
     {
         $result = -1;
         if ($productBrandId > 0 && $parentId >= -1) {
             $sql = "update " . self::TableName_ProductBrand
-                . " set ParentId=:ParentId"
+                . " set ParentId=:ParentId,Rank=:Rank"
                 . " where " . self::TableId_ProductBrand . "=:" . self::TableId_ProductBrand;
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ProductBrand, $productBrandId);
             $dataProperty->AddField("ParentId", $parentId);
+            $dataProperty->AddField("Rank", $rank);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
@@ -100,18 +102,18 @@ class ProductBrandManageData extends BaseManageData {
 
     /**
      * 获取产品品牌记录
-     * @param int $siteId 站点Id
+     * @param int $channelId 频道Id
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetList($siteId, $order = "", $topCount = -1)
+    public function GetList($channelId, $order = "", $topCount = -1)
     {
         $result = null;
         if ($topCount != -1)
             $topCount = " limit " . $topCount;
         else $topCount = "";
-        if ($siteId > 0) {
+        if ($channelId > 0) {
             switch ($order) {
                 default:
                     $order = " ORDER BY Sort DESC,Createdate DESC,CONVERT( ProductBrandName USING GBK ) COLLATE GBK_CHINESE_CI ASC";
@@ -123,7 +125,7 @@ class ProductBrandManageData extends BaseManageData {
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("SiteId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
