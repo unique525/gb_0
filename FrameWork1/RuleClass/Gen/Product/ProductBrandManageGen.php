@@ -222,14 +222,15 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
         if ($siteId > 0 && $adminUserId > 0) {
             $productBrandManageData = new ProductBrandManageData();
             $arrList = $productBrandManageData->GetList($siteId, "", -1);
-            $treeNodes = '{ id:0, pId:-1,name:"根节点", valueType:0,open:true},';
+            $treeNodes = "";
             for ($i = 0; $i < count($arrList); $i++) {
-                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductBrandId"] . ', pId:' . $arrList[$i]["ParentId"] . ', name:"' . $arrList[$i]["ProductBrandName"] . '", valueType:"' . $arrList[$i]["Rank"] . '"},';
+                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductBrandId"] . ', pId:' . $arrList[$i]["ParentId"] . ', name:"' . $arrList[$i]["ProductBrandName"] . '", rank:"' . $arrList[$i]["Rank"] . '"},';
             }
             $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
             $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
             parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", "", $tempContent);
             return $tempContent;
         } else return "";
     }

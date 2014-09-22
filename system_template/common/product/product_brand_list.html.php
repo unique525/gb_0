@@ -18,10 +18,7 @@
     }
 
 </style>
-<script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/system_js/common.js"></script>
-<script type="text/javascript" src="/system_js/common_event.js"></script>
-<script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+{common_head}
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.excheck-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.exedit-3.0.min.js"></script>
@@ -29,7 +26,7 @@
 <!--
 var zTree1;
 var setting;
-var zNodes =[{treeNodes}];
+var zNodes =[{ id:0, pId:-1,name:"品牌", rank:0,open:true},{treeNodes}];
 setting = {
     data: {
         simpleData: {
@@ -87,10 +84,10 @@ function zTreeOnClick(event, treeId, treeNode) {
             $("#s_ProductBrandId").text(data['ProductBrandId']);
             $("#f_Rank").val(data['Rank']);
             $("#f_ProductBrandName").val(data['ProductBrandName']);
+            $("#f_ProductBrandIntro").val(data['ProductBrandIntro']);
             $("#f_Sort").val(data['Sort']);
             $("#f_CreateDate").val(data['CreateDate']);
             $("#preview_title_pic").attr("idvalue",data['LogoUploadFileId']);
-            alert($("#preview_title_pic").attr("idvalue"));
             $("#img_titlepic").val("");
             var btnSubmit=$("#btnSubmit");
             btnSubmit.attr('value', '修改');
@@ -134,6 +131,7 @@ function addTreeNode() {
     $("#s_ProductBrandId").text("");
     $("#f_Rank").val("0");
     $("#f_ProductBrandName").val("");
+    $("#f_ProductBrandIntro").val("");
     $("#f_Sort").val('0');
     var file = $("#img_titlepic");
     file.after(file.clone().val(''));//清空file类型控件
@@ -194,7 +192,7 @@ function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {
     $.ajax({
         url:"/default.php?secu=manage&mod=product_brand",
         async: false,
-        data:{m:"drag",product_brand_id:id,parent_id:pId,rank:1},
+        data:{m:"async_drag",product_brand_id:id,parent_id:pId,rank:1},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
@@ -235,19 +233,7 @@ function sub()
 </script>
 </head>
 <body>
-<div id="dialog_box" title="提示" style="display:none;">
-    <div id="dialog_content">
-    </div>
-</div>
-<div id="tb_window_top">
-    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="40%" height="35"></td>
-            <td align="right"><img alt="刷新" style="cursor: pointer" onclick="window.location.href=window.location.href;" src="../images/re.gif" /> <img alt="关闭" style="cursor: pointer" onclick="self.parent.tb_remove();" src="../images/close.gif" /></td>
-        </tr>
-    </table>
-</div>
-
+{common_body_deal}
 <div id="rMenu">
     <ul id="m_add" onclick="addTreeNode();"><li>增加节点</li></ul>
     <ul id="m_del" onclick="removeTreeNode();"><li>删除节点</li></ul>
@@ -287,13 +273,9 @@ function sub()
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" ><label for="f_Rank">类型：</label></td>
+                            <td class="spe_line" style=" vertical-align:middle"><label for="f_ProductBrandIntro">简介：</label></td>
                             <td class="spe_line">
-                                <select id="f_Rank" name="f_Rank">
-                                    <option value="0">默认</option>
-                                    <option value="6">选项</option>
-                                </select>
-                                &nbsp;&nbsp;<a id="optionHref" href="#" target="_self" style="display:none">修改参数类型选项</a>
+                                <textarea rows="10" cols="50" class="input_box" id="f_ProductBrandIntro" name="f_ProductBrandIntro"></textarea>
                             </td>
                         </tr>
                         <tr>
