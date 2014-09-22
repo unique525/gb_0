@@ -516,13 +516,18 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION:
-                //产品参数类型选项
+                /**产品参数类型选项题图   tableId 为 productParamTypeId  */
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE:
-                //产品参数类型
+                /**产品参数类型题图   tableId 为 productParamTypeClassId  */
                 $uploadFilePath = $uploadPath . "product_param_type" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND:
+                /**产品品牌题图   tableId 为 siteId  */
+                $uploadFilePath = $uploadPath . "product_brand" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_AD_CONTENT:

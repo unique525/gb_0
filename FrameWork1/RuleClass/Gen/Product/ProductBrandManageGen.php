@@ -52,10 +52,10 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     public function GenCreate()
     {
         $tempContent = "";
+        $siteId = Control::PostRequest("f_SiteId", "");
         $parentId = Control::PostRequest("f_ParentId", "");
         $productBrandName = Control::PostRequest("f_ProductBrandName", "");
         $rank = Control::PostRequest("f_Rank", "");
-
         $manageUserId = Control::GetManageUserId();
 
         if ($parentId >= 0 && $manageUserId > 0) {
@@ -74,7 +74,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                         //file pic
                         $fileElementName = "file_pic";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND;
-                        $tableId = $productBrandId;
+                        $tableId = $siteId;
                         $uploadFile = new UploadFile();
                         $uploadFileId = 0;
                         $titlePicResult = self::Upload(
@@ -134,11 +134,12 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     public function GenModify()
     {
         $tempContent = "";
+        $siteId = Control::PostRequest("f_SiteId", "");
         $parentId = Control::PostRequest("f_ParentId", "");
         $productBrandName = Control::PostRequest("f_ProductBrandName", "");
         $rank = Control::PostRequest("f_Rank", "");
         $manageUserId = Control::GetManageUserId();
-        $productBrandId = Control::PostRequest("f_ProductBrandId", "");
+        $productBrandId = Control::GetRequest("product_brand_id", "");
         if ($productBrandId > 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
@@ -154,7 +155,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                         //file pic
                         $fileElementName = "file_pic";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND;
-                        $tableId = $productBrandId;
+                        $tableId = $siteId;
                         $uploadFile = new UploadFile();
                         $uploadFileId = 0;
                         $titlePic1Result = self::Upload(
@@ -216,17 +217,18 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     public function GenListForManageTree()
     {
         $tempContent = Template::Load("product/product_brand_list.html", "common");
-        $channelId = Control::GetRequest("channel_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $adminUserId = Control::GetManageUserId();
-        if ($channelId > 0 && $adminUserId > 0) {
+        if ($siteId > 0 && $adminUserId > 0) {
             $productBrandManageData = new ProductBrandManageData();
-            $arrList = $productBrandManageData->GetList($channelId, "", -1);
+            $arrList = $productBrandManageData->GetList($siteId, "", -1);
             $treeNodes = '{ id:0, pId:-1,name:"根节点", valueType:0,open:true},';
             for ($i = 0; $i < count($arrList); $i++) {
                 $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductBrandId"] . ', pId:' . $arrList[$i]["ParentId"] . ', name:"' . $arrList[$i]["ProductBrandName"] . '", valueType:"' . $arrList[$i]["Rank"] . '"},';
             }
             $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
             $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
             parent::ReplaceEnd($tempContent);
             return $tempContent;
         } else return "";
