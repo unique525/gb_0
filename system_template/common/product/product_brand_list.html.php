@@ -20,6 +20,8 @@
 </style>
 <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/system_js/common.js"></script>
+<script type="text/javascript" src="/system_js/common_event.js"></script>
+<script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.excheck-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.exedit-3.0.min.js"></script>
@@ -67,23 +69,6 @@ $(document).ready(function(){
                 rMenu.style.visibility = "hidden";
             }
         });
-    var img = $("#img_titlepic");
-    var theImage = new Image();
-    theImage.src = img.attr("src");
-    var tp = '{titlepic}';
-    $("#preview_titlepic").click(function() {
-        if(tp != ''){
-
-            $("#dialog_titlepic").dialog({
-                width : theImage.width+30,
-                height : theImage.height+50
-            });
-
-        }
-        else{
-            alert('还没有上传题图');
-        }
-    });
 });
 
 function zTreeOnClick(event, treeId, treeNode) {
@@ -104,6 +89,8 @@ function zTreeOnClick(event, treeId, treeNode) {
             $("#f_ProductBrandName").val(data['ProductBrandName']);
             $("#f_Sort").val(data['Sort']);
             $("#f_CreateDate").val(data['CreateDate']);
+            $("#preview_title_pic").attr("idvalue",data['LogoUploadFileId']);
+            alert($("#preview_title_pic").attr("idvalue"));
             $("#img_titlepic").val("");
             var btnSubmit=$("#btnSubmit");
             btnSubmit.attr('value', '修改');
@@ -248,7 +235,10 @@ function sub()
 </script>
 </head>
 <body>
-
+<div id="dialog_box" title="提示" style="display:none;">
+    <div id="dialog_content">
+    </div>
+</div>
 <div id="tb_window_top">
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -293,7 +283,7 @@ function sub()
                             <td class="spe_line">
                                 <input id="file_pic" name="file_pic" type="file" class="input_box"
                                        style="width:400px;background:#ffffff;margin-top:3px;"/>
-                                <span id="preview_title_pic" class="show_title_pic" idvalue="{LogoUploadFileId}" style="cursor:pointer">[预览]</span>
+                                <span id="preview_title_pic" class="show_title_pic" idvalue="" style="cursor:pointer">[预览]</span>
                             </td>
                         </tr>
                         <tr>
