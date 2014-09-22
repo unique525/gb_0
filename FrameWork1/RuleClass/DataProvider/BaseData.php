@@ -211,6 +211,14 @@ class BaseData
      */
     const TableId_ForumPost = "ForumPostId";
 
+    /**
+     * 论坛主题类型 数据表名
+     */
+    const TableName_ForumTopicType = "cst_forum_topic_type";
+    /**
+     * 论坛主题类型 数据表自增字段名
+     */
+    const TableId_ForumTopicType  = "ForumTopicTypeId";
 
 
     /**

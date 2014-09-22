@@ -173,15 +173,22 @@
                 <div id="tabs">
                     <ul style="padding:0">
                         <li class="ui-tabs-nav-custom"><a href="#tabs-1">主题内容</a></li>
-                        <li class="ui-tabs-nav-custom"><a href="#tabs-2">高级参数</a></li>
+                        <li class="ui-tabs-nav-custom"><a href="#tabs-2">特殊选项</a></li>
                     </ul>
                     <div id="tabs-1">
                         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td style="width: 80px;">
-                                    <div class="topic_type_select">
-                                    <select style="border:none;width:80px;" name="">
-                                        <option value="">[原创]</option>
+                                    <div class="forum_topic_type_select">
+                                    <select name="f_ForumTopicTypeId">
+                                        <option value="0">主题类型</option>
+                                        <icms id="forum_topic_type_list" type="list">
+                                            <item>
+                                                <![CDATA[
+                                                <option value="{f_ForumTopicTypeId}">{f_ForumTopicTypeName}</option>
+                                                ]]>
+                                            </item>
+                                        </icms>
                                     </select>
                                     </div>
                                 </td>
@@ -230,7 +237,103 @@
                         </table>
                     </div>
                     <div id="tabs-2">
+                        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td style="width: 120px; height: 40px; text-align: right;">
+                                    <label for="f_ShowSign">显示签名：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <input type="checkbox" id="f_ShowSign" name="f_ShowSign" checked="checked" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="f_ForumTopicAccess">特殊功能：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <div class="forum_topic_access_select">
+                                    <select id="f_ForumTopicAccess" name="f_ForumTopicAccess">
+                                        <option value="0">无</option>
+                                        <option value="1">禁止回复帖</option>
+                                        <option value="10">问题帖 - 悬赏{cfg_ForumMoneyName}</option>
+                                        <option value="11">问题帖 - 悬赏{cfg_ForumScoreName}</option>
+                                        <option value="12">问题帖 - 悬赏{cfg_ForumPointName}</option>
+                                        <option value="13">问题帖 - 悬赏{cfg_ForumCharmName}</option>
+                                        <option value="14">问题帖 - 悬赏{cfg_ForumExpName}</option>
+                                        <option value="20">出售帖 - {cfg_ForumMoneyName}购买</option>
+                                        <option value="21">出售帖 - {cfg_ForumScoreName}购买</option>
+                                        <option value="22">出售帖 - {cfg_ForumPointName}购买</option>
+                                        <option value="23">出售帖 - {cfg_ForumCharmName}购买</option>
+                                        <option value="24">出售帖 - {cfg_ForumExpName}购买</option>
+                                        <option value="30">阅读限制帖 - 达到X{cfg_ForumMoneyName}可见</option>
+                                        <option value="31">阅读限制帖 - 达到X{cfg_ForumScoreName}可见</option>
+                                        <option value="32">阅读限制帖 - 达到X{cfg_ForumPointName}可见</option>
+                                        <option value="33">阅读限制帖 - 达到X{cfg_ForumCharmName}可见</option>
+                                        <option value="34">阅读限制帖 - 达到X{cfg_ForumExpName}可见</option>
+                                        <option value="35">阅读限制帖 - 某人可见</option>
+                                        <option value="36">阅读限制帖 - 好友可见</option>
+                                        <option value="37">阅读限制帖 - 某身份可见</option>
+                                        <option value="38">阅读限制帖 - 达到X{cfg_ForumPostCountName}可见</option>
+                                        <option value="39">阅读限制帖 - 达到X注册时间可见(分钟)</option>
+                                        <option value="40">阅读限制帖 - 达到X在线时间可见(分钟)</option>
+                                    </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="f_AccessLimitNumber">输入数值：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <input class="input_number" id="f_AccessLimitNumber" name="f_AccessLimitNumber" type="text" value="{AccessLimitNumber}" maxlength="10" />
+                                </td>
+                            </tr>
 
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="a_AccessLimitUserName">输入会员名：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <input class="input_box_normal" id="a_AccessLimitUserName" name="a_AccessLimitUserName" style="width:500px;" type="text" maxlength="2000" /> (多个会员请用 ; 分隔会员名)
+                                    <input type="hidden" name="f_AccessLimitUserId" value="{AccessLimitUserId}" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="f_AccessLimitUserGroupId">选择身份：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <div>
+                                    <icms id="user_group_list" type="list">
+                                        <item>
+                                            <![CDATA[
+                                            <div style="float:left;width:20%;"><input name="f_AccessLimitUserGroupId" type="checkbox" value="{f_UserGroupId}" /> {f_UserGroupName}</div>
+                                            ]]>
+                                        </item>
+                                    </icms>
+                                    <div class="spe"></div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="f_ShowBoughtUser">显示购买者：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <input type="checkbox" id="f_ShowBoughtUser" name="f_ShowBoughtUser" checked="checked" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 40px; text-align: right;">
+                                    <label for="f_IsOneSale">一次性购买：</label>
+                                </td>
+                                <td style="padding:4px 0;">
+                                    <input type="checkbox" id="f_IsOneSale" name="f_IsOneSale" checked="checked" />
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
