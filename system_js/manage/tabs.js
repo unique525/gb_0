@@ -62,4 +62,8 @@ function closeTab(){
     }
 }
 
+function closeAllTab(){
+
+}
+
 
