@@ -132,8 +132,11 @@ function zTreeOnClick(event, treeId, treeNode) {
             $("#f_ProductBrandIntro").val(data['ProductBrandIntro']);
             $("#f_Sort").val(data['Sort']);
             $("#f_CreateDate").val(data['CreateDate']);
+            var file = $("#file_pic");
+            file.after(file.clone().val(''));//清空file类型控件
+            file.remove();
+            //赋于预览控件fileId值
             $("#preview_title_pic").attr("idvalue",data['LogoUploadFileId']);
-            $("#img_titlepic").val("");
             var btnSubmit=$("#btnSubmit");
             btnSubmit.attr('value', '修改');
             btnSubmit.css("display","");
@@ -179,9 +182,10 @@ function addTreeNode() {
     $("#f_ProductBrandName").val("");
     $("#f_ProductBrandIntro").val("");
     $("#f_Sort").val('0');
-    var file = $("#img_titlepic");
+    var file = $("#file_pic");
     file.after(file.clone().val(''));//清空file类型控件
     file.remove();
+    $("#preview_title_pic").attr("idvalue","");//清空预览控件fileId值
     var today = new Date();
     var createDate = formatDate(today,"yyyy-MM-dd HH:mm:ss");
     $("#f_CreateDate").val(createDate);
@@ -280,6 +284,12 @@ function sub()
         mainForm.attr("action",actionUrl);
         mainForm.submit();
     }
+}
+
+//新增和修改返回时回调此方法填充uploadFileId到预览控件上
+function FillUploadFileId(uploadFileId)
+{
+   $("#preview_title_pic").attr("idvalue",uploadFileId);
 }
 
 //-->

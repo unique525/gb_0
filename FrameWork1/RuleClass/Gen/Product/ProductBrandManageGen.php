@@ -57,7 +57,6 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
         $productBrandName = Control::PostRequest("f_ProductBrandName", "");
         $rank = Control::PostRequest("f_Rank", "");
         $manageUserId = Control::GetManageUserId();
-
         if ($parentId >= 0 && $manageUserId > 0) {
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
@@ -70,6 +69,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($productBrandId > 0) {
+                    $uploadFileId = "";
                     if( !empty($_FILES)){
                         //file pic
                         $fileElementName = "file_pic";
@@ -96,7 +96,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                     }
 
                     Control::ShowMessage(Language::Load('product', 1));
-                    $jsCode = 'parent.AddNodeById("' . $productBrandId . '","' . $parentId . '","' . $productBrandName . '","' . $rank . '");';
+                    $jsCode = 'parent.AddNodeById("' . $productBrandId . '","' . $parentId . '","' . $productBrandName . '","' . $rank . '");parent.FillUploadFileId('.$uploadFileId.');';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('product', 2));
@@ -151,6 +151,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
+                    $uploadFileId = "";
                     if( !empty($_FILES)){
                         //file pic
                         $fileElementName = "file_pic";
@@ -179,7 +180,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                     }
                     //javascript 处理
                     Control::ShowMessage(Language::Load('product', 3));
-                    $jsCode = 'parent.EditNodeById("' . $productBrandId . '","' . $parentId . '","' . $productBrandName . '","' . $rank . '");';
+                    $jsCode = 'parent.EditNodeById("' . $productBrandId . '","' . $parentId . '","' . $productBrandName . '","' . $rank . '");parent.FillUploadFileId('.$uploadFileId.');';
                     Control::RunJavascript($jsCode);
                 } else {
                     Control::ShowMessage(Language::Load('product', 4));
