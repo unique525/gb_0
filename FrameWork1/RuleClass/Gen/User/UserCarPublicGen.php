@@ -42,6 +42,9 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
             case "async_remove_bin":
                 $result = self::AsyncRemoveBin();
                 break;
+            case "async_get_car_count":
+                $result = self::AsyncGetCarCount();
+                break;
         }
         return $result;
     }
@@ -114,6 +117,21 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen{
             }
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":'.self::MODIFY_BuyCount_FAIL.'})';
+        }
+    }
+
+    private function AsyncGetCarCount(){
+        $userId = Control::GetUserId();
+        $siteId =   Control::GetRequest("site_id",0);
+
+        if($userId > 0 && $siteId > 0){
+            $userCarPublicData = new UserCarPublicData();
+            $result = $userCarPublicData->GetCarCount($userId,$siteId);
+            if($result > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+            }else{
+                return Control::GetRequest("jsonpcallback","").'({"result":0})';
+            }
         }
     }
 }

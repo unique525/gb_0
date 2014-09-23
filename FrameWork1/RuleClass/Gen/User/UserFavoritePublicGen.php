@@ -58,21 +58,21 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function GenList() {
-        Control::SetUserCookie(1,"test");
         $templateFileUrl = "user/user_favorite.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
+        $siteId = Control::GetRequest("site_id",0);
         if($userId > 0){
             $tagId = "user_favorite";
             $userFavoritePublicData = new UserFavoritePublicData();
-            $arrUserFavoriteList = $userFavoritePublicData->GetList($userId);
-            if(count($arrUserFavoriteList) > 0){
-                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
-            }else{
-                Template::RemoveCustomTag($templateContent, $tagId);
-            }
+//            $arrUserFavoriteList = $userFavoritePublicData->GetList($userId,$siteId);
+//            if(count($arrUserFavoriteList) > 0){
+//                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
+//            }else{
+//                Template::RemoveCustomTag($templateContent, $tagId);
+//            }
             return $templateContent;
         }else{
             return "";

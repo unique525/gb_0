@@ -42,6 +42,12 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_check_repeat":
                 $result = self::AsyncCheckRepeat();
                 break;
+            case "async_get_one":
+                $result = self::AsyncGetOne();
+                break;
+            case "homepage":
+                $result = self::GenHomePage();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -50,19 +56,18 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function AsyncLogin(){
-        $userName = Control::GetRequest("user_name", "");
+        $userAccount = Control::GetRequest("user_account", "");
         $userPass = Control::GetRequest("user_pass", "");
         $siteId = Control::GetRequest("site_id",0);
 
-        $debug = new DebugLogManageData();
-        $debug->Create($userName."---".$userPass."---".$siteId);
-        if(!empty($userName) && !empty($userPass) && $siteId > 0){
+        if(!empty($userAccount) && !empty($userPass) && $siteId > 0){
             $userPublicData = new UserPublicData();
-            $result = $userPublicData->CheckLogin($userName, $userPass, $siteId);
-            if($result < 0){
+            $userId = $userPublicData->CheckLogin($userAccount, $userPass, $siteId);
+            if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":-1})';
             }else {
-                return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+                Control::SetUserCookie($userId,$userAccount);
+                return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
             }
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":-2})';
@@ -168,6 +173,73 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }
         } else {
             return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_PARAMETER.'})';
+        }
+    }
+
+    private function AsyncGetOne(){
+        $userId = intval(Control::GetUserId());
+        $siteId = Control::GetRequest("site_id",0);
+        if($userId > 0 && $siteId > 0){
+            $userInfoPublicData = new UserInfoPublicData();
+            $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
+            return Control::GetRequest("jsonpcallback","").'({"result":' . Format::FixJsonEncode($arrUserOne) . '})';
+        }else{
+            Control::GoUrl("/login.htm");
+            return null;
+        }
+    }
+
+    private function GenHomePage(){
+        $userId =Control::GetUserId();
+        $siteId = Control::GetRequest("site_id",0);
+
+        if($userId > 0 && $siteId > 0){
+            $templateFileUrl = "user/center.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            $userAccount = Control::GetUserName();
+
+            $userInfoPublicData = new UserInfoPublicData();
+            $userOrderPublicData = new UserOrderPublicData();
+            $userFavoritePublicData = new UserFavoritePublicData();
+
+            //--------替换会员信息--------begin
+            $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
+            Template::ReplaceOne($templateContent,$arrUserOne);
+            //------------------------------end
+
+            //-----------替换最近收藏----------begin
+            $tagId = "favorite_list";
+            $pageBegin = 0;
+            $pageSize = 4;
+            $allCount = 0;
+            $arrUserFavoriteList = $userFavoritePublicData->GetListForHomePage($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            if(count($arrUserFavoriteList) > 0){
+                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
+            }else{
+                Template::ReplaceCustomTag($templateContent, $tagId,"您还没有收藏任何产品");
+            }
+
+
+            //------------零散替换--------begin
+            $State_UnSettleOrder = 0;
+            $State_UnCommentOrder = 70;
+            $unSettleOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnSettleOrder);
+            $unCommentOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnCommentOrder);
+
+            $arrReplace = array(
+                "{user_account}" => $userAccount,
+                "{un_settle_order_count}" => $unSettleOrderCount,
+                "{un_comment_order_count}" => $unCommentOrderCount
+            );
+            //-----------------------------end
+
+            $templateContent = strtr($templateContent,$arrReplace);
+            return $templateContent;
+        }else{
+            return null;
         }
     }
 

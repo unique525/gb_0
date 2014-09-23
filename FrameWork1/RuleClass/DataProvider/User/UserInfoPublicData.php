@@ -8,6 +8,7 @@
  */
 class UserInfoPublicData extends BasePublicData
 {
+    const State_Unavailable_User = 100;
 
     public function Init($userId){
         $result = -1;
@@ -93,6 +94,136 @@ class UserInfoPublicData extends BasePublicData
 
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             }
+        }
+        return $result;
+    }
+
+    /**
+     * 修改用户信息
+     * @param int $userId
+     * @param string $nickName
+     * @param string $realName
+     * @param string $email
+     * @param string $qq
+     * @param string $comeFrom
+     * @param string $birthday
+     * @param string $idCard
+     * @param string $address
+     * @param string $postCode
+     * @param string $mobile
+     * @param string $tel
+     * @param string $province
+     * @param string $city
+     * @param string $sign
+     * @param int $gender
+     * @param string $bankName
+     * @param string $bankOpenAddress
+     *  @param string $bankUserName
+     *  @param string $bankAccount
+     * @return int
+     */
+    public function ModifyInfo($userId, $nickName, $realName, $email, $qq, $comeFrom, $birthday, $idCard, $address, $postCode, $mobile,
+                               $tel, $province, $city,$sign,$gender,$bankName, $bankOpenAddress, $bankUserName, $bankAccount) {
+        $result = -1;
+        if($userId > 0){
+            $sql = "UPDATE ".self::TableName_UserInfo." SET Gender=:Gender,RealName=:RealName,Email=:Email,QQ=:QQ,ComeFrom=:ComeFrom,NickName=:NickName,
+                Birthday=:Birthday,IdCard=:IdCard,Address=:Address,PostCode=:PostCode,Mobile=:Mobile,Tel=:Tel,Province=:Province,City=:City,BankName=:BankName,
+                BankOpenAddress=:BankOpenAddress,BankUserName=:BankUserName,BankAccount=:BankAccount,Sign=:Sign WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Gender", $gender);
+            $dataProperty->AddField("RealName", $realName);
+            $dataProperty->AddField("Nickname", $nickName);
+            $dataProperty->AddField("Email", $email);
+            $dataProperty->AddField("QQ", $qq);
+            $dataProperty->AddField("ComeFrom", $comeFrom);
+            $dataProperty->AddField("Birthday", $birthday);
+            $dataProperty->AddField("IdCard", $idCard);
+            $dataProperty->AddField("Address", $address);
+            $dataProperty->AddField("PostCode", $postCode);
+            $dataProperty->AddField("Mobile", $mobile);
+            $dataProperty->AddField("Tel", $tel);
+            $dataProperty->AddField("Province", $province);
+            $dataProperty->AddField("City", $city);
+            $dataProperty->AddField("BankName", $bankName);
+            $dataProperty->AddField("BankOpenAddress", $bankOpenAddress);
+            $dataProperty->AddField("BankUserName", $bankUserName);
+            $dataProperty->AddField("BankAccount", $bankAccount);
+            $dataProperty->AddField("Sign", $sign);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetOne($userId,$siteId){
+        $result = null;
+        if($userId > 0){
+            $sql = "SELECT
+                            u.UserName,
+                            u.UserEmail,
+                            u.UserMobile,
+                            u.UserId,
+                            u.State,
+                            ui.NickName,
+                            ui.RealName,
+                            ui.Email,
+                            ui.AvatarUploadFileId,
+                            ui.QQ,
+                            ui.IdCard,
+                            ui.Address,
+                            ui.Birthday,
+                            ui.PostCode,
+                            ui.Mobile,
+                            ui.Tel,
+                            ui.UserScore,
+                            ui.UserMoney,
+                            ui.UserCharm,
+                            ui.UserExp,
+                            ui.UserPoint,
+                            ui.Sign,
+                            ui.ComeFrom,
+                            ui.Honor,
+                            ui.FansCount,
+                            ui.Gender,
+                            ui.Province,
+                            ui.City,
+                            ui.Hit,
+                            ui.MessageCount,
+                            ui.UserPostCount,
+                            ui.UserPostBestCount,
+                            ui.UserActivityCount,
+                            ui.UserAlbumCount,
+                            ui.UserBestAlbumCount,
+                            ui.UserRecAlbumCount,
+                            ui.UserAlbumCommentCount,
+                            ul.UserLevelName,
+                            ul.UserLevelPic,
+                            ul.UserLevel,
+                            ur.UserGroupID
+                            FROM ".self::TableName_User." u
+                            INNER JOIN ".self::TableName_UserInfo." ui ON (u.UserID = ui.UserID)
+                            LEFT JOIN ".self::TableName_UserSiteLevel." usl ON (u.UserID = usl.UserId) AND usl.SiteId=:SiteId
+                            LEFT JOIN ".self::TableName_UserRole." ur ON (u.UserID = ur.UserID) AND ur.SiteID = :SiteId2
+                            LEFT JOIN ".self::TableName_UserLevel." ul ON (usl.SiteId = ul.SiteID) AND (usl.UserLevelId = ul.UserLevelID)
+                            LEFT JOIN ".self::TableName_UserGroup." ug ON (ur.UserGroupID = ug.UserGroupID) AND (ur.SiteID = ug.SiteID)
+                            WHERE u.UserId=:UserId AND u.State<".self::State_Unavailable_User;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("SiteId2",$siteId);
+            $dataProperty->AddField("UserId",$userId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function CheckIsExist($userId,$siteId){
+        $result = -1;
+        if($userId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserInfo." WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
     }
