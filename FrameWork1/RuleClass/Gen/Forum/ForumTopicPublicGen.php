@@ -79,6 +79,26 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
+        //forum topic type list
+        $forumTopicTypePublicData = new ForumTopicTypePublicData();
+        $tagId = "forum_topic_type_list";
+        $arrList = $forumTopicTypePublicData->GetList($forumId);
+        if (count($arrList) > 0) {
+            Template::ReplaceList($tempContent, $arrList, $tagId);
+        } else {
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        //user group list
+        $userGroupPublicData = new UserGroupPublicData();
+        $tagId = "user_group_list";
+        $arrList = $userGroupPublicData->GetList($siteId);
+        if (count($arrList) > 0) {
+            Template::ReplaceList($tempContent, $arrList, $tagId);
+        } else {
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
 
         if(!empty($_POST)){
 

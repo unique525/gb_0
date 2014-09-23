@@ -12,39 +12,6 @@ $().ready(function(){
 
 
 /**
- * 时间按单位分割
- * @param timeName 时间dom id
- * @param timeValue 完整时间string
- * @return
- */
-function GetTimes(timeName,timeValue){
-    var strDate=timeValue.substr(0,10);
-    var strHour=timeValue.substr(11,2);
-    var strMin=timeValue.substr(14,2);
-    var strSec=timeValue.substr(17,2);
-    var Time = $("#f_"+timeName);
-    Time.val(strDate);
-    $("#f_"+timeName+"ShowHour").val(strHour);
-    $("#f_"+timeName+"ShowMinute").val(strMin);
-    $("#f_"+timeName+"ShowSecond").val(strSec);
-
-
-}
-
-/**
- * 合并时间单位
- * @param timeName 时间dom id
- * @return
- */
-function SetTimes(timeName){
-    var Time = $("#f_"+timeName);
-    if(Time.val()){
-        Time.val(Time.val().substr(0,10)+' '+$("#f_"+timeName+"ShowHour").val()+':'+$("#f_"+timeName+"ShowMinute").val()+':'+$("#f_"+timeName+"ShowSecond").val());
-    }
-}
-
-
-/**
  * 格式化状态值
  * @param state 状态
  * @return string
@@ -54,11 +21,8 @@ function FormatState(state){
         case "0":
             return "启用";
             break;
-        case "30":
-            return "发布";
-            break;
         case "100":
-            return "<"+"span style='color:#990000'>删除<"+"/span>";
+            return "<"+"span style='color:#990000'>停用<"+"/span>";
             break;
         default :
             return "未知";

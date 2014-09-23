@@ -88,6 +88,33 @@
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
+
+
+    /**
+     * 短字符串
+     */
+    const SITE_CONFIG_TYPE_STRING_200 = 0;
+
+    /**
+     * 长字符串
+     */
+    const SITE_CONFIG_TYPE_STRING_2000 = 1;
+
+    /**
+     * TEXT
+     */
+    const SITE_CONFIG_TYPE_TEXT = 2;
+
+    /**
+     * INT
+     */
+    const SITE_CONFIG_TYPE_INT = 3;
+
+    /**
+     * NUMBER
+     */
+    const SITE_CONFIG_TYPE_NUMBER = 4;
+
     /**
      * @var array string mid Short Message
      */
@@ -998,18 +1025,18 @@ class SiteConfigData extends BaseData {
      */
     public function __get($siteConfigName)
     {
-        $siteConfigType = 0;
+        $siteConfigType = self::SITE_CONFIG_TYPE_STRING_200;
         $defaultValue = '';
 
         if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
-            $siteConfigType = 1;
+            $siteConfigType = self::SITE_CONFIG_TYPE_STRING_2000;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_2)) {
-            $siteConfigType = 2;
+            $siteConfigType = self::SITE_CONFIG_TYPE_TEXT;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_3)) {
-            $siteConfigType = 3;
+            $siteConfigType = self::SITE_CONFIG_TYPE_INT;
             $defaultValue = 0;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
-            $siteConfigType = 4;
+            $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
             $defaultValue = 0;
         }
 
@@ -1023,15 +1050,15 @@ class SiteConfigData extends BaseData {
      */
     public function __set($siteConfigName, $fieldValue)
     {
-        $siteConfigType = 0;
+        $siteConfigType = self::SITE_CONFIG_TYPE_STRING_200;
         if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
-            $siteConfigType = 1;
+            $siteConfigType = self::SITE_CONFIG_TYPE_STRING_2000;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_2)) {
-            $siteConfigType = 2;
+            $siteConfigType = self::SITE_CONFIG_TYPE_TEXT;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_3)) {
-            $siteConfigType = 3;
+            $siteConfigType = self::SITE_CONFIG_TYPE_INT;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
-            $siteConfigType = 4;
+            $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
         }
         self::SetValue($this->SiteId, $siteConfigName, $fieldValue, $siteConfigType);
     }
@@ -1047,31 +1074,31 @@ class SiteConfigData extends BaseData {
     {
         if(intval($siteId>0)){
             switch ($siteConfigType) {
-                case 0:
+                case self::SITE_CONFIG_TYPE_STRING_200:
                     $fieldName = "StringNorValue";
                     if (empty($fieldValue)) {
                         $fieldValue = "";
                     }
                     break;
-                case 1:
+                case self::SITE_CONFIG_TYPE_STRING_2000:
                     $fieldName = "StringMidValue";
                     if (empty($fieldValue)) {
                         $fieldValue = "";
                     }
                     break;
-                case 2:
+                case self::SITE_CONFIG_TYPE_TEXT:
                     $fieldName = "TextValue";
                     if (empty($fieldValue)) {
                         $fieldValue = "";
                     }
                     break;
-                case 3:
+                case self::SITE_CONFIG_TYPE_INT:
                     $fieldName = "IntValue";
                     if (empty($fieldValue)) {
                         $fieldValue = 0;
                     }
                     break;
-                case 4:
+                case self::SITE_CONFIG_TYPE_NUMBER:
                     $fieldName = "NumValue";
                     if (empty($fieldValue)) {
                         $fieldValue = 0;
@@ -1106,6 +1133,7 @@ class SiteConfigData extends BaseData {
         }
     }
 
+
     /**
      * 取得配置值（已缓冲）
      * @param int $siteId 站点id
@@ -1121,19 +1149,19 @@ class SiteConfigData extends BaseData {
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 switch ($siteConfigType) {
-                    case 0: //varchar 200
+                    case self::SITE_CONFIG_TYPE_STRING_200: //varchar 200
                         $fieldName = "StringNorValue";
                         break;
-                    case 1: //varchar 2000
+                    case self::SITE_CONFIG_TYPE_STRING_2000: //varchar 2000
                         $fieldName = "StringMidValue";
                         break;
-                    case 2:
+                    case self::SITE_CONFIG_TYPE_TEXT:
                         $fieldName = "TextValue";
                         break;
-                    case 3:
+                    case self::SITE_CONFIG_TYPE_INT:
                         $fieldName = "IntValue";
                         break;
-                    case 4:
+                    case self::SITE_CONFIG_TYPE_NUMBER:
                         $fieldName = "NumValue";
                         break;
                     default:
@@ -1159,6 +1187,25 @@ class SiteConfigData extends BaseData {
             return $result;
         } else {
             return $defaultValue;
+        }
+    }
+
+
+    /**
+     * 返回某一站点下所有配置项列表
+     * @param int $siteId 站点id
+     * @return array 配置列表
+     */
+    public function GetList($siteId)
+    {
+        if ($siteId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_SiteConfig . " WHERE SiteId=:SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            return $result;
+        } else {
+            return null;
         }
     }
 } 

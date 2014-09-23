@@ -33,6 +33,22 @@ class BaseData
      */
     const TableId_SiteContent = "SiteContentId";
     /**
+     * 站点广告 数据表名
+     */
+    const TableName_SiteAd = "cst_site_ad";
+    /**
+     * 站点广告 数据表自增字段名
+     */
+    const TableId_SiteAd = "SiteAdId";
+    /**
+     * 站点过滤 数据表名
+     */
+    const TableName_SiteFilter = "cst_site_filter";
+    /**
+     * 站点过滤 数据表自增字段名
+     */
+    const TableId_SiteFilter = "SiteFilterId";
+    /**
      * FTP 数据表名
      */
     const TableName_Ftp = "cst_ftp";
@@ -195,6 +211,14 @@ class BaseData
      */
     const TableId_ForumPost = "ForumPostId";
 
+    /**
+     * 论坛主题类型 数据表名
+     */
+    const TableName_ForumTopicType = "cst_forum_topic_type";
+    /**
+     * 论坛主题类型 数据表自增字段名
+     */
+    const TableId_ForumTopicType  = "ForumTopicTypeId";
 
 
     /**
@@ -445,6 +469,14 @@ class BaseData
      */
     const TableId_ProductParamTypeOption = "ProductParamTypeOptionId";
     /**
+     * 产品品牌 数据表名
+     */
+    const TableName_ProductBrand = "cst_product_brand";
+    /**
+     * 产品品牌 数据表自增字段名
+     */
+    const TableId_ProductBrand = "ProductBrandId";
+    /**
      * 产品价格 数据表名
      */
     const TableName_ProductPrice = "cst_product_price";
@@ -473,7 +505,7 @@ class BaseData
     /**
      * 分类信息 数据表名
      */
-    const TableName_Information = "cst_Information";
+    const TableName_Information = "cst_information";
     /**
      * 分类信息 数据表自增字段名
      */

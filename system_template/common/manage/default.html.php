@@ -76,6 +76,7 @@
                     </ul>
                     <div id="tabs-1">
                         <div style="padding:20px;">请从右边的导航树上选择您想要操作的频道（栏目）</div>
+                        <div style="padding:20px;display:none;"><div id="btn_close_all_tab">关闭所有已打开项目</div></div>
                     </div>
                 </div>
 

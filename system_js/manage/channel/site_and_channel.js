@@ -242,6 +242,73 @@ function onBodyMouseDown(event) {
     }
 }
 
+
+/**
+ * 频道类型 站点首页类 0
+ */
+window.CHANNEL_TYPE_HOME = 0;
+/**
+ * 频道类型 新闻信息类 1
+ */
+window.CHANNEL_TYPE_DOCUMENT_NEWS = 1;
+/**
+ * 频道类型 咨询答复类 2
+ */
+window.CHANNEL_TYPE_THREAD = 2;
+/**
+ * 频道类型 图片轮换类 3
+ */
+window.CHANNEL_TYPE_SLIDER = 3;
+/**
+ * 频道类型 产品类 4
+ */
+window.CHANNEL_TYPE_PRODUCT = 4;
+/**
+ * 频道类型 频道结合产品类 5
+ */
+window.CHANNEL_TYPE_CHANNEL_PRODUCT = 5;
+/**
+ * 频道类型 活动类 6
+ */
+window.CHANNEL_TYPE_ACTIVITY = 6;
+/**
+ * 频道类型 在线调查类 7
+ */
+window.CHANNEL_TYPE_SITE_VOTE = 7;
+/**
+ * 频道类型 自定义页面类 8
+ */
+window.CHANNEL_TYPE_SITE_CONTENT = 8;
+/**
+ * 频道类型 友情链接类 9
+ */
+window.CHANNEL_TYPE_SITE_LINK = 9;
+/**
+ * 频道类型 活动表单类 10
+ */
+window.CHANNEL_TYPE_CUSTOM_FORM = 10;
+/**
+ * 频道类型 文字直播类 11
+ */
+window.CHANNEL_TYPE_TEXT_LIVE = 11;
+/**
+ * 频道类型 投票类 12
+ */
+window.CHANNEL_TYPE_VOTE = 12;
+/**
+ * 频道类型 在线测试 13
+ */
+window.CHANNEL_TYPE_EXAM = 13;
+/**
+ * 频道类型 分类信息 14
+ */
+window.CHANNEL_TYPE_INFORMATION = 14;
+/**
+ * 频道类型 外部接口类 50
+ */
+window.CHANNEL_TYPE_INTERFACE = 50;
+
+
 /**
  * get document list
  */
@@ -250,44 +317,50 @@ function _ChannelClick() {
         var aw = $(window).height() - 138 - 35;
         var size = aw / 28;
         window.G_PageSize = parseInt(size) - 2;
-        if (window.G_SelectedChannelType === 1) { //新闻类频道
+        if (window.G_SelectedChannelType === window.CHANNEL_TYPE_DOCUMENT_NEWS) { //新闻类频道
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=list&channel_id=' + window.G_SelectedChannelId;
             addTab();
-        } else if (window.G_SelectedChannelType === 2) { //咨询回复类频道
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_THREAD) { //咨询回复类频道
 
-        } else if (window.G_SelectedChannelType === 3) { //图片轮换类频道
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SLIDER) { //图片轮换类频道
 
-        } else if (window.G_SelectedChannelType === 4) { //产品类频道
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_PRODUCT) { //产品类频道
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=product&m=list&channel_id=' + window.G_SelectedChannelId;
             addTab();
-        } else if (window.G_SelectedChannelType === 5) { //频道产品类频道
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_CHANNEL_PRODUCT) { //频道产品类频道
 
-        } else if (window.G_SelectedChannelType === 6) { //活动类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_ACTIVITY) { //活动类
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=activity&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
             addTab();
 
-        } else if (window.G_SelectedChannelType === 7) { //厂商品牌类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_VOTE) { //在线调查
 
-        } else if (window.G_SelectedChannelType === 8) { //自定义页面类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_CONTENT) { //自定义页面类
 
-        } else if (window.G_SelectedChannelType === 9) { //友情链接类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_LINK) { //友情链接类
 
-        } else if (window.G_SelectedChannelType === 10) { //活动表单类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_CUSTOM_FORM) { //活动表单类
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
             addTab();
-        } else if (window.G_SelectedChannelType === 11) { //文字直播类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_TEXT_LIVE) { //文字直播类
 
-        } else if (window.G_SelectedChannelType === 12) { //投票调查类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_VOTE) { //投票调查类
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=vote&m=list&site_id='+ window.G_NowSiteId +'&channel_id=' + window.G_SelectedChannelId;
             addTab();
-        } else if (window.G_SelectedChannelType === 13) { //试题类
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_EXAM) { //试题类
 
-        } else if (window.G_SelectedChannelType === 0) { //站点首页
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_INFORMATION) { //分类信息
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=information&m=list&site_id='+ window.G_NowSiteId +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_HOME) { //站点首页
+
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_INTERFACE) { //接口
 
         }
     }

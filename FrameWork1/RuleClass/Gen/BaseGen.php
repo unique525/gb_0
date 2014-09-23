@@ -167,11 +167,11 @@ class BaseGen
         $commonBodyDeal = Template::Load("manage/common_body_deal.html", "common");
         $commonBodyList = Template::Load("manage/common_body_list.html", "common");
 
-        $tabIndex = Control::GetRequest("tab_index",0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
 
-        $manageDomainForRex = str_ireplace("http://","",MANAGE_DOMAIN);
-        $manageDomainForRex = str_ireplace("https://","",$manageDomainForRex);
-        $manageDomainForRex = str_ireplace(".","\.",$manageDomainForRex);
+        $manageDomainForRex = str_ireplace("http://", "", MANAGE_DOMAIN);
+        $manageDomainForRex = str_ireplace("https://", "", $manageDomainForRex);
+        $manageDomainForRex = str_ireplace(".", "\.", $manageDomainForRex);
 
         $tempContent = str_ireplace("{tab_index}", $tabIndex, $tempContent);
         $tempContent = str_ireplace("{common_head}", $commonHead, $tempContent);
@@ -247,50 +247,49 @@ class BaseGen
      */
     protected function ReplaceSiteConfig($siteId, &$tempContent)
     {
-        /**
-         * $siteConfigManageData = new SiteConfigManageData($siteId);
-         * $arrSiteConfigOne = $siteConfigManageData->GetList($siteId);
-         * if (count($arrSiteConfigOne) > 0) {
-         * for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
-         * $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
-         * $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
-         * $stringMidValue = $arrSiteConfigOne[$i]["StringMidValue"];
-         * $textValue = $arrSiteConfigOne[$i]["TextValue"];
-         * $intValue = $arrSiteConfigOne[$i]["IntValue"];
-         * $numValue = $arrSiteConfigOne[$i]["NumValue"];
-         * $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
-         * switch ($siteConfigType) {
-         * case 0:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
-         * break;
-         * case 1:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
-         * break;
-         * case 2:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
-         * break;
-         * case 3:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
-         * break;
-         * case 4:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
-         * break;
-         * default:
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-         * $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
-         * break;
-         * }
-         * }
-         * } else { //移除掉标记
-         * $patterns = '/\{cfg_(.*)\<\/}/imsU';
-         * $tempContent = preg_replace($patterns, "", $tempContent);
-         * }
-         */
+
+        $siteConfigData = new SiteConfigData($siteId);
+        $arrSiteConfigOne = $siteConfigData->GetList($siteId);
+        if (count($arrSiteConfigOne) > 0) {
+            for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
+                $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
+                $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
+                $stringMidValue = $arrSiteConfigOne[$i]["StringMidValue"];
+                $textValue = $arrSiteConfigOne[$i]["TextValue"];
+                $intValue = $arrSiteConfigOne[$i]["IntValue"];
+                $numValue = $arrSiteConfigOne[$i]["NumValue"];
+                $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
+                switch ($siteConfigType) {
+                    case SiteConfigData::SITE_CONFIG_TYPE_STRING_200:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        break;
+                    case SiteConfigData::SITE_CONFIG_TYPE_STRING_2000:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
+                        break;
+                    case SiteConfigData::SITE_CONFIG_TYPE_TEXT:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
+                        break;
+                    case SiteConfigData::SITE_CONFIG_TYPE_INT:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
+                        break;
+                    case SiteConfigData::SITE_CONFIG_TYPE_NUMBER:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
+                        break;
+                    default:
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        break;
+                }
+            }
+        } else { //移除掉标记
+            $patterns = '/\{cfg_(.*)\<\/}/imsU';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
     }
 
 
@@ -367,14 +366,14 @@ class BaseGen
                         $_FILES[$fileElementName]['size'], //文件大小，字节
                         $fileExtension,
                         $_FILES[$fileElementName]['name'], //原始文件名
-                        str_ireplace(PHYSICAL_PATH, "", $dirPath).$newFileName, //文件路径+文件名
+                        str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
                         $tableType,
                         $tableId,
                         $manageUserId,
                         $userId
                     );
 
-                    if($uploadFileId>0){
+                    if ($uploadFileId > 0) {
                         //返回值处理
                         $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
@@ -516,14 +515,29 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION:
-                //产品参数类型选项
+                /**产品参数类型选项题图   tableId 为 productParamTypeId  */
                 $uploadFilePath = $uploadPath . "product_option" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE:
-                //产品参数类型
+                /**产品参数类型题图   tableId 为 productParamTypeClassId  */
                 $uploadFilePath = $uploadPath . "product_param_type" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND:
+                /**产品品牌题图   tableId 为 siteId  */
+                $uploadFilePath = $uploadPath . "product_brand" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+                $newFileName = 'logo_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO:
+                /**产品品牌简介内容图   tableId 为 siteId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product_brand" .
+                        DIRECTORY_SEPARATOR . strval($tableId) .
+                        DIRECTORY_SEPARATOR . $date .
+                        DIRECTORY_SEPARATOR;
+                    $newFileName = 'product_brand_intro_' . uniqid() . '.' . $fileExtension;
+                }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
@@ -531,24 +545,46 @@ class BaseGen
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1:
-                //活动类题图上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                //活动类题图1上传
+                $uploadFilePath = $uploadPath . "activity" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2:
-                //活动类题图上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                //活动类题图2上传
+                $uploadFilePath = $uploadPath . "activity" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_2_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3:
-                //活动类题图上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                //活动类题图3上传
+                $uploadFilePath = $uploadPath . "activity" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_3_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传
-                $uploadFilePath = $uploadPath . "activity" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
-                $newFileName = 'activity_content_pic' . uniqid() . '.' . $fileExtension;
+                $uploadFilePath = $uploadPath . "activity" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'activity_pic_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_CONTENT:
+                //活动内容图片上传
+                $uploadFilePath = $uploadPath . "activity" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'activity_content_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_INFORMATION_TITLE_PIC_1:
+                //分类信息题图1上传
+                $uploadFilePath = $uploadPath . "information" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_INFORMATION_CONTENT:
+                //分类信息内容上传
+                $uploadFilePath = $uploadPath . "information" .
+                    DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'information_content_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_GROUP:
                 //会员组
@@ -814,20 +850,21 @@ class BaseGen
      * @param int $mobileHeight 移动客户端使用的图片的高度，默认为0，不按高度缩放
      * @return int 操作结果
      */
-    public function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0){
+    public function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0)
+    {
         $result = -1;
-        if($uploadFileId>0 && ($mobileWidth >0 || $mobileHeight>0)){
+        if ($uploadFileId > 0 && ($mobileWidth > 0 || $mobileHeight > 0)) {
             //1.取得原图
             $withCache = false;
             $uploadFileData = new UploadFileData();
             $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
             //2.制作缩略图
-            if(!empty($uploadFilePath)){
+            if (!empty($uploadFilePath)) {
                 $thumbFileName = "mobile";
                 $jpgQuality = 90;
-                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$mobileWidth,$mobileHeight,$thumbFileName,$jpgQuality);
+                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath, $mobileWidth, $mobileHeight, $thumbFileName, $jpgQuality);
 
-                if(!empty($uploadFileMobilePath)){
+                if (!empty($uploadFileMobilePath)) {
                     //3.修改数据表
                     $result = $uploadFileData->ModifyUploadFileMobilePath(
                         $uploadFileId,
@@ -846,20 +883,21 @@ class BaseGen
      * @param int $padHeight 图片的高度，默认为0，不按高度缩放
      * @return int
      */
-    public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0){
+    public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0)
+    {
         $result = -1;
-        if($uploadFileId>0 && ($padWidth >0 || $padHeight>0)){
+        if ($uploadFileId > 0 && ($padWidth > 0 || $padHeight > 0)) {
             //1.取得原图
             $withCache = false;
             $uploadFileData = new UploadFileData();
             $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
             //2.制作缩略图
-            if(!empty($uploadFilePath)){
+            if (!empty($uploadFilePath)) {
                 $thumbFileName = "pad";
                 $jpgQuality = 90;
-                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath,$padWidth,$padHeight,$thumbFileName,$jpgQuality);
+                $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath, $padWidth, $padHeight, $thumbFileName, $jpgQuality);
 
-                if(!empty($uploadFileMobilePath)){
+                if (!empty($uploadFileMobilePath)) {
                     //3.修改数据表
                     $result = $uploadFileData->ModifyUploadFilePadPath(
                         $uploadFileId,
@@ -871,31 +909,38 @@ class BaseGen
         return $result;
     }
 
-    public function GenUploadFileThumb1($uploadFileId){
+    public function GenUploadFileThumb1($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileThumb2($uploadFileId){
+    public function GenUploadFileThumb2($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileThumb3($uploadFileId){
+    public function GenUploadFileThumb3($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileWatermark1($uploadFileId){
+    public function GenUploadFileWatermark1($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileWatermark2($uploadFileId){
+    public function GenUploadFileWatermark2($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileCompress1($uploadFileId){
+    public function GenUploadFileCompress1($uploadFileId)
+    {
 
     }
 
-    public function GenUploadFileCompress2($uploadFileId){
+    public function GenUploadFileCompress2($uploadFileId)
+    {
 
     }
 
@@ -903,40 +948,41 @@ class BaseGen
      * 删除上传文件记录和物理文件
      * @param int $uploadFileId 上传文件id
      */
-    public function DeleteUploadFile($uploadFileId){
+    public function DeleteUploadFile($uploadFileId)
+    {
 
         $uploadFileData = new UploadFileData();
 
         $uploadFile = $uploadFileData->Fill($uploadFileId);
 
-        if(strlen($uploadFile->UploadFilePath)){
+        if (strlen($uploadFile->UploadFilePath)) {
             FileObject::DeleteFile($uploadFile->UploadFilePath);
         }
-        if(strlen($uploadFile->UploadFileMobilePath)){
+        if (strlen($uploadFile->UploadFileMobilePath)) {
             FileObject::DeleteFile($uploadFile->UploadFileMobilePath);
         }
-        if(strlen($uploadFile->UploadFilePadPath)){
+        if (strlen($uploadFile->UploadFilePadPath)) {
             FileObject::DeleteFile($uploadFile->UploadFilePadPath);
         }
-        if(strlen($uploadFile->UploadFileThumbPath1)){
+        if (strlen($uploadFile->UploadFileThumbPath1)) {
             FileObject::DeleteFile($uploadFile->UploadFileThumbPath1);
         }
-        if(strlen($uploadFile->UploadFileThumbPath2)){
+        if (strlen($uploadFile->UploadFileThumbPath2)) {
             FileObject::DeleteFile($uploadFile->UploadFileThumbPath2);
         }
-        if(strlen($uploadFile->UploadFileThumbPath3)){
+        if (strlen($uploadFile->UploadFileThumbPath3)) {
             FileObject::DeleteFile($uploadFile->UploadFileThumbPath3);
         }
-        if(strlen($uploadFile->UploadFileWatermarkPath1)){
+        if (strlen($uploadFile->UploadFileWatermarkPath1)) {
             FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath1);
         }
-        if(strlen($uploadFile->UploadFileWatermarkPath2)){
+        if (strlen($uploadFile->UploadFileWatermarkPath2)) {
             FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath2);
         }
-        if(strlen($uploadFile->UploadFileCompressPath1)){
+        if (strlen($uploadFile->UploadFileCompressPath1)) {
             FileObject::DeleteFile($uploadFile->UploadFileCompressPath1);
         }
-        if(strlen($uploadFile->UploadFileCompressPath2)){
+        if (strlen($uploadFile->UploadFileCompressPath2)) {
             FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
         }
 
@@ -953,32 +999,30 @@ class BaseGen
      * @param string $allowExt 允许的扩展名（默认jpg,jpeg,gif,png）
      * @return bool|string 返回结果代码
      */
-    public function SaveRemoteImage($url,$tableType,$tableId,UploadFile &$uploadFile,$maxSize = 2097152,$allowExt = "jpg,jpeg,gif,png"){
+    public function SaveRemoteImage($url, $tableType, $tableId, UploadFile &$uploadFile, $maxSize = 2097152, $allowExt = "jpg,jpeg,gif,png")
+    {
         $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS;
 
-        $reExt='('.str_replace(',','|',$allowExt).')';
-        if(substr($url,0,10)=='data:image'){//base64编码的图片，可能出现在firefox粘贴，或者某些网站上，例如google图片
-            if(!preg_match('/^data:image\/'.$reExt.'/i',$url,$sExt)){
+        $reExt = '(' . str_replace(',', '|', $allowExt) . ')';
+        if (substr($url, 0, 10) == 'data:image') { //base64编码的图片，可能出现在firefox粘贴，或者某些网站上，例如google图片
+            if (!preg_match('/^data:image\/' . $reExt . '/i', $url, $sExt)) {
                 $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ERROR_DATA;
                 return $errorMessage;
             }
-            $fileExtension=$sExt[1];
-            $imgContent=base64_decode(substr($url,strpos($url,'base64,')+7));
-        }
-        else{
-            if(!preg_match('/\.'.$reExt.'$/i',$url,$sExt)){
+            $fileExtension = $sExt[1];
+            $imgContent = base64_decode(substr($url, strpos($url, 'base64,') + 7));
+        } else {
+            if (!preg_match('/\.' . $reExt . '$/i', $url, $sExt)) {
                 $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_ERROR_DATA;
                 return $errorMessage;
             }
-            $fileExtension=$sExt[1];
+            $fileExtension = $sExt[1];
             $imgContent = Remote::GetUrl($url);
         }
-        if(strlen($imgContent)>$maxSize){
+        if (strlen($imgContent) > $maxSize) {
             $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_HTML;
             return $errorMessage;
         }
-
-
 
 
         $newFileName = "";
@@ -1000,14 +1044,14 @@ class BaseGen
 
 
         if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
-            $filePath = $dirPath.$newFileName;
+            $filePath = $dirPath . $newFileName;
 
             $isWriteFile = FileObject::Write($filePath, $imgContent);
 
-            if($isWriteFile){
+            if ($isWriteFile) {
                 //检查mime是否为图片，需要php.ini中开启gd2扩展
-                $fileInfo= @getimagesize($filePath);
-                if(!$fileInfo||!preg_match("/image\/".$reExt."/i",$fileInfo['mime'])){
+                $fileInfo = @getimagesize($filePath);
+                if (!$fileInfo || !preg_match("/image\/" . $reExt . "/i", $fileInfo['mime'])) {
                     @unlink($filePath);
 
                     //MIME不是图片
@@ -1015,7 +1059,7 @@ class BaseGen
                     return $errorMessage;
                 }
 
-                $filePath = "/".$filePath;
+                $filePath = "/" . $filePath;
 
                 //数据库操作
                 $uploadFileData = new UploadFileData();
@@ -1034,13 +1078,13 @@ class BaseGen
                 $resultMessage = "";
 
                 //返回值处理
-                $returnDirPath = "/".str_ireplace(PHYSICAL_PATH, "", $dirPath);
+                $returnDirPath = "/" . str_ireplace(PHYSICAL_PATH, "", $dirPath);
 
                 $uploadFilePath = $returnDirPath . $newFileName;
                 $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
 
                 $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
-            }else{
+            } else {
                 //写入失败
                 $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_WRITE_FAILURE;
             }

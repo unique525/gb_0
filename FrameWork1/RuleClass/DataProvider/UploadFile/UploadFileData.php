@@ -95,28 +95,36 @@ class UploadFileData extends BaseData
      * 产品组图
      */
     const UPLOAD_TABLE_TYPE_PRODUCT_PIC = 48;
-
-
     /**
-     * 广告内容图
+     * 产品品牌题图
      */
-    const UPLOAD_TABLE_TYPE_AD_CONTENT = 50;
+    const UPLOAD_TABLE_TYPE_PRODUCT_BRAND = 49;
     /**
-     * 活动内容图
+     * 产品简介内容图片
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO = 50;
+
+
+    /**
+     * 活动题图1
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1 = 60;
     /**
-     * 活动内容图
+     * 活动题图2
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_2 = 61;
     /**
-     * 活动内容图
+     * 活动题图3
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3 = 62;
     /**
      * 活动花絮
      */
     const UPLOAD_TABLE_TYPE_ACTIVITY_PIC = 63;
+    /**
+     * 活动内容图
+     */
+    const UPLOAD_TABLE_TYPE_ACTIVITY_CONTENT = 64;
 
 
     /**
@@ -203,6 +211,12 @@ class UploadFileData extends BaseData
      */
     const UPLOAD_TABLE_TYPE_INFORMATION_CONTENT = 135;
 
+
+
+    /**
+     * 广告内容图
+     */
+    const UPLOAD_TABLE_TYPE_SITE_AD_CONTENT = 150;
 
     /**
      * 上传文件增加到数据表

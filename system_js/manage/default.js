@@ -43,6 +43,12 @@ $(function () {
         });
     });
 
+    $("#btn_close_all_tab").click(function () {
+        closeAllTab();
+        //channel name
+        $(".channel_name").html("");
+    });
+
     var aw = $(window).height() - 108 - 35;
     var size = aw / 28;
     window.G_PageSize = parseInt(size) - 1;

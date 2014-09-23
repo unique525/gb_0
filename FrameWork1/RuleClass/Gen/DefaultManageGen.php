@@ -79,6 +79,14 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $siteManageGen = new SiteManageGen();
                     $result = $siteManageGen->Gen();
                     break;
+                case "site_filter":
+                    $siteFilterManageGen = new SiteFilterManageGen();
+                    $result = $siteFilterManageGen->Gen();
+                    break;
+                case "site_ad":
+                    $siteAdManageGen = new SiteAdManageGen();
+                    $result = $siteAdManageGen->Gen();
+                    break;
                 case "manage_menu_of_user":
                     $manageMenuOfUserManageGen = new ManageMenuOfUserManageGen();
                     $result = $manageMenuOfUserManageGen->Gen();
@@ -135,6 +143,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $productParamTypeOptionManageGen = new ProductParamTypeOptionManageGen();
                     $result = $productParamTypeOptionManageGen->Gen();
                     break;
+                case "product_brand":
+                    $productBrandManageGen = new ProductBrandManageGen();
+                    $result = $productBrandManageGen->Gen();
+                    break;
                 case "product_price":
                     $productPriceManageGen = new ProductPriceManageGen();
                     $result = $productPriceManageGen->Gen();
@@ -144,12 +156,16 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $productPicManageGen->Gen();
                     break;
                 case "activity":
-                    $ActivityManageGen = new ActivityManageGen();
-                    $result = $ActivityManageGen->Gen();
+                    $activityManageGen = new ActivityManageGen();
+                    $result = $activityManageGen->Gen();
                     break;
                 case "activity_class":
-                    $ActivityClassManageGen = new ActivityClassManageGen();
-                    $result = $ActivityClassManageGen->Gen();
+                    $activityClassManageGen = new ActivityClassManageGen();
+                    $result = $activityClassManageGen->Gen();
+                    break;
+                case "information":
+                    $informationManageGen = new InformationManageGen();
+                    $result = $informationManageGen->Gen();
                     break;
                 default :
                     $result = self::GenDefault();

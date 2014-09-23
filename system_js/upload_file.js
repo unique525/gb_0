@@ -80,12 +80,20 @@ window.UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE = 46;
  * 产品参数类型选项
  */
 window.UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 47;
-
-
 /**
- * 广告内容图
+ * 产品组图
  */
-window.UPLOAD_TABLE_TYPE_AD_CONTENT = 50;
+window.UPLOAD_TABLE_TYPE_PRODUCT_PIC = 48;
+/**
+ * 产品品牌题图
+ */
+window.UPLOAD_TABLE_TYPE_PRODUCT_BRAND = 49;
+/**
+ * 产品简介内容图片
+ */
+window.UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO = 50;
+
+
 /**
  * 活动题图1
  */
@@ -187,6 +195,11 @@ window.UPLOAD_TABLE_TYPE_INFORMATION_TITLE_PIC_1 = 130;
  */
 window.UPLOAD_TABLE_TYPE_INFORMATION_CONTENT = 135;
 
+
+/**
+ * 广告内容图
+ */
+window.UPLOAD_TABLE_TYPE_SITE_AD_CONTENT = 150;
 
 
 /**

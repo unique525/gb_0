@@ -47,13 +47,13 @@ class CustomFormContentManageGen extends BaseManageGen implements IBaseManageGen
      * @return string 字段内容列表html页面
      */
     private function GenList() {
-        $manageUserId = Control::GetManageUserID();
+        $manageUserId = Control::GetManageUserId();
         $customFormId = Control::GetRequest("custom_form_id", 0);
         $resultJavaScript="";
         $customFormManageData = new CustomFormManageData();
-        $channelId = $customFormManageData->GetChannelID($customFormId,FALSE);
+        $channelId = $customFormManageData->GetChannelId($customFormId,FALSE);
         $channelData = new ChannelManageData();
-        $siteId = $channelData->GetSiteID($channelId,FALSE);
+        $siteId = $channelData->GetSiteId($channelId,FALSE);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
         $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
