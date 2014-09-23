@@ -22,8 +22,41 @@
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.core-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.excheck-3.0.min.js"></script>
 <script type="text/javascript" src="/system_js/ztree/jquery.ztree.exedit-3.0.min.js"></script>
+<script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
+<script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+<script type="text/javascript" src="/system_js/upload_file.js"></script>
 <script type="text/javascript" LANGUAGE="javascript">
 <!--
+//加载品牌简介文本编辑框
+var editor;
+var batchAttachWatermark = "0";
+
+var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
+var tableId = parseInt('{SiteId}');
+
+$(function(){
+    if ($.browser.msie) {
+        $('input:checkbox').click(function () {
+            this.blur();
+            this.focus();
+        });
+    };
+
+    var editorHeight = $(window).height() - 220;
+    editorHeight = parseInt(editorHeight);
+
+    var f_DocumentNewsContent = $('#f_DocumentNewsContent');
+
+    editor = f_DocumentNewsContent.xheditor({
+        tools:'full',
+        height:editorHeight,
+        upImgUrl:"",
+        upImgExt:"jpg,jpeg,gif,png",
+        localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+        remoteImgSaveUrl:''
+    });
+});
+//加载品牌树
 var zTree1;
 var setting;
 var zNodes =[{ id:0, pId:-1,name:"品牌",rank:0,open:true},{treeNodes}];
@@ -282,14 +315,14 @@ function sub()
                             </td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style=" vertical-align:middle"><label for="f_ProductBrandIntro">简介：</label></td>
-                            <td class="spe_line">
-                                <textarea rows="10" cols="50" class="input_box" id="f_ProductBrandIntro" name="f_ProductBrandIntro"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
                             <td class="spe_line"><label for="f_Sort">排序数字：</label></td>
                             <td class="spe_line"><input type="text" class="input_number" id="f_Sort" name="f_Sort" value="0" style=" width: 100px;font-size:14px;" maxlength="10" /> (输入数字，越大越靠前)</td>
+                        </tr>
+                        <tr>
+                            <td class="spe_line" style=" vertical-align:middle"><label for="f_ProductBrandIntro">简介：</label></td>
+                            <td class="spe_line">
+                                <textarea class="mceEditor" id="f_ProductBrandIntro" name="f_ProductBrandIntro" style=" width: 100%;">{ProductBrandIntro}</textarea>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2" align="right" style="padding-top:10px">

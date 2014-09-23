@@ -527,7 +527,17 @@ class BaseGen
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND:
                 /**产品品牌题图   tableId 为 siteId  */
                 $uploadFilePath = $uploadPath . "product_brand" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = uniqid() . '.' . $fileExtension;
+                $newFileName = 'logo_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO:
+                /**产品品牌简介内容图   tableId 为 siteId  */
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product_brand" .
+                        DIRECTORY_SEPARATOR . strval($tableId) .
+                        DIRECTORY_SEPARATOR . $date .
+                        DIRECTORY_SEPARATOR;
+                    $newFileName = 'product_brand_intro_' . uniqid() . '.' . $fileExtension;
+                }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */

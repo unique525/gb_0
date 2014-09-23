@@ -99,6 +99,10 @@ class UploadFileData extends BaseData
      * 产品品牌题图
      */
     const UPLOAD_TABLE_TYPE_PRODUCT_BRAND = 49;
+    /**
+     * 产品简介内容图片
+     */
+    const UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO = 50;
 
 
     /**
