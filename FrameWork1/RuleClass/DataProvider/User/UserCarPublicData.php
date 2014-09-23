@@ -75,12 +75,30 @@ class UserCarPublicData extends BasePublicData
     public function Delete($userCarId,$userId){
         $result = -1;
         if($userCarId > 0 && $userId > 0){
-            $sql = "DELETE FROM ".self::TableName_UserCar." WHERE UserId = :UserId AND UserCarId = :UserCarId";
+            $sql = "DELETE FROM ".self::TableName_UserCar." WHERE UserId = :UserId AND UserCarId = :UserCarId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("UserCarId",$userCarId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
         }
         return $result;
+    }
+
+    public function GetCarCount($userId,$siteId){
+        $result = -1;
+        if($userId > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserCar." WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetListForConfirmOrder($arrUserCarIdList){
+        if(count($arrUserCarIdList) > 0){
+
+        }
     }
 } 

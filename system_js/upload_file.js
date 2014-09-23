@@ -80,6 +80,19 @@ window.UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE = 46;
  * 产品参数类型选项
  */
 window.UPLOAD_TABLE_TYPE_PRODUCT_PARAM_TYPE_OPTION = 47;
+/**
+ * 产品组图
+ */
+window.UPLOAD_TABLE_TYPE_PRODUCT_PIC = 48;
+/**
+ * 产品品牌题图
+ */
+window.UPLOAD_TABLE_TYPE_PRODUCT_BRAND = 49;
+/**
+ * 产品简介内容图片
+ */
+window.UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO = 50;
+
 
 /**
  * 活动题图1

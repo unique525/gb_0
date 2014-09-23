@@ -30,4 +30,17 @@ class UserOrderPublicData extends BasePublicData{
         }
         return $result;
     }
+
+    public function GetUserOrderCountByState($userId,$siteId,$state){
+        $result = -1;
+        if($userId > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserOrder." WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("State",$state);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
