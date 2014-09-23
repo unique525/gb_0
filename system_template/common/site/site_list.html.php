@@ -4,6 +4,30 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
     <script type="text/javascript" src="/system_js/manage/channel/site_and_channel.js"></script>
+
+
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $(".span_filter").click(function (event) {
+                event.preventDefault();
+                var siteId=this.attr("idvalue");
+                var siteName=this.attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_filter&m=list' + '&site_id=' + siteId;
+                parent.G_TabTitle = siteName + '-过滤管理';
+                parent.addTab();
+            });
+
+
+            $(".span_ad").click(function (event) {
+                event.preventDefault();
+                var siteId=this.attr("idvalue");
+                var siteName=this.attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=list' + '&site_id=' + siteId;
+                parent.G_TabTitle = siteName + '-广告管理';
+                parent.addTab();
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="div_list">
@@ -53,7 +77,11 @@
                             <td class="spe_line2" style="width:150px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;"><img class="img_open_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img class="img_close_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
-                            <td class="spe_line2" style="width:400px;text-align:center;"><a href="/default.php?secu=manage&mod=product_brand&&m=list_for_manage_tree&site_id={f_SiteId}">产品品牌管理</a></td>
+
+                            <td class="spe_line2" style="width:380px;text-align:left;padding:0 10px 0 10px">
+                                <span class="span_filter" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">过滤</span>
+                                <span class="span_ad" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">广告</span>
+                            </td>
                         </tr>
                     </table>
                 </li>
