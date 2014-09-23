@@ -39,15 +39,48 @@ class UserFavoritePublicData extends BasePublicData
     /**
      * 获取会员收藏的列表
      * @param int $userId 用户Id
+     * @param int $siteId 站点Id
+     * @param int $pageBegin 从pageBegin开始
+     * @param int $pageSize 查询pageSize条记录
+     * @param int $allCount 总行数
      * @return array|null 会员收藏的列表
      */
-    public function GetList($userId){
+    public function GetList($userId,$siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($userId > 0){
-            $sql = "SELECT * FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId;";
+            $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf,".self::TableName_UploadFile.
+                            " uf2 WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId AND SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取会员收藏的列表
+     * @param int $userId 用户Id
+     * @param int $siteId 站点Id
+     * @param int $pageBegin 从pageBegin开始
+     * @param int $pageSize 查询pageSize条记录
+     * @param int $allCount 总行数
+     * @return array|null 会员收藏的列表
+     */
+    public function GetListForHomePage($userId,$siteId,$pageBegin,$pageSize,&$allCount){
+        $result = null;
+        if($userId > 0){
+            $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf LEFT JOIN ".self::TableName_UploadFile." uf2
+                            ON uf.UserFavoriteUploadFileId = uf2.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId
+                            ORDER BY uf.CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
         }
         return $result;
     }
