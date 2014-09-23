@@ -29,9 +29,7 @@
 <!--
 //加载品牌简介文本编辑框
 var editor;
-var batchAttachWatermark = "0";
-
-var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
+var tableType = window.UPLOAD_TABLE_TYPE_PRODUCT_BRAND_INTRO;
 var tableId = parseInt('{SiteId}');
 
 $(function(){
@@ -45,9 +43,9 @@ $(function(){
     var editorHeight = $(window).height() - 220;
     editorHeight = parseInt(editorHeight);
 
-    var f_DocumentNewsContent = $('#f_DocumentNewsContent');
+    var f_ProductBrandIntro = $('#f_ProductBrandIntro');
 
-    editor = f_DocumentNewsContent.xheditor({
+    editor = f_ProductBrandIntro.xheditor({
         tools:'full',
         height:editorHeight,
         upImgUrl:"",
@@ -55,10 +53,21 @@ $(function(){
         localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
         remoteImgSaveUrl:''
     });
+
+    var btnUploadToContent = $("#btnUploadToContent");
+    btnUploadToContent.click(function(){
+
+        var fileElementId = 'file_upload_to_content';
+        var fUploadFile = $("#f_UploadFiles");
+        var attachWatermark = 0;
+        AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+    });
+
 });
 //加载品牌树
 var zTree1;
 var setting;
+
 var zNodes =[{ id:0, pId:-1,name:"品牌",rank:0,open:true},{treeNodes}];
 setting = {
     data: {
@@ -85,12 +94,11 @@ setting = {
     }
 };
 
-function refreshTree() {
-    zTree1=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
-}
-
 var rMenu;
 $(document).ready(function(){
+    var zTreeHeight = $(window).height() - 80;
+    zTreeHeight = parseInt(zTreeHeight);
+    $("#treeDemo").css("height",zTreeHeight);
     refreshTree();
     rMenu = document.getElementById("rMenu");
     $("body").bind("mousedown",
@@ -100,6 +108,10 @@ $(document).ready(function(){
             }
         });
 });
+
+function refreshTree() {
+    zTree1=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+}
 
 function zTreeOnClick(event, treeId, treeNode) {
     var id=treeNode.id;
@@ -281,14 +293,14 @@ function sub()
 </div>
 <form id="mainForm" name="mainForm" action="" method="post"  enctype="multipart/form-data"  target='hidden_frame' >
     <div style="margin:8px;">
-        <table border=0 class="tb1">
+        <table border=0 class="tb1" width="100%">
             <tr>
                 <td width=380px align=center valign=top>
                     <div style="text-align:left;">
-                        <ul id="treeDemo" class="ztree" style="border: 1px #000 solid;height:470px;width:380px"></ul>
+                        <ul id="treeDemo" class="ztree" style="border: 1px #cccccc solid;width:380px;height:100px"></ul>
                     </div>
                 </td>
-                <td  align=left valign=top style="padding:0 0 0 60px;">
+                <td  align=left valign=top style="padding:0 0 0 20px;">
                     <table width="100%" cellspacing="0" cellpadding="0">
                         <tr>
                             <td class="spe_line" >上级节点名称：</td>
@@ -301,7 +313,7 @@ function sub()
                         <tr>
                             <td class="spe_line" ><label for="f_ProductBrandName">名称：</label></td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" id="f_ProductBrandName" name="f_ProductBrandName" value="" style=" width: 200px;font-size:14px;" maxlength="50" /><label id="s_ProductBrandId" ></label>
+                                <input type="text" class="input_box" id="f_ProductBrandName" name="f_ProductBrandName" value="" style=" width: 200px;font-size:14px;" maxlength="50" /><label id="s_ProductBrandId" style="visibility:hidden"></label>
                                 <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
                                 <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="" />
                             </td>
@@ -319,14 +331,20 @@ function sub()
                             <td class="spe_line"><input type="text" class="input_number" id="f_Sort" name="f_Sort" value="0" style=" width: 100px;font-size:14px;" maxlength="10" /> (输入数字，越大越靠前)</td>
                         </tr>
                         <tr>
-                            <td class="spe_line" style=" vertical-align:middle"><label for="f_ProductBrandIntro">简介：</label></td>
-                            <td class="spe_line">
-                                <textarea class="mceEditor" id="f_ProductBrandIntro" name="f_ProductBrandIntro" style=" width: 100%;">{ProductBrandIntro}</textarea>
+                            <td style=" vertical-align:middle"><label for="f_ProductBrandIntro">简介：</label></td>
+                            <td>
+                                <textarea class="mceEditor" id="f_ProductBrandIntro" name="f_ProductBrandIntro" style=" width: 100%;"></textarea>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="right" style="padding-top:10px">
-                                <input type="button" id="btnSubmit" name="btnSubmit" class="btnSubmit" tabindex="0" onclick="sub();" style="display:none" value="" accesskey="s" />
+                            <td class="spe_line"></td>
+                            <td class="spe_line" align="left">
+                                <input id="file_upload_to_content" name="file_upload_to_content" type="file" class="input_box" size="7" style="width:60%; background: #ffffff;" /> <img id="loading" src="/system_template/common/images/loading1.gif" style="display:none;" /><input id="btnUploadToContent" type="button" value="上传" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center" style="padding-top:10px">
+                                <input type="button" class="btn"  id="btnSubmit" name="btnSubmit" tabindex="0" onclick="sub();" style="display:none" value="" accesskey="s" />
                             </td>
                         </tr>
                     </table>
