@@ -7,9 +7,8 @@ html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,pre,code,address,variable,form,fieldset,b
 	font-family:"宋体";
 	color:#3e4a61;
 }
-ul,li{list-style:none;margin:0;padding:0;}
+ul,li{list-style:none;}
 dl,dd,dt{margin:0;padding:0;}
-img{ border:1px solid #ccc;}
 a{ color:#444444; text-decoration:none;}
 a:hover{ text-decoration:underline;}
 img,input{ vertical-align:middle;border:none;}
@@ -130,3 +129,56 @@ img,input{ vertical-align:middle;border:none;}
 .footerleft .cont{width:100px;margin:0px auto; text-align:center;line-height:32px;font-size:14px;color:#0F671E;}
 .footerleft .cont a{font-size:14px;color:#0F671E;}
 .footerright{width:150px; float:left; text-align:center;font-size:15px;font-family:"Microsoft YaHei";line-height:45px;}
+
+/*----------------------购物车css------------------------------------*/
+.step{width:600px; float:right;padding-top:26px;}
+.step1{width:49px; float:left;}
+.steptext{width:110px; float:left; line-height:25px;padding-left:5px;}
+.steptext .grey{color:#C1C1C1;}
+.steptext .green{color:#8CC540;font-size:14px;font-weight:bold;}
+.steptext .orange{color:#FF9700;font-size:14px;font-weight:bold;}
+.steptext .grey2{color:#929292;font-size:14px;font-weight:bold;}
+.angle{width:40px;height:49px; background:url(angle.png) no-repeat;padding-right:10px; float:left;}
+
+.shoppingcart{padding-top:15px;}
+.shoppingcart .lefttext{width:120px; float:left;font-size:18px;font-family:"Microsoft YaHei";line-height:47px; text-indent:5px;}
+.shoppingcart .righttext{width:270px; float:right;line-height:47px;font-size:14px;}
+.shoppingcart .righttext a{font-size:14px;color:#FF3C00;}
+
+.contgreybg{height:46px; background:#F7F7F7; border:1px solid #D5D5D5;border-width:1px 0px; float:left;width:1114px;line-height:46px;padding:0px 43px;font-size:14px;}
+
+.productlist{}
+.productlist ul{}
+.productlist li{padding:23px 43px; border:dashed 1px #CFCFCF;border-width:0px 0px 1px 0px;}
+.productlist li .a1{width:40px; float:left;padding-top:20px;}
+.productlist li .a2{width:100px; float:left;}
+.productlist li .a3{width:350px; float:left;font-size:14px;line-height:26px;}
+.productlist li .a4{width:155px; float:left;font-size:24px;font-family:"Microsoft YaHei";font-weight:bold; text-align:center;line-height:50px;}
+.productlist li .a5{width:80px; float:left;padding:15px 20px 0px 50px;}
+.productlist li .a5 .num{width:50px; float:left;}
+.productlist li .a5 input{width:20px;border:1px #B2B2B2 solid;padding:5px 10px;font-size:14px;}
+.productlist li .a5 .arrow{width:13px; float:left;padding-top:4px;}
+.productlist li .a6{width:120px; float:left;font-size:24px;font-family:"Microsoft YaHei";font-weight:bold; text-align:center;color:#ff3c00;line-height:50px;}
+.productlist li .a7{width:100px;font-size:14px; float:left;line-height:40px; text-align:center;}
+.productlist li .a8{width:70px;font-size:14px; float:left;line-height:25px; text-align:right;}
+
+.productbottom{width:1114px;padding:30px 43px 40px 43px;font-size:14px;}
+.productbottom .f18{font-size:18px;font-family:"Microsoft YaHei";}
+.productbottom td{padding:5px 0px;}
+
+.producttab{padding-bottom:70px;}
+.producttab ul{}
+.producttab li{width:240px; float:left;}
+
+.producttab2{}
+.producttab2 .title{height:47px;line-height:45px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat; text-align:center;width:20%; float:left;}
+.producttab2 .title a{height:47px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat;}
+.producttab2 .title a:hover{height:47px;display:block; background:url(tab_red.png) no-repeat;font-size:16px;font-family:"Microsoft YaHei"; text-decoration:none;}
+
+.producttab dl{width:180px;margin:20px auto;}
+.producttab dd{width:180px;}
+.producttab dt{width:180px;line-height:26px;color:#8B8A8A;}
+.producttab .pricenew{font-size:16px;font-family:"Microsoft YaHei";color:#ff3c00; font-weight:normal; font-style:normal; text-align:left;}
+.producttab .priceold{font-size:14px;font-family:"Microsoft YaHei";font-weight:normal; font-style:normal; text-align:rihgt; text-decoration:line-through;color:#8B8A8A;}
+
+.producttab .btn_jrgwc{width:91px;margin:0px auto;}
