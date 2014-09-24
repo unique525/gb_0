@@ -265,17 +265,17 @@ class DocumentNewsManageData extends BaseManageData
      * @param string $hit 按HIT排序方式（默认不按hit排）
      * @return array 资讯列表数据集
      */
-    public function GetList($channelId,
-                            $pageBegin,
-                            $pageSize,
-                            &$allCount,
-                            $searchKey = "",
-                            $searchType = 0,
-                            $isSelf = 0,
-                            $manageUserId = 0,
-                            $sort = "down",
-                            $hit = ""
-
+    public function GetList(
+        $channelId,
+        $pageBegin,
+        $pageSize,
+        &$allCount,
+        $searchKey = "",
+        $searchType = 0,
+        $isSelf = 0,
+        $manageUserId = 0,
+        $sort = "down",
+        $hit = ""
     )
     {
         $searchSql = "";

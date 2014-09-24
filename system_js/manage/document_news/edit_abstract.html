@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>编辑摘要</title>
+
+<script language="javascript">
+//兼容firefoxinsertAdjacentElement
+if(typeof HTMLElement!="undefined" && !HTMLElement.prototype.insertAdjacentElement)
+{
+     HTMLElement.prototype.insertAdjacentElement = function(where,parsedNode)
+     {
+        switch (where)
+        {
+            case 'beforeBegin':
+                this.parentNode.insertBefore(parsedNode,this)
+                break;
+            case 'afterBegin':
+                this.insertBefore(parsedNode,this.firstChild);
+                break;
+            case 'beforeEnd':
+                this.appendChild(parsedNode);
+                break;
+            case 'afterEnd':
+                if (this.nextSibling) this.parentNode.insertBefore(parsedNode,this.nextSibling);
+                    else this.parentNode.appendChild(parsedNode);
+                break;
+         }
+     }
+
+     HTMLElement.prototype.insertAdjacentHTML = function (where,htmlStr)
+     {
+         var r = this.ownerDocument.createRange();
+         r.setStartBefore(this);
+         var parsedHTML = r.createContextualFragment(htmlStr);
+         this.insertAdjacentElement(where,parsedHTML)
+     }
+
+     HTMLElement.prototype.insertAdjacentText = function (where,txtStr)
+     {
+         var parsedText = document.createTextNode(txtStr)
+         this.insertAdjacentElement(where,parsedText)
+     }
+}
+
+function getEvent()
+
+{
+
+    if(document.all)
+
+    {
+
+    return window.event;//如果是ie
+
+    }
+
+func=getEvent.caller;
+
+while(func!=null)
+
+{
+
+    var arg0=func.arguments[0];
+
+    if(arg0)
+
+    {
+
+        if((arg0.constructor==Event || arg0.constructor ==MouseEvent)
+
+        ||(typeof(arg0)=="object" && arg0.preventDefault && arg0.stopPropagation))
+
+        {
+
+        return arg0;
+
+        }
+
+    }
+
+        func=func.caller;
+
+    }
+
+    return null;
+
+}
+		var targetobj;
+		if(window.dialogArguments!=null)//IE Use
+		targetobj=window.dialogArguments.document.getElementById('f_documentnewsintro');
+		else targetobj=opener.window.document.getElementById('f_documentnewsintro')
+
+ function add(t) {
+	 	var objtable = document.getElementById(t);
+		//var rows =  objtable.getElementsByTagName("tr");
+        var length = objtable.rows.length;
+        var objLastTH = objtable.rows[length - 1];
+        var numTD = objLastTH.cells.length;
+        var onewTR = objtable.insertRow(-1);
+
+        var j = length - 1;		
+        for (var i = 0; i < numTD; i ++) {//添加单元格
+            var oCell = onewTR.insertCell(-1);
+            oCell.innerHTML = "";
+            oCell.className = objLastTH.cells[i].className;
+            oCell.align = objLastTH.cells[i].align;
+
+            if (i == 0) {
+                oCell.insertAdjacentHTML("afterBegin", "<INPUT  onClick='delrecord();' type='checkbox' />");
+            }
+			else if (i == 1) {
+                oCell.insertAdjacentHTML("afterBegin", "<input type='text' maxlength='30' style='width:98%' name='text_title'/>");
+            }
+            else if (i == 2) {
+                oCell.insertAdjacentHTML("afterBegin", "<input type='text' name='text_href'  style='width:98%' />");
+            }
+			else if (i == 3) {
+                oCell.insertAdjacentHTML("afterBegin", "<select name='select_color' style='width:98%'' /><option selected value=''>默认</option><option value='black'>黑色</option><option value='red'>红色</option><option value='green'>绿色</option><option value='blue'>蓝色</option></select>");
+            }
+            else {
+                oCell.insertAdjacentHTML("afterBegin", "<INPUT  name='check_font' type='checkbox'  style='width:98%' />");
+            }
+
+
+        }
+    }
+	function addbycount(t) {
+		var objtable = document.getElementById(t);
+		var length = objtable.rows.length;
+		var addcount = document.getElementById("add_num").value;
+		var truelength=length-1;
+		if(parseInt(length)+parseInt(addcount)>11){alert('已经有'+truelength+'行，不能超过10行摘要');return false;}
+		for(var i=0;i<addcount;i++)
+		{
+			add(t);
+		}
+	}
+	function addbyarr(t,arr) {
+		var objtable = document.getElementById(t);
+        var length = objtable.rows.length;
+        var objLastTH = objtable.rows[length - 1];
+        var numTD = objLastTH.cells.length;
+        var onewTR = objtable.insertRow(-1);
+
+        var j = length - 1;
+        for (var i = 0; i < numTD; i ++) {//添加单元格
+            var oCell = onewTR.insertCell(-1);
+            oCell.innerHTML = "";
+            oCell.className = objLastTH.cells[i].className;
+            oCell.align = objLastTH.cells[i].align;
+
+            if (i == 0) {
+                oCell.insertAdjacentHTML("afterBegin", "<INPUT  onClick='delrecord();' type='checkbox' />");
+            }
+			else if (i == 1) {
+                oCell.insertAdjacentHTML("afterBegin", "<input type='text' maxlength='30'  style='width:98%' name='text_title' value='"+arr[0]+"'/>");
+            }
+            else if (i == 2) {
+                oCell.insertAdjacentHTML("afterBegin", "<input type='text' name='text_href'  style='width:98%' value='"+arr[2]+"'/>");
+            }
+			else if (i == 3) {
+                oCell.insertAdjacentHTML("afterBegin", "<select name='select_color' style='width:98%' /><option selected value=''>默认</option><option value='black'>黑色</option><option value='red'>红色</option><option value='green'>绿色</option><option value='blue'>蓝色</option></select>");
+				oCell.children[0].value=arr[1];
+            }
+            else {
+                oCell.insertAdjacentHTML("afterBegin", "<INPUT  name='check_font' type='checkbox'  style='width:98%'/>");
+				oCell.children[0].checked=arr[3];
+            }
+
+
+        }
+    }
+    function delrecord() {
+		var evt=getEvent();
+        var e=evt.srcElement||evt.target;
+        var ch = e.checked;
+        while (e.tagName != "TR") {
+             e=e.parentElement||e.parentNode;
+        }
+        if (ch) {
+            e.del = "1";
+        } else {
+            e.del = "0";
+        }
+    }
+    function deletelast(t) {
+		var objtable = document.getElementById(t);
+        var length = objtable.rows.length;
+        if (length - 1 == 0) {
+            return;
+        }
+        for (var i = 1; i < objtable.rows.length; i++) {
+            if (objtable.rows[i].del==1) {
+                objtable.deleteRow(objtable.rows[i].rowIndex)
+                i--;
+            }
+        }
+    }
+	function gethtmlstr()
+    {
+        //var i = parent.tableDatailIframe1.window.document.all.input_rownum.value;		
+        var t = window.document.getElementById("DataGridPersonnel");
+        var length = t.rows.length;
+		var truelength = length-1;
+		var addheadstr="";
+		var addendstr="";
+		if(window.document.getElementById("check1").checked) 
+		{
+			addheadstr="["; 
+			addendstr="]";
+		}
+		else if(window.document.getElementById("check2").checked) 
+		{
+			addheadstr="【"; 
+			addendstr="】";
+		}
+		if(length>11){alert('已经有'+truelength+'行，不能超过10行摘要');return false;}
+        var htmlstrwhole='';
+        for (var j = 1; j < length; j ++)
+        {
+			if(document.getElementsByName("text_title")[j-1].value.replace(/(^\s*)|(\s*$)/g, "").length<1) continue;
+                        var fontColor = "[{COLOR}]";
+                        var htmlstr="";
+                        if(fontColor == ""){
+                            htmlstr='<a href="[{URL}]" target="_blank">[{STRONG}][{TEXT}][{/STRONG}]</a>';
+                        }else{
+                            htmlstr='<a href="[{URL}]" target="_blank">[{STRONG}]<font color="[{COLOR}]">[{TEXT}]</font>[{/STRONG}]</a>';
+			}
+			htmlstr=htmlstr.replace("[{URL}]",document.getElementsByName("text_href")[j-1].value);
+			htmlstr=htmlstr.replace("[{COLOR}]",document.getElementsByName("select_color")[j-1].value);
+			htmlstr=htmlstr.replace("[{TEXT}]",addheadstr+document.getElementsByName("text_title")[j-1].value+addendstr);
+			var strongflag = document.getElementsByName("check_font")[j-1].checked;
+			if(strongflag) 
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","<strong>");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","</strong>");
+			}
+			else
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","");			
+			}
+			htmlstrwhole +=htmlstr+"\n";
+            //sumnum = sumnum + document.getElementsByName("text_title")[j-1].value;
+        }		
+		if(htmlstrwhole!="")
+		targetobj.value = htmlstrwhole.substring(0,htmlstrwhole.length-1);
+		else
+		targetobj.value="";
+		window.close();
+		//htmlstr=htmlstr.replace("[{URL}]","1234");		
+        //parent.tableDatailIframe1.window.document.getElementById("DataGridPersonnel").rows[i].cells[4].innerHTML=sumnum/5
+    }
+	function getobjectbystr()
+    {
+		var aParams = new Object() ;	
+		if(targetobj.value!="")
+		{
+		aParams = targetobj.value.toLowerCase().split('\n') ;
+		for (i=0 ; i < aParams.length ; i++)
+		{
+			if(aParams[i].length<10) {continue;}
+			var hrefstr=aParams[i].split('href="')[1].split('"')[0];
+			var colorstr=aParams[i].split('color="')[1].split('"')[0];
+			var tmeparr = aParams[i].split('</font>')[0].split('>');
+			var textstr=tmeparr[tmeparr.length-1];
+			var strongflag=false;
+			if(aParams[i].split('strong').length<3)
+			{
+				strongflag=false;
+			}
+			else
+			{
+				strongflag=true;
+			}
+			addbyarr("DataGridPersonnel",[textstr,colorstr,hrefstr,strongflag])
+			//var aParam = aParams[i].split('=') ;
+			//URLParams[aParam[0]] = aParam[1] ;
+		}
+		}
+		else
+		{
+			add("DataGridPersonnel");
+			add("DataGridPersonnel");
+			add("DataGridPersonnel");
+		}
+	}
+	function showitem()
+	{
+		var t = window.document.getElementById("DataGridPersonnel");
+        var length = t.rows.length;
+        var htmlstrwhole='';
+		var htmlstrwhole1="";
+		var htmlstrwhole2="";
+		var addheadstr="";
+		var addendstr="";
+		if(window.document.getElementById("check1").checked) 
+		{
+			addheadstr="["; 
+			addendstr="]";
+		}
+		else if(window.document.getElementById("check2").checked) 
+		{
+			addheadstr="【"; 
+			addendstr="】";
+		}
+        for (var j = 1; j < length; j ++)
+        {
+			if(document.getElementsByName("text_title")[j-1].value.replace(/(^\s*)|(\s*$)/g, "").length<1) continue;
+			var htmlstr='<a href="[{URL}]" target="_blank">[{STRONG}]<font style="font-size:12px" color="[{COLOR}]">[{TEXT}]</font>[{/STRONG}]</a>';
+			htmlstr=htmlstr.replace("[{URL}]",document.getElementsByName("text_href")[j-1].value);
+			htmlstr=htmlstr.replace("[{COLOR}]",document.getElementsByName("select_color")[j-1].value);
+			htmlstr=htmlstr.replace("[{TEXT}]",addheadstr+document.getElementsByName("text_title")[j-1].value+addendstr);
+			var strongflag = document.getElementsByName("check_font")[j-1].checked;
+			if(strongflag) 
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","<strong>");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","</strong>");
+			}
+			else
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","");			
+			}
+			htmlstrwhole +=htmlstr+"\n";
+            //sumnum = sumnum + document.getElementsByName("text_title")[j-1].value;
+        }
+		 for (var j = 1; j < length; j ++)
+        {
+			var htmlstr='<a href="[{URL}]" target="_blank">[{STRONG}]<font style="font-size:14px" color="[{COLOR}]">[{TEXT}]</font>[{/STRONG}]</a>';
+			htmlstr=htmlstr.replace("[{URL}]",document.getElementsByName("text_href")[j-1].value);
+			htmlstr=htmlstr.replace("[{COLOR}]",document.getElementsByName("select_color")[j-1].value);
+			htmlstr=htmlstr.replace("[{TEXT}]",addheadstr+document.getElementsByName("text_title")[j-1].value+addendstr);
+			var strongflag = document.getElementsByName("check_font")[j-1].checked;
+			if(strongflag) 
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","<strong>");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","</strong>");
+			}
+			else
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","");			
+			}
+			htmlstrwhole1 +=htmlstr+"\n";
+            //sumnum = sumnum + document.getElementsByName("text_title")[j-1].value;
+        }
+		 for (var j = 1; j < length; j ++)
+        {
+			var htmlstr='<a href="[{URL}]" target="_blank">[{STRONG}]<font style="font-size:16px" color="[{COLOR}]">[{TEXT}]</font>[{/STRONG}]</a>';
+			htmlstr=htmlstr.replace("[{URL}]",document.getElementsByName("text_href")[j-1].value);
+			htmlstr=htmlstr.replace("[{COLOR}]",document.getElementsByName("select_color")[j-1].value);
+			htmlstr=htmlstr.replace("[{TEXT}]",addheadstr+document.getElementsByName("text_title")[j-1].value+addendstr);
+			var strongflag = document.getElementsByName("check_font")[j-1].checked;
+			if(strongflag) 
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","<strong>");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","</strong>");
+			}
+			else
+			{
+			  htmlstr=htmlstr.replace("[{STRONG}]","");
+			  htmlstr=htmlstr.replace("[{/STRONG}]","");			
+			}
+			htmlstrwhole2 +=htmlstr+"\n";
+            //sumnum = sumnum + document.getElementsByName("text_title")[j-1].value;
+        }
+		if(htmlstrwhole!="")
+		{
+		document.getElementById('fileItem').innerHTML ="<div style='width:740px;height:120px;overflow:hidden'>"+ htmlstrwhole.substring(0,htmlstrwhole.length-1)+"<br>"+htmlstrwhole1.substring(0,htmlstrwhole1.length-1)+"<br>"+htmlstrwhole2.substring(0,htmlstrwhole1.length-1)+"</div>";
+		}
+		else
+		document.getElementById('fileItem').innerHTML = "";
+	}
+		</script>
+</head>
+
+<body onload="getobjectbystr();">
+<TABLE width="800px" border="0" cellspacing="4" cellpadding="0">
+  <tr>
+ 	<TD vAlign=center>
+	<select name='add_num' id='add_num'/>
+		<option selected value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option>
+		<option value=5>5</option><option value=6>6</option><option value=7>7</option><option value=8>8</option>
+		<option value=9>9</option><option value=10>10</option>
+	</select>
+          <INPUT name="btn_addtitle" type=button  onClick=addbycount("DataGridPersonnel") value=新增 >
+		  <INPUT name="btn_deltitle" type=button  onClick=deletelast("DataGridPersonnel") value=删除>
+		  <INPUT name="btn_view" type=button  onClick=showitem() value=预览>
+		  <!--<INPUT name="btn_testfunc" type=button  onClick=getobjectbystr() value=得到列表值>-->
+    <INPUT name="btn_testarea" type=button  onClick=gethtmlstr() value=保存并关闭>
+	<input type="checkbox" name="check1" id="check1"/><span>两边加[]号</span>
+	<input type="checkbox" name="check2" id="check2"/><span>两边加【】号</span>
+	</TD>
+  </tr>
+</table>
+<TABLE width="800px" border="0" cellspacing="4" cellpadding="0"  id="DataGridPersonnel">
+  <tr>
+    <td align="center" nowrap="nowrap" width="20px"></td>
+    <td align="center" nowrap="nowrap" width="200px" >文字</td>    
+    <td align="center" nowrap="nowrap" width="400px" >链接</td>
+	<td align="center" nowrap="nowrap" width="60px" >颜色</td>
+    <td align="center" nowrap="nowrap" width="60px" >加粗</td>
+  </tr>
+</table>
+<span id="fileItem" style="border-right: #000000 0px solid; border-top: #000000 0px solid;
+              border-left: #000000 0px solid; width: 740px; border-bottom: #000000 0px solid;
+              height: 150px"></span>
+
+</body>
+</html>
