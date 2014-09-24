@@ -83,8 +83,46 @@
  * @property int $ChannelTitlePic2PadWidth
  * @property int $ChannelTitlePic3MobileWidth
  * @property int $ChannelTitlePic3PadWidth
+ *
  * @property int $ProductTitlePic1MobileWidth
  * @property int $ProductTitlePic1PadWidth
+ * @property int $ProductTitlePic1Thumb1Width
+ * @property int $ProductTitlePic1Thumb2Width
+ * @property int $ProductTitlePic1Thumb3Width
+ * @property int $ProductTitlePic1Watermark1Width
+ * @property int $ProductTitlePic1Watermark2Width
+ * @property int $ProductTitlePic1Compress1Width
+ * @property int $ProductTitlePic1Compress2Width
+ *
+ * @property int $ProductTitlePic2MobileWidth
+ * @property int $ProductTitlePic2PadWidth
+ * @property int $ProductTitlePic2Thumb1Width
+ * @property int $ProductTitlePic2Thumb2Width
+ * @property int $ProductTitlePic2Thumb3Width
+ * @property int $ProductTitlePic2Watermark1Width
+ * @property int $ProductTitlePic2Watermark2Width
+ * @property int $ProductTitlePic2Compress1Width
+ * @property int $ProductTitlePic2Compress2Width
+ *
+ * @property int $ProductTitlePic3MobileWidth
+ * @property int $ProductTitlePic3PadWidth
+ * @property int $ProductTitlePic3Thumb1Width
+ * @property int $ProductTitlePic3Thumb2Width
+ * @property int $ProductTitlePic3Thumb3Width
+ * @property int $ProductTitlePic3Watermark1Width
+ * @property int $ProductTitlePic3Watermark2Width
+ * @property int $ProductTitlePic3Compress1Width
+ * @property int $ProductTitlePic3Compress2Width
+ *
+ * @property int $ProductTitlePic4MobileWidth
+ * @property int $ProductTitlePic4PadWidth
+ * @property int $ProductTitlePic4Thumb1Width
+ * @property int $ProductTitlePic4Thumb2Width
+ * @property int $ProductTitlePic4Thumb3Width
+ * @property int $ProductTitlePic4Watermark1Width
+ * @property int $ProductTitlePic4Watermark2Width
+ * @property int $ProductTitlePic4Compress1Width
+ * @property int $ProductTitlePic4Compress2Width
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
