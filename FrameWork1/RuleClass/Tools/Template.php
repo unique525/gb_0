@@ -628,15 +628,22 @@ class Template
                 //分拆处理发布时间字段
                 $pos = stripos(strtolower($columnName), strtolower("PublishDate"));
                 if ($pos !== false) {
-                    $date1 = explode(' ', $columnValue);
-                    $date2 = explode('-', $date1[0]);
-                    $year = $date2[0];
-                    $month = $date2[1];
-                    $day = $date2[2];
+                    if(!empty($columnValue)){
+                        $date1 = explode(' ', $columnValue);
+                        if(!empty($date1)){
+                            $date2 = explode('-', $date1[0]);
+                            if(!empty($date2)){
+                                $year = $date2[0];
+                                $month = $date2[1];
+                                $day = $date2[2];
 
-                    $tempContent = str_ireplace("{publish_year}", $year, $tempContent);
-                    $tempContent = str_ireplace("{publish_month}", $month, $tempContent);
-                    $tempContent = str_ireplace("{publish_day}", $day, $tempContent);
+                                $tempContent = str_ireplace("{publish_year}", $year, $tempContent);
+                                $tempContent = str_ireplace("{publish_month}", $month, $tempContent);
+                                $tempContent = str_ireplace("{publish_day}", $day, $tempContent);
+                            }
+                        }
+                    }
+
                 }
 
                 //分拆处理显示时间字段
