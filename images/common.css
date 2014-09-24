@@ -184,8 +184,8 @@ a:hover{color:#ff3c00; text-decoration:underline;}
 .gdproperty_n dl dd { float: left; width: 420px;}
 .gdproperty_n dl dd ul {width: 420px;font-size:14px;}
 .gdproperty_n dl dd ul li {display: inline;    float: left; line-height: 14px;  margin: 0 5px 5px 0; padding: 1px;    position: relative;    vertical-align: middle;font-size:14px;}
-.gdproperty_n dl dd ul li span.propondefault{border: 1px solid #adadad;color: #333;display: inline-block;    min-width: 10px;padding: 6px 11px;text-align: center;text-decoration: none;white-space: nowrap;ont-size:14px;}
-.gdproperty_n dl dd ul li span.proponselect {background: url( url(2_10.gif)) no-repeat scroll 100% 14px rgba(0, 0, 0, 0); border: 2px solid #00a93d;color: #333;display: inline-block;min-width: 10px;padding: 5px 10px;text-align: center;text-decoration: none;white-space: nowrap;}
+.gdproperty_n dl dd ul li span.propondefault{cursor:pointer;border: 1px solid #adadad;color: #333;display: inline-block;min-width: 10px;padding: 6px 11px;text-align: center;text-decoration: none;white-space: nowrap;ont-size:14px;}
+.gdproperty_n dl dd ul li span.proponselect {cursor:pointer;background: url( url(2_10.gif)) no-repeat scroll 100% 14px rgba(0, 0, 0, 0); border: 2px solid #00a93d;color: #333;display: inline-block;min-width: 10px;padding: 5px 10px;text-align: center;text-decoration: none;white-space: nowrap;}
 .textgt_n { border: 1px solid #b2b2b2;display: inline; font-size: 14px;height:20px;    line-height: 14px;    margin: 0 2px;padding: 3px;    text-align: center;    width: 22px;}
 
 
