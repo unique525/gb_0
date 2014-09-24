@@ -91,6 +91,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $siteAdManageGen = new SiteAdManageGen();
                     $result = $siteAdManageGen->Gen();
                     break;
+                case "site_ad_content":
+                    $siteAdContentManageGen = new SiteAdContentManageGen();
+                    $result = $siteAdContentManageGen->Gen();
+                    break;
                 case "manage_menu_of_user":
                     $manageMenuOfUserManageGen = new ManageMenuOfUserManageGen();
                     $result = $manageMenuOfUserManageGen->Gen();
