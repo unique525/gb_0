@@ -72,6 +72,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
                     break;
+                case "source":
+                    $sourceManageGen = new SourceManageGen();
+                    $result = $sourceManageGen->Gen();
+                    break;
                 case "set_template":
                     self::SetTemplate();
                     break;

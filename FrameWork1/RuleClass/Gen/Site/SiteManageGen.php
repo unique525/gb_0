@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台站点配置生成类
+ * 后台管理 站点 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Site
  * @author zhangchi

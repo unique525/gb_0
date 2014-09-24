@@ -81,3 +81,11 @@ ul{list-style-type:none;}
     padding: 0 10px 2px 0;
     cursor: pointer;}
 .span_close_box{cursor:pointer;}
+
+#dialog_abstract_box{width:780px;height:500px;display:none;z-index:100;position:absolute;
+    background: #e6e8ec;
+    padding:0 10px;
+    left: 100px;
+    top:100px;
+}
+.source_select{background: #e6e8ec;}

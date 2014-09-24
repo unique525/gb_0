@@ -411,6 +411,15 @@ class BaseData
      */
     const TableId_VoteRecordDetail = "VoteRecordDetailId";
 
+
+    /**
+     * 来源 数据表名
+     */
+    const TableName_Source = "cst_source";
+    /**
+     * 来源 数据表自增字段名
+     */
+    const TableId_Source = "SourceId";
     /**
      * 通用来源 数据表名
      */
