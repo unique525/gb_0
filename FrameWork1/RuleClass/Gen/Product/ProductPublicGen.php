@@ -105,7 +105,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function loadDetailTemp($temp,$channelId)
     {
-        $templateFileUrl = "product/test_detail.html";
+        $templateFileUrl = "product/product_detail.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
