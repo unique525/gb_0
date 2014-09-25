@@ -369,56 +369,6 @@ function _ChannelClick() {
 
 }
 
-/**
- * 处理站点列表页的js
- */
-$(function () {
-
-    //格式化站点状态
-    $(".span_state").each(function(){
-        $(this).text(FormatSiteState($(this).text()));
-    });
-
-    //开启站点
-    $(".img_open_site").click(function(){
-        var siteId = parseInt($(this).attr("idvalue"));
-        var state = 0; //开启状态
-        if(siteId>0){
-            $.ajax({
-                type: "get",
-                url: "default.php?secu=manage&mod=site&m=async_modify_state",
-                data: {
-                    site_id: siteId,
-                    state:state
-                },
-                dataType: "jsonp",
-                jsonp: "jsonpcallback",
-                success: function(data) {
-                    alert(data);
-                }
-            });
-        }
-    });
-
-});
-
-/**
- * 格式化站点状态值
- * @return {string}
- */
-function FormatSiteState(state){
-    switch (state){
-        case "0":
-            return "启用";
-            break;
-        case "100":
-            return "<"+"span style='color:#990000'>停用<"+"/span>";
-            break;
-        default :
-            return "未知";
-            break;
-    }
-}
 
 
 
