@@ -539,7 +539,7 @@ class BaseGen
                     $newFileName = 'product_brand_intro_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_AD_CONTENT:
+            case UploadFileData::UPLOAD_TABLE_TYPE_SITE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
