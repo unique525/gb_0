@@ -14,12 +14,72 @@
     <script type="text/javascript">
     $(function(){
         $('.jqzoom').jqzoom({
+            zoomWidth:350,
+            zoomHeight:350,
             zoomType: 'standard',
             lens:true,
             preloadImages: false,
-            alwaysOn:false
+            alwaysOn:false,
+            title:false,
+        });
+        //价格选择
+        var spanPropon=$('.propon');
+        spanPropon.click(function(){
+            //产品促销价格
+            var productPriceValue=$(this).attr("pricevalue");
+            $("#productPrice").text(productPriceValue);
+            //产品价格
+            var productSalePriceValue=$("#productSalePrice").text();
+            //优惠的差价
+            var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
+            $("#priceReduce").text(priceReduceValue);
+            //价格选择切换效果
+            spanPropon.attr("class","propon propondefault");//默认全部不选择
+            $(this).attr("class","propon proponselect");//点击选中
+        });
+        //页面加载后默认选中第一个价格
+        spanPropon.eq(0).click();
+        //购买数量加减
+        $("#dow").click(function () {
+            ProductNumChange(-1)
+        });
+        $("#up").click(function () {
+            ProductNumChange(1)
+        });
+        var inputProductNum=$("#productNum");
+        inputProductNum.bind("keyup", function () {
+            validateCount.call($(this));
+        });
+        inputProductNum.bind("blur", function () {
+            validateCount.call($(this));
         });
     });
+    //产品数量增减
+    function ProductNumChange(changeNum) {
+        var inputProductNum=$("#productNum");
+        var productNum = inputProductNum.val();
+        if (Number(productNum)) {
+            productNum = parseInt(productNum) + parseInt(changeNum);
+            if (productNum == 0) {
+                productNum = 1
+            }
+            inputProductNum.val(productNum)
+        } else {
+            if (changeNum > 0) {
+                inputProductNum.val("1")
+            } else {
+                inputProductNum.val("1")
+            }
+        }
+    }
+    //产品购买数量数字验证
+    function validateCount() {
+        var intreg = /^\d+$/;
+        var sSum = this.val();
+        if ("0" == sSum || !intreg.test(sSum)) {
+            this.val("1");
+        }
+    }
     </script>
 </head>
 <body>
@@ -57,7 +117,7 @@
 </div>
 <div class="box1200">
     <div class="myseatnew">
-        <a href="#">首页</a> &gt; <a href="#">蔬菜</a> &gt; 本来精选绿芦笋300g 肉质细嫩，口味香郁</div>
+        <a href="#">首页</a> &gt; <a href="#">蔬菜</a> &gt; {ProductName}</div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -136,7 +196,9 @@
         <tr>
             <td align="center" valign="top" class="goodstopl" >
                 <div class="magnifier">
-                    <img  style="width: 350px;height: 350px; border:1px #fdf3ea solid; overflow: hidden" alt="" src="images/0102011080C.jpg">
+                    <a href="http://image2.benlailife.com/ProductBigImage/0301030231C.jpg" class="jqzoom" rel='gal1'  title="triumph1" >
+                        <img src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" onerror="this.onerror=null;this.src='http://image1.benlailife.com/Content/images/NoPicmiddle.jpg&#39;?v=8.2.43" style="width: 350px;height: 350px; overflow: hidden"/>
+                    </a>
                 </div>
                 <div class="pic_small">
                     <span  class="pic_sl"></span>
@@ -152,35 +214,46 @@
             <td width="40">&nbsp;</td>
             <td align="left" valign="top" class="goodstopr"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left"> <h1 class="ft20">本来精选绿芦笋300g 肉质细嫩，口味香郁味香郁味香郁味</h1></td>
+                        <td align="left"> <h1 class="ft20">{ProductName}</h1></td>
                     </tr>
                     <tr>
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span class="newprice">18.50</span></span></p>
-                                <p class="price_n">原　价：<span class="oldprice" style="text-decoration: line-through">25.80</span></p>
-                                <p class="price_n"><span class="chaprice">已优惠：<span style="padding-right: 5px; color:#ff3c00">7.30</span></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice"></span></span></p>
+                                <p class="price_n">原　价：<span id="productSalePrice" class="oldprice" style="text-decoration: line-through">{SalePrice}</span></p>
+                                <p class="price_n"><span class="chaprice">已优惠：<span id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
-                        <td align="left"><div class="gdproperty_n"><dl>
-                                    <dt>品种/规格：</dt><dd><ul>
-                                            <li ><span class="propondefault">绿奇异果8粒</span></li>
-                                            <li><span class="propondefault">1.2kg</span></li><li>
-                                                <span class="proponselect">绿奇异果16粒（礼盒装）</span></li>
-                                            <li ><span class="propondefault">绿奇异果8粒</span></li>
-                                        </ul></dd></dl></div></td>
+                        <td align="left">
+                            <div class="gdproperty_n">
+                                <dl>
+                                    <dt>品种/规格：</dt>
+                                    <dd>
+                                        <ul>
+                                            <icms id="{ProductId}" type="product_price_list">
+                                                <item>
+                                                    <![CDATA[
+                                                    <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}">{f_ProductPriceIntro}</span></li>
+                                                    ]]>
+                                                </item>
+                                            </icms>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td align="left" style="font-size:14px;">
                             <div class=quantity>
                                 <p>购买数量： </P>
-                                <p><a hidefocus class=dow href="#"><img
+                                <p><a hidefocus class=dow id="dow" href="#"><img
                                             src="images/dy_03.gif" width=15
                                             height=15></a> </p>
-                                <P class=mt0><INPUT id=textgtSum class=textgt_n value=1 maxLength=4
+                                <P class=mt0><INPUT id=productNum class=textgt_n value=1 maxLength=4
                                                     type=text> </p>
-                                <P><a hideFocus  class=up href="#"><img
+                                <P><a hideFocus class=up id="up" href="#"><img
                                             src="images/dy_05.gif" width=15
                                             height=15></a> </p></div>
                         </td>
