@@ -181,20 +181,20 @@ a:hover{color:#ff3c00; text-decoration:underline;}
 .gdproperty_n dl dd { float: left; width: 420px;}
 .gdproperty_n dl dd ul {width: 420px;font-size:14px;}
 .gdproperty_n dl dd ul li {display: inline;    float: left; line-height: 14px;  margin: 0 5px 5px 0; padding: 1px;    position: relative;    vertical-align: middle;font-size:14px;}
-.gdproperty_n dl dd ul li span.propondefault{border: 1px solid #adadad;color: #333;display: inline-block;    min-width: 10px;padding: 6px 11px;text-align: center;text-decoration: none;white-space: nowrap;ont-size:14px;}
-.gdproperty_n dl dd ul li span.proponselect {background: url( url(2_10.gif)) no-repeat scroll 100% 14px rgba(0, 0, 0, 0); border: 2px solid #00a93d;color: #333;display: inline-block;min-width: 10px;padding: 5px 10px;text-align: center;text-decoration: none;white-space: nowrap;}
+.gdproperty_n dl dd ul li span.propondefault{cursor:pointer;border: 1px solid #adadad;color: #333;display: inline-block;    min-width: 10px;padding: 6px 11px;text-align: center;text-decoration: none;white-space: nowrap;ont-size:14px;}
+.gdproperty_n dl dd ul li span.proponselect {cursor:pointer;background: url( url(2_10.gif)) no-repeat scroll 100% 14px rgba(0, 0, 0, 0); border: 2px solid #00a93d;color: #333;display: inline-block;min-width: 10px;padding: 5px 10px;text-align: center;text-decoration: none;white-space: nowrap;}
 .textgt_n { border: 1px solid #b2b2b2;display: inline; font-size: 14px;height:20px;    line-height: 14px;    margin: 0 2px;padding: 3px;    text-align: center;    width: 22px;}
 
 
 
 .goodstopl {width: 350px; padding-left:30px;}
-.magnifier {height: 350px;overflow: hidden; width: 350px; margin-bottom:20px;}
+.magnifier {height: 350px;width: 350px; margin-bottom:20px;}
 .jqzoom {cursor: pointer;float: left;padding: 0;position: relative;}
 .goodstopr .limit .time span { color: #fe8e10;    font-size: 14px; font-weight: bold;
     margin: 0 2px; padding: 0 5px;text-align: center;text-decoration: none;}
 element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;overflow: hidden;vertical-align: middle;    width: 350px;}
 .pic_small {height: 54px;margin: 10px 0;width: 365px;}
-.pic_sl,.pic_sr {cursor:pointer;background:url(1_03.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);cursor: pointer;display: inline;float: left; height: 54px;width: 19px;}
+.pic_sl,.pic_sr {background:url(1_03.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);cursor: pointer;display: inline;float: left; height: 54px;width: 19px;}
 .pic_sr { background: url(1_05.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);}
 .pic_smiddle {display: inline;float: left;height:54px;width: 326px;}
 .pic_smiddle ul li a {border: 1px solid #dddddd;display: block;height:50px;width:50px; margin:0px 5px; float:left;}
