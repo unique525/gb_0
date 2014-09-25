@@ -18,10 +18,6 @@
             $('#tabs').tabs();
 
 
-
-
-
-
         });
 
         function submitForm(closeTab) {
@@ -32,7 +28,7 @@
                     $("#CloseTab").val("0");
                 }
 
-                $("#mainForm").attr("action", "/default.php?secu=manage&mod=document_news&m={method}&channel_id={ChannelId}&document_news_id={DocumentNewsId}&tab_index=" + parent.G_TabIndex + "");
+                $("#mainForm").attr("action", "/default.php?secu=manage&mod=site_config&m=set&site_id={SiteId}&tab_index=" + parent.G_TabIndex + "");
                 $('#mainForm').submit();
 
         }
@@ -65,48 +61,48 @@
                             <div style="">
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
-                                            <label for="cfg_ForumIeTitle_0">论坛的IE标题：</label></td>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ForumIeTitle_0">论坛浏览器标题：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeTitle_0" id="cfg_ForumIeTitle_0" value="{cfg_ForumIeTitle_0}" maxlength="200" type="text" class="inputbox" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeTitle_0" id="cfg_ForumIeTitle_0" value="{cfg_ForumIeTitle_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
-                                            <label for="cfg_ForumIeKeywords_0">论坛的IE关键字：</label></td>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ForumIeKeywords_0">论坛浏览器关键字 Keyword：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeKeywords_0" id="cfg_ForumIeKeywords_0" value="{cfg_ForumIeKeywords_0}" maxlength="200" type="text" class="inputbox" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeKeywords_0" id="cfg_ForumIeKeywords_0" value="{cfg_ForumIeKeywords_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
-                                            <label for="cfg_ForumIeDescription_0">论坛的IE Description：</label></td>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ForumIeDescription_0">论坛浏览器描述文字 Description：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeDescription_0" id="cfg_ForumIeDescription_0" value="{cfg_ForumIeDescription_0}" maxlength="200" type="text" class="inputbox" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeDescription_0" id="cfg_ForumIeDescription_0" value="{cfg_ForumIeDescription_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumLogoImage_0">论坛LOGO图片：</label></td>
                                         <td class="spe_line">
 
-                                            <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="inputbox" style=" width: 500px;"/> [<a id="preview_ForumLogoImage" href="" target="_blank">预览</a>]<br/>
-                                            <input id="ForumLogoImageToUpload" name="ForumLogoImageToUpload" type="file" class="inputbox" style="width:200px; background: #ffffff;"/> <img id="ForumLogoImageloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
+                                            <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/> [<a id="preview_ForumLogoImage" href="" target="_blank">预览</a>]<br/>
+                                            <input id="ForumLogoImageToUpload" name="ForumLogoImageToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumLogoImageloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
                                             <input id="btnForumLogoImageUpload" onclick="return ajaxForumLogoImageUpload()" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumBackground_0">论坛背景图片：</label></td>
                                         <td class="spe_line">
 
-                                            <input id="cfg_ForumBackground_0" name="cfg_ForumBackground_0" value="{cfg_ForumBackground_0}" maxlength="200" type="text" class="inputbox" style=" width: 500px;"/> [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
-                                            <input id="ForumBackgroundToUpload" name="ForumBackgroundToUpload" type="file" class="inputbox" style="width:200px; background: #ffffff;"/> <img id="ForumBackgroundloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
+                                            <input id="cfg_ForumBackground_0" name="cfg_ForumBackground_0" value="{cfg_ForumBackground_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/> [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
+                                            <input id="ForumBackgroundToUpload" name="ForumBackgroundToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumBackgroundloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
                                             <input id="btnForumBackgroundUpload" onclick="return ajaxForumBackgroundUpload()" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumCssDefault_0">论坛默认的样式：</label></td>
                                         <td class="spe_line">
                                             <select id="cfg_ForumCssDefault_0" name="cfg_ForumCssDefault_0">
@@ -129,7 +125,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumCssDefaultWidth_0">论坛默认的样式宽度文件：</label></td>
                                         <td class="spe_line">
                                             <select id="cfg_ForumCssDefaultWidth_0" name="cfg_ForumCssDefaultWidth_0">
@@ -142,7 +138,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" height="30" align="right">
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumCssDefaultFontSize_0">论坛默认的样式字体文件：</label></td>
                                         <td class="spe_line">
                                             <select id="cfg_ForumCssDefaultFontSize_0" name="cfg_ForumCssDefaultFontSize_0">
@@ -162,7 +158,7 @@
                                     <tr>
                                         <td class="spe_line">
                                             <label for="cfg_ForumTopInfo_2"></label><textarea id="cfg_ForumTopInfo_2" name="cfg_ForumTopInfo_2" style="width:90%;height:380px;">{cfg_ForumTopInfo_2}</textarea><br/>
-                                            <input id="ForumTopInfoToUpload" name="ForumTopInfoToUpload" type="file" class="inputbox" style="width:200px; background: #ffffff;"/> <img id="ForumTopinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
+                                            <input id="ForumTopInfoToUpload" name="ForumTopInfoToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumTopinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
                                             <input id="btnForumTopInfoUpload" onclick="return ajaxForumTopinfoUpload()" type="button" value="上传"/>
                                         </td>
                                     </tr>
@@ -176,7 +172,7 @@
                                     <tr>
                                         <td class="spe_line">
                                             <label for="cfg_ForumBotInfo_2"></label><textarea id="cfg_ForumBotInfo_2" name="cfg_ForumBotInfo_2" style="width:90%;height:380px;">{cfg_ForumBotInfo_2}</textarea><br/>
-                                            <input id="ForumBotinfoToUpload" name="ForumBotinfoToUpload" type="file" class="inputbox" style="width:200px; background: #ffffff;"/> <img id="ForumBotinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
+                                            <input id="ForumBotinfoToUpload" name="ForumBotinfoToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumBotinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
                                             <input id="btnForumBotinfoUpload" onclick="return ajaxForumBotinfoUpload()" type="button" value="上传"/>
                                         </td>
                                     </tr>
@@ -188,17 +184,17 @@
                             <div>
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td class="spe_line" style="width:20%;" height="30" align="right">
+                                        <td class="spe_line" style="width:20%;" height="40" align="right">
                                             <label for="cfg_ForumTopicPageSize_3">主题列表每页记录数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumTopicPageSize_3" id="cfg_ForumTopicPageSize_3" value="{cfg_ForumTopicPageSize_3}" maxlength="3" type="text" class="inputnumber" style=" width: 50px;"/>
+                                            <input name="cfg_ForumTopicPageSize_3" id="cfg_ForumTopicPageSize_3" value="{cfg_ForumTopicPageSize_3}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="spe_line" style="width:20%;" height="30" align="right">
+                                        <td class="spe_line" style="width:20%;" height="40" align="right">
                                             <label for="cfg_ForumPostPageSize_3">帖子列表每页记录数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumPostPageSize_3" id="cfg_ForumPostPageSize_3" value="{cfg_ForumPostPageSize_3}" maxlength="3" type="text" class="inputnumber" style=" width: 50px;"/>
+                                            <input name="cfg_ForumPostPageSize_3" id="cfg_ForumPostPageSize_3" value="{cfg_ForumPostPageSize_3}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
                                         </td>
                                     </tr>
                                 </table>
