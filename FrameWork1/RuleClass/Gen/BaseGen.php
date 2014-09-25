@@ -850,7 +850,7 @@ class BaseGen
      * @param int $mobileHeight 移动客户端使用的图片的高度，默认为0，不按高度缩放
      * @return int 操作结果
      */
-    public function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0)
+    protected function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($mobileWidth > 0 || $mobileHeight > 0)) {
@@ -881,9 +881,9 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $padWidth 图片的宽度
      * @param int $padHeight 图片的高度，默认为0，不按高度缩放
-     * @return int
+     * @return int 操作结果
      */
-    public function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0)
+    protected function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($padWidth > 0 || $padHeight > 0)) {
@@ -909,39 +909,339 @@ class BaseGen
         return $result;
     }
 
-    public function GenUploadFileThumb1($uploadFileId)
+    /**
+     * 生成缩略图1的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $imageWidth 图片的宽度
+     * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @return int 操作结果
+     */
+    protected function GenUploadFileThumb1($uploadFileId, $imageWidth, $imageHeight = 0)
     {
+        $result = -1;
+        if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if (!empty($uploadFilePath)) {
+                $thumbFileName = "thumb1";
+                $jpgQuality = 90;
+                $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileThumbPath1(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileThumb2($uploadFileId)
+    /**
+     * 生成缩略图2的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $imageWidth 图片的宽度
+     * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @return int 操作结果
+     */
+    protected function GenUploadFileThumb2($uploadFileId, $imageWidth, $imageHeight = 0)
     {
+        $result = -1;
+        if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if (!empty($uploadFilePath)) {
+                $thumbFileName = "thumb2";
+                $jpgQuality = 90;
+                $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileThumbPath2(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileThumb3($uploadFileId)
+    /**
+     * 生成缩略图3的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $imageWidth 图片的宽度
+     * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @return int 操作结果
+     */
+    protected function GenUploadFileThumb3($uploadFileId, $imageWidth, $imageHeight = 0)
     {
+        $result = -1;
+        if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if (!empty($uploadFilePath)) {
+                $thumbFileName = "thumb3";
+                $jpgQuality = 90;
+                $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileThumbPath3(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileWatermark1($uploadFileId)
-    {
+    /**
+     * 在哪张图上制作水印图 0 在原图上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC = 0;
 
+    /**
+     * 在哪张图上制作水印图 1 在缩略图1上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_1 = 1;
+
+    /**
+     * 在哪张图上制作水印图 2 在缩略图2上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_2 = 2;
+
+    /**
+     * 在哪张图上制作水印图 3 在缩略图3上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_3 = 3;
+
+    /**
+     * 在哪张图上制作水印图 4 在压缩图1上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_1 = 4;
+
+    /**
+     * 在哪张图上制作水印图 4 在压缩图2上制作
+     */
+    const MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_2 = 5;
+
+    /**
+     * 生成水印图1的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param string $watermarkFilePath 水印图地址
+     * @param int $sourceType 在哪张图上制作水印图（默认0 在原图上制作）
+     * @param int $watermarkPosition   水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部居左, 5:底部居右
+     * @param int $mode     模式 0 支持png本身透明度的方式 1 半透明格式水印
+     * @param int $alpha     透明度 -- 0:完全透明, 100:完全不透明
+     * @return int 操作结果
+     */
+    protected function GenUploadFileWatermark1(
+        $uploadFileId,
+        $watermarkFilePath,
+        $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC,
+        $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT,
+        $mode = ImageObject::WATERMARK_MODE_PNG,
+        $alpha = 70
+    )
+    {
+        $result = -1;
+        if ($uploadFileId > 0 && !empty($watermarkFilePath)) {
+            //1.取得制作图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            switch($sourceType){
+                case self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC:
+                    $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_1:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath1($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_2:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath2($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_3:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath3($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_1:
+                    $uploadFilePath = $uploadFileData->GetUploadFileCompressPath1($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_2:
+                    $uploadFilePath = $uploadFileData->GetUploadFileCompressPath2($uploadFileId, $withCache);
+                    break;
+            }
+
+            //2.制作水印图
+            if (!empty($uploadFilePath)) {
+                $addFileName = "watermark1";
+
+                $newUploadFilePath = ImageObject::GenWatermark(
+                    $uploadFilePath,
+                    $watermarkFilePath,
+                    $addFileName,
+                    $watermarkPosition,
+                    $mode,
+                    $alpha
+                );
+
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileWatermarkPath1(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileWatermark2($uploadFileId)
+    /**
+     * 生成水印图2的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param string $watermarkFilePath 水印图地址
+     * @param int $sourceType 在哪张图上制作水印图（默认0 在原图上制作）
+     * @param int $watermarkPosition   水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部居左, 5:底部居右
+     * @param int $mode     模式 0 支持png本身透明度的方式 1 半透明格式水印
+     * @param int $alpha     透明度 -- 0:完全透明, 100:完全不透明
+     * @return int 操作结果
+     */
+    protected function GenUploadFileWatermark2(
+        $uploadFileId,
+        $watermarkFilePath,
+        $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC,
+        $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT,
+        $mode = ImageObject::WATERMARK_MODE_PNG,
+        $alpha = 70
+    )
     {
+        $result = -1;
+        if ($uploadFileId > 0 && !empty($watermarkFilePath)) {
+            //1.取得制作图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            switch($sourceType){
+                case self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC:
+                    $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_1:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath1($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_2:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath2($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_THUMB_PIC_3:
+                    $uploadFilePath = $uploadFileData->GetUploadFileThumbPath3($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_1:
+                    $uploadFilePath = $uploadFileData->GetUploadFileCompressPath1($uploadFileId, $withCache);
+                    break;
+                case self::MAKE_WATERMARK_SOURCE_TYPE_COMPRESS_PIC_2:
+                    $uploadFilePath = $uploadFileData->GetUploadFileCompressPath2($uploadFileId, $withCache);
+                    break;
+            }
 
+            //2.制作水印图
+            if (!empty($uploadFilePath)) {
+                $addFileName = "watermark2";
+
+                $newUploadFilePath = ImageObject::GenWatermark(
+                    $uploadFilePath,
+                    $watermarkFilePath,
+                    $addFileName,
+                    $watermarkPosition,
+                    $mode,
+                    $alpha
+                );
+
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileWatermarkPath2(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileCompress1($uploadFileId)
+    /**
+     * 生成压缩图1的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $imageWidth 图片的宽度
+     * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 图片质量 默认90
+     * @return int 操作结果
+     */
+    public function GenUploadFileCompress1($uploadFileId, $imageWidth, $imageHeight = 0, $jpgQuality = 90)
     {
+        $result = -1;
+        if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if (!empty($uploadFilePath)) {
+                $thumbFileName = "compress1";
+                $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileCompressPath1(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
-    public function GenUploadFileCompress2($uploadFileId)
+    /**
+     * 生成压缩图2的上传文件（图片），并存入上传文件表对应记录行
+     * @param int $uploadFileId 上传文件id
+     * @param int $imageWidth 图片的宽度
+     * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 图片质量 默认90
+     * @return int 操作结果
+     */
+    public function GenUploadFileCompress2($uploadFileId, $imageWidth, $imageHeight = 0, $jpgQuality = 90)
     {
+        $result = -1;
+        if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
+            //1.取得原图
+            $withCache = false;
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, $withCache);
+            //2.制作缩略图
+            if (!empty($uploadFilePath)) {
+                $thumbFileName = "compress2";
+                $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
+                if (!empty($newUploadFilePath)) {
+                    //3.修改数据表
+                    $result = $uploadFileData->ModifyUploadFileCompressPath1(
+                        $uploadFileId,
+                        $newUploadFilePath
+                    );
+                }
+            }
+        }
+        return $result;
     }
 
     /**
