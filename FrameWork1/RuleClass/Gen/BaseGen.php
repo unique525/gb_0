@@ -1041,11 +1041,11 @@ class BaseGen
     /**
      * 生成水印图1的上传文件（图片），并存入上传文件表对应记录行
      * @param int $uploadFileId 上传文件id
-     * @param string $watermarkFilePath 水印图地址
+     * @param string $watermarkFilePath 水印图地址(相对地址)
      * @param int $sourceType 在哪张图上制作水印图（默认0 在原图上制作）
      * @param int $watermarkPosition   水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部居左, 5:底部居右
-     * @param int $mode     模式 0 支持png本身透明度的方式 1 半透明格式水印
-     * @param int $alpha     透明度 -- 0:完全透明, 100:完全不透明
+     * @param int $mode 模式 0 支持png本身透明度的方式 1 半透明格式水印
+     * @param int $alpha 透明度 -- 0:完全透明, 100:完全不透明
      * @return int 操作结果
      */
     protected function GenUploadFileWatermark1(

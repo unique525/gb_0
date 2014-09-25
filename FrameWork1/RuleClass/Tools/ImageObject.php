@@ -335,7 +335,7 @@ class ImageObject {
         if (!$sourceFileInfo) {
             return -1;  //原文件不存在
         }
-        $watermarkFileInfo = @getimagesize($watermarkFilePath);
+        $watermarkFileInfo = @getimagesize(PHYSICAL_PATH . DIRECTORY_SEPARATOR .$watermarkFilePath);
         if (!$watermarkFileInfo) {
             return -2;  //水印图片不存在
         }
