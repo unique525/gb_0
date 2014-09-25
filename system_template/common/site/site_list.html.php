@@ -25,27 +25,26 @@
                 parent.G_TabTitle = siteName + '-广告管理';
                 parent.addTab();
             });
-        });
 
 
 
-        //格式化站点状态
-        $(".span_state").each(function(){
-            $(this).html(formatSiteState($(this).text()));
-        });
+            //格式化站点状态
+            $(".span_state").each(function(){
+                $(this).html(formatSiteState($(this).text()));
+            });
 
-        //开启站点
-        $(".img_open_site").click(function(){
-            var siteId = parseInt($(this).attr("idvalue"));
-            var state = 0; //开启状态
-            modifySiteState(siteId, state);
-        });
-        //停用站点
-        $(".img_close_site").click(function(){
-            var siteId = parseInt($(this).attr("idvalue"));
-            var state = 100; //开启状态
-            modifySiteState(siteId, state);
-        });
+            //开启站点
+            $(".img_open_site").click(function(){
+                var siteId = parseInt($(this).attr("idvalue"));
+                var state = 0; //开启状态
+                modifySiteState(siteId, state);
+            });
+            //停用站点
+            $(".img_close_site").click(function(){
+                var siteId = parseInt($(this).attr("idvalue"));
+                var state = 100; //开启状态
+                modifySiteState(siteId, state);
+            });
         });
 
 
