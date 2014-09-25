@@ -14,34 +14,31 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
      */
     public function Gen() {
         $result = "";
-        $action = Control::GetRequest("a", "");
-        switch ($action) {
+        $method = Control::GetRequest("m", "");
+        switch ($method) {
             case "set":
                 $result = self::GenSet();
                 break;
         }
-        $replace_arr = array(
-            "{action}" => $action
-        );
-        $result = strtr($result, $replace_arr);
+        $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
     /**
-     * 新增站点
-     * @return <type>
+     * 新增或编辑站点配置
+     * @return string
      */
     private function GenSet() {
-        $siteId = Control::GetRequest("sid", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $type = intval(Control::GetRequest("type", 0));        
         if ($type == 1) { //forum
-            $tempContent = Template::Load("site/siteconfig_deal_forum.html", "common");
+            $tempContent = Template::Load("site/site_config_deal_forum.html", "common");
         } else {
-            $tempContent = Template::Load("site/siteconfig_deal.html", "common");
+            $tempContent = Template::Load("site/site_config_deal.html", "common");
         }
-        $nowAdminUserId = Control::GetManageUserId();
+        $manageUserId = Control::GetManageUserId();
         parent::ReplaceFirst($tempContent);
-        $siteConfigManageData = new SiteConfigManageData($siteId);
+        $siteConfigData = new SiteConfigData($siteId);
         if ($siteId > 0) {
             if (!empty($_POST)) {
                 //读取表单
@@ -60,24 +57,19 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                                 $value = implode(",", $value);
                             }
                             $value = stripslashes($value);
-                            $siteConfigManageData->SetValue($siteId, $siteConfigName, $value, $siteConfigType);
+                            $siteConfigData->SetValue($siteId, $siteConfigName, $value, $siteConfigType);
                         }
                     }
                 }
                 if ($type == 1) { //forum
-                    Control::ShowMessage(Language::Load("siteconfig", 1));
+                    Control::ShowMessage(Language::Load("site_config", 1));
                 } else {
-                    Control::ShowMessage(Language::Load("siteconfig", 1));
-                    $jscode = 'self.parent.loadsitelist(1);self.parent.$("#tabs").tabs("select","#tabs-1");';
-                    //if ($tab_index > 0) {
-                    //    $jscode = $jscode . 'self.parent.$("#tabs").tabs("remove",' . ($tab_index - 1) . ');';
-                    //}
-                    Control::RunJS($jscode);
+                    Control::ShowMessage(Language::Load("site_config", 1));
                 }
             }
 
             //加载数据
-            $arrSiteConfigOne = $siteConfigManageData->GetList($siteId);
+            $arrSiteConfigOne = $siteConfigData->GetList($siteId);
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
                 $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
                 $stringNorValue = $arrSiteConfigOne[$i]["StringNorValue"];
@@ -87,23 +79,23 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                 $numValue = $arrSiteConfigOne[$i]["NumValue"];
                 $siteConfigType = intval($arrSiteConfigOne[$i]["SiteConfigType"]);
                 switch ($siteConfigType) {
-                    case 0:
+                    case SiteConfigData::SITE_CONFIG_TYPE_STRING_200:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
                         Template::ReplaceSelectControl($tempContent, $siteConfigName, $stringNorValue);
                         break;
-                    case 1:
+                    case SiteConfigData::SITE_CONFIG_TYPE_STRING_2000:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
                         Template::ReplaceSelectControl($tempContent, $siteConfigName, $stringMidValue);
                         break;
-                    case 2:
+                    case SiteConfigData::SITE_CONFIG_TYPE_TEXT:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
                         Template::ReplaceSelectControl($tempContent, $siteConfigName, $textValue);
                         break;
-                    case 3:
+                    case SiteConfigData::SITE_CONFIG_TYPE_INT:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
                         Template::ReplaceSelectControl($tempContent, $siteConfigName, $intValue);
                         break;
-                    case 4:
+                    case SiteConfigData::SITE_CONFIG_TYPE_NUMBER:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
                         Template::ReplaceSelectControl($tempContent, $siteConfigName, $numValue);
                         break;
@@ -135,7 +127,7 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
-
+/**
     public function SubGen($SiteId, &$tempContent) {
         $siteConfigManageData = new SiteConfigManageData($SiteId);
         $arrSiteConfigOne = $siteConfigManageData->GetList($SiteId);
@@ -180,7 +172,7 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = preg_replace($patterns, "", $tempContent);
         }
     }
-
+*/
 }
 
 ?>
