@@ -9,10 +9,16 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-    <script src="../js/jquery.jqzoom-core.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="../css/jquery.jqzoom.css" type="text/css">
+    <script src="/front_js/jqzoom/js/jquery.jqzoom-core.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/front_js/jqzoom/css/jquery.jqzoom.css" type="text/css">
     <script type="text/javascript">
     $(function(){
+        $('.jqzoom').jqzoom({
+            zoomType: 'standard',
+            lens:true,
+            preloadImages: false,
+            alwaysOn:false
+        });
     });
     </script>
 </head>
@@ -54,7 +60,7 @@
         <a href="#">首页</a> &gt; <a href="#">蔬菜</a> &gt; 本来精选绿芦笋300g 肉质细嫩，口味香郁</div>
 </div>
 <div class="box1200">
-<div class="box210 fl">
+<div class="box194 fl">
     <!--小类列表菜单-->
     <div class="listsum" id="categoryListSum">
         <div class="tit">蔬菜水果</div>
@@ -125,7 +131,7 @@
 
     </div>
 </div>
-<div class="box970  fr">
+<div class="box990  fr">
 <div class="goodstop"><table width="100%" cellpadding="0" cellspacing="0" >
         <tr>
             <td align="center" valign="top" class="goodstopl" >
@@ -146,7 +152,7 @@
             <td width="40">&nbsp;</td>
             <td align="left" valign="top" class="goodstopr"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left"><h1>本来精选绿芦笋300g 肉质细嫩，口味香郁味香郁味香郁味</h1></td>
+                        <td align="left"> <h1 class="ft20">本来精选绿芦笋300g 肉质细嫩，口味香郁味香郁味香郁味</h1></td>
                     </tr>
                     <tr>
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
@@ -157,28 +163,13 @@
                                 <p class="price_n"><span class="chaprice">已优惠：<span style="padding-right: 5px; color:#ff3c00">7.30</span></span></p></div>
                     </tr>
                     <tr>
-                        <td align="left">
-                            <div class="gdproperty_n">
-                                <dl>
-                                    <dt>品种/规格：</dt>
-                                    <dd>
-                                        <ul>
-                                            <icms id="{ProductId}" type="product_price_list">
-                                                <item>
-                                                    <![CDATA[
-                                                    <li><span class="propondefault" idvalue="{f_ProductPriceId}" title="{f_ProductPriceValue}">{f_ProductPriceIntro}</span></li>
-                                                    ]]>
-                                                </item>
-                                            </icms>
-                                            <li><span class="propondefault">绿奇异果8粒</span></li>
-                                            <li><span class="propondefault">1.2kg</span></li><li>
-                                            <li><span class="proponselect">绿奇异果16粒（礼盒装）</span></li>
+                        <td align="left"><div class="gdproperty_n"><dl>
+                                    <dt>品种/规格：</dt><dd><ul>
                                             <li ><span class="propondefault">绿奇异果8粒</span></li>
-                                        </ul>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </td>
+                                            <li><span class="propondefault">1.2kg</span></li><li>
+                                                <span class="proponselect">绿奇异果16粒（礼盒装）</span></li>
+                                            <li ><span class="propondefault">绿奇异果8粒</span></li>
+                                        </ul></dd></dl></div></td>
                     </tr>
                     <tr>
                         <td align="left" style="font-size:14px;">
@@ -261,17 +252,17 @@
     </div>
 </div>
 <div class="blank10">        </div>
-<div class="box970  fr">
+<div class="box990  fr">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
+            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="images/5_38.gif" width="50" height="50" /></a></td>
                     </tr>
                 </table>
                 ccddrrrrrrrrr</br>
                 <span class="grenn">金牌会员</span></td>
-            <td width="90%" align="left" valign="top">
+            <td width="89%" align="left" valign="top">
                 <table width="882" border="0" cellspacing="0" cellpadding="0">
                     <tr> </tr>
                     <tr>
@@ -294,14 +285,14 @@
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
+            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
                     </tr>
                 </table>
                 ccddrrrrrrrrr</br>
                 <span class="grenn">金牌会员</span></td>
-            <td width="90%" align="left" valign="top">
+            <td width="89%" align="left" valign="top">
                 <table width="882" border="0" cellspacing="0" cellpadding="0">
                     <tr> </tr>
                     <tr>
@@ -324,14 +315,14 @@
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
+            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
                     </tr>
                 </table>
                 ccddrrrrrrrrr</br>
                 <span class="grenn">金牌会员</span></td>
-            <td width="90%" align="left" valign="top">
+            <td width="89%" align="left" valign="top">
                 <table width="882" border="0" cellspacing="0" cellpadding="0">
                     <tr> </tr>
                     <tr>
@@ -354,14 +345,14 @@
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
+            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
                     </tr>
                 </table>
                 ccddrrrrrrrrr</br>
                 <span class="grenn">金牌会员</span></td>
-            <td width="90%" align="left" valign="top">
+            <td width="89%" align="left" valign="top">
                 <table width="882" border="0" cellspacing="0" cellpadding="0">
                     <tr> </tr>
                     <tr>
