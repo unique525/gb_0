@@ -88,16 +88,16 @@ while(func!=null)
 }
 		var targetobj;
 		if(window.dialogArguments!=null)//IE Use
-		targetobj=window.dialogArguments.document.getElementById('f_documentnewsintro');
-		else targetobj=opener.window.document.getElementById('f_documentnewsintro')
+		targetobj=window.dialogArguments.document.getElementById('f_DocumentNewsIntro');
+		else targetobj=opener.window.document.getElementById('f_DocumentNewsIntro')
 
  function add(t) {
-	 	var objtable = document.getElementById(t);
+	 	var objTable = document.getElementById(t);
 		//var rows =  objtable.getElementsByTagName("tr");
-        var length = objtable.rows.length;
-        var objLastTH = objtable.rows[length - 1];
+        var length = objTable.rows.length;
+        var objLastTH = objTable.rows[length - 1];
         var numTD = objLastTH.cells.length;
-        var onewTR = objtable.insertRow(-1);
+        var onewTR = objTable.insertRow(-1);
 
         var j = length - 1;		
         for (var i = 0; i < numTD; i ++) {//添加单元格
@@ -119,7 +119,7 @@ while(func!=null)
                 oCell.insertAdjacentHTML("afterBegin", "<select name='select_color' style='width:98%'' /><option selected value=''>默认</option><option value='black'>黑色</option><option value='red'>红色</option><option value='green'>绿色</option><option value='blue'>蓝色</option></select>");
             }
             else {
-                oCell.insertAdjacentHTML("afterBegin", "<INPUT  name='check_font' type='checkbox'  style='width:98%' />");
+                oCell.insertAdjacentHTML("afterBegin", "<"+"input  name='check_font' type='checkbox'  style='width:98%' />");
             }
 
 

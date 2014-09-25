@@ -51,3 +51,44 @@ function ModifyState(method, idvalue, state) {
         }
     });
 }
+
+/**
+ * 检查日期
+ * @param endDate 结束时间
+ * @return
+ */
+function CheckEndDate(endDate){
+    var isDate = 0;
+
+    var today = new Date();
+    var now_day = today.getDate();
+    var now_month = today.getMonth()+1;
+    var now_year = today.getFullYear();
+
+    var arr=endDate.split(" ");
+    arr=arr[0].split("-");
+    var site_year = arr[0];
+    var site_month = arr[1];
+    var site_day = arr[2];
+
+    if(site_year < now_year){
+        isDate = 0;     //年过期
+    } else{
+        if(site_month < now_month){
+            isDate = 0;     //月过期
+        }else{
+            if(site_day < now_day){
+                isDate = 0;     //日期过期
+            }else{
+                isDate = 1;
+            }
+        }
+    }
+
+    if(isDate == 1){
+        document.write(endDate);
+    }else{
+        document.write('<font color=red>'+endDate+'</font>');
+
+    }
+}
