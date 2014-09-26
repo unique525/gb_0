@@ -33,7 +33,7 @@
     </head>
     <body>
         {common_body_deal}
-        <form id="mainForm" action="/default.php?secu=manage&mod=product_price&m={method}&product_price_id={ProductPriceId}&p={PageIndex}" method="post">
+        <form id="mainForm" action="/default.php?secu=manage&mod=product_price&m={method}&product_id={ProductId}&product_price_id={ProductPriceId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
                     <td class="spe_line" height="30" align="right"></td>
