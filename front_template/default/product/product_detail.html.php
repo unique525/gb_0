@@ -186,7 +186,7 @@
             <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
                 <item>
                     <![CDATA[
-                    <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="images/1_10.gif" ></a>
                         <p><a href="#" target="_blank" ><font class="cleb6100 ml5">{f_ProductName}</font></a>  </p>现价: ￥{f_SalePrice}</li>
 
                     ]]>
@@ -314,9 +314,9 @@
                 <icms id="product_rec_level" type="product_list" where="RecLevel" top="4">
                     <item>
                         <![CDATA[
-                        <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
+                        <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="images/3_14.gif" ></a>
                             <p><a href="#" target="_blank" >{f_ProductName}</a>  </p>
-                            ￥42.80 <span>￥{f_SalePrice}</span></li>
+                            ￥{f_SalePrice} <span>￥{f_MarketPrice}</span></li>
                         ]]>
                     </item>
                 </icms>
