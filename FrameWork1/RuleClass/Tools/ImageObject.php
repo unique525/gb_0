@@ -273,4 +273,152 @@ class ImageObject {
 
     }
 
+    /**
+     * 模式 0 支持png本身透明度的方式
+     */
+    const WATERMARK_MODE_PNG = 0;
+    /**
+     * 模式 1 半透明格式水印
+     */
+    const WATERMARK_MODE_GIF = 1;
+    /**
+     * 水印位置 1:顶部居左
+     */
+    const WATERMARK_POSITION_TOP_LEFT = 1;
+    /**
+     * 水印位置 2:顶部居右
+     */
+    const WATERMARK_POSITION_TOP_RIGHT = 2;
+    /**
+     * 水印位置 3:居中
+     */
+    const WATERMARK_POSITION_CENTER = 3;
+    /**
+     * 水印位置 4:底部居左
+     */
+    const WATERMARK_POSITION_BOTTOM_LEFT = 4;
+    /**
+     * 水印位置 5:底部居右
+     */
+    const WATERMARK_POSITION_BOTTOM_RIGHT = 5;
+
+    /**
+     * 图片加水印（适用于png/jpg/gif格式）
+     * @param string $sourceFilePath    原图片
+     * @param string $watermarkFilePath  水印图片
+     * @param string $addFileName  附加的文件名称
+     * @param int $watermarkPosition   水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部居左, 5:底部居右
+     * @param int $mode     模式 0 支持png本身透明度的方式 1 半透明格式水印
+     * @param int $alpha     透明度 -- 0:完全透明, 100:完全不透明
+     * @return string|int 成功 -- 加水印后的新图片地址
+     *      失败 -- -1:原文件不存在, -2:水印图片不存在, -3:原文件图像对象建立失败
+     *              -4:水印文件图像对象建立失败 -5:加水印后的新图片保存失败
+     */
+    public static function GenWatermark(
+        $sourceFilePath,
+        $watermarkFilePath,
+        $addFileName,
+        $watermarkPosition = 5,
+        $mode = 0,
+        $alpha = 100
+    ) {
+
+        sleep(1);
+
+        $sourceFileDir = strtolower(FileObject::GetDirName(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceFilePath)));
+        $sourceFileExName = strtolower(FileObject::GetExtension($sourceFilePath));
+        $sourceFileName = strtolower(FileObject::GetName($sourceFilePath));
+        $newFileName = strtolower($sourceFileName . "_" . $addFileName);
+        $saveFilePath = PHYSICAL_PATH . $sourceFileDir . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName;
+
+        $sourceFileInfo = @getimagesize($sourceFilePath);
+        if (!$sourceFileInfo) {
+            return -1;  //原文件不存在
+        }
+        $watermarkFileInfo = @getimagesize(PHYSICAL_PATH . DIRECTORY_SEPARATOR .$watermarkFilePath);
+        if (!$watermarkFileInfo) {
+            return -2;  //水印图片不存在
+        }
+        $sourceImageObject = self::CreateImageByExtention($sourceFilePath);
+        if (!$sourceImageObject) {
+            return -3;  //原文件图像对象建立失败
+        }
+        $watermarkImageObject = self::CreateImageByExtention($watermarkFilePath);
+        if (!$watermarkImageObject) {
+            return -4;  //水印文件图像对象建立失败
+        }
+        switch ($watermarkPosition) {
+
+            case 1: //1顶部居左
+                $x = $y = 0;
+                break;
+
+            case 2: //2顶部居右
+                $x = $sourceFileInfo[0] - $watermarkFileInfo[0];
+                $y = 0;
+                break;
+
+            case 3: //3居中
+                $x = ($sourceFileInfo[0] - $watermarkFileInfo[0]) / 2;
+                $y = ($sourceFileInfo[1] - $watermarkFileInfo[1]) / 2;
+                break;
+
+            case 4: //4底部居左
+                $x = 0;
+                $y = $sourceFileInfo[1] - $watermarkFileInfo[1];
+                break;
+
+            case 5: //5底部居右
+                $x = $sourceFileInfo[0] - $watermarkFileInfo[0] - 10;
+                $y = $sourceFileInfo[1] - $watermarkFileInfo[1] - 10;
+                break;
+            default:
+                $x = $y = 0;
+                break;
+        }
+
+        if($mode == self::WATERMARK_MODE_GIF){
+            //半透明格式水印
+            imagecopymerge($sourceImageObject, $watermarkImageObject, $x, $y, 0, 0, $watermarkFileInfo[0], $watermarkFileInfo[1], $alpha);
+        }
+        else{
+            //支持png本身透明度的方式
+            imagecopy($sourceImageObject,$watermarkImageObject,$x, $y,0,0,$watermarkFileInfo[0],$watermarkFileInfo[1]);
+        }
+
+
+        switch ($sourceFileInfo[2]) {
+            case 1: imagegif($sourceImageObject, $saveFilePath);
+                break;
+            case 2: imagejpeg($sourceImageObject, $saveFilePath, 100);
+                break;
+            case 3: imagepng($sourceImageObject, $saveFilePath);
+                break;
+            default:
+                return -5;  //保存失败
+        }
+        imagedestroy($sourceImageObject);
+        imagedestroy($watermarkImageObject);
+        return $saveFilePath;
+
+    }
+
+    /**
+     * 从扩展名类型创建图片对象
+     * @param string $filePath 文件地址
+     * @return null|resource 资源对象
+     */
+    private static function CreateImageByExtention($filePath) {
+        $info = getimagesize($filePath);
+        $im = null;
+        switch ($info[2]) {
+            case 1: $im = imagecreatefromgif($filePath);
+                break;
+            case 2: $im = imagecreatefromjpeg($filePath);
+                break;
+            case 3: $im = imagecreatefrompng($filePath);
+                break;
+        }
+        return $im;
+    }
 } 

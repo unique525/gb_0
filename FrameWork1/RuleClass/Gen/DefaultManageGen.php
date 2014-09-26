@@ -83,6 +83,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $siteManageGen = new SiteManageGen();
                     $result = $siteManageGen->Gen();
                     break;
+                case "site_config":
+                    $siteConfigManageGen = new SiteConfigManageGen();
+                    $result = $siteConfigManageGen->Gen();
+                    break;
                 case "site_filter":
                     $siteFilterManageGen = new SiteFilterManageGen();
                     $result = $siteFilterManageGen->Gen();

@@ -680,9 +680,8 @@ function submitForm(closeTab) {
 <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续"
-                                                                                            type="button"
-                                                                                            onclick="submitForm(0)"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>

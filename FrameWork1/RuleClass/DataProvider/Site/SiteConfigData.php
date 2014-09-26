@@ -86,43 +86,18 @@
  *
  * @property int $ProductTitlePic1MobileWidth
  * @property int $ProductTitlePic1PadWidth
- * @property int $ProductTitlePic1Thumb1Width
- * @property int $ProductTitlePic1Thumb2Width
- * @property int $ProductTitlePic1Thumb3Width
- * @property int $ProductTitlePic1Watermark1Width
- * @property int $ProductTitlePic1Watermark2Width
- * @property int $ProductTitlePic1Compress1Width
- * @property int $ProductTitlePic1Compress2Width
  *
- * @property int $ProductTitlePic2MobileWidth
- * @property int $ProductTitlePic2PadWidth
- * @property int $ProductTitlePic2Thumb1Width
- * @property int $ProductTitlePic2Thumb2Width
- * @property int $ProductTitlePic2Thumb3Width
- * @property int $ProductTitlePic2Watermark1Width
- * @property int $ProductTitlePic2Watermark2Width
- * @property int $ProductTitlePic2Compress1Width
- * @property int $ProductTitlePic2Compress2Width
+ * @property int $ProductPicMobileWidth
+ * @property int $ProductPicPadWidth
+ * @property int $ProductPicThumb1Width
+ * @property int $ProductPicThumb2Width
+ * @property int $ProductPicThumb3Width
+ * @property int $ProductPicWatermark1Width
+ * @property int $ProductPicWatermark2Width
+ * @property int $ProductPicCompress1Width
+ * @property int $ProductPicCompress2Width
  *
- * @property int $ProductTitlePic3MobileWidth
- * @property int $ProductTitlePic3PadWidth
- * @property int $ProductTitlePic3Thumb1Width
- * @property int $ProductTitlePic3Thumb2Width
- * @property int $ProductTitlePic3Thumb3Width
- * @property int $ProductTitlePic3Watermark1Width
- * @property int $ProductTitlePic3Watermark2Width
- * @property int $ProductTitlePic3Compress1Width
- * @property int $ProductTitlePic3Compress2Width
  *
- * @property int $ProductTitlePic4MobileWidth
- * @property int $ProductTitlePic4PadWidth
- * @property int $ProductTitlePic4Thumb1Width
- * @property int $ProductTitlePic4Thumb2Width
- * @property int $ProductTitlePic4Thumb3Width
- * @property int $ProductTitlePic4Watermark1Width
- * @property int $ProductTitlePic4Watermark2Width
- * @property int $ProductTitlePic4Compress1Width
- * @property int $ProductTitlePic4Compress2Width
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
@@ -214,7 +189,17 @@ class SiteConfigData extends BaseData {
         "ChannelTitlePic3PadWidth",
 
         "ProductTitlePic1MobileWidth",
-        "ProductTitlePic1PadWidth"
+        "ProductTitlePic1PadWidth",
+
+        "ProductPicMobileWidth",
+        "ProductPicPadWidth",
+        "ProductPicThumb1Width",
+        "ProductPicThumb2Width",
+        "ProductPicThumb3Width",
+        "ProductPicWatermark1Width",
+        "ProductPicWatermark2Width",
+        "ProductPicCompress1Width",
+        "ProductPicCompress2Width"
 
     );
 
@@ -278,7 +263,104 @@ class SiteConfigData extends BaseData {
     ////////////////////////会员相册相关/////////////////////////////////
     /////////////////////////////////////////////////////////////////
     private $UserAlbumThumbWidth = 0; //会员相册图片缩略图宽度
-    private $UserAlbumToBestMustVoteCount = 35;
+    private $UserAlbumToBestMustVoteCount = 35; //会员相册变成精华相册需要的支持票数
+    //
+    //论坛相关
+    private $OpenHomePage = 0; //开启门户站点首页
+    private $ForumIeTitle = ''; //论坛的IE标题
+    private $ForumIeKeywords = ''; //论坛的IE keywords
+    private $ForumIeDescription = ''; //论坛的IE Description
+    private $ForumLogoImage = ''; //论坛LOGO图片网址
+    private $ForumBackground = ''; //论坛背景图片网址
+    private $OpenRegisterWindow = 0; //是否开启注册提示窗口
+    private $RegisterWindowContent = ''; //注册提示窗口文字内容
+    private $ForumTopInfo = ''; //论坛顶部信息
+    private $ForumAdTopIndex = ''; //论坛首页顶部广告
+    private $ForumBotInfo = ''; //论坛底部信息
+    private $ForumAdBotIndex = ''; //论坛首页底部广告
+
+    private $ForumAdTopTopicList = ''; //论坛帖子列表页顶部广告
+    private $ForumAdBotTopicList = ''; //论坛帖子列表页底部广告
+    private $ForumAdTopTopicContent = ''; //论坛帖子内容页顶部广告
+    private $ForumAdBotTopicContent = ''; //论坛帖子内容页底部广告
+
+    private $ForumNewPostCount = 0; //今日发帖数
+    private $ForumYesterdayPostCount = 0; //昨日发帖数
+    private $ForumTopPostCount = 0; //最高日发帖数
+    private $ForumTopicCount = 0; //主题总数
+    private $ForumReplyCount = 0; //回复总数
+    private $ForumPostCount = 0; //帖子总数
+    private $ForumTopicPageSize = 0; //主题列表每页记录数
+    private $ForumPostPageSize = 0; //帖子列表每页记录数
+    private $UserCount = 0; //会员总数
+    private $UserNameLength = 50; //注册会员名的最大长度
+    private $UserDefaultState = 0; //注册会员时，State初始状态值
+    private $UserRecDefaultState = 0; //推荐会员时，State初始状态值
+    private $UserDefaultUserGroupIdForRole = 0; //默认的会员role表中的UserGroupId
+    private $UserCommissionOwn = 0; //本人的默认提成比率
+    private $UserCommissionChild = 0; //本人的下一级默认提成比率
+    private $UserCommissionGrandson = 0; //本人的下两级默认提成比率
+
+    private $NewRegisterUserId = 0; //新注册的会员Id
+    private $NewRegisterUserName = ''; //新注册的会员名
+    private $NewUserMessageVoice = ''; //新短消息提示音文件网址
+    private $ForumPicShowMode = 0; //论坛首页版块图标的位置
+    private $ForumMoneyName = ''; //论坛中金钱的别名
+    private $ForumCharmName = ''; //论坛中魅力的别名
+    private $ForumScoreName = ''; //论坛中积分的别名
+    private $ForumExpName = ''; //论坛中经验的别名
+    private $ForumPointName = ''; //论坛中点券的别名
+    private $ForumPostCountName = ''; //论坛中会员发帖数的别名
+    private $ForumCssDefault = ''; //论坛默认的样式文件
+    private $ForumCssDefaultWidth = ''; //论坛默认的样式宽度文件
+    private $ForumCssDefaultFontSize = ''; //论坛默认的样式字体大小文件
+    private $ForumPicMobileWidth = 0; //论坛图标 移动客户端用
+    private $ForumPicPadWidth = 0; //论坛图标 平板电脑用
+    /////////////////////////////////////////////////////////////////
+    ////////////////////////支付相关/////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    private $PayAlipayPartnerId = ''; //支付宝的合作者身份(Partner ID)
+    private $PayAlipayKey = ''; //支付宝的合作者key
+    private $PayAlipaySellerEmail = ''; //支付宝的合作者邮箱
+    private $PayQuickMerchantAcctId = ''; //快钱人民币网关账户号
+    private $PayQuickKey = ''; //快钱人民币网关密钥
+
+    /////////////////////////////////////////////////////////////////
+    ////////////////////////第三方短信网关/////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    private $SmsThirdType = ""; //第三方短信网关接口商名称
+    private $SmsThirdUrl = ""; //第三方短信网关接口网址
+    private $SmsThirdUserName = ""; //第三方短信网关接口帐号
+    private $SmsThirdPassword = ""; //第三方短信网关接口密码
+    private $UserSmsMessageContent = ""; //默认会员短信内容
+
+    /////////////////////////////////////////////////////////////////
+    ////////////////////////资讯/////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
+    private $DocumentNewsTitlePicMobileWidth = 0; //为适配手机客户端，资讯题图的同比缩小宽度值
+    private $DocumentNewsTitlePicPadWidth = 0; //为适配平板客户端，资讯题图的同比缩小宽度值
+
+    private $ChannelTitlePic1MobileWidth = 0;  //为适配手机客户端，频道题图1的同比缩小宽度值
+    private $ChannelTitlePic1PadWidth = 0;     //为适配平板客户端，频道题图1的同比缩小宽度值
+    private $ChannelTitlePic2MobileWidth = 0;  //为适配手机客户端，频道题图2的同比缩小宽度值
+    private $ChannelTitlePic2PadWidth = 0;     //为适配平板客户端，频道题图2的同比缩小宽度值
+    private $ChannelTitlePic3MobileWidth = 0;  //为适配手机客户端，频道题图3的同比缩小宽度值
+    private $ChannelTitlePic3PadWidth = 0;     //为适配平板客户端，频道题图3的同比缩小宽度值
+
+    private $ProductTitlePic1MobileWidth = 0;  //为适配手机客户端，产品题图1的同比缩小宽度值
+    private $ProductTitlePic1PadWidth = 0;  //为适配平板客户端，产品题图1的同比缩小宽度值
+
+    private $ProductPicMobileWidth = 0;  //为适配手机客户端，产品图片的同比缩小宽度值
+    private $ProductPicPadWidth = 0;     //为适配平板客户端，产品图片的同比缩小宽度值
+    private $ProductPicThumb1Width = 0;  //产品图片的缩略图1宽度值
+    private $ProductPicThumb2Width = 0;  //产品图片的缩略图2宽度值
+    private $ProductPicThumb3Width = 0;  //产品图片的缩略图3宽度值
+    private $ProductPicWatermark1Width = 0;  //产品图片的水印图1宽度值
+    private $ProductPicWatermark2Width = 0;  //产品图片的水印图2宽度值
+    private $ProductPicCompress1Width = 0;  //产品图片的压缩图1宽度值
+    private $ProductPicCompress2Width = 0;  //产品图片的压缩图2宽度值
+
 
     /**
      * @return mixed
@@ -862,93 +944,152 @@ class SiteConfigData extends BaseData {
     public function getUserSmsMessageContent()
     {
         return $this->UserSmsMessageContent;
-    } //会员相册变成精华相册需要的支持票数
-    //
-    //论坛相关
-    private $OpenHomePage = 0; //开启门户站点首页
-    private $ForumIeTitle = ''; //论坛的IE标题
-    private $ForumIeKeywords = ''; //论坛的IE keywords
-    private $ForumIeDescription = ''; //论坛的IE Description
-    private $ForumLogoImage = ''; //论坛LOGO图片网址
-    private $ForumBackground = ''; //论坛背景图片网址
-    private $OpenRegisterWindow = 0; //是否开启注册提示窗口
-    private $RegisterWindowContent = ''; //注册提示窗口文字内容
-    private $ForumTopInfo = ''; //论坛顶部信息
-    private $ForumAdTopIndex = ''; //论坛首页顶部广告
-    private $ForumBotInfo = ''; //论坛底部信息
-    private $ForumAdBotIndex = ''; //论坛首页底部广告
+    }
 
-    private $ForumAdTopTopicList = ''; //论坛帖子列表页顶部广告
-    private $ForumAdBotTopicList = ''; //论坛帖子列表页底部广告
-    private $ForumAdTopTopicContent = ''; //论坛帖子内容页顶部广告
-    private $ForumAdBotTopicContent = ''; //论坛帖子内容页底部广告
+    /**
+     * @param mixed $ProductPicCompress1Width
+     */
+    public function setProductPicCompress1Width($ProductPicCompress1Width)
+    {
+        $this->ProductPicCompress1Width = $ProductPicCompress1Width;
+    }
 
-    private $ForumNewPostCount = 0; //今日发帖数
-    private $ForumYesterdayPostCount = 0; //昨日发帖数
-    private $ForumTopPostCount = 0; //最高日发帖数
-    private $ForumTopicCount = 0; //主题总数
-    private $ForumReplyCount = 0; //回复总数
-    private $ForumPostCount = 0; //帖子总数
-    private $ForumTopicPageSize = 0; //主题列表每页记录数
-    private $ForumPostPageSize = 0; //帖子列表每页记录数
-    private $UserCount = 0; //会员总数
-    private $UserNameLength = 50; //注册会员名的最大长度
-    private $UserDefaultState = 0; //注册会员时，State初始状态值
-    private $UserRecDefaultState = 0; //推荐会员时，State初始状态值
-    private $UserDefaultUserGroupIdForRole = 0; //默认的会员role表中的UserGroupId
-    private $UserCommissionOwn = 0; //本人的默认提成比率
-    private $UserCommissionChild = 0; //本人的下一级默认提成比率
-    private $UserCommissionGrandson = 0; //本人的下两级默认提成比率
+    /**
+     * @return mixed
+     */
+    public function getProductPicCompress1Width()
+    {
+        return $this->ProductPicCompress1Width;
+    }
 
-    private $NewRegisterUserId = 0; //新注册的会员Id
-    private $NewRegisterUserName = ''; //新注册的会员名
-    private $NewUserMessageVoice = ''; //新短消息提示音文件网址
-    private $ForumPicShowMode = 0; //论坛首页版块图标的位置
-    private $ForumMoneyName = ''; //论坛中金钱的别名
-    private $ForumCharmName = ''; //论坛中魅力的别名
-    private $ForumScoreName = ''; //论坛中积分的别名
-    private $ForumExpName = ''; //论坛中经验的别名
-    private $ForumPointName = ''; //论坛中点券的别名
-    private $ForumPostCountName = ''; //论坛中会员发帖数的别名
-    private $ForumCssDefault = ''; //论坛默认的样式文件
-    private $ForumCssDefaultWidth = ''; //论坛默认的样式宽度文件
-    private $ForumCssDefaultFontSize = ''; //论坛默认的样式字体大小文件
-    private $ForumPicMobileWidth = 0; //论坛图标 移动客户端用
-    private $ForumPicPadWidth = 0; //论坛图标 平板电脑用
-    /////////////////////////////////////////////////////////////////
-    ////////////////////////支付相关/////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    private $PayAlipayPartnerId = ''; //支付宝的合作者身份(Partner ID)
-    private $PayAlipayKey = ''; //支付宝的合作者key
-    private $PayAlipaySellerEmail = ''; //支付宝的合作者邮箱
-    private $PayQuickMerchantAcctId = ''; //快钱人民币网关账户号
-    private $PayQuickKey = ''; //快钱人民币网关密钥
+    /**
+     * @param mixed $ProductPicCompress2Width
+     */
+    public function setProductPicCompress2Width($ProductPicCompress2Width)
+    {
+        $this->ProductPicCompress2Width = $ProductPicCompress2Width;
+    }
 
-    /////////////////////////////////////////////////////////////////
-    ////////////////////////第三方短信网关/////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-    private $SmsThirdType = ""; //第三方短信网关接口商名称
-    private $SmsThirdUrl = ""; //第三方短信网关接口网址
-    private $SmsThirdUserName = ""; //第三方短信网关接口帐号
-    private $SmsThirdPassword = ""; //第三方短信网关接口密码
-    private $UserSmsMessageContent = ""; //默认会员短信内容
+    /**
+     * @return mixed
+     */
+    public function getProductPicCompress2Width()
+    {
+        return $this->ProductPicCompress2Width;
+    }
 
-    /////////////////////////////////////////////////////////////////
-    ////////////////////////资讯/////////////////////////////////
-    /////////////////////////////////////////////////////////////////
+    /**
+     * @param mixed $ProductPicMobileWidth
+     */
+    public function setProductPicMobileWidth($ProductPicMobileWidth)
+    {
+        $this->ProductPicMobileWidth = $ProductPicMobileWidth;
+    }
 
-    private $DocumentNewsTitlePicMobileWidth = 0; //为适配手机客户端，资讯题图的同比缩小宽度值
-    private $DocumentNewsTitlePicPadWidth = 0; //为适配平板客户端，资讯题图的同比缩小宽度值
+    /**
+     * @return mixed
+     */
+    public function getProductPicMobileWidth()
+    {
+        return $this->ProductPicMobileWidth;
+    }
 
-    private $ChannelTitlePic1MobileWidth = 0;  //为适配手机客户端，频道题图1的同比缩小宽度值
-    private $ChannelTitlePic1PadWidth = 0;     //为适配平板客户端，频道题图1的同比缩小宽度值
-    private $ChannelTitlePic2MobileWidth = 0;  //为适配手机客户端，频道题图2的同比缩小宽度值
-    private $ChannelTitlePic2PadWidth = 0;     //为适配平板客户端，频道题图2的同比缩小宽度值
-    private $ChannelTitlePic3MobileWidth = 0;  //为适配手机客户端，频道题图3的同比缩小宽度值
-    private $ChannelTitlePic3PadWidth = 0;     //为适配平板客户端，频道题图3的同比缩小宽度值
+    /**
+     * @param mixed $ProductPicPadWidth
+     */
+    public function setProductPicPadWidth($ProductPicPadWidth)
+    {
+        $this->ProductPicPadWidth = $ProductPicPadWidth;
+    }
 
-    private $ProductTitlePic1MobileWidth = 0;  //为适配手机客户端，产品题图1的同比缩小宽度值
-    private $ProductTitlePic1PadWidth = 0;  //为适配平板客户端，产品题图1的同比缩小宽度值
+    /**
+     * @return mixed
+     */
+    public function getProductPicPadWidth()
+    {
+        return $this->ProductPicPadWidth;
+    }
+
+    /**
+     * @param mixed $ProductPicThumb1Width
+     */
+    public function setProductPicThumb1Width($ProductPicThumb1Width)
+    {
+        $this->ProductPicThumb1Width = $ProductPicThumb1Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductPicThumb1Width()
+    {
+        return $this->ProductPicThumb1Width;
+    }
+
+    /**
+     * @param mixed $ProductPicThumb2Width
+     */
+    public function setProductPicThumb2Width($ProductPicThumb2Width)
+    {
+        $this->ProductPicThumb2Width = $ProductPicThumb2Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductPicThumb2Width()
+    {
+        return $this->ProductPicThumb2Width;
+    }
+
+    /**
+     * @param mixed $ProductPicThumb3Width
+     */
+    public function setProductPicThumb3Width($ProductPicThumb3Width)
+    {
+        $this->ProductPicThumb3Width = $ProductPicThumb3Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductPicThumb3Width()
+    {
+        return $this->ProductPicThumb3Width;
+    }
+
+    /**
+     * @param mixed $ProductPicWatermark1Width
+     */
+    public function setProductPicWatermark1Width($ProductPicWatermark1Width)
+    {
+        $this->ProductPicWatermark1Width = $ProductPicWatermark1Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductPicWatermark1Width()
+    {
+        return $this->ProductPicWatermark1Width;
+    }
+
+    /**
+     * @param mixed $ProductPicWatermark2Width
+     */
+    public function setProductPicWatermark2Width($ProductPicWatermark2Width)
+    {
+        $this->ProductPicWatermark2Width = $ProductPicWatermark2Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductPicWatermark2Width()
+    {
+        return $this->ProductPicWatermark2Width;
+    }
+
     /**
      * @param mixed $ChannelTitlePic1MobileWidth
      */

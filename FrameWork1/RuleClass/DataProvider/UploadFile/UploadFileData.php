@@ -332,6 +332,170 @@ class UploadFileData extends BaseData
     }
 
     /**
+     * 修改上传文件路径（缩略图1使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileThumbPath1 上传文件路径（缩略图1使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileThumbPath1($uploadFileId, $uploadFileThumbPath1)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileThumbPath1)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileThumbPath1=:UploadFileThumbPath1
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileThumbPath1", $uploadFileThumbPath1);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 修改上传文件路径（缩略图2使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileThumbPath2 上传文件路径（缩略图2使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileThumbPath2($uploadFileId, $uploadFileThumbPath2)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileThumbPath2)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileThumbPath2=:UploadFileThumbPath2
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileThumbPath2", $uploadFileThumbPath2);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 修改上传文件路径（缩略图3使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileThumbPath3 上传文件路径（缩略图3使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileThumbPath3($uploadFileId, $uploadFileThumbPath3)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileThumbPath3)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileThumbPath3=:UploadFileThumbPath3
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileThumbPath3", $uploadFileThumbPath3);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 修改上传文件路径（水印图1使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileWatermarkPath1 上传文件路径（水印图1使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileWatermarkPath1($uploadFileId, $uploadFileWatermarkPath1)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileWatermarkPath1)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileWatermarkPath1=:UploadFileWatermarkPath1
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileWatermarkPath1", $uploadFileWatermarkPath1);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 修改上传文件路径（水印图2使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileWatermarkPath2 上传文件路径（水印图2使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileWatermarkPath2($uploadFileId, $uploadFileWatermarkPath2)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileWatermarkPath2)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileWatermarkPath2=:UploadFileWatermarkPath2
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileWatermarkPath2", $uploadFileWatermarkPath2);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+
+    /**
+     * 修改上传文件路径（压缩图1使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileCompressPath1 上传文件路径（压缩图1使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileCompressPath1($uploadFileId, $uploadFileCompressPath1)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileCompressPath1)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileCompressPath1=:UploadFileCompressPath1
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileCompressPath1", $uploadFileCompressPath1);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+
+
+    /**
+     * 修改上传文件路径（压缩图2使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileCompressPath2 上传文件路径（压缩图2使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileCompressPath2($uploadFileId, $uploadFileCompressPath2)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileCompressPath2)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileCompressPath2=:UploadFileCompressPath2
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileCompressPath2", $uploadFileCompressPath2);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
      * 修改TableId
      * @param int $uploadFileId 上传文件id
      * @param int $tableId 对应表id
