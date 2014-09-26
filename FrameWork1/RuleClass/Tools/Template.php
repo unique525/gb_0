@@ -37,6 +37,14 @@ class Template
      * 模板标签类型：产品参数类型列表 type="product_param_type_list"
      */
     const TAG_TYPE_PRODUCT_PARAM_TYPE_LIST = "product_param_type_list";
+    /**
+     * 模板标签类型：产品价格列表 type="product_price_list"
+     */
+    const TAG_TYPE_PRODUCT_PRICE_LIST = "product_price_list";
+    /**
+     * 模板标签类型：产品图片列表 type="product_pic_list"
+     */
+    const TAG_TYPE_PRODUCT_PIC_LIST = "product_pic_list";
 
 
     /**

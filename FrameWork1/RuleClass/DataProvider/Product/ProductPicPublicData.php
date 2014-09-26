@@ -1,18 +1,18 @@
 <?php
 
 /**
- * 前台管理 会员购物车 数据类
+ * 产品图片数据类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_User
- * @author yin
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_ProductPic
+ * @author hy
  */
-class ProductPricePublicData extends BasePublicData
+class ProductPicPublicData extends BasePublicData
 {
 
     /**
-     * 一个产品价格的信息
-     * @param int $productPriceId 产品价格Id
-     * @return array 产品价格一维数组
+     * 一个产品图片的信息
+     * @param int $productPriceId 产品图片Id
+     * @return array 产品图片一维数组
      */
     public function GetOne($productPriceId)
     {
@@ -20,15 +20,15 @@ class ProductPricePublicData extends BasePublicData
         if ($productPriceId < 0) {
             return $result;
         }
-        $sql = "SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate FROM " . self::TableName_ProductPrice . " WHERE ProductPriceId=:ProductPriceId;";
+        $sql = "SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate FROM " . self::TableName_ProductPic . " WHERE ProductPicId=:ProductPicId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ProductPriceId", $productPriceId);
+        $dataProperty->AddField("ProductPicId", $productPriceId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 获取产品价格数组通用
+     * 获取产品图片数组通用
      * @param int $productId   产品ID
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
@@ -43,15 +43,15 @@ class ProductPricePublicData extends BasePublicData
         if ($productId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,ProductPriceId DESC";
+                    $order = " ORDER BY Sort DESC,ProductId ASC";
                     break;
             }
             $sql = "
-            SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
-            FROM " . self::TableName_ProductPrice . "
+            SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
+            FROM " . self::TableName_ProductPic . "
             WHERE ProductId=:ProductId"
-                . $order
-                . $topCount;
+            . $order
+            . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -60,15 +60,16 @@ class ProductPricePublicData extends BasePublicData
     }
 
     /**
-     * 获取产品价格分页列表
+     * 获取产品图片分页列表
      * @param int $productId 产品Id
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页记录数
      * @param int $allCount 记录总数
+     * @param string $tag 图片类别
      * @param string $searchKey 查询字符
-     * @return array  产品价格列表数组
+     * @return array  产品图片列表数组
      */
-    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $searchKey = "")
+    public function GetListForPager($productId, $pageBegin, $pageSize, &$allCount, $tag = "", $searchKey = "")
     {
         $result = null;
         if ($productId < 0) {
@@ -77,22 +78,28 @@ class ProductPricePublicData extends BasePublicData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductId", $productId);
         $searchSql = "";
+        if (strlen($tag) > 0 && $tag != "undefined") {
+            $searchSql .= " AND (ProductPicTag=:ProductPicTag)";
+            $dataProperty->AddField("ProductPicTag", $tag);
+        }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " AND (ProductPriceIntro like :searchKey1) AND";
+            $searchSql .= " AND (ProductPicIntro like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
 
         $sql = "
-        SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
-        FROM " . self::TableName_ProductPrice . "
+        SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
+        FROM " . self::TableName_ProductPic . "
         WHERE ProductId=:ProductId" . $searchSql . "
-        ORDER BY Sort DESC,ProductPriceId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+        ORDER BY Sort DESC,ProductPicId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "
-        SELECT COUNT(*) FROM " . self::TableName_ProductPrice . "
+        SELECT COUNT(*) FROM " . self::TableName_ProductPic . "
         WHERE ProductId=:ProductId" . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
-} 
+}
+
+?>

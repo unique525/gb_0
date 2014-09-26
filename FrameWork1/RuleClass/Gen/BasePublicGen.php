@@ -101,6 +101,18 @@ class BasePublicGen extends BaseGen {
                             $templateContent = self::ReplaceTemplateOfProductParamTypeList($templateContent, $productParamTypeClassId, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         }
                         break;
+                    case Template::TAG_TYPE_PRODUCT_PRICE_LIST :
+                        $productId = intval(str_ireplace("product_price_", "", $tagId));
+                        if ($productId > 0) {
+                            $templateContent = self::ReplaceTemplateOfProductPriceList($templateContent, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                    case Template::TAG_TYPE_PRODUCT_PIC_LIST :
+                        $productId = intval(str_ireplace("product_pic_", "", $tagId));
+                        if ($productId > 0) {
+                            $templateContent = self::ReplaceTemplateOfProductPicList($templateContent, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
                 }
             }
         }
@@ -223,6 +235,9 @@ class BasePublicGen extends BaseGen {
             switch ($tagWhere) {
                 case "channel":
                     $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                    break;
+                case "RecLevel":
+                    $arrProductList = $productPublicData->GetListByRecLevel($tagOrder, $tagTopCount);
                     break;
                 default :
                     //new
@@ -368,6 +383,96 @@ class BasePublicGen extends BaseGen {
             }
             $arrProductParamTypeList[$i]["ParamTypeValue"]=$paramTypeMappingValue;
         }
+    }
+
+    /**
+     * 替换产品价格列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $productId 产品id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfProductPriceList(
+        $templateContent,
+        $productId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($productId > 0) {
+            $arrProductPriceList = null;
+            $productPricePublicData = new ProductPricePublicData();
+            switch ($tagWhere) {
+                case "normal":
+                    $arrProductPriceList = $productPricePublicData->GetList($productId, $tagOrder, $tagTopCount);
+                    break;
+                default :
+                    //new
+                    $arrProductPriceList = $productPricePublicData->GetList($productId, $tagOrder, $tagTopCount);
+                    break;
+            }
+            if (!empty($arrProductPriceList)) {
+                Template::ReplaceList($tagContent, $arrProductPriceList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            }
+        }
+
+        return $templateContent;
+    }
+
+    /**
+     * 替换产品图片列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $productId 产品id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfProductPicList(
+        $templateContent,
+        $productId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($productId > 0) {
+            $arrProductPicList = null;
+            $productPicPublicData = new ProductPicPublicData();
+            switch ($tagWhere) {
+                case "channel":
+                    $arrProductPicList = $productPicPublicData->GetList($productId, $tagOrder, $tagTopCount);
+                    break;
+                default :
+                    //new
+                    $arrProductPicList = $productPicPublicData->GetList($productId, $tagOrder, $tagTopCount);
+                    break;
+            }
+            if (!empty($arrProductPicList)) {
+                Template::ReplaceList($tagContent, $arrProductPicList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            }
+        }
+
+        return $templateContent;
     }
 
 }

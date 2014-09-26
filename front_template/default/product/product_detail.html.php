@@ -101,23 +101,15 @@
     }
     //产品小图鼠标经过显示大图
     function ShowImage(img1, bigimage) {
-        $("#showjq").html("");
-        $("#showjq").html("<img src=\"" + $("#" + img1).html() + "\" alt=\"\" style=\"width: 350px;height: 350px; overflow: hidden\"  id=\"img\" jqimg=\"" + $("#" + bigimage).html() + "\"  onerror=\"this.onerror=null;this.src='/Content/images/NoPicmiddle.jpg'\" />");
-        $("#smallPic li a").mouseover(function () {
-            $("#smallPic li a").attr("class", "");
+        $("#magnifier").html("");
+        var picHtml='<a href="http://image2.benlailife.com/ProductBigImage/0508010088C.jpg" class="jqzoom" rel="gal1"  title="triumph1" >';
+        picHtml +='<img src="http://image2.benlailife.com/ProductImage/0508010088C.jpg" style="width: 350px;height: 350px; overflow: hidden"/></a>';
+        $("#magnifier").html(picHtml);
+        $("#pic_smiddle_content li a").mouseover(function () {
+            $("#pic_smiddle_content li a").attr("class", "");
             $(this).attr("class", "bdc2")
         })
     }
-
-    $(".spec-items").imgScroll(
-        {   visible: 5,
-            speed: 200,
-            step: 1,
-            loop: !1,
-            prev: "#spec-forward",
-            next: "#spec-backward",
-            disableClass: "disabled"
-        });
     </script>
 </head>
 <body>
@@ -233,16 +225,16 @@
 <div class="goodstop"><table width="100%" cellpadding="0" cellspacing="0" >
         <tr>
             <td align="center" valign="top" class="goodstopl" >
-                <div class="magnifier">
+                <div id="magnifier" class="magnifier">
                     <a href="http://image2.benlailife.com/ProductBigImage/0301030231C.jpg" class="jqzoom" rel='gal1'  title="triumph1" >
-                        <img src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" onerror="this.onerror=null;this.src='http://image1.benlailife.com/Content/images/NoPicmiddle.jpg&#39;?v=8.2.43" style="width: 350px;height: 350px; overflow: hidden"/>
+                        <img src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" style="width: 350px;height: 350px; overflow: hidden"/>
                     </a>
                 </div>
                 <div class="pic_small">
                     <span id="pic_sl" class="pic_sl"></span>
                     <div id="pic_smiddle" class="pic_smiddle" style="overflow: hidden">
                         <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
-                            <li><a href="#" class=" bdc2"><img  src="images/2_00.gif"></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
+                            <li><a href="#" class="bdc2" onmouseover="ShowImage('http://image2.benlailife.com/ProductImage/0301030231C.jpg','http://image2.benlailife.com/ProductBigImage/0301030231C.jpg')"><img  src="images/2_00.gif"></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
                         </ul>
                     </div>
                     <span id="pic_sr" class="pic_sr"></span>
@@ -269,7 +261,7 @@
                                     <dt>品种/规格：</dt>
                                     <dd>
                                         <ul>
-                                            <icms id="{ProductId}" type="product_price_list">
+                                            <icms id="product_price_{ProductId}" type="product_price_list">
                                                 <item>
                                                     <![CDATA[
                                                     <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}">{f_ProductPriceIntro}</span></li>
@@ -320,22 +312,16 @@
         <div class="zi"> 商品推荐</div>
         <div class=" fctl">
             <ul>
-                <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
-                    <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
-                            人四件套</a>  </p>
-                    ￥42.80 <span>￥49</span></li>
-                <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
-                    <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
-                            人四件套</a>  </p>
-                    ￥42.80 <span>￥49</span></li>
-                <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
-                    <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
-                            人四件套</a>  </p>
-                    ￥42.80 <span>￥49</span></li>
-                <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
-                    <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
-                            人四件套</a>  </p>
-                    ￥42.80 <span>￥49</span></li>
+                <icms id="product_{ChannelId}" type="product_list" where="RecLevel" top="4">
+                    <item>
+                        <![CDATA[
+                        <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
+                            <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
+                                    人四件套</a>  </p>
+                            ￥42.80 <span>￥49</span></li>
+                        ]]>
+                    </item>
+                </icms>
             </ul>
         </div>
     </div></div><div class="clear">    </div>

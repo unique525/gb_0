@@ -92,9 +92,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         //子模板替换
         $templateContent = parent::ReplaceTemplate($templateContent);
 
-        //加载产品价格数据
-        self::GenProductPrice($templateContent);
-
 
         $patterns = '/\{s_(.*?)\}/';
         $templateContent = preg_replace($patterns, "", $templateContent);
@@ -111,34 +108,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         return $templateContent;
-    }
-
-    /**
-     * 替换模板中的产品价格标记生成价格列表
-     * @param string $tempContent 模板字符串
-     */
-    public function GenProductPrice(&$tempContent)
-    {
-        $keyName = "icms";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
-        if (isset($arr)) {
-            if (count($arr) > 1) {
-                if (!empty($arr[1])) {
-                    $productPriceManageData = new ProductPriceManageData();
-                    $arr2 = $arr[1];
-                    foreach ($arr2 as $val) {
-                        $content = '<' . $keyName . '' . $val . '</' . $keyName . '>';
-                        $productId = Template::GetParamValue($content, "id", $keyName);
-                        $type = Template::GetParamValue($content, "type", $keyName);
-                        if ($type == 'product_price_list') {
-                            $arrProductPicTagList = $productPriceManageData->GetList($productId);
-                            Template::ReplaceList($content, $arrProductPicTagList, $productId, $keyName);
-                            $tempContent = Template::ReplaceCustomTag($tempContent, $productId, $content, $keyName);
-                        }
-                    }
-                }
-            }
-        }
     }
 
 }
