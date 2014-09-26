@@ -166,18 +166,6 @@ window.UPLOAD_TABLE_TYPE_SITE_CONFIG = 84;
 window.UPLOAD_TABLE_TYPE_CUSTOM_FORM = 90;
 
 /**
- * 论坛版块图标1
- */
-window.UPLOAD_TABLE_TYPE_FORUM_PIC_1 = 100;
-/**
- * 论坛版块图标2
- */
-window.UPLOAD_TABLE_TYPE_FORUM_PIC_2 = 101;
-/**
- * 论坛版块帖子内容图
- */
-window.UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT = 104;
-/**
  * 投票选项图标
  */
 window.UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM = 110;
@@ -201,6 +189,37 @@ window.UPLOAD_TABLE_TYPE_INFORMATION_CONTENT = 135;
  */
 window.UPLOAD_TABLE_TYPE_SITE_AD_CONTENT = 150;
 
+
+
+/**
+ * 论坛版块图标1
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_PIC_1 = 200;
+/**
+ * 论坛版块图标2
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_PIC_2 = 201;
+/**
+ * 论坛版块帖子内容图
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT = 204;
+/**
+ * 论坛 顶部信息内容图
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_TOP_INFO_CONTENT = 205;
+/**
+ * 论坛 底部信息内容图
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT = 206;
+
+/**
+ * 论坛 LOGO图
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_LOGO = 207;
+/**
+ * 论坛 背景图
+ */
+window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
 
 /**
  * 格式化上传文件的返回结果信息
@@ -277,14 +296,18 @@ function FormatResultMessage(resultMessage){
  * @param {object} editor 编辑控制对象
  * @param {object} fUploadFile 存储上传文件id列表的控件对象
  * @param {int} attachWatermark 是否加水印
+ * @param {string} loadingImageId loading图的id
  */
-function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark)
+function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark,loadingImageId)
 {
+    if(loadingImageId == undefined || loadingImageId == null){
+        loadingImageId = "loading";
+    }
     $(document).ajaxStart(function() {
-        $( "#loading" ).show();
+        $( "#"+loadingImageId ).show();
     });
     $(document).ajaxComplete(function() {
-        $( "#loading" ).hide();
+        $( "#"+loadingImageId ).hide();
     });
 
 
@@ -298,9 +321,15 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
             if(typeof(data.error) != 'undefined')
             {
                 if(parseInt(data.error)>0){ //ok
-                    var uploadFiles = fUploadFile.val();
-                    uploadFiles = uploadFiles + "," + data.upload_file_id;
-                    fUploadFile.val(uploadFiles);
+
+                    if(fUploadFile != undefined && fUploadFile != null){
+                        var uploadFiles = fUploadFile.val();
+                        uploadFiles = uploadFiles + "," + data.upload_file_id;
+                        fUploadFile.val(uploadFiles);
+                    }
+
+
+
                     if(editor != undefined){
 
                         var uploadFilePath = UploadFileFormatHtml(data.upload_file_path);

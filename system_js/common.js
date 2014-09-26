@@ -31,6 +31,14 @@ function rtrim(str) {
 }
 
 $().ready(function() {
+
+    if ($.browser.msie) {
+        $('input:checkbox').click(function () {
+            this.blur();
+            this.focus();
+        });
+    };
+
     var inputPrice = $(".input_price");
     inputPrice.keyup(function() {
         checkPrice(this);

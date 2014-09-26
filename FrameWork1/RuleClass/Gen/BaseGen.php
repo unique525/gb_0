@@ -539,6 +539,18 @@ class BaseGen
                     $newFileName = 'product_brand_intro_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_CONTENT: /**产品内容图   tableId 为 channelId  */
+
+                if ($tableId > 0) {
+                    $uploadFilePath = $uploadPath . "product_content" .
+                        DIRECTORY_SEPARATOR . strval($tableId) .
+                        DIRECTORY_SEPARATOR . $date .
+                        DIRECTORY_SEPARATOR;
+                    $newFileName = 'product_content_' . uniqid() . '.' . $fileExtension;
+                }
+                break;
+
+
             case UploadFileData::UPLOAD_TABLE_TYPE_SITE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -613,21 +625,7 @@ class BaseGen
                 $uploadFilePath = $uploadPath . "site_config" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1:
-                /** 论坛版块图标1 */
-                $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
-                break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2:
-                /** 论坛版块图标2 */
-                $uploadFilePath = $uploadPath . "forum" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
-                break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
-                /** 论坛帖子内容 */
-                $uploadFilePath = $uploadPath . "forum_post" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
-                break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_CUSTOM_FORM: //自定义表单
                 $uploadFilePath = $uploadPath . "custom_form" . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
@@ -676,6 +674,67 @@ class BaseGen
                     $uploadFilePath = $uploadPath . "user_sign" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
                     $newFileName = uniqid() . '.' . $fileExtension;
                 }
+                break;
+
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1:
+                /** 论坛版块图标1 */
+                $uploadFilePath =
+                    $uploadPath . "forum" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR . $date .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2:
+                /** 论坛版块图标2 */
+                $uploadFilePath =
+                    $uploadPath . "forum" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR . $date .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+                /** 论坛帖子内容 */
+                $uploadFilePath =
+                    $uploadPath . "forum_post" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR . $date .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_TOP_INFO_CONTENT:
+                /** 论坛 顶部信息内容图 */
+                $uploadFilePath =
+                    $uploadPath . "forum_top_info_content" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT:
+                /** 论坛 底部信息内容图 */
+                $uploadFilePath =
+                    $uploadPath . "forum_bot_info_content" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_LOGO:
+                /** 论坛 LOGO */
+                $uploadFilePath =
+                    $uploadPath . "forum_logo" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC:
+                /** 论坛 背景图 */
+                $uploadFilePath =
+                    $uploadPath . "forum_background_pic" .
+                    DIRECTORY_SEPARATOR . strval($tableId) .
+                    DIRECTORY_SEPARATOR;
+                $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
         }
         return $uploadFilePath;

@@ -10,13 +10,39 @@
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
 
     <script type="text/javascript">
-        var editor1;
-        var editor2;
+        var editorOfForumTopInfo;
+        var editorOfForumBotInfo;
+        var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_FORUM_TOP_INFO_CONTENT;
+        var tableTypeOfForumBotInfo = window.UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT;
+        var tableId = parseInt("{SiteId}");
         $(function () {
-            editor1 = $('#cfg_ForumTopInfo_2').xheditor();
-            editor2 = $('#cfg_ForumBotInfo_2').xheditor();
+            editorOfForumTopInfo = $('#cfg_ForumTopInfo_2').xheditor();
+            editorOfForumBotInfo = $('#cfg_ForumBotInfo_2').xheditor();
             $('#tabs').tabs();
 
+
+
+            var btnUploadToForumTopInfo = $("#btnUploadToForumTopInfo");
+            btnUploadToForumTopInfo.click(function () {
+
+                var fileElementId = 'file_upload_to_forum_top_info';
+                var fUploadFile = null;
+
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfForumTopInfo";
+                AjaxFileUpload(fileElementId, tableTypeOfForumTopInfo, tableId, editorOfForumTopInfo, fUploadFile, attachWatermark,loadingImageId);
+            });
+
+            var btnUploadToForumBotInfo = $("#btnUploadToForumBotInfo");
+            btnUploadToForumBotInfo.click(function () {
+
+                var fileElementId = 'file_upload_to_forum_bot_info';
+                var fUploadFile = null;
+
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfForumBotInfo";
+                AjaxFileUpload(fileElementId, tableTypeOfForumBotInfo, tableId, editorOfForumBotInfo, fUploadFile, attachWatermark,loadingImageId);
+            });
 
         });
 
@@ -158,8 +184,10 @@
                                     <tr>
                                         <td class="spe_line">
                                             <label for="cfg_ForumTopInfo_2"></label><textarea id="cfg_ForumTopInfo_2" name="cfg_ForumTopInfo_2" style="width:90%;height:380px;">{cfg_ForumTopInfo_2}</textarea><br/>
-                                            <input id="ForumTopInfoToUpload" name="ForumTopInfoToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumTopinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
-                                            <input id="btnForumTopInfoUpload" onclick="return ajaxForumTopinfoUpload()" type="button" value="上传"/>
+                                            <input id="file_upload_to_forum_top_info" name="file_upload_to_forum_top_info" type="file"
+                                                   class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
+                                                id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif"
+                                                style="display:none;"/><input id="btnUploadToForumTopInfo" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -172,8 +200,10 @@
                                     <tr>
                                         <td class="spe_line">
                                             <label for="cfg_ForumBotInfo_2"></label><textarea id="cfg_ForumBotInfo_2" name="cfg_ForumBotInfo_2" style="width:90%;height:380px;">{cfg_ForumBotInfo_2}</textarea><br/>
-                                            <input id="ForumBotinfoToUpload" name="ForumBotinfoToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumBotinfoloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
-                                            <input id="btnForumBotinfoUpload" onclick="return ajaxForumBotinfoUpload()" type="button" value="上传"/>
+                                            <input id="file_upload_to_forum_bot_info" name="file_upload_to_forum_bot_info" type="file"
+                                                   class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
+                                                id="loadingOfForumBotInfo" src="/system_template/common/images/loading1.gif"
+                                                style="display:none;"/><input id="btnUploadToForumBotInfo" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                 </table>

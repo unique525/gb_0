@@ -181,18 +181,6 @@ class UploadFileData extends BaseData
     const UPLOAD_TABLE_TYPE_CUSTOM_FORM = 90;
 
     /**
-     * 论坛版块图标1
-     */
-    const UPLOAD_TABLE_TYPE_FORUM_PIC_1 = 100;
-    /**
-     * 论坛版块图标2
-     */
-    const UPLOAD_TABLE_TYPE_FORUM_PIC_2 = 101;
-    /**
-     * 论坛版块帖子内容图
-     */
-    const UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT = 104;
-    /**
      * 投票选项图标
      */
     const UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM = 110;
@@ -217,6 +205,37 @@ class UploadFileData extends BaseData
      * 广告内容图
      */
     const UPLOAD_TABLE_TYPE_SITE_AD_CONTENT = 150;
+
+
+
+    /**
+     * 论坛版块图标1
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_PIC_1 = 200;
+    /**
+     * 论坛版块图标2
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_PIC_2 = 201;
+    /**
+     * 论坛版块帖子内容图
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT = 204;
+    /**
+     * 论坛 顶部信息内容图
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_TOP_INFO_CONTENT = 205;
+    /**
+     * 论坛 底部信息内容图
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT = 206;
+    /**
+     * 论坛 LOGO图
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_LOGO = 207;
+    /**
+     * 论坛 背景图
+     */
+    const UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
 
     /**
      * 上传文件增加到数据表

@@ -18,14 +18,6 @@ var tableId = parseInt('{ChannelId}');
 
 $(function () {
 
-    if ($.browser.msie) {
-        $('input:checkbox').click(function () {
-            this.blur();
-            this.focus();
-        });
-    }
-    ;
-
     var editorHeight = $(window).height() - 220;
     editorHeight = parseInt(editorHeight);
 
@@ -39,9 +31,41 @@ $(function () {
         localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
         remoteImgSaveUrl: ''
     });
+    /******************    远程抓图    ********************/
+    var cbSaveRemoteImage = $("#cbSaveRemoteImage");
+    cbSaveRemoteImage.change(function () {
+        if (cbSaveRemoteImage.prop("checked") == true) {
+
+            f_DocumentNewsContent.xheditor(false);
+
+            editor = f_DocumentNewsContent.xheditor({
+                tools: 'full',
+                height: editorHeight,
+                upImgUrl: "",
+                upImgExt: "jpg,jpeg,gif,png",
+                localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl: '/default.php?mod=upload_file&a=async_save_remote_image&table_type=' + tableType + '&table_id=' + tableId
+            });
+
+        } else {
+
+            f_DocumentNewsContent.xheditor(false);
+
+            editor = f_DocumentNewsContent.xheditor({
+                tools: 'full',
+                height: editorHeight,
+                upImgUrl: "",
+                upImgExt: "jpg,jpeg,gif,png",
+                localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl: ''
+            });
+        }
+    });
+
+    $('#tabs').tabs();
 
     var f_ShowDate = $("#f_ShowDate");
-    $('#tabs').tabs();
+
     f_ShowDate.datepicker({
         dateFormat: 'yy-mm-dd',
         numberOfMonths: 3,
@@ -88,35 +112,6 @@ $(function () {
         $("#f_SourceName").val($(this).text());
     });
 
-    var cbSaveRemoteImage = $("#cbSaveRemoteImage");
-    cbSaveRemoteImage.change(function () {
-        if (cbSaveRemoteImage.prop("checked") == true) {
-
-            f_DocumentNewsContent.xheditor(false);
-
-            editor = f_DocumentNewsContent.xheditor({
-                tools: 'full',
-                height: editorHeight,
-                upImgUrl: "",
-                upImgExt: "jpg,jpeg,gif,png",
-                localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
-                remoteImgSaveUrl: '/default.php?mod=upload_file&a=async_save_remote_image&table_type=' + tableType + '&table_id=' + tableId
-            });
-
-        } else {
-
-            f_DocumentNewsContent.xheditor(false);
-
-            editor = $('#f_DocumentNewsContent').xheditor({
-                tools: 'full',
-                height: editorHeight,
-                upImgUrl: "",
-                upImgExt: "jpg,jpeg,gif,png",
-                localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
-                remoteImgSaveUrl: ''
-            });
-        }
-    });
 
     var btnUploadToContent = $("#btnUploadToContent");
     btnUploadToContent.click(function () {
@@ -125,11 +120,11 @@ $(function () {
         var fUploadFile = $("#f_UploadFiles");
 
         var attachWatermark = 0;
-        if ($("#attachwatermark").attr("checked") == true) {
+        if ($("#cbAttachWatermark").attr("checked") == true) {
             attachWatermark = 1;
         }
-
-        AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark);
+        var loadingImageId = null;
+        AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId);
     });
 
     var btnAddPreContent = $(".btn_add_pre_content");
