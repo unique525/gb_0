@@ -184,4 +184,31 @@ class ProductPublicData extends BasePublicData {
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
+
+    /**
+     * 根据销售数量获取产品记录
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetListBySaleCount($order = "", $topCount = null)
+    {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        switch ($order) {
+            default:
+                $order = " ORDER BY SaleCount DESC";
+                break;
+        }
+        $sql = "SELECT *"
+            . " FROM " . self::TableName_Product
+            . " WHERE State<100"
+            . $order
+            . $topCount;
+        $dataProperty = new DataProperty();
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
 } 

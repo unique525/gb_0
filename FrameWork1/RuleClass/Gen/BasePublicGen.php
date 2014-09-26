@@ -83,10 +83,7 @@ class BasePublicGen extends BaseGen {
                         }
                         break;
                     case Template::TAG_TYPE_PRODUCT_LIST :
-                        $channelId = intval(str_ireplace("product_", "", $tagId));
-                        if ($channelId > 0) {
-                            $templateContent = self::ReplaceTemplateOfProductList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
-                        }
+                        $templateContent = self::ReplaceTemplateOfProductList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         break;
                     case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST :
                         $channelId = intval(str_ireplace("product_param_type_class_", "", $tagId));
@@ -229,28 +226,31 @@ class BasePublicGen extends BaseGen {
         $state
     )
     {
-        if ($channelId > 0) {
-            $arrProductList = null;
-            $productPublicData = new ProductPublicData();
-            switch ($tagWhere) {
-                case "channel":
+        $arrProductList = null;
+        $productPublicData = new ProductPublicData();
+        switch ($tagWhere) {
+            case "channel":
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
                     $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
-                    break;
-                case "RecLevel":
-                    $arrProductList = $productPublicData->GetListByRecLevel($tagOrder, $tagTopCount);
-                    break;
-                default :
-                    //new
-                    $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
-                    break;
-            }
-            if (!empty($arrProductList)) {
-                Template::ReplaceList($tagContent, $arrProductList, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
+                }
+                break;
+            case "RecLevel":
+                $arrProductList = $productPublicData->GetListByRecLevel($tagOrder, $tagTopCount);
+                break;
+            case "SaleCount":
+                $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
+                break;
+            default :
+                //new
+                $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                break;
         }
-
+        if (!empty($arrProductList)) {
+            Template::ReplaceList($tagContent, $arrProductList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+        }
         return $templateContent;
     }
 

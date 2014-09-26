@@ -183,16 +183,15 @@
             <div class="fl">热销榜</div>
         </ul><div class="clear"> </div>
         <ul>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
+            <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
+                <item>
+                    <![CDATA[
+                    <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
+                        <p><a href="#" target="_blank" ><font class="cleb6100 ml5">{f_ProductName}</font></a>  </p>现价: ￥{f_SalePrice}</li>
+
+                    ]]>
+                </item>
+            </icms>
         </ul>
     </div>
     <div class="blank10">        </div>
@@ -312,13 +311,12 @@
         <div class="zi"> 商品推荐</div>
         <div class=" fctl">
             <ul>
-                <icms id="product_{ChannelId}" type="product_list" where="RecLevel" top="4">
+                <icms id="product_rec_level" type="product_list" where="RecLevel" top="4">
                     <item>
                         <![CDATA[
                         <li > <a class="pic" href="#" target="_blank" ><img src="images/3_14.gif" ></a>
-                            <p><a href="#" target="_blank" >富安娜家纺 全棉斜纹 纯棉印花双
-                                    人四件套</a>  </p>
-                            ￥42.80 <span>￥49</span></li>
+                            <p><a href="#" target="_blank" >{f_ProductName}</a>  </p>
+                            ￥42.80 <span>￥{f_SalePrice}</span></li>
                         ]]>
                     </item>
                 </icms>
