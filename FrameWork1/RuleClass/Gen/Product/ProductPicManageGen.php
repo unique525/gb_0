@@ -43,12 +43,15 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
+        $channelId = Control::GetRequest("channel_id", 0);
         $productId = Control::GetRequest("product_id", 0);
         $pageIndex = Control::GetRequest("p", 0);
         $tempContent = Template::Load("product/product_pic_deal.html", "common");
         $resultJavaScript = "";
         if ($productId > 0 && $manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, false);
             $productPicManageData = new ProductPicManageData();
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
@@ -81,6 +84,20 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                         }
                         if($uploadFileId>0){
                             $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                        }
+                        $siteConfigData = new SiteConfigData($siteId);
+                        if($uploadFileId>0){
+                            $ProductPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
+                            if($ProductPicThumb1Width<=0){
+                                $ProductPicThumb1Width  = 350; //默认350宽
+                            }
+                            parent::GenUploadFileThumb1($uploadFileId,$ProductPicThumb1Width);
+
+                            $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
+                            if($ProductPicThumb2Width<=0){
+                                $ProductPicThumb2Width  = 50; //默认50宽
+                            }
+                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
                         }
                     }
                     //javascript 处理
@@ -138,9 +155,13 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
         $resultJavaScript="";
         $ProductPicId = Control::GetRequest("product_pic_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
+        $channelId = Control::GetRequest("channel_id", 0);
         parent::ReplaceFirst($tempContent);
         $productPicManageData = new ProductPicManageData();
         if ($ProductPicId >0 && $manageUserId > 0) {
+            $channelManageData = new ChannelManageData();
+            $withCache = FALSE;
+            $siteId = $channelManageData->GetSiteId($channelId, $withCache);
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
                 $result = $productPicManageData->Modify($httpPostData, $ProductPicId);
@@ -174,6 +195,21 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
 
                             //修改题图
                             $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                        }
+
+                        $siteConfigData = new SiteConfigData($siteId);
+                        if($uploadFileId>0){
+                            $ProductPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
+                            if($ProductPicThumb1Width<=0){
+                                $ProductPicThumb1Width  = 350; //默认350宽
+                            }
+                            parent::GenUploadFileThumb1($uploadFileId,$ProductPicThumb1Width);
+
+                            $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
+                            if($ProductPicThumb2Width<=0){
+                                $ProductPicThumb2Width  = 50; //默认50宽
+                            }
+                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
                         }
                     }
                     //javascript 处理

@@ -128,7 +128,8 @@ $(function () {
         event.preventDefault();
         var productId=$(this).attr('idvalue');
         var productName=$(this).attr('alt');
-        parent.G_TabUrl = '/default.php?secu=manage&mod=product_pic&m=list&product_id=' + productId + '&ps=8';
+        var channelId=parent.G_SelectedChannelId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=product_pic&m=list&channel_id='+channelId+'&product_id=' + productId + '&ps=8';
         parent.G_TabTitle = productName + '-图片管理';
         parent.addTab();
     });

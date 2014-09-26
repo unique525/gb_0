@@ -7,13 +7,14 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
+        var channelId = Request["channel_id"];
         var productId = Request["product_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_pic&m=create&product_id='+productId+'&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_pic&m=create&channel_id='+channelId+'&product_id='+productId+'&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -30,13 +31,14 @@ $(function() {
     btnModify.css("cursor", "pointer");
     btnModify.click(function(event) {
         event.preventDefault();
+        var channelId = Request["channel_id"];
         var productPicId = $(this).attr('idvalue');
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=product_pic&m=modify&product_pic_id=' + productPicId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=product_pic&m=modify&channel_id='+channelId+'&product_pic_id=' + productPicId + '&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
