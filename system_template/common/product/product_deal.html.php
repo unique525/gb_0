@@ -6,12 +6,85 @@
     {common_head}
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+    <script type="text/javascript" src="/system_js/upload_file.js"></script>
     <script type="text/javascript">
         <!--
         var editor;
-        $(function () {
-            getProductPriceList();
+        var tableType = window.UPLOAD_TABLE_TYPE_PRODUCT_CONTENT;
+        var tableId = parseInt('{ChannelId}');
 
+        $(function () {
+
+            var editorHeight = $(window).height() - 450;
+            editorHeight = parseInt(editorHeight);
+
+            var f_ProductContent = $('#f_ProductContent');
+
+            editor = f_ProductContent.xheditor({
+                tools: 'full',
+                height: editorHeight,
+                upImgUrl: "",
+                upImgExt: "jpg,jpeg,gif,png",
+                localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl: ''
+            });
+            /******************    远程抓图    ********************/
+            var cbSaveRemoteImage = $("#cbSaveRemoteImage");
+            cbSaveRemoteImage.change(function () {
+                if (cbSaveRemoteImage.prop("checked") == true) {
+
+                    f_ProductContent.xheditor(false);
+
+                    editor = f_ProductContent.xheditor({
+                        tools: 'full',
+                        height: editorHeight,
+                        upImgUrl: "",
+                        upImgExt: "jpg,jpeg,gif,png",
+                        localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                        remoteImgSaveUrl: '/default.php?mod=upload_file&a=async_save_remote_image&table_type=' + tableType + '&table_id=' + tableId
+                    });
+
+                } else {
+
+                    f_ProductContent.xheditor(false);
+
+                    editor = f_ProductContent.xheditor({
+                        tools: 'full',
+                        height: editorHeight,
+                        upImgUrl: "",
+                        upImgExt: "jpg,jpeg,gif,png",
+                        localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                        remoteImgSaveUrl: ''
+                    });
+                }
+            });
+
+
+            var f_AutoRemoveDate = $("#f_AutoRemoveDate");
+
+            f_AutoRemoveDate.datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 3,
+                showButtonPanel: true
+            });
+
+
+
+            var btnUploadToContent = $("#btnUploadToContent");
+            btnUploadToContent.click(function () {
+
+                var fileElementId = 'file_upload_to_content';
+                var fUploadFile = $("#f_UploadFiles");
+
+                var attachWatermark = 0;
+                if ($("#cbAttachWatermark").attr("checked") == true) {
+                    attachWatermark = 1;
+                }
+                var loadingImageId = null;
+                AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId);
+            });
+
+            getProductPriceList();
         });
 
         function submitForm(closeTab) {
@@ -130,21 +203,18 @@
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductName">产品名称：</label></td>
-                <td class="spe_line">
+                <td style=" width: 500px;" class="spe_line">
                     <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
                     <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}" />
                     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
                     <input name="f_ProductName" id="f_ProductName" value="{ProductName}" type="text" class="input_box" style="width:300px;"/>
+                    <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}"/>
                 </td>
-            </tr>
-
-            <tr>
-                <td class="spe_line" height="30" align="right"><label for="f_ProductNumber">产品编号：</label></td>
+                <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductNumber">产品编号：</label></td>
                 <td class="spe_line">
                     <input id="f_ProductNumber" name="f_ProductNumber" type="text" value="{ProductNumber}" maxlength="100" style="width:300px;" class="input_box"/>
                     （可以为空）</td>
             </tr>
-
 
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_State">状态：</label></td>
@@ -155,8 +225,6 @@
                     </select>
                     {s_State}
                 </td>
-            </tr>
-            <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_SaleState">上架情况：</label></td>
                 <td class="spe_line">
                     <select id="f_SaleState" name="f_SaleState">
@@ -165,6 +233,12 @@
                         <option value="100">已经下架</option>
                     </select>
                     {s_SaleState}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="f_OpenAutoRemove">开启自动下架：</label>
+                    <input type="checkbox" id="f_OpenAutoRemove" name="f_OpenAutoRemove"/>
+                    <label for="f_AutoRemoveDate">自动下架日期：</label>
+                    <input type="text" class="input_box" id="f_AutoRemoveDate" name="f_AutoRemoveDate" value="{AutoRemoveDate}"
+                           style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly"/>
                 </td>
             </tr>
             <tr>
@@ -174,8 +248,6 @@
                            style="width:400px;background:#ffffff;margin-top:3px;"/>
                     <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
                 </td>
-            </tr>
-            <tr>
                 <td class="spe_line" height="30" align="right"><label for="file_title_pic_2">产品题图2：</label></td>
                 <td class="spe_line">
                     <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
@@ -190,8 +262,6 @@
                            style="width:400px; background: #ffffff; margin-top: 3px;"/>
                     <span id="preview_title_pic3" class="show_title_pic" idvalue="{TitlePic3UploadFileId}" style="cursor:pointer">[预览]</span>
                 </td>
-            </tr>
-            <tr>
                 <td class="spe_line" height="30" align="right"><label for="file_title_pic_4">产品题图4：</label></td>
                 <td class="spe_line">
                     <input id="file_title_pic_4" name="file_title_pic_4" type="file" class="input_box"
@@ -201,14 +271,37 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_ProductIntro">产品介绍：</label></td>
-                <td class="spe_line">
+                <td colspan="3" class="spe_line">
                     <textarea cols="30" rows="30" id="f_ProductIntro" name="f_ProductIntro" style="width:70%;height:100px;">{ProductIntro}</textarea>
                 </td>
+
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_ProductContent">产品内容：</label></td>
-                <td class="spe_line">
+                <td class="spe_line" colspan="3">
                     <textarea cols="30" rows="30" id="f_ProductContent" name="f_ProductContent" style="width:70%;height:250px;">{ProductContent}</textarea>
+                </td>
+
+            </tr>
+            <tr>
+                <td height="30" align="right"></td>
+                <td colspan="3">
+                    <label for="cbAttachWatermark">附加水印：</label>
+                    <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark"/> (只支持jpg或jpeg图片)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="cbSaveRemoteImage">远程抓图：</label>
+                    <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/> (只支持jpg、jpeg、gif、png图片)
+                </td>
+
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right">文件上传：</td>
+                <td class="spe_line" colspan="3">
+                    <input id="file_upload_to_content" name="file_upload_to_content" type="file"
+                           class="input_box" size="7" style="width:30%; background: #ffffff;"/> <img
+                        id="loading" src="/system_template/common/images/loading1.gif"
+                        style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
+
                 </td>
             </tr>
         </table>
