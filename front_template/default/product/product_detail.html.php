@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jquery.jqzoom-core.js" type="text/javascript"></script>
+    <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jquery.jqzoom.css" type="text/css">
     <script type="text/javascript">
     $(function(){
@@ -53,6 +54,24 @@
         inputProductNum.bind("blur", function () {
             validateCount.call($(this));
         });
+        //产品缩略图滚动效果
+        new Marquee(
+            {
+                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
+                Direction : 2,
+                PrevBtnID : "pic_sl",
+                NextBtnID : "pic_sr",
+                Step	  : 0.3,
+                Width	  : 312,
+                Height	  : 64,
+                Timer	  : 20,
+                DelayTime : 3000,
+                WaitTime  : 100000,
+                ScrollStep: 62,
+                SwitchType: 0,
+                AutoStart : true
+            });
+
     });
     //产品数量增减
     function ProductNumChange(changeNum) {
@@ -80,6 +99,25 @@
             this.val("1");
         }
     }
+    //产品小图鼠标经过显示大图
+    function ShowImage(img1, bigimage) {
+        $("#showjq").html("");
+        $("#showjq").html("<img src=\"" + $("#" + img1).html() + "\" alt=\"\" style=\"width: 350px;height: 350px; overflow: hidden\"  id=\"img\" jqimg=\"" + $("#" + bigimage).html() + "\"  onerror=\"this.onerror=null;this.src='/Content/images/NoPicmiddle.jpg'\" />");
+        $("#smallPic li a").mouseover(function () {
+            $("#smallPic li a").attr("class", "");
+            $(this).attr("class", "bdc2")
+        })
+    }
+
+    $(".spec-items").imgScroll(
+        {   visible: 5,
+            speed: 200,
+            step: 1,
+            loop: !1,
+            prev: "#spec-forward",
+            next: "#spec-backward",
+            disableClass: "disabled"
+        });
     </script>
 </head>
 <body>
@@ -201,13 +239,13 @@
                     </a>
                 </div>
                 <div class="pic_small">
-                    <span  class="pic_sl"></span>
-                    <div class="pic_smiddle">
-                        <ul style="width: 312px; height: 64px; overflow: hidden">
-                            <li><a href="#" class=" bdc2"><img  src="images/2_00.gif"></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
+                    <span id="pic_sl" class="pic_sl"></span>
+                    <div id="pic_smiddle" class="pic_smiddle" style="overflow: hidden">
+                        <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
+                            <li><a href="#" class=" bdc2"><img  src="images/2_00.gif"></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
                         </ul>
                     </div>
-                    <span class="pic_sr"></span>
+                    <span id="pic_sr" class="pic_sr"></span>
                     <div class="clear"> </div>
                 </div>
             </td>
