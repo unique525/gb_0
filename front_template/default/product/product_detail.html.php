@@ -53,23 +53,23 @@
         inputProductNum.bind("blur", function () {
             validateCount.call($(this));
         });
-        //产品缩略图滚动效果
-        new Marquee(
-            {
-                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
-                Direction : 2,
-                PrevBtnID : "pic_sl",
-                NextBtnID : "pic_sr",
-                Step	  : 0.3,
-                Width	  : 312,
-                Height	  : 64,
-                Timer	  : 20,
-                DelayTime : 3000,
-                WaitTime  : 100000,
-                ScrollStep: 62,
-                SwitchType: 0,
-                AutoStart : true
-            });
+//        //产品缩略图滚动效果
+//        new Marquee(
+//            {
+//                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
+//                Direction : 2,
+//                PrevBtnID : "pic_sl",
+//                NextBtnID : "pic_sr",
+//                Step	  : 0.3,
+//                Width	  : 312,
+//                Height	  : 64,
+//                Timer	  : 20,
+//                DelayTime : 3000,
+//                WaitTime  : 100000,
+//                ScrollStep: 62,
+//                SwitchType: 0,
+//                AutoStart : true
+//            });
         //产品小图鼠标经过显示大图
         $("#pic_smiddle_content li ").mouseover(function(){
             $(this).siblings().each(function(){
@@ -229,9 +229,15 @@
                 </div>
                 <div class="pic_small">
                     <span id="pic_sl" class="pic_sl"></span>
-                    <div id="pic_smiddle" class="pic_smiddle" style="overflow: hidden">
+                    <div id="pic_smiddle" class="pic_smiddle" style="overflow:hidden">
                         <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
-                            <li><img class="bdc2" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50" /></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
+                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="2">
+                                <item>
+                                    <![CDATA[
+                                    <li><img class="" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50"></li>
+                                    ]]>
+                                </item>
+                            </icms>
                         </ul>
                     </div>
                     <span id="pic_sr" class="pic_sr"></span>

@@ -197,7 +197,7 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 .pic_sl,.pic_sr {background:url(1_03.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);cursor: pointer;display: inline;float: left; height: 54px;width: 19px;}
 .pic_sr { background: url(1_05.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);}
 .pic_smiddle {display: inline;float: left;height:54px;width: 326px;}
-.pic_smiddle ul li a {border: 1px solid #dddddd;display: block;height:50px;width:50px; margin:0px 5px; float:left;}
+.pic_smiddle ul li img {border: 1px solid #dddddd;display: block;height:50px;width:50px; margin:0px 5px; float:left;}
 .bdc2 {border: 2px solid #ff9900 !important;}
 
 /*商品推荐*/
