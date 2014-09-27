@@ -49,7 +49,7 @@ class ProductPicPublicData extends BasePublicData
             $sql = "
             SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
             FROM " . self::TableName_ProductPic . "
-            WHERE ProductId=:ProductId"
+            WHERE State=0 AND ProductId=:ProductId"
             . $order
             . $topCount;
             $dataProperty = new DataProperty();

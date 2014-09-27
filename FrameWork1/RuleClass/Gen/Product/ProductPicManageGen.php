@@ -66,7 +66,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                         //file pic
                         $fileElementName = "file_pic";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PIC;
-                        $tableId = $ProductPicId;
+                        $tableId = $productId;
                         $uploadFile = new UploadFile();
                         $uploadFileId = 0;
                         $titlePicResult = self::Upload(
@@ -156,6 +156,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
         $ProductPicId = Control::GetRequest("product_pic_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
         $channelId = Control::GetRequest("channel_id", 0);
+        $productId = Control::GetRequest("product_id", 0);
         parent::ReplaceFirst($tempContent);
         $productPicManageData = new ProductPicManageData();
         if ($ProductPicId >0 && $manageUserId > 0) {
@@ -175,7 +176,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                         //file pic
                         $fileElementName = "file_pic";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_PIC;
-                        $tableId = $ProductPicId;
+                        $tableId = $productId;
                         $uploadFile = new UploadFile();
                         $uploadFileId = 0;
                         $titlePic1Result = self::Upload(

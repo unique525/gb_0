@@ -9,19 +9,18 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-    <script src="/front_js/jqzoom/js/jquery.jqzoom-core.js" type="text/javascript"></script>
+    <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/front_js/jqzoom/css/jquery.jqzoom.css" type="text/css">
+    <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
     <script type="text/javascript">
     $(function(){
-        $('.jqzoom').jqzoom({
-            zoomWidth:350,
-            zoomHeight:350,
-            zoomType: 'standard',
-            lens:true,
-            preloadImages: false,
-            alwaysOn:false,
-            title:false,
+        $(".jqzoom").jqzoom({
+            offset:5,
+            xzoom:350,
+            yzoom:350,
+            position:"right",
+            preload:1,
+            lens:1
         });
         //价格选择
         var spanPropon=$('.propon');
@@ -71,7 +70,17 @@
                 SwitchType: 0,
                 AutoStart : true
             });
-
+        //产品小图鼠标经过显示大图
+        $("#pic_smiddle_content li ").mouseover(function(){
+            $(this).siblings().each(function(){
+                $("img", this).attr("class", "");
+            });
+            var rollImg = $("img", this);
+            rollImg.attr("class", "bdc2");
+            var originPic=rollImg.attr("originpic");
+            var originThumb1pic=rollImg.attr("thumb1pic");
+            $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
+        });
     });
     //产品数量增减
     function ProductNumChange(changeNum) {
@@ -98,17 +107,6 @@
         if ("0" == sSum || !intreg.test(sSum)) {
             this.val("1");
         }
-    }
-    //产品小图鼠标经过显示大图
-    function ShowImage(img1, bigimage) {
-        $("#magnifier").html("");
-        var picHtml='<a href="http://image2.benlailife.com/ProductBigImage/0508010088C.jpg" class="jqzoom" rel="gal1"  title="triumph1" >';
-        picHtml +='<img src="http://image2.benlailife.com/ProductImage/0508010088C.jpg" style="width: 350px;height: 350px; overflow: hidden"/></a>';
-        $("#magnifier").html(picHtml);
-        $("#pic_smiddle_content li a").mouseover(function () {
-            $("#pic_smiddle_content li a").attr("class", "");
-            $(this).attr("class", "bdc2")
-        })
     }
     </script>
 </head>
@@ -225,15 +223,15 @@
         <tr>
             <td align="center" valign="top" class="goodstopl" >
                 <div id="magnifier" class="magnifier">
-                    <a href="http://image2.benlailife.com/ProductBigImage/0301030231C.jpg" class="jqzoom" rel='gal1'  title="triumph1" >
-                        <img src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" style="width: 350px;height: 350px; overflow: hidden"/>
-                    </a>
+                    <div id="BigImage" class="jqzoom" style="border:1px solid #ccc">
+                        <img id="jqimg" src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" width="350" longdesc="http://image2.benlailife.com/ProductBigImage/0301030231C.jpg"/>
+                    </div>
                 </div>
                 <div class="pic_small">
                     <span id="pic_sl" class="pic_sl"></span>
                     <div id="pic_smiddle" class="pic_smiddle" style="overflow: hidden">
                         <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
-                            <li><a href="#" class="bdc2" onmouseover="ShowImage('http://image2.benlailife.com/ProductImage/0301030231C.jpg','http://image2.benlailife.com/ProductBigImage/0301030231C.jpg')"><img  src="images/2_00.gif"></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
+                            <li><img class="bdc2" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50" /></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li><li><a href="#"><img  src="images/2_00.gif" /></a></li>
                         </ul>
                     </div>
                     <span id="pic_sr" class="pic_sr"></span>
