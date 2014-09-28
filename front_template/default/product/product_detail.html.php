@@ -10,9 +10,23 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
-    <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
+    <script src="/front_js/jcarousel/js/jquery.jcarousel.pack.js" type="text/javascript"></script>
+    <script src="/front_js/jcarousel/css/jquery.jcarousel.css" type="text/javascript"></script>
     <script type="text/javascript">
+        function mycarousel_initCallback(carousel) {
+            $('#pic_sl').bind('click', function() {
+                alert("22");
+                carousel.next();
+                return false;
+            });
+
+            $('#pic_sr').bind('click', function() {
+                alert("33");
+                carousel.prev();
+                return false;
+            });
+        };
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -53,23 +67,13 @@
             inputProductNum.bind("blur", function () {
                 validateCount.call($(this));
             });
-//        //产品缩略图滚动效果
-//        new Marquee(
-//            {
-//                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
-//                Direction : 2,
-//                PrevBtnID : "pic_sl",
-//                NextBtnID : "pic_sr",
-//                Step	  : 0.3,
-//                Width	  : 312,
-//                Height	  : 64,
-//                Timer	  : 20,
-//                DelayTime : 3000,
-//                WaitTime  : 100000,
-//                ScrollStep: 62,
-//                SwitchType: 0,
-//                AutoStart : true
-//            });
+            jQuery("#pic_smiddle").jcarousel({
+                scroll: 1,
+                initCallback: mycarousel_initCallback,
+                // This tells jCarousel NOT to autobuild prev/next buttons
+                buttonNextHTML: null,
+                buttonPrevHTML: null
+            });
             //产品小图鼠标经过显示大图
             $("#pic_smiddle_content li ").mouseover(function(){
                 $(this).siblings().each(function(){
@@ -231,7 +235,7 @@
                     <span id="pic_sl" class="pic_sl"></span>
                     <div id="pic_smiddle" class="pic_smiddle" style="overflow:hidden">
                         <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
-                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="2">
+                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
                                 <item>
                                     <![CDATA[
                                     <li><img class="" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50"></li>
