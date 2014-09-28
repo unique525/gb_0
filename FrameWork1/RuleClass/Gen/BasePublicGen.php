@@ -83,7 +83,7 @@ class BasePublicGen extends BaseGen {
                         }
                         break;
                     case Template::TAG_TYPE_PRODUCT_LIST :
-                        $templateContent = self::ReplaceTemplateOfProductList($templateContent, $channelId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        $templateContent = self::ReplaceTemplateOfProductList($templateContent, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         break;
                     case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST :
                         $channelId = intval(str_ireplace("product_param_type_class_", "", $tagId));
@@ -206,7 +206,6 @@ class BasePublicGen extends BaseGen {
     /**
      * 替换产品列表的内容
      * @param string $templateContent 要处理的模板内容
-     * @param int $channelId 频道id
      * @param string $tagId 标签id
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
@@ -217,7 +216,6 @@ class BasePublicGen extends BaseGen {
      */
     private function ReplaceTemplateOfProductList(
         $templateContent,
-        $channelId,
         $tagId,
         $tagContent,
         $tagTopCount,
@@ -242,9 +240,10 @@ class BasePublicGen extends BaseGen {
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
                 break;
             default :
-                //new
-                $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
-                break;
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                }
         }
         if (!empty($arrProductList)) {
             Template::ReplaceList($tagContent, $arrProductList, $tagId);
