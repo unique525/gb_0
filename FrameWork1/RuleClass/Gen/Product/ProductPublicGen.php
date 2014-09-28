@@ -48,19 +48,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function loadListTemp($temp,$channelId)
     {
-
-        $result='
-            <icms id="product_{ChannelId}" type="product_list" where="channel">
-                <item>
-                    <![CDATA[
-                    <div class="main_line_title" style="font-size:14px">{f_ProductName}</div>
-                    <div class="main_line_title" style="font-size:14px">{f_UploadFilePath}</div>
-                    <div class="spe"></div>
-                    ]]>
-                </item>
-            </icms>';
-        $result = str_ireplace("{ChannelId}", $channelId, $result);
-        return $result;
+        $templateFileUrl = "product/product_list.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+        return $templateContent;
     }
 
     /**

@@ -13,46 +13,46 @@
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
     <script type="text/javascript">
-    $(function(){
-        $(".jqzoom").jqzoom({
-            offset:5,
-            xzoom:350,
-            yzoom:350,
-            position:"right",
-            preload:1,
-            lens:1
-        });
-        //价格选择
-        var spanPropon=$('.propon');
-        spanPropon.click(function(){
-            //产品促销价格
-            var productPriceValue=$(this).attr("pricevalue");
-            $("#productPrice").text(productPriceValue);
-            //产品价格
-            var productSalePriceValue=$("#productSalePrice").text();
-            //优惠的差价
-            var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
-            $("#priceReduce").text(priceReduceValue);
-            //价格选择切换效果
-            spanPropon.attr("class","propon propondefault");//默认全部不选择
-            $(this).attr("class","propon proponselect");//点击选中
-        });
-        //页面加载后默认选中第一个价格
-        spanPropon.eq(0).click();
-        //购买数量加减
-        $("#dow").click(function () {
-            ProductNumChange(-1)
-        });
-        $("#up").click(function () {
-            ProductNumChange(1)
-        });
-        var inputProductNum=$("#productNum");
-        inputProductNum.bind("keyup", function () {
-            validateCount.call($(this));
-        });
-        inputProductNum.bind("blur", function () {
-            validateCount.call($(this));
-        });
+        $(function(){
+            $(".jqzoom").jqzoom({
+                offset:5,
+                xzoom:350,
+                yzoom:350,
+                position:"right",
+                preload:1,
+                lens:1
+            });
+            //价格选择
+            var spanPropon=$('.propon');
+            spanPropon.click(function(){
+                //产品促销价格
+                var productPriceValue=$(this).attr("pricevalue");
+                $("#productPrice").text(productPriceValue);
+                //产品价格
+                var productSalePriceValue=$("#productSalePrice").text();
+                //优惠的差价
+                var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
+                $("#priceReduce").text(priceReduceValue);
+                //价格选择切换效果
+                spanPropon.attr("class","propon propondefault");//默认全部不选择
+                $(this).attr("class","propon proponselect");//点击选中
+            });
+            //页面加载后默认选中第一个价格
+            spanPropon.eq(0).click();
+            //购买数量加减
+            $("#dow").click(function () {
+                ProductNumChange(-1)
+            });
+            $("#up").click(function () {
+                ProductNumChange(1)
+            });
+            var inputProductNum=$("#productNum");
+            inputProductNum.bind("keyup", function () {
+                validateCount.call($(this));
+            });
+            inputProductNum.bind("blur", function () {
+                validateCount.call($(this));
+            });
 //        //产品缩略图滚动效果
 //        new Marquee(
 //            {
@@ -70,44 +70,44 @@
 //                SwitchType: 0,
 //                AutoStart : true
 //            });
-        //产品小图鼠标经过显示大图
-        $("#pic_smiddle_content li ").mouseover(function(){
-            $(this).siblings().each(function(){
-                $("img", this).attr("class", "");
+            //产品小图鼠标经过显示大图
+            $("#pic_smiddle_content li ").mouseover(function(){
+                $(this).siblings().each(function(){
+                    $("img", this).attr("class", "");
+                });
+                var rollImg = $("img", this);
+                rollImg.attr("class", "bdc2");
+                var originPic=rollImg.attr("originpic");
+                var originThumb1pic=rollImg.attr("thumb1pic");
+                $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
-            var rollImg = $("img", this);
-            rollImg.attr("class", "bdc2");
-            var originPic=rollImg.attr("originpic");
-            var originThumb1pic=rollImg.attr("thumb1pic");
-            $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
         });
-    });
-    //产品数量增减
-    function ProductNumChange(changeNum) {
-        var inputProductNum=$("#productNum");
-        var productNum = inputProductNum.val();
-        if (Number(productNum)) {
-            productNum = parseInt(productNum) + parseInt(changeNum);
-            if (productNum == 0) {
-                productNum = 1
-            }
-            inputProductNum.val(productNum)
-        } else {
-            if (changeNum > 0) {
-                inputProductNum.val("1")
+        //产品数量增减
+        function ProductNumChange(changeNum) {
+            var inputProductNum=$("#productNum");
+            var productNum = inputProductNum.val();
+            if (Number(productNum)) {
+                productNum = parseInt(productNum) + parseInt(changeNum);
+                if (productNum == 0) {
+                    productNum = 1
+                }
+                inputProductNum.val(productNum)
             } else {
-                inputProductNum.val("1")
+                if (changeNum > 0) {
+                    inputProductNum.val("1")
+                } else {
+                    inputProductNum.val("1")
+                }
             }
         }
-    }
-    //产品购买数量数字验证
-    function validateCount() {
-        var intreg = /^\d+$/;
-        var sSum = this.val();
-        if ("0" == sSum || !intreg.test(sSum)) {
-            this.val("1");
+        //产品购买数量数字验证
+        function validateCount() {
+            var intreg = /^\d+$/;
+            var sSum = this.val();
+            if ("0" == sSum || !intreg.test(sSum)) {
+                this.val("1");
+            }
         }
-    }
     </script>
 </head>
 <body>
