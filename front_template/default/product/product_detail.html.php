@@ -10,23 +10,9 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
+    <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
-    <script src="/front_js/jcarousel/js/jquery.jcarousel.pack.js" type="text/javascript"></script>
-    <script src="/front_js/jcarousel/css/jquery.jcarousel.css" type="text/javascript"></script>
     <script type="text/javascript">
-        function mycarousel_initCallback(carousel) {
-            $('#pic_sl').bind('click', function() {
-                alert("22");
-                carousel.next();
-                return false;
-            });
-
-            $('#pic_sr').bind('click', function() {
-                alert("33");
-                carousel.prev();
-                return false;
-            });
-        };
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -67,20 +53,56 @@
             inputProductNum.bind("blur", function () {
                 validateCount.call($(this));
             });
-            jQuery("#pic_smiddle").jcarousel({
-                scroll: 1,
-                initCallback: mycarousel_initCallback,
-                // This tells jCarousel NOT to autobuild prev/next buttons
-                buttonNextHTML: null,
-                buttonPrevHTML: null
+            //产品缩略图滚动效果
+            var scrollPic= new Marquee(
+            {
+                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
+                Direction : 4,
+                Step	  : 0.3,
+                Width	  : 312,
+                Height	  : 64,
+                Timer	  : 20,
+                DelayTime : 3000,
+                WaitTime  : 100000,
+                ScrollStep: 60,
+                SwitchType: 0,
+                AutoStart : true
             });
+            var leftRollBtn=$("#pic_sr");
+            var rightRollBtn=$("#pic_sl");
+            leftRollBtn.click(function () {
+                scrollPic.Run("Left");
+            });
+            rightRollBtn.click(function () {
+                scrollPic.Run("Right");
+            });
+            //rightRollBtn.css("display","none");//将按钮置为不可点击(样式)
+            //滚动至边界做相应处理，切换按钮状态(样式)
+            scrollPic.OnBound = function()
+            {
+                if(scrollPic.Bound == 2)
+                {
+                    //leftRollBtn.css("display","none");
+                }
+                else
+                {
+                    //rightRollBtn.css("display","none");
+                }
+            };
+            //不在边界正常滚动
+            scrollPic.UnBound = function()
+            {
+                rightRollBtn.disabled = $("#pic_sl").disabled = false;
+                //rightRollBtn.css("display","");
+                //leftRollBtn.css("display","");
+            };
             //产品小图鼠标经过显示大图
             $("#pic_smiddle_content li ").mouseover(function(){
                 $(this).siblings().each(function(){
-                    $("img", this).attr("class", "");
+                    $("img", this).attr("class", "pic_default");
                 });
                 var rollImg = $("img", this);
-                rollImg.attr("class", "bdc2");
+                rollImg.attr("class", "pic_select");
                 var originPic=rollImg.attr("originpic");
                 var originThumb1pic=rollImg.attr("thumb1pic");
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
@@ -233,12 +255,12 @@
                 </div>
                 <div class="pic_small">
                     <span id="pic_sl" class="pic_sl"></span>
-                    <div id="pic_smiddle" class="pic_smiddle" style="overflow:hidden">
-                        <ul id="pic_smiddle_content" class="pic_smiddle_content" style="width: 312px; height: 64px; overflow: hidden">
+                    <div id="pic_smiddle" class="pic_smiddle">
+                        <ul id="pic_smiddle_content">
                             <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
                                 <item>
                                     <![CDATA[
-                                    <li><img class="" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50"></li>
+                                    <li><img class="pic_default" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50"></li>
                                     ]]>
                                 </item>
                             </icms>
