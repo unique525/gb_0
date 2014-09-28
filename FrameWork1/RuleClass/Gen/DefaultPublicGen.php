@@ -31,6 +31,14 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $userCarPublicGen = new UserCarPublicGen();
                 $result = $userCarPublicGen->GenPublic();
                 break;
+            case "user_order":
+                $userOrderPublicGen = new UserOrderPublicGen();
+                $result = $userOrderPublicGen->GenPublic();
+                break;
+            case "user_receive_info":
+                $userReceivePublicGen = new UserReceiveInfoPublicGen();
+                $result = $userReceivePublicGen->GenPublic();
+                break;
             case "user_favorite":
                 $userFavoritePublicGen = new UserFavoritePublicGen();
                 $result = $userFavoritePublicGen->GenPublic();

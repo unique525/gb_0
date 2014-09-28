@@ -46,10 +46,8 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_User.".State,
             ".self::TableName_UserInfo.".NickName,
             ".self::TableName_UserInfo.".RealName,
+            ".self::TableName_UploadFile.".UploadFilePath,
             ".self::TableName_UserInfo.".Email,
-            ".self::TableName_UserInfo.".Avatar,
-            ".self::TableName_UserInfo.".AvatarMedium,
-            ".self::TableName_UserInfo.".AvatarSmall,
             ".self::TableName_UserInfo.".QQ,
             ".self::TableName_UserInfo.".IDCard,
             ".self::TableName_UserInfo.".Address,
@@ -92,6 +90,7 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserRole.".UserGroupID
             FROM ".self::TableName_User."
             INNER JOIN ".self::TableName_UserInfo." ON (".self::TableName_User.".UserID = ".self::TableName_UserInfo.".UserID)
+            LEFT JOIN ".self::TableName_UploadFile." ON ".self::TableName_UserInfo.".AvatarUploadFileId = ".self::TableName_UploadFile.".UploadFileId
             LEFT JOIN ".self::TableName_UserSiteLevel." ON (".self::TableName_User.".UserID = ".self::TableName_UserSiteLevel.".UserId) AND ".self::TableName_UserSiteLevel.".SiteId=:SiteId
             LEFT JOIN ".self::TableName_UserRole." ON (".self::TableName_User.".UserID = ".self::TableName_UserRole.".UserID) AND ".self::TableName_UserRole.".SiteID = :SiteId2
             LEFT JOIN ".self::TableName_UserLevel." ON (".self::TableName_UserSiteLevel.".SiteId = ".self::TableName_UserLevel.".SiteID) AND (".self::TableName_UserSiteLevel.".UserLevelId = ".self::TableName_UserLevel.".UserLevelID)

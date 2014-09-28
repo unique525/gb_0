@@ -120,13 +120,16 @@ class Control {
     public static function PostRequest($paramName, $defaultValue) {
         if (isset($_POST[$paramName])) {
             if (strlen($_POST[$paramName]) <= 0) {
-                return $defaultValue;
+                $result = $defaultValue;
             } else {
-                return $_POST[$paramName];
+                $result = $_POST[$paramName];
             }
         } else {
-            return $defaultValue;
+            $result = $defaultValue;
         }
+        $result = Format::RemoveXSS($result);
+        $result = Format::FormatHtmlTag($result);
+        return $result;
     }
 
 

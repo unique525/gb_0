@@ -181,6 +181,10 @@ class DefineCode {
      * 活动类型 后台管理 返回值前缀
      */
     const ACTIVITY_CLASS_MANAGE = - 320000;
+    /**
+     * 广告点击记录 前台 返回值前缀
+     */
+    const SITE_AD_LOG_PUBLIC = - 325000;
 
 
 }

@@ -144,6 +144,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
 
+            $crateDate=date('Y-m-d H:i:s');
             $replace_arr = array(
                 "{ChannelId}" => $channelId,
                 "{UserId}" => $userId,
@@ -152,6 +153,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                 "{UserQQ}" => $userQQ,
                 "{UserEmail}" => $userEmail,
                 "{TabIndex}" => $tabIndex,
+                "{CreateDate}" => $crateDate,
                 "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replace_arr);
@@ -195,7 +197,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                 $modifySuccess = $informationManageData->Modify($_POST, $informationId);
 
                 //记入操作log
-                $operateContent = "Create Information：InformationId：" . $informationId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $modifySuccess;
+                $operateContent = "Modify Information：InformationId：" . $informationId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $modifySuccess;
                 self::CreateManageUserLog($operateContent);
 
                 if ($modifySuccess > 0) {

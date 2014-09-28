@@ -23,10 +23,12 @@ class UserOrderPublicData extends BasePublicData{
         return $result;
     }
 
-    public function GetList($userId,$pageBegin,$pageSize,$allCount){
+    public function GetList($userId,$siteId,$state,$pageBegin,$pageSize,$allCount){
         $result = null;
-        if($userId > 0){
-            $sql = "";
+        if($userId > 0 && $siteId > 0){
+            if($state == -1){
+                //$sql = "SELECT uo.*,uop FROM ".self::TableName_UserOrder."";
+            }
         }
         return $result;
     }
@@ -43,4 +45,5 @@ class UserOrderPublicData extends BasePublicData{
         }
         return $result;
     }
+
 }
