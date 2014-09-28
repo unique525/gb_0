@@ -59,6 +59,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $productPublicGen = new ProductPublicGen();
                 $result = $productPublicGen->GenPublic();
                 break;
+            case "site_ad":
+                $productPublicGen = new SiteAdPublicGen();
+                $result = $productPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;
