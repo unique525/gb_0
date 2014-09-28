@@ -353,14 +353,37 @@
             </ul>
         </div>
     </div></div><div class="clear">    </div>
-<div class="das_b"><ul class="des_tab">
-        <li id="detail_desc_tab" class="des_tabbox">
-            <a class="tab cur" tabindex="0" href="javascript:void(0)">商品介绍</a>
-            <a class="tab" href="javascript:void(0)" tabindex="1">售后服务</a>
-            <a  class="tab" >评价
+<div class="gdmsg"><ul class="gdmsg_tab">
+        <li id="detail_desc_tab" class="gdmsg_tabbox">
+            <a  id="id_1" class="tab cur" tabindex="0" href="#">商品介绍</a>
+            <a  id="id_2" class="tab" href="#" tabindex="1">属性</a>
+            <a  id="id_3" class="tab" href="#" tabindex="1">售后服务</a>
+            <a  id="id_4" class="tab" >评价
                 <em>661</em>
             </a></li>
-    </ul></div>
+    </ul>
+    <div id="tabdiv1" class="gdmsgcont" >
+        <div class="dtl758"><img src="images/0102011080C.jpg" width="350" height="350" /></div>
+    </div>
+    <div id="tabdiv2" class="gdmsgcont1" style="display: block;">
+        <table class="gdparameter" width="990" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="hd"  colspan="2"> 商品关联 </td>
+            </tr>
+            <tr>
+                <td  class="left"> 种类 </td>
+                <td   class="right">红肉 </td>
+            </tr>
+            <tr>
+                <td  class="left">gbgg</td>
+                <td  class="right">gggg</td>
+            </tr>
+
+        </table>
+        <br>
+    </div>
+    <div id="tabdiv3" class="gdshfw" style="display: block;"></div>
+</div>
 <div class="blank30">        </div>
 <div class="gdcomment">
     <div class="zi"> 商品评价</div>

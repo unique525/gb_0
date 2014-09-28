@@ -219,16 +219,25 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 
 /*商品介绍*/
 
-.des {float: left;margin-bottom: 20px;width:990px;}
-.des_tab {background-color: #ffffff;    border: 1px solid #e5e5e5; box-shadow: 1px 1px 2px rgba(221, 221, 221, 0.6);height: 40px;}
-.des_tab .des_tabbox {background-color: #ffffff;float: left;}
-.des_tab li {color: #333;font: 14px/50px '微软雅黑';height: 100%;}
-.des_tab .des_tabbox .tab {width: 110px;}
-.des_tab .tab {border-right: 1px solid #e1e1e1;color: #333;
+.gdmsg {float: left;margin-bottom: 20px;width:990px;}
+.gdmsg_tab {background-color: #ffffff;    border: 1px solid #e5e5e5; box-shadow: 1px 1px 2px rgba(221, 221, 221, 0.6);height: 40px;}
+.gdmsg_tab .des_tabbox {background-color: #ffffff;float: left;}
+.gdmsg_tab li {color: #333;font: 14px/50px '微软雅黑';height: 100%;}
+.gdmsg_tab .des_tabbox .tab {width: 110px;}
+.gdmsg_tab .tab {border-right: 1px solid #e1e1e1;color: #333;
     float: left;font-family: 'microsoft yahei';font-size: 14px;height: 42px;left: -1px;
     line-height: 40px;outline: 0 none;position: relative;text-align: center;top: -1px;width: 120px;z-index: 30;}
-.des_tab .cur { background-color: #00a93d; color: white;}
-.des_tab .tab em {color: #ff3c00;font-family: tahoma;font-size: 12px;}
+.gdmsg_tab .cur { background-color: #00a93d; color: white;}
+.gdmsg_tab .tab em {color: #ff3c00;font-family: tahoma;font-size: 12px;}
+.gdmsg .gdmsgcont {padding: 25px; width: 940px;}
+.dtl718 {float: left;padding-bottom: 10px;width: 718px;}
+.gdmsgcont1 {padding-top: 10px;}
+.gdparameter {width:990px;}
+.gdparameter td.hd {background-color: #f2f2f2;color: #333;font-weight: bold;text-align: center;}
+.gdparameter td {border: 1px solid #ddd;color: #333;height: 35px;line-height: 35px;}
+.gdparameter td.left {padding-right: 10px;text-align: right; width: 185px;}
+.gdparameter td.right {padding-left: 10px;text-align: left;  width:780px;}
+.gdshfw {padding-top: 10px;}
 
 
 
