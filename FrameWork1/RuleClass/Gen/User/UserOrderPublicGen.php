@@ -10,7 +10,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
      * @return string
      */
     public function GenPublic(){
-        $method = Control::GetRequest("m","");
+        $method = Control::GetRequest("a","");
         $result = "";
         switch($method){
             case "create":
@@ -35,12 +35,28 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenList(){
-        return "";
+        $state = Control::GetRequest("state",-1);
+        $userId = Control::GetUserId();
+        $siteId = intval(Control::GetRequest("site_id",0));
+
+        if($userId > 0 && $siteId > 0){
+            $templateFileUrl = "user/order_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            $userOrderPublicData = new UserOrderPublicData();
+            //$userOrderPublicData->GetList();
+
+            return $templateContent;
+        }else{
+            return "";
+        }
     }
 
     private function AsyncGetOrderCountByState(){
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = intval(Control::GetRequest("site_id",0));
         $state = Control::GetRequest("state",0);
 
         if($userId > 0 && $siteId > 0){
@@ -49,20 +65,53 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenConfirmOrder(){
-        $arrProductList = json_decode(Control::PostRequest("arr_product",array()));
         $userId = Control::GetUserId();
-        $siteId = Control::PostRequest("site_id",0);
+        $siteId = intval(Control::GetRequest("site_id",0));
+        $arrCarIdString = Control::GetRequest("arr_user_car_id","");
 
-        if(count($arrProductList) > 0 && $userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/user_confirm_order.html";
+        if($arrCarIdString != "" && $userId > 0 && $siteId > 0){
+            $templateFileUrl = "user/order.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
-            $tagId = "product_order";
-            Template::ReplaceList($templateContent,$arrProductList,$tagId);
+            $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
+            $userCarPublicData = new UserCarPublicData();
+
+            $tagIdUserReceive = "user_receive";
+            $arrUserReceiveInfoList = $userReceiveInfoPublicData->GetList($userId);
+            if(count($arrUserReceiveInfoList) > 0){
+                Template::ReplaceList($templateContent,$arrUserReceiveInfoList,$tagIdUserReceive);
+            }else{
+                Template::ReplaceCustomTag($templateContent,$tagIdUserReceive,"");
+            }
+
+
+            $tagIdProductOrder = "product_order";
+            $arrCarIdString = str_ireplace("_",",",$arrCarIdString);
+            $arrProductOrderList = $userCarPublicData->GetListForConfirmOrder($arrCarIdString,$userId);
+            if(count($arrProductOrderList) > 0){
+                Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
+            }else{
+                Template::ReplaceCustomTag($templateContent,$tagIdProductOrder,"");
+            }
+
+            $sendPrice = $userCarPublicData->GetSendPriceForConfirmOrder($arrCarIdString,$userId);
+            $totalProductPrice = $userCarPublicData->GetTotalProductPriceForConfirmOrder($arrCarIdString,$userId);
+            $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
+
+            $replace_arr = array(
+                "{SendPrice}" => sprintf("%1\$.3f",$sendPrice),
+                "{TotalProductPrice}" => sprintf("%1\$.3f",$totalProductPrice),
+                "{TotalPrice}" => sprintf("%1\$.3f",$totalPrice)
+            );
+
+            $templateContent = strtr($templateContent,$replace_arr);
 
             return $templateContent;
+        }else{
+            Control::GoUrl("/login.htm");
+            return null;
         }
     }
 }

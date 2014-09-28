@@ -12,25 +12,30 @@ class UserFavoritePublicData extends BasePublicData
      * @param int $userId 会员Id
      * @param int $tableId 表Id
      * @param int $tableType 收藏类型
-     * @param string $userFavoriteTag 收藏标签
+     * @param int $siteId 站点Id
      * @param string $userFavoriteTitle 收藏的标题
      * @param string $userFavoriteUrl 收藏的地址
+     * @param int $userFavoriteUploadFileId 收藏的图片Id
+     * @param string $userFavoriteTag 收藏标签
      * @return int 最后插入的Id
      */
-    public function Create($userId,$tableId,$tableType,$userFavoriteTag,$userFavoriteTitle,$userFavoriteUrl){
+    public function Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$userFavoriteUploadFileId,$userFavoriteTag){
         $result = -1;
         if($userId > 0 && $tableId > 0 && $tableType > 0){
             $sql = "INSERT INTO ".self::TableName_UserFavorite
-                ." (UserId,TableId,TableType,UserFavoriteTitle,UserFavoriteUrl,CreateDate,UserFavoriteTag)
-                VALUES (:UserId,:TableId,:TableType,:UserFavoriteTitle,:UserFavoriteUrl,now(),:UserFavoriteTag);";
+                ." (UserId,TableId,TableType,SiteId,UserFavoriteTitle,UserFavoriteUrl,UserFavoriteUploadFileId,CreateDate,UserFavoriteTag)
+                VALUES (:UserId,:TableId,:TableType,:SiteId,:UserFavoriteTitle,:UserFavoriteUrl,:UserFavoriteUploadFileId,now(),:UserFavoriteTag);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("TableId",$tableId);
             $dataProperty->AddField("TableType",$tableType);
+            $dataProperty->AddField("SiteId",$siteId);
             $dataProperty->AddField("UserFavoriteTitle",$userFavoriteTitle);
-            $dataProperty->AddField("UseFavoriteTag",$userFavoriteTag);
-            $dataProperty->AddField("UseFavoriteUrl",$userFavoriteUrl);
+            $dataProperty->AddField("UserFavoriteUrl",$userFavoriteUrl);
+            $dataProperty->AddField("UserFavoriteUploadFileId",$userFavoriteUploadFileId);
+            $dataProperty->AddField("UserFavoriteTag",$userFavoriteTag);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
+
         }
         return $result;
 

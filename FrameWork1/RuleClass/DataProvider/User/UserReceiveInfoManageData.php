@@ -18,7 +18,7 @@ class UserReceiveInfoManageData extends BaseManageData{
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
-            return $result;
         }
+        return $result;
     }
 }

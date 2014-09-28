@@ -20,8 +20,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         $result = "";
         $method = Control::GetRequest("a", "");
         switch ($method) {
-            case "add":
-                $result = self::GenCreate();
+            case "async_add":
+                $result = self::AsyncCreate();
                 break;
             case "list":
                 $result = self::GenList();
@@ -37,17 +37,42 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
      * 新增
      * @return string
      */
-    private function GenCreate(){
-        $tableId = intval(Control::GetRequest("table_id",0));
-        $tableType = intval(Control::GetRequest("table_type",0));
-        $userFavoriteTitle = Control::GetRequest("user_favorite_title","");
+    private function AsyncCreate(){
+        $tableId = intval(Control::PostRequest("table_id",0));
+        $tableType = intval(Control::PostRequest("table_type",0));
+        $siteId = intval(Control::PostRequest("site_id",0));
         $userId = Control::GetUserId();
-        $userFavoriteUrl = $_SERVER['HTTP_REFERER'];
-        $userFavoriteTag = Control::GetRequest("user_favorite_tag","");
-        if($tableId > 0 && $tableType > 0 && !empty($userFavoriteTitle) && $userId > 0){
-            $userFavoritePublicData = new UserFavoritePublicData();
-            $result = $userFavoritePublicData->Create($userId,$tableId,$tableType,$userFavoriteTag,$userFavoriteTitle,$userFavoriteUrl);
-            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+        $userFavoriteTag = Control::PostRequest("user_favorite_tag","");
+        if($tableId > 0 && $tableType > 0 && !empty($userFavoriteTag) && $userId > 0 && $siteId > 0){
+            $userFavoriteData = new UserFavoriteData();
+            $userFavoriteTitle = "";
+            $uploadFileId = 0;
+            $userFavoriteUrl = "";
+            if($tableType == $userFavoriteData::TableType_Product){
+                $userFavoriteTitle = Control::GetRequest("user_favorite_title","");
+                $productPublicData = new ProductPublicData();
+                $arrProductOne =$productPublicData->GetOneForUserFavorite($tableId);
+                if($userFavoriteTitle == ""){
+                    $userFavoriteTitle = $arrProductOne["ProductName"];
+                }
+                $channelId = $arrProductOne["ChannelId"];
+                $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
+                $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
+
+                //判断是否重复
+            }
+
+            if($userFavoriteTitle != "" && $userFavoriteUrl != "" && $uploadFileId > 0){
+                $userFavoritePublicData = new UserFavoritePublicData();
+                $result = $userFavoritePublicData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
+                if($result > 0){
+                    return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+                }else{
+                    return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
+                }
+            }else{
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
+            }
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
         }

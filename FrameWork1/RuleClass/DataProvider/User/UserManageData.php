@@ -49,11 +49,10 @@ class UserManageData extends BaseManageData
         $sql = "
             SELECT
             u.*,
-            ui.Avatar
+            uf.UploadFilePath
             FROM
-            " . self::TableName_User . " u," . self::TableName_UserInfo . " ui
+            " . self::TableName_User . " u," . self::TableName_UserInfo . " ui LEFT JOIN ".self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
             WHERE u.UserId=ui.UserId AND u.SiteId=:SiteId " . $searchSql . " ORDER BY u.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         $sql = "SELECT count(*) FROM " . self::TableName_User . " u," . self::TableName_UserInfo . " ui WHERE u.UserId=ui.UserId AND u.SiteId=:SiteId " . $searchSql . ";";
