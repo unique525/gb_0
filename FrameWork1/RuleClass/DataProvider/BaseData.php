@@ -49,6 +49,14 @@ class BaseData
      */
     const TableId_SiteAdContent = "SiteAdContentId";
     /**
+     * 站点广告记录 数据表名
+     */
+    const TableName_SiteAdLog = "cst_site_ad_log";
+    /**
+     * 站点广告记录 数据表自增字段名
+     */
+    const TableId_SiteAdLog = "AdLogId";
+    /**
      * 站点过滤 数据表名
      */
     const TableName_SiteFilter = "cst_site_filter";
