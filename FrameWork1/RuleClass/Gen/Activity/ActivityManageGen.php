@@ -522,6 +522,9 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
                 $userData = new UserManageData();
                 $userName = $userData->GetUserName($userId,FALSE);
+
+
+                $crateDate=date('Y-m-d H:i:s');
                 $replace_arr = array(
                     "{ChannelId}" => $channelId,
                     "{ActivityType}" => $activityType,
@@ -530,6 +533,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     "{ManageUserId}" => $manageUserId,
                     "{ManageUserName}" => $manageUsername,
                     "{TabIndex}" => $tabIndex,
+                    "{CreateDate}"=>$crateDate,
                     "{display}" => ""
                 );
                 $tempContent = strtr($tempContent, $replace_arr);

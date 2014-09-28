@@ -3,12 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
-    <script type="text/javascript" src="/system_js/manage/site/site.js"></script>
+    <script type="text/javascript" src="/system_js/manage/site/site_ad.js"></script>
 
     <script type="text/javascript">
         $("document").ready(function () {
             var siteId = Request["site_id"];
             var siteName = Request["site_name"];
+            siteName=decodeURI(siteName);
             $("#btn_select_all").click(function (event) {
                 event.preventDefault();
                 var inputSelect = $("[name='doc_input']");
@@ -24,38 +25,47 @@
                 event.preventDefault();
                 var searchKey = $("#search_key").val();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=list' + '&site_id=' + siteId + '&search_key=' + searchKey;
-                parent.G_TabTitle = siteName + '-广告搜索';
+                parent.G_TabTitle = siteName + '-广告位搜索';
                 parent.addTab();
             });
 
-            $(".span_content").click(function (event) {
-                event.preventDefault();
-                var adId=this.attr("idvalue");
-                var adName=this.attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=list' + '&site_id=' + siteId + '&site_ad_id=' + adId;
-                parent.G_TabTitle = adName + '-广告内容';
-                parent.addTab();
-            });
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=activity&m=create' + '&channel_id=' + channelId;
-                parent.G_TabTitle = channelName + '-新建活动';
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=create' + '&site_id=' + siteId + '&site_name=' + siteName;
+                parent.G_TabTitle = siteName + '-新建广告位';
+                parent.addTab();
+            });
+
+            var btnContent = $(".span_content");
+            btnContent.css("cursor", "pointer");
+            btnContent.click(function (event) {
+                event.preventDefault();
+                var adId=$(this).attr("idvalue");
+                var adName=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=list' + '&site_id=' + siteId + '&site_ad_id=' + adId + '&site_ad_name=' + adName;
+                parent.G_TabTitle = adName + '-广告内容';
                 parent.addTab();
             });
 
             var btnEdit = $(".btn_edit");
             btnEdit.css("cursor", "pointer");
             btnEdit.click(function (event) {
-                var activityId = $(this).attr('idvalue');
-                var activityType = $(this).attr('type_value');
+                var siteAdId = $(this).attr('idvalue');
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=activity&m=modify&activity_id=' + activityId + '&activity_type=' + activityType + '&channel_id=' + channelId;
-                parent.G_TabTitle = siteName + '-编辑活动';
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=modify&site_ad_id=' + siteAdId + '&site_id=' + siteId + '&site_name=' + siteName;
+                parent.G_TabTitle = siteName + '-编辑广告位';
                 parent.addTab();
             });
 
+            var btnSetJs = $(".span_create_js");
+            btnSetJs.css("cursor", "pointer");
+            btnSetJs.click(function (event) {
+                var siteAdId = $(this).attr('idvalue');
+                event.preventDefault();
+                window.open('/default.php?secu=manage&mod=site_ad&m=create_js&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
 
+            });
             $(".span_state").each(function () {
                 $(this).html(FormatState($(this).attr("title")));
             });
@@ -85,15 +95,15 @@
             </td>
         </tr>
     </table>
-    <table class="doc_grid" width="99%" align="center" cellpadding="0" cellspacing="0">
+    <table class="grid" width="100%" align="center" cellpadding="0" cellspacing="0">
         <tr class="grid_title">
             <td style="width:60px;text-align:center;">ID</td>
             <td style="width:40px;text-align:center;">编辑</td>
+            <td style="width:40px;text-align:center;">状态</td>
             <td style="width:40px;text-align:center;">停用</td>
             <td style="width:40px;text-align:center;">启用</td>
-            <td>站点名称</td>
+            <td style="width:120px;text-align:center;">站点名称</td>
             <td>广告位</td>
-            <td style="width:40px;text-align:center;">状态</td>
             <td style="width:120px;text-align:center;">规格</td>
             <td style="width:80px;text-align:center;">查看广告</td>
             <td style="width:80px;text-align:center;">更新JS</td>
@@ -116,11 +126,11 @@
                                 style=" cursor: pointer" alt="停用或删除"
                                 src="/system_template/default/images/manage/stop.jpg"
                                 onclick="ModifyState('site_ad', '{f_SiteAdId}', '100')"/></span></td>
-                    <td class="spe_line2" >{f_SiteName}</td>
-                    <td class="spe_line2" title="{f_SiteAdId}">{f_SiteAdName}</td>
-                    <td class="spe_line2" style="text-align:center;">{f_AdWidth}×{f_AdHeight}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_SiteName}</td>
+                    <td class="spe_line2" title="{f_SiteAdId}" >{f_SiteAdName}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_SiteAdWidth}×{f_SiteAdHeight}</td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_content"  idvalue="{f_SiteAdId}" title="{f_SiteAdName}">查看广告</span></td>
-                    <td class="spe_line2" style="text-align:center;"><a href="#" title="{f_siteid} 点击更新广告JS {f_adid}" onclick="window.open('index.php?a=ad&m=adcreatejs&adid={f_adid}&siteid={f_siteid}','', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );">更新JS</a></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_create_js" title="{f_siteid} 点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
                     <td class="spe_line2" style="text-align:center;"><a href="{rootpath}/document/index.php?a=ad&m=list&adid={f_adid}&height=&width=&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true" title="点击进行预览 {f_adid}">预览</a></td>
                 </tr>
                 ]]></item></icms>
