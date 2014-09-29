@@ -107,4 +107,17 @@ class UserFavoritePublicData extends BasePublicData
         }
         return $result;
     }
+
+    public function CheckIsExist($tableId,$tableType){
+        $result = -1;
+        if($tableId > 0 && $tableType > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserFavorite." WHERE TableId = :TableId AND TableType = :TableType;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId",$tableId);
+            $dataProperty->AddField("TableType",$tableType);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+
+    }
 } 
