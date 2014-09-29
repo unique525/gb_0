@@ -126,6 +126,21 @@
                         }
                     }
                 });
+
+            //产品详情展示TAB页切换
+            $('#detail_desc_tab a').click(function () {
+                $(this).siblings().each(function(){
+                    $(this).attr("class", "tab");
+                });
+                $(this).attr("class", "tab cur");
+                $(".gdmsgcont").css("display", "none");
+                $(".gdmsgcont1").css("display", "none");
+                var num = $(this).attr("alt");
+                if(num!=3){//不对评论显示控制，评论默认都显示
+                    $("#tabdiv"+num).css("display", "block");
+                }
+
+            });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -374,17 +389,16 @@
     </div></div><div class="clear">    </div>
 <div class="gdmsg"><ul class="gdmsg_tab">
         <li id="detail_desc_tab" class="gdmsg_tabbox">
-            <a  id="id_1" class="tab cur" tabindex="0" href="#">商品介绍</a>
-            <a  id="id_2" class="tab" href="#" tabindex="1">属性</a>
-            <a  id="id_3" class="tab" href="#" tabindex="1">售后服务</a>
-            <a  id="id_4" class="tab" >评价
+            <a  id="id_1" alt="1" class="tab cur" tabindex="0" href="javascript:;">商品介绍</a>
+            <a  id="id_2" alt="2" class="tab"  href="javascript:;" tabindex="1">属性</a>
+            <a  id="id_3" alt="3" class="tab"  href="javascript:;">评价
                 <em>661</em>
             </a></li>
     </ul>
     <div id="tabdiv1" class="gdmsgcont" >
-        <div class="dtl758"><img src="images/0102011080C.jpg" width="350" height="350" /></div>
+        <div class="dtl758">{ProductContent}</div>
     </div>
-    <div id="tabdiv2" class="gdmsgcont1" style="display: block;">
+    <div id="tabdiv2" class="gdmsgcont1" style="display: none;">
         <table class="gdparameter" width="990" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="hd"  colspan="2"> 商品关联 </td>
@@ -401,10 +415,9 @@
         </table>
         <br>
     </div>
-    <div id="tabdiv3" class="gdshfw" style="display: block;"></div>
 </div>
 <div class="blank30">        </div>
-<div class="gdcomment">
+<div class="gdcomment" id="tabdiv6">
     <div class="zi"> 商品评价</div>
     <div class="gdcomment-1">
         <div class="rate"><strong><span id="span_scoreCount">94%</span></strong><br>好评度</div>
