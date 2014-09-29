@@ -107,17 +107,7 @@
                 var originThumb1pic=rollImg.attr("thumb1pic");
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
-            $("#listsum").delegate('.listsum-1', "click",
-                function (e) {
-                    if (e.target != "javascript:;") {
-                        var className = $(this).find('dl').attr("class");
-                        if (className == "listhover") {
-                            $(this).find('dl').removeClass("listhover")
-                        } else {
-                            $(this).find('dl').addClass('listhover').end().siblings().find("dl").removeClass("listhover")
-                        }
-                    }
-                });
+
             //左侧产品类别树形效果
             $("#categoryListSum").delegate('.listsum-1', "click",
                 function (e) {
@@ -129,7 +119,7 @@
                             $("#categoryListSum dt a").attr("href", datalink);
                         }
                         if (className == "listhover") {
-                            $(this).find('dl').removeClass("listhover")
+                            $(this).find('dl').removeClass("listhover");
                         } else {
                             $(this).find('dl').find('dt').find('a').addClass("on");
                             $(this).find('dl').addClass('listhover').end().siblings().find("dl").removeClass("listhover")
