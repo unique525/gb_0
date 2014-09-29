@@ -68,12 +68,13 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         $siteId = intval(Control::GetRequest("site_id",0));
         $arrCarIdString = Control::GetRequest("arr_user_car_id","");
+        $templateFileUrl = "user/order.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         if($arrCarIdString != "" && $userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/order.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
 
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
             $userCarPublicData = new UserCarPublicData();
@@ -108,6 +109,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             $templateContent = strtr($templateContent,$replace_arr);
 
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             Control::GoUrl("/login.htm");
