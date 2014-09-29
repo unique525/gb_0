@@ -7,12 +7,13 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
     <script type="text/javascript">
+        var select_product_price_id = 0;
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -27,6 +28,7 @@
             spanPropon.click(function(){
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
+                select_product_price_id = $(this).attr("idvalue");
                 $("#productPrice").text(productPriceValue);
                 //产品价格
                 var productSalePriceValue=$("#productSalePrice").text();
@@ -141,6 +143,14 @@
                 }
 
             });
+
+            $("#add_car").click(function(){
+                var buyCount = $("").val();
+                var activity_product_id = 0;
+                if(select_product_price_id  > 0){
+                    addCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                }
+            });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -189,7 +199,7 @@
         <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
         <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
         <div class="shopping"><span>购物车</span></div>
-        <div class="number">0</div>
+        <div class="number" id="user_car_count">0</div>
     </div>
 </div>
 <div class="clean"></div>
@@ -352,10 +362,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" style="padding:20px 0;"><a href="＃"><img src="images/2_07.gif" width="155" height="36" /></a>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
+                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
                     </tr>
                     <tr>
-                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　<img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <a href="#">我要收藏</a></td>
+                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　<img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addFavorite('{ProductId}','{ProductName}','1','商品',{SiteId});">我要收藏</span></td>
                     </tr>
                     <tr>
                         <td align="left" style="padding:20px 0;">分享有礼　<a href="#"><img src="images/2_29.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_31.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_33.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_35.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_37.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_39.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_41.gif" width="16" height="16" /></a></td>
