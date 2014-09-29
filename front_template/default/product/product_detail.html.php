@@ -107,6 +107,25 @@
                 var originThumb1pic=rollImg.attr("thumb1pic");
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
+
+            //左侧产品类别树形效果
+            $("#categoryListSum").delegate('.listsum-1', "click",
+                function (e) {
+                    if (e.target != "javascript:;" && e.target != 'javascript:void(0);') {
+                        var className = $(this).find('dl').attr("class");
+                        $("#categoryListSum dt").find('a').removeClass("on");
+                        var datalink = $(this).attr("data-link");
+                        if (datalink) {
+                            $("#categoryListSum dt a").attr("href", datalink);
+                        }
+                        if (className == "listhover") {
+                            $(this).find('dl').removeClass("listhover");
+                        } else {
+                            $(this).find('dl').find('dt').find('a').addClass("on");
+                            $(this).find('dl').addClass('listhover').end().siblings().find("dl").removeClass("listhover")
+                        }
+                    }
+                });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -182,7 +201,7 @@
             <dl class="listhover">
                 <dt><a class="on" hidefocus="true">蔬菜</a></dt>
                 <dd><ul>
-                        <li><a href="#" class="" title="豆角类">豆角类</a></li>
+                        <li><a href="http://www.benlai.com/list-36.html">豆角类</a></li>
                         <li><a href="#" class="" title="叶菜类">叶菜类</a></li>
                         <li><a href="#" class="" title="根茎类">根茎类</a></li>
                         <li><a href="#" class="" title="茄果类">茄果类</a></li>

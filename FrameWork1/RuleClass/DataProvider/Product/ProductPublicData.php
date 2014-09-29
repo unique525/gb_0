@@ -211,4 +211,15 @@ class ProductPublicData extends BasePublicData {
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
+
+    public function GetOneForUserFavorite($productId){
+        $result = null;
+        if($productId > 0){
+            $sql = "SELECT ProductName,ChannelId,TitlePic1UploadFileId FROM ".self::TableName_Product." WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId",$productId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
