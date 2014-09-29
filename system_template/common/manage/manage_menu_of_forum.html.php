@@ -3,7 +3,7 @@
         $("#forum_config").click(function() {
             if(window.G_NowSiteId>0){
                 window.G_TabTitle = $(this).html();
-                window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=1&site_id=' + window.G_NowSiteId;
+                window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=1&site_id=' + window.G_NowSiteId + "&tab_index=" + parent.G_TabIndex + "";
                 addTab();
             }else{
                 $("#dialog_box").dialog({

@@ -33,6 +33,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
         $type = intval(Control::GetRequest("type", 0));        
         if ($type == 1) { //forum
             $tempContent = Template::Load("site/site_config_deal_forum.html", "common");
+        } elseif ($type == 2) { //user
+            $tempContent = Template::Load("site/site_config_deal_user.html", "common");
         } else {
             $tempContent = Template::Load("site/site_config_deal.html", "common");
         }
@@ -105,10 +107,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                         break;
                 }
             }
-            $replace_arr = array(
-                "{siteid}" => $siteId,
-            );
-            $tempContent = strtr($tempContent, $replace_arr);
+
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
             //去掉select开头的标记 {sel_xxx_xxx}
