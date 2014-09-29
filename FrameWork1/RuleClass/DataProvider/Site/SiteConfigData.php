@@ -204,37 +204,6 @@ class SiteConfigData extends BaseData {
     );
 
     /**
-     * @param mixed $ProductTitlePic1MobileWidth
-     */
-    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
-    {
-        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1MobileWidth()
-    {
-        return $this->ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @param mixed $ProductTitlePic1PadWidth
-     */
-    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
-    {
-        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1PadWidth()
-    {
-        return $this->ProductTitlePic1PadWidth;
-    }
-    /**
      * @var array number
      */
     private $ArrSiteConfigTypes_4 = array(
@@ -361,6 +330,38 @@ class SiteConfigData extends BaseData {
     private $ProductPicCompress1Width = 0;  //产品图片的压缩图1宽度值
     private $ProductPicCompress2Width = 0;  //产品图片的压缩图2宽度值
 
+
+    /**
+     * @param mixed $ProductTitlePic1MobileWidth
+     */
+    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
+    {
+        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1MobileWidth()
+    {
+        return $this->ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1PadWidth
+     */
+    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
+    {
+        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1PadWidth()
+    {
+        return $this->ProductTitlePic1PadWidth;
+    }
 
     /**
      * @return mixed

@@ -81,7 +81,8 @@
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
-                AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId);
+                var inputTextId = null;
+                AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId, inputTextId);
             });
 
             getProductPriceList();

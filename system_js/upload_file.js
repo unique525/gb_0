@@ -297,8 +297,9 @@ function FormatResultMessage(resultMessage){
  * @param {object} fUploadFile 存储上传文件id列表的控件对象
  * @param {int} attachWatermark 是否加水印
  * @param {string} loadingImageId loading图的id
+ * @param {string} inputTextId 传入要设置结果值的input控件id
  */
-function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark,loadingImageId)
+function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark,loadingImageId,inputTextId)
 {
     if(loadingImageId == undefined || loadingImageId == null){
         loadingImageId = "loading";
@@ -312,7 +313,7 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
 
 
     $.ajaxFileUpload({
-        url:'/default.php?mod=upload_file&a=async_upload&file_element_name=file_upload_to_content&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
+        url:'/default.php?mod=upload_file&a=async_upload&file_element_name='+fileElementId+'&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
         secureUri:false,
         fileElementId:fileElementId,
         dataType: 'json',
@@ -330,12 +331,16 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
 
 
 
-                    if(editor != undefined){
+                    if(editor != undefined && editor != null){
 
                         var uploadFilePath = UploadFileFormatHtml(data.upload_file_path);
 
                         editor.pasteHTML("<br /><br />"+uploadFilePath);
 
+                    }
+
+                    if(inputTextId != undefined && inputTextId != null){
+                        $( "#"+inputTextId ).val(uploadFilePath);
                     }
 
                 }else{
