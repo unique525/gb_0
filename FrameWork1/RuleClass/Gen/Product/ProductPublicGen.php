@@ -41,6 +41,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $templateContent = self::loadListTemp($temp,$channelId);
+
+        //加载产品类别数据
+        $channelPublicData = new ChannelPublicData();
+        $arrOne = $channelPublicData->GetOne($channelId);
+        Template::ReplaceOne($templateContent, $arrOne);
+
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;
@@ -68,8 +74,8 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = self::loadDetailTemp($temp,$channelId);
 
         //加载产品表数据
-        $productManageData = new ProductManageData();
-        $arrOne = $productManageData->GetOne($productId);
+        $productPublicData = new ProductPublicData();
+        $arrOne = $productPublicData->GetOne($productId);
         Template::ReplaceOne($templateContent, $arrOne);
 
         //父模板替换

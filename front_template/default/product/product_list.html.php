@@ -183,7 +183,7 @@
     </table>
 </div>
 <div class="clear"> </div>
-<div class="list_tit"><h1>蔬菜</h1> <div class="eb6100">相关商品<span>238</span>款
+<div class="list_tit"><h1>{ChannelName}</h1> <div class="eb6100">相关商品<span>238</span>款
     </div>
 </div>
 <div class="clear"> </div>
