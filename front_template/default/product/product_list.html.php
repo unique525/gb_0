@@ -15,7 +15,7 @@
             +'</a>'
             +'</div>'
             +'<div class="name">'
-            +'<a  target="_blank" href="#">{f_ProductName}0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
+            +'<a  target="_blank" href="#">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
             +'</div>'
             +'<div class="price" style="color:#eb6100;">'
             +'￥36.00'
@@ -51,16 +51,27 @@
                         }
                         else //每行最后一个
                         {
-                            productListHtml += '</ul><div class="line"></div><ul>'
+                            productListHtml += productTempList+'</ul><div class="line"></div><ul>'
                         }
-                        productListHtml.replaceAll("{f_ProductName}",v["ProductName"]);
+                        productListHtml=productListHtml.replaceAll("{f_ProductName}",v["ProductName"]);
                     });
                     $("#product_list").html('<div class="clear"></div>'+productListHtml);
                 }
             });
         }
+        //根据不同的排序字段顺序显示产品列表
+        function showProductListWithOrder(order) {
+            if (order != "default") {//默认排序以外其他排序方式
+                var nextClassName = $(this).attr("class");
+                nextClassName = (nextClassName == "listup" ? "listdown" : "listup");
+                $(this).attr("class", nextClassName);
+                var direction = (nextClassName == "listup" ? "asc" : "desc");
+                getProductList(1, 12, {ChannelId}, order + "_" + direction, "");
+            }
+            else getProductList(1, 12, {ChannelId}, "" , "");
+        }
         $(function(){
-            getProductList(1,4,94,"","");
+            getProductList(1,12,{ChannelId},"","");
         });
     </script>
 </head>
@@ -250,7 +261,7 @@
         <dt>排序：</dt>
         <dd>
             <div class="price-2"  style="width: 360px">
-                <a href="#"  class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="#" class="listup"  >时间</a> <a href="#"  class="listup"  >销量</a> <a href="#"class="listup" >价格</a> <a href="#" hidefocus="true" class="listup"  >评论</a>
+                <a href="javascript:;" onclick="showProductListWithOrder('default')" class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="javascript:;" class="listup" onclick="showProductListWithOrder('time')"  >时间</a> <a href="javascript:;" onclick="showProductListWithOrder('sale')"  class="listup"  >销量</a> <a href="javascript:;"  onclick="showProductListWithOrder('price')" class="listup" >价格</a> <a href="javascript:;"  onclick="showProductListWithOrder('comment')" hidefocus="true" class="listup"  >评论</a>
             </div>
             <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">    <a href="#">&lt;</a>    2/9    <a class="disabledr02" href="#" >下一页&nbsp;&gt; </a>    </div></div>
             <span class="clear"></span>
