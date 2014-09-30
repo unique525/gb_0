@@ -10,12 +10,12 @@
     <script type="text/javascript ">
         var productTempList='<li id="p_0">'
             +'<div class="mt25">'
-            +'<a class="pic" target="_blank" href="#">'
+            +'<a class="pic" target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">'
             +'<img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">'
             +'</a>'
             +'</div>'
             +'<div class="name">'
-            +'<a  target="_blank" href="#">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
+            +'<a  target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
             +'</div>'
             +'<div class="price" style="color:#eb6100;">'
             +'￥36.00'
@@ -54,6 +54,8 @@
                             productListHtml += productTempList+'</ul><div class="line"></div><ul>'
                         }
                         productListHtml=productListHtml.replaceAll("{f_ProductName}",v["ProductName"]);
+                        productListHtml=productListHtml.replaceAll("{f_ChannelId}",v["ChannelId"]);
+                        productListHtml=productListHtml.replaceAll("{f_ProductId}",v["ProductId"]);
                     });
                     $("#product_list").html('<div class="clear"></div>'+productListHtml);
                 }
