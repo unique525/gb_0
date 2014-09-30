@@ -298,17 +298,32 @@ function FormatResultMessage(resultMessage){
  * @param {int} attachWatermark 是否加水印
  * @param {string} loadingImageId loading图的id
  * @param {string} inputTextId 传入要设置结果值的input控件id
+ * @param {string} previewImageId 传入预览图片控件id
+ * @param {object} btnUpload 上传按钮控件对象
  */
-function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark,loadingImageId,inputTextId)
+function AjaxFileUpload(
+    fileElementId,
+    tableType,
+    tableId,
+    editor,
+    fUploadFile,
+    attachWatermark,
+    loadingImageId,
+    inputTextId,
+    previewImageId,
+    btnUpload
+    )
 {
     if(loadingImageId == undefined || loadingImageId == null){
         loadingImageId = "loading";
     }
     $(document).ajaxStart(function() {
         $( "#"+loadingImageId ).show();
+        btnUpload.attr("disabled","disabled");
     });
     $(document).ajaxComplete(function() {
         $( "#"+loadingImageId ).hide();
+        btnUpload.removeAttr("disabled");
     });
 
 
@@ -329,13 +344,13 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
                         fUploadFile.val(uploadFiles);
                     }
 
-
+                    var uploadFilePath = data.upload_file_path;
 
                     if(editor != undefined && editor != null){
 
-                        var uploadFilePath = UploadFileFormatHtml(data.upload_file_path);
 
-                        editor.pasteHTML("<br /><br />"+uploadFilePath);
+
+                        editor.pasteHTML("<br /><br />"+UploadFileFormatHtml(uploadFilePath));
 
                     }
 
@@ -343,8 +358,13 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
                         $( "#"+inputTextId ).val(uploadFilePath);
                     }
 
+                    if(previewImageId != undefined && previewImageId != null){
+                        $( "#"+previewImageId ).attr("src",uploadFilePath);
+                    }
+
                 }else{
 
+                    btnUpload.removeAttr("disabled");
                     alert(FormatResultMessage(parseInt(data.error)));
 
                 }
@@ -352,6 +372,7 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
         },
         error: function (data, status, e)
         {
+            btnUpload.removeAttr("disabled");
             alert(e);
         }
     });
