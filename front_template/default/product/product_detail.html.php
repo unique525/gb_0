@@ -7,12 +7,13 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
     <script type="text/javascript">
+        var select_product_price_id = 0;
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -27,6 +28,7 @@
             spanPropon.click(function(){
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
+                select_product_price_id = $(this).attr("idvalue");
                 $("#productPrice").text(productPriceValue);
                 //产品价格
                 var productSalePriceValue=$("#productSalePrice").text();
@@ -55,19 +57,19 @@
             });
             //产品缩略图滚动效果
             var scrollPic= new Marquee(
-            {
-                MSClass	  : ["pic_smiddle","pic_smiddle_content"],
-                Direction : 4,
-                Step	  : 0.3,
-                Width	  : 312,
-                Height	  : 64,
-                Timer	  : 20,
-                DelayTime : 3000,
-                WaitTime  : 100000,
-                ScrollStep: 60,
-                SwitchType: 0,
-                AutoStart : true
-            });
+                {
+                    MSClass	  : ["pic_smiddle","pic_smiddle_content"],
+                    Direction : 4,
+                    Step	  : 0.3,
+                    Width	  : 312,
+                    Height	  : 64,
+                    Timer	  : 20,
+                    DelayTime : 3000,
+                    WaitTime  : 100000,
+                    ScrollStep: 60,
+                    SwitchType: 0,
+                    AutoStart : true
+                });
             var leftRollBtn=$("#pic_sr");
             var rightRollBtn=$("#pic_sl");
             leftRollBtn.click(function () {
@@ -126,6 +128,29 @@
                         }
                     }
                 });
+
+            //产品详情展示TAB页切换
+            $('#detail_desc_tab a').click(function () {
+                $(this).siblings().each(function(){
+                    $(this).attr("class", "tab");
+                });
+                $(this).attr("class", "tab cur");
+                $(".gdmsgcont").css("display", "none");
+                $(".gdmsgcont1").css("display", "none");
+                var num = $(this).attr("alt");
+                if(num!=3){//不对评论显示控制，评论默认都显示
+                    $("#tabdiv"+num).css("display", "block");
+                }
+
+            });
+
+            $("#add_car").click(function(){
+                var buyCount = $("").val();
+                var activity_product_id = 0;
+                if(select_product_price_id  > 0){
+                    addCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                }
+            });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -174,7 +199,7 @@
         <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
         <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
         <div class="shopping"><span>购物车</span></div>
-        <div class="number">0</div>
+        <div class="number" id="user_car_count">0</div>
     </div>
 </div>
 <div class="clean"></div>
@@ -337,10 +362,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" style="padding:20px 0;"><a href="＃"><img src="images/2_07.gif" width="155" height="36" /></a>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
+                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
                     </tr>
                     <tr>
-                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　<img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <a href="#">我要收藏</a></td>
+                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　<img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addFavorite('{ProductId}','{ProductName}','1','商品',{SiteId});">我要收藏</span></td>
                     </tr>
                     <tr>
                         <td align="left" style="padding:20px 0;">分享有礼　<a href="#"><img src="images/2_29.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_31.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_33.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_35.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_37.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_39.gif" width="16" height="16" /></a> <a href="#"><img src="images/2_41.gif" width="16" height="16" /></a></td>
@@ -374,37 +399,39 @@
     </div></div><div class="clear">    </div>
 <div class="gdmsg"><ul class="gdmsg_tab">
         <li id="detail_desc_tab" class="gdmsg_tabbox">
-            <a  id="id_1" class="tab cur" tabindex="0" href="#">商品介绍</a>
-            <a  id="id_2" class="tab" href="#" tabindex="1">属性</a>
-            <a  id="id_3" class="tab" href="#" tabindex="1">售后服务</a>
-            <a  id="id_4" class="tab" >评价
+            <a  id="id_1" alt="1" class="tab cur" tabindex="0" href="javascript:;">商品介绍</a>
+            <a  id="id_2" alt="2" class="tab"  href="javascript:;" tabindex="1">属性</a>
+            <a  id="id_3" alt="3" class="tab"  href="javascript:;">评价
                 <em>661</em>
             </a></li>
     </ul>
     <div id="tabdiv1" class="gdmsgcont" >
-        <div class="dtl758"><img src="images/0102011080C.jpg" width="350" height="350" /></div>
+        <div class="dtl758">{ProductContent}</div>
     </div>
-    <div id="tabdiv2" class="gdmsgcont1" style="display: block;">
-        <table class="gdparameter" width="990" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="hd"  colspan="2"> 商品关联 </td>
-            </tr>
-            <tr>
-                <td  class="left"> 种类 </td>
-                <td   class="right">红肉 </td>
-            </tr>
-            <tr>
-                <td  class="left">gbgg</td>
-                <td  class="right">gggg</td>
-            </tr>
-
-        </table>
-        <br>
+    <div id="tabdiv2" class="gdmsgcont1" style="display: none;">
+        <icms id="product_param_type_class_{ChannelId}" type="product_param_type_class_list">
+            <item>
+                <![CDATA[
+                <div class="paramone">{f_ProductParamTypeClassName}</div>
+                    <icms_child id="product_param_type_{f_ProductParamTypeClassId}" relation_id="{ProductId}" type="product_param_type_list">
+                        <item_child>
+                            [CDATA]
+                            <div class="paramtwo">
+                                <div class="paramtwoleft">{f_ParamTypeName}：</div>
+                                <div class="paramtworight">{f_ParamTypeValue}</div>
+                            </div>
+                            [/CDATA]
+                        </item_child>
+                    </icms_child>
+                    <div class="clear"></div>
+                ]]>
+            </item>
+        </icms>
+        <div class="clear"></div>
     </div>
-    <div id="tabdiv3" class="gdshfw" style="display: block;"></div>
 </div>
 <div class="blank30">        </div>
-<div class="gdcomment">
+<div class="gdcomment" id="tabdiv6">
     <div class="zi"> 商品评价</div>
     <div class="gdcomment-1">
         <div class="rate"><strong><span id="span_scoreCount">94%</span></strong><br>好评度</div>
