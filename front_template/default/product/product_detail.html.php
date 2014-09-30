@@ -409,106 +409,24 @@
         <div class="dtl758">{ProductContent}</div>
     </div>
     <div id="tabdiv2" class="gdmsgcont1" style="display: none;">
-        <div class="paramone">基本信息</div>
-        <div class="paramtwo">
-            <div class="paramtwoleft">生产公司</div>
-            <div class="paramtworight">一汽-大众</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">经销商</div>
-            <div class="paramtworight">湖南华洋世纪</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">市场报价</div>
-            <div class="paramtworight">266800</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">厂商指导价</div>
-            <div class="paramtworight">266800</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">厂家</div>
-            <div class="paramtworight">3333</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">排量</div>
-            <div class="paramtworight">2.0L</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">级别</div>
-            <div class="paramtworight">111</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">厢式</div>
-            <div class="paramtworight">111</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">质保</div>
-            <div class="paramtworight"></div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">上市时间</div>
-            <div class="paramtworight">2011年</div>
-        </div>
-
-
-
-
-        <div class="paramone" style="font-size: 14px">外部尺寸</div>
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">长</div>
-            <div class="paramtworight">4865mm</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">宽</div>
-            <div class="paramtworight">1820mm</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">高</div>
-            <div class="paramtworight">1475mm</div>
-        </div>
-
-
-
-        <div class="paramtwo">
-            <div class="paramtwoleft">轴距</div>
-            <div class="paramtworight">2812mm</div>
-        </div>
+        <icms id="product_param_type_class_{ChannelId}" type="product_param_type_class_list">
+            <item>
+                <![CDATA[
+                <div class="paramone">{f_ProductParamTypeClassName}</div>
+                    <icms_child id="product_param_type_{f_ProductParamTypeClassId}" relation_id="{ProductId}" type="product_param_type_list">
+                        <item_child>
+                            [CDATA]
+                            <div class="paramtwo">
+                                <div class="paramtwoleft">{f_ParamTypeName}：</div>
+                                <div class="paramtworight">{f_ParamTypeValue}</div>
+                            </div>
+                            [/CDATA]
+                        </item_child>
+                    </icms_child>
+                    <div class="clear"></div>
+                ]]>
+            </item>
+        </icms>
         <div class="clear"></div>
     </div>
 </div>
