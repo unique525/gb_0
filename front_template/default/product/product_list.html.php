@@ -3,8 +3,66 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>无标题文档</title>
-    <link href="images/common.css" rel="stylesheet" type="text/css" />
-    <link href="images/common_css.css" rel="stylesheet" type="text/css" />
+    <link href="/images/common.css" rel="stylesheet" type="text/css" />
+    <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript ">
+        var productTempList='<li id="p_0">'
+            +'<div class="mt25">'
+            +'<a class="pic" target="_blank" href="#">'
+            +'<img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">'
+            +'</a>'
+            +'</div>'
+            +'<div class="name">'
+            +'<a  target="_blank" href="#">{f_ProductName}0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
+            +'</div>'
+            +'<div class="price" style="color:#eb6100;">'
+            +'￥36.00'
+            +'<span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>'
+            +'</div>'
+            +'<div >'
+            +'<input  class="textgt" type="text" maxlength="3" value="1">'
+            +'<div class="onup">'
+            +'<span class="up" ></span>'
+            +'<span class="dow"> </span>'
+            +'</div>'
+            +'<input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart(\'#textgtSum_0\' ,37693,\'36.00\',\'0102022101C\',\'1002\')" name="btnbutton" value="">'
+            +'<a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>'
+            +'</div>'
+            +'</li>';
+        function getProductList(pageIndex,pageSize,channelId,order,searchKey){
+            $.ajax({
+                url:"/default.php?mod=product",
+                data:{a:"ajax_list",channel_id:channelId,order:order,search_key:searchKey,p:pageIndex,ps:pageSize},
+                dataType:"jsonp",
+                jsonp:"jsonpcallback",
+                success:function(data){
+                    var result = data["result"];
+                    var productListHtml="<ul>";
+                    $.each(result,function(i,v){
+                        if(i+1==result.length)//到了最后一个
+                        {
+                            productListHtml += productTempList+'<div class="line"></div></ul>'
+                        }
+                        else if((i+1)%4)//不是每行最后一个
+                        {
+                            productListHtml += productTempList;
+                        }
+                        else //每行最后一个
+                        {
+                            productListHtml += '</ul><div class="line"></div><ul>'
+                        }
+                        productListHtml.replaceAll("{f_ProductName}",v["ProductName"]);
+                    });
+                    $("#product_list").html('<div class="clear"></div>'+productListHtml);
+                }
+            });
+        }
+        $(function(){
+            getProductList(1,4,94,"","");
+        });
+    </script>
 </head>
 <body>
 <div class="loginbg">
@@ -200,293 +258,7 @@
     </dl>
 </div>
 <div class="clear"> </div>
-<div class="listgooods" style=" width:990px;">
-<div class="clear"> </div>
-<ul>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-</ul>
-<div class="line"></div>
-<ul>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-</ul>
-<div class="line"></div>
-<ul>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-    <li id="p_0">
-        <div class="mt25">
-            <a class="pic" target="_blank" href="#">
-                <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"  src="images/3_14.gif">
-            </a>
-        </div>
-        <div class="name">
-            <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-        </div>
-        <div class="price" style="color:#eb6100;">
-            ￥36.00
-            <span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>
-        </div>
-        <div >
-            <input  class="textgt" type="text" maxlength="3" value="1">
-            <div class="onup">
-                <span class="up" ></span>
-                <span class="dow"> </span>
-            </div>
-            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-            <a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
-        </div>
-    </li>
-</ul>
-<div class="line"></div>
+<div class="listgooods" id="product_list" style=" width:990px;">
 </div>
 <div class="pags" style="margin:30px 0px;">
     <div class="pdr15 fr" style="width: 165px;">

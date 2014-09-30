@@ -34,14 +34,38 @@ class ProductPublicData extends BasePublicData {
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetList($channelId, $order = "", $topCount = -1)
+    public function GetList($channelId, $order = "", $topCount = null)
     {
         $result = null;
-        if ($topCount != -1)
+        if ($topCount != null)
             $topCount = " limit " . $topCount;
         else $topCount = "";
         if ($channelId > 0) {
             switch ($order) {
+                case "time_desc":
+                    $order = " ORDER BY Createdate DESC";
+                    break;
+                case "time_asc":
+                    $order = " ORDER BY Createdate ASC";
+                    break;
+                case "sale_desc":
+                    $order = " ORDER BY SaleCount DESC";
+                    break;
+                case "sale_asc":
+                    $order = " ORDER BY SaleCount ASC";
+                    break;
+                case "price_desc":
+                    $order = " ORDER BY SalePrice DESC";
+                    break;
+                case "price_asc":
+                    $order = " ORDER BY SalePrice ASC";
+                    break;
+                case "comment_asc":
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+                case "comment_desc":
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
                 default:
                     $order = " ORDER BY Sort DESC,Createdate DESC";
                     break;
