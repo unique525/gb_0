@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>星滋味</title>
+    <title>星滋味--{ProductName}</title>
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />

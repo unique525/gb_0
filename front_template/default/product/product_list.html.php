@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>无标题文档</title>
+    <title>星滋味--{ChannelName}</title>
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
