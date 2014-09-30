@@ -33,6 +33,7 @@
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumTopInfo";
                 var inputTextId = null;
+                var previewImageId = null;
 
                 AjaxFileUpload(
                     fileElementId,
@@ -42,7 +43,9 @@
                     fUploadFile,
                     attachWatermark,
                     loadingImageId,
-                    inputTextId
+                    inputTextId,
+                    previewImageId,
+                    $(this)
                 );
             });
 
@@ -55,6 +58,7 @@
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumBotInfo";
                 var inputTextId = null;
+                var previewImageId = null;
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfForumBotInfo,
@@ -63,7 +67,9 @@
                     fUploadFile,
                     attachWatermark,
                     loadingImageId,
-                    inputTextId
+                    inputTextId,
+                    previewImageId,
+                    $(this)
                 );
             });
 
@@ -77,6 +83,7 @@
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumLogo";
                 var inputTextId = "cfg_ForumLogoImage_0";
+                var previewImageId = "preview_ForumLogoImage";
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfForumLogo,
@@ -85,7 +92,9 @@
                     fUploadFile,
                     attachWatermark,
                     loadingImageId,
-                    inputTextId
+                    inputTextId,
+                    previewImageId,
+                    $(this)
                 );
             });
 
@@ -156,9 +165,9 @@
                                         <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumLogoImage_0">论坛LOGO图片：</label></td>
                                         <td class="spe_line">
-
+                                            <img id="preview_ForumLogoImage" src="{cfg_ForumLogoImage_0}" /><br/>
                                             <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
-                                            [<a id="preview_ForumLogoImage" href="" target="_blank">预览</a>]<br/>
+                                            <br/>
                                             <input id="forum_logo_image_upload" name="forum_logo_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
                                             <img id="loadingOfForumLogo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToForumLogo" type="button" value="上传"/>
