@@ -237,14 +237,22 @@
                         <li><a href="#" class="" title="芽菜类">芽菜类</a></li>
                         <li><a href="#" class="" title="速冻蔬菜">速冻蔬</a></li>
                     </ul>
-                    <div class="clear"></div></dd></dl></div>
-        <div class="listsum-1" ><dl class="">
+                    <div class="clear"></div>
+                </dd>
+            </dl>
+        </div>
+        <div class="listsum-1" >
+            <dl class="">
                 <dt><a class="" href="#" hidefocus="true">水果</a></dt>
                 <dd><ul>
                         <li><a href="#" class="" title="台湾水果">台湾水果</a></li>
                         <li><a href="#" class="" title="国产水果">国产水果</a></li>
                         <li><a href="#" class="#" title="进口水果">进口水果</a></li></ul>
-                    <div class="clear"></div></dd></dl></div></div>
+                    <div class="clear"></div>
+                </dd>
+            </dl>
+        </div>
+    </div>
     <div class="blank10">        </div>
     <div class="similar_hot">
         <ul class="title">
