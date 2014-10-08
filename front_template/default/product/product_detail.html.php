@@ -224,18 +224,10 @@
         <div class="tit">蔬菜水果</div>
         <div class="listsum-1" >
             <dl class="listhover">
-                <dt><a class="on" hidefocus="true">蔬菜</a></dt>
+                <dt><a href="javascript:;" class="on" hidefocus="true">蔬菜</a></dt>
                 <dd><ul>
-                        <li><a href="http://www.benlai.com/list-36.html">豆角类</a></li>
-                        <li><a href="#" class="" title="叶菜类">叶菜类</a></li>
-                        <li><a href="#" class="" title="根茎类">根茎类</a></li>
-                        <li><a href="#" class="" title="茄果类">茄果类</a></li>
-                        <li><a href="#" class="" title="瓜类">瓜类</a></li>
-                        <li><a href="#" class="" title="香辛类·葱姜蒜">香辛类·葱</a></li>
-                        <li><a href="#" class="" title="豆角·豆类">豆角·豆</a></li>
-                        <li><a href="#" class="" title="菌菇类">菌菇类</a></li>
-                        <li><a href="#" class="" title="芽菜类">芽菜类</a></li>
-                        <li><a href="#" class="" title="速冻蔬菜">速冻蔬</a></li>
+                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=109">豆角类</a></li>
+                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=110" class="" title="叶菜类">叶菜类</a></li>
                     </ul>
                     <div class="clear"></div>
                 </dd>
@@ -245,9 +237,9 @@
             <dl class="">
                 <dt><a class="" href="#" hidefocus="true">水果</a></dt>
                 <dd><ul>
-                        <li><a href="#" class="" title="台湾水果">台湾水果</a></li>
-                        <li><a href="#" class="" title="国产水果">国产水果</a></li>
-                        <li><a href="#" class="#" title="进口水果">进口水果</a></li></ul>
+                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=111">进口水果</a></li>
+                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=112" class="" title="国产水果">国产水果</a></li>
+                    </ul>
                     <div class="clear"></div>
                 </dd>
             </dl>
