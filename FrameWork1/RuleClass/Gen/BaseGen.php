@@ -249,6 +249,7 @@ class BaseGen
     {
 
         $siteConfigData = new SiteConfigData($siteId);
+        $uploadFileData = new UploadFileData();
         $arrSiteConfigOne = $siteConfigData->GetList($siteId);
         if (count($arrSiteConfigOne) > 0) {
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
@@ -275,6 +276,79 @@ class BaseGen
                     case SiteConfigData::SITE_CONFIG_TYPE_INT:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
+
+
+
+
+                        /**
+                         * 上传文件id替换
+                         * {cfg_$siteConfigName_$siteConfigType_upload_file_mobile_path}
+                         */
+                        $withCache = TRUE;
+                        $uploadFilePath = $uploadFileData->GetUploadFilePath($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}"
+                            , $uploadFilePath
+                            , $tempContent
+                        );
+
+                        $uploadFileMobilePath = $uploadFileData->GetUploadFileMobilePath($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_mobile_path}"
+                            , $uploadFileMobilePath
+                            , $tempContent
+                        );
+
+                        $uploadFilePadPath = $uploadFileData->GetUploadFilePadPath($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_pad_path}"
+                            , $uploadFilePadPath
+                            , $tempContent
+                        );
+
+                        $uploadFileThumbPath1 = $uploadFileData->GetUploadFileThumbPath1($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_1}"
+                            , $uploadFileThumbPath1
+                            , $tempContent
+                        );
+
+                        $uploadFileThumbPath2 = $uploadFileData->GetUploadFileThumbPath2($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_2}"
+                            , $uploadFileThumbPath2
+                            , $tempContent
+                        );
+
+                        $uploadFileThumbPath3 = $uploadFileData->GetUploadFileThumbPath3($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_3}"
+                            , $uploadFileThumbPath3
+                            , $tempContent
+                        );
+
+                        $uploadFileWatermarkPath1 = $uploadFileData->GetUploadFileWatermarkPath1($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_1}"
+                            , $uploadFileWatermarkPath1
+                            , $tempContent
+                        );
+
+                        $uploadFileWatermarkPath2 = $uploadFileData->GetUploadFileWatermarkPath2($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_2}"
+                            , $uploadFileWatermarkPath2
+                            , $tempContent
+                        );
+
+                        $uploadFileCompressPath1 = $uploadFileData->GetUploadFileCompressPath1($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_1}"
+                            , $uploadFileCompressPath1
+                            , $tempContent
+                        );
+
+                        $uploadFileCompressPath2 = $uploadFileData->GetUploadFileCompressPath2($intValue,$withCache);
+                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_2}"
+                            , $uploadFileCompressPath2
+                            , $tempContent
+                        );
+
+
+
+
+
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_NUMBER:
                         $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);

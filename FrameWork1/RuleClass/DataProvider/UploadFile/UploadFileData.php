@@ -574,6 +574,23 @@ class UploadFileData extends BaseData
         }
     }
 
+
+    /**
+     * 返回一行数据
+     * @param int $uploadFileId 产品id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($uploadFileId){
+        $result = null;
+        if($uploadFileId>0){
+            $sql = "SELECT * FROM " . self::TableName_UploadFile . " WHERE UploadFileId=:UploadFileId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 取得上传文件名称
      * @param int $uploadFileId 上传文件id
