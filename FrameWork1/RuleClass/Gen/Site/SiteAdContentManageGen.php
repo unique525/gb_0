@@ -53,13 +53,53 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
         $siteAdContentManageData = new SiteAdContentManageData();
         if (intval($siteAdId) > 0) {
             if (!empty($_POST)) {
+                $warningWhenSuccess="";
                 $newSiteAdContentId = $siteAdContentManageData->Create($_POST);
 
                 //记入操作log
                 $operateContent = "Create site_ad_content：SiteAdContentId：" . $newSiteAdContentId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newSiteAdContentId;
                 self::CreateManageUserLog($operateContent);
 
+
                 if ($newSiteAdContentId > 0) {
+                    //重新格式化内容
+                    $siteAdContent=$siteAdContentManageData->GetContent($newSiteAdContentId);
+                    $siteAdType=Control::PostRequest("f_SiteAdType","");//广告文件类型0:GIF,1:SWF,2:SWFT透明,3:SWFO降级,4:MMS
+                    if($siteAdContent!=""){
+                        $siteAdContent=strtolower($siteAdContent);
+                        $contentSet=-1;
+                        switch($siteAdType){
+                            case 0:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, '<img'));//格式化广告内容字段 删除多余内容，保留第一个图片标签或其他广告内容标签
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "/>") + strlen("/>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($newSiteAdContentId,$contentFile);
+                                break;
+                            case 1:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($newSiteAdContentId,$contentFile);
+                                break;
+                            case 2:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($newSiteAdContentId,$contentFile);
+                                break;
+                            case 3:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($newSiteAdContentId,$contentFile);
+                                break;
+                            case 4:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($newSiteAdContentId,$contentFile);
+                                break;
+                        }
+                        if($contentSet<0){
+                            $warningWhenSuccess .= Language::Load('site_ad', 15);//重新格式化内容失败！广告内容可能错误显示！
+                        }
+                    }
+
 
                     //设置题图
                     $uploadFiles = Control::PostRequest("UploadFiles", "");
@@ -68,11 +108,11 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                         $last=count($arrayOfUploadFile)-1;
                         $titlePicSet=$siteAdContentManageData->ModifyTitlePic($newSiteAdContentId,$arrayOfUploadFile[$last]);
                         if($titlePicSet<0){
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_ad', 7));//设置题图失败！
+                            $warningWhenSuccess .= Language::Load('site_ad', 7);//设置题图失败！
                         }
                     }
 
-                    Control::ShowMessage(Language::Load('site_ad', 1));//提交成功!
+                    Control::ShowMessage($warningWhenSuccess.Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         $resultJavaScript .= Control::GetCloseTab();
@@ -128,6 +168,8 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
 
         if (intval($siteAdId) > 0) {
             if (!empty($_POST)) {
+                $warningWhenSuccess="";
+
                 $modifySuccess = $siteAdContentManageData->Modify($_POST, $siteAdContentId);
 
                 //记入操作log
@@ -136,6 +178,46 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
 
                 if ($modifySuccess > 0) {
 
+                    //重新格式化内容
+                    $siteAdContent=$siteAdContentManageData->GetContent($siteAdContentId);
+                    $siteAdType=Control::PostRequest("f_SiteAdType","");//广告文件类型0:GIF,1:SWF,2:SWFT透明,3:SWFO降级,4:MMS
+                    if($siteAdContent!=""){
+                        $siteAdContent=strtolower($siteAdContent);
+                        $contentSet=-1;
+                        switch($siteAdType){
+                            case 0:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, '<img'));//格式化广告内容字段 删除多余内容，保留第一个图片标签或其他广告内容标签  &lt;img  /&gt;
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "/>") + strlen("/>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                break;
+                            case 1:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                break;
+                            case 2:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                break;
+                            case 3:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                break;
+                            case 4:
+                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                break;
+                        }
+                        if($contentSet<0){
+                            $warningWhenSuccess .= Language::Load('site_ad', 15);//重新格式化内容失败！广告内容可能错误显示！
+                        }
+                    }
+
+
+
                     //设置题图
                     $uploadFiles = Control::PostRequest("UploadFiles", "");
                     $arrayOfUploadFile = explode(",", $uploadFiles);
@@ -143,11 +225,11 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                         $last=count($arrayOfUploadFile)-1;
                         $titlePicSet=$siteAdContentManageData->ModifyTitlePic($siteAdContentId,$arrayOfUploadFile[$last]);
                         if($titlePicSet<0){
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_ad', 7));//设置题图失败！
+                            $warningWhenSuccess .= Language::Load('site_ad', 7);//设置题图失败！
                         }
                     }
 
-                    Control::ShowMessage(Language::Load('site_ad', 1));//提交成功!
+                    Control::ShowMessage($warningWhenSuccess.Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         $resultJavaScript .= Control::GetCloseTab();
@@ -243,8 +325,8 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
         $siteAdContentId = Control::GetRequest("table_id", 0);
         $state = Control::GetRequest("state",0);
         if ($siteAdContentId > 0) {
-            $siteAdManageData = new SiteAdManageData();
-            $result = $siteAdManageData->ModifyState($siteAdContentId,$state);
+            $siteAdContentManageData = new SiteAdContentManageData();
+            $result = $siteAdContentManageData->ModifyState($siteAdContentId,$state);
             //加入操作日志
             $operateContent = 'ModifyState site_ad_content,Get FORM:' . implode('|', $_GET) . ';\r\nResult:site_ad:' . $result;
             self::CreateManageUserLog($operateContent);

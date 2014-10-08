@@ -10,6 +10,19 @@ class SiteAdPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
     /**
+     * 广告点击记录添加：成功
+     */
+    const INSERT_AD_LOG_DATA_SUCCESS = 1;
+    /**
+     * 广告点击记录添加：失败
+     */
+    const INSERT_AD_LOG_DATA_FAILURE = -1;
+    /**
+     * 广告 site_content_id 错误
+     */
+    const FALSE_SITE_AD_CONTENT_ID = -2;
+
+    /**
      * 引导方法
      * @return string 返回执行结果
      */
@@ -21,7 +34,7 @@ class SiteAdPublicGen extends BasePublicGen implements IBasePublicGen {
                 $result = self::GenAddSiteAdClick();
                 break;
             case "site_ad_virtual_click":
-                $result = self::GenAddSiteAdViltualClick();
+                //$result = self::GenAddSiteAdVirtualClick();
                 break;
         }
         $replace_arr = array(
@@ -36,6 +49,7 @@ class SiteAdPublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function GenAddSiteAdClick() {
+        $result="";
         if (!empty($_GET)) {
             $siteAdContentId = intval(Control::GetRequest("id", "0"));
             if ($siteAdContentId > 0) {
@@ -46,59 +60,63 @@ class SiteAdPublicGen extends BasePublicGen implements IBasePublicGen {
                 $referenceUrl = $_SERVER['HTTP_REFERER'];                                                                 //来路url
                 $referenceDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $referenceUrl));                //来路域名
                 $isVirtualClick = 0;  //1为虚拟点击,其他为正常点击
-                $adLogPublicData = new AdLogPublicData();
+                $adLogPublicData = new SiteAdLogPublicData();
                 $insertId = $adLogPublicData->InsertData($siteAdContentId, $createdate, $ip, $agent, $referenceDomain, $referenceUrl, $isVirtualClick);
                 if ($insertId > 0) {
-                    $recommon = 1;
+                    $result.=abs(DefineCode::SITE_AD_LOG_PUBLIC)+self::INSERT_AD_LOG_DATA_SUCCESS;//广告点击记录添加：成功
                 } else {
-                    $recommon = -1;
+                    $result.=DefineCode::SITE_AD_LOG_PUBLIC+self::INSERT_AD_LOG_DATA_FAILURE;//广告点击记录添加：失败
                 }
-                if (isset($_GET['jsonpcallback'])) {
-                    echo Control::GetRequest("jsonpcallback","") . '([{recommon:"' . $recommon . '"}])';
-                    return "";
-                }
+            }else{
+                $result.=DefineCode::SITE_AD_LOG_PUBLIC+self::FALSE_SITE_AD_CONTENT_ID;//广告 site_content_id 错误
+            }
+            if (isset($_GET['jsonpcallback'])) {
+                echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
             }
         }
+        return $result;
     }
 
     /**
      * 统计虚拟点击
      * @return string
      */
-    private function GenVClick() {
-        $recommon = 0;
-        $adcontentid = intval(Control::GetRequest("id", "0"));
-        if (!empty($_GET) && $adcontentid > 0) {
-            $refurl = $_SERVER['HTTP_REFERER'];                                                                 //来路url
-            $refdomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $refurl));                //来路域名
-//检查来路是否是changsha.cn域名下的
-            if (stristr($refdomain, 'changsha.cn') != FALSE) {
-                $adcontentData = new AdContentData();
-                $openvclick = $adcontentData->GetOpenVClick($adcontentid);
-                $createdate = date("Y-m-d H:i:s", time());
-                $hoursection = date("H", time());
-                if (intval($openvclick) === 1) {
-                    $vclicklimit = $adcontentData->GetVClickLimit($adcontentid);
-                    $advclickData = new AdVClickData();
-                    $vclickcount = $advclickData->GetVClickCount($adcontentid, $hoursection);
-//实际点击数少于设置的虚拟点击$vclicklimit则新增
-                    if ($vclickcount < $vclicklimit) {
-                        $recommon = $advclickData->Create($adcontentid);
-                        $ip = Control::GetIP();
-                        $agent = Control::GetOS();
-                        $agent = $agent . "与" . Control::GetBrowse();
-                        $isvclick = 1;      //点击记录类型:1为虚拟
-                        $adlogData = new AdLogData();
-                        $insertid = $adlogData->InsertData($adlogid, $adcontentid, $createdate, $ip, $agent, $refdomain, $refurl, $isvclick);
-                        $recommon = $insertid;
-                    }
-                }
-            }
-        }
-        if (isset($_GET['jsonpcallback'])) {
-            echo Control::GetRequest("jsonpcallback","") . '([{recommon:"' . $recommon . '"}])';
-            return "";
-        }
-    }
+//    private function GenAddSiteAdVirtualClick() {
+//        $result = 0;
+//        $siteAdContentId = intval(Control::GetRequest("id", "0"));
+//        if (!empty($_GET) && $siteAdContentId > 0) {
+//            $referenceUrl = $_SERVER['HTTP_REFERER'];                                                                 //来路url
+//            $referenceDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $referenceUrl));                //来路域名
+////检查来路是否是changsha.cn域名下的
+//            //if (stristr($referenceDomain, 'changsha.cn') != FALSE) {
+//                $siteAdContentPublicData = new SiteAdContentPublicData();
+//                $openVClick = $siteAdContentPublicData->GetOpenVClick($siteAdContentId);
+//                $CreateDate = date("Y-m-d H:i:s", time());
+//                $hourSection = date("H", time());
+//                if (intval($openVClick) === 1) {
+//                    $VClickLimit = $siteAdContentPublicData->GetVClickLimit($siteAdContentId);
+//                    $siteAdLogPublicData = new SiteAdLogPublicData();
+//                    $VClickCount = $siteAdLogPublicData->GetVClickCount($siteAdContentId, $hourSection);
+////实际点击数少于设置的虚拟点击VClickLimit则新增
+//                    if ($VClickCount < $VClickLimit) {
+//                        $result = $siteAdLogPublicData->Create($siteAdContentId);
+//                        $ip = Control::GetIP();
+//                        $agent = Control::GetOS();
+//                        $agent = $agent . "与" . Control::GetBrowse();
+//                        $isvclick = 1;      //点击记录类型:1为虚拟
+//                        $adlogData = new AdLogData();
+//                        $insertid = $adlogData->InsertData($adlogid, $siteAdContentId, $CreateDate, $ip, $agent, $referenceDomain, $referenceUrl, $isvclick);
+//                        $result = $insertid;
+//                    }
+//                }
+//            //}
+//        }
+//        if (isset($_GET['jsonpcallback'])) {
+//            echo Control::GetRequest("jsonpcallback","") . '([{recommon:"' . $result . '"}])';
+//            return "";
+//        }
+//    }
 
-} 
+}
+
+?>

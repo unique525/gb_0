@@ -130,7 +130,7 @@
                     <td class="spe_line2" title="{f_SiteAdId}" >{f_SiteAdName}</td>
                     <td class="spe_line2" style="text-align:center;">{f_SiteAdWidth}×{f_SiteAdHeight}</td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_content"  idvalue="{f_SiteAdId}" title="{f_SiteAdName}">查看广告</span></td>
-                    <td class="spe_line2" style="text-align:center;"><span class="span_create_js" title="{f_siteid} 点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
                     <td class="spe_line2" style="text-align:center;"><a href="{rootpath}/document/index.php?a=ad&m=list&adid={f_adid}&height=&width=&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true" title="点击进行预览 {f_adid}">预览</a></td>
                 </tr>
                 ]]></item></icms>
