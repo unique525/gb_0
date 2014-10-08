@@ -45,6 +45,7 @@
  * @property int ForumPicMobileWidth
  * @property int ForumPicPadWidth
  * @property int $UserCount
+ * @property int $UserAlbumThumbHeight
  * @property int $UserNameLength
  * @property int $UserDefaultState
  * @property int $UserRecDefaultState
@@ -52,6 +53,8 @@
  * @property int $UserCommissionOwn
  * @property int $UserCommissionChild
  * @property int $UserCommissionGrandson
+ * @property int $UserDefaultMaleAvatar
+ * @property int $UserDefaultFemaleAvatar
  * @property int $NewRegisterUserId
  * @property string $NewRegisterUserName
  * @property string $NewUserMessageVoice
@@ -173,9 +176,12 @@ class SiteConfigData extends BaseData {
         "ForumPicPadWidth",
         "OpenFtpLog",
         "UserAlbumThumbWidth",
+        "UserAlbumThumbHeight",
         "UserDefaultUserGroupIdForRole",
         "UserAlbumToBestMustVoteCount",
         "UserDefaultState",
+        "UserDefaultMaleAvatar",
+        "UserDefaultFemaleAvatar",
         "UserRecDefaultState",
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
@@ -232,6 +238,7 @@ class SiteConfigData extends BaseData {
     ////////////////////////会员相册相关/////////////////////////////////
     /////////////////////////////////////////////////////////////////
     private $UserAlbumThumbWidth = 0; //会员相册图片缩略图宽度
+    private $UserAlbumThumbHeight = 0;//会员相册图片缩略图高度
     private $UserAlbumToBestMustVoteCount = 35; //会员相册变成精华相册需要的支持票数
     //
     //论坛相关
@@ -261,6 +268,8 @@ class SiteConfigData extends BaseData {
     private $ForumPostCount = 0; //帖子总数
     private $ForumTopicPageSize = 0; //主题列表每页记录数
     private $ForumPostPageSize = 0; //帖子列表每页记录数
+
+
     private $UserCount = 0; //会员总数
     private $UserNameLength = 50; //注册会员名的最大长度
     private $UserDefaultState = 0; //注册会员时，State初始状态值
@@ -269,6 +278,8 @@ class SiteConfigData extends BaseData {
     private $UserCommissionOwn = 0; //本人的默认提成比率
     private $UserCommissionChild = 0; //本人的下一级默认提成比率
     private $UserCommissionGrandson = 0; //本人的下两级默认提成比率
+    private $UserDefaultMaleAvatar = 0;//站点默认男性用户头像 保存UploadFileId
+    private $UserDefaultFemaleAvatar = 0; //站点默认女性用户头像 保存UploadFileId
 
     private $NewRegisterUserId = 0; //新注册的会员Id
     private $NewRegisterUserName = ''; //新注册的会员名
@@ -867,6 +878,23 @@ class SiteConfigData extends BaseData {
         return $this->UserAlbumThumbWidth;
     }
 
+
+
+    /**
+     * @param mixed $UserAlbumThumbHeight
+     */
+    public function setUserAlbumThumbHeight($UserAlbumThumbHeight)
+    {
+        $this->UserAlbumThumbHeight = $UserAlbumThumbHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumThumbHeight()
+    {
+        return $this->UserAlbumThumbHeight;
+    }
     /**
      * @return mixed
      */
@@ -929,6 +957,38 @@ class SiteConfigData extends BaseData {
     public function getUserNameLength()
     {
         return $this->UserNameLength;
+    }
+
+    /**
+     * @param mixed $UserDefaultMaleAvatar
+     */
+    public function setUserDefaultMaleAvatar($UserDefaultMaleAvatar)
+    {
+        $this->UserDefaultMaleAvatar = $UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultMaleAvatar()
+    {
+        return $this->UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @param mixed $UserDefaultFemaleAvatar
+     */
+    public function setUserDefaultFemaleAvatar($UserDefaultFemaleAvatar)
+    {
+        $this->UserDefaultFemaleAvatar = $UserDefaultFemaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultFemaleAvatar()
+    {
+        return $this->UserDefaultFemaleAvatar;
     }
 
     /**
