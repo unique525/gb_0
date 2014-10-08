@@ -18,16 +18,10 @@
             +'<a  target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>'
             +'</div>'
             +'<div class="price" style="color:#eb6100;">'
-            +'￥36.00'
-            +'<span >已有13608人评价</span><br/><font class="pricenew">原价：￥11.60</font>'
+            +'￥{f_SalePrice}'
+            +'<span >已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>'
             +'</div>'
-            +'<div >'
-            +'<input  class="textgt" type="text" maxlength="3" value="1">'
-            +'<div class="onup">'
-            +'<span class="up" ></span>'
-            +'<span class="dow"> </span>'
-            +'</div>'
-            +'<input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart(\'#textgtSum_0\' ,37693,\'36.00\',\'0102022101C\',\'1002\')" name="btnbutton" value="">'
+            +'<input style=" margin:0 13px;cursor: pointer"  class="butn1 fl mt5" type="button" onclick="window.open(\'/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}\')" name="btnbutton" value="">'
             +'<a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>'
             +'</div>'
             +'</li>';
@@ -56,6 +50,8 @@
                         productListHtml=productListHtml.replaceAll("{f_ProductName}",v["ProductName"]);
                         productListHtml=productListHtml.replaceAll("{f_ChannelId}",v["ChannelId"]);
                         productListHtml=productListHtml.replaceAll("{f_ProductId}",v["ProductId"]);
+                        productListHtml=productListHtml.replaceAll("{f_MarketPrice}",v["MarketPrice"]);
+                        productListHtml=productListHtml.replaceAll("{f_SalePrice}",v["SalePrice"]);
                     });
                     $("#product_list").html('<div class="clear"></div>'+productListHtml);
                 }
@@ -169,16 +165,15 @@
             <div class="fl">热销榜</div>
         </ul><div class="clear"> </div>
         <ul>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
-            <li > <a class="pic" href="#" target="_blank" ><img src="images/1_10.gif" ></a>
-                <p><a href="#" target="_blank" >智利进口加力苹果1kg（盒装8粒）<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥42.80</li>
+            <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
+                <item>
+                    <![CDATA[
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="images/1_10.gif" ></a>
+                        <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
+
+                    ]]>
+                </item>
+            </icms>
         </ul>
     </div>
     <div class="blank10">        </div>
@@ -212,66 +207,32 @@
 <div class="favorcombcont" style="background:url(images/hot_03.gif) no-repeat top left;">
     <div style=" font-size:18px;font:400 20px ;padding-left:25px; line-height:60px; font-family: '微软雅黑';"> 特别推荐</div><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td><table width="310" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="120" align="left" valign="top"><a href="#" target="_blank"><img src="images/hot_02.gif" width="110" height="110" /></a></td>
-                        <td align="left" valign="top"><div class="listgooods"><div class="hot">
-                                    <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-                                </div>
-                                <div class="jg" style="color:#eb6100;">
-                                    ￥36.00
-                                    <span >原价：￥11.60</span>
-                                </div>
-                                <div >
-                                    <input  class="textgt" type="text" maxlength="3" value="1">
-                                    <div class="onup">
-                                        <span class="up" ></span>
-                                        <span class="dow"> </span>
+            <icms id="product_rec_level" type="product_list" where="RecLevel" top="3">
+                <item>
+                    <![CDATA[
+                    <td>
+                        <table width="310" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td width="120" align="left" valign="top"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="images/hot_02.gif" width="110" height="110" /></a></td>
+                                <td align="left" valign="top">
+                                    <div class="listgooods"><div class="hot">
+                                            <a  target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
+                                        </div>
+                                        <div class="jg" style="color:#eb6100;">
+                                            ￥{f_SalePrice}
+                                            <span >原价：￥{f_MarketPrice}</span>
+                                        </div>
+                                        <div>
+                                            <input style=" margin:0 13px;cursor: pointer"  class="butn1 fl mt5" type="button" onclick="window.open('/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}')" name="btnbutton" value="">
+                                        </div>
                                     </div>
-                                    <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-                                </div></div></td>
-                    </tr>
-                </table></td>
-            <td><table width="310" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="120" align="left" valign="top"><a href="#" target="_blank"><img src="images/hot_02.gif" width="110" height="110" /></a></td>
-                        <td align="left" valign="top"><div class="listgooods"><div class="hot">
-                                    <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-                                </div>
-                                <div class="jg" style="color:#eb6100;">
-                                    ￥36.00
-                                    <span >原价：￥11.60</span>
-                                </div>
-                                <div >
-                                    <input  class="textgt" type="text" maxlength="3" value="1">
-                                    <div class="onup">
-                                        <span class="up" ></span>
-                                        <span class="dow"> </span>
-                                    </div>
-                                    <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-                                </div></div></td>
-                    </tr>
-                </table></td>
-            <td><table width="310" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="120" align="left" valign="top"><a href="#" target="_blank"><img src="images/hot_02.gif" width="110" height="110" /></a></td>
-                        <td align="left" valign="top"><div class="listgooods"><div class="hot">
-                                    <a  target="_blank" href="#">（兑换专用）云南蒙自石榴（6粒装） 0g<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
-                                </div>
-                                <div class="jg" style="color:#eb6100;">
-                                    ￥36.00
-                                    <span >原价：￥11.60</span>
-                                </div>
-                                <div >
-                                    <input  class="textgt" type="text" maxlength="3" value="1">
-                                    <div class="onup">
-                                        <span class="up" ></span>
-                                        <span class="dow"> </span>
-                                    </div>
-                                    <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
-                                </div></div></td>
-                    </tr>
-                </table></td>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    ]]>
+                </item>
+            </icms>
         </tr>
     </table>
 </div>

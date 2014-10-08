@@ -49,7 +49,7 @@ class ProductPricePublicData extends BasePublicData
             $sql = "
             SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
             FROM " . self::TableName_ProductPrice . "
-            WHERE ProductId=:ProductId"
+            WHERE State=0 AND ProductId=:ProductId"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
