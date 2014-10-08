@@ -13,10 +13,10 @@
         var tableTypeOfUserAvatar = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
         var tableId = parseInt("{SiteId}");
 
-        window.AjaxFileUploadCallBack = function(data){
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
             var uploadFileId =  data.upload_file_id;
             var uploadFilePath = data.upload_file_path;
-            var fileElementId = data.fileElementId;
+            var fileElementId = fileElementId;
             if(fileElementId == "user_default_male_avatar"){
                 $( "#cfg_UserDefaultMaleAvatar_3" ).val(uploadFileId);
                 $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
