@@ -16,9 +16,14 @@
         window.AjaxFileUploadCallBack = function(data){
             var uploadFileId =  data.upload_file_id;
             var uploadFilePath = data.upload_file_path;
-            $( "#cfg_UserDefaultMaleAvatar_3" ).val(uploadFileId);
-            $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
-            alert($( "#preview_UserDefaultMaleImage").attr("src"));
+            var fileElementId = data.fileElementId;
+            if(fileElementId == "user_default_male_avatar"){
+                $( "#cfg_UserDefaultMaleAvatar_3" ).val(uploadFileId);
+                $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
+            }else{
+                $( "#cfg_UserDefaultFemaleAvatar_3" ).val(uploadFileId);
+                $( "#preview_UserDefaultFemaleImage").attr("src",uploadFilePath);
+            }
         }
 
         $(function () {
@@ -165,7 +170,7 @@
                                         <td class="spe_line">
                                             <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_3_upload_file_path}" /><br/>
                                             <input id="user_default_female_avatar" name="user_default_female_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_UserDefaultFemaleAvatar_3" type="hidden" value=""/>
+                                            <input id="cfg_UserDefaultFemaleAvatar_3" name="cfg_UserDefaultFemaleAvatar_3" type="hidden" value="{cfg_UserDefaultFemaleAvatar_3}"/>
                                             <img id="loadingOfUserDefaultFemaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToFemaleAvatar" type="button" value="上传"/>
                                         </td>
