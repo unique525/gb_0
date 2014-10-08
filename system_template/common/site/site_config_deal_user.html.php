@@ -44,6 +44,26 @@
                 );
             });
 
+            //站点默认女性用户头像
+            var btnUploadToFemaleAvatar = $("#btnUploadToFemaleAvatar");
+            btnUploadToFemaleAvatar.click(function () {
+
+                var fileElementId = 'user_default_female_avatar';
+                var loadingImageId = "loadingOfUserDefaultFemaleAvatar";
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfUserAvatar,
+                    tableId,
+                    loadingImageId,
+                    $(this),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                );
+            });
+
         });
 
         function submitForm(closeTab) {
@@ -143,7 +163,7 @@
                                         <td class="spe_line" height="40" align="right">
                                             <label for="cfg_UserDefaultFemaleAvatar_3">站点默认女性用户头像：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_ForumLogoImage_0}" /><br/>
+                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_3_upload_file_path}" /><br/>
                                             <input id="user_default_female_avatar" name="user_default_female_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
                                             <input id="cfg_UserDefaultFemaleAvatar_3" type="hidden" value=""/>
                                             <img id="loadingOfUserDefaultFemaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
