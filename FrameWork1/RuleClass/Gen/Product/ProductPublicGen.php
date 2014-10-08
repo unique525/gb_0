@@ -25,6 +25,9 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "ajax_list":
+                $result = self::AjaxList();
+                break;
             default:
                 break;
         }
@@ -41,6 +44,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $templateContent = self::loadListTemp($temp,$channelId);
+
+        //加载产品类别数据
+        $channelPublicData = new ChannelPublicData();
+        $arrOne = $channelPublicData->GetOne($channelId);
+        Template::ReplaceOne($templateContent, $arrOne);
+
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;
@@ -68,8 +77,8 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = self::loadDetailTemp($temp,$channelId);
 
         //加载产品表数据
-        $productManageData = new ProductManageData();
-        $arrOne = $productManageData->GetOne($productId);
+        $productPublicData = new ProductPublicData();
+        $arrOne = $productPublicData->GetOne($productId);
         Template::ReplaceOne($templateContent, $arrOne);
 
         //父模板替换
@@ -101,6 +110,21 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         return $templateContent;
+    }
+
+    /**
+     * ajax方法得到产品列表数据
+     * @return string 产品列表HTML
+     */
+    private function AjaxList()
+    {
+        $channelId = Control::GetRequest("channel_id", 0);
+        $order = Control::GetRequest("order", "");
+        $top = Control::GetRequest("ps", 12);
+        $ProductPublicData = new ProductPublicData();
+        $arrList = $ProductPublicData->GetList($channelId,$order,$top);
+        $tempArrList = json_encode($arrList);
+        return Control::GetRequest("jsonpcallback","") . '({"result":' . $tempArrList . '})';
     }
 
 }

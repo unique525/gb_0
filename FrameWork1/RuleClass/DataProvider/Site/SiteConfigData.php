@@ -45,6 +45,7 @@
  * @property int ForumPicMobileWidth
  * @property int ForumPicPadWidth
  * @property int $UserCount
+ * @property int $UserAlbumThumbHeight
  * @property int $UserNameLength
  * @property int $UserDefaultState
  * @property int $UserRecDefaultState
@@ -52,6 +53,8 @@
  * @property int $UserCommissionOwn
  * @property int $UserCommissionChild
  * @property int $UserCommissionGrandson
+ * @property int $UserDefaultMaleAvatar
+ * @property int $UserDefaultFemaleAvatar
  * @property int $NewRegisterUserId
  * @property string $NewRegisterUserName
  * @property string $NewUserMessageVoice
@@ -129,6 +132,11 @@ class SiteConfigData extends BaseData {
     const SITE_CONFIG_TYPE_NUMBER = 4;
 
     /**
+     * UPLOAD FILE ID
+     */
+    const SITE_CONFIG_TYPE_UPLOAD_FILE_ID = 5;
+
+    /**
      * @var array string mid Short Message
      */
     private $ArrSiteConfigTypes_1 = array(
@@ -173,6 +181,7 @@ class SiteConfigData extends BaseData {
         "ForumPicPadWidth",
         "OpenFtpLog",
         "UserAlbumThumbWidth",
+        "UserAlbumThumbHeight",
         "UserDefaultUserGroupIdForRole",
         "UserAlbumToBestMustVoteCount",
         "UserDefaultState",
@@ -204,37 +213,6 @@ class SiteConfigData extends BaseData {
     );
 
     /**
-     * @param mixed $ProductTitlePic1MobileWidth
-     */
-    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
-    {
-        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1MobileWidth()
-    {
-        return $this->ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @param mixed $ProductTitlePic1PadWidth
-     */
-    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
-    {
-        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1PadWidth()
-    {
-        return $this->ProductTitlePic1PadWidth;
-    }
-    /**
      * @var array number
      */
     private $ArrSiteConfigTypes_4 = array(
@@ -242,6 +220,15 @@ class SiteConfigData extends BaseData {
         "UserCommissionChild",
         "UserCommissionGrandson"
     );
+
+    /**
+     * @var array upload file id
+     */
+    private $ArrSiteConfigTypes_5 = array(
+        "UserDefaultMaleAvatar",
+        "UserDefaultFemaleAvatar"
+    );
+
     private $SiteId = 1;
 
     //公共配置
@@ -263,6 +250,7 @@ class SiteConfigData extends BaseData {
     ////////////////////////会员相册相关/////////////////////////////////
     /////////////////////////////////////////////////////////////////
     private $UserAlbumThumbWidth = 0; //会员相册图片缩略图宽度
+    private $UserAlbumThumbHeight = 0;//会员相册图片缩略图高度
     private $UserAlbumToBestMustVoteCount = 35; //会员相册变成精华相册需要的支持票数
     //
     //论坛相关
@@ -292,6 +280,8 @@ class SiteConfigData extends BaseData {
     private $ForumPostCount = 0; //帖子总数
     private $ForumTopicPageSize = 0; //主题列表每页记录数
     private $ForumPostPageSize = 0; //帖子列表每页记录数
+
+
     private $UserCount = 0; //会员总数
     private $UserNameLength = 50; //注册会员名的最大长度
     private $UserDefaultState = 0; //注册会员时，State初始状态值
@@ -300,6 +290,8 @@ class SiteConfigData extends BaseData {
     private $UserCommissionOwn = 0; //本人的默认提成比率
     private $UserCommissionChild = 0; //本人的下一级默认提成比率
     private $UserCommissionGrandson = 0; //本人的下两级默认提成比率
+    private $UserDefaultMaleAvatar = 0;//站点默认男性用户头像 保存UploadFileId
+    private $UserDefaultFemaleAvatar = 0; //站点默认女性用户头像 保存UploadFileId
 
     private $NewRegisterUserId = 0; //新注册的会员Id
     private $NewRegisterUserName = ''; //新注册的会员名
@@ -361,6 +353,38 @@ class SiteConfigData extends BaseData {
     private $ProductPicCompress1Width = 0;  //产品图片的压缩图1宽度值
     private $ProductPicCompress2Width = 0;  //产品图片的压缩图2宽度值
 
+
+    /**
+     * @param mixed $ProductTitlePic1MobileWidth
+     */
+    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
+    {
+        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1MobileWidth()
+    {
+        return $this->ProductTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1PadWidth
+     */
+    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
+    {
+        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1PadWidth()
+    {
+        return $this->ProductTitlePic1PadWidth;
+    }
 
     /**
      * @return mixed
@@ -866,6 +890,23 @@ class SiteConfigData extends BaseData {
         return $this->UserAlbumThumbWidth;
     }
 
+
+
+    /**
+     * @param mixed $UserAlbumThumbHeight
+     */
+    public function setUserAlbumThumbHeight($UserAlbumThumbHeight)
+    {
+        $this->UserAlbumThumbHeight = $UserAlbumThumbHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumThumbHeight()
+    {
+        return $this->UserAlbumThumbHeight;
+    }
     /**
      * @return mixed
      */
@@ -928,6 +969,38 @@ class SiteConfigData extends BaseData {
     public function getUserNameLength()
     {
         return $this->UserNameLength;
+    }
+
+    /**
+     * @param mixed $UserDefaultMaleAvatar
+     */
+    public function setUserDefaultMaleAvatar($UserDefaultMaleAvatar)
+    {
+        $this->UserDefaultMaleAvatar = $UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultMaleAvatar()
+    {
+        return $this->UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @param mixed $UserDefaultFemaleAvatar
+     */
+    public function setUserDefaultFemaleAvatar($UserDefaultFemaleAvatar)
+    {
+        $this->UserDefaultFemaleAvatar = $UserDefaultFemaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultFemaleAvatar()
+    {
+        return $this->UserDefaultFemaleAvatar;
     }
 
     /**
@@ -1217,6 +1290,9 @@ class SiteConfigData extends BaseData {
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
             $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
             $defaultValue = 0;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
+            $defaultValue = 0;
         }
 
         return self::GetValue($this->SiteId, $siteConfigName, $siteConfigType, $defaultValue);
@@ -1238,6 +1314,8 @@ class SiteConfigData extends BaseData {
             $siteConfigType = self::SITE_CONFIG_TYPE_INT;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
             $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
         }
         self::SetValue($this->SiteId, $siteConfigName, $fieldValue, $siteConfigType);
     }
@@ -1283,6 +1361,12 @@ class SiteConfigData extends BaseData {
                         $fieldValue = 0;
                     }
                     break;
+                case self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID:
+                    $fieldName = "UploadFileId";
+                    if (empty($fieldValue)) {
+                        $fieldValue = 0;
+                    }
+                    break;
                 default:
                     $fieldName = "StringNorValue";
                     if (empty($fieldValue)) {
@@ -1301,7 +1385,7 @@ class SiteConfigData extends BaseData {
                 $dataProperty->AddField("SiteConfigType", $siteConfigType);
                 $this->dbOperator->Execute($sql, $dataProperty);
             } else {
-                $sql = "INSERT INTO " . self::TableName_SiteConfig . " (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
+                $sql = "INSERT INTO " . self::TableName_SiteConfig . " (SiteId,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
                 $dataProperty->AddField("FieldValue", $fieldValue);
                 $dataProperty->AddField("SiteConfigType", $siteConfigType);
                 $this->dbOperator->Execute($sql, $dataProperty);
@@ -1342,6 +1426,9 @@ class SiteConfigData extends BaseData {
                         break;
                     case self::SITE_CONFIG_TYPE_NUMBER:
                         $fieldName = "NumValue";
+                        break;
+                    case self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID:
+                        $fieldName = "UploadFileId";
                         break;
                     default:
                         $fieldName = "StringNorValue";

@@ -102,7 +102,7 @@ class ProductPriceManageData extends BaseManageData
         if ($productId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,ProductId ASC";
+                    $order = " ORDER BY Sort DESC,ProductPriceId ASC";
                     break;
             }
             $sql = "
@@ -145,7 +145,7 @@ class ProductPriceManageData extends BaseManageData
         SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
         FROM " . self::TableName_ProductPrice . "
         WHERE ProductId=:ProductId" . $searchSql . "
-        ORDER BY Sort DESC,ProductPriceId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+        ORDER BY Sort DESC,ProductPriceId ASC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "
         SELECT COUNT(*) FROM " . self::TableName_ProductPrice . "

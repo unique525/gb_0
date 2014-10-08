@@ -14,6 +14,8 @@
         var editorOfForumBotInfo;
         var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_FORUM_TOP_INFO_CONTENT;
         var tableTypeOfForumBotInfo = window.UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT;
+        var tableTypeOfForumLogo = window.UPLOAD_TABLE_TYPE_FORUM_LOGO;
+        var tableTypeOfForumBackgroundPic = window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC;
         var tableId = parseInt("{SiteId}");
         $(function () {
             editorOfForumTopInfo = $('#cfg_ForumTopInfo_2').xheditor();
@@ -30,7 +32,21 @@
 
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumTopInfo";
-                AjaxFileUpload(fileElementId, tableTypeOfForumTopInfo, tableId, editorOfForumTopInfo, fUploadFile, attachWatermark,loadingImageId);
+                var inputTextId = null;
+                var previewImageId = null;
+
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfForumTopInfo,
+                    tableId,
+                    editorOfForumTopInfo,
+                    fUploadFile,
+                    attachWatermark,
+                    loadingImageId,
+                    inputTextId,
+                    previewImageId,
+                    $(this)
+                );
             });
 
             var btnUploadToForumBotInfo = $("#btnUploadToForumBotInfo");
@@ -41,7 +57,45 @@
 
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumBotInfo";
-                AjaxFileUpload(fileElementId, tableTypeOfForumBotInfo, tableId, editorOfForumBotInfo, fUploadFile, attachWatermark,loadingImageId);
+                var inputTextId = null;
+                var previewImageId = null;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfForumBotInfo,
+                    tableId,
+                    editorOfForumBotInfo,
+                    fUploadFile,
+                    attachWatermark,
+                    loadingImageId,
+                    inputTextId,
+                    previewImageId,
+                    $(this)
+                );
+            });
+
+            //论坛logo上传
+            var btnUploadToForumLogo = $("#btnUploadToForumLogo");
+            btnUploadToForumLogo.click(function () {
+
+                var fileElementId = 'forum_logo_image_upload';
+                var fUploadFile = null;
+
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfForumLogo";
+                var inputTextId = "cfg_ForumLogoImage_0";
+                var previewImageId = "preview_ForumLogoImage";
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfForumLogo,
+                    tableId,
+                    null,
+                    fUploadFile,
+                    attachWatermark,
+                    loadingImageId,
+                    inputTextId,
+                    previewImageId,
+                    $(this)
+                );
             });
 
         });
@@ -54,7 +108,7 @@
                     $("#CloseTab").val("0");
                 }
 
-                $("#mainForm").attr("action", "/default.php?secu=manage&mod=site_config&m=set&site_id={SiteId}&tab_index=" + parent.G_TabIndex + "");
+                $("#mainForm").attr("action", "/default.php?secu=manage&mod=site_config&m=set&type=1&site_id={SiteId}&tab_index=" + parent.G_TabIndex + "");
                 $('#mainForm').submit();
 
         }
@@ -111,20 +165,23 @@
                                         <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumLogoImage_0">论坛LOGO图片：</label></td>
                                         <td class="spe_line">
-
-                                            <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/> [<a id="preview_ForumLogoImage" href="" target="_blank">预览</a>]<br/>
-                                            <input id="ForumLogoImageToUpload" name="ForumLogoImageToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumLogoImageloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
-                                            <input id="btnForumLogoImageUpload" onclick="return ajaxForumLogoImageUpload()" type="button" value="上传"/>
+                                            <img id="preview_ForumLogoImage" src="{cfg_ForumLogoImage_0}" /><br/>
+                                            <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <br/>
+                                            <input id="forum_logo_image_upload" name="forum_logo_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <img id="loadingOfForumLogo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnUploadToForumLogo" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ForumBackground_0">论坛背景图片：</label></td>
                                         <td class="spe_line">
-
-                                            <input id="cfg_ForumBackground_0" name="cfg_ForumBackground_0" value="{cfg_ForumBackground_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/> [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
-                                            <input id="ForumBackgroundToUpload" name="ForumBackgroundToUpload" type="file" class="input_box" style="width:200px; background: #ffffff;"/> <img id="ForumBackgroundloading" src="{rootpath}/images/ui-anim_basic_16x16.gif" style="display:none;"/>
-                                            <input id="btnForumBackgroundUpload" onclick="return ajaxForumBackgroundUpload()" type="button" value="上传"/>
+                                            <input id="cfg_ForumBackground_0" name="cfg_ForumBackground_0" value="{cfg_ForumBackground_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
+                                            <input id="forum_background_image_upload" name="forum_background_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <img id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnUploadToForumBackground" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>

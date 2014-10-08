@@ -404,6 +404,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenProperty(){
         $tempContent = Template::Load("channel/channel_property.html", "common");
         $channelId = Control::GetRequest("channel_id", 0);
+        $tempContent = str_ireplace("{ChannelId}",$channelId, $tempContent);
 
         return $tempContent;
     }

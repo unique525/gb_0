@@ -221,6 +221,12 @@ window.UPLOAD_TABLE_TYPE_FORUM_LOGO = 207;
  */
 window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
 
+
+/**
+ * 站点配置中上传的图片
+ */
+window.UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC = 300;
+
 /**
  * 格式化上传文件的返回结果信息
  * @param {int} resultMessage 错误编码
@@ -293,26 +299,42 @@ function FormatResultMessage(resultMessage){
  * @param {string} fileElementId 上传文件控件name
  * @param {int} tableType 表类型
  * @param {int} tableId 表id
+ * @param {string} loadingImageId loading图的id
+ * @param {object} btnUpload 上传按钮控件对象
  * @param {object} editor 编辑控制对象
  * @param {object} fUploadFile 存储上传文件id列表的控件对象
  * @param {int} attachWatermark 是否加水印
- * @param {string} loadingImageId loading图的id
+ * @param {string} inputTextId 传入要设置结果值的input控件id
+ * @param {string} previewImageId 传入预览图片控件id
  */
-function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark,loadingImageId)
+function AjaxFileUpload(
+    fileElementId,
+    tableType,
+    tableId,
+    loadingImageId,
+    btnUpload,
+    editor,
+    fUploadFile,
+    attachWatermark,
+    inputTextId,
+    previewImageId
+    )
 {
     if(loadingImageId == undefined || loadingImageId == null){
         loadingImageId = "loading";
     }
     $(document).ajaxStart(function() {
         $( "#"+loadingImageId ).show();
+        btnUpload.attr("disabled","disabled");
     });
     $(document).ajaxComplete(function() {
         $( "#"+loadingImageId ).hide();
+        btnUpload.removeAttr("disabled");
     });
 
 
     $.ajaxFileUpload({
-        url:'/default.php?mod=upload_file&a=async_upload&file_element_name=file_upload_to_content&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
+        url:'/default.php?mod=upload_file&a=async_upload&file_element_name='+fileElementId+'&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
         secureUri:false,
         fileElementId:fileElementId,
         dataType: 'json',
@@ -328,25 +350,39 @@ function AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attac
                         fUploadFile.val(uploadFiles);
                     }
 
+                    var uploadFilePath = data.upload_file_path;
+
+                    if(editor != undefined && editor != null){
 
 
-                    if(editor != undefined){
 
-                        var uploadFilePath = UploadFileFormatHtml(data.upload_file_path);
-
-                        editor.pasteHTML("<br /><br />"+uploadFilePath);
+                        editor.pasteHTML("<br /><br />"+UploadFileFormatHtml(uploadFilePath));
 
                     }
 
+                    if(inputTextId != undefined && inputTextId != null){
+                        $( "#"+inputTextId ).val(uploadFilePath);
+                    }
+
+                    if(previewImageId != undefined && previewImageId != null){
+                        $( "#"+previewImageId ).attr("src",uploadFilePath);
+                    }
+
+
+
                 }else{
 
+                    btnUpload.removeAttr("disabled");
                     alert(FormatResultMessage(parseInt(data.error)));
 
                 }
             }
+            //执行回调函数
+            window.AjaxFileUploadCallBack(fileElementId, data);
         },
         error: function (data, status, e)
         {
+            btnUpload.removeAttr("disabled");
             alert(e);
         }
     });

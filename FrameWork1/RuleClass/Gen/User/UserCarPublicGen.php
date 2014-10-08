@@ -38,7 +38,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $method = Control::GetRequest("a", 0);
         $result = "";
         switch ($method) {
-            case "add":
+            case "async_add":
                 $result = self::GenCreate();
                 break;
             case "list":
@@ -94,6 +94,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
         if ($userId > 0) {
+            parent::ReplaceFirst($templateContent);
             $userCarPublicData = new UserCarPublicData();
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
             $tagId = "user_car";
@@ -105,7 +106,8 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             }
         } else {
             Control::GoUrl("/login.htm");
-        }
+    }
+        parent::ReplaceEnd($templateContent);
         return $templateContent;
     }
 

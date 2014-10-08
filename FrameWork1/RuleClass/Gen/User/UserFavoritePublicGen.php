@@ -16,6 +16,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
 
     const TABLE_TYPE_PRODUCT = 1;
 
+    const CREATE_IS_EXIST = -2;
+
     public function GenPublic() {
         $result = "";
         $method = Control::GetRequest("a", "");
@@ -45,6 +47,7 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         $userFavoriteTag = Control::PostRequest("user_favorite_tag","");
         if($tableId > 0 && $tableType > 0 && !empty($userFavoriteTag) && $userId > 0 && $siteId > 0){
             $userFavoriteData = new UserFavoriteData();
+            $userFavoritePublicData = new UserFavoritePublicData();
             $userFavoriteTitle = "";
             $uploadFileId = 0;
             $userFavoriteUrl = "";
@@ -59,9 +62,13 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
                 $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
                 $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
 
-                //判断是否重复
             }
 
+            //判断是否重复
+            $canAddFavorite = $userFavoritePublicData->CheckIsExist($tableId,$tableType);
+            if($canAddFavorite > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_IS_EXIST.'})';
+            }
             if($userFavoriteTitle != "" && $userFavoriteUrl != "" && $uploadFileId > 0){
                 $userFavoritePublicData = new UserFavoritePublicData();
                 $result = $userFavoritePublicData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);

@@ -16,6 +16,13 @@ var batchAttachWatermark = "0";
 var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
 var tableId = parseInt('{ChannelId}');
 
+//上传回调函数
+window.AjaxFileUploadCallBack = function(data){
+
+}
+
+
+
 $(function () {
 
     var editorHeight = $(window).height() - 220;
@@ -124,7 +131,8 @@ $(function () {
             attachWatermark = 1;
         }
         var loadingImageId = null;
-        AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId);
+        var inputTextId = null;
+        AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId, inputTextId);
     });
 
     var btnAddPreContent = $(".btn_add_pre_content");
