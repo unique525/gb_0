@@ -362,6 +362,9 @@ function AjaxFileUpload(
                         $( "#"+previewImageId ).attr("src",uploadFilePath);
                     }
 
+                    //执行回调函数
+                    window.AjaxFileUploadCallBack(data);
+
                 }else{
 
                     btnUpload.removeAttr("disabled");
