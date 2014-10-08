@@ -362,8 +362,7 @@ function AjaxFileUpload(
                         $( "#"+previewImageId ).attr("src",uploadFilePath);
                     }
 
-                    //执行回调函数
-                    window.AjaxFileUploadCallBack(data);
+
 
                 }else{
 
@@ -372,6 +371,8 @@ function AjaxFileUpload(
 
                 }
             }
+            //执行回调函数
+            window.AjaxFileUploadCallBack(fileElementId, data);
         },
         error: function (data, status, e)
         {
