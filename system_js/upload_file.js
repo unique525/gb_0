@@ -293,10 +293,10 @@ function FormatResultMessage(resultMessage){
  * @param {string} fileElementId 上传文件控件name
  * @param {int} tableType 表类型
  * @param {int} tableId 表id
+ * @param {string} loadingImageId loading图的id
  * @param {object} editor 编辑控制对象
  * @param {object} fUploadFile 存储上传文件id列表的控件对象
  * @param {int} attachWatermark 是否加水印
- * @param {string} loadingImageId loading图的id
  * @param {string} inputTextId 传入要设置结果值的input控件id
  * @param {string} previewImageId 传入预览图片控件id
  * @param {object} btnUpload 上传按钮控件对象
@@ -305,10 +305,10 @@ function AjaxFileUpload(
     fileElementId,
     tableType,
     tableId,
+    loadingImageId,
     editor,
     fUploadFile,
     attachWatermark,
-    loadingImageId,
     inputTextId,
     previewImageId,
     btnUpload
