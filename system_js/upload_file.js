@@ -221,6 +221,12 @@ window.UPLOAD_TABLE_TYPE_FORUM_LOGO = 207;
  */
 window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
 
+
+/**
+ * 站点配置中上传的图片
+ */
+window.UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC = 300;
+
 /**
  * 格式化上传文件的返回结果信息
  * @param {int} resultMessage 错误编码

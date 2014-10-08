@@ -817,6 +817,16 @@ class BaseGen
                     DIRECTORY_SEPARATOR;
                 $newFileName = $tableId . '_' . uniqid() . '.' . $fileExtension;
                 break;
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC:
+                //会员头像
+                $uploadFilePath = $uploadPath . "site_config"
+                    . DIRECTORY_SEPARATOR . strval($tableId)
+                    . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+
+
+                break;
         }
         return $uploadFilePath;
     }

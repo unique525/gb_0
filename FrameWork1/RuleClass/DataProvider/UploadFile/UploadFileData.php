@@ -237,6 +237,13 @@ class UploadFileData extends BaseData
      */
     const UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
 
+
+    /**
+     * 站点配置中上传的图片
+     */
+    const UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC = 300;
+
+
     /**
      * 上传文件增加到数据表
      * @param string $uploadFileName 文件名
