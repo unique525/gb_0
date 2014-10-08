@@ -94,6 +94,13 @@ $(document).ready(function() {
                     window.G_TabUrl = '/default.php?secu=manage&mod=user_favorite&m=list&site_id=' + window.G_NowSiteId;
                     addTab();
                 });
+                //会员站点配置
+                $("#btnUserSiteConfig").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员参数设置';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=2&site_id=' + window.G_NowSiteId + "&tab_index=" + parent.G_TabIndex + "";
+                    addTab();
+                });
             }
         }
     });

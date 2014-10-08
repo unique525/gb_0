@@ -37,7 +37,7 @@ function addFavorite(tableId,favoriteName,tableType,userFavoriteTag,siteId){
         $.ajax({
             url:"/default.php?mod=user_favorite&a=async_add",
             type:"POST",
-            data:{table_id:tableId,table_type:tableType,user_favorite_title:favoriteName,user_favorite_tag:userFavoriteTag,site_id:1},
+            data:{table_id:tableId,table_type:tableType,user_favorite_title:favoriteName,user_favorite_tag:userFavoriteTag,site_id:siteId},
             dataType:"jsonp",
             jsonp:"jsonpcallback",
             success:function(data){
