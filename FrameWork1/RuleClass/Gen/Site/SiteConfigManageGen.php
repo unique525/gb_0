@@ -28,7 +28,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
      * 新增或编辑站点配置
      * @return string
      */
-    private function GenSet() {
+    private function GenSet()
+    {
         $siteId = Control::GetRequest("site_id", 0);
         $type = intval(Control::GetRequest("type", 0));        
         if ($type == 1) { //forum
@@ -70,6 +71,9 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 
+            parent::ReplaceSiteConfig($siteId, $tempContent);
+
+/**
             //加载数据
             $arrSiteConfigOne = $siteConfigData->GetList($siteId);
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
@@ -107,7 +111,7 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                         break;
                 }
             }
-
+*/
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
