@@ -132,6 +132,11 @@ class SiteConfigData extends BaseData {
     const SITE_CONFIG_TYPE_NUMBER = 4;
 
     /**
+     * UPLOAD FILE ID
+     */
+    const SITE_CONFIG_TYPE_UPLOAD_FILE_ID = 5;
+
+    /**
      * @var array string mid Short Message
      */
     private $ArrSiteConfigTypes_1 = array(
@@ -180,8 +185,6 @@ class SiteConfigData extends BaseData {
         "UserDefaultUserGroupIdForRole",
         "UserAlbumToBestMustVoteCount",
         "UserDefaultState",
-        "UserDefaultMaleAvatar",
-        "UserDefaultFemaleAvatar",
         "UserRecDefaultState",
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
@@ -217,6 +220,15 @@ class SiteConfigData extends BaseData {
         "UserCommissionChild",
         "UserCommissionGrandson"
     );
+
+    /**
+     * @var array upload file id
+     */
+    private $ArrSiteConfigTypes_5 = array(
+        "UserDefaultMaleAvatar",
+        "UserDefaultFemaleAvatar"
+    );
+
     private $SiteId = 1;
 
     //公共配置
@@ -1278,6 +1290,9 @@ class SiteConfigData extends BaseData {
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
             $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
             $defaultValue = 0;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
+            $defaultValue = 0;
         }
 
         return self::GetValue($this->SiteId, $siteConfigName, $siteConfigType, $defaultValue);
@@ -1299,6 +1314,8 @@ class SiteConfigData extends BaseData {
             $siteConfigType = self::SITE_CONFIG_TYPE_INT;
         } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
             $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
         }
         self::SetValue($this->SiteId, $siteConfigName, $fieldValue, $siteConfigType);
     }
@@ -1344,6 +1361,12 @@ class SiteConfigData extends BaseData {
                         $fieldValue = 0;
                     }
                     break;
+                case self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID:
+                    $fieldName = "UploadFileId";
+                    if (empty($fieldValue)) {
+                        $fieldValue = 0;
+                    }
+                    break;
                 default:
                     $fieldName = "StringNorValue";
                     if (empty($fieldValue)) {
@@ -1362,7 +1385,7 @@ class SiteConfigData extends BaseData {
                 $dataProperty->AddField("SiteConfigType", $siteConfigType);
                 $this->dbOperator->Execute($sql, $dataProperty);
             } else {
-                $sql = "INSERT INTO " . self::TableName_SiteConfig . " (SiteID,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
+                $sql = "INSERT INTO " . self::TableName_SiteConfig . " (SiteId,SiteConfigName," . $fieldName . ",SiteConfigType) VALUES (:SiteId,:SiteConfigName,:FieldValue,:SiteConfigType);";
                 $dataProperty->AddField("FieldValue", $fieldValue);
                 $dataProperty->AddField("SiteConfigType", $siteConfigType);
                 $this->dbOperator->Execute($sql, $dataProperty);
@@ -1403,6 +1426,9 @@ class SiteConfigData extends BaseData {
                         break;
                     case self::SITE_CONFIG_TYPE_NUMBER:
                         $fieldName = "NumValue";
+                        break;
+                    case self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID:
+                        $fieldName = "UploadFileId";
                         break;
                     default:
                         $fieldName = "StringNorValue";
