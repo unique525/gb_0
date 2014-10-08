@@ -70,6 +70,9 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 
+            parent::ReplaceSiteConfig($siteId, $tempContent);
+
+/**
             //加载数据
             $arrSiteConfigOne = $siteConfigData->GetList($siteId);
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
@@ -107,7 +110,7 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                         break;
                 }
             }
-
+*/
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
