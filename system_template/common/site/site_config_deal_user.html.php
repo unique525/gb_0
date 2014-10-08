@@ -18,10 +18,10 @@
             var uploadFilePath = data.upload_file_path;
             var fileElementId = fileElementId;
             if(fileElementId == "user_default_male_avatar"){
-                $( "#cfg_UserDefaultMaleAvatar_3" ).val(uploadFileId);
+                $( "#cfg_UserDefaultMaleAvatar_5" ).val(uploadFileId);
                 $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
             }else{
-                $( "#cfg_UserDefaultFemaleAvatar_3" ).val(uploadFileId);
+                $( "#cfg_UserDefaultFemaleAvatar_5" ).val(uploadFileId);
                 $( "#preview_UserDefaultFemaleImage").attr("src",uploadFilePath);
             }
         }
@@ -155,22 +155,22 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserDefaultMaleAvatar_3">站点默认男性用户头像：</label></td>
+                                            <label for="cfg_UserDefaultMaleAvatar_5">站点默认男性用户头像：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_UserDefaultMaleImage" src="{cfg_UserDefaultMaleAvatar_3_upload_file_path}" /><br/>
+                                            <img id="preview_UserDefaultMaleImage" src="{cfg_UserDefaultMaleAvatar_5_upload_file_path}" /><br/>
                                             <input id="user_default_male_avatar" name="user_default_male_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_UserDefaultMaleAvatar_3" name="cfg_UserDefaultMaleAvatar_3" type="hidden" value="{cfg_UserDefaultMaleAvatar_3}"/>
+                                            <input id="cfg_UserDefaultMaleAvatar_5" name="cfg_UserDefaultMaleAvatar_5" type="hidden" value="{cfg_UserDefaultMaleAvatar_5}"/>
                                             <img id="loadingOfUserDefaultMaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToMaleAvatar" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserDefaultFemaleAvatar_3">站点默认女性用户头像：</label></td>
+                                            <label for="cfg_UserDefaultFemaleAvatar_5">站点默认女性用户头像：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_3_upload_file_path}" /><br/>
+                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_5_upload_file_path}" /><br/>
                                             <input id="user_default_female_avatar" name="user_default_female_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_UserDefaultFemaleAvatar_3" name="cfg_UserDefaultFemaleAvatar_3" type="hidden" value="{cfg_UserDefaultFemaleAvatar_3}"/>
+                                            <input id="cfg_UserDefaultFemaleAvatar_5" name="cfg_UserDefaultFemaleAvatar_5" type="hidden" value="{cfg_UserDefaultFemaleAvatar_5}"/>
                                             <img id="loadingOfUserDefaultFemaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToFemaleAvatar" type="button" value="上传"/>
                                         </td>
