@@ -28,7 +28,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
      * 新增或编辑站点配置
      * @return string
      */
-    private function GenSet() {
+    private function GenSet()
+    {
         $siteId = Control::GetRequest("site_id", 0);
         $type = intval(Control::GetRequest("type", 0));        
         if ($type == 1) { //forum
