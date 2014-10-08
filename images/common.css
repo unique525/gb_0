@@ -231,7 +231,7 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 .gdmsg_tab .tab em {color: #ff3c00;font-family: tahoma;font-size: 12px;}
 .gdmsg .gdmsgcont {padding: 25px; width: 940px;}
 .dtl718 {float: left;padding-bottom: 10px;width: 718px;}
-.gdmsgcont1 {padding-top: 10px;width:988px;border: #ddd 1px solid;}
+.gdmsgcont1 {padding-top: 10px;padding-left:10px;width:978px;border: #ddd 1px solid;}
 .gdmsgcont1 .paramone {clear: both; line-height:35px;border-bottom: #dfdfdf 1px solid;background-color: #ffffff;color: #333;font-weight: bold; font-size:14px;text-align:left;}
 .gdmsgcont1 .paramtwo {float: left;line-height:28px; width: 493px;color: #333;}
 .gdmsgcont1 .paramtwo .paramtwoleft {

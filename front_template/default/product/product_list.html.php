@@ -7,7 +7,7 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
-    <script type="text/javascript ">
+    <script type="text/javascript">
         var productTempList='<li id="p_0">'
             +'<div class="mt25">'
             +'<a class="pic" target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">'
@@ -61,18 +61,22 @@
                 }
             });
         }
-        //根据不同的排序字段顺序显示产品列表
-        function showProductListWithOrder(order) {
-            if (order != "default") {//默认排序以外其他排序方式
-                var nextClassName = $(this).attr("class");
-                nextClassName = (nextClassName == "listup" ? "listdown" : "listup");
-                $(this).attr("class", nextClassName);
-                var direction = (nextClassName == "listup" ? "asc" : "desc");
-                getProductList(1, 12, {ChannelId}, order + "_" + direction, "");
-            }
-            else getProductList(1, 12, {ChannelId}, "" , "");
-        }
         $(function(){
+            //根据不同的排序字段顺序显示产品列表
+            $('.price-2 a').click(function () {
+                $(this).siblings().each(function(){
+                    $(this).attr("class", "listup");
+                });
+                var order = $(this).attr("title");
+                if (order != "default") {//默认排序以外其他排序方式
+                    var nextClassName = $(this).attr("class");
+                    nextClassName = (nextClassName == "listup on" ? "listup" : "listup on");
+                    $(this).attr("class", nextClassName);
+                    var direction = (nextClassName == "listup on" ? "asc" : "desc");
+                    getProductList(1, 12, {ChannelId}, order + "_" + direction, "");
+                }
+                else getProductList(1, 12, {ChannelId}, "" , "");
+            });
             getProductList(1,12,{ChannelId},"","");
         });
     </script>
@@ -263,7 +267,7 @@
         <dt>排序：</dt>
         <dd>
             <div class="price-2"  style="width: 360px">
-                <a href="javascript:;" onclick="showProductListWithOrder('default')" class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="javascript:;" class="listup" onclick="showProductListWithOrder('time')"  >时间</a> <a href="javascript:;" onclick="showProductListWithOrder('sale')"  class="listup"  >销量</a> <a href="javascript:;"  onclick="showProductListWithOrder('price')" class="listup" >价格</a> <a href="javascript:;"  onclick="showProductListWithOrder('comment')" hidefocus="true" class="listup"  >评论</a>
+                <a href="javascript:;" title="default" class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="javascript:;" class="listup"  title="time"  >时间</a> <a href="javascript:;"  title="sale"  class="listup"  >销量</a> <a href="javascript:;"   title="price" class="listup" >价格</a> <a href="javascript:;"   title="comment" hidefocus="true" class="listup"  >评论</a>
             </div>
             <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">    <a href="#">&lt;</a>    2/9    <a class="disabledr02" href="#" >下一页&nbsp;&gt; </a>    </div></div>
             <span class="clear"></span>
