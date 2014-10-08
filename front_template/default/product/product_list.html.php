@@ -21,13 +21,7 @@
             +'￥{f_SalePrice}'
             +'<span >已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>'
             +'</div>'
-            +'<div >'
-            +'<input  class="textgt" type="text" maxlength="3" value="1">'
-            +'<div class="onup">'
-            +'<span class="up" ></span>'
-            +'<span class="dow"> </span>'
-            +'</div>'
-            +'<input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart(\'#textgtSum_0\' ,37693,\'36.00\',\'0102022101C\',\'1002\')" name="btnbutton" value="">'
+            +'<input style=" margin:0 13px;cursor: pointer"  class="butn1 fl mt5" type="button" onclick="window.open(\'/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}\')" name="btnbutton" value="">'
             +'<a class="sclist"  onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>'
             +'</div>'
             +'</li>';
@@ -229,12 +223,7 @@
                                             <span >原价：￥{f_MarketPrice}</span>
                                         </div>
                                         <div>
-                                            <input  class="textgt" type="text" maxlength="3" value="1">
-                                            <div class="onup">
-                                                <span class="up" ></span>
-                                                <span class="dow"> </span>
-                                            </div>
-                                            <input style=" margin:0 13px;"  class="butn1 fl mt5" type="button" onclick="c1.AddProductCart('#textgtSum_0' ,37693,'36.00','0102022101C','1002')" name="btnbutton" value="">
+                                            <input style=" margin:0 13px;cursor: pointer"  class="butn1 fl mt5" type="button" onclick="window.open('/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}')" name="btnbutton" value="">
                                         </div>
                                     </div>
                                 </td>
