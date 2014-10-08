@@ -642,30 +642,35 @@ class BaseGen
                     DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_2_' . uniqid() . '.' . $fileExtension;
                 break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_3:
                 //活动类题图3上传
                 $uploadFilePath = $uploadPath . "activity" .
                     DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_3_' . uniqid() . '.' . $fileExtension;
                 break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_PIC:
                 //活动花絮图片上传
                 $uploadFilePath = $uploadPath . "activity" .
                     DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'activity_pic_' . uniqid() . '.' . $fileExtension;
                 break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_CONTENT:
                 //活动内容图片上传
                 $uploadFilePath = $uploadPath . "activity" .
                     DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'activity_content_' . uniqid() . '.' . $fileExtension;
                 break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_INFORMATION_TITLE_PIC_1:
                 //分类信息题图1上传
                 $uploadFilePath = $uploadPath . "information" .
                     DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
                 break;
+
             case UploadFileData::UPLOAD_TABLE_TYPE_INFORMATION_CONTENT:
                 //分类信息内容上传
                 $uploadFilePath = $uploadPath . "information" .
@@ -679,6 +684,8 @@ class BaseGen
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR:
                 //会员头像
+                $uploadFilePath = $uploadPath . "user_avatar" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . strval($userId) .DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
 
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_COVER:
