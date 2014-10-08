@@ -16,6 +16,13 @@ var batchAttachWatermark = "0";
 var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
 var tableId = parseInt('{ChannelId}');
 
+//上传回调函数
+window.AjaxFileUploadCallBack = function(data){
+
+}
+
+
+
 $(function () {
 
     var editorHeight = $(window).height() - 220;
