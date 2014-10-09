@@ -270,4 +270,15 @@ class ProductPublicData extends BasePublicData {
         }
         return $result;
     }
+
+    public function GetChannelIdByProductId($productId){
+        $result = -1;
+        if($productId > 0){
+            $sql = "SELECT ChannelId FROM ".self::TableName_Product." WHERE ProductId = :ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId",$productId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 }

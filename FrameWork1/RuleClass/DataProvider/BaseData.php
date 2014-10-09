@@ -459,8 +459,16 @@ class BaseData
     const TableName_Product = "cst_product";
     /**
      * 产品 数据表自增字段名
-     */
+*/
     const TableId_Product = "ProductId";
+    /**
+     * 产品评论 数据表名
+     */
+    const TableName_ProductComment = "cst_product_comment";
+    /**
+     * 产品评论 数据表自增字段名
+     */
+    const TableId_ProductComment = "ProductCommentId";
     /**
      * 产品参数 数据表名
      */
