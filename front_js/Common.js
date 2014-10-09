@@ -11,7 +11,11 @@ function QueryString()
             if (num > 0) {
                 name = arrTmp[i].substring(0, num);
                 value = arrTmp[i].substr(num + 1);
-                this[name] = value;
+                //过滤掉锚定，#号后不带入参数值
+                var anchorNum = value.indexOf("#");
+                if(anchorNum>0)
+                    this[name] = value.substring(0, anchorNum);
+                else this[name] = value;
             }
         }
     }

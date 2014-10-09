@@ -62,7 +62,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             $tagId = "product_list";
             $allCount = 0;
             $productPublicData = new ProductPublicData();
-            $arrList = $productPublicData->GetListForPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $order);
+            $arrList = $productPublicData->GetListForPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
                 $styleNumber = 1;
