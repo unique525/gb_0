@@ -48,6 +48,7 @@
             </td>
             <td style="width: 180px;">创建时间</td>
             <td style="width: 100px;">发稿人</td>
+            <td style="width: 40px;"></td>
         </tr>
     </table>
     <ul id="sort_grid">

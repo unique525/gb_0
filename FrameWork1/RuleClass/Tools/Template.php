@@ -89,8 +89,19 @@ class Template
      * @param array $arrList 用来替换到模板中的集合内容
      * @param string $tagId 替换标签的id
      * @param string $tagName 替换标签名称
+     * @param array $arrChildList 子表数据（默认为空，不进行子父表处理）
+     * @param string $tableIdName 主表主键名称
+     * @param string $parentIdName 父子键名称
      */
-    public static function ReplaceList(&$tempContent, $arrList, $tagId, $tagName = self::DEFAULT_TAG_NAME)
+    public static function ReplaceList(
+        &$tempContent,
+        $arrList,
+        $tagId,
+        $tagName = self::DEFAULT_TAG_NAME,
+        $arrChildList = null,
+        $tableIdName = null,
+        $parentIdName = "ParentId"
+    )
     {
         if (stripos($tempContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
@@ -142,6 +153,12 @@ class Template
                             $footerRowTitleCount = self::GetParamIntValue($doc, $tagName, "footer_title");
                         }
 
+                        //Child标题最大字符数
+                        $childRowTitleCount = self::GetParamIntValue($doc, $tagName, "child_row_title_count");
+                        if ($childRowTitleCount <= 0) {
+                            $childRowTitleCount = self::GetParamIntValue($doc, $tagName, "child_title");
+                        }
+
                         //标题最大字符数
                         $itemRowTitleCount = self::GetParamIntValue($doc, $tagName, "item_row_title_count");
                         if ($itemRowTitleCount <= 0) {
@@ -174,6 +191,15 @@ class Template
                         $itemSplitterCount = self::GetParamIntValue($doc, $tagName, "item_splitter_count");
                         //读取主段到尾段的分割线
                         $footerSplitterTempContent = self::GetNodeValue($doc, "footer_splitter", $tagName);
+                        //读取子表模板
+                        if( $arrChildList != null ){
+                            $childTempContent = self::GetNodeValue($doc, "child", $tagName);
+                        }else{
+                            $childTempContent = "";
+                        }
+
+
+
                     } else {
                         //使用SAX
                         $parser = xml_parser_create();
@@ -214,6 +240,12 @@ class Template
                         }
 
                         //标题最大字符数
+                        $childRowTitleCount = intval($arrayXml[0]['attributes']['CHILD_ROW_TITLE_COUNT']);
+                        if ($childRowTitleCount <= 0) {
+                            $childRowTitleCount = intval($arrayXml[0]['attributes']['CHILD_TITLE']);
+                        }
+
+                        //标题最大字符数
                         $itemRowTitleCount = intval($arrayXml[0]['attributes']['ITEM_ROW_TITLE_COUNT']);
                         if ($itemRowTitleCount <= 0) {
                             $itemRowTitleCount = intval($arrayXml[0]['attributes']['TITLE']);
@@ -245,6 +277,13 @@ class Template
                         $itemSplitterCount = intval($arrayXml[0]['attributes']['ITEM_SPLITTER_COUNT']);
                         //读取主段到尾段的分割线
                         $footerSplitterTempContent = self::GetNodeValueForSax($arrayXml, "FOOTER_SPLITTER");
+
+                        //读取子表模板
+                        if( $arrChildList != null ){
+                            $childTempContent = self::GetNodeValueForSax($arrayXml, "CHILD");
+                        }else{
+                            $childTempContent = "";
+                        }
                     }
                     ///////////////////////////////////////////////////////////////////
                     $sb = "";
@@ -254,7 +293,18 @@ class Template
                         $columns = $arrList[$i];
                         $list = $headerTempContent;
                         $itemType = "header";
-                        $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                        $list = self::ReplaceListItem(
+                            $i,
+                            $type,
+                            $itemRowTitleCount,
+                            $itemRowIntroCount,
+                            $headerRowTitleCount,
+                            $footerRowTitleCount,
+                            $childRowTitleCount,
+                            $columns,
+                            $list,
+                            $itemType
+                        );
                         $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
                     }
@@ -285,15 +335,59 @@ class Template
 
                         $columns = $arrList[$i];
                         $itemType = "item";
-                        $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
-                        $list = str_ireplace("{c_all_count}", count($arrList), $list);
-                        $sb = $sb . $list;
+                        $list = self::ReplaceListItem(
+                            $i,
+                            $type,
+                            $itemRowTitleCount,
+                            $itemRowIntroCount,
+                            $headerRowTitleCount,
+                            $footerRowTitleCount,
+                            $childRowTitleCount,
+                            $columns,
+                            $list,
+                            $itemType
+                        );
                         //每隔一定主段条数附加分割线，最底部分割线不附加
                         if ($itemSplitterCount > 0) {
                             if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSplitterCount) == 0) {
                                 $sb = $sb . $itemSplitterTempContent;
                             }
                         }
+
+                        //处理子表数据
+                        $sbChild = "";
+                        if(count($arrChildList)>0){
+
+                            for($j = 0; $j<count($arrChildList); $j++){
+
+                                $listOfChild = $childTempContent;
+                                $columnsOfChild = $arrChildList[$j];
+
+                                $listOfChild = self::ReplaceListItem(
+                                    $j,
+                                    $type,
+                                    $itemRowTitleCount,
+                                    $itemRowIntroCount,
+                                    $headerRowTitleCount,
+                                    $footerRowTitleCount,
+                                    $childRowTitleCount,
+                                    $columnsOfChild,
+                                    $listOfChild,
+                                    $itemType
+                                );
+
+                                $sbChild = $sbChild . $listOfChild;
+                            }
+
+
+                        }
+
+
+                        $list = str_ireplace("{child}", $sbChild, $list);
+                        $list = str_ireplace("{c_all_count}", count($arrList), $list);
+                        $sb = $sb . $list;
+
+
                     }
 
 
@@ -306,7 +400,18 @@ class Template
                             $columns = $arrList[$i];
                             $list = $footerTempContent;
                             $itemType = "footer";
-                            $list = self::ReplaceListItem($i, $type, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $list, $itemType);
+                            $list = self::ReplaceListItem(
+                                $i,
+                                $type,
+                                $itemRowTitleCount,
+                                $itemRowIntroCount,
+                                $headerRowTitleCount,
+                                $footerRowTitleCount,
+                                $childRowTitleCount,
+                                $columns,
+                                $list,
+                                $itemType
+                            );
                             $list = str_ireplace("{c_all_count}", count($arrList), $list);
                             $sb = $sb . $list;
                         }
@@ -329,12 +434,13 @@ class Template
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param int $childRowTitleCount 子记录列表项目标题最大字符数
      * @param array $columns 字段数组
      * @param string $listTemplate 要替换的列表模板内容
      * @param string $itemType 标签的类型 header item footer
      * @return mixed
      */
-    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $columns, $listTemplate, $itemType)
+    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $childRowTitleCount, $columns, $listTemplate, $itemType)
     {
         $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate); //加入输出序号
         if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
@@ -344,7 +450,7 @@ class Template
         }
         foreach ($columns as $columnName => $columnValue) {
             //公用替换
-            self::FormatColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            self::FormatColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $childRowTitleCount, $itemType);
             if (strtolower($tagType) === 'document_news_list') {
                 self::FormatDocumentNewsColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
             } else if (strtolower($tagType) === 'product_list') {
@@ -365,9 +471,20 @@ class Template
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param int $childRowTitleCount 子记录列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType)
+    private static function FormatColumnValue(
+        $columnName,
+        $columnValue,
+        &$tempContent,
+        $itemRowTitleCount,
+        $itemRowIntroCount,
+        $headerRowTitleCount,
+        $footerRowTitleCount,
+        $childRowTitleCount,
+        $itemType
+    )
     {
         if (strtolower($columnName) == "state") {
             $tempContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $tempContent);
@@ -395,6 +512,11 @@ class Template
                 if (intval($footerRowTitleCount) > 0) {
                     //截断字符
                     $columnValue = Format::ToShort($columnValue, $footerRowTitleCount);
+                }
+            } else if ($itemType == "child") {
+                if (intval($childRowTitleCount) > 0) {
+                    //截断字符
+                    $columnValue = Format::ToShort($columnValue, $childRowTitleCount);
                 }
             } else {
                 if (intval($itemRowTitleCount) > 0) {
