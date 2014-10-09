@@ -384,6 +384,7 @@ class Template
 
 
                         //每隔一定主段条数附加分割线，最底部分割线不附加
+                        //一定要放最后加载
                         if ($itemSplitterCount > 0) {
 
                             if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSplitterCount) == 0) {
