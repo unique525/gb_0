@@ -50,6 +50,34 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $arrOne = $channelPublicData->GetOne($channelId);
         Template::ReplaceOne($templateContent, $arrOne);
 
+        $channelId = Control::GetRequest("channel_id", 0);
+        $order= Control::GetRequest("order", 0);
+        $pageSize = Control::GetRequest("ps", 20);
+        $searchKey = Control::GetRequest("search_key", "");
+        $searchKey = urldecode($searchKey);
+        $pageIndex = Control::GetRequest("p", 1);
+
+        if ($pageIndex > 0 && $channelId > 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $tagId = "product_list";
+            $allCount = 0;
+            $productPublicData = new ProductPublicData();
+            $arrList = $productPublicData->GetListForPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $order);
+            if (count($arrList) > 0) {
+                Template::ReplaceList($templateContent, $arrList, $tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?secu=manage&mod=product_param_type&m=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
+            } else {
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("product", 101), $templateContent);
+            }
+        }
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;

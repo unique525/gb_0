@@ -90,46 +90,70 @@ class ProductPublicData extends BasePublicData {
      * @param int $allCount 记录总数
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
-     * @param int $isSelf 是否只显示当前登录的管理员录入的产品
-     * @param int $manageUserId 后台管理员id
+     * @param string $order 排序方式
      * @return array 产品列表数据集
      */
-    public function GetListForPager($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $isSelf = 0, $manageUserId = 0)
+    public function GetListForPager($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $order = "")
     {
-        $searchSql = "";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("ChannelId", $channelId);
-        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            if ($searchType == 0) { //产品名称
-                $searchSql = " AND (ProductName like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else if ($searchType == 1) { //简介
-                $searchSql = " AND (ProductIntro like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else if ($searchType == 2) { //发布人
-                $searchSql = " AND (ManageUserName like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else if ($searchType == 3) { //标签
-                $searchSql = " AND (ProductTag like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else { //模糊
-                $searchSql = " AND (ProductName LIKE :SearchKey1
+        $result = null;
+        if ($channelId > 0) {
+            switch ($order) {
+                case "time_down":
+                    $order = " ORDER BY Createdate DESC";
+                    break;
+                case "time_up":
+                    $order = " ORDER BY Createdate ASC";
+                    break;
+                case "sale_down":
+                    $order = " ORDER BY SaleCount DESC";
+                    break;
+                case "sale_up":
+                    $order = " ORDER BY SaleCount ASC";
+                    break;
+                case "price_down":
+                    $order = " ORDER BY SalePrice DESC";
+                    break;
+                case "price_up":
+                    $order = " ORDER BY SalePrice ASC";
+                    break;
+                case "comment_down":
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+                case "comment_up":
+                    $order = " ORDER BY Sort ASC,Createdate ASC";
+                    break;
+                default:
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+            }
+            $searchSql = "";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                if ($searchType == 0) { //产品名称
+                    $searchSql = " AND (ProductName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 1) { //简介
+                    $searchSql = " AND (ProductIntro like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 2) { //发布人
+                    $searchSql = " AND (ManageUserName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 3) { //标签
+                    $searchSql = " AND (ProductTag like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else { //模糊
+                    $searchSql = " AND (ProductName LIKE :SearchKey1
                                     OR ManageUserName LIKE :SearchKey2
                                     OR ProductIntro LIKE :SearchKey3
                                     OR ProductTag LIKE :SearchKey4)";
-                $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
-                $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
-                $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
-                $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
+                }
             }
-        }
-        if ($isSelf === 1 && $manageUserId > 0) {
-            $conditionManageUserId = ' AND ManageUserId=' . intval($manageUserId);
-        } else {
-            $conditionManageUserId = "";
-        }
-
-        $sql = "
+            $sql = "
             SELECT
             ProductId,ProductNumber,ProductName,SiteId,ChannelId,
             ProductShortName,ProductIntro,ProductTag,
@@ -139,14 +163,14 @@ class ProductPublicData extends BasePublicData {
             SaleState,GetScore,SendPrice,SendPriceAdd,DirectUrl,MarketPrice,SaleCount,PublishDate
             FROM
             " . self::TableName_Product . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
-            ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
 
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-        $sql = "SELECT count(*) FROM " . self::TableName_Product . "
-                WHERE ChannelId=:ChannelId AND State<100 " . $conditionManageUserId . " " . $searchSql . ";";
-        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+            $sql = "SELECT count(*) FROM " . self::TableName_Product . "
+                WHERE ChannelId=:ChannelId AND State<100 "  . " " . $searchSql . ";";
+            $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
 
         return $result;
     }
