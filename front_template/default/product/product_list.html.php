@@ -30,13 +30,16 @@
 
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
+            var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps=12";
+            var order = Request["order"];
+            var orderType="";
+            var direction="";
+            if (order != null&&order != "") {
+                orderType = order.split('_')[0];
+                direction = order.split('_')[1];
+                $('.price-2 a[title="'+orderType+'"]').attr("class", "listup on");
+            }
             $('.price-2 a').click(function () {
-                var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps=12";
-                var order = Request["order"];
-                if (order != null&&order != "") {
-                    var orderType = order.split('_')[0];
-                    var direction = order.split('_')[1];
-                    $(this).attr("class", "listup on");
                     if ($(this).attr("title") == orderType) {
                         direction = (direction == "up" ? "down" : "up");
                         url += "&order=" + orderType + "_" + direction;
@@ -44,9 +47,6 @@
                     else {
                         url += "&order=" + $(this).attr("title") + "_up";
                     }
-                }
-                else
-                    url += "&order=" + $(this).attr("title") + "_up";
                 window.location.href=url+"#product_list_anchor";
             });
         });
