@@ -194,8 +194,8 @@ a:hover{color:#ff3c00; text-decoration:underline;}
     margin: 0 2px; padding: 0 5px;text-align: center;text-decoration: none;}
 element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;overflow: hidden;vertical-align: middle;    width: 350px;}
 .pic_small {height: 54px;margin: 10px 0;width: 365px;}
-.pic_sl,.pic_sr {background:url(1_03.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);cursor: pointer;display: inline;float: left; height: 54px;width: 19px;}
-.pic_sr { background: url(1_05.gif) no-repeat scroll 2px 0px rgba(0, 0, 0, 0);}
+.pic_sl,.pic_sr {background:url(1_03.gif) no-repeat scroll 2px 0px;cursor: pointer;display: inline;float: left; height: 54px;width: 19px;}
+.pic_sr { background: url(1_05.gif) no-repeat scroll 2px 0px;}
 .pic_smiddle {display: inline;float: left;height:54px;width: 326px;overflow:hidden;}
 .pic_smiddle ul{width: 312px; height: 64px; overflow: hidden;}
 .pic_smiddle ul li {display: block;height:50px;width:50px; margin:0px 5px; float:left;}
