@@ -148,7 +148,7 @@ a:hover{color:#ff3c00; text-decoration:underline;}
 .listsum{width:172px;border:1px solid #dddddd; padding:10px;border-top:2px solid #659a32;}
 .listsum .tit{ width:172px; height:15px;font:400 14px/15px "微软雅黑";color:#000; padding-bottom:10px; border-bottom:1px solid #dddddd}
 .listsum .listsum-1{ cursor:pointer;}
-.listsum .listsum-1 dt{ height:35px; line-height:35px; padding-left:15px; font-size:12px; color:#333; background:url(list_open.gif)no-repeat 2px 13px;}
+.listsum .listsum-1 dt{ height:35px; line-height:35px; padding-left:15px; font-size:12px; color:#333; background:url(list_open.gif) no-repeat 2px 13px;}
 .listsum .listhover dt{height:35px; line-height:35px; padding-left:15px; font-size:12px; color:#333; background:url(list_minus.gif) no-repeat 2px 13px; cursor:pointer;}
 .listsum .listsum-1 dl dt .on {height:35px; line-height:35px; font-size:12px; color:#ff3c00; text-decoration:none;}
 .listsum .listsum-1 dl dt a:hover {color:#ff3c00;}
