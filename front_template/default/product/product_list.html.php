@@ -47,7 +47,7 @@
                 }
                 else
                     url += "&order=" + $(this).attr("title") + "_up";
-                window.location.href=url;
+                window.location.href=url+"#product_list_anchor";
             });
         });
     </script>
@@ -194,6 +194,7 @@
     </table>
 </div>
 <div class="clear"> </div>
+    <a name="product_list_anchor"></a>
 <div class="list_tit"><h1>{ChannelName}</h1> <div class="eb6100">相关商品<span>238</span>款
     </div>
 </div>
