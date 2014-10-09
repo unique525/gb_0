@@ -244,10 +244,10 @@
                             <td class="spe_line" style="text-align: left">
 
                                 <select id="f_SiteAdType" name="f_SiteAdType">
-                                    <option value="GIF" selected="selected">GIF</option>
-                                    <option value="SWF">SWF默认模式</option>
-                                    <option value="SWFT">SWF_透明</option>
-                                    <option value="SWFO">SWF_降级</option>
+                                    <option value="0" selected="selected">GIF</option>
+                                    <option value="1">SWF默认模式</option>
+                                    <option value="2">SWF_透明</option>
+                                    <option value="3">SWF_降级</option>
                                 </select>
                                 {s_SiteAdType}
                             </td>

@@ -58,12 +58,9 @@ function ModifyState(method, idvalue, state) {
  * @return
  */
 function CheckEndDate(endDate){
-    var isDate = 0;
+    var after = 0;
 
     var today = new Date();
-    var now_day = today.getDate();
-    var now_month = today.getMonth()+1;
-    var now_year = today.getFullYear();
 
     var arr=endDate.split(" ");
     arr=arr[0].split("-");
@@ -71,21 +68,11 @@ function CheckEndDate(endDate){
     var site_month = arr[1];
     var site_day = arr[2];
 
-    if(site_year < now_year){
-        isDate = 0;     //年过期
-    } else{
-        if(site_month < now_month){
-            isDate = 0;     //月过期
-        }else{
-            if(site_day < now_day){
-                isDate = 0;     //日期过期
-            }else{
-                isDate = 1;
-            }
-        }
-    }
+    var end=new Date(site_year,site_month,site_day)
+    if(end>today)
+        after=1;
 
-    if(isDate == 1){
+    if(after == 1){
         document.write(endDate);
     }else{
         document.write('<font color=red>'+endDate+'</font>');

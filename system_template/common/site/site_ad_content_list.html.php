@@ -7,6 +7,7 @@
 
     <script type="text/javascript">
         $("document").ready(function () {
+            var siteId = Request["site_id"];
             var siteAdId = Request["site_ad_id"];
             var siteAdName = Request["site_ad_name"];
             siteAdName=decodeURI(siteAdName);
@@ -49,6 +50,14 @@
                 parent.addTab();
             });
 
+            var btnSetJs = $(".span_create_js");
+            btnSetJs.css("cursor", "pointer");
+            btnSetJs.click(function (event) {
+                var siteAdId = $(this).attr('idvalue');
+                event.preventDefault();
+                window.open('/default.php?secu=manage&mod=site_ad&m=create_js&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+
+            });
 
             $(".span_state").each(function () {
                 $(this).html(FormatState($(this).attr("title")));
@@ -115,7 +124,7 @@
                     <td class="spe_line2" style="width:80px;text-align:center;"><a href="{rootpath}/{f_titlepic}" title="点击进行查看广告 {f_titlepic}" target="_blank">查看广告</a></td>
                     <td class="spe_line2" style="width:80px;text-align:center;"><a href="{f_adurl}" title="点击查看广告指向链接 {f_adurl}" target="_blank">指向链接</a></td>
                     <td class="spe_line2" style="width:80px;text-align:center;">{f_AddedVirtualClickCount}</td>
-                    <td class="spe_line2" style="width:40px;text-align:center;"><a href="#" title="{siteid} 点击更新广告JS {f_adid}" onclick="window.open('index.php?a=ad&m=adcreatejs&adid={f_adid}&siteid={siteid}','', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );">更新JS</a></td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
                 </tr>
                 ]]></item>
         </icms>

@@ -3,7 +3,7 @@
  * 后台管理 广告内容 数据类
  *
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_site_ad
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_site
  * @author 525
  */
 
@@ -110,7 +110,20 @@ class SiteAdContentManageData  extends BaseManageData{
      */
     public function GetAllAdContent($siteAdId) {
         $dataProperty = new DataProperty();
-        $sql = "SELECT * FROM " . self::TableName_SiteAdContent . " WHERE SiteAdId=:SiteAdId AND state=0 AND EndDate>now() ORDER BY SiteAdContentId Desc ";
+        $sql = "SELECT * FROM " . self::TableName_SiteAdContent . " WHERE SiteAdId=:SiteAdId AND State=0 AND EndDate>now() ORDER BY Sort Desc, SiteAdContentId Desc ;";
+        $dataProperty->AddField("SiteAdId", $siteAdId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得广告位最后一条可用广告 准备生成JS
+     * @param  int $siteAdId
+     * @return array 广告数据集
+     */
+    public function GetLastAdContent($siteAdId) {
+        $dataProperty = new DataProperty();
+        $sql = "SELECT * FROM " . self::TableName_SiteAdContent . " WHERE SiteAdId=:SiteAdId AND State=0 ORDER BY EndDate Desc, Sort Desc, SiteAdContentId Desc limit 1;";
         $dataProperty->AddField("SiteAdId", $siteAdId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
@@ -186,5 +199,48 @@ class SiteAdContentManageData  extends BaseManageData{
         return $result;
     }
 
+
+    /**
+     * 格式化SiteAdContent字段 保留第一个元素
+     * @param int $siteAdContentId 广告id
+     * @param int $siteAdContent 内容
+     * @return int 操作结果
+     */
+    public function ModifyContent($siteAdContentId, $siteAdContent)
+    {
+        $result = -1;
+        if($siteAdContentId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_SiteAdContent . " SET
+                    SiteAdContent = :SiteAdContent
+
+                    WHERE SiteAdContentId = :SiteAdContentId
+
+                    ;";
+            $dataProperty->AddField("SiteAdContent", $siteAdContent);
+            $dataProperty->AddField("SiteAdContentId", $siteAdContentId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取SiteAdContent字段
+     * @param int $siteAdContentId 广告id
+     * @return int 操作结果
+     */
+    public function GetContent($siteAdContentId)
+    {
+        $result = -1;
+        if($siteAdContentId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT SiteAdContent FROM " . self::TableName_SiteAdContent . " WHERE SiteAdContentId = :SiteAdContentId ;";
+            $dataProperty->AddField("SiteAdContentId", $siteAdContentId);
+            $result = $this->dbOperator->GetString($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 }
 ?>

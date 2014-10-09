@@ -12,4 +12,8 @@
     <module id="10"><content><![CDATA[广告JS更新成功！]]></content></module>
     <module id="11"><content><![CDATA[该广告位没有可用的广告！]]></content></module>
     <module id="12"><content><![CDATA[广告site_ad_content_id错误！]]></content></module>
+    <module id="13"><content><![CDATA[广告JS为空，广告将不会显示！]]></content></module>
+    <module id="14"><content><![CDATA[广告内容为空！前台讲显示空白！]]></content></module>
+    <module id="15"><content><![CDATA[重新格式化内容失败！广告内容可能错误显示！]]></content></module>
+    <module id="16"><content><![CDATA[所有广告均已过期！页面将保留最后过期的广告！]]></content></module>
 </root>
