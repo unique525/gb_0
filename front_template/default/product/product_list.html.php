@@ -179,8 +179,8 @@
                                             ￥{f_SalePrice}
                                             <span >原价：￥{f_MarketPrice}</span>
                                         </div>
-                                        <div>
-                                            <input style=" margin:0 13px;cursor: pointer"  class="butn1 fl mt5" type="button" onclick="window.open('/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}')" name="btnbutton" value="">
+                                        <div class="btn_jrgwc">
+                                            <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
                                         </div>
                                     </div>
                                 </td>
@@ -234,9 +234,9 @@
                     ￥{f_SalePrice}
                     <span>已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
                 </div>
-                <input style=" margin:0 13px;cursor: pointer" class="butn1 fl mt5" type="button"
-                       onclick="window.open('/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}')"
-                       name="btnbutton" value="">
+                <div class="btn_jrgwc">
+                    <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
+                </div>
                 <a class="sclist" onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
             </li>
             ]]>
