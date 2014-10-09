@@ -1,3 +1,23 @@
+function QueryString()
+{
+    var name, value, i;
+    var str = location.href;
+    var num = str.indexOf("?");
+    if (num >= 0) {
+        str = str.substr(num + 1);
+        var arrTmp = str.split("&");
+        for (i = 0; i < arrTmp.length; i++) {
+            num = arrTmp[i].indexOf("=");
+            if (num > 0) {
+                name = arrTmp[i].substring(0, num);
+                value = arrTmp[i].substr(num + 1);
+                this[name] = value;
+            }
+        }
+    }
+}
+var Request = new QueryString();
+
 $(function(){
     $.ajax({
         url:"/default.php?mod=user_car&a=async_get_car_count&site_id=1",
