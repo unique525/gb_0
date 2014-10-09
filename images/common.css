@@ -368,6 +368,8 @@ div.diggtop a {border: 1px solid #efefef;color: #666;margin: 0 4px;padding: 2px 
 .listgooods ul li .price {color: #ff3c00;font-family: "Microsoft YaHei";font-size: 16px;font-weight: bold;margin-top: 10px;padding-bottom: 10px; line-height:24px;}
 .listgooods ul li .price font {color: #999;font-weight: 400;font-size:14px; line-height:24px; text-decoration: line-through;}
 .listgooods ul li .price span {color: #999;font-weight: 400;font-size:12px; line-height:24px; float:right;}
+.listgooods .btn_jrgwc{width:76px;margin:0px auto; float:left; padding:0px 5px;}
+
 
 
 /*特别推荐*/
