@@ -347,12 +347,7 @@ class Template
                             $list,
                             $itemType
                         );
-                        //每隔一定主段条数附加分割线，最底部分割线不附加
-                        if ($itemSplitterCount > 0) {
-                            if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSplitterCount) == 0) {
-                                $sb = $sb . $itemSplitterTempContent;
-                            }
-                        }
+
 
                         //处理子表数据
                         $sbChild = "";
@@ -386,6 +381,16 @@ class Template
                         $list = str_ireplace("{child}", $sbChild, $list);
                         $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
+
+
+                        //每隔一定主段条数附加分割线，最底部分割线不附加
+                        if ($itemSplitterCount > 0) {
+
+                            if ($i < count($arrList) - $footerRowCount - 1 && ($i - $headerRowCount + 1) % ($itemSplitterCount) == 0) {
+                                $sb = $sb . $itemSplitterTempContent;
+                            }
+                        }
+
 
 
                     }
