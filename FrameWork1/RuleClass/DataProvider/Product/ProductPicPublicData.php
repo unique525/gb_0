@@ -20,7 +20,11 @@ class ProductPicPublicData extends BasePublicData
         if ($productPriceId < 0) {
             return $result;
         }
-        $sql = "SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate FROM " . self::TableName_ProductPic . " WHERE ProductPicId=:ProductPicId;";
+        $sql = "
+        SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
+        FROM " . self::TableName_ProductPic . " t1
+        LEFT OUTER JOIN " .self::TableName_UploadFile." t2 on t1.
+        WHERE ProductPicId=:ProductPicId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductPicId", $productPriceId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);

@@ -70,9 +70,10 @@ class ProductPublicData extends BasePublicData {
                     $order = " ORDER BY Sort DESC,Createdate DESC";
                     break;
             }
-            $sql = "SELECT *"
-                . " FROM " . self::TableName_Product
-                . " WHERE ChannelId=:ChannelId AND State<100"
+            $sql = "SELECT t.*,t1.*"
+                . " FROM " . self::TableName_Product ." t"
+                . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
+                . " WHERE t.ChannelId=:ChannelId AND t.State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
@@ -99,31 +100,31 @@ class ProductPublicData extends BasePublicData {
         if ($channelId > 0) {
             switch ($order) {
                 case "time_down":
-                    $order = " ORDER BY Createdate DESC";
+                    $order = " ORDER BY t.Createdate DESC";
                     break;
                 case "time_up":
-                    $order = " ORDER BY Createdate ASC";
+                    $order = " ORDER BY t.Createdate ASC";
                     break;
                 case "sale_down":
-                    $order = " ORDER BY SaleCount DESC";
+                    $order = " ORDER BY t.SaleCount DESC";
                     break;
                 case "sale_up":
-                    $order = " ORDER BY SaleCount ASC";
+                    $order = " ORDER BY t.SaleCount ASC";
                     break;
                 case "price_down":
-                    $order = " ORDER BY SalePrice DESC";
+                    $order = " ORDER BY t.SalePrice DESC";
                     break;
                 case "price_up":
-                    $order = " ORDER BY SalePrice ASC";
+                    $order = " ORDER BY t.SalePrice ASC";
                     break;
                 case "comment_down":
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY t.Sort DESC,t.Createdate DESC";
                     break;
                 case "comment_up":
-                    $order = " ORDER BY Sort ASC,Createdate ASC";
+                    $order = " ORDER BY t.Sort ASC,t.Createdate ASC";
                     break;
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY t.Sort DESC,t.Createdate DESC";
                     break;
             }
             $searchSql = "";
@@ -155,15 +156,16 @@ class ProductPublicData extends BasePublicData {
             }
             $sql = "
             SELECT
-            ProductId,ProductNumber,ProductName,SiteId,ChannelId,
-            ProductShortName,ProductIntro,ProductTag,
-            TitlePic1UploadFileId,TitlePic2UploadFileId,TitlePic3UploadFileId,TitlePic4UploadFileId,
-            SalePrice,CreateDate,ManageUserId,ManageUserName,UserId,UserName,
-            Sort,State,RecLevel,HitCount,RecCount,FavoriteCount,QuestionCount,IsHot,IsNew,
-            SaleState,GetScore,SendPrice,SendPriceAdd,DirectUrl,MarketPrice,SaleCount,PublishDate
+            t.ProductId,t.ProductNumber,t.ProductName,t.SiteId,t.ChannelId,t.
+            ProductShortName,t.ProductIntro,t.ProductTag,t.
+            TitlePic1UploadFileId,t.TitlePic2UploadFileId,t.TitlePic3UploadFileId,t.TitlePic4UploadFileId,t.
+            SalePrice,t.CreateDate,t.ManageUserId,t.ManageUserName,t.UserId,t.UserName,t.
+            Sort,t.State,t.RecLevel,t.HitCount,t.RecCount,t.FavoriteCount,t.QuestionCount,t.IsHot,t.IsNew,t.
+            SaleState,t.GetScore,t.SendPrice,t.SendPriceAdd,t.DirectUrl,t.MarketPrice,t.SaleCount,t.PublishDate,t1.*
             FROM
-            " . self::TableName_Product . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
+            " . self::TableName_Product . " t
+            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
+            WHERE t.ChannelId=:ChannelId AND t.State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
@@ -191,12 +193,13 @@ class ProductPublicData extends BasePublicData {
         if ($channelId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY t.Sort DESC,t.Createdate DESC";
                     break;
             }
-            $sql = "SELECT *"
-                . " FROM " . self::TableName_Product
-                . " WHERE ChannelId=:ChannelId AND State<100"
+            $sql = "SELECT t.*,t1."
+                . " FROM " . self::TableName_Product ." t"
+                . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
+                . " WHERE t.ChannelId=:ChannelId AND t.State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
@@ -220,12 +223,13 @@ class ProductPublicData extends BasePublicData {
         else $topCount = "";
         switch ($order) {
             default:
-                $order = " ORDER BY RecLevel DESC";
+                $order = " ORDER BY t.RecLevel DESC";
                 break;
         }
         $sql = "SELECT *"
-            . " FROM " . self::TableName_Product
-            . " WHERE State<100"
+            . " FROM " . self::TableName_Product ." t"
+            . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
+            . " WHERE t.State<100"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
@@ -247,12 +251,13 @@ class ProductPublicData extends BasePublicData {
         else $topCount = "";
         switch ($order) {
             default:
-                $order = " ORDER BY SaleCount DESC";
+                $order = " ORDER BY t.SaleCount DESC";
                 break;
         }
         $sql = "SELECT *"
-            . " FROM " . self::TableName_Product
-            . " WHERE State<100"
+            . " FROM " . self::TableName_Product ." t"
+            . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
+            . " WHERE t.State<100"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
