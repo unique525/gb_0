@@ -21,10 +21,10 @@ class ProductPicPublicData extends BasePublicData
             return $result;
         }
         $sql = "
-        SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
-        FROM " . self::TableName_ProductPic . " t1
-        LEFT OUTER JOIN " .self::TableName_UploadFile." t2 on t1.
-        WHERE ProductPicId=:ProductPicId;";
+        SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate,t1.*
+        FROM " . self::TableName_ProductPic . " t
+        LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.UploadFileId=t1.UploadFileId
+        WHERE t.ProductPicId=:ProductPicId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ProductPicId", $productPriceId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -47,13 +47,14 @@ class ProductPicPublicData extends BasePublicData
         if ($productId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY Sort DESC,ProductId ASC";
+                    $order = " ORDER BY t.Sort DESC,t.ProductId ASC";
                     break;
             }
             $sql = "
-            SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
-            FROM " . self::TableName_ProductPic . "
-            WHERE State=0 AND ProductId=:ProductId"
+            SELECT t.ProductPicId,t.ProductId,t.UploadFileId,t.ProductPicTag,t.Sort,t.State,t.CreateDate,t1.*
+            FROM " . self::TableName_ProductPic . " t
+            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.UploadFileId=t1.UploadFileId
+            WHERE t.State=0 AND t.ProductId=:ProductId"
             . $order
             . $topCount;
             $dataProperty = new DataProperty();
@@ -83,23 +84,24 @@ class ProductPicPublicData extends BasePublicData
         $dataProperty->AddField("ProductId", $productId);
         $searchSql = "";
         if (strlen($tag) > 0 && $tag != "undefined") {
-            $searchSql .= " AND (ProductPicTag=:ProductPicTag)";
+            $searchSql .= " AND (t.ProductPicTag=:ProductPicTag)";
             $dataProperty->AddField("ProductPicTag", $tag);
         }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $searchSql .= " AND (ProductPicIntro like :searchKey1)";
+            $searchSql .= " AND (t.ProductPicIntro like :searchKey1)";
             $dataProperty->AddField("searchKey1", "%" . $searchKey . "%");
         }
 
         $sql = "
-        SELECT ProductPicId,ProductId,UploadFileId,ProductPicTag,Sort,State,CreateDate
-        FROM " . self::TableName_ProductPic . "
-        WHERE ProductId=:ProductId" . $searchSql . "
-        ORDER BY Sort DESC,ProductPicId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+        SELECT t.ProductPicId,t.ProductId,t.UploadFileId,t.ProductPicTag,t.Sort,t.State,t.CreateDate
+        FROM " . self::TableName_ProductPic . " t
+        LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.UploadFileId=t1.UploadFileId
+        WHERE t.State=0 AND ProductId=:ProductId" . $searchSql . "
+        ORDER BY t.Sort DESC,t.ProductPicId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "
         SELECT COUNT(*) FROM " . self::TableName_ProductPic . "
-        WHERE ProductId=:ProductId" . $searchSql . ";";
+        WHERE t.State=0 AND ProductId=:ProductId" . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }

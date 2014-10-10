@@ -68,7 +68,7 @@
                     <span class="span_state" title="{f_State}" id="span_state_{f_ProductPicId}">{f_State}</span>
                     <span><img alt="" class="div_start" idvalue="{f_ProductPicId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" />&nbsp;&nbsp;&nbsp;&nbsp;<img alt="" class="div_stop" idvalue="{f_ProductPicId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" /></span>
                 </div>
-                <div class="image"><img alt="" src="{rootpath}/{f_titlepic}" width="280px" height="150px"/></div>
+                <div class="image"><img alt="" src="{f_UploadFileThumbPath1}" width="150px" height="150px"/></div>
                 <div class="pic_title">{f_ProductPicTag}</div>
             </div>
             ]]>

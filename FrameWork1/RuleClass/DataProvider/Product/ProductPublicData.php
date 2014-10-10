@@ -18,7 +18,12 @@ class ProductPublicData extends BasePublicData {
     public function GetOne($productId){
         $result = null;
         if($productId>0){
-            $sql = "SELECT * FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $sql = "
+            SELECT t.*,t1.*
+            FROM
+            " . self::TableName_Product . " t
+            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
+            WHERE t.ProductId=:ProductId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);

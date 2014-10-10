@@ -294,7 +294,7 @@
             <td align="center" valign="top" class="goodstopl" >
                 <div id="magnifier" class="magnifier">
                     <div id="BigImage" class="jqzoom" style="border:1px solid #ccc">
-                        <img id="jqimg" src="http://image2.benlailife.com/ProductImage/0301030231C.jpg" width="350" longdesc="http://image2.benlailife.com/ProductBigImage/0301030231C.jpg"/>
+                        <img id="jqimg" src="{UploadFilePath}" width="350" longdesc="{UploadFilePath}"/>
                     </div>
                 </div>
                 <div class="pic_small">
@@ -304,7 +304,7 @@
                             <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
                                 <item>
                                     <![CDATA[
-                                    <li><img class="pic_default" src="http://image1.benlailife.com/ProductSmallImage/0102020675C.jpg" originpic="http://image2.benlailife.com/ProductBigImage/0102020675C.jpg" thumb1pic="http://image2.benlailife.com/ProductImage/0102020675C.jpg"  width="50"></li>
+                                    <li><img class="pic_default" src="{f_UploadFileThumbPath2}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
                                     ]]>
                                 </item>
                             </icms>
