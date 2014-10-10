@@ -62,6 +62,11 @@
             $(".span_state").each(function () {
                 $(this).html(FormatState($(this).attr("title")));
             });
+
+            $(".span_virtual_click").each(function () {
+                $(this).html(FormatVirtualClick($(this).attr("title")));
+            });
+
         });
 
 
@@ -95,11 +100,11 @@
             <td style="width:40px;text-align:center;">状态</td>
             <td style="width:40px;text-align:center;">启用</td>
             <td style="width:40px;text-align:center;">停用</td>
-            <td style="width:220px;">名称</td>
-            <td>时间</td>
+            <td>名称</td>
+            <td style="width:350px;">时间</td>
             <td style="width:80px;text-align:center;">查看广告</td>
             <td style="width:80px;text-align:center;">指向链接</td>
-            <td style="width:80px;text-align:center;">虚拟点击</td>
+            <td style="width:160px;text-align:center;">虚拟点击</td>
             <td style="width:80px;text-align:center;">更新JS</td>
         </tr>
         <icms id="site_ad_content" type="list"><item><![CDATA[
@@ -119,11 +124,11 @@
                                 style=" cursor: pointer" alt="停用或删除"
                                 src="/system_template/default/images/manage/stop.jpg"
                                 onclick="ModifyState('site_ad_content', '{f_SiteAdContentId}', '100')"/></span></td>
-                    <td class="spe_line2" style="width:220px;text-align:left;" title="{f_SiteAdContentId}"><span style="color:{f_SiteAdContentTitleColor};font-weight:{f_SiteAdContentTitleBold};">{f_SiteAdContentTitle}</span></td>
+                    <td class="spe_line2" style="text-align:left;" title="{f_SiteAdContentId}"><span style="color:{f_SiteAdContentTitleColor};font-weight:{f_SiteAdContentTitleBold};">{f_SiteAdContentTitle}</span></td>
                     <td class="spe_line2" style="text-align:left;">{f_BeginDate}—><script type="text/javascript">CheckEndDate("{f_EndDate}")</script></td>
                     <td class="spe_line2" style="width:80px;text-align:center;"><a href="{rootpath}/{f_titlepic}" title="点击进行查看广告 {f_titlepic}" target="_blank">查看广告</a></td>
-                    <td class="spe_line2" style="width:80px;text-align:center;"><a href="{f_adurl}" title="点击查看广告指向链接 {f_adurl}" target="_blank">指向链接</a></td>
-                    <td class="spe_line2" style="width:80px;text-align:center;">{f_AddedVirtualClickCount}</td>
+                    <td class="spe_line2" style="width:80px;text-align:center;"><a href="{f_SiteAdUrl}" title="点击查看广告指向链接 {f_SiteAdUrl}" target="_blank">指向链接</a></td>
+                    <td class="spe_line2" style="width:160px;text-align:center;"><span class="span_virtual_click" idvalue="{f_SiteAdId}" title="{f_OpenVirtualClick}"></span>/{f_AddedVirtualClickCount}次</td>
                     <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
                 </tr>
                 ]]></item>

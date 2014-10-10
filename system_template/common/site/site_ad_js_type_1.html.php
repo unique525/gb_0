@@ -1,4 +1,6 @@
-
+/**
+*   文字
+*/
 document.write('<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidth}px; height:{SiteAdHeight}px;overflow:hidden;" class="icms_site_ad site_ad_show_type_{ShowType}" title="{ShowNumber}">');
     <icms id="site_ad_content" type="list">
         <item><![CDATA[

@@ -12,6 +12,54 @@ $().ready(function(){
 
 
 /**
+ * 格式化显示类型
+ * @param showType 显示类型
+ * @return string
+ */
+function FormatShowType(showType){
+    switch (showType){
+        case "0":
+            return "图片";
+            break;
+        case "1":
+            return "文字";
+            break;
+        case "2":
+            return "轮换";
+            break;
+        case "3":
+            return "随机";
+            break;
+        case "4":
+            return "落幕";
+            break;
+        default :
+            return "未知";
+            break;
+    }
+}
+
+
+/**
+ * 格式化虚拟点击状态
+ * @param state 状态
+ * @return string
+ */
+function FormatVirtualClick(state){
+    switch (state){
+        case "1":
+            return "开启";
+            break;
+        case "0":
+            return "关闭";
+            break;
+        default :
+            return "未知";
+            break;
+    }
+}
+
+/**
  * 格式化状态值
  * @param state 状态
  * @return string

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理 广告内容 数据类
+ * 前台 广告日志 数据类
  *
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_site
