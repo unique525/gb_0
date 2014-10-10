@@ -106,7 +106,7 @@
             var submit=1;
             if ($('#f_InformationTitle').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
-                $("#dialog_content").html("请输入活动名称");
+                $("#dialog_content").html("请输入标题");
                 submit=0;
             }
             if(submit==1) {

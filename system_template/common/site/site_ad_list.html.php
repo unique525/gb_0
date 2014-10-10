@@ -66,8 +66,24 @@
                 window.open('/default.php?secu=manage&mod=site_ad&m=create_js&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
 
             });
+
+
+            var btnPreShow = $(".span_pre_show");
+            btnPreShow.css("cursor", "pointer");
+            btnPreShow.click(function (event) {
+                var siteAdId = $(this).attr('idvalue');
+                var widthHeight = $(this).attr('title');
+                event.preventDefault();
+                window.open('/default.php?secu=manage&mod=site_ad&m=pre_show&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', widthHeight+' top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+
+            });
+
+
             $(".span_state").each(function () {
                 $(this).html(FormatState($(this).attr("title")));
+            });
+            $(".span_show_type").each(function () {
+                $(this).html(FormatShowType($(this).attr("title")));
             });
         });
 
@@ -100,10 +116,11 @@
             <td style="width:60px;text-align:center;">ID</td>
             <td style="width:40px;text-align:center;">编辑</td>
             <td style="width:40px;text-align:center;">状态</td>
-            <td style="width:40px;text-align:center;">停用</td>
             <td style="width:40px;text-align:center;">启用</td>
+            <td style="width:40px;text-align:center;">停用</td>
             <td style="width:120px;text-align:center;">站点名称</td>
             <td>广告位</td>
+            <td style="width:80px;text-align:center;">显示类型</td>
             <td style="width:120px;text-align:center;">规格</td>
             <td style="width:80px;text-align:center;">查看广告</td>
             <td style="width:80px;text-align:center;">更新JS</td>
@@ -128,10 +145,11 @@
                                 onclick="ModifyState('site_ad', '{f_SiteAdId}', '100')"/></span></td>
                     <td class="spe_line2" style="text-align:center;">{f_SiteName}</td>
                     <td class="spe_line2" title="{f_SiteAdId}" >{f_SiteAdName}</td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_show_type" title="{f_ShowType}" id="show_type_{f_SiteAdId}"></span></td>
                     <td class="spe_line2" style="text-align:center;">{f_SiteAdWidth}×{f_SiteAdHeight}</td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_content"  idvalue="{f_SiteAdId}" title="{f_SiteAdName}">查看广告</span></td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
-                    <td class="spe_line2" style="text-align:center;"><a href="{rootpath}/document/index.php?a=ad&m=list&adid={f_adid}&height=&width=&placeValuesBeforeTB_=savedValues&TB_iframe=true&modal=true" title="点击进行预览 {f_adid}">预览</a></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_pre_show" title="width={f_SiteAdWidth}, height={f_SiteAdHeight}," idvalue="{f_SiteAdId}" >预览</span></td>
                 </tr>
                 ]]></item></icms>
     </table>

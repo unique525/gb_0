@@ -32,6 +32,9 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
             case "create_js":
                 $result = self::GenCreateJs();
                 break;
+            case "pre_show":
+                $result = self::GenPreShow();
+                break;
             case "modify_state":
                 $result = self::ModifyState();
                 break;
@@ -232,6 +235,7 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreateJs() {
         $result="";
+        $messageWindowLastingTime=5000; //提示页面5秒后自动关闭
         $siteId = intval(Control::GetRequest("site_id", 0));
         $siteAdId = intval(Control::GetRequest("site_ad_id", 0));
 
@@ -257,13 +261,6 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         if(count($listOfSiteAdContentArray)>0){
-                            for($i=0;$i<count($listOfSiteAdContentArray);$i++){          //将参数字段格式化成文本以生成div的class
-                                if($listOfSiteAdContentArray[$i]["OpenVirtualClick"]==1){
-                                    $listOfSiteAdContentArray[$i]["OpenVirtualClick"]="open_virtual_click";
-                                }else{
-                                    $listOfSiteAdContentArray[$i]["OpenVirtualClick"]="";
-                                }
-                            }
                             $siteAdJsContent = Template::Load("site/site_ad_js_type_" . intval($showType) . ".html","common"); //ShowType 0为图片 1文字 2轮换 3随机 4落幕
                             $listName = "site_ad_content";
                             Template::ReplaceList($siteAdJsContent, $listOfSiteAdContentArray, $listName);
@@ -276,7 +273,7 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
                                 "{ShowNumber}" => $showNumber
                             );
                             $siteAdJsContent = strtr($siteAdJsContent, $replaceArr);
-                            //解jquery与社区的JS冲突问题
+                            //解jquery与其他$的JS冲突问题
                             $siteAdJsContent = str_ireplace("$", 'jQuery', $siteAdJsContent);
 
                         }else{
@@ -333,7 +330,8 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
                         //        //parent::Ftp($_publishTitlePic, $_publishTitlePic, "", $_documentChannelID, $_hasFtp, $_ftptype);
                         //    }
                     }
-
+                    if($result!="")
+                        $messageWindowLastingTime+=10000;
                     $result .= Language::Load('site_ad', 10) ;  //广告JS更新成功!
                     $result .= "<br><br>" . "/ad/" . $siteId . '/site_ad_' . $siteAdId . ".js";
 
@@ -350,7 +348,6 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
 
 
 
-                //$siteAdJsContent = self::GenJsFormatAd($siteAdId);
 
 
             }else{
@@ -360,8 +357,8 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
             $result .= Language::Load('site_ad', 5);//站点siteid错误！;
         }
         echo $result;
-        $jsCode = 'setTimeout("window.close()",5000);';
-        //Control::RunJavascript($jsCode);
+        $jsCode = 'setTimeout("window.close()",'.$messageWindowLastingTime.');';
+        Control::RunJavascript($jsCode);
         return "";
     }
 
@@ -399,6 +396,34 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
             if ($_pos === false) {
                 $result = "http://" . $result;
             }
+        }
+        return $result;
+    }
+
+
+    /**
+     * 预览
+     * @return string 预览页面
+     */
+    private function GenPreShow() {
+        $result="";
+        $siteAdId=Control::GetRequest("site_ad_id","0");
+        $siteId=Control::GetRequest("site_id","0");
+        if(intval($siteId)>0){
+            if(intval($siteAdId)>0){
+                $tempContent = Template::Load("site/site_ad_pre_show.html","common");
+                $replaceArr = array(
+                    "{SiteId}"=>$siteId,
+                    "{SiteAdId}" => $siteAdId
+                );
+                $tempContent = strtr($tempContent, $replaceArr);
+                parent::ReplaceEnd($tempContent);
+                $result=$tempContent;
+            }else{
+                $result.=Language::Load('site_ad', 6);//广告位site_ad_id错误！
+            }
+        }else{
+            $result.=Language::Load('site_ad', 5);//站点siteid错误！
         }
         return $result;
     }
