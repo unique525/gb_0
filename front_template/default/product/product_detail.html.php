@@ -226,8 +226,8 @@
             <dl class="listhover">
                 <dt><a href="javascript:;" class="on" hidefocus="true">蔬菜</a></dt>
                 <dd><ul>
-                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=109">豆角类</a></li>
-                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=110" class="" title="叶菜类">叶菜类</a></li>
+                        <li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a></li>
+                        <li><a href="/default.php?&mod=product&a=list&channel_id=110" class="" title="叶菜类">叶菜类</a></li>
                     </ul>
                     <div class="clear"></div>
                 </dd>
@@ -237,8 +237,8 @@
             <dl class="">
                 <dt><a class="" href="#" hidefocus="true">水果</a></dt>
                 <dd><ul>
-                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=111">进口水果</a></li>
-                        <li><a href="http://localhost/default.php?&mod=product&a=list&channel_id=112" class="" title="国产水果">国产水果</a></li>
+                        <li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a></li>
+                        <li><a href="/default.php?&mod=product&a=list&channel_id=112" class="" title="国产水果">国产水果</a></li>
                     </ul>
                     <div class="clear"></div>
                 </dd>

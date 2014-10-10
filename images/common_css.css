@@ -51,7 +51,7 @@ img,input{ vertical-align:middle;border:none;}
 
 .mainbav{height:40px; background:#00A93C;}
 .goods{width:194px;height:40px; background:url(goods.png) no-repeat; float:left;}
-.goods span{ padding-left:58px;font-size:16px;font-family:"Microsoft YaHei"; font-weight:bold; color:#FFF;line-height:38px;}
+.goods ul>li>span{ padding-left:58px;font-size:16px;font-family:"Microsoft YaHei"; font-weight:bold; color:#FFF;line-height:38px;}
 .column1{width:75px;float:left;color:#FFFFFF;font-family:"Microsoft YaHei";font-size:14px;line-height:40px; background:url(icon_home.png) no-repeat;margin-left:48px; text-indent:22px;}
 .column1 a{color:#FFFFFF;}
 .column2{width:86px;float:left;color:#FFFFFF;font-family:"Microsoft YaHei";font-size:14px;line-height:40px; text-align:center;}
@@ -282,3 +282,42 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 .registeright2{padding:5px;width:100px;border: solid 1px #CCCCCC;height:28px;line-height:28px;}
 .change{font-size:14px;font-family:"Microsoft YaHei";}
 .btnreg{width:360px;border:0;background:url(btnreg.png) no-repeat;font-size:25px;font-family:"Microsoft YaHei";text-align:center;color:#FFFFFF;padding:5px 0px 9px 0px;}
+
+#leftmenu a{
+    text-decoration:none;
+    display:inline;
+}
+#leftmenu ul{
+    text-align:left;
+}
+#leftmenu .arrow{ /* 菜单项的右侧小箭头 */
+    float:right;
+    padding-right:5px;
+}
+#leftmenu>ul{height:30px;} /* 即使没有菜单项也能保持顶级菜单栏的高度。 */
+/* 一级菜单 */
+#leftmenu>ul>li{
+    text-align:center;
+    display:inline-block;
+    position:relative;
+    line-height:30px;
+}
+#leftmenu>ul>li>a{color:#fff;}
+#leftmenu>ul>li:hover{}
+/* 下拉的菜单栏 */
+#leftmenu>ul>li ul{
+    display:none;
+    width:150px;
+    position:absolute;
+
+    background:#c1cd94;
+    box-shadow:2px 2px 2px #000;
+    -webkit-box-shadow:2px 2px 2px #000;
+    -moz-box-shadow:2px 2px 2px #123;
+}
+/* 下拉菜单的菜单项 */
+#leftmenu>ul>li>ul li{padding-left:5px; position:relative;}
+#leftmenu>ul>li>ul li>a{color:#000;margin-left:10px}
+#leftmenu>ul>li>ul li:hover{background:#d3dbb3;}
+/* 三级及以下的菜单项的定位 */
+#leftmenu>ul>li>ul>li ul{left:150px; top:0px;}
