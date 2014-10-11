@@ -9,7 +9,7 @@
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript">
         $(function () {
-            /* 菜单初始化 */
+            /* 顶部banner类别菜单初始化 */
             $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
             $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
             {
@@ -116,7 +116,7 @@
 </div>
 <div class="box1200">
     <div class="myseatnew">
-        <a href="#">首页</a> &gt; <a href="#">蔬菜</a> &gt; 本来精选绿芦笋300g 肉质细嫩，口味香郁</div>
+        <a href="#">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a></div>
 </div>
 <div class="box1200">
 <div class="box194 fl">

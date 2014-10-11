@@ -110,6 +110,23 @@
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
 
+            /* 顶部banner类别菜单初始化 */
+            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+            $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
+            {
+                $(this).children('ul').slideDown('fast');
+            }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
+                {
+                    $(this).children('ul').slideUp('fast');
+                });
+            $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
+            {
+                $(this).children('ul').slideDown('fast');
+            }).bind('mouseleave',function() // 子菜单的鼠标移出操作
+                {
+                    $(this).children('ul').slideUp('fast');
+                });
+
             //左侧产品类别树形效果
             $("#categoryListSum").delegate('.listsum-1', "click",
                 function (e) {
@@ -205,7 +222,20 @@
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">
-        <div class="goods"><span>所有商品分类</span></div>
+        <div class="goods" id="leftmenu">
+            <ul>
+                <li><span>所有商品分类</span>
+                    <ul>
+                        <li><a href="">蔬菜</a>
+                            <ul><li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a><a href="/default.php?&mod=product&a=list&channel_id=110">叶菜类</a></li></ul>
+                        </li>
+                        <li><a href="">水果</a>
+                            <ul><li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a><a href="/default.php?&mod=product&a=list&channel_id=112">国产水果</a></li></ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
         <div class="column1"><a href="">首页</a></div>
         <div class="column2"><a href="">超市量贩</a></div>
         <div class="column2"><a href="">团购</a></div>
@@ -215,7 +245,7 @@
 </div>
 <div class="box1200">
     <div class="myseatnew">
-        <a href="#">首页</a> &gt; <a href="#">蔬菜</a> &gt; {ProductName}</div>
+        <a href="#">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
