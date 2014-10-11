@@ -73,7 +73,7 @@ class SiteAdContentManageData  extends BaseManageData{
                 WHERE SiteAdId=:SiteAdId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_SiteAdContent . " WHERE SiteAdId=:SiteAdId AND state<100 " . $searchSql . " ;";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_SiteAdContent . " WHERE SiteAdId=:SiteAdId " . $searchSql . " ;";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
