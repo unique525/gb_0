@@ -310,7 +310,7 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
     width:193px;
     position:absolute;
 
-    background:#c1cd94;
+    background:#00A93C;
     box-shadow:2px 2px 2px #000;
     -webkit-box-shadow:2px 2px 2px #000;
     -moz-box-shadow:2px 2px 2px #123;
@@ -318,6 +318,6 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 /* 下拉菜单的菜单项 */
 #leftmenu>ul>li>ul li{padding-left:5px; position:relative;}
 #leftmenu>ul>li>ul li>a{color:#000;margin-left:10px}
-#leftmenu>ul>li>ul li:hover{background:#d3dbb3;}
+#leftmenu>ul>li>ul li:hover{background:#56CC0E;}
 /* 三级及以下的菜单项的定位 */
 #leftmenu>ul>li>ul>li ul{left:193px; top:0px;}
