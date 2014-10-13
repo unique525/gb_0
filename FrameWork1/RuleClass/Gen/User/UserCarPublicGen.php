@@ -105,7 +105,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
         } else {
-            Control::GoUrl("/login.htm");
+            Control::GoUrl("/login.html");
     }
         parent::ReplaceEnd($templateContent);
         return $templateContent;
