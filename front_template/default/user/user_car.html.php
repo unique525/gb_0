@@ -109,7 +109,7 @@
     <item>
         <![CDATA[
              --------------<br/>
-            <img src=""/>|
+            <img src="{f_UploadFilePath}"/>|
             {f_ProductName}|
             {f_ProductPriceIntro}|
             <span id="product_price_value_{f_UserCarId}">{f_ProductPriceValue}|</span>
