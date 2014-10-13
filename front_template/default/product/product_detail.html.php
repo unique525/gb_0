@@ -165,7 +165,6 @@
 
             $("#add_car").click(function(){
                 var buyCount = $("#productNum").val();
-                alert(buyCount);
                 var activity_product_id = 0;
                 if(select_product_price_id  > 0){
                     addUserCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
