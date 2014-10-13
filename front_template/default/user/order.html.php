@@ -205,7 +205,7 @@
             <div class="new_con_box">
                 <div class="new_con_arw"><img src="/images/cart_n_arrowl.gif" width="11" height="21" alt=""/></div>
                 <div class="new_commodity">
-                    <div class="fr"><a href="">[返回购物车]</a></div>
+                    <div class="fr"><a href="/default.php?mod=user_car&a=list">[返回购物车]</a></div>
                     <table border="0" cellspacing="1" cellpadding="0" class="com_list" bgcolor="#dddddd">
                         <tr class="com_list_tit">
                             <td>商品名称</td>
