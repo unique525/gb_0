@@ -1,0 +1,347 @@
+<?php
+
+/**
+ * 广告位页面生成类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_Gen_CustomForm
+ * @author 525
+ */
+
+class SiteFilterManageGen extends BaseManageGen implements IBaseManageGen {
+
+    /**
+     * 引导方法
+     * @return string 返回执行结果
+     */
+    function Gen() {
+        $result = "";
+        $method = Control::GetRequest("m", "");
+        switch ($method) {
+            case "create":
+                $result = self::GenCreate();
+                break;
+            case "modify":
+                $result = self::GenModify();
+                break;
+            case "list":
+                $result = self::GenList();
+                break;
+            case "modify_state":
+                $result = self::ModifyState();
+                break;
+        }
+        $replaceArray = array(
+            "{method}" => $method
+        );
+        $result = strtr($result, $replaceArray);
+        return $result;
+    }
+
+
+    public function DoFilter($siteId, $useArea, &$stop, &$content, &$multiContent = null) {
+        $result = "";
+        $stop = FALSE;
+        $siteFilterManageData = new SiteFilterManageData();
+        $arrSiteFilter = $siteFilterManageData->GetList($siteId);
+
+        if (count($arrSiteFilter) > 0) {
+
+            for ($i = 0; $i < count($arrSiteFilter); $i++) {
+                $siteFilterWord = trim($arrSiteFilter[$i]["SiteFilterWord"]); //过滤字符
+                $intervalCount = intval($arrSiteFilter[$i]["IntervalCount"]); //过滤字符中的间隔数字
+                $siteFilterType = intval($arrSiteFilter[$i]["SiteFilterType"]); //过滤类型 0:替换 1:阻止
+                $siteFilterArea = intval($arrSiteFilter[$i]["SiteFilterArea"]); //过滤范围 0:全局 1:资讯 2:活动 3:会员 4:评论
+                $pregMatch = "";
+                $siteFilterWordLength = mb_strlen($siteFilterWord, 'utf8');
+
+                if ($siteFilterWordLength > 0 && $intervalCount >= 0) {
+                    for ($j = 0; $j < $siteFilterWordLength; $j++) {
+                        if ($j < $siteFilterWordLength - 1) {//不是最后一个字符，就拼接正则表达式
+                            $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1) . "[\s|\S|\d|\D|，|。|？|：|；|‘|’|！|“|”|—]{0,$intervalCount}";
+                        } else {//否则只拼接字符
+                            $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1);
+                        }
+                    }
+                }
+                if (mb_strlen($pregMatch) > 0) { //match字符不为空时才处理
+                    $pregMatch = '/' . $pregMatch . '/iu';
+
+                    if ($useArea == $siteFilterArea || $siteFilterArea == 0) { //只处理符合对应使用区域和全局的
+                        if (!empty($multiContent)) { //多内容数组
+                            for ($imc = 0; $imc < count($multiContent); $imc++) {
+                                if (!empty($multiContent[$imc])) {
+                                    $multiContent[$imc] = preg_replace($pregMatch, "***", $multiContent[$imc]);
+                                }
+                            }
+                        } else { //单字符串
+                            if ($siteFilterType == 1) { //同时阻止执行
+                                $matches = null;
+                                if (preg_match($pregMatch, $content, $matches)) {
+                                    $stop = TRUE;
+                                    //$i = count($arrSiteFilter);
+                                    $result = $matches[0];
+                                }
+                            }
+                            $content = preg_replace($pregMatch, "***", $content); //替换过滤字符为 *
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 新增过滤
+     * @return string 执行结果
+     */
+    private function GenCreate() {
+        $tempContent = Template::Load("site/site_filter_deal.html","common");
+        $siteId = Control::GetRequest("site_id", "-1");
+        $siteName = Control::GetRequest("site_name", "");
+        $resultJavaScript="";
+        $tabIndex = Control::GetRequest("tab_index", 1);
+
+        if($siteId>=0){
+
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserId = Control::GetManageUserId();
+            $manageUserAuthority = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthority->CanManageFilter($siteId, 0, $manageUserId);
+            if ($can != 1) {
+                Control::ShowMessage(Language::Load('document', 26), $tempContent);//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
+                return "";
+            }
+
+            $siteFilterManageData = new SiteFilterManageData();
+            parent::ReplaceFirst($tempContent);
+            if (!empty($_POST)) {
+                $siteId = Control::PostRequest("f_SiteId", "0");
+                $siteFilterArea = control::PostRequest("f_SiteFilterArea", 0);
+                $siteFilterWord = control::PostRequest("f_SiteFilterWord", "");
+                if($siteFilterWord!=""){
+                    $alreadyFilter = $siteFilterManageData->GetCount($siteFilterArea,$siteFilterWord,$siteId);  //检查是否存在该过滤
+                    if($alreadyFilter==0){
+
+                        $newFilterId = $siteFilterManageData->Create($_POST);
+
+
+                        //记入操作log
+                        $operateContent = "Create site_filter：SiteFilterId：" . $newFilterId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newFilterId;
+                        self::CreateManageUserLog($operateContent);
+
+                        if ($newFilterId > 0) {
+                            Control::ShowMessage(Language::Load('site_filter', 1));//提交成功!
+                            $closeTab = Control::PostRequest("CloseTab",0);
+                            if($closeTab == 1){
+                                $resultJavaScript .= Control::GetCloseTab();
+                            }else{
+                                Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                            }
+                        }else{
+                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 2));//提交失败!插入或修改数据库错误！
+                        }
+                    }else{
+                        $resultJavaScript.=Control::GetJqueryMessage(Language::Load('site_filter', 7));//该过滤已经存在！不能重复添加
+                    }
+                }else{
+                    $resultJavaScript.=Control::GetJqueryMessage(Language::Load('site_filter', 3));//过滤字符为空！
+                }
+            }
+
+
+            $createDate=date('Y-m-d H:i:s');
+            $replaceArr = array(
+                "{SiteId}" => $siteId,
+                "{SiteName}" => $siteName,
+                "{TabIndex}" => $tabIndex,
+                "{CreateDate}" => $createDate,
+                "{ReadOnly}" => "",
+                "{display}" => ""
+            );
+            $tempContent = strtr($tempContent, $replaceArr);
+
+            $fieldsOfTable = $siteFilterManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfTable);
+
+            //替换掉{s XXX}的内容
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        } else {
+            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 5));//站点siteid错误！;
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
+
+    /**
+     * 编辑过滤
+     * @return string 执行结果
+     */
+    private function GenModify() {
+        $tempContent = Template::Load("site/site_filter_deal.html","common");
+        $siteId = Control::GetRequest("site_id", "-1");
+        $siteName = Control::GetRequest("site_name", "");
+        $resultJavaScript="";
+        $tabIndex = Control::GetRequest("tab_index", 1);
+        $siteFilterId= Control::GetRequest("site_filter_id",-1);
+        $siteFilterId=intval($siteFilterId);
+        if($siteFilterId>0){
+            if($siteId>=0){
+
+                ///////////////判断是否有操作权限///////////////////
+                $manageUserId = Control::GetManageUserId();
+                $manageUserAuthority = new ManageUserAuthorityManageData();
+                $can = $manageUserAuthority->CanManageFilter($siteId, 0, $manageUserId);
+                if ($can != 1) {
+                    Control::ShowMessage(Language::Load('document', 26), $tempContent);//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
+                    return "";
+                }
+
+                $siteFilterManageData = new SiteFilterManageData();
+                parent::ReplaceFirst($tempContent);
+                if (!empty($_POST)) {
+                    $siteId = Control::PostRequest("f_SiteId", "0");
+                    $siteFilterWord = control::PostRequest("f_SiteFilterWord", "");
+                    if($siteFilterWord!=""){
+
+                            $Modified = $siteFilterManageData->Modify($_POST,$siteFilterId);
+
+
+                            //记入操作log
+                            $operateContent = "Modify site_filter：SiteFilterId：" . $Modified .",POST FORM:".implode("|",$_POST).";\r\nResult:". $Modified;
+                            self::CreateManageUserLog($operateContent);
+
+                            if ($Modified > 0) {
+                                Control::ShowMessage(Language::Load('site_filter', 1));//提交成功!
+                                $closeTab = Control::PostRequest("CloseTab",0);
+                                if($closeTab == 1){
+                                    $resultJavaScript .= Control::GetCloseTab();
+                                }else{
+                                    Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                                }
+                            }else{
+                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 2));//提交失败!插入或修改数据库错误！
+                            }
+                    }else{
+                        $resultJavaScript.=Control::GetJqueryMessage(Language::Load('site_filter', 3));//过滤字符为空！
+                    }
+                }
+
+                $replaceArr = array(
+                    "{SiteId}" => $siteId,
+                    "{SiteName}" => $siteName,
+                    "{TabIndex}" => $tabIndex,
+                    "{ReadOnly}" => "readonly",
+                    "{display}" => "none"
+                );
+                $tempContent = strtr($tempContent, $replaceArr);
+
+
+                $arrOneSiteFilter = $siteFilterManageData->GetOne($siteFilterId);
+                if(!empty($arrOneSiteFilter)){
+                    Template::ReplaceOne($tempContent, $arrOneSiteFilter);
+                }else{
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 4));//过滤原有数据获取失败！请谨慎修改！
+                }
+
+
+
+                //替换掉{s XXX}的内容
+                $patterns = '/\{s_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
+            } else {
+                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 5));//站点siteid错误！;
+            }
+        }else{
+            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site_filter', 6));//过滤字符site_filter_id错误！;
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
+    /**
+     * 过滤字段分页列表
+     * @return string 列表页面html
+     */
+    private function GenList(){
+        $resultJavaScript="";
+        $tempContent = Template::Load("site/site_filter_list.html","common");
+        $siteId = Control::GetRequest("site_id", "0");
+        $pageSize = Control::GetRequest("ps", 20);
+        $pageIndex = Control::GetRequest("p", 1);
+        $searchKey = Control::GetRequest("search_key", "");
+
+
+        if ($pageIndex > 0 && $siteId > 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $listName = "site_filter";
+            $allCount = 0;
+
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserId = Control::GetManageUserId();
+            $manageUserAuthority = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthority->CanManageFilter($siteId, 0, $manageUserId);
+            if ($can == 1) {
+                $siteFilterManageData = new SiteFilterManageData();
+                $listOfFilterArray = $siteFilterManageData->GetListPager($siteId, $pageBegin, $pageSize, $allCount, $searchKey);
+                if(count($listOfFilterArray)>0){
+                    Template::ReplaceList($tempContent, $listOfFilterArray, $listName);
+
+                    $styleNumber = 1;
+                    $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                    $isJs = FALSE;
+                    $navUrl = "default.php?secu=manage&mod=site_filter&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $jsFunctionName = "";
+                    $jsParamList = "";
+                    $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
+
+
+                    $replace_arr = array(
+                        "{PagerButton}" => $pagerButton
+                    );
+                    $tempContent = strtr($tempContent, $replace_arr);
+                }else{
+                    Template::RemoveCustomTag($tempContent, $listName);
+                    $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
+                }
+
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                $tempContent = str_ireplace("{PagerButton}", Language::Load('document', 26), $tempContent);//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
+            }
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+            $result=$tempContent;
+        }else{
+            $result = Language::Load('site_filter', 3);
+        }
+        return $result;
+    }
+    /**
+     * 修改过滤状态
+     * @return string 修改结果
+     */
+    private function ModifyState()
+    {
+        //$result = -1;
+        $siteFilterId = Control::GetRequest("table_id", 0);
+        $state = Control::GetRequest("state",0);
+        if ($siteFilterId > 0) {
+            $siteFilterManageData = new SiteFilterManageData();
+            $result = $siteFilterManageData->ModifyState($siteFilterId,$state);
+            //加入操作日志
+            $operateContent = 'ModifyState site_filter,Get FORM:' . implode('|', $_GET) . ';\r\nResult:site_ad:' . $result;
+            self::CreateManageUserLog($operateContent);
+        } else {
+            $result = -1;
+        }
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
+}
+?>

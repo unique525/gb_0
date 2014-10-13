@@ -78,7 +78,7 @@ class InformationManageData extends BaseManageData{
                 WHERE ChannelId=:ChannelId " . $searchSql . " ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_Information . " WHERE ChannelId=:ChannelId AND state<100 " . $searchSql . " ;";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_Information . " WHERE ChannelId=:ChannelId " . $searchSql . " ;";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;

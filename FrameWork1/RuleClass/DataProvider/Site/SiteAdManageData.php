@@ -45,7 +45,7 @@ class SiteAdManageData  extends BaseManageData{
 
 
     /**
-     * 获取活动分页列表
+     * 获取广告位分页列表
      * @param int $siteId 站点id
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页大小
@@ -73,7 +73,7 @@ class SiteAdManageData  extends BaseManageData{
                 WHERE SiteId=:SiteId " . $searchSql . " LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_SiteAd . " WHERE SiteId=:SiteId AND state<100 " . $searchSql . " ;";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_SiteAd . " WHERE SiteId=:SiteId " . $searchSql . " ;";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;

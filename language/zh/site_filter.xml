@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <module id="1"><content><![CDATA[提交成功!]]></content></module>
+    <module id="2"><content><![CDATA[提交失败!插入或修改数据库错误！]]></content></module>
+    <module id="3"><content><![CDATA[过滤字符为空！]]></content></module>
+    <module id="4"><content><![CDATA[过滤原有数据获取失败！请谨慎修改！]]></content></module>
+    <module id="5"><content><![CDATA[站点id错误]]></content></module>
+    <module id="6"><content><![CDATA[过滤字符site_filter_id错误]]></content></module>
+    <module id="7"><content><![CDATA[该过滤已经存在！不能重复添加]]></content></module>
+</root>
