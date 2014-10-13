@@ -334,31 +334,40 @@ $(function () {
   </tr>
   <tr>
     <td class="registerleft"><span>*</span>请确认密码：</td>
-    <td><input name="" type="text" class="registeright"/></td>
-  </tr>
-  <tr>
-    <td class="registerleft">验证手机：</td>
-    <td><input name="" type="text" class="registeright"/></td>
-  </tr>
-  <tr>
-    <td class="registerleft">验证邮箱：</td>
-    <td><input name="" type="text" class="registeright"/></td>
-  </tr>
-  <tr>
-    <td class="registerleft"><span>*</span>验证码：</td>
-    <td>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="120"><input name="" type="text" class="registeright2"/></td>
-    <td width="110"><img src="/images/icon_yzm.png" width="105" height="35" /></td>
-    <td class="change">看不清？<a href=""><font color="#00A93C">换一张</font></a></td>
-  </tr>
-</table>
+    <td id="td_confirm_pass">
+        <input type="password" id="confirm_pass" class="input_box registeright" value=""/>
+        <span id="span_confirm_pass_error" class="error_span"></span>
     </td>
   </tr>
   <tr>
+    <td class="registerleft">验证手机：</td>
+    <td id="td_user_mobile">
+        <input type="text" id="user_mobile" maxlength="40" class="input_box registeright" name="UserMobile" value=""/>
+        <span id="span_user_mobile_error" class="error_span"></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="registerleft">验证邮箱：</td>
+    <td id="td_user_email">
+        <input type="text" id="user_email" maxlength="40" class="input_box registeright" name="UserEmail" value=""/>
+        <span id="span_user_email_error" class="error_span"></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="registerleft"><span>*</span>验证码：</td>
+      <td id="td_check_code">
+          <input type="text" id="check_code" class="input_number input1" value="" size="8"/>
+          <img src="/default.php?mod=common&a=gen_gif_verify_code&sn=user_register" title="" alt=""
+               onclick="this.setAttribute('src','/default.php?mod=common&a=gen_gif_verify_code&sn=user_register&n='+Math.random());"
+               style="cursor: pointer;"/>
+          <span class="error_span" id="span_check_code_error"></span>
+      </td>
+  </tr>
+  <tr>
     <td class="registerleft"></td>
-    <td class="change"><input name="" type="checkbox" value="" />&nbsp;我已同意并阅读<a href=""><font color="#00A93C">《星滋味用户注册协议》</font></a></td>
+    <td class="change">
+        <input type="checkbox" id="accept_item" name="accept_item"/>&nbsp;我已同意并阅读<a href="#"><font color="#00A93C">《星滋味用户注册协议》</font></a>
+    </td>
   </tr>
   <tr>
     <td></td>
