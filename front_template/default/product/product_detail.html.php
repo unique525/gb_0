@@ -203,7 +203,7 @@
 
 <div class="loginbg">
     <div class="wrapper">
-        <div class="loginleft">您好，欢迎来到星滋味    请<a target="_blank" href="http://localhost/login.html">登陆</a>    <a href="">免费注册</a></div>
+        <div class="loginleft">您好，欢迎来到星滋味    请<a target="_blank" href="/login.html">登陆</a>    <a href="">免费注册</a></div>
         <div class="loginright"><a target="_blank" href="/default.php?mod=user&a=homepage&site_id=1">我的星滋味</a>    <a href="">收藏本站</a></div>
     </div>
 </div>
