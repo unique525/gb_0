@@ -73,7 +73,7 @@
 <div class="loginbg">
     <div class="wrapper">
         <div class="loginleft">您好，欢迎来到星滋味    请<a href="">登陆</a>    <a href="">免费注册</a></div>
-        <div class="loginright"><a href="">我的星滋味</a>    <a href="">收藏本站</a></div>
+        <div class="loginright"><a target="_blank" href="/default.php?mod=user&a=homepage&site_id=1">我的星滋味</a>    <a href="">收藏本站</a></div>
     </div>
 </div>
 <div class="wrapper2">
@@ -86,7 +86,7 @@
     <div class="service">
         <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
         <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><span>购物车</span></div>
+        <div class="shopping"><span><a href="/default.php?mod=user_car&a=list" target="_blank"></span></div>
         <div class="number">0</div>
     </div>
 </div>
