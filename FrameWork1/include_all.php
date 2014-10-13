@@ -53,6 +53,7 @@ include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseClientGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseClientGen.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/Forum/ForumBasePublicGen.php");
 //include once rule class
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
 $arrFiles = getFileNames($dir);
