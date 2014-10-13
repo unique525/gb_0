@@ -86,7 +86,7 @@
     <div class="service">
         <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
         <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><span><a href="/default.php?mod=user_car&a=list" target="_blank"></span></div>
+        <div class="shopping"><span><a href="/default.php?mod=user_car&a=list" target="_blank"></a></span></div>
         <div class="number">0</div>
     </div>
 </div>
