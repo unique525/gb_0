@@ -8,6 +8,8 @@
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/user/user_car.js"></script>
+    <script type="text/javascript" src="/front_js/user/user_favorite.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
@@ -165,7 +167,7 @@
                 var buyCount = $("").val();
                 var activity_product_id = 0;
                 if(select_product_price_id  > 0){
-                    addCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                    addUserCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
                 }
             });
         });
