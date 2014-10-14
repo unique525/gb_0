@@ -116,17 +116,17 @@
             $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
             $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
             {
-                $(this).children('ul').slideDown('fast');
+                $(this).children('ul').css('display','');
             }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
                 {
-                    $(this).children('ul').slideUp('fast');
+                    $(this).children('ul').css('display','none');
                 });
             $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
             {
-                $(this).children('ul').slideDown('fast');
+                $(this).children('ul').css('display','');
             }).bind('mouseleave',function() // 子菜单的鼠标移出操作
                 {
-                    $(this).children('ul').slideUp('fast');
+                    $(this).children('ul').css('display','none');
                 });
 
             //左侧产品类别树形效果
@@ -227,12 +227,12 @@
         <div class="goods" id="leftmenu">
             <ul>
                 <li><span>所有商品分类</span>
-                    <ul>
+                    <ul style="display:none">
                         <li><a href="">蔬菜</a>
-                            <ul><li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a><a href="/default.php?&mod=product&a=list&channel_id=110">叶菜类</a></li></ul>
+                            <ul style="display:none"><li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a><a href="/default.php?&mod=product&a=list&channel_id=110">叶菜类</a></li></ul>
                         </li>
                         <li><a href="">水果</a>
-                            <ul><li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a><a href="/default.php?&mod=product&a=list&channel_id=112">国产水果</a></li></ul>
+                            <ul style="display:none"><li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a><a href="/default.php?&mod=product&a=list&channel_id=112">国产水果</a></li></ul>
                         </li>
                     </ul>
                 </li>
