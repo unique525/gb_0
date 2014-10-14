@@ -213,7 +213,7 @@
                             <td>单价</td>
                             <td>金额小计</td>
                         </tr>
-                        <icms id="product_order">
+                        <icms id="product_with_product_price">
                             <item><![CDATA[
                                 <tr>
                                     <td>
@@ -222,10 +222,10 @@
                                     </td>
                                     <td class="send_td01" style="text-align:center">{f_BuyCount}</td>
                                     <td class="send_td01" style="text-align:center">
-                                        ¥{f_ProductPriceValue}
+                                        <span class="show_price">{f_ProductPriceValue}</span>
                                     </td>
                                     <td class="send_td01" style="text-align:center">
-                                        ¥<span class="UserOrderSubtotal">{f_BuyPrice}</span>
+                                        <span class="UserOrderSubtotal show_price">{f_BuyPrice}</span>
                                     </td>
                                 </tr>
                                 ]]>
@@ -252,11 +252,11 @@
         </div>
 
         <div class="new_all_submit">
-            <div class="new_all_price">商品金额<b>¥{TotalProductPrice}</b>元
-                + 运费<b>¥{SendPrice}</b>元
-                &nbsp;&nbsp;&nbsp;&nbsp;您需为订单支付金额<span>¥{TotalPrice}</span>元
+            <div class="new_all_price">商品金额<strong class="show_price">{TotalProductPrice}</strong>元
+                + 运费<strong class="show_price">{SendPrice}</strong>元
+                &nbsp;&nbsp;&nbsp;&nbsp;您需为订单支付金额<span class="show_price">{TotalPrice}</span>元
             </div>
-            <div class="red">！请确认收货地址后进行订单提交</div>
+            <div class="red">请确认收货地址后进行订单提交！</div>
             <div style="padding-top:15px;"><input name="" type="button" class="btn_submit" value="提交"/></div>
         </div>
 

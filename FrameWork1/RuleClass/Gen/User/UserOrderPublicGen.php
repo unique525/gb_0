@@ -19,11 +19,14 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             case "list":
                 $result = self::GenList();
                 break;
-            case "async_get_order_count_by_state":
-                $result = self::AsyncGetOrderCountByState();
+            case "async_get_count_by_state":
+                $result = self::AsyncGetCountByState();
                 break;
-            case "confirm_order":
-                $result = self::GenConfirmOrder();
+            case "confirm":
+                $result = self::GenConfirm();
+                break;
+            case "submit":
+                $result = self::GenSubmit();
                 break;
         }
         return $result;
@@ -54,7 +57,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         }
     }
 
-    private function AsyncGetOrderCountByState(){
+    private function AsyncGetCountByState(){
         $userId = Control::GetUserId();
         $siteId = intval(Control::GetRequest("site_id",0));
         $state = Control::GetRequest("state",0);
@@ -64,16 +67,16 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         }
     }
 
-    private function GenConfirmOrder(){
+    private function GenConfirm(){
         $userId = Control::GetUserId();
         $siteId = intval(Control::GetRequest("site_id",0));
-        $arrCarIdString = Control::GetRequest("arr_user_car_id","");
+        $strUserCarIds = Control::GetRequest("arr_user_car_id","");
         $templateFileUrl = "user/order.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
-        if($arrCarIdString != "" && $userId > 0 && $siteId > 0){
+        if($strUserCarIds != "" && $userId > 0 && $siteId > 0){
             parent::ReplaceFirst($templateContent);
 
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
@@ -88,17 +91,20 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
 
-            $tagIdProductOrder = "product_order";
-            $arrCarIdString = str_ireplace("_",",",$arrCarIdString);
-            $arrProductOrderList = $userCarPublicData->GetListForConfirmOrder($arrCarIdString,$userId);
+            $tagIdProductOrder = "product_with_product_price";
+            $strUserCarIds = str_ireplace("_",",",$strUserCarIds);
+            $arrProductOrderList = $userCarPublicData->GetListForConfirmUserOrder(
+                $strUserCarIds,
+                $userId
+            );
             if(count($arrProductOrderList) > 0){
                 Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
             }else{
                 Template::ReplaceCustomTag($templateContent,$tagIdProductOrder,"");
             }
 
-            $sendPrice = $userCarPublicData->GetSendPriceForConfirmOrder($arrCarIdString,$userId);
-            $totalProductPrice = $userCarPublicData->GetTotalProductPriceForConfirmOrder($arrCarIdString,$userId);
+            $sendPrice = $userCarPublicData->GetSendPriceForConfirmUserOrder($strUserCarIds,$userId);
+            $totalProductPrice = $userCarPublicData->GetTotalProductPriceForConfirmUserOrder($strUserCarIds,$userId);
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
 
             $replace_arr = array(

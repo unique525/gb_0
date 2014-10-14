@@ -10,6 +10,13 @@ class UserCarPublicData extends BasePublicData
 {
     /**
      * 新增
+     * @param $userId
+     * @param $siteId
+     * @param $productId
+     * @param $productPriceId
+     * @param $buyCount
+     * @param int $activityProductId
+     * @return int
      */
     public function Create($userId, $siteId, $productId, $productPriceId, $buyCount, $activityProductId = 0)
     {
@@ -96,11 +103,11 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
-    public function BatchDelete($arrUserCarIdString, $userId)
+    public function BatchDelete($strUserCarIds, $userId)
     {
         $result = -1;
-        if (!empty($arrUserCarIdString) && $userId > 0) {
-            $sql = "DELETE FROM " . self::TableName_UserCar . " WHERE UserId = :UserId AND UserCarId IN (" . $arrUserCarIdString . ");";
+        if (!empty($strUserCarIds) && $userId > 0) {
+            $sql = "DELETE FROM " . self::TableName_UserCar . " WHERE UserId = :UserId AND UserCarId IN (" . $strUserCarIds . ");";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -108,7 +115,7 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetCarCount($userId, $siteId)
+    public function GetCount($userId, $siteId)
     {
         $result = -1;
         if ($userId > 0 && $siteId > 0) {
@@ -121,15 +128,16 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetListForConfirmOrder($arrUserCarIdString, $userId)
+    public function GetListForConfirmUserOrder($strUserCarIds, $userId)
     {
         $result = null;
-        $arrUserCarIdList = explode(",", $arrUserCarIdString);
-        if (count($arrUserCarIdList) > 0) {
+        $arrUserCarId = explode(",", $strUserCarIds);
+        if (count($arrUserCarId) > 0) {
             $sql = "SELECT uc.*,(uc.BuyCount*pp.ProductPriceValue) AS BuyPrice,
                             p.ProductName,
                             p.ChannelId,
                             p.ProductId,
+                            pp.ProductPriceId,
                             pp.ProductPriceValue,
                             pp.ProductUnit,
                             pp.ProductPriceIntro,
@@ -140,7 +148,7 @@ class UserCarPublicData extends BasePublicData
                     WHERE uc.ProductPriceId = pp.ProductPriceId
                     AND uc.ProductId = psp.ProductId
                     AND uc.ProductId = p.ProductId
-                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $arrUserCarIdString . ");";
+                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $strUserCarIds . ");";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -148,15 +156,15 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetSendPriceForConfirmOrder($arrUserCarIdString, $userId)
+    public function GetSendPriceForConfirmUserOrder($strUserCarIds, $userId)
     {
         $result = null;
-        $arrUserCarIdList = explode(",", $arrUserCarIdString);
-        if (count($arrUserCarIdList) > 0) {
+        $arrUserCarId = explode(",", $strUserCarIds);
+        if (count($arrUserCarId) > 0) {
             $sql = "SELECT max(psp.SendPrice)
                     FROM " . self::TableName_UserCar . " uc," . self::TableName_ProductSendPrice . " psp
                     WHERE uc.ProductId = psp.ProductId
-                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $arrUserCarIdString . ");";
+                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $strUserCarIds . ");";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetFloat($sql, $dataProperty);
@@ -164,15 +172,15 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetTotalProductPriceForConfirmOrder($arrUserCarIdString, $userId)
+    public function GetTotalProductPriceForConfirmUserOrder($strUserCarIds, $userId)
     {
         $result = null;
-        $arrUserCarIdList = explode(",", $arrUserCarIdString);
+        $arrUserCarIdList = explode(",", $strUserCarIds);
         if (count($arrUserCarIdList) > 0) {
             $sql = "SELECT sum(uc.BuyCount*pp.ProductPriceValue) AS TotalPrice
                     FROM " . self::TableName_UserCar . " uc," . self::TableName_ProductPrice . " pp
                     WHERE uc.ProductPriceId = pp.ProductPriceId
-                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $arrUserCarIdString . ");";
+                    AND uc.UserId = :UserId AND uc.UserCarId IN (" . $strUserCarIds . ");";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetFloat($sql, $dataProperty);

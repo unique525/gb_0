@@ -206,7 +206,7 @@
                             arr_user_car_id = arr_user_car_id+selected_car[i]+"_";
                         }
                     }
-                    location.replace("/default.php?mod=user_order&a=confirm_order&arr_user_car_id="+arr_user_car_id+"&site_id=1");
+                    location.replace("/default.php?mod=user_order&a=confirm&arr_user_car_id="+arr_user_car_id+"&site_id=1");
                 }else{
                     alert("请选择一个或多个商品");
                 }
