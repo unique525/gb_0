@@ -84,9 +84,9 @@ function addFavorite(tableId,favoriteName,tableType,userFavoriteTag,siteId){
 function formatPrice(price){
     if(price != undefined){
         if(parseFloat(price)>0){
-            return parseFloat(price).toFixed(3);
+            return parseFloat(price).toFixed(2);
         }else{
-            return "0.000";
+            return "0.00";
         }
 
     }else{
