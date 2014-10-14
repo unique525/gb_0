@@ -286,7 +286,8 @@
                     <div><img class="minus_count" id="minus_{f_UserCarId}" idvalue="{f_UserCarId}" src="/images/arrow2.png" width="13" height="10" /></div>
                 </div>
             </div>
-            <div class="a6">￥<span class="buy_price" id="buy_price_{f_UserCarId}">{f_BuyPrice}</span></div>
+            <div class="a6">
+                ￥<span class="buy_price" id="buy_price_{f_UserCarId}">{f_BuyPrice}</span></div>
             <div class="a7">有货</div>
             <div class="a8">
                 <span style="cursor:pointer" onclick="addFavorite('{f_ProductId}','{f_ProductName}','1','商品','{f_SiteId}');">
