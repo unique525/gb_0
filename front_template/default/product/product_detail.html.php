@@ -7,7 +7,7 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
     <script type="text/javascript" src="/front_js/user/user_favorite.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
@@ -31,7 +31,7 @@
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
                 select_product_price_id = $(this).attr("idvalue");
-                $("#productPrice").text(productPriceValue);
+                $("#productPrice").text(formatPrice(productPriceValue));
                 //产品价格
                 var productSalePriceValue=$("#productSalePrice").text();
                 //优惠的差价
@@ -287,7 +287,7 @@
                 <item>
                     <![CDATA[
                     <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="90" height="90" ></a>
-                        <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
+                        <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
 
                     ]]>
                 </item>
@@ -415,14 +415,14 @@
 </div>
 <div  class="baifenb" style="overflow: hidden;"><div class="favorcombcont">
         <div class="zi"> 商品推荐</div>
-        <div class=" fctl">
+        <div class="fctl">
             <ul>
                 <icms id="product_rec_level" type="product_list" where="RecLevel" top="4">
                     <item>
                         <![CDATA[
                         <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="150" height="175" ></a>
                             <p><a href="#" target="_blank" >{f_ProductName}</a>  </p>
-                            ￥{f_SalePrice} <span>￥{f_MarketPrice}</span></li>
+                            ￥<span class="show_price">{f_SalePrice}</span> <span class="removed">￥<span class="show_price">{f_MarketPrice}</span></span></li>
                         ]]>
                     </item>
                 </icms>
