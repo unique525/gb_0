@@ -99,6 +99,22 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
             $tagId = "user_car";
 
+            for($i=0;count($arrUserCarProductList);$i++){
+
+                $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
+                $productPriceValue = intval($arrUserCarProductList[$i]["ProductPriceValue"]);
+                if($activityProductId>0){
+                    $disCount = 1;
+                    $salePrice = $disCount * $productPriceValue;
+                }else{
+                    $salePrice = $productPriceValue;
+                }
+
+                $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
+
+            }
+
+
             if (count($arrUserCarProductList) > 0) {
                 Template::ReplaceList($templateContent, $arrUserCarProductList, $tagId);
             } else {
