@@ -278,7 +278,7 @@
             <div class="a3">{f_ProductName}</div>
             <div class="a4">
                 ￥<span id="sale_price_value_{f_UserCarId}" class="show_price">{f_SalePrice}</span><br/>
-                <span style="font-size: 14px;color:#CCC">￥</span><span id="product_price_value_{f_UserCarId}" class="show_price" style="TEXT-DECORATION: line-through;font-size: 14px;color:#CCC">{f_ProductPriceValue}</span>
+                <span style="font-size: 14px;color:#CCC">原价：￥</span><span id="product_price_value_{f_UserCarId}" class="show_price" style="TEXT-DECORATION: line-through;font-size: 14px;color:#CCC">{f_ProductPriceValue}</span>
             </div>
             <div class="a5">
                 <div class="num">
