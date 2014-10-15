@@ -2,6 +2,16 @@
  * Created by a525 on 14-9-30.
  */
 
+
+/**
+ *
+ * @param {int} siteAdId
+ * @param {string} switchClassName
+ */
+window.runSiteAdJs = function(siteAdId,switchClassName){
+
+};
+
 $().ready(function() {
     //检查所有广告是否到期
     var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
@@ -174,4 +184,5 @@ function IsInTime(adContent){
         adContent.setAttribute("idvalue","-1");  //未开始
     adContent.setAttribute("id",times[2]);
 }
+
 
