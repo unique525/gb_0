@@ -16,14 +16,14 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
     public function GenPublic()
     {
         $result = "";
-        $method = Control::GetRequest("a", "");
-        switch ($method) {
+        $action = Control::GetRequest("a", "");
+        switch ($action) {
             case "modify":
                 $result = self::GenModify();
                 break;
         }
 
-        $result = str_ireplace("{method}", $method, $result);
+        $result = str_ireplace("{action}", $action, $result);
 
         return $result;
     }
@@ -32,7 +32,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $siteId = Control::GetRequest("site_id",0);
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/user_info_deal.html";
+            $templateFileUrl = "/user/user_info_deal.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
