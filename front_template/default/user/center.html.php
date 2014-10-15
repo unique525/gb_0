@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>会员中心</title>
 <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .right{cursor:pointer}
@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="/images/js.js"></script>
+    <script type="text/javascript" src="/front_js/user/user_car.js"></script>
 
 <script type="text/javascript">
     $(function(){
@@ -48,7 +49,7 @@
 <div class="service">
 <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
 <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-<div class="shopping"><span>购物车</span></div>
+<div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
 <div class="number" id="user_car_count">0</div>
 </div>
 </div>

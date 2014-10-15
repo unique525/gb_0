@@ -8,13 +8,12 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script type="text/javascript">
+        var reUrl = Request["re_url"];
         $(function(){
             $("#btn_login").click(function(){
                 var url = "/default.php?mod=user&a=async_login";
-                var reUrl = Request["re_url"];
                 var userAccount = $("#user_account").val();
                 var userPass = $("#user_pass").val();
-
                 if(userAccount != "" && userPass != ""){
                     $.ajax({
                         url:url,
@@ -31,7 +30,7 @@
                                 if(reUrl == undefined || reUrl.length == 0){
                                     window.location.href="/default.php?mod=user&a=homepage&site_id=1";
                                 }else{
-                                    window.location.href=reUrl;
+                                    location.href=decodeURIComponent(reUrl);
                                 }
                             }
                         }
@@ -51,7 +50,7 @@
 </div>
 <div class="clean"></div>
 <div class="wrapper">
-<div style="width:125px;height:31px;padding-left:985px;float:left;"><a href=""><img src="/images/registerbtn.png" width="125" height="31" /></a></div>
+<div style="width:125px;height:31px;padding-left:985px;float:left;"><a href="/register.html"><img src="/images/registerbtn.png" width="125" height="31" /></a></div>
 <div class="clean"></div>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -71,7 +70,7 @@
   </tr>
   <tr><td style="text-align:right;"><a href="">忘记密码？</a></td></tr>
   <tr>
-    <td height="60"><input id="btn_login" name="" type="button" class="btnlogin" value="提交"/></td>
+    <td height="60"><input id="btn_login" name="" type="button" class="btnlogin" style="cursor:pointer" value="提交"/></td>
   </tr>
 </table>
 </div>
