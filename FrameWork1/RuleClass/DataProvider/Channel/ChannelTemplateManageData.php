@@ -94,6 +94,33 @@ class ChannelTemplateManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 取得当前频道下所有模板，管理模板使用
+     * @param int $channelId 频道id
+     * @return array|null 发布模板
+     */
+    public function GetListForManage($channelId){
+        $result = null;
+
+        if($channelId>0){
+            $sql = "SELECT
+                        ct.*,
+                        length(ct.Attachment) as AttachmentLength,
+                        mu.ManageUserName
+                    FROM
+                        " . self::TableName_ChannelTemplate . " ct,
+                        " . self::TableName_ManageUser." mu
+                    WHERE ct.ChannelId=:ChannelId
+                        AND ct.ManageUserId=mu.ManageUserId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 取得当前频道下对应发布方式的模板
      * @param int $channelId 频道id

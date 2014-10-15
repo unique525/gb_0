@@ -53,7 +53,7 @@
             if(siteId>0){
                 $.ajax({
                     type: "get",
-                    url: "default.php?secu=manage&mod=site&m=async_modify_state",
+                    url: "/default.php?secu=manage&mod=site&m=async_modify_state",
                     data: {
                         site_id: siteId,
                         state:state

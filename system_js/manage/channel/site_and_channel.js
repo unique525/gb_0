@@ -103,6 +103,13 @@ $(function () {
         addTab();
     });
 
+    // channel template
+    var btnRightViewChannelTemplate = $("#btn_right_view_channel_template");
+    btnRightViewChannelTemplate.click(function () {
+        window.G_TabTitle = "频道模板";
+        window.G_TabUrl = '/default.php?secu=manage&mod=channel_template&m=list&channel_id='+window.G_SelectedChannelId;
+        addTab();
+    });
 
 
     var btnRightPubChannel = $("#btn_right_pub_channel");

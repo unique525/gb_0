@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 后台管理 站点 生成类
+ * 后台管理 频道模板 生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_Site
+ * @package iCMS_FrameWork1_RuleClass_Gen_Channel
  * @author zhangchi
  */
-class SiteManageGen extends BaseManageGen implements IBaseManageGen {
+class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -43,10 +43,10 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate(){
         $manageUserId = Control::GetManageUserId();
         if($manageUserId<=0){
-            return Language::Load("site",8);
+            return Language::Load("channel_template",8);
         }
 
-        $tempContent = Template::Load("site/site_deal.html", "common");
+        $tempContent = Template::Load("channel/channel_template_deal.html", "common");
 
 
 
@@ -103,7 +103,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen {
         //}
 
         //load template
-        $tempContent = Template::Load("site/site_list.html", "common");
+        $tempContent = Template::Load("channel/channel_template_list.html", "common");
 
         parent::ReplaceFirst($tempContent);
 
@@ -111,39 +111,32 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen {
         ///////////////输出权限到页面///////////////////
         ////////////////////////////////////////////////////
 
-        $pageSize = Control::GetRequest("ps", 20);
-        $pageIndex = Control::GetRequest("p", 1);
+        $channelId = Control::GetRequest("channel_id", 0);
         $searchKey = Control::GetRequest("search_key", "");
         $searchType = Control::GetRequest("search_type", -1);
         $searchKey = urldecode($searchKey);
 
-        if ($pageIndex > 0) {
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "site_list";
+        if ($channelId > 0) {
+
+            $tagId = "channel_template_list";
             $allCount = 0;
-            $siteManageData = new SiteManageData();
-            $arrList = $siteManageData->GetList($pageBegin, $pageSize, $allCount, $searchKey, $searchType, $manageUserId);
+            $channelTemplateManageData = new ChannelTemplateManageData();
+            $arrList = $channelTemplateManageData->GetListForManage($channelId, $searchKey, $searchType, $manageUserId);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
-
-
-                $styleNumber = 1;
-                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
-                $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=site&m=list&p={0}&ps=$pageSize";
-                $jsFunctionName = "";
-                $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-
-                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+                $tempContent = str_ireplace("{pager_button}", "", $tempContent);
 
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("site", 7), $tempContent);
+                $tempContent = str_ireplace("{pager_button}", Language::Load("channel_template", 9), $tempContent);
             }
+        }else{
+
         }
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
+
+
 } 
