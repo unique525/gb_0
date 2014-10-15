@@ -8,7 +8,14 @@
  */
 class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 {
-
+    /**
+     * 加入购物车成功
+     */
+    const ADD_USER_CAR_SUCCESS = 1;
+    /**
+     * 加入购物车成功
+     */
+    const ADD_USER_CAR_FAIL = -1;
     /**
      * 修改购买数量成功
      */
@@ -29,6 +36,10 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
      * 删除购物车产品失败
      */
     const PRODUCT_TABLE_TYPE_IN_UPLOAD_FILE = -1;
+    /**
+     * 未登陆
+     */
+    const IS_NOT_LOGIN = -2;
 
     /**
      * 引导方法
@@ -38,8 +49,8 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $method = Control::GetRequest("a", 0);
         $result = "";
         switch ($method) {
-            case "async_add":
-                $result = self::GenCreate();
+            case "async_create":
+                $result = self::AsyncCreate();
                 break;
             case "list":
                 $result = self::GenList();
@@ -53,14 +64,14 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_batch_remove_bin":
                 $result = self::AsyncBatchRemoveBin();
                 break;
-            case "async_get_car_count":
+            case "async_get_count":
                 $result = self::AsyncGetCarCount();
                 break;
         }
         return $result;
     }
 
-    private function GenCreate()
+    private function AsyncCreate()
     {
         $userId = Control::GetUserId();
         $siteId = Control::GetRequest("site_id", 0);
@@ -73,16 +84,15 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 $userCarPublicData = new UserCarPublicData();
                 $result = $userCarPublicData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $activityProductId);
                 if ($result > 0) {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":1})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_SUCCESS.'})';
                 } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":-1})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL.'})';
                 }
             } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":-1})';
+                return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL.'})';
             }
         } else {
-            Control::GoUrl("/login.htm");
-            return "";
+            return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::IS_NOT_LOGIN.'})';
         }
     }
 
@@ -96,24 +106,22 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0) {
             parent::ReplaceFirst($templateContent);
             $userCarPublicData = new UserCarPublicData();
+            $activityProductPublicData = new ActivityProductPublicData();
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
             $tagId = "user_car";
 
-            for($i=0;count($arrUserCarProductList);$i++){
-
+            for($i=0;$i<count($arrUserCarProductList);$i++){
                 $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
                 $productPriceValue = intval($arrUserCarProductList[$i]["ProductPriceValue"]);
                 if($activityProductId>0){
-                    $disCount = 1;
-                    $salePrice = $disCount * $productPriceValue;
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId);
+                    $salePrice = $discount * $productPriceValue;
                 }else{
                     $salePrice = $productPriceValue;
                 }
-
                 $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-
+                $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
             }
-
 
             if (count($arrUserCarProductList) > 0) {
                 Template::ReplaceList($templateContent, $arrUserCarProductList, $tagId);
@@ -171,7 +179,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
         if ($userId > 0 && $siteId > 0) {
             $userCarPublicData = new UserCarPublicData();
-            $result = $userCarPublicData->GetCarCount($userId, $siteId);
+            $result = $userCarPublicData->GetCount($userId, $siteId);
             if ($result > 0) {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
             } else {

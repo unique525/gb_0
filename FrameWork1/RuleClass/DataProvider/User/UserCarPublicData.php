@@ -50,7 +50,6 @@ class UserCarPublicData extends BasePublicData
         if ($userId > 0) {
             $sql = "SELECT uc.*
                         ,up.UploadFilePath
-                        ,(uc.BuyCount*pp.ProductPriceValue) AS BuyPrice
                         ,p.ProductName
                         ,p.ProductId
                         ,pp.ProductPriceValue

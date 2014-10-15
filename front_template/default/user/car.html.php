@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<link href="/images/common_css.css" rel="stylesheet" type="text/css" />
+<title>我的购物车</title>
+<link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script type="text/javascript">
         var selected_car = new Array();
@@ -29,7 +29,7 @@
                             }else{
                                 //成功
                                 $("#buy_count_"+user_car_id).val(buy_count);
-                                var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                                var product_price = parseFloat($("#sale_price_value_"+user_car_id).html());
                                 //var send_price = parseFloat($("#send_price_"+user_car_id).html());
                                 //var buy_price = buy_count*product_price+send_price;
                                 var buy_price = buy_count*product_price;
@@ -63,7 +63,7 @@
                         }else{
                             //成功
                             $("#buy_count_"+user_car_id).val(buy_count);
-                            var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                            var product_price = parseFloat($("#sale_price_value_"+user_car_id).html());
 //                            var send_price = parseFloat($("#send_price_"+user_car_id).html());
 //                            var buy_price = buy_count*product_price+send_price;
                             var buy_price = buy_count*product_price;
@@ -94,7 +94,7 @@
                         }else{
                             //成功
                             $("#buy_count_"+user_car_id).val(buy_count);
-                            var product_price = parseFloat($("#product_price_value_"+user_car_id).html());
+                            var product_price = parseFloat($("#sale_price_value_"+user_car_id).html());
 //                            var send_price = parseFloat($("#send_price_"+user_car_id).html());
 //                            var buy_price = buy_count*product_price+send_price;
                             var buy_price = buy_count*product_price;
@@ -276,7 +276,10 @@
             <div class="a1"><input class="checkbox_car" id="checkbox_car_{f_UserCarId}" idvalue="{f_UserCarId}" autocomplete="off" name="" type="checkbox" value="" /></div>
             <div class="a2"><img src="{f_UploadFilePath}" width="72" height="72" /></div>
             <div class="a3">{f_ProductName}</div>
-            <div class="a4">￥<span id="product_price_value_{f_UserCarId}">{f_ProductPriceValue}</span></div>
+            <div class="a4">
+                ￥<span id="sale_price_value_{f_UserCarId}" class="show_price">{f_SalePrice}</span><br/>
+                <span style="font-size: 14px;color:#CCC">￥</span><span id="product_price_value_{f_UserCarId}" class="show_price" style="TEXT-DECORATION: line-through;font-size: 14px;color:#CCC">{f_ProductPriceValue}</span>
+            </div>
             <div class="a5">
                 <div class="num">
                     <input class="input_buy_count" id="buy_count_{f_UserCarId}" idvalue="{f_UserCarId}" type="text" value="{f_BuyCount}"/>
@@ -287,7 +290,7 @@
                 </div>
             </div>
             <div class="a6">
-                ￥<span class="buy_price" id="buy_price_{f_UserCarId}">{f_BuyPrice}</span></div>
+                ￥<span class="buy_price show_price" id="buy_price_{f_UserCarId}">{f_BuyPrice}</span></div>
             <div class="a7">有货</div>
             <div class="a8">
                 <span style="cursor:pointer" onclick="addFavorite('{f_ProductId}','{f_ProductName}','1','商品','{f_SiteId}');">

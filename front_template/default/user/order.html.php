@@ -99,7 +99,7 @@
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">
-        <div class="goods"><span>所有商品分类</span></div>
+        <div class="goods" id="leftmenu"><ul><li><span>所有商品分类</span></li></ul></div>
         <div class="column1"><a href="">首页</a></div>
         <div class="column2"><a href="">超市量贩</a></div>
         <div class="column2"><a href="">团购</a></div>
