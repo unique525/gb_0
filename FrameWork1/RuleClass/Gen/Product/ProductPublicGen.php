@@ -68,7 +68,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
                 $isJs = FALSE;
-                $navUrl = "/default.php?secu=manage&mod=product_param_type&m=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order";
+                $navUrl = "/default.php?mod=product&a=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order#product_list_anchor";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
