@@ -6,7 +6,7 @@
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript">
         $(function () {
             /* 顶部banner类别菜单初始化 */

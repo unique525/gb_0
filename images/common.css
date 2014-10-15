@@ -210,7 +210,8 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 .favorcombcont .fctl ul{padding:0px 10px;margin:0px;}
 .favorcombcont .fctl ul li {text-align:center;text-indent:0px;list-style-type:none;list-style-position:outside;color:#ff3c00;padding:10px 28px;width:178px;line-height:20px;font-weight:bold; float:left;text-align:left; font-size:16px;}
 .favorcombcont .fctl ul li p{text-align:left;font-weight:100;margin-top:5px; padding-bottom:10px;}
-.favorcombcont .fctl ul li span{ font-weight:100; font-size:14px; color:#999999;text-decoration: line-through; padding-left:20px;}
+.favorcombcont .fctl ul li .removed{ font-weight:100; font-size:14px; color:#999999;text-decoration: line-through; padding-left:20px;}
+.favorcombcont .fctl ul li span{ }
 .favorcombcont .fctl ul li a.pic{text-decoration:none;color:#333;}
 .favorcombcont .fctl ul li a{text-decoration:none;color:#8b8a8a;}
 .favorcombcont .fctl ul li a:hover{text-decoration:underline;color:#f08b0c;}
