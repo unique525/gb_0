@@ -103,16 +103,18 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
-        $tagId = "user_car";
+        $siteId =Control::GetRequest("site_id",1);
+        $tagId = "user_car_list";
         if ($userId > 0) {
             parent::ReplaceFirst($templateContent);
             $userCarPublicData = new UserCarPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
+            $userFavoritePublicData = new UserFavoritePublicData();
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
 
             for($i=0;$i<count($arrUserCarProductList);$i++){
                 $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
-                $productPriceValue = intval($arrUserCarProductList[$i]["ProductPriceValue"]);
+                $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
                 if($activityProductId>0){
                     $discount = $activityProductPublicData->GetDiscount($activityProductId);
                     $salePrice = $discount * $productPriceValue;
@@ -128,8 +130,21 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
+            //-----------替换最近收藏----------begin
+            $recentUserFavoriteTagId = "recent_user_favorite_list";
+            $pageBegin = 0;
+            $pageSize = 5;
+            $allCount = 0;
+            $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            if(count($arrUserFavoriteList) > 0){
+                Template::ReplaceList($templateContent,$arrUserFavoriteList,$recentUserFavoriteTagId);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent, $recentUserFavoriteTagId,"您还没有收藏任何产品");
+            }
+            //------------------------------end
         } else {
             Template::RemoveCustomTag($templateContent, $tagId);
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=user_car&a=list"));
     }
         parent::ReplaceEnd($templateContent);
         return $templateContent;

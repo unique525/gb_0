@@ -397,7 +397,7 @@ $(function () {
   </tr>
   <tr>
     <td class="registerleft"></td>
-    <td class="change">已注册<a href=""><font color="#00A93C">点此登录</font></a></td>
+    <td class="change">已注册<a href="/default.php?mod=user&a=login"><font color="#00A93C">点此登录</font></a></td>
   </tr>
 </table>
     </td>

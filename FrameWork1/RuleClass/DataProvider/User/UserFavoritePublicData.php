@@ -66,7 +66,7 @@ class UserFavoritePublicData extends BasePublicData
     }
 
     /**
-     * 获取会员收藏的列表
+     * 获取最近收藏的列表
      * @param int $userId 用户Id
      * @param int $siteId 站点Id
      * @param int $pageBegin 从pageBegin开始
@@ -74,7 +74,7 @@ class UserFavoritePublicData extends BasePublicData
      * @param int $allCount 总行数
      * @return array|null 会员收藏的列表
      */
-    public function GetListForHomePage($userId,$siteId,$pageBegin,$pageSize,&$allCount){
+    public function GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($userId > 0){
             $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf LEFT JOIN ".self::TableName_UploadFile." uf2

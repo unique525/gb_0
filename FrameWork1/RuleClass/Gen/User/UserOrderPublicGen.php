@@ -99,17 +99,19 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $userId
             );
 
+            $totalProductPrice = 0;//订单总价
             for($i=0;$i<count($arrProductOrderList);$i++){
                 $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);
-                $productPriceValue = intval($arrProductOrderList[$i]["ProductPriceValue"]);
+                $productPriceValue = floatval($arrProductOrderList[$i]["ProductPriceValue"]);
                 if($activityProductId>0){
                     $discount = $activityProductPublicData->GetDiscount($activityProductId);
                     $salePrice = $discount * $productPriceValue;
                 }else{
                     $salePrice = $productPriceValue;
                 }
-                $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
+                $arrProductOrderList[$i]["SalePrice"] = $salePrice;
+                $arrProductOrderList[$i]["BuyPrice"] = $arrProductOrderList[$i]["BuyCount"]*$salePrice;
+                $totalProductPrice = $arrProductOrderList[$i]["BuyPrice"]+$totalProductPrice;
             }
             if(count($arrProductOrderList) > 0){
                 Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
@@ -118,7 +120,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
             $sendPrice = $userCarPublicData->GetSendPriceForConfirmUserOrder($strUserCarIds,$userId);
-            $totalProductPrice = $userCarPublicData->GetTotalProductPriceForConfirmUserOrder($strUserCarIds,$userId);
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
 
             $replace_arr = array(
