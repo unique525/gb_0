@@ -9,53 +9,7 @@
 class ChannelTemplateManageData extends BaseManageData
 {
 
-    /**
-     * 联动发布，只发布在本频道下
-     */
-    const PUBLISH_TYPE_LINKAGE_ONLY_SELF = 0;
-    /**
-     * 联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
-     */
-    const PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER = 1;
-    /**
-     * 联动发布，发布在所有继承树关系的频道下
-     */
-    const PUBLISH_TYPE_LINKAGE_ALL = 2;
-    /**
-     * 非联动发布，只发布在本频道下
-     */
-    const PUBLISH_TYPE_ONLY_SELF = 10;
-    /**
-     * 不发布
-     */
-    const PUBLISH_TYPE_NOT_PUBLISH = 20;
-    /**
-     * 资讯详细页模板
-     */
-    const PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL = 30;
-    /**
-     * 活动详细页模板
-     */
-    const PUBLISH_TYPE_ACTIVITY_DETAIL = 31;
 
-    /**
-     * 普通模板
-     */
-    const CHANNEL_TEMPLATE_TYPE_NORMAL = 0;
-
-    /**
-     * 动态模板
-     */
-    const CHANNEL_TEMPLATE_TYPE_DYNAMIC = 1;
-
-    /**
-     * 状态：正常
-     */
-    const STATE_NORMAL = 0;
-    /**
-     * 状态：已删
-     */
-    const STATE_REMOVED = 100;
 
     /**
      * 新增频道模板
@@ -125,13 +79,13 @@ class ChannelTemplateManageData extends BaseManageData
             $sql = "SELECT * FROM " . self::TableName_ChannelTemplate . "
              WHERE ChannelId=:ChannelId
                 AND
-                   State<".self::STATE_REMOVED."
+                   State<".ChannelTemplateData::STATE_REMOVED."
                 AND
                    PublishType IN (
-                            ".self::PUBLISH_TYPE_LINKAGE_ALL.",
-                            ".self::PUBLISH_TYPE_LINKAGE_ONLY_SELF.",
-                            ".self::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER.",
-                            ".self::PUBLISH_TYPE_ONLY_SELF."
+                            ".ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL.",
+                            ".ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_SELF.",
+                            ".ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER.",
+                            ".ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF."
                             );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
@@ -147,7 +101,10 @@ class ChannelTemplateManageData extends BaseManageData
      * @param int $channelTemplateType 模板类型 0普通 1动态
      * @return array|null 发布模板
      */
-    public function GetListByPublishType($channelId, $publishType, $channelTemplateType = ChannelTemplateManageData::CHANNEL_TEMPLATE_TYPE_NORMAL){
+    public function GetListByPublishType(
+        $channelId,
+        $publishType,
+        $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_NORMAL){
 
         $result = null;
 
@@ -155,7 +112,7 @@ class ChannelTemplateManageData extends BaseManageData
             $sql = "SELECT * FROM " . self::TableName_ChannelTemplate . "
              WHERE ChannelId=:ChannelId
                 AND
-                   State<".self::STATE_REMOVED."
+                   State<".ChannelTemplateData::STATE_REMOVED."
                 AND
                    PublishType = :PublishType
                 AND

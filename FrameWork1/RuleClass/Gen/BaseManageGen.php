@@ -152,15 +152,15 @@ class BaseManageGen extends BaseGen
 
                         //3.根据PublishType和PublishFileName生成目标文件
                         switch ($publishType) {
-                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
+                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
                                 //联动发布，只发布在本频道下
 
                                 break;
-                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
+                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
                                 //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
                                 //触发频道id $channelId
                                 $timeStart = Control::GetMicroTime();
-                                $result = self::AddToPublishQueue($channelId, $rank, $channelTemplateContent, $publishType, $publishFileName, $publishQueueManageData);
+                                $result = self::AddToPublishQueueForChannelTemplate($channelId, $rank, $channelTemplateContent, $publishType, $publishFileName, $publishQueueManageData);
                                 $timeEnd = Control::GetMicroTime();
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
@@ -172,11 +172,11 @@ class BaseManageGen extends BaseGen
                                     "now channel id:$nowChannelId add to publish queue result:$result"
                                 );
                                 break;
-                            case ChannelTemplateManageData::PUBLISH_TYPE_LINKAGE_ALL:
+                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL:
                                 //联动发布，发布在所有继承树关系的频道下
 
                                 break;
-                            case ChannelTemplateManageData::PUBLISH_TYPE_ONLY_SELF:
+                            case ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF:
                                 //非联动发布，只发布在本频道下
 
                                 break;
@@ -371,17 +371,17 @@ class BaseManageGen extends BaseGen
      * 加入到发布队列
      * @param int $channelId 频道id
      * @param int $rank 频道级别
-     * @param string $channelTemplateContent 模板内容
+     * @param string $publishContent 模板内容
      * @param int $publishType 发布方式
      * @param string $publishFileName 发布文件名
      * @param PublishQueueManageData $publishQueueManageData 发布队列对象
      * @param string $publishPath 发布路径，一般为空，详细页模板才需要使用
      * @return int|number 发布结果
      */
-    private function AddToPublishQueue(
+    private function AddToPublishQueueForChannelTemplate(
         $channelId,
         $rank,
-        $channelTemplateContent,
+        $publishContent,
         $publishType,
         $publishFileName,
         PublishQueueManageData &$publishQueueManageData,
@@ -393,10 +393,10 @@ class BaseManageGen extends BaseGen
         if ($channelId > 0) {
             switch ($publishType) {
 
-                case ChannelTemplateManageData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL: //资讯详细页模板
+                case ChannelTemplateData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL: //资讯详细页模板
                     $destinationPath = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName;
                     break;
-                case ChannelTemplateManageData::PUBLISH_TYPE_ACTIVITY_DETAIL: //活动详细页模板
+                case ChannelTemplateData::PUBLISH_TYPE_ACTIVITY_DETAIL: //活动详细页模板
                     $destinationPath = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName;
                     break;
                 default: //ChannelTemplateManageData::CHANNEL_TEMPLATE_TYPE_NORMAL 普通模板
@@ -408,7 +408,7 @@ class BaseManageGen extends BaseGen
                     break;
             }
             $sourcePath = '';
-            $publishQueueManageData->Add($destinationPath, $sourcePath, $channelTemplateContent);
+            $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
             $result = abs(DefineCode::PUBLISH) + self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
         } else {
             $result = DefineCode::PUBLISH + self::ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR;
@@ -527,7 +527,7 @@ class BaseManageGen extends BaseGen
                     while ($rank >= 0) {
 
                         $timeStart = Control::GetMicroTime();
-                        $publishType = ChannelTemplateManageData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL;
+                        $publishType = ChannelTemplateData::PUBLISH_TYPE_DOCUMENT_NEWS_DETAIL;
 
                         $arrChannelTemplateList = $channelTemplateManageData->GetListByPublishType($nowChannelId, $publishType);
                         $timeEnd = Control::GetMicroTime();
@@ -577,7 +577,7 @@ class BaseManageGen extends BaseGen
                                 //发布路径，频道id+日期
                                 $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
 
-                                $result = self::AddToPublishQueue(
+                                $result = self::AddToPublishQueueForChannelTemplate(
                                     $channelId,
                                     $rank,
                                     $channelTemplateContent,
