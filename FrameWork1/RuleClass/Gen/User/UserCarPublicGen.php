@@ -65,7 +65,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 $result = self::AsyncBatchRemoveBin();
                 break;
             case "async_get_count":
-                $result = self::AsyncGetCarCount();
+                $result = self::AsyncGetCount();
                 break;
         }
         return $result;
@@ -103,12 +103,12 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
+        $tagId = "user_car";
         if ($userId > 0) {
             parent::ReplaceFirst($templateContent);
             $userCarPublicData = new UserCarPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
             $arrUserCarProductList = $userCarPublicData->GetList($userId);
-            $tagId = "user_car";
 
             for($i=0;$i<count($arrUserCarProductList);$i++){
                 $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
@@ -129,7 +129,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
         } else {
-            Control::GoUrl("/login.html");
+            Template::RemoveCustomTag($templateContent, $tagId);
     }
         parent::ReplaceEnd($templateContent);
         return $templateContent;
@@ -172,7 +172,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         }
     }
 
-    private function AsyncGetCarCount()
+    private function AsyncGetCount()
     {
         $userId = Control::GetUserId();
         $siteId = Control::GetRequest("site_id", 0);
