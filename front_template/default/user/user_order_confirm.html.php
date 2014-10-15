@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>无标题文档</title>
+    <title>订单确认</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
@@ -222,7 +222,7 @@
                                     </td>
                                     <td class="send_td01" style="text-align:center">{f_BuyCount}</td>
                                     <td class="send_td01" style="text-align:center">
-                                        <span class="show_price">{f_ProductPriceValue}</span>
+                                        <span class="show_price">{f_SalePrice}</span>
                                     </td>
                                     <td class="send_td01" style="text-align:center">
                                         <span class="UserOrderSubtotal show_price">{f_BuyPrice}</span>

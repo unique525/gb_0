@@ -71,7 +71,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         $siteId = intval(Control::GetRequest("site_id",0));
         $strUserCarIds = Control::GetRequest("arr_user_car_id","");
-        $templateFileUrl = "user/order.html";
+        $templateFileUrl = "user/user_order_confirm.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -80,6 +80,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             parent::ReplaceFirst($templateContent);
 
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
+            $activityProductPublicData = new ActivityProductPublicData();
             $userCarPublicData = new UserCarPublicData();
 
             $tagIdUserReceive = "user_receive";
@@ -97,6 +98,21 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $strUserCarIds,
                 $userId
             );
+
+            $totalProductPrice = 0;//订单总价
+            for($i=0;$i<count($arrProductOrderList);$i++){
+                $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);
+                $productPriceValue = floatval($arrProductOrderList[$i]["ProductPriceValue"]);
+                if($activityProductId>0){
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId);
+                    $salePrice = $discount * $productPriceValue;
+                }else{
+                    $salePrice = $productPriceValue;
+                }
+                $arrProductOrderList[$i]["SalePrice"] = $salePrice;
+                $arrProductOrderList[$i]["BuyPrice"] = $arrProductOrderList[$i]["BuyCount"]*$salePrice;
+                $totalProductPrice = $arrProductOrderList[$i]["BuyPrice"]+$totalProductPrice;
+            }
             if(count($arrProductOrderList) > 0){
                 Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
             }else{
@@ -104,7 +120,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
             $sendPrice = $userCarPublicData->GetSendPriceForConfirmUserOrder($strUserCarIds,$userId);
-            $totalProductPrice = $userCarPublicData->GetTotalProductPriceForConfirmUserOrder($strUserCarIds,$userId);
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
 
             $replace_arr = array(
@@ -118,7 +133,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
-            Control::GoUrl("/login.htm");
+            Control::GoUrl("/default.php?mod=user&a=login");
             return null;
         }
     }

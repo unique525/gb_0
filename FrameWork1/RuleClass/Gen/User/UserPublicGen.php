@@ -31,13 +31,19 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     public function GenPublic()
     {
         $result = "";
-        $method = Control::GetRequest("a", "");
-        switch ($method) {
-            case "async_login":
-                $result = self::AsyncLogin();
+        $action = Control::GetRequest("a", "");
+        switch ($action) {
+            case "login":
+                $result = self::GenLogin();
                 break;
             case "register":
                 $result = self::GenRegister();
+                break;
+            case "async_login":
+                $result = self::AsyncLogin();
+                break;
+            case "async_register":
+                $result = self::AsyncRegister();
                 break;
             case "async_check_repeat":
                 $result = self::AsyncCheckRepeat();
@@ -50,9 +56,25 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
         }
 
-        $result = str_ireplace("{method}", $method, $result);
+        $result = str_ireplace("{action}", $action, $result);
 
         return $result;
+    }
+
+    private function GenLogin(){
+        $templateFileUrl = "user/user_login.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        return $templateContent;
+    }
+
+    private function GenRegister(){
+        $templateFileUrl = "user/user_register.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        return $templateContent;
     }
 
     private function AsyncLogin(){
@@ -111,7 +133,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
      * 注册
      * @return string
      */
-    private function GenRegister()
+    private function AsyncRegister()
     {
         $siteId = Control::GetRequest("site_id", 0);
         $userName = htmlspecialchars(Control::PostRequest("UserName", ""));
@@ -184,7 +206,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
             return Control::GetRequest("jsonpcallback","").'({"result":' . Format::FixJsonEncode($arrUserOne) . '})';
         }else{
-            Control::GoUrl("/login.htm");
+            Control::GoUrl("/default.php?mod=user&a=login");
             return null;
         }
     }
@@ -194,7 +216,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $siteId = Control::GetRequest("site_id",0);
 
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/center.html";
+            $templateFileUrl = "user/user_center.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -215,19 +237,19 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $pageBegin = 0;
             $pageSize = 4;
             $allCount = 0;
-            $arrUserFavoriteList = $userFavoritePublicData->GetListForHomePage($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
             if(count($arrUserFavoriteList) > 0){
                 Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
             }else{
-                Template::ReplaceCustomTag($templateContent, $tagId,"您还没有收藏任何产品");
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId,"您还没有收藏任何产品");
             }
-
+            //------------------------------end
 
             //------------零散替换--------begin
-            $State_UnSettleOrder = 0;
-            $State_UnCommentOrder = 70;
-            $unSettleOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnSettleOrder);
-            $unCommentOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnCommentOrder);
+            $State_UnSettleUserOrder = 0;
+            $State_UnCommentUserOrder = 70;
+            $unSettleOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnSettleUserOrder);
+            $unCommentOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnCommentUserOrder);
 
             $arrReplace = array(
                 "{user_account}" => $userAccount,
@@ -239,6 +261,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = strtr($templateContent,$arrReplace);
             return $templateContent;
         }else{
+            Control::GoUrl("/default.php?mod=user&a=login");
             return null;
         }
     }

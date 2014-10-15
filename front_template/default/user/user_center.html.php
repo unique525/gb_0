@@ -122,7 +122,7 @@
         <icms id="favorite_list">
             <item><![CDATA[
                 <dl>
-                    <dd><a href="{f_UserFavoriteUrl}"><img src="{f_UploadFilePath}" width="180" height="160" /></a></dd>
+                    <dd><a href="{f_UserFavoriteUrl}" target="_blank"><img src="{f_UploadFilePath}" width="180" height="160" /></a></dd>
                     <dt>{f_UserFavoriteTitle}</dt>
                 </dl>
                 ]]></item>
