@@ -286,9 +286,23 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                 $navUrl = "default.php?secu=manage&mod=site&m=list&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $pagerButton = Pager::ShowPageButton(
+                    $pagerTemplate,
+                    $navUrl,
+                    $allCount,
+                    $pageSize,
+                    $pageIndex,
+                    $styleNumber,
+                    $isJs,
+                    $jsFunctionName,
+                    $jsParamList
+                );
 
-                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+                $tempContent = str_ireplace(
+                    "{pager_button}",
+                    $pagerButton,
+                    $tempContent
+                );
 
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
