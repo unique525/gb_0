@@ -9,7 +9,14 @@
 class ChannelTemplateManageData extends BaseManageData
 {
 
-
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ChannelTemplate){
+        return parent::GetFields(self::TableName_ChannelTemplate);
+    }
 
     /**
      * 新增频道模板
@@ -87,6 +94,33 @@ class ChannelTemplateManageData extends BaseManageData
                             ".ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER.",
                             ".ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF."
                             );";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得当前频道下所有模板，管理模板使用
+     * @param int $channelId 频道id
+     * @return array|null 发布模板
+     */
+    public function GetListForManage($channelId){
+        $result = null;
+
+        if($channelId>0){
+            $sql = "SELECT
+                        ct.*,
+                        length(ct.Attachment) as AttachmentLength,
+                        mu.ManageUserName
+                    FROM
+                        " . self::TableName_ChannelTemplate . " ct,
+                        " . self::TableName_ManageUser." mu
+                    WHERE ct.ChannelId=:ChannelId
+                        AND ct.ManageUserId=mu.ManageUserId
+                    ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

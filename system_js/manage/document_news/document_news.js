@@ -100,7 +100,9 @@ $(function() {
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id=' + documentNewsId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
+        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='
+            + documentNewsId + '&p=' + pageIndex + '&channel_id='
+            + parent.G_SelectedChannelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
         parent.addTab();
     });

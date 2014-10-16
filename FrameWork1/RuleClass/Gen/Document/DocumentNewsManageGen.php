@@ -66,8 +66,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $can = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
             if (!$can) {
                 $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 26));
-                //Control::ShowMessage(Language::Load('document', 26));
-                //return "";
+
             }else{
                 $documentNewsManageData = new DocumentNewsManageData();
                 $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
@@ -230,7 +229,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                         }
                     } else {
                         $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 2));
-                        //Control::ShowMessage(Language::Load('document', 2));
                     }
                 }
                 //去掉s开头的标记 {s_xxx_xxx}
@@ -513,12 +511,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        Control::CloseTab();
+                        $resultJavaScript .= Control::GetCloseTab();
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
                 } else {
-                    Control::ShowMessage(Language::Load('document', 2));
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 4));
                 }
             }
         }

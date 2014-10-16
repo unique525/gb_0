@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
     <module id="1">
-        <content><![CDATA[站点添加成功！]]></content>
+        <content><![CDATA[新增成功！]]></content>
     </module>
     <module id="2">
-        <content><![CDATA[站点添加失败！]]></content>
+        <content><![CDATA[新增失败！]]></content>
     </module>
     <module id="3">
-        <content><![CDATA[站点编辑成功！]]></content>
+        <content><![CDATA[编辑成功！]]></content>
     </module>
     <module id="4">
-        <content><![CDATA[站点编辑失败！]]></content>
+        <content><![CDATA[编辑失败！]]></content>
     </module>
     <module id="5">
         <content><![CDATA[站点停用成功！]]></content>
