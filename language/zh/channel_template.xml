@@ -22,7 +22,7 @@
         <content><![CDATA[对不起，您未被授权浏览此页面！]]></content>
     </module>
     <module id="8">
-        <content><![CDATA[管理员信息不正确！]]></content>
+        <content><![CDATA[参数错误或管理员信息不正确！]]></content>
     </module>
     <module id="9">
         <content><![CDATA[

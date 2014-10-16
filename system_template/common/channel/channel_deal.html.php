@@ -21,7 +21,6 @@
 
             var selChannelType = $("#f_ChannelType");
             selChannelType.change(function () {
-                $(this).css("background-color", "#FFFFCC");
                 var dnt = $(this).val();
                 if (dnt == '50') {
                     $(".type_0").css("display", "none");
