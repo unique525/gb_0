@@ -42,11 +42,64 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenCreate(){
         $manageUserId = Control::GetManageUserId();
-        if($manageUserId<=0){
-            return Language::Load("channel_template",8);
+
+        $channelId = Control::GetRequest("channel_id", 0);
+        $resultJavaScript = "";
+
+        if($channelId>0 && $manageUserId>0){
+
+            $channelTemplateManageData = new ChannelTemplateManageData();
+
+            $tempContent = Template::Load("channel/channel_template_deal.html", "common");
+
+            parent::ReplaceFirst($tempContent);
+
+            if (!empty($_POST)) {
+
+                $httpPostData = $_POST;
+
+
+                $channelTemplateId = $channelTemplateManageData->Create($httpPostData);
+                //加入操作日志
+                $operateContent = 'Create ChannelTemplate,POST FORM:'
+                    . implode('|', $_POST) . ';\r\nResult:siteId:' . $channelTemplateId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($channelTemplateId > 0) {
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        $resultJavaScript .= Control::GetCloseTab();
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript .=
+                        Control::GetJqueryMessage(Language::Load('channel_template', 2)); //新增失败！
+
+                }
+
+            }
+
+            $fieldsOfChannel = $channelTemplateManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+
+            parent::ReplaceEnd($tempContent);
+
+
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+
+
+
+
+        }else{
+            $tempContent = Language::Load("channel_template",8);
         }
 
-        $tempContent = Template::Load("channel/channel_template_deal.html", "common");
+
 
 
 

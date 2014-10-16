@@ -208,7 +208,10 @@ function submitForm(closeTab) {
             $("#CloseTab").val("0");
         }
 
-        $("#mainForm").attr("action", "/default.php?secu=manage&mod=document_news&m={method}&channel_id={ChannelId}&document_news_id={DocumentNewsId}&tab_index=" + parent.G_TabIndex + "");
+        $("#mainForm").attr("action", "/default.php?secu=manage" +
+            "&mod=document_news&m={method}" +
+            "&channel_id={ChannelId}" +
+            "&document_news_id={DocumentNewsId}&tab_index=" + parent.G_TabIndex + "");
         $('#mainForm').submit();
     }
 }
@@ -265,6 +268,7 @@ function submitForm(closeTab) {
                 </td>
                 <td>
                     <input type="checkbox" id="cbTitleBold"/> <label for="cbTitleBold">加粗</label>
+                    <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
                 </td>
             </tr>
         </table>

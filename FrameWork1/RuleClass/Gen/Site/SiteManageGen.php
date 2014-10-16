@@ -101,7 +101,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     }
                 } else {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site', 3)); //新增失败！
-                    //Control::ShowMessage(Language::Load('document', 2));
+
                 }
 
             }
@@ -187,7 +187,6 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/site_data');
-
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         $resultJavaScript .= Control::GetCloseTab();
