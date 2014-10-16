@@ -185,24 +185,19 @@
             <span class="fl">最近浏览</span><a href="#"  class="fr mr5" >清空</a></div>
         <div class="clear">    </div>
         <ul >
-            <li><a class="lookpic" href="#" target="_blank" title="">
-                    <img src="images/2_14.gif" style="display: inline; "></a>
-                <div class="lookmis">
-                    <p class="lookname">
-                        <a href="#" target="_blank" title="">【进店必败】新西兰佳沛绿果）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥18.50 </p></div>
-            </li>    <div class="clear">    </div>
-            <li><a class="lookpic" href="#" target="_blank" title=""><img src="images/2_14.gif" style="display: inline; " /></a>
-                <div class="lookmis">
-                    <p class="lookname">
-                        <a href="#" target="_blank" title="">【进店必败】新西兰佳沛绿果猕猴桃450g（盒装6粒）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥18.50 </p></div>
-            </li>    <div class="clear">    </div>
-            <li><a class="lookpic" href="#" target="_blank" title=""><img src="images/2_14.gif" style="display: inline; " /></a>
-                <div class="lookmis">
-                    <p class="lookname">
-                        <a href="#" target="_blank" title="">【进店必败】新西兰佳沛绿果猕猴桃450g（盒装6粒）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥18.50 </p></div>
-            </li>    <div class="clear">    </div>
+            <icms id="user_explore_1" type="user_explore_list" top="3">
+                <item>
+                    <![CDATA[
+                    <li><a class="lookpic" href="#" target="_blank" title="">
+                            <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
+                        <div class="lookmis">
+                            <p class="lookname">
+                                <a href="#" target="_blank" title="">【进店必败】1新西兰佳沛绿果）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥18.50 </p></div>
+                    </li>    <div class="clear">    </div>
+                    ]]>
+                </item>
+            </icms>
         </ul>
-
     </div>
 </div>
 <div class="box990 fr"><div class="banner01"><a href="#" target="_blank"><img src="images/banner01.gif" width="990" height="105" /></a></div>

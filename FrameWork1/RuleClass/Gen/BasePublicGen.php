@@ -110,6 +110,12 @@ class BasePublicGen extends BaseGen {
                             $templateContent = self::ReplaceTemplateOfProductPicList($templateContent, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         }
                         break;
+                    case Template::TAG_TYPE_USER_EXPLORE_LIST :
+                        $tableType = intval(str_ireplace("user_explore_", "", $tagId));
+                        if ($tableType > 0) {
+                            $templateContent = self::ReplaceTemplateOfUserExploreList($templateContent, $tableType, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
                 }
             }
         }
@@ -430,17 +436,17 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
-     * 替换产品图片列表的内容
-     * @param string $templateContent 要处理的模板内容
-     * @param int $productId 产品id
-     * @param string $tagId 标签id
-     * @param string $tagContent 标签内容
-     * @param int $tagTopCount 显示条数
-     * @param string $tagWhere 查询方式
-     * @param string $tagOrder 排序方式
-     * @param int $state 状态
-     * @return mixed|string 内容模板
-     */
+ * 替换产品图片列表的内容
+ * @param string $templateContent 要处理的模板内容
+ * @param int $productId 产品id
+ * @param string $tagId 标签id
+ * @param string $tagContent 标签内容
+ * @param int $tagTopCount 显示条数
+ * @param string $tagWhere 查询方式
+ * @param string $tagOrder 排序方式
+ * @param int $state 状态
+ * @return mixed|string 内容模板
+ */
     private function ReplaceTemplateOfProductPicList(
         $templateContent,
         $productId,
@@ -472,6 +478,131 @@ class BasePublicGen extends BaseGen {
         }
 
         return $templateContent;
+    }
+
+    /**
+     * 替换用户浏览记录的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $tableType 对应表Id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfUserExploreList(
+        $templateContent,
+        $tableType,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($tableType > 0) {
+            $userId = Control::GetUserId();
+            $arrUserExploreList = null;
+            switch ($tagWhere) {
+                case "channel":
+                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                    break;
+                default :
+                    //new
+                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                    break;
+            }
+            if (!empty($arrUserExploreList)) {
+                Template::ReplaceList($tagContent, $arrUserExploreList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            }
+        }
+
+        return $templateContent;
+    }
+
+    /**
+     * 生成会员浏览记录COOKIE
+     * @param int $userId 会员Id
+     * @param int $tableId 对应表Id
+     * @param int $tableType 对应表类型
+     * @param string $url 浏览页面Url地址
+     * @param string $titlePic 题图地址
+     */
+    protected function CreateExploreCookie($userId,$tableId,$tableType,$url,$titlePic)
+    {
+        if ($userId > 0) {
+            if (!isset($_COOKIE['ExploreHistory'])) {
+                //将当前访问信息保存到数组中
+                $arr["TableId"] = $tableId;
+                $arr["TableType"] = $tableType;
+                $arr["UserId"] = $userId;
+                $arr["Url"] = $url;
+                $arr["TitlePic"] = $titlePic;
+                $arrList[] = $arr;
+                $userArr['"'.$userId.'"'] = $arrList;
+                //存储为字符串
+                $cookieStr = serialize($userArr);
+                //保存到cookie当中
+                setcookie('ExploreHistory', $cookieStr);
+            } else {
+                //读取cookie
+                $cookieStr = $_COOKIE['ExploreHistory'];
+                //字符串转回原来的数组
+                $userArr = unserialize($cookieStr);
+                foreach ($userArr as $key => $value) {
+                    if ($key === $userId) {
+                        $arrList = $value;
+                        //将当前访问信息保存到数组中
+                        $arr["TableId"] = $tableId;
+                        $arr["TableType"] = $tableType;
+                        $arr["UserId"] = $userId;
+                        $arr["TitlePic"] = $titlePic;
+                        $arr["Url"] = $url;
+                        $arrList[]=$arr;
+                        //除去重复的
+                        $arrList = array_unique($arrList);
+                        if (count($arrList) > 10) {
+                            //只保存10条访问记录
+                            array_shift($arrList);
+                        }
+                        $userArr['"'.$userId.'"']=$arrList;
+                    }
+                }
+                //序列化为为字符串存储
+                $cookieStr = serialize($userArr);
+                //保存到cookie当中
+                setcookie('ExploreHistory', $cookieStr);
+            }
+        }
+    }
+
+    /**
+     * 根据会员Id从会员浏览记录COOKIE中取得用户浏览记录数组
+     * @param int $userId 会员Id
+     * @return array|null 取得会员浏览记录对应数组
+     */
+    protected function GetUserExploreArrayFromCookieByUserId($userId)
+    {
+        $arrList = null;
+        if ($userId > 0) {
+            if (isset($_COOKIE['ExploreHistory'])) {
+                //读取cookie
+                $cookieStr = $_COOKIE['ExploreHistory'];
+                //字符串转回原来的数组
+                $userArr = unserialize($cookieStr);
+                foreach ($userArr as $key => $value) {
+                    if ($key === $userId) {
+                        $arrList = $value;
+                    }
+                }
+            }
+        }
+        return $arrList;
     }
 
 }
