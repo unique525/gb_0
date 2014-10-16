@@ -10,6 +10,15 @@ class SiteManageData extends BaseManageData {
 
 
     /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_Site){
+        return parent::GetFields(self::TableName_Site);
+    }
+
+    /**
      * 新增站点
      * @param array $httpPostData $_POST数组
      * @return int 新增的站点id
@@ -88,6 +97,32 @@ class SiteManageData extends BaseManageData {
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
+        return $result;
+    }
+
+    /**
+     * 修改站点题图的上传文件id
+     * @param int $siteId 站点id
+     * @param int $titlePicUploadFileId 题图上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic(
+        $siteId,
+        $titlePicUploadFileId
+    )
+    {
+        $result = -1;
+        if($siteId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Site . " SET
+                    TitlePicUploadFileId = :TitlePicUploadFileId
+                    WHERE SiteId = :SiteId
+                    ;";
+            $dataProperty->AddField("TitlePicUploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
         return $result;
     }
 
@@ -229,6 +264,79 @@ class SiteManageData extends BaseManageData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 返回一行数据
+     * @param int $siteId 站点id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($siteId){
+        $result = null;
+        if($siteId>0){
+            $sql = "SELECT * FROM
+                        " . self::TableName_Site . "
+                    WHERE SiteId=:SiteId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 修改站点题图的上传文件id
+     * @param int $siteId 站点id
+     * @param int $titlePicUploadFileId 题图1上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePicUploadFileId($siteId, $titlePicUploadFileId)
+    {
+        $result = -1;
+        if($siteId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Site . " SET
+                    TitlePicUploadFileId = :TitlePicUploadFileId
+
+                    WHERE SiteId = :SiteId
+                    ;";
+            $dataProperty->AddField("TitlePicUploadFileId", $titlePicUploadFileId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得题图的上传文件id
+     * @param int $siteId 站点id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图的上传文件id
+     */
+    public function GetTitlePicUploadFileId($siteId, $withCache)
+    {
+        $result = -1;
+        if ($siteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data';
+            $cacheFile = 'site_get_title_pic_upload_file_id.cache_' . $siteId . '';
+            $sql = "SELECT TitlePicUploadFileId FROM " . self::TableName_Site . "
+
+                    WHERE SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->GetInfoOfIntValue(
+                $sql,
+                $dataProperty,
+                $withCache,
+                $cacheDir,
+                $cacheFile
+            );
         }
         return $result;
     }

@@ -132,7 +132,19 @@ $(function () {
         }
         var loadingImageId = null;
         var inputTextId = null;
-        AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId, inputTextId);
+        var previewImageId = null;
+        AjaxFileUpload(
+            fileElementId,
+            tableType,
+            tableId,
+            loadingImageId,
+            btnUploadToContent,
+            editor,
+            fUploadFile,
+            attachWatermark,
+            inputTextId,
+            previewImageId
+        );
     });
 
     var btnAddPreContent = $(".btn_add_pre_content");
@@ -161,80 +173,7 @@ $(function () {
         closeAbstractBox();
     });
 
-    /**
-     //组图上传
 
-     $("#uploader").plupload({
-                    // General settings
-                    runtimes : 'flash,silverlight,html5,gears,html4',
-                    url : '{rootpath}/common/index.php?a=uploadbatch&cid={cid}&type=1&batchattachwatermark='+batchattachwatermark,
-                    max_file_size : '100mb',
-                    max_file_count: 20, // user can add no more then 20 files at a time
-                    chunk_size : '250kb',
-                    unique_names : true,
-                    multiple_queues : true,
-
-                    // Resize images on clientside if we can
-                    //resize : {width : 320, height : 240, quality : 90},
-		
-                    // Rename files by clicking on their titles
-                    rename: true,
-		
-                    // Sort files
-                    sortable: true,
-
-                    // Specify what files to browse for
-                    filters : [
-                        {title : "Image files", extensions : "jpg,gif,png,bmp,jpeg"},
-                        {title : "Zip files", extensions : "zip,rar"},
-                        {title : "Video files", extensions : "avi,mp4,mp3,wmv,wma"}
-                    ],
-
-                    // Flash settings
-                    flash_swf_url : '../js/plupload/js/plupload.flash.swf',
-
-                    // Silverlight settings
-                    silverlight_xap_url : '../js/plupload/js/plupload.silverlight.xap',
-                    preinit: {
-                        Init: function(up, info) {
-                        },
-                        UploadFile: function(up, file) {
-                            up.settings.url = '{rootpath}/common/index.php?a=uploadbatch&cid={cid}&type=1&batchattachwatermark='+batchattachwatermark;
-                        }
-                    },
-                    init: {
-                        
-                        FileUploaded: function(up, file, info) {
-                            // Called when a file has finished uploading
-                            //log('[FileUploaded] File:', file, "Info:", info);
-                            var filesize = parseInt(file.size);
-                            var fileid = parseInt(info.response);
-                            if(fileid>0 && filesize>0){
-                                var uploadfiles = $("#f_uploadfiles").val();
-                                uploadfiles = uploadfiles + "," + fileid;
-                                $("#f_uploadfiles").val(uploadfiles);
-                                   
-                                //modify file size
-                                $.post("../common/index.php?a=uploadfile&m=modifyfilesize&id=" + fileid + "&size="+filesize, {
-                                    results: $(this).html()
-                                }, function(xml) {
-                                    
-                                });
-                                if(!$("#f_ShowPicMethod").attr('checked')){ //没有打勾
-                                    $.post("../common/index.php?a=uploadfile&m=geturl&id=" + fileid, {
-                                        results: $(this).html()
-                                    }, function(xml) {
-                                        var outfile = tofile_html(xml);
-                                        var htmlContent = tinyMCE.get('f_documentnewscontent').getContent();
-                                        htmlContent = htmlContent + outfile;
-                                        tinyMCE.get('f_documentnewscontent').setContent(htmlContent);
-                                    }); 
-                                }
-                            }                            
-                        }
-                    }
-                });
-     */
 
 });
 

@@ -265,7 +265,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 if (!$hasRepeatPublishPath) {
                     $result = $channelManageData->Modify($httpPostData, $channelId);
                     //加入操作日志
-                    $operateContent = 'Modify Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$result;
+                    $operateContent = 'Modify Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:result:'.$result;
                     self::CreateManageUserLog($operateContent);
 
                     if ($result > 0) {

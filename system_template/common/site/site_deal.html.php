@@ -4,93 +4,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     {common_head}
-    <script type="text/javascript" src="/system_js/xheditor-1.1.13/xheditor-1.1.13-zh-cn.min.js"></script>
     <script type="text/javascript">
         <!--
-        var editor;
+
         $(function () {
-            editor = $('#f_ChannelIntro').xheditor();
 
 
-            $("#preview_title_pic1").click(function () {
-                var imgTitlePic1 = "{TitlePic1}";
-                if (imgTitlePic1 !== '') {
-                    var imageOfTitlePic1 = new Image();
-                    imageOfTitlePic1.src = imgTitlePic1;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic1.width + 30,
-                        height: imageOfTitlePic1.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic1 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图1");
-                }
-            });
-
-
-            $("#preview_title_pic2").click(function () {
-                var imgTitlePic2 = "{TitlePic2}";
-                if (imgTitlePic2 !== '') {
-                    var imageOfTitlePic2 = new Image();
-                    imageOfTitlePic2.src = imgTitlePic2;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic2.width + 30,
-                        height: imageOfTitlePic2.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic2 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图2");
-                }
-            });
-
-            $("#preview_title_pic3").click(function () {
-                var imgTitlePic3 = "{TitlePic2}";
-                if (imgTitlePic3 !== '') {
-                    var imageOfTitlePic3 = new Image();
-                    imageOfTitlePic3.src = imgTitlePic3;
-                    $("#dialog_box").dialog({
-                        width: imageOfTitlePic3.width + 30,
-                        height: imageOfTitlePic3.height + 30
-                    });
-                    var imgHtml = '<' + 'img src="' + imgTitlePic3 + '" alt="" />';
-                    $("#dialog_content").html(imgHtml);
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("还没有上传题图2");
-                }
-            });
-
-            var selChannelType = $("#f_ChannelType");
-            selChannelType.change(function () {
-                $(this).css("background-color", "#FFFFCC");
-                var dnt = $(this).val();
-                if (dnt == '50') {
-                    $(".type_0").css("display", "none");
-                    $(".type_1").css("display", "");
-                } else {
-                    $(".type_0").css("display", "");
-                    $(".type_1").css("display", "none");
-                }
-
-            });
-            selChannelType.change();
         });
 
         function submitForm(closeTab) {
             if ($('#f_SiteName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
-                $("#dialog_content").html("请输入频道名称");
-            } else if ($('#f_ChannelIntro').text().length > 1000) {
-                $("#dialog_box").dialog({width: 300, height: 100});
-                $("#dialog_content").html("频道简介不能超过1000个字符");
+                $("#dialog_content").html("请输入站点名称");
             } else {
                 if (closeTab == 1) {
                     $("#CloseTab").val("1");
@@ -160,7 +85,7 @@
                 <option value="0">本地发布</option>
                 <option value="1">FTP发布</option>
             </select>
-            {f_PublishType}
+            {s_PublishType}
         </td>
     </tr>
     <tr>
@@ -172,11 +97,10 @@
 
 
     <tr>
-        <td class="spe_line" height="30" align="right"><label for="file_title_pic_1">站点图标：</label></td>
+        <td class="spe_line" height="30" align="right"><label for="file_title_pic">站点图标：</label></td>
         <td class="spe_line">
-            <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                   style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                  style="cursor:pointer">[预览]</span>
+            <input id="file_title_pic" name="file_title_pic" type="file" class="input_box"
+                   style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic" class="show_title_pic" idvalue="{TitlePicUploadFileId}" style="cursor:pointer">[预览]</span>
 
         </td>
     </tr>
