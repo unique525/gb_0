@@ -45,6 +45,10 @@ class Template
      * 模板标签类型：产品图片列表 type="product_pic_list"
      */
     const TAG_TYPE_PRODUCT_PIC_LIST = "product_pic_list";
+    /**
+     * 模板标签类型：浏览记录列表 type="user_explore_list"
+     */
+    const TAG_TYPE_USER_EXPLORE_LIST = "user_explore_list";
 
 
     /**

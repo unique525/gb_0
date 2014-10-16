@@ -131,6 +131,14 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $patterns = '/\{s_(.*?)\}/';
         $templateContent = preg_replace($patterns, "", $templateContent);
         parent::ReplaceEnd($templateContent);
+
+        //存入用户浏览记录进CooKie
+        $tableId = $productId;
+        $tableType = 1;
+        $userId = Control::GetUserId();
+        $url = $_SERVER['REQUEST_URI'];
+        $titlePic = $arrOne["UploadFilePath"];
+        parent::CreateExploreCookie($userId,$tableId,$tableType,$url,$titlePic);
         return $templateContent;
     }
 
