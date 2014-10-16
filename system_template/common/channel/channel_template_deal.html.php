@@ -16,7 +16,7 @@
             ,word_wrap: false
             ,language: "zh"
             ,syntax: "html"
-            ,font_size: "11"
+            ,font_size: "12"
             ,font_family: "宋体,Courier New,verdana"
 
         });
