@@ -237,7 +237,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $pageBegin = 0;
             $pageSize = 4;
             $allCount = 0;
-            $arrUserFavoriteList = $userFavoritePublicData->GetListForHomePage($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
             if(count($arrUserFavoriteList) > 0){
                 Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
             }else{

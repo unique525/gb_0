@@ -31,7 +31,7 @@ class UserCarPublicData extends BasePublicData
             $dataProperty->AddField("ProductId", $productId);
             $dataProperty->AddField("ProductPriceId", $productPriceId);
             $dataProperty->AddField("BuyCount", $buyCount);
-            $dataProperty->AddField("ActivityProductId", $userId);
+            $dataProperty->AddField("ActivityProductId", $activityProductId);
 
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
         }

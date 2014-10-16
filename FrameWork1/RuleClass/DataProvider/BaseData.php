@@ -360,6 +360,14 @@ class BaseData
      * 会员相册分类 数据表自增字段名
      */
     const TableId_UserReceiveInfo = "UserReceiveInfoId";
+    /**
+     * 会员浏览记录 数据表名
+     */
+    const TableName_UserExplore = "cst_user_explore";
+    /**
+     * 会员浏览记录 数据表自增字段名
+     */
+    const TableId_UserExplore = "UserExploreId";
 
     /**
      * 自定义表单 数据表名

@@ -47,7 +47,9 @@
 
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
-            var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps=12";
+            var ps = Request["ps"];
+            if(ps==null||ps=="") ps="";
+            var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
             var direction="";
@@ -296,28 +298,11 @@
     <div class="line"></div>
     </ul>
 </div>
-<div class="pags" style="margin:30px 0px;">
-    <div class="pdr15 fr" style="width: 165px;">
-        <input  class="butn16 fr ml10" type="button" value="">
-        <div class="fr"> 页 </div>
-        <div class="fr">
-            <input  class="pagtext" type="text"  value="1">
-        </div>
-        <div class="fr"> 转至 </div>
-    </div>
-    <div class="fr eb6100"></div>
-    <div class="fr pdr15">共50页</div>
-    <div class="digg">
-        <a class="disabledl02" href="#">上一页</a>
-        <span  class="current">1</span>
-        <a  href="#">2</a>
-        <a  href="#">3</a>
-        <a class="dian">...</a>
-        <a  href="#">50</a>
-        <a class="disabledr" href="#">下一页</a>
-    </div>
+<div style="float: right;">
+    {pager_button}
     <div class="clear"></div>
 </div>
+
 </div>
 </div>
 </div>

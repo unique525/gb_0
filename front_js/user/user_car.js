@@ -13,7 +13,7 @@ function addUserCar(siteId,productId,buyCount,productPriceId,activity_product_id
                 location.replace(location);
             }else if(result == -2){
                 var re_url = encodeURIComponent(location);
-                window.location.href = "/login.html?re_url="+re_url;
+                window.location.href = "/default.php?mod=user&a=login&re_url="+re_url;
             }else{
                 //成功
                 alert("加入成功");
