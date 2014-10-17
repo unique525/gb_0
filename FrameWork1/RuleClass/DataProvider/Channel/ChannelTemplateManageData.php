@@ -102,6 +102,24 @@ class ChannelTemplateManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 删除附件
+     * @param int $channelTemplateId 模板id
+     * @return int 操作影响的行数
+     */
+    public function DeleteAttachment($channelTemplateId){
+        $result = -1;
+        if($channelTemplateId>0){
+            $sql = "UPDATE " . self::TableName_ChannelTemplate . "
+                    SET Attachment = null
+                    WHERE ChannelTemplateId=:ChannelTemplateId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 
     /**
@@ -119,6 +137,28 @@ class ChannelTemplateManageData extends BaseManageData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得频道模板的附件
+     * @param int $channelTemplateId 频道模板id
+     * @return string 频道模板的附件
+     */
+    public function GetAttachment($channelTemplateId) {
+        $result = null;
+        if($channelTemplateId>0){
+            $sql = "SELECT
+                    Attachment
+                FROM
+                    " . self::TableName_ChannelTemplate . "
+                WHERE ChannelTemplateId=:ChannelTemplateId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->dbOperator->GetLob($sql, $dataProperty);
+
         }
         return $result;
     }

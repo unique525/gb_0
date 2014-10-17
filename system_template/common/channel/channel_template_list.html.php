@@ -41,7 +41,13 @@
             //格式化附件
             $(".span_attachment_length").each(function(){
                 if($(this).text().length>0){
-                    $(this).html('<img src="/system_template/{template_name}/images/manage/zip.jpg" />');
+                    var channelTemplateId = parseInt($(this).attr("idvalue"));
+                    $(this).html('' +
+                        '<a href="/default.php?secu=manage' +
+                        '&mod=channel_template' +
+                        '&m=get_channel_template_content&channel_template_id='+channelTemplateId+'" target="_blank">' +
+                        '<img src="/system_template/{template_name}/images/manage/zip.jpg" ' +
+                        '/></a>');
                 }else{
                     $(this).html('无');
                 }
@@ -210,7 +216,7 @@
                             </td>
                             <td class="spe_line2" style="width:200px;text-align:center;" title="发布文件名">{f_PublishFileName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;" title="是否带有附件">
-                                <span class="span_attachment_length">{f_AttachmentLength}</span>
+                                <span class="span_attachment_length" idvalue="{f_ChannelTemplateId}">{f_AttachmentLength}</span>
                             </td>
                             <td class="spe_line2" style="width:100px;text-align:center;" title="发布模式">
                                 <span class="span_publish_type">{f_PublishType}</span>

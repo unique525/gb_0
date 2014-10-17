@@ -24,11 +24,17 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
+            case "delete_attachment":
+                $result = self::DeleteAttachment();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
+                break;
+            case "get_channel_template_content":
+                $result = self::GetChannelTemplateContent();
                 break;
         }
 
@@ -277,5 +283,37 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
+    /**
+     * 返回模板附件
+     * @return null|string
+     */
+    private function GetChannelTemplateContent(){
+        $result = null;
+        $channelTemplateId = Control::GetRequest("channel_template_id", 0);
+        if($channelTemplateId>0){
+            $channelTemplateManageData = new ChannelTemplateManageData();
+            $fileData = $channelTemplateManageData->GetAttachment($channelTemplateId);
+            if (!empty($fileData)) {
+                header("Content-type: application/zip;");
+                header("Content-Disposition: attachment; filename=attachment.zip");
+                $result = $fileData;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 返回模板附件
+     * @return int 返回
+     */
+    private function DeleteAttachment(){
+        $result = -1;
+        $channelTemplateId = Control::GetRequest("channel_template_id", 0);
+        if($channelTemplateId>0){
+            $channelTemplateManageData = new ChannelTemplateManageData();
+            $result = $channelTemplateManageData->DeleteAttachment($channelTemplateId);
+        }
+        return $result;
+    }
 
 } 

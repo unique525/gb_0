@@ -33,6 +33,26 @@
             });
             selChannelTemplateType.change();
 
+            var deleteAttachment = $("#btn_delete_attachment");
+            deleteAttachment.click(function () {
+
+                $.ajax({
+                    type: "get",
+                    url: "/default.php?secu=manage" +
+                        "&mod=channel_template" +
+                        "&m=delete_attachment",
+                    data: {
+                        channel_template_id: "{b_ChannelTemplateId}"
+                    },
+                    dataType: "jsonp",
+                    jsonp: "jsonpcallback",
+                    success: function(data) {
+
+                    }
+                });
+
+            });
+
         });
 
         function submitForm(closeTab) {
@@ -151,7 +171,11 @@
                 <td class="spe_line">
                     <input id="file_attachment" name="file_attachment" type="file" class="input_box"
                            style="width:400px;background:#ffffff;margin-top:3px;"/>
-                    <span id="btn_download_attachment" style="cursor:pointer">[下载]</span>
+                    <span id="btn_download_attachment" style="cursor:pointer">
+                        <a href="/default.php?secu=manage&mod=channel_template&m=get_channel_template_content&channel_template_id={b_ChannelTemplateId}" target="_blank">
+                        [下载]
+                        </a>
+                    </span>
                     <span id="btn_delete_attachment" style="cursor:pointer">[删除]</span>
 
                 </td>
