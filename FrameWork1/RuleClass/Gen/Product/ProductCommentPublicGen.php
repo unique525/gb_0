@@ -6,15 +6,25 @@
  * @author yin
  */
 class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
+    /**
+     *
+     */
     const IS_NOT_BOUGHT = -2;
+    /**
+     *
+     */
     const SYSTEM_ERROR = -3;
+    /**
+     *
+     */
+    const IS_NOT_LOGIN = -4;
 
     public function GenPublic()
     {
         $result = "";
         $action = Control::GetRequest("a","");
         switch($action){
-            case "add":
+            case "create":
                 $result = self::GenCreate();
                 break;
         }
@@ -64,12 +74,18 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
                         return Control::GetRequest("jsonpcallback","").'({"result":'.self::SYSTEM_ERROR.'})';
                     }
 
+                }else{
+                    return "";
                 }
             }else{
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::IS_NOT_BOUGHT.'})';
             }
         }else{
-            return null;
+            if($userId > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::IS_NOT_LOGIN.'})';
+            }else{
+                return "";
+            }
         }
     }
 }

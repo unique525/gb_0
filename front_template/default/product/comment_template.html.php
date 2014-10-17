@@ -7,23 +7,24 @@
         body,div,ul,li,p{margin:0;padding:0;}
         body{color:#666;font:12px/1.5 Arial;}
         ul{list-style-type:none;}
-        #star{position:relative;width:600px;margin:10px auto;}
-        #star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
-        #star ul{margin:0 10px;}
-        #star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(/jscss/demoimg/201206/star.png) no-repeat;}
-        #star strong{color:#f60;padding-left:10px;}
-        #star li.on{background-position:0 -28px;}
-        #star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(/jscss/demoimg/201206/icon.gif) no-repeat;padding:7px 10px 0;}
-        #star p em{color:#f60;display:block;font-style:normal;}
+        .star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
+        .star ul{margin:0 10px;}
+        .star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(/images/star.png) no-repeat;}
+        .star strong{color:#f60;padding-left:10px;}
+        .star li.on{background-position:0 -28px;}
+        .star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(/images/icon.gif) no-repeat;padding:7px 10px 0;}
+        .star p em{color:#f60;display:block;font-style:normal;}
     </style>
     <script type="text/javascript">
         window.onload = function ()
         {
-            var oStar = document.getElementById("star");
+            var oProductStar = document.getElementById("product_star");
+            var oSendStar = document.getElementById("send_star");
+            var oServiceStar = document.getElementById("service_star");
             var aLi = oStar.getElementsByTagName("li");
             var oUl = oStar.getElementsByTagName("ul")[0];
-            var oSpan = oStar.getElementsByTagName("span")[1];
-            var oP = oStar.getElementsByTagName("p")[0];
+            var oSpan = document.getElementById("result");
+            var oP = document.getElementById("display_score");
             var i = iScore = iStar = 0;
             var aMsg = [
                 "很不满意|差得太离谱，与卖家描述的严重不符，非常不满",
@@ -43,7 +44,7 @@
                     //浮动层显示
                     oP.style.display = "block";
                     //计算浮动层位置
-                    oP.style.left = oUl.offsetLeft + this.index * this.offsetWidth - 104 + "px";
+                    oP.style.left = oUl.offsetLeft + this.index * this.offsetWidth - 64 + "px";
                     //匹配浮动层文字内容
                     oP.innerHTML = "<em><b>" + this.index + "</b> 分 " + aMsg[this.index - 1].match(/(.+)\|/)[1] + "</em>" + aMsg[this.index - 1].match(/\|(.+)/)[1]
                 };
@@ -60,6 +61,7 @@
                     iStar = this.index;
                     oP.style.display = "none";
                     oSpan.innerHTML = "<strong>" + (this.index) + " 分</strong> (" + aMsg[this.index - 1].match(/\|(.+)/)[1] + ")"
+                    $("#score").val(iScore);
                 }
             }
             //评分处理
@@ -73,8 +75,9 @@
     </script>
 </head>
 <body>
-<div id="star">
-    <span>点击星星就能打分</span>
+<div style="margin: 0 auto;width:800px">
+<div id="product_star" class="star">
+    <span>评分：</span>
     <ul>
         <li><a href="javascript:;">1</a></li>
         <li><a href="javascript:;">2</a></li>
@@ -82,8 +85,43 @@
         <li><a href="javascript:;">4</a></li>
         <li><a href="javascript:;">5</a></li>
     </ul>
-    <span></span>
-    <p></p>
+    <div id="product_result" class="result"></div>
+    <p id="product_display_score" class="display_score"></p>
+</div>
+    <div id="send_star" class="star">
+        <span>评分：</span>
+        <ul>
+            <li><a href="javascript:;">1</a></li>
+            <li><a href="javascript:;">2</a></li>
+            <li><a href="javascript:;">3</a></li>
+            <li><a href="javascript:;">4</a></li>
+            <li><a href="javascript:;">5</a></li>
+        </ul>
+        <div id="send_result" class="result"></div>
+        <p id="send_display_score" class="display_score"></p>
+    </div>
+    <div id="service_star" class="star">
+        <span>评分：</span>
+        <ul>
+            <li><a href="javascript:;">1</a></li>
+            <li><a href="javascript:;">2</a></li>
+            <li><a href="javascript:;">3</a></li>
+            <li><a href="javascript:;">4</a></li>
+            <li><a href="javascript:;">5</a></li>
+        </ul>
+        <div id="service_result" class="result"></div>
+        <p id="service_display_score" class="display_score"></p>
+    </div>
+<div style="clear:both"></div>
+<div style="width:100%;">
+    <textarea style="width:100%;height:100px" name="Content"></textarea>
+
+    <div style="float:right;width:50px">
+        <input type="button" value="发表" id="submit" />
+    </div>
+    <div style="clear:both;"></div>
+    <input type="hidden" id="score" value=""/>
+</div>
 </div>
 </body>
 </html>
