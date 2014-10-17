@@ -68,6 +68,20 @@
                     }
                 window.location.href=url+"#product_list_anchor";
             });
+
+            //清空会员浏览记录ajax方法
+            $("#hrefClear").click(function(){
+                var url = "/default.php?mod=user_explore&a=async_delete";
+                    $.ajax({
+                        url:url,
+                        data:{},
+                        dataType:"jsonp",
+                        jsonp:"jsonpcallback",
+                        success:function(data){
+                            $("#explore_list").html("");
+                        }
+                    });
+            });
         });
     </script>
 </head>
@@ -182,9 +196,9 @@
     <div class="blank10">        </div>
     <div class="looked" >
         <div class="title">
-            <span class="fl">最近浏览</span><a href="#"  class="fr mr5" >清空</a></div>
+            <span class="fl">最近浏览</span><a href="javascript:;" id="hrefClear"  class="fr mr5" >清空</a></div>
         <div class="clear">    </div>
-        <ul >
+        <ul id="explore_list">
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
