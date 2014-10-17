@@ -37,7 +37,7 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
-     * 新增站点
+     * 新增
      * @return string 模板内容页面
      */
     private function GenCreate(){
@@ -58,7 +58,6 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
 
                 $httpPostData = $_POST;
 
-
                 $channelTemplateId = $channelTemplateManageData->Create($httpPostData);
                 //加入操作日志
                 $operateContent = 'Create ChannelTemplate,POST FORM:'
@@ -66,6 +65,17 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                 self::CreateManageUserLog($operateContent);
 
                 if ($channelTemplateId > 0) {
+
+                    //模板附件处理
+                    if (!empty($_FILES["file_attachment"]["tmp_name"])) {
+                        $fileName = $_FILES["file_attachment"]["tmp_name"];
+                        $fileData = file_get_contents($fileName);
+                        $channelTemplateManageData->ModifyAttachment(
+                            $channelTemplateId,
+                            $fileData
+                        );
+                    }
+
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
@@ -84,7 +94,7 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             $fieldsOfChannel = $channelTemplateManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 
-            $patterns = '/\{s_(.*?)\}/';
+            $patterns = '/\{b_s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
 
             parent::ReplaceEnd($tempContent);
@@ -106,6 +116,77 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
 
 
+    }
+
+
+    /**
+     * 编辑
+     * @return string 模板内容页面
+     */
+    private function GenModify()
+    {
+
+        $channelTemplateId = Control::GetRequest("channel_template_id", 0);
+        $resultJavaScript = "";
+        $manageUserId = Control::GetManageUserId();
+
+        if ($channelTemplateId > 0 && $manageUserId > 0) {
+            $tempContent = Template::Load("channel/channel_template_deal.html", "common");
+            parent::ReplaceFirst($tempContent);
+
+            $channelTemplateManageData = new ChannelTemplateManageData();
+
+            //加载原有数据
+            $arrOne = $channelTemplateManageData->GetOne($channelTemplateId);
+
+            $isArrayList = false;
+            $isForTemplateManage = TRUE;
+
+            Template::ReplaceOne($tempContent, $arrOne, $isArrayList, $isForTemplateManage);
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $channelTemplateManageData->Modify($httpPostData, $channelTemplateId);
+                //加入操作日志
+                $operateContent = 'Modify ChannelTemplate,POST FORM:'
+                    . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+                    //附件操作
+                    if (!empty($_FILES)) {
+
+                        if (!empty($_FILES["file_attachment"]["tmp_name"])) {
+                            $fileName = $_FILES["file_attachment"]["tmp_name"];
+                            $fileData = file_get_contents($fileName);
+                            $channelTemplateManageData->ModifyAttachment(
+                                $channelTemplateId,
+                                $fileData
+                            );
+                        }
+                    }
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        $resultJavaScript .= Control::GetCloseTab();
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel_template', 4)); //编辑失败！
+                }
+            }
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
     }
 
 
@@ -183,6 +264,11 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                 Template::RemoveCustomTag($tempContent, $tagId);
                 $tempContent = str_ireplace("{pager_button}", Language::Load("channel_template", 9), $tempContent);
             }
+
+            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+
+
+
         }else{
 
         }

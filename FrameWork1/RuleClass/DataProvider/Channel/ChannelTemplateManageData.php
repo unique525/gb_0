@@ -34,6 +34,95 @@ class ChannelTemplateManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 修改
+     * @param array $httpPostData $_POST数组
+     * @param int $channelTemplateId 模板id
+     * @return int 返回影响的行数
+     */
+    public function Modify($httpPostData, $channelTemplateId)
+    {
+        $result = -1;
+        if($channelTemplateId>0){
+
+            $dataProperty = new DataProperty();
+            $addFieldName = "";
+            $addFieldValue = "";
+            $preNumber = "";
+            $addFieldNames = array();
+            $addFieldValues = array();
+            if (!empty($httpPostData)) {
+                $sql = parent::GetUpdateSql(
+                    $httpPostData,
+                    self::TableName_ChannelTemplate,
+                    self::TableId_ChannelTemplate,
+                    $channelTemplateId,
+                    $dataProperty,
+                    $addFieldName,
+                    $addFieldValue,
+                    $preNumber,
+                    $addFieldNames,
+                    $addFieldValues
+                );
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+            }
+
+        }
+
+        return $result;
+    }
+
+
+
+    /**
+     * 修改模板附件
+     * @param int $channelTemplateId 模板id
+     * @param string $attachment 读入到字符串中的附件
+     * @return int 修改结果
+     */
+    public function ModifyAttachment($channelTemplateId, $attachment) {
+
+        $result = -1;
+
+        if($channelTemplateId>0 && !empty($attachment)){
+            $sql = "UPDATE
+                        " . self::TableName_ChannelTemplate . "
+                    SET
+                        Attachment=:Attachment
+                    WHERE
+                        ChannelTemplateId=:ChannelTemplateId;";
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("attachment", $attachment, PDO::PARAM_LOB);
+            $dataProperty->AddField("Attachment", $attachment);
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+
+    /**
+     * 返回一行数据
+     * @param int $channelTemplateId 模板id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($channelTemplateId){
+        $result = null;
+        if($channelTemplateId>0){
+            $sql = "SELECT * FROM
+                        " . self::TableName_ChannelTemplate . "
+                    WHERE ChannelTemplateId=:ChannelTemplateId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 取得频道模板的内容
      * @param int $channelTemplateId 频道模板id

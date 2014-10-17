@@ -3,13 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
-
-
     <script type="text/javascript">
         $("document").ready(function () {
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template&m=create';
+                parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template' +
+                    '&m=create&channel_id={ChannelId}';
                 parent.G_TabTitle =  '新增模板';
                 parent.addTab();
             });
