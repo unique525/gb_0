@@ -33,8 +33,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
-            case "get_channel_template_content":
-                $result = self::GetChannelTemplateContent();
+            case "get_attachment":
+                $result = self::GetAttachment();
                 break;
         }
 
@@ -287,7 +287,7 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
      * 返回模板附件
      * @return null|string
      */
-    private function GetChannelTemplateContent(){
+    private function GetAttachment(){
         $result = null;
         $channelTemplateId = Control::GetRequest("channel_template_id", 0);
         if($channelTemplateId>0){

@@ -177,7 +177,7 @@
                     <input id="file_attachment" name="file_attachment" type="file" class="input_box"
                            style="width:400px;background:#ffffff;margin-top:3px;"/>
                     <span id="btn_download_attachment" style="cursor:pointer">
-                        <a href="/default.php?secu=manage&mod=channel_template&m=get_channel_template_content&channel_template_id={b_ChannelTemplateId}" target="_blank">
+                        <a href="/default.php?secu=manage&mod=channel_template&m=get_attachment&channel_template_id={b_ChannelTemplateId}" target="_blank">
                         [下载]
                         </a>
                     </span>

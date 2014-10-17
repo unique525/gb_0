@@ -45,7 +45,7 @@
                     $(this).html('' +
                         '<a href="/default.php?secu=manage' +
                         '&mod=channel_template' +
-                        '&m=get_channel_template_content&channel_template_id='+channelTemplateId+'" target="_blank">' +
+                        '&m=get_attachment&channel_template_id='+channelTemplateId+'" target="_blank">' +
                         '<img src="/system_template/{template_name}/images/manage/zip.jpg" ' +
                         '/></a>');
                 }else{
