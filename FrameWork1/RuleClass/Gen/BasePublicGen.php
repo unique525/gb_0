@@ -555,7 +555,7 @@ class BasePublicGen extends BaseGen {
                 //字符串转回原来的数组
                 $userArr = unserialize($cookieStr);
                 foreach ($userArr as $key => $value) {
-                    if ($key === $userId) {
+                    if ($key == strval($userId)) {
                         $arrList = $value;
                         //将当前访问信息保存到数组中
                         $arr["TableId"] = $tableId;
@@ -563,11 +563,9 @@ class BasePublicGen extends BaseGen {
                         $arr["UserId"] = $userId;
                         $arr["TitlePic"] = $titlePic;
                         $arr["Url"] = $url;
-                        $arrList[]=$arr;
-                        //除去重复的
-                        $arrList = array_unique($arrList);
-                        if (count($arrList) > 10) {
-                            //只保存10条访问记录
+                        $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
+                        if (count($arrList) > 3) {
+                            //只保存3条访问记录
                             array_shift($arrList);
                         }
                         $userArr['"'.$userId.'"']=$arrList;
@@ -596,7 +594,7 @@ class BasePublicGen extends BaseGen {
                 //字符串转回原来的数组
                 $userArr = unserialize($cookieStr);
                 foreach ($userArr as $key => $value) {
-                    if ($key === $userId) {
+                    if ($key === strval($userId)) {
                         $arrList = $value;
                     }
                 }
