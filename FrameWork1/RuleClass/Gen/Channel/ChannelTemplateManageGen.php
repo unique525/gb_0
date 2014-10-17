@@ -24,8 +24,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
-            case "delete_attachment":
-                $result = self::DeleteAttachment();
+            case "async_delete_attachment":
+                $result = self::AsyncDeleteAttachment();
                 break;
             case "list":
                 $result = self::GenList();
@@ -306,14 +306,14 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
      * 返回模板附件
      * @return int 返回
      */
-    private function DeleteAttachment(){
+    private function AsyncDeleteAttachment(){
         $result = -1;
         $channelTemplateId = Control::GetRequest("channel_template_id", 0);
         if($channelTemplateId>0){
             $channelTemplateManageData = new ChannelTemplateManageData();
             $result = $channelTemplateManageData->DeleteAttachment($channelTemplateId);
         }
-        return $result;
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 
 } 

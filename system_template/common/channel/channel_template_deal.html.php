@@ -40,14 +40,19 @@
                     type: "get",
                     url: "/default.php?secu=manage" +
                         "&mod=channel_template" +
-                        "&m=delete_attachment",
+                        "&m=async_delete_attachment",
                     data: {
                         channel_template_id: "{b_ChannelTemplateId}"
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-
+                        var result = parseInt(data["result"]);
+                        if(result>0){
+                            alert("操作完成");
+                        }else{
+                            alert("没有上传附件或删除失败");
+                        }
                     }
                 });
 
