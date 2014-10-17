@@ -506,6 +506,7 @@ class BasePublicGen extends BaseGen {
         if ($tableType > 0) {
             $userId = Control::GetUserId();
             $arrUserExploreList = null;
+            $arrUserExploreListStand = null;
             switch ($tagWhere) {
                 case "channel":
                     $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
@@ -515,8 +516,12 @@ class BasePublicGen extends BaseGen {
                     $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
                     break;
             }
-            if (!empty($arrUserExploreList)) {
-                Template::ReplaceList($tagContent, $arrUserExploreList, $tagId);
+            //转换为标准数组
+            foreach ($arrUserExploreList as  $columnValue) {
+                $arrUserExploreListStand[]=$columnValue;
+            }
+            if (!empty($arrUserExploreListStand)) {
+                Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
@@ -536,45 +541,38 @@ class BasePublicGen extends BaseGen {
     protected function CreateExploreCookie($userId,$tableId,$tableType,$url,$titlePic)
     {
         if ($userId > 0) {
-            if (!isset($_COOKIE['ExploreHistory'])) {
+            if (!isset($_COOKIE['ExploreHistory'.'_'.$userId])) {
                 //将当前访问信息保存到数组中
                 $arr["TableId"] = $tableId;
                 $arr["TableType"] = $tableType;
                 $arr["UserId"] = $userId;
                 $arr["Url"] = $url;
                 $arr["TitlePic"] = $titlePic;
-                $arrList[] = $arr;
-                $userArr['"'.$userId.'"'] = $arrList;
+                $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
                 //存储为字符串
-                $cookieStr = serialize($userArr);
+                $cookieStr = serialize($arrList);
                 //保存到cookie当中
-                setcookie('ExploreHistory', $cookieStr);
+                setcookie('ExploreHistory'.'_'.$userId, $cookieStr);
             } else {
                 //读取cookie
-                $cookieStr = $_COOKIE['ExploreHistory'];
+                $cookieStr = $_COOKIE['ExploreHistory'.'_'.$userId];
                 //字符串转回原来的数组
-                $userArr = unserialize($cookieStr);
-                foreach ($userArr as $key => $value) {
-                    if ($key == strval($userId)) {
-                        $arrList = $value;
-                        //将当前访问信息保存到数组中
-                        $arr["TableId"] = $tableId;
-                        $arr["TableType"] = $tableType;
-                        $arr["UserId"] = $userId;
-                        $arr["TitlePic"] = $titlePic;
-                        $arr["Url"] = $url;
-                        $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
-                        if (count($arrList) > 3) {
-                            //只保存3条访问记录
-                            array_shift($arrList);
-                        }
-                        $userArr['"'.$userId.'"']=$arrList;
-                    }
+                $arrList = unserialize($cookieStr);
+                //将当前访问信息保存到数组中
+                $arr["TableId"] = $tableId;
+                $arr["TableType"] = $tableType;
+                $arr["UserId"] = $userId;
+                $arr["TitlePic"] = $titlePic;
+                $arr["Url"] = $url;
+                $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
+                if (count($arrList) > 3) {
+                    //只保存3条访问记录
+                    array_shift($arrList);
                 }
                 //序列化为为字符串存储
-                $cookieStr = serialize($userArr);
+                $cookieStr = serialize($arrList);
                 //保存到cookie当中
-                setcookie('ExploreHistory', $cookieStr);
+                setcookie('ExploreHistory'.'_'.$userId, $cookieStr);
             }
         }
     }
@@ -588,16 +586,11 @@ class BasePublicGen extends BaseGen {
     {
         $arrList = null;
         if ($userId > 0) {
-            if (isset($_COOKIE['ExploreHistory'])) {
+            if (isset($_COOKIE['ExploreHistory'.'_'.$userId])) {
                 //读取cookie
-                $cookieStr = $_COOKIE['ExploreHistory'];
+                $cookieStr = ($_COOKIE['ExploreHistory'.'_'.$userId]);
                 //字符串转回原来的数组
-                $userArr = unserialize($cookieStr);
-                foreach ($userArr as $key => $value) {
-                    if ($key === strval($userId)) {
-                        $arrList = $value;
-                    }
-                }
+                $arrList = unserialize($cookieStr);
             }
         }
         return $arrList;
