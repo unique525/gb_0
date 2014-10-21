@@ -206,7 +206,7 @@
                             <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
                         <div class="lookmis">
                             <p class="lookname">
-                                <a href="#" target="_blank" title="">【进店必败】1新西兰佳沛绿果）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥18.50 </p></div>
+                                <a href="#" target="_blank" title="">【进店必败】{f_Title}）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
                     </li>    <div class="clear">    </div>
                     ]]>
                 </item>

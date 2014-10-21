@@ -538,9 +538,11 @@ class BasePublicGen extends BaseGen {
      * @param int $tableId 对应表Id
      * @param int $tableType 对应表类型
      * @param string $url 浏览页面Url地址
+     * @param string $title 标题
      * @param string $titlePic 题图地址
+     * @param string $price 价格
      */
-    protected function CreateExploreCookie($userId,$tableId,$tableType,$url,$titlePic)
+    protected function CreateExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price)
     {
         if ($userId > 0) {
             if (!isset($_COOKIE['ExploreHistory'.'_'.$userId])) {
@@ -549,7 +551,9 @@ class BasePublicGen extends BaseGen {
                 $arr["TableType"] = $tableType;
                 $arr["UserId"] = $userId;
                 $arr["Url"] = $url;
+                $arr["Title"] = $title;
                 $arr["TitlePic"] = $titlePic;
+                $arr["Price"] = $price;
                 $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
                 //存储为字符串
                 $cookieStr = serialize($arrList);
@@ -564,8 +568,10 @@ class BasePublicGen extends BaseGen {
                 $arr["TableId"] = $tableId;
                 $arr["TableType"] = $tableType;
                 $arr["UserId"] = $userId;
-                $arr["TitlePic"] = $titlePic;
                 $arr["Url"] = $url;
+                $arr["Title"] = $title;
+                $arr["TitlePic"] = $titlePic;
+                $arr["Price"] = $price;
                 $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
                 if (count($arrList) > 3) {
                     //只保存3条访问记录
