@@ -362,20 +362,23 @@ class Template
                                 $listOfChild = $childTempContent;
                                 $columnsOfChild = $arrChildList[$j];
 
-                                $listOfChild = self::ReplaceListItem(
-                                    $j,
-                                    $type,
-                                    $itemRowTitleCount,
-                                    $itemRowIntroCount,
-                                    $headerRowTitleCount,
-                                    $footerRowTitleCount,
-                                    $childRowTitleCount,
-                                    $columnsOfChild,
-                                    $listOfChild,
-                                    $itemType
-                                );
+                                if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
+                                    $listOfChild = self::ReplaceListItem(
+                                        $j,
+                                        $type,
+                                        $itemRowTitleCount,
+                                        $itemRowIntroCount,
+                                        $headerRowTitleCount,
+                                        $footerRowTitleCount,
+                                        $childRowTitleCount,
+                                        $columnsOfChild,
+                                        $listOfChild,
+                                        $itemType
+                                    );
 
-                                $sbChild = $sbChild . $listOfChild;
+                                    $sbChild = $sbChild . $listOfChild;
+                                }
+
                             }
 
 
