@@ -173,7 +173,6 @@
 
             //清空会员浏览记录ajax方法
             $("#hrefClear").click(function(){
-                alert("11");
                 var url = "/default.php?mod=user_explore&a=async_delete";
                 $.ajax({
                     url:url,
