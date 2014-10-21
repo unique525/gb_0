@@ -48,7 +48,7 @@
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
             var ps = Request["ps"];
-            if(ps==null||ps=="") ps="12";
+            if(ps==null||ps=="") ps="4";
             var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
