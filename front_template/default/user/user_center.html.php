@@ -11,7 +11,6 @@
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
-    <script type="text/javascript" src="/front_js/user/user.js"></script>
 
 <script type="text/javascript">
 
@@ -21,7 +20,6 @@
 
     $(function(){
 
-        window.isLogin(siteId);
 
         $(".right").click(function(){
             var idvalue = $(this).attr("idvalue");
@@ -41,12 +39,6 @@
 </head>
 
 <body>
-<div class="loginbg">
-<div class="wrapper">
-<div class="loginleft">您好，欢迎来到星滋味    请<a href="">登陆</a>    <a href="">免费注册</a></div>
-<div class="loginright"><a href="">我的星滋味</a>    <a href="">收藏本站</a></div>
-</div>
-</div>
 <div class="wrapper2">
 <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103" /></a></div>
 <div class="search">
@@ -64,7 +56,7 @@
 <div class="clean"></div>
 <div class="mainbav">
 <div class="wrapper">
-    <div class="goods" id="leftmenu"><ul><li><span>所有商品分类</span></li></ul></div>
+    <div class="goods" id="leftmenu"><ul><li><span>会员中心</span></li></ul></div>
 <div class="column1"><a href="">首页</a></div>
 <div class="column2"><a href="">超市量贩</a></div>
 <div class="column2"><a href="">团购</a></div>

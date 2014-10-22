@@ -270,6 +270,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $tempContent = str_ireplace("{UserAccount}", $userAccount, $tempContent);
             $tempContent = str_ireplace("{UserOrderOfNewCount}", $userOrderOfNewCount, $tempContent);
             $tempContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
             return $tempContent;
         }else{
             Control::GoUrl("/default.php?mod=user&a=login");

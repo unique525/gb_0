@@ -21,16 +21,41 @@ class ChannelTemplateManageData extends BaseManageData
     /**
      * 新增频道模板
      * @param array $httpPostData $_POST数组
+     * @param int $manageUserId 后台管理员id
+     * @param int $channelId 频道id
+     * @param int $siteId 站点id
      * @return int 新增的频道模板id
      */
-    public function Create($httpPostData)
+    public function Create($httpPostData,$manageUserId,$channelId,$siteId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         if (!empty($httpPostData)) {
-            $sql = parent::GetInsertSql($httpPostData, self::TableName_Channel, $dataProperty);
+
+
+            $addFieldName = "";
+            $addFieldValue = "";
+            $preNumber = "";
+            $addFieldNames = array(
+                "ManageUserId","ChannelId","SiteId");
+            $addFieldValues = array($manageUserId,$channelId,$siteId);
+
+
+
+            $sql = parent::GetInsertSql(
+                $httpPostData,
+                self::TableName_ChannelTemplate,
+                $dataProperty,
+                $addFieldName,
+                $addFieldValue,
+                $preNumber,
+                $addFieldNames,
+                $addFieldValues
+            );
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
+
+
         return $result;
     }
 

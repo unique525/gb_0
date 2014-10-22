@@ -8,6 +8,7 @@
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/user/user.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
     <script type="text/javascript" src="/front_js/user/user_favorite.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
@@ -215,12 +216,6 @@
 </head>
 <body>
 
-<div class="loginbg">
-    <div class="wrapper">
-        <div class="loginleft">您好，欢迎来到星滋味    请<a target="_blank" href="/login.html">登陆</a>    <a href="">免费注册</a></div>
-        <div class="loginright"><a target="_blank" href="/default.php?mod=user&a=homepage&site_id=1">我的星滋味</a>    <a href="">收藏本站</a></div>
-    </div>
-</div>
 <div class="wrapper2">
     <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103" /></a></div>
     <div class="search">
