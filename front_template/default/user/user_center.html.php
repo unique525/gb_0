@@ -10,16 +10,18 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-<script type="text/javascript" src="/images/js.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
     <script type="text/javascript" src="/front_js/user/user.js"></script>
 
 <script type="text/javascript">
+
+    var siteId = parseInt("{SiteId}");
+
+
+
     $(function(){
 
-        window.isLogin();
-
-
+        window.isLogin(siteId);
 
         $(".right").click(function(){
             var idvalue = $(this).attr("idvalue");
@@ -100,13 +102,13 @@
 <div class="rightmember">
 <div class="leftperson"><img src="/images/pic_person.png" width="120" height="120" /><h3><a href="">编辑个人资料</a></h3></div>
 <div class="rightinfo">
-<b>您好！ {user_account}</b><br />
+<b>您好！ {UserAccount}</b><br />
 会员级别：{UserGroupName}<br />
 我的积分：{UserScore} 分<br />
 <ul>
 <!--<li>待处理订单（1）</li>-->
-<li>待评价订单（{un_comment_order_count}）</li>
-<li>待支付订单（{un_settle_order_count}）</li>
+<li>待评价订单（{UserOrderOfUncommentCount}）</li>
+<li>待支付订单（{UserOrderOfNewCount}）</li>
 </ul>
 </div>
 
@@ -134,7 +136,7 @@
                 ]]></item>
         </icms>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼2</dt>
@@ -156,7 +158,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼3</dt>
@@ -178,7 +180,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼4</dt>
@@ -200,7 +202,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼5</dt>

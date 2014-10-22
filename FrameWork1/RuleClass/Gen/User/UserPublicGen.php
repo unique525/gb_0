@@ -234,7 +234,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $templateFileUrl = "user/user_center.html";
             $templateName = "default";
             $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
             $userAccount = Control::GetUserName();
 
@@ -254,27 +254,23 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $allCount = 0;
             $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
             if(count($arrUserFavoriteList) > 0){
-                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
+                Template::ReplaceList($tempContent,$arrUserFavoriteList,$tagId);
             }else{
-                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId,"您还没有收藏任何产品");
+                $tempContent = Template::ReplaceCustomTag($tempContent, $tagId,"您还没有收藏任何产品");
             }
             //------------------------------end
 
             //------------零散替换--------begin
-            $State_UnSettleUserOrder = 0;
-            $State_UnCommentUserOrder = 70;
-            $unSettleOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnSettleUserOrder);
-            $unCommentOrderCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$State_UnCommentUserOrder);
+            $userOrderStateOfNew = UserOrderData::STATE_NEW;
+            $userOrderStateOfUncomment = UserOrderData::STATE_UNCOMMENT;
+            $userOrderOfNewCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfNew);
+            $userOrderOfUncommentCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfUncomment);
 
-            $arrReplace = array(
-                "{user_account}" => $userAccount,
-                "{un_settle_order_count}" => $unSettleOrderCount,
-                "{un_comment_order_count}" => $unCommentOrderCount
-            );
-            //-----------------------------end
 
-            $templateContent = strtr($templateContent,$arrReplace);
-            return $templateContent;
+            $tempContent = str_ireplace("{UserAccount}", $userAccount, $tempContent);
+            $tempContent = str_ireplace("{UserOrderOfNewCount}", $userOrderOfNewCount, $tempContent);
+            $tempContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $tempContent);
+            return $tempContent;
         }else{
             Control::GoUrl("/default.php?mod=user&a=login");
             return null;

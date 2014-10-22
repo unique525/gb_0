@@ -4,7 +4,7 @@ html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,pre,code,address,variable,form,fieldset,b
     margin:0;
     font-size:12px;
     font-weight:normal;
-    font-family:"宋体";
+    font-family:"Microsoft YaHei";
     color:#3e4a61;
 }
 ul,li{list-style:none;}
@@ -105,16 +105,12 @@ img,input{ vertical-align:middle;border:none;}
 #tab .tabCon div{
     padding:10px;
     position:absolute;
-    opacity:0;
-    filter:alpha(opacity=0);
 }
 #tab .tabList li.cur{
     border-bottom:none;
     background:#fff;
 }
 #tab .tabCon div.cur{
-    opacity:1;
-    filter:alpha(opacity=100);
 }
 #tab .tabCon dl{width:200px; float:left;}
 #tab .tabCon dd{width:180px;margin:0px auto;}

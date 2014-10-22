@@ -1,11 +1,11 @@
 /**
  * 是否登录
  */
-window.isLogin = function(){
-    alert(user.UserName);
+window.isLogin = function(siteId){
+
     $.ajax({
         url:"/default.php?mod=user&a=async_get_one",
-        data:{},
+        data:{"site_id":siteId},
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
@@ -14,7 +14,7 @@ window.isLogin = function(){
                 //window.showLoginBox();
             }else{
                 var user = eval(data["result"]);
-                alert(user.UserName);
+                alert(111);
                 //window.showIsLoginBox();
             }
         }
