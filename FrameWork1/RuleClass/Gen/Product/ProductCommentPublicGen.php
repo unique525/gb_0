@@ -27,6 +27,9 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "list":
+                $result = self::GenList();
+                break;
         }
         return $result;
     }
@@ -87,5 +90,30 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
                 return "";
             }
         }
+    }
+
+    private function GenList(){
+        $templateFileUrl = "product/comment_template_test.html";
+        $templatePath = "front_template";
+        $templateName = "default";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $tagId = "product_comment_list";
+
+        $productCommentPublicData = new ProductCommentPublicData();
+        $arrProductCommentList = $productCommentPublicData->GetList();
+
+        $strParentIds = "";
+        for($i=0;$i<count($arrProductCommentList);$i++){
+            if($i<count($arrProductCommentList)-1){
+                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"].",";
+            }else{
+                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"];
+            }
+        }
+        $arrChildProductCommentList = $productCommentPublicData->GetListOfStrParentIds($strParentIds);
+
+        Template::ReplaceList($templateContent,$arrProductCommentList,$tagId,"icms",$arrChildProductCommentList,"ProductCommentId","ParentId");
+        return $templateContent;
     }
 }

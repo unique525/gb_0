@@ -79,6 +79,22 @@
 </head>
 <body>
 <div style="margin: 0 auto;width:800px">
+    <icms id="product_comment_list" type="list">
+        <item>
+        <![CDATA[
+            <div>
+                <div>
+                    {f_Content}
+                </div>
+                {child}
+            </div>
+        ]]>
+        </item>
+        <child><![CDATA[
+            <div style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;{f_Content}</div>
+            ]]>
+        </child>
+    </icms>
     <div id="product_star" class="star" idvalue="product">
         <span>评分：</span>
         <ul>
