@@ -32,6 +32,8 @@
                                 }else{
                                     location.href=decodeURIComponent(reUrl);
                                 }
+                            }else{
+                                alert(result);
                             }
                         }
                     });

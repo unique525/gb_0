@@ -97,6 +97,10 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
 
             }
 
+            //初始化附件目录名
+            $tempContent = str_ireplace("{b_AttachmentName}", "images".$channelId, $tempContent);
+
+
             $fieldsOfChannel = $channelTemplateManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
 

@@ -170,8 +170,8 @@ class Control {
      * @param int $hour 保存时间（单位小时），默认24小时
      */
     public static function SetUserCookie($userId, $userName, $hour = 24) {
-        setcookie("UID", $userId, time() + $hour * 3600);
-        $userName = urlencode($userName);
+        setcookie("UID", Des::Encrypt($userId,"su141022"), time() + $hour * 3600);
+        $userName = Des::Encrypt(urlencode($userName),"su141022");
         setcookie("USERNAME", $userName, time() + $hour * 3600);
     }
 
@@ -181,7 +181,7 @@ class Control {
      */
     public static function GetUserId() {
         if (isset($_COOKIE["UID"])) {
-            return intval($_COOKIE["UID"]);
+            return intval(Des::Decrypt($_COOKIE["UID"],"su141022"));
         } else {
             return -1;
         }
@@ -193,7 +193,7 @@ class Control {
      */
     public static function GetUserName() {
         if (isset($_COOKIE["USERNAME"])) {
-            return urldecode($_COOKIE["USERNAME"]);
+            return Des::Decrypt(urldecode($_COOKIE["USERNAME"]),"su141022");
         } else {
             return "";
         }
@@ -216,12 +216,12 @@ class Control {
      */
     public static function SetManageUserCookie($manageUserId, $manageUserName, $hour = 1, $domain = "") {
         if (!empty($domain)) {
-            setcookie('ICMS_MANAGE_USER_ID', $manageUserId, time() + $hour * 3600, "/", $domain);
-            $manageUserName = urlencode($manageUserName);
+            setcookie('ICMS_MANAGE_USER_ID', Des::Encrypt($manageUserId,"mu141022"), time() + $hour * 3600, "/", $domain);
+            $manageUserName = Des::Encrypt(urlencode($manageUserName),"mu141022");
             setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/", $domain);
         } else {
-            setcookie('ICMS_MANAGE_USER_ID', $manageUserId, time() + $hour * 3600, "/");
-            $manageUserName = urlencode($manageUserName);
+            setcookie('ICMS_MANAGE_USER_ID', Des::Encrypt($manageUserId,"mu141022"), time() + $hour * 3600, "/");
+            $manageUserName = Des::Encrypt(urlencode($manageUserName),"mu141022");
             setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/");
         }
     }
@@ -232,7 +232,7 @@ class Control {
      */
     public static function GetManageUserId() {
         if (isset($_COOKIE["ICMS_MANAGE_USER_ID"])) {
-            return intval($_COOKIE["ICMS_MANAGE_USER_ID"]);
+            return intval(Des::Decrypt($_COOKIE["ICMS_MANAGE_USER_ID"],"mu141022"));
         } else {
             return -1;
         }
@@ -244,7 +244,7 @@ class Control {
      */
     public static function GetManageUserName() {
         if (isset($_COOKIE["ICMS_MANAGE_USER_NAME"])) {
-            return urldecode($_COOKIE["ICMS_MANAGE_USER_NAME"]);
+            return Des::Decrypt(urldecode($_COOKIE["ICMS_MANAGE_USER_NAME"]),"mu141022");
         } else {
             return "";
         }

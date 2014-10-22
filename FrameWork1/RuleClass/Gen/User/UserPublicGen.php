@@ -51,6 +51,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_one":
                 $result = self::AsyncGetOne();
                 break;
+            case "async_is_login":
+                $result = self::AsyncIsLogin();
+                break;
             case "homepage":
                 $result = self::GenHomePage();
                 break;
@@ -206,10 +209,22 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
             return Control::GetRequest("jsonpcallback","").'({"result":' . Format::FixJsonEncode($arrUserOne) . '})';
         }else{
-            Control::GoUrl("/default.php?mod=user&a=login");
-            return null;
+            return Control::GetRequest("jsonpcallback","").'({"result":"-1"})';
         }
     }
+
+    /**
+     * ajax检查是否登录
+     */
+    private function AsyncIsLogin(){
+        $userId = intval(Control::GetUserId());
+        if($userId>0){
+            return Control::GetRequest("jsonpcallback","").'({"result":"'.$userId.'"})';
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":"-1"})';
+        }
+    }
+
 
     private function GenHomePage(){
         $userId =Control::GetUserId();

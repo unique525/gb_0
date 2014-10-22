@@ -12,9 +12,15 @@
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="/images/js.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
+    <script type="text/javascript" src="/front_js/user/user.js"></script>
 
 <script type="text/javascript">
     $(function(){
+
+        window.isLogin();
+
+
+
         $(".right").click(function(){
             var idvalue = $(this).attr("idvalue");
             var state = $("#"+idvalue+"_child").css("display");
