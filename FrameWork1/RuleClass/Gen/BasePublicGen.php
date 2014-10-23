@@ -517,7 +517,7 @@ class BasePublicGen extends BaseGen {
                     break;
             }
             //转换为标准数组
-            foreach ($arrUserExploreList as  $columnValue) {
+            foreach ((array)$arrUserExploreList as  $columnValue) {
                 $arrUserExploreListStand[]=$columnValue;
             }
             if (!empty($arrUserExploreListStand)) {
