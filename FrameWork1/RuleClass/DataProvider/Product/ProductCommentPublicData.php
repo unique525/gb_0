@@ -109,7 +109,41 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
+    public function GetListOfStrParentIds($strParentIds){
+        $result = null;
+        if(!empty($strParentIds)){
+        $sql = "
+            SELECT
+                ParentId,
+                Subject,
+                Content,
+                UserId,
+                UserName,
+                ProductScore,
+                SendScore,
+                ServiceScore
+            FROM " . self::TableName_ProductComment . "
+
+            WHERE
+                ParentId IN (".$strParentIds.")
+
+            ORDER BY CreateDate DESC;
+
+                ";
+        $dataProperty = new DataProperty();
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     public function GetListOfChild(){
 
+    }
+
+    public function GetList(){
+        $sql = "SELECT * FROM ".self::TableName_ProductComment." WHERE ParentId = 0 ";
+        $dataProperty = new DataProperty();
+        $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        return $result;
     }
 }

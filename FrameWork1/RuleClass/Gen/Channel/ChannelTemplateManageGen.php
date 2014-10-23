@@ -55,6 +55,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
         if($channelId>0 && $manageUserId>0){
 
             $channelTemplateManageData = new ChannelTemplateManageData();
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, false);
 
             $tempContent = Template::Load("channel/channel_template_deal.html", "common");
 
@@ -64,7 +66,9 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
 
                 $httpPostData = $_POST;
 
-                $channelTemplateId = $channelTemplateManageData->Create($httpPostData);
+                $channelTemplateId = $channelTemplateManageData->Create(
+                    $httpPostData,$manageUserId,$channelId,$siteId
+                );
                 //加入操作日志
                 $operateContent = 'Create ChannelTemplate,POST FORM:'
                     . implode('|', $_POST) . ';\r\nResult:siteId:' . $channelTemplateId;
@@ -96,6 +100,13 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                 }
 
             }
+
+
+            $tempContent = str_ireplace("{b_ChannelId}", $channelId, $tempContent);
+
+            //初始化附件目录名
+            $tempContent = str_ireplace("{b_AttachmentName}", "images".$channelId, $tempContent);
+
 
             $fieldsOfChannel = $channelTemplateManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
@@ -186,6 +197,9 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel_template', 4)); //编辑失败！
                 }
             }
+
+
+
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);

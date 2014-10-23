@@ -9,9 +9,28 @@
 class UserOrderData extends BaseData {
 
     /**
-     * 状态：正常
+     * 状态：新建
      */
-    const STATE_NORMAL = 0;
+    const STATE_NEW = 0;
+
+
+    /**
+     * 状态：未付款
+     */
+    const STATE_NON_PAYMENT = 10;
+    /**
+     * 状态：已付款，未发货
+     */
+    const STATE_PAYMENT = 20;
+
+
+
+    /**
+     * 状态：未评价
+     */
+    const STATE_UNCOMMENT = 70;
+
+
     /**
      * 状态：已删
      */

@@ -10,11 +10,17 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-<script type="text/javascript" src="/images/js.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
 
 <script type="text/javascript">
+
+    var siteId = parseInt("{SiteId}");
+
+
+
     $(function(){
+
+
         $(".right").click(function(){
             var idvalue = $(this).attr("idvalue");
             var state = $("#"+idvalue+"_child").css("display");
@@ -33,12 +39,6 @@
 </head>
 
 <body>
-<div class="loginbg">
-<div class="wrapper">
-<div class="loginleft">您好，欢迎来到星滋味    请<a href="">登陆</a>    <a href="">免费注册</a></div>
-<div class="loginright"><a href="">我的星滋味</a>    <a href="">收藏本站</a></div>
-</div>
-</div>
 <div class="wrapper2">
 <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103" /></a></div>
 <div class="search">
@@ -56,7 +56,7 @@
 <div class="clean"></div>
 <div class="mainbav">
 <div class="wrapper">
-    <div class="goods" id="leftmenu"><ul><li><span>所有商品分类</span></li></ul></div>
+    <div class="goods" id="leftmenu"><ul><li><span>会员中心</span></li></ul></div>
 <div class="column1"><a href="">首页</a></div>
 <div class="column2"><a href="">超市量贩</a></div>
 <div class="column2"><a href="">团购</a></div>
@@ -94,13 +94,13 @@
 <div class="rightmember">
 <div class="leftperson"><img src="/images/pic_person.png" width="120" height="120" /><h3><a href="">编辑个人资料</a></h3></div>
 <div class="rightinfo">
-<b>您好！ {user_account}</b><br />
+<b>您好！ {UserAccount}</b><br />
 会员级别：{UserGroupName}<br />
 我的积分：{UserScore} 分<br />
 <ul>
 <!--<li>待处理订单（1）</li>-->
-<li>待评价订单（{un_comment_order_count}）</li>
-<li>待支付订单（{un_settle_order_count}）</li>
+<li>待评价订单（{UserOrderOfUncommentCount}）</li>
+<li>待支付订单（{UserOrderOfNewCount}）</li>
 </ul>
 </div>
 
@@ -128,7 +128,7 @@
                 ]]></item>
         </icms>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼2</dt>
@@ -150,7 +150,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼3</dt>
@@ -172,7 +172,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼4</dt>
@@ -194,7 +194,7 @@
       <h3>￥25.90</h3>
     </dl>
     </div>
-    <div>
+    <div style="display:none;">
     <dl>
       <dd><img src="/images/pic_prduct.png" width="180" height="160" /></dd>
       <dt>妈咪宝贝满299减30送豪礼5</dt>

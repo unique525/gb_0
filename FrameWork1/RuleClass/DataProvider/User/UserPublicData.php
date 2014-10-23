@@ -12,7 +12,11 @@ class UserPublicData extends BasePublicData {
     public function CheckLogin($userName,$userPass,$siteId){
         $result = -1;
         if(!empty($userName) && !empty($userPass) && $siteId > 0){
-            $sql = "SELECT UserId FROM ".self::TableName_User." WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile) AND UserPass = :UserPass AND SiteId = :SiteId;";
+            $sql = "SELECT UserId FROM ".self::TableName_User."
+                        WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
+                            AND UserPass = :UserPass
+                            AND SiteId = :SiteId
+                            ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userName);
             $dataProperty->AddField("UserEmail",$userName);

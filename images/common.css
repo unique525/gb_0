@@ -1,6 +1,6 @@
 ﻿@charset "utf-8";/* CSS Document */
 
-html,body,form,img,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,b,u,i,p,em,td,th,input,textarea,label,select,iframe{ font-family:"微软雅黑";font-size:12px;color:#333;padding:0;margin:0;}
+html,body,form,img,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,b,u,i,p,em,td,th,input,textarea,label,select,iframe{ font-family:"Microsoft YaHei";font-size:12px;color:#333;padding:0;margin:0;}
 body{background:url(../images/topbg.gif) left top repeat-x;}
 img{font-size:12px;vertical-align:middle;}
 input{outline: none;}
@@ -146,7 +146,7 @@ a:hover{color:#ff3c00; text-decoration:underline;}
 
 /*小类列表菜单*/
 .listsum{width:172px;border:1px solid #dddddd; padding:10px;border-top:2px solid #659a32;}
-.listsum .tit{ width:172px; height:15px;font:400 14px/15px "微软雅黑";color:#000; padding-bottom:10px; border-bottom:1px solid #dddddd}
+.listsum .tit{ width:172px; height:15px;font:400 14px/15px "Microsoft YaHei";color:#000; padding-bottom:10px; border-bottom:1px solid #dddddd}
 .listsum .listsum-1{ cursor:pointer;}
 .listsum .listsum-1 dt{ height:35px; line-height:35px; padding-left:15px; font-size:12px; color:#333; background:url(list_open.gif) no-repeat 2px 13px;}
 .listsum .listhover dt{height:35px; line-height:35px; padding-left:15px; font-size:12px; color:#333; background:url(list_minus.gif) no-repeat 2px 13px; cursor:pointer;}
@@ -160,7 +160,7 @@ a:hover{color:#ff3c00; text-decoration:underline;}
 
 /*看过此商品的用户最终购买*/
 .looked{ width:172px;border:1px solid #dddddd; padding:10px 10px 0px 10px;border-top:2px solid #659a32;}
-.looked .title,.hotbang .title{ width:172px; height:30px; font:400 14px/30px "微软雅黑";color:#000; margin-bottom:5px;border-bottom:1px solid #dddddd}
+.looked .title,.hotbang .title{ width:172px; height:30px; font:400 14px/30px "Microsoft YaHei";color:#000; margin-bottom:5px;border-bottom:1px solid #dddddd}
 .looked ul li{ width:172px; height:70px; margin-bottom:10px;}
 .looked ul li .lookpic{ width:60px; height:60px; float:left; display:inline-block;}
 .looked ul li .lookmis{width:104px; height:60px;text-align:left; float:left; display:inline; margin-left:8px;}
@@ -246,14 +246,14 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 
 
 .gdcomment {border: 1px solid #dddddd;float: left;padding:0; width: 988px;border-top:2px solid #659a32;}
-.gdcomment .zi {font-family: 微软雅黑;line-height: 35px; font-size:14px; background:#f7f7f7; padding-left:20px;}
+.gdcomment .zi {font-family:"Microsoft YaHei";line-height: 35px; font-size:14px; background:#f7f7f7; padding-left:20px;}
 .gdcomment .title {border-bottom: 1px solid #dddddd;height: 36px; padding-top: 4px;width:990px;}
 .gdcomment-1 {height: 60px;padding: 26px 0;width:900px;}
 .gdcomment-1 .rate {border-right: 1px solid #e4e4e4;float: left;height: 40px;padding: 10px 0;text-align: center;width:400px; color:#8b8a8a; }
 .gdcomment-1 .rate strong {color: #ff3c00;font-family: arial;font-size: 34px;line-height: 36px;}
 .gdcomment-1 .percent {float: left;height: 60px;padding: 0 3px 0 15px;width: 300px;}
 .gdcomment-1 .percent dl {display: inline;float: left;margin-bottom: 10px;overflow: hidden;width: 300px;}
-.gdcomment-1 .percent dt, .percent dd {float: left;font-family: 宋体;margin-right: 5px;}
+.gdcomment-1 .percent dt, .percent dd {float: left;font-family:"Microsoft YaHei";margin-right: 5px;}
 .gdcomment-1 .percent .d1 {background-color: #efefef;height: 12px;overflow: hidden;width: 150px;}
 
 .pags {float: right;line-height: 26px; width:800px;}
@@ -344,7 +344,7 @@ DIV.digg a.disabledr {
 
 /*列表内容*/
 .list_tit {float: left;margin-top: 15px;width:990px;}
-.list_tit h1 {float: left;font: 400 28px "微软雅黑" ; margin-right: 20px;line-height: 28px;}
+.list_tit h1 {float: left;font: 400 28px "Microsoft YaHei" ; margin-right: 20px;line-height: 28px;}
 .list_tit .eb6100 {color: #999;line-height: 28px;margin-top: 2px;}
 .list_tit .eb6100 span {color: #ff3c00; padding: 0 3px;}
 .sort {border: 1px solid #dcdcdc; margin-top: 15px;width:990px;}
