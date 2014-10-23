@@ -160,7 +160,7 @@
                 <td class="spe_line" height="30" align="right"><label for="f_ChannelTemplateContent">模板内容：</label></td>
                 <td class="spe_line">
                     <textarea id="f_ChannelTemplateContent" name="f_ChannelTemplateContent" style="display:none;">{b_ChannelTemplateContent}</textarea>
-                    <textarea id="edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContent}</textarea>
+                    <label for="edit_area"></label><textarea id="edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContent}</textarea>
                 </td>
             </tr>
             <tr>
