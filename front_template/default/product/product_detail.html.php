@@ -14,7 +14,7 @@
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
+    <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css" />
     <style type="text/css">
         ul{list-style-type:none;}
         .star ul{float:left;display:inline;height:19px;line-height:19px;}
