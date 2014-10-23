@@ -203,6 +203,30 @@
                     }
                 });
             });
+
+            $.ajax({
+                url:"/default.php?mod=product_comment&a=async_get_appraisal",
+                data:{product_id:{ProductId}},
+                dataType:"jsonp",
+                jsonp:"jsonpcallback",
+                success:function(data){
+                    var positive_appraisal = parseInt(data["positive_appraisal"]);
+                    var moderate_appraisal = parseInt(data["moderate_appraisal"]);
+                    var negative_appraisal = parseInt(data["negative_appraisal"]);
+                    var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
+                    var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
+                    var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
+                    var moderate_appraisal_width = (moderate_appraisal/total_appraisal).toFixed(2)*100;
+                    $("#span_scoreCount").html(positive_appraisal_width+"%");
+                    $("#divspan_VeryGood").html(positive_appraisal_width+"%");
+                    $("#divspan_Good").html(moderate_appraisal_width+"%");
+                    $("#divspan_NoGood").html(negative_appraisal_width+"%");
+
+                    $("#div_VeryGood").css("width",positive_appraisal_width+"%");
+                    $("#div_Good").css("width",moderate_appraisal_width+"%");
+                    $("#div_NoGood").css("width",negative_appraisal_width+"%");
+                }
+            });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -509,14 +533,32 @@
 <div class="gdcomment" id="tabdiv6">
     <div class="zi"> 商品评价</div>
     <div class="gdcomment-1">
-        <div class="rate"><strong><span id="span_scoreCount">94%</span></strong><br>好评度</div>
+        <div class="rate"><strong><span id="span_scoreCount"></span></strong><br>好评度</div>
         <div class="percent">
             <dl>
                 <dt>好评</dt>
-                <dd class="d1"><div id="div_VeryGood" style="width: 94%;"></div> </dd>
-                <dd class="d2"><span id="Divspan_VeryGood">94%</span></dd></dl>
-            <dl><dt>中评</dt><dd class="d1"><div id="div_Good" style="width: 3%;"></div></dd><dd class="d2"><span id="divspan_Good">3%</span></dd></dl>
-            <dl><dt>差评</dt><dd class="d1"><div id="div_NoGood" style="width: 3%;"></div></dd><dd class="d2"><span id="divspan_NoGood">3%</span></dd></dl>
+                <dd class="d1">
+                    <div id="div_VeryGood" style="height:12px;background-color:red""></div>
+                </dd>
+                <dd class="d2"><span id="divspan_VeryGood"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>中评</dt>
+                <dd class="d1">
+                    <div id="div_Good" style="height:12px;background-color: red"></div>
+                </dd>
+                <dd class="d2"><span id="divspan_Good"></span></dd>
+            </dl>
+            <dl>
+                <dt>差评</dt>
+                <dd class="d1">
+                    <div id="div_NoGood" style="height:12px;background-color: red"></div>
+                </dd>
+                <dd class="d2">
+                    <span id="divspan_NoGood">3%</span>
+                </dd>
+            </dl>
         </div>
     </div>
 </div>
@@ -578,8 +620,7 @@
         <child>
             <![CDATA[
                 <div style="color:red">
-                    <div>{f_UserName}</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;{f_Content}</div>
+                    <div>{f_UserName}:&nbsp;&nbsp;&nbsp;&nbsp;{f_Content}</div>
                 </div>
             ]]>
         </child>
