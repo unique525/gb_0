@@ -14,7 +14,7 @@ window.isLogin = function(siteId){
                 //window.showLoginBox();
             }else{
                 var user = eval(data["result"]);
-                alert(111);
+                //alert(111);
                 //window.showIsLoginBox();
             }
         }
