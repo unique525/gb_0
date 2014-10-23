@@ -244,11 +244,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             //--------替换会员信息--------begin
             $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
-            Template::ReplaceOne($templateContent,$arrUserOne);
+            Template::ReplaceOne($tempContent,$arrUserOne);
             //------------------------------end
 
             //-----------替换最近收藏----------begin
-            $tagId = "favorite_list";
+            $tagId = "recent_user_favorite_list";
             $pageBegin = 0;
             $pageSize = 4;
             $allCount = 0;

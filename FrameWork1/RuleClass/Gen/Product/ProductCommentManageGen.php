@@ -1,11 +1,11 @@
 <?php
 /**
- * 产品评论 前台 生成类
+ * 产品评论 后台生成类
  * @category iCMS
  * @package iCMS_Rules_Gen_Product
  * @author yin
  */
-class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
+class ProductCommentManageGen extends BaseManageGen implements IBaseManageGen{
     /**
      *
      */
@@ -19,7 +19,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
      */
     const IS_NOT_LOGIN = -4;
 
-    public function GenPublic()
+    public function Gen()
     {
         $result = "";
         $action = Control::GetRequest("a","");
@@ -99,8 +99,8 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         $tagId = "product_comment_list";
-
         $productId = 0;
+
         $productCommentPublicData = new ProductCommentPublicData();
         $arrProductCommentList = $productCommentPublicData->GetList($productId);
 

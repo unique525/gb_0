@@ -140,10 +140,34 @@ class ProductCommentPublicData extends BasePublicData
 
     }
 
-    public function GetList(){
-        $sql = "SELECT * FROM ".self::TableName_ProductComment." WHERE ParentId = 0 ";
-        $dataProperty = new DataProperty();
-        $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+    public function GetListOfParent($productId,&$allCount,$pageBegin,$pageSize){
+        $result = null;
+        if($productId > 0){
+            $sql = "SELECT pc.*,ug.UserGroupName,uf.UploadFileCompressPath1 FROM "
+                .self::TableName_ProductComment." pc,"
+                .self::TableName_UserRole." ur,"
+                .self::TableName_UserGroup." ug,"
+                .self::TableName_UserInfo." ui LEFT JOIN "
+                .self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
+                AND ui.UserId = pc.UserId
+                AND pc.UserId = ur.UserId AND ur.UserGroupId = ug.UserGroupId
+                LIMIT ".$pageBegin.",".$pageSize.";";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId",$productId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+
+            $sqlCount = "SELECT count(*) FROM "
+                .self::TableName_ProductComment." pc,"
+                .self::TableName_UserRole." ur,"
+                .self::TableName_UserGroup." ug,"
+                .self::TableName_UserInfo." ui LEFT JOIN "
+                .self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
+                AND ui.UserId = pc.UserId
+                AND pc.UserId = ur.UserId AND ur.UserGroupId = ug.UserGroupId;";
+            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
+        }
         return $result;
     }
 }

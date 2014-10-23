@@ -15,6 +15,13 @@
     <script src="/front_js/jqzoom/js/jqzoom.js" type="text/javascript"></script>
     <script src="/front_js/roll/msclass.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/front_js/jqzoom/css/jqzoom.css" type="text/css">
+    <style type="text/css">
+        ul{list-style-type:none;}
+        .star ul{float:left;display:inline;height:19px;line-height:19px;}
+        .star ul{margin:0 10px;}
+        .star li{float:left;width:24px;text-indent:-9999px;background:url(/images/star.png) no-repeat;}
+        .star li.on{background-position:0 -28px;}
+    </style>
     <script type="text/javascript">
         var select_product_price_id = 0;
         $(function(){
@@ -185,6 +192,17 @@
                     }
                 });
             });
+
+            $(".product_comment_ul").each(function(){
+                var productScore = $(this).attr("idvalue");
+                var aLi = $(this).find("li");
+                aLi.each(function(){
+                    var star = parseInt($(this).html());
+                    if(star <= productScore){
+                        $(this).addClass("on");
+                    }
+                });
+            });
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
@@ -212,6 +230,7 @@
                 this.val("1");
             }
         }
+
     </script>
 </head>
 <body>
@@ -503,26 +522,47 @@
 </div>
 <div class="blank10">        </div>
 <div class="box990  fr">
+    <a name="comment"></a>
+    <icms id="product_comment_list" type="list">
+        <item>
+            <![CDATA[
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
+            <td width="11%" align="center" valign="top" style="padding-top:10px;">
+                <table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="images/5_38.gif" width="50" height="50" /></a></td>
+                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileCompressPath1}" width="50" height="50" /></a></td>
                     </tr>
                 </table>
-                ccddrrrrrrrrr</br>
-                <span class="grenn">金牌会员</span></td>
+                {f_UserName}</br>
+                <span class="grenn">{f_UserGroupName}</span></td>
             <td width="89%" align="left" valign="top">
                 <table width="882" border="0" cellspacing="0" cellpadding="0">
                     <tr> </tr>
                     <tr>
-                        <td background="images/5_22.gif" height="39" style="padding-left:30px;"><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><span style="float:right; padding-right:20px; color:#8b8a8a">2014-09-22 12:30</span></td>
+                        <td background="images/5_22.gif" height="39" style="padding-left:30px;">
+                            <div class="star">
+                                <ul class="product_comment_ul" idvalue="{f_ProductScore}">
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                            </div>
+                            <span style="float:right; padding-right:20px; color:#8b8a8a">{f_CreateDate}</span>
+                        </td>
                     </tr>
                     <tr>
-                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">产品不错，值得推错，值得推错，值得推错，值得推错，值得推荐。 </td>
+                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">
+                            {f_Content}
+                            <div style="margin-left: 10px">
+                                {child}
+                            </div>
+                        </td>
                     </tr>
                     <tr>
-                        <td background="images/5_29.gif" style="padding-left:30px; padding-bottom:20px;"><a href="#"><img src="images/5_32.gif" width="61" height="22" /></a></td>
+                        <td background="images/5_29.gif" style="padding-left:30px; padding-bottom:20px;cursor:pointer"><!--<img src="images/5_32.gif" width="61" height="22" />--></td>
                     </tr>
                     <tr>
                         <td background="images/5_35.gif" height="1" style="padding-left:30px;"></td>
@@ -533,118 +573,21 @@
             <td height="10" colspan="2" align="center" valign="top" ></td>
         </tr>
     </table>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
-                    </tr>
-                </table>
-                ccddrrrrrrrrr</br>
-                <span class="grenn">金牌会员</span></td>
-            <td width="89%" align="left" valign="top">
-                <table width="882" border="0" cellspacing="0" cellpadding="0">
-                    <tr> </tr>
-                    <tr>
-                        <td background="images/5_22.gif" height="39" style="padding-left:30px;"><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><span style="float:right; padding-right:20px; color:#8b8a8a">2014-09-22 12:30</span></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">产品不错，值得推错，值得推错，值得推错，值得推错，值得推荐。 </td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding-left:30px; padding-bottom:20px;"><a href="#"><img src="images/5_32.gif" width="61" height="22" /></a></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_35.gif" height="1" style="padding-left:30px;"></td>
-                    </tr>
-                </table></td>
-        </tr>
-        <tr>
-            <td height="10" colspan="2" align="center" valign="top" ></td>
-        </tr>
-    </table>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
-                    </tr>
-                </table>
-                ccddrrrrrrrrr</br>
-                <span class="grenn">金牌会员</span></td>
-            <td width="89%" align="left" valign="top">
-                <table width="882" border="0" cellspacing="0" cellpadding="0">
-                    <tr> </tr>
-                    <tr>
-                        <td background="images/5_22.gif" height="39" style="padding-left:30px;"><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><span style="float:right; padding-right:20px; color:#8b8a8a">2014-09-22 12:30</span></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">产品不错，值得推错，值得推错，值得推错，值得推错，值得推荐。 </td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding-left:30px; padding-bottom:20px;"><a href="#"><img src="images/5_32.gif" width="61" height="22" /></a></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_35.gif" height="1" style="padding-left:30px;"></td>
-                    </tr>
-                </table></td>
-        </tr>
-        <tr>
-            <td height="10" colspan="2" align="center" valign="top" ></td>
-        </tr>
-    </table>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="11%" align="center" valign="top" style="padding-top:10px;"><table width="70" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><img src="images/5_38.gif" width="50" height="50" /></td>
-                    </tr>
-                </table>
-                ccddrrrrrrrrr</br>
-                <span class="grenn">金牌会员</span></td>
-            <td width="89%" align="left" valign="top">
-                <table width="882" border="0" cellspacing="0" cellpadding="0">
-                    <tr> </tr>
-                    <tr>
-                        <td background="images/5_22.gif" height="39" style="padding-left:30px;"><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><img src="images/5_42.gif" width="14" height="14" /><span style="float:right; padding-right:20px; color:#8b8a8a">2014-09-22 12:30</span></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">产品不错，值得推错，值得推错，值得推错，值得推错，值得推荐。 </td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_29.gif" style="padding-left:30px; padding-bottom:20px;"><a href="#"><img src="images/5_32.gif" width="61" height="22" /></a></td>
-                    </tr>
-                    <tr>
-                        <td background="images/5_35.gif" height="1" style="padding-left:30px;"></td>
-                    </tr>
-                </table></td>
-        </tr>
-        <tr>
-            <td height="10" colspan="2" align="center" valign="top" ></td>
-        </tr>
-    </table>
+            ]]>
+        </item>
+        <child>
+            <![CDATA[
+                <div style="color:red">
+                    <div>{f_UserName}</div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;{f_Content}</div>
+                </div>
+            ]]>
+        </child>
+    </icms>
 </div>
 <div class="clear"></div>
 <div class="pags" style="margin:30px 0px;">
-    <div class="pdr15 fr" style="width: 165px;">
-        <input  class="butn16 fr ml10" type="button" value="">
-        <div class="fr"> 页 </div>
-        <div class="fr">
-            <input  class="pagtext" type="text"  value="1">
-        </div>
-        <div class="fr"> 转至 </div>
-    </div>
-    <div class="fr eb6100"></div>
-    <div class="fr pdr15">共50页</div>
-    <div class="digg">
-        <a class="disabledl02" href="#">上一页</a>
-        <span  class="current">1</span>
-        <a  href="#">2</a>
-        <a  href="#">3</a>
-        <a class="dian">...</a>
-        <a  href="#">50</a>
-        <a class="disabledr" href="#">下一页</a>
-    </div>
+    {product_comment_pager_button}
     <div class="clear"></div>
 </div>
 </div>

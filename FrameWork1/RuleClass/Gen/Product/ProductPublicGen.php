@@ -127,6 +127,48 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         //子模板替换
         $templateContent = parent::ReplaceTemplate($templateContent);
 
+        //产品评价内容替换
+        //----------begin-----------
+        $productCommentListTagId = "product_comment_list";
+        $productCommentAllCount = 0;
+        $productCommentPageIndex = Control::GetRequest("pc_pi",1);
+        $productCommentPageSize = Control::GetRequest("pc_ps",1);
+        $productCommentPageBegin = ($productCommentPageIndex - 1) * $productCommentPageSize;
+
+        $productCommentPublicData = new ProductCommentPublicData();
+        $arrProductCommentList = $productCommentPublicData->GetListOfParent
+              (
+                $productId,
+                $productCommentAllCount,
+                $productCommentPageBegin,
+                $productCommentPageSize
+              );
+
+        $strParentIds = "";
+        for($i=0;$i<count($arrProductCommentList);$i++){
+            if($i<count($arrProductCommentList)-1){
+                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"].",";
+            }else{
+                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"];
+            }
+        }
+        $arrChildProductCommentList = $productCommentPublicData->GetListOfStrParentIds($strParentIds);
+
+        if(count($arrProductCommentList) > 0){
+            Template::ReplaceList($templateContent,$arrProductCommentList,$productCommentListTagId,"icms",$arrChildProductCommentList,"ProductCommentId","ParentId");
+        }else{
+            Template::RemoveCustomTag($templateContent,$productCommentListTagId);
+        }
+
+        $styleNumber = 1;
+        $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+        $isJs = FALSE;
+        $navUrl = "/default.php?mod=product&a=detail&channel_id=".$channelId."&product_id=".$productId."&pc_pi={0}&pc_ps=".$productCommentPageSize."#comment";
+        $jsFunctionName = "";
+        $jsParamList = "";
+        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $productCommentAllCount, $productCommentPageSize, $productCommentPageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+        $templateContent = str_ireplace("{product_comment_pager_button}", $pagerButton, $templateContent);
+        //----------end-------------
 
         $patterns = '/\{s_(.*?)\}/';
         $templateContent = preg_replace($patterns, "", $templateContent);

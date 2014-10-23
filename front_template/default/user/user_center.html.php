@@ -90,7 +90,7 @@
     </td>
     <td width="1" bgcolor="#D4D4D4"></td>
     <td width="1006" valign="top">
-<div class="rightbar"><div class="rightbar2"><a href="">星滋味首页</a> > 账户管理</div></div>  
+<div class="rightbar"><div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div></div>
 <div class="rightmember">
 <div class="leftperson"><img src="/images/pic_person.png" width="120" height="120" /><h3><a href="">编辑个人资料</a></h3></div>
 <div class="rightinfo">
@@ -99,8 +99,8 @@
 我的积分：{UserScore} 分<br />
 <ul>
 <!--<li>待处理订单（1）</li>-->
-<li>待评价订单（{UserOrderOfUncommentCount}）</li>
-<li>待支付订单（{UserOrderOfNewCount}）</li>
+<li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待评价订单（{UserOrderOfUncommentCount}）</a></li>
+<li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待支付订单（{UserOrderOfNewCount}）</a></li>
 </ul>
 </div>
 
@@ -119,11 +119,11 @@
   </div>
   <div class="tabCon">
 	<div class="cur">
-        <icms id="favorite_list">
+        <icms id="recent_user_favorite_list" type="list">
             <item><![CDATA[
                 <dl>
                     <dd><a href="{f_UserFavoriteUrl}" target="_blank"><img src="{f_UploadFilePath}" width="180" height="160" /></a></dd>
-                    <dt>{f_UserFavoriteTitle}</dt>
+                    <dt><a href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a></dt>
                 </dl>
                 ]]></item>
         </icms>
