@@ -22,7 +22,7 @@
     <div {ShowPre} class="pb3"><a href="{url}&{PageIndexName}={preindex}">上一页</a></div>
     {PageList}
     <div {shownext} class="pb3"><a href="{url}&{PageIndexName}={nextindex}"><span id="linkNext">下一页</span></a></div>
-    <div class="pb3"><a href="{url}&p={EndIndex}">最末页</a></div>
+    <div class="pb3"><a href="{url}&{PageIndexName}={EndIndex}">最末页</a></div>
     <div class="pb5">{NowIndex}/{AllIndex}</div>
     <div class="pb5">总共{AllCount}/每页{PageSize}</div>
     <div class="pb4" style="display:{ShowGoTo}"><label>
