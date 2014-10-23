@@ -79,7 +79,31 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
     private function GenDefaultPublic(){
-        return "";
+        $temp = Control::GetRequest("temp", "");
+        $siteId = 1;
+        $templateContent = self::loadDefaultTemp($temp,$siteId);
+
+//        //加载站点数据数据
+//        $sitePublicData = new SitePublicData();
+//        $arrOne = $sitePublicData->GetOne($siteId);
+//        Template::ReplaceOne($templateContent, $arrOne);
+
+        //模板替换
+        $templateContent = parent::ReplaceTemplate($templateContent);
+        $patterns = '/\{s_(.*?)\}/';
+        $templateContent = preg_replace($patterns, "", $templateContent);
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
+    }
+
+    private function loadDefaultTemp($temp,$siteId)
+    {
+        $templateFileUrl = "default.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateContent = str_ireplace("{ChannelId}", $siteId, $templateContent);
+        return $templateContent;
     }
 
 }
