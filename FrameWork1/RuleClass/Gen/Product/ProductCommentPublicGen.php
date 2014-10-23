@@ -7,17 +7,25 @@
  */
 class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
     /**
-     *
+     *没有购买
      */
     const IS_NOT_BOUGHT = -2;
     /**
-     *
+     *系统错误
      */
     const SYSTEM_ERROR = -3;
     /**
-     *
+     *没有登录
      */
     const IS_NOT_LOGIN = -4;
+    /**
+     *成功
+     */
+    const SUCCESS= 1;
+    /**
+     *参数错误
+     */
+    const PARAMETER_ERROR= -1;
 
     public function GenPublic()
     {
@@ -30,6 +38,8 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_get_appraisal":
+                $result = self::AsyncGetAppraisal();
         }
         return $result;
     }
@@ -116,5 +126,31 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen{
 
         Template::ReplaceList($templateContent,$arrProductCommentList,$tagId,"icms",$arrChildProductCommentList,"ProductCommentId","ParentId");
         return $templateContent;
+    }
+
+    private function AsyncGetAppraisal(){
+        $productId = Control::GetRequest("product_id",0);
+        if($productId > 0){
+            $productCommentPublicData = new ProductCommentPublicData();
+            $arrAppraisalList = $productCommentPublicData->GetAppraisal($productId);
+
+            if(count($arrAppraisalList) > 0){
+                $positiveAppraisal = intval($arrAppraisalList[0]["Count"]);
+                $moderateAppraisal = intval($arrAppraisalList[1]["Count"]);
+                $negativeAppraisal = intval($arrAppraisalList[2]["Count"]);
+
+                return Control::GetRequest("jsonpcallback","")
+                    .'({
+                        "result":'.self::SUCCESS.',
+                        "positive_appraisal":'.$positiveAppraisal.',
+                        "moderate_appraisal":'.$moderateAppraisal.',
+                        "negative_appraisal":'.$negativeAppraisal.'
+                        })';
+            }else{
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::SYSTEM_ERROR.'})';
+            }
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::PARAMETER_ERROR.'})';
+        }
     }
 }

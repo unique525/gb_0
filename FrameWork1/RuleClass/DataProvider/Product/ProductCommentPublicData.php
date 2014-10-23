@@ -74,8 +74,12 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
-
-    public function GetListByParentId($parentId){
+    /**
+     * @param $parentId
+     * @return int|null
+     */
+    public function GetListByParentId($parentId)
+    {
         $result = null;
 
         $sql = "
@@ -97,10 +101,6 @@ class ProductCommentPublicData extends BasePublicData
 
                 ";
 
-
-
-
-
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ParentId", $parentId);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
@@ -109,10 +109,15 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetListOfStrParentIds($strParentIds){
+    /**
+     * @param $strParentIds
+     * @return array|null
+     */
+    public function GetListOfStrParentIds($strParentIds)
+    {
         $result = null;
-        if(!empty($strParentIds)){
-        $sql = "
+        if (!empty($strParentIds)) {
+            $sql = "
             SELECT
                 ParentId,
                 Subject,
@@ -125,48 +130,63 @@ class ProductCommentPublicData extends BasePublicData
             FROM " . self::TableName_ProductComment . "
 
             WHERE
-                ParentId IN (".$strParentIds.")
+                ParentId IN (" . $strParentIds . ")
 
             ORDER BY CreateDate DESC;
 
                 ";
-        $dataProperty = new DataProperty();
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $dataProperty = new DataProperty();
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }
 
-    public function GetListOfChild(){
+    public function GetListOfChild()
+    {
 
     }
 
-    public function GetListOfParent($productId,&$allCount,$pageBegin,$pageSize){
+    public function GetListOfParent($productId, &$allCount, $pageBegin, $pageSize)
+    {
         $result = null;
-        if($productId > 0){
+        if ($productId > 0) {
             $sql = "SELECT pc.*,ug.UserGroupName,uf.UploadFileCompressPath1 FROM "
-                .self::TableName_ProductComment." pc,"
-                .self::TableName_UserRole." ur,"
-                .self::TableName_UserGroup." ug,"
-                .self::TableName_UserInfo." ui LEFT JOIN "
-                .self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                . self::TableName_ProductComment . " pc,"
+                . self::TableName_UserRole . " ur,"
+                . self::TableName_UserGroup . " ug,"
+                . self::TableName_UserInfo . " ui LEFT JOIN "
+                . self::TableName_UploadFile . " uf ON ui.AvatarUploadFileId = uf.UploadFileId
                 WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
                 AND ui.UserId = pc.UserId
                 AND pc.UserId = ur.UserId AND ur.UserGroupId = ug.UserGroupId
-                LIMIT ".$pageBegin.",".$pageSize.";";
+                LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ProductId",$productId);
-            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sqlCount = "SELECT count(*) FROM "
-                .self::TableName_ProductComment." pc,"
-                .self::TableName_UserRole." ur,"
-                .self::TableName_UserGroup." ug,"
-                .self::TableName_UserInfo." ui LEFT JOIN "
-                .self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                . self::TableName_ProductComment . " pc,"
+                . self::TableName_UserRole . " ur,"
+                . self::TableName_UserGroup . " ug,"
+                . self::TableName_UserInfo . " ui LEFT JOIN "
+                . self::TableName_UploadFile . " uf ON ui.AvatarUploadFileId = uf.UploadFileId
                 WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
                 AND ui.UserId = pc.UserId
                 AND pc.UserId = ur.UserId AND ur.UserGroupId = ug.UserGroupId;";
-            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetAppraisal($productId)
+    {
+        $result = null;
+        if ($productId > 0) {
+            $sql = "SELECT count(appraisal) AS Count FROM " . self::TableName_ProductComment
+                . " WHERE ParentId = 0 AND RANK = 0 AND ProductId = :ProductId GROUP BY Appraisal";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId",$productId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }

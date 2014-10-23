@@ -69,7 +69,10 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
                 $styleNumber = 1;
-                $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+                $templateFileUrl = "pager/pager_style".$styleNumber.".html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                 $isJs = FALSE;
                 $navUrl = "/default.php?mod=product&a=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order#product_list_anchor";
                 $jsFunctionName = "";
@@ -137,7 +140,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $productCommentListTagId = "product_comment_list";
         $productCommentAllCount = 0;
         $productCommentPageIndex = Control::GetRequest("pc_pi",1);
-        $productCommentPageSize = Control::GetRequest("pc_ps",1);
+        $productCommentPageSize = Control::GetRequest("pc_ps",10);
         $productCommentPageBegin = ($productCommentPageIndex - 1) * $productCommentPageSize;
 
         $productCommentPublicData = new ProductCommentPublicData();
@@ -166,12 +169,33 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         }
 
         $styleNumber = 1;
-        $pagerTemplate = Template::Load("pager/pager_style".$styleNumber.".html","common");
+        $templateFileUrl = "pager/pager_style".$styleNumber.".html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+
         $isJs = FALSE;
         $navUrl = "/default.php?mod=product&a=detail&channel_id=".$channelId."&product_id=".$productId."&pc_pi={0}&pc_ps=".$productCommentPageSize."#comment";
         $jsFunctionName = "";
         $jsParamList = "";
-        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $productCommentAllCount, $productCommentPageSize, $productCommentPageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+        $pageIndexName = "pc_pi";
+        $pageSizeName = "pc_ps";
+        $showGoTo = false;
+        $pagerButton = Pager::ShowPageButton
+            (
+                $pagerTemplate,
+                $navUrl,
+                $productCommentAllCount,
+                $productCommentPageSize,
+                $productCommentPageIndex,
+                $styleNumber,
+                $isJs,
+                $jsFunctionName,
+                $jsParamList,
+                $pageIndexName,
+                $pageSizeName,
+                $showGoTo
+            );
         $templateContent = str_ireplace("{product_comment_pager_button}", $pagerButton, $templateContent);
         //----------end-------------
 
