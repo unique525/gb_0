@@ -21,6 +21,7 @@ class Pager {
      * @param string $jsParamList JS方法的参数字符串
      * @param string $pageIndexName 页码参数名称，默认 p
      * @param string $pageSizeName 页大小参数名称，默认 pz
+     * @param bool $showGoTo 是否显示转向框，默认显示
      * @return string 返回分页HTML代码
      */
     public static function ShowPageButton(
