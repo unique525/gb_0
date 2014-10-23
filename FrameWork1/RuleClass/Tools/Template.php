@@ -64,12 +64,12 @@ class Template
         if (!file_exists($filePath)) {
             die("can not found template file:" . $filePath);
         }
-        $tempContent = file_get_contents($filePath);
+        $templateContent = file_get_contents($filePath);
         //去掉BOM
-        if (preg_match('/^\xEF\xBB\xBF/', $tempContent)) {
-            $tempContent = substr($tempContent, 3);
+        if (preg_match('/^\xEF\xBB\xBF/', $templateContent)) {
+            $templateContent = substr($templateContent, 3);
         }
-        return $tempContent;
+        return $templateContent;
     }
 
     /**
@@ -89,7 +89,7 @@ class Template
 
     /**
      * 替换列表类的模板
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param array $arrList 用来替换到模板中的集合内容
      * @param string $tagId 替换标签的id
      * @param string $tagName 替换标签名称
@@ -98,7 +98,7 @@ class Template
      * @param string $parentIdName 父子键名称
      */
     public static function ReplaceList(
-        &$tempContent,
+        &$templateContent,
         $arrList,
         $tagId,
         $tagName = self::DEFAULT_TAG_NAME,
@@ -107,12 +107,12 @@ class Template
         $parentIdName = "ParentId"
     )
     {
-        if (stripos($tempContent, $tagName) > 0) {
+        if (stripos($templateContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
 
                 $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
                 $endTagString = '</' . $tagName . '>';
-                $listTempContent = substr($tempContent, strpos($tempContent, $beginTagString));
+                $listTempContent = substr($templateContent, strpos($templateContent, $beginTagString));
                 $listTempContent = substr($listTempContent, 0, strpos($listTempContent, $endTagString) + strlen($endTagString));
 
                 if (strlen($listTempContent) > 0) {
@@ -431,10 +431,10 @@ class Template
                     }
 
                     $result = $sb;
-                    $tempContent = str_replace($listTempContent, $result, $tempContent);
+                    $templateContent = str_replace($listTempContent, $result, $templateContent);
                 }
             } else { //替换模板内容为空
-                self::ReplaceCustomTag($tempContent, $tagId, "", $tagName);
+                self::ReplaceCustomTag($templateContent, $tagId, "", $tagName);
             }
         }
     }
@@ -479,7 +479,7 @@ class Template
      * 通用的格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
@@ -490,7 +490,7 @@ class Template
     private static function FormatColumnValue(
         $columnName,
         $columnValue,
-        &$tempContent,
+        &$templateContent,
         $itemRowTitleCount,
         $itemRowIntroCount,
         $headerRowTitleCount,
@@ -500,12 +500,12 @@ class Template
     )
     {
         if (strtolower($columnName) == "state") {
-            $tempContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $tempContent);
+            $templateContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $templateContent);
         }
         $pos = stripos(strtolower($columnName), "subject");
         if ($pos !== false) {
             $columnValue = Format::FormatHtmlTag($columnValue);
-            $tempContent = str_ireplace("{c_title_all}", $columnValue, $tempContent);
+            $templateContent = str_ireplace("{c_title_all}", $columnValue, $templateContent);
             if (intval($itemRowTitleCount) > 0) {
                 //截断字符
                 $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
@@ -554,9 +554,9 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_day}", $day, $templateContent);
         }
 
         $pos = stripos(strtolower($columnName), "create_date");
@@ -567,25 +567,25 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_c_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_c_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_c_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_c_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_c_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
         }
-        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
+        $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
     }
 
     /**
      * 为资讯格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
     {
         $pos = stripos(strtolower($columnName), strtolower("ShowDate"));
         if ($pos !== false) {
@@ -594,9 +594,9 @@ class Template
             $year = $date2[0];
             $month = $date2[1];
             $day = $date2[2];
-            $tempContent = str_ireplace("{f_show_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_show_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_show_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_show_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_show_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_show_day}", $day, $templateContent);
         }
         $pos = stripos(strtolower($columnName), strtolower("DocumentNewsContent"));
         if ($pos !== false) {
@@ -605,24 +605,24 @@ class Template
                 //截断字符
                 $columnValue = Format::ToShort(strip_tags($columnValue), $itemRowIntroCount);
             }
-            $tempContent = str_ireplace("{f_document_news_content_no_html}", strip_tags($columnValue), $tempContent);
+            $templateContent = str_ireplace("{f_document_news_content_no_html}", strip_tags($columnValue), $templateContent);
         }
         $columnValue = str_ireplace("'", "&#039;", $columnValue);
-        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
+        $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
     }
 
     /**
      * 为活动格式化行内容
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatActivityColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    private static function FormatActivityColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
     {
         $pos = stripos(strtolower($columnName), "activity_content");
         if ($pos !== false) {
@@ -643,9 +643,9 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_apply_begin_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_apply_begin_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_apply_begin_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_apply_begin_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_apply_begin_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_apply_begin_day}", $day, $templateContent);
         }
 
         $pos = stripos(strtolower($columnName), "apply_end_date");
@@ -657,9 +657,9 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_apply_end_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_apply_end_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_apply_end_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_apply_end_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_apply_end_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_apply_end_day}", $day, $templateContent);
         }
 
         $pos = stripos(strtolower($columnName), "begin_date");
@@ -671,9 +671,9 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_begin_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_begin_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_begin_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_begin_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_begin_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_begin_day}", $day, $templateContent);
         }
 
         $pos = stripos(strtolower($columnName), "end_date");
@@ -685,32 +685,32 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $tempContent = str_ireplace("{f_end_year}", $year, $tempContent);
-            $tempContent = str_ireplace("{f_end_month}", $month, $tempContent);
-            $tempContent = str_ireplace("{f_end_day}", $day, $tempContent);
+            $templateContent = str_ireplace("{f_end_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_end_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_end_day}", $day, $templateContent);
         }
-        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
+        $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
     }
 
     /**
      * 为product 格式化字段
      * @param string $columnName 字段名称
      * @param string $columnValue 字段值
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param int $itemRowTitleCount 主列表项目标题最大字符数
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatProductColumnValue($columnName, $columnValue, &$tempContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    private static function FormatProductColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
     {
         $pos = stripos(strtolower($columnName), "sale_price");
         if ($pos !== false) {
             if (is_numeric($columnValue) && $columnValue > 0)
-                $tempContent = str_ireplace("{f_sale_price_show}", number_format($columnValue / 10000, 2, '.', ''), $tempContent);
+                $templateContent = str_ireplace("{f_sale_price_show}", number_format($columnValue / 10000, 2, '.', ''), $templateContent);
             else
-                $tempContent = str_ireplace("{f_sale_price_show}", "", $tempContent);
+                $templateContent = str_ireplace("{f_sale_price_show}", "", $templateContent);
         }
 
         if (strtolower($columnName) === "product_content") {
@@ -718,25 +718,25 @@ class Template
         }
 
         $columnValue = str_ireplace("'", "&#039;", $columnValue);
-        $tempContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $tempContent);
+        $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
     }
 
     /**
      * 替换详细信息页面
-     * @param string $tempContent 要处理的模板
+     * @param string $templateContent 要处理的模板
      * @param array $arrInfo 要替换的数组数据
      * @param bool $isArrayList 默认为false，使用一维数组存储数据
      * @param bool $isForTemplateManage 是否后台模板管理中使用，默认false，非后台模板管理使用
      */
-    public static function ReplaceOne(&$tempContent, $arrInfo, $isArrayList = false, $isForTemplateManage = false)
+    public static function ReplaceOne(&$templateContent, $arrInfo, $isArrayList = false, $isForTemplateManage = false)
     {
         if (count($arrInfo) > 0) {
             if (!$isArrayList) { //使用一维数组存储数据
-                self::_ReplaceOne($tempContent, $arrInfo, $isForTemplateManage);
+                self::_ReplaceOne($templateContent, $arrInfo, $isForTemplateManage);
             } else { //使用二维数组存储数据
                 for ($i = 0; $i < count($arrInfo); $i++) {
                     $columns = $arrInfo[$i];
-                    self::_ReplaceOne($tempContent, $columns, $isForTemplateManage);
+                    self::_ReplaceOne($templateContent, $columns, $isForTemplateManage);
                 }
             }
         }
@@ -745,11 +745,11 @@ class Template
 
     /**
      * 处理详细信息子方法
-     * @param string $tempContent 要处理的模板
+     * @param string $templateContent 要处理的模板
      * @param array $arrOne 要替换的数组数据
      * @param bool $isForTemplateManage 是否后台模板管理中使用，默认false，非后台模板管理使用
      */
-    private static function _ReplaceOne(&$tempContent, $arrOne, $isForTemplateManage = false)
+    private static function _ReplaceOne(&$templateContent, $arrOne, $isForTemplateManage = false)
     {
         if (!empty($arrOne)) {
             foreach ($arrOne as $columnName => $columnValue) {
@@ -780,9 +780,9 @@ class Template
                                 $month = $date2[1];
                                 $day = $date2[2];
 
-                                $tempContent = str_ireplace("{publish_year}", $year, $tempContent);
-                                $tempContent = str_ireplace("{publish_month}", $month, $tempContent);
-                                $tempContent = str_ireplace("{publish_day}", $day, $tempContent);
+                                $templateContent = str_ireplace("{publish_year}", $year, $templateContent);
+                                $templateContent = str_ireplace("{publish_month}", $month, $templateContent);
+                                $templateContent = str_ireplace("{publish_day}", $day, $templateContent);
                             }
                         }
                     }
@@ -798,9 +798,9 @@ class Template
                     $month = $date2[1];
                     $day = $date2[2];
 
-                    $tempContent = str_ireplace("{show_year}", $year, $tempContent);
-                    $tempContent = str_ireplace("{show_month}", $month, $tempContent);
-                    $tempContent = str_ireplace("{show_day}", $day, $tempContent);
+                    $templateContent = str_ireplace("{show_year}", $year, $templateContent);
+                    $templateContent = str_ireplace("{show_month}", $month, $templateContent);
+                    $templateContent = str_ireplace("{show_day}", $day, $templateContent);
                 }
 
 
@@ -813,19 +813,19 @@ class Template
 
 
                 if (strtolower($columnName) === strtolower("OpenComment")) {
-                    $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", "selected=\"selected\"", $tempContent);
+                    $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", "selected=\"selected\"", $templateContent);
                     if (intval($columnValue) === 0) { //关闭评论
                         $columnValue = "display:none;";
                     } else {
                         $columnValue = "";
                     }
-                    $tempContent = str_ireplace("{" . $columnName . "}", $columnValue, $tempContent);
+                    $templateContent = str_ireplace("{" . $columnName . "}", $columnValue, $templateContent);
                 }
 
-                $tempContent = str_ireplace("{" . $preManage . $columnName . "}", $columnValue, $tempContent);
+                $templateContent = str_ireplace("{" . $preManage . $columnName . "}", $columnValue, $templateContent);
 
                 //处理常规去掉HTML代码的值
-                $tempContent = str_ireplace("{" . $preManage . $columnName . "_no_html}", strip_tags($columnValue), $tempContent);
+                $templateContent = str_ireplace("{" . $preManage . $columnName . "_no_html}", strip_tags($columnValue), $templateContent);
 
                 //处理下拉菜单的默认值
 
@@ -833,16 +833,16 @@ class Template
                     $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("selected",true);
                 </script>';
 
-                $tempContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $tempContent);
+                $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $templateContent);
 
                 $checkedOption = '<script type="text/javascript">
                     $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("checked",true);
                 </script>';
 
-                $tempContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $tempContent);
+                $templateContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $templateContent);
 
                 if (intval($columnValue) === 1) {
-                    $tempContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $tempContent);
+                    $templateContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $templateContent);
                 }
             }
         }
@@ -950,27 +950,27 @@ class Template
 
     /**
      * 取得页面中所有的标记段，并存入数组
-     * @param string $tempContent 要替换的模板内容
+     * @param string $templateContent 要替换的模板内容
      * @param string $tagName 标签名称
      * @return array 返回数组
      */
-    public static function GetAllCustomTag($tempContent, $tagName = self::DEFAULT_TAG_NAME)
+    public static function GetAllCustomTag($templateContent, $tagName = self::DEFAULT_TAG_NAME)
     {
         $preg = "/\<$tagName(.*)\<\/$tagName>/imsU";
-        preg_match_all($preg, $tempContent, $result, PREG_PATTERN_ORDER);
+        preg_match_all($preg, $templateContent, $result, PREG_PATTERN_ORDER);
         return $result;
     }
 
     /**
      * 把对应id的自定义标签替换成指定内容，可以识别标记的type属性
-     * @param string $tempContent 要替换的模板内容
+     * @param string $templateContent 要替换的模板内容
      * @param string $tagId 标签的id
      * @param string $replaceContent 要替换的内容
      * @param string $tagName 标签名称
      * @param string $tagType 标签的type
      * @return string 替换后的内容
      */
-    public static function ReplaceCustomTag($tempContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
+    public static function ReplaceCustomTag($templateContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
     {
         /**
          * if($tagType != null && strlen($tagType)>0){
@@ -987,47 +987,47 @@ class Template
          */
         if (!empty($tagId) && !empty($tagType)) {
             $patterns = "/\<$tagName id=\"$tagId\" type=\"$tagType\"(.*)\<\/$tagName>/imsU";
-            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
         } else if (!empty($tagId)) {
             $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
-            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
         } else {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
-            $tempContent = preg_replace($patterns, $replaceContent, $tempContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
         }
-        return $tempContent;
+        return $templateContent;
 
     }
 
 
     /**
      * 删除模板中所有自定义标签或指定ID的标签
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param string $tagId 替换标签的id，如果为空，则删除所有自定义标签
      * @param string $tagName 替换标签名称
      */
-    public static function RemoveCustomTag(&$tempContent, $tagId = "", $tagName = self::DEFAULT_TAG_NAME)
+    public static function RemoveCustomTag(&$templateContent, $tagId = "", $tagName = self::DEFAULT_TAG_NAME)
     {
         if (empty($tagId)) {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
         } else {
             $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
         }
     }
 
     /**
      * 替换页面中Select Checkbox Radio的选择值
-     * @param string $tempContent 要替换的模板内容，指针型参数，直接输出结果
+     * @param string $templateContent 要替换的模板内容，指针型参数，直接输出结果
      * @param string $fieldName 字段名
      * @param string $fieldValue 字段值
      */
-    public static function ReplaceSelectControl(&$tempContent, $fieldName, $fieldValue)
+    public static function ReplaceSelectControl(&$templateContent, $fieldName, $fieldValue)
     {
-        $tempContent = str_ireplace("{sel_" . $fieldName . "_" . $fieldValue . "}", "selected", $tempContent);
-        $tempContent = str_ireplace("{cb_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
-        $tempContent = str_ireplace("{rd_" . $fieldName . "_" . $fieldValue . "}", "checked", $tempContent);
+        $templateContent = str_ireplace("{sel_" . $fieldName . "_" . $fieldValue . "}", "selected", $templateContent);
+        $templateContent = str_ireplace("{cb_" . $fieldName . "_" . $fieldValue . "}", "checked", $templateContent);
+        $templateContent = str_ireplace("{rd_" . $fieldName . "_" . $fieldValue . "}", "checked", $templateContent);
     }
 
 }

@@ -43,7 +43,10 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
-        $templateContent = self::loadListTemp($temp,$channelId);
+        $templateContent = self::LoadListTemp($temp,$channelId);
+
+        parent::ReplaceFirst($templateContent);
+
 
         //加载产品类别数据
         $channelPublicData = new ChannelPublicData();
@@ -83,7 +86,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    private function loadListTemp($temp,$channelId)
+    private function LoadListTemp($temp,$channelId)
     {
         $templateFileUrl = "product/product_list.html";
         $templateName = "default";

@@ -10,7 +10,7 @@ class Pager {
     
     /**
      * 显示分页按钮
-     * @param string $tempContent 分页模板
+     * @param string $templateContent 分页模板
      * @param string $navUrl 指向地址，需要包含{0}来指向当前页
      * @param int $allCount 记录总数
      * @param int $pageSize 页数
@@ -19,13 +19,27 @@ class Pager {
      * @param boolean $isJs 是否是JS分页
      * @param string $jsFunctionName JS方法的名称
      * @param string $jsParamList JS方法的参数字符串
+     * @param string $pageIndexName 页码参数名称，默认 p
+     * @param string $pageSizeName 页大小参数名称，默认 pz
      * @return string 返回分页HTML代码
      */
-    public static function ShowPageButton($tempContent, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "") {
-        $tempContent = trim($tempContent);
+    public static function ShowPageButton(
+        $templateContent,
+        $navUrl,
+        $allCount,
+        $pageSize,
+        $pageIndex ,
+        $styleNumber = 1,
+        $isJs = false,
+        $jsFunctionName = "" ,
+        $jsParamList = "",
+        $pageIndexName = "p",
+        $pageSizeName = "pz"
+    ) {
+        $templateContent = trim($templateContent);
 
-        if (strlen($tempContent) <= 0) {
-            $tempContent = self::GetPagerDefaultTempContent();
+        if (strlen($templateContent) <= 0) {
+            $templateContent = self::GetPagerDefaultTempContent();
             $temp = self::GetPagerDefaultListTemp();
         } else {
             if ($isJs) {
@@ -36,7 +50,7 @@ class Pager {
         }
         $outHtml = "";
         if ($pageSize > 0 && $pageSize < $allCount) {
-            $outHtml = $tempContent;
+            $outHtml = $templateContent;
 
             if ($allCount % $pageSize == 0) {
                 $allBtnCount = (int) ($allCount / $pageSize);
@@ -119,9 +133,11 @@ class Pager {
             $outHtml = str_ireplace("{FirstIndex}", str_ireplace("{0}", "1", $navUrl), $outHtml);
             $outHtml = str_ireplace("{PreIndexC}", $pageIndex - 1, $outHtml);
             $outHtml = str_ireplace("{FirstIndexC}", "1", $outHtml);
-            $outHtml = str_ireplace("{Rd}", str_ireplace("&p={0}", "", $navUrl), $outHtml);
+            $outHtml = str_ireplace("{Rd}", str_ireplace("&$pageIndexName={0}", "", $navUrl), $outHtml);
             $outHtml = str_ireplace("{Url}&p=", "", $outHtml);
             $outHtml = str_ireplace("{BoxStyle}", "pb1", $outHtml);
+            $outHtml = str_ireplace("{PageIndexName}", $pageIndexName, $outHtml);
+            $outHtml = str_ireplace("{PageSizeName}", $pageSizeName, $outHtml);
         }
 
         return $outHtml;
