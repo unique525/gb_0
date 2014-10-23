@@ -11,11 +11,10 @@ window.isLogin = function(siteId){
         success:function(data){
             var result = parseInt(data["result"]);
             if(result <= 0){
-                //window.showLoginBox();
+                window.showLoginBoxCallBack();
             }else{
                 var user = eval(data["result"]);
-                //alert(111);
-                //window.showIsLoginBox();
+                window.showIsLoginBoxCallBack(user);
             }
         }
     });

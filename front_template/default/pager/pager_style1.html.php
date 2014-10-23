@@ -25,7 +25,7 @@
     <div class="pb3"><a href="{url}&p={EndIndex}">最末页</a></div>
     <div class="pb5">{NowIndex}/{AllIndex}</div>
     <div class="pb5">总共{AllCount}/每页{PageSize}</div>
-    <div class="pb4"><label>
+    <div class="pb4" style="display:{ShowGoTo}"><label>
             <input type="text" maxlength="6" value="输入页码" class="pager_input" onfocus="this.value = '';" onkeypress="if (event.keyCode == 13) {
             if (!isNaN(parseInt(this.value))) {
                 window.location.href = '{rd}&{PageIndexName}=' + this.value.replace('.', '');

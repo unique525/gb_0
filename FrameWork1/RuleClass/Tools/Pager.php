@@ -34,7 +34,8 @@ class Pager {
         $jsFunctionName = "" ,
         $jsParamList = "",
         $pageIndexName = "p",
-        $pageSizeName = "pz"
+        $pageSizeName = "pz",
+        $showGoTo = TRUE
     ) {
         $templateContent = trim($templateContent);
 
@@ -138,6 +139,11 @@ class Pager {
             $outHtml = str_ireplace("{BoxStyle}", "pb1", $outHtml);
             $outHtml = str_ireplace("{PageIndexName}", $pageIndexName, $outHtml);
             $outHtml = str_ireplace("{PageSizeName}", $pageSizeName, $outHtml);
+            if($showGoTo){
+                $outHtml = str_ireplace("{ShowGoTo}", "", $outHtml);
+            }else{
+                $outHtml = str_ireplace("{ShowGoTo}", "none", $outHtml);
+            }
         }
 
         return $outHtml;
