@@ -487,7 +487,7 @@ class BaseManageGen extends BaseGen
         $publishChannel = false
     )
     {
-
+        $manageUserId = Control::GetManageUserId();
         if($documentNewsId>0){
             $documentNewsManageData = new DocumentNewsManageData();
             //取得并判断状态
@@ -576,6 +576,14 @@ class BaseManageGen extends BaseGen
                                 $publishFileName = strval($documentNewsId).'.html';
                                 //发布路径，频道id+日期
                                 $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+
+                                //修改发布时间和发布人，只有发布时间为空时才进行操作
+                                $documentNewsManageData->ModifyPublishDate(
+                                    $documentNewsId,
+                                    date("Y-m-d H:i:s", time()),
+                                    $manageUserId
+                                );
+
 
                                 $result = self::AddToPublishQueueForChannelTemplate(
                                     $channelId,

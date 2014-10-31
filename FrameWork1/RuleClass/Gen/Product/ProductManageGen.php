@@ -165,6 +165,8 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                                 $productTitlePic1PadWidth  = 1024; //默认1024宽
                             }
                             self::GenUploadFilePad($uploadFileId1,$productTitlePic1PadWidth);
+
+
                         }
                     }
 

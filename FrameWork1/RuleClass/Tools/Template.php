@@ -96,6 +96,9 @@ class Template
      * @param array $arrChildList 子表数据（默认为空，不进行子父表处理）
      * @param string $tableIdName 主表主键名称
      * @param string $parentIdName 父子键名称
+     * @param array $arrThirdList 第三级子表数据（默认为空，不进行第三级子父表处理）
+     * @param string $thirdTableIdName 第三级表主键名称
+     * @param string $thirdParentIdName 第二级子键名称
      */
     public static function ReplaceList(
         &$templateContent,
@@ -104,7 +107,10 @@ class Template
         $tagName = self::DEFAULT_TAG_NAME,
         $arrChildList = null,
         $tableIdName = null,
-        $parentIdName = "ParentId"
+        $parentIdName = "ParentId",
+        $arrThirdList = null,
+        $thirdTableIdName = null,
+        $thirdParentIdName = "ParentId"
     )
     {
         if (stripos($templateContent, $tagName) > 0) {
@@ -163,6 +169,12 @@ class Template
                             $childRowTitleCount = self::GetParamIntValue($doc, $tagName, "child_title");
                         }
 
+                        //三级表标题最大字符数
+                        $thirdRowTitleCount = self::GetParamIntValue($doc, $tagName, "third_row_title_count");
+                        if ($thirdRowTitleCount <= 0) {
+                            $thirdRowTitleCount = self::GetParamIntValue($doc, $tagName, "third_title");
+                        }
+
                         //标题最大字符数
                         $itemRowTitleCount = self::GetParamIntValue($doc, $tagName, "item_row_title_count");
                         if ($itemRowTitleCount <= 0) {
@@ -200,6 +212,12 @@ class Template
                             $childTempContent = self::GetNodeValue($doc, "child", $tagName);
                         }else{
                             $childTempContent = "";
+                        }
+                        //读取三级模板
+                        if( $arrThirdList != null ){
+                            $thirdTempContent = self::GetNodeValue($doc, "third", $tagName);
+                        }else{
+                            $thirdTempContent = "";
                         }
 
 
@@ -243,10 +261,15 @@ class Template
                             $footerRowTitleCount = intval($arrayXml[0]['attributes']['FOOTER_TITLE']);
                         }
 
-                        //标题最大字符数
+                        //子表标题最大字符数
                         $childRowTitleCount = intval($arrayXml[0]['attributes']['CHILD_ROW_TITLE_COUNT']);
                         if ($childRowTitleCount <= 0) {
                             $childRowTitleCount = intval($arrayXml[0]['attributes']['CHILD_TITLE']);
+                        }
+                        //三级表标题最大字符数
+                        $thirdRowTitleCount = intval($arrayXml[0]['attributes']['THIRD_ROW_TITLE_COUNT']);
+                        if ($thirdRowTitleCount <= 0) {
+                            $thirdRowTitleCount = intval($arrayXml[0]['attributes']['THIRD_TITLE']);
                         }
 
                         //标题最大字符数
@@ -287,6 +310,13 @@ class Template
                             $childTempContent = self::GetNodeValueForSax($arrayXml, "CHILD");
                         }else{
                             $childTempContent = "";
+                        }
+
+                        //读取三级模板
+                        if( $arrThirdList != null ){
+                            $thirdTempContent = self::GetNodeValueForSax($arrayXml, "THIRD");
+                        }else{
+                            $thirdTempContent = "";
                         }
                     }
                     ///////////////////////////////////////////////////////////////////
@@ -363,6 +393,13 @@ class Template
                                 $columnsOfChild = $arrChildList[$j];
 
                                 if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
+
+
+
+
+
+
+
                                     $listOfChild = self::ReplaceListItem(
                                         $j,
                                         $type,
@@ -375,6 +412,45 @@ class Template
                                         $listOfChild,
                                         $itemType
                                     );
+
+                                    //处理三级数据
+                                    $sbThird = "";
+                                    if(count($arrThirdList)>0){
+
+                                        for($k = 0; $k<count($arrThirdList); $k++){
+
+                                            $listOfThird = $thirdTempContent;
+                                            $columnsOfThird = $arrThirdList[$k];
+
+                                            if($arrChildList[$j][$thirdTableIdName] ==
+                                                $arrThirdList[$k][$thirdParentIdName]
+                                            ){
+
+                                                $listOfThird = self::ReplaceListItem(
+                                                    $k,
+                                                    $type,
+                                                    $itemRowTitleCount,
+                                                    $itemRowIntroCount,
+                                                    $headerRowTitleCount,
+                                                    $footerRowTitleCount,
+                                                    $thirdRowTitleCount,
+                                                    $columnsOfThird,
+                                                    $listOfThird,
+                                                    $itemType
+                                                );
+
+                                                $sbThird = $sbThird . $listOfThird;
+                                            }
+
+
+                                        }
+
+
+
+                                    }
+
+                                    $listOfChild = str_ireplace("{third}", $sbThird, $listOfChild);
+
 
                                     $sbChild = $sbChild . $listOfChild;
                                 }
@@ -453,27 +529,103 @@ class Template
      * @param string $itemType 标签的类型 header item footer
      * @return mixed
      */
-    private static function ReplaceListItem($i, $tagType, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $childRowTitleCount, $columns, $listTemplate, $itemType)
+    private static function ReplaceListItem(
+        $i,
+        $tagType,
+        $itemRowTitleCount,
+        $itemRowIntroCount,
+        $headerRowTitleCount,
+        $footerRowTitleCount,
+        $childRowTitleCount,
+        $columns,
+        $listTemplate,
+        $itemType
+    )
     {
         $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate); //加入输出序号
-        if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
-            $listTemplate = str_ireplace("{c_url}", $columns["DirectUrl"], $listTemplate); //直接输出url
-        } else {
-            $listTemplate = str_ireplace("{c_url}", "/h/{f_channel_id}/{f_year}{f_month}{f_day}/{f_document_news_id}.html", $listTemplate);
+
+        if (strtolower($tagType) === 'document_news_list')
+        {
+            self::FormatDocumentNewsRow(
+                $listTemplate,
+                $columns
+            );
         }
+
+
         foreach ($columns as $columnName => $columnValue) {
             //公用替换
-            self::FormatColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $childRowTitleCount, $itemType);
-            if (strtolower($tagType) === 'document_news_list') {
-                self::FormatDocumentNewsColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'product_list') {
-                self::FormatProductColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
-            } else if (strtolower($tagType) === 'activity_list') {
-                self::FormatActivityColumnValue($columnName, $columnValue, $listTemplate, $itemRowTitleCount, $headerRowTitleCount, $footerRowTitleCount, $itemType);
+            self::FormatColumnValue(
+                    $columnName,
+                    $columnValue,
+                    $listTemplate,
+                    $itemRowTitleCount,
+                    $itemRowIntroCount,
+                    $headerRowTitleCount,
+                    $footerRowTitleCount,
+                    $childRowTitleCount,
+                    $itemType
+            );
+
+            if (strtolower($tagType) === 'document_news_list')
+            {
+                self::FormatDocumentNewsColumnValue(
+                    $columnName,
+                    $columnValue,
+                    $listTemplate,
+                    $itemRowTitleCount,
+                    $itemRowIntroCount,
+                    $headerRowTitleCount,
+                    $footerRowTitleCount,
+                    $itemType
+                );
+            }
+            else if (strtolower($tagType) === 'product_list')
+            {
+                self::FormatProductColumnValue(
+                    $columnName,
+                    $columnValue,
+                    $listTemplate,
+                    $itemRowTitleCount,
+                    $itemRowIntroCount,
+                    $headerRowTitleCount,
+                    $footerRowTitleCount,
+                    $itemType
+                );
+            }
+            else if (strtolower($tagType) === 'activity_list')
+            {
+                self::FormatActivityColumnValue(
+                    $columnName,
+                    $columnValue,
+                    $listTemplate,
+                    $itemRowTitleCount,
+                    $headerRowTitleCount,
+                    $footerRowTitleCount,
+                    $itemType
+                );
             }
         }
         return $listTemplate;
     }
+
+
+    /**
+     * 为资讯格式化所有行的内容
+     * @param string $listTemplate 列表模板
+     * @param array $columns 列数组
+     */
+    private static function FormatDocumentNewsRow(&$listTemplate, $columns){
+
+        if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
+            $listTemplate = str_ireplace("{c_DocumentNewsUrl}", $columns["DirectUrl"], $listTemplate); //直接输出url
+        } else {
+            $listTemplate = str_ireplace("{c_DocumentNewsUrl}",
+                "/h/{f_ChannelId}/{f_year}{f_month}{f_day}/{f_DocumentNewsId}.html", $listTemplate);
+        }
+
+    }
+
 
     /**
      * 通用的格式化行内容
@@ -546,7 +698,7 @@ class Template
                 $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
             }
         }
-        $pos = stripos(strtolower($columnName), "publish_date");
+        $pos = stripos(strtolower($columnName), strtolower("PublishDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
@@ -559,7 +711,7 @@ class Template
             $templateContent = str_ireplace("{f_day}", $day, $templateContent);
         }
 
-        $pos = stripos(strtolower($columnName), "create_date");
+        $pos = stripos(strtolower($columnName), strtolower("CreateDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
             $date2 = explode('-', $date1[0]);
@@ -573,6 +725,8 @@ class Template
         }
         $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
     }
+
+
 
     /**
      * 为资讯格式化行内容
@@ -598,6 +752,9 @@ class Template
             $templateContent = str_ireplace("{f_show_month}", $month, $templateContent);
             $templateContent = str_ireplace("{f_show_day}", $day, $templateContent);
         }
+
+
+        //处理内容
         $pos = stripos(strtolower($columnName), strtolower("DocumentNewsContent"));
         if ($pos !== false) {
             $columnValue = str_ireplace("../upload/document_news", "/upload/document_news", $columnValue);

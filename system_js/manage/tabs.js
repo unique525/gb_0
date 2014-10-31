@@ -49,7 +49,8 @@ function closeTab(){
             //var panelId = "tabs-"+nowTabCounter;
             //parent.$("#" + panelId).remove();
             //parent.G_Tabs.tabs("refresh");
-            parent.G_Tabs.tabs("option", "active", window.G_TabCounter-1);
+            //alert(parent.G_TabCounter);
+            parent.G_Tabs.tabs("option", "active", parent.G_TabCounter-1);
             parent.G_Tabs.tabs( "refresh" );
             //刷新内容
             parent.$("#iframeNewTab").attr("src",parent.$("#iframeNewTab").attr("src"));

@@ -376,22 +376,61 @@ class DocumentNewsManageData extends BaseManageData
         }
     }
 
+
     /**
-     * 修改锁定状态和时间
+     * 修改发布时间和发布人,只有发布时间为空时才进行操作
      * @param int $documentNewsId 文档id
-     * @param int $lockEdit 是否锁定
-     * @param int $adminUserId 操作管理员id
+     * @param int $publishDate 发布时间
+     * @param int $manageUserId 操作管理员id
      * @return int 操作结果
      */
-    public function ModifyLockEdit($documentNewsId, $lockEdit, $adminUserId)
+    public function ModifyPublishDate($documentNewsId, $publishDate, $manageUserId)
     {
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_DocumentNews . " SET `LockEdit`=:LockEdit,LockEditDate=now(),LockEditAdminUserId=:LockEditAdminUserId WHERE DocumentNewsId=:DocumentNewsId;";
+            $sql = "UPDATE " . self::TableName_DocumentNews . "
+                SET
+
+                    PublishDate=:PublishDate,
+                    PublishManageUserId=:PublishManageUserId
+
+                WHERE
+                        DocumentNewsId=:DocumentNewsId
+                    AND PublishDate is NULL
+
+                    ;";
+
+
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $dataProperty->AddField("PublishDate", $publishDate);
+            $dataProperty->AddField("PublishManageUserId", $manageUserId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改锁定状态和时间
+     * @param int $documentNewsId 文档id
+     * @param int $lockEdit 是否锁定
+     * @param int $manageUserId 操作管理员id
+     * @return int 操作结果
+     */
+    public function ModifyLockEdit($documentNewsId, $lockEdit, $manageUserId)
+    {
+        $result = 0;
+        if ($documentNewsId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET
+                        LockEdit=:LockEdit,
+                        LockEditDate=now(),
+                        LockEditManageUserId=:LockEditManageUserId
+
+                        WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("LockEdit", $lockEdit);
-            $dataProperty->AddField("LockEditAdminUserId", $adminUserId);
+            $dataProperty->AddField("LockEditManageUserId", $manageUserId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
@@ -408,7 +447,7 @@ class DocumentNewsManageData extends BaseManageData
         $result = 0;
         if ($documentNewsId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_DocumentNews . " SET `State`=:State WHERE DocumentNewsId=:DocumentNewsId;";
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET State=:State WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -639,80 +678,6 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
-    //////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////Get List////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
-
-
-    /**
-     * @param int $channelId
-     * @param string $topCount
-     * @param int $state
-     * @return array|null
-     */
-    public function GetNewList($channelId, $topCount, $state) {
-
-        $result = null;
-
-        if(!empty($topCount)){
-            $selectColumn = '
-            DocumentNewsId,
-            SiteId,
-            ChannelId,
-            DocumentNewsTitle,
-            DocumentNewsContent,
-            DocumentNewsSubTitle,
-            DocumentNewsCiteTitle,
-            DocumentNewsShortTitle,
-            DocumentNewsIntro,
-            CreateDate,
-            ManageUserId,
-            ManageUserName,
-            UserId,
-            UserName,
-            Author,
-            State,
-            DocumentNewsType,
-            DirectUrl,
-            PublishDate,
-            ShowDate,
-            SourceName,
-            DocumentNewsMainTag,
-            DocumentNewsTag,
-            Sort,
-            TitlePic,
-            TitlePic2,
-            TitlePic3,
-            DocumentNewsTitleColor,
-            DocumentNewsTitleBold,
-            OpenComment,
-            ShowHour,
-            ShowMinute,
-            ShowSecond,
-            UploadFiles,
-            IsHot,
-            RecLevel,
-            WaitPublish,
-            ShowPicMethod,
-            IsCopy,
-            IsAddToFullText,
-            ClosePosition,
-            Hit,
-            LockEdit,
-            LockEditDate,
-            LockEditAdminUserId';
-
-            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
-                WHERE ChannelId=:ChannelId AND State=:State
-                ORDER BY Sort DESC, CreateDate DESC LIMIT " . $topCount;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
-            $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        }
-
-        return $result;
-    }
 }
 
 ?>

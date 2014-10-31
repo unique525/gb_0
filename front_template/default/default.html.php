@@ -16,12 +16,7 @@
 
 <body>
 <div class="head">
-    <div class="loginbg">
-        <div class="wrapper">
-            <div class="loginleft">您好，欢迎来到星滋味    请<a href="">登陆</a>    <a href="">免费注册</a></div>
-            <div class="loginright"><a href="">我的星滋味</a>    <a href="">收藏本站</a></div>
-        </div>
-    </div>
+    <pre_temp id="3"></pre_temp>
     <div class="wrapper2">
         <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103" /></a></div>
         <div class="search">
@@ -53,39 +48,67 @@
 <div class="first_part">
     <div class="wrapper">
         <div class="left_bar left">
-            <div style="background:#00a93c;"><ul>
-                    <li>每日生鲜</li>
-                    <li>每日生鲜</li>
-                    <li>每日生鲜</li>
-                    <li>每日生鲜</li>
-                    <li>每日生鲜</li>
-                    <li>每日生鲜</li>
-                </ul></div>
+            <div style="background:#00a93c;">
+
+                <ul>
+                    <li><span>所有商品分类</span>
+                        <ul>
+                            <icms id="channel_3" type="channel_list" where="parent">
+                                <item>
+                                    <![CDATA[
+                                    <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                        <ul style="display: none;">
+                                            {child}
+                                        </ul>
+                                    </li>
+                                    ]]>
+                                </item>
+                                <child>
+                                    <![CDATA[
+                                    <li><span>{f_ChannelName}</span></li>
+                                    <dd>{third}</dd>
+                                    ]]>
+                                </child>
+                                <third>
+                                    <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
+                                    ]]>
+                                </third>
+
+                            </icms>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
         </div>
         <div class="middle left"><img src="images/ad.jpg" width="741" height="429" /></div>
         <div class="right_bar right">
             <div class="gonggao">
-                <div class="title1"><span class="right"><a href="#" target="_blank">更多</a></span>网站公告 </div>
+                <div class="title1"><span class="right"><a href="/h/17/list.html" target="_blank">更多</a></span>网站公告 </div>
                 <div class="gonggao_list">
                     <ul>
-                        <li><a href="#" target="_blank">[晒单有礼]10元代金券晒单即可得</a></li>
-                        <li><a href="#" target="_blank">[晒单有礼]10元代金券晒单即可得</a></li>
-                        <li><a href="#" target="_blank">[晒单有礼]10元代金券晒单即可得</a></li>
-                        <li><a href="#" target="_blank">[晒单有礼]10元代金券晒单即可得</a></li>
+                    <icms id="channel_17" type="document_news_list" top="4" title="24">
+                        <item>
+                            <![CDATA[
+                            <li><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></li>
+                            ]]>
+                        </item>
+                    </icms>
                     </ul>
                 </div>
             </div>
             <div class="fuwu">
                 <div class="title1"><span class="right"><a href="#">更多</a></span>便民服务</div>
                 <div class="fuwu_tags">
-                    <div class="fuwu_class gray"><a href="#" class="jiazhen" target="_blank">家政 服务</a></div>
-                    <div class="fuwu_class"><a href="#" class="weixiu" target="_blank">维修清洗</a></div>
-                    <div class="fuwu_class gray"><a href="#" class="fanxin" target="_blank">翻新保养</a></div>
-                    <div class="fuwu_class"><a href="#" class="jiaju" target="_blank">家居安全</a></div>
-                    <div class="fuwu_class"><a href="#" class="jiaotong" target="_blank">交通旅游</a></div>
-                    <div class="fuwu_class gray"><a href="#" class="jiaoyu" target="_blank">教育培训</a></div>
-                    <div class="fuwu_class"><a href="#" class="jinrong" target="_blank">金融服务</a></div>
-                    <div class="fuwu_class gray"><a href="#" class="qita" target="_blank">其他服务</a></div>
+                    <div class="fuwu_class gray"><a href="/h/19/list.html" class="jiazhen" target="_blank">家政服务</a></div>
+                    <div class="fuwu_class"><a href="/h/20/list.html" class="weixiu" target="_blank">维修清洗</a></div>
+                    <div class="fuwu_class gray"><a href="/h/21/list.html" class="fanxin" target="_blank">翻新保养</a></div>
+                    <div class="fuwu_class"><a href="/h/22/list.html" class="jiaju" target="_blank">家居安全</a></div>
+                    <div class="fuwu_class"><a href="/h/23/list.html" class="jiaotong" target="_blank">交通旅游</a></div>
+                    <div class="fuwu_class gray"><a href="/h/24/list.html" class="jiaoyu" target="_blank">教育培训</a></div>
+                    <div class="fuwu_class"><a href="/h/25/list.html" class="jinrong" target="_blank">金融服务</a></div>
+                    <div class="fuwu_class gray"><a href="/h/26/list.html" class="qita" target="_blank">其他服务</a></div>
                 </div>
             </div>
         </div>
