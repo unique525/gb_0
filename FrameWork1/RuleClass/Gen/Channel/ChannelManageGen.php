@@ -168,6 +168,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                         }
 
+                        //更新子节点id
                         $channelManageData->UpdateParentChildrenChannelId($channelId);
 
 
@@ -402,6 +403,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenRemoveToBin(){
         $tempContent = Template::Load("channel/channel_remove_to_bin.html", "common");
         $channelId = Control::GetRequest("channel_id", 0);
+        $channelManageData = new ChannelManageData();
+        $channelManageData->UpdateParentChildrenChannelId($channelId);
 
         return $tempContent;
     }
