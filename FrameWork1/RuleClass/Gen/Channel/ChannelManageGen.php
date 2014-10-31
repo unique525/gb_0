@@ -168,6 +168,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                         }
 
+                        $channelManageData->UpdateParentChildrenChannelId($channelId);
+
+
                         //授权给创建人
                         if ($manageUserId > 1) { //只有非ADMIN的要授权
                             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -234,6 +237,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
             parent::ReplaceFirst($tempContent);
             $channelManageData = new ChannelManageData();
+
+            $channelManageData->UpdateParentChildrenChannelId($channelId);
 
             $parentChannelName = $channelManageData->GetParentChannelName($channelId, false);
 

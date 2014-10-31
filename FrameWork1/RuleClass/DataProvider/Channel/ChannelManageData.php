@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 后台管理 频道 数据类
  * @category iCMS
@@ -13,7 +14,8 @@ class ChannelManageData extends BaseManageData
      * @param string $tableName 表名
      * @return array 字段数据集
      */
-    public function GetFields($tableName = self::TableName_Channel){
+    public function GetFields($tableName = self::TableName_Channel)
+    {
         return parent::GetFields(self::TableName_Channel);
     }
 
@@ -73,7 +75,7 @@ class ChannelManageData extends BaseManageData
     public function ModifyTitlePic($channelId, $titlePic1UploadFileId, $titlePic2UploadFileId, $titlePic3UploadFileId)
     {
         $result = -1;
-        if($channelId>0){
+        if ($channelId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Channel . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId,
@@ -102,7 +104,7 @@ class ChannelManageData extends BaseManageData
     public function ModifyTitlePic1UploadFileId($channelId, $titlePic1UploadFileId)
     {
         $result = -1;
-        if($channelId>0){
+        if ($channelId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Channel . " SET
                     TitlePic1UploadFileId = :TitlePic1UploadFileId
@@ -126,7 +128,7 @@ class ChannelManageData extends BaseManageData
     public function ModifyTitlePic2UploadFileId($channelId, $titlePic2UploadFileId)
     {
         $result = -1;
-        if($channelId>0){
+        if ($channelId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Channel . " SET
                     TitlePic2UploadFileId = :TitlePic2UploadFileId
@@ -150,7 +152,7 @@ class ChannelManageData extends BaseManageData
     public function ModifyTitlePic3UploadFileId($channelId, $titlePic3UploadFileId)
     {
         $result = -1;
-        if($channelId>0){
+        if ($channelId > 0) {
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Channel . " SET
                     TitlePic3UploadFileId = :TitlePic3UploadFileId
@@ -163,6 +165,89 @@ class ChannelManageData extends BaseManageData
         }
 
         return $result;
+    }
+
+    /**
+     * 修改频道子节点id字符串
+     * @param int $channelId 频道id
+     * @param string $childrenChannelId 子节点id字符串
+     * @return int 操作结果
+     */
+    public function ModifyChildrenChannelId($channelId, $childrenChannelId)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+
+            if(strpos($childrenChannelId,',') == 0){
+                $childrenChannelId = substr($childrenChannelId,1);
+            }
+
+            $oldChildrenChannelId = self::GetChildrenChannelId($channelId, false);
+
+            $childrenChannelId = $oldChildrenChannelId . ',' . $childrenChannelId;
+
+            $arrChildrenChannelId = explode(',', $childrenChannelId);
+            //去重复
+            $arrChildrenChannelId = array_unique($arrChildrenChannelId);
+
+            $childrenChannelId = implode(',', $arrChildrenChannelId);
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Channel . " SET
+                    ChildrenChannelId = :ChildrenChannelId
+
+                    WHERE ChannelId = :ChannelId
+                    ;";
+            $dataProperty->AddField("ChildrenChannelId", $childrenChannelId);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 更新子节点id字符串
+     * @param int $channelId 频道id
+     */
+    public function UpdateParentChildrenChannelId($channelId)
+    {
+
+        $rank = self::GetRank($channelId, false);
+
+        $childrenChannelId = "";
+
+
+        while ($rank > 0) {
+
+
+            $parentId = self::GetParentChannelId($channelId, false);
+
+
+            $dataProperty = new DataProperty();
+
+            $sql = "SELECT
+                    GROUP_CONCAT(ChannelId) FROM " . self::TableName_Channel . "
+
+                WHERE ParentId = :ParentId
+                    AND State<100;
+
+                    ";
+
+            $dataProperty->AddField("ParentId", $parentId);
+            $childrenChannelId = $childrenChannelId . ',' . $this->dbOperator->GetString($sql, $dataProperty);
+
+
+            self::ModifyChildrenChannelId($parentId, $childrenChannelId);
+
+            $channelId = $parentId;
+
+
+            $rank--;
+
+        }
+
+
     }
 
     /**
@@ -191,9 +276,10 @@ class ChannelManageData extends BaseManageData
      * @param int $channelId 频道id
      * @return array|null 取得对应数组
      */
-    public function GetOne($channelId){
+    public function GetOne($channelId)
+    {
         $result = null;
-        if($channelId>0){
+        if ($channelId > 0) {
             $sql = "SELECT * FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
@@ -215,6 +301,28 @@ class ChannelManageData extends BaseManageData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
             $cacheFile = 'channel_get_channel_name.cache_' . $channelId . '';
             $sql = "SELECT ChannelName FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 取得子节点id字符串
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 子节点id字符串
+     */
+    public function GetChildrenChannelId($channelId, $withCache)
+    {
+        $result = "";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_children_channel_id.cache_' . $channelId . '';
+            $sql = "SELECT ChildrenChannelId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -369,7 +477,6 @@ class ChannelManageData extends BaseManageData
     }
 
 
-
     /**
      * 取得频道级别
      * @param int $channelId 频道id
@@ -389,7 +496,6 @@ class ChannelManageData extends BaseManageData
         }
         return $result;
     }
-
 
 
     /**
@@ -419,7 +525,8 @@ class ChannelManageData extends BaseManageData
      * @param int $channelId 要检查的频道编号，修改时用，新增时，此参数为0
      * @return bool 检查结果，存在重复为是，否则为否
      */
-    public function CheckRepeatPublishPath($siteId, $publishPath , $channelId) {
+    public function CheckRepeatPublishPath($siteId, $publishPath, $channelId)
+    {
         $dataProperty = new DataProperty();
         if ($channelId > 0) {
             $sql = "SELECT count(*) FROM " . self::TableName_Channel . " WHERE SiteId=:SiteId AND PublishPath=:PublishPath AND ChannelId<>:ChannelId;";
@@ -430,9 +537,9 @@ class ChannelManageData extends BaseManageData
         $dataProperty->AddField("PublishPath", $publishPath);
         $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
-        if($result>0){
+        if ($result > 0) {
             return TRUE;
-        }else{
+        } else {
             return FALSE;
         }
     }
@@ -504,17 +611,18 @@ class ChannelManageData extends BaseManageData
      * @param string $order 排序方式
      * @return array|null 列表数据集
      */
-    public function GetListByParentId($channelId, $topCount, $order){
+    public function GetListByParentId($channelId, $topCount, $order)
+    {
         $result = null;
-        if($channelId >0){
-            switch($order){
+        if ($channelId > 0) {
+            switch ($order) {
                 default:
-                    $order = "ORDER BY Sort DESC,Createdate DESC,".self::TableId_Channel." DESC";
+                    $order = "ORDER BY Sort DESC,Createdate DESC," . self::TableId_Channel . " DESC";
                     break;
             }
             $sql = "SELECT
                         *
-                        FROM ".self::TableName_Channel."
+                        FROM " . self::TableName_Channel . "
                         WHERE State<100 AND IsCircle=1 AND ParentId=:ChannelId
                         $order
                         LIMIT $topCount";
