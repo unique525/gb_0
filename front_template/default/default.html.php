@@ -56,7 +56,8 @@
 <div class="main">
 <div class="first_part">
     <div class="wrapper">
-        <div class="left_bar left" id="leftmenu">
+        <div class="left_bar left" id="leftmenu" style="background:#00a93c;height:429px;">
+
             <ul>
                 <li>
                     <ul style="display: block;">
