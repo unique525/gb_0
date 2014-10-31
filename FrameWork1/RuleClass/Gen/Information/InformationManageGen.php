@@ -103,18 +103,18 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                             //图片多平台处理
                             $channelManageData=new ChannelManageData();
                             $siteId=$channelManageData->GetSiteId($channelId,FALSE);
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
-                            $informationTitlePicMobileWidth = $siteConfigManageData->$informationTitlePicMobileWidth;
-                            if($informationTitlePicMobileWidth<=0){
-                                $informationTitlePicMobileWidth  = 320; //默认320宽
+                            $siteConfigData = new SiteConfigData($siteId);
+                            $informationTitlePic1MobileWidth = $siteConfigData->InformationTitlePic1MobileWidth;
+                            if($informationTitlePic1MobileWidth<=0){
+                                $informationTitlePic1MobileWidth  = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId1,$informationTitlePicMobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1,$informationTitlePic1MobileWidth);
 
-                            $informationTitlePicPadWidth = $siteConfigManageData->$informationTitlePicPadWidth;
-                            if($informationTitlePicPadWidth<=0){
-                                $informationTitlePicPadWidth  = 1024; //默认1024宽
+                            $informationTitlePic1PadWidth = $siteConfigData->InformationTitlePic1PadWidth;
+                            if($informationTitlePic1PadWidth<=0){
+                                $informationTitlePic1PadWidth  = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId1,$informationTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1,$informationTitlePic1PadWidth);
                         }
                     }
                 }else{
@@ -234,25 +234,24 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
 
                         }
 
-
                         if($uploadFileId1>0){
                             $informationManageData->ModifyTitlePic($informationId, $uploadFileId1);
 
                             //图片多平台处理
                             $channelManageData=new ChannelManageData();
                             $siteId=$channelManageData->GetSiteId($channelId,FALSE);
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
-                            $informationTitlePicMobileWidth = $siteConfigManageData->$informationTitlePicMobileWidth;
-                            if($informationTitlePicMobileWidth<=0){
-                                $informationTitlePicMobileWidth  = 320; //默认320宽
+                            $siteConfigData = new SiteConfigData($siteId);
+                            $informationTitlePic1MobileWidth = $siteConfigData->InformationTitlePic1MobileWidth;
+                            if($informationTitlePic1MobileWidth<=0){
+                                $informationTitlePic1MobileWidth  = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId1,$informationTitlePicMobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1,$informationTitlePic1MobileWidth);
 
-                            $informationTitlePicPadWidth = $siteConfigManageData->$informationTitlePicPadWidth;
-                            if($informationTitlePicPadWidth<=0){
-                                $informationTitlePicPadWidth  = 1024; //默认1024宽
+                            $informationTitle1PicPadWidth = $siteConfigData->InformationTitlePic1PadWidth;
+                            if($informationTitle1PicPadWidth<=0){
+                                $informationTitle1PicPadWidth  = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId1,$informationTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1,$informationTitle1PicPadWidth);
                         }
                     }
                 }else{
@@ -280,8 +279,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
                 $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 3));//用户数据获取失败！继续操作可能会对信息记录造成影响！
             }else{
                 $userData = new UserManageData();
-                $userName= $userData->GetOne($userId,FALSE);
-
+                $userName= $userData->GetUserName($userId,FALSE);
                 $userInfoManageData= new UserInfoManageData();
                 $oneUserInfoArray=$userInfoManageData->GetOne($userId,FALSE);
                 $userMobile = $oneUserInfoArray["UserMobile"];

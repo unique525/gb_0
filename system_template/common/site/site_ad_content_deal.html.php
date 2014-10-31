@@ -15,7 +15,13 @@
         var batchAttachWatermark = "0";
 
         var tableType = window.UPLOAD_TABLE_TYPE_SITE_AD_CONTENT;
-        var tableId = '{SiteAdId}';
+        var tableId = parseInt('{SiteAdId}');
+
+
+        //上传回调函数
+        window.AjaxFileUploadCallBack = function(data){
+
+        }
 
         $(function(){
 
@@ -115,7 +121,21 @@
                 if($("#attachwatermark").attr("checked")==true){
                     attachWatermark = 1;
                 }
-                AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableType,
+                    tableId,
+                    loadingImageId,
+                    btnUploadToContent,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId
+                );
             });
 
 

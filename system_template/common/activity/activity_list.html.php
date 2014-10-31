@@ -57,9 +57,10 @@
         btnEdit.click(function (event) {
             var activityId = $(this).attr('idvalue');
             var activityType = $(this).attr('type_value');
+            var activityTitle = $(this).attr('title');
             event.preventDefault();
             parent.G_TabUrl = '/default.php?secu=manage&mod=activity&m=modify&activity_id=' + activityId + '&activity_type=' + activityType + '&channel_id=' + channelId;
-            parent.G_TabTitle = siteName + '-编辑活动';
+            parent.G_TabTitle = activityTitle + '-编辑活动';
             parent.addTab();
         });
 
@@ -120,7 +121,7 @@
                     <td class="spe_line2" style="width:40px;text-align:center;"><img style="cursor: pointer"
                                                                                      class="btn_edit"
                                                                                      src="/system_template/default/images/manage/edit.gif"
-                                                                                     alt="编辑" title="{f_ActivityId}"
+                                                                                     alt="编辑" title="{f_ActivityTitle}"
                                                                                      idvalue="{f_ActivityId}"
                                                                                      type_value="{f_ActivityType}"/>
                     </td>

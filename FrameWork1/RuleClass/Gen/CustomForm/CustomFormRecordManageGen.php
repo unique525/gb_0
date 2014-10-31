@@ -123,6 +123,33 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                         }
                     }
 
+                //附件操作
+                if (!empty($_FILES)) {
+                    foreach($_FILES as $key => $value){
+                        if (!empty($_FILES[$key]["tmp_name"])) {
+                            $arr = Format::ToSplit($key, '_');
+                            if (count($arr) == 3) {
+                                $fileCustomFormId = $arr[1];
+                                $fileCustomFormFieldId = $arr[2];
+                                $fileType = $_FILES[$key]["type"];
+                                $fileName = "Attachment_".$fileCustomFormFieldId."_".pathinfo($_FILES[$key]["name"],PATHINFO_EXTENSION);
+                                $fileData = file_get_contents($_FILES[$key]["tmp_name"]);
+                                $fileContentId=$customFormContentManageData->CreateAttachment(
+                                    $newId,
+                                    $fileCustomFormId,
+                                    $fileCustomFormFieldId,
+                                    $manageUserId,
+                                    $fileData,
+                                    $fileName,
+                                    $fileType
+                                );
+                                if($fileContentId<0){
+                                    return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING."field_id:".$fileCustomFormFieldId;
+                                }
+                            }
+                        }
+                    }
+                }
 
 
 
@@ -260,11 +287,9 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             Template::ReplaceOne($tempContent, $arrList, 0);
 
             if (!empty($_POST)) {
-
                 $result = $customFormRecordData->Modify($_POST,$customFormRecordId);
 
                 if ($result > 0) {
-
                     //修改内容表
                     $customFormContentManageData = new CustomFormContentManageData();
                     $customFormFieldManageData = new CustomFormFieldManageData();
@@ -297,6 +322,34 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                         }
                     }
 
+
+                    //附件操作
+                    if (!empty($_FILES)) {
+                        foreach($_FILES as $key => $value){
+                            if (!empty($_FILES[$key]["tmp_name"])) {
+                                $arr = Format::ToSplit($key, '_');
+                                if (count($arr) == 3) {
+                                    $fileCustomFormId = $arr[1];
+                                    $fileCustomFormFieldId = $arr[2];
+                                    $fileType = $_FILES[$key]["type"];
+                                    $fileName = "Attachment_".$fileCustomFormFieldId."_".pathinfo($_FILES[$key]["name"],PATHINFO_EXTENSION);
+                                    $fileData = file_get_contents($_FILES[$key]["tmp_name"]);
+                                    $fileContentId=$customFormContentManageData->CreateAttachment(
+                                        $customFormRecordId,
+                                        $fileCustomFormId,
+                                        $fileCustomFormFieldId,
+                                        $manageUserId,
+                                        $fileData,
+                                        $fileName,
+                                        $fileType
+                                    );
+                                    if($fileContentId<0){
+                                        return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING."field_id:".$fileCustomFormFieldId;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     Control::ShowMessage(Language::Load('custom_form', 1));
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -352,6 +405,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $customFormFieldId = intval($arrayOfFieldList[$f]["CustomFormFieldId"]);
             $customFormFieldType = intval($arrayOfFieldList[$f]["CustomFormFieldType"]);
             $inputValue = "";
+            $customFormContentId = -1;
             if (!empty($arrContentList)) {
                 for ($k = 0; $k < count($arrContentList); $k++) {
                     if ($arrContentList[$k]["CustomFormFieldId"] == $customFormFieldId) {
@@ -372,7 +426,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                                 $inputValue = $arrContentList[$k]["ContentOfDatetime"];
                                 break;
                             case 5:
-                                $inputValue = $arrContentList[$k]["ContentOfBlob"];
+                                $customFormContentId = $arrContentList[$k]["CustomFormContentId"];
                                 break;
                         }
                     }
@@ -406,6 +460,15 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                     $addClass = 'class="input_box"';
                     $addStyle = 'style=" width: 100px;"';
                     $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="text" ' . $addClass . ' ' . $addStyle . ' />';
+                    break;
+                case 5: //blob
+                    $addClass = 'class="input_box"';
+                    $addStyle = 'style=" width: 200px;margin-right:30px"';
+                    $inputText = '<input name="' . $inputName . '" id="' . $inputName . '" value="' . $inputValue . '" type="file" ' . $addClass . ' ' . $addStyle . ' />';
+                    $inputText.='<span id="'.$customFormContentId.'" class="btn_download_attachment" style="cursor:pointer">';
+                    $inputText.='<a href="/default.php?secu=manage&mod=custom_form_content&m=get_attachment&custom_form_content_id='.$customFormContentId.'" target="_blank">[下载]</a>';
+                    $inputText.='</span>';
+                    $inputText.='<span id="'.$customFormContentId.'" class="btn_delete_attachment" style="cursor:pointer">[删除]</span>';
                     break;
             }
             $customFormContentTable .= '<tr>';
@@ -474,7 +537,14 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             }
 
 
-            $pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
+            $styleNumber = 1;
+            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+            $isJs = FALSE;
+            $navUrl = "/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id=$customFormId&p={0}&ps=$pageSize";
+            $jsFunctionName = "";
+            $jsParamList = "";
+            $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
+            //$pagerButton = Pager::ShowPageButton($tempContent, "", $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs = false, $jsFunctionName = "" , $jsParamList = "");
 
             $listTable="";
             $fieldSelectionForSearch="";
@@ -515,7 +585,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      */
     private function GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray){
 
-        $listTable = '<table width="99%" class="doc_grid" cellpadding="0" cellspacing="0">';
+        $listTable = '<table width="100%" class="doc_grid" cellpadding="0" cellspacing="0">';
         $listTable .= '<tr class="grid_title">';
         $listTable .= '<td style="padding-left:2px;"></td>';
         for ($f = 0; $f < count($listOfFieldArray); $f++) {
@@ -557,20 +627,24 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                                 $listTable .= $listOfContentArray[$k]["ContentOfDatetime"];
                                 break;
                             case 5:
-                                $listTable .= $listOfContentArray[$k]["ContentOfBlob"];
+                                $listTable.='<a href="/default.php?secu=manage&mod=custom_form_content&m=get_attachment&custom_form_content_id='.$listOfContentArray[$k]["CustomFormContentId"].'" target="_blank">[下载]</a>';
+                                $listTable.='</span>';
+                                $listTable.='<span id="'.$listOfContentArray[$k]["CustomFormContentId"].'" class="btn_delete_attachment" style="cursor:pointer">[删除]</span>';
+                                //$listTable .= $listOfContentArray[$k]["ContentOfBlob"];
                                 break;
                         }
                     }
                 }
                 $listTable .= '</td>';
             }
-            $listTable .= '<td class="spe_line" style="padding-left:2px;">' . $listOfRecordArray[$i]["State"] . '</td>';
-            $listTable .= '<td class="spe_line" style="padding-left:2px;">' . $listOfRecordArray[$i]["CreateDate"] . '</td>';
+            $listTable .= '<td class="spe_line2" style="padding-left:2px;">' . $listOfRecordArray[$i]["State"] . '</td>';
+            $listTable .= '<td class="spe_line2" style="padding-left:2px;">' . $listOfRecordArray[$i]["CreateDate"] . '</td>';
             $listTable .= '</tr>';
         }
         $listTable .= '</tabel>';
         return $listTable;
     }
+
 
     /**
      * 通过表单字段关键字搜索并取得表单记录列表

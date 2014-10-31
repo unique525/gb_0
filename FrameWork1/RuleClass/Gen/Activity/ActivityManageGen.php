@@ -187,18 +187,18 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                             //图片多平台处理
                             $channelManageData=new ChannelManageData();
                             $siteId=$channelManageData->GetSiteId($channelId,FALSE);
-                            $siteConfigManageData = new SiteConfigManageData($siteId);
-                            $activityTitlePicMobileWidth = $siteConfigManageData->$activityTitlePicMobileWidth;
-                            if($activityTitlePicMobileWidth<=0){
-                                $activityTitlePicMobileWidth  = 320; //默认320宽
+                            $siteConfigData = new SiteConfigData($siteId);
+                            $activityTitlePic1MobileWidth = $siteConfigData->ActivityTitlePic1MobileWidth;
+                            if($activityTitlePic1MobileWidth<=0){
+                                $activityTitlePic1MobileWidth  = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId1,$activityTitlePicMobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1,$activityTitlePic1MobileWidth);
 
-                            $activityTitlePicPadWidth = $siteConfigManageData->$activityTitlePicPadWidth;
-                            if($activityTitlePicPadWidth<=0){
-                                $activityTitlePicPadWidth  = 1024; //默认1024宽
+                            $activityTitlePic1PadWidth = $siteConfigData->ActivityTitlePic1PadWidth;
+                            if($activityTitlePic1PadWidth<=0){
+                                $activityTitlePic1PadWidth  = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId1,$activityTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1,$activityTitlePic1PadWidth);
                         }
                     }
 
@@ -268,7 +268,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 "{ActivityType}" => $activityType,
                 "{ChannelId}" => $channelId,
                 "{TabIndex}" => $tabIndex,
-                "{Display}" => "none"
+                "{display}" => "none"
             );
             $tempContent = strtr($tempContent, $replace_arr);
 
@@ -429,18 +429,18 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                                 //图片多平台处理
                                 $channelManageData=new ChannelManageData();
                                 $siteId=$channelManageData->GetSiteId($channelId,FALSE);
-                                $siteConfigManageData = new SiteConfigManageData($siteId);
-                                    $activityTitlePicMobileWidth = $siteConfigManageData->$activityTitlePicMobileWidth;
-                                    if($activityTitlePicMobileWidth<=0){
-                                        $activityTitlePicMobileWidth  = 320; //默认320宽
+                                $siteConfigData = new SiteConfigData($siteId);
+                                    $activityTitlePic1MobileWidth = $siteConfigData->ActivityTitlePic1MobileWidth;
+                                    if($activityTitlePic1MobileWidth<=0){
+                                        $activityTitlePic1MobileWidth  = 320; //默认320宽
                                     }
-                                    self::GenUploadFileMobile($uploadFileId1,$activityTitlePicMobileWidth);
+                                    self::GenUploadFileMobile($uploadFileId1,$activityTitlePic1MobileWidth);
 
-                                    $activityTitlePicPadWidth = $siteConfigManageData->$activityTitlePicPadWidth;
-                                    if($activityTitlePicPadWidth<=0){
-                                        $activityTitlePicPadWidth  = 1024; //默认1024宽
+                                    $activityTitlePic1PadWidth = $siteConfigData->ActivityTitlePic1PadWidth;
+                                    if($activityTitlePic1PadWidth<=0){
+                                        $activityTitlePic1PadWidth  = 1024; //默认1024宽
                                     }
-                                    self::GenUploadFilePad($uploadFileId1,$activityTitlePicPadWidth);
+                                    self::GenUploadFilePad($uploadFileId1,$activityTitlePic1PadWidth);
                             }
                         }
                     }else{

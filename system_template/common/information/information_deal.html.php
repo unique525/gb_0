@@ -16,7 +16,12 @@
         var batchAttachWatermark = "0";
 
         var tableType = window.UPLOAD_TABLE_TYPE_INFORMATION_CONTENT;
-        var tableId = '{ChannelId}';
+        var tableId = parseInt('{ChannelId}');
+
+        //上传回调函数
+        window.AjaxFileUploadCallBack = function(data){
+
+        }
 
         $(function(){
 
@@ -92,7 +97,21 @@
                 if($("#attachwatermark").attr("checked")==true){
                     attachWatermark = 1;
                 }
-                AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableType,
+                    tableId,
+                    loadingImageId,
+                    btnUploadToContent,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId
+                );
             });
 
 
@@ -124,7 +143,7 @@
 <body>
 {common_body_deal}
 <form id="main_form" enctype="multipart/form-data"
-      action="/default.php?secu=manage&mod=information&m={method}&channel_id={ChannelId}&Information_id={InformationId}&tab_index={TabIndex}"
+      action="/default.php?secu=manage&mod=information&m={method}&channel_id={ChannelId}&information_id={InformationId}&tab_index={TabIndex}"
       method="post">
 <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}" />
 <input type="hidden" id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" />
@@ -151,7 +170,7 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td style="width:20px;text-align: left;"><label for="f_InformationTitle">标题：</label></td>
-                <td style=" width: 600px;text-align: left">
+                <td style=" width: 500px;text-align: left">
                     <input type="text" class="input_box" id="f_InformationTitle" name="f_InformationTitle" value="{InformationTitle}" style="width:480px;font-size:14px; background-color: #ffffff;" maxlength="200" />
                 </td>
             </tr>

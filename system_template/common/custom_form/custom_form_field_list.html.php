@@ -7,12 +7,12 @@
     <script type="text/javascript">
         $("document").ready(function(){
             var channelId = Request["channel_id"];
-            var channelName = Request["channel_name"];
+            var customFormSubject = Request["custom_form_subject"];
 
             $("#btn_create_custom_form_field").click(function(event) {
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=create&custom_form_id={CustomFormId}';
-                parent.G_TabTitle = channelName + '-新增字段';
+                parent.G_TabTitle = customFormSubject + '-新增字段';
                 parent.addTab();
             });
 
@@ -22,7 +22,7 @@
                 var customFormFieldId = $(this).attr('idvalue');
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=modify&custom_form_id={CustomFormId}&custom_form_field_id=' + customFormFieldId + '&channel_id=' + channelId;
-                parent.G_TabTitle = channelName + '-编辑字段';
+                parent.G_TabTitle = customFormSubject + '-编辑字段';
                 parent.addTab();
             });
         });
@@ -53,12 +53,12 @@
             <item>
                 <![CDATA[
                 <tr class="grid_item">
-                    <td class="spe_line" style="text-align:center;">{f_CustomFormFieldId}</td>
-                    <td class="spe_line" style="text-align:center;"><img class="btn_edit_custom_form_field" src="/system_template/default/images/manage/edit.gif" alt="编辑" idvalue="{f_CustomFormFieldId}" title="{f_CustomFormId}" /></td>
-                    <td class="spe_line" style="text-align:center;">{f_State}</td>
-                    <td class="spe_line">{f_CustomFormFieldName}</td>
-                    <td class="spe_line" style="text-align:center;">{f_CustomFormFieldType}</td>
-                    <td class="spe_line" style="text-align:center;">{f_Sort}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_CustomFormFieldId}</td>
+                    <td class="spe_line2" style="text-align:center;"><img class="btn_edit_custom_form_field" src="/system_template/default/images/manage/edit.gif" alt="编辑" idvalue="{f_CustomFormFieldId}" title="{f_CustomFormId}" /></td>
+                    <td class="spe_line2" style="text-align:center;">{f_State}</td>
+                    <td class="spe_line2">{f_CustomFormFieldName}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_CustomFormFieldType}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_Sort}</td>
                 </tr>
                 ]]>
             </item>

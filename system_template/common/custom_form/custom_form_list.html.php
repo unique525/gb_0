@@ -42,13 +42,14 @@
         btnOpenCustomFormField.css("cursor", "pointer");
         btnOpenCustomFormField.click(function(event) {
             var customFormId = $(this).attr('idvalue');
+            var customFormSubject = $(this).attr('title');
             event.preventDefault();
             var pageIndex = parseInt(Request["p"]);
             if (pageIndex <= 0||!pageIndex) {
                 pageIndex = 1;
             }
-            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
-            parent.G_TabTitle = channelName + '-管理字段';
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&custom_form_subject=' + customFormSubject;
+            parent.G_TabTitle = customFormSubject + '-管理字段';
             parent.addTab();
         });
 
@@ -57,13 +58,14 @@
         btnOpenCustomFormRecord.css("cursor", "pointer");
         btnOpenCustomFormRecord.click(function(event) {
             var customFormId = $(this).attr('idvalue');
+            var customFormSubject = $(this).attr('title');
             event.preventDefault();
             var pageIndex = parseInt(Request["p"]);
             if (pageIndex <= 0||!pageIndex) {
                 pageIndex = 1;
             }
-            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
-            parent.G_TabTitle = channelName + '-查看数据';
+            parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=list&custom_form_id=' + customFormId + '&p=' + pageIndex + '&custom_form_subject=' + customFormSubject;
+            parent.G_TabTitle = customFormSubject + '-查看数据';
             parent.addTab();
         });
 
@@ -99,8 +101,8 @@
                 <tr class="grid_item">
                     <td class="spe_line2" style="text-align:center;"><input id="doc_input" class="doc_input" type="checkbox" name="doc_input" value="{f_CustomFormId}" /></td>
                     <td class="spe_line2" style="text-align:center;"><img class="btn_edit" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="{f_CustomFormId}" idvalue="{f_CustomFormId}"/></td>
-                    <td class="spe_line2"><a target="_blank"  title="{f_CustomFormId}" ><span style="color:black;font-weight:inherit;">{f_CustomFormSubject}</span></a> <span class="btn_open_custom_form_record" title="{f_CustomFormId}" idvalue="{f_CustomFormId}" style="cursor:pointer;">【查看数据】</span></td>
-                    <td class="spe_line2" style="text-align:center;"><span class="btn_open_custom_form_field" title="{f_CustomFormId}"  idvalue="{f_CustomFormId}" style="cursor:pointer;">管理</span></td>
+                    <td class="spe_line2"><a target="_blank"  title="{f_CustomFormId}" ><span style="color:black;font-weight:inherit;">{f_CustomFormSubject}</span></a> <span class="btn_open_custom_form_record" title="{f_CustomFormSubject}" idvalue="{f_CustomFormId}" style="cursor:pointer;">【查看数据】</span></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="btn_open_custom_form_field" title="{f_CustomFormSubject}"  idvalue="{f_CustomFormId}" style="cursor:pointer;">管理</span></td>
                     <td class="spe_line2"><img class="img_publish" style="cursor: pointer" src="/system_template/default/images/manage/publish.gif" title="{f_SiteContentId}" alt="发布" /></td>
                     <td class="spe_line2" style="text-align:center;">{f_sort}</td>
                     <td class="spe_line2" style="text-align:center;">{f_state}</td>

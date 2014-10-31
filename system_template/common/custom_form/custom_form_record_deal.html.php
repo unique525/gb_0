@@ -14,11 +14,43 @@
                 $('#main_form').submit();
         }
 
+        $().ready(function(){
+
+            var deleteAttachment = $(".btn_delete_attachment");
+            deleteAttachment.click(function () {
+                var r=confirm("是否确认删除！");
+                if(r==true){
+                    var customFormContentId = $(this).attr("id");
+
+                    $.ajax({
+                        type: "get",
+                        url: "/default.php?secu=manage" +
+                            "&mod=custom_form_content" +
+                            "&m=async_delete_attachment",
+                        data: {
+                            custom_form_content_id: customFormContentId
+                        },
+                        dataType: "jsonp",
+                        jsonp: "jsonpcallback",
+                        success: function(data) {
+                            var result = parseInt(data["result"]);
+                            if(result>0){
+                                alert("操作完成");
+                            }else{
+                                alert("没有上传附件或删除失败");
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+
     </script>
 </head>
 <body>
 {common_body_deal}
-<form id="main_form" action="/default.php?secu=manage&mod=custom_form_record&m={method}&custom_form_id={CustomFormId}&custom_form_record_id={CustomFormRecordId}&tab_index={TabIndex}" method="post">
+<form id="main_form" enctype="multipart/form-data" action="/default.php?secu=manage&mod=custom_form_record&m={method}&custom_form_id={CustomFormId}&custom_form_record_id={CustomFormRecordId}&tab_index={TabIndex}" method="post">
     <div style="margin:10px auto;">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>

@@ -28,7 +28,7 @@ class CustomFormContentManageData extends BaseManageData {
             $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
             $dataProperty->AddField("UserId", $userId);
 
-
+        $sql="";
 
             switch ($customFormFieldType) {
                 case 0:
@@ -51,13 +51,8 @@ class CustomFormContentManageData extends BaseManageData {
                     $dataProperty->AddField("ContentOfDatetime", $content);
                     $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfDatetime) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfDatetime) ;";
                     break;
-                case 5:
-                    $dataProperty->AddField("ContentOfBlob", $content);
-                    $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob) ;";
-                    break;
             }
-
-            if (!empty($sql)) {
+            if ($sql!="") {
                 $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
             }
         }
@@ -96,6 +91,99 @@ class CustomFormContentManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 创建附件
+     * @param int $customFormRecordId 被操作的表单记录的id
+     * @param int $customFormId 被操作的表单的id
+     * @param int $customFormFieldId 被操作的表单字段id
+     * @param int $userId 操作用户的id
+     * @param mixed $content 新增的内容
+     * @param int $fileName 格式化文件名 存入ContentOfText字段
+     * @param int $fileType 文件type 存入ContentOfString字段
+     * @return int 新增id
+     */
+    public function CreateAttachment($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content, $fileName, $fileType){
+        $result = -1;
+        if($customFormRecordId>0&&$customFormId>0&&$customFormFieldId>0 && !empty($content)){
+            $sql = "INSERT INTO
+                        " . self::TableName_CustomFormContent . "
+                    (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob,ContentOfText,ContentOfString)
+                    VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob,:ContentOfText,:ContentOfString) ;";
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("attachment", $attachment, PDO::PARAM_LOB);
+            $dataProperty->AddField("ContentOfBlob", $content);
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("ContentOfText", $fileName);
+            $dataProperty->AddField("ContentOfString", $fileType);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得附件
+     * @param int $customFormContentId 表单内容id
+     * @return string 附件
+     */
+    public function GetAttachment($customFormContentId) {
+        $result = null;
+        if($customFormContentId>0){
+            $sql = "SELECT
+                    ContentOfBlob
+                FROM
+                    " . self::TableName_CustomFormContent . "
+                WHERE CustomFormContentId=:CustomFormContentId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormContentId", $customFormContentId);
+            $result = $this->dbOperator->GetLob($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+    /**
+     * 取得附件文件名
+     * @param int $customFormContentId 表单内容id
+     * @return string 附件
+     */
+    public function GetAttachmentFileAttribute($customFormContentId) {
+        $result = null;
+        if($customFormContentId>0){
+            $sql = "SELECT
+                    ContentOfText,ContentOfString
+                FROM
+                    " . self::TableName_CustomFormContent . "
+                WHERE CustomFormContentId=:CustomFormContentId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormContentId", $customFormContentId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+
+    /**
+     * 删除附件
+     * @param int $customFormContentId 附件所在表单内容id
+     * @return int 结果
+     */
+    public function DeleteAttachment($customFormContentId){
+        $result = -1;
+        if($customFormContentId>0){
+            $sql = "DELETE FROM " . self::TableName_CustomFormContent . "
+                    WHERE CustomFormContentId=:CustomFormContentId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormContentId", $customFormContentId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

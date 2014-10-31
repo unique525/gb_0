@@ -119,6 +119,9 @@ class CustomFormFieldManageGen extends BaseManageGen implements IBaseManageGen {
             $arrayOfTableNameList = $sourceCommonManageData->GetFields("cst_custom_form_field");
             parent::ReplaceWhenCreate($tempContent,$arrayOfTableNameList);
 
+            //去掉s开头的标记 {s_xxx_xxx}
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
 
             ///////////////////////////////////////////////////////
         }else{

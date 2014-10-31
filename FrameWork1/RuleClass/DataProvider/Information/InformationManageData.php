@@ -124,7 +124,7 @@ class InformationManageData extends BaseManageData{
         if($informationId>0){
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_Information . " SET
-                    TitlePic1UploadFileId = :TitlePic1UploadFileId,
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId
 
                     WHERE InformationId = :InformationId
 
@@ -133,7 +133,6 @@ class InformationManageData extends BaseManageData{
             $dataProperty->AddField("InformationId", $informationId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
-
         return $result;
     }
 

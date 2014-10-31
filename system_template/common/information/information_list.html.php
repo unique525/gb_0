@@ -50,9 +50,10 @@
         btnEdit.css("cursor", "pointer");
         btnEdit.click(function (event) {
             var informationId = $(this).attr('idvalue');
+            var informationTitle = $(this).attr('title');
             event.preventDefault();
             parent.G_TabUrl = '/default.php?secu=manage&mod=information&m=modify&information_id=' + informationId + '&channel_id=' + channelId;
-            parent.G_TabTitle = siteName + '-编辑分类信息';
+            parent.G_TabTitle = informationTitle + '-编辑分类信息';
             parent.addTab();
         });
 
