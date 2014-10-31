@@ -108,31 +108,28 @@
             <ul>
                 <li><span>所有商品分类</span>
                     <ul style="display: none;">
-                        <li><img src="/images/fish.png" width="37" height="35" /><a href="">每日生鲜</a>
-                            <ul style="display: none;">
-                                <li><span>蔬菜</span></li>
-                                <dd><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a><span>|</span><a href="/default.php?&mod=product&a=list&channel_id=110">叶菜类</a></dd>
-                                <li><span>水果</span></li>
-                                <dd><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a><span>|</span><a href="/default.php?&mod=product&a=list&channel_id=112">国产水果</a></dd>
-                            </ul>
-                        </li>
-                        <li><img src="/images/fruit.png" width="37" height="35" /><a href="">时令水果</a>
-                            <ul style="display: none;">
-                                <li><span>蔬菜</span></li>
-                                <dd><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a><span>|</span><a href="/default.php?&mod=product&a=list&channel_id=110">叶菜类</a></dd>
-                                <li><span>水果</span></li>
-                                <dd><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a><span>|</span><a href="/default.php?&mod=product&a=list&channel_id=112">国产水果</a></dd>
-                            </ul>
-                        </li>
-                        <li><img src="/images/meat.png" width="37" height="35" /><a href="">肉奶蛋禽</a></li>
-                        <li><img src="/images/semi_manufactures.png" width="37" height="35" /><a href="">半成品</a></li>
-                        <li><img src="/images/rice.png" width="37" height="35" /><a href="">粮油副食</a></li>
-                        <li><img src="/images/cake.png" width="37" height="35" /><a href="">零食糕点</a></li>
-                        <li><img src="/images/house.png" width="37" height="35" /><a href="">家居用品</a></li>
-                        <li><img src="/images/baby.png" width="37" height="35" /><a href="">母婴保健</a></li>
-                        <li><img src="/images/work.png" width="37" height="35" /><a href="">办公家电</a></li>
-                        <li><img src="/images/drink.png" width="37" height="35" /><a href="">酒水饮料</a></li>
-                        <li><img src="/images/card.png" width="37" height="35" /><a href="">礼品卡券</a></li>
+                        <icms id="channel_3" type="channel_list" where="parent">
+                            <item>
+                                <![CDATA[
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                    <ul style="display: none;">
+                                        {child}
+                                    </ul>
+                                </li>
+                                ]]>
+                            </item>
+                            <child>
+                                <![CDATA[
+                                <li><span>{f_ChannelName}</span></li>
+                                <dd>{third}</dd>
+                                ]]>
+                            </child>
+                            <third>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
+                                ]]>
+                            </third>
+
+                        </icms>
                     </ul>
                 </li>
             </ul>

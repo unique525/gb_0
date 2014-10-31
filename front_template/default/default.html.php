@@ -10,6 +10,15 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript">
     $(function () {
+        /* 顶部banner类别菜单初始化 */
+        $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+        $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
+        {
+            $(this).children('ul').css('display','');
+        }).bind('mouseleave',function() // 子菜单的鼠标移出操作
+            {
+                $(this).children('ul').css('display','none');
+            });
     });
     </script>
 </head>
@@ -47,40 +56,36 @@
 <div class="main">
 <div class="first_part">
     <div class="wrapper">
-        <div class="left_bar left">
-            <div style="background:#00a93c;">
+        <div class="left_bar left" id="leftmenu">
+            <ul>
+                <li>
+                    <ul style="display: block;">
+                        <icms id="channel_3" type="channel_list" where="parent">
+                            <item>
+                                <![CDATA[
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                    <ul style="display: none;">
+                                        {child}
+                                    </ul>
+                                </li>
+                                ]]>
+                            </item>
+                            <child>
+                                <![CDATA[
+                                <li><span>{f_ChannelName}</span></li>
+                                <dd>{third}</dd>
+                                ]]>
+                            </child>
+                            <third>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
+                                ]]>
+                            </third>
 
-                <ul>
-                    <li><span>所有商品分类</span>
-                        <ul>
-                            <icms id="channel_3" type="channel_list" where="parent">
-                                <item>
-                                    <![CDATA[
-                                    <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
-                                        <ul style="display: none;">
-                                            {child}
-                                        </ul>
-                                    </li>
-                                    ]]>
-                                </item>
-                                <child>
-                                    <![CDATA[
-                                    <li><span>{f_ChannelName}</span></li>
-                                    <dd>{third}</dd>
-                                    ]]>
-                                </child>
-                                <third>
-                                    <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
-                                    ]]>
-                                </third>
+                        </icms>
+                    </ul>
+                </li>
+            </ul>
 
-                            </icms>
-                        </ul>
-                    </li>
-                </ul>
-
-
-            </div>
         </div>
         <div class="middle left"><img src="images/ad.jpg" width="741" height="429" /></div>
         <div class="right_bar right">
