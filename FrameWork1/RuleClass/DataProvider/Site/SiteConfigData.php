@@ -101,6 +101,16 @@
  * @property int $ProductPicCompress2Width
  *
  *
+ * @property int $InformationTitlePic1MobileWidth
+ * @property int $InformationTitlePic1PadWidth
+ *
+ * @property int $ActivityTitlePic1MobileWidth
+ * @property int $ActivityTitlePic1PadWidth
+ * @property int $ActivityTitlePic2MobileWidth
+ * @property int $ActivityTitlePic2PadWidth
+ * @property int $ActivityTitlePic3MobileWidth
+ * @property int $ActivityTitlePic3PadWidth
+ *
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
@@ -208,9 +218,19 @@ class SiteConfigData extends BaseData {
         "ProductPicWatermark1Width",
         "ProductPicWatermark2Width",
         "ProductPicCompress1Width",
-        "ProductPicCompress2Width"
+        "ProductPicCompress2Width",
 
-    );
+        "InformationTitlePic1MobileWidth",
+        "InformationTitlePic1PadWidth",
+
+        "ActivityTitlePic1MobileWidth",
+        "ActivityTitlePic1PadWidth",
+        "ActivityTitlePic2MobileWidth",
+        "ActivityTitlePic2PadWidth",
+        "ActivityTitlePic3MobileWidth",
+        "ActivityTitlePic3PadWidth"
+
+);
 
     /**
      * @var array number
@@ -353,6 +373,15 @@ class SiteConfigData extends BaseData {
     private $ProductPicCompress1Width = 0;  //产品图片的压缩图1宽度值
     private $ProductPicCompress2Width = 0;  //产品图片的压缩图2宽度值
 
+    private $InformationTitlePic1MobileWidth = 0; //为适配手机客户端，分类信息题图的同比缩小宽度值
+    private $InformationTitlePic1PadWidth = 0; //为适配平板客户端，分类信息题图的同比缩小宽度值
+
+    private $ActivityTitlePic1MobileWidth = 0; //为适配手机客户端，活动题图1的同比缩小宽度值
+    private $ActivityTitlePic1PadWidth = 0;    //为适配平板客户端，活动题图1的同比缩小宽度值
+    private $ActivityTitlePic2MobileWidth = 0; //为适配手机客户端，活动题图2的同比缩小宽度值
+    private $ActivityTitlePic2PadWidth = 0;    //为适配平板客户端，活动题图2的同比缩小宽度值
+    private $ActivityTitlePic3MobileWidth = 0; //为适配手机客户端，活动题图3的同比缩小宽度值
+    private $ActivityTitlePic3PadWidth = 0;    //为适配平板客户端，活动题图3的同比缩小宽度值
 
     /**
      * @param mixed $ProductTitlePic1MobileWidth
@@ -1258,6 +1287,133 @@ class SiteConfigData extends BaseData {
     {
         return $this->ChannelTitlePic3PadWidth;
     }
+
+    /**
+     * @param mixed $InformationTitlePic1MobileWidth
+     */
+    public function setInformationTitlePic1MobileWidth($InformationTitlePic1MobileWidth)
+    {
+        $this->$InformationTitlePic1MobileWidth = $InformationTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInformationTitlePic1MobileWidth()
+    {
+        return $this->$InformationTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $InformationTitlePic1PadWidth
+     */
+    public function setInformationTitlePic1PadWidth($InformationTitlePic1PadWidth)
+    {
+        $this->$InformationTitlePic1PadWidth = $InformationTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInformationTitlePic1PadWidth()
+    {
+        return $this->$InformationTitlePic1PadWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic1MobileWidth
+     */
+    public function setActivityTitlePic1MobileWidth($ActivityTitlePic1MobileWidth)
+    {
+        $this->$ActivityTitlePic1MobileWidth = $ActivityTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic1MobileWidth()
+    {
+        return $this->$ActivityTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic1PadWidth
+     */
+    public function setActivityTitlePic1PadWidth($ActivityTitlePic1PadWidth)
+    {
+        $this->$ActivityTitlePic1PadWidth = $ActivityTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic1PadWidth()
+    {
+        return $this->$ActivityTitlePic1PadWidth;
+    }
+    /**
+     * @param mixed $ActivityTitlePic2MobileWidth
+     */
+    public function setActivityTitlePic2MobileWidth($ActivityTitlePic2MobileWidth)
+    {
+        $this->$ActivityTitlePic2MobileWidth = $ActivityTitlePic2MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic2MobileWidth()
+    {
+        return $this->$ActivityTitlePic2MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic2PadWidth
+     */
+    public function setActivityTitlePic2PadWidth($ActivityTitlePic2PadWidth)
+    {
+        $this->$ActivityTitlePic2PadWidth = $ActivityTitlePic2PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic2PadWidth()
+    {
+        return $this->$ActivityTitlePic2PadWidth;
+    }
+    /**
+     * @param mixed $ActivityTitlePic3MobileWidth
+     */
+    public function setActivityTitlePic3MobileWidth($ActivityTitlePic3MobileWidth)
+    {
+        $this->$ActivityTitlePic3MobileWidth = $ActivityTitlePic3MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic3MobileWidth()
+    {
+        return $this->$ActivityTitlePic3MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic3PadWidth
+     */
+    public function setActivityTitlePic3PadWidth($ActivityTitlePic3PadWidth)
+    {
+        $this->$ActivityTitlePic3PadWidth = $ActivityTitlePic3PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic3PadWidth()
+    {
+        return $this->$ActivityTitlePic3PadWidth;
+    }
+
 
     protected $dbOperator = null;
     /**
