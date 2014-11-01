@@ -89,6 +89,9 @@
  *
  * @property int $ProductTitlePic1MobileWidth
  * @property int $ProductTitlePic1PadWidth
+ * @property int $ProductTitlePic1Thumb1Width
+ * @property int $ProductTitlePic1Thumb2Width
+ * @property int $ProductTitlePic1Thumb3Width
  *
  * @property int $ProductPicMobileWidth
  * @property int $ProductPicPadWidth

@@ -95,9 +95,15 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
 
                             $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
                             if($ProductPicThumb2Width<=0){
-                                $ProductPicThumb2Width  = 50; //默认50宽
+                                $ProductPicThumb2Width  = 200; //默认200宽
                             }
                             parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
+
+                            $ProductPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
+                            if($ProductPicThumb3Width<=0){
+                                $ProductPicThumb3Width  = 100; //默认50宽
+                            }
+                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb3Width);
                         }
                     }
                     //javascript 处理
@@ -208,9 +214,15 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
 
                             $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
                             if($ProductPicThumb2Width<=0){
-                                $ProductPicThumb2Width  = 50; //默认50宽
+                                $ProductPicThumb2Width  = 200; //默认200宽
                             }
                             parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
+
+                            $ProductPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
+                            if($ProductPicThumb3Width<=0){
+                                $ProductPicThumb3Width  = 100; //默认100宽
+                            }
+                            parent::GenUploadFileThumb3($uploadFileId,$ProductPicThumb3Width);
                         }
                     }
                     //javascript 处理

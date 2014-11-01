@@ -154,6 +154,27 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
 
                         $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId1>0){
+                            //生成产品题图1缩略图
+                            $productTitlePic1Thumb1Width = $siteConfigData->$ProductTitlePic1Thumb1Width;
+                            if($productTitlePic1Thumb1Width<=0){
+                                $productTitlePic1Thumb1Width  = 350; //默认350宽
+                            }
+                            parent::GenUploadFileThumb1($uploadFileId1,$productTitlePic1Thumb1Width);
+
+                            //生成产品题图2缩略图
+                            $productTitlePic1Thumb2Width = $siteConfigData->$ProductTitlePic1Thumb2Width;
+                            if($productTitlePic1Thumb2Width<=0){
+                                $productTitlePic1Thumb2Width  = 200; //默认200宽
+                            }
+                            parent::GenUploadFileThumb2($uploadFileId1,$productTitlePic1Thumb2Width);
+
+                            //生成产品题图3缩略图
+                            $productTitlePic1Thumb3Width = $siteConfigData->$ProductTitlePic1Thumb3Width;
+                            if($productTitlePic1Thumb3Width<=0){
+                                $productTitlePic1Thumb3Width  = 100; //默认100宽
+                            }
+                            parent::GenUploadFileThumb3($uploadFileId1,$productTitlePic1Thumb3Width);
+
                             $productTitlePic1MobileWidth = $siteConfigData->ProductTitlePic1MobileWidth;
                             if($productTitlePic1MobileWidth<=0){
                                 $productTitlePic1MobileWidth  = 320; //默认320宽
@@ -387,6 +408,27 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                             //重新制作题图1的相关图片
                             $siteConfigData = new SiteConfigData($siteId);
                             if($uploadFileId1>0){
+                                //产品题图1缩略图
+                                $productTitlePic1Thumb1Width = $siteConfigData->$ProductTitlePic1Thumb1Width;
+                                if($productTitlePic1Thumb1Width<=0){
+                                    $productTitlePic1Thumb1Width  = 350; //默认350宽
+                                }
+                                parent::GenUploadFileThumb1($uploadFileId1,$productTitlePic1Thumb1Width);
+
+                                //产品题图2缩略图
+                                $productTitlePic1Thumb2Width = $siteConfigData->$ProductTitlePic1Thumb2Width;
+                                if($productTitlePic1Thumb2Width<=0){
+                                    $productTitlePic1Thumb2Width  = 200; //默认200宽
+                                }
+                                parent::GenUploadFileThumb2($uploadFileId1,$productTitlePic1Thumb2Width);
+
+                                //产品题图3缩略图
+                                $productTitlePic1Thumb3Width = $siteConfigData->$ProductTitlePic1Thumb3Width;
+                                if($productTitlePic1Thumb3Width<=0){
+                                    $productTitlePic1Thumb3Width  = 100; //默认100宽
+                                }
+                                parent::GenUploadFileThumb3($uploadFileId1,$productTitlePic1Thumb3Width);
+
                                 $productTitlePic1MobileWidth = $siteConfigData->ProductTitlePic1MobileWidth;
                                 if($productTitlePic1MobileWidth<=0){
                                     $productTitlePic1MobileWidth  = 320; //默认320宽
