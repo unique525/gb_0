@@ -80,7 +80,7 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
 
     private function GenDefaultPublic(){
         $temp = Control::GetRequest("temp", "");
-        $siteId = parent::GetSiteIdBySubDomain();
+        $siteId = parent::GetSiteIdByDomain();
         $templateContent = self::loadDefaultTemp($temp,$siteId);
 
 //        //加载站点数据数据

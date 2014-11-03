@@ -12,19 +12,24 @@ class BasePublicGen extends BaseGen {
      * 通过子域名取得站点id
      * @return int 站点id
      */
-    protected function GetSiteIdBySubDomain() {
+    protected function GetSiteIdByDomain() {
         $siteId = 0;
         $host = strtolower($_SERVER['HTTP_HOST']);
         $host = str_ireplace("http://", "", $host);
         if ($host === "localhost" || $host === "127.0.0.1") {
             $siteId = 1;
         } else {
+
+            //先查绑定的一级域名
+
+
+            //查子域名
             $arrDomain = explode(".", $host);
             if (count($arrDomain) > 0) {
                 $subDomain = $arrDomain[0];
                 if (strlen($subDomain) > 0) {
-                    $siteData = new SiteData();
-                    $siteId = $siteData->GetSiteId($subDomain);
+                    $sitePublicData = new SitePublicData();
+                    $siteId = $sitePublicData->GetSiteId($subDomain);
                 }
             }
         }
