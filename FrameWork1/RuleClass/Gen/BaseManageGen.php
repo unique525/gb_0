@@ -433,7 +433,9 @@ class BaseManageGen extends BaseGen
         $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
-
+            $openFtpLog = false;
+            $ftpLogManageData = new FtpLogManageData();
+            Ftp::UploadQueue($ftpInfo,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
