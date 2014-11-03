@@ -21,5 +21,6 @@ document.write('<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{
 document.write('</div>');
 
 var siteAdId = "icms_ad_item";
+var showType = "{ShowType}";
 var switchClassName = "switch_{f_SiteAdId}";
 window.runSiteAd(siteAdId,switchClassName);

@@ -15,55 +15,55 @@ class Ftp
     /**
      * 不支持FTP
      */
-    const FTP_NOT_SUPPORT = 002;
+    const FTP_NOT_SUPPORT = 102;
     /**
      * 连接失败
      */
-    const FTP_CONNECT_FAILURE = -2;
+    const FTP_CONNECT_FAILURE = -102;
     /**
      * 登录失败
      */
-    const FTP_LOGIN_FAILURE = -3;
+    const FTP_LOGIN_FAILURE = -103;
     /**
      * 切换或创建文件夹失败
      */
-    const FTP_CHANGE_OR_MAKE_DIR_FAILURE = -4;
+    const FTP_CHANGE_OR_MAKE_DIR_FAILURE = -104;
     /**
      * ftp信息为空
      */
-    const FTP_INFO_EMPTY = -5;
+    const FTP_INFO_EMPTY = -105;
     /**
      * ftp传输内容为空
      */
-    const FTP_CONTENT_EMPTY = -6;
+    const FTP_CONTENT_EMPTY = -106;
     /**
      * 传输失败
      */
-    const FTP_TRANSFER_FAILURE = -7;
+    const FTP_TRANSFER_FAILURE = -107;
     /**
      * 目标路径为空
      */
-    const FTP_DESTINATION_EMPTY = -8;
+    const FTP_DESTINATION_EMPTY = -108;
     /**
      * 切换文件夹失败
      */
-    const FTP_CHANGE_DIR_FAILURE = -9;
+    const FTP_CHANGE_DIR_FAILURE = -109;
     /**
      * 删除失败
      */
-    const FTP_DELETE_FAILURE = -10;
+    const FTP_DELETE_FAILURE = -100;
     /**
      * 传输成功
      */
-    const FTP_TRANSFER_SUCCESS = 1;
+    const FTP_TRANSFER_SUCCESS = 100;
     /**
      * 传输完成，但不代表成功
      */
-    const FTP_TRANSFER_FINISHED = 2;
+    const FTP_TRANSFER_FINISHED = 200;
     /**
      * 删除成功
      */
-    const FTP_DELETE_SUCCESS = 3;
+    const FTP_DELETE_SUCCESS = 300;
 
     /**
      * 单个文件传输
@@ -78,26 +78,30 @@ class Ftp
     public static function Upload($ftpInfo, $destinationPath, $sourcePath = null, $sourceContent = null, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
     {
         //进行连接
-        $result = DefineCode::FTP_CODE + self::FTP_NO_ACTION;
+        $result = DefineCode::FTP + self::FTP_NO_ACTION;
         $ftpConnect = self::Connect($ftpInfo);
         if (!$ftpConnect) { //连接失败
             $result = self::FTP_CONNECT_FAILURE; //连接失败
         } else { //连接成功
             //判断
-            if (isset($ftpInfo['User']) && isset($ftpInfo['Pass']) && isset($ftpInfo['PassiveMode']) && isset($ftpInfo['Path'])) {
-                $ftpUser = $ftpInfo['User'];
-                $ftpPass = $ftpInfo['Pass'];
+            if (isset($ftpInfo['FtpUser'])
+                && isset($ftpInfo['FtpPass'])
+                && isset($ftpInfo['PassiveMode'])
+                && isset($ftpInfo['RemotePath'])
+            ) {
+                $ftpUser = $ftpInfo['FtpUser'];
+                $ftpPass = $ftpInfo['FtpPass'];
                 $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
                 $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-                $ftpPath = self::FormatPath($ftpInfo['Path']);
+                $ftpPath = self::FormatPath($ftpInfo['RemotePath']);
                 //开始登录
-                $ftpIsLogin = Ftp_Login($ftpConnect, $ftpUser, $ftpPass);
+                $ftpIsLogin = ftp_login($ftpConnect, $ftpUser, $ftpPass);
                 if ($ftpIsLogin) { //登录成功
                     if ($ftpPassiveMode > 0) { //被动模式
-                        Ftp_Pasv($ftpConnect, TRUE);
+                        ftp_pasv($ftpConnect, TRUE);
                     } else { //主动模式
-                        Ftp_Pasv($ftpConnect, FALSE);
+                        ftp_pasv($ftpConnect, FALSE);
                     }
 
                     $ftpId = intval($ftpInfo['FtpId']);
@@ -105,7 +109,17 @@ class Ftp
                     $destinationPath = self::FormatPath($destinationPath);
                     $sourcePath = self::FormatPath($sourcePath);
                     //开始传输
-                    $uploadResult = self::BeginUpload($ftpConnect, $ftpPath, $destinationPath, $sourcePath, $sourceContent, $openFtpLog, $ftpLogManageData, $ftpId, $siteId);
+                    $uploadResult = self::BeginUpload(
+                        $ftpConnect,
+                        $ftpPath,
+                        $destinationPath,
+                        $sourcePath,
+                        $sourceContent,
+                        $openFtpLog,
+                        $ftpLogManageData,
+                        $ftpId,
+                        $siteId
+                    );
                     if ($uploadResult == self::FTP_TRANSFER_SUCCESS) {
                         $result = self::FTP_TRANSFER_SUCCESS; //上传成功
                     }
@@ -122,17 +136,23 @@ class Ftp
     /**
      * 多文件队列传输
      * @param array $ftpInfo FTP连接信息
-     * @param array $arrUpload FTP队列信息
-     * @param bool $openFtpLog 是否开启了记录FTP传输日志的功能，默认0未开启，1为开启
+     * @param PublishQueueManageData $publishQueueManageData 传输队列对象
+     * @param bool $openFtpLog 是否开启了记录FTP传输日志的功能，默认未开启
      * @param FtpLogManageData $ftpLogManageData FTP日志对象
      * @return int -5:连接失败 -2:连接失败 -1:登录失败 1:上传成功
      */
-    public static function UploadQueue($ftpInfo, &$arrUpload = null, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
+    public static function UploadQueue($ftpInfo, PublishQueueManageData &$publishQueueManageData, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
     {
+        $arrUpload = $publishQueueManageData->Queue;
         if (empty($arrUpload)) {
             return self::FTP_CONTENT_EMPTY; //上传数组为空
         }
-        if (!isset($ftpInfo['User']) || !isset($ftpInfo['Pass']) || !isset($ftpInfo['PassiveMode']) || !isset($ftpInfo['Path']) || !isset($ftpInfo['FtpId'])) {
+        if (!isset($ftpInfo['FtpUser']) ||
+            !isset($ftpInfo['FtpPass']) ||
+            !isset($ftpInfo['PassiveMode']) ||
+            !isset($ftpInfo['RemotePath']) ||
+            !isset($ftpInfo['FtpId'])
+        ) {
             return self::FTP_INFO_EMPTY; //FTP配置信息为空
         }
 
@@ -141,27 +161,38 @@ class Ftp
             return self::FTP_CONNECT_FAILURE;
         }
 
-        $ftpUser = $ftpInfo['User'];
-        $ftpPass = $ftpInfo['Pass'];
+        $ftpUser = $ftpInfo['FtpUser'];
+        $ftpPass = $ftpInfo['FtpPass'];
         $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
         $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-        $ftpPath = $ftpInfo['Path'];
+        $ftpPath = $ftpInfo['RemotePath'];
         $ftpPath = self::FormatPath($ftpPath);
         //开始登录
-        $ftpIsLogin = @ftp_login($ftpConnect, $ftpUser, $ftpPass);
+        $ftpIsLogin = ftp_login($ftpConnect, $ftpUser, $ftpPass);
         if ($ftpIsLogin) { //登录成功
             if ($ftpPassiveMode > 0) { //被动模式
-                Ftp_Pasv($ftpConnect, TRUE);
+                ftp_pasv($ftpConnect, TRUE);
             } else { //主动模式
-                Ftp_Pasv($ftpConnect, FALSE);
+                ftp_pasv($ftpConnect, FALSE);
             }
 
             //开始传输
+
             for ($i = 0; $i < count($arrUpload); $i++) {
                 $destinationPath = self::FormatPath($arrUpload[$i]["DestinationPath"]);
                 $sourcePath = self::FormatPath($arrUpload[$i]["SourcePath"]);
-                $uploadResult = self::BeginUpload($ftpConnect, $ftpPath, $destinationPath, $sourcePath, $arrUpload[$i]["Content"], $openFtpLog, $ftpLogManageData, $ftpInfo['FtpID'], $ftpInfo['SiteID']);
+                $uploadResult = self::BeginUpload(
+                    $ftpConnect,
+                    $ftpPath,
+                    $destinationPath,
+                    $sourcePath,
+                    $arrUpload[$i]["Content"],
+                    $openFtpLog,
+                    $ftpLogManageData,
+                    $ftpInfo['FtpId'],
+                    $ftpInfo['SiteId']
+                );
                 if ($uploadResult == self::FTP_TRANSFER_SUCCESS) {
                     $arrUpload[$i]["result"] = 1;
                 } else {
@@ -172,9 +203,9 @@ class Ftp
 
 
         } else { //登录失败
-            return self::FTP_LOGIN_FAILURE;
+            $result = self::FTP_LOGIN_FAILURE;
         }
-        Ftp_Close($ftpConnect);
+        ftp_close($ftpConnect);
         return $result;
     }
 
@@ -192,13 +223,17 @@ class Ftp
             return self::FTP_CONNECT_FAILURE;
         } else { //连接成功
             //判断ftp info
-            if (isset($ftpInfo['User']) && isset($ftpInfo['Pass']) && isset($ftpInfo['PassiveMode']) && isset($ftpInfo['Path'])) {
-                $ftpUser = $ftpInfo['User'];
-                $ftpPass = $ftpInfo['Pass'];
+            if (isset($ftpInfo['FtpUser']) &&
+                isset($ftpInfo['FtpPass']) &&
+                isset($ftpInfo['PassiveMode']) &&
+                isset($ftpInfo['RemotePath'])
+            ) {
+                $ftpUser = $ftpInfo['FtpUser'];
+                $ftpPass = $ftpInfo['FtpPass'];
                 $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
                 $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-                $ftpPath = $ftpInfo['Path'];
+                $ftpPath = $ftpInfo['RemotePath'];
                 $ftpPath = self::FormatPath($ftpPath);
                 //开始登录
                 $isLogin = @ftp_login($ftpConnect, $ftpUser, $ftpPass);
@@ -282,10 +317,10 @@ class Ftp
         }
 
         $timeEnd = Control::GetMicroTime();
-        $time = $timeEnd - $timeStart;
+        $timeSpan = $timeEnd - $timeStart;
 
         if ($openFtpLog) {
-            $ftpLogManageData->Insert($ftpId, $destinationPath, $sourcePath, $time, $result);
+            $ftpLogManageData->Create($ftpId, $destinationPath, $sourcePath, $timeSpan, $result);
         }
 
         return $result;
@@ -307,11 +342,11 @@ class Ftp
         }
 
         //判断ftp info
-        if (isset($ftpInfo['Host']) && isset($ftpInfo['Port'])) {
-            $ftpHost = $ftpInfo['Host'];
+        if (isset($ftpInfo['FtpHost']) && isset($ftpInfo['FtpPort'])) {
+            $ftpHost = $ftpInfo['FtpHost'];
             $ftpPort = 21;
-            if (isset($ftpInfo['Port'])) {
-                $ftpPort = intval($ftpInfo['Port']);
+            if (isset($ftpInfo['FtpPort'])) {
+                $ftpPort = intval($ftpInfo['FtpPort']);
             }
             $ftpTimeout = 90;
             if (isset($ftpInfo['Timeout'])) {
@@ -346,13 +381,13 @@ class Ftp
      */
     private static function ChangeOrMakeDir($ftpConnect, $dirPath)
     {
-        $result = Ftp_ChDir($ftpConnect, $dirPath);
+        $result = ftp_chdir($ftpConnect, $dirPath);
         if (!$result) { //切换FTP上传目录失败
             $isMakeDir = self::MakeDir($ftpConnect, $dirPath);
             if (!$isMakeDir) { //创建文件夹失败
                 return FALSE;
             } else {
-                $result = Ftp_ChDir($ftpConnect, $dirPath);
+                $result = ftp_chdir($ftpConnect, $dirPath);
                 return $result;
             }
         }

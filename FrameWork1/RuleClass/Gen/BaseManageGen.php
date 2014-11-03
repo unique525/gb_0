@@ -14,6 +14,11 @@ class BaseManageGen extends BaseGen
     const PUBLISH_PATH = "h";
 
     /**
+     * 系统广告的根目录
+     */
+    const SITE_AD_PATH = "ad";
+
+    /**
      * 发布频道 返回值 未操作
      */
     const PUBLISH_CHANNEL_RESULT_NO_ACTION = -101;
@@ -417,7 +422,6 @@ class BaseManageGen extends BaseGen
 
     }
 
-
     /**
      * 传输发布队列
      * @param PublishQueueManageData $publishQueueManageData 发布队列对象
@@ -429,7 +433,9 @@ class BaseManageGen extends BaseGen
         $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
-
+            $openFtpLog = false;
+            $ftpLogManageData = new FtpLogManageData();
+            Ftp::UploadQueue($ftpInfo,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
@@ -659,6 +665,173 @@ class BaseManageGen extends BaseGen
 
     }
 
+
+
+    /**
+     * 发布广告 返回值 广告id小于0
+     */
+    const PUBLISH_SITE_AD_RESULT_SITE_AD_ID_ERROR = -301;
+
+    /**
+     * 发布广告 返回值 站点id小于0
+     */
+    const PUBLISH_SITE_AD_RESULT_SITE_ID_ERROR = -302;
+
+    /**
+     * 发布广告 返回值 操作完成，结果存储于结果数组中
+     */
+    const PUBLISH_SITE_AD_RESULT_FINISHED = 301;
+
+
+    /**
+     * 发布广告JS
+     * @param int $siteAdId
+     * @param PublishQueueManageData $publishQueueManageData
+     * @param string $warns
+     * @return int 发布结果
+     */
+    protected function PublishSiteAd(
+        $siteAdId,
+        PublishQueueManageData $publishQueueManageData,
+        &$warns
+    ){
+            $result="";
+            if ($siteAdId > 0) {
+                $siteAdManageData=new SiteAdManageData();
+                $siteId=$siteAdManageData->GetSiteId($siteAdId,FALSE);
+                if ($siteId > 0) {
+                $siteAdManageData = new SiteAdManageData();
+                $arrayOfOneSiteAd = $siteAdManageData->GetOne($siteAdId);
+                if (count($arrayOfOneSiteAd) > 0) {
+                    if (intval($arrayOfOneSiteAd["State"]) === 0) {
+                        $showNumber = intval($arrayOfOneSiteAd["ShowNumber"]);//轮换类广告位是否显示轮换数字
+                        $siteAdWidth = intval($arrayOfOneSiteAd["SiteAdWidth"]);
+                        $siteAdHeight = intval($arrayOfOneSiteAd["SiteAdHeight"]);
+                        $showType = $arrayOfOneSiteAd["ShowType"];     //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
+                        $siteAdContentManageData = new SiteAdContentManageData();
+                        if ($showType < 0) {
+                            $showType = 0;
+                        }
+                        $listOfSiteAdContentArray = $siteAdContentManageData->GetAllAdContent($siteAdId);//取广告位下所有可用状态广告（启用，未过期）
+
+                        if(count($listOfSiteAdContentArray)<=0){
+                            $listOfSiteAdContentArray = $siteAdContentManageData->GetLastAdContent($siteAdId);//没有可用广告 则尝试取最后一条过期广告以防页面空白
+                            $warns.=Language::Load('site_ad', 16); //所有广告均已过期！页面将保留最后过期的广告！
+                        }
+
+                        if(count($listOfSiteAdContentArray)>0){
+                            $siteAdJsContent = Template::Load("site/site_ad_js_type_" . intval($showType) . ".html","common"); //ShowType 0为图片 1文字 2轮换 3随机 4落幕
+                            $listName = "site_ad_content";
+                            Template::ReplaceList($siteAdJsContent, $listOfSiteAdContentArray, $listName);
+
+                            $replaceArr = array(
+                                "{SiteAdId}" => $siteAdId,
+                                "{SiteAdWidth}" => $siteAdWidth,
+                                "{SiteAdHeight}" => $siteAdHeight,
+                                "{ShowType}" => $showType,
+                                "{ShowNumber}" => $showNumber
+                            );
+                            $siteAdJsContent = strtr($siteAdJsContent, $replaceArr);
+                            //解jquery与其他$的JS冲突问题
+                            $siteAdJsContent = str_ireplace("$", 'jQuery', $siteAdJsContent);
+
+                        }else{
+                            $warns.=Language::Load('site_ad', 11); //该广告位没有可用的广告
+                            $warns.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
+                            $siteAdJsContent="";
+                        }
+
+
+                    }else{
+                        $warns.=Language::Load('site_ad', 9);//当前操作对象不是启用状态！
+                        $warns.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
+                        $siteAdJsContent="";
+                    }
+
+
+                    //生成广告调用JS文件
+
+                    //$tempDir = '/' . '/ad/' . $siteId;
+                    //$source = $tempDir . '/site_ad_' . $siteAdId . ".js";
+                    //FileObject::CreateDir($tempDir);
+                    //FileObject::Write($source, $siteAdJsContent);
+
+
+                    $siteAdFileName = 'site_ad_' . $siteAdId . ".js";
+                    $publishResult=self::AddToPublishQueueForSiteAd(
+                        $siteAdId,
+                        $siteAdJsContent,
+                        $siteAdFileName,
+                        $publishQueueManageData
+                    );
+
+                    self::TransferPublishQueue($publishQueueManageData, $siteId);
+
+                    if($publishResult>0){
+                        $result .= Language::Load('site_ad', 10) ;  //广告JS更新成功!
+                        $result .= "<br><br>" . "/ad/" . $siteId . '/site_ad_' . $siteAdId . ".js";
+                    }else{
+                        $result.=Language::Load('site_ad', 17);//广告JS文件发布失败！
+                        $result.="<br>error code:" . $publishResult;
+                    }
+
+
+                    //记入操作log
+                    $operateContent = "CreateJs site_ad：SiteAdId：" . $siteAdId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
+                    self::CreateManageUserLog($operateContent);
+
+                }else{
+                    $result.=Language::Load('site_ad', 8);//获取该条记录数据失败！
+                }
+
+
+
+
+
+
+
+                }else{
+                $result .= Language::Load('site_ad', 5);//站点siteid错误！;
+            }
+            }else{
+            $result .= Language::Load('site_ad', 6);//广告位site_ad_id错误！;
+        }
+        return $result;
+
+    }
+    /**
+     * 加入到发布队列 广告
+     * @param int $siteAdId 站点id
+     * @param string $publishContent 广告内容
+     * @param string $publishFileName 发布文件名
+     * @param PublishQueueManageData $publishQueueManageData 发布队列对象
+     * @return int|number 发布结果
+     */
+    private function AddToPublishQueueForSiteAd(
+        $siteAdId,
+        $publishContent,
+        $publishFileName,
+        PublishQueueManageData &$publishQueueManageData
+    )
+    {
+        //$result = self::ADD_TO_PUBLISH_QUEUE_RESULT_NO_ACTION;
+        if ($siteAdId > 0) {
+            $siteAdManageData=new SiteAdManageData();
+            $siteId=$siteAdManageData->GetSiteId($siteAdId,FALSE);
+            if($siteId > 0){
+                $destinationPath = self::SITE_AD_PATH . '/' .strval($siteId) . '/' . $publishFileName;
+                $sourcePath = '';
+                $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
+                $result = abs(DefineCode::PUBLISH) + self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
+            }else{
+                $result = DefineCode::PUBLISH + self::PUBLISH_SITE_AD_RESULT_SITE_ID_ERROR;
+            }
+        } else {
+            $result = DefineCode::PUBLISH + self::PUBLISH_SITE_AD_RESULT_SITE_AD_ID_ERROR;
+        }
+        return $result;
+
+    }
 }
 
 ?>

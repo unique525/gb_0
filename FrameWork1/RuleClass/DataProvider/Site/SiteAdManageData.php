@@ -139,7 +139,7 @@ class SiteAdManageData  extends BaseManageData{
                 $sql = "SELECT SiteId FROM " . self::TableName_SiteAd . " WHERE SiteAdId=:SiteAdId;";
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("SiteAdId", $siteAdId);
-                $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+                $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
             }
             return $result;
         }

@@ -106,7 +106,7 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                     $arrayOfUploadFile = explode(",", $uploadFiles);
                     if (count($arrayOfUploadFile) > 0) {
                         $last=count($arrayOfUploadFile)-1;
-                        $titlePicSet=$siteAdContentManageData->ModifyTitlePic($newSiteAdContentId,$arrayOfUploadFile[$last]);
+                        $titlePicSet=$siteAdContentManageData->ModifyTitlePic($newSiteAdContentId,$arrayOfUploadFile[$last]);//最后一张的upload file id
                         if($titlePicSet<0){
                             $warningWhenSuccess .= Language::Load('site_ad', 7);//设置题图失败！
                         }
