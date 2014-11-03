@@ -134,45 +134,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td width="193" valign="top" height="750">
-                <div class="leftsidebar">
-                    <div class="leftsidebar1">
-                        <div class="icon"><img class="right_img" id="account_manage_img" src="/images/icon_jia.png"
-                                               width="11" height="11"/></div>
-                        <div class="right" alt="close" idvalue="account_manage">账户管理</div>
-                    </div>
-                    <div class="right_child" id="account_manage_child" style="display: none">
-                        <div class="leftsidebar2"><a href="">交易条款</a></div>
-                        <div class="leftsidebar2"><a href="">购物流程</a></div>
-                        <div class="leftsidebar2"><a href="">发票制度</a></div>
-                    </div>
-                    <div class="leftsidebar1">
-                        <div class="icon"><img class="right_img" id="shopping_guide_img" src="/images/icon_jia.png"
-                                               width="11" height="11"/></div>
-                        <div class="right" idvalue="shopping_guide">购物指南</div>
-                    </div>
-                    <div class="right_child" id="shopping_guide_child" style="display: none">
-                        <div class="leftsidebar2"><a href="">交易条款</a></div>
-                        <div class="leftsidebar2"><a href="">购物流程</a></div>
-                        <div class="leftsidebar2"><a href="">发票制度</a></div>
-                        <div class="leftsidebar2"><a href="">会员等级</a></div>
-                        <div class="leftsidebar2"><a href="">积分制度</a></div>
-                    </div>
-                    <div class="leftsidebar1">
-                        <div class="icon"><img class="right_img" id="send_service_img" src="/images/icon_jia.png"
-                                               width="11" height="11"/></div>
-                        <div class="right" idvalue="send_service">配送服务</div>
-                    </div>
-                    <div class="leftsidebar1">
-                        <div class="icon"><img class="right_img" id="pay_way_img" src="/images/icon_jia.png" width="11"
-                                               height="11"/></div>
-                        <div class="right" idvalue="pay_way">支付方式</div>
-                    </div>
-                    <div class="leftsidebar1">
-                        <div class="icon"><img class="right_img" id="after_service_img" src="/images/icon_jia.png"
-                                               width="11" height="11"/></div>
-                        <div class="right" idvalue="after_service">售后服务</div>
-                    </div>
-                </div>
+                <pre_temp id="6"></pre_temp>
             </td>
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">

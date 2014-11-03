@@ -84,6 +84,7 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
 
             $tagId = "user_receive_info_list";
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
@@ -95,6 +96,7 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_receive_info",7));
             }
 
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return "";

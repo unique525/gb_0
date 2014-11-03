@@ -67,6 +67,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $productCommentPublicGen = new ProductCommentPublicGen();
                 $result = $productCommentPublicGen->GenPublic();
                 break;
+            case "site_ad":
+                $siteAdPublicGen = new SiteAdPublicGen();
+                $result = $siteAdPublicGen->GenPublic();
+                break;
             case "site_ad_content":
                 $siteAdContentPublicGen = new SiteAdContentPublicGen();
                 $result = $siteAdContentPublicGen->GenPublic();

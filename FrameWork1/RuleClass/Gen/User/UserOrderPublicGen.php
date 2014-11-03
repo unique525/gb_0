@@ -49,22 +49,28 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
 
             $pageIndex = Control::GetRequest("p",1);
             $pageSize = Control::GetRequest("ps",30);
-            $state = Control::GetRequest("state",10);
+            $state = Control::GetRequest("state",-1);
             $pageBegin = ($pageIndex-1)*$pageSize;
             $allCount = 0;
 
             $tagId = "user_order_list";
             $userOrderPublicData = new UserOrderPublicData();
-            $arrUserOrderList = $userOrderPublicData->GetList($userId,$siteId,$state,$pageBegin,$pageSize,$allCount);
+            if($state < 0){
+                $arrUserOrderList = $userOrderPublicData->GetList($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            }else{
+                $arrUserOrderList = $userOrderPublicData->GetListByState($userId,$siteId,$state,$pageBegin,$pageSize,$allCount);
+            }
 
             if(count($arrUserOrderList) != 0){
                 Template::ReplaceList($templateContent,$arrUserOrderList,$tagId);
             }else{
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_order",7));
             }
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return "";
@@ -81,6 +87,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $templateName = "default";
                 $templatePath = "front_template";
                 $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+                parent::ReplaceFirst($templateContent);
 
                 $userOrderPublicData = new UserOrderPublicData();
                 $userOrderProductPublicData = new UserOrderProductPublicData();
@@ -101,6 +108,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }else{
                 $templateContent = Language::Load("user_order",8);
             }
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             Control::GoUrl("/default.php?mod=user&a=login");

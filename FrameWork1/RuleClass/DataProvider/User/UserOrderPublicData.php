@@ -27,7 +27,41 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetList($userId, $siteId, $state, $pageBegin, $pageSize, &$allCount)
+    /**
+     * @param $userId
+     * @param $siteId
+     * @param $pageBegin
+     * @param $pageSize
+     * @param $allCount
+     * @return array|null
+     */
+    public function GetList($userId, $siteId,  $pageBegin, $pageSize, &$allCount)
+    {
+        $result = null;
+        if ($userId > 0 && $siteId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_UserOrder
+                . " WHERE UserId = :UserId AND SiteId = :SiteId LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
+                . " WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * @param $userId
+     * @param $siteId
+     * @param $state
+     * @param $pageBegin
+     * @param $pageSize
+     * @param $allCount
+     * @return array|null
+     */
+    public function GetListByState($userId, $siteId, $state, $pageBegin, $pageSize, &$allCount)
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
