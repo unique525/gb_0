@@ -246,8 +246,8 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
         echo $warns;
         echo "<br>".$result;
         if($warns==""){
-            $jsCode = 'setTimeout("window.close()",'.$messageWindowLastingTime.');';
-            Control::RunJavascript($jsCode);
+            //$jsCode = 'setTimeout("window.close()",'.$messageWindowLastingTime.');';
+            //Control::RunJavascript($jsCode);
         }
         return "";
     }

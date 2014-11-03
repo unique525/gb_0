@@ -288,8 +288,8 @@
                             <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label for="f_OpenCount">统计：</label></td>
                             <td class="spe_line" style="text-align: left">
                                     <select id="f_OpenCount" name="f_OpenCount">
-                                        <option selected="selected" value="1"></option>
-                                        <option value="0"></option>
+                                        <option value="1">是</option>
+                                        <option selected="selected" value="0">否</option>
                                     </select>
                                     (是否对点击数进行统计)
                                     {s_OpenCount}
