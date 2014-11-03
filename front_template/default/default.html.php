@@ -82,7 +82,7 @@
                                 ]]>
                             </child>
                             <third>
-                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
+                                <![CDATA[<a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
                                 ]]>
                             </third>
 
@@ -198,7 +198,7 @@
                     </item>
                     <child>
                         <![CDATA[
-                        <li><a href="#" target="_blank">{f_ChannelName}</a></li>
+                        <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                         ]]>
                     </child>
                 </icms>
@@ -282,7 +282,7 @@
                         </item>
                         <child>
                             <![CDATA[
-                            <li><a href="#" target="_blank">{f_ChannelName}</a></li>
+                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                             ]]>
                         </child>
                     </icms>
