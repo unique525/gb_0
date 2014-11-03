@@ -31,8 +31,8 @@ class ProductManageData extends BaseManageData
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array();
-        $addFieldValues = array();
+        $addFieldNames = array("CreateDate");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()));
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,

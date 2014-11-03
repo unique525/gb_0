@@ -207,12 +207,12 @@
             </td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_IsCircle">是否加入模板库的循环调用：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="f_IsCircle">是否加入循环调用：</label></td>
             <td class="spe_line">
                 <select id="f_IsCircle" name="f_IsCircle">
                     <option value="0">否</option>
-                    <option value="1">是</option>
-                </select> (在使用模板库调用频道数据时)
+                    <option value="1" selected="selected">是</option>
+                </select> (在调用频道数据时)
                 {s_IsCircle}
             </td>
         </tr>
