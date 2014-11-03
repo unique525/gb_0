@@ -30,13 +30,14 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
      * @return mixed|string
      */
     private function GenModify(){
-        $templateContent = Template::Load("user/user_order_deal.html","common");
         $userOrderId = intval(Control::GetRequest("user_order_id",0));
         $siteId = intval(Control::GetRequest("site_id",0));
-        parent::ReplaceFirst($templateContent);
         $resultJavaScript = "";
 
         if($userOrderId > 0 && $siteId > 0){
+            $templateContent = Template::Load("user/user_order_deal.html","common");
+            parent::ReplaceFirst($templateContent);
+
             $pageSize = intval(Control::GetRequest("ps",0));
             $tabIndex = intval(Control::GetRequest("tab_index",0));
             $pageIndex = intval(Control::GetRequest("p",1));

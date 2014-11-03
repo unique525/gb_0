@@ -41,9 +41,9 @@
                 if (address != "" && postcode != "" && receive_person_name != "" && (tel != "" || mobile != "")) {
                     var url = "";
                     if(nowSelectReceiveInfoId == 0){
-                        url = "/default.php?mod=user_receive_info&a=create";
+                        url = "/default.php?mod=user_receive_info&a=async_create";
                     }else{
-                        url = "/default.php?mod=user_receive_info&a=modify&user_receive_info_id="+nowSelectReceiveInfoId;
+                        url = "/default.php?mod=user_receive_info&a=async_modify&user_receive_info_id="+nowSelectReceiveInfoId;
                     }
                     $.ajax({
                         url: url,

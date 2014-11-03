@@ -25,6 +25,9 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             case "confirm":
                 $result = self::GenConfirm();
                 break;
+            case "detail":
+                $result = self::GenDetail();
+                break;
             case "submit":
                 $result = self::GenSubmit();
                 break;
@@ -38,21 +41,69 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenList(){
-        $state = Control::GetRequest("state",-1);
         $userId = Control::GetUserId();
         $siteId = intval(Control::GetRequest("site_id",0));
 
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/order_list.html";
+            $templateFileUrl = "user/user_order_list.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
-            $userOrderPublicData = new UserOrderPublicData();
-            //$userOrderPublicData->GetList();
+            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = Control::GetRequest("ps",30);
+            $state = Control::GetRequest("state",10);
+            $pageBegin = ($pageIndex-1)*$pageSize;
+            $allCount = 0;
 
+            $tagId = "user_order_list";
+            $userOrderPublicData = new UserOrderPublicData();
+            $arrUserOrderList = $userOrderPublicData->GetList($userId,$siteId,$state,$pageBegin,$pageSize,$allCount);
+
+            if(count($arrUserOrderList) != 0){
+                Template::ReplaceList($templateContent,$arrUserOrderList,$tagId);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_order",7));
+            }
             return $templateContent;
         }else{
+            return "";
+        }
+    }
+
+    private function GenDetail(){
+        $userId =Control::GetUserId();
+        if($userId > 0){
+            $userOrderId = Control::GetRequest("user_order_id",0);
+            $siteId = Control::GetRequest("site_id",0);
+            if($userOrderId > 0 && $siteId > 0){
+                $templateFileUrl = "user/user_order_detail.html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+                $userOrderPublicData = new UserOrderPublicData();
+                $userOrderProductPublicData = new UserOrderProductPublicData();
+
+                $arrUserOrderOne = $userOrderPublicData->GetOne($userOrderId,$siteId);
+                $arrUserOrderProductList = $userOrderProductPublicData->GetList($userOrderId,$siteId);
+
+                $tagUserOrderProductListId = "user_order_product_list";
+                if(count($arrUserOrderProductList) > 0){
+                    Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagUserOrderProductListId);
+                }else{
+                    Template::RemoveCustomTag($templateContent);
+                }
+
+                if(count($arrUserOrderOne) > 0){
+                    Template::ReplaceOne($templateContent,$arrUserOrderOne);
+                }
+            }else{
+                $templateContent = Language::Load("user_order",8);
+            }
+            return $templateContent;
+        }else{
+            Control::GoUrl("/default.php?mod=user&a=login");
             return "";
         }
     }

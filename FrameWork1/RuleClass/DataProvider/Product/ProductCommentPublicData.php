@@ -113,7 +113,7 @@ class ProductCommentPublicData extends BasePublicData
      * @param $strParentIds
      * @return array|null
      */
-    public function GetListOfStrParentIds($strParentIds)
+    public function GetListOfChild($strParentIds)
     {
         $result = null;
         if (!empty($strParentIds)) {
@@ -139,11 +139,6 @@ class ProductCommentPublicData extends BasePublicData
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
-    }
-
-    public function GetListOfChild()
-    {
-
     }
 
     public function GetListOfParent($productId, &$allCount, $pageBegin, $pageSize)

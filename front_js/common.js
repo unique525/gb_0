@@ -106,3 +106,9 @@ String.prototype.replaceAll = function(s1, s2) {
     return this.replace(new RegExp(s1, "gm"), s2);
 }
 
+$(function(){
+    $(".show_price").each(function(){
+        $(this).text(formatPrice($(this).text()));
+    });
+});
+

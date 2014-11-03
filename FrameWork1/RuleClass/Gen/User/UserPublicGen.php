@@ -256,7 +256,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             if(count($arrUserFavoriteList) > 0){
                 Template::ReplaceList($tempContent,$arrUserFavoriteList,$tagId);
             }else{
-                $tempContent = Template::ReplaceCustomTag($tempContent, $tagId,"您还没有收藏任何产品");
+                $tempContent = Template::ReplaceCustomTag($tempContent, $tagId,Language::Load("user",42));
             }
             //------------------------------end
 

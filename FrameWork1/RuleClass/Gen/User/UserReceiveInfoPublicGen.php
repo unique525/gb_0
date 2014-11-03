@@ -13,17 +13,20 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
         $method = Control::GetRequest("a","");
         $result = "";
         switch($method){
-            case "create":
-                $result = self::GenCreate();
+            case "async_create":
+                $result = self::AsyncCreate();
                 break;
-            case "modify":
-                $result = self::GenModify();
+            case "async_modify":
+                $result = self::AsyncModify();
+                break;
+            case "list":
+                $result = self::GenList();
                 break;
         }
         return $result;
     }
 
-    private function GenCreate(){
+    private function AsyncCreate(){
         $userId = Control::GetUserId();
         $address = Control::PostRequest("address",0);
         $postcode = Control::PostRequest("postcode",0);
@@ -44,12 +47,11 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
                 return Control::GetRequest("jsonpcallback","").'({"result":-1})';
             }
         }else{
-            Control::GoUrl("login.html");
             return "";
         }
     }
 
-    private function GenModify(){
+    private function AsyncModify(){
         $userId = Control::GetUserId();
         $userReceiveInfoId = intval(Control::GetRequest("user_receive_info_id",0));
         $address = Control::PostRequest("address",0);
@@ -71,7 +73,30 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
                 return Control::GetRequest("jsonpcallback","").'({"result":-2})';
             }
         }else{
-            Control::GoUrl("login.html");
+            return "";
+        }
+    }
+
+    private function GenList(){
+        $userId = Control::GetUserId();
+        if($userId > 0){
+            $templateFileUrl = "user/user_receive_info_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            $tagId = "user_receive_info_list";
+            $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
+            $arrUserReceiveInfoList = $userReceiveInfoPublicData->GetList($userId);
+
+            if(count($arrUserReceiveInfoList) > 0){
+                Template::ReplaceList($templateContent,$arrUserReceiveInfoList,$tagId);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_receive_info",7));
+            }
+
+            return $templateContent;
+        }else{
             return "";
         }
     }
