@@ -15,55 +15,55 @@ class Ftp
     /**
      * 不支持FTP
      */
-    const FTP_NOT_SUPPORT = 002;
+    const FTP_NOT_SUPPORT = 102;
     /**
      * 连接失败
      */
-    const FTP_CONNECT_FAILURE = -2;
+    const FTP_CONNECT_FAILURE = -102;
     /**
      * 登录失败
      */
-    const FTP_LOGIN_FAILURE = -3;
+    const FTP_LOGIN_FAILURE = -103;
     /**
      * 切换或创建文件夹失败
      */
-    const FTP_CHANGE_OR_MAKE_DIR_FAILURE = -4;
+    const FTP_CHANGE_OR_MAKE_DIR_FAILURE = -104;
     /**
      * ftp信息为空
      */
-    const FTP_INFO_EMPTY = -5;
+    const FTP_INFO_EMPTY = -105;
     /**
      * ftp传输内容为空
      */
-    const FTP_CONTENT_EMPTY = -6;
+    const FTP_CONTENT_EMPTY = -106;
     /**
      * 传输失败
      */
-    const FTP_TRANSFER_FAILURE = -7;
+    const FTP_TRANSFER_FAILURE = -107;
     /**
      * 目标路径为空
      */
-    const FTP_DESTINATION_EMPTY = -8;
+    const FTP_DESTINATION_EMPTY = -108;
     /**
      * 切换文件夹失败
      */
-    const FTP_CHANGE_DIR_FAILURE = -9;
+    const FTP_CHANGE_DIR_FAILURE = -109;
     /**
      * 删除失败
      */
-    const FTP_DELETE_FAILURE = -10;
+    const FTP_DELETE_FAILURE = -100;
     /**
      * 传输成功
      */
-    const FTP_TRANSFER_SUCCESS = 1;
+    const FTP_TRANSFER_SUCCESS = 100;
     /**
      * 传输完成，但不代表成功
      */
-    const FTP_TRANSFER_FINISHED = 2;
+    const FTP_TRANSFER_FINISHED = 200;
     /**
      * 删除成功
      */
-    const FTP_DELETE_SUCCESS = 3;
+    const FTP_DELETE_SUCCESS = 300;
 
     /**
      * 单个文件传输
