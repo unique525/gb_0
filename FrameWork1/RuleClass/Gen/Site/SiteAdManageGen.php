@@ -236,129 +236,19 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreateJs() {
         $result="";
         $messageWindowLastingTime=5000; //提示页面5秒后自动关闭
-        $siteId = intval(Control::GetRequest("site_id", 0));
         $siteAdId = intval(Control::GetRequest("site_ad_id", 0));
 
-        if ($siteId > 0) {
-            if ($siteAdId > 0) {
-                $siteAdManageData = new SiteAdManageData();
-                $arrayOfOneSiteAd = $siteAdManageData->GetOne($siteAdId);
-                if (count($arrayOfOneSiteAd) > 0) {
-                    if (intval($arrayOfOneSiteAd["State"]) === 0) {
-                        $showNumber = intval($arrayOfOneSiteAd["ShowNumber"]);//轮换类广告位是否显示轮换数字
-                        $siteAdWidth = intval($arrayOfOneSiteAd["SiteAdWidth"]);
-                        $siteAdHeight = intval($arrayOfOneSiteAd["SiteAdHeight"]);
-                        $showType = $arrayOfOneSiteAd["ShowType"];     //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
-                        $siteAdContentManageData = new SiteAdContentManageData();
-                        if ($showType < 0) {
-                            $showType = 0;
-                        }
-                        $listOfSiteAdContentArray = $siteAdContentManageData->GetAllAdContent($siteAdId);//取广告位下所有可用状态广告（启用，未过期）
 
-                        if(count($listOfSiteAdContentArray)<=0){
-                            $listOfSiteAdContentArray = $siteAdContentManageData->GetLastAdContent($siteAdId);//没有可用广告 则尝试取最后一条过期广告以防页面空白
-                            $result.=Language::Load('site_ad', 16); //所有广告均已过期！页面将保留最后过期的广告！
-                        }
+        $warns="";
+        $publishQueueManageData = new PublishQueueManageData();
 
-                        if(count($listOfSiteAdContentArray)>0){
-                            $siteAdJsContent = Template::Load("site/site_ad_js_type_" . intval($showType) . ".html","common"); //ShowType 0为图片 1文字 2轮换 3随机 4落幕
-                            $listName = "site_ad_content";
-                            Template::ReplaceList($siteAdJsContent, $listOfSiteAdContentArray, $listName);
-
-                            $replaceArr = array(
-                                "{SiteAdId}" => $siteAdId,
-                                "{SiteAdWidth}" => $siteAdWidth,
-                                "{SiteAdHeight}" => $siteAdHeight,
-                                "{ShowType}" => $showType,
-                                "{ShowNumber}" => $showNumber
-                            );
-                            $siteAdJsContent = strtr($siteAdJsContent, $replaceArr);
-                            //解jquery与其他$的JS冲突问题
-                            $siteAdJsContent = str_ireplace("$", 'jQuery', $siteAdJsContent);
-
-                        }else{
-                            $result.=Language::Load('site_ad', 11); //该广告位没有可用的广告
-                            $result.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
-                            $siteAdJsContent="";
-                        }
-
-
-                    }else{
-                        $result.=Language::Load('site_ad', 9);//当前操作对象不是启用状态！
-                        $result.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
-                        $siteAdJsContent="";
-                    }
-
-
-                    //生成广告调用JS文件
-                    $tempDir = '/' . '/ad/' . $siteId;
-                    $source = $tempDir . '/site_ad_' . $siteAdId . ".js";
-                    FileObject::CreateDir($tempDir);
-                    FileObject::Write($source, $siteAdJsContent);
-
-
-                    $siteAdContentManageData = new SiteAdContentManageData();
-                    $arrayOfSiteAdsToUpload = $siteAdContentManageData->GetList($siteAdId);  //获取广告位所有广告 准备发布文件到对应站点及WEBAPP_DOMAIN下
-                    //$_adminuserid = 1;
-                    //$_rank = 0;
-                    //$_parentid = 0;
-                    //$_documentChannelData = new DocumentChannelData();
-                    //$_documentChannelArr = $_documentChannelData->GetList($siteId, $_adminuserid, $_rank, $_parentid);
-                    //$_documentChannelID = $_documentChannelArr["0"]["DocumentChannelID"];
-                    //$_hasFtp = $_documentChannelData->GetHasFtp($_documentChannelID);
-                    //$_ftptype = 0;
-
-
-                    $siteManageData = new SiteManageData();
-                    $siteUrl = strtolower($siteManageData->GetSiteUrl($siteId,FALSE));    //发布到site
-                    if($siteUrl!=MANAGE_DOMAIN){
-
-                        //for ($i = 0; $i < count($arrayOfSiteAdsToUpload); $i++) {
-                        //    if (strlen($arrayOfSiteAdsToUpload[$i]["TitlePicUploadFileId"]) > 0) {
-                        //        $titlePicUploadFileId = $arrayOfSiteAdsToUpload[$i]["TitlePicUploadFileId"];
-                        //        //$_publishTitlePic=
-                        //        //parent::Ftp($_publishTitlePic, $_publishTitlePic, "", $_documentChannelID, $_hasFtp, $_ftptype);
-                        //    }
-                    }
-
-                    if(WEBAPP_DOMAIN!=MANAGE_DOMAIN){                                     //发布到 WEBAPP_DOMAIN
-
-                        //for ($i = 0; $i < count($arrayOfSiteAdsToUpload); $i++) {
-                        //    if (strlen($arrayOfSiteAdsToUpload[$i]["TitlePicUploadFileId"]) > 0) {
-                        //        $titlePicUploadFileId = $arrayOfSiteAdsToUpload[$i]["TitlePicUploadFileId"];
-                        //        //$_publishTitlePic=
-                        //        //parent::Ftp($_publishTitlePic, $_publishTitlePic, "", $_documentChannelID, $_hasFtp, $_ftptype);
-                        //    }
-                    }
-                    if($result!="")
-                        $messageWindowLastingTime+=10000;
-                    $result .= Language::Load('site_ad', 10) ;  //广告JS更新成功!
-                    $result .= "<br><br>" . "/ad/" . $siteId . '/site_ad_' . $siteAdId . ".js";
-
-
-                    //记入操作log
-                    $operateContent = "CreateJs site_ad：SiteAdId：" . $siteAdId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
-                    self::CreateManageUserLog($operateContent);
-
-                }else{
-                    $result.=Language::Load('site_ad', 8);//获取该条记录数据失败！
-                }
-
-
-
-
-
-
-
-            }else{
-                $result .= Language::Load('site_ad', 6);//广告位site_ad_id错误！;
-            }
-        }else{
-            $result .= Language::Load('site_ad', 5);//站点siteid错误！;
+        $result = parent::PublishSiteAd($siteAdId, $publishQueueManageData, $warns);
+        echo $warns;
+        echo "<br>".$result;
+        if($warns==""){
+            $jsCode = 'setTimeout("window.close()",'.$messageWindowLastingTime.');';
+            Control::RunJavascript($jsCode);
         }
-        echo $result;
-        $jsCode = 'setTimeout("window.close()",'.$messageWindowLastingTime.');';
-        Control::RunJavascript($jsCode);
         return "";
     }
 
