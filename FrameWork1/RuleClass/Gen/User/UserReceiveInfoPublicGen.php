@@ -78,7 +78,6 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenList(){
-        echo $_SESSION["SiteId"];
         $userId = Control::GetUserId();
         if($userId > 0){
             $templateFileUrl = "user/user_receive_info_list.html";

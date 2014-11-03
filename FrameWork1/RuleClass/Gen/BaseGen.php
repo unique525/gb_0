@@ -6,7 +6,6 @@
  * @package iCMS_FrameWork1_RuleClass_Gen
  * @author zhangchi
  */
-$_SESSION["SiteId"] = "1";
 class BaseGen
 {
     /**
