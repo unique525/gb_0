@@ -11,6 +11,7 @@
     <link href="/images/index_layout.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/user/user.js"></script>
     <script type="text/javascript">
     $(function () {
         /* 顶部banner类别菜单初始化 */
@@ -185,18 +186,24 @@
             <div class="title3 green_bg">每日生鲜</div>
             <div class="nav">
                 <ul>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
+                <icms id="channel_27" type="channel_list" where="parent">
+                    <item>
+                        <![CDATA[
+                        <li>{f_ChannelName}
+                            <ul>
+                                {child}
+                            </ul>
+                        </li>
+                        ]]>
+                    </item>
+                    <child>
+                        <![CDATA[
+                        <li><a href="#" target="_blank">{f_ChannelName}</a></li>
+                        ]]>
+                    </child>
+                </icms>
                 </ul>
+
                 <div class="clean"></div>
             </div>
         </div>
@@ -263,17 +270,22 @@
             <div class="title3 red_bg">时令水果</div>
             <div class="nav">
                 <ul>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
-                    <li><a href="#" target="_blank">叶菜类</a></li>
+                    <icms id="channel_28" type="channel_list" where="parent">
+                        <item>
+                            <![CDATA[
+                            <li>{f_ChannelName}
+                                <ul>
+                                    {child}
+                                </ul>
+                            </li>
+                            ]]>
+                        </item>
+                        <child>
+                            <![CDATA[
+                            <li><a href="#" target="_blank">{f_ChannelName}</a></li>
+                            ]]>
+                        </child>
+                    </icms>
                 </ul>
                 <div class="clean"></div>
             </div>

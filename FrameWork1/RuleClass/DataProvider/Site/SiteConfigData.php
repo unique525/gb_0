@@ -4,6 +4,7 @@
  * 公共 站点配置 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Site
+ * @property int $OpenUrlReWrite
  * @property int $OpenFtpLog
  * @property string $MailSmtpHost
  * @property string $MailSmtpUserName
@@ -178,6 +179,7 @@ class SiteConfigData extends BaseData {
      * @var array int
      */
     private $ArrSiteConfigTypes_3 = array(
+        "OpenUrlReWrite",
         "OpenHomePage",
         "OpenRegisterWindow",
         "ForumNewPostCount",
@@ -255,6 +257,7 @@ class SiteConfigData extends BaseData {
     private $SiteId = 1;
 
     //公共配置
+    private $OpenUrlReWrite = 0; //开启URL重写功能
     private $OpenFtpLog = 0; //开启FTP传输日志记录
     private $MailSmtpHost = ""; // SMTP 服务器
     private $MailSmtpUserName = ""; // SMTP服务器用户名
@@ -384,7 +387,73 @@ class SiteConfigData extends BaseData {
     private $ActivityTitlePic2MobileWidth = 0; //为适配手机客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic2PadWidth = 0;    //为适配平板客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic3MobileWidth = 0; //为适配手机客户端，活动题图3的同比缩小宽度值
-    private $ActivityTitlePic3PadWidth = 0;    //为适配平板客户端，活动题图3的同比缩小宽度值
+    private $ActivityTitlePic3PadWidth = 0; //为适配平板客户端，活动题图3的同比缩小宽度值
+
+    /**
+     * @param mixed $OpenUrlReWrite
+     */
+    public function setOpenUrlReWrite($OpenUrlReWrite)
+    {
+        $this->OpenUrlReWrite = $OpenUrlReWrite;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenUrlReWrite()
+    {
+        return $this->OpenUrlReWrite;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1Thumb1Width
+     */
+    public function setProductTitlePic1Thumb1Width($ProductTitlePic1Thumb1Width)
+    {
+        $this->ProductTitlePic1Thumb1Width = $ProductTitlePic1Thumb1Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1Thumb1Width()
+    {
+        return $this->ProductTitlePic1Thumb1Width;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1Thumb2Width
+     */
+    public function setProductTitlePic1Thumb2Width($ProductTitlePic1Thumb2Width)
+    {
+        $this->ProductTitlePic1Thumb2Width = $ProductTitlePic1Thumb2Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1Thumb2Width()
+    {
+        return $this->ProductTitlePic1Thumb2Width;
+    }
+
+    /**
+     * @param mixed $ProductTitlePic1Thumb3Width
+     */
+    public function setProductTitlePic1Thumb3Width($ProductTitlePic1Thumb3Width)
+    {
+        $this->ProductTitlePic1Thumb3Width = $ProductTitlePic1Thumb3Width;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductTitlePic1Thumb3Width()
+    {
+        return $this->ProductTitlePic1Thumb3Width;
+    }
+
+
 
     /**
      * @param mixed $ProductTitlePic1MobileWidth
