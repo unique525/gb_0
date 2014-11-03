@@ -207,10 +207,10 @@
 </table>
 <div id="tabs-1">
     <div class="spe_line" style="line-height: 40px;text-align: left;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td style=" width: 60px;"><label for="f_SiteAdContentTitle">标题：</label></td>
-                <td style=" width: 600px;">
+                <td style=" width: 60px;"><label for="f_SiteAdContentTitle">&nbsp;标题：</label></td>
+                <td style="">
                     <input type="text" class="iColorPicker input_box" id="f_SiteAdContentTitle" name="f_SiteAdContentTitle" value="{SiteAdContentTitle}" style="width:480px;font-size:14px; background-color: #ffffff;" maxlength="200" />
                     <input type="hidden" id="f_SiteAdContentTitleColor" name="f_SiteAdContentTitleColor" value="{SiteAdContentTitleColor}"  />
                     <input type="hidden" id="f_SiteAdContentTitleBold" name="f_SiteAdContentTitleBold" value="{SiteAdContentTitleBold}"  />
@@ -220,7 +220,7 @@
         </table>
     </div>
     <div style=" margin-top:3px;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <table width="99%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td width="75%">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">

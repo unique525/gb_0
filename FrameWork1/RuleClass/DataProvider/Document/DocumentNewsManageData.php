@@ -678,6 +678,83 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Get List////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * 最新的列表数据集
+     * @param int $channelId 频道id
+     * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
+     * @param int $state 状态
+     * @return array|null 返回最新的列表数据集
+     */
+    public function GetNewList($channelId, $topCount, $state) {
+
+        $result = null;
+
+        if(!empty($topCount)){
+            $selectColumn = '
+            DocumentNewsId,
+            SiteId,
+            ChannelId,
+            DocumentNewsTitle,
+            DocumentNewsContent,
+            DocumentNewsSubTitle,
+            DocumentNewsCiteTitle,
+            DocumentNewsShortTitle,
+            DocumentNewsIntro,
+            CreateDate,
+            ManageUserId,
+            ManageUserName,
+            UserId,
+            UserName,
+            Author,
+            State,
+            DocumentNewsType,
+            DirectUrl,
+            PublishDate,
+            ShowDate,
+            SourceName,
+            DocumentNewsMainTag,
+            DocumentNewsTag,
+            Sort,
+            TitlePic,
+            TitlePic2,
+            TitlePic3,
+            DocumentNewsTitleColor,
+            DocumentNewsTitleBold,
+            OpenComment,
+            ShowHour,
+            ShowMinute,
+            ShowSecond,
+            UploadFiles,
+            IsHot,
+            RecLevel,
+            WaitPublish,
+            ShowPicMethod,
+            IsCopy,
+            IsAddToFullText,
+            ClosePosition,
+            Hit,
+            LockEdit,
+            LockEditDate,
+            LockEditAdminUserId';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
+                WHERE ChannelId=:ChannelId AND State=:State
+                ORDER BY Sort DESC, CreateDate DESC LIMIT " . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
 }
 
 ?>
