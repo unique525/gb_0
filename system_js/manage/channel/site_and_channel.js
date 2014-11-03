@@ -346,7 +346,9 @@ function _ChannelClick() {
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_VOTE) { //在线调查
 
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_CONTENT) { //自定义页面类
-
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=site_content&m=list&channel_id=' + window.G_SelectedChannelId;
+            addTab();
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_SITE_LINK) { //友情链接类
 
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_CUSTOM_FORM) { //活动表单类

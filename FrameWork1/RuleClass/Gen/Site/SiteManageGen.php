@@ -106,8 +106,8 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
 
             }
 
-            $fieldsOfChannel = $siteManageData->GetFields();
-            parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
+            $fields = $siteManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fields);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
