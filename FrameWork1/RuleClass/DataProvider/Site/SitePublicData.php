@@ -14,10 +14,10 @@ class SitePublicData extends BasePublicData {
      * @return string 子域名 
      */
     public function GetSubDomain($siteId) {
-        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'sitedata';
-        $cacheFile = 'site_subdomain.cache_' . $siteId . '.php';
+        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'site_data';
+        $cacheFile = 'site_sub_domain.cache_' . $siteId . '.php';
         if (parent::IsDataCached($cacheDir, $cacheFile)) {
-            $sql = "SELECT SubDomain FROM " . self::tableName . " WHERE SiteId=:SiteId";
+            $sql = "SELECT SubDomain FROM " . self::TableName_Site . " WHERE SiteId=:SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetString($sql, $dataProperty);
@@ -34,16 +34,42 @@ class SitePublicData extends BasePublicData {
      * @return int 站点id
      */
     public function GetSiteId($subDomain) {
-        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'sitedata';
-        $cacheFile = 'site_siteid.cache_' . $subDomain . '.php';
+        $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'site_data';
+        $cacheFile = 'site_site_id.cache_' . $subDomain . '.php';
         if (parent::IsDataCached($cacheDir, $cacheFile)) {
-            $sql = "SELECT SiteId FROM " . self::tableName . " WHERE SubDomain=:SubDomain";
+            $sql = "SELECT SiteId FROM " . self::TableName_Site . " WHERE SubDomain=:SubDomain;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SubDomain", $subDomain);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
             DataCache::Set($cacheDir, $cacheFile, $result);
         } else {
             $result = intval(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile));
+        }
+        return $result;
+    }
+
+    /**
+     * 返回一行数据
+     * @param int $siteId 站点id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($siteId){
+        $result = null;
+        if($siteId>0){
+            $sql = "SELECT
+                SiteId,
+                SiteName,
+                BrowserTitle,
+                BrowserDescription,
+                BrowserKeywords
+
+            FROM " . self::TableName_Site . "
+
+            WHERE SiteId=:SiteId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
         }
         return $result;
     }

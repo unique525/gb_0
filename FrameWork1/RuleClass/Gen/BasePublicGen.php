@@ -143,7 +143,7 @@ class BasePublicGen extends BaseGen {
 
     /**
      * 替换频道列表的内容
-     * @param string $channelTemplateContent 要处理的模板内容
+     * @param string $templateContent 要处理的模板内容
      * @param string $tagId 标签id
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
@@ -153,7 +153,7 @@ class BasePublicGen extends BaseGen {
      * @return mixed|string 内容模板
      */
     private function ReplaceTemplateOfChannelList(
-        $channelTemplateContent,
+        $templateContent,
         $tagId,
         $tagContent,
         $tagTopCount,
@@ -285,15 +285,15 @@ class BasePublicGen extends BaseGen {
                 //替换子循环里的<![CDATA[标记
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
                 $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }else{
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
             }
 
 
         }
 
-        return $channelTemplateContent;
+        return $templateContent;
     }
 
     /**

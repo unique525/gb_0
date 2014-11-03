@@ -10,13 +10,13 @@ class BaseGen
 {
     /**
      * 在模板替换前的统一替换
-     * @param string $tempContent 要处理的模板
+     * @param string $templateContent 要处理的模板
      */
-    public function ReplaceFirst(&$tempContent)
+    public function ReplaceFirst(&$templateContent)
     {
         ///////找出PreTemp标记/////////  <pre_temp id="2"></pre_temp>
         $tagName = "pre_temp";
-        $arrSimpleCustomTags = Template::GetAllCustomTag($tempContent, $tagName);
+        $arrSimpleCustomTags = Template::GetAllCustomTag($templateContent, $tagName);
         if (isset($arrSimpleCustomTags)) {
             if (count($arrSimpleCustomTags) > 1) {
                 $arrTempContents = $arrSimpleCustomTags[1];
@@ -26,13 +26,13 @@ class BaseGen
                     $channelTemplateId = Template::GetParamValue($docContent, "id", $tagName);
                     $channelTemplateManageData = new ChannelTemplateManageData();
                     $preTempContent = $channelTemplateManageData->GetChannelTemplateContent($channelTemplateId, false);
-                    $tempContent = Template::ReplaceCustomTag($tempContent, $channelTemplateId, $preTempContent, $tagName);
+                    $templateContent = Template::ReplaceCustomTag($templateContent, $channelTemplateId, $preTempContent, $tagName);
                 }
             }
         }
         ///////找出site_content标记/////////
         $tagName = "site_content";
-        $arrSimpleCustomTags = Template::GetAllCustomTag($tempContent, $tagName);
+        $arrSimpleCustomTags = Template::GetAllCustomTag($templateContent, $tagName);
         if (isset($arrSimpleCustomTags)) {
             if (count($arrSimpleCustomTags) > 1) {
                 $arrTempContents = $arrSimpleCustomTags[1];
@@ -42,14 +42,14 @@ class BaseGen
                     $siteContentId = Template::GetParamValue($docContent, "id", $tagName);
                     $siteContentManageData = new SiteContentManageData();
                     $siteContent = $siteContentManageData->GetSiteContentValue($siteContentId, false);
-                    $tempContent = Template::ReplaceCustomTag($tempContent, $siteContentId, $siteContent, $tagName);
+                    $templateContent = Template::ReplaceCustomTag($templateContent, $siteContentId, $siteContent, $tagName);
                 }
             }
         }
 
         ///////找出SiteAd标记/////////
         $keyName = "site_ad";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        $arr = Template::GetAllCustomTag($templateContent, $keyName);
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
@@ -59,14 +59,14 @@ class BaseGen
 
                     $adgen = new AdGen();
                     $pre_content = $adgen->GenFormatAd($siteAdId);
-                    $tempContent = Template::ReplaceSiteAd($tempContent, $siteAdId, $pre_content);
+                    $templateContent = Template::ReplaceSiteAd($templateContent, $siteAdId, $pre_content);
                 }
             }
         }
 
         //找出icms slider标记
         $keyName = "pic_slider";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        $arr = Template::GetAllCustomTag($templateContent, $keyName);
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
@@ -129,7 +129,7 @@ class BaseGen
                         if ($slider_i == 0) {
                             $slidercontent = '<script type="text/javascript" src="{funcdomain}/js/myfocus-1.2.0.full.js"></script>' . $slidercontent;
                         }
-                        $tempContent = Template::ReplaceIcmsSlider($tempContent, $docchannelid, $slidercontent);
+                        $templateContent = Template::ReplaceIcmsSlider($templateContent, $docchannelid, $slidercontent);
                         $slider_i++;
                     }
                 }
@@ -138,7 +138,7 @@ class BaseGen
 
         //channel_name
         $keyName = "channel_name";
-        $arr = Template::GetAllCustomTag($tempContent, $keyName);
+        $arr = Template::GetAllCustomTag($templateContent, $keyName);
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
@@ -148,7 +148,7 @@ class BaseGen
                         $docContent = "<$keyName$val</$keyName>";
                         $channelId = Template::GetParamValue($docContent, "id", $keyName);
                         $channelName = $channelManageData->GetChannelName($channelId, false);
-                        $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $channelName, $tagName);
+                        $templateContent = Template::ReplaceCustomTag($templateContent, $channelId, $channelName, $tagName);
                     }
                 }
             }
@@ -157,9 +157,9 @@ class BaseGen
 
     /**
      * 在模板替换后的统一替换
-     * @param string $tempContent 要处理的模板
+     * @param string $templateContent 要处理的模板
      */
-    public function ReplaceEnd(&$tempContent)
+    public function ReplaceEnd(&$templateContent)
     {
         $templateName = self::GetTemplateName();
         $selectTemplate = Template::Load("select_template.html", "common");
@@ -173,20 +173,20 @@ class BaseGen
         $manageDomainForRex = str_ireplace("https://", "", $manageDomainForRex);
         $manageDomainForRex = str_ireplace(".", "\.", $manageDomainForRex);
 
-        $tempContent = str_ireplace("{tab_index}", $tabIndex, $tempContent);
-        $tempContent = str_ireplace("{common_head}", $commonHead, $tempContent);
-        $tempContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $tempContent);
-        $tempContent = str_ireplace("{common_body_list}", $commonBodyList, $tempContent);
-        $tempContent = str_ireplace("{system_name}", SYSTEM_NAME, $tempContent);
-        $tempContent = str_ireplace("{relative_path}", RELATIVE_PATH, $tempContent);
-        $tempContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $tempContent);
-        $tempContent = str_ireplace("{manage_domain_rex}", $manageDomainForRex, $tempContent);
-        $tempContent = str_ireplace("{webapp_domain}", WEBAPP_DOMAIN, $tempContent);
-        $tempContent = str_ireplace("{template_name}", $templateName, $tempContent);
-        $tempContent = str_ireplace("{select_template}", $selectTemplate, $tempContent);
-        $tempContent = str_ireplace("{template_selected_$templateName}", "_selected", $tempContent);
-        $tempContent = str_ireplace("{template_selected_default}", "", $tempContent);
-        $tempContent = str_ireplace("{template_selected_deepblue}", "", $tempContent);
+        $templateContent = str_ireplace("{tab_index}", $tabIndex, $templateContent);
+        $templateContent = str_ireplace("{common_head}", $commonHead, $templateContent);
+        $templateContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $templateContent);
+        $templateContent = str_ireplace("{common_body_list}", $commonBodyList, $templateContent);
+        $templateContent = str_ireplace("{system_name}", SYSTEM_NAME, $templateContent);
+        $templateContent = str_ireplace("{relative_path}", RELATIVE_PATH, $templateContent);
+        $templateContent = str_ireplace("{manage_domain}", MANAGE_DOMAIN, $templateContent);
+        $templateContent = str_ireplace("{manage_domain_rex}", $manageDomainForRex, $templateContent);
+        $templateContent = str_ireplace("{webapp_domain}", WEBAPP_DOMAIN, $templateContent);
+        $templateContent = str_ireplace("{template_name}", $templateName, $templateContent);
+        $templateContent = str_ireplace("{select_template}", $selectTemplate, $templateContent);
+        $templateContent = str_ireplace("{template_selected_$templateName}", "_selected", $templateContent);
+        $templateContent = str_ireplace("{template_selected_default}", "", $templateContent);
+        $templateContent = str_ireplace("{template_selected_deepblue}", "", $templateContent);
     }
 
     /**
@@ -241,11 +241,28 @@ class BaseGen
     }
 
     /**
+     * 替换模板中的站点信息
+     * @param int $siteId 站点id
+     * @param string $templateContent 模板内容
+     */
+    protected function ReplaceSiteInfo($siteId, &$templateContent){
+        if($siteId>0){
+
+            $sitePublicData = new SitePublicData();
+            $arrSiteInfo = $sitePublicData->GetOne($siteId);
+
+            Template::ReplaceOne($templateContent,$arrSiteInfo);
+
+
+        }
+    }
+
+    /**
      * 替换模板中的配置标记
      * @param int $siteId 站点id
-     * @param string $tempContent 模板内容
+     * @param string $templateContent 模板内容
      */
-    protected function ReplaceSiteConfig($siteId, &$tempContent)
+    protected function ReplaceSiteConfig($siteId, &$templateContent)
     {
         $siteConfigData = new SiteConfigData($siteId);
         $uploadFileData = new UploadFileData();
@@ -263,28 +280,28 @@ class BaseGen
 
                 switch ($siteConfigType) {
                     case SiteConfigData::SITE_CONFIG_TYPE_STRING_200:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $templateContent);
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_STRING_2000:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringMidValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringMidValue, $templateContent);
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_TEXT:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $textValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $textValue, $templateContent);
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_INT:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $intValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $intValue, $templateContent);
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_NUMBER:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $numValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $numValue, $templateContent);
                         break;
                     case SiteConfigData::SITE_CONFIG_TYPE_UPLOAD_FILE_ID:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $uploadFileId, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $uploadFileId, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $uploadFileId, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $uploadFileId, $templateContent);
 
 
                         //echo "{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}";
@@ -296,75 +313,75 @@ class BaseGen
                          */
                         $withCache = TRUE;
                         $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}"
                             , $uploadFilePath
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileMobilePath = $uploadFileData->GetUploadFileMobilePath($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_mobile_path}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_mobile_path}"
                             , $uploadFileMobilePath
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFilePadPath = $uploadFileData->GetUploadFilePadPath($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_pad_path}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_pad_path}"
                             , $uploadFilePadPath
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileThumbPath1 = $uploadFileData->GetUploadFileThumbPath1($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_1}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_1}"
                             , $uploadFileThumbPath1
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileThumbPath2 = $uploadFileData->GetUploadFileThumbPath2($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_2}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_2}"
                             , $uploadFileThumbPath2
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileThumbPath3 = $uploadFileData->GetUploadFileThumbPath3($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_3}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_thumb_path_3}"
                             , $uploadFileThumbPath3
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileWatermarkPath1 = $uploadFileData->GetUploadFileWatermarkPath1($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_1}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_1}"
                             , $uploadFileWatermarkPath1
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileWatermarkPath2 = $uploadFileData->GetUploadFileWatermarkPath2($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_2}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_watermark_path_2}"
                             , $uploadFileWatermarkPath2
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileCompressPath1 = $uploadFileData->GetUploadFileCompressPath1($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_1}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_1}"
                             , $uploadFileCompressPath1
-                            , $tempContent
+                            , $templateContent
                         );
 
                         $uploadFileCompressPath2 = $uploadFileData->GetUploadFileCompressPath2($uploadFileId,$withCache);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_2}"
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_compress_path_2}"
                             , $uploadFileCompressPath2
-                            , $tempContent
+                            , $templateContent
                         );
 
                         break;
                     default:
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $tempContent);
-                        $tempContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $tempContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $stringNorValue, $templateContent);
+                        $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $stringNorValue, $templateContent);
                         break;
                 }
             }
         } else { //移除掉标记
             $patterns = '/\{cfg_(.*)\<\/}/imsU';
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
         }
     }
 
