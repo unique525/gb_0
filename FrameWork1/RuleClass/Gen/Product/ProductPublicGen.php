@@ -160,7 +160,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"];
             }
         }
-        $arrChildProductCommentList = $productCommentPublicData->GetListOfStrParentIds($strParentIds);
+        $arrChildProductCommentList = $productCommentPublicData->GetListOfChild($strParentIds);
 
         if(count($arrProductCommentList) > 0){
             Template::ReplaceList($templateContent,$arrProductCommentList,$productCommentListTagId,"icms",$arrChildProductCommentList,"ProductCommentId","ParentId");
