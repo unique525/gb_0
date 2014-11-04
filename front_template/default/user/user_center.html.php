@@ -23,19 +23,19 @@
         $(function () {
 
 
-            $(".right").click(function () {
-                var idvalue = $(this).attr("idvalue");
-                var state = $("#" + idvalue + "_child").css("display");
-                if (state == "none") {
-                    $(".right_child").css("display", "none");
-                    $(".right_img").attr("src", "/images/icon_jia.png");
-                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
-                    $("#" + idvalue + "_child").css("display", "inline");
-                } else {
-                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
-                    $("#" + idvalue + "_child").css("display", "none");
-                }
-            });
+//            $(".right").click(function () {
+//                var idvalue = $(this).attr("idvalue");
+//                var state = $("#" + idvalue + "_child").css("display");
+//                if (state == "none") {
+//                    $(".right_child").css("display", "none");
+//                    $(".right_img").attr("src", "/images/icon_jia.png");
+//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
+//                    $("#" + idvalue + "_child").css("display", "inline");
+//                } else {
+//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
+//                    $("#" + idvalue + "_child").css("display", "none");
+//                }
+//            });
         });
     </script>
 </head>

@@ -74,7 +74,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncCreate()
     {
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
         $productId = Control::GetRequest("product_id", 0);
         $buyCount = Control::GetRequest("buy_count", 0);
         $productPriceId = Control::GetRequest("product_price_id", 0);
@@ -103,7 +103,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
-        $siteId =Control::GetRequest("site_id",1);
+        $siteId =parent::GetSiteIdByDomain();
         $tagId = "user_car_list";
         if ($userId > 0) {
             parent::ReplaceFirst($templateContent);
@@ -190,7 +190,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncGetCount()
     {
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
 
         if ($userId > 0 && $siteId > 0) {
             $userCarPublicData = new UserCarPublicData();
@@ -208,7 +208,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncBatchRemoveBin()
     {
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
 
         if ($userId > 0 && $siteId > 0) {
             $arrUserCarIdString = Control::PostRequest("arr_user_car_id", "");

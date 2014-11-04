@@ -122,7 +122,7 @@ class UserInfoPublicData extends BasePublicData
      *  @param string $bankAccount
      * @return int
      */
-    public function ModifyInfo($userId, $nickName, $realName, $email, $qq, $comeFrom, $birthday, $idCard, $address, $postCode, $mobile,
+    public function Modify($userId, $nickName, $realName, $email, $qq, $comeFrom, $birthday, $idCard, $address, $postCode, $mobile,
                                $tel, $province, $city,$sign,$gender,$bankName, $bankOpenAddress, $bankUserName, $bankAccount) {
         $result = -1;
         if($userId > 0){

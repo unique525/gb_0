@@ -28,14 +28,15 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         return $result;
     }
 
-    public function GenModify(){
+    private function GenModify(){
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = parent::GetSiteIdByDomain();
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "/user/user_info_deal.html";
+            $templateFileUrl = "/user/user_info_modify.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
 
             $userInfoPublicData = new UserInfoPublicData();
 
@@ -52,7 +53,26 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
             if(!empty($_POST)){
-                $httpPostData = Format::FormatHtmlTagInPost($_POST);
+                $nickName = Control::PostRequest("nick_name","");
+                $realName = Control::PostRequest("real_name","");
+                $email = Control::PostRequest("email","");
+                $qq = Control::PostRequest("qq","");
+                $comeFrom = Control::PostRequest("come_from","");
+                $birthday = Control::PostRequest("birthday","0000-00-00");
+                $idCard = Control::PostRequest("id_card","");
+                $address = Control::PostRequest("address","");
+                $postCode = Control::PostRequest("post_code","");
+                $mobile = Control::PostRequest("mobile","");
+                $tel = Control::PostRequest("tel","");
+                $province = Control::PostRequest("province","");
+                $city = Control::PostRequest("city","");
+                $sign = Control::PostRequest("sign","");
+                $gender = Control::PostRequest("gender","");
+                $bankName = Control::PostRequest("bank_name","");
+                $bankOpenAddress = Control::PostRequest("bank_open_address","");
+                $bankUserName = Control::PostRequest("bank_user_name","");
+                $bankAccount = Control::PostRequest("bank_account","");
+
 
                 $result = $userInfoPublicData->Modify($userId);
 
@@ -70,7 +90,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
                     //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
                 }
             }
-
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             Control::GoUrl("");

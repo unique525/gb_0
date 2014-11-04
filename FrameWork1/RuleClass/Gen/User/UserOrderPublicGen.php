@@ -42,7 +42,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
     private function GenList(){
         $userId = Control::GetUserId();
-        $siteId = intval(Control::GetRequest("site_id",0));
+        $siteId = parent::GetSiteIdByDomain();
 
         if($userId > 0 && $siteId > 0){
             $templateFileUrl = "user/user_order_list.html";
@@ -50,6 +50,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
+            parent::ReplaceSiteInfo($siteId, $templateContent);
 
             $pageIndex = Control::GetRequest("p",1);
             $pageSize = Control::GetRequest("ps",30);
@@ -80,14 +81,15 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenDetail(){
         $userId =Control::GetUserId();
         if($userId > 0){
+            $siteId = parent::GetSiteIdByDomain();
             $userOrderId = Control::GetRequest("user_order_id",0);
-            $siteId = Control::GetRequest("site_id",0);
             if($userOrderId > 0 && $siteId > 0){
                 $templateFileUrl = "user/user_order_detail.html";
                 $templateName = "default";
                 $templatePath = "front_template";
                 $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
                 parent::ReplaceFirst($templateContent);
+                parent::ReplaceSiteInfo($siteId, $templateContent);
 
                 $userOrderPublicData = new UserOrderPublicData();
                 $userOrderProductPublicData = new UserOrderProductPublicData();
