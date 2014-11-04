@@ -187,6 +187,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $informationManageGen = new InformationManageGen();
                     $result = $informationManageGen->Gen();
                     break;
+                case "ftp":
+                    $ftpManageGen = new FtpManageGen();
+                    $result = $ftpManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
