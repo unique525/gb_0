@@ -397,6 +397,15 @@ class BasePublicGen extends BaseGen {
             case "SaleCount":
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
                 break;
+            case "AllChild":
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $channelPublicData = new ChannelPublicData();
+                    $ChannelRow = $channelPublicData->GetOne($channelId);
+                    $ChildChannelId = $ChannelRow['ChildrenChannelId'];
+                    $arrProductList = $productPublicData->GetListByChannelId($ChildChannelId, $tagOrder, $tagTopCount);
+                }
+                break;
             default :
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {

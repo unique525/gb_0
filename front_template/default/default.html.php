@@ -187,46 +187,22 @@
         <div class="left middle green_top">
             <div class="sales">
                 <ul>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
+                    <icms id="product_27" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="194" height="150" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">￥{f_SalePrice}<span class="old_price">￥{f_MarketPrice}</span></a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
                 </ul>
             </div>
         </div>
@@ -270,46 +246,22 @@
         <div class="left middle red_top">
             <div class="sales">
                 <ul>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
+                    <icms id="product_28" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="194" height="150" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">￥{f_SalePrice}<span class="old_price">￥{f_MarketPrice}</span></a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
                 </ul>
             </div>
         </div>
