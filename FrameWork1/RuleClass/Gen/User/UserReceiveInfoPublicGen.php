@@ -80,11 +80,13 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenList(){
         $userId = Control::GetUserId();
         if($userId > 0){
+            $siteId = parent::GetSiteIdByDomain();
             $templateFileUrl = "user/user_receive_info_list.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
+            parent::ReplaceSiteInfo($siteId, $templateContent);
 
             $tagId = "user_receive_info_list";
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();

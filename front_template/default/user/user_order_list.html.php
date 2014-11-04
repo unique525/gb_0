@@ -23,19 +23,19 @@
         $(function () {
 
 
-            $(".right").click(function () {
-                var idvalue = $(this).attr("idvalue");
-                var state = $("#" + idvalue + "_child").css("display");
-                if (state == "none") {
-                    $(".right_child").css("display", "none");
-                    $(".right_img").attr("src", "/images/icon_jia.png");
-                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
-                    $("#" + idvalue + "_child").css("display", "inline");
-                } else {
-                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
-                    $("#" + idvalue + "_child").css("display", "none");
-                }
-            });
+//            $(".right").click(function () {
+//                var idvalue = $(this).attr("idvalue");
+//                var state = $("#" + idvalue + "_child").css("display");
+//                if (state == "none") {
+//                    $(".right_child").css("display", "none");
+//                    $(".right_img").attr("src", "/images/icon_jia.png");
+//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
+//                    $("#" + idvalue + "_child").css("display", "inline");
+//                } else {
+//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
+//                    $("#" + idvalue + "_child").css("display", "none");
+//                }
+//            });
         });
     </script>
 </head>
@@ -89,7 +89,7 @@
                                 <span>{f_SendPrice}</span>
                                 <span>{f_CreateDate}</span>
                                 <span>{f_State}</span>
-                                <span><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}&site_id={f_SiteId}" target="_blank">订单详情</a></span>
+                                <span><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></span>
                             </div>
                             ]]></item>
                     </icms>

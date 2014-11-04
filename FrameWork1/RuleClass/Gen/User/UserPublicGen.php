@@ -83,7 +83,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncLogin(){
         $userAccount = Control::GetRequest("user_account", "");
         $userPass = Control::GetRequest("user_pass", "");
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = parent::GetSiteIdByDomain();
 
         if(!empty($userAccount) && !empty($userPass) && $siteId > 0){
             $userPublicData = new UserPublicData();
@@ -203,7 +203,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function AsyncGetOne(){
         $userId = intval(Control::GetUserId());
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = parent::GetSiteIdByDomain();
         if($userId > 0 && $siteId > 0){
             $userInfoPublicData = new UserInfoPublicData();
             $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
@@ -228,13 +228,15 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenHomePage(){
         $userId =Control::GetUserId();
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = parent::GetSiteIdByDomain();
 
         if($userId > 0 && $siteId > 0){
             $templateFileUrl = "user/user_center.html";
             $templateName = "default";
             $templatePath = "front_template";
-            $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            parent::ReplaceFirst($templateContent);
 
             $userAccount = Control::GetUserName();
 
@@ -244,7 +246,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             //--------替换会员信息--------begin
             $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
-            Template::ReplaceOne($tempContent,$arrUserOne);
+            Template::ReplaceOne($templateContent,$arrUserOne);
             //------------------------------end
 
             //-----------替换最近收藏----------begin
@@ -254,9 +256,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $allCount = 0;
             $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
             if(count($arrUserFavoriteList) > 0){
-                Template::ReplaceList($tempContent,$arrUserFavoriteList,$tagId);
+                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
             }else{
-                $tempContent = Template::ReplaceCustomTag($tempContent, $tagId,Language::Load("user",42));
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId,Language::Load("user",42));
             }
             //------------------------------end
 
@@ -267,11 +269,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $userOrderOfUncommentCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfUncomment);
 
 
-            $tempContent = str_ireplace("{UserAccount}", $userAccount, $tempContent);
-            $tempContent = str_ireplace("{UserOrderOfNewCount}", $userOrderOfNewCount, $tempContent);
-            $tempContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $tempContent);
-            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            return $tempContent;
+            $templateContent = str_ireplace("{UserAccount}", $userAccount, $templateContent);
+            $templateContent = str_ireplace("{UserOrderOfNewCount}", $userOrderOfNewCount, $templateContent);
+            $templateContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
         }else{
             Control::GoUrl("/default.php?mod=user&a=login");
             return null;
