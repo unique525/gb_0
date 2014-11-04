@@ -1,3 +1,22 @@
+
+
+/**
+ * 发布频道 返回值 未操作
+ */
+window.PUBLISH_CHANNEL_RESULT_NO_ACTION = -130101;
+/**
+ * 发布频道 返回值 频道id小于0
+ */
+window.PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR = -130102;
+/**
+ * 发布频道 返回值 操作完成，结果存储于结果数组中
+ */
+window.PUBLISH_CHANNEL_RESULT_FINISHED = 130101;
+
+
+
+
+
 $(function () {
 
     var nowTemplateName = "default";
@@ -16,9 +35,7 @@ $(function () {
         addTab();
     });
 
-
     $("#img_go_site_url").attr("src", "/system_template/" + nowTemplateName + "/images/manage/go.jpg");
-
 
     var divNowSelectedSite = $("#div_now_selected_site");
     var divSelectSiteList = $("#div_select_site_list");
@@ -115,7 +132,7 @@ $(function () {
     var btnRightPubChannel = $("#btn_right_pub_channel");
     btnRightPubChannel.click(function () {
         $("#dialog_box").dialog({
-            height: 140,
+            height: 540,
             modal: true
         });
         var dialogContent = $("#dialog_content");
@@ -124,13 +141,12 @@ $(function () {
         $.post("/default.php?secu=manage&mod=channel&m=publish&channel_id=" + window.G_SelectedChannelId + "", {
             resultbox: $(this).html()
         }, function(result) {
+
             dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
-            if (parseInt(result) > 0) {
-
-            }else if (parseInt(result) == -2) {
-
+            if (parseInt(result) == window.PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR) {
+                dialogContent.html("发布失败，频道id小于0");
             }else {
-
+                dialogContent.html("发布完成<br />"+result);
             }
         });
 
