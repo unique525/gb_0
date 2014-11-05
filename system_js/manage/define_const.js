@@ -16,6 +16,7 @@ window.G_TabUrl = "";
 window.G_TabTitle = "";
 window.G_TabCounter = 1;
 window.G_TabIndex = 1;
+window.G_RefererTabId = "tabs-1"; //来源tab index
 window.G_TemplateName = "";
 window.G_PageSize = 15;
 
