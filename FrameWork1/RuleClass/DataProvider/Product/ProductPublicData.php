@@ -261,7 +261,7 @@ class ProductPublicData extends BasePublicData {
                 $order = " ORDER BY t.SaleCount DESC";
                 break;
         }
-        $sql = "SELECT *"
+        $sql = "SELECT t.*,t1.*"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
             . " WHERE t.State<100"
