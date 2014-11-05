@@ -219,7 +219,7 @@
 <div class="favorcombcont" style="background:url(images/hot_03.gif) no-repeat top left;">
     <div style=" font-size:18px;font:400 20px ;padding-left:25px; line-height:60px; font-family: '微软雅黑';"> 特别推荐</div><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <icms id="product_rec_level" type="product_list" where="RecLevel" top="3">
+            <icms id="product_6" type="product_list" where="RecLevel" top="3">
                 <item>
                     <![CDATA[
                     <td>

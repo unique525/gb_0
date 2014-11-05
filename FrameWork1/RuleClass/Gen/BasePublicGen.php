@@ -392,7 +392,10 @@ class BasePublicGen extends BaseGen {
                 }
                 break;
             case "RecLevel":
-                $arrProductList = $productPublicData->GetListByRecLevel($tagOrder, $tagTopCount);
+                $recLevel = intval(str_ireplace("product_", "", $tagId));
+                if ($recLevel > 0) {
+                    $arrProductList = $arrProductList = $productPublicData->GetListByRecLevel($recLevel, $tagOrder, $tagTopCount);
+                }
                 break;
             case "SaleCount":
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);

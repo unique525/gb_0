@@ -216,11 +216,12 @@ class ProductPublicData extends BasePublicData {
 
     /**
      * 根据推荐级别获取产品记录
+     * @param int $recLevel 推荐级别
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetListByRecLevel($order = "", $topCount = null)
+    public function GetListByRecLevel($recLevel, $order = "", $topCount = null)
     {
         $result = null;
         if ($topCount != null)
@@ -234,10 +235,11 @@ class ProductPublicData extends BasePublicData {
         $sql = "SELECT *"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-            . " WHERE t.State<100"
+            . " WHERE t.RecLevel=:RecLevel AND t.State<100"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
+        $dataProperty->AddField("RecLevel", $recLevel);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
