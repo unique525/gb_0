@@ -1,13 +1,12 @@
 <?php
 
 /**
- * 后台管理 频道 生成类
+ * 后台管理 图片轮换 生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_Channel
+ * @package iCMS_FrameWork1_RuleClass_Gen_PicSlider
  * @author zhangchi
  */
-class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
-
+class PicSliderManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -24,18 +23,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 break;
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
-                break;
-            case "delete":
-                $result = self::GenDelete();
-                break;
-            case "publish":
-                $result = self::Publish();
-                break;
-            case "list_for_manage_left":
-                $result = self::GenListForManageLeft();
-                break;
-            case "property":
-                $result = self::GenProperty();
                 break;
         }
 
@@ -54,52 +41,36 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserId = Control::GetManageUserId();
 
         if ($parentId >0 && $manageUserId > 0) {
-            $tempContent = Template::Load("channel/channel_deal.html", "common");
+            $tempContent = Template::Load("pic_slider/pic_slider_deal.html", "common");
             parent::ReplaceFirst($tempContent);
-            $channelManageData = new ChannelManageData();
-            $parentName = $channelManageData->GetChannelName($parentId, false);
-            $siteId = $channelManageData->GetSiteId($parentId, false);
-            $rank = $channelManageData->GetRank($parentId, false);
-            if ($rank < 0) {
-                $rank = 0;
-            }
-            $rank++;
+            $picSliderManageData = new PicSliderManageData();
+
+
             if (!empty($_POST)) {
 
                 $httpPostData = $_POST;
-                $publishPath = Control::PostRequest("f_PublishPath", "");
-                $hasRepeatPublishPath = false;
-                if (strlen($publishPath) > 0) {
-                    //判断PublishPath是否已经有重复的了
-                    $channelId = 0;
-                    $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $channelId);
-                    if ($hasRepeatPublishPath) {
-                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('channel', 2)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
-                        //Control::ShowMessage(Language::Load('document', 9));
-                    }
-                }
 
-                if (!$hasRepeatPublishPath) {
 
-                    $channelId = $channelManageData->Create($httpPostData);
+
+                    $picSliderId = $picSliderManageData->Create($httpPostData);
                     //加入操作日志
-                    $operateContent = 'Create Channel,POST FORM:'.implode('|',$_POST).';\r\nResult:channelId:'.$channelId;
+                    $operateContent = 'Create PicSlider,POST FORM:'.implode('|',$_POST).';\r\nResult:PicSliderId:'.$picSliderId;
                     self::CreateManageUserLog($operateContent);
 
-                    if ($channelId > 0) {
+                    if ($picSliderId > 0) {
                         if( !empty($_FILES)){
                             //title pic1
-                            $fileElementName = "file_title_pic_1";
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1;
-                            $tableId = $channelId;
-                            $uploadFile1 = new UploadFile();
-                            $uploadFileId1 = 0;
+                            $fileElementName = "file_upload_file_1";
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PIC_SLIDER;
+                            $tableId = $picSliderId;
+                            $uploadFile = new UploadFile();
+                            $uploadFileId = 0;
                             $titlePic1Result = self::Upload(
                                 $fileElementName,
                                 $tableType,
                                 $tableId,
-                                $uploadFile1,
-                                $uploadFileId1
+                                $uploadFile,
+                                $uploadFileId
                             );
 
                             if (intval($titlePic1Result) <=0){
@@ -108,83 +79,16 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
                             }
 
-                            //title pic2
-                            $fileElementName = "file_title_pic_2";
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_2;
-                            $uploadFileId2 = 0;
-                            $uploadFile2 = new UploadFile();
-                            $titlePic2Result = self::Upload(
-                                $fileElementName,
-                                $tableType,
-                                $tableId,
-                                $uploadFile2,
-                                $uploadFileId2
-                            );
-                            if (intval($titlePic2Result) <=0){
-                                //上传出错或没有选择文件上传
-                            }else{
-
-                            }
-                            //title pic3
-                            $fileElementName = "file_title_pic_3";
-
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_3;
-                            $uploadFileId3 = 0;
-
-                            $uploadFile3 = new UploadFile();
-
-                            $titlePic3Result = self::Upload(
-                                $fileElementName,
-                                $tableType,
-                                $tableId,
-                                $uploadFile3,
-                                $uploadFileId3
-                            );
-                            if (intval($titlePic3Result) <=0){
-                                //上传出错或没有选择文件上传
-                            }else{
-
+                            if($uploadFileId>0){
+                                $picSliderManageData->ModifyUploadFileId($picSliderId, $uploadFileId);
                             }
 
-                            if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
-                                $channelManageData->ModifyTitlePic($channelId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
-                            }
-
-                            $siteConfigData = new SiteConfigData($siteId);
-                            if($uploadFileId1>0){
-                                $channelTitlePic1MobileWidth = $siteConfigData->ChannelTitlePic1MobileWidth;
-                                if($channelTitlePic1MobileWidth<=0){
-                                    $channelTitlePic1MobileWidth  = 320; //默认320宽
-                                }
-                                self::GenUploadFileMobile($uploadFileId1,$channelTitlePic1MobileWidth);
-
-                                $channelTitlePic1PadWidth = $siteConfigData->ChannelTitlePic1PadWidth;
-                                if($channelTitlePic1PadWidth<=0){
-                                    $channelTitlePic1PadWidth  = 1024; //默认1024宽
-                                }
-                                self::GenUploadFilePad($uploadFileId1,$channelTitlePic1PadWidth);
-                            }
-
-
-                        }
-
-                        //更新子节点id
-                        $channelManageData->UpdateParentChildrenChannelId($channelId);
-
-
-                        //授权给创建人
-                        if ($manageUserId > 1) { //只有非ADMIN的要授权
-                            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-                            $manageUserAuthorityManageData->CreateForChannel($siteId, $channelId, $manageUserId);
                         }
 
                         //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/channel_data');
+                        DataCache::RemoveDir(CACHE_PATH . '/pic_slider_data');
 
                         //javascript 处理
-                        //重新加载左边导航树
-                        $javascriptLoadChannel = "parent._LoadChannelListForManage(parent.G_NowSiteId);";
-                        Control::RunJavascript($javascriptLoadChannel);
 
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
@@ -194,27 +98,18 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                         }
                     } else {
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('channel', 3)); //新增失败！
-                        //Control::ShowMessage(Language::Load('document', 2));
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('pic_slider', 2)); //新增失败！
                     }
-                }
+
             }
 
-            $tempContent = str_ireplace("{CreateDate}", strval(date('Y-m-d', time())), $tempContent);
-            $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
-            $tempContent = str_ireplace("{ParentId}", strval($parentId), $tempContent);
-            $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
-            $tempContent = str_ireplace("{Rank}", strval($rank), $tempContent);
-
-            $fields = $channelManageData->GetFields();
+            $fields = $picSliderManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fields);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
 
             parent::ReplaceEnd($tempContent);
-
-
 
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
 
@@ -408,110 +303,4 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
         return $tempContent;
     }
-
-    private function GenProperty(){
-        $tempContent = Template::Load("channel/channel_property.html", "common");
-        $channelId = Control::GetRequest("channel_id", 0);
-        $tempContent = str_ireplace("{ChannelId}",$channelId, $tempContent);
-
-        return $tempContent;
-    }
-
-    /**
-     * 物理删除
-     * @return string 模板内容页面
-     */
-    private function GenDelete(){
-        $tempContent = "";
-
-        return $tempContent;
-    }
-
-    /**
-     * 发布频道
-     * @return int 返回发布结果
-     */
-    private function Publish(){
-        $result = -1;
-        $channelId = Control::GetRequest("channel_id", -1);
-        if($channelId>0){
-            $publishQueueManageData = new PublishQueueManageData();
-            $result = parent::PublishChannel($channelId, $publishQueueManageData);
-            if($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED)){
-                $result = '';
-                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
-
-                    $publishResult = "";
-
-                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
-                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
-                    ){
-                        $publishResult = "Ok";
-                    }
-
-
-                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
-                        .'<br />'
-                    ;
-                }
-                //print_r($publishQueueManageData->Queue);
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * 频道树，后台主界面用
-     * @return string 返回zTree的JSON数据结构
-     */
-    private function GenListForManageLeft() {
-        $siteId = Control::GetRequest("site_id", 0);
-        $adminUserId = Control::GetManageUserId();
-        if ($siteId > 0 && $adminUserId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
-            $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $adminUserId . '.php';
-            if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
-                $channelManageData = new ChannelManageData();
-                $arrList = $channelManageData->GetListForManageLeft($siteId, $adminUserId);
-                $sb = '[';
-                for ($i = 0; $i < count($arrList); $i++) {
-                    $channelName = Format::FormatQuote($arrList[$i]['ChannelName']);
-                    $channelId = $arrList[$i]['ChannelId'];
-                    $channelType = intval($arrList[$i]['ChannelType']);
-                    $rank = intval($arrList[$i]['Rank']);
-                    $parentId = intval($arrList[$i]['ParentId']);
-                    $childCounts = intval($arrList[$i]['ChildCount']);
-                    $isParent = "";
-                    if ($childCounts > 0) {
-                        $isParent = ", isParent:true";
-                    }
-
-                    $iconSkin = ',iconSkin:"diy' . $channelType . '"';
-
-                    if ($rank == 0) {
-                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "channelType":"' . $channelType . '", open:true ' . $isParent . ' ' . $iconSkin . '}';
-                    } else {
-                        $sb = $sb . '{ id:' . $channelId . ', pId:' . $parentId . ', name:"' . $channelName . '", "channelType":"' . $channelType . '" ' . $isParent . ' ' . $iconSkin . '}';
-                    }
-
-                    if ($i < count($arrList) - 1) {
-                        $sb = $sb . ',';
-                    }
-                }
-                $sb = $sb . ']';
-                $result = '' . $sb . '';
-
-                DataCache::Set($cacheDir, $cacheFile, $result);
-            } else {
-                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-            }
-            return $result;
-        }else{
-            return null;
-        }
-    }
-
-
-}
-
-?>
+} 

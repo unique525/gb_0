@@ -227,6 +227,12 @@ window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC = 208;
  */
 window.UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC = 300;
 
+
+/**
+ * 图片轮换上传的图片
+ */
+window.UPLOAD_TABLE_TYPE_PIC_SLIDER = 320;
+
 /**
  * 格式化上传文件的返回结果信息
  * @param {int} resultMessage 错误编码

@@ -23,7 +23,7 @@
         .star li.on{background-position:0 -28px;}
     </style>
     <script type="text/javascript">
-        var select_product_price_id = 0;
+        var selectProductPriceId = 0;
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -38,7 +38,7 @@
             spanPropon.click(function(){
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
-                select_product_price_id = $(this).attr("idvalue");
+                selectProductPriceId = $(this).attr("idvalue");
                 $("#productPrice").text(formatPrice(productPriceValue));
                 //产品价格
                 var productSalePriceValue=$("#productSalePrice").text();
@@ -173,9 +173,9 @@
 
             $("#add_car").click(function(){
                 var buyCount = $("#productNum").val();
-                var activity_product_id = 0;
-                if(select_product_price_id  > 0){
-                    addUserCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                var activityProductId = 0;
+                if(selectProductPriceId  > 0){
+                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId);
                 }
             });
 

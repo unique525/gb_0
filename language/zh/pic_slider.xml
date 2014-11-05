@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <module id="1"><content><![CDATA[首页]]></content></module>
+    <module id="2"><content><![CDATA[新增失败]]></content></module>
+    <module id="3"><content><![CDATA[您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！]]></content></module>
+    <module id="4"><content><![CDATA[<div style="padding:5px;">此频道目前还没有文档或数据，或者没有查询到相关文档或数据</div>]]></content></module>
+    <module id="5"><content><![CDATA[编辑失败]]></content></module>
+</root>
