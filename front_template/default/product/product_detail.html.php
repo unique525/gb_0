@@ -322,29 +322,28 @@
 <div class="box194 fl">
     <!--小类列表菜单-->
     <div class="listsum" id="categoryListSum">
-        <div class="tit">蔬菜水果</div>
-        <div class="listsum-1" >
-            <dl class="listhover">
-                <dt><a href="javascript:;" class="on" hidefocus="true">蔬菜</a></dt>
-                <dd><ul>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a></li>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=110" class="" title="叶菜类">叶菜类</a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </dd>
-            </dl>
-        </div>
-        <div class="listsum-1" >
-            <dl class="">
-                <dt><a class="" href="#" hidefocus="true">水果</a></dt>
-                <dd><ul>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a></li>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=112" class="" title="国产水果">国产水果</a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </dd>
-            </dl>
-        </div>
+        <div class="tit">{ChannelName}</div>
+        <icms id="channel_{ChannelId}" type="channel_list" where="parent">
+            <item>
+                <![CDATA[
+                <div class="listsum-1">
+                    <dl title="{f_ChannelId}">
+                        <dt><a href="javascript:;"  hidefocus="true">{f_ChannelName}</a></dt>
+                        <dd><ul>
+                                {child}
+                            </ul>
+                            <div class="clear"></div>
+                        </dd>
+                    </dl>
+                </div>
+                ]]>
+            </item>
+            <child>
+                <![CDATA[
+                <li><a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                ]]>
+            </child>
+        </icms>
     </div>
     <div class="blank10">        </div>
     <div class="similar_hot">
