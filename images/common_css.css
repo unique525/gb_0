@@ -324,7 +324,7 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 #leftmenu>ul>li>ul>li ul>li>a{color:#595959;font-weight:bold;font-size:12px;}
 #leftmenu>ul>li>ul>li ul>li>span{padding-left:0px;margin-left:10px;color:#595959;font-weight:bold;font-size:12px;}
 #leftmenu>ul>li>ul>li ul>dd{width:230px;margin:0px auto;padding:5px;line-height:22px;font-size:12px;color:#8A8A8A;font-family:"Microsoft YaHei";}
-#leftmenu>ul>li>ul>li ul>dd>a{font-size:12px;color:#8A8A8A;font-family:"Microsoft YaHei";}
+#leftmenu>ul>li>ul>li ul>dd>a{font-size:12px;color:#8A8A8A;font-family:"Microsoft YaHei"; display: inline-block; border-right:1px solid #8a8a8a; padding:0 8px; height:12px; line-height: 12px;}
 #leftmenu>ul>li>ul>li ul>dd :hover{color:#56CC0E;font-family:"Microsoft YaHei";}
 #leftmenu>ul>li>ul>li ul>dd>span{padding:0px 8px;}
 
