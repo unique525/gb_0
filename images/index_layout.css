@@ -34,9 +34,9 @@
 .sale_goods{ padding:0 16px 21px; color:#8b8a8a; background:#e9e9e9;}
 .sale_goods .time{ line-height:42px; text-align:center;}
 .sale_goods .time span{ color:#ff3c00; font-size:18px; font-family:"微软雅黑", "黑体";}
-.sale_goods .name a{ display:block; line-height:32px; padding:7px 0; color:#8b8a8a;}
+.sale_goods .name a{ display:block; line-height:18px; padding:7px 0; color:#8b8a8a;}
 .price a{ display:block; font-size:16px; color:#ff3c00; font-family:"微软雅黑", "黑体"; line-height:28px;}
-.price a .old_price{ color:#8b8a8a; text-decoration:line-through;}
+.price a .old_price{ float:right; color:#8b8a8a; text-decoration:line-through;}
 
 .sales{ padding-left:18px;}
 .middle .title2{ width:241px; }
@@ -46,7 +46,7 @@
 .middle .sales .good li .name{ line-height:18px; padding:14px 0 6px;}
 .middle .sales .good li .new_tag{ width:64px; height:64px; position:absolute; background:url(icons.png) no-repeat 0 -81px; text-indent:-99999999px; top:15px; right:15px;}
 .right_bar .sale_goods{ padding:0 23px; background:none;}
-.right_bar .sale_goods .name a{ padding:0px;}
+.right_bar .sale_goods .name a{ line-height:18px; padding:7px 0;}
 
 .part_3{ border-bottom:1px solid #e9e9e9; padding-bottom:20px;}
 .title3{ font-size:26px; font-family:"微软雅黑", "黑体"; text-align:center; color:#fff; line-height:47px;}
@@ -55,13 +55,14 @@
 .red_bg{ background:#ff3c00;}
 .red_top{ border-top:2px solid #ff3c00;}
 .box_1{ padding-bottom:25px;}
-.nav{ background:#e9e9e9; padding:20px 0 0; height:280px;} 
+.nav{ background:#e9e9e9; padding:20px 0 0; height:300px;}
 .nav li{ float:left; width:80px; padding-left:17px; line-height:28px;}
 .nav li a{ font-weight:bold; color:#7e7e7e; font-size:14px;}
+.nav .sec_title{ font-size: 16px; font-weight: bold; color: #666;}
 .part_3 .sales li{ display:block; float:left; width:340px; padding:20px 10px 10px;}
-.part_3 .sales li .left{ width:194px;}
+.part_3 .sales li .left{width:160px; padding:0 10px;}
 .part_3 .sales li .right{ width:145px; padding-top:15px;}
-.part_3 .sales li .name{ line-height:18px; height:85px;}
+.part_3 .sales li .name{  line-height:18px; height:100px;}
 .right_ad{ position:relative; width:241px;}
 .tuijian{ position:absolute; height:66px; padding:15px 50px; width:141px; top:253px; left:0px; text-align:center; background:url(icons.png) repeat-x 0 -148px;}
 .tuijian h1{ font-family:"微软雅黑", "黑体"; font-size:21px; border-bottom:1px solid #000; padding-bottom:8px; font-weight:bold;}
