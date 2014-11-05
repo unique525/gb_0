@@ -59,9 +59,9 @@
 .nav li{ float:left; width:80px; padding-left:17px; line-height:28px;}
 .nav li a{ font-weight:bold; color:#7e7e7e; font-size:14px;}
 .part_3 .sales li{ display:block; float:left; width:340px; padding:20px 10px 10px;}
-.part_3 .sales li .left{ width:194px;}
+.part_3 .sales li .left{width:160px; padding:0 10px;}
 .part_3 .sales li .right{ width:145px; padding-top:15px;}
-.part_3 .sales li .name{ line-height:18px; height:85px;}
+.part_3 .sales li .name{  line-height:18px; height:100px;}
 .right_ad{ position:relative; width:241px;}
 .tuijian{ position:absolute; height:66px; padding:15px 50px; width:141px; top:253px; left:0px; text-align:center; background:url(icons.png) repeat-x 0 -148px;}
 .tuijian h1{ font-family:"微软雅黑", "黑体"; font-size:21px; border-bottom:1px solid #000; padding-bottom:8px; font-weight:bold;}
