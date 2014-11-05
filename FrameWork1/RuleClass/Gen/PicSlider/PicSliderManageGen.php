@@ -24,6 +24,9 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen {
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
+            case "list":
+                $result = self::GenList();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -301,6 +304,92 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen {
         $channelManageData = new ChannelManageData();
         $channelManageData->UpdateParentChildrenChannelId($channelId);
 
+        return $tempContent;
+    }
+
+
+    /**
+     * 生成列表页面
+     */
+    private function GenList() {
+        $channelId = Control::GetRequest("channel_id", 0);
+        if ($channelId <= 0) {
+            return null;
+        }
+        $manageUserId = Control::GetManageUserId();
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteId($channelId, false);
+        if($siteId<=0){
+            return null;
+        }
+
+        ///////////////判断是否有操作权限///////////////////
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        if (!$canExplore) {
+            die(Language::Load('channel', 4));
+        }
+
+        //load template
+        $tempContent = Template::Load("pic_slider/pic_slider_list.html", "common");
+
+
+        parent::ReplaceFirst($tempContent);
+
+
+        $pageSize = Control::GetRequest("ps", 20);
+        $pageIndex = Control::GetRequest("p", 1);
+        $searchKey = Control::GetRequest("search_key", "");
+        $searchType = Control::GetRequest("search_type", -1);
+        $searchKey = urldecode($searchKey);
+
+        if (isset($searchKey) && strlen($searchKey) > 0) {
+            $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
+            if (!$canSearch) {
+                die(Language::Load('channel', 4));
+            }
+        }
+
+        if ($pageIndex > 0 && $channelId > 0) {
+
+            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $tagId = "pic_slider_list";
+            $allCount = 0;
+            $isSelf = Control::GetRequest("is_self", 0);
+            $picSliderManageData = new PicSliderManageData();
+            $arrPicSliderList = $picSliderManageData->GetList(
+                $channelId,
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $searchKey,
+                $searchType,
+                $isSelf,
+                $manageUserId
+            );
+            if (count($arrPicSliderList) > 0) {
+                Template::ReplaceList($tempContent, $arrPicSliderList, $tagId);
+
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=pic_slider&m=list&channel_id=$channelId&p={0}
+                            &ps=$pageSize&isself=$isSelf";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+
+            } else {
+                Template::RemoveCustomTag($tempContent, $tagId);
+                $tempContent = str_ireplace("{pager_button}", Language::Load("pic_slider", 4), $tempContent);
+            }
+        }
+
+        parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
 } 
