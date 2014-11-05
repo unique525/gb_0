@@ -354,7 +354,7 @@
             <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
                 <item>
                     <![CDATA[
-                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{UploadFileThumbPath3}" width="90" height="90" ></a>
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90" height="90" ></a>
                         <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
 
                     ]]>
@@ -390,7 +390,7 @@
             <td align="center" valign="top" class="goodstopl" >
                 <div id="magnifier" class="magnifier">
                     <div id="BigImage" class="jqzoom" style="border:1px solid #ccc">
-                        <img id="jqimg" src="{UploadFilePath}" width="350" longdesc="{UploadFilePath}"/>
+                        <img id="jqimg" src="{UploadFileThumbPath1}" width="350" longdesc="{UploadFilePath}"/>
                     </div>
                 </div>
                 <div class="pic_small">
@@ -400,7 +400,7 @@
                             <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
                                 <item>
                                     <![CDATA[
-                                    <li><img class="pic_default" src="{f_UploadFileThumbPath2}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
+                                    <li><img class="pic_default" src="{f_UploadFileThumbPath3}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
                                     ]]>
                                 </item>
                             </icms>

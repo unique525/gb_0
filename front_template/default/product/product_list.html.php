@@ -185,7 +185,7 @@
             <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
                 <item>
                     <![CDATA[
-                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="90px" height="90px" ></a>
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90px" height="90px" ></a>
                         <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
 
                     ]]>
@@ -225,7 +225,7 @@
                     <td>
                         <table width="310" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td width="120" align="left" valign="top"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="110" height="110" /></a></td>
+                                <td width="120" align="left" valign="top"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="110" height="110" /></a></td>
                                 <td align="left" valign="top">
                                     <div class="listgooods"><div class="hot">
                                             <a  target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
@@ -277,7 +277,7 @@
                     <a class="pic" target="_blank"
                        href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">
                         <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"
-                             src="{f_UploadFilePath}">
+                             src="{f_UploadFileThumbPath2}">
                     </a>
                 </div>
                 <div class="name">
