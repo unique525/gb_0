@@ -270,7 +270,7 @@
                     <icms id="channel_28" type="channel_list" where="parent">
                         <item>
                             <![CDATA[
-                            <li>{f_ChannelName}
+                            <li><span class="sec_title">{f_ChannelName}</span>
                                 <ul>
                                     {child}
                                 </ul>
