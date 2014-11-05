@@ -397,7 +397,8 @@
                     <span id="pic_sl" class="pic_sl"></span>
                     <div id="pic_smiddle" class="pic_smiddle">
                         <ul id="pic_smiddle_content">
-                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
+                            <li><img class="pic_default" src="{UploadFileThumbPath3}" originpic="{UploadFilePath}" thumb1pic="{UploadFileThumbPath1}"  width="50"></li>
+                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="100">
                                 <item>
                                     <![CDATA[
                                     <li><img class="pic_default" src="{f_UploadFileThumbPath3}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
