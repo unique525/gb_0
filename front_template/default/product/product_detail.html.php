@@ -284,7 +284,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                            {child}
                                     </ul>
