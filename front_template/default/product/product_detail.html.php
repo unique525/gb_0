@@ -40,10 +40,10 @@
                 var productPriceValue=$(this).attr("pricevalue");
                 selectProductPriceId = $(this).attr("idvalue");
                 $("#productPrice").text(formatPrice(productPriceValue));
-                //产品价格
-                var productSalePriceValue=$("#productSalePrice").text();
+                //产品市场价格
+                var productMarketPriceValue=$("#productMarketPrice").text();
                 //优惠的差价
-                var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
+                var priceReduceValue=parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
                 $("#priceReduce").text(priceReduceValue);
                 //价格选择切换效果
                 spanPropon.attr("class","propon propondefault");//默认全部不选择
@@ -421,7 +421,7 @@
                     </tr>
                     <tr>
                         <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice"></span></span></p>
-                                <p class="price_n">原　价：<span id="productSalePrice" class="oldprice" style="text-decoration: line-through">{SalePrice}</span></p>
+                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice" style="text-decoration: line-through">{MarketPrice}</span></p>
                                 <p class="price_n"><span class="chaprice">已优惠：<span id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
