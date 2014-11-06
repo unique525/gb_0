@@ -424,17 +424,31 @@ class BaseGen
      * @param int $tableId 上传文件对应的表id
      * @param UploadFile $uploadFile 返回的上传文件对象
      * @param int $uploadFileId 返回新的上传文件id
+     * @param int $imgMaxWidth 图片最大宽度限制
+     * @param int $imgMaxHeight 图片最大高度限制
+     * @param int $imgMinWidth 图片最小宽度限制
+     * @param int $imgMinHeight 图片最小高度限制
      * @return int 返回成功或错误代码
      */
     protected function Upload(
         $fileElementName = "file_upload",
         $tableType = 0,
         $tableId = 0,
-        UploadFile &$uploadFile,
-        &$uploadFileId = 0
+        UploadFile &$uploadFile = null,
+        &$uploadFileId = 0,
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
     )
     {
-        $errorMessage = self::UploadPreCheck($fileElementName);
+        $errorMessage = self::UploadPreCheck(
+            $fileElementName,
+            $imgMaxWidth,
+            $imgMaxHeight,
+            $imgMinWidth,
+            $imgMinHeight
+        );
         $resultMessage = "";
         $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
@@ -642,8 +656,6 @@ class BaseGen
                     $newFileName = 'product_content_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-
-
             case UploadFileData::UPLOAD_TABLE_TYPE_SITE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -944,9 +956,19 @@ class BaseGen
     /**
      * 上传文件预检查
      * @param string $fileElementName 上传控件名称
+     * @param int $imgMaxWidth 错误代码，默认返回1，没有错误
+     * @param int $imgMaxHeight 错误代码，默认返回1，没有错误
+     * @param int $imgMinWidth 错误代码，默认返回1，没有错误
+     * @param int $imgMinHeight 错误代码，默认返回1，没有错误
      * @return int 错误代码，默认返回1，没有错误
      */
-    private function UploadPreCheck($fileElementName)
+    private function UploadPreCheck(
+        $fileElementName,
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
+    )
     {
         $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS;
 

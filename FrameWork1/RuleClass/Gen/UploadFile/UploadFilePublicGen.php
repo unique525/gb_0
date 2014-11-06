@@ -66,10 +66,46 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         $tableId = Control::GetRequest("table_id", 0);
         if (!empty($fileElementName) && $tableType > 0) {
 
+            $imgMaxWidth = 0;
+            $imgMaxHeight = 0;
+            $imgMinWidth = 0;
+            $imgMinHeight = 0;
+
+
+            if($tableType == UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR){
+
+                $siteId = parent::GetSiteIdByDomain();
+                if($siteId>0){
+
+                    $siteConfigData = new SiteConfigData($siteId);
+                    $imgMaxWidth = $siteConfigData->UserAvatarMaxWidth;
+                    $imgMaxHeight = $siteConfigData->UserAvatarMaxHeight;
+                    $imgMinWidth = $siteConfigData->UserAvatarMinWidth;
+                    $imgMinHeight = $siteConfigData->UserAvatarMinHeight;
+
+                }
+
+            }
+
+
+
+
+
+
             $uploadFile = new UploadFile();
             $uploadFileId = 0;
 
-            parent::Upload($fileElementName, $tableType, $tableId, $uploadFile, $uploadFileId);
+            parent::Upload(
+                $fileElementName,
+                $tableType,
+                $tableId,
+                $uploadFile,
+                $uploadFileId,
+                $imgMaxWidth,
+                $imgMaxHeight,
+                $imgMinWidth,
+                $imgMinHeight
+            );
 
             $result = $uploadFile->FormatToJson();
 
