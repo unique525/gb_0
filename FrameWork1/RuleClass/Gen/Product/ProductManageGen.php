@@ -581,6 +581,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                               Template::ReplaceList($content, $arrProductParamTypeClassList, $channelId, $keyName);
                               $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
                             }
+                            //替换为空
                             else $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, "", $keyName);
                         }
                     }
