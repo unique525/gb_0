@@ -211,7 +211,6 @@
                 jsonp:"jsonpcallback",
                 success:function(data){
                     var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
-                    alert(positive_appraisal);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
                     var negative_appraisal = parseInt(data["negative_appraisal"]);
 
