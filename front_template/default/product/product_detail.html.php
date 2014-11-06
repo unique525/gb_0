@@ -210,9 +210,11 @@
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
-                    var positive_appraisal = parseInt(data["positive_appraisal"]);
+                    var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
+                    alert(positive_appraisal);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
                     var negative_appraisal = parseInt(data["negative_appraisal"]);
+
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
                     var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
                     var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;

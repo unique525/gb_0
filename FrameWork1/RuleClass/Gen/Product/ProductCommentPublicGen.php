@@ -154,17 +154,18 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
                 $positiveAppraisal = intval($arrAppraisalList[0]["Count"]);
                 $moderateAppraisal = intval($arrAppraisalList[1]["Count"]);
                 $negativeAppraisal = intval($arrAppraisalList[2]["Count"]);
-
-                return Control::GetRequest("jsonpcallback", "")
-                . '({
+            } else {
+                $positiveAppraisal = 0;
+                $moderateAppraisal = 0;
+                $negativeAppraisal = 0;
+            }
+            return Control::GetRequest("jsonpcallback", "")
+            . '({
                         "result":' . self::SUCCESS . ',
                         "positive_appraisal":' . $positiveAppraisal . ',
                         "moderate_appraisal":' . $moderateAppraisal . ',
                         "negative_appraisal":' . $negativeAppraisal . '
                         })';
-            } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SYSTEM_ERROR . '})';
-            }
         } else {
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::PARAMETER_ERROR . '})';
         }

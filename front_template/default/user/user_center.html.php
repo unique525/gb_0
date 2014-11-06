@@ -85,7 +85,9 @@
                 <div class="rightmember">
                     <div class="leftperson"><img src="/images/pic_person.png" width="120" height="120"/>
 
-                        <h3><a href="">编辑个人资料</a></h3></div>
+                        <h3><a href="/default.php?mod=user_info&a=modify">编辑个人资料</a></h3>
+                        <h3><a href="/default.php?mod=user_info&a=modify_avatar">修改头像</a></h3>
+                    </div>
                     <div class="rightinfo">
                         <b>您好！ {UserAccount}</b><br/>
                         会员级别：{UserGroupName}<br/>
