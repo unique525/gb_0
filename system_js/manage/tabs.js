@@ -3,13 +3,24 @@
  */
 $().ready(function() {
     /******************  加载标签页  **************************/
-    window.G_Tabs = $("#tabs").tabs();
+    window.G_Tabs = $("#tabs").tabs({
+            activate: function( event, ui ) {
+
+                //设置当前的来源tab id
+                window.G_RefererTabId = ui.oldPanel.attr("id");
+
+            }
+        }
+    );
     window.G_Tabs.delegate("span.ui-icon-close", "click", function() {
         var panelId = $(this).closest("li").remove().attr("aria-controls");
         $("#" + panelId).remove();
         window.G_Tabs.tabs("refresh");
         window.G_TabCounter--;
     });
+
+
+
 });
 
 /**
@@ -41,18 +52,19 @@ function addTab() {
  */
 function closeTab(){
 
+
     if(Request["tab_index"] != undefined){
         var nowTableIndex = parseInt(Request["tab_index"]);
+
         if(nowTableIndex >=0){
             parent.G_TabCounter--;
             parent.$("#tabs_title-"+nowTableIndex).closest("li").remove();
-            //var panelId = "tabs-"+nowTabCounter;
-            //parent.$("#" + panelId).remove();
-            //parent.G_Tabs.tabs("refresh");
-            //alert(parent.G_TabCounter);
-            parent.G_Tabs.tabs("option", "active", parent.G_TabCounter-1);
+            var panelId = parent.G_RefererTabId.replace(/tabs-/i,"");// "tabs-"+nowTabCounter;
+            parent.G_Tabs.tabs("option", "active", parseInt(panelId)-1);
+            //parent.G_Tabs.tabs("option", "active", parent.G_TabCounter-1);
             parent.G_Tabs.tabs( "refresh" );
             //刷新内容
+
             parent.$("#iframeNewTab").attr("src",parent.$("#iframeNewTab").attr("src"));
 
         }else{
@@ -61,6 +73,7 @@ function closeTab(){
     }else{
         //alert("tab_index未定义");
     }
+
 }
 
 function closeAllTab(){

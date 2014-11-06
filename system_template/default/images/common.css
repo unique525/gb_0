@@ -68,6 +68,14 @@ ul{list-style-type:none;}
 .grid_can_sort img{margin-left:3px;}
 .grid_can_sort_selected img{margin-left:3px;}
 
+.li_list_width_img{
+    float:left;
+    margin:10px;
+    box-shadow: 0 0 5px #666;
+    padding-right:4px;
+    background:#efefef;
+}
+
 .user_item{float:left;width:18%;margin-right:5px;margin-top:5px;padding:5px;background:#efefef;border:solid 1px #C8CBD5;}
 
 

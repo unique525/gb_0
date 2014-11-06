@@ -838,8 +838,18 @@ class BaseGen
                 break;
 
             case UploadFileData::UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC:
-                //会员头像
+                //站点配置
                 $uploadFilePath = $uploadPath . "site_config"
+                    . DIRECTORY_SEPARATOR . strval($tableId)
+                    . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+
+
+                break;
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_PIC_SLIDER:
+                //图片轮换
+                $uploadFilePath = $uploadPath . "pic_slider"
                     . DIRECTORY_SEPARATOR . strval($tableId)
                     . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;

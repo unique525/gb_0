@@ -21,17 +21,18 @@ class PicSliderManageData extends BaseManageData {
     /**
      * 新增图片轮换
      * @param array $httpPostData $_POST数组
+     * @param int $manageUserId 后台管理员id
      * @return int 新增的图片轮换id
      */
-    public function Create($httpPostData)
+    public function Create($httpPostData, $manageUserId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("CreateDate");
-        $addFieldValues = array(date("Y-m-d H:i:s", time()));
+        $addFieldNames = array("CreateDate","ManageUserId");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()),$manageUserId);
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,
@@ -125,6 +126,27 @@ class PicSliderManageData extends BaseManageData {
     }
 
 
+    /**
+     * 取得上传文件id
+     * @param int $picSliderId 图片轮换id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 上传文件id
+     */
+    public function GetUploadFileId($picSliderId, $withCache)
+    {
+        $result = -1;
+        if ($picSliderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'pic_slider_data';
+            $cacheFile = 'pic_slider_get_upload_file_id.cache_' . $picSliderId . '';
+            $sql = "SELECT UploadFileId FROM " . self::TableName_PicSlider . "
+                    WHERE PicSliderId = :PicSliderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("PicSliderId", $picSliderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 
     /**
      * 取得列表数据集
@@ -166,10 +188,20 @@ class PicSliderManageData extends BaseManageData {
 
         $sql = "
             SELECT
-            *
+                *,
+                (SELECT UploadFilePath
+                    FROM ". self::TableName_UploadFile ."
+                    WHERE
+                        UploadFileId=" . self::TableName_PicSlider . ".UploadFileId
+                ) AS UploadFilePath
+
             FROM
             " . self::TableName_PicSlider . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
+            WHERE
+                ChannelId=:ChannelId
+                AND State<100
+
+                " . $searchSql . " " . $conditionManageUserId . "
             ORDER BY Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
