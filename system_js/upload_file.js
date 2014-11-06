@@ -293,6 +293,27 @@ function FormatResultMessage(resultMessage){
         case -115112:
             result = "上传文件结果：移动上传文件到目标路径时失败";
             break;
+        case -115113:
+            result = "抓取文件结果：数据不正确";
+            break;
+        case -115114:
+            result = "MIME不是图片";
+            break;
+        case -115115:
+            result = "写入失败";
+            break;
+        case -115116:
+            result = "图片文件 超过最大宽度";
+            break;
+        case -115117:
+            result = "图片文件 超过最大高度";
+            break;
+        case -115118:
+            result = "图片文件 不足最小宽度";
+            break;
+        case -115119:
+            result = "图片文件 不足最小高度";
+            break;
     }
 
 

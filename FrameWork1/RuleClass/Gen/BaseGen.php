@@ -954,6 +954,26 @@ class BaseGen
     const UPLOAD_RESULT_WRITE_FAILURE = -115;
 
     /**
+     * 图片文件 超过最大宽度
+     */
+    const UPLOAD_RESULT_OVER_MAX_WIDTH = -116;
+
+    /**
+     * 图片文件 超过最大高度
+     */
+    const UPLOAD_RESULT_OVER_MAX_HEIGHT = -117;
+
+    /**
+     * 图片文件 不足最小宽度
+     */
+    const UPLOAD_RESULT_LESS_MIN_WIDTH = -118;
+
+    /**
+     * 图片文件 不足最小高度
+     */
+    const UPLOAD_RESULT_LESS_MIN_HEIGHT = -119;
+
+    /**
      * 上传文件预检查
      * @param string $fileElementName 上传控件名称
      * @param int $imgMaxWidth 错误代码，默认返回1，没有错误
@@ -1037,6 +1057,49 @@ class BaseGen
             $fileExtension == "rar" ||
             $fileExtension == "jpeg"
         ) {
+
+            if($fileExtension == "jpg" ||
+                $fileExtension == "gif" ||
+                $fileExtension == "png" ||
+                $fileExtension == "jpeg"
+            ){
+                //图片文件判断图片大小
+
+                list($width, $height, $type) = getimagesize(
+                    $_FILES[$fileElementName]['tmp_name']);
+
+                if($imgMaxWidth>0){
+                    if($width>$imgMaxWidth){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_OVER_MAX_WIDTH;
+                    }
+                }
+
+                if($imgMaxHeight>0){
+                    if($height>$imgMaxHeight){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_OVER_MAX_HEIGHT;
+                    }
+                }
+
+                if($imgMinWidth>0){
+                    if($width<$imgMinWidth){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_LESS_MIN_WIDTH;
+                    }
+                }
+
+                if($imgMinHeight>0){
+                    if($height<$imgMinHeight){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_LESS_MIN_HEIGHT;
+                    }
+                }
+
+            }
+
+
+
+
+
+
+
         } else {
             $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_TYPE;
         }
