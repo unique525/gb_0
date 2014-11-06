@@ -676,30 +676,31 @@ class BasePublicGen extends BaseGen {
     )
     {
         $userId = Control::GetUserId();
-        if ($tableType > 0) {
-            $arrUserExploreList = null;
-            $arrUserExploreListStand = null;
-            switch ($tagWhere) {
-                case "channel":
-                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
-                    break;
-                default :
-                    //new
-                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
-                    break;
-            }
-            //转换为标准数组
-            foreach ((array)$arrUserExploreList as  $columnValue) {
-                $arrUserExploreListStand[]=$columnValue;
-            }
-            if (!empty($arrUserExploreListStand)) {
-                Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
+        if ($userId > 0) {
+            if ($tableType > 0) {
+                $arrUserExploreList = null;
+                $arrUserExploreListStand = null;
+                switch ($tagWhere) {
+                    case "channel":
+                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        break;
+                    default :
+                        //new
+                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        break;
+                }
+                //转换为标准数组
+                foreach ((array)$arrUserExploreList as $columnValue) {
+                    $arrUserExploreListStand[] = $columnValue;
+                }
+                if (!empty($arrUserExploreListStand)) {
+                    Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
+                    //把对应ID的CMS标记替换成指定内容
+                    $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+                } else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
         }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+        else $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
 
         return $templateContent;
     }
