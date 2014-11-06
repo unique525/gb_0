@@ -12,6 +12,14 @@
         var editor;
         var tableType = window.UPLOAD_TABLE_TYPE_SITE_CONTENT;
         var tableId = parseInt('{ChannelId}');
+
+        //上传回调函数
+        window.AjaxFileUploadCallBack = function(data){
+
+        }
+
+
+
         $(function () {
 
             var editorHeight = $(window).height() - 275;
@@ -60,6 +68,34 @@
                         remoteImgSaveUrl: ''
                     });
                 }
+            });
+
+
+            var btnUploadToContent = $("#btnUploadToContent");
+            btnUploadToContent.click(function () {
+
+                var fileElementId = 'file_upload_to_content';
+                var fUploadFile = $("#f_UploadFiles");
+
+                var attachWatermark = 0;
+                if ($("#cbAttachWatermark").attr("checked") == true) {
+                    attachWatermark = 1;
+                }
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableType,
+                    tableId,
+                    loadingImageId,
+                    btnUploadToContent,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId
+                );
             });
 
         });
