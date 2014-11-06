@@ -13,26 +13,51 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/front_js/user/user.js"></script>
     <script type="text/javascript">
-    $(function () {
-        /* 顶部banner类别菜单初始化 */
-        $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-        $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
-        {
-            $(this).children('ul').css('display','');
-        }).bind('mouseleave',function() // 子菜单的鼠标移出操作
-        {
-                $(this).children('ul').css('display','none');
+        //倒计时处理代码
+        function countDown(time, day_elem, hour_elem, minute_elem, second_elem) {
+            //if(typeof end_time == "string")
+            var end_time = new Date(time).getTime(),//月份是实际月份-1
+            //current_time = new Date().getTime(),
+                sys_second = (end_time - new Date().getTime()) / 1000;
+            var timer = setInterval(function () {
+                if (sys_second > 0) {
+                    sys_second -= 1;
+                    var day = Math.floor((sys_second / 3600) / 24);
+                    var hour = Math.floor((sys_second / 3600) % 24);
+                    var minute = Math.floor((sys_second / 60) % 60);
+                    var second = Math.floor(sys_second % 60);
+                    day_elem && $(day_elem).text(day);//计算天
+                    $(hour_elem).text(hour < 10 ? "0" + hour : hour);//计算小时
+                    $(minute_elem).text(minute < 10 ? "0" + minute : minute);//计算分
+                    $(second_elem).text(second < 10 ? "0" + second : second);// 计算秒
+                } else {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+        $(function () {
+            /* 顶部banner类别菜单初始化 */
+            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+            $('#leftmenu>ul>li>ul li').bind('mouseover',function () // 子菜单的鼠标移入操作
+            {
+                $(this).children('ul').css('display', '');
+            }).bind('mouseleave', function () // 子菜单的鼠标移出操作
+                {
+                    $(this).children('ul').css('display', 'none');
+                });
+            //爆品抢购、新品速递、好评单品TAB页切换
+            $('#sales>div[alt]').bind('mouseover', function () // 子菜单的鼠标移入操作
+            {
+                $('#sales>div[alt]').attr("class", "title2 left");
+                $(this).attr("class", "title2 left recent");
+                $(".good").css("display", "none");
+                var num = $(this).attr("alt");
+                $("#tabdiv" + num).css("display", "block");
+            });
+            //显示倒计时
+
+            countDown("2014/12/10 22:59:59",null,"#demo02 .hour","#demo02 .minute","#demo02 .second");
         });
-        //爆品抢购、新品速递、好评单品TAB页切换
-        $('#sales>div[alt]').bind('mouseover',function() // 子菜单的鼠标移入操作
-        {
-            $('#sales>div[alt]').attr("class", "title2 left");
-            $(this).attr("class", "title2 left recent");
-            $(".good").css("display", "none");
-            var num = $(this).attr("alt");
-            $("#tabdiv"+num).css("display", "block");
-        });
-    });
     </script>
 </head>
 
@@ -118,12 +143,17 @@
             <icms id="product_1" type="product_list" where="RecLevel" top="1">
                 <item>
                     <![CDATA[
-                    <div class="sale_goods">
-                        <div class="time">剩余<span>02</span>小时<span>23</span>分钟<span>40</span>秒 </div>
+                    <div class="sale_goods" id="sale_goods">
+                        <div class="time">剩余<span class="day"></span>天<span class="hour"></span>时<span class="minute"></span>分<span class="second"></span>秒</div>
                         <div class="pic"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="162" height="162" /></a></div>
                         <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
                         <div class="price"> <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                     </div>
+                    <script type="text/javascript">
+                    $(function () {
+                        countDown("{f_AutoRemoveDate}","#sale_goods .day","#sale_goods .hour","#sale_goods .minute","#sale_goods .second");
+                    });
+                    </script>
                     ]]>
                 </item>
             </icms>
@@ -188,12 +218,17 @@
             <icms id="product_5" type="product_list" where="RecLevel" top="1">
                 <item>
                     <![CDATA[
-                    <div class="sale_goods">
-                        <div class="time">剩余<span>02</span>小时<span>23</span>分钟<span>40</span>秒 </div>
+                    <div class="sale_goods" id="sale_goods2">
+                        <div class="time">剩余<span class="day"></span>天<span class="hour"></span>时<span class="minute"></span>分<span class="second"></span>秒</div>
                         <div class="pic"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="160" height="160" /></a></div>
                         <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
                         <div class="price"> <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                     </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            countDown("{f_AutoRemoveDate}","#sale_goods2 .day","#sale_goods2 .hour","#sale_goods2 .minute","#sale_goods2 .second");
+                        });
+                    </script>
                     ]]>
                 </item>
             </icms>
