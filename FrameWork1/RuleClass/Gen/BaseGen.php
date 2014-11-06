@@ -424,17 +424,31 @@ class BaseGen
      * @param int $tableId 上传文件对应的表id
      * @param UploadFile $uploadFile 返回的上传文件对象
      * @param int $uploadFileId 返回新的上传文件id
+     * @param int $imgMaxWidth 图片最大宽度限制
+     * @param int $imgMaxHeight 图片最大高度限制
+     * @param int $imgMinWidth 图片最小宽度限制
+     * @param int $imgMinHeight 图片最小高度限制
      * @return int 返回成功或错误代码
      */
     protected function Upload(
         $fileElementName = "file_upload",
         $tableType = 0,
         $tableId = 0,
-        UploadFile &$uploadFile,
-        &$uploadFileId = 0
+        UploadFile &$uploadFile = null,
+        &$uploadFileId = 0,
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
     )
     {
-        $errorMessage = self::UploadPreCheck($fileElementName);
+        $errorMessage = self::UploadPreCheck(
+            $fileElementName,
+            $imgMaxWidth,
+            $imgMaxHeight,
+            $imgMinWidth,
+            $imgMinHeight
+        );
         $resultMessage = "";
         $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
@@ -642,8 +656,6 @@ class BaseGen
                     $newFileName = 'product_content_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-
-
             case UploadFileData::UPLOAD_TABLE_TYPE_SITE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
                 $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -942,11 +954,41 @@ class BaseGen
     const UPLOAD_RESULT_WRITE_FAILURE = -115;
 
     /**
+     * 图片文件 超过最大宽度
+     */
+    const UPLOAD_RESULT_OVER_MAX_WIDTH = -116;
+
+    /**
+     * 图片文件 超过最大高度
+     */
+    const UPLOAD_RESULT_OVER_MAX_HEIGHT = -117;
+
+    /**
+     * 图片文件 不足最小宽度
+     */
+    const UPLOAD_RESULT_LESS_MIN_WIDTH = -118;
+
+    /**
+     * 图片文件 不足最小高度
+     */
+    const UPLOAD_RESULT_LESS_MIN_HEIGHT = -119;
+
+    /**
      * 上传文件预检查
      * @param string $fileElementName 上传控件名称
+     * @param int $imgMaxWidth 错误代码，默认返回1，没有错误
+     * @param int $imgMaxHeight 错误代码，默认返回1，没有错误
+     * @param int $imgMinWidth 错误代码，默认返回1，没有错误
+     * @param int $imgMinHeight 错误代码，默认返回1，没有错误
      * @return int 错误代码，默认返回1，没有错误
      */
-    private function UploadPreCheck($fileElementName)
+    private function UploadPreCheck(
+        $fileElementName,
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
+    )
     {
         $errorMessage = abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS;
 
@@ -1015,6 +1057,49 @@ class BaseGen
             $fileExtension == "rar" ||
             $fileExtension == "jpeg"
         ) {
+
+            if($fileExtension == "jpg" ||
+                $fileExtension == "gif" ||
+                $fileExtension == "png" ||
+                $fileExtension == "jpeg"
+            ){
+                //图片文件判断图片大小
+
+                list($width, $height, $type) = getimagesize(
+                    $_FILES[$fileElementName]['tmp_name']);
+
+                if($imgMaxWidth>0){
+                    if($width>$imgMaxWidth){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_OVER_MAX_WIDTH;
+                    }
+                }
+
+                if($imgMaxHeight>0){
+                    if($height>$imgMaxHeight){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_OVER_MAX_HEIGHT;
+                    }
+                }
+
+                if($imgMinWidth>0){
+                    if($width<$imgMinWidth){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_LESS_MIN_WIDTH;
+                    }
+                }
+
+                if($imgMinHeight>0){
+                    if($height<$imgMinHeight){
+                        $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_LESS_MIN_HEIGHT;
+                    }
+                }
+
+            }
+
+
+
+
+
+
+
         } else {
             $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_TYPE;
         }

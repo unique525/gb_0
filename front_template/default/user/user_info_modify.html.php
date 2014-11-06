@@ -6,6 +6,9 @@
     <title>会员中心</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
+        .rightbar input{
+            border: 1px solid #CCC;
+        }
         .right {
             cursor: pointer
         }
@@ -92,7 +95,7 @@
                             <td class="spe_line" width="320">{UserName}</td>
                             <td class="spe_line" width="120" align="right">真实姓名：</td>
                             <td class="spe_line" width="320">
-                                <input type="text" class="input_box" value="{RealName}" name="f_RealName"/>
+                                <input type="text" class="input_box" value="{RealName}" name="RealName"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -100,25 +103,38 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">昵称：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{NickName}" name="f_NickName"/>
+                                {NickName}
+                                <input type="hidden" value="{NickName}" name="NickName"/>
                             </td>
                             <td class="spe_line" align="right">性别：</td>
                             <td class="spe_line">
-                                <select id="f_Gender" name="f_Gender">
-                                    <option value="男">男</option>
-                                    <option value="女">女</option>
+                                <select id="f_Gender" name="Gender">
+                                    <option value="0">男</option>
+                                    <option value="1">女</option>
                                 </select>
                                 {s_Gender}
                             </td>
                             <td class="spe_line"></td>
                         </tr>
+                        <tr height="10">
+                            <td class="spe_line"></td>
+                            <td class="spe_line" align="right"></td>
+                            <td class="spe_line">
+                            </td>
+                            <td class="spe_line" align="right"></td>
+                            <td class="spe_line">
+                            </td>
+                            <td class="spe_line"></td>
+                        </tr>
                         <tr>
                             <td class="spe_line"></td>
-                            <td class="spe_line" align="right">会员头像：</td>
-                            <td class="spe_line">[预览]&nbsp;&nbsp;&nbsp;&nbsp;[修改]</td>
+                            <td class="spe_line" align="right">会员点卷：</td>
+                            <td class="spe_line">
+                                {UserPoint}
+                            </td>
                             <td class="spe_line" align="right">会员积分：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{UserScore}" name="f_UserScore"/>
+                                {UserScore}
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -126,11 +142,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">会员金钱：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{UserMoney}" name="f_UserMoney"/>
+                                {UserMoney}
                             </td>
                             <td class="spe_line" align="right">会员魅力：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{UserCharm}" name="f_UserCharm">
+                                {UserCharm}
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -138,11 +154,10 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">会员经验：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{UserExp}" name="f_UserExp"/>
+                                {UserExp}
                             </td>
-                            <td class="spe_line" align="right">会员点卷：</td>
+                            <td class="spe_line" align="right"></td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{UserPoint}" name="f_UserPoint"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -150,7 +165,7 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right" valign="top">会员签名：</td>
                             <td class="spe_line" colspan="3">
-                                <textarea style="width:590px" name="f_Sign">{Sign}</textarea>
+                                <textarea style="width:590px" name="Sign">{Sign}</textarea>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -158,11 +173,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">Email：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" style="width: 250px" value="{Email}" name="f_Email"/>
+                                <input type="text" class="input_box" style="width: 250px" value="{Email}" name="Email"/>
                             </td>
                             <td class="spe_line" align="right">QQ：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" id="SalePrice" value="{QQ}" name="f_QQ"/>
+                                <input type="text" class="input_box" id="SalePrice" value="{QQ}" name="QQ"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -170,11 +185,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">来自：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{ComeFrom}" name="f_ComeFrom"/>
+                                <input type="text" class="input_box" value="{ComeFrom}" name="ComeFrom"/>
                             </td>
                             <td class="spe_line" align="right">头衔：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{Honor}" name="f_Honor"/>
+                                {Honor}
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -182,11 +197,12 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">生日：</td>
                             <td class="spe_line">
-                                <input type="text" id="f_Birthday" value="{Birthday}" name="f_Birthday"/>
+                                <input type="text" id="f_Birthday" value="{Birthday}" name="Birthday"/>
                             </td>
                             <td class="spe_line" align="right">身份证：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{IdCard}" name="f_IdCard"/>
+                                {IdCard}
+                                <input type="hidden" value="{IdCard}" name="IdCard"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -194,11 +210,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">邮编：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{PostCode}" name="f_PostCode"/>
+                                <input type="text" class="input_number" value="{PostCode}" name="PostCode"/>
                             </td>
                             <td class="spe_line" align="right">地址：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" style="width:300px" value="{Address}" name="f_Address"/>
+                                <input type="text" class="input_box" style="width:300px" value="{Address}" name="Address"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -206,11 +222,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">电话：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{Tel}" name="f_Tel"/>
+                                <input type="text" class="input_number" value="{Tel}" name="Tel"/>
                             </td>
                             <td class="spe_line" align="right">手机：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_number" value="{Mobile}" name="f_Mobile"/>
+                                <input type="text" class="input_number" value="{Mobile}" name="Mobile"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -218,11 +234,11 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">国家：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{Country}" name="f_Country"/>
+                                <input type="text" class="input_box" value="{Country}" name="Country"/>
                             </td>
                             <td class="spe_line" align="right">省份：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{Province}" name="f_Province"/>
+                                <input type="text" class="input_box" value="{Province}" name="Province"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
@@ -230,14 +246,15 @@
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">职业：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{Occupational}" name="f_Occupational"/>
+                                <input type="text" class="input_box" value="{Occupational}" name="Occupational"/>
                             </td>
                             <td class="spe_line" align="right">城市：</td>
                             <td class="spe_line">
-                                <input type="text" class="input_box" value="{City}" name="f_City"/>
+                                <input type="text" class="input_box" value="{City}" name="City"/>
                             </td>
                             <td class="spe_line"></td>
                         </tr>
+                        <!--
                         <tr>
                             <td class="spe_line"></td>
                             <td class="spe_line" align="right">银行名称：</td>
@@ -261,7 +278,7 @@
                                 <input type="text" class="input_box" value="{BankAccount}" name="f_BankAccount"/>
                             </td>
                             <td class="spe_line"></td>
-                        </tr>
+                        </tr>-->
                     </table>
                     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                         <tr>
@@ -270,7 +287,7 @@
                             </td>
                             <td width="10"></td>
                             <td height="60" align="left">
-                                <input id="cancel_dialog" class="btn" value="取消" type="button"/>
+                                <input id="cancel_dialog" class="btn" value="取消" onclick="window.location.href  = '/default.php?mod=user&a=homepage';" type="button"/>
                             </td>
                         </tr>
                     </table>
