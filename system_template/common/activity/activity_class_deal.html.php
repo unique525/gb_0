@@ -6,6 +6,7 @@
     <script type="text/javascript">
         $().ready(function () {
             var siteName = Request["site_name"];
+            siteName=decodeURI(siteName);
             $('#SiteName').val(siteName);
         });
         function submitForm(continueCreate) {

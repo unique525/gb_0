@@ -43,6 +43,15 @@
                 parent.addTab();
             });
 
+            $(".span_ftp").click(function (event) {
+                event.preventDefault();
+                var siteId=$(this).attr("idvalue");
+                var siteName=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=ftp&m=list' + '&site_id=' + siteId + '&site_name=' + siteName;
+                parent.G_TabTitle = siteName + '-ftp管理';
+                parent.addTab();
+            });
+
 
 
             //格式化站点状态
@@ -156,6 +165,7 @@
                                 <a href="/default.php?secu=manage&mod=product_brand&&m=list_for_manage_tree&site_id={f_SiteId}">产品品牌管理</a>
                                 <span class="span_filter" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">过滤</span>
                                 <span class="span_ad" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">广告</span>
+                                <span class="span_ftp" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">ftp</span>
                             </td>
                         </tr>
                     </table>

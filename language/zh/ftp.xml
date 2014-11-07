@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <module id="1"><content><![CDATA[提交成功!]]></content></module>
+    <module id="2"><content><![CDATA[提交失败!插入或修改数据库错误！]]></content></module>
+    <module id="3"><content><![CDATA[ftp host为空！]]></content></module>
+    <module id="4"><content><![CDATA[ftp原有数据获取失败！请谨慎修改！]]></content></module>
+    <module id="5"><content><![CDATA[站点id错误]]></content></module>
+    <module id="6"><content><![CDATA[ftp id错误！]]></content></module>
+</root>

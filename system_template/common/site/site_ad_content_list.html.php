@@ -11,6 +11,9 @@
             var siteAdId = Request["site_ad_id"];
             var siteAdName = Request["site_ad_name"];
             siteAdName=decodeURI(siteAdName);
+            var siteName = Request["site_name"];
+            siteName=decodeURI(siteName);
+            var widthHeight = Request["width_height"];
             $("#btn_select_all").click(function (event) {
                 event.preventDefault();
                 var inputSelect = $("[name='doc_input']");
@@ -38,6 +41,13 @@
                 parent.addTab();
             });
 
+            $("#btn_back").click(function (event) {
+                event.preventDefault();
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=list' + '&site_id=' + siteId + '&site_name=' + siteName;
+                parent.G_TabTitle = siteName + '广告管理';
+                parent.addTab();
+            });
+
 
             var btnEdit = $(".btn_edit");
             btnEdit.css("cursor", "pointer");
@@ -49,6 +59,18 @@
                 parent.G_TabTitle = siteAdContentTitle + '-编辑广告';
                 parent.addTab();
             });
+
+
+
+            var btnPreShow = $(".span_pre_show");
+            btnPreShow.css("cursor", "pointer");
+            btnPreShow.click(function (event) {
+                var siteAdId = $(this).attr('idvalue');
+                event.preventDefault();
+                window.open('/default.php?mod=site_ad&m=pre_show&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', widthHeight+' top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+
+            });
+
 
             var btnSetJs = $(".span_create_js");
             btnSetJs.css("cursor", "pointer");
@@ -81,6 +103,9 @@
             <td id="td_main_btn" width="83">
                 <input id="btn_create" class="btn2" value="新建广告" title="新建一个广告" type="button"/>
             </td>
+            <td id="td_main_btn" width="183">
+                <input id="btn_back" class="btn2" value="返回广告位管理" title="返回广告位" type="button"/>
+            </td>
             <td id="td_main_btn" align="right">
                 <div id="search_box">
                     <label for="search_key"></label><input id="search_key" name="search_key" class="input_box"
@@ -102,7 +127,7 @@
             <td style="width:40px;text-align:center;">停用</td>
             <td>名称</td>
             <td style="width:350px;">时间</td>
-            <td style="width:80px;text-align:center;">查看广告</td>
+            <td style="width:40px;text-align:center;">预览</td>
             <td style="width:80px;text-align:center;">指向链接</td>
             <td style="width:160px;text-align:center;">虚拟点击</td>
             <td style="width:80px;text-align:center;">更新JS</td>
@@ -126,9 +151,9 @@
                                 onclick="ModifyState('site_ad_content', '{f_SiteAdContentId}', '100')"/></span></td>
                     <td class="spe_line2" style="text-align:left;" title="{f_SiteAdContentId}"><span style="color:{f_SiteAdContentTitleColor};font-weight:{f_SiteAdContentTitleBold};">{f_SiteAdContentTitle}</span></td>
                     <td class="spe_line2" style="text-align:left;">{f_BeginDate}—><script type="text/javascript">CheckEndDate("{f_EndDate}")</script></td>
-                    <td class="spe_line2" style="width:80px;text-align:center;"><a href="{rootpath}/{f_titlepic}" title="点击进行查看广告 {f_titlepic}" target="_blank">查看广告</a></td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_pre_show" idvalue="{f_SiteAdId}" >预览</span></td>
                     <td class="spe_line2" style="width:80px;text-align:center;"><a href="{f_SiteAdUrl}" title="点击查看广告指向链接 {f_SiteAdUrl}" target="_blank">指向链接</a></td>
-                    <td class="spe_line2" style="width:160px;text-align:center;"><span class="span_virtual_click" idvalue="{f_SiteAdId}" title="{f_OpenVirtualClick}"></span>/{f_AddedVirtualClickCount}次</td>
+                    <td class="spe_line2" style="width:160px;text-align:center;"><span class="span_virtual_click" idvalue="{f_SiteAdId}" title="{f_OpenVirtualClick}"></span>/{f_VirtualClickLimit}次每小时</td>
                     <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
                 </tr>
                 ]]></item>

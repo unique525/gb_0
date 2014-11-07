@@ -83,15 +83,15 @@ $().ready(function() {
     }
 
 
-    //记录点击
+    //点击
     $(".open_count_1").click(function(){
-
+        var adContentId = $(this).attr("idvalue");
         $.ajax({
             url:"/default.php",
             data:{
-                mod:"site_ad",
+                mod:"site_ad_content",
                 m:"site_ad_click",
-                id:$(this).attr("id")
+                id:adContentId
             },
             dataType:"jsonp",
             jsonp:"jsonpcallback",
@@ -105,25 +105,36 @@ $().ready(function() {
         });
     });
 
-    //虚拟点击
+    //点击
     $.each($(".open_virtual_click_1"),function(){
+        var available=$(this).closest("div") .attr("idvalue"); //找父元素div的idvalue  如果为-1则过期不做处理
+        if(available>=0){
+            var adUrl=$(this).attr("href");
+            var adContentId = $(this).attr("idvalue");
             $.ajax({
                 url:"/default.php",
                 data:{
-                    "mod":"site_ad",
+                    "mod":"site_ad_content",
                     "m":"site_ad_virtual_click",
-                    "id":$(this).attr("id")
+                    "id":adContentId
                 },
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
                     $.each(data,function(i,v){
                         if (v["ReCommon"] > 0){
-                            console.warn(v["ReCommon"]+" 广告id:"+id);
+                            console.warn(v["ReCommon"]+" 广告id:"+adContentId);
+                            var siteAdFrame = document.createElement("iframe");
+                            siteAdFrame.src = adUrl;
+                            siteAdFrame.style.width = "0px";
+                            siteAdFrame.style.height = "0px";
+                            siteAdFrame.style.display = "none";
+                            document.body.appendChild(siteAdFrame);
                         }
                     });
                 }
             });
+        }
     });
 
 });
@@ -168,7 +179,7 @@ function adSwitch(adId, tag){
 function IsInTime(adContent){
     var today=new Date();
     var timeValue=adContent.id;
-    var times=timeValue.split("_");
+    var times=timeValue.split("_");  //id="起始时间_结束时间_广告id"
     var beginDateStr=times[0];
     var beginDateArr=beginDateStr.substr(0,10).split("-");
     var beginDate=new Date(beginDateArr[0],beginDateArr[1],beginDateArr[2]);
@@ -178,7 +189,7 @@ function IsInTime(adContent){
         var endDate=new Date(endDateArr[0],endDateArr[1],endDateArr[2]);
         if(endDate<today){  //过期
             adContent.setAttribute("idvalue","-1");   //idvalue存储广告显示时间，若过期则置-1
-            console.warn("有广告已到期！title:"+adContent.getAttribute("title")+" 广告id:"+adContent.getAttribute("idvalue"));
+            console.warn("有广告已到期！title:"+adContent.getAttribute("title")+" 广告id:"+times[2]);
         }
     }else
         adContent.setAttribute("idvalue","-1");  //未开始

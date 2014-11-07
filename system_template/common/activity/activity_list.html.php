@@ -18,7 +18,9 @@
         var channelId = Request["channel_id"];
         var siteId = Request["site_id"];
         var channelName = Request["channel_name"];
+        channelName=decodeURI(channelName);
         var siteName = Request["site_name"];
+        siteName=decodeURI(siteName);
         $("#btn_select_all").click(function (event) {
             event.preventDefault();
             var inputSelect = $("[name='doc_input']");

@@ -7,12 +7,11 @@
     <script type="text/javascript">
         $("document").ready(function(){
             var channelId = Request["channel_id"];
-            var customFormSubject = Request["custom_form_subject"];
 
             $("#btn_create_custom_form_field").click(function(event) {
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=create&custom_form_id={CustomFormId}';
-                parent.G_TabTitle = customFormSubject + '-新增字段';
+                parent.G_TabTitle = '新增字段';
                 parent.addTab();
             });
 
@@ -22,7 +21,7 @@
                 var customFormFieldId = $(this).attr('idvalue');
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_field&m=modify&custom_form_id={CustomFormId}&custom_form_field_id=' + customFormFieldId + '&channel_id=' + channelId;
-                parent.G_TabTitle = customFormSubject + '-编辑字段';
+                parent.G_TabTitle = '编辑字段';
                 parent.addTab();
             });
         });

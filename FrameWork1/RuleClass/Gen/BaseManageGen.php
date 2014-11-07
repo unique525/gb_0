@@ -16,7 +16,7 @@ class BaseManageGen extends BaseGen
     /**
      * 系统广告的根目录
      */
-    const SITE_AD_PATH = "ad";
+    const SITE_AD_PATH = "front_js/site_ad";
 
     /**
      * 发布频道 返回值 未操作
@@ -769,7 +769,7 @@ class BaseManageGen extends BaseGen
 
                     if($publishResult>0){
                         $result .= Language::Load('site_ad', 10) ;  //广告JS更新成功!
-                        $result .= "<br><br>" . "/ad/" . $siteId . '/site_ad_' . $siteAdId . ".js";
+                        $result .= "<br><br>" . self::SITE_AD_PATH .'/'. $siteId . '/site_ad_' . $siteAdId . ".js";
                     }else{
                         $result.=Language::Load('site_ad', 17);//广告JS文件发布失败！
                         $result.="<br>error code:" . $publishResult;
