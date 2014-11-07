@@ -213,7 +213,7 @@ class SiteFilterManageGen extends BaseManageGen implements IBaseManageGen {
 
 
                             //记入操作log
-                            $operateContent = "Modify site_filter：SiteFilterId：" . $Modified .",POST FORM:".implode("|",$_POST).";\r\nResult:". $Modified;
+                            $operateContent = "Modify site_filter：SiteFilterId：" . $siteFilterId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $Modified;
                             self::CreateManageUserLog($operateContent);
 
                             if ($Modified > 0) {

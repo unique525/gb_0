@@ -41,6 +41,25 @@ function FormatShowType(showType){
 
 
 /**
+ * 格式化点击统计状态
+ * @param state 状态
+ * @return string
+ */
+function FormatOpenCount(state){
+    switch (state){
+        case "1":
+            return "<"+"span style='color:green'>开启<"+"/span>";
+            break;
+        case "0":
+            return "关闭";
+            break;
+        default :
+            return "未知";
+            break;
+    }
+}
+
+/**
  * 格式化虚拟点击状态
  * @param state 状态
  * @return string
@@ -48,7 +67,7 @@ function FormatShowType(showType){
 function FormatVirtualClick(state){
     switch (state){
         case "1":
-            return "开启";
+            return "<"+"span style='color:green'>开启<"+"/span>";
             break;
         case "0":
             return "关闭";

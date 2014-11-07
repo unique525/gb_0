@@ -43,7 +43,8 @@
                 event.preventDefault();
                 var adId=$(this).attr("idvalue");
                 var adName=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=list' + '&site_id=' + siteId + '&site_ad_id=' + adId + '&site_ad_name=' + adName;
+                var widthHeight = $(this).attr('alt');
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=list' + '&site_id=' + siteId + '&site_name=' + siteName + '&site_ad_id=' + adId + '&site_ad_name=' + adName + '&width_height=' + widthHeight;
                 parent.G_TabTitle = adName + '-广告内容';
                 parent.addTab();
             });
@@ -74,7 +75,7 @@
                 var siteAdId = $(this).attr('idvalue');
                 var widthHeight = $(this).attr('title');
                 event.preventDefault();
-                window.open('/default.php?secu=manage&mod=site_ad&m=pre_show&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', widthHeight+' top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+                window.open('/default.php?mod=site_ad&m=pre_show&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', widthHeight+' top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
 
             });
 
@@ -147,9 +148,9 @@
                     <td class="spe_line2" title="{f_SiteAdId}" >{f_SiteAdName}</td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_show_type" title="{f_ShowType}" id="show_type_{f_SiteAdId}"></span></td>
                     <td class="spe_line2" style="text-align:center;">{f_SiteAdWidth}×{f_SiteAdHeight}</td>
-                    <td class="spe_line2" style="text-align:center;"><span class="span_content"  idvalue="{f_SiteAdId}" title="{f_SiteAdName}">查看广告</span></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_content"  idvalue="{f_SiteAdId}" title="{f_SiteAdName}" alt="width={f_SiteAdWidth},height={f_SiteAdHeight},">查看广告</span></td>
                     <td class="spe_line2" style="text-align:center;"><span class="span_create_js" title="点击更新广告JS {f_SiteAdId}" idvalue="{f_SiteAdId}" >更新JS</span></td>
-                    <td class="spe_line2" style="text-align:center;"><span class="span_pre_show" title="width={f_SiteAdWidth}, height={f_SiteAdHeight}," idvalue="{f_SiteAdId}" >预览</span></td>
+                    <td class="spe_line2" style="text-align:center;"><span class="span_pre_show" title="width={f_SiteAdWidth},height={f_SiteAdHeight}," idvalue="{f_SiteAdId}" >预览</span></td>
                 </tr>
                 ]]></item></icms>
     </table>
