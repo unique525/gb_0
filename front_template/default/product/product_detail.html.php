@@ -23,7 +23,7 @@
         .star li.on{background-position:0 -28px;}
     </style>
     <script type="text/javascript">
-        var select_product_price_id = 0;
+        var selectProductPriceId = 0;
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -38,12 +38,12 @@
             spanPropon.click(function(){
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
-                select_product_price_id = $(this).attr("idvalue");
+                selectProductPriceId = $(this).attr("idvalue");
                 $("#productPrice").text(formatPrice(productPriceValue));
-                //产品价格
-                var productSalePriceValue=$("#productSalePrice").text();
+                //产品市场价格
+                var productMarketPriceValue=$("#productMarketPrice").text();
                 //优惠的差价
-                var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
+                var priceReduceValue=parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
                 $("#priceReduce").text(priceReduceValue);
                 //价格选择切换效果
                 spanPropon.attr("class","propon propondefault");//默认全部不选择
@@ -173,9 +173,9 @@
 
             $("#add_car").click(function(){
                 var buyCount = $("#productNum").val();
-                var activity_product_id = 0;
-                if(select_product_price_id  > 0){
-                    addUserCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                var activityProductId = 0;
+                if(selectProductPriceId  > 0){
+                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId);
                 }
             });
 
@@ -210,9 +210,10 @@
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
-                    var positive_appraisal = parseInt(data["positive_appraisal"]);
+                    var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
                     var negative_appraisal = parseInt(data["negative_appraisal"]);
+
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
                     var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
                     var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
@@ -284,7 +285,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                            {child}
                                     </ul>
@@ -322,29 +323,28 @@
 <div class="box194 fl">
     <!--小类列表菜单-->
     <div class="listsum" id="categoryListSum">
-        <div class="tit">蔬菜水果</div>
-        <div class="listsum-1" >
-            <dl class="listhover">
-                <dt><a href="javascript:;" class="on" hidefocus="true">蔬菜</a></dt>
-                <dd><ul>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=109">豆角类</a></li>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=110" class="" title="叶菜类">叶菜类</a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </dd>
-            </dl>
-        </div>
-        <div class="listsum-1" >
-            <dl class="">
-                <dt><a class="" href="#" hidefocus="true">水果</a></dt>
-                <dd><ul>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=111">进口水果</a></li>
-                        <li><a href="/default.php?&mod=product&a=list&channel_id=112" class="" title="国产水果">国产水果</a></li>
-                    </ul>
-                    <div class="clear"></div>
-                </dd>
-            </dl>
-        </div>
+        <div class="tit">{ChannelName}</div>
+        <icms id="channel_{ChannelId}" type="channel_list" where="parent">
+            <item>
+                <![CDATA[
+                <div class="listsum-1">
+                    <dl title="{f_ChannelId}">
+                        <dt><a href="javascript:;"  hidefocus="true">{f_ChannelName}</a></dt>
+                        <dd><ul>
+                                {child}
+                            </ul>
+                            <div class="clear"></div>
+                        </dd>
+                    </dl>
+                </div>
+                ]]>
+            </item>
+            <child>
+                <![CDATA[
+                <li><a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                ]]>
+            </child>
+        </icms>
     </div>
     <div class="blank10">        </div>
     <div class="similar_hot">
@@ -355,7 +355,7 @@
             <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
                 <item>
                     <![CDATA[
-                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="90" height="90" ></a>
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90" height="90" ></a>
                         <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
 
                     ]]>
@@ -372,11 +372,11 @@
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
-                    <li><a class="lookpic" href="#" target="_blank" title="">
+                    <li><a class="lookpic" href="{f_url}" target="_blank" title="">
                             <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
                         <div class="lookmis">
                             <p class="lookname">
-                                <a href="#" target="_blank" title="">【进店必败】{f_Title}<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
+                                <a href="{f_url}" target="_blank" title="">【进店必败】{f_Title}<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
                     </li>    <div class="clear">    </div>
                     ]]>
                 </item>
@@ -391,17 +391,18 @@
             <td align="center" valign="top" class="goodstopl" >
                 <div id="magnifier" class="magnifier">
                     <div id="BigImage" class="jqzoom" style="border:1px solid #ccc">
-                        <img id="jqimg" src="{UploadFilePath}" width="350" longdesc="{UploadFilePath}"/>
+                        <img id="jqimg" src="{UploadFileThumbPath1}" width="350" longdesc="{UploadFilePath}"/>
                     </div>
                 </div>
                 <div class="pic_small">
                     <span id="pic_sl" class="pic_sl"></span>
                     <div id="pic_smiddle" class="pic_smiddle">
                         <ul id="pic_smiddle_content">
-                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="8">
+                            <li><img class="pic_default" src="{UploadFileThumbPath3}" originpic="{UploadFilePath}" thumb1pic="{UploadFileThumbPath1}"  width="50"></li>
+                            <icms id="product_pic_{ProductId}" type="product_pic_list" top="100">
                                 <item>
                                     <![CDATA[
-                                    <li><img class="pic_default" src="{f_UploadFileThumbPath2}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
+                                    <li><img class="pic_default" src="{f_UploadFileThumbPath3}" originpic="{f_UploadFilePath}" thumb1pic="{f_UploadFileThumbPath1}"  width="50"></li>
                                     ]]>
                                 </item>
                             </icms>
@@ -421,7 +422,7 @@
                     </tr>
                     <tr>
                         <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice"></span></span></p>
-                                <p class="price_n">原　价：<span id="productSalePrice" class="oldprice" style="text-decoration: line-through">{SalePrice}</span></p>
+                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice" style="text-decoration: line-through">{MarketPrice}</span></p>
                                 <p class="price_n"><span class="chaprice">已优惠：<span id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
@@ -482,7 +483,7 @@
         <div class="zi"> 商品推荐</div>
         <div class="fctl">
             <ul>
-                <icms id="product_rec_level" type="product_list" where="RecLevel" top="4">
+                <icms id="product_6" type="product_list" where="RecLevel" top="4">
                     <item>
                         <![CDATA[
                         <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="150" height="175" ></a>

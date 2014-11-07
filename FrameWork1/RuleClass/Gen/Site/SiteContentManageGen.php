@@ -260,7 +260,8 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
 
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{pager_button}", Language::Load("site_content", 7), $templateContent);
+                $templateContent = str_ireplace("{pager_button}",
+                    Language::Load("site_content", 9), $templateContent);
             }
         }
 

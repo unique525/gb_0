@@ -576,8 +576,13 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $type = Template::GetParamValue($content, "type", $keyName);
                         if ($type == 'product_param_type_class_list') {
                             $arrProductParamTypeClassList = $productParamTypeClassData->GetList($channelId);
-                            Template::ReplaceList($content, $arrProductParamTypeClassList, $channelId, $keyName);
-                            $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
+                            if(count($arrProductParamTypeClassList)>0)
+                            {
+                              Template::ReplaceList($content, $arrProductParamTypeClassList, $channelId, $keyName);
+                              $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, $content, $keyName);
+                            }
+                            //替换为空
+                            else $tempContent = Template::ReplaceCustomTag($tempContent, $channelId, "", $keyName);
                         }
                     }
                 }
@@ -604,8 +609,12 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         $type = Template::GetParamValue($content, "type", $keyName);
                         if ($type == 'product_param_type_list') {
                             $arrProductParamTypeList = $productParamTypeData->GetList($productParamTypeClassId);
+                            if(count($arrProductParamTypeList)>0)
+                            {
                             Template::ReplaceList($content, $arrProductParamTypeList, $productParamTypeClassId, $keyName);
                             $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeClassId, $content, $keyName);
+                            }
+                            else $tempContent = Template::ReplaceCustomTag($tempContent, $productParamTypeClassId, "", $keyName);
                         }
                     }
                 }

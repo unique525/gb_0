@@ -55,7 +55,7 @@ class BaseData
     /**
      * 站点广告记录 数据表自增字段名
      */
-    const TableId_SiteAdLog = "AdLogId";
+    const TableId_SiteAdLog = "SiteAdLogId";
     /**
      * 站点过滤 数据表名
      */
@@ -80,6 +80,16 @@ class BaseData
      * FTP日志 数据表自增字段名
      */
     const TableId_FtpLog = "FtpLogId";
+
+
+    /**
+     * 图片轮换 数据表名
+     */
+    const TableName_PicSlider = "cst_pic_slider";
+    /**
+     * 图片轮换 数据表自增字段名
+     */
+    const TableId_PicSlider = "PicSliderId";
 
     /**
      * 发布日志 数据表名

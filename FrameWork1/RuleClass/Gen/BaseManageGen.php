@@ -115,12 +115,16 @@ class BaseManageGen extends BaseGen
             $channelTemplateManageData = new ChannelTemplateManageData();
             $rank = $channelManageData->GetRank($channelId, false);
             $siteId = $channelManageData->GetSiteId($channelId, false);
-            $nowChannelId = $channelId;
+            $currentChannelId = $channelId;
+            $currentRank = $rank;
+
+            $arrChannelIds = array();
 
             //循环Rank进行发布
             while ($rank >= 0) {
+
                 $timeStart = Control::GetMicroTime();
-                $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($nowChannelId);
+                $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($currentChannelId);
                 $timeEnd = Control::GetMicroTime();
 
                 $publishLogManageData->Create(
@@ -132,10 +136,16 @@ class BaseManageGen extends BaseGen
                     $timeEnd - $timeStart,
                     "get template list"
                 );
-                if (!empty($arrChannelTemplateList)) {
-                    for ($i = 0; $i < Count($arrChannelTemplateList); $i++) {
-                        //1.取得模板数据
 
+
+                //把频道id放入继承树数组，为发布在所有继承树关系下使用
+                $arrChannelIds[$rank]["ChannelId"] = $currentChannelId;
+                $arrChannelIds[$rank]["Rank"] = $rank;
+
+
+                if (!empty($arrChannelTemplateList)) {
+                    for ($i = 0; $i < count($arrChannelTemplateList); $i++) {
+                        //1.取得模板数据
                         //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
                         $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
                         $publishType = $arrChannelTemplateList[$i]["PublishType"];
@@ -152,20 +162,48 @@ class BaseManageGen extends BaseGen
                             "",
                             "",
                             $timeEnd - $timeStart,
-                            "now channel id:$nowChannelId replace template"
+                            "now channel id:$currentChannelId replace template"
                         );
 
                         //3.根据PublishType和PublishFileName生成目标文件
                         switch ($publishType) {
                             case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
-                                //联动发布，只发布在本频道下
+                                //联动发布，只发布在本频道下(模板所属频道)
+                                //本频道id $currentChannelId
 
+                                $timeStart = Control::GetMicroTime();
+                                $result = self::AddToPublishQueueForChannelTemplate(
+                                    $currentChannelId,
+                                    $rank,
+                                    $channelTemplateContent,
+                                    $publishType,
+                                    $publishFileName,
+                                    $publishQueueManageData
+                                );
+                                $timeEnd = Control::GetMicroTime();
+                                $publishLogManageData->Create(
+                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                    PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                    $currentChannelId,
+                                    "",
+                                    "",
+                                    $timeEnd - $timeStart,
+                                    "now channel id:$currentChannelId add to publish queue result:$result"
+                                );
                                 break;
                             case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
                                 //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
                                 //触发频道id $channelId
+
                                 $timeStart = Control::GetMicroTime();
-                                $result = self::AddToPublishQueueForChannelTemplate($channelId, $rank, $channelTemplateContent, $publishType, $publishFileName, $publishQueueManageData);
+                                $result = self::AddToPublishQueueForChannelTemplate(
+                                    $channelId,
+                                    $currentRank,
+                                    $channelTemplateContent,
+                                    $publishType,
+                                    $publishFileName,
+                                    $publishQueueManageData
+                                );
                                 $timeEnd = Control::GetMicroTime();
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
@@ -174,21 +212,75 @@ class BaseManageGen extends BaseGen
                                     "",
                                     "",
                                     $timeEnd - $timeStart,
-                                    "now channel id:$nowChannelId add to publish queue result:$result"
+                                    "now channel id:$currentChannelId add to publish queue result:$result"
                                 );
                                 break;
                             case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL:
                                 //联动发布，发布在所有继承树关系的频道下
 
+                                for($x = 0; $x < count($arrChannelIds);$x++){
+
+                                    $timeStart = Control::GetMicroTime();
+                                    $result = self::AddToPublishQueueForChannelTemplate(
+                                        intval($arrChannelIds[$x]["ChannelId"]),
+                                        intval($arrChannelIds[$x]["Rank"]),
+                                        $channelTemplateContent,
+                                        $publishType,
+                                        $publishFileName,
+                                        $publishQueueManageData
+                                    );
+                                    $timeEnd = Control::GetMicroTime();
+                                    $publishLogManageData->Create(
+                                        PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                        PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                        $arrChannelIds[$x],
+                                        "",
+                                        "",
+                                        $timeEnd - $timeStart,
+                                        "now channel id:$currentChannelId add to publish queue result:$result"
+                                    );
+                                }
+
+
+
                                 break;
                             case ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF:
                                 //非联动发布，只发布在本频道下
+                                //触发频道与当前频道一致时才处理
+
+                                if($channelId == $currentChannelId){
+
+                                    $timeStart = Control::GetMicroTime();
+                                    $result = self::AddToPublishQueueForChannelTemplate(
+                                        $currentChannelId,
+                                        $rank,
+                                        $channelTemplateContent,
+                                        $publishType,
+                                        $publishFileName,
+                                        $publishQueueManageData
+                                    );
+                                    $timeEnd = Control::GetMicroTime();
+                                    $publishLogManageData->Create(
+                                        PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                        PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                        $currentChannelId,
+                                        "",
+                                        "",
+                                        $timeEnd - $timeStart,
+                                        "now channel id:$currentChannelId add to publish queue result:$result"
+                                    );
+
+                                }
+
 
                                 break;
                         }
                     }
                 }
-                $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
+
+
+
+                $currentChannelId = $channelManageData->GetParentChannelId($currentChannelId, false);
 
                 $rank--;
             }
@@ -203,7 +295,7 @@ class BaseManageGen extends BaseGen
                 "",
                 "",
                 $timeEnd - $timeStart,
-                "now channel id:$nowChannelId transfer publish queue"
+                "now channel id:$currentChannelId transfer publish queue"
             );
             $result = abs(DefineCode::PUBLISH) + self::PUBLISH_CHANNEL_RESULT_FINISHED;
         } else {
@@ -410,10 +502,13 @@ class BaseManageGen extends BaseGen
                     } else {
                         $destinationPath = self::PUBLISH_PATH . '/' . strval($channelId) . '/' . $publishFileName;
                     }
+
                     break;
             }
             $sourcePath = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
+
+
             $result = abs(DefineCode::PUBLISH) + self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
         } else {
             $result = DefineCode::PUBLISH + self::ADD_TO_PUBLISH_QUEUE_RESULT_CHANNEL_ID_ERROR;
@@ -444,7 +539,8 @@ class BaseManageGen extends BaseGen
                     $channelTemplateContent = $publishQueueManageData->Queue[$i]["Content"];
                     $result = FileObject::Write($destinationPath, $channelTemplateContent);
                     if($result>0){ //成功返回成功码
-                        $publishQueueManageData->Queue[$i]["Result"] = abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;
+                        $publishQueueManageData->Queue[$i]["Result"] =
+                            abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;
                     }else{ //错误则返回FileObject::Write中的错误码
                         $publishQueueManageData->Queue[$i]["Result"] = $result;
                     }

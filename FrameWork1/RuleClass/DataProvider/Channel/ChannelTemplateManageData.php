@@ -37,10 +37,8 @@ class ChannelTemplateManageData extends BaseManageData
             $addFieldValue = "";
             $preNumber = "";
             $addFieldNames = array(
-                "ManageUserId","ChannelId","SiteId");
-            $addFieldValues = array($manageUserId,$channelId,$siteId);
-
-
+                "ManageUserId","ChannelId","SiteId","CreateDate");
+            $addFieldValues = array($manageUserId,$channelId,$siteId,date("Y-m-d H:i:s", time()));
 
             $sql = parent::GetInsertSql(
                 $httpPostData,

@@ -115,7 +115,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                         {child}
                                     </ul>
@@ -185,7 +185,7 @@
             <icms id="product_sale_count" type="product_list" where="SaleCount" top="5">
                 <item>
                     <![CDATA[
-                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="90px" height="90px" ></a>
+                    <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90px" height="90px" ></a>
                         <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
 
                     ]]>
@@ -219,13 +219,13 @@
 <div class="favorcombcont" style="background:url(images/hot_03.gif) no-repeat top left;">
     <div style=" font-size:18px;font:400 20px ;padding-left:25px; line-height:60px; font-family: '微软雅黑';"> 特别推荐</div><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <icms id="product_rec_level" type="product_list" where="RecLevel" top="3">
+            <icms id="product_6" type="product_list" where="RecLevel" top="3">
                 <item>
                     <![CDATA[
                     <td>
                         <table width="310" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td width="120" align="left" valign="top"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="110" height="110" /></a></td>
+                                <td width="120" align="left" valign="top"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="110" height="110" /></a></td>
                                 <td align="left" valign="top">
                                     <div class="listgooods"><div class="hot">
                                             <a  target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
@@ -233,9 +233,6 @@
                                         <div class="jg" style="color:#eb6100;">
                                             ￥{f_SalePrice}
                                             <span >原价：￥{f_MarketPrice}</span>
-                                        </div>
-                                        <div class="btn_jrgwc">
-                                            <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
                                         </div>
                                     </div>
                                 </td>
@@ -277,7 +274,7 @@
                     <a class="pic" target="_blank"
                        href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">
                         <img class="img150150" width="196" height="196" style="width: 196px; height: 196px"
-                             src="{f_UploadFilePath}">
+                             src="{f_UploadFileThumbPath2}">
                     </a>
                 </div>
                 <div class="name">
@@ -288,9 +285,6 @@
                 <div class="price" style="color:#eb6100;">
                     ￥{f_SalePrice}
                     <span>已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
-                </div>
-                <div class="btn_jrgwc">
-                    <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
                 </div>
                 <a class="sclist" onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
             </li>

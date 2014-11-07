@@ -392,10 +392,22 @@ class BasePublicGen extends BaseGen {
                 }
                 break;
             case "RecLevel":
-                $arrProductList = $productPublicData->GetListByRecLevel($tagOrder, $tagTopCount);
+                $recLevel = intval(str_ireplace("product_", "", $tagId));
+                if ($recLevel > 0) {
+                    $arrProductList = $arrProductList = $productPublicData->GetListByRecLevel($recLevel, $tagOrder, $tagTopCount);
+                }
                 break;
             case "SaleCount":
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
+                break;
+            case "AllChild":
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $channelPublicData = new ChannelPublicData();
+                    $ChannelRow = $channelPublicData->GetOne($channelId);
+                    $ChildChannelId = $ChannelRow['ChildrenChannelId'];
+                    $arrProductList = $productPublicData->GetListByChannelId($ChildChannelId, $tagOrder, $tagTopCount);
+                }
                 break;
             default :
                 $channelId = intval(str_ireplace("product_", "", $tagId));
@@ -408,6 +420,7 @@ class BasePublicGen extends BaseGen {
             //把对应ID的CMS标记替换成指定内容
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
         }
+        else Template::RemoveCustomTag($templateContent, $tagId);
         return $templateContent;
     }
 
@@ -451,7 +464,9 @@ class BasePublicGen extends BaseGen {
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
+            else Template::RemoveCustomTag($templateContent, $tagId);
         }
+        else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
@@ -499,7 +514,9 @@ class BasePublicGen extends BaseGen {
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
+            else Template::RemoveCustomTag($templateContent, $tagId);
         }
+        else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
@@ -582,7 +599,9 @@ class BasePublicGen extends BaseGen {
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
+            else Template::RemoveCustomTag($templateContent, $tagId);
         }
+        else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
@@ -627,6 +646,7 @@ class BasePublicGen extends BaseGen {
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
             }
+            else Template::RemoveCustomTag($templateContent, $tagId);
         }
 
         return $templateContent;
@@ -656,30 +676,31 @@ class BasePublicGen extends BaseGen {
     )
     {
         $userId = Control::GetUserId();
-        if ($tableType > 0) {
-            $arrUserExploreList = null;
-            $arrUserExploreListStand = null;
-            switch ($tagWhere) {
-                case "channel":
-                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
-                    break;
-                default :
-                    //new
-                    $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
-                    break;
-            }
-            //转换为标准数组
-            foreach ((array)$arrUserExploreList as  $columnValue) {
-                $arrUserExploreListStand[]=$columnValue;
-            }
-            if (!empty($arrUserExploreListStand)) {
-                Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
+        if ($userId > 0) {
+            if ($tableType > 0) {
+                $arrUserExploreList = null;
+                $arrUserExploreListStand = null;
+                switch ($tagWhere) {
+                    case "channel":
+                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        break;
+                    default :
+                        //new
+                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        break;
+                }
+                //转换为标准数组
+                foreach ((array)$arrUserExploreList as $columnValue) {
+                    $arrUserExploreListStand[] = $columnValue;
+                }
+                if (!empty($arrUserExploreListStand)) {
+                    Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
+                    //把对应ID的CMS标记替换成指定内容
+                    $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+                } else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
         }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+        else $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
 
         return $templateContent;
     }

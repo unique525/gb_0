@@ -54,7 +54,8 @@ class ChannelPublicData extends BasePublicData {
                         BrowserKeywords,
                         CreateDate,
                         Sort,
-                        ChannelIntro
+                        ChannelIntro,
+                        ChildrenChannelId
 
                     FROM ".self::TableName_Channel."
                     WHERE

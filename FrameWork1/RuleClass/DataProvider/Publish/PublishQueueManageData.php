@@ -20,7 +20,12 @@ class PublishQueueManageData extends BaseManageData {
      */
     public function Add($destinationPath, $sourcePath, $content) {
         if (!empty($destinationPath)) {
-            $arrTemp = array("DestinationPath" => $destinationPath, "SourcePath" => $sourcePath, "Content" => $content, "Result" => 0);
+            $arrTemp = array(
+                "DestinationPath" => $destinationPath,
+                "SourcePath" => $sourcePath,
+                "Content" => $content,
+                "Result" => 0
+            );
             array_push($this->Queue, $arrTemp);
         }
     }

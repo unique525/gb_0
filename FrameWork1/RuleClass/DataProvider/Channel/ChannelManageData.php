@@ -198,6 +198,11 @@ class ChannelManageData extends BaseManageData
 
                     WHERE ChannelId = :ChannelId
                     ;";
+
+            if(strpos($childrenChannelId,',') == 0){
+                $childrenChannelId = substr($childrenChannelId,1);
+            }
+
             $dataProperty->AddField("ChildrenChannelId", $childrenChannelId);
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);

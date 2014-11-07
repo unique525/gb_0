@@ -13,17 +13,51 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/front_js/user/user.js"></script>
     <script type="text/javascript">
-    $(function () {
-        /* 顶部banner类别菜单初始化 */
-        $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-        $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
-        {
-            $(this).children('ul').css('display','');
-        }).bind('mouseleave',function() // 子菜单的鼠标移出操作
-        {
-                $(this).children('ul').css('display','none');
+        //倒计时处理代码
+        function countDown(time, day_elem, hour_elem, minute_elem, second_elem) {
+            //if(typeof end_time == "string")
+            var end_time = new Date(time).getTime(),//月份是实际月份-1
+            //current_time = new Date().getTime(),
+                sys_second = (end_time - new Date().getTime()) / 1000;
+            var timer = setInterval(function () {
+                if (sys_second > 0) {
+                    sys_second -= 1;
+                    var day = Math.floor((sys_second / 3600) / 24);
+                    var hour = Math.floor((sys_second / 3600) % 24);
+                    var minute = Math.floor((sys_second / 60) % 60);
+                    var second = Math.floor(sys_second % 60);
+                    day_elem && $(day_elem).text(day);//计算天
+                    $(hour_elem).text(hour < 10 ? "0" + hour : hour);//计算小时
+                    $(minute_elem).text(minute < 10 ? "0" + minute : minute);//计算分
+                    $(second_elem).text(second < 10 ? "0" + second : second);// 计算秒
+                } else {
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+        $(function () {
+            /* 顶部banner类别菜单初始化 */
+            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+            $('#leftmenu>ul>li>ul li').bind('mouseover',function () // 子菜单的鼠标移入操作
+            {
+                $(this).children('ul').css('display', '');
+            }).bind('mouseleave', function () // 子菜单的鼠标移出操作
+                {
+                    $(this).children('ul').css('display', 'none');
+                });
+            //爆品抢购、新品速递、好评单品TAB页切换
+            $('#sales>div[alt]').bind('mouseover', function () // 子菜单的鼠标移入操作
+            {
+                $('#sales>div[alt]').attr("class", "title2 left");
+                $(this).attr("class", "title2 left recent");
+                $(".good").css("display", "none");
+                var num = $(this).attr("alt");
+                $("#tabdiv" + num).css("display", "block");
+            });
+            //显示倒计时
+
+            countDown("2014/12/10 22:59:59",null,"#demo02 .hour","#demo02 .minute","#demo02 .second");
         });
-    });
     </script>
 </head>
 
@@ -45,7 +79,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                         {child}
                                     </ul>
@@ -106,40 +140,74 @@
     <div class="left_bar left">
         <div class="xianshi">
             <div class="title2"><a href="#" target="_blank">限时抢购</a></div>
-            <div class="sale_goods">
-                <div class="time">剩余<span>02</span>小时<span>23</span>分钟<span>40</span>秒 </div>
-                <div class="pic"><a href="#" target="_blank"><img src="images/xianshi_img.jpg" width="162" height="136" /></a></div>
-                <div class="name"><a href="#" target="_blank">妈咪宝贝满299减30送豪礼</a></div>
-                <div class="price"> <a href="#" target="_blank"><span class="right old_price">￥49</span>￥25.90</a></div>
-            </div>
+            <icms id="product_1" type="product_list" where="RecLevel" top="1">
+                <item>
+                    <![CDATA[
+                    <div class="sale_goods" id="sale_goods">
+                        <div class="time">剩余<span class="day"></span>天<span class="hour"></span>时<span class="minute"></span>分<span class="second"></span>秒</div>
+                        <div class="pic"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="162" height="162" /></a></div>
+                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                        <div class="price"> <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                    </div>
+                    <script type="text/javascript">
+                    $(function () {
+                        countDown("{f_AutoRemoveDate}","#sale_goods .day","#sale_goods .hour","#sale_goods .minute","#sale_goods .second");
+                    });
+                    </script>
+                    ]]>
+                </item>
+            </icms>
         </div>
     </div>
     <div class="middle left">
-        <div class="sales">
-            <div class="title2 left "><a href="#" target="_blank">爆品抢购</a></div>
-            <div class="title2 left recent"><a href="#" target="_blank">新品速递</a></div>
-            <div class="title2 left"><a href="#" target="_blank">好评单品</a></div>
+        <div class="sales" id="sales">
+            <div class="title2 left recent" alt="1"><a href="javascript:;">爆品抢购</a></div>
+            <div class="title2 left" alt="2"><a href="javascript:;">新品速递</a></div>
+            <div class="title2 left" alt="3"><a href="javascript:;">好评单品</a></div>
             <div class="clean"></div>
-            <div class="good">
+            <div class="good" id="tabdiv1">
                 <ul>
-                    <li>
-                        <div class="new_tag hidden">新品速递</div>
-                        <div><a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a></div>
-                        <div class="name"><a href="#" target="_blank">富安娜家纺 全棉斜纹 纯棉印花双人四件套</a></div>
-                        <div class="price"><a href="#" target="_blank"><span class="right old_price">￥45.5</span>￥25.90</a></div>
-                    </li>
-                    <li>
-                        <div class="new_tag">新品速递</div>
-                        <div><a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a></div>
-                        <div class="name"><a href="#" target="_blank">富安娜家纺 全棉斜纹 纯棉印花双人四件套</a></div>
-                        <div class="price"><a href="#" target="_blank"><span class="right old_price">￥45.5</span>￥25.90</a></div>
-                    </li>
-                    <li>
-                        <div class="new_tag hidden">新品速递</div>
-                        <div><a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a></div>
-                        <div class="name"><a href="#" target="_blank">富安娜家纺 全棉斜纹 纯棉印花双人四件套</a></div>
-                        <div class="price"><a href="#" target="_blank"><span class="right old_price">￥45.5</span>￥25.90</a></div>
-                    </li>
+                    <icms id="product_2" type="product_list" where="RecLevel" top="3">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
+                </ul>
+            </div>
+            <div class="good" id="tabdiv2" style="display: none">
+                <ul>
+                    <icms id="product_3" type="product_list" where="RecLevel" top="3">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
+                </ul>
+            </div>
+            <div class="good" id="tabdiv3" style="display: none">
+                <ul>
+                    <icms id="product_4" type="product_list" where="RecLevel" top="3">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
                 </ul>
             </div>
         </div>
@@ -147,12 +215,23 @@
     <div class="right_bar right">
         <div class="sales">
             <div class="title2 recent"><a href="#" target="_blank">下期预售</a></div>
-            <div class="sale_goods">
-                <div class="time">剩余<span>02</span>小时<span>23</span>分钟<span>40</span>秒 </div>
-                <div class="pic"><a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a></div>
-                <div class="name"><a href="#" target="_blank">妈咪宝贝满299减30送豪礼</a></div>
-                <div class="price"> <a href="#" target="_blank"><span class="right old_price">￥49</span>￥25.90</a></div>
-            </div>
+            <icms id="product_5" type="product_list" where="RecLevel" top="1">
+                <item>
+                    <![CDATA[
+                    <div class="sale_goods" id="sale_goods2">
+                        <div class="time">剩余<span class="day"></span>天<span class="hour"></span>时<span class="minute"></span>分<span class="second"></span>秒</div>
+                        <div class="pic"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="160" height="160" /></a></div>
+                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                        <div class="price"> <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            countDown("{f_AutoRemoveDate}","#sale_goods2 .day","#sale_goods2 .hour","#sale_goods2 .minute","#sale_goods2 .second");
+                        });
+                    </script>
+                    ]]>
+                </item>
+            </icms>
         </div>
     </div>
     <div class="clean"></div>
@@ -166,7 +245,7 @@
                 <icms id="channel_27" type="channel_list" where="parent">
                     <item>
                         <![CDATA[
-                        <li>{f_ChannelName}
+                        <li><span class="sec_title">{f_ChannelName}</span>
                             <ul>
                                 {child}
                             </ul>
@@ -187,46 +266,22 @@
         <div class="left middle green_top">
             <div class="sales">
                 <ul>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
+                    <icms id="product_27" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="160" height="160" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
                 </ul>
             </div>
         </div>
@@ -250,7 +305,7 @@
                     <icms id="channel_28" type="channel_list" where="parent">
                         <item>
                             <![CDATA[
-                            <li>{f_ChannelName}
+                            <li><span class="sec_title">{f_ChannelName}</span>
                                 <ul>
                                     {child}
                                 </ul>
@@ -270,46 +325,22 @@
         <div class="left middle red_top">
             <div class="sales">
                 <ul>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
-                    <li>
-                        <div class="left">
-                            <a href="#" target="_blank"><img src="images/img_1.jpg" width="194" height="150" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="name"><a href="#" target="_blank">富安娜家纺全棉斜纹纯棉印花双人四件套富安娜家全棉斜纹纯棉印花双人四</a></div>
-                            <div class="price"><a href="#" target="_blank">￥25.90<span class="old_price">￥49</span></a></div>
-                        </div>
-                        <div class="clean"></div>
-                    </li>
+                    <icms id="product_28" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="160" height="160" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
                 </ul>
             </div>
         </div>

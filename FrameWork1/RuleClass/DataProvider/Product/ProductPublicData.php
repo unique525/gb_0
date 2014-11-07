@@ -184,7 +184,7 @@ class ProductPublicData extends BasePublicData {
 
     /**
      * 根据频道ID获取产品记录
-     * @param int $channelId 频道Id
+     * @param int $channelId 频道Id,可以是 id,id,id 的形式
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
@@ -201,14 +201,14 @@ class ProductPublicData extends BasePublicData {
                     $order = " ORDER BY t.Sort DESC,t.Createdate DESC";
                     break;
             }
-            $sql = "SELECT t.*,t1."
+            $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId=:ChannelId AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
+            //$dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
@@ -216,11 +216,12 @@ class ProductPublicData extends BasePublicData {
 
     /**
      * 根据推荐级别获取产品记录
+     * @param int $recLevel 推荐级别
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
      */
-    public function GetListByRecLevel($order = "", $topCount = null)
+    public function GetListByRecLevel($recLevel, $order = "", $topCount = null)
     {
         $result = null;
         if ($topCount != null)
@@ -234,10 +235,11 @@ class ProductPublicData extends BasePublicData {
         $sql = "SELECT *"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-            . " WHERE t.State<100"
+            . " WHERE t.RecLevel=:RecLevel AND t.State<100"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
+        $dataProperty->AddField("RecLevel", $recLevel);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
@@ -259,7 +261,7 @@ class ProductPublicData extends BasePublicData {
                 $order = " ORDER BY t.SaleCount DESC";
                 break;
         }
-        $sql = "SELECT *"
+        $sql = "SELECT t.*,t1.*"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
             . " WHERE t.State<100"

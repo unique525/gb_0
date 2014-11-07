@@ -29,6 +29,52 @@ class UserInfoPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * @param $userId
+     * @param string $realName
+     * @param string $nickName
+     * @param string $avatarUploadFileId
+     * @param int $userScore
+     * @param int $userMoney
+     * @param int $userCharm
+     * @param int $userExp
+     * @param int $userPoint
+     * @param string $question
+     * @param string $answer
+     * @param string $sign
+     * @param string $lastVisitIP
+     * @param string $lastVisitTime
+     * @param string $email
+     * @param string $qq
+     * @param string $country
+     * @param string $comeFrom
+     * @param string $honor
+     * @param string $birthday
+     * @param int $gender
+     * @param int $fansCount
+     * @param string $idCard
+     * @param string $postCode
+     * @param string $address
+     * @param string $tel
+     * @param string $mobile
+     * @param string $province
+     * @param string $occupational
+     * @param string $city
+     * @param string $district
+     * @param int $hit
+     * @param int $messageCount
+     * @param int $userPostCount
+     * @param int $userPostBestCount
+     * @param int $userActivityCount
+     * @param int $userAlbumCount
+     * @param int $userBestAlbumCount
+     * @param int $userRecAlbumCount
+     * @param int $userAlbumCommentCount
+     * @param int $userCommissionOwn
+     * @param int $userCommissionChild
+     * @param int $userCommissionGrandson
+     * @return int
+     */
     public function Create($userId, $realName = '', $nickName = '',$avatarUploadFileId="", $userScore = 0, $userMoney = 0, $userCharm = 0, $userExp = 0, $userPoint = 0, $question = '', $answer = '', $sign = '', $lastVisitIP = '', $lastVisitTime = '', $email = '', $qq = '', $country = '', $comeFrom = '', $honor = '', $birthday = '', $gender = 0, $fansCount = 0, $idCard = '', $postCode = '', $address = '', $tel = '', $mobile = '', $province = '', $occupational = '', $city = '', $district = '', $hit = 0, $messageCount = 0, $userPostCount = 0, $userPostBestCount = 0, $userActivityCount = 0, $userAlbumCount = 0, $userBestAlbumCount = 0, $userRecAlbumCount = 0, $userAlbumCommentCount = 0, $userCommissionOwn = 0, $userCommissionChild = 0, $userCommissionGrandson = 0)
     {
         $result = -1;
@@ -122,20 +168,20 @@ class UserInfoPublicData extends BasePublicData
      *  @param string $bankAccount
      * @return int
      */
-    public function ModifyInfo($userId, $nickName, $realName, $email, $qq, $comeFrom, $birthday, $idCard, $address, $postCode, $mobile,
-                               $tel, $province, $city,$sign,$gender,$bankName, $bankOpenAddress, $bankUserName, $bankAccount) {
+    public function Modify($userId, $nickName, $realName, $email, $qq, $comeFrom, $birthday, $idCard, $address, $postCode, $mobile,
+                               $tel, $province, $city,$sign,$gender,$bankName = "", $bankOpenAddress ="", $bankUserName="", $bankAccount="") {
         $result = -1;
         if($userId > 0){
-            $sql = "UPDATE ".self::TableName_UserInfo." SET Gender=:Gender,RealName=:RealName,Email=:Email,QQ=:QQ,ComeFrom=:ComeFrom,NickName=:NickName,
+            $sql = "UPDATE ".self::TableName_UserInfo." SET Gender=:Gender,RealName=:RealName,Email=:Email,QQ=:QQ,ComeFrom=:ComeFrom,NickName=:Nickname,
                 Birthday=:Birthday,IdCard=:IdCard,Address=:Address,PostCode=:PostCode,Mobile=:Mobile,Tel=:Tel,Province=:Province,City=:City,BankName=:BankName,
                 BankOpenAddress=:BankOpenAddress,BankUserName=:BankUserName,BankAccount=:BankAccount,Sign=:Sign WHERE UserId = :UserId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("Gender", $gender);
             $dataProperty->AddField("RealName", $realName);
-            $dataProperty->AddField("Nickname", $nickName);
             $dataProperty->AddField("Email", $email);
             $dataProperty->AddField("QQ", $qq);
             $dataProperty->AddField("ComeFrom", $comeFrom);
+            $dataProperty->AddField("Nickname", $nickName);
             $dataProperty->AddField("Birthday", $birthday);
             $dataProperty->AddField("IdCard", $idCard);
             $dataProperty->AddField("Address", $address);
@@ -196,6 +242,12 @@ class UserInfoPublicData extends BasePublicData
                             ui.UserBestAlbumCount,
                             ui.UserRecAlbumCount,
                             ui.UserAlbumCommentCount,
+                            ui.Country,
+                            ui.Occupational,
+                            ui.BankName,
+                            ui.BankOpenAddress,
+                            ui.BankUserName,
+                            ui.BankAccount,
                             ul.UserLevelName,
                             ul.UserLevelPic,
                             ul.UserLevel,
@@ -225,6 +277,17 @@ class UserInfoPublicData extends BasePublicData
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetUserAvatar($userId){
+        $result = null;
+        if($userId > 0){
+            $sql = "SELECT uf.UploadFilePath,uf.UploadFileMobilePath,uf.UploadFilePadPath,uf.UploadFileThumbPath1,uf.UploadFileThumbPath2 FROM ".self::TableName_UploadFile." uf WHERE uf.TableType = ".UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR." AND uf.TableId = :TableId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId",$userId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
         }
         return $result;
     }

@@ -165,13 +165,14 @@ class ImageObject {
         }
 
         //获取源文件的详细信息(源文件的宽度 高度等信息)
-        list($sourceWidth, $sourceHeight, $type) = @getimagesize(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+        list($sourceWidth, $sourceHeight, $type) = getimagesize(
+            PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
         if (1 == $type) {
-            $sourceImage = @imagecreatefromgif(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefromgif(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
         } else if (2 == $type) {
-            $sourceImage = @imagecreatefromjpeg(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefromjpeg(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
         } else if (3 == $type) {
-            $sourceImage = @imagecreatefrompng(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefrompng(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
         }else{
             $sourceImage = null;
         }

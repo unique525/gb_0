@@ -95,7 +95,7 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
-        $siteId = Control::GetRequest("site_id",0);
+        $siteId = parent::GetSiteIdByDomain();
         if($userId > 0){
             $tagId = "user_favorite";
             $userFavoritePublicData = new UserFavoritePublicData();
