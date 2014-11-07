@@ -83,7 +83,7 @@ $(function() {
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
         var channelId = parseInt($(this).attr('idvalue'));
-        if (pageIndex <= 0) {
+        if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
@@ -97,7 +97,7 @@ $(function() {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='

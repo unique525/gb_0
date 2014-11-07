@@ -7,13 +7,19 @@
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
+    <script type="text/javascript" src="/system_js/manage/product/product_price.js"></script>
     <script type="text/javascript">
         <!--
         var editor;
         var tableType = window.UPLOAD_TABLE_TYPE_PRODUCT_CONTENT;
         var tableId = parseInt('{ChannelId}');
 
+        var productPriceObject = null;
+        var productPriceArray = new Array();
+
         $(function () {
+
+
 
             var editorHeight = $(window).height() - 450;
             editorHeight = parseInt(editorHeight);
@@ -82,8 +88,105 @@
                 }
                 var loadingImageId = null;
                 var inputTextId = null;
-                AjaxFileUpload(fileElementId, tableType, tableId, editor, fUploadFile, attachWatermark,loadingImageId, inputTextId);
+                var previewImageId = null;
+
+                AjaxFileUpload(
+                    fileElementId,
+                    tableType,
+                    tableId,
+                    loadingImageId,
+                    btnUploadToContent,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId
+                );
+
             });
+
+            var btnCreateProductPrice = $("#btn_create_product_price");
+            btnCreateProductPrice.click(function () {
+
+                var productId = parseInt("{ProductId}");
+                if(productId>0){//修改页面的新增价格
+
+                    ProductPriceCreate(productId);
+
+                }else{ //新增页面的增加价格
+                    $("#dialog_create_product_price").dialog({
+                        title: "新增产品价格",
+                        width: 500,
+                        height: 300
+                    });
+                }
+            });
+
+
+
+            //价格新增确认
+            var btnProductPriceConfirm = $("#btn_product_price_confirm");
+            btnProductPriceConfirm.click(function () {
+
+                if($("#c_ProductPriceValue").val() == ""){
+                    alert("请输入产品价格");
+                    return;
+                }
+                if($("#c_ProductCount").val() == ""){
+                    alert("请输入产品数量");
+                    return;
+                }
+                if($("#c_ProductUnit").val() == ""){
+                    alert("请输入产品单位");
+                    return;
+                }
+                if($("#c_ProductPriceIntro").val() == ""){
+                    alert("请输入产品价格说明");
+                    return;
+                }
+
+                if($("#btn_product_price_confirm").attr("idvalue") == ""){
+                    //新增时确认
+                    productPriceObject = new Object();
+                    productPriceObject.ProductPriceValue = $("#c_ProductPriceValue").val();
+                    productPriceObject.ProductCount = $("#c_ProductCount").val();
+                    productPriceObject.ProductUnit = $("#c_ProductUnit").val();
+                    productPriceObject.ProductPriceIntro = $("#c_ProductPriceIntro").val();
+                    productPriceObject.Sort = $("#c_Sort").val();
+                    productPriceObject.State = $("#c_State").val();
+
+                    productPriceArray.push(productPriceObject);
+
+                    $("#c_ProductPriceValue").val("");
+                    $("#c_ProductCount").val("");
+                    $("#c_ProductPriceIntro").val("");
+                    $("#c_Sort").val("0");
+                }else{
+                    //修改时确认
+                    productPriceObject = new Object();
+                    productPriceObject.ProductPriceValue = $("#c_ProductPriceValue").val();
+                    productPriceObject.ProductCount = $("#c_ProductCount").val();
+                    productPriceObject.ProductUnit = $("#c_ProductUnit").val();
+                    productPriceObject.ProductPriceIntro = $("#c_ProductPriceIntro").val();
+                    productPriceObject.Sort = $("#c_Sort").val();
+                    productPriceObject.State = $("#c_State").val();
+
+
+                    var x = parseInt($("#btn_product_price_confirm").attr("idvalue"));
+
+                    productPriceArray[x] = productPriceObject;
+                }
+
+
+
+
+                getProductPriceList();
+
+                $("#dialog_create_product_price").dialog('close');
+
+            });
+
+
 
             getProductPriceList();
         });
@@ -111,19 +214,22 @@
         }
         function getProductPriceList() {
             var productId=Request['product_id'];
-            var productPriceHtml=
-                '<tr class="grid_title">'
-                    +'<td style="width:40px;text-align:center;">编辑</td>'
-                    +'<td>价格说明</td>'
-                    +'<td style="width:60px;text-align:center">价格</td>'
-                    +'<td style="width:60px;text-align:center">数量</td>'
-                    +'<td style="width:60px;text-align:center;">单位</td>'
-                    +'<td style="width:60px;text-align:center;">状态</td>'
-                    +'<td style="width:80px;text-align:center;">启用|停用</td>'
-                    +'</tr>';
-            if (productId > 0) {
+
+            if (productId > 0) { //修改页面，从数据库取
+
+                var productPriceHtml=
+                    '<tr class="grid_title">'
+                        +'<td style="width:40px;text-align:center;">编辑</td>'
+                        +'<td>价格说明</td>'
+                        +'<td style="width:60px;text-align:center">价格</td>'
+                        +'<td style="width:60px;text-align:center">数量</td>'
+                        +'<td style="width:60px;text-align:center;">单位</td>'
+                        +'<td style="width:60px;text-align:center;">状态</td>'
+                        +'<td style="width:80px;text-align:center;">启用|停用</td>'
+                        +'</tr>';
+
                 $.ajax({
-                    url: "/default.php?secu=manage&mod=product_price&m=async_list&p=NaN",
+                    url: "/default.php?secu=manage&mod=product_price&m=async_list",
                     data: {secu: "manage", mod: "product_price", m: "async_list", product_id: productId},
                     dataType: "jsonp",
                     async: false,
@@ -145,10 +251,63 @@
                         $("#product_price_list").html(productPriceHtml);
                     }
                 });
+            }else{ //新增页面，从productPriceArray对象中取
+
+                var productPriceHtml=
+                    '<tr class="grid_title">'
+                        +'<td style="width:40px;text-align:center;">编辑</td>'
+                        +'<td>价格说明</td>'
+                        +'<td style="width:60px;text-align:center">价格</td>'
+                        +'<td style="width:60px;text-align:center">数量</td>'
+                        +'<td style="width:60px;text-align:center;">单位</td>'
+                        +'<td style="width:60px;text-align:center;">状态</td>'
+                        +'</tr>';
+
+                for(var i=0;i<productPriceArray.length;i++){
+                    productPriceHtml = productPriceHtml
+                        +'<tr>'
+                        +'<td class="spe_line2" style="text-align: center;"><img class="btn_modify_product_price" style="cursor:pointer" src="/system_template/{template_name}/images/manage/edit.gif" alt="编辑" idvalue="'+i+'" /></td>'
+                        +'<td class="spe_line2">'+productPriceArray[i].ProductPriceIntro+'</td>'
+                        +'<td class="spe_line2" style="text-align: center;">'+productPriceArray[i].ProductPriceValue+'</td>'
+                        +'<td class="spe_line2" style="text-align: center;">'+productPriceArray[i].ProductCount+'</td>'
+                        +'<td class="spe_line2" style="text-align: center;">'+productPriceArray[i].ProductUnit+'</td>'
+                        +'<td class="spe_line2" style="text-align: center;">'+FormatProductPriceState(productPriceArray[i].State)+'</span></td>'
+                        +'</tr>';
+                }
+
+                $("#product_price_list").html(productPriceHtml);
+
+                //新增产品时，编辑产品价格
+                var btnModifyProductPrice = $(".btn_modify_product_price");
+                btnModifyProductPrice.click(function () {
+
+                    $("#dialog_create_product_price").dialog({
+                        title: "编辑产品价格",
+                        width: 500,
+                        height: 300
+                    });
+
+                    var i = $(this).attr("idvalue");
+
+                    //加载数据
+                    if(productPriceArray[i] != undefined && productPriceArray[i] != null){
+
+                        $("#c_ProductPriceValue").val(productPriceArray[i].ProductPriceValue);
+                        $("#c_ProductCount").val(productPriceArray[i].ProductCount);
+                        $("#c_ProductUnit").val(productPriceArray[i].ProductUnit);
+                        $("#c_ProductPriceIntro").val(productPriceArray[i].ProductPriceIntro);
+                        $("#c_Sort").val(productPriceArray[i].Sort);
+                        $("#c_State").val(productPriceArray[i].State);
+                        $("#btn_product_price_confirm").attr("idvalue",i);
+
+                    }
+
+                });
+
             }
         }
     </script>
-    <script type="text/javascript" src="/system_js/manage/product/product_price.js"></script>
+
     <style type="text/css">
         #main_content {
             width:99%; text-align: center;
@@ -172,6 +331,51 @@
 </head>
 <body>
 {common_body_deal}
+
+<div id="dialog_create_product_price" style="display:none;">
+
+    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_ProductPriceValue">价格：</label></td>
+            <td class="spe_line"><input name="c_ProductPriceValue" id="c_ProductPriceValue" value="" type="text" class="input_price" style=" width: 100px;" /></td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_ProductCount">数量：</label></td>
+            <td class="spe_line"><input name="c_ProductCount" id="c_ProductCount" value="" type="text" class="input_number" style=" width: 100px;" /></td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_ProductUnit">单位：</label></td>
+            <td class="spe_line"><input name="c_ProductUnit" id="c_ProductUnit" value="" type="text" class="input_box" style=" width: 300px;" /></td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_ProductPriceIntro">价格说明：</label></td>
+            <td class="spe_line"><input name="c_ProductPriceIntro" id="c_ProductPriceIntro" value="" type="text" class="input_box" style=" width: 300px;" /></td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_Sort">排序：</label></td>
+            <td class="spe_line"><input name="c_Sort" id="c_Sort" value="0" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="c_State">状态：</label></td>
+            <td class="spe_line">
+                <select id="c_State" name="c_State">
+                    <option value="0">启用</option>
+                    <option value="100">停用</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" height="30" align="center">
+                <input id="btn_product_price_confirm" idvalue="" class="btn" value="确 认" type="button" />
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+
+
+
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
     <div id="result_table" style="font-size: 14px;">
         <iframe id="dialog_frame" src=""  style="border: 0; " width="100%" height="220px"></iframe>
@@ -325,7 +529,8 @@
         <table width="60%" cellpadding="0" cellspacing="0" style="border:1px solid #cccccc; margin-top: 10px" align="left">
             <tr>
                 <td align="left"><span style="font-size:14px; font-weight: bold; margin-left: 12px">产品价格列表</span>
-                <input style="margin-left: 40px" type="button" value="增加价格" onclick="ProductPriceCreate({ProductId})"; />
+                <input style="margin-left: 40px" type="button" value="增加价格" id="btn_create_product_price" />
+                    <input type="hidden" id="hidden_product_price_object" />
                 </td>
             </tr>
             <tr>
