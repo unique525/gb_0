@@ -65,11 +65,11 @@ class Format
     {
         //$content = str_replace('<', '&lt;', $content);
         //$content = str_replace(">", "&gt;", $content);
-        if(is_array($content)){
-            for($i = 0; $i<count($content); $i++){
+        if (is_array($content)) {
+            for ($i = 0; $i < count($content); $i++) {
                 $content[$i] = htmlspecialchars($content[$i]);
             }
-        }else{
+        } else {
             $content = htmlspecialchars($content);
         }
 
@@ -89,7 +89,7 @@ class Format
     public static function FormatHtmlTagInPost($arr)
     {
         $newArray = array();
-        foreach($arr as $key=>$val){
+        foreach ($arr as $key => $val) {
             $val = self::FormatHtmlTag($val);
             $newArray[$key] = $val;
         }
@@ -102,8 +102,9 @@ class Format
      * @param string $content 要格式化的JSON内容
      * @return string 格式化后的JSON内容
      */
-    public static function FormatJson($content){
-        $content = preg_replace("/([\\\\\/'])/",'\\\$1',$content);
+    public static function FormatJson($content)
+    {
+        $content = preg_replace("/([\\\\\/'])/", '\\\$1', $content);
         return $content;
     }
 
@@ -112,15 +113,16 @@ class Format
      * @param string $content 要检查的内容，正确内容为 0,10 之类字符串
      * @return null|string 返回检查后的内容，非法返回null
      */
-    public static function CheckTopCount($content){
+    public static function CheckTopCount($content)
+    {
         //如果可以直接转化为int型，则直接退出
-        if(is_numeric($content)){
+        if (is_numeric($content)) {
             return $content;
         }
         //把 0,10 这种转化为数组
-        $arr = explode(",",$content);
-        foreach($arr as $val){
-            if(!is_numeric($val)){
+        $arr = explode(",", $content);
+        foreach ($arr as $val) {
+            if (!is_numeric($val)) {
                 return null;
             }
         }
@@ -243,6 +245,43 @@ class Format
             return self::CustomJsonEncode($arrList);
         }
     }
+
+    /**
+     * 支持所有PHP版本的JSON_DECODE
+     * @param string $json Json格式的字符串
+     * @return int|mixed|null|array 结果数组或错误值
+    */
+    public static function FixJsonDecode($json)
+    {
+        $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json);
+
+        if (function_exists('json_decode')) {
+
+            if ($result = json_decode($json,TRUE)) {
+                return $result;
+            } else {
+                return json_last_error();
+            }
+        } else {
+            $x = null;
+            $comment = false;
+            $out = '$x=';
+
+            for ($i = 0; $i < strlen($json); $i++) {
+                if (!$comment) {
+                    if (($json[$i] == '{') || ($json[$i] == '[')) $out .= ' array(';
+                    else if (($json[$i] == '}') || ($json[$i] == ']')) $out .= ')';
+                    else if ($json[$i] == ':') $out .= '=>';
+                    else                         $out .= $json[$i];
+                } else $out .= $json[$i];
+                if ($json[$i] == '"' && $json[($i - 1)] != "\\") $comment = !$comment;
+            }
+            eval($out . ';');
+            return $x;
+        }
+
+    }
+
 
     /**
      * 对老版本PHP使用的json封装方法
@@ -385,9 +424,10 @@ class Format
      * @param array $arr 二唯数组
      * @return array 返回新的二唯数组
      */
-    public static function RemoveXSSForArray($arr){
+    public static function RemoveXSSForArray($arr)
+    {
         $newArray = array();
-        foreach($arr as $key=>$val){
+        foreach ($arr as $key => $val) {
             $val = self::RemoveXSS($val);
             $newArray[$key] = $val;
         }
@@ -400,7 +440,8 @@ class Format
      * @param string $val 要处理的字符串，可能包含恶意的脚本代码如<script language="javascript">alert("hello world");</script>
      * @return string 处理后的字符串
      */
-    public static function RemoveXSS($val) {
+    public static function RemoveXSS($val)
+    {
         // remove all non-printable characters. CR(0a) and LF(0b) and TAB(9) are allowed
         // this prevents some character re-spacing such as <java\0script>
         // note that you have to handle splits with \n, \r, and \t later since they *are* allowed in some inputs
@@ -417,9 +458,9 @@ class Format
             // 0{0,7} matches any padded zeros, which are optional and go up to 8 chars
 
             // @ @ search for the hex values
-            $val = preg_replace('/(&#[xX]0{0,8}'.dechex(ord($search[$i])).';?)/i', $search[$i], $val); // with a ;
+            $val = preg_replace('/(&#[xX]0{0,8}' . dechex(ord($search[$i])) . ';?)/i', $search[$i], $val); // with a ;
             // @ @ 0{0,7} matches '0' zero to seven times
-            $val = preg_replace('/(&#0{0,8}'.ord($search[$i]).';?)/', $search[$i], $val); // with a ;
+            $val = preg_replace('/(&#0{0,8}' . ord($search[$i]) . ';?)/', $search[$i], $val); // with a ;
         }
 
         // now the only remaining whitespace attacks are \t, \n, and \r
@@ -443,7 +484,7 @@ class Format
                     $pattern .= $ra[$i][$j];
                 }
                 $pattern .= '/i';
-                $replacement = substr($ra[$i], 0, 2).'<x>'.substr($ra[$i], 2); // add in <> to nerf the tag
+                $replacement = substr($ra[$i], 0, 2) . '<x>' . substr($ra[$i], 2); // add in <> to nerf the tag
                 $val = preg_replace($pattern, $replacement, $val); // filter out the hex tags
                 if ($val_before == $val) {
                     // no replacements were made, so exit the loop

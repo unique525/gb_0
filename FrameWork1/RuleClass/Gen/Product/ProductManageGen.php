@@ -56,6 +56,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             $siteId = $channelManageData->GetSiteId($channelId, false);
 
             if (!empty($_POST)) {
+
                 $httpPostData = $_POST;
 
                 //产品新增
@@ -69,6 +70,41 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
 
                     //产品参数新增
                     $productParamManageData->CreateProductParam($httpPostData, $productId);
+
+                    //产品价格新增
+                    $productPriceJson = Control::PostRequest("x_ProductPriceArray","",false);
+
+                    $arrProductPrice = Format::FixJsonDecode(
+                        $productPriceJson
+                    );
+
+                    $productPriceManageData = new ProductPriceManageData();
+
+                    for($i = 0;$i<count($arrProductPrice);$i++){
+
+                        $productPriceValue = $arrProductPrice[$i]["ProductPriceValue"];
+                        $productCount = $arrProductPrice[$i]["ProductCount"];
+                        $productUnit = $arrProductPrice[$i]["ProductUnit"];
+                        $productPriceIntro = $arrProductPrice[$i]["ProductPriceIntro"];
+                        $sort = $arrProductPrice[$i]["Sort"];
+                        $state = $arrProductPrice[$i]["State"];
+                        $remark = "";
+
+                        $productPriceManageData->CreateForProductCreate(
+                            $productId,
+                            $productPriceValue,
+                            $productPriceIntro,
+                            $productCount,
+                            $productUnit,
+                            $remark,
+                            $state,
+                            $sort,
+                            $manageUserId
+                        );
+
+                    }
+
+                    //处理题图
                     if( !empty($_FILES)){
                         //title pic1
                         $fileElementName = "file_title_pic_1";
@@ -210,7 +246,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
                 } else {
-                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 1)); //新增失败！
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('product', 2)); //新增失败！
                 }
 
             }
