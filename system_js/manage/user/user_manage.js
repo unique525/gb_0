@@ -105,13 +105,7 @@ $(document).ready(function() {
         }
     });
 
-    /***会员管理页面js***/
-    $(".img_avatar").each(function(){
-        var avatar = $(this).attr("src");
-        if(avatar == undefined || avatar.length<=0){
-            $(this).attr("src", "/front_template/default/skins/gray/no_avatar_small.gif");
-        }
-    });
+
 
     //按用户名进行查找
     $("#SearchSub").click(function () {
