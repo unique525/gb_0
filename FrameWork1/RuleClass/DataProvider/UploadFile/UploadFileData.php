@@ -245,6 +245,12 @@ class UploadFileData extends BaseData
 
 
     /**
+     * 图片轮换上传的图片
+     */
+    const UPLOAD_TABLE_TYPE_PIC_SLIDER = 320;
+
+
+    /**
      * 上传文件增加到数据表
      * @param string $uploadFileName 文件名
      * @param int $uploadFileSize 文件大小

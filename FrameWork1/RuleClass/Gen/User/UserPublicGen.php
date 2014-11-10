@@ -87,7 +87,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
         if(!empty($userAccount) && !empty($userPass) && $siteId > 0){
             $userPublicData = new UserPublicData();
-            $userId = $userPublicData->CheckLogin($userAccount, $userPass, $siteId);
+            $userId = $userPublicData->Login($userAccount, $userPass, $siteId);
             if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":-1})';
             }else {

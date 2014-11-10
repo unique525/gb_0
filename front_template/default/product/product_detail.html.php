@@ -23,7 +23,7 @@
         .star li.on{background-position:0 -28px;}
     </style>
     <script type="text/javascript">
-        var select_product_price_id = 0;
+        var selectProductPriceId = 0;
         $(function(){
             $(".jqzoom").jqzoom({
                 offset:5,
@@ -38,12 +38,12 @@
             spanPropon.click(function(){
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
-                select_product_price_id = $(this).attr("idvalue");
+                selectProductPriceId = $(this).attr("idvalue");
                 $("#productPrice").text(formatPrice(productPriceValue));
-                //产品价格
-                var productSalePriceValue=$("#productSalePrice").text();
+                //产品市场价格
+                var productMarketPriceValue=$("#productMarketPrice").text();
                 //优惠的差价
-                var priceReduceValue=parseFloat(productSalePriceValue)-parseFloat(productPriceValue);
+                var priceReduceValue=parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
                 $("#priceReduce").text(priceReduceValue);
                 //价格选择切换效果
                 spanPropon.attr("class","propon propondefault");//默认全部不选择
@@ -173,9 +173,9 @@
 
             $("#add_car").click(function(){
                 var buyCount = $("#productNum").val();
-                var activity_product_id = 0;
-                if(select_product_price_id  > 0){
-                    addUserCar('{SiteId}','{ProductId}',buyCount,select_product_price_id,activity_product_id);
+                var activityProductId = 0;
+                if(selectProductPriceId  > 0){
+                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId);
                 }
             });
 
@@ -210,9 +210,10 @@
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
-                    var positive_appraisal = parseInt(data["positive_appraisal"]);
+                    var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
                     var negative_appraisal = parseInt(data["negative_appraisal"]);
+
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
                     var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
                     var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
@@ -284,7 +285,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                            {child}
                                     </ul>
@@ -371,11 +372,11 @@
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
-                    <li><a class="lookpic" href="#" target="_blank" title="">
+                    <li><a class="lookpic" href="{f_url}" target="_blank" title="">
                             <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
                         <div class="lookmis">
                             <p class="lookname">
-                                <a href="#" target="_blank" title="">【进店必败】{f_Title}<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
+                                <a href="{f_url}" target="_blank" title="">【进店必败】{f_Title}<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
                     </li>    <div class="clear">    </div>
                     ]]>
                 </item>
@@ -421,7 +422,7 @@
                     </tr>
                     <tr>
                         <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice"></span></span></p>
-                                <p class="price_n">原　价：<span id="productSalePrice" class="oldprice" style="text-decoration: line-through">{SalePrice}</span></p>
+                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice" style="text-decoration: line-through">{MarketPrice}</span></p>
                                 <p class="price_n"><span class="chaprice">已优惠：<span id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>

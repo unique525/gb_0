@@ -19,7 +19,7 @@ $(function () {
     btnCreate.click(function(event) {
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=product&m=create&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;
@@ -33,7 +33,7 @@ $(function () {
         var productId = $(this).attr('idvalue');
         event.preventDefault();
         var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
+        if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
         parent.G_TabUrl = '/default.php?secu=manage&mod=product&m=modify&product_id=' + productId + '&p=' + pageIndex + '&channel_id=' + parent.G_SelectedChannelId;

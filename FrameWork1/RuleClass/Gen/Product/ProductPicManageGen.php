@@ -103,7 +103,7 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                             if($ProductPicThumb3Width<=0){
                                 $ProductPicThumb3Width  = 100; //默认50宽
                             }
-                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb3Width);
+                            parent::GenUploadFileThumb3($uploadFileId,$ProductPicThumb3Width);
                         }
                     }
                     //javascript 处理

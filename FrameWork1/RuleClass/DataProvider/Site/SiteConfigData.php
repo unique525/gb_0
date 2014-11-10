@@ -56,6 +56,13 @@
  * @property int $UserCommissionGrandson
  * @property int $UserDefaultMaleAvatar
  * @property int $UserDefaultFemaleAvatar
+ *
+ *
+ * @property int $UserAvatarMaxWidth
+ * @property int $UserAvatarMaxHeight
+ * @property int $UserAvatarMinWidth
+ * @property int $UserAvatarMinHeight
+ *
  * @property int $NewRegisterUserId
  * @property string $NewRegisterUserName
  * @property string $NewUserMessageVoice
@@ -201,6 +208,12 @@ class SiteConfigData extends BaseData {
         "UserAlbumToBestMustVoteCount",
         "UserDefaultState",
         "UserRecDefaultState",
+
+        "UserAvatarMaxWidth",
+        "UserAvatarMaxHeight",
+        "UserAvatarMinWidth",
+        "UserAvatarMinHeight",
+
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
         "DocumentNewsTitlePicPadWidth",
@@ -319,6 +332,12 @@ class SiteConfigData extends BaseData {
     private $UserDefaultMaleAvatar = 0;//站点默认男性用户头像 保存UploadFileId
     private $UserDefaultFemaleAvatar = 0; //站点默认女性用户头像 保存UploadFileId
 
+    private $UserAvatarMaxWidth = 0;  //会员头像最大宽度
+    private $UserAvatarMaxHeight = 0; //会员头像最大高度
+    private $UserAvatarMinWidth = 0;  //会员头像最小宽度
+    private $UserAvatarMinHeight = 0; //会员头像最小高度
+
+
     private $NewRegisterUserId = 0; //新注册的会员Id
     private $NewRegisterUserName = ''; //新注册的会员名
     private $NewUserMessageVoice = ''; //新短消息提示音文件网址
@@ -387,7 +406,75 @@ class SiteConfigData extends BaseData {
     private $ActivityTitlePic2MobileWidth = 0; //为适配手机客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic2PadWidth = 0;    //为适配平板客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic3MobileWidth = 0; //为适配手机客户端，活动题图3的同比缩小宽度值
-    private $ActivityTitlePic3PadWidth = 0; //为适配平板客户端，活动题图3的同比缩小宽度值
+    private $ActivityTitlePic3PadWidth = 0;
+
+    /**
+     * @param mixed $UserAvatarMaxHeight
+     */
+    public function setUserAvatarMaxHeight($UserAvatarMaxHeight)
+    {
+        $this->UserAvatarMaxHeight = $UserAvatarMaxHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMaxHeight()
+    {
+        return $this->UserAvatarMaxHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarMaxWidth
+     */
+    public function setUserAvatarMaxWidth($UserAvatarMaxWidth)
+    {
+        $this->UserAvatarMaxWidth = $UserAvatarMaxWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMaxWidth()
+    {
+        return $this->UserAvatarMaxWidth;
+    }
+
+    /**
+     * @param mixed $UserAvatarMinHeight
+     */
+    public function setUserAvatarMinHeight($UserAvatarMinHeight)
+    {
+        $this->UserAvatarMinHeight = $UserAvatarMinHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMinHeight()
+    {
+        return $this->UserAvatarMinHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarMinWidth
+     */
+    public function setUserAvatarMinWidth($UserAvatarMinWidth)
+    {
+        $this->UserAvatarMinWidth = $UserAvatarMinWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMinWidth()
+    {
+        return $this->UserAvatarMinWidth;
+    } //为适配平板客户端，活动题图3的同比缩小宽度值
+
+
+
+
 
     /**
      * @param mixed $OpenUrlReWrite

@@ -5,8 +5,7 @@ $(function() {
     //$(document).tooltip()会使title属性失效;
 });
 
-function ProductPriceCreate(){
-    var productId = Request["product_id"];
+function ProductPriceCreate(productId){
     var pageIndex = Request["p"]==null?1:Request["p"];
     pageIndex =  parseInt(pageIndex);
     if (pageIndex <= 0) {

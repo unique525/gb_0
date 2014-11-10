@@ -13,9 +13,11 @@ function QueryString()
                 value = arrTmp[i].substr(num + 1);
                 //过滤掉锚定，#号后不带入参数值
                 var anchorNum = value.indexOf("#");
-                if(anchorNum>0)
+                if(anchorNum>0){
                     this[name] = value.substring(0, anchorNum);
-                else this[name] = value;
+                }else{
+                    this[name] = value;
+                }
             }
         }
     }

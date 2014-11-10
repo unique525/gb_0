@@ -115,7 +115,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="">{f_ChannelName}</a>
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
                                     <ul style="display: none;">
                                         {child}
                                     </ul>
@@ -234,9 +234,6 @@
                                             ￥{f_SalePrice}
                                             <span >原价：￥{f_MarketPrice}</span>
                                         </div>
-                                        <div class="btn_jrgwc">
-                                            <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
-                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -288,9 +285,6 @@
                 <div class="price" style="color:#eb6100;">
                     ￥{f_SalePrice}
                     <span>已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
-                </div>
-                <div class="btn_jrgwc">
-                    <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="images/2_11.png" width="76" height="26" /></a>
                 </div>
                 <a class="sclist" onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
             </li>

@@ -11,7 +11,6 @@
     $("document").ready(function(){
 
         var channelId = Request["channel_id"];
-        var channelName = Request["channel_name"];
 
         $("#btn_select_all").click(function(event) {
             event.preventDefault();
@@ -33,7 +32,7 @@
                 pageIndex = 1;
             }
             parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=modify&custom_form_id=' + customFormId + '&p=' + pageIndex + '&channel_id=' + channelId;
-            parent.G_TabTitle = channelName + '-编辑表单';
+            parent.G_TabTitle = '编辑表单';
             parent.addTab();
         });
 
@@ -72,7 +71,7 @@
         $("#btn_create").click(function(event) {
             event.preventDefault();
             parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form&m=create' + '&channel_id=' +  channelId;
-            parent.G_TabTitle = channelName + '-新建表单';
+            parent.G_TabTitle = '新建表单';
             parent.addTab();
         });
     });

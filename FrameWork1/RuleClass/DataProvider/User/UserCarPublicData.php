@@ -48,22 +48,13 @@ class UserCarPublicData extends BasePublicData
     {
         $result = null;
         if ($userId > 0) {
-            $sql = "SELECT uc.*
-                        ,up.UploadFilePath
-                        ,p.ProductName
-                        ,p.ProductId
-                        ,pp.ProductPriceValue
-                        ,pp.ProductUnit
-                        ,pp.ProductPriceIntro
-                        ,psp.SendPrice
-
-                    FROM " . self::TableName_UserCar . " uc," . self::TableName_ProductPrice . " pp,"
-                . self::TableName_Product . " p LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId,"
-                . self::TableName_ProductSendPrice . " psp
-                    WHERE uc.ProductPriceId = pp.ProductPriceId
-                    AND uc.ProductId = psp.ProductId
-                    AND uc.ProductId = p.ProductId
-                    AND uc.UserId = :UserId;";
+            $sql = "SELECT uc.* ,up.UploadFilePath ,p.ProductName ,p.ProductId ,pp.ProductPriceValue ,pp.ProductUnit ,pp.ProductPriceIntro ,psp.SendPrice
+                            FROM " . self::TableName_UserCar . " uc
+                            LEFT JOIN " . self::TableName_ProductSendPrice . " psp ON uc.ProductId = psp.ProductId
+                            LEFT JOIN " . self::TableName_ProductPrice . " pp ON uc.ProductPriceId = pp.ProductPriceId
+                            LEFT JOIN ". self::TableName_Product . " p ON uc.ProductId = p.ProductId
+                            LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId
+                            WHERE uc.UserId = :UserId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

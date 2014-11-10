@@ -9,20 +9,24 @@
 class UserPublicData extends BasePublicData {
 
 
-    public function CheckLogin($userName,$userPass,$siteId){
+    /**
+     * 检查登录
+     * @param string $userName
+     * @param string $userPass
+     * @return int 返回userId
+     */
+    public function Login($userName,$userPass){
         $result = -1;
-        if(!empty($userName) && !empty($userPass) && $siteId > 0){
+        if(!empty($userName) && !empty($userPass)){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
                             AND UserPass = :UserPass
-                            AND SiteId = :SiteId
                             ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userName);
             $dataProperty->AddField("UserEmail",$userName);
             $dataProperty->AddField("UserMobile",$userName);
             $dataProperty->AddField("UserPass",$userPass);
-            $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
@@ -47,26 +51,7 @@ class UserPublicData extends BasePublicData {
         }
         return $result;
     }
-    
-    /**
-     * 会员登录
-     * @param string $userName 会员帐号
-     * @param string $userPass 会员密码
-     * @return int 用户Id
-     */
-    public function Login($userName, $userPass) {
-        $result = -1;
 
-        if (!empty($userName) && !empty($userPass)) {
-
-            $dataProperty = new DataProperty();
-            $sql = "SELECT " . self::TableId_User . " FROM " . self::TableName_User . " WHERE UserName=:UserName AND UserPass=:UserPass;";
-            $dataProperty->AddField('UserName', $userName);
-            $dataProperty->AddField('UserPass', $userPass);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
-        }
-        return $result;
-    }
 
     /**
      * 检查相同的用户名

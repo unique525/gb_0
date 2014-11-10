@@ -90,7 +90,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         if( !empty($_FILES)){
                             //title pic1
                             $fileElementName = "file_title_pic_1";
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1;
                             $tableId = $channelId;
                             $uploadFile1 = new UploadFile();
                             $uploadFileId1 = 0;
@@ -206,8 +206,8 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = str_ireplace("{SiteId}", strval($siteId), $tempContent);
             $tempContent = str_ireplace("{Rank}", strval($rank), $tempContent);
 
-            $fieldsOfChannel = $channelManageData->GetFields();
-            parent::ReplaceWhenCreate($tempContent, $fieldsOfChannel);
+            $fields = $channelManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $fields);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -229,13 +229,13 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 模板内容页面
      */
     private function GenModify() {
-        $tempContent = Template::Load("channel/channel_deal.html", "common");
+        $tempContent = "";
         $channelId = Control::GetRequest("channel_id", 0);
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
         if ($channelId >0 && $manageUserId > 0) {
-
+            $tempContent = Template::Load("channel/channel_deal.html", "common");
             parent::ReplaceFirst($tempContent);
             $channelManageData = new ChannelManageData();
 
@@ -279,7 +279,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         if( !empty($_FILES)){
                             //title pic1
                             $fileElementName = "file_title_pic_1";
-                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1; //channel
+                            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_CHANNEL_1;
                             $tableId = $channelId;
                             $uploadFile1 = new UploadFile();
                             $uploadFileId1 = 0;
@@ -390,9 +390,10 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+
         }
-        parent::ReplaceEnd($tempContent);
-        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 
