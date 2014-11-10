@@ -475,10 +475,22 @@ class BaseGen
 
                         self::ClearUploadFile($uploadFileId);
 
-                        //2.修改数据表
+                        //2.清空数据表
+                        $uploadFileData->Clear($uploadFileId);
 
-
-
+                        //3.修改数据表
+                        $uploadFileData->Modify(
+                            $uploadFileId,
+                            $newFileName,
+                            $_FILES[$fileElementName]['size'], //文件大小，字节
+                            $fileExtension,
+                            $_FILES[$fileElementName]['name'], //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
                     }else{
                         //创建新的uploadFile数据
                         $uploadFileId = $uploadFileData->Create(

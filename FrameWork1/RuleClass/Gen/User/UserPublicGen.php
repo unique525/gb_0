@@ -24,6 +24,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     const NO_REPEAT = 0;//没有重复的
 
+    const ILLEGAL_PARAMETER = -2;//非法参数
+
+    const ERROR_USER_PASS = -1;//账号密码错误
+
+
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -89,13 +94,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $userPublicData = new UserPublicData();
             $userId = $userPublicData->Login($userAccount, $userPass, $siteId);
             if($userId <= 0){
-                return Control::GetRequest("jsonpcallback","").'({"result":-1})';
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {
                 Control::SetUserCookie($userId,$userAccount);
                 return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
             }
         }else{
-            return Control::GetRequest("jsonpcallback","").'({"result":-2})';
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::ILLEGAL_PARAMETER.'})';
         }
     }
 

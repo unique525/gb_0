@@ -533,3 +533,23 @@ function UploadFileFormatHtml(fileName){
     }
     return url;
 }
+
+function CreateThumb1(uploadFileId,width,height){
+    $.ajax({
+        url:"/default.php?mod=upload_file&a=async_create_thumb1&width="+width+"&height="+height+"&upload_file_id="+uploadFileId,
+        secureUri:false,
+        dataType:"json",
+        success:function(data){
+            if(typeof(data.error) != 'undefined')
+            {
+                alert(data.error);
+            }else{
+                window.CreateThumb1CallBack(data);
+            }
+        },
+        error: function (data, status, e)
+        {
+            alert(e);
+        }
+    });
+}

@@ -354,17 +354,21 @@ class UploadFileData extends BaseData
         $sql = "UPDATE " . self::TableName_UploadFile . "
                 SET
                     UploadFileName = :UploadFileName,
-                    UploadFileSize,UploadFileExtentionName,
-            UploadFileOrgName,UploadFilePath,TableType,
-            TableId,ManageUserId,UserId,CreateDate,UploadFileTitle,
-            UploadFileInfo,IsBatchUpload)
-
-            VALUES
-
-           (:UploadFileName,:UploadFileSize,:UploadFileExtentionName,
-           :UploadFileOrgName,:UploadFilePath,:TableType,
-           :TableId,:ManageUserId,:UserId,now(),:UploadFileTitle,
-           :UploadFileInfo,:IsBatchUpload);";
+                    UploadFileSize = :UploadFileSize,
+                    UploadFileExtentionName = :UploadFileExtentionName,
+                    UploadFileOrgName = :UploadFileOrgName,
+                    UploadFilePath = :UploadFilePath,
+                    TableType = :TableType,
+                    TableId = :TableId,
+                    ManageUserId = :ManageUserId,
+                    UserId = :UserId,
+                    CreateDate = :CreateDate,
+                    UploadFileTitle = :UploadFileTitle,
+                    UploadFileInfo = :UploadFileInfo,
+                    IsBatchUpload = :IsBatchUpload
+                WHERE
+                    UploadFileId = :UploadFileId;
+        ";
 
         $uploadFilePath = str_ireplace("../../", "/", $uploadFilePath);
         $uploadFilePath = str_ireplace("../", "/", $uploadFilePath);
@@ -385,6 +389,7 @@ class UploadFileData extends BaseData
         $dataProperty->AddField("UploadFileTitle", $uploadFileTitle);
         $dataProperty->AddField("UploadFileInfo", $uploadFileInfo);
         $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
+        $dataProperty->AddField("UploadFileId", $uploadFileId);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
@@ -1386,7 +1391,9 @@ class UploadFileData extends BaseData
             if (!empty($arr["UploadFilePath"])) {
                 $uploadFile->UploadFilePath = strval($arr["UploadFilePath"]);
             }
-
+            if (!empty($arr["UploadFileThumbPath1"])) {
+                $uploadFile->UploadFileThumbPath1 = strval($arr["UploadFileThumbPath1"]);
+            }
         }
     }
 
