@@ -91,20 +91,7 @@
 </head>
 <body>
 <pre_temp id="3"></pre_temp>
-<div class="wrapper2">
-    <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103" /></a></div>
-    <div class="search">
-        <div class="search_green"><input name="" type="text" class="text"/></div>
-        <div class="searchbtn"><img src="images/search.png" width="46" height="28" /></div>
-        <div class="searchbottom">平谷大桃  哈密瓜  新鲜葡萄  红炉磨坊  太湖鲜鱼</div>
-    </div>
-    <div class="service">
-        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
-        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><span><a href="/default.php?mod=user_car&a=list" target="_blank"></a></span></div>
-        <div class="number">0</div>
-    </div>
-</div>
+<pre_temp id="4"></pre_temp>
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">

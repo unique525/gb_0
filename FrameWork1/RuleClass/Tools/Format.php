@@ -249,18 +249,19 @@ class Format
     /**
      * 支持所有PHP版本的JSON_DECODE
      * @param string $json Json格式的字符串
+     * @param bool $decodeArray 是否转换成数组，而不是对象，默认是
      * @return int|mixed|null|array 结果数组或错误值
     */
-    public static function FixJsonDecode($json)
+    public static function FixJsonDecode($json,$decodeArray = true)
     {
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json);
 
         if (function_exists('json_decode')) {
 
-            if ($result = json_decode($json,TRUE)) {
+            if ($result = json_decode($json,$decodeArray)) {
                 return $result;
             } else {
-                return json_last_error();
+                return "";//json_last_error();
             }
         } else {
             $x = null;

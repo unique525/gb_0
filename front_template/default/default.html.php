@@ -12,6 +12,8 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/front_js/user/user.js"></script>
+    <script type="text/javascript" src="/front_js/bx_slider/jquery.bxslider.min.js"></script>
+    <link href="/front_js/bx_slider/jquery.bxslider.css" rel="stylesheet" />
     <script type="text/javascript">
         //倒计时处理代码
         function countDown(time, day_elem, hour_elem, minute_elem, second_elem) {
@@ -57,6 +59,9 @@
             //显示倒计时
 
             countDown("2014/12/10 22:59:59",null,"#demo02 .hour","#demo02 .minute","#demo02 .second");
+
+            $('.bx_slider').bxSlider();
+
         });
     </script>
 </head>
@@ -103,7 +108,19 @@
             </ul>
 
         </div>
-        <div class="middle left"><img src="images/ad.jpg" width="741" height="429" /></div>
+        <div class="middle left">
+            <ul class="bx_slider">
+
+            <icms id="channel_134" type="pic_slider_list" top="4" title="24">
+                <item>
+                    <![CDATA[
+                    <li><a href="{f_DirectUrl}" target="_blank"><img src="{f_UploadFilePath}" alt="{f_PicSliderTitle}" width="741" height="429" /></a></li>
+                    ]]>
+                </item>
+            </icms>
+
+            </ul>
+        </div>
         <div class="right_bar right">
             <div class="gonggao">
                 <div class="title1"><span class="right"><a href="/h/17/list.html" target="_blank">更多</a></span>网站公告 </div>

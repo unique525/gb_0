@@ -90,7 +90,7 @@
         <td class="spe_line" height="30" align="right"><label for="f_BindDomain">绑定一级域名：</label></td>
         <td class="spe_line">
             <input id="f_BindDomain" name="f_BindDomain" type="text" value="{BindDomain}" class="input_box"
-                   style="width:400px;" maxlength="500"/> 多个一级域名用;分隔
+                   style="width:400px;" maxlength="500"/> 多个一级域名用,分隔
         </td>
     </tr>
 

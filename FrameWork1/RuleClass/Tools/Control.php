@@ -569,5 +569,15 @@ class Control {
 
         return $result;
     }
+
+    /**
+     * 取一级域名
+     * @param string $url 网址
+     * @return string 一级域名
+     */
+    public static function GetDomain($url){
+        preg_match('/[\w][\w-]*\.(?:com\.cn|com|cn|co|net|org|gov|cc|biz|info)(\/|$)/isU', $url, $domain);
+        return rtrim($domain[0], '/');
+    }
 }
 ?>

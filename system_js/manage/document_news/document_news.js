@@ -306,7 +306,7 @@ function formatDocumentNewsState(state){
             break;
         default :
             return "未知";
-        break;
+            break;
     }
 }
 

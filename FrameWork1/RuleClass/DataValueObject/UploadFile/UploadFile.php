@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理 上传文件类
+ * 上传文件对象类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataValueObject_UploadFile
  * @property string $ErrorMessage 错误代码

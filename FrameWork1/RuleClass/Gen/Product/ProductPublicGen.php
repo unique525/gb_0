@@ -211,7 +211,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $title = $arrOne["ProductName"];
         $titlePic = $arrOne["UploadFileThumbPath3"];
         $price = $arrOne["SalePrice"];
-        parent::CreateExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price);
+        parent::CreateUserExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price);
         return $templateContent;
     }
 

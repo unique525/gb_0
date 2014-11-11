@@ -16,11 +16,12 @@ class DocumentNewsPublicData extends BasePublicData {
 
 
     /**
-     * @param int $channelId
-     * @param string $topCount
-     * @param int $state
-     * @param int $orderBy
-     * @return array|null
+     * 取得资讯列表
+     * @param int $channelId 频道id
+     * @param string $topCount 显示条数  1或 1,10
+     * @param int $state 状态
+     * @param int $orderBy 排序方式
+     * @return array|null 返回资讯列表
      */
     public function GetList($channelId, $topCount, $state, $orderBy = 0) {
 
