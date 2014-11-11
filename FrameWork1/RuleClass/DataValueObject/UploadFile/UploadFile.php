@@ -524,6 +524,9 @@ class UploadFile {
             if(!empty($this->UploadFilePath)){
                 $returnJson .= ',"upload_file_path":"'. $this->UploadFilePath . '"';
             }
+            if(!empty($this->UploadFileThumbPath1)){
+                $returnJson .= ',"upload_file_thumb_path1":"'. $this->UploadFileThumbPath1 . '"';
+            }
 
         }
         $returnJson .= '}';

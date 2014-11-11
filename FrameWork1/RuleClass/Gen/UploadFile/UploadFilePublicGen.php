@@ -28,6 +28,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_save_remote_image":
                 $result = self::AsyncSaveRemoteImage();
                 break;
+            case "async_create_thumb1":
+                $result = self::AsyncCreateThumb1();
+                break;
         }
 
         return $result;
@@ -72,10 +75,10 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             $imgMinHeight = 0;
 
 
-            if($tableType == UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR){
+            if ($tableType == UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR) {
 
                 $siteId = parent::GetSiteIdByDomain();
-                if($siteId>0){
+                if ($siteId > 0) {
 
                     $siteConfigData = new SiteConfigData($siteId);
                     $imgMaxWidth = $siteConfigData->UserAvatarMaxWidth;
@@ -88,12 +91,8 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             }
 
 
-
-
-
-
             $uploadFile = new UploadFile();
-            $uploadFileId = 0;
+            $uploadFileId = Control::GetRequest("upload_file_id",0);
 
             parent::Upload(
                 $fileElementName,
@@ -139,7 +138,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
                 parent::SaveRemoteImage($arrUrls[$i], $tableType, $tableId, $uploadFile);
 
-                if (strlen($uploadFile->UploadFilePath)>0) {
+                if (strlen($uploadFile->UploadFilePath) > 0) {
                     $arrUrls[$i] = $uploadFile->UploadFilePath;
                 }
             }
@@ -147,5 +146,42 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
         return implode('|', $arrUrls);
 
+    }
+
+    private function AsyncCreateThumb1()
+    {
+        $uploadFileId = Control::GetRequest("upload_file_id", 0);
+        $width = Control::GetRequest("width", 0);
+        $height = Control::GetRequest("height", 0);
+
+        if ($uploadFileId > 0 && $width > 0) {
+            if ($height <= 0) {
+                $resultOfCreateThumb1 = parent::GenUploadFileThumb1($uploadFileId, $width);
+            } else {
+                $resultOfCreateThumb1 = parent::GenUploadFileThumb1($uploadFileId, $width, $height);
+            }
+
+            if ($resultOfCreateThumb1 > 0) {
+                $uploadFileData = new UploadFileData();
+                $uploadFile = $uploadFileData->Fill($uploadFileId);
+                $result = $uploadFile->GetJson();
+            } else {
+                $result = '{';
+                $result .= '"error":"system error",';
+                $result .= '"result_html":"",';
+                $result .= '"upload_file_id":"",';
+                $result .= '"upload_file_path":""';
+                $result .= '}';
+            }
+        } else {
+            $result = '{';
+            $result .= '"error":"param error",';
+            $result .= '"result_html":"",';
+            $result .= '"upload_file_id":"",';
+            $result .= '"upload_file_path":""';
+            $result .= '}';
+        }
+
+        return $result;
     }
 } 

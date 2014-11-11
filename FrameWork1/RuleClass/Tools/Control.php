@@ -115,9 +115,10 @@ class Control {
      * 取得Post方式传输的表单请求
      * @param string $paramName 参数名称
      * @param mixed $defaultValue 参数默认值，支持string,int,float
+     * @param bool $removeXSS 是否删除XSS信息
      * @return mixed 返回值
      */
-    public static function PostRequest($paramName, $defaultValue) {
+    public static function PostRequest($paramName, $defaultValue, $removeXSS = true) {
         if (isset($_POST[$paramName])) {
             if (strlen($_POST[$paramName]) <= 0) {
                 $result = $defaultValue;
@@ -127,8 +128,11 @@ class Control {
         } else {
             $result = $defaultValue;
         }
-        $result = Format::RemoveXSS($result);
-        $result = Format::FormatHtmlTag($result);
+        if($removeXSS){
+            $result = Format::RemoveXSS($result);
+            $result = Format::FormatHtmlTag($result);
+        }
+
         return $result;
     }
 

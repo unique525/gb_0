@@ -16,18 +16,53 @@
     </style>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/jquery.Jcrop.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script type="text/javascript" src="/front_js/user/user_car.js"></script>
-    <script type="text/javascript" src="/front_js/ajaxfileupload_v2.1.js"></script>
-    <script type="text/javascript" src="/front_js/jquery.Jcrop.min.js"></script>
+    <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+    <script type="text/javascript" src="/system_js/upload_file.js"></script>
 
     <script type="text/javascript">
 
         var width = 200;
         var height = 200;
         var src = "";
+        var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
+        var tableId = {UserId};
+
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
+            var uploadFileId=data["upload_file_id"];
+            CreateThumb1(uploadFileId,400,0);
+        };
+
+        window.CreateThumb1CallBack = function(data){
+            src = data["upload_file_thumb_path1"];
+            cutimage();
+        };
+
+
         $(function(){
             getAvatar();
+
+            $("#btnupload").click(function () {
+
+                var fileElementId = 'file_upload_to_user_avatar';
+
+                var loadingImageId = "loadingOfUserAvatar";
+
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfForumTopInfo,
+                    tableId,
+                    loadingImageId,
+                    $(this),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                );
+            });
         });
 
         function getAvatar(){
@@ -41,6 +76,7 @@
                     if(result == 1){
                         var avatarList = data["avatarList"];
                         var avatarSrc = avatarList["UploadFilePath"];
+                        src = avatarSrc;
                         $("#avatar").attr("src",avatarSrc);
                     }else{
                         alert("获取头像失败");
@@ -48,47 +84,7 @@
                 }
             });
         }
-        /**
-         * ajax上传
-         */
-        function ajaxFileUpload()
-        {
-            $("#loading")
-                .ajaxStart(function(){
-                    $(this).show();
-                })
-                .ajaxComplete(function(){
-                    $(this).hide();
-                });
 
-            $.ajaxFileUpload({
-                url:'/default.php?mod=user_info&a=async_modify_avatar',
-                async:false,
-                fileElementId:'fileToUpload',
-                dataType: 'jsonp',
-                success: function (data, status)
-                {
-                    if(data == 3){
-                        alert("请上传宽高比不超过2的图片.");
-                    }else if(data == 2){
-                        alert("请上传宽度大于200像素和高度大于200像素的图片.");
-                    }else if(data == 1){
-                        alert("上传失败.");
-                    }else if(data == 4){
-                        alert("上传的格式不对,如果上传的是JPEG格式,请将后缀名改成JPG.");
-                    }else{
-                        getAvatar();
-                        cutimage();
-                    }
-                },
-                error: function (data, status, e)
-                {
-                    alert(e);
-                }
-            });
-            return false;
-
-        }
 
         function cutimage(){
             $("#upload").css("display","none");
@@ -192,8 +188,11 @@
             <tr>
                 <td width="169"><div style="padding:3px; border:1px solid #e9e9e9;"><img id="avatar" width="160px" height="160px" src=""/></div></td>
                 <td width="25" rowspan="9" align="left" ></td>
-                <td width="439" rowspan="9" align="left" bgcolor="#f4f4f4"><input id="fileToUpload" name="fileToUpload" type="file" class="input1" style="margin:20px; background:#ffffff; "/>
-                    <input id="btnupload" type="button" value="上传" onclick="return ajaxFileUpload();"/></td>
+                <td width="439" rowspan="9" align="left" bgcolor="#f4f4f4">
+                    <input id="file_upload_to_user_avatar" name="file_upload_to_user_avatar" type="file" class="input1" style="margin:20px; background:#ffffff; "/>
+                    <input id="btnupload" type="button" value="上传""/>
+                    <img id="loadingOfUserAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                </td>
                 <td width="397" align="left" bgcolor="#f4f4f4" ><div style="margin:15px; padding:10px 20px;color: #585858;font-size: 12px; line-height:30px; border-left:1px dashed #CCCCCC"><p ><span  style="color:#CC0000">*</span>  支持jpg、png图片格式</p>
                         <p><span  style="color:#CC0000">*</span>  请上传宽高比不大于2的图片</p>
                         <p><span  style="color:#CC0000">*</span>  请上传宽度大于200像素,高度大于200像素的图片</p></div>                           </td>

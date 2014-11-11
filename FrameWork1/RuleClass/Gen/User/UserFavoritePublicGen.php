@@ -8,15 +8,35 @@
  */
 class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
 
+    /**
+     *
+     */
     const CREATE_FAIL = -1;
 
+    /**
+     *
+     */
     const DELETE_FAIL = -1;
 
+    /**
+     *
+     */
     const DELETE_SUCCESS = 1;
 
+    /**
+     *
+     */
     const TABLE_TYPE_PRODUCT = 1;
 
+    /**
+     *
+     */
     const CREATE_IS_EXIST = -2;
+
+    /**
+     *
+     */
+    const IS_NOT_LOGIN= -3;
 
     public function GenPublic() {
         $result = "";
@@ -42,11 +62,11 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
     private function AsyncCreate(){
         $tableId = intval(Control::PostRequest("table_id",0));
         $tableType = intval(Control::PostRequest("table_type",0));
-        $siteId = intval(Control::PostRequest("site_id",0));
+        $siteId = parent::GetSiteIdByDomain();
         $userId = Control::GetUserId();
         $userFavoriteTag = Control::PostRequest("user_favorite_tag","");
+
         if($tableId > 0 && $tableType > 0 && !empty($userFavoriteTag) && $userId > 0 && $siteId > 0){
-            $userFavoriteData = new UserFavoriteData();
             $userFavoritePublicData = new UserFavoritePublicData();
             $userFavoriteTitle = "";
             $uploadFileId = 0;
@@ -80,6 +100,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
             }else{
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
             }
+        }else if($userId <= 0){
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::IS_NOT_LOGIN.'})';
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
         }

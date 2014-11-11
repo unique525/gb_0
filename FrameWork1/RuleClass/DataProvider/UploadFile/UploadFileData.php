@@ -317,6 +317,146 @@ class UploadFileData extends BaseData
         return $result;
     }
 
+
+    /**
+     * 上传文件 修改数据表
+     * @param int $uploadFileId 上传文件id
+     * @param string $uploadFileName 文件名
+     * @param int $uploadFileSize 文件大小
+     * @param int $uploadFileExtentionName 文件类型（扩展名）
+     * @param string $uploadFileOrgName 文件原名称
+     * @param string $uploadFilePath 文件路径
+     * @param int $tableType 对应表类型
+     * @param int $tableId 对应表id
+     * @param int $manageUserId 后台管理员id
+     * @param int $userId 会员id
+     * @param string $uploadFileTitle 文件标题
+     * @param string $uploadFileInfo 文件介绍
+     * @param int $isBatchUpload 是否是批量上传的文件
+     * @return int 新增的上传文件id
+     */
+    public function Modify(
+        $uploadFileId,
+        $uploadFileName,
+        $uploadFileSize,
+        $uploadFileExtentionName,
+        $uploadFileOrgName,
+        $uploadFilePath,
+        $tableType,
+        $tableId,
+        $manageUserId,
+        $userId,
+        $uploadFileTitle = '',
+        $uploadFileInfo = '',
+        $isBatchUpload = 0
+    )
+    {
+        $sql = "UPDATE " . self::TableName_UploadFile . "
+                SET
+                    UploadFileName = :UploadFileName,
+                    UploadFileSize = :UploadFileSize,
+                    UploadFileExtentionName = :UploadFileExtentionName,
+                    UploadFileOrgName = :UploadFileOrgName,
+                    UploadFilePath = :UploadFilePath,
+                    TableType = :TableType,
+                    TableId = :TableId,
+                    ManageUserId = :ManageUserId,
+                    UserId = :UserId,
+                    CreateDate = :CreateDate,
+                    UploadFileTitle = :UploadFileTitle,
+                    UploadFileInfo = :UploadFileInfo,
+                    IsBatchUpload = :IsBatchUpload
+                WHERE
+                    UploadFileId = :UploadFileId;
+        ";
+
+        $uploadFilePath = str_ireplace("../../", "/", $uploadFilePath);
+        $uploadFilePath = str_ireplace("../", "/", $uploadFilePath);
+        $uploadFilePath = str_ireplace("./", "/", $uploadFilePath);
+
+        $uploadFilePath = str_ireplace(DIRECTORY_SEPARATOR, "/", $uploadFilePath);
+
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UploadFileName", $uploadFileName);
+        $dataProperty->AddField("UploadFileSize", $uploadFileSize);
+        $dataProperty->AddField("UploadFileExtentionName", $uploadFileExtentionName);
+        $dataProperty->AddField("UploadFileOrgName", $uploadFileOrgName);
+        $dataProperty->AddField("UploadFilePath", $uploadFilePath);
+        $dataProperty->AddField("TableType", $tableType);
+        $dataProperty->AddField("TableId", $tableId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+        $dataProperty->AddField("UserId", $userId);
+        $dataProperty->AddField("UploadFileTitle", $uploadFileTitle);
+        $dataProperty->AddField("UploadFileInfo", $uploadFileInfo);
+        $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
+        $dataProperty->AddField("UploadFileId", $uploadFileId);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        return $result;
+    }
+
+
+    /**
+     * 修改上传文件路径（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @return int 操作结果
+     */
+    public function Clear($uploadFileId)
+    {
+        if ($uploadFileId > 0) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET
+                            UploadFileName='',
+                            UploadFileExtentionName='',
+                            UploadFileSize=0,
+                            UploadFileType=0,
+                            UploadFileOrgName='',
+                            UploadFilePath='',
+                            UploadFileMobilePath='',
+                            UploadFilePadPath='',
+                            UploadFileThumbPath1='',
+                            UploadFileThumbPath2='',
+                            UploadFileThumbPath3='',
+                            UploadFileWatermarkPath1='',
+                            UploadFileWatermarkPath2='',
+                            UploadFileCompressPath1='',
+                            UploadFileCompressPath2='',
+                            UploadFileTitle='',
+                            UploadFileInfo=''
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+
+    /**
+     * 修改上传文件路径（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFilePath 上传文件路径（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFilePath($uploadFileId, $uploadFilePath)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFilePath)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFilePath=:UploadFilePath
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFilePath", $uploadFilePath);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
     /**
      * 修改上传文件路径（移动客户端使用）（文件夹+文件名）
      * @param int $uploadFileId 上传文件id
@@ -585,6 +725,23 @@ class UploadFileData extends BaseData
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 物理删除一条记录
+     * @param int $uploadFileId 上传文件id
+     * @return int 操作结果
+     */
+    public function Delete($uploadFileId){
+        $result = -1;
+        if ($uploadFileId > 0 ){
+
+            $sql = "DELETE FROM " . self::TableName_UploadFile . " WHERE UploadFileId=:UploadFileId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
     }
 
 
@@ -1234,7 +1391,9 @@ class UploadFileData extends BaseData
             if (!empty($arr["UploadFilePath"])) {
                 $uploadFile->UploadFilePath = strval($arr["UploadFilePath"]);
             }
-
+            if (!empty($arr["UploadFileThumbPath1"])) {
+                $uploadFile->UploadFileThumbPath1 = strval($arr["UploadFileThumbPath1"]);
+            }
         }
     }
 

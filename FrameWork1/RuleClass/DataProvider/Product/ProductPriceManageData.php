@@ -13,7 +13,8 @@ class ProductPriceManageData extends BaseManageData
      * @param string $tableName 表名
      * @return array 字段数据集
      */
-    public function GetFields($tableName = self::TableName_ProductPrice){
+    public function GetFields($tableName = self::TableName_ProductPrice)
+    {
         return parent::GetFields(self::TableName_ProductPrice);
     }
 
@@ -30,13 +31,84 @@ class ProductPriceManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 新增产品价格
+     * @param int $productId
+     * @param float $productPriceValue
+     * @param string $productPriceIntro
+     * @param int $productCount
+     * @param string $productUnit
+     * @param string $remark
+     * @param int $state
+     * @param int $sort
+     * @param int $manageUserId
+     * @return int 产品价格Id
+     */
+    public function CreateForProductCreate(
+        $productId,
+        $productPriceValue,
+        $productPriceIntro,
+        $productCount,
+        $productUnit,
+        $remark,
+        $state,
+        $sort,
+        $manageUserId
+    )
+    {
+
+        $sql = "INSERT INTO
+                " . self::TableName_ProductPrice . "
+                (
+                    ProductId,
+                    ProductPriceValue,
+                    ProductPriceIntro,
+                    ProductCount,
+                    ProductUnit,
+                    Remark,
+                    State,
+                    Sort,
+                    ManageUserId,
+                    CreateDate
+                )
+                VALUES
+                (
+                    :ProductId,
+                    :ProductPriceValue,
+                    :ProductPriceIntro,
+                    :ProductCount,
+                    :ProductUnit,
+                    :Remark,
+                    :State,
+                    :Sort,
+                    :ManageUserId,
+                    now()
+                );
+
+                ";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ProductId", $productId);
+        $dataProperty->AddField("ProductPriceValue", $productPriceValue);
+        $dataProperty->AddField("ProductPriceIntro", $productPriceIntro);
+        $dataProperty->AddField("ProductCount", $productCount);
+        $dataProperty->AddField("ProductUnit", $productUnit);
+        $dataProperty->AddField("Remark", $remark);
+        $dataProperty->AddField("State", $state);
+        $dataProperty->AddField("Sort", $sort);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        return $result;
+    }
+
     /**
      * 异步修改状态
      * @param string $productPriceId 产品价格Id
      * @param string $state 状态
      * @return int 执行结果
      */
-    public function ModifyState($productPriceId,$state)
+    public function ModifyState($productPriceId, $state)
     {
         $result = -1;
         if ($productPriceId < 0) {
@@ -88,7 +160,7 @@ class ProductPriceManageData extends BaseManageData
 
     /**
      * 获取产品价格数组通用
-     * @param int $productId   产品ID
+     * @param int $productId 产品ID
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array  返回查询题目数组
@@ -109,8 +181,8 @@ class ProductPriceManageData extends BaseManageData
             SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
             FROM " . self::TableName_ProductPrice . "
             WHERE ProductId=:ProductId"
-            . $order
-            . $topCount;
+                . $order
+                . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

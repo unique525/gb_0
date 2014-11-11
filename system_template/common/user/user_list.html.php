@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
@@ -43,6 +43,18 @@
                     alert("用户为停用状态，请修改为非停用状态再编辑用户详细信息");
                 }
             });
+
+            /***会员管理页面js***/
+            $(".img_avatar").each(function(){
+                var avatar = $(this).attr("src");
+                if(avatar == undefined || avatar.length<=0){
+                    $(this).attr("src", "/front_template/default/skins/gray/no_avatar.gif");
+                }
+            });
+
+
+            var boxWidth = ($(document).width() - 96) / 5;
+            $(".li_list_width_img").css("width", boxWidth);
         });
     </script>
 </head>
@@ -76,25 +88,19 @@
         <icms id="user_list">
             <item>
                 <![CDATA[
-                    <li class="user_item">
-                        <table width="100%" cellpadding="0" cellspacing="0" border="1">
+                    <li class="li_list_width_img">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
                             <tr>
-                                <td width="60" height="60">
-                                    <img class="img_avatar" width="60" height="60" src="{f_Avatar}" alt="会员头像"/>
+                                <td width="125">
+                                    <img class="img_avatar" width="120" height="120" src="" style="display:block;" alt="会员头像"/>
                                 </td>
-                                <td width="5"></td>
-                                <td align="left" valign="top">
-                                    <div style="width:245px;overflow: hidden">{f_UserName}</div>
-                                    状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" height="5"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">
-                                    <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
-                                    <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
+                                <td>
+                                    <div>{f_UserName}</div>
+                                    <div>状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
+                                    <div>
+                                        <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
+                                        <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
+                                    </div>
                                 </td>
                             </tr>
                         </table>

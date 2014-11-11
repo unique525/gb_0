@@ -24,11 +24,15 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "async_modify_avatar":
+            case "modify_avatar"://生成修改头像界面
+                $result = self::GenModifyAvatar();
+                break;
+            case "async_modify_avatar"://ajax修改头像
                 $result = self::AsyncModifyAvatar();
                 break;
             case "async_get_avatar":
                 $result = self::AsyncGetAvatar();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -108,7 +112,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         }
     }
 
-    private function AsyncModifyAvatar(){
+    private function GenModifyAvatar(){
         $userId = Control::GetUserId();
         if($userId > 0){
             $templateFileUrl = "/user/user_modify_avatar.html";
@@ -117,9 +121,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
 
-
+            $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
+            Control::GoUrl("/default.php?mod=user&a=login");
             return "";
         }
     }

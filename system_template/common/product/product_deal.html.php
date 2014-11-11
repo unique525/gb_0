@@ -4,6 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     {common_head}
+
+    <script type="text/javascript" src="/system_js/json.js"></script>
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
@@ -128,19 +130,19 @@
             var btnProductPriceConfirm = $("#btn_product_price_confirm");
             btnProductPriceConfirm.click(function () {
 
-                if($("#c_ProductPriceValue").val() == ""){
+                if($("#x_ProductPriceValue").val() == ""){
                     alert("请输入产品价格");
                     return;
                 }
-                if($("#c_ProductCount").val() == ""){
+                if($("#x_ProductCount").val() == ""){
                     alert("请输入产品数量");
                     return;
                 }
-                if($("#c_ProductUnit").val() == ""){
+                if($("#x_ProductUnit").val() == ""){
                     alert("请输入产品单位");
                     return;
                 }
-                if($("#c_ProductPriceIntro").val() == ""){
+                if($("#x_ProductPriceIntro").val() == ""){
                     alert("请输入产品价格说明");
                     return;
                 }
@@ -148,28 +150,28 @@
                 if($("#btn_product_price_confirm").attr("idvalue") == ""){
                     //新增时确认
                     productPriceObject = new Object();
-                    productPriceObject.ProductPriceValue = $("#c_ProductPriceValue").val();
-                    productPriceObject.ProductCount = $("#c_ProductCount").val();
-                    productPriceObject.ProductUnit = $("#c_ProductUnit").val();
-                    productPriceObject.ProductPriceIntro = $("#c_ProductPriceIntro").val();
-                    productPriceObject.Sort = $("#c_Sort").val();
-                    productPriceObject.State = $("#c_State").val();
+                    productPriceObject.ProductPriceValue = $("#x_ProductPriceValue").val();
+                    productPriceObject.ProductCount = $("#x_ProductCount").val();
+                    productPriceObject.ProductUnit = $("#x_ProductUnit").val();
+                    productPriceObject.ProductPriceIntro = $("#x_ProductPriceIntro").val();
+                    productPriceObject.Sort = $("#x_Sort").val();
+                    productPriceObject.State = $("#x_State").val();
 
                     productPriceArray.push(productPriceObject);
 
-                    $("#c_ProductPriceValue").val("");
-                    $("#c_ProductCount").val("");
-                    $("#c_ProductPriceIntro").val("");
-                    $("#c_Sort").val("0");
+                    $("#x_ProductPriceValue").val("");
+                    $("#x_ProductCount").val("");
+                    $("#x_ProductPriceIntro").val("");
+                    $("#x_Sort").val("0");
                 }else{
                     //修改时确认
                     productPriceObject = new Object();
-                    productPriceObject.ProductPriceValue = $("#c_ProductPriceValue").val();
-                    productPriceObject.ProductCount = $("#c_ProductCount").val();
-                    productPriceObject.ProductUnit = $("#c_ProductUnit").val();
-                    productPriceObject.ProductPriceIntro = $("#c_ProductPriceIntro").val();
-                    productPriceObject.Sort = $("#c_Sort").val();
-                    productPriceObject.State = $("#c_State").val();
+                    productPriceObject.ProductPriceValue = $("#x_ProductPriceValue").val();
+                    productPriceObject.ProductCount = $("#x_ProductCount").val();
+                    productPriceObject.ProductUnit = $("#x_ProductUnit").val();
+                    productPriceObject.ProductPriceIntro = $("#x_ProductPriceIntro").val();
+                    productPriceObject.Sort = $("#x_Sort").val();
+                    productPriceObject.State = $("#x_State").val();
 
 
                     var x = parseInt($("#btn_product_price_confirm").attr("idvalue"));
@@ -204,6 +206,12 @@
                 } else {
                     $("#CloseTab").val("0");
                 }
+
+                //处理价格数组
+                var json = JSON.stringify(productPriceArray);
+                $("#x_ProductPriceArray").val(json);
+
+
                 $('#mainForm').submit();
             }
         }
@@ -292,12 +300,12 @@
                     //加载数据
                     if(productPriceArray[i] != undefined && productPriceArray[i] != null){
 
-                        $("#c_ProductPriceValue").val(productPriceArray[i].ProductPriceValue);
-                        $("#c_ProductCount").val(productPriceArray[i].ProductCount);
-                        $("#c_ProductUnit").val(productPriceArray[i].ProductUnit);
-                        $("#c_ProductPriceIntro").val(productPriceArray[i].ProductPriceIntro);
-                        $("#c_Sort").val(productPriceArray[i].Sort);
-                        $("#c_State").val(productPriceArray[i].State);
+                        $("#x_ProductPriceValue").val(productPriceArray[i].ProductPriceValue);
+                        $("#x_ProductCount").val(productPriceArray[i].ProductCount);
+                        $("#x_ProductUnit").val(productPriceArray[i].ProductUnit);
+                        $("#x_ProductPriceIntro").val(productPriceArray[i].ProductPriceIntro);
+                        $("#x_Sort").val(productPriceArray[i].Sort);
+                        $("#x_State").val(productPriceArray[i].State);
                         $("#btn_product_price_confirm").attr("idvalue",i);
 
                     }
@@ -336,29 +344,29 @@
 
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_ProductPriceValue">价格：</label></td>
-            <td class="spe_line"><input name="c_ProductPriceValue" id="c_ProductPriceValue" value="" type="text" class="input_price" style=" width: 100px;" /></td>
+            <td class="spe_line" height="30" align="right"><label for="x_ProductPriceValue">价格：</label></td>
+            <td class="spe_line"><input name="x_ProductPriceValue" id="x_ProductPriceValue" value="" type="text" class="input_price" style=" width: 100px;" /></td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_ProductCount">数量：</label></td>
-            <td class="spe_line"><input name="c_ProductCount" id="c_ProductCount" value="" type="text" class="input_number" style=" width: 100px;" /></td>
+            <td class="spe_line" height="30" align="right"><label for="x_ProductCount">数量：</label></td>
+            <td class="spe_line"><input name="x_ProductCount" id="x_ProductCount" value="" type="text" class="input_number" style=" width: 100px;" /></td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_ProductUnit">单位：</label></td>
-            <td class="spe_line"><input name="c_ProductUnit" id="c_ProductUnit" value="" type="text" class="input_box" style=" width: 300px;" /></td>
+            <td class="spe_line" height="30" align="right"><label for="x_ProductUnit">单位：</label></td>
+            <td class="spe_line"><input name="x_ProductUnit" id="x_ProductUnit" value="" type="text" class="input_box" style=" width: 300px;" /></td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_ProductPriceIntro">价格说明：</label></td>
-            <td class="spe_line"><input name="c_ProductPriceIntro" id="c_ProductPriceIntro" value="" type="text" class="input_box" style=" width: 300px;" /></td>
+            <td class="spe_line" height="30" align="right"><label for="x_ProductPriceIntro">价格说明：</label></td>
+            <td class="spe_line"><input name="x_ProductPriceIntro" id="x_ProductPriceIntro" value="" type="text" class="input_box" style=" width: 300px;" /></td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_Sort">排序：</label></td>
-            <td class="spe_line"><input name="c_Sort" id="c_Sort" value="0" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
+            <td class="spe_line" height="30" align="right"><label for="x_Sort">排序：</label></td>
+            <td class="spe_line"><input name="x_Sort" id="x_Sort" value="0" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,数值越大越靠前)</td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="c_State">状态：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="x_State">状态：</label></td>
             <td class="spe_line">
-                <select id="c_State" name="c_State">
+                <select id="x_State" name="x_State">
                     <option value="0">启用</option>
                     <option value="100">停用</option>
                 </select>
@@ -414,6 +422,7 @@
                     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
                     <input name="f_ProductName" id="f_ProductName" value="{ProductName}" type="text" class="input_box" style="width:300px;"/>
                     <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}"/>
+                    <input type="hidden" id="x_ProductPriceArray" name="x_ProductPriceArray" />
                 </td>
                 <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductNumber">产品编号：</label></td>
                 <td class="spe_line">

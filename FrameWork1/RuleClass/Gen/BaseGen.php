@@ -468,17 +468,44 @@ class BaseGen
                 if ($moveResult) {
                     //数据库操作
                     $uploadFileData = new UploadFileData();
-                    $uploadFileId = $uploadFileData->Create(
-                        $newFileName,
-                        $_FILES[$fileElementName]['size'], //文件大小，字节
-                        $fileExtension,
-                        $_FILES[$fileElementName]['name'], //原始文件名
-                        str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
-                        $tableType,
-                        $tableId,
-                        $manageUserId,
-                        $userId
-                    );
+                    if ($uploadFileId > 0) {
+                        //修改原有uploadFile数据
+
+                        //1.删除原有原图文件
+
+                        self::ClearUploadFile($uploadFileId);
+
+                        //2.清空数据表
+                        $uploadFileData->Clear($uploadFileId);
+
+                        //3.修改数据表
+                        $uploadFileData->Modify(
+                            $uploadFileId,
+                            $newFileName,
+                            $_FILES[$fileElementName]['size'], //文件大小，字节
+                            $fileExtension,
+                            $_FILES[$fileElementName]['name'], //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
+                    }else{
+                        //创建新的uploadFile数据
+                        $uploadFileId = $uploadFileData->Create(
+                            $newFileName,
+                            $_FILES[$fileElementName]['size'], //文件大小，字节
+                            $fileExtension,
+                            $_FILES[$fileElementName]['name'], //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
+                    }
+
 
                     if ($uploadFileId > 0) {
                         //返回值处理
@@ -1514,41 +1541,95 @@ class BaseGen
      */
     public function DeleteUploadFile($uploadFileId)
     {
+        if($uploadFileId>0){
+            $uploadFileData = new UploadFileData();
 
-        $uploadFileData = new UploadFileData();
+            $uploadFile = $uploadFileData->Fill($uploadFileId);
 
-        $uploadFile = $uploadFileData->Fill($uploadFileId);
+            if (strlen($uploadFile->UploadFilePath)) {
+                FileObject::DeleteFile($uploadFile->UploadFilePath);
+            }
+            if (strlen($uploadFile->UploadFileMobilePath)) {
+                FileObject::DeleteFile($uploadFile->UploadFileMobilePath);
+            }
+            if (strlen($uploadFile->UploadFilePadPath)) {
+                FileObject::DeleteFile($uploadFile->UploadFilePadPath);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath1);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath2);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath3)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath3);
+            }
+            if (strlen($uploadFile->UploadFileWatermarkPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath1);
+            }
+            if (strlen($uploadFile->UploadFileWatermarkPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath2);
+            }
+            if (strlen($uploadFile->UploadFileCompressPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileCompressPath1);
+            }
+            if (strlen($uploadFile->UploadFileCompressPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
+            }
 
-        if (strlen($uploadFile->UploadFilePath)) {
-            FileObject::DeleteFile($uploadFile->UploadFilePath);
+            $uploadFileData->Delete($uploadFileId);
         }
-        if (strlen($uploadFile->UploadFileMobilePath)) {
-            FileObject::DeleteFile($uploadFile->UploadFileMobilePath);
+
+
+    }
+
+
+    /**
+     * 清空某条上传文件记录和删除物理文件（不删除记录）
+     * @param int $uploadFileId 上传文件id
+     */
+    public function ClearUploadFile($uploadFileId)
+    {
+        if($uploadFileId>0){
+            $uploadFileData = new UploadFileData();
+
+            $uploadFile = $uploadFileData->Fill($uploadFileId);
+
+            if (strlen($uploadFile->UploadFilePath)) {
+                FileObject::DeleteFile($uploadFile->UploadFilePath);
+            }
+            if (strlen($uploadFile->UploadFileMobilePath)) {
+                FileObject::DeleteFile($uploadFile->UploadFileMobilePath);
+            }
+            if (strlen($uploadFile->UploadFilePadPath)) {
+                FileObject::DeleteFile($uploadFile->UploadFilePadPath);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath1);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath2);
+            }
+            if (strlen($uploadFile->UploadFileThumbPath3)) {
+                FileObject::DeleteFile($uploadFile->UploadFileThumbPath3);
+            }
+            if (strlen($uploadFile->UploadFileWatermarkPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath1);
+            }
+            if (strlen($uploadFile->UploadFileWatermarkPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath2);
+            }
+            if (strlen($uploadFile->UploadFileCompressPath1)) {
+                FileObject::DeleteFile($uploadFile->UploadFileCompressPath1);
+            }
+            if (strlen($uploadFile->UploadFileCompressPath2)) {
+                FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
+            }
+
+            $uploadFileData->Clear($uploadFileId);
+
         }
-        if (strlen($uploadFile->UploadFilePadPath)) {
-            FileObject::DeleteFile($uploadFile->UploadFilePadPath);
-        }
-        if (strlen($uploadFile->UploadFileThumbPath1)) {
-            FileObject::DeleteFile($uploadFile->UploadFileThumbPath1);
-        }
-        if (strlen($uploadFile->UploadFileThumbPath2)) {
-            FileObject::DeleteFile($uploadFile->UploadFileThumbPath2);
-        }
-        if (strlen($uploadFile->UploadFileThumbPath3)) {
-            FileObject::DeleteFile($uploadFile->UploadFileThumbPath3);
-        }
-        if (strlen($uploadFile->UploadFileWatermarkPath1)) {
-            FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath1);
-        }
-        if (strlen($uploadFile->UploadFileWatermarkPath2)) {
-            FileObject::DeleteFile($uploadFile->UploadFileWatermarkPath2);
-        }
-        if (strlen($uploadFile->UploadFileCompressPath1)) {
-            FileObject::DeleteFile($uploadFile->UploadFileCompressPath1);
-        }
-        if (strlen($uploadFile->UploadFileCompressPath2)) {
-            FileObject::DeleteFile($uploadFile->UploadFileCompressPath2);
-        }
+
 
     }
 
