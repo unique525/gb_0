@@ -372,11 +372,11 @@
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
-                    <li><a class="lookpic" href="{f_url}" target="_blank" title="">
+                    <li><a class="lookpic" href="{f_Url}" target="_blank" title="">
                             <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
                         <div class="lookmis">
                             <p class="lookname">
-                                <a href="{f_url}" target="_blank" title="">【进店必败】{f_Title}<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
+                                <a href="{f_Url}" target="_blank" title="">{f_Title}</a></p><p>￥{f_Price} </p></div>
                     </li>    <div class="clear">    </div>
                     ]]>
                 </item>

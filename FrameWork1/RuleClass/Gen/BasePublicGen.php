@@ -13,7 +13,6 @@ class BasePublicGen extends BaseGen {
      * @return int 站点id
      */
     protected function GetSiteIdByDomain() {
-        $siteId = 0;
         $host = strtolower($_SERVER['HTTP_HOST']);
         $host = str_ireplace("http://", "", $host);
         if ($host === "localhost" || $host === "127.0.0.1") {
@@ -21,17 +20,23 @@ class BasePublicGen extends BaseGen {
         } else {
 
             //先查绑定的一级域名
+            $domain = Control::GetDomain(strtolower($_SERVER['HTTP_HOST']));
+            $sitePublicData = new SitePublicData();
+            $siteId = $sitePublicData->GetSiteIdByBindDomain($domain, true);
 
+            if($siteId<=0){
+                //查子域名
+                $arrSubDomain = explode(".", $host);
+                if (count($arrSubDomain) > 0) {
+                    $subDomain = $arrSubDomain[0];
 
-            //查子域名
-            $arrDomain = explode(".", $host);
-            if (count($arrDomain) > 0) {
-                $subDomain = $arrDomain[0];
-                if (strlen($subDomain) > 0) {
-                    $sitePublicData = new SitePublicData();
-                    $siteId = $sitePublicData->GetSiteId($subDomain);
+                    if (strlen($subDomain) > 0) {
+
+                        $siteId = $sitePublicData->GetSiteId($subDomain, true);
+                    }
                 }
             }
+
         }
         return $siteId;
     }
@@ -95,6 +100,21 @@ class BasePublicGen extends BaseGen {
                         $channelId = intval(str_ireplace("channel_", "", $tagId));
                         if ($channelId > 0) {
                             $templateContent = self::ReplaceTemplateOfDocumentNewsList(
+                                $templateContent,
+                                $channelId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
+                    case Template::TAG_TYPE_PIC_SLIDER_LIST :
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($channelId > 0) {
+                            $templateContent = self::ReplaceTemplateOfPicSlider(
                                 $templateContent,
                                 $channelId,
                                 $tagId,
@@ -302,17 +322,17 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
- * 替换资讯列表的内容
- * @param string $channelTemplateContent 要处理的模板内容
- * @param int $channelId 频道id
- * @param string $tagId 标签id
- * @param string $tagContent 标签内容
- * @param int $tagTopCount 显示条数
- * @param string $tagWhere 查询方式
- * @param string $tagOrder 排序方式
- * @param int $state 状态
- * @return mixed|string 内容模板
- */
+     * 替换资讯列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
     private function ReplaceTemplateOfDocumentNewsList(
         $channelTemplateContent,
         $channelId,
@@ -350,6 +370,66 @@ class BasePublicGen extends BaseGen {
             }
             if (!empty($arrDocumentNewsList)) {
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+    /**
+     * 替换图片轮换列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfPicSlider(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($channelId > 0) {
+
+            //只显示已审状态
+            $state = PicSliderData::STATE_VERIFY;
+
+
+            $arrList = null;
+            $picSliderPublicData = new PicSliderPublicData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $picSliderPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+            }
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
             }else{
@@ -678,29 +758,32 @@ class BasePublicGen extends BaseGen {
         $userId = Control::GetUserId();
         if ($userId > 0) {
             if ($tableType > 0) {
-                $arrUserExploreList = null;
-                $arrUserExploreListStand = null;
+                //$arrUserExploreList = null;
+                //$arrUserExploreListStand = null;
+                //$userExploreCollection = new UserExploreCollection();
                 switch ($tagWhere) {
                     case "channel":
-                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
                         break;
                     default :
                         //new
-                        $arrUserExploreList = self::GetUserExploreArrayFromCookieByUserId($userId);
+                        $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
                         break;
                 }
-                //转换为标准数组
-                foreach ((array)$arrUserExploreList as $columnValue) {
-                    $arrUserExploreListStand[] = $columnValue;
-                }
-                if (!empty($arrUserExploreListStand)) {
-                    Template::ReplaceList($tagContent, $arrUserExploreListStand, $tagId);
+                if (count($userExploreCollection->UserExplores)>0) {
+                    Template::ReplaceList($tagContent, $userExploreCollection->UserExplores, $tagId);
                     //把对应ID的CMS标记替换成指定内容
                     $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-                } else Template::RemoveCustomTag($templateContent, $tagId);
-            } else Template::RemoveCustomTag($templateContent, $tagId);
+                } else {
+                    Template::RemoveCustomTag($templateContent, $tagId);
+                }
+            } else {
+                Template::RemoveCustomTag($templateContent, $tagId);
+            }
         }
-        else $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
+        else {
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
+        }
 
         return $templateContent;
     }
@@ -715,66 +798,61 @@ class BasePublicGen extends BaseGen {
      * @param string $titlePic 题图地址
      * @param string $price 价格
      */
-    protected function CreateExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price)
+    protected function CreateUserExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price)
     {
+
         if ($userId > 0) {
-            if (!isset($_COOKIE['ExploreHistory'.'_'.$userId])) {
-                //将当前访问信息保存到数组中
-                $arr["TableId"] = $tableId;
-                $arr["TableType"] = $tableType;
-                $arr["UserId"] = $userId;
-                $arr["Url"] = $url;
-                $arr["Title"] = $title;
-                $arr["TitlePic"] = $titlePic;
-                $arr["Price"] = $price;
-                $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
-                //存储为字符串
-                $cookieStr = serialize($arrList);
-                //保存到cookie当中
-                setcookie('ExploreHistory'.'_'.$userId, $cookieStr);
+
+            $userExplore = new UserExplore();
+            $userExploreCollection = new UserExploreCollection();
+
+            if (!isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
+
             } else {
                 //读取cookie
-                $cookieStr = $_COOKIE['ExploreHistory'.'_'.$userId];
-                //字符串转回原来的数组
-                $arrList = unserialize($cookieStr);
-                //将当前访问信息保存到数组中
-                $arr["TableId"] = $tableId;
-                $arr["TableType"] = $tableType;
-                $arr["UserId"] = $userId;
-                $arr["Url"] = $url;
-                $arr["Title"] = $title;
-                $arr["TitlePic"] = $titlePic;
-                $arr["Price"] = $price;
-                $arrList['"'.$tableType.'_'.$tableId.'"']=$arr;
-                if (count($arrList) > 3) {
-                    //只保存3条访问记录
-                    array_shift($arrList);
-                }
-                //序列化为为字符串存储
-                $cookieStr = serialize($arrList);
-                //保存到cookie当中
-                setcookie('ExploreHistory'.'_'.$userId, $cookieStr);
+                $cookieStr = $_COOKIE['UserExploreHistory'.'_'.$userId];
+                $userExploreCollection->UserExplores = Format::FixJsonDecode(base64_decode($cookieStr));
+
+
             }
+
+
+            //将当前访问信息保存到数组中
+            $userExplore->TableId = $tableId;
+            $userExplore->TableType = $tableType;
+            $userExplore->UserId = $userId;
+            $userExplore->Url = $url;
+            $userExplore->Title = $title;
+            $userExplore->TitlePic = $titlePic;
+            $userExplore->Price = $price;
+            $userExploreCollection->AddField($userExplore->ConvertToArray());
+            //print_r($userExploreCollection->UserExplores);
+            //存储为字符串
+            $cookieStr = base64_encode(Format::FixJsonEncode($userExploreCollection->UserExplores));
+
+            //保存到cookie当中
+            setcookie('UserExploreHistory'.'_'.$userId, $cookieStr);
         }
+
     }
 
     /**
      * 根据会员Id从会员浏览记录COOKIE中取得用户浏览记录数组
      * @param int $userId 会员Id
-     * @return array|null 取得会员浏览记录对应数组
+     * @return UserExploreCollection 取得会员浏览记录对应数组
      */
     protected function GetUserExploreArrayFromCookieByUserId($userId)
     {
-        $arrList = null;
+        $userExploreCollection = new UserExploreCollection();
         if ($userId > 0) {
-            if (isset($_COOKIE['ExploreHistory'.'_'.$userId])) {
+            if (isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
                 //读取cookie
-                $cookieStr = ($_COOKIE['ExploreHistory'.'_'.$userId]);
+                $cookieStr = ($_COOKIE['UserExploreHistory'.'_'.$userId]);
                 //字符串转回原来的数组
-                $arrList = unserialize($cookieStr);
+                $userExploreCollection->UserExplores = Format::FixJsonDecode(base64_decode($cookieStr));
             }
         }
-        return $arrList;
+        return $userExploreCollection;
     }
 
 }

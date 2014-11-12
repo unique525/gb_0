@@ -46,9 +46,36 @@
             $(".li_list_width_img").css("width", boxWidth);
             $(".pic_slider_img").css("width", boxWidth + 4);
 
+            $(".span_state").each(function(){
+                $(this).html(formatState($(this).text()));
+            });
 
         });
 
+
+        /**
+         * 格式化状态值
+         * @return {string}
+         */
+        function formatState(state){
+            state = parseInt(state);
+            var result = "";
+            switch (state){
+                case 0:
+                    result = "新稿";
+                    break;
+                case 30:
+                    result = "<"+"span style='color:#006600'>已审<"+"/span>";
+                    break;
+                case 100:
+                    result = "<"+"span style='color:#990000'>已删<"+"/span>";
+                    break;
+                default :
+                    result = "未知";
+                    break;
+            }
+            return result;
+        }
         -->
 
     </script>
