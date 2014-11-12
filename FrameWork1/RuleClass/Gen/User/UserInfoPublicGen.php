@@ -30,8 +30,8 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             case "generate_avatar": //生成头像并插入数据库
                 $result = self::GenAvatar();
                 break;
-            case "async_get_avatar":
-                $result = self::AsyncGetAvatar();
+            case "async_get_avatar_upload_file_id":
+                $result = self::AsyncGetAvatarUploadFileId();
                 break;
         }
 
@@ -132,28 +132,19 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         }
     }
 
-    private function AsyncGetAvatar()
+    /**
+     *
+     * @return string
+     */
+    private function AsyncGetAvatarUploadFileId()
     {
+        $result = -1;
         $userId = Control::GetUserId();
-        $siteId = parent::GetSiteIdByDomain();
         if ($userId > 0) {
             $userInfoPublicData = new UserInfoPublicData();
-            $arrUserAvatarOne = $userInfoPublicData->GetUserAvatar($userId);
-
-            if (!empty($arrUserAvatarOne)) {
-                //判断头像
-                if ($arrUserAvatarOne["UploadFilePath"] == "" || empty($arrUserAvatarOne["UploadFilePath"])) {
-                    $siteConfigData = new SiteConfigData($siteId);
-                    $arrUserAvatarOne['UploadFilePath'] = $siteConfigData->UserDefaultMaleAvatar;
-                }
-                $arrUserAvatarOne = json_encode($arrUserAvatarOne);
-                return Control::GetRequest("jsonpcallback", "") . '({"avatarList":' . $arrUserAvatarOne . ',"result":' . self::ASYNC_SUCCESS . '})';
-            } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":"' . self::ASYNC_FAILED . '"})';
-            }
-        } else {
-            return Control::GetRequest("jsonpcallback", "") . '({"result":"' . self::ASYNC_FAILED . '"})';
+            $result = $userInfoPublicData->GetAvatarUploadFileId($userId, true);
         }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
     }
 
     private function GenAvatar()
@@ -168,7 +159,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
 
 
                 $userInfoPublicData = new UserInfoPublicData();
-                $result = $userInfoPublicData->ModifyAvatar($userId, $uploadFileId);
+                $result = $userInfoPublicData->ModifyAvatarUploadFileId($userId, $uploadFileId);
 
             } else {
                 Control::GoUrl($reUrl);

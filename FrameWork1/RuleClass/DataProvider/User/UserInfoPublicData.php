@@ -285,28 +285,28 @@ class UserInfoPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetUserAvatar($userId){
-        $result = null;
-        if($userId > 0){
-            $sql = "SELECT
-                                uf.UploadFilePath,
-                                uf.UploadFileMobilePath,
-                                uf.UploadFilePadPath,
-                                uf.UploadFileThumbPath1,
-                                uf.UploadFileThumbPath2
-                          FROM
-                                ".self::TableName_UserInfo." ui,
-                                ".self::TableName_UploadFile." uf
-                          WHERE
-                                ui.AvatarUploadFileId = uf.UploadFileId AND ui.UserId = :UserId";
+    /**
+     * 取得会员头像对象的uploadFileId
+     * @param int $userId 会员id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 是否锁定编辑 0:未锁定 1:已锁定
+     */
+    public function GetAvatarUploadFileId($userId, $withCache)
+    {
+        $result = -1;
+        if ($userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data';
+            $cacheFile = 'user_get_avatar_upload_file_id.cache_' . $userId . '';
+            $sql = "SELECT AvatarUploadFileId FROM " . self::TableName_UserInfo . " WHERE UserId=:UserId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("UserId",$userId);
-            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }
 
-    public function ModifyAvatar($userId,$uploadFileId){
+
+    public function ModifyAvatarUploadFileId($userId,$uploadFileId){
         $result = -1;
         if($userId > 0 && $uploadFileId > 0){
             $sql = "UPDATE ".self::TableName_UserInfo." SET AvatarUploadFileId = :AvatarUploadFileId WHERE UserId = :UserId;";
