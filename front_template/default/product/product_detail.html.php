@@ -212,12 +212,19 @@
                 success:function(data){
                     var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
-                    var negative_appraisal = parseInt(data["negative_appraisal"]);
+                    var negative_appraisal = parseInt(data["negative_appraisal"])
 
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
-                    var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
-                    var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
-                    var moderate_appraisal_width = (moderate_appraisal/total_appraisal).toFixed(2)*100;
+
+                    var negative_appraisal_width = 0;
+                    var positive_appraisal_width = 0;
+                    var moderate_appraisal_width = 0;
+                    if(total_appraisal > 0){
+                        negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
+                        positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
+                        moderate_appraisal_width = (moderate_appraisal/total_appraisal).toFixed(2)*100;
+                    }
+
                     $("#span_scoreCount").html(positive_appraisal_width+"%");
                     $("#divspan_VeryGood").html(positive_appraisal_width+"%");
                     $("#divspan_Good").html(moderate_appraisal_width+"%");
@@ -555,7 +562,7 @@
                     <div id="div_NoGood" style="height:12px;background-color: red"></div>
                 </dd>
                 <dd class="d2">
-                    <span id="divspan_NoGood">3%</span>
+                    <span id="divspan_NoGood"></span>
                 </dd>
             </dl>
         </div>
@@ -572,7 +579,7 @@
             <td width="11%" align="center" valign="top" style="padding-top:10px;">
                 <table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileCompressPath1}" width="50" height="50" /></a></td>
+                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileThumbPath2}" width="50" height="50" /></a></td>
                     </tr>
                 </table>
                 {f_UserName}</br>

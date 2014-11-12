@@ -148,17 +148,15 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {
             $productCommentPublicData = new ProductCommentPublicData();
-            $arrAppraisalList = $productCommentPublicData->GetAppraisal($productId);
 
-            if (count($arrAppraisalList) > 0) {
-                $positiveAppraisal = intval($arrAppraisalList[0]["Count"]);
-                $moderateAppraisal = intval($arrAppraisalList[1]["Count"]);
-                $negativeAppraisal = intval($arrAppraisalList[2]["Count"]);
-            } else {
-                $positiveAppraisal = 0;
-                $moderateAppraisal = 0;
-                $negativeAppraisal = 0;
-            }
+            //好评
+            $positiveAppraisal = $productCommentPublicData->GetAppraisalCount($productId,0);
+            //中评
+            $moderateAppraisal = $productCommentPublicData->GetAppraisalCount($productId,1);
+            //差评
+            $negativeAppraisal = $productCommentPublicData->GetAppraisalCount($productId,2);
+
+
             return Control::GetRequest("jsonpcallback", "")
             . '({
                         "result":' . self::SUCCESS . ',

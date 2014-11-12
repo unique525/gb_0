@@ -113,7 +113,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userName = htmlspecialchars(Control::GetRequest("user_name", ""));
         $userEmail = htmlspecialchars(Control::GetRequest("user_email", ""));
         $userMobile = htmlspecialchars(Control::GetRequest("user_mobile", ""));
-        $siteId = intval(Control::GetRequest("site_id", 0));
+        $siteId = parent::GetSiteIdByDomain();
 
         if ((!empty($userName) || !empty($userEmail) || !empty($userMobile)) && $siteId > 0) {
             $isSameName = self::IsRepeatUserName($userName);
@@ -143,7 +143,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function AsyncRegister()
     {
-        $siteId = Control::GetRequest("site_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
         $userName = htmlspecialchars(Control::PostRequest("UserName", ""));
         $userEmail = htmlspecialchars(Control::PostRequest("UserEmail", ""));
         $userMobile = htmlspecialchars(Control::PostRequest("UserMobile", ""));

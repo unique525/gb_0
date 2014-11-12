@@ -84,6 +84,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
 
             }
 
+            $debug = new DebugLogManageData();
+            $debug->Create("");
             //判断是否重复
             $canAddFavorite = $userFavoritePublicData->CheckIsExist($tableId,$tableType);
             if($canAddFavorite > 0){
