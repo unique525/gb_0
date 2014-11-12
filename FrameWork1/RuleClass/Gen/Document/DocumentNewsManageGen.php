@@ -34,6 +34,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             case "async_modify_sort":
                 $result = self::AsyncModifySort();
                 break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
@@ -666,14 +669,30 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
     /**
+     * 修改排序号
+     * @return int 修改结果
+     */
+    private function AsyncModifySort(){
+        $result = -1;
+        $documentNewsId = Control::GetRequest("document_news_id", 0);
+        $sort = Control::GetRequest("sort", 0);
+        if($documentNewsId>0){
+            $documentNewsManageData = new DocumentNewsManageData();
+            $result = $documentNewsManageData->ModifySort($sort, $documentNewsId);
+        }
+        return $result;
+    }
+
+
+    /**
      * 批量修改排序号
      * @return string 返回Jsonp修改结果
      */
-    private function AsyncModifySort() {
+    private function AsyncModifySortByDrag() {
         $arrDocumentNewsId = Control::GetRequest("sort", null);
         if(!empty($arrDocumentNewsId)){
             $documentNewsManageData = new DocumentNewsManageData();
-            $result = $documentNewsManageData->ModifySort($arrDocumentNewsId);
+            $result = $documentNewsManageData->ModifySortForDrag($arrDocumentNewsId);
             return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
         }  else{
             return "";

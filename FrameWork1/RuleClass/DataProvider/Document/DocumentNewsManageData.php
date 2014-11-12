@@ -348,11 +348,83 @@ class DocumentNewsManageData extends BaseManageData
     }
 
     /**
+     * 修改排序
+     * @param int $sort 大于0向上移动，否则向下移动
+     * @param int $documentNewsId 资讯id
+     * @return int 返回结果
+     */
+    public function ModifySort($sort, $documentNewsId) {
+        $result = 0;
+        if ($documentNewsId > 0) {
+
+            $channelId = $this->GetChannelId($documentNewsId, false);
+
+            $currentSort = $this->GetSort($documentNewsId, false);
+
+            if ($sort > 0) { //向上移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_DocumentNews . "
+
+                        WHERE
+                            ChannelId=:ChannelId
+                        AND DocumentNewsId<>:DocumentNewsId
+                        AND sort>=:CurrentSort
+
+                        ORDER BY Sort DESC LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            } else{//向下移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_DocumentNews . "
+
+                        WHERE ChannelId=:ChannelId
+                        AND DocumentNewsId<>:DocumentNewsId
+                        AND Sort<=:CurrentSort
+
+                        ORDER BY Sort LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            }
+
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $newSort = $newSort + $sort;
+
+
+            //2011.12.8 zc 排序号禁止负数
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . "
+                    SET `Sort`=:NewSort
+                    WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty->AddField("NewSort", $newSort);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 拖动排序
      * @param array $arrDocumentNewsId 待处理的文档编号数组
      * @return int 操作结果
      */
-    public function ModifySort($arrDocumentNewsId)
+    public function ModifySortForDrag($arrDocumentNewsId)
     {
         if (count($arrDocumentNewsId) > 1) { //大于1条时排序才有意义
             $strDocumentNewsId = join(',', $arrDocumentNewsId);
@@ -510,6 +582,26 @@ class DocumentNewsManageData extends BaseManageData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
             $cacheFile = 'document_news_get_channel_id.cache_' . $documentNewsId . '';
             $sql = "SELECT ChannelId FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序号
+     * @param int $documentNewsId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序号
+     */
+    public function GetSort($documentNewsId, $withCache)
+    {
+        $result = -1;
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_sort.cache_' . $documentNewsId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

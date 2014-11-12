@@ -219,6 +219,171 @@ class ProductManageData extends BaseManageData
 
 
     /**
+     * 修改排序
+     * @param int $sort 大于0向上移动，否则向下移动
+     * @param int $productId 产品id
+     * @return int 返回结果
+     */
+    public function ModifySort($sort, $productId) {
+        $result = 0;
+        if ($productId > 0) {
+
+            $channelId = $this->GetChannelId($productId, false);
+
+            $currentSort = $this->GetSort($productId, false);
+
+            if ($sort > 0) { //向上移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_Product . "
+
+                        WHERE
+                            ChannelId=:ChannelId
+                        AND ProductId<>:ProductId
+                        AND sort>=:CurrentSort
+
+                        ORDER BY Sort DESC LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("ProductId", $productId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            } else{//向下移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_Product . "
+
+                        WHERE ChannelId=:ChannelId
+                        AND ProductId<>:ProductId
+                        AND Sort<=:CurrentSort
+
+                        ORDER BY Sort LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("ProductId", $productId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            }
+
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $newSort = $newSort + $sort;
+
+
+            //2011.12.8 zc 排序号禁止负数
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . "
+                    SET `Sort`=:NewSort
+                    WHERE ProductId=:ProductId;";
+            $dataProperty->AddField("NewSort", $newSort);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 拖动排序
+     * @param array $arrProductId 待处理的数组
+     * @return int 操作结果
+     */
+    public function ModifySortForDrag($arrProductId)
+    {
+        if (count($arrProductId) > 1) { //大于1条时排序才有意义
+            $strId = join(',', $arrProductId);
+            $strId = Format::FormatSql($strId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_Product . " WHERE ProductId IN ($strId);";
+            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $arrSql = array();
+            for ($i = 0; $i < count($arrProductId); $i++) {
+                $newSort = $maxSort - $i;
+                if ($newSort < 0) {
+                    $newSort = 0;
+                }
+                $newSort = intval($newSort);
+                $productId = intval($arrProductId[$i]);
+                $sql = "UPDATE " . self::TableName_Product . " SET Sort=$newSort WHERE ProductId=$productId;";
+                $arrSql[] = $sql;
+            }
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
+        }
+    }
+    /**
+     * 新增文档时修改排序号到当前频道的最大排序
+     * @param int $channelId 频道id
+     * @param int $productId 产品id
+     * @return int 影响的记录行数
+     */
+    public function ModifySortWhenCreate($channelId, $productId) {
+        $result = -1;
+        if($channelId >0 && $productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT max(Sort) FROM " . self::TableName_Product . " WHERE ChannelId=:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+            $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            $newSort = $maxSort + 1;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $newSort);
+            $dataProperty->AddField("ProductId", $productId);
+            $sql = "UPDATE " . self::TableName_Product . " SET Sort=:Sort WHERE ProductId=:ProductId;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得所属频道id
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 所属频道id
+     */
+    public function GetChannelId($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_channel_id.cache_' . $productId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序号
+     * @param int $productId 产品id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序号
+     */
+    public function GetSort($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_sort.cache_' . $productId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得题图1的上传文件id
      * @param int $productId 产品id
      * @param bool $withCache 是否从缓冲中取

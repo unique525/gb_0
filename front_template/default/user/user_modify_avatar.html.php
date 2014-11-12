@@ -26,19 +26,25 @@
 
         var width = 200;
         var height = 200;
-        var uploadFileId= 0;
+        var uploadFileId = 0;
         var src = "";
         var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
         var tableId = {UserId};
 
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-            uploadFileId=data["upload_file_id"];
-            CreateThumb1(uploadFileId,400,0);
+
+            if(data["upload_file_id"] != undefined){
+                uploadFileId=data["upload_file_id"];
+                //CreateThumb1(uploadFileId,400,0);
+                cutImage();
+            }
+
+
         };
 
         window.CreateThumb1CallBack = function(data){
             src = data["upload_file_thumb_path1"];
-            cutimage();
+
         };
 
 
@@ -87,7 +93,7 @@
         }
 
 
-        function cutimage(){
+        function cutImage(){
             $("#upload").css("display","none");
             $("#outer").css("display","block");
             $("#target").attr("src",src);
@@ -98,7 +104,7 @@
                 aspectRatio: 1,
                 bgFade:true,
                 bgOpacity: .3,
-                minSize :[200,200]
+                minSize :[{cfg_UserAvatarMinWidth_3},200]
             },function(){
                 // Use the API to get the real image size
                 var bounds = this.getBounds();

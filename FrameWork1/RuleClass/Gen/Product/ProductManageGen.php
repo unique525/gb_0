@@ -30,6 +30,12 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_modify_sort":
+                $result = self::AsyncModifySort();
+                break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -67,6 +73,10 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($productId > 0) {
+
+                    //新增文档时修改排序号到当前频道的最大排序
+                    $productManageData->ModifySortWhenCreate($channelId, $productId);
+
 
                     //产品参数新增
                     $productParamManageData->CreateProductParam($httpPostData, $productId);
@@ -505,6 +515,15 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
+     *
+     * @return string
+     */
+    private function GenRemoveToBin(){
+        $result = "";
+        return $result;
+    }
+
+    /**
      * 生成资讯管理列表页面
      */
     private function GenList() {
@@ -758,6 +777,38 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
 
         }
         return $result;
+    }
+
+
+    /**
+     * 修改排序号
+     * @return int 修改结果
+     */
+    private function AsyncModifySort(){
+        $result = -1;
+        $productId = Control::GetRequest("product_id", 0);
+        $sort = Control::GetRequest("sort", 0);
+        if($productId>0){
+            $productManageData = new ProductManageData();
+            $result = $productManageData->ModifySort($sort, $productId);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifySortByDrag() {
+        $arrProductId = Control::GetRequest("sort", null);
+        if(!empty($arrProductId)){
+            $productManageData = new ProductManageData();
+            $result = $productManageData->ModifySortForDrag($arrProductId);
+            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+        }  else{
+            return "";
+        }
     }
 
     /**
