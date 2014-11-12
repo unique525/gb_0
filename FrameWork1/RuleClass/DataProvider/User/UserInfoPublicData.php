@@ -10,6 +10,10 @@ class UserInfoPublicData extends BasePublicData
 {
     const State_Unavailable_User = 100;
 
+    /**
+     * @param $userId
+     * @return int
+     */
     public function Init($userId){
         $result = -1;
         if($userId > 0){
@@ -284,10 +288,31 @@ class UserInfoPublicData extends BasePublicData
     public function GetUserAvatar($userId){
         $result = null;
         if($userId > 0){
-            $sql = "SELECT uf.UploadFilePath,uf.UploadFileMobilePath,uf.UploadFilePadPath,uf.UploadFileThumbPath1,uf.UploadFileThumbPath2 FROM ".self::TableName_UploadFile." uf WHERE uf.TableType = ".UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR." AND uf.TableId = :TableId";
+            $sql = "SELECT
+                                uf.UploadFilePath,
+                                uf.UploadFileMobilePath,
+                                uf.UploadFilePadPath,
+                                uf.UploadFileThumbPath1,
+                                uf.UploadFileThumbPath2
+                          FROM
+                                ".self::TableName_UserInfo." ui,
+                                ".self::TableName_UploadFile." uf
+                          WHERE
+                                ui.AvatarUploadFileId = uf.UploadFileId AND ui.UserId = :UserId";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("TableId",$userId);
+            $dataProperty->AddField("UserId",$userId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function ModifyAvatar($userId,$uploadFileId){
+        $result = -1;
+        if($userId > 0 && $uploadFileId > 0){
+            $sql = "UPDATE ".self::TableName_UserInfo." SET AvatarUploadFileId = :AvatarUploadFileId WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
         }
         return $result;
     }

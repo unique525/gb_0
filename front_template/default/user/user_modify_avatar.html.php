@@ -26,12 +26,13 @@
 
         var width = 200;
         var height = 200;
+        var uploadFileId= 0;
         var src = "";
         var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
         var tableId = {UserId};
 
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-            var uploadFileId=data["upload_file_id"];
+            uploadFileId=data["upload_file_id"];
             CreateThumb1(uploadFileId,400,0);
         };
 
@@ -132,7 +133,7 @@
                 }
                 $('#height').val(height);
                 $('#width').val(width);
-                $('#source').val(src);
+                $('#upload_file_id').val(uploadFileId);
                 $("#preview_large").attr("src",src);
                 $("#preview_small").attr("src",src);
             }
@@ -224,7 +225,7 @@
                         </td>
                     </tr>
                 </table>
-                <form action="/default.php?mod=user_info&a=create_avatar" method="post">
+                <form action="/default.php?mod=user_info&a=generate_avatar" method="post">
                     <input type="hidden" id="x" name="x" />
                     <input type="hidden" id="y" name="y" />
                     <input type="hidden" id="w" name="w" />
