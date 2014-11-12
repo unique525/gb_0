@@ -109,6 +109,173 @@ class PicSliderManageData extends BaseManageData {
 
 
     /**
+     * 修改排序
+     * @param int $sort 大于0向上移动，否则向下移动
+     * @param int $picSliderId 图片轮换id
+     * @return int 返回结果
+     */
+    public function ModifySort($sort, $picSliderId) {
+        $result = 0;
+        if ($picSliderId > 0) {
+
+            $channelId = $this->GetChannelId($picSliderId, false);
+
+            $currentSort = $this->GetSort($picSliderId, false);
+
+            if ($sort > 0) { //向上移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_PicSlider . "
+
+                        WHERE
+                            ChannelId=:ChannelId
+                        AND PicSliderId<>:PicSliderId
+                        AND sort>=:CurrentSort
+
+                        ORDER BY Sort DESC LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("PicSliderId", $picSliderId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            } else{//向下移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_PicSlider . "
+
+                        WHERE ChannelId=:ChannelId
+                        AND PicSliderId<>:PicSliderId
+                        AND Sort<=:CurrentSort
+
+                        ORDER BY Sort LIMIT 1;
+                        ";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $dataProperty->AddField("PicSliderId", $picSliderId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            }
+
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $newSort = $newSort + $sort;
+
+            //排序号禁止负数
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_PicSlider . "
+                    SET `Sort`=:NewSort
+                    WHERE PicSliderId=:PicSliderId;";
+            $dataProperty->AddField("NewSort", $newSort);
+            $dataProperty->AddField("PicSliderId", $picSliderId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 拖动排序
+     * @param array $arrPicSliderId 待处理的数组
+     * @return int 操作结果
+     */
+    public function ModifySortForDrag($arrPicSliderId)
+    {
+        if (count($arrPicSliderId) > 1) { //大于1条时排序才有意义
+            $strId = join(',', $arrPicSliderId);
+            $strId = Format::FormatSql($strId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_PicSlider . " WHERE PicSliderId IN ($strId);";
+            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $arrSql = array();
+            for ($i = 0; $i < count($arrPicSliderId); $i++) {
+                $newSort = $maxSort - $i;
+                if ($newSort < 0) {
+                    $newSort = 0;
+                }
+                $newSort = intval($newSort);
+                $picSliderId = intval($arrPicSliderId[$i]);
+                $sql = "UPDATE " . self::TableName_PicSlider . " SET Sort=$newSort WHERE PicSliderId=$picSliderId;";
+                $arrSql[] = $sql;
+            }
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
+        }
+    }
+
+
+    /**
+     * 新增文档时修改排序号到当前频道的最大排序
+     * @param int $channelId 频道id
+     * @param int $picSliderId 图片轮换id
+     * @return int 影响的记录行数
+     */
+    public function ModifySortWhenCreate($channelId, $picSliderId) {
+        $result = -1;
+        if($channelId >0 && $picSliderId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT max(Sort) FROM " . self::TableName_PicSlider . " WHERE ChannelId=:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+            $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            $newSort = $maxSort + 1;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $newSort);
+            $dataProperty->AddField("PicSliderId", $picSliderId);
+            $sql = "UPDATE " . self::TableName_PicSlider . " SET Sort=:Sort WHERE PicSliderId=:PicSliderId;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得所属频道id
+     * @param int $picSliderId 图片轮换id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 所属频道id
+     */
+    public function GetChannelId($picSliderId, $withCache)
+    {
+        $result = -1;
+        if ($picSliderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'pic_slider_data';
+            $cacheFile = 'pic_slider_get_channel_id.cache_' . $picSliderId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_PicSlider . " WHERE PicSliderId=:PicSliderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("PicSliderId", $picSliderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序号
+     * @param int $picSliderId 图片轮换id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序号
+     */
+    public function GetSort($picSliderId, $withCache)
+    {
+        $result = -1;
+        if ($picSliderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'pic_slider_data';
+            $cacheFile = 'pic_slider_get_sort.cache_' . $picSliderId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_PicSlider . " WHERE PicSliderId=:PicSliderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("PicSliderId", $picSliderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
      * 返回一行数据
      * @param int $picSliderId 图片轮换id
      * @return array|null 取得对应数组

@@ -137,6 +137,9 @@
         <td class="spe_line" height="30" align="right"><label for="f_SiteContentTitle">标题：</label></td>
         <td class="spe_line">
             <input name="f_SiteContentTitle" id="f_SiteContentTitle" value="{SiteContentTitle}" type="text" class="input_box" style="width:500px;"/>
+            <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}"/>
+            <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}"/>
+            <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}"/>
         </td>
     </tr>
     <tr>

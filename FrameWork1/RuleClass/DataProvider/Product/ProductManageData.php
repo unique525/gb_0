@@ -22,17 +22,18 @@ class ProductManageData extends BaseManageData
     /**
      * 新增产品
      * @param array $httpPostData $_POST数组
+     * @param int $manageUserId 后台管理员id
      * @return int 新增的产品id
      */
-    public function Create($httpPostData)
+    public function Create($httpPostData, $manageUserId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("CreateDate");
-        $addFieldValues = array(date("Y-m-d H:i:s", time()));
+        $addFieldNames = array("CreateDate","ManageUserId");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()),$manageUserId);
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,
@@ -319,6 +320,7 @@ class ProductManageData extends BaseManageData
             return -1;
         }
     }
+
     /**
      * 新增文档时修改排序号到当前频道的最大排序
      * @param int $channelId 频道id

@@ -66,7 +66,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 $httpPostData = $_POST;
 
                 //产品新增
-                $productId = $productManageData->Create($httpPostData);
+                $productId = $productManageData->Create($httpPostData, $manageUserId);
                 //加入操作日志
                 $operateContent = 'Create Product,POST FORM:'
                     . implode('|', $_POST) . ';\r\nResult:productId:' . $productId;

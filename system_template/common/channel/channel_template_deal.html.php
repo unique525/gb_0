@@ -9,7 +9,7 @@
         <!--
 
         editAreaLoader.init({
-            id: "edit_area"	// id of the textarea to transform
+            id: "tabs-1_edit_area"	// id of the textarea to transform
             ,start_highlight: true	// if start with highlight
             ,allow_resize: "both"
             ,allow_toggle: false
@@ -21,7 +21,32 @@
 
         });
 
+
+
         $(function () {
+            $("#tabs").tabs({
+                    activate: function( event, ui ) {
+
+                        //设置当前的来源tab id
+                        var oldId = ui.oldPanel.attr("id");
+                        var newId = ui.newPanel.attr("id");
+
+                        editAreaLoader.init({
+                            id: newId+"_edit_area"	// id of the textarea to transform
+                            ,start_highlight: true	// if start with highlight
+                            ,allow_resize: "both"
+                            ,allow_toggle: false
+                            ,word_wrap: false
+                            ,language: "zh"
+                            ,syntax: "html"
+                            ,font_size: "12"
+                            ,font_family: "宋体,Courier New,verdana"
+
+                        });
+                    }
+                }
+            );
+
             var selChannelTemplateType = $("#f_ChannelTemplateType");
             selChannelTemplateType.change(function () {
                 var dnt = $(this).val();
@@ -32,6 +57,22 @@
                 }
             });
             selChannelTemplateType.change();
+
+            $("#span_show_1").click(function () {
+                editAreaLoader.init({
+                    id: "edit_area2"	// id of the textarea to transform
+                    ,start_highlight: true	// if start with highlight
+                    ,allow_resize: "both"
+                    ,allow_toggle: false
+                    ,word_wrap: false
+                    ,language: "zh"
+                    ,syntax: "html"
+                    ,font_size: "12"
+                    ,font_family: "宋体,Courier New,verdana"
+
+                });
+                $("#div_2").css("display","block");
+            });
 
             var deleteAttachment = $("#btn_delete_attachment");
             deleteAttachment.click(function () {
@@ -63,12 +104,29 @@
         function submitForm(closeTab) {
 
             var content = editAreaLoader
-                .getValue("edit_area")
+                .getValue("tabs-1_edit_area")
                 .replaceAll("<text_area","<textarea");
             content = content.replaceAll("</text_area>","</textarea>");
 
             $("#f_ChannelTemplateContent").val(content);
 
+            var content2 = editAreaLoader
+                .getValue("tabs-2_edit_area")
+                .replaceAll("<text_area","<textarea");
+            content2 = content2.replaceAll("</text_area>","</textarea>");
+            $("#f_ChannelTemplateContentForMobile").val(content2);
+
+            var content3 = editAreaLoader
+                .getValue("tabs-3_edit_area")
+                .replaceAll("<text_area","<textarea");
+            content3 = content3.replaceAll("</text_area>","</textarea>");
+            $("#f_ChannelTemplateContentForPad").val(content3);
+
+            var content4 = editAreaLoader
+                .getValue("tabs-4_edit_area")
+                .replaceAll("<text_area","<textarea");
+            content4 = content4.replaceAll("</text_area>","</textarea>");
+            $("#f_ChannelTemplateContentForTV").val(content4);
 
             if ($('#f_ChannelTemplateName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
@@ -159,9 +217,35 @@
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_ChannelTemplateContent">模板内容：</label></td>
                 <td class="spe_line">
-                    <textarea id="f_ChannelTemplateContent" name="f_ChannelTemplateContent" style="display:none;">{b_ChannelTemplateContent}</textarea>
-                    <label for="edit_area"></label><textarea id="edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContent}</textarea>
-                </td>
+
+                    <div id="tabs" style="margin-left:4px;">
+                        <ul>
+                            <li><a href="#tabs-1">网页模板</a></li>
+                            <li><label for="f_ChannelTemplateContentForMobile"><a href="#tabs-2">移动客户端（手机）模板</a></label></li>
+                            <li><label for="f_ChannelTemplateContentForPad"><a href="#tabs-3">平板电脑模板</a></label></li>
+                            <li><label for="f_ChannelTemplateContentForTV"><a href="#tabs-4">大屏幕（电视）模板</a></label></li>
+                        </ul>
+                        <div id="tabs-1" style="padding-top:3px;">
+                            <textarea id="f_ChannelTemplateContent" name="f_ChannelTemplateContent" style="display:none;">{b_ChannelTemplateContent}</textarea>
+                            <label for="tabs-1_edit_area"></label><textarea id="tabs-1_edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContent}</textarea>
+                        </div>
+                        <div id="tabs-2" style="padding-top:3px;">
+                            <textarea id="f_ChannelTemplateContentForMobile" name="f_ChannelTemplateContentForMobile" style="display:none;">{b_ChannelTemplateContentForMobile}</textarea>
+                            <label for="tabs-2_edit_area"></label><textarea id="tabs-2_edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContentForMobile}</textarea>
+                        </div>
+                        <div id="tabs-3" style="padding-top:3px;">
+                            <textarea id="f_ChannelTemplateContentForPad" name="f_ChannelTemplateContentForPad" style="display:none;">{b_ChannelTemplateContentForPad}</textarea>
+                            <label for="tabs-3_edit_area"></label><textarea id="tabs-3_edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContentForPad}</textarea>
+
+                        </div>
+                        <div id="tabs-4" style="padding-top:3px;">
+                            <textarea id="f_ChannelTemplateContentForTV" name="f_ChannelTemplateContentForTV" style="display:none;">{b_ChannelTemplateContentForTV}</textarea>
+                            <label for="tabs-4_edit_area"></label><textarea id="tabs-4_edit_area" col="20" class="input_box" style="width:97%;height:360px;">{b_ChannelTemplateContentForTV}</textarea>
+                        </div>
+
+
+
+                    </td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_AttachmentName">生成附件目录名称：</label></td>

@@ -307,15 +307,18 @@ class BaseManageGen extends BaseGen
 
     /**
      * 替换内容
-     * @param int $siteId 频道id
+     * @param int $channelId 频道id
      * @param string $channelTemplateContent 模板内容
      * @return mixed|string 内容模板
      */
-    private function ReplaceTemplate($siteId, $channelTemplateContent)
+    private function ReplaceTemplate($channelId, $channelTemplateContent)
     {
         /** 1.处理预加载模板 */
-
-
+        self::ReplaceFirst($channelTemplateContent);
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteId($channelId, true);
+        $channelTemplateContent = str_ireplace("{SiteId}", $siteId, $channelTemplateContent);
+        parent::ReplaceSiteInfo($siteId, $channelTemplateContent);
 
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
@@ -373,6 +376,7 @@ class BaseManageGen extends BaseGen
                 }
             }
         }
+        self::ReplaceEnd($channelTemplateContent);
         return $channelTemplateContent;
     }
 

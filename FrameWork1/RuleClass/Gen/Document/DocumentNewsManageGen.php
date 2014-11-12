@@ -50,13 +50,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * @return mixed|string
      */
     private function GenCreate() {
-        $tempContent = Template::Load("document/document_news_deal.html","common");
+        $templateContent = Template::Load("document/document_news_deal.html","common");
         $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
         $pageIndex = Control::GetRequest("p", 1);
         $resultJavaScript = "";
-        parent::ReplaceFirst($tempContent);
+        parent::ReplaceFirst($templateContent);
 
         if ($channelId > 0) {
 
@@ -72,22 +72,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
             }else{
                 $documentNewsManageData = new DocumentNewsManageData();
-                $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
-                $tempContent = str_ireplace("{ChannelName}", $channelName, $tempContent);
-                $tempContent = str_ireplace("{DocumentNewsId}", "", $tempContent);
-                $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-                $tempContent = str_ireplace("{ManageUserId}", $manageUserId, $tempContent);
-                $tempContent = str_ireplace("{ManageUserName}", $manageUserName, $tempContent);
-                $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
+                $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+                $templateContent = str_ireplace("{ChannelName}", $channelName, $templateContent);
+                $templateContent = str_ireplace("{DocumentNewsId}", "", $templateContent);
+                $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+                $templateContent = str_ireplace("{ManageUserId}", $manageUserId, $templateContent);
+                $templateContent = str_ireplace("{ManageUserName}", $manageUserName, $templateContent);
+                $templateContent = str_ireplace("{PageIndex}", $pageIndex, $templateContent);
 
                 //pre content
                 $documentPreContentManageData = new DocumentPreContentManageData();
                 $tagId = "document_pre_content";
                 $arrList = $documentPreContentManageData->GetList();
                 if (count($arrList) > 0) {
-                    Template::ReplaceList($tempContent, $arrList, $tagId);
+                    Template::ReplaceList($templateContent, $arrList, $tagId);
                 } else {
-                    Template::RemoveCustomTag($tempContent, $tagId);
+                    Template::RemoveCustomTag($templateContent, $tagId);
                 }
 
                 //source common
@@ -95,12 +95,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $tagId = "source_common_list";
                 $arrList = $sourceCommonManageData->GetList();
                 if (count($arrList) > 0) {
-                    Template::ReplaceList($tempContent, $arrList, $tagId);
+                    Template::ReplaceList($templateContent, $arrList, $tagId);
                 } else {
-                    Template::RemoveCustomTag($tempContent, $tagId);
+                    Template::RemoveCustomTag($templateContent, $tagId);
                 }
 
-                parent::ReplaceWhenCreate($tempContent, $documentNewsManageData->GetFields());
+                parent::ReplaceWhenCreate($templateContent, $documentNewsManageData->GetFields());
 
                 if (!empty($_POST)) {
                     $httpPostData = $_POST;
@@ -236,20 +236,20 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
                 //去掉s开头的标记 {s_xxx_xxx}
                 $patterns = '/\{s_(.*?)\}/';
-                $tempContent = preg_replace($patterns, "", $tempContent);
+                $templateContent = preg_replace($patterns, "", $templateContent);
                 //去掉c开头的标记 {c_xxx}
                 $patterns = '/\{c_(.*?)\}/';
-                $tempContent = preg_replace($patterns, "", $tempContent);
+                $templateContent = preg_replace($patterns, "", $templateContent);
                 //去掉r开头的标记 {r_xxx_xxx}
                 $patterns = '/\{r_(.*?)\}/';
-                $tempContent = preg_replace($patterns, "", $tempContent);
+                $templateContent = preg_replace($patterns, "", $templateContent);
             }
             ////////////////////////////////////////////////////
         }
 
-        parent::ReplaceEnd($tempContent);
-        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+        return $templateContent;
     }
 
     /**
@@ -257,13 +257,13 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * @return mixed|string
      */
     private function GenModify() {
-        $tempContent = Template::Load("document/document_news_deal.html", "common");
+        $templateContent = Template::Load("document/document_news_deal.html", "common");
         $documentNewsId = Control::GetRequest("document_news_id", 0);
 
         $nowManageUserId = Control::GetManageUserId();
         $pageIndex = Control::GetRequest("p", 1);
         $resultJavaScript = "";
-        parent::ReplaceFirst($tempContent);
+        parent::ReplaceFirst($templateContent);
         if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             $manageUserManageData = new ManageUserManageData();
@@ -324,10 +324,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
             ////////////////////////////////////////////////////
 
-            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
-            $tempContent = str_ireplace("{DocumentNewsId}", $documentNewsId, $tempContent);
-            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{PageIndex}", $pageIndex, $tempContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $templateContent = str_ireplace("{DocumentNewsId}", $documentNewsId, $templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{PageIndex}", $pageIndex, $templateContent);
 
             /////////////////////////////////////////////////
             //pre content
@@ -335,9 +335,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "document_pre_content";
             $arrList = $documentPreContentManageData->GetList();
             if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $tagId);
+                Template::ReplaceList($templateContent, $arrList, $tagId);
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
+                Template::RemoveCustomTag($templateContent, $tagId);
             }
 
             //source common
@@ -345,24 +345,24 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "source_common_list";
             $arrList = $sourceCommonManageData->GetList();
             if (count($arrList) > 0) {
-                Template::ReplaceList($tempContent, $arrList, $tagId);
+                Template::ReplaceList($templateContent, $arrList, $tagId);
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
+                Template::RemoveCustomTag($templateContent, $tagId);
             }
 
 
 
             $arrOne = $documentNewsManageData->GetOne($documentNewsId);
-            Template::ReplaceOne($tempContent, $arrOne, false, false);
+            Template::ReplaceOne($templateContent, $arrOne, false, false);
             //去掉s开头的标记 {s_xxx_xxx}
             $patterns = '/\{s_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
             //去掉c开头的标记 {c_xxx}
             $patterns = '/\{c_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
             //去掉r开头的标记 {r_xxx_xxx}
             $patterns = '/\{r_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
+            $templateContent = preg_replace($patterns, "", $templateContent);
             if (!empty($_POST)) {
 
                 $httpPostData = $_POST;
@@ -523,9 +523,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
         }
-        parent::ReplaceEnd($tempContent);
-        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+        return $templateContent;
     }
 
     private function GenRemoveToBin(){
@@ -579,10 +579,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         }
 
         //load template
-        $tempContent = Template::Load("document/document_news_list.html", "common");
+        $templateContent = Template::Load("document/document_news_list.html", "common");
 
 
-        parent::ReplaceFirst($tempContent);
+        parent::ReplaceFirst($templateContent);
 
         ////////////////////////////////////////////////////
         ///////////////输出权限到页面///////////////////
@@ -598,15 +598,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $canCreate = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
 
 
-        $tempContent = str_ireplace("{CanRework}", $canRework == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanAudit1}", $canAudit1 == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanAudit2}", $canAudit2 == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanAudit3}", $canAudit3 == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanAudit4}", $canAudit4 == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanRefused}", $canRefused == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanPublish}", $canPublish == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanModify}", $canModify == 1 ? "" : "display:none", $tempContent);
-        $tempContent = str_ireplace("{CanCreate}", $canCreate == 1 ? "" : "display:none", $tempContent);
+        $templateContent = str_ireplace("{CanRework}", $canRework == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanAudit1}", $canAudit1 == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanAudit2}", $canAudit2 == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanAudit3}", $canAudit3 == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanAudit4}", $canAudit4 == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanRefused}", $canRefused == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanPublish}", $canPublish == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanModify}", $canModify == 1 ? "" : "display:none", $templateContent);
+        $templateContent = str_ireplace("{CanCreate}", $canCreate == 1 ? "" : "display:none", $templateContent);
 
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
@@ -626,7 +626,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($pageIndex > 0 && $channelId > 0) {
 
-            $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "document_news_list";
@@ -646,7 +646,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $hit
             );
             if (count($arrDocumentNewsList) > 0) {
-                Template::ReplaceList($tempContent, $arrDocumentNewsList, $tagId);
+                Template::ReplaceList($templateContent, $arrDocumentNewsList, $tagId);
 
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
@@ -656,16 +656,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
 
-                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
 
             } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
             }
         }
 
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     /**
