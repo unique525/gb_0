@@ -1154,13 +1154,13 @@ class Template
          */
         if (!empty($tagId) && !empty($tagType)) {
             $patterns = "/\<$tagName id=\"$tagId\" type=\"$tagType\"(.*)\<\/$tagName>/imsU";
-            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent, 1);
         } else if (!empty($tagId)) {
             $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
-            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent, 1);
         } else {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";
-            $templateContent = preg_replace($patterns, $replaceContent, $templateContent);
+            $templateContent = preg_replace($patterns, $replaceContent, $templateContent, 1);
         }
         return $templateContent;
 

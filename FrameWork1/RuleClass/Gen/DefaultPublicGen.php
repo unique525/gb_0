@@ -79,6 +79,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $siteAdContentPublicGen = new SiteAdContentPublicGen();
                 $result = $siteAdContentPublicGen->GenPublic();
                 break;
+            case "document_news":
+                $documentNewsPublicGen = new DocumentNewsPublicGen();
+                $result = $documentNewsPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;

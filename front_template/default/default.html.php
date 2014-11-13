@@ -59,7 +59,10 @@
 
             countDown("2014/12/10 22:59:59",null,"#demo02 .hour","#demo02 .minute","#demo02 .second");
 
-            $('.bx_slider').bxSlider();
+            $('.bx_slider').bxSlider({
+                auto: true,
+                controls: false
+            });
 
         });
     </script>
@@ -304,11 +307,19 @@
         <div class="right_bar right">
             <div class="sales">
                 <div class="right_ad">
-                    <div class="tuijian">
-                        <h1><a href="#" target="_blank">买手推荐</a></h1>
-                        <p><a href="#">产品产品产品产品</a></p>
-                    </div>
-                    <a href="#"><img src="images/tuijian_img.jpg" width="241" height="349" /></a></div>
+                    <icms id="channel_135" type="document_news_list" top="0,1" title="36">
+                        <item>
+                            <![CDATA[
+                            <div class="tuijian">
+                                <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                                <p><a href="{c_DocumentNewsUrl}">{f_DocumentNewsIntro}</a></p>
+                            </div>
+                            <a href="{c_DocumentNewsUrl}"><img src="{f_TitlePic1Path}" width="241" height="349" /></a>
+                            ]]>
+                        </item>
+                    </icms>
+                </div>
+
             </div>
         </div>
         <div class="clean"></div>
@@ -363,11 +374,18 @@
         <div class="right_bar right">
             <div class="sales">
                 <div class="right_ad">
-                    <div class="tuijian">
-                        <h1><a href="#" target="_blank">买手推荐</a></h1>
-                        <p><a href="#">产品产品产品产品</a></p>
-                    </div>
-                    <a href="#"><img src="images/tuijian_img.jpg" width="241" height="349" /></a></div>
+                    <icms id="channel_135" type="document_news_list" top="1,1" title="36">
+                        <item>
+                            <![CDATA[
+                            <div class="tuijian">
+                                <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                                <p><a href="{c_DocumentNewsUrl}">{f_DocumentNewsIntro}</a></p>
+                            </div>
+                            <a href="{c_DocumentNewsUrl}"><img src="{f_TitlePic1Path}" width="241" height="349" /></a>
+                            ]]>
+                        </item>
+                    </icms>
+                </div>
             </div>
         </div>
         <div class="clean"></div>
@@ -388,18 +406,7 @@
     <div class="other_part">
         <ul>
             <li>
-                <div class="title4 green_bg"><a href="/h/135/list.html" target="_blank">买手推荐</a></div>
-                <icms id="channel_135" type="document_news_list" top="1" title="36">
-                    <item>
-                        <![CDATA[
-                        <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
-                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
-                        ]]>
-                    </item>
-                </icms>
-            </li>
-            <li>
-                <div class="title4 red_bg"><a href="/h/136/list.html" target="_blank">饮食健康</a></div>
+                <div class="title4 green_bg"><a href="/h/136/list.html" target="_blank">饮食健康</a></div>
                 <icms id="channel_136" type="document_news_list" top="1" title="36">
                     <item>
                         <![CDATA[
@@ -410,14 +417,37 @@
                 </icms>
             </li>
             <li>
-                <div class="title4 blue_bg">饮食健康</div>
-                <div><a href="#" target="_blank"><img src="images/img_2.jpg" width="279" height="153" /></a></div>
-                <h1><a href="#" target="_blank">干煸菜花：这样吃更美味</a></h1>
+                <div class="title4 red_bg"><a href="/h/137/list.html" target="_blank">家庭保健</a></div>
+                <icms id="channel_137" type="document_news_list" top="1" title="36">
+                    <item>
+                        <![CDATA[
+                        <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
+                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        ]]>
+                    </item>
+                </icms>
+            </li>
+            <li>
+                <div class="title4 blue_bg"><a href="/h/138/list.html" target="_blank">时尚生活</a></div>
+                <icms id="channel_138" type="document_news_list" top="1" title="36">
+                    <item>
+                        <![CDATA[
+                        <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
+                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        ]]>
+                    </item>
+                </icms>
             </li>
             <li class="last">
-                <div class="title4 purple_bg">饮食健康</div>
-                <div><a href="#" target="_blank"><img src="images/img_2.jpg" width="279" height="153" /></a></div>
-                <h1><a href="#" target="_blank">干煸菜花：这样吃更美味</a></h1>
+                <div class="title4 purple_bg"><a href="/h/139/list.html" target="_blank">旅游休闲</a></div>
+                <icms id="channel_139" type="document_news_list" top="1" title="36">
+                    <item>
+                        <![CDATA[
+                        <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
+                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        ]]>
+                    </item>
+                </icms>
             </li>
         </ul>
         <div class="clean"></div>

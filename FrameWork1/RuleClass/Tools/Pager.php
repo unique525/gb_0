@@ -22,6 +22,8 @@ class Pager {
      * @param string $pageIndexName 页码参数名称，默认 p
      * @param string $pageSizeName 页大小参数名称，默认 pz
      * @param bool $showGoTo 是否显示转向框，默认显示
+     * @param bool $isFront 是否前台使用
+     * @param string $pagerContentTemplate 前台使用时，要传入列表按钮模板
      * @return string 返回分页HTML代码
      */
     public static function ShowPageButton(
@@ -36,7 +38,9 @@ class Pager {
         $jsParamList = "",
         $pageIndexName = "p",
         $pageSizeName = "pz",
-        $showGoTo = TRUE
+        $showGoTo = TRUE,
+        $isFront = false,
+        $pagerContentTemplate = ""
     ) {
         $templateContent = trim($templateContent);
 
@@ -44,10 +48,14 @@ class Pager {
             $templateContent = self::GetPagerDefaultTempContent();
             $temp = self::GetPagerDefaultListTemp();
         } else {
-            if ($isJs) {
-                $temp = Template::Load("pager/pager_content_js_style$styleNumber.html", "common");
-            } else {
-                $temp = Template::Load("pager/pager_content_style$styleNumber.html", "common");
+            if($isFront){
+                $temp = $pagerContentTemplate;
+            }else{
+                if ($isJs) {
+                    $temp = Template::Load("pager/pager_content_js_style$styleNumber.html", "common");
+                } else {
+                    $temp = Template::Load("pager/pager_content_style$styleNumber.html", "common");
+                }
             }
         }
         $outHtml = "";

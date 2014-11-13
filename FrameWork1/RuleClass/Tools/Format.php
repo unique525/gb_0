@@ -119,7 +119,7 @@ class Format
         if (is_numeric($content)) {
             return $content;
         }
-        //把 0,10 这种转化为数组
+        //把 0,10 这种转化为数组,并验证
         $arr = explode(",", $content);
         foreach ($arr as $val) {
             if (!is_numeric($val)) {
