@@ -77,11 +77,15 @@ class DocumentNewsPublicData extends BasePublicData {
             ShowPicMethod,
             ClosePosition,
             Hit,
-            PublishDate
+            PublishDate,
+            (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
+                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1Path
             ';
 
             $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
-                WHERE ChannelId=:ChannelId AND State=:State
+                WHERE
+                    ChannelId=:ChannelId
+                    AND State=:State
                 ORDER BY $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);

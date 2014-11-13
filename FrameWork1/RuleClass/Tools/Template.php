@@ -581,6 +581,7 @@ class Template
                     $itemRowIntroCount,
                     $headerRowTitleCount,
                     $footerRowTitleCount,
+                    $childRowTitleCount,
                     $itemType
                 );
             }
@@ -658,50 +659,8 @@ class Template
         if (strtolower($columnName) == "state") {
             $templateContent = str_ireplace("{f_" . $columnName . "_value}", $columnValue, $templateContent);
         }
-        $pos = stripos(strtolower($columnName), "subject");
-        if ($pos !== false) {
-            $columnValue = Format::FormatHtmlTag($columnValue);
-            $templateContent = str_ireplace("{c_title_all}", $columnValue, $templateContent);
-            if (intval($itemRowTitleCount) > 0) {
-                //截断字符
-                $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
-            }
-        }
-        //格式化标题
-        $pos = stripos(strtolower($columnName), "title");
-        $pos2 = stripos(strtolower($columnName), "title_pic");
-        if ($pos !== false && $pos2 === false) {
-            $columnValue = Format::FormatHtmlTag($columnValue);
-            if ($itemType == "header") {
-                if (intval($headerRowTitleCount) > 0) {
-                    //截断字符
-                    $columnValue = Format::ToShort($columnValue, $headerRowTitleCount);
-                }
-            } else if ($itemType == "footer") {
-                if (intval($footerRowTitleCount) > 0) {
-                    //截断字符
-                    $columnValue = Format::ToShort($columnValue, $footerRowTitleCount);
-                }
-            } else if ($itemType == "child") {
-                if (intval($childRowTitleCount) > 0) {
-                    //截断字符
-                    $columnValue = Format::ToShort($columnValue, $childRowTitleCount);
-                }
-            } else {
-                if (intval($itemRowTitleCount) > 0) {
-                    //截断字符
-                    $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
-                }
-            }
-        }
-        //格式化简介
-        $pos = stripos(strtolower($columnName), "intro");
-        if ($pos !== false) {
-            if (intval($itemRowIntroCount) > 0) {
-                //截断字符
-                $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
-            }
-        }
+
+
         $pos = stripos(strtolower($columnName), strtolower("PublishDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
@@ -741,9 +700,20 @@ class Template
      * @param int $itemRowIntroCount 主列表项目简介最大字符数
      * @param int $headerRowTitleCount 顶部列表项目标题最大字符数
      * @param int $footerRowTitleCount 底部列表项目标题最大字符数
+     * @param int $childRowTitleCount 子项列表项目标题最大字符数
      * @param string $itemType 标签的类型 header item footer
      */
-    private static function FormatDocumentNewsColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
+    private static function FormatDocumentNewsColumnValue(
+        $columnName,
+        $columnValue,
+        &$templateContent,
+        $itemRowTitleCount,
+        $itemRowIntroCount,
+        $headerRowTitleCount,
+        $footerRowTitleCount,
+        $childRowTitleCount,
+        $itemType = "item"
+    )
     {
         $pos = stripos(strtolower($columnName), strtolower("ShowDate"));
         if ($pos !== false) {
@@ -757,6 +727,42 @@ class Template
             $templateContent = str_ireplace("{f_show_day}", $day, $templateContent);
         }
 
+        //格式化标题
+        $pos = stripos(strtolower($columnName), "DocumentNewsTitle");
+
+        if ($pos !== false) {
+            $columnValue = Format::FormatHtmlTag($columnValue);
+            if ($itemType == "header") {
+                if (intval($headerRowTitleCount) > 0) {
+                    //截断字符
+                    $columnValue = Format::ToShort($columnValue, $headerRowTitleCount);
+                }
+            } else if ($itemType == "footer") {
+                if (intval($footerRowTitleCount) > 0) {
+                    //截断字符
+                    $columnValue = Format::ToShort($columnValue, $footerRowTitleCount);
+                }
+            } else if ($itemType == "child") {
+                if (intval($childRowTitleCount) > 0) {
+                    //截断字符
+                    $columnValue = Format::ToShort($columnValue, $childRowTitleCount);
+                }
+            } else {
+                if (intval($itemRowTitleCount) > 0) {
+                    //截断字符
+                    $columnValue = Format::ToShort($columnValue, $itemRowTitleCount);
+                }
+            }
+        }
+
+        //格式化简介
+        $pos = stripos(strtolower($columnName), "intro");
+        if ($pos !== false) {
+            if (intval($itemRowIntroCount) > 0) {
+                //截断字符
+                $columnValue = Format::ToShort($columnValue, $itemRowIntroCount);
+            }
+        }
 
         //处理内容
         $pos = stripos(strtolower($columnName), strtolower("DocumentNewsContent"));
