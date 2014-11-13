@@ -200,7 +200,6 @@ class BasePublicGen extends BaseGen {
         }
 
 
-
         if ($siteId > 0 || $channelId>0) {
             $arrChannelList = null;
             $arrChannelChildList = null;

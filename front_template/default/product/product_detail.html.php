@@ -43,7 +43,10 @@
                 //产品市场价格
                 var productMarketPriceValue=$("#productMarketPrice").text();
                 //优惠的差价
-                var priceReduceValue=parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
+                var priceReduceValue = parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
+
+                priceReduceValue = formatPrice(priceReduceValue);
+
                 $("#priceReduce").text(priceReduceValue);
                 //价格选择切换效果
                 spanPropon.attr("class","propon propondefault");//默认全部不选择
@@ -212,12 +215,19 @@
                 success:function(data){
                     var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
-                    var negative_appraisal = parseInt(data["negative_appraisal"]);
+                    var negative_appraisal = parseInt(data["negative_appraisal"])
 
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
-                    var negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
-                    var positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
-                    var moderate_appraisal_width = (moderate_appraisal/total_appraisal).toFixed(2)*100;
+
+                    var negative_appraisal_width = 0;
+                    var positive_appraisal_width = 0;
+                    var moderate_appraisal_width = 0;
+                    if(total_appraisal > 0){
+                        negative_appraisal_width = (negative_appraisal/total_appraisal).toFixed(2)*100;
+                        positive_appraisal_width = (positive_appraisal/total_appraisal).toFixed(2)*100;
+                        moderate_appraisal_width = (moderate_appraisal/total_appraisal).toFixed(2)*100;
+                    }
+
                     $("#span_scoreCount").html(positive_appraisal_width+"%");
                     $("#divspan_VeryGood").html(positive_appraisal_width+"%");
                     $("#divspan_Good").html(moderate_appraisal_width+"%");
@@ -249,9 +259,9 @@
         }
         //产品购买数量数字验证
         function validateCount() {
-            var intreg = /^\d+$/;
+            var value = /^\d+$/;
             var sSum = this.val();
-            if ("0" == sSum || !intreg.test(sSum)) {
+            if ("0" == sSum || !value.test(sSum)) {
                 this.val("1");
             }
         }
@@ -260,61 +270,9 @@
 </head>
 <body>
 <pre_temp id="3"></pre_temp>
-<div class="wrapper2">
-    <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103" /></a></div>
-    <div class="search">
-        <div class="search_green"><input name="" type="text" class="text"/></div>
-        <div class="searchbtn"><img src="images/search.png" width="46" height="28" /></div>
-        <div class="searchbottom">平谷大桃  哈密瓜  新鲜葡萄  红炉磨坊  太湖鲜鱼</div>
-    </div>
-    <div class="service">
-        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
-        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><span><a href="/default.php?mod=user_car&a=list" target="_blank">购物车</a></span></div>
-        <div class="number" id="user_car_count">0</div>
-    </div>
-</div>
-<div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div id="leftmenu">
-            <ul>
-                <li><span>所有商品分类</span>
-                    <ul style="display: none;">
+<pre_temp id="4"></pre_temp>
+<pre_temp id="9"></pre_temp>
 
-                        <icms id="channel_3" type="channel_list" where="parent">
-                            <item>
-                                <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
-                                    <ul style="display: none;">
-                                           {child}
-                                    </ul>
-                                </li>
-                                ]]>
-                            </item>
-                            <child>
-                                <![CDATA[
-                                    <li><span>{f_ChannelName}</span></li>
-                                    <dd>{third}</dd>
-                                ]]>
-                            </child>
-                            <third>
-                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
-                                ]]>
-                            </third>
-
-                        </icms>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="images/icon_new.png" width="29" height="30" /></div>
-    </div>
-</div>
 <div class="box1200">
     <div class="myseatnew">
         <a href="#">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
@@ -421,9 +379,9 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice"></span></span></p>
-                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice" style="text-decoration: line-through">{MarketPrice}</span></p>
-                                <p class="price_n"><span class="chaprice">已优惠：<span id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice show_price"></span></span></p>
+                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
+                                <p class="price_n"><span class="chaprice">已优惠：<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
                         <td align="left">
@@ -555,7 +513,7 @@
                     <div id="div_NoGood" style="height:12px;background-color: red"></div>
                 </dd>
                 <dd class="d2">
-                    <span id="divspan_NoGood">3%</span>
+                    <span id="divspan_NoGood"></span>
                 </dd>
             </dl>
         </div>
@@ -572,7 +530,7 @@
             <td width="11%" align="center" valign="top" style="padding-top:10px;">
                 <table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileCompressPath1}" width="50" height="50" /></a></td>
+                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileThumbPath2}" width="50" height="50" /></a></td>
                     </tr>
                 </table>
                 {f_UserName}</br>

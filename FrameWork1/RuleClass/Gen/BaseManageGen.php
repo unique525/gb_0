@@ -307,15 +307,18 @@ class BaseManageGen extends BaseGen
 
     /**
      * 替换内容
-     * @param int $siteId 频道id
+     * @param int $channelId 频道id
      * @param string $channelTemplateContent 模板内容
      * @return mixed|string 内容模板
      */
-    private function ReplaceTemplate($siteId, $channelTemplateContent)
+    private function ReplaceTemplate($channelId, $channelTemplateContent)
     {
         /** 1.处理预加载模板 */
-
-
+        self::ReplaceFirst($channelTemplateContent);
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteId($channelId, true);
+        $channelTemplateContent = str_ireplace("{SiteId}", $siteId, $channelTemplateContent);
+        parent::ReplaceSiteInfo($siteId, $channelTemplateContent);
 
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
@@ -331,6 +334,8 @@ class BaseManageGen extends BaseGen
                 $tagOrder = Template::GetParamValue($tagContent, "order");
                 //标签特殊查询条件
                 $tagWhere = Template::GetParamValue($tagContent, "where");
+                //标签特殊查询条件的值
+                $tagWhereValue = Template::GetParamValue($tagContent, "where_value");
                 //显示条数
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
                 $tagTopCount = Format::CheckTopCount($tagTopCount);
@@ -342,18 +347,17 @@ class BaseManageGen extends BaseGen
 
                 switch ($tagType) {
                     case Template::TAG_TYPE_CHANNEL_LIST :
-                        $siteId = intval(str_ireplace("site_", "", $tagId));
-                        if ($siteId > 0) {
+
                             $channelTemplateContent = self::ReplaceTemplateOfChannelList(
                                 $channelTemplateContent,
-                                $siteId,
                                 $tagId,
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
+                                $tagWhereValue,
                                 $tagOrder
                             );
-                        }
+
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
                         $channelId = intval(str_ireplace("channel_", "", $tagId));
@@ -373,49 +377,162 @@ class BaseManageGen extends BaseGen
                 }
             }
         }
+        self::ReplaceEnd($channelTemplateContent);
         return $channelTemplateContent;
     }
 
     /**
      * 替换频道列表的内容
-     * @param string $channelTemplateContent 要处理的模板内容
-     * @param int $siteId 站点id
+     * @param string $templateContent 要处理的模板内容
      * @param string $tagId 标签id
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件的值
      * @param string $tagOrder 排序方式
      * @return mixed|string 内容模板
      */
     private function ReplaceTemplateOfChannelList(
-        $channelTemplateContent,
-        $siteId,
+        $templateContent,
         $tagId,
         $tagContent,
         $tagTopCount,
         $tagWhere,
+        $tagWhereValue,
         $tagOrder
     )
     {
-        if ($siteId > 0) {
+        $channelId = 0;
+        $pos = stripos(strtolower($tagId), "channel_");
+        if ($pos !== false) {
+            $channelId = intval(str_ireplace("channel_", "", $tagId));
+        }
+
+        $siteId = 0;
+        $pos = stripos(strtolower($tagId), "site_");
+        if ($pos !== false) {
+            $siteId = intval(str_ireplace("site_", "", $tagId));
+        }
+
+
+        if ($siteId > 0 || $channelId>0) {
             $arrChannelList = null;
+            $arrChannelChildList = null;
+            $arrChannelThirdList = null;
+            $tableIdName = "ChannelId";
+            $parentIdName = "ParentId";
+            $thirdTableIdName = "ChannelId";
+            $thirdParentIdName = "ParentId";
+
             switch ($tagWhere) {
                 case "parent":
-                    $channelManageData = new ChannelManageData();
-                    $arrChannelList = $channelManageData->GetListByParentId($siteId, $tagTopCount, $tagOrder);
+
+                    if($tagTopCount<=0){
+                        $tagTopCount = 100;
+                    }
+                    $channelPublicData = new ChannelPublicData();
+
+                    $arrChannelList = $channelPublicData->GetListByParentId(
+                        $tagTopCount,
+                        $channelId,
+                        $tagOrder
+                    );
+
+                    $sbChildChannelId = '';
+                    $sbThirdChannelId = '';
+                    if(count($arrChannelList)>0){
+
+                        for($i = 0;$i<count($arrChannelList); $i++){
+                            $sbChildChannelId .= ','.$arrChannelList[$i]["ChannelId"];
+                        }
+
+                        if(strpos($sbChildChannelId,',') == 0){
+                            $sbChildChannelId = substr($sbChildChannelId,1);
+                        }
+
+                        if(strlen($sbChildChannelId)>0){
+                            //echo $sbChildChannelId;
+                            //二级
+                            $arrChannelChildList = $channelPublicData->GetListByParentId(
+                                $tagTopCount,
+                                $sbChildChannelId,
+                                $tagOrder
+                            );
+
+                            if(count($arrChannelChildList)>0){
+                                for($j = 0;$j<count($arrChannelChildList); $j++){
+                                    $sbThirdChannelId .= ','.$arrChannelChildList[$j]["ChannelId"];
+                                }
+                            }
+
+                        }
+
+                        if(strpos($sbThirdChannelId,',') == 0){
+                            $sbThirdChannelId = substr($sbThirdChannelId,1);
+                        }
+
+                        if(strlen($sbThirdChannelId)>0){
+                            //三级
+                            $arrChannelThirdList = $channelPublicData->GetListByParentId(
+                                $tagTopCount,
+                                $sbThirdChannelId,
+                                $tagOrder
+                            );
+                        }
+
+
+                    }
+
+
+                    break;
+                case "rank":
+                    if($siteId>0){
+                        $rank = intval($tagWhereValue);
+                        $channelPublicData = new ChannelPublicData();
+                        $arrChannelList = $channelPublicData->GetListByRank(
+                            $siteId,
+                            $tagTopCount,
+                            $rank,
+                            $tagOrder
+                        );
+                    }
+
+
+                    break;
+                default:
+                    //默认显示三层
+
+
                     break;
             }
+
             if (!empty($arrChannelList)) {
-                Template::ReplaceList($tagContent, $arrChannelList, $tagId);
+                $tagName = Template::DEFAULT_TAG_NAME;
+                Template::ReplaceList(
+                    $tagContent,
+                    $arrChannelList,
+                    $tagId,
+                    $tagName,
+                    $arrChannelChildList,
+                    $tableIdName,
+                    $parentIdName,
+                    $arrChannelThirdList,
+                    $thirdTableIdName,
+                    $thirdParentIdName
+                );
                 //把对应ID的CMS标记替换成指定内容
                 //替换子循环里的<![CDATA[标记
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
                 $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
             }
+
+
         }
 
-        return $channelTemplateContent;
+        return $templateContent;
     }
 
     /**

@@ -24,14 +24,14 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "modify_avatar"://生成修改头像界面
+            case "modify_avatar": //生成修改头像界面
                 $result = self::GenModifyAvatar();
                 break;
-            case "async_modify_avatar"://ajax修改头像
-                $result = self::AsyncModifyAvatar();
+            case "generate_avatar": //生成头像并插入数据库
+                $result = self::GenAvatar();
                 break;
-            case "async_get_avatar":
-                $result = self::AsyncGetAvatar();
+            case "async_get_avatar_upload_file_id":
+                $result = self::AsyncGetAvatarUploadFileId();
                 break;
         }
 
@@ -40,10 +40,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         return $result;
     }
 
-    private function GenModify(){
+    private function GenModify()
+    {
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
-        if($userId > 0 && $siteId > 0){
+        if ($userId > 0 && $siteId > 0) {
             $templateFileUrl = "/user/user_info_modify.html";
             $templateName = "default";
             $templatePath = "front_template";
@@ -52,69 +53,70 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
 
             $userInfoPublicData = new UserInfoPublicData();
 
-            $isExist = $userInfoPublicData->CheckIsExist($userId,$siteId);
+            $isExist = $userInfoPublicData->CheckIsExist($userId, $siteId);
 
-            if($isExist == 0){//检查这个会员是否创建了会员详细信息，如果没有 就创建
+            if ($isExist == 0) { //检查这个会员是否创建了会员详细信息，如果没有 就创建
                 $userInfoPublicData->Create($userId);
             }
-            $arrUserInfoOne = $userInfoPublicData->GetOne($userId,$siteId);
-            if(!empty($arrUserInfoOne) > 0){
-                Template::ReplaceOne($templateContent,$arrUserInfoOne);
-            }else{
-                $templateContent =Language::Load('user_info', 7);
+            $arrUserInfoOne = $userInfoPublicData->GetOne($userId, $siteId);
+            if (!empty($arrUserInfoOne) > 0) {
+                Template::ReplaceOne($templateContent, $arrUserInfoOne);
+            } else {
+                $templateContent = Language::Load('user_info', 7);
             }
 
-            if(!empty($_POST)){
-                $nickName = Control::PostRequest("NickName","");
-                $realName = Control::PostRequest("RealName","");
-                $email = Control::PostRequest("Email","");
-                $qq = Control::PostRequest("QQ","");
-                $comeFrom = Control::PostRequest("ComeFrom","");
-                $birthday = Control::PostRequest("Birthday","0000-00-00");
-                $idCard = Control::PostRequest("IdCard","");
-                $address = Control::PostRequest("Address","");
-                $postCode = Control::PostRequest("PostCode","");
-                $mobile = Control::PostRequest("Mobile","");
-                $tel = Control::PostRequest("Tel","");
-                $province = Control::PostRequest("Province","");
-                $city = Control::PostRequest("City","");
-                $sign = Control::PostRequest("Sign","");
-                $gender = Control::PostRequest("Gender","");
+            if (!empty($_POST)) {
+                $nickName = Control::PostRequest("NickName", "");
+                $realName = Control::PostRequest("RealName", "");
+                $email = Control::PostRequest("Email", "");
+                $qq = Control::PostRequest("QQ", "");
+                $comeFrom = Control::PostRequest("ComeFrom", "");
+                $birthday = Control::PostRequest("Birthday", "0000-00-00");
+                $idCard = Control::PostRequest("IdCard", "");
+                $address = Control::PostRequest("Address", "");
+                $postCode = Control::PostRequest("PostCode", "");
+                $mobile = Control::PostRequest("Mobile", "");
+                $tel = Control::PostRequest("Tel", "");
+                $province = Control::PostRequest("Province", "");
+                $city = Control::PostRequest("City", "");
+                $sign = Control::PostRequest("Sign", "");
+                $gender = Control::PostRequest("Gender", "");
 //                $bankName = Control::PostRequest("bank_name","");
 //                $bankOpenAddress = Control::PostRequest("bank_open_address","");
 //                $bankUserName = Control::PostRequest("bank_user_name","");
 //                $bankAccount = Control::PostRequest("bank_account","");
 
 
-                $result = $userInfoPublicData->Modify($userId,$nickName, $realName, $email, $qq,
-                                                                                        $comeFrom, $birthday,$idCard, $address, $postCode,
-                                                                                        $mobile,$tel, $province, $city,$sign,$gender
-                                                                                        );
+                $result = $userInfoPublicData->Modify($userId, $nickName, $realName, $email, $qq,
+                    $comeFrom, $birthday, $idCard, $address, $postCode,
+                    $mobile, $tel, $province, $city, $sign, $gender
+                );
 
 
                 //加入操作日志
-                $operateContent = 'Modify User,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                $operateContent = 'Modify User,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);
 
-                if($result > 0){
+                if ($result > 0) {
                     $jsCode = 'alert("修改成功");parent.location.href=parent.location.href';
                     Control::RunJavascript($jsCode);
-                }else{
+                } else {
                     $jsCode = 'alert("修改失败");';
                     Control::RunJavascript($jsCode);
                 }
             }
             parent::ReplaceEnd($templateContent);
             return $templateContent;
-        }else{
+        } else {
             Control::GoUrl("");
             return null;
         }
     }
 
-    private function GenModifyAvatar(){
+    private function GenModifyAvatar()
+    {
         $userId = Control::GetUserId();
-        if($userId > 0){
+        if ($userId > 0) {
             $templateFileUrl = "/user/user_modify_avatar.html";
             $templateName = "default";
             $templatePath = "front_template";
@@ -124,33 +126,47 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
-        }else{
+        } else {
             Control::GoUrl("/default.php?mod=user&a=login");
             return "";
         }
     }
 
-    private function AsyncGetAvatar(){
+    /**
+     *
+     * @return string
+     */
+    private function AsyncGetAvatarUploadFileId()
+    {
+        $result = -1;
         $userId = Control::GetUserId();
-        $siteId = parent::GetSiteIdByDomain();
         if ($userId > 0) {
             $userInfoPublicData = new UserInfoPublicData();
-            $arrUserAvatarOne = $userInfoPublicData->GetUserAvatar($userId);
-
-            if (!empty($arrUserAvatarOne)) {
-                //判断头像
-                if ($arrUserAvatarOne["UploadFilePath"] == "" || empty($arrUserAvatarOne["UploadFilePath"])) {
-                    $siteConfigData = new SiteConfigData($siteId);
-                    $arrUserAvatarOne['UploadFilePath'] = $siteConfigData->UserDefaultMaleAvatar;
-                }
-                $arrUserAvatarOne = json_encode($arrUserAvatarOne);
-                return Control::GetRequest("jsonpcallback","") . '({"avatarList":' . $arrUserAvatarOne . ',"result":'.self::ASYNC_SUCCESS.'})';
-            } else {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"'.self::ASYNC_FAILED.'"})';
-            }
-        }else{
-            return Control::GetRequest("jsonpcallback","") . '({"result":"'.self::ASYNC_FAILED.'"})';
+            $result = $userInfoPublicData->GetAvatarUploadFileId($userId, true);
         }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
+    }
+
+    private function GenAvatar()
+    {
+        $userId = Control::GetUserId();
+        if ($userId > 0) {
+            $uploadFileId = Control::PostRequest("upload_file_id", "");
+            $width = Control::PostRequest("width", 0);
+            $height = Control::PostRequest("height", 0);
+            $reUrl = Control::PostRequest("re_url", 0);
+            if ($uploadFileId > 0) {
+
+
+                $userInfoPublicData = new UserInfoPublicData();
+                $result = $userInfoPublicData->ModifyAvatarUploadFileId($userId, $uploadFileId);
+
+            } else {
+                Control::GoUrl($reUrl);
+                Control::ShowMessage("创建头像出错,请再次尝试");
+            }
+        }
+        return "";
     }
 }
 

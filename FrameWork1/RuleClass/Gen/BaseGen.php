@@ -252,8 +252,6 @@ class BaseGen
             $arrSiteInfo = $sitePublicData->GetOne($siteId);
 
             Template::ReplaceOne($templateContent,$arrSiteInfo);
-
-
         }
     }
 

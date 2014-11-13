@@ -10,7 +10,10 @@
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_content&m=create';
+                parent.G_TabUrl = '/default.php?secu=manage' +
+                    '&mod=site_content' +
+                    '&m=create' +
+                    '&channel_id='+parent.G_SelectedChannelId+'';
                 parent.G_TabTitle =  '新增自定义页面';
                 parent.addTab();
             });

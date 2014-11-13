@@ -10,27 +10,27 @@
 class SiteAdLogPublicData extends BaseData {
     /**
      * 记录广告点击
-     * @param int $adContentId
+     * @param int $siteAdContentId
      * @param string $createDate
      * @param string $ipAddress
-     * @param string $agent
-     * @param string $refDomain
-     * @param string $refUrl
-     * @param int $isVClick
+     * @param string $webAgent
+     * @param string $refererDomain
+     * @param string $refererUrl
+     * @param int $isVirtualClick
      * @return int
      */
-    public function InsertData($adContentId, $createDate, $ipAddress, $agent, $refDomain, $refUrl, $isVClick = 0) {
+    public function InsertData($siteAdContentId, $createDate, $ipAddress, $webAgent, $refererDomain, $refererUrl, $isVirtualClick = 0) {
         $result="";
-        if($adContentId>0){
-            $sql = "INSERT INTO " . self::TableName_SiteAdLog . " (AdContentId,CreateDate,IpAddress,Agent,RefDomain,RefUrl,IsVClick) values (:AdContentId,:CreateDate,:IpAddress,:Agent,:RefDomain,:RefUrl,:IsVClick)";
+        if($siteAdContentId>0){
+            $sql = "INSERT INTO " . self::TableName_SiteAdLog . " (SiteAdContentId,CreateDate,IpAddress,WebAgent,RefererDomain,RefererUrl,IsVirtualClick) values (:SiteAdContentId,:CreateDate,:IpAddress,:WebAgent,:RefererDomain,:RefererUrl,:IsVirtualClick)";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("AdContentId", $adContentId);
+            $dataProperty->AddField("SiteAdContentId", $siteAdContentId);
             $dataProperty->AddField("CreateDate", $createDate);
             $dataProperty->AddField("IpAddress", $ipAddress);
-            $dataProperty->AddField("Agent", $agent);
-            $dataProperty->AddField("RefDomain", $refDomain);
-            $dataProperty->AddField("RefUrl", $refUrl);
-            $dataProperty->AddField("IsVClick", $isVClick);
+            $dataProperty->AddField("WebAgent", $webAgent);
+            $dataProperty->AddField("RefererDomain", $refererDomain);
+            $dataProperty->AddField("RefererUrl", $refererUrl);
+            $dataProperty->AddField("IsVirtualClick", $isVirtualClick);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
 

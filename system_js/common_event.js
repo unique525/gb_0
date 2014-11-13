@@ -4,7 +4,7 @@
  */
 $().ready(function() {
 
-    //格式化价格
+    //显示题图
     $(".show_title_pic").click(function(){
         var uploadFileId = parseInt($(this).attr("idvalue"));
         if(uploadFileId != undefined && uploadFileId>0){

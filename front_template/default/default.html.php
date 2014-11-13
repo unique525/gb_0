@@ -11,7 +11,6 @@
     <link href="/images/index_layout.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
-    <script type="text/javascript" src="/front_js/user/user.js"></script>
     <script type="text/javascript" src="/front_js/bx_slider/jquery.bxslider.min.js"></script>
     <link href="/front_js/bx_slider/jquery.bxslider.css" rel="stylesheet" />
     <script type="text/javascript">
@@ -380,7 +379,7 @@
             <li><a href="#">每日生鲜</a></li>
             <li><a href="#">每日生鲜</a></li>
             <li><a href="#">每日生鲜</a></li>
-            <li class="go_user"><a href="#">用户中心</a></li>
+            <li class="go_user"><a href="/default.php?mod=user&a=homepage">用户中心</a></li>
             <li class="go_top"><a href="#">回到顶部</a></li>
         </ul>
     </div>
@@ -389,7 +388,7 @@
     <div class="other_part">
         <ul>
             <li>
-                <div class="title4 green_bg">饮食健康</div>
+                <div class="title4 green_bg">买手推荐</div>
                 <div><a href="#" target="_blank"><img src="images/img_2.jpg" width="279" height="153" /></a></div>
                 <h1><a href="#" target="_blank">干煸菜花：这样吃更美味</a></h1>
             </li>
@@ -414,56 +413,6 @@
 </div>
 </div>
 
-<div class="foot">
-    <div class="footerline"></div>
-    <div class="wrapper">
-        <div class="footerleft">
-            <div class="cont">
-                <div><img src="images/footergwzn.png" width="79" height="79" /></div>
-                <b>交易条款</b><br />
-                <a href="" target="_blank">购物流程</a><br />
-                <a href="" target="_blank">发票制度</a><br />
-                <a href="" target="_blank">会员等级</a><br />
-                <a href="" target="_blank">积分制度</a><br /><br />
-            </div>
-        </div>
-        <div class="footerleft">
-            <div class="cont">
-                <div><img src="images/footerpsfw.png" width="79" height="79" /></div>
-                <b>配送服务</b><br />
-                <a href="" target="_blank">配送说明</a><br />
-                <a href="" target="_blank">配送范围</a><br />
-                <a href="" target="_blank">配送状态查询</a><br /><br /><br />
-            </div>
-        </div>
-        <div class="footerleft">
-            <div class="cont">
-                <div><img src="images/footerzffs.png" width="79" height="79" /></div>
-                <b>支付方式</b><br />
-                <a href="" target="_blank">支付宝支付</a><br />
-                <a href="" target="_blank">银联在线支付</a><br />
-                <a href="" target="_blank">货到付款</a><br /><br /><br />
-            </div>
-        </div>
-        <div class="footerleft">
-            <div class="cont">
-                <div><img src="images/footershfw.png" width="79" height="79" /></div>
-                <b>售后服务</b><br />
-                <a href="" target="_blank">服务承诺</a><br />
-                <a href="" target="_blank">退换货政策</a><br />
-                <a href="" target="_blank">退换货流程</a><br /><br /><br />
-            </div>
-        </div>
-        <div class="footerright" style="padding-left:50px;">
-            手机客户端下载
-            <div><img src="images/weixin.png" width="104" height="104" /></div>
-        </div>
-        <div class="footerright" style="padding-right:50px;">
-            手机客户端下载
-            <div><img src="images/weixin.png" width="104" height="104" /></div>
-        </div>
-    </div>
-</div>
-
+<pre_temp id="8"></pre_temp>
 </body>
 </html>

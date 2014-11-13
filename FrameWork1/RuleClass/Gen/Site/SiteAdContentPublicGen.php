@@ -9,6 +9,14 @@
 class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
+
+    /**
+     * 虚拟点击记录缓冲文件路径
+     */
+    const VIRTUAL_CLICK_CACHE_FILE_PATH = "/cache/site_ad_virtual_click/";
+
+
+
     /**
      * 广告点击记录添加：成功
      */
@@ -25,6 +33,9 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
      * 广告点击统计未开启
      */
     const OPEN_COUNT_IS_OFF = -3;
+
+
+
 
     /**
      * 引导方法
@@ -102,12 +113,40 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                 $siteAdContentPublicData = new SiteAdContentPublicData();
                 $openVClick = $siteAdContentPublicData->GetOpenVirtualClick($siteAdContentId);
                 if (intval($openVClick) === 1) {
-                    $createDate = date("Y-m-d H:i:s", time());
+                    $addVCount=0;  //是否新增虚拟点击纪录  初始为0  取缓冲符合条件后改为1
+
                     $hourSection = date("H", time());
                     $VClickLimit = $siteAdContentPublicData->GetVirtualClickLimit($siteAdContentId);
-                    $siteAdLogPublicData = new SiteAdLogPublicData();
-                    $VClickCount = -1;//$siteAdLogPublicData->GetVClickCount($siteAdContentId, $hourSection);
-                    if ($VClickCount < $VClickLimit) {   //实际点击数少于设置的虚拟点击VClickLimit则新增
+
+
+                    $hourInCache=$hourSection;  //如果没有缓冲或者缓冲为空  设置默认值:当前小时, 0点击
+                    $clickInCache=0;
+                    $filePath=self::VIRTUAL_CLICK_CACHE_FILE_PATH;
+                    $fileName="site_ad_content_".$siteAdContentId.".txt";
+                    $cacheContent=DataCache::Get($filePath.$fileName);   //取缓冲中虚拟点击状态   小时_点击数
+                    if($cacheContent&&$cacheContent!=""){
+                        $arrayOfVClickState=mb_split("_",$cacheContent);
+                        if($arrayOfVClickState){
+                            $hourInCache=$arrayOfVClickState[0];
+                            $clickInCache=intval($arrayOfVClickState[1]);
+                        }
+                    }
+                    if(intval($hourSection)==intval($hourInCache)){  //小时不对 则取当前小时  点击数为1
+                        if($clickInCache<$VClickLimit){
+                            $addVCount=1;
+                            $clickInCache++;
+                        }
+                    }else{
+                        $addVCount=1;
+                        $clickInCache=1;
+                    }
+                    $newCacheContent=$hourSection."_".strval($clickInCache);
+                    DataCache::Set($filePath,$fileName,$newCacheContent);
+
+
+
+                    if ($addVCount==1) {   //初始为0，符合条件改为1  新增纪录
+                        $createDate = date("Y-m-d H:i:s", time());
                         $ip = Control::GetIP();
                         $agent = Control::GetOS();
                         $agent = $agent . "与" . Control::GetBrowser();

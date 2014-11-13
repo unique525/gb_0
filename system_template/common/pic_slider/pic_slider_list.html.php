@@ -50,6 +50,44 @@
                 $(this).html(formatState($(this).text()));
             });
 
+
+
+
+            //改变向上移动（排序）
+            $(".btn_up").click(function(event) {
+                var picSliderId = $(this).attr('idvalue');
+                event.preventDefault();
+                $.post("/default.php?secu=manage&mod=pic_slider&m=async_modify_sort&pic_slider_id="+picSliderId + "&sort=1", {
+                    resultbox: $(this).html()
+                }, function(xml) {
+                    window.location.href = window.location.href;
+                });
+            });
+
+            //改变向下移动（排序）
+            $(".btn_down").click(function(event) {
+                var picSliderId = $(this).attr('idvalue');
+                event.preventDefault();
+                $.post("/default.php?secu=manage&mod=pic_slider&m=async_modify_sort&pic_slider_id=" + picSliderId + "&sort=-1", {
+                    resultbox: $(this).html()
+                }, function(xml) {
+                    window.location.href = window.location.href;
+                });
+            });
+
+            //拖动排序变化
+            var sortGrid = $("#sort_grid");
+            sortGrid.sortable();
+            sortGrid.bind("sortstop", function(event, ui) {
+                var sortList = $("#sort_grid").sortable("serialize");
+                $.post("/default.php?secu=manage&mod=pic_slider&m=async_modify_sort_by_drag&" + sortList, {
+                    resultbox: $(this).html()
+                }, function() {
+                    //操作完成后触发的命令
+                });
+            });
+            sortGrid.disableSelection();
+
         });
 
 
@@ -118,14 +156,14 @@
                              idvalue="{f_PicSliderId}" alt="编辑"/>
 
                         <span class="span_state" id="span_state_{f_PicSliderId}">{f_State}</span>
-                        <img class="btn_change_state"
+                        <img class="btn_change_state" style="cursor:pointer;"
                              src="/system_template/{template_name}/images/manage/change_state.gif"
                              idvalue="{f_PicSliderId}" title="改变文档状态" alt="改变状态"/>
-                        <img class="btn_publish" src="/system_template/{template_name}/images/manage/publish.gif"
+                        <img class="btn_publish" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/publish.gif"
                              idvalue="{f_PicSliderId}" title="发布文档" alt="发布"/>
-                        <img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif"
+                        <img class="btn_up" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/arr_up.gif"
                              idvalue="{f_PicSliderId}" title="向上移动" alt="向上"/>
-                        <img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif"
+                        <img class="btn_down" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/arr_down.gif"
                              idvalue="{f_PicSliderId}" title="向下移动" alt="向下"/>
                     </div>
                     <div style="padding:3px 5px;">{f_CreateDate}</div>

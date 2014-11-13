@@ -145,7 +145,7 @@ class ProductCommentPublicData extends BasePublicData
     {
         $result = null;
         if ($productId > 0) {
-            $sql = "SELECT pc.*,ug.UserGroupName,uf.UploadFileCompressPath1 FROM "
+            $sql = "SELECT pc.*,ug.UserGroupName,uf.UploadFileThumbPath2 FROM "
                 . self::TableName_ProductComment . " pc,"
                 . self::TableName_UserRole . " ur,"
                 . self::TableName_UserGroup . " ug,"
@@ -173,15 +173,16 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetAppraisal($productId)
+    public function GetAppraisalCount($productId,$appraisalType)
     {
-        $result = null;
+        $result = 0;
         if ($productId > 0) {
             $sql = "SELECT count(appraisal) AS Count FROM " . self::TableName_ProductComment
-                . " WHERE ParentId = 0 AND RANK = 0 AND ProductId = :ProductId GROUP BY Appraisal";
+                . " WHERE ParentId = 0 AND RANK = 0 AND ProductId = :ProductId AND Appraisal = :AppraisalType";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId",$productId);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $dataProperty->AddField("AppraisalType",$appraisalType);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
         return $result;
     }

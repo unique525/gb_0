@@ -4,6 +4,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
     <script type="text/javascript" src="/system_js/manage/document_news/document_news.js"></script>
+    <script type="text/javascript">
+        $(function() {
+
+
+
+
+
+
+
+
+        });
+    </script>
+
 </head>
 <body>
 <div class="div_list">
@@ -67,7 +80,7 @@
                             <td class="spe_line2" style="width:40px;text-align:center;">
                                 <img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_DocumentNewsId}" title="改变文档状态" alt="改变状态"/>
                                 <div class="state_box" style="display: none;" id="div_state_box_{f_DocumentNewsId}" title="">
-                                    <div style="float:right;"><img class="btn_close_box" idvalue="{f_DocumentNewsId}" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
+                                    <div style="float:right;"><img style="vertical-align:top;" class="btn_close_box" idvalue="{f_DocumentNewsId}" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
                                     <div style="clear:both;">
                                         <div style="{CanCreate}" class="document_news_set_state" statevalue="0" idvalue="{f_DocumentNewsId}">新稿</div>
                                         <div style="{CanModify}" class="document_news_set_state" statevalue="1" idvalue="{f_DocumentNewsId}">已编</div>
@@ -84,7 +97,7 @@
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_DocumentNewsId}" alt="预览" title="预览文档"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_publish" src="/system_template/{template_name}/images/manage/publish.gif" idvalue="{f_DocumentNewsId}" title="发布文档" alt="发布"/></td>
                             <td class="spe_line2" style="padding-left:10px;"><a target="_blank" href="{view_url}"><span style="color:{f_DocumentNewsTitleColor};font-weight:{f_DocumentNewsTitleBold};">{f_DocumentNewsTitle}</span></a></td>
-                            <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_DocumentNewsId}" title="向上移动" alt="向上"/><img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_DocumentNewsId}" title="向下移动" alt="向下"/></td>
+                            <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_DocumentNewsId}" title="向上移动" alt="向上"/><img style="cursor:pointer;" class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_DocumentNewsId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:60px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的推荐级别，用在特定的模板中">{f_RecLevel}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;">{f_Hit}</td>

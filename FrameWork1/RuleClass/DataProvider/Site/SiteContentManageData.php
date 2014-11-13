@@ -22,17 +22,18 @@ class SiteContentManageData extends BaseManageData
     /**
      * 新增站点
      * @param array $httpPostData $_POST数组
+     * @param int $manageUserId 后台管理员id
      * @return int 新增的站点id
      */
-    public function Create($httpPostData)
+    public function Create($httpPostData,$manageUserId)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array();
-        $addFieldValues = array();
+        $addFieldNames = array("CreateDate","ManageUserId");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()),$manageUserId);
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,

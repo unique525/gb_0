@@ -44,19 +44,27 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
+        $channelId = Control::GetRequest("channel_id", 0);
 
         $resultJavaScript = "";
 
-        if ($manageUserId > 0) {
+        if ($manageUserId > 0 && $channelId>0) {
             $siteContentManageData = new SiteContentManageData();
             $templateContent = Template::Load("site/site_content_deal.html", "common");
             parent::ReplaceFirst($templateContent);
+
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, false);
+
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
 
             if (!empty($_POST)) {
 
                 $httpPostData = $_POST;
 
-                $siteContentId = $siteContentManageData->Create($httpPostData);
+                $siteContentId = $siteContentManageData->Create($httpPostData,$manageUserId);
                 //加入操作日志
                 $operateContent = 'Create Site Content,POST FORM:'
                     . implode('|', $_POST) . ';\r\nResult:siteContentId:' . $siteContentId;
@@ -84,14 +92,15 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
             $patterns = '/\{s_(.*?)\}/';
             $templateContent = preg_replace($patterns, "", $templateContent);
 
-            parent::ReplaceEnd($templateContent);
 
 
-            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
 
         } else {
             $templateContent = Language::Load("site_content", 8);
         }
+
+        parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
 
         return $templateContent;
 

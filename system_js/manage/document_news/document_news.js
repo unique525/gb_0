@@ -86,7 +86,8 @@ $(function() {
         if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
+        parent.G_TabUrl = '/default.php?secu=manage' +
+            '&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
         parent.G_TabTitle = parent.G_SelectedChannelName + '-新增文档';
         parent.addTab();
     });
@@ -159,12 +160,34 @@ $(function() {
     });
 
 
-    //排序变化
+    //改变向上移动（排序）
+    $(".btn_up").click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
+        event.preventDefault();
+        $.post("/default.php?secu=manage&mod=document_news&m=async_modify_sort&document_news_id="+documentNewsId + "&sort=1", {
+            resultbox: $(this).html()
+        }, function(xml) {
+            window.location.href = window.location.href;
+        });
+    });
+
+    //改变向下移动（排序）
+    $(".btn_down").click(function(event) {
+        var documentNewsId = $(this).attr('idvalue');
+        event.preventDefault();
+        $.post("/default.php?secu=manage&mod=document_news&m=async_modify_sort&document_news_id=" + documentNewsId + "&sort=-1", {
+            resultbox: $(this).html()
+        }, function(xml) {
+            window.location.href = window.location.href;
+        });
+    });
+
+    //拖动排序变化
     var sortGrid = $("#sort_grid");
     sortGrid.sortable();
     sortGrid.bind("sortstop", function(event, ui) {
         var sortList = $("#sort_grid").sortable("serialize");
-        $.post("/default.php?secu=manage&mod=document_news&m=async_modify_sort&" + sortList, {
+        $.post("/default.php?secu=manage&mod=document_news&m=async_modify_sort_by_drag&" + sortList, {
             resultbox: $(this).html()
         }, function() {
             //操作完成后触发的命令

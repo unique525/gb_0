@@ -29,6 +29,12 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_modify_sort":
+                $result = self::AsyncModifySort();
+                break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -78,6 +84,10 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($picSliderId > 0) {
+
+                    //新增文档时修改排序号到当前频道的最大排序
+                    $picSliderManageData->ModifySortWhenCreate($channelId, $picSliderId);
+
                     if (!empty($_FILES)) {
                         //title pic1
                         $fileElementName = "file_upload_file";
@@ -323,5 +333,37 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+
+    /**
+     * 修改排序号
+     * @return int 修改结果
+     */
+    private function AsyncModifySort(){
+        $result = -1;
+        $picSliderId = Control::GetRequest("pic_slider_id", 0);
+        $sort = Control::GetRequest("sort", 0);
+        if($picSliderId>0){
+            $picSliderManageData = new PicSliderManageData();
+            $result = $picSliderManageData->ModifySort($sort, $picSliderId);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifySortByDrag() {
+        $arrPicSliderId = Control::GetRequest("sort", null);
+        if(!empty($arrPicSliderId)){
+            $picSliderManageData = new PicSliderManageData();
+            $result = $picSliderManageData->ModifySortForDrag($arrPicSliderId);
+            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+        }  else{
+            return "";
+        }
     }
 } 

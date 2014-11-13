@@ -66,11 +66,21 @@
                                 </label></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ProductId}" alt="编辑"/></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span class="span_state" id="{f_ProductId}">{f_State}</span></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_ProductId}" title="改变产品状态" alt="改变状态"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">
+                                <img class="btn_change_state" src="/system_template/{template_name}/images/manage/change_state.gif" idvalue="{f_ProductId}" title="改变产品状态" alt="改变状态"/>
+                                <div class="state_box" style="display: none;" id="div_state_box_{f_ProductId}" title="">
+                                <div style="float:right;"><img style="vertical-align:top;" class="btn_close_box" idvalue="{f_ProductId}" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
+                                <div style="clear:both;">
+                                    <div style="" class="product_set_state" statevalue="0" idvalue="{f_ProductId}">启用</div>
+                                    <div style="" class="product_set_state" statevalue="100" idvalue="{f_ProductId}">停用</div>
+                                    <div class="spe"></div>
+                                </div>
+                                </div>
+                            </td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_ProductId}" alt="预览" title="预览文档"/></td>
                             <td class="spe_line2" style="width:150px;text-align:left;"><a target="_blank" href="{view_url}"><span style="">{f_ProductNumber}</span></a></td>
                             <td class="spe_line2" style="text-align:left;"><a target="_blank" href="{view_url}"><span style="">{f_ProductName}</span></a></td>
-                            <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductId}" title="向上移动" alt="向上"/><img class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductId}" title="向下移动" alt="向下"/></td>
+                            <td class="spe_line2" style="width:36px;text-align:center;"><img style="cursor:pointer;" class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductId}" title="向上移动" alt="向上"/><img style="cursor:pointer;" class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:80px;text-align:center;" title="排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:100px;" title="">￥<span class="show_price">{f_SalePrice}</span></td>
                             <td class="spe_line2" style="width:100px;" title="">{f_SaleCount}</td>

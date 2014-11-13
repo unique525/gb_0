@@ -3,9 +3,9 @@ td,p{font-size:14px;word-break:break-all;word-wrap:break-word;}
 legend{font-weight:bold;margin-bottom:8px;margin-top:5px;}
 form{ margin:0; border:0;}
 input,select{vertical-align:middle;font-family: Microsoft YaHei,Verdana,serif;}
-img{border:0;}
+img{border:0;border-image-width:0;}
 iframe{border:0; margin:0;clear:both;}
-div{margin:0 auto;}
+div{margin:0 auto;border-image-width:0;}
 a{color:#52596B;text-decoration:none;}
 ul{list-style-type:none;}
 *{padding: 0; margin: 0;}

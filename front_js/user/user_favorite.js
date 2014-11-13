@@ -1,7 +1,5 @@
 
 function addUserFavorite(tableId,favoriteName,tableType,userFavoriteTag){
-    alert(tableId);
-    alert(tableType);
     $.ajax({
         url:"/default.php?mod=user_favorite&a=async_add",
         type:"POST",
@@ -14,7 +12,7 @@ function addUserFavorite(tableId,favoriteName,tableType,userFavoriteTag){
                 alert("收藏失败");
                 location.replace(location);
             }else if(data["result"] == -2){
-                alert("已被收藏");
+                alert("这个产品已经被收藏了");
                 location.replace(location);
             }else if(data["result"] == -3){
                 alert("您还未登陆");

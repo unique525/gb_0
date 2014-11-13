@@ -31,6 +31,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_create_thumb1":
                 $result = self::AsyncCreateThumb1();
                 break;
+            case "cut_image":
+                $result = self::CutImage();
+                break;
         }
 
         return $result;
