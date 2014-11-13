@@ -233,6 +233,23 @@ window.UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC = 300;
  */
 window.UPLOAD_TABLE_TYPE_PIC_SLIDER = 320;
 
+
+/**
+ * 报纸版面上传的图片
+ */
+window.UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PIC = 340;
+
+/**
+ * 报纸版面上传的PDF
+ */
+window.UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PDF = 341;
+
+/**
+ * 报纸文章附件上传的图片
+ */
+window.UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC = 350;
+
+
 /**
  * 格式化上传文件的返回结果信息
  * @param {int} resultMessage 错误编码

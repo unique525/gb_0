@@ -249,6 +249,21 @@ class UploadFileData extends BaseData
      */
     const UPLOAD_TABLE_TYPE_PIC_SLIDER = 320;
 
+    /**
+     * 报纸版面上传的图片
+     */
+    const UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PIC = 340;
+
+    /**
+     * 报纸版面上传的PDF
+     */
+    const UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PDF = 341;
+
+    /**
+     * 报纸文章附件上传的图片
+     */
+    const UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC = 350;
+
 
     /**
      * 上传文件增加到数据表

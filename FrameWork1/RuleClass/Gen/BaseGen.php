@@ -893,6 +893,32 @@ class BaseGen
 
 
                 break;
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PDF:
+
+                $uploadFilePath = $uploadPath . "newspaper_page"
+                    . DIRECTORY_SEPARATOR . strval($tableId)
+                    . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+                break;
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_NEWSPAPER_PAGE_PIC:
+
+                $uploadFilePath = $uploadPath . "newspaper_page"
+                    . DIRECTORY_SEPARATOR . strval($tableId)
+                    . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+                break;
+
+            case UploadFileData::UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC:
+
+                $uploadFilePath = $uploadPath . "newspaper_article"
+                    . DIRECTORY_SEPARATOR . strval($tableId)
+                    . DIRECTORY_SEPARATOR;
+                $newFileName = uniqid() . '.' . $fileExtension;
+
+
+                break;
         }
         return $uploadFilePath;
     }

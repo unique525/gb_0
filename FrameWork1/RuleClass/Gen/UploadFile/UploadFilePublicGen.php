@@ -69,10 +69,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function AsyncUpload()
     {
-
-        $fileElementName = Control::GetRequest("file_element_name", "");
-        $tableType = Control::GetRequest("table_type", 0);
-        $tableId = Control::GetRequest("table_id", 0);
+        $fileElementName = Control::PostOrGetRequest("file_element_name", "");
+        $tableType = Control::PostOrGetRequest("table_type", 0);
+        $tableId = Control::PostOrGetRequest("table_id", 0);
         if (!empty($fileElementName) && $tableType > 0) {
 
             $imgMaxWidth = 0;
