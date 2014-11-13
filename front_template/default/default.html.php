@@ -97,7 +97,7 @@
                                 ]]>
                             </child>
                             <third>
-                                <![CDATA[<a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
+                                <![CDATA[<a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a>
                                 ]]>
                             </third>
 

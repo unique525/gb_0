@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>会员中心</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
+    <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .right {
             cursor: pointer
@@ -81,18 +82,58 @@
             <td width="1006" valign="top">
                 <div class="rightbar">
                     <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
-                    <icms id="user_order_list">
-                        <item><![CDATA[
-                            <div>
-                                <span>{f_UserOrderNumber}</span>
-                                <span>{f_AllPrice}</span>
-                                <span>{f_SendPrice}</span>
-                                <span>{f_CreateDate}</span>
-                                <span>{f_State}</span>
-                                <span><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></span>
-                            </div>
-                            ]]></item>
-                    </icms>
+                    <div style="padding:20px 50px;">
+                        <div class="order_class">
+                            <ul>
+                                <li><a class="selected" href="#">所有订单</a></li>
+                                <li><a href="#">待付款<span>2</span></a></li>
+                                <li><a href="#">待发货<span>2</span></a></li>
+                                <li><a href="#">待评价<span>2</span></a></li>
+                            </ul>
+                            <div class="clean"></div>
+                        </div>
+                        <div class="order_form">
+                            <table class="title" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="order_number">订单号</td>
+                                    <td class="all_price">原价</td>
+                                    <td class="send_price">优惠价</td>
+                                    <td class="create_date">下单日期</td>
+                                    <td class="state">数量</td>
+                                    <td class="option">交易操作</td>
+                                </tr>
+                            </table>
+                            <icms id="user_order_list">
+                                <item><![CDATA[
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td class="order_number"><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">{f_UserOrderNumber}</a></td>
+                                            <td class="all_price">{f_AllPrice}</td>
+                                            <td class="send_price">{f_SendPrice}</td>
+                                            <td class="create_date">{f_CreateDate}</td>
+                                            <td class="state">{f_State}</td>
+                                            <td class="option"><a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></td>
+                                        </tr>
+                                    </table>
+                                    ]]></item>
+                            </icms>
+
+                        </div>
+                        <div class="flips">
+                            <ul>
+                                <li><a href="#">首页</a></li>
+                                <li><a href="#">1</a></li>
+                                <li><a class="recent" href="#">2</a></li>
+                                <li><a href="#">...</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">共5页</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">5</a></li>
+                            </ul>
+                            <div class="clean"></div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </td>
         </tr>
