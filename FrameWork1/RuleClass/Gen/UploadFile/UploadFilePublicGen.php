@@ -28,11 +28,14 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_save_remote_image":
                 $result = self::AsyncSaveRemoteImage();
                 break;
-            case "async_create_thumb1":
-                $result = self::AsyncCreateThumb1();
+            case "async_modify_upload_file_thumb_path2":
+                $result = self::AsyncModifyUploadFileThumbPath2();
                 break;
-            case "cut_image":
-                $result = self::CutImage();
+            case "async_cut_image":
+                $result = self::AsyncCutImage();
+                break;
+            case "async_modify_upload_file_thumb_path1_for_cut_image":
+                $result = self::AsyncModifyUploadFileThumbPath1ForCutImage();
                 break;
         }
 
@@ -151,7 +154,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
     }
 
-    private function AsyncCreateThumb1()
+    private function AsyncModifyUploadFileThumbPath2()
     {
         $uploadFileId = Control::GetRequest("upload_file_id", 0);
         $width = Control::GetRequest("width", 0);
@@ -159,9 +162,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
         if ($uploadFileId > 0 && $width > 0) {
             if ($height <= 0) {
-                $resultOfCreateThumb1 = parent::GenUploadFileThumb1($uploadFileId, $width);
+                $resultOfCreateThumb1 = parent::GenUploadFileThumb2($uploadFileId, $width);
             } else {
-                $resultOfCreateThumb1 = parent::GenUploadFileThumb1($uploadFileId, $width, $height);
+                $resultOfCreateThumb1 = parent::GenUploadFileThumb2($uploadFileId, $width, $height);
             }
 
             if ($resultOfCreateThumb1 > 0) {
@@ -186,5 +189,40 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         }
 
         return $result;
+    }
+
+    private function AsyncCutImage(){
+        $uploadFileId =Control::GetRequest("upload_file_id",0);
+
+        $newImagePath = "";
+        if($uploadFileId > 0){
+            $uploadFileData = new UploadFileData();
+            $uploadFile = $uploadFileData->Fill($uploadFileId);
+
+            if($uploadFile != null && isset($uploadFile)){
+
+                $sourceX = Control::PostOrGetRequest("x",0);
+                $sourceY = Control::PostOrGetRequest("y",0);
+                $targetWidth = Control::PostOrGetRequest("width",0);
+                $targetHeight = Control::PostOrGetRequest("height",0);
+                $sourceWidth = Control::PostOrGetRequest("w",0);
+                $sourceHeight = Control::PostOrGetRequest("h",0);
+                $newImagePath = ImageObject::CutImg($uploadFile->UploadFilePath,$sourceX,$sourceY,$sourceWidth,$sourceHeight,$targetWidth,$targetHeight);
+            }
+        }
+        return '{"new_image_path":"'.Format::FormatJson($newImagePath).'"}';
+    }
+
+    private function AsyncModifyUploadFileThumbPath1ForCutImage(){
+        $uploadFileId = Control::GetRequest("upload_file_id",0);
+        $uploadFileThumbPath1 = Control::GetRequest("upload_file_thumb_path","");
+        $userId =Control::GetUserId();
+
+        $result = -1;
+        if($uploadFileId > 0 && $uploadFileThumbPath1 != ""){
+            $uploadFilePublicData = new UploadFilePublicData();
+            $result = $uploadFilePublicData->ModifyUploadFileThumbPath1($uploadFileId,$uploadFileThumbPath1,$userId);
+        }
+        return '{"result":'.$result.'}';
     }
 } 

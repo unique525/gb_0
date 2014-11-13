@@ -317,6 +317,13 @@ class UploadFileData extends BaseData
         return $result;
     }
 
+    public function Init($userId){
+        $sql = "INSERT INTO ".self::TableName_UploadFile."(Create,UserId) VALUES (now(),:UserId);";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserId",$userId);
+        $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
+        return $result;
+    }
 
     /**
      * 上传文件 修改数据表
