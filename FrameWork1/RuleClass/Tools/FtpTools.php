@@ -67,7 +67,7 @@ class FtpTools
 
     /**
      * 单个文件传输
-     * @param array $ftpInfo FTP连接信息
+     * @param Ftp $ftp FTP信息对象
      * @param string $destinationPath 目标路径
      * @param string $sourcePath 来源路径
      * @param string $sourceContent 要传输的内容
@@ -75,26 +75,26 @@ class FtpTools
      * @param FtpLogManageData $ftpLogManageData 传输日志操作对象
      * @return int 返回传输结果 -1:连接失败 -2:登录失败 -5:连接失败 1:上传成功
      */
-    public static function Upload($ftpInfo, $destinationPath, $sourcePath = null, $sourceContent = null, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
+    public static function Upload(Ftp $ftp, $destinationPath, $sourcePath = null, $sourceContent = null, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
     {
         //进行连接
         $result = DefineCode::FTP + self::FTP_NO_ACTION;
-        $ftpConnect = self::Connect($ftpInfo);
+        $ftpConnect = self::Connect($ftp);
         if (!$ftpConnect) { //连接失败
             $result = DefineCode::FTP + self::FTP_CONNECT_FAILURE; //连接失败
         } else { //连接成功
             //判断
-            if (isset($ftpInfo['FtpUser'])
-                && isset($ftpInfo['FtpPass'])
-                && isset($ftpInfo['PassiveMode'])
-                && isset($ftpInfo['RemotePath'])
+            if (isset($ftp->FtpUser)
+                && isset($ftp->FtpPass)
+                && isset($ftp->PassiveMode)
+                && isset($ftp->RemotePath)
             ) {
-                $ftpUser = $ftpInfo['FtpUser'];
-                $ftpPass = $ftpInfo['FtpPass'];
+                $ftpUser = $ftp->FtpUser;
+                $ftpPass = $ftp->FtpPass;
                 $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
-                $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-                $ftpPath = self::FormatPath($ftpInfo['RemotePath']);
+                $ftpPassiveMode = intval($ftp->PassiveMode);
+                $ftpPath = self::FormatPath($ftp->RemotePath);
                 //开始登录
                 $ftpIsLogin = ftp_login($ftpConnect, $ftpUser, $ftpPass);
                 if ($ftpIsLogin) { //登录成功
@@ -104,8 +104,8 @@ class FtpTools
                         ftp_pasv($ftpConnect, FALSE);
                     }
 
-                    $ftpId = intval($ftpInfo['FtpId']);
-                    $siteId = intval($ftpInfo['SiteId']);
+                    $ftpId = intval($ftp->FtpId);
+                    $siteId = intval($ftp->SiteId);
                     $destinationPath = self::FormatPath($destinationPath);
                     $sourcePath = self::FormatPath($sourcePath);
                     //开始传输
@@ -135,38 +135,38 @@ class FtpTools
 
     /**
      * 多文件队列传输
-     * @param array $ftpInfo FTP连接信息
+     * @param Ftp $ftp FTP信息对象
      * @param PublishQueueManageData $publishQueueManageData 传输队列对象
      * @param bool $openFtpLog 是否开启了记录FTP传输日志的功能，默认未开启
      * @param FtpLogManageData $ftpLogManageData FTP日志对象
      * @return int -5:连接失败 -2:连接失败 -1:登录失败 1:上传成功
      */
-    public static function UploadQueue($ftpInfo, PublishQueueManageData &$publishQueueManageData, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
+    public static function UploadQueue(Ftp $ftp, PublishQueueManageData &$publishQueueManageData, $openFtpLog = false, FtpLogManageData $ftpLogManageData = null)
     {
         $arrUpload = $publishQueueManageData->Queue;
         if (empty($arrUpload)) {
             return DefineCode::FTP + self::FTP_CONTENT_EMPTY; //上传数组为空
         }
-        if (!isset($ftpInfo['FtpUser']) ||
-            !isset($ftpInfo['FtpPass']) ||
-            !isset($ftpInfo['PassiveMode']) ||
-            !isset($ftpInfo['RemotePath']) ||
-            !isset($ftpInfo['FtpId'])
+        if (!isset($ftp->FtpUser) ||
+            !isset($ftp->FtpPass) ||
+            !isset($ftp->PasvMode) ||
+            !isset($ftp->RemotePath) ||
+            !isset($ftp->FtpId)
         ) {
             return DefineCode::FTP + self::FTP_INFO_EMPTY; //FTP配置信息为空
         }
 
-        $ftpConnect = self::Connect($ftpInfo);
+        $ftpConnect = self::Connect($ftp);
         if (!$ftpConnect) { //连接失败
             return DefineCode::FTP + self::FTP_CONNECT_FAILURE;
         }
 
-        $ftpUser = $ftpInfo['FtpUser'];
-        $ftpPass = $ftpInfo['FtpPass'];
+        $ftpUser = $ftp->FtpUser;
+        $ftpPass = $ftp->FtpPass;
         $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
-        $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-        $ftpPath = $ftpInfo['RemotePath'];
+        $ftpPassiveMode = intval($ftp->PasvMode);
+        $ftpPath = $ftp->RemotePath;
         $ftpPath = self::FormatPath($ftpPath);
         //开始登录
         $ftpIsLogin = ftp_login($ftpConnect, $ftpUser, $ftpPass);
@@ -190,8 +190,8 @@ class FtpTools
                     $arrUpload[$i]["Content"],
                     $openFtpLog,
                     $ftpLogManageData,
-                    $ftpInfo['FtpId'],
-                    $ftpInfo['SiteId']
+                    $ftp->FtpId,
+                    $ftp->SiteId
                 );
                 if ($uploadResult == abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS) {
                     $arrUpload[$i]["result"] = abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS;
@@ -211,29 +211,30 @@ class FtpTools
 
     /**
      * 删除文件
-     * @param array $ftpInfo FTP连接信息
+     * @param Ftp $ftp FTP信息对象
      * @param string $deleteFilePath 要删除的文件路径
      * @return int 操作结果
      */
-    public static function Delete($ftpInfo, $deleteFilePath)
+    public static function Delete(Ftp $ftp, $deleteFilePath)
     {
         $result = DefineCode::FTP + self::FTP_NO_ACTION;
-        $ftpConnect = self::Connect($ftpInfo);//进行连接
+        $ftpConnect = self::Connect($ftp);//进行连接
         if (!$ftpConnect) { //连接失败
             return DefineCode::FTP + self::FTP_CONNECT_FAILURE;
         } else { //连接成功
             //判断ftp info
-            if (isset($ftpInfo['FtpUser']) &&
-                isset($ftpInfo['FtpPass']) &&
-                isset($ftpInfo['PassiveMode']) &&
-                isset($ftpInfo['RemotePath'])
+            if (!isset($ftp->FtpUser) ||
+                !isset($ftp->FtpPass) ||
+                !isset($ftp->PasvMode) ||
+                !isset($ftp->RemotePath) ||
+                !isset($ftp->FtpId)
             ) {
-                $ftpUser = $ftpInfo['FtpUser'];
-                $ftpPass = $ftpInfo['FtpPass'];
+                $ftpUser = $ftp->FtpUser;
+                $ftpPass = $ftp->FtpPass;
                 $ftpPass = str_replace(array("\n", "\r"), array('', ''), $ftpPass);
 
-                $ftpPassiveMode = intval($ftpInfo['PassiveMode']);
-                $ftpPath = $ftpInfo['RemotePath'];
+                $ftpPassiveMode = intval($ftp->PasvMode);
+                $ftpPath = $ftp->RemotePath;
                 $ftpPath = self::FormatPath($ftpPath);
                 //开始登录
                 $isLogin = @ftp_login($ftpConnect, $ftpUser, $ftpPass);
@@ -328,10 +329,10 @@ class FtpTools
 
     /**
      * 连接到FTP，打开端口
-     * @param array $ftpInfo
+     * @param Ftp $ftp FTP信息对象
      * @return resource FTP连接的信息
      */
-    private static function Connect($ftpInfo)
+    private static function Connect(Ftp $ftp)
     {
         $ftpConnect = null;
         @set_time_limit(0);
@@ -342,15 +343,15 @@ class FtpTools
         }
 
         //判断ftp info
-        if (isset($ftpInfo['FtpHost']) && isset($ftpInfo['FtpPort'])) {
-            $ftpHost = $ftpInfo['FtpHost'];
+        if (isset($ftp->FtpHost) && isset($ftp->FtpPort)) {
+            $ftpHost = $ftp->FtpHost;
             $ftpPort = 21;
-            if (isset($ftpInfo['FtpPort'])) {
-                $ftpPort = intval($ftpInfo['FtpPort']);
+            if (isset($ftp->FtpPort)) {
+                $ftpPort = intval($ftp->FtpPort);
             }
             $ftpTimeout = 90;
-            if (isset($ftpInfo['Timeout'])) {
-                $ftpTimeout = intval($ftpInfo['Timeout']);
+            if (isset($ftp->Timeout)) {
+                $ftpTimeout = intval($ftp->Timeout);
             }
             $ftpConnect = @$connectFunction($ftpHost, $ftpPort, $ftpTimeout);
             if ($ftpTimeout >= 0 && function_exists('ftp_set_option')) { //设置超时时间
