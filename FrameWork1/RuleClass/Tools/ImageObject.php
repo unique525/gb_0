@@ -422,4 +422,53 @@ class ImageObject {
         }
         return $im;
     }
+
+    /**
+     * @param string $sourceImgPath 源图象文件路径。
+     * @param float $sourceX 源文件 X 坐标点
+     * @param float $sourceY 源文件 Y 坐标点
+     * @param float $sourceWidth 源文件的宽度
+     * @param float $sourceHeight 源文件的高度
+     * @param float $targetWidth 目标文件的宽度
+     * @param float $targetHeight 目标文件的高度
+     * @param string $addFileName 目标文件的后缀
+     * @param int $jpegQuality 截图质量
+     * @return string
+     */
+    public static function CutImg($sourceImgPath, $sourceX,$sourceY,$sourceWidth,$sourceHeight,$targetWidth, $targetHeight,$addFileName = 'cut',$jpegQuality=100) {
+        //if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        sleep(1);
+        if(intval($jpegQuality)>100){
+            $jpegQuality = 100;
+        }
+        //if($sourceFileExName !== "jpg"){
+        //    return -1;//只处理jpg图像,非jpg图像返回错误代码-1
+        //}
+
+
+        if ($sourceImgPath === "") {
+            return ""; //文件名错误
+        }
+
+        $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $sourceImgPath);
+        $sourceFilePath = strtolower(FileObject::GetDirName(str_ireplace("/", DIRECTORY_SEPARATOR, $sourceImgPath)));
+        $sourceFileExName = strtolower(FileObject::GetExtension($sourceImgPath));
+        $sourceFileName = strtolower(FileObject::GetName($sourceImgPath));
+
+        if($sourceFileExName === "" || $sourceFileName === ""){
+            return "";
+        }
+        $newFileName = $sourceFileName."_".$addFileName;
+
+        $toFile = $src . $newFileName."." . $sourceFileExName;
+        $imgR = imagecreatefromjpeg($src);
+        $dstR = ImageCreateTrueColor($targetWidth, $targetHeight);
+        imagecopyresampled($dstR, $imgR, 0, 0, $sourceX, $sourceY, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+        imagejpeg($dstR, $toFile, $jpegQuality);
+        imagedestroy($imgR);
+        imagedestroy($dstR);
+        $result = str_ireplace(DIRECTORY_SEPARATOR,"/",$sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
+        return $result;
+        //}
+    }
 } 

@@ -148,6 +148,34 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_UserAlbumThumbWidth_3">会员大头像宽度：</label></td>
+                                        <td class="spe_line">
+                                            <input name="cfg_UserAvatarBigWidth_3" id="cfg_UserAvatarBigWidth_3" value="{cfg_UserAvatarBigWidth_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_UserAlbumThumbWidth_3">会员大头像高度：</label></td>
+                                        <td class="spe_line">
+                                            <input name="cfg_UserAvatarBigHeight_3" id="cfg_UserAvatarBigHeight_3" value="{cfg_UserAvatarBigHeight_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_UserAlbumThumbWidth_3">会员小头像宽度：</label></td>
+                                        <td class="spe_line">
+                                            <input name="cfg_UserAvatarSmallWidth_3" id="cfg_UserAvatarSmallWidth_3" value="{cfg_UserAvatarSmallWidth_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_UserAlbumThumbWidth_3">会员小头像高度：</label></td>
+                                        <td class="spe_line">
+                                            <input name="cfg_UserAvatarSmallHeight_3" id="cfg_UserAvatarSmallHeight_3" value="{cfg_UserAvatarSmallHeight_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_UserAlbumToBestMustVoteCount_3">升级成精华册需要的支持票数：</label></td>
                                         <td class="spe_line">
                                             <input name="cfg_UserAlbumToBestMustVoteCount_3" id="cfg_UserAlbumToBestMustVoteCount_3" value="{cfg_UserAlbumToBestMustVoteCount_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>

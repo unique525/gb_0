@@ -24,29 +24,66 @@
 
     <script type="text/javascript">
 
-        var width = 200;
-        var height = 200;
+        var bigWidth = {cfg_UserAvatarBigWidth_3};
+        var bigHeight = {cfg_UserAvatarBigWidth_3};
+        var smallWidth = {cfg_UserAvatarSmallWidth_3};
+        var smallHeight = {cfg_UserAvatarSmallWidth_3};
         var uploadFileId = 0;
         var src = "";
         var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
         var tableId = {UserId};
 
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-
             if(data["upload_file_id"] != undefined){
-                uploadFileId=data["upload_file_id"];
+                uploadFileId=parseInt(data["upload_file_id"]);
                 //CreateThumb1(uploadFileId,400,0);
-                cutImage();
+                src = data["upload_file_path"].toString();
+                if(uploadFileId > 0 && src  != ""){
+                    cutImageDisplay();
+                }else{
+                    alert("上传失败");
+                }
             }
-
-
         };
 
-        window.CreateThumb1CallBack = function(data){
-            src = data["upload_file_thumb_path1"];
+        window.CutImgCallBack = function(data){
 
+            $.ajax({
+                url:"/default.php?mod=upload_file&a=async_modify_upload_file_thumb_path1_for_cut_image&upload_file_id="
+                    +uploadFileId+"&upload_file_thumb_path="+data["new_image_path"],
+                secureUri:false,
+                dataType:"json",
+                success:function(data){
+                    uploadFileId = data["upload_file_id"];
+                    if(uploadFileId != undefined){
+                        ModifyUploadFileThumb2(uploadFileId,smallWidth,smallHeight);
+                    }
+                },
+                error: function (data, status, e)
+                {
+                    alert(e);
+                }
+            });
         };
 
+        window.GetOneCallBack = function(data){
+            if(data["UploadFilePath"] != ""){
+                var avatarSrc = data["UploadFilePath"];
+                src = avatarSrc;
+                $("#avatar").attr("src",avatarSrc);
+            }else{
+                var avatarSrc = {cfg_UserDefaultMaleAvatar_5};
+                src = avatarSrc;
+                $("#avatar").attr("src",avatarSrc);
+            }
+        };
+
+        window.ModifyUploadFileThumb2CallBack = function(data){
+            if(data["upload_file_id"] > 0){
+                alert("成功");
+                window.open("/default.php?mod=user&a=homepage");
+            }
+        };
 
         $(function(){
             getAvatar();
@@ -70,21 +107,26 @@
                     null
                 );
             });
+
+            $("#sub").click(function(){
+                var CutImgForm = $("#CutImgForm");
+                if(uploadFileId > 0){
+                    CutImg(CutImgForm,uploadFileId);
+                }
+            });
         });
 
         function getAvatar(){
             $.ajax({
-                url:"/default.php?mod=user_info&a=async_get_avatar",
+                url:"/default.php?mod=user_info&a=async_get_avatar_upload_file_id",
                 async:false,
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
                     var result = data["result"];
                     if(result == 1){
-                        var avatarList = data["avatarList"];
-                        var avatarSrc = avatarList["UploadFilePath"];
-                        src = avatarSrc;
-                        $("#avatar").attr("src",avatarSrc);
+                        uploadFileId = data["avatar_upload_file_id"];
+                        GetOneUploadFile(uploadFileId);
                     }else{
                         alert("获取头像失败");
                     }
@@ -93,7 +135,7 @@
         }
 
 
-        function cutImage(){
+        function cutImageDisplay(){
             $("#upload").css("display","none");
             $("#outer").css("display","block");
             $("#target").attr("src",src);
@@ -104,7 +146,7 @@
                 aspectRatio: 1,
                 bgFade:true,
                 bgOpacity: .3,
-                minSize :[{cfg_UserAvatarMinWidth_3},200]
+                minSize :[{cfg_UserAvatarMinWidth_3},{cfg_UserAvatarMinHeight_3}]
             },function(){
                 // Use the API to get the real image size
                 var bounds = this.getBounds();
@@ -193,7 +235,11 @@
     <div id="upload" style="padding:25px;">
         <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-                <td width="169"><div style="padding:3px; border:1px solid #e9e9e9;"><img id="avatar" width="160px" height="160px" src=""/></div></td>
+                <td width="169">
+                    <div style="padding:3px; border:1px solid #e9e9e9;">
+                        <img id="avatar" width="160px" height="160px" src=""/>
+                    </div>
+                </td>
                 <td width="25" rowspan="9" align="left" ></td>
                 <td width="439" rowspan="9" align="left" bgcolor="#f4f4f4">
                     <input id="file_upload_to_user_avatar" name="file_upload_to_user_avatar" type="file" class="input1" style="margin:20px; background:#ffffff; "/>
@@ -231,7 +277,7 @@
                         </td>
                     </tr>
                 </table>
-                <form action="/default.php?mod=user_info&a=generate_avatar" method="post">
+                <form id="CutImgForm">
                     <input type="hidden" id="x" name="x" />
                     <input type="hidden" id="y" name="y" />
                     <input type="hidden" id="w" name="w" />
@@ -240,7 +286,7 @@
                     <input type="hidden" value="" id="width" name="width"/>
                     <input type="hidden" value="" id="source" name="source"/>
                     <input type="hidden" value="/default.php?mod=user&a=homepage" id="source" name="re_url"/>
-                    <input type="submit" class="Btn23H_orangeA vTop" style="margin:0px 0px 25px 25px;border:none;" value="确定" />
+                    <input type="button" id="sub" class="Btn23H_orangeA vTop" style="margin:0px 0px 25px 25px;border:none;" value="确定" />
                 </form>
             </div>
         </div>

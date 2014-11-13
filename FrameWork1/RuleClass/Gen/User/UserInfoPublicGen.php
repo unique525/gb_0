@@ -116,6 +116,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenModifyAvatar()
     {
         $userId = Control::GetUserId();
+        $siteId =parent::GetSiteIdByDomain();
         if ($userId > 0) {
             $templateFileUrl = "/user/user_modify_avatar.html";
             $templateName = "default";
@@ -123,7 +124,9 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
 
+
             $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
+            parent::ReplaceSiteConfig($siteId,$templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         } else {
@@ -143,6 +146,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0) {
             $userInfoPublicData = new UserInfoPublicData();
             $result = $userInfoPublicData->GetAvatarUploadFileId($userId, true);
+
+            if($result <= 0){
+                $uploadFileData = new UploadFileData();
+                $result = $uploadFileData->Init($userId,true);
+            }
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
     }

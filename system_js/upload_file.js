@@ -534,7 +534,7 @@ function UploadFileFormatHtml(fileName){
     return url;
 }
 
-function CreateThumb1(uploadFileId,width,height){
+function ModifyUploadFileThumb2(uploadFileId,width,height){
     $.ajax({
         url:"/default.php?mod=upload_file&a=async_create_thumb1&width="+width+"&height="+height+"&upload_file_id="+uploadFileId,
         secureUri:false,
@@ -544,8 +544,40 @@ function CreateThumb1(uploadFileId,width,height){
             {
                 alert(data.error);
             }else{
-                window.CreateThumb1CallBack(data);
+                window.ModifyUploadFileThumb2CallBack(data);
             }
+        },
+        error: function (data, status, e)
+        {
+            alert(e);
+        }
+    });
+}
+
+function CutImg(cutImgForm,uploadFileId){
+    var parameter = cutImgForm.serialize();
+    $.ajax({
+        url:"/default.php?mod=upload_file&a=async_cut_image&upload_file_id="+uploadFileId,
+        data:parameter,
+        secureUri:false,
+        dataType:"json",
+        success:function(data){
+                window.CutImgCallBack(data);
+        },
+        error: function (data, status, e)
+        {
+            alert(e);
+        }
+    });
+}
+
+function GetOneUploadFile(uploadFileId){
+    $.ajax({
+        url:"/default.php?mod=upload_file&a=async_get_one&upload_file_id="+uploadFileId,
+        secureUri:false,
+        dataType:"json",
+        success:function(data){
+            window.GetOneCallBack(data);
         },
         error: function (data, status, e)
         {

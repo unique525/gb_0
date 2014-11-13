@@ -62,6 +62,10 @@
  * @property int $UserAvatarMaxHeight
  * @property int $UserAvatarMinWidth
  * @property int $UserAvatarMinHeight
+ * @property int $UserAvatarBigWidth
+ * @property int $UserAvatarBigHeight
+ * @property int $UserAvatarSmallWidth
+ * @property int $UserAvatarSmallHeight
  *
  * @property int $NewRegisterUserId
  * @property string $NewRegisterUserName
@@ -213,6 +217,10 @@ class SiteConfigData extends BaseData {
         "UserAvatarMaxHeight",
         "UserAvatarMinWidth",
         "UserAvatarMinHeight",
+        "UserAvatarBigWidth",
+        "UserAvatarBigHeight",
+        "UserAvatarSmallWidth",
+        "UserAvatarSmallHeight",
 
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
@@ -336,6 +344,10 @@ class SiteConfigData extends BaseData {
     private $UserAvatarMaxHeight = 0; //会员头像最大高度
     private $UserAvatarMinWidth = 0;  //会员头像最小宽度
     private $UserAvatarMinHeight = 0; //会员头像最小高度
+    private $UserAvatarBigWidth = 0;  //会员大头像宽度
+    private $UserAvatarBigHeight = 0;//会员大头像高度
+    private $UserAvatarSmallWidth = 0;  //会员小头像宽度
+    private $UserAvatarSmallHeight = 0; //会员小头像高度
 
 
     private $NewRegisterUserId = 0; //新注册的会员Id
@@ -1189,6 +1201,70 @@ class SiteConfigData extends BaseData {
     public function getUserDefaultFemaleAvatar()
     {
         return $this->UserDefaultFemaleAvatar;
+    }
+
+    /**
+     * @param mixed $UserAvatarBigHeight
+     */
+    public function setUserAvatarBigHeight($UserAvatarBigHeight)
+    {
+        $this->UserAvatarBigHeight = $UserAvatarBigHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarBigHeight()
+    {
+        return $this->UserAvatarBigHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarBigWidth
+     */
+    public function setUserAvatarBigWidth($UserAvatarBigWidth)
+    {
+        $this->UserAvatarBigWidth = $UserAvatarBigWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarBigWidth()
+    {
+        return $this->UserAvatarBigWidth;
+    }
+
+    /**
+     * @param mixed $UserAvatarSmallHeight
+     */
+    public function setUserAvatarSmallHeight($UserAvatarSmallHeight)
+    {
+        $this->UserAvatarSmallHeight = $UserAvatarSmallHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarSmallHeight()
+    {
+        return $this->UserAvatarSmallHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarSmallWidth
+     */
+    public function setUserAvatarSmallWidth($UserAvatarSmallWidth)
+    {
+        $this->UserAvatarSmallWidth = $UserAvatarSmallWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarSmallWidth()
+    {
+        return $this->UserAvatarSmallWidth;
     }
 
     /**
