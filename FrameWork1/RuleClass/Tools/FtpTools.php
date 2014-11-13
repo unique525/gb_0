@@ -6,7 +6,7 @@
  * @package iCMS_FrameWork1_RuleClass_Tools
  * @author zhangchi
  */
-class Ftp
+class FtpTools
 {
     /**
      * 未操作
@@ -81,7 +81,7 @@ class Ftp
         $result = DefineCode::FTP + self::FTP_NO_ACTION;
         $ftpConnect = self::Connect($ftpInfo);
         if (!$ftpConnect) { //连接失败
-            $result = self::FTP_CONNECT_FAILURE; //连接失败
+            $result = DefineCode::FTP + self::FTP_CONNECT_FAILURE; //连接失败
         } else { //连接成功
             //判断
             if (isset($ftpInfo['FtpUser'])
@@ -120,15 +120,15 @@ class Ftp
                         $ftpId,
                         $siteId
                     );
-                    if ($uploadResult == self::FTP_TRANSFER_SUCCESS) {
-                        $result = self::FTP_TRANSFER_SUCCESS; //上传成功
+                    if ($uploadResult == abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS) {
+                        $result = abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS; //上传成功
                     }
 
                 } else { //登录失败
-                    $result = self::FTP_LOGIN_FAILURE; //登录失败
+                    $result = DefineCode::FTP + self::FTP_LOGIN_FAILURE; //登录失败
                 }
             }
-            Ftp_Close($ftpConnect);
+            ftp_close($ftpConnect);
         }
         return $result;
     }
@@ -145,7 +145,7 @@ class Ftp
     {
         $arrUpload = $publishQueueManageData->Queue;
         if (empty($arrUpload)) {
-            return self::FTP_CONTENT_EMPTY; //上传数组为空
+            return DefineCode::FTP + self::FTP_CONTENT_EMPTY; //上传数组为空
         }
         if (!isset($ftpInfo['FtpUser']) ||
             !isset($ftpInfo['FtpPass']) ||
@@ -153,12 +153,12 @@ class Ftp
             !isset($ftpInfo['RemotePath']) ||
             !isset($ftpInfo['FtpId'])
         ) {
-            return self::FTP_INFO_EMPTY; //FTP配置信息为空
+            return DefineCode::FTP + self::FTP_INFO_EMPTY; //FTP配置信息为空
         }
 
         $ftpConnect = self::Connect($ftpInfo);
         if (!$ftpConnect) { //连接失败
-            return self::FTP_CONNECT_FAILURE;
+            return DefineCode::FTP + self::FTP_CONNECT_FAILURE;
         }
 
         $ftpUser = $ftpInfo['FtpUser'];
@@ -193,17 +193,17 @@ class Ftp
                     $ftpInfo['FtpId'],
                     $ftpInfo['SiteId']
                 );
-                if ($uploadResult == self::FTP_TRANSFER_SUCCESS) {
-                    $arrUpload[$i]["result"] = 1;
+                if ($uploadResult == abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS) {
+                    $arrUpload[$i]["result"] = abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS;
                 } else {
-                    $arrUpload[$i]["result"] = 0;
+                    $arrUpload[$i]["result"] = DefineCode::FTP + self::FTP_TRANSFER_FAILURE;
                 }
             }
-            $result = self::FTP_TRANSFER_FINISHED; //操作完成，但不代表所有文件操作成功
+            $result = abs(DefineCode::FTP) + self::FTP_TRANSFER_FINISHED; //操作完成，但不代表所有文件操作成功
 
 
         } else { //登录失败
-            $result = self::FTP_LOGIN_FAILURE;
+            $result = DefineCode::FTP + self::FTP_LOGIN_FAILURE;
         }
         ftp_close($ftpConnect);
         return $result;
@@ -217,10 +217,10 @@ class Ftp
      */
     public static function Delete($ftpInfo, $deleteFilePath)
     {
-        $result = self::FTP_NO_ACTION;
+        $result = DefineCode::FTP + self::FTP_NO_ACTION;
         $ftpConnect = self::Connect($ftpInfo);//进行连接
         if (!$ftpConnect) { //连接失败
-            return self::FTP_CONNECT_FAILURE;
+            return DefineCode::FTP + self::FTP_CONNECT_FAILURE;
         } else { //连接成功
             //判断ftp info
             if (isset($ftpInfo['FtpUser']) &&
@@ -239,26 +239,26 @@ class Ftp
                 $isLogin = @ftp_login($ftpConnect, $ftpUser, $ftpPass);
                 if ($isLogin) { //登录成功
                     if ($ftpPassiveMode > 0) { //被动模式
-                        Ftp_Pasv($ftpConnect, TRUE);
+                        ftp_pasv($ftpConnect, TRUE);
                     } else { //被动模式
-                        Ftp_Pasv($ftpConnect, FALSE);
+                        ftp_pasv($ftpConnect, FALSE);
                     }
-                    $isChangeDir = Ftp_ChDir($ftpConnect, $ftpPath);
+                    $isChangeDir = ftp_chdir($ftpConnect, $ftpPath);
                     if($isChangeDir){
                         $deleteFilePath = str_replace('/h', 'h', $deleteFilePath);
-                        if(Ftp_Delete($ftpConnect, $deleteFilePath)){
-                            $result = self::FTP_DELETE_SUCCESS;
+                        if(ftp_delete($ftpConnect, $deleteFilePath)){
+                            $result = abs(DefineCode::FTP) + self::FTP_DELETE_SUCCESS;
                         }else{
-                            $result = self::FTP_DELETE_FAILURE;
+                            $result = DefineCode::FTP + self::FTP_DELETE_FAILURE;
                         }
                     }else{
-                        $result = self::FTP_CHANGE_DIR_FAILURE;
+                        $result = DefineCode::FTP + self::FTP_CHANGE_DIR_FAILURE;
                     }
                 }else{
-                    $result = self::FTP_LOGIN_FAILURE;
+                    $result = DefineCode::FTP + self::FTP_LOGIN_FAILURE;
                 }
             }
-            Ftp_Close($ftpConnect);
+            ftp_close($ftpConnect);
         }
         return $result;
     }
@@ -281,7 +281,7 @@ class Ftp
         $timeStart = Control::GetMicroTime();
 
         if (empty($destinationPath)) { //目标服务器路径不能为空
-            return self::FTP_DESTINATION_EMPTY;
+            return DefineCode::FTP + self::FTP_DESTINATION_EMPTY;
         }
 
         $dirName = dirname($destinationPath); //目标文件地址
@@ -304,12 +304,12 @@ class Ftp
         //切换或创建目录
         $changeOrMakeDirResult = self::ChangeOrMakeDir($ftpConnect, $dirName);
         if (!$changeOrMakeDirResult) {
-            $result = self::FTP_CHANGE_OR_MAKE_DIR_FAILURE;
+            $result = DefineCode::FTP + self::FTP_CHANGE_OR_MAKE_DIR_FAILURE;
         } else {
-            if (Ftp_Put($ftpConnect, $fileName, $sourcePath, FTP_BINARY)) {
-                $result = self::FTP_TRANSFER_SUCCESS;
+            if (ftp_put($ftpConnect, $fileName, $sourcePath, FTP_BINARY)) {
+                $result = abs(DefineCode::FTP) + self::FTP_TRANSFER_SUCCESS;
             } else {
-                $result = self::FTP_TRANSFER_FAILURE;
+                $result = DefineCode::FTP + self::FTP_TRANSFER_FAILURE;
             }
             if (strlen($sourceContent) > 0) { //发布内容上传时，删除临时文件
                 FileObject::DeleteDir($sourcePath);
@@ -408,7 +408,7 @@ class Ftp
         foreach ($arrPath as $path) { //循环创建文件夹
             $dir .= $separator . $path;
             $separator = "/";
-            if (!Ftp_MkDir($ftpConnect, $dir)) {
+            if (!ftp_mkdir($ftpConnect, $dir)) {
                 return FALSE;
             }
         }

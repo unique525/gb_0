@@ -210,6 +210,9 @@
                         <option value="20">不发布</option>
                         <option value="30">资讯详细页模板</option>
                         <option value="31">活动详细页模板</option>
+                        <option value="32">自定义页面详细页模板</option>
+                        <option value="33">分类信息详细页模板</option>
+                        <option value="34">产品详细页模板</option>
                     </select>
                     {b_s_PublishType}
                 </td>

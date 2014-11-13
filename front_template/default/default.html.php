@@ -388,7 +388,7 @@
     <div class="other_part">
         <ul>
             <li>
-                <div class="title4 green_bg">买手推荐</div>
+                <div class="title4 green_bg"><a href="/h/135/list.html" target="_blank">买手推荐</a></div>
                 <icms id="channel_135" type="document_news_list" top="1" title="36">
                     <item>
                         <![CDATA[
@@ -399,9 +399,15 @@
                 </icms>
             </li>
             <li>
-                <div class="title4 red_bg">饮食健康</div>
-                <div><a href="#" target="_blank"><img src="images/img_2.jpg" width="279" height="153" /></a></div>
-                <h1><a href="#" target="_blank">干煸菜花：这样吃更美味</a></h1>
+                <div class="title4 red_bg"><a href="/h/136/list.html" target="_blank">饮食健康</a></div>
+                <icms id="channel_136" type="document_news_list" top="1" title="36">
+                    <item>
+                        <![CDATA[
+                        <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
+                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        ]]>
+                    </item>
+                </icms>
             </li>
             <li>
                 <div class="title4 blue_bg">饮食健康</div>

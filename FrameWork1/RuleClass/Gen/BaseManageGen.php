@@ -62,6 +62,14 @@ class BaseManageGen extends BaseGen
      * 发布传输结果：传输成功
      */
     const PUBLISH_TRANSFER_RESULT_SUCCESS = 110;
+    /**
+     * 发布传输结果：删除成功
+     */
+    const PUBLISH_DELETE_RESULT_SUCCESS = 121;
+    /**
+     * 发布传输结果：删除失败
+     */
+    const PUBLISH_DELETE_RESULT_FAILURE = -121;
 
 
     /**
@@ -647,7 +655,7 @@ class BaseManageGen extends BaseGen
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
             $openFtpLog = false;
             $ftpLogManageData = new FtpLogManageData();
-            Ftp::UploadQueue($ftpInfo,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
+            FtpTools::UploadQueue($ftpInfo,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
@@ -660,6 +668,43 @@ class BaseManageGen extends BaseGen
                             abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;
                     }else{ //错误则返回FileObject::Write中的错误码
                         $publishQueueManageData->Queue[$i]["Result"] = $result;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 删除发布队列中的内容
+     * @param PublishQueueManageData $publishQueueManageData 发布队列对象
+     * @param int $siteId 站点id
+     */
+    private function DeleteByPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
+    {
+        $ftpManageData = new FtpManageData();
+        $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
+        //判断是用ftp方式传输还是直接写文件方式传输
+        if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
+
+            if (!empty($publishQueueManageData->Queue)) {
+                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
+                    $result = FtpTools::Delete($ftpInfo, $publishQueueManageData->Queue[$i]["DestinationPath"]);
+                    $publishQueueManageData->Queue[$i]["Result"] = $result;
+                }
+            }
+
+        } else { //没有定义ftp配置信息，使用直接写文件方式传输
+            if (!empty($publishQueueManageData->Queue)) {
+                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
+                    $destinationPath = $publishQueueManageData->Queue[$i]["DestinationPath"];
+
+                    $result = FileObject::DeleteFile($destinationPath);
+                    if($result>0){ //成功返回成功码
+                        $publishQueueManageData->Queue[$i]["Result"] =
+                            abs(DefineCode::PUBLISH) + self::PUBLISH_DELETE_RESULT_SUCCESS;
+                    }else{ //错误则返回FileObject::Write中的错误码
+                        $publishQueueManageData->Queue[$i]["Result"] =
+                            DefineCode::PUBLISH + self::PUBLISH_DELETE_RESULT_FAILURE;
                     }
                 }
             }
@@ -733,13 +778,14 @@ class BaseManageGen extends BaseGen
 
                 /**************** 取得模板 ********************/
 
-                $channelId = $documentNewsManageData->GetChannelId($documentNewsId, false);
+                $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
 
                 if($channelId>0){
                     $channelManageData = new ChannelManageData();
                     $channelTemplateManageData = new ChannelTemplateManageData();
-                    $rank = $channelManageData->GetRank($channelId, false);
-                    $siteId = $channelManageData->GetSiteId($channelId, false);
+                    $rank = $channelManageData->GetRank($channelId, true);
+                    $siteId = $channelManageData->GetSiteId($channelId, true);
+                    $channelName = $channelManageData->GetChannelName($channelId, true);
                     $nowChannelId = $channelId;
 
                     //循环Rank进行发布
@@ -770,7 +816,7 @@ class BaseManageGen extends BaseGen
                                 //$publishType = $arrChannelTemplateList[$i]["PublishType"];
                                 //$publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
 
-                                //2.替换模板内容
+                                //2.替换列表类的模板内容
                                 $timeStart = Control::GetMicroTime();
                                 $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
                                 $timeEnd = Control::GetMicroTime();
@@ -787,7 +833,16 @@ class BaseManageGen extends BaseGen
                                     "now document news id id:$documentNewsId replace template"
                                 );
 
-                                //3.根据PublishType和PublishFileName生成目标文件
+
+                                //3.替换资讯内容和其他一些内容
+                                $arrOne = $documentNewsManageData->GetOne($documentNewsId);
+                                Template::ReplaceOne($channelTemplateContent, $arrOne);
+
+                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+
+
+
+                                //4.根据PublishType和PublishFileName生成目标文件
                                 //触发频道id $channelId
                                 $timeStart = Control::GetMicroTime();
 
@@ -873,8 +928,50 @@ class BaseManageGen extends BaseGen
 
     }
 
-    protected function CancelPublishDocumentNews($documentNewsId)
+    /**
+     *
+     * @param $documentNewsId
+     * @param $siteId
+     */
+    protected function CancelPublishDocumentNews($documentNewsId, $siteId)
     {
+        $result = -1;
+        if($documentNewsId>0){
+            /**************** 传输日志 ********************/
+            $publishLogManageData = new PublishLogManageData();
+            $publishLogManageData->Create(
+                PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                $documentNewsId,
+                "",
+                "",
+                0,
+                "begin cancel"
+            );
+
+
+            $documentNewsManageData = new DocumentNewsManageData();
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
+            $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, true);
+
+            //发布文件名，资讯id构成
+            $publishFileName = strval($documentNewsId).'.html';
+            //发布路径，频道id+日期
+            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+
+            $publishQueueManageData = new PublishQueueManageData();
+            $destinationPath = $publishPath . '/' .$publishFileName;
+            $sourcePath = '';
+            $publishContent = '';
+            $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
+
+            self::DeleteByPublishQueue($publishQueueManageData, $siteId);
+
+
+        }
+
+
+
 
     }
 

@@ -152,6 +152,15 @@
                 case "31":
                     return "<span title='活动详细页模板'>活动详细</span>";
                     break;
+                case "32":
+                    return "<span title='自定义页面详细页模板'>自定义页面详细</span>";
+                    break;
+                case "33":
+                    return "<span title='分类信息详细页模板'>分类信息详细</span>";
+                    break;
+                case "34":
+                    return "<span title='产品详细页模板'>产品详细</span>";
+                    break;
                 default :
                     return "未知";
                     break;

@@ -166,6 +166,14 @@ class Format
     {
         $date1 = explode(' ', $dateString);
         $date2 = explode('-', $date1[0]);
+
+        if(strlen($date2[1])<2){ //月份补位
+            $date2[1] = '0'.$date2[1];
+        }
+        if(strlen($date2[2])<2){ //天数补位
+            $date2[2] = '0'.$date2[2];
+        }
+
         return $date2[0] . $date2[1] . $date2[2];
     }
 

@@ -710,9 +710,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         if ($documentNewsId > 0 && $state >= 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             $manageUserManageData = new ManageUserManageData();
-            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, false);
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $manageUserId = Control::GetManageUserId();
-            $siteId = $documentNewsManageData->GetSiteId($documentNewsId, false);
+            $siteId = $documentNewsManageData->GetSiteId($documentNewsId, true);
             /**********************************************************************
              ******************************判断是否有操作权限**********************
              **********************************************************************/
@@ -770,7 +770,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 )
                 && intval($state) === DocumentNewsData::STATE_REFUSE)
             {
-                $cancelPublishResult = parent::CancelPublishDocumentNews($documentNewsId);
+                $cancelPublishResult = parent::CancelPublishDocumentNews($documentNewsId, $siteId);
                 if($cancelPublishResult){
                     //修改状态
                     $result = $documentNewsManageData->ModifyState($documentNewsId, $state);

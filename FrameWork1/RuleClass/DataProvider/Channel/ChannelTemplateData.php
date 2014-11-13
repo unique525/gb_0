@@ -35,6 +35,18 @@ class ChannelTemplateData {
      * 活动详细页模板
      */
     const PUBLISH_TYPE_ACTIVITY_DETAIL = 31;
+    /**
+     * 自定义页面详细页模板
+     */
+    const PUBLISH_TYPE_SITE_CONTENT_DETAIL = 32;
+    /**
+     * 分类信息详细页模板
+     */
+    const PUBLISH_TYPE_INFORMATION_DETAIL = 33;
+    /**
+     * 产品详细页模板
+     */
+    const PUBLISH_TYPE_PRODUCT_DETAIL = 34;
 
     /**
      * 普通模板
