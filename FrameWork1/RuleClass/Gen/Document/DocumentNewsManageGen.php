@@ -6,13 +6,15 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Document
  * @author zhangchi
  */
-class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
+class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
+{
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function Gen() {
+    public function Gen()
+    {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
@@ -49,8 +51,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 生成资讯管理新增页面
      * @return mixed|string
      */
-    private function GenCreate() {
-        $templateContent = Template::Load("document/document_news_deal.html","common");
+    private function GenCreate()
+    {
+        $templateContent = Template::Load("document/document_news_deal.html", "common");
         $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
@@ -70,7 +73,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             if (!$can) {
                 $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 26));
 
-            }else{
+            } else {
                 $documentNewsManageData = new DocumentNewsManageData();
                 $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
                 $templateContent = str_ireplace("{ChannelName}", $channelName, $templateContent);
@@ -109,7 +112,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsId = $documentNewsManageData->Create($httpPostData);
 
                     //加入操作日志
-                    $operateContent = 'Create DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:documentNewsId:'.$documentNewsId;
+                    $operateContent = 'Create DocumentNews,POST FORM:' . implode('|', $_POST) . ';\r\nResult:documentNewsId:' . $documentNewsId;
                     self::CreateManageUserLog($operateContent);
 
                     if ($documentNewsId > 0) {
@@ -128,9 +131,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $uploadFileId1
                         );
 
-                        if (intval($titlePic1Result) <=0){
+                        if (intval($titlePic1Result) <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
 
                         }
 
@@ -146,9 +149,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $uploadFile2,
                             $uploadFileId2
                         );
-                        if (intval($titlePic2Result) <=0){
+                        if (intval($titlePic2Result) <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
 
                         }
                         //title pic3
@@ -164,31 +167,30 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $tableType,
                             $tableId,
                             $uploadFile3,
-                            $uploadFileId3)
-                        ;
-                        if (intval($titlePic3Result) <=0){
+                            $uploadFileId3);
+                        if (intval($titlePic3Result) <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
 
                         }
 
-                        if($uploadFileId1>0 || $uploadFileId2>0 || $uploadFileId3>0){
+                        if ($uploadFileId1 > 0 || $uploadFileId2 > 0 || $uploadFileId3 > 0) {
                             $documentNewsManageData->ModifyTitlePic($documentNewsId, $uploadFileId1, $uploadFileId2, $uploadFileId3);
                         }
 
                         $siteConfigData = new SiteConfigData($siteId);
-                        if($uploadFileId1>0){
+                        if ($uploadFileId1 > 0) {
                             $documentNewsTitlePic1MobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
-                            if($documentNewsTitlePic1MobileWidth<=0){
-                                $documentNewsTitlePic1MobileWidth  = 320; //默认320宽
+                            if ($documentNewsTitlePic1MobileWidth <= 0) {
+                                $documentNewsTitlePic1MobileWidth = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId1,$documentNewsTitlePic1MobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1, $documentNewsTitlePic1MobileWidth);
 
                             $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
-                            if($documentNewsTitlePicPadWidth<=0){
-                                $documentNewsTitlePicPadWidth  = 1024; //默认1024宽
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId1,$documentNewsTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1, $documentNewsTitlePicPadWidth);
                         }
 
 
@@ -224,11 +226,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                         //javascript 处理
 
-                        $closeTab = Control::PostRequest("CloseTab",0);
-                        if($closeTab == 1){
+                        $closeTab = Control::PostRequest("CloseTab", 0);
+                        if ($closeTab == 1) {
                             $resultJavaScript .= Control::GetCloseTab();
-                        }else{
-                            Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                        } else {
+                            Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                         }
                     } else {
                         $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 2));
@@ -256,7 +258,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 生成资讯管理修改页面
      * @return mixed|string
      */
-    private function GenModify() {
+    private function GenModify()
+    {
         $templateContent = Template::Load("document/document_news_deal.html", "common");
         $documentNewsId = Control::GetRequest("document_news_id", 0);
 
@@ -303,11 +306,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
                 if ($documentNewsManageUserId !== $nowManageUserId) { //发稿人与当前操作人不是同一人时才判断
                     $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $nowManageUserId);
-                }else{
+                } else {
                     //如果发稿人与当前操作人是同一人，则不处理
                 }
                 //3 检查是否有在本频道编辑同一管理组他人文档的权限
-                if(!$can){
+                if (!$can) {
                     //是否是同一管理组
                     $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
                     $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($nowManageUserId);
@@ -318,7 +321,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     }
                 }
             }
-            if(!$can){
+            if (!$can) {
                 return Language::Load('document', 26);
             }
 
@@ -351,7 +354,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
 
-
             $arrOne = $documentNewsManageData->GetOne($documentNewsId);
             Template::ReplaceOne($templateContent, $arrOne, false, false);
             //去掉s开头的标记 {s_xxx_xxx}
@@ -370,7 +372,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = $documentNewsManageData->Modify($httpPostData, $documentNewsId);
 
                 //加入操作日志
-                $operateContent = 'Modify DocumentNews,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
+                $operateContent = 'Modify DocumentNews,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
@@ -382,7 +384,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsManageData->ModifyState($documentNewsId, $state);
 
                     //题图操作
-                    if( !empty($_FILES)){
+                    if (!empty($_FILES)) {
 
                         $tableId = $documentNewsId;
 
@@ -400,9 +402,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $uploadFileId1
                         );
 
-                        if (intval($titlePic1Result) <=0 && $uploadFileId1<=0){
+                        if (intval($titlePic1Result) <= 0 && $uploadFileId1 <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
                             //删除原有题图
                             $oldUploadFileId1 = $documentNewsManageData->GetTitlePic1UploadFileId($documentNewsId, false);
                             parent::DeleteUploadFile($oldUploadFileId1);
@@ -423,9 +425,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $uploadFile2,
                             $uploadFileId2
                         );
-                        if (intval($titlePic2Result) <=0){
+                        if (intval($titlePic2Result) <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
                             //删除原有题图
                             $oldUploadFileId2 = $documentNewsManageData->GetTitlePic2UploadFileId($documentNewsId, false);
                             parent::DeleteUploadFile($oldUploadFileId2);
@@ -448,9 +450,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                             $uploadFile3,
                             $uploadFileId3
                         );
-                        if (intval($titlePic3Result) <=0){
+                        if (intval($titlePic3Result) <= 0) {
                             //上传出错或没有选择文件上传
-                        }else{
+                        } else {
                             //删除原有题图
                             $oldUploadFileId3 = $documentNewsManageData->GetTitlePic3UploadFileId($documentNewsId, false);
                             parent::DeleteUploadFile($oldUploadFileId3);
@@ -461,18 +463,18 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                         //重新制作题图1的相关图片
                         $siteConfigData = new SiteConfigData($siteId);
-                        if($uploadFileId1>0){
+                        if ($uploadFileId1 > 0) {
                             $documentNewsTitlePic1MobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
-                            if($documentNewsTitlePic1MobileWidth<=0){
-                                $documentNewsTitlePic1MobileWidth  = 320; //默认320宽
+                            if ($documentNewsTitlePic1MobileWidth <= 0) {
+                                $documentNewsTitlePic1MobileWidth = 320; //默认320宽
                             }
-                            self::GenUploadFileMobile($uploadFileId1,$documentNewsTitlePic1MobileWidth);
+                            self::GenUploadFileMobile($uploadFileId1, $documentNewsTitlePic1MobileWidth);
 
                             $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
-                            if($documentNewsTitlePicPadWidth<=0){
-                                $documentNewsTitlePicPadWidth  = 1024; //默认1024宽
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
                             }
-                            self::GenUploadFilePad($uploadFileId1,$documentNewsTitlePicPadWidth);
+                            self::GenUploadFilePad($uploadFileId1, $documentNewsTitlePicPadWidth);
                         }
                     }
 
@@ -488,7 +490,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                     for ($i = 0; $i < count($arrUploadFiles); $i++) {
                         if (intval($arrUploadFiles[$i]) > 0) {
                             $uploadFileData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
-                            if($isBatchUpload>0){
+                            if ($isBatchUpload > 0) {
                                 $uploadFileData->ModifyIsBatchUpload(intval($arrUploadFiles[$i]), $isBatchUpload);
                             }
                         }
@@ -512,11 +514,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
 
                     //javascript 处理
 
-                    $closeTab = Control::PostRequest("CloseTab",0);
-                    if($closeTab == 1){
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
                         $resultJavaScript .= Control::GetCloseTab();
-                    }else{
-                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
                 } else {
                     $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 4));
@@ -528,7 +530,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         return $templateContent;
     }
 
-    private function GenRemoveToBin(){
+    private function GenRemoveToBin()
+    {
         $result = "";
         return $result;
     }
@@ -538,16 +541,17 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 发布资讯详细页面
      * @return int 返回发布结果
      */
-    private function AsyncPublish(){
+    private function AsyncPublish()
+    {
         $result = -1;
         $documentNewsId = Control::GetRequest("document_news_id", -1);
-        if($documentNewsId>0){
+        if ($documentNewsId > 0) {
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;
             $publishChannel = true;
             $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
-            if($result == BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED){
-                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+            if ($result == BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED) {
+                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
                     $publishQueueManageData->Queue[$i]["Content"] = "";
                 }
                 //print_r($publishQueueManageData->Queue);
@@ -559,7 +563,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 生成资讯管理列表页面
      */
-    private function GenList() {
+    private function GenList()
+    {
         $channelId = Control::GetRequest("channel_id", 0);
         if ($channelId <= 0) {
             return null;
@@ -567,7 +572,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserId = Control::GetManageUserId();
         $channelManageData = new ChannelManageData();
         $siteId = $channelManageData->GetSiteId($channelId, false);
-        if($siteId<=0){
+        if ($siteId <= 0) {
             return null;
         }
 
@@ -672,11 +677,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 修改排序号
      * @return int 修改结果
      */
-    private function AsyncModifySort(){
+    private function AsyncModifySort()
+    {
         $result = -1;
         $documentNewsId = Control::GetRequest("document_news_id", 0);
         $sort = Control::GetRequest("sort", 0);
-        if($documentNewsId>0){
+        if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifySort($sort, $documentNewsId);
         }
@@ -688,13 +694,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 批量修改排序号
      * @return string 返回Jsonp修改结果
      */
-    private function AsyncModifySortByDrag() {
+    private function AsyncModifySortByDrag()
+    {
         $arrDocumentNewsId = Control::GetRequest("sort", null);
-        if(!empty($arrDocumentNewsId)){
+        if (!empty($arrDocumentNewsId)) {
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifySortForDrag($arrDocumentNewsId);
-            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
-        }  else{
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+        } else {
             return "";
         }
     }
@@ -703,7 +710,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
      * 修改文档状态 状态值定义在Data类中
      * @return string 返回Jsonp修改结果
      */
-    private function AsyncModifyState() {
+    private function AsyncModifyState()
+    {
         $result = -1;
         $documentNewsId = Control::GetRequest("document_news_id", 0);
         $state = Control::GetRequest("state", -1);
@@ -743,11 +751,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
                 $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
                 if ($documentNewsManageUserId !== $manageUserId) { //发稿人与当前操作人不是同一人时才判断
                     $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $manageUserId);
-                }else{
+                } else {
                     //如果发稿人与当前操作人是同一人，则不处理
                 }
                 //3 检查是否有在本频道编辑同一管理组他人文档的权限
-                if(!$can){
+                if (!$can) {
                     //是否是同一管理组
                     $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
                     $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($manageUserId);
@@ -768,20 +776,30 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen {
             if (($oldState === DocumentNewsData::STATE_PUBLISHED
                     || $oldState === DocumentNewsData::STATE_REFUSE
                 )
-                && intval($state) === DocumentNewsData::STATE_REFUSE)
-            {
-                $cancelPublishResult = parent::CancelPublishDocumentNews($documentNewsId, $siteId);
-                if($cancelPublishResult){
-                    //修改状态
-                    $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
+                && intval($state) === DocumentNewsData::STATE_REFUSE
+            ) {
+                $publishQueueManageData = new PublishQueueManageData();
+                parent::CancelPublishDocumentNews($publishQueueManageData, $documentNewsId, $siteId);
+                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
+                    $deleteResult = intval($publishQueueManageData->Queue[$i]["Result"]);
+                    if (
+                        $deleteResult == abs(DefineCode::FTP) + FtpTools::FTP_DELETE_SUCCESS
+                        ||
+                        $deleteResult == abs(DefineCode::PUBLISH) + self::PUBLISH_DELETE_RESULT_SUCCESS
+                    ) {
+                        //修改状态
+                        $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
+                    } else {
+                        $result = intval($publishQueueManageData->Queue[$i]["Result"]);
+                    }
                 }
-            }else{
+            } else {
                 //修改状态
                 $result = $documentNewsManageData->ModifyState($documentNewsId, $state);
             }
 
             //加入操作日志
-            $operateContent = 'Modify State DocumentNews,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
+            $operateContent = 'Modify State DocumentNews,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
             self::CreateManageUserLog($operateContent);
         }
         return $result;

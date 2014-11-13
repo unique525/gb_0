@@ -650,12 +650,15 @@ class BaseManageGen extends BaseGen
     private function TransferPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
     {
         $ftpManageData = new FtpManageData();
-        $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
+        $ftp = new Ftp();
+        $arrFtpOne = $ftpManageData->GetOneBySiteId($siteId);
+        $ftpManageData->FillFtp($arrFtpOne, $ftp);
+
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
             $openFtpLog = false;
             $ftpLogManageData = new FtpLogManageData();
-            FtpTools::UploadQueue($ftpInfo,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
+            FtpTools::UploadQueue($ftp,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
@@ -682,13 +685,15 @@ class BaseManageGen extends BaseGen
     private function DeleteByPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
     {
         $ftpManageData = new FtpManageData();
-        $ftpInfo = $ftpManageData->GetOneBySiteId($siteId);
+        $ftp = new Ftp();
+        $arrFtpOne = $ftpManageData->GetOneBySiteId($siteId);
+        $ftpManageData->FillFtp($arrFtpOne,$ftp);
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
 
             if (!empty($publishQueueManageData->Queue)) {
                 for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
-                    $result = FtpTools::Delete($ftpInfo, $publishQueueManageData->Queue[$i]["DestinationPath"]);
+                    $result = FtpTools::Delete($ftp, $publishQueueManageData->Queue[$i]["DestinationPath"]);
                     $publishQueueManageData->Queue[$i]["Result"] = $result;
                 }
             }
@@ -929,11 +934,13 @@ class BaseManageGen extends BaseGen
     }
 
     /**
-     *
-     * @param $documentNewsId
-     * @param $siteId
+     * 取消发布（删除已发布的文件）
+     * @param PublishQueueManageData $publishQueueManageData 发布队列对象，传出参数，包括了发布文件的结果值
+     * @param int $documentNewsId 资讯id
+     * @param int $siteId 站点id
+     * @return int 结果
      */
-    protected function CancelPublishDocumentNews($documentNewsId, $siteId)
+    protected function CancelPublishDocumentNews(PublishQueueManageData $publishQueueManageData, $documentNewsId, $siteId)
     {
         $result = -1;
         if($documentNewsId>0){
@@ -959,7 +966,7 @@ class BaseManageGen extends BaseGen
             //发布路径，频道id+日期
             $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
 
-            $publishQueueManageData = new PublishQueueManageData();
+
             $destinationPath = $publishPath . '/' .$publishFileName;
             $sourcePath = '';
             $publishContent = '';
@@ -970,7 +977,7 @@ class BaseManageGen extends BaseGen
 
         }
 
-
+        return $result;
 
 
     }

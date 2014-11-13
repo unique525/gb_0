@@ -151,4 +151,44 @@ class FtpManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+    /**
+     * 将数组中的内容填充到对象中
+     * @param array $arr 一条ftp记录
+     * @param Ftp $ftp Ftp数据对象
+     */
+    public function FillFtp($arr, Ftp &$ftp)
+    {
+        if (!empty($arr)) {
+
+            if (!empty($arr["FtpId"])) {
+                $ftp->FtpId = intval($arr["FtpId"]);
+            }
+            if (!empty($arr["FtpHost"])) {
+                $ftp->FtpHost = strval($arr["FtpHost"]);
+            }
+            if (!empty($arr["FtpPort"])) {
+                $ftp->FtpPort = strval($arr["FtpPort"]);
+            }
+            if (!empty($arr["FtpUser"])) {
+                $ftp->FtpUser = strval($arr["FtpUser"]);
+            }
+            if (!empty($arr["FtpPass"])) {
+                $ftp->FtpPass = strval($arr["FtpPass"]);
+            }
+            if (!empty($arr["RemotePath"])) {
+                $ftp->RemotePath = strval($arr["RemotePath"]);
+            }
+            if (!empty($arr["PasvMode"])) {
+                $ftp->PasvMode = strval($arr["PasvMode"]);
+            }
+            if (!empty($arr["Timeout"])) {
+                $ftp->Timeout = strval($arr["Timeout"]);
+            }
+            if (!empty($arr["SiteId"])) {
+                $ftp->SiteId = strval($arr["SiteId"]);
+            }
+        }
+    }
 } 
