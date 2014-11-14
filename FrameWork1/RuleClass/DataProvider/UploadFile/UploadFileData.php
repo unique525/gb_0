@@ -412,7 +412,7 @@ class UploadFileData extends BaseData
         $dataProperty->AddField("UploadFileInfo", $uploadFileInfo);
         $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
         $dataProperty->AddField("UploadFileId", $uploadFileId);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 

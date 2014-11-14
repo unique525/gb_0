@@ -21,7 +21,6 @@ class UserExploreCollection {
     public function setUserExplores($UserExplores)
     {
         $this->UserExplores = $UserExplores;
-
         if (count($this->UserExplores) > 5) {
             //只保存5条访问记录
             array_shift($this->UserExplores);

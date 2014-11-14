@@ -8,5 +8,8 @@
  */
 class UserExploreData extends BaseData
 {
-    const TableType_Product = 1;
+    /**
+     *
+     */
+    const TABLE_TYPE_PRODUCT = 1;
 } 
