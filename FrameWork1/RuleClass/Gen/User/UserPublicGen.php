@@ -246,7 +246,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $siteId = parent::GetSiteIdByDomain();
 
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/user_center.html";
+            $templateFileUrl = "user/user_homepage.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);

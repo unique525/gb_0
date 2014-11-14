@@ -139,7 +139,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             if(count($arrUserFavoriteList) > 0){
                 Template::ReplaceList($templateContent,$arrUserFavoriteList,$recentUserFavoriteTagId);
             }else{
-                $templateContent = Template::ReplaceCustomTag($templateContent, $recentUserFavoriteTagId,Language::Load("user_car",7));
+                $templateContent = Template::ReplaceCustomTag($templateContent, $recentUserFavoriteTagId,Language::Load("user_favorite",1));
             }
             //------------------------------end
         } else {

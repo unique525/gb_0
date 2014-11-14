@@ -199,9 +199,11 @@
                 success:function(data){
                     var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
-                    var negative_appraisal = parseInt(data["negative_appraisal"])
+                    var negative_appraisal = parseInt(data["negative_appraisal"]);
 
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
+
+                    $("#total_appraisal").html(total_appraisal.toString());
 
                     var negative_appraisal_width = 0;
                     var positive_appraisal_width = 0;
@@ -442,7 +444,7 @@
             <a  id="id_1" alt="1" class="tab cur" tabindex="0" href="javascript:;">商品介绍</a>
             <a  id="id_2" alt="2" class="tab"  href="javascript:;" tabindex="1">属性</a>
             <a  id="id_3" alt="3" class="tab"  href="javascript:;">评价
-                <em>661</em>
+                <em id="total_appraisal">661</em>
             </a></li>
     </ul>
     <div id="tabdiv1" class="gdmsgcont" >
