@@ -89,12 +89,37 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     $pagerContentTemplate
                 );
 
-                $arrResult["result_list"] = $arrList;
 
-                $pagerButton = str_ireplace('"','\"',$pagerButton);
-                $pagerButton = str_ireplace('\r','',$pagerButton);
-                $pagerButton = str_ireplace('\n','',$pagerButton);
-                $arrResult["pager_button"] = urlencode($pagerButton);
+                //格式化arrList
+                $resultArrList = null;
+                foreach ($arrList as $columnValue) {
+
+                    $directUrl = $columnValue['DirectUrl'];
+                    $publishDate = Format::DateStringToSimple($columnValue['PublishDate']);
+
+                    if(strlen($directUrl)>0){
+                        $columnValue['DocumentNewsUrl'] = $directUrl;
+                    }else{
+                        $columnValue['DocumentNewsUrl'] =
+                            '/h/'.$columnValue['ChannelId'].
+                            '/'.$publishDate.
+                            '/'.$columnValue['DocumentNewsId'].'.html';
+                    }
+
+                    $resultArrList[] = $columnValue;
+                }
+
+
+                $arrResult["result_list"] = $resultArrList;
+
+
+
+
+                //$pagerButton = str_ireplace('"','\"',$pagerButton);
+                //$pagerButton = str_ireplace("'","\\'",$pagerButton);
+                //$pagerButton = str_ireplace('\r','',$pagerButton);
+                //$pagerButton = str_ireplace('\n','',$pagerButton);
+                $arrResult["pager_button"] = $pagerButton;
 
 
 

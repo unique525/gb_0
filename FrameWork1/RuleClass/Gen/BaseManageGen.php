@@ -121,8 +121,9 @@ class BaseManageGen extends BaseGen
             /**************** 取得模板 ********************/
             $channelManageData = new ChannelManageData();
             $channelTemplateManageData = new ChannelTemplateManageData();
-            $rank = $channelManageData->GetRank($channelId, false);
-            $siteId = $channelManageData->GetSiteId($channelId, false);
+            $rank = $channelManageData->GetRank($channelId, true);
+            $siteId = $channelManageData->GetSiteId($channelId, true);
+            $channelName = $channelManageData->GetChannelName($channelId, true);
             $currentChannelId = $channelId;
             $currentRank = $rank;
 
@@ -162,6 +163,13 @@ class BaseManageGen extends BaseGen
                         //2.替换模板内容
                         $timeStart = Control::GetMicroTime();
                         $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+
+                        $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
+                        $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
+                        $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
+
+
+
                         $timeEnd = Control::GetMicroTime();
                         $publishLogManageData->Create(
                             PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,

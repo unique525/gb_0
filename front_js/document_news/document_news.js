@@ -1,45 +1,11 @@
-
-var documentNewsObject = new Object();
-DocumentNewsId
-SiteId
-ChannelId
-DocumentNewsTitle
-DocumentNewsSubTitle
-DocumentNewsCiteTitle
-DocumentNewsShortTitle
-DocumentNewsIntro
-CreateDate
-ManageUserId
-ManageUserName
-UserId
-UserName
-Author
-State
-DocumentNewsType
-DirectUrl
-ShowDate
-SourceName
-DocumentNewsMainTag
-DocumentNewsTag
-Sort
-TitlePic1UploadFileId
-TitlePic2UploadFileId
-TitlePic3UploadFileId
-DocumentNewsTitleColor
-DocumentNewsTitleBold
-OpenComment
-ShowHour
-ShowMinute
-ShowSecond
-IsHot
-RecLevel
-ShowPicMethod
-ClosePosition
-Hit
-PublishDate
-TitlePic1Path
-
-
+/**
+ * 取得资讯列表通用方法
+ * @param {int} channelId
+ * @param {int} pageIndex
+ * @param {int} pageSize
+ * @param {string} searchKey
+ * @param {int} pagerStyle
+ */
 function getDocumentNewsList(channelId,pageIndex,pageSize,searchKey,pagerStyle){
 
     $.ajax({
@@ -55,14 +21,14 @@ function getDocumentNewsList(channelId,pageIndex,pageSize,searchKey,pagerStyle){
         jsonp: "jsonpcallback",
         success: function (data) {
             var object = eval(data);
-            //alert(data);
-            //alert(data["result_list"]);
-            //var object = eval(data);
             var documentNewsCollection = eval(object.result_list);
-            //alert(documentNewsObject[1].DocumentNewsId);
-            //alert(object.pager_button);
 
-            //window.getDocumentNewsListCallBack(data);
+            //var pagerButton = decodeURIComponent(object.pager_button);
+            var pagerButton = object.pager_button;
+
+            if(documentNewsCollection != undefined && pagerButton != undefined){
+                window.getDocumentNewsListCallBack(documentNewsCollection,pagerButton);
+            }
         }
     });
 
