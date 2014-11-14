@@ -193,7 +193,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncCutImage(){
         $uploadFileId =Control::GetRequest("upload_file_id",0);
 
-        $newImagePath = "";
+        $result = "";
         if($uploadFileId > 0){
             $uploadFileData = new UploadFileData();
             $uploadFile = $uploadFileData->Fill($uploadFileId);
@@ -207,9 +207,12 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
                 $sourceWidth = Control::PostOrGetRequest("w",0);
                 $sourceHeight = Control::PostOrGetRequest("h",0);
                 $newImagePath = ImageObject::CutImg($uploadFile->UploadFilePath,$sourceX,$sourceY,$sourceWidth,$sourceHeight,$targetWidth,$targetHeight);
+                if(!empty($newImagePath)){
+                    $result = '{"new_image_path":"'.Format::FormatJson($newImagePath).'"}';
+                }
             }
         }
-        return '{"new_image_path":"'.Format::FormatJson($newImagePath).'"}';
+        return $result;
     }
 
     private function AsyncModifyUploadFilePathForCutImage(){

@@ -53,7 +53,7 @@
         };
 
         /**
-         *
+         *截图回调函数
          * @param data
          * @constructor
          */
@@ -80,6 +80,11 @@
             }
         };
 
+        /**
+         * 取得一个UploadFile的回调函数
+         * @param data
+         * @constructor
+         */
         window.GetOneCallBack = function(data){
             if(data["upload_file_path"] != ""){
                 var avatarSrc = data["upload_file_path"];
@@ -88,6 +93,11 @@
             }
         };
 
+        /**
+         * 修改UploadFileThumbPath2的回调函数
+         * @param data
+         * @constructor
+         */
         window.ModifyUploadFileThumb2CallBack = function(data){
             if(data["upload_file_id"] > 0){
                 $.ajax({
@@ -98,6 +108,10 @@
 
                         if(data["result"] > 0){
                             window.location.href = location.href;
+                        }else{
+                            alert("修改头像失败");
+                            $("#sub").attr("disabled","enable");
+                            $( "#loadingOfFinish"+loadingImageId ).hide();
                         }
                     }
                 });
@@ -140,6 +154,8 @@
             });
 
             $("#sub").click(function(){
+                $(this).attr("disabled","disabled");
+                $( "#loadingOfFinish" ).show();
                 var CutImgForm = $("#CutImgForm");
                 if(uploadFileId > 0){
                     CutImg(CutImgForm,uploadFileId);
@@ -266,7 +282,7 @@
 <td width="1" bgcolor="#D4D4D4"></td>
 <td width="1006" valign="top">
 <div class="rightbar">
-<div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
+<div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>修改头像</div>
     <div id="upload" style="padding:25px;">
         <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
@@ -322,7 +338,9 @@
                     <input type="hidden" value="" id="width" name="width"/>
                     <input type="hidden" value="" id="source" name="source"/>
                     <input type="hidden" value="/default.php?mod=user&a=homepage" id="source" name="re_url"/>
-                    <input type="button" id="sub" class="Btn23H_orangeA vTop" style="margin:0px 0px 25px 25px;border:none;" value="确定" />
+                    <div id="sub" style="background-color: #CCC;width:80px;height:25px;cursor:pointer;float:left">确定</div>
+                    <div style="float:left"><img id="loadingOfFinish" src="/system_template/common/images/loading1.gif" style="display:none;"/></div>
+                    <div style="clear:left"></div>
                 </form>
             </div>
         </div>

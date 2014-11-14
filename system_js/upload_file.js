@@ -553,6 +553,12 @@ function UploadFileFormatHtml(fileName){
     return url;
 }
 
+/**
+ * 修改UploadFileThumbPath2
+ * @param {int} uploadFileId
+ * @param {int} width
+ * @param {int} height
+ */
 function ModifyUploadFileThumb2(uploadFileId,width,height){
     $.ajax({
         url:"/default.php?mod=upload_file&a=async_modify_upload_file_thumb_path2&width="+width+"&height="+height+"&upload_file_id="+uploadFileId,
@@ -573,6 +579,11 @@ function ModifyUploadFileThumb2(uploadFileId,width,height){
     });
 }
 
+/**
+ * 截图
+ * @param {Object} cutImgForm 截图后的参数的form表单
+ * @param {int} uploadFileId
+ */
 function CutImg(cutImgForm,uploadFileId){
     var parameter = cutImgForm.serialize();
     $.ajax({
