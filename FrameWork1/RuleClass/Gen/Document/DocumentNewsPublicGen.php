@@ -26,7 +26,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     private function AsyncGetList(){
         $result = "";
 
-        $channelId = Control::GetRequest("cid", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
         $parentId = Control::GetRequest("parent_id", 0);
@@ -53,6 +53,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 $parentId
             );
             if (count($arrList) > 0) {
+
                 $templateFileUrl = "pager/pager_style".$pagerTempType."_js.html";
                 $templateName = "default";
                 $templatePath = "front_template";
@@ -88,19 +89,21 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     $pagerContentTemplate
                 );
 
-                $arrResult[] = $arrList;
-                $arrResult[] = urlencode($pagerButton);
+                $arrResult["result_list"] = $arrList;
+
+                $pagerButton = str_ireplace('"','\"',$pagerButton);
+                $pagerButton = str_ireplace('\r','',$pagerButton);
+                $pagerButton = str_ireplace('\n','',$pagerButton);
+                $arrResult["pager_button"] = urlencode($pagerButton);
 
 
 
                 $result = Format::FixJsonEncode($arrResult);
 
-                print_r($result);
-die();
-                $pagerButton = str_ireplace('"','\"',$pagerButton);
-                $pagerButton = str_ireplace('\r','',$pagerButton);
-                $pagerButton = str_ireplace('\n','',$pagerButton);
-                $result = '"result_list":' . $result . ',"pager_button":"'.$pagerButton.'"';
+                //print_r($result);
+//die();
+
+                //$result = '"result_list":' . $result . ',"pager_button":"'.$pagerButton.'"';
             }
         }
 
