@@ -88,8 +88,12 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     $pagerContentTemplate
                 );
 
+                $arrResult[] = $arrList;
+                $arrResult[] = urlencode($pagerButton);
 
-                $result = Format::FixJsonEncode($arrList);
+
+
+                $result = Format::FixJsonEncode($arrResult);
 
                 print_r($result);
 die();

@@ -133,28 +133,31 @@ class UserExplore {
     {
         return $this->UserId;
     }
+
     /**
-     * get 配置值
-     * @param string $fieldName 配置名称
-     * @return string 配置值
+     * 取得属性值
+     * @param string $name 属性字段名称
+     * @return mixed 属性值
      */
-    public function __get($fieldName){
-        $funcName = "get$fieldName";
-        if(function_exists($funcName)){
-            return $this->$funcName();
-        }else{
-            return null;
+    public function __get($name)
+    {
+        if (method_exists($this, ($method = 'get'.$name)))
+        {
+            return $this->$method();
         }
+        else return NULL;
     }
+
     /**
-     * 设置配置值
-     * @param string $fieldName 配置名称
-     * @param string $fieldValue 配置值
+     * 设置属性值
+     * @param string $name 属性字段名称
+     * @param string $value 属性值
      */
-    public function __set($fieldName,$fieldValue){
-        $funcName = "set$fieldName";
-        if(function_exists($funcName)){
-            $this->$funcName($fieldValue);
+    public function __set($name, $value)
+    {
+        if (method_exists($this, ($method = 'set'.$name)))
+        {
+            $this->$method($value);
         }
     }
 

@@ -24,28 +24,39 @@
 
     <script type="text/javascript">
 
-        var bigWidth = {cfg_UserAvatarBigWidth_3};
-        var bigHeight = {cfg_UserAvatarBigHeight_3};
-        var smallWidth = {cfg_UserAvatarSmallWidth_3};
-        var smallHeight = {cfg_UserAvatarSmallHeight_3};
+        var bigWidth = parseInt("{cfg_UserAvatarBigWidth_3}");
+        var bigHeight = parseInt("{cfg_UserAvatarBigHeight_3}");
+        var smallWidth = parseInt("{cfg_UserAvatarSmallWidth_3}");
+        var smallHeight = parseInt("{cfg_UserAvatarSmallHeight_3}");
         var uploadFileId = 0;
         var src = "";
-        var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
-        var tableId = {UserId};
+        var tableType = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
+        var tableId = parseInt("{UserId}");
 
+        /**
+         * 上传原文件回调
+         * @param fileElementId
+         * @param data
+         * @constructor
+         */
         window.AjaxFileUploadCallBack = function(fileElementId,data){
             if(data["upload_file_id"] != undefined){
                 uploadFileId=parseInt(data["upload_file_id"]);
                 //CreateThumb1(uploadFileId,400,0);
                 src = data["upload_file_path"].toString();
                 if(uploadFileId > 0 && src  != ""){
-                    cutImageDisplay();
+                    cutImageDisplay(); //显示在截图控件中
                 }else{
                     alert("上传失败");
                 }
             }
         };
 
+        /**
+         *
+         * @param data
+         * @constructor
+         */
         window.CutImgCallBack = function(data){
             if(data["new_image_path"] != undefined){
                 $.ajax({
@@ -94,7 +105,7 @@
         };
 
         $(function(){
-            getAvatar();
+            getAvatarUploadFileId();
 
             $("#btn_upload").click(function () {
 
@@ -102,19 +113,30 @@
 
                 var loadingImageId = "loadingOfUserAvatar";
 
+                var fUploadFile = $("#f_UploadFiles");
+
+                var attachWatermark = 0;
+                if ($("#cbAttachWatermark").attr("checked") == true) {
+                    attachWatermark = 1;
+                }
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+                var editor = null;
                 AjaxFileUpload(
                     fileElementId,
-                    tableTypeOfForumTopInfo,
+                    tableType,
                     tableId,
                     loadingImageId,
                     $(this),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId,
                     uploadFileId
                 );
+
             });
 
             $("#sub").click(function(){
@@ -125,7 +147,7 @@
             });
         });
 
-        function getAvatar(){
+        function getAvatarUploadFileId(){
             $.ajax({
                 url:"/default.php?mod=user_info&a=async_get_avatar_upload_file_id",
                 async:false,
@@ -137,7 +159,9 @@
                         uploadFileId = parseInt(result);
                         GetOneUploadFile(uploadFileId);
                     }else{
-                         $("#avatar").attr("alt","您还");
+                        $("#avatar").css("width",bigWidth);
+                        $("#avatar").css("height",bigHeight);
+                        $("#avatar").attr("alt","您还没有上传头像");
 
                         //alert("获取头像失败");
                     }

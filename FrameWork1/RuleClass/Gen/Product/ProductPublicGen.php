@@ -134,7 +134,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $price = $arrOne["SalePrice"];
                 parent::CreateUserExploreCookie($userId, $tableId, $tableType, $url, $title, $titlePic, $price);
 
-
                 //父模板替换
                 $templateContent = parent::ReplaceTemplate($templateContent);
                 //把对应ID的CMS标记替换成指定内容
@@ -218,8 +217,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
         }
-
-
         return $templateContent;
     }
 

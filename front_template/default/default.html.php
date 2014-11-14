@@ -131,7 +131,7 @@
                     <icms id="channel_17" type="document_news_list" top="4" title="24">
                         <item>
                             <![CDATA[
-                            <li><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></li>
+                            <li><a href="{c_DocumentNewsUrl}" style="font-weight:{f_DocumentNewsTitleBold};color:{f_DocumentNewsTitleColor}" target="_blank">{f_DocumentNewsTitle}</a></li>
                             ]]>
                         </item>
                     </icms>
@@ -411,7 +411,7 @@
                     <item>
                         <![CDATA[
                         <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
-                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        <h1><a href="{c_DocumentNewsUrl}" style="font-weight:{f_DocumentNewsTitleBold};color:{f_DocumentNewsTitleColor}" target="_blank">{f_DocumentNewsTitle}</a></h1>
                         ]]>
                     </item>
                 </icms>
@@ -422,7 +422,7 @@
                     <item>
                         <![CDATA[
                         <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
-                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        <h1><a href="{c_DocumentNewsUrl}" style="font-weight:{f_DocumentNewsTitleBold};color:{f_DocumentNewsTitleColor}" target="_blank">{f_DocumentNewsTitle}</a></h1>
                         ]]>
                     </item>
                 </icms>
@@ -433,7 +433,7 @@
                     <item>
                         <![CDATA[
                         <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
-                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        <h1><a href="{c_DocumentNewsUrl}" style="font-weight:{f_DocumentNewsTitleBold};color:{f_DocumentNewsTitleColor}" target="_blank">{f_DocumentNewsTitle}</a></h1>
                         ]]>
                     </item>
                 </icms>
@@ -444,7 +444,7 @@
                     <item>
                         <![CDATA[
                         <div><a href="{c_DocumentNewsUrl}" target="_blank"><img src="{f_TitlePic1Path}" width="279" height="153" alt="{f_DocumentNewsTitle}" /></a></div>
-                        <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                        <h1><a href="{c_DocumentNewsUrl}" style="font-weight:{f_DocumentNewsTitleBold};color:{f_DocumentNewsTitleColor}" target="_blank">{f_DocumentNewsTitle}</a></h1>
                         ]]>
                     </item>
                 </icms>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <module id="1"><content><![CDATA[
+        <span style="line-height:180%">只有登陆用户才有浏览记录，<br />
+        请先<a href="/default.php?mod=user&a=login&re_url={ReturnUrl}">[登陆]</a>!</span>
+        ]]></content></module>
+</root>
