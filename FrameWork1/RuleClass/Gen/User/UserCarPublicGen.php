@@ -98,15 +98,16 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenList()
     {
-        $templateFileUrl = "user/user_car_list.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
         $siteId =parent::GetSiteIdByDomain();
-        $tagId = "user_car_list";
         if ($userId > 0) {
+            $templateFileUrl = "user/user_car_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
+
+            $tagId = "user_car_list";
             $userCarPublicData = new UserCarPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
             $userFavoritePublicData = new UserFavoritePublicData();

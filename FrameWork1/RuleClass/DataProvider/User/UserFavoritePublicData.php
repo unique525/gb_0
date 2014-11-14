@@ -53,9 +53,10 @@ class UserFavoritePublicData extends BasePublicData
     public function GetList($userId,$siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($userId > 0){
-            $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf,".self::TableName_UploadFile.
-                            " uf2 WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId LIMIT ".$pageBegin.",".$pageSize.";";
-            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserFavorite." WHERE UserId = :UserId AND SiteId = :SiteId;";
+            $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf LEFT JOIN ".self::TableName_UploadFile.
+                " uf2 ON uf.UserFavoriteUploadFileId = uf2.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserFavorite." uf LEFT JOIN ".self::TableName_UploadFile.
+                " uf2 ON uf.UserFavoriteUploadFileId = uf2.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("SiteId",$siteId);
