@@ -350,6 +350,7 @@ function FormatResultMessage(resultMessage){
  * @param {int} attachWatermark 是否加水印
  * @param {string} inputTextId 传入要设置结果值的input控件id
  * @param {string} previewImageId 传入预览图片控件id
+ * @param {int} uploadFileId 修改时UploadFileId > 0
  */
 function AjaxFileUpload(
     fileElementId,
@@ -361,7 +362,8 @@ function AjaxFileUpload(
     fUploadFile,
     attachWatermark,
     inputTextId,
-    previewImageId
+    previewImageId,
+    uploadFileId
     )
 {
     if(loadingImageId == undefined || loadingImageId == null){
@@ -378,7 +380,7 @@ function AjaxFileUpload(
 
 
     $.ajaxFileUpload({
-        url:'/default.php?mod=upload_file&a=async_upload&file_element_name='+fileElementId+'&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark,
+        url:'/default.php?mod=upload_file&a=async_upload&file_element_name='+fileElementId+'&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark+"&upload_file_id="+uploadFileId,
         secureUri:false,
         fileElementId:fileElementId,
         dataType: 'json',
@@ -553,7 +555,7 @@ function UploadFileFormatHtml(fileName){
 
 function ModifyUploadFileThumb2(uploadFileId,width,height){
     $.ajax({
-        url:"/default.php?mod=upload_file&a=async_create_thumb1&width="+width+"&height="+height+"&upload_file_id="+uploadFileId,
+        url:"/default.php?mod=upload_file&a=async_modify_upload_file_thumb_path2&width="+width+"&height="+height+"&upload_file_id="+uploadFileId,
         secureUri:false,
         dataType:"json",
         success:function(data){
@@ -589,6 +591,7 @@ function CutImg(cutImgForm,uploadFileId){
 }
 
 function GetOneUploadFile(uploadFileId){
+
     $.ajax({
         url:"/default.php?mod=upload_file&a=async_get_one&upload_file_id="+uploadFileId,
         secureUri:false,

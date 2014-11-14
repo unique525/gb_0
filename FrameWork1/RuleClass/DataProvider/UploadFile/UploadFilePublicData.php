@@ -9,16 +9,16 @@
 class UploadFilePublicData extends BasePublicData{
     /**
      * @param $uploadFileId
-     * @param $uploadFileThumbPath1
+     * @param $uploadFilePath
      * @param $userId
      * @return int
      */
-    public function ModifyUploadFileThumbPath1($uploadFileId,$uploadFileThumbPath1,$userId){
+    public function ModifyUploadFilePath($uploadFileId,$uploadFilePath,$userId){
         $result = -1;
         if($uploadFileId > 0){
-            $sql = "UPDATE ".self::TableName_UploadFile." SET UploadFileThumbPath1 = :UploadFileThumbPath1 WHERE UploadFileId = :UploadFileId AND UserId = :UserId;";
+            $sql = "UPDATE ".self::TableName_UploadFile." SET UploadFilePath = :UploadFilePath WHERE UploadFileId = :UploadFileId AND UserId = :UserId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("UploadFileThumbPath1",$uploadFileThumbPath1);
+            $dataProperty->AddField("UploadFilePath",$uploadFilePath);
             $dataProperty->AddField("UploadFileId",$uploadFileId);
             $dataProperty->AddField("UserId",$userId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);

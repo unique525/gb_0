@@ -25,9 +25,9 @@
     <script type="text/javascript">
 
         var bigWidth = {cfg_UserAvatarBigWidth_3};
-        var bigHeight = {cfg_UserAvatarBigWidth_3};
+        var bigHeight = {cfg_UserAvatarBigHeight_3};
         var smallWidth = {cfg_UserAvatarSmallWidth_3};
-        var smallHeight = {cfg_UserAvatarSmallWidth_3};
+        var smallHeight = {cfg_UserAvatarSmallHeight_3};
         var uploadFileId = 0;
         var src = "";
         var tableTypeOfForumTopInfo = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
@@ -47,32 +47,31 @@
         };
 
         window.CutImgCallBack = function(data){
-
-            $.ajax({
-                url:"/default.php?mod=upload_file&a=async_modify_upload_file_thumb_path1_for_cut_image&upload_file_id="
-                    +uploadFileId+"&upload_file_thumb_path="+data["new_image_path"],
-                secureUri:false,
-                dataType:"json",
-                success:function(data){
-                    uploadFileId = data["upload_file_id"];
-                    if(uploadFileId != undefined){
-                        ModifyUploadFileThumb2(uploadFileId,smallWidth,smallHeight);
+            if(data["new_image_path"] != undefined){
+                $.ajax({
+                    url:"/default.php?mod=upload_file&a=async_modify_upload_file_path_for_cut_image&upload_file_id="
+                        +uploadFileId+"&upload_file_path="+data["new_image_path"],
+                    secureUri:false,
+                    dataType:"json",
+                    success:function(data){
+                        uploadFileId = parseInt(data["upload_file_id"]);
+                        if(uploadFileId != undefined && uploadFileId > 0){
+                            ModifyUploadFileThumb2(uploadFileId,smallWidth,smallHeight);
+                        }
+                    },
+                    error: function (data, status, e)
+                    {
+                        alert(e);
                     }
-                },
-                error: function (data, status, e)
-                {
-                    alert(e);
-                }
-            });
+                });
+            }else{
+                alert("头像截图失败");
+            }
         };
 
         window.GetOneCallBack = function(data){
-            if(data["UploadFilePath"] != ""){
-                var avatarSrc = data["UploadFilePath"];
-                src = avatarSrc;
-                $("#avatar").attr("src",avatarSrc);
-            }else{
-                var avatarSrc = {cfg_UserDefaultMaleAvatar_5};
+            if(data["upload_file_path"] != ""){
+                var avatarSrc = data["upload_file_path"];
                 src = avatarSrc;
                 $("#avatar").attr("src",avatarSrc);
             }
@@ -80,15 +79,24 @@
 
         window.ModifyUploadFileThumb2CallBack = function(data){
             if(data["upload_file_id"] > 0){
-                alert("成功");
-                window.open("/default.php?mod=user&a=homepage");
+                $.ajax({
+                    url:"/default.php?mod=user_info&a=async_modify_avatar_upload_file_id&upload_file_id="+uploadFileId,
+                    dataType:"jsonp",
+                    jsonp:"jsonpcallback",
+                    success:function(data){
+
+                        if(data["result"] > 0){
+                            window.location.href = location.href;
+                        }
+                    }
+                });
             }
         };
 
         $(function(){
             getAvatar();
 
-            $("#btnupload").click(function () {
+            $("#btn_upload").click(function () {
 
                 var fileElementId = 'file_upload_to_user_avatar';
 
@@ -104,7 +112,8 @@
                     null,
                     null,
                     null,
-                    null
+                    null,
+                    uploadFileId
                 );
             });
 
@@ -124,11 +133,13 @@
                 jsonp:"jsonpcallback",
                 success:function(data){
                     var result = data["result"];
-                    if(result == 1){
-                        uploadFileId = data["avatar_upload_file_id"];
+                    if(result > 0){
+                        uploadFileId = parseInt(result);
                         GetOneUploadFile(uploadFileId);
                     }else{
-                        alert("获取头像失败");
+                         $("#avatar").attr("alt","您还");
+
+                        //alert("获取头像失败");
                     }
                 }
             });
@@ -158,29 +169,29 @@
             function updatePreview(c){
                 if (parseInt(c.w) > 0)
                 {
-                    var rx = width / c.w;
-                    var ry = height / c.h;
+                    var rx = bigWidth/ c.w;
+                    var ry = bigHeight/ c.h;
                     $('#preview_large').css({
                         width: Math.round(rx * boundx) + 'px',
                         height: Math.round(ry * boundy) + 'px',
-                        marginLeft: '-' + Math.round(ry * c.x) + 'px',
+                        marginLeft: '-' + Math.round(rx * c.x) + 'px',
                         marginTop: '-' + Math.round(ry * c.y) + 'px'
                     });
-                    var rx_small = 50 / c.w;
-                    var ry_small = 50 / c.h;
+                    var rx_small = smallWidth / c.w;
+                    var ry_small = smallHeight / c.h;
                     $('#preview_small').css({
                         width: Math.round(rx_small * boundx) + 'px',
-                        height: Math.round(rx_small * boundy) + 'px',
+                        height: Math.round(ry_small * boundy) + 'px',
                         marginLeft: '-' + Math.round(rx_small * c.x) + 'px',
-                        marginTop: '-' + Math.round(rx_small * c.y) + 'px'
+                        marginTop: '-' + Math.round(ry_small * c.y) + 'px'
                     });
                     $('#x').val(c.x);
                     $('#y').val(c.y);
                     $('#w').val(c.w);
                     $('#h').val(c.h);
                 }
-                $('#height').val(height);
-                $('#width').val(width);
+                $('#height').val(bigHeight);
+                $('#width').val(bigWidth);
                 $('#upload_file_id').val(uploadFileId);
                 $("#preview_large").attr("src",src);
                 $("#preview_small").attr("src",src);
@@ -243,12 +254,13 @@
                 <td width="25" rowspan="9" align="left" ></td>
                 <td width="439" rowspan="9" align="left" bgcolor="#f4f4f4">
                     <input id="file_upload_to_user_avatar" name="file_upload_to_user_avatar" type="file" class="input1" style="margin:20px; background:#ffffff; "/>
-                    <input id="btnupload" type="button" value="上传""/>
+                    <input id="btn_upload" type="button" value="上传""/>
                     <img id="loadingOfUserAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                 </td>
                 <td width="397" align="left" bgcolor="#f4f4f4" ><div style="margin:15px; padding:10px 20px;color: #585858;font-size: 12px; line-height:30px; border-left:1px dashed #CCCCCC"><p ><span  style="color:#CC0000">*</span>  支持jpg、png图片格式</p>
                         <p><span  style="color:#CC0000">*</span>  请上传宽高比不大于2的图片</p>
-                        <p><span  style="color:#CC0000">*</span>  请上传宽度大于200像素,高度大于200像素的图片</p></div>                           </td>
+                        <p><span  style="color:#CC0000">*</span>  请上传宽度大于200像素,高度大于200像素的图片</p></div>
+                </td>
             </tr>
         </table>
     </div>
@@ -261,12 +273,12 @@
                             <img src="" id="target" alt="Flowers"/>
                         </td>
                         <td valign="top">
-                            <div style="width:200px;height:200px;overflow:hidden;">
+                            <div style="width:{cfg_UserAvatarBigWidth_3}px;height:{cfg_UserAvatarBigHeight_3}px;overflow:hidden;">
                                 <img src="" id="preview_large" alt="中图预览" class="jcrop-preview" />
                             </div>
                         </td>
                         <td valign="top">
-                            <div style="width:50px;height:50px;overflow:hidden;">
+                            <div style="width:{cfg_UserAvatarSmallWidth_3}px;height:{cfg_UserAvatarSmallHeight_3}px;overflow:hidden;">
                                 <img src="" id="preview_small" alt="小图预览" class="jcrop-preview" />
                             </div>
                         </td>

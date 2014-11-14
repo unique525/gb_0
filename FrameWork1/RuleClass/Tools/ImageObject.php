@@ -441,13 +441,9 @@ class ImageObject {
         if(intval($jpegQuality)>100){
             $jpegQuality = 100;
         }
-        //if($sourceFileExName !== "jpg"){
-        //    return -1;//只处理jpg图像,非jpg图像返回错误代码-1
-        //}
-
 
         if ($sourceImgPath === "") {
-            return ""; //文件名错误
+            return -1; //文件名错误
         }
 
         $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $sourceImgPath);
@@ -456,18 +452,25 @@ class ImageObject {
         $sourceFileName = strtolower(FileObject::GetName($sourceImgPath));
 
         if($sourceFileExName === "" || $sourceFileName === ""){
-            return "";
+            return -2;
         }
         $newFileName = $sourceFileName."_".$addFileName;
 
-        $toFile = $src . $newFileName."." . $sourceFileExName;
+        $toFile = PHYSICAL_PATH.$sourceFilePath . DIRECTORY_SEPARATOR .$newFileName."." . $sourceFileExName;
         $imgR = imagecreatefromjpeg($src);
         $dstR = ImageCreateTrueColor($targetWidth, $targetHeight);
-        imagecopyresampled($dstR, $imgR, 0, 0, $sourceX, $sourceY, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
-        imagejpeg($dstR, $toFile, $jpegQuality);
+        if($imgR == false || $dstR == false){
+            return -3;
+        }
+        $resultCopy = imagecopyresampled($dstR, $imgR, 0, 0, $sourceX, $sourceY, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+        $resultCreate = imagejpeg($dstR, $toFile, $jpegQuality);
         imagedestroy($imgR);
         imagedestroy($dstR);
-        $result = str_ireplace(DIRECTORY_SEPARATOR,"/",$sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
+        if( $resultCopy == true && $resultCreate == true){
+            $result = str_ireplace(DIRECTORY_SEPARATOR,"/",$sourceFilePath . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName);
+        }else{
+            $result = -4;
+        }
         return $result;
         //}
     }

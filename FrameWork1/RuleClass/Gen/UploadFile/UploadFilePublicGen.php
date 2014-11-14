@@ -34,8 +34,8 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_cut_image":
                 $result = self::AsyncCutImage();
                 break;
-            case "async_modify_upload_file_thumb_path1_for_cut_image":
-                $result = self::AsyncModifyUploadFileThumbPath1ForCutImage();
+            case "async_modify_upload_file_path_for_cut_image":
+                $result = self::AsyncModifyUploadFilePathForCutImage();
                 break;
         }
 
@@ -161,12 +161,12 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
         if ($uploadFileId > 0 && $width > 0) {
             if ($height <= 0) {
-                $resultOfCreateThumb1 = parent::GenUploadFileThumb2($uploadFileId, $width);
+                $resultOfCreateThumb2 = parent::GenUploadFileThumb2($uploadFileId, $width);
             } else {
-                $resultOfCreateThumb1 = parent::GenUploadFileThumb2($uploadFileId, $width, $height);
+                $resultOfCreateThumb2 = parent::GenUploadFileThumb2($uploadFileId, $width, $height);
             }
 
-            if ($resultOfCreateThumb1 > 0) {
+            if ($resultOfCreateThumb2 > 0) {
                 $uploadFileData = new UploadFileData();
                 $uploadFile = $uploadFileData->Fill($uploadFileId);
                 $result = $uploadFile->GetJson();
@@ -212,16 +212,34 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         return '{"new_image_path":"'.Format::FormatJson($newImagePath).'"}';
     }
 
-    private function AsyncModifyUploadFileThumbPath1ForCutImage(){
+    private function AsyncModifyUploadFilePathForCutImage(){
         $uploadFileId = Control::GetRequest("upload_file_id",0);
-        $uploadFileThumbPath1 = Control::GetRequest("upload_file_thumb_path","");
+        $uploadFilePath = Control::GetRequest("upload_file_path","");
         $userId =Control::GetUserId();
 
-        $result = -1;
-        if($uploadFileId > 0 && $uploadFileThumbPath1 != ""){
+        if($uploadFileId > 0 && $uploadFilePath != ""){
             $uploadFilePublicData = new UploadFilePublicData();
-            $result = $uploadFilePublicData->ModifyUploadFileThumbPath1($uploadFileId,$uploadFileThumbPath1,$userId);
+            $result = $uploadFilePublicData->ModifyUploadFilePath($uploadFileId,$uploadFilePath,$userId);
+            if ($result > 0) {
+                $uploadFileData = new UploadFileData();
+                $uploadFile = $uploadFileData->Fill($uploadFileId);
+                $result = $uploadFile->GetJson();
+            } else {
+                $result = '{';
+                $result .= '"error":"system error",';
+                $result .= '"result_html":"",';
+                $result .= '"upload_file_id":"",';
+                $result .= '"upload_file_path":""';
+                $result .= '}';
+            }
+        } else {
+            $result = '{';
+            $result .= '"error":"param error",';
+            $result .= '"result_html":"",';
+            $result .= '"upload_file_id":"",';
+            $result .= '"upload_file_path":""';
+            $result .= '}';
         }
-        return '{"result":'.$result.'}';
+        return $result;
     }
 } 
