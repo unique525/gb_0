@@ -90,6 +90,9 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
                 $result = Format::FixJsonEncode($arrList);
+
+                print_r($result);
+die();
                 $pagerButton = str_ireplace('"','\"',$pagerButton);
                 $pagerButton = str_ireplace('\r','',$pagerButton);
                 $pagerButton = str_ireplace('\n','',$pagerButton);
