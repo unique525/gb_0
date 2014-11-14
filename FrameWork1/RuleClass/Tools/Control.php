@@ -211,6 +211,44 @@ class Control {
         setcookie("USERNAME", "", time() - 1);
     }
 
+
+    /**
+     * 写入会员浏览记录cookie
+     * @param int $userId 会员id
+     * @param string $content cookie内容
+     * @param int $hour 保存时间（单位小时），默认24小时
+     */
+    public static function SetUserExploreCookie($userId, $content, $hour = 24) {
+        $cookieStr = base64_encode(Format::FixJsonEncode($content));
+        //保存到cookie当中
+        setcookie('UserExploreHistory'.'_'.$userId, $cookieStr, time() + $hour * 3600);
+    }
+
+    /**
+     * 从cookie中取得会员浏览记录
+     * @param int $userId 会员id
+     * @return string 会员浏览记录,没找到时返回""
+     */
+    public static function GetUserExploreCookie($userId) {
+        if (isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
+
+            $cookieStr = $_COOKIE['UserExploreHistory'.'_'.$userId];
+            return Format::FixJsonDecode(base64_decode($cookieStr));
+
+            //return Des::Decrypt(urldecode($_COOKIE["USERNAME"]),"su141022");
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * 删除会员浏览记录COOKIE
+     * @param int $userId 会员id
+     */
+    public static function DelUserExploreCookie($userId) {
+        setcookie('UserExploreHistory'.'_'.$userId, 0, time() - 1);
+    }
+
     /**
      * 写入后台管理员cookie
      * @param int $manageUserId 后台帐号id

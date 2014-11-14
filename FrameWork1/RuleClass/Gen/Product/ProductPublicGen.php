@@ -25,9 +25,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "ajax_list":
-                $result = self::AjaxList();
-                break;
             default:
                 break;
         }
@@ -226,20 +223,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    /**
-     * ajax方法得到产品列表数据
-     * @return string 产品列表HTML
-     */
-    private function AjaxList()
-    {
-        $channelId = Control::GetRequest("channel_id", 0);
-        $order = Control::GetRequest("order", "");
-        $top = Control::GetRequest("ps", 12);
-        $ProductPublicData = new ProductPublicData();
-        $arrList = $ProductPublicData->GetList($channelId,$order,$top);
-        $tempArrList = json_encode($arrList);
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $tempArrList . '})';
-    }
 
 }
 
