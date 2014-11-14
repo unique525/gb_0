@@ -187,10 +187,9 @@
     <dl class="pxlist" style="padding-left:20px;">
         <dt>排序：</dt>
         <dd>
-            <div class="price-2"  style="width: 360px">
-                <a href="javascript:;" title="default" class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="javascript:;" class="listup"  title="time"  >时间</a> <a href="javascript:;"  title="sale"  class="listup"  >销量</a> <a href="javascript:;"   title="price" class="listup" >价格</a> <a href="javascript:;"   title="comment" hidefocus="true" class="listup"  >评论</a>
+            <div class="price-2"  style="width: 360px"> <a href="javascript:;" title="default" class="listup on"  style="background-image:none;padding-left:10px">默认</a> <a href="javascript:;" class="listup"  title="time"  >时间</a> <a href="javascript:;"  title="sale"  class="listup"  >销量</a> <a href="javascript:;"   title="price" class="listup" >价格</a> <a href="javascript:;"   title="comment" hidefocus="true" class="listup"  >评论</a>
             </div>
-            <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">    <a href="#">&lt;</a>    2/9    <a class="disabledr02" href="#" >下一页&nbsp;&gt; </a>    </div></div>
+            <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">      </div></div>
             <span class="clear"></span>
         </dd>
     </dl>
