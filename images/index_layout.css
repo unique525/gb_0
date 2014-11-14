@@ -74,7 +74,9 @@
 .title4{ line-height:45px; font-family:"微软雅黑", "黑体"; font-size:16px; color:#fff; text-indent:20px;}
 .title4 a,.title4 a:hover{color: #ffffff; text-decoration: none;}
 .blue_bg{ background:#0bc6d3;}
+.blue_top{ border-top:2px solid #0bc6d3;}
 .purple_bg{ background:#921a8a;}
+.purple_top{ border-top:2px solid #921a8a;}
 .other_part li{ float:left; width:279px; padding-right:27px;}
 .other_part .last{ padding-right:0px;}
 .other_part li h1{ display:block; background:#f8f8f8; padding-left:15px;}
