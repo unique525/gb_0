@@ -67,7 +67,7 @@ img,input{ vertical-align:middle;border:none;}
 .leftsidebar2 a{height:37px;color:#00A93C;font-size:14px;}
 .leftsidebar2 a:hover{display:block;color:#8A8A8A;background:#F0F0F0;text-decoration:none;}
 
-.rightbar{height:66px;border:solid 1px #D4D4D4;border-width:0px 0px 1px 0px;}
+.rightbar{border:solid 1px #D4D4D4;border-width:0px 0px 1px 0px;}
 .rightbar2{margin-left:48px; background:url(icon1.png) no-repeat; text-indent:35px;font-size:14px;line-height:66px;}
 
 .rightmember{padding:40px 0px 0px 0px;width:893px;margin:0px auto;}
