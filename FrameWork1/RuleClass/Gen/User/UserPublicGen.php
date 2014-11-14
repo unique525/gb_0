@@ -41,6 +41,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "login":
                 $result = self::GenLogin();
                 break;
+            case "logout":
+                $result = self::GenLogout();
+                break;
             case "register":
                 $result = self::GenRegister();
                 break;
@@ -75,6 +78,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         return $templateContent;
+    }
+
+    private function GenLogout(){
+        Control::DelUserCookie();
+        session_start();
+        session_destroy();
+        Control::GoUrl("/");
     }
 
     private function GenRegister(){

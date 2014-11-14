@@ -327,6 +327,59 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 #leftmenu>ul>li>ul>li ul>dd :hover{color:#56CC0E;font-family:"Microsoft YaHei";}
 #leftmenu>ul>li>ul>li ul>dd>span{padding:0px 8px;}
 
+
+
+
+
+#leftmenu2{width:194px;height:40px; background:url(goods.png) no-repeat; float:left;color:#FFFFFF}
+#leftmenu2 ul>li>span{ padding-left:58px;font-size:16px;font-family:"Microsoft YaHei"; font-weight:bold; color:#FFF;line-height:38px;}
+#leftmenu2 a{
+    text-decoration:none;
+    font-size:14px;
+    display:inline;
+}
+#leftmenu2 ul{
+    text-align:left;
+}
+#leftmenu2 .arrow{ /* 菜单项的右侧小箭头 */
+    float:right;
+    padding-right:5px;
+}
+#leftmenu2>ul{
+    height:30px;
+} /* 即使没有菜单项也能保持顶级菜单栏的高度。 */
+/* 一级菜单 */
+#leftmenu2>ul>li{
+    display:inline-block;
+    position:relative;
+    line-height:30px;
+}
+#leftmenu2>ul>li>a{color:#fff;}
+#leftmenu2>ul>li:hover{}
+/* 下拉的菜单栏 */
+#leftmenu2>ul>li ul{
+    width:194px;
+    position:absolute;
+    z-index: 100;
+
+    background:#00A93C;
+}
+/* 下拉菜单的菜单项 */
+#leftmenu2>ul>li>ul li{padding-left:5px; position:relative; line-height:35px; font-weight:bold; border:solid 1px #2BB85D;border-width:0px 0px 1px 0px;font-family:"Microsoft YaHei";}
+#leftmenu2>ul>li>ul li>a{color:#fff;margin-left:10px}
+#leftmenu2>ul>li>ul>li:hover{background:#56CC0E;}
+/* 三级及以下的菜单项的定位 */
+#leftmenu2>ul>li>ul>li ul{left:194px; top:0px; background:url(classifybg.png) repeat;width:278px;}
+#leftmenu2>ul>li>ul>li ul>li{color:#595959; font-weight:bold;font-size:12px; border: solid 1px #538E1A;border-width:0px 0px 1px 0px;font-family:"Microsoft YaHei";}
+#leftmenu2>ul>li>ul>li ul>li>a{color:#595959;font-weight:bold;font-size:12px;}
+#leftmenu2>ul>li>ul>li ul>li>span{padding-left:0px;margin-left:10px;color:#595959;font-weight:bold;font-size:12px;}
+#leftmenu2>ul>li>ul>li ul>dd{width:230px;margin:0px auto;padding:5px;line-height:22px;font-size:12px;color:#8A8A8A;font-family:"Microsoft YaHei";}
+#leftmenu2>ul>li>ul>li ul>dd>a{font-size:12px;color:#8A8A8A;font-family:"Microsoft YaHei"; display: inline-block; border-right:1px solid #8a8a8a; padding:0 8px; height:12px; line-height: 12px;}
+#leftmenu2>ul>li>ul>li ul>dd :hover{color:#56CC0E;font-family:"Microsoft YaHei";}
+#leftmenu2>ul>li>ul>li ul>dd>span{padding:0px 8px;}
+
+
+
 /* pager css */
 #pager_btn{margin-top:3px;font-size:16px;}
 #pager_btn a{font-size:16px;}

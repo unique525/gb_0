@@ -757,18 +757,13 @@ class BasePublicGen extends BaseGen {
         $userId = Control::GetUserId();
         if ($userId > 0) {
             if ($tableType > 0) {
-                //$arrUserExploreList = null;
-                //$arrUserExploreListStand = null;
-                //$userExploreCollection = new UserExploreCollection();
                 switch ($tagWhere) {
-                    case "channel":
-                        $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
-                        break;
                     default :
                         //new
                         $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
                         break;
                 }
+
                 if (count($userExploreCollection->UserExplores)>0) {
                     Template::ReplaceList($tagContent, $userExploreCollection->UserExplores, $tagId);
                     //把对应ID的CMS标记替换成指定内容
@@ -781,7 +776,9 @@ class BasePublicGen extends BaseGen {
             }
         }
         else {
-            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
+            $showMessage = Language::Load("user_explore",1);
+            $showMessage = str_ireplace("{ReturnUrl}", urlencode($_SERVER["REQUEST_URI"]),$showMessage);
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $showMessage);
         }
 
         return $templateContent;
@@ -804,7 +801,6 @@ class BasePublicGen extends BaseGen {
 
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
-
             if (strlen(Control::GetUserExploreCookie($userId))>0) {
 
             } else {
@@ -823,6 +819,8 @@ class BasePublicGen extends BaseGen {
             $userExplore->Price = $price;
             $userExploreCollection->AddField($userExplore->ConvertToArray());
             //存储为COOKIE
+
+
             Control::SetUserExploreCookie($userId, $userExploreCollection->UserExplores, 100);
         }
 

@@ -227,7 +227,7 @@ class Control {
     /**
      * 从cookie中取得会员浏览记录
      * @param int $userId 会员id
-     * @return string 会员浏览记录,没找到时返回""
+     * @return array 会员浏览记录
      */
     public static function GetUserExploreCookie($userId) {
         if (isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
@@ -237,7 +237,7 @@ class Control {
 
             //return Des::Decrypt(urldecode($_COOKIE["USERNAME"]),"su141022");
         } else {
-            return "";
+            return null;
         }
     }
 
