@@ -203,8 +203,9 @@ class DocumentNewsPublicData extends BasePublicData {
             ORDER BY Sort DESC, PublishDate DESC
             LIMIT " . $pageBegin . "," . $pageSize . "";
 
+
         $dataProperty->AddField("State", $state);
-        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
 
         $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE State=:State " . $searchSql;

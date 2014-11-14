@@ -69,6 +69,7 @@
 </head>
 
 <body>
+<span id="top"></span>
 <div class="head">
     <pre_temp id="3"></pre_temp>
     <pre_temp id="4"></pre_temp>
@@ -258,7 +259,7 @@
 <div class="part_3 wrapper">
     <div class="box_1">
         <div class="left left_bar">
-            <div class="title3 green_bg">每日生鲜</div>
+            <div class="title3 green_bg">每日生鲜<span id="channel_27"></span></div>
             <div class="nav">
                 <ul>
                 <icms id="channel_27" type="channel_list" where="parent">
@@ -326,7 +327,7 @@
     </div>
     <div class="box_1">
         <div class="left left_bar">
-            <div class="title3 red_bg">时令水果</div>
+            <div class="title3 red_bg">时令水果<span id="channel_28"></span></div>
             <div class="nav">
                 <ul>
                     <icms id="channel_28" type="channel_list" where="parent">
@@ -390,15 +391,147 @@
         </div>
         <div class="clean"></div>
     </div>
+    <div class="box_1">
+        <div class="left left_bar">
+            <div class="title3 blue_bg">家居用品<span id="channel_33"></span></div>
+            <div class="nav">
+                <ul>
+                    <icms id="channel_33" type="channel_list" where="parent">
+                        <item>
+                            <![CDATA[
+                            <li><span class="sec_title">{f_ChannelName}</span>
+                                <ul>
+                                    {child}
+                                </ul>
+                            </li>
+                            ]]>
+                        </item>
+                        <child>
+                            <![CDATA[
+                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                            ]]>
+                        </child>
+                    </icms>
+                </ul>
+                <div class="clean"></div>
+            </div>
+        </div>
+        <div class="left middle blue_top">
+            <div class="sales">
+
+                <ul>
+                    <icms id="product_33" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="160" height="160" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
+                </ul>
+            </div>
+        </div>
+        <div class="right_bar right">
+            <div class="sales">
+                <div class="right_ad">
+                    <icms id="channel_135" type="document_news_list" top="2,1" title="36">
+                        <item>
+                            <![CDATA[
+                            <div class="tuijian">
+                                <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                                <p><a href="{c_DocumentNewsUrl}">{f_DocumentNewsIntro}</a></p>
+                            </div>
+                            <a href="{c_DocumentNewsUrl}"><img src="{f_TitlePic1Path}" width="241" height="349" /></a>
+                            ]]>
+                        </item>
+                    </icms>
+                </div>
+            </div>
+        </div>
+        <div class="clean"></div>
+    </div>
+    <div class="box_1">
+        <div class="left left_bar">
+            <div class="title3 purple_bg">办公家电<span id="channel_35"></span></div>
+            <div class="nav">
+                <ul>
+                    <icms id="channel_35" type="channel_list" where="parent">
+                        <item>
+                            <![CDATA[
+                            <li><span class="sec_title">{f_ChannelName}</span>
+                                <ul>
+                                    {child}
+                                </ul>
+                            </li>
+                            ]]>
+                        </item>
+                        <child>
+                            <![CDATA[
+                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                            ]]>
+                        </child>
+                    </icms>
+                </ul>
+                <div class="clean"></div>
+            </div>
+        </div>
+        <div class="left middle purple_top">
+            <div class="sales">
+                <ul>
+                    <icms id="product_35" type="product_list" where="AllChild" top="4">
+                        <item>
+                            <![CDATA[
+                            <li>
+                                <div class="left">
+                                    <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="160" height="160" /></a>
+                                </div>
+                                <div class="right">
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                </div>
+                                <div class="clean"></div>
+                            </li>
+                            ]]>
+                        </item>
+                    </icms>
+                </ul>
+            </div>
+        </div>
+        <div class="right_bar right">
+            <div class="sales">
+                <div class="right_ad">
+                    <icms id="channel_135" type="document_news_list" top="3,1" title="36">
+                        <item>
+                            <![CDATA[
+                            <div class="tuijian">
+                                <h1><a href="{c_DocumentNewsUrl}" target="_blank">{f_DocumentNewsTitle}</a></h1>
+                                <p><a href="{c_DocumentNewsUrl}">{f_DocumentNewsIntro}</a></p>
+                            </div>
+                            <a href="{c_DocumentNewsUrl}"><img src="{f_TitlePic1Path}" width="241" height="349" /></a>
+                            ]]>
+                        </item>
+                    </icms>
+                </div>
+            </div>
+        </div>
+        <div class="clean"></div>
+    </div>
     <div class="side_tag">
         <ul>
-            <li><a href="#">每日生鲜</a></li>
-            <li><a href="#">时令水果</a></li>
-            <li><a href="#">每日生鲜</a></li>
-            <li><a href="#">每日生鲜</a></li>
-            <li><a href="#">每日生鲜</a></li>
+            <li><a href="#channel_27">每日生鲜</a></li>
+            <li><a href="#channel_28">时令水果</a></li>
+            <li><a href="#channel_33">家居用品</a></li>
+            <li><a href="#channel_35">办公家电</a></li>
             <li class="go_user"><a href="/default.php?mod=user&a=homepage">用户中心</a></li>
-            <li class="go_top"><a href="#">回到顶部</a></li>
+            <li class="go_top"><a href="#top">回到顶部</a></li>
         </ul>
     </div>
 </div>
