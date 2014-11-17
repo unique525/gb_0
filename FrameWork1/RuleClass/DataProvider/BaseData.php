@@ -579,6 +579,45 @@ class BaseData
      */
     const TableId_Information = "InformationId";
 
+
+    /**
+     * 电子报 数据表名
+     */
+    const TableName_Newspaper = "cst_newspaper";
+    /**
+     * 电子报 数据表自增字段名
+     */
+    const TableId_Newspaper = "NewspaperId";
+
+    /**
+     * 电子报版面 数据表名
+     */
+    const TableName_NewspaperPage = "cst_newspaper_page";
+    /**
+     * 电子报版面 数据表自增字段名
+     */
+    const TableId_NewspaperPage = "NewspaperPageId";
+
+    /**
+     * 电子报文章 数据表名
+     */
+    const TableName_NewspaperArticle = "cst_newspaper_article";
+    /**
+     * 电子报文章 数据表自增字段名
+     */
+    const TableId_NewspaperArticle = "NewspaperArticleId";
+
+    /**
+     * 电子报文章图片 数据表名
+     */
+    const TableName_NewspaperArticlePic = "cst_newspaper_article_pic";
+    /**
+     * 电子报文章图片 数据表自增字段名
+     */
+    const TableId_NewspaperArticlePic = "NewspaperArticlePicId";
+
+
+
     /**
      * 调试 数据表名
      */
