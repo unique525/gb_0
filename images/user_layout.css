@@ -40,3 +40,16 @@
 .order_detail .product_list .product_fullprice,.order_detail .product_list .product_cutprice,.order_detail .product_list .product_finalprice{ width:80px; text-align: center;}
 .order_detail .product_list .product_num,.order_detail .product_list .product_unit{ width:50px; text-align: center;}
 /*---------订单detail-----------*/
+
+/*----------地址管理--------------*/
+.add_list td{ height:50px; vertical-align:middle; border-bottom:1px solid #efefef;}
+.add_list .add_title td{ background:#efefef; border-bottom:1px solid #00a93c; text-align:center;}
+.add_list .receive_id{ width:100px; text-align: center;}
+.add_list .add_title .address{ width:300px;}
+.post_code,.mobile,.home_tel,.opretion{ width:100px; text-align:center;}
+.opretion span,.add_new dt span{ color:#ff3d00;}
+.add_new{ padding:25px; border:1px dashed #ccc; width:770px;}
+.add_new dl{ padding:10px 0;}
+.add_new dt{ float:left; width:80px;}
+.add_new dl .adr_prompt{ margin-left:80px; padding-top:10px;}
+/*----------地址管理--------------*/
