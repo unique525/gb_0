@@ -300,7 +300,7 @@
                 <item>
                     <![CDATA[
                     <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90" height="90" ></a>
-                        <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
+                        <p><a href="#" target="_blank" >{f_ProductName}</a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
 
                     ]]>
                 </item>
@@ -365,9 +365,9 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice show_price"></span></span></p>
-                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
-                                <p class="price_n"><span class="chaprice">已优惠：<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price"></span></span></p>
+                                <p class="price_n">原　价：￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
+                                <p class="price_n"><span class="chaprice">已优惠：￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
                         <td align="left">

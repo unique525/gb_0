@@ -139,7 +139,7 @@ $(function() {
         var dialogContent = $("#dialog_content");
         dialogContent.html("开始发布");
 
-        $.post("/default.php?secu=manage&mod=document_news&m=publish&document_news_id=" + documentNewsId + "", {
+        $.post("/default.php?secu=manage&mod=document_news&m=async_publish&document_news_id=" + documentNewsId + "", {
             resultbox: $(this).html()
         }, function(result) {
             dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');

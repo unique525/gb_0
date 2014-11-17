@@ -32,7 +32,10 @@ class PublishLogManageData extends BaseManageData
      * 对应表类型：资讯
      */
     const TABLE_TYPE_DOCUMENT_NEWS = 2;
-
+    /**
+     * 对应表类型：自定义页面
+     */
+    const TABLE_TYPE_SITE_CONTENT = 3;
 
     /**
      * 新增发布日志
