@@ -31,6 +31,9 @@ class NewspaperPublicGen extends BasePublicGen {
         $templateContent = "";
         if($channelId>0){
 
+
+            $publishDate = Control::GetRequest("publish_date", "");
+
             $templateFileUrl = "newspaper/newspaper_page_one.html";
             $templateName = "default";
             $templatePath = "front_template";
@@ -38,7 +41,12 @@ class NewspaperPublicGen extends BasePublicGen {
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
             $newspaperPublicData = new NewspaperPublicData();
-            $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
+            if(strlen($publishDate)>0){
+                $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
+            }else{
+                $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
+            }
+
 
             if($currentNewspaperId>0){
 
