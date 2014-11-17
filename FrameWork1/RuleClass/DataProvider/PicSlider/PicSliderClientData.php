@@ -1,5 +1,5 @@
 <?php
 
-class PicSliderClientData {
+class PicSliderClientData extends BaseClientData {
 
 } 
