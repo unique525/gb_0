@@ -25,9 +25,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "ajax_list":
-                $result = self::AjaxList();
-                break;
             default:
                 break;
         }
@@ -43,7 +40,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
-        $templateContent = self::LoadListTemp($temp,$channelId);
+        $templateContent = self::LoadListTemp($temp, $channelId);
 
         parent::ReplaceFirst($templateContent);
 
@@ -54,7 +51,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         Template::ReplaceOne($templateContent, $arrOne);
 
         $channelId = Control::GetRequest("channel_id", 0);
-        $order= Control::GetRequest("order", 0);
+        $order = Control::GetRequest("order", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
@@ -69,7 +66,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
                 $styleNumber = 1;
-                $templateFileUrl = "pager/pager_style".$styleNumber.".html";
+                $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
                 $templateName = "default";
                 $templatePath = "front_template";
                 $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -89,7 +86,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    private function LoadListTemp($temp,$channelId)
+    private function LoadListTemp($temp, $channelId)
     {
         $templateFileUrl = "product/product_list.html";
         $templateName = "default";
@@ -108,115 +105,123 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $productId = Control::GetRequest("product_id", 0);
-        $templateContent = self::loadDetailTemp($temp,$channelId);
+        $templateContent = "";
 
-        parent::ReplaceFirst($templateContent);
+        if ($productId > 0) {
+            $templateContent = self::loadDetailTemp($temp, $channelId);
 
-        //加载产品类别数据
-        $channelPublicData = new ChannelPublicData();
-        $arrOne = $channelPublicData->GetOne($channelId);
-        Template::ReplaceOne($templateContent, $arrOne);
+            parent::ReplaceFirst($templateContent);
 
-        //加载产品表数据
-        $productPublicData = new ProductPublicData();
-        $arrOne = $productPublicData->GetOne($productId);
-        Template::ReplaceOne($templateContent, $arrOne);
+            //加载产品类别数据
+            $channelPublicData = new ChannelPublicData();
+            $arrOne = $channelPublicData->GetOne($channelId);
+            Template::ReplaceOne($templateContent, $arrOne);
 
-        //父模板替换
-        $templateContent = parent::ReplaceTemplate($templateContent);
-        //把对应ID的CMS标记替换成指定内容
-        //替换子循环里的<![CDATA[标记
-        $templateContent = str_ireplace("<icms_child", "<icms", $templateContent);
-        $templateContent = str_ireplace("</icms_child>", "</icms>", $templateContent);
-        $templateContent = str_ireplace("<item_child", "<item", $templateContent);
-        $templateContent = str_ireplace("</item_child>", "</item>", $templateContent);
-        $templateContent = str_ireplace("[CDATA]", "<![CDATA[", $templateContent);
-        $templateContent = str_ireplace("[/CDATA]", "]]>", $templateContent);
-        //子模板替换
-        $templateContent = parent::ReplaceTemplate($templateContent);
+            //加载产品表数据
+            $productPublicData = new ProductPublicData();
+            $arrOne = $productPublicData->GetOne($productId);
 
-        //产品评价内容替换
-        //----------begin-----------
-        $productCommentListTagId = "product_comment_list";
-        $productCommentAllCount = 0;
-        $productCommentPageIndex = Control::GetRequest("pc_pi",1);
-        $productCommentPageSize = Control::GetRequest("pc_ps",10);
-        $productCommentPageBegin = ($productCommentPageIndex - 1) * $productCommentPageSize;
+            if(count($arrOne)>0){
+                Template::ReplaceOne($templateContent, $arrOne);
 
-        $productCommentPublicData = new ProductCommentPublicData();
-        $arrProductCommentList = $productCommentPublicData->GetListOfParent
-              (
-                $productId,
-                $productCommentAllCount,
-                $productCommentPageBegin,
-                $productCommentPageSize
-              );
+                //存入用户浏览记录进CooKie
+                $tableId = $productId;
+                $tableType = UserExploreData::TABLE_TYPE_PRODUCT;
+                $userId = Control::GetUserId();
+                $url = $_SERVER['REQUEST_URI'];
+                $title = $arrOne["ProductName"];
+                $titlePic = $arrOne["UploadFileThumbPath3"];
+                $price = $arrOne["SalePrice"];
+                parent::CreateUserExploreCookie($userId, $tableId, $tableType, $url, $title, $titlePic, $price);
 
-        $strParentIds = "";
-        for($i=0;$i<count($arrProductCommentList);$i++){
-            if($i<count($arrProductCommentList)-1){
-                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"].",";
-            }else{
-                $strParentIds = $strParentIds.$arrProductCommentList[$i]["ProductCommentId"];
+                //父模板替换
+                $templateContent = parent::ReplaceTemplate($templateContent);
+                //把对应ID的CMS标记替换成指定内容
+                //替换子循环里的<![CDATA[标记
+                $templateContent = str_ireplace("<icms_child", "<icms", $templateContent);
+                $templateContent = str_ireplace("</icms_child>", "</icms>", $templateContent);
+                $templateContent = str_ireplace("<item_child", "<item", $templateContent);
+                $templateContent = str_ireplace("</item_child>", "</item>", $templateContent);
+                $templateContent = str_ireplace("[CDATA]", "<![CDATA[", $templateContent);
+                $templateContent = str_ireplace("[/CDATA]", "]]>", $templateContent);
+                //子模板替换
+                $templateContent = parent::ReplaceTemplate($templateContent);
+
+                //产品评价内容替换
+                //----------begin-----------
+                $productCommentListTagId = "product_comment_list";
+                $productCommentAllCount = 0;
+                $productCommentPageIndex = Control::GetRequest("pc_pi", 1);
+                $productCommentPageSize = Control::GetRequest("pc_ps", 10);
+                $productCommentPageBegin = ($productCommentPageIndex - 1) * $productCommentPageSize;
+
+                $productCommentPublicData = new ProductCommentPublicData();
+                $arrProductCommentList = $productCommentPublicData->GetListOfParent
+                    (
+                        $productId,
+                        $productCommentAllCount,
+                        $productCommentPageBegin,
+                        $productCommentPageSize
+                    );
+
+                $strParentIds = "";
+                for ($i = 0; $i < count($arrProductCommentList); $i++) {
+                    if ($i < count($arrProductCommentList) - 1) {
+                        $strParentIds = $strParentIds . $arrProductCommentList[$i]["ProductCommentId"] . ",";
+                    } else {
+                        $strParentIds = $strParentIds . $arrProductCommentList[$i]["ProductCommentId"];
+                    }
+                }
+                $arrChildProductCommentList = $productCommentPublicData->GetListOfChild($strParentIds);
+
+                if (count($arrProductCommentList) > 0) {
+                    Template::ReplaceList($templateContent, $arrProductCommentList, $productCommentListTagId, "icms", $arrChildProductCommentList, "ProductCommentId", "ParentId");
+                } else {
+                    Template::RemoveCustomTag($templateContent, $productCommentListTagId);
+                }
+
+                $styleNumber = 1;
+                $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+                $isJs = FALSE;
+                $navUrl = "/default.php?mod=product&a=detail&channel_id=" . $channelId . "&product_id=" . $productId . "&pc_pi={0}&pc_ps=" . $productCommentPageSize . "#comment";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pageIndexName = "pc_pi";
+                $pageSizeName = "pc_ps";
+                $showGoTo = false;
+                $pagerButton = Pager::ShowPageButton
+                    (
+                        $pagerTemplate,
+                        $navUrl,
+                        $productCommentAllCount,
+                        $productCommentPageSize,
+                        $productCommentPageIndex,
+                        $styleNumber,
+                        $isJs,
+                        $jsFunctionName,
+                        $jsParamList,
+                        $pageIndexName,
+                        $pageSizeName,
+                        $showGoTo
+                    );
+                $templateContent = str_ireplace("{product_comment_pager_button}", $pagerButton, $templateContent);
+                //----------end-------------
+
+                $patterns = '/\{s_(.*?)\}/';
+                $templateContent = preg_replace($patterns, "", $templateContent);
+                parent::ReplaceEnd($templateContent);
             }
+
         }
-        $arrChildProductCommentList = $productCommentPublicData->GetListOfChild($strParentIds);
-
-        if(count($arrProductCommentList) > 0){
-            Template::ReplaceList($templateContent,$arrProductCommentList,$productCommentListTagId,"icms",$arrChildProductCommentList,"ProductCommentId","ParentId");
-        }else{
-            Template::RemoveCustomTag($templateContent,$productCommentListTagId);
-        }
-
-        $styleNumber = 1;
-        $templateFileUrl = "pager/pager_style".$styleNumber.".html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-        $isJs = FALSE;
-        $navUrl = "/default.php?mod=product&a=detail&channel_id=".$channelId."&product_id=".$productId."&pc_pi={0}&pc_ps=".$productCommentPageSize."#comment";
-        $jsFunctionName = "";
-        $jsParamList = "";
-        $pageIndexName = "pc_pi";
-        $pageSizeName = "pc_ps";
-        $showGoTo = false;
-        $pagerButton = Pager::ShowPageButton
-            (
-                $pagerTemplate,
-                $navUrl,
-                $productCommentAllCount,
-                $productCommentPageSize,
-                $productCommentPageIndex,
-                $styleNumber,
-                $isJs,
-                $jsFunctionName,
-                $jsParamList,
-                $pageIndexName,
-                $pageSizeName,
-                $showGoTo
-            );
-        $templateContent = str_ireplace("{product_comment_pager_button}", $pagerButton, $templateContent);
-        //----------end-------------
-
-        $patterns = '/\{s_(.*?)\}/';
-        $templateContent = preg_replace($patterns, "", $templateContent);
-        parent::ReplaceEnd($templateContent);
-
-        //存入用户浏览记录进CooKie
-        $tableId = $productId;
-        $tableType = 1;
-        $userId = Control::GetUserId();
-        $url = $_SERVER['REQUEST_URI'];
-        $title = $arrOne["ProductName"];
-        $titlePic = $arrOne["UploadFileThumbPath3"];
-        $price = $arrOne["SalePrice"];
-        parent::CreateUserExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price);
         return $templateContent;
     }
 
 
-    private function loadDetailTemp($temp,$channelId)
+    private function loadDetailTemp($temp, $channelId)
     {
         $templateFileUrl = "product/product_detail.html";
         $templateName = "default";
@@ -226,20 +231,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    /**
-     * ajax方法得到产品列表数据
-     * @return string 产品列表HTML
-     */
-    private function AjaxList()
-    {
-        $channelId = Control::GetRequest("channel_id", 0);
-        $order = Control::GetRequest("order", "");
-        $top = Control::GetRequest("ps", 12);
-        $ProductPublicData = new ProductPublicData();
-        $arrList = $ProductPublicData->GetList($channelId,$order,$top);
-        $tempArrList = json_encode($arrList);
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $tempArrList . '})';
-    }
 
 }
 

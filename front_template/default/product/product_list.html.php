@@ -9,22 +9,7 @@
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript">
         $(function () {
-            /* 顶部banner类别菜单初始化 */
-            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-            $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
-            {
-                $(this).children('ul').css('display','');
-            }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
-                {
-                    $(this).children('ul').css('display','none');
-                });
-            $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
-            {
-                $(this).children('ul').css('display','');
-            }).bind('mouseleave',function() // 子菜单的鼠标移出操作
-                {
-                    $(this).children('ul').css('display','none');
-                });
+
 
         //左侧产品类别树形效果
             $("#categoryListSum").delegate('.listsum-1', "click",
@@ -92,49 +77,10 @@
 <body>
 <pre_temp id="3"></pre_temp>
 <pre_temp id="4"></pre_temp>
-<div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div id="leftmenu">
-            <ul>
-                <li><span>所有商品分类</span>
-                    <ul style="display: none;">
-                        <icms id="channel_3" type="channel_list" where="parent">
-                            <item>
-                                <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
-                                    <ul style="display: none;">
-                                        {child}
-                                    </ul>
-                                </li>
-                                ]]>
-                            </item>
-                            <child>
-                                <![CDATA[
-                                <li><span>{f_ChannelName}</span></li>
-                                <dd>{third}</dd>
-                                ]]>
-                            </child>
-                            <third>
-                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a><span>|</span>
-                                ]]>
-                            </third>
-
-                        </icms>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="images/icon_new.png" width="29" height="30" /></div>
-    </div>
-</div>
+<pre_temp id="9"></pre_temp>
 <div class="box1200">
     <div class="myseatnew">
-        <a href="#">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a></div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a></div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -146,7 +92,7 @@
                 <![CDATA[
                 <div class="listsum-1">
                     <dl title="{f_ChannelId}">
-                        <dt><a href="javascript:;"  hidefocus="true">{f_ChannelName}</a></dt>
+                        <dt><a href="javascript:;" hidefocus="true">{f_ChannelName}</a></dt>
                         <dd><ul>
                                 {child}
                             </ul>
@@ -174,13 +120,12 @@
                     <![CDATA[
                     <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90px" height="90px" ></a>
                         <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
-
                     ]]>
                 </item>
             </icms>
         </ul>
     </div>
-    <div class="blank10">        </div>
+    <div class="blank10"></div>
     <div class="looked" >
         <div class="title">
             <span class="fl">最近浏览</span><a href="javascript:;" id="hrefClear"  class="fr mr5" >清空</a></div>
@@ -189,11 +134,11 @@
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
-                    <li><a class="lookpic" href="#" target="_blank" title="">
+                    <li><a class="lookpic" href="{f_Url}" target="_blank" title="">
                             <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
                         <div class="lookmis">
                             <p class="lookname">
-                                <a href="#" target="_blank" title="">【进店必败】{f_Title}）<font class="cleb6100 ml5">低热量，高营养，酸甜爽口</font></a></p><p>￥{f_Price} </p></div>
+                                <a href="{f_Url}" target="_blank" title="">{f_Title}</a></p><p>￥{f_Price} </p></div>
                     </li>    <div class="clear">    </div>
                     ]]>
                 </item>
@@ -242,10 +187,9 @@
     <dl class="pxlist" style="padding-left:20px;">
         <dt>排序：</dt>
         <dd>
-            <div class="price-2"  style="width: 360px">
-                <a href="javascript:;" title="default" class="listup on"  style="background-image:none;padding-left:10px"  >默认</a> <a href="javascript:;" class="listup"  title="time"  >时间</a> <a href="javascript:;"  title="sale"  class="listup"  >销量</a> <a href="javascript:;"   title="price" class="listup" >价格</a> <a href="javascript:;"   title="comment" hidefocus="true" class="listup"  >评论</a>
+            <div class="price-2"  style="width: 360px"> <a href="javascript:;" title="default" class="listup on"  style="background-image:none;padding-left:10px">默认</a> <a href="javascript:;" class="listup"  title="time"  >时间</a> <a href="javascript:;"  title="sale"  class="listup"  >销量</a> <a href="javascript:;"   title="price" class="listup" >价格</a> <a href="javascript:;"   title="comment" hidefocus="true" class="listup"  >评论</a>
             </div>
-            <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">    <a href="#">&lt;</a>    2/9    <a class="disabledr02" href="#" >下一页&nbsp;&gt; </a>    </div></div>
+            <div  class="pags1" style="line-height: 28px;"><div class="diggtop p0">      </div></div>
             <span class="clear"></span>
         </dd>
     </dl>

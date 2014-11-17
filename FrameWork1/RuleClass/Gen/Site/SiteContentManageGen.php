@@ -28,6 +28,9 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_publish":
+                $result = self::AsyncPublish();
+                break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
@@ -234,6 +237,9 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
         $searchKey = urldecode($searchKey);
 
         if ($pageIndex > 0) {
+
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "site_content_list";
             $allCount = 0;
@@ -276,5 +282,30 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
 
         parent::ReplaceEnd($templateContent);
         return $templateContent;
+    }
+
+
+
+    /**
+     * 发布资讯详细页面
+     * @return int 返回发布结果
+     */
+    private function AsyncPublish()
+    {
+        $result = -1;
+        $siteContentId = Control::GetRequest("site_content_id", -1);
+        if ($siteContentId > 0) {
+            $publishQueueManageData = new PublishQueueManageData();
+            $executeTransfer = true;
+            $publishChannel = true;
+            $result = parent::PublishSiteContent($siteContentId, $publishQueueManageData, $executeTransfer, $publishChannel);
+            if ($result == BaseManageGen::PUBLISH_SITE_CONTENT_RESULT_FINISHED) {
+                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
+                    $publishQueueManageData->Queue[$i]["Content"] = "";
+                }
+                //print_r($publishQueueManageData->Queue);
+            }
+        }
+        return $result;
     }
 } 

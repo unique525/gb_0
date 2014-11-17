@@ -16,8 +16,8 @@ class UserExplorePublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_delete":
                 $result = self::AsyncDelete();
                 break;
-            case "ajax_list":
-                $result = self::AjaxList();
+            case "async_get_list":
+                $result = self::AsyncGetList();
                 break;
         }
         return $result;
@@ -30,7 +30,7 @@ class UserExplorePublicGen extends BasePublicGen implements IBasePublicGen {
     {
         $userId = Control::GetUserId();
         if ($userId > 0) {
-            setcookie("ExploreHistory_".$userId, 0, time() - 1);
+            Control::DelUserExploreCookie($userId);
             session_start();
             session_destroy();
         }
@@ -39,20 +39,11 @@ class UserExplorePublicGen extends BasePublicGen implements IBasePublicGen {
 
     /**
      * ajax方法得到用户浏览记录数据
-     * @return string 产品列表HTML
+     * @return string 产品列表JSON
      */
-    private function AjaxList()
+    private function AsyncGetList()
     {
-        $tableId = intval(Control::GetRequest("table_id",0));
-        $tableType = intval(Control::GetRequest("table_type",0));
-        $siteId = intval(Control::GetRequest("site_id",0));
-        $userId = Control::GetUserId();
-        $order = Control::GetRequest("order", "");
-        $top = Control::GetRequest("ps", 4);
-        $userExplorePublicData = new UserExplorePublicData();
-        $arrList = $userExplorePublicData->GetList($siteId, $userId, $tableType, $tableId, $order, $top);
-        $tempArrList = json_encode($arrList);
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $tempArrList . '})';
+
     }
 }
 

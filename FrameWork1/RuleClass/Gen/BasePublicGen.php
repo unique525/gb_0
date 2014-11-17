@@ -757,18 +757,13 @@ class BasePublicGen extends BaseGen {
         $userId = Control::GetUserId();
         if ($userId > 0) {
             if ($tableType > 0) {
-                //$arrUserExploreList = null;
-                //$arrUserExploreListStand = null;
-                //$userExploreCollection = new UserExploreCollection();
                 switch ($tagWhere) {
-                    case "channel":
-                        $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
-                        break;
                     default :
                         //new
                         $userExploreCollection = self::GetUserExploreArrayFromCookieByUserId($userId);
                         break;
                 }
+
                 if (count($userExploreCollection->UserExplores)>0) {
                     Template::ReplaceList($tagContent, $userExploreCollection->UserExplores, $tagId);
                     //把对应ID的CMS标记替换成指定内容
@@ -781,7 +776,9 @@ class BasePublicGen extends BaseGen {
             }
         }
         else {
-            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, "只有登陆用户才有浏览记录，请先登陆");
+            $showMessage = Language::Load("user_explore",1);
+            $showMessage = str_ireplace("{ReturnUrl}", urlencode($_SERVER["REQUEST_URI"]),$showMessage);
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $showMessage);
         }
 
         return $templateContent;
@@ -804,17 +801,13 @@ class BasePublicGen extends BaseGen {
 
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
-
-            if (!isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
+            if (strlen(Control::GetUserExploreCookie($userId))>0) {
 
             } else {
                 //读取cookie
-                $cookieStr = $_COOKIE['UserExploreHistory'.'_'.$userId];
-                $userExploreCollection->UserExplores = Format::FixJsonDecode(base64_decode($cookieStr));
-
-
+                $cookieStr = Control::GetUserExploreCookie($userId);
+                $userExploreCollection->UserExplores = $cookieStr;
             }
-
 
             //将当前访问信息保存到数组中
             $userExplore->TableId = $tableId;
@@ -825,12 +818,10 @@ class BasePublicGen extends BaseGen {
             $userExplore->TitlePic = $titlePic;
             $userExplore->Price = $price;
             $userExploreCollection->AddField($userExplore->ConvertToArray());
-            //print_r($userExploreCollection->UserExplores);
-            //存储为字符串
-            $cookieStr = base64_encode(Format::FixJsonEncode($userExploreCollection->UserExplores));
+            //存储为COOKIE
 
-            //保存到cookie当中
-            setcookie('UserExploreHistory'.'_'.$userId, $cookieStr);
+
+            Control::SetUserExploreCookie($userId, $userExploreCollection->UserExplores, 100);
         }
 
     }
@@ -844,11 +835,11 @@ class BasePublicGen extends BaseGen {
     {
         $userExploreCollection = new UserExploreCollection();
         if ($userId > 0) {
-            if (isset($_COOKIE['UserExploreHistory'.'_'.$userId])) {
+            if (strlen(Control::GetUserExploreCookie($userId))>0) {
                 //读取cookie
-                $cookieStr = ($_COOKIE['UserExploreHistory'.'_'.$userId]);
+                $cookieStr = Control::GetUserExploreCookie($userId);
                 //字符串转回原来的数组
-                $userExploreCollection->UserExplores = Format::FixJsonDecode(base64_decode($cookieStr));
+                $userExploreCollection->UserExplores = $cookieStr;
             }
         }
         return $userExploreCollection;

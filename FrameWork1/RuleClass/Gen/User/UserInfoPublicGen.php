@@ -27,8 +27,8 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify_avatar": //生成修改头像界面
                 $result = self::GenModifyAvatar();
                 break;
-            case "generate_avatar": //生成头像并插入数据库
-                $result = self::GenAvatar();
+            case "async_modify_avatar_upload_file_id": //生成头像并插入数据库
+                $result = self::AsyncModifyAvatarUploadFileId();
                 break;
             case "async_get_avatar_upload_file_id":
                 $result = self::AsyncGetAvatarUploadFileId();
@@ -146,35 +146,22 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0) {
             $userInfoPublicData = new UserInfoPublicData();
             $result = $userInfoPublicData->GetAvatarUploadFileId($userId, true);
-
-            if($result <= 0){
-                $uploadFileData = new UploadFileData();
-                $result = $uploadFileData->Init($userId,true);
-            }
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
     }
 
-    private function GenAvatar()
+    private function AsyncModifyAvatarUploadFileId()
     {
         $userId = Control::GetUserId();
+        $result = -1;
         if ($userId > 0) {
-            $uploadFileId = Control::PostRequest("upload_file_id", "");
-            $width = Control::PostRequest("width", 0);
-            $height = Control::PostRequest("height", 0);
-            $reUrl = Control::PostRequest("re_url", 0);
+            $uploadFileId = Control::GetRequest("upload_file_id", "");
             if ($uploadFileId > 0) {
-
-
                 $userInfoPublicData = new UserInfoPublicData();
                 $result = $userInfoPublicData->ModifyAvatarUploadFileId($userId, $uploadFileId);
-
-            } else {
-                Control::GoUrl($reUrl);
-                Control::ShowMessage("创建头像出错,请再次尝试");
             }
         }
-        return "";
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 }
 

@@ -21,7 +21,6 @@ class UserExploreCollection {
     public function setUserExplores($UserExplores)
     {
         $this->UserExplores = $UserExplores;
-
         if (count($this->UserExplores) > 5) {
             //只保存5条访问记录
             array_shift($this->UserExplores);
@@ -39,31 +38,31 @@ class UserExploreCollection {
     }
 
     /**
-     * get 配置值
-     * @param string $fieldName 配置名称
-     * @return string 配置值
+     * 取得属性值
+     * @param string $name 属性字段名称
+     * @return mixed 属性值
      */
-    public function __get($fieldName){
-        $funcName = "get$fieldName";
-        if(function_exists($funcName)){
-            return $this->$funcName();
-        }else{
-            return null;
+    public function __get($name)
+    {
+        if (method_exists($this, ($method = 'get'.$name)))
+        {
+            return $this->$method();
         }
+        else return NULL;
     }
+
     /**
-     * 设置配置值
-     * @param string $fieldName 配置名称
-     * @param string $fieldValue 配置值
+     * 设置属性值
+     * @param string $name 属性字段名称
+     * @param string $value 属性值
      */
-    public function __set($fieldName,$fieldValue){
-        $funcName = "set$fieldName";
-        if(function_exists($funcName)){
-            $this->$funcName($fieldValue);
+    public function __set($name, $value)
+    {
+        if (method_exists($this, ($method = 'set'.$name)))
+        {
+            $this->$method($value);
         }
     }
-
-
 
     /**
      * 给数据对象增加字段值
@@ -73,8 +72,11 @@ class UserExploreCollection {
     {
 
         $doAdd = true;
-        if(count($this->UserExplores)>0){
-
+        if(isset($this->UserExplores) &&
+            is_array($this->UserExplores) &&
+            count($this->UserExplores)>0 &&
+            !empty($this->UserExplores)
+        ){
             for($i=0;$i<count($this->UserExplores);$i++){
 
                 $userExploreTableId = $this->UserExplores[$i]["TableId"];

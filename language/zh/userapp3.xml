@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<root>
-<module id="1"><content><![CDATA[对不起，参数传递出错！暂时不能发布！]]></content></module>
-<module id="2"><content><![CDATA[非法提交！]]></content></module>
-<module id="3"><content><![CDATA[发布成功！]]></content></module>
-<module id="4"><content><![CDATA[发布失败！]]></content></module>
-</root>

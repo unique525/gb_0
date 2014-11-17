@@ -133,6 +133,7 @@ $(function () {
         var loadingImageId = null;
         var inputTextId = null;
         var previewImageId = null;
+        var uploadFileId = 0;
         AjaxFileUpload(
             fileElementId,
             tableType,
@@ -143,7 +144,8 @@ $(function () {
             fUploadFile,
             attachWatermark,
             inputTextId,
-            previewImageId
+            previewImageId,
+            uploadFileId
         );
     });
 

@@ -332,14 +332,6 @@ class UploadFileData extends BaseData
         return $result;
     }
 
-    public function Init($userId){
-        $sql = "INSERT INTO ".self::TableName_UploadFile."(Create,UserId) VALUES (now(),:UserId);";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("UserId",$userId);
-        $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
-        return $result;
-    }
-
     /**
      * 上传文件 修改数据表
      * @param int $uploadFileId 上传文件id
@@ -384,7 +376,7 @@ class UploadFileData extends BaseData
                     TableId = :TableId,
                     ManageUserId = :ManageUserId,
                     UserId = :UserId,
-                    CreateDate = :CreateDate,
+                    CreateDate = now(),
                     UploadFileTitle = :UploadFileTitle,
                     UploadFileInfo = :UploadFileInfo,
                     IsBatchUpload = :IsBatchUpload
@@ -412,7 +404,22 @@ class UploadFileData extends BaseData
         $dataProperty->AddField("UploadFileInfo", $uploadFileInfo);
         $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
         $dataProperty->AddField("UploadFileId", $uploadFileId);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        $debug = new DebugLogManageData();
+        $debug->Create($uploadFileId
+            ."--".$uploadFileName
+            ."--".$uploadFileSize
+            ."--".$uploadFileExtentionName
+            ."--".$uploadFileOrgName
+            ."--".$uploadFilePath
+            ."--".$tableType
+            ."--".$tableId
+            ."--".$manageUserId
+            ."--".$userId
+            ."--".$uploadFileTitle
+            ."--".$uploadFileInfo
+            ."--".$isBatchUpload
+        );
         return $result;
     }
 

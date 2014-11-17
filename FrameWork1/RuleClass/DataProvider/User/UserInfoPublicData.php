@@ -312,6 +312,7 @@ class UserInfoPublicData extends BasePublicData
             $sql = "UPDATE ".self::TableName_UserInfo." SET AvatarUploadFileId = :AvatarUploadFileId WHERE UserId = :UserId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("AvatarUploadFileId",$uploadFileId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
         }
         return $result;

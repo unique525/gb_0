@@ -26,7 +26,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     private function AsyncGetList(){
         $result = "";
 
-        $channelId = Control::GetRequest("cid", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
         $parentId = Control::GetRequest("parent_id", 0);
@@ -53,6 +53,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 $parentId
             );
             if (count($arrList) > 0) {
+
                 $templateFileUrl = "pager/pager_style".$pagerTempType."_js.html";
                 $templateName = "default";
                 $templatePath = "front_template";
@@ -89,11 +90,45 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 );
 
 
-                $result = Format::FixJsonEncode($arrList);
-                $pagerButton = str_ireplace('"','\"',$pagerButton);
-                $pagerButton = str_ireplace('\r','',$pagerButton);
-                $pagerButton = str_ireplace('\n','',$pagerButton);
-                $result = '"result_list":' . $result . ',"pager_button":"'.$pagerButton.'"';
+                //格式化arrList
+                $resultArrList = null;
+                foreach ($arrList as $columnValue) {
+
+                    $directUrl = $columnValue['DirectUrl'];
+                    $publishDate = Format::DateStringToSimple($columnValue['PublishDate']);
+
+                    if(strlen($directUrl)>0){
+                        $columnValue['DocumentNewsUrl'] = $directUrl;
+                    }else{
+                        $columnValue['DocumentNewsUrl'] =
+                            '/h/'.$columnValue['ChannelId'].
+                            '/'.$publishDate.
+                            '/'.$columnValue['DocumentNewsId'].'.html';
+                    }
+
+                    $resultArrList[] = $columnValue;
+                }
+
+
+                $arrResult["result_list"] = $resultArrList;
+
+
+
+
+                //$pagerButton = str_ireplace('"','\"',$pagerButton);
+                //$pagerButton = str_ireplace("'","\\'",$pagerButton);
+                //$pagerButton = str_ireplace('\r','',$pagerButton);
+                //$pagerButton = str_ireplace('\n','',$pagerButton);
+                $arrResult["pager_button"] = $pagerButton;
+
+
+
+                $result = Format::FixJsonEncode($arrResult);
+
+                //print_r($result);
+//die();
+
+                //$result = '"result_list":' . $result . ',"pager_button":"'.$pagerButton.'"';
             }
         }
 

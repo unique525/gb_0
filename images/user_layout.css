@@ -1,0 +1,55 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*------翻页----------*/
+.flips li{ float:left; text-align:center; width:40px; line-height:40px; height:40px; padding:0 5px;}
+.flips ul{ float:right;}
+.flips li a{ display:block; border:1px solid #ccc; color:#ccc; font-size:14px;}
+.flips li a:hover,.flips li .recent{ background:#ff3d00; border:1px solid #ff3d00; color:#333; text-decoration:none;}
+/*------翻页----------*/
+
+/*---------订单中心-----------*/
+.order_class{ height:35px; border-bottom:2px solid #ccc;}
+.order_class li{ float:left; width:120px; text-align:center; line-height:35px;}
+.order_class li a{ display:block; font-size:16px; font-family:"微软雅黑", "黑体";}
+.order_class li a span{ padding-left:5px; color:#ff3d00;}
+.order_class li a:hover,.order_class li .selected{ border-bottom:2px solid #ff3d00; text-decoration:none; color:#ff3d00;}
+
+.order_form{ padding:20px 0;}
+.order_form table{ margin-bottom:15px; border-bottom:1px solid #e8e8e8; padding-bottom:5px;}
+.order_form table .order_number{ width:320px; text-indent:24px;}
+.order_form table .all_price,.order_form table .send_price,.order_form table .create_date{ width:117px; text-align:center;}
+.order_form table .state{ width:107px; text-align:center;}
+.order_form table .option{ width:127px; text-align:center;}
+.order_form table td{ line-height:45px;}
+.order_form .title td{ text-align:center; text-indent:0;}
+.order_form .title{ background:#efefef; border:none; padding:0;}
+.order_form table .ckxq{ display:block; width:80px; background:#00a93c; height:30px; line-height:30px; color:#fff; margin-left:23px;}
+.order_form table .pay_bill,.order_form table .ckwl{ display:block; width:80px; background:#ff3d00; height:30px; line-height:30px; color:#fff; margin-left:23px;}
+/*---------订单中心-----------*/
+
+/*---------订单detail-----------*/
+.infor_title{ line-height:45px; text-align:center; width:80px;}
+.order_detail .title{ line-height:40px; font-size:16px; margin:10px 0; background:#efefef; padding-left:10px; font-weight:bold; border-bottom:2px solid #ff3d00;}
+.order_detail .product_list td{ padding:15px 0; border-bottom:1px solid #ccc;}
+.order_detail .product_list .bottom_price td{ border:none;}
+.order_detail .product_list .list_title td{ line-height:45px; padding:0;}
+.order_detail .product_list .list_title .product_name{ width:500px;}
+.order_detail .product_list .product_name{ width:375px; line-height:24px; padding-right:15px;}
+.order_detail .product_list .product_pic{ padding:15px;}
+.order_detail .product_list .product_fullprice,.order_detail .product_list .product_cutprice,.order_detail .product_list .product_finalprice{ width:80px; text-align: center;}
+.order_detail .product_list .product_num,.order_detail .product_list .product_unit{ width:50px; text-align: center;}
+/*---------订单detail-----------*/
+
+/*----------地址管理--------------*/
+.add_list td{ height:50px; vertical-align:middle; border-bottom:1px solid #efefef;}
+.add_list .add_title td{ background:#efefef; border-bottom:1px solid #00a93c; text-align:center;}
+.add_list .receive_id{ width:100px; text-align: center;}
+.add_list .add_title .address{ width:300px;}
+.post_code,.mobile,.home_tel,.opretion{ width:100px; text-align:center;}
+.opretion span,.add_new dt span{ color:#ff3d00;}
+.add_new{ padding:25px; border:1px dashed #ccc; width:770px;}
+.add_new dl{ padding:10px 0;}
+.add_new dt{ float:left; width:80px;}
+.add_new dl .adr_prompt{ margin-left:80px; padding-top:10px;}
+/*----------地址管理--------------*/

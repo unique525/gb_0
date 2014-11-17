@@ -109,6 +109,39 @@ class SiteContentManageData extends BaseManageData
 
 
     /**
+     * 修改发布时间和发布人,只有发布时间为空时才进行操作
+     * @param int $siteContentId 自定义页面id
+     * @param int $publishDate 发布时间
+     * @param int $manageUserId 操作管理员id
+     * @return int 操作结果
+     */
+    public function ModifyPublishDate($siteContentId, $publishDate, $manageUserId)
+    {
+        $result = 0;
+        if ($siteContentId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_SiteContent . "
+                SET
+
+                    PublishDate=:PublishDate,
+                    PublishManageUserId=:PublishManageUserId
+
+                WHERE
+                        SiteContentId=:SiteContentId
+                    AND PublishDate is NULL
+
+                    ;";
+
+
+            $dataProperty->AddField("SiteContentId", $siteContentId);
+            $dataProperty->AddField("PublishDate", $publishDate);
+            $dataProperty->AddField("PublishManageUserId", $manageUserId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 返回一行数据
      * @param int $siteContentId 站点id
      * @return array|null 取得对应数组
@@ -123,6 +156,27 @@ class SiteContentManageData extends BaseManageData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteContentId", $siteContentId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得自定义页面的发布时间
+     * @param int $siteContentId 自定义页面id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 自定义页面的发布时间
+     */
+    public function GetPublishDate($siteContentId, $withCache)
+    {
+        $result = "";
+        if ($siteContentId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_content_data';
+            $cacheFile = 'site_content_get_publish_date.cache_' . $siteContentId . '';
+            $sql = "SELECT PublishDate FROM " . self::TableName_SiteContent . " WHERE SiteContentId=:SiteContentId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteContentId", $siteContentId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }

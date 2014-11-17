@@ -123,22 +123,6 @@
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
 
-            /* 顶部banner类别菜单初始化 */
-            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-            $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
-            {
-                $(this).children('ul').css('display','');
-            }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
-                {
-                    $(this).children('ul').css('display','none');
-                });
-            $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
-            {
-                $(this).children('ul').css('display','');
-            }).bind('mouseleave',function() // 子菜单的鼠标移出操作
-                {
-                    $(this).children('ul').css('display','none');
-                });
 
             //左侧产品类别树形效果
             $("#categoryListSum").delegate('.listsum-1', "click",
@@ -215,9 +199,11 @@
                 success:function(data){
                     var positive_appraisal = null ?  0:parseInt(data["positive_appraisal"]);
                     var moderate_appraisal = parseInt(data["moderate_appraisal"]);
-                    var negative_appraisal = parseInt(data["negative_appraisal"])
+                    var negative_appraisal = parseInt(data["negative_appraisal"]);
 
                     var total_appraisal =positive_appraisal + moderate_appraisal + negative_appraisal;
+
+                    $("#total_appraisal").html(total_appraisal.toString());
 
                     var negative_appraisal_width = 0;
                     var positive_appraisal_width = 0;
@@ -275,7 +261,7 @@
 
 <div class="box1200">
     <div class="myseatnew">
-        <a href="#">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -314,7 +300,7 @@
                 <item>
                     <![CDATA[
                     <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90" height="90" ></a>
-                        <p><a href="#" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
+                        <p><a href="#" target="_blank" >{f_ProductName}</a>  </p>现价: ￥<span class="show_price">{f_SalePrice}</span></li>
 
                     ]]>
                 </item>
@@ -379,9 +365,9 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<span id="productPrice" class="newprice show_price"></span></span></p>
-                                <p class="price_n">原　价：<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
-                                <p class="price_n"><span class="chaprice">已优惠：<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price"></span></span></p>
+                                <p class="price_n">原　价：￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
+                                <p class="price_n"><span class="chaprice">已优惠：￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
                         <td align="left">
@@ -458,7 +444,7 @@
             <a  id="id_1" alt="1" class="tab cur" tabindex="0" href="javascript:;">商品介绍</a>
             <a  id="id_2" alt="2" class="tab"  href="javascript:;" tabindex="1">属性</a>
             <a  id="id_3" alt="3" class="tab"  href="javascript:;">评价
-                <em>661</em>
+                <em id="total_appraisal">661</em>
             </a></li>
     </ul>
     <div id="tabdiv1" class="gdmsgcont" >

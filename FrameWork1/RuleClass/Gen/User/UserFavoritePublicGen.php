@@ -83,9 +83,6 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
                 $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
 
             }
-
-            $debug = new DebugLogManageData();
-            $debug->Create("");
             //判断是否重复
             $canAddFavorite = $userFavoritePublicData->CheckIsExist($tableId,$tableType);
             if($canAddFavorite > 0){
@@ -114,21 +111,40 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function GenList() {
-        $templateFileUrl = "user/user_favorite.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
         if($userId > 0){
-            $tagId = "user_favorite";
+            $templateFileUrl = "user/user_favorite_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            parent::ReplaceFirst($templateContent);
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+
+            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = Control::GetRequest("ps",0);
+
+            $tagId = "user_favorite_list";
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $pageSize = 5;
+            $allCount = 0;
             $userFavoritePublicData = new UserFavoritePublicData();
-//            $arrUserFavoriteList = $userFavoritePublicData->GetList($userId,$siteId);
-//            if(count($arrUserFavoriteList) > 0){
-//                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
-//            }else{
-//                Template::RemoveCustomTag($templateContent, $tagId);
-//            }
+            $arrUserFavoriteList = $userFavoritePublicData->GetList($userId,$siteId,$pageBegin,$pageSize,$allCount);
+            if(count($arrUserFavoriteList) > 0){
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?mod=user_favorite&a=list&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
+                $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
+            }else{
+                Template::RemoveCustomTag($templateContent, $tagId);
+            }
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return "";

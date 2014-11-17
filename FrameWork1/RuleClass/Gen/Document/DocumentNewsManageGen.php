@@ -30,7 +30,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "publish":
+            case "async_publish":
                 $result = self::AsyncPublish();
                 break;
             case "async_modify_sort":

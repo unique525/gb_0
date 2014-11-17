@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>会员中心</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
+    <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .right {
             cursor: pointer
@@ -140,37 +141,42 @@
             <td width="1006" valign="top">
                 <div class="rightbar">
                     <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
-                    <table width="90%" border="0" cellspacing="0" cellpadding="0"
-                           style="line-height:50px;margin:20px auto 0px auto;">
+                </div>
+                <div style="padding:20px 50px;">
+                    <table class="add_list" width="800" border="0" cellspacing="0" cellpadding="0">
+                        <tr class="add_title">
+                            <td class="receive_id">收件人</td>
+                            <td class="address">收件地址</td>
+                            <td class="post_code">邮编</td>
+                            <td class="mobile">手机</td>
+                            <td class="home_tel">电话</td>
+                            <td class="opretion">操作</td>
+                        </tr>
                         <icms id="user_receive_info_list">
                             <item><![CDATA[
-                                <tr>
 
-                                    <td valign="top" style="font-size:14px;word-break:break-all; word-wrap:normal;">
-                                        <b>
-                                            <span id="Address_{f_UserReceiveInfoId}">{f_Address}</span>,
-                                            <span id="ReceivePersonName_{f_UserReceiveInfoId}">{f_ReceivePersonName}</span>,
-                                            <span id="Postcode_{f_UserReceiveInfoId}">{f_Postcode}</span>,
-                                            <span id="Mobile_{f_UserReceiveInfoId}">{f_Mobile}</span>,
-                                            <span id="HomeTel_{f_UserReceiveInfoId}">{f_HomeTel}</span>
-                                        </b>
-                                    </td>
-                                    <td width="80" style="font-size:12px;">
+                                <tr>
+                                    <td id="ReceivePersonName_{f_UserReceiveInfoId}" class="receive_id">{f_ReceivePersonName}</td>
+                                    <td id="Address_{f_UserReceiveInfoId}" class="address">{f_Address}</td>
+                                    <td id="Postcode_{f_UserReceiveInfoId}" class="post_code">{f_Postcode}</td>
+                                    <td id="Mobile_{f_UserReceiveInfoId}" class="mobile">{f_Mobile}</td>
+                                    <td id="HomeTel_{f_UserReceiveInfoId}" class="home_tel">{f_HomeTel}</td>
+                                    <td class="opretion">
                                     <span class="modify_receive_info" idvalue="{f_UserReceiveInfoId}"
                                           style="cursor:pointer">修改本地址</span>
                                     </td>
                                 </tr>
+
+
                                 ]]>
                             </item>
                         </icms>
-                        <tr>
-                            <td valign="top"><img id="add_receive_info" style="cursor: pointer" src="/images/btnaddress.png"
-                                                  width="89" height="25"/></td>
-                            <td></td>
+                        <tr >
+                            <td style="border:none; padding-left: 15px;" valign="middle" colspan="5"><img id="add_receive_info" style="cursor: pointer" src="images/btnaddress.png" width="89" height="25"/></td>
+                            <td style="border:none;"></td>
                         </tr>
                     </table>
-
-                    <div id="new_receive_info_div" class="new_adr_in" style="display: none">
+                    <div id="new_receive_info_div" class="add_new" style="display: none">
                         <dl>
                             <dt><span>*</span>详细地址：</dt>
                             <dd>
@@ -218,6 +224,7 @@
                             </dd>
                         </dl>
                     </div>
+                    <div class="clean"></div>
                 </div>
             </td>
         </tr>
