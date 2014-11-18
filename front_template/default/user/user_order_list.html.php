@@ -82,6 +82,7 @@
             <td width="1006" valign="top">
                 <div class="rightbar">
                     <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
+                </div>
                     <div style="padding:20px 50px;">
                         <div class="order_class">
                             <ul>
@@ -132,7 +133,6 @@
                             </ul>
                             <div class="clean"></div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </td>
