@@ -3,7 +3,7 @@
 
 /*------翻页----------*/
 .flips li{ float:left; text-align:center; width:40px; line-height:40px; height:40px; padding:0 5px;}
-.flips ul{ float:right;}
+.flips{ float:right;}
 .flips li a{ display:block; border:1px solid #ccc; color:#ccc; font-size:14px;}
 .flips li a:hover,.flips li .recent{ background:#ff3d00; border:1px solid #ff3d00; color:#333; text-decoration:none;}
 /*------翻页----------*/
@@ -57,7 +57,12 @@
 /*-----------账户信息修改--------------*/
 .change_info{ padding:20px 0 20px 150px;}
 .change_info .label{ width:80px;}
-.change_info td{ line-height:50px;}
+.change_info td{ line-height:40px;}
 .change_info .btns{ height:30px; padding:25px 0 15px 10px;}
 .change_info .btns input{ border:none; background-color:#00a93c; color:#fff; height:30px; line-height:30px; width:80px; margin-right:30px;}
 /*-----------账户信息修改--------------*/
+
+/*-----------我的收藏-------------*/
+.faver_list li{ float:left; width:200px; text-align:center; padding:18px; line-height:30px;}
+.faver_list li .faver_title{ height:30px; overflow:hidden; display:block;}
+/*-----------我的收藏-------------*/

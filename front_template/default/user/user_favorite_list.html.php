@@ -82,41 +82,28 @@
             <td width="1006" valign="top">
                 <div class="rightbar">
                     <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的收藏</div>
-                    <div style="padding:20px 50px;">
-                            <icms id="user_favorite_list">
-                                <item><![CDATA[
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td class="order_number">
-                                                <div><img src="{f_UploadFilePath}" width="200" height="200"/></div>
-                                                <a href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    ]]></item>
-                            </icms>
-                        {pagerButton}
-                        </div>
-                        <div class="flips">
-                            <ul>
-                                <li><a href="#">首页</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a class="recent" href="#">2</a></li>
-                                <li><a href="#">...</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">共5页</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">5</a></li>
-                            </ul>
-                            <div class="clean"></div>
-                        </div>
-                    </div>
                 </div>
-</div>
-</td>
-</tr>
+                <div style="padding:20px 0 20px 50px;">
+                    <ul class="faver_list">
+                        <icms id="user_favorite_list">
+                            <item><![CDATA[
+                                <li class="order_number"> <a href="{f_UserFavoriteUrl}" target="_blank">
+                                        <div><img src="{f_UploadFilePath}" width="200" height="200"/></div></a>
+                                    <a class="faver_title" href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a>
+                                </li>
+                                ]]></item>
+                        </icms>
+                        <div class="clean"></div>
+
+                    </ul>
+                </div>
+                <div class="flips">
+                    {pagerButton}
+                </div>
+                <div class="clean"></div>
+            </td>
+        </tr>
 </table>
-</div>
 <div class="footerline"></div>
 <div class="wrapper">
     <div class="footerleft">
