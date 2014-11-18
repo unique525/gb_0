@@ -281,11 +281,12 @@
 </td>
 <td width="1" bgcolor="#D4D4D4"></td>
 <td width="1006" valign="top">
-<div class="rightbar">
-<div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>修改头像</div>
+    <div class="rightbar">
+        <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>修改头像</div>
+    </div>
     <div id="upload" style="padding:25px;">
-        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-            <tr>
+          <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+             <tr>
                 <td width="169">
                     <div style="padding:3px; border:1px solid #e9e9e9;">
                         <img id="avatar" width="160px" height="160px" src=""/>
@@ -301,34 +302,35 @@
                         <p><span  style="color:#CC0000">*</span>  请上传宽高比不大于2的图片</p>
                         <p><span  style="color:#CC0000">*</span>  请上传宽度大于200像素,高度大于200像素的图片</p></div>
                 </td>
-            </tr>
-        </table>
+             </tr>
+          </table>
     </div>
-    <div id="outer" style="display:none">
-        <div class="jcExample">
-            <div class="article" >
-                <table cellspacing="25">
-                    <tr>
-                        <td valign="top">
-                            <img src="" id="target" alt="Flowers"/>
-                        </td>
-                        <td valign="top">
-                            <div style="width:{cfg_UserAvatarBigWidth_3}px;height:{cfg_UserAvatarBigHeight_3}px;overflow:hidden;">
-                                <img src="" id="preview_large" alt="中图预览" class="jcrop-preview" />
-                            </div>
-                        </td>
-                        <td valign="top">
-                            <div style="width:{cfg_UserAvatarSmallWidth_3}px;height:{cfg_UserAvatarSmallHeight_3}px;overflow:hidden;">
-                                <img src="" id="preview_small" alt="小图预览" class="jcrop-preview" />
-                            </div>
-                        </td>
-                        <td valign="top">
-                            <div style="padding:5px 10px;color: #585858;font-size:12px; line-height:30px; border-left:1px dashed #CCCCCC">
-                                <p >  你可以随意拖拽及缩放方框来调整</p>
-                                <p >  其他头像的截图区域</p></div>
-                        </td>
-                    </tr>
-                </table>
+            <div id="outer" style="display:none">
+                <div class="jcExample">
+                    <div class="article" >
+                        <table cellspacing="25">
+                            <tr>
+                                <td valign="top">
+                                    <img src="" id="target" alt="Flowers"/>
+                                </td>
+                                <td valign="top">
+                                    <div style="width:{cfg_UserAvatarBigWidth_3}px;height:{cfg_UserAvatarBigHeight_3}px;overflow:hidden;">
+                                        <img src="" id="preview_large" alt="中图预览" class="jcrop-preview" />
+                                    </div>
+                                </td>
+                                <td valign="top">
+                                    <div style="width:{cfg_UserAvatarSmallWidth_3}px;height:{cfg_UserAvatarSmallHeight_3}px;overflow:hidden;">
+                                        <img src="" id="preview_small" alt="小图预览" class="jcrop-preview" />
+                                    </div>
+                                </td>
+                                <td valign="top">
+                                    <div style="padding:5px 10px;color: #585858;font-size:12px; line-height:30px; border-left:1px dashed #CCCCCC">
+                                        <p >  你可以随意拖拽及缩放方框来调整</p>
+                                        <p >  其他头像的截图区域</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                 <form id="CutImgForm">
                     <input type="hidden" id="x" name="x" />
                     <input type="hidden" id="y" name="y" />
@@ -343,9 +345,9 @@
                     <div style="clear:left"></div>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
+                </div>
+            </div>
+
 </td>
 </tr>
 </table>
