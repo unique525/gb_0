@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{ietitle}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="{iekeywords}" />
+    <meta name="description" content="{iedescription}" />
+    <link rel="stylesheet" href="http://xzw.changsha.cn/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="http://xzw.changsha.cn/furong/image_mobile/1.css" />
+    <script src="http://xzw.changsha.cn/system_js/jquery-1.9.1.min.js"></script>
+    <script src="http://xzw.changsha.cn/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="http://xzw.changsha.cn/front_js/bx_slider/jquery.bxslider.min.js"></script>
+    <link href="http://xzw.changsha.cn/front_js/bx_slider/jquery.bxslider.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function () {
+            $('.bx_slider').bxSlider({
+                auto: true,
+                controls: false
+            });
+        });
+        $(document).on("pageinit","#pageone",function(){
+            $("#img01").on("tap",function(){
+                //window.location.href = '01-list.html'
+            });
+
+            $("#img01").on("swipeleft",function(){
+                //alert("您向左滑动！");
+                //window.location.href = '2.html'
+            });
+
+            $(".box1_image").each(function(){
+                var screenWidth = $(document).width();
+
+                $(this).css("width",screenWidth/4-15);
+
+                //alert($(this).css("width"));
+            });
+            $(".slider_image").each(function(){
+                var screenWidth = $(document).width();
+
+                $(this).css("width",screenWidth);
+
+                //alert($(this).css("width"));
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+
+
+    <div>
+
+        <ul class="bx_slider">
+
+            <li><a href="{f_DirectUrl}" target="_blank"><img class="slider_image" src="http://xzw.changsha.cn/furong/image_mobile/ad1.jpg" alt="{f_PicSliderTitle}" /></a></li>
+
+        </ul>
+
+
+    </div>
+
+    <div>
+
+
+        <div class="index_box1">
+            <a href="/h/244/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/1.jpg" alt="" />
+                <br />
+                <span>机构职责</span>
+            </a>
+        </div>
+        <div class="index_box1">
+            <a href="/h/246/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/2.jpg" alt="" />
+                <br />
+                <span>领导分工</span>
+            </a>
+
+        </div>
+        <div class="index_box1">
+            <a href="/h/242/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/3.jpg" alt="" />
+                <br />
+                <span>工作文件</span>
+            </a>
+        </div>
+        <div class="index_box1">
+            <a href="/h/253/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/4.jpg" alt="" />
+                <br />
+                <span>政策法规</span>
+            </a>
+        </div>
+        <div class="spe"></div>
+
+
+
+
+    </div>
+    <div>
+
+
+        <div class="index_box1">
+            <a href="/h/245/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/5.jpg" alt="" />
+                <br />
+                <span>成员单位</span>
+            </a>
+        </div>
+        <div class="index_box1">
+            <a href="/h/244/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/6.jpg" alt="" />
+                <br />
+                <span>联系方式</span>
+            </a>
+
+        </div>
+        <div class="index_box1">
+            <a href="/h/249/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/7.jpg" alt="" />
+                <br />
+                <span>工作动态</span>
+            </a>
+        </div>
+        <div class="index_box1">
+            <a href="/h/649/list_m.html" style="color:#909090;">
+                <img class="box1_image" src="http://xzw.changsha.cn/furong/image_mobile/8.jpg" alt="" />
+                <br />
+                <span>行政许可</span>
+            </a>
+        </div>
+        <div class="spe"></div>
+
+
+
+
+    </div>
+
+
+
+</div>
+
+</body>
+</html>
+	
