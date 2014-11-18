@@ -44,7 +44,7 @@
 /*----------地址管理--------------*/
 .add_list td{ height:50px; vertical-align:middle; border-bottom:1px solid #efefef;}
 .add_list .add_title td{ background:#efefef; border-bottom:1px solid #00a93c; text-align:center;}
-.add_list .receive_id{ width:100px; text-align: center;}
+.add_list .receive_id{ width:100px;}
 .add_list .add_title .address{ width:300px;}
 .post_code,.mobile,.home_tel,.opretion{ width:100px; text-align:center;}
 .opretion span,.add_new dt span{ color:#ff3d00;}
@@ -53,3 +53,11 @@
 .add_new dt{ float:left; width:80px;}
 .add_new dl .adr_prompt{ margin-left:80px; padding-top:10px;}
 /*----------地址管理--------------*/
+
+/*-----------账户信息修改--------------*/
+.change_info{ padding:20px 0 20px 150px;}
+.change_info .label{ width:80px;}
+.change_info td{ line-height:50px;}
+.change_info .btns{ height:30px; padding:25px 0 15px 10px;}
+.change_info .btns input{ border:none; background-color:#00a93c; color:#fff; height:30px; line-height:30px; width:80px; margin-right:30px;}
+/*-----------账户信息修改--------------*/
