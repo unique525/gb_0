@@ -159,7 +159,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $strUserCarIds,
                 $userId
             );
-
             $totalProductPrice = 0;//订单总价
             for($i=0;$i<count($arrProductOrderList);$i++){
                 $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);

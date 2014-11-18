@@ -8,8 +8,13 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
+    <script type="text/javascript" src="/system_js/json.js"></script>
     <script type="text/javascript">
         var nowSelectReceiveInfoId = 0;
+
+
+        var productObject = null;
+        var productArray = new Array();
 
         $(function () {
             $("#add_receive_info").click(function () {
@@ -70,17 +75,16 @@
                     alert("请填入完整信息");
                 }
             });
+
+            $("#btn_submit").click(function () {
+                var json = JSON.stringify(productArray);
+                alert(json);
+            });
         });
     </script>
 </head>
 
 <body>
-<div class="loginbg">
-    <div class="wrapper">
-        <div class="loginleft">您好，欢迎来到星滋味 请<a href="">登陆</a> <a href="">免费注册</a></div>
-        <div class="loginright"><a href="">我的星滋味</a> <a href="">收藏本站</a></div>
-    </div>
-</div>
 <div class="wrapper">
     <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
     <div class="step">
@@ -215,6 +219,18 @@
                         </tr>
                         <icms id="product_with_product_price">
                             <item><![CDATA[
+                                <script type="text/javascript">
+
+
+                                    //新增时确认
+                                    productObject = new Object();
+                                    productObject.ProductId = "{f_ProductId}";
+
+
+                                    productArray.push(productObject);
+
+
+                                </script>
                                 <tr>
                                     <td>
                                         <a href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"
@@ -257,61 +273,13 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;您需为订单支付金额<span class="show_price">{TotalPrice}</span>元
             </div>
             <div class="red">请确认收货地址后进行订单提交！</div>
-            <div style="padding-top:15px;"><input name="" type="button" class="btn_submit" value="提交"/></div>
+            <div style="padding-top:15px;"><input id="btn_submit" type="button" class="btn_submit" value="提交"/></div>
         </div>
 
     </div>
 </div>
 <div class="clean"></div>
 
-
-<div class="footerline"></div>
-<div class="wrapper">
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footergwzn.png" width="79" height="79"/></div>
-            <b>交易条款</b><br/>
-            <a href="" target="_blank">购物流程</a><br/>
-            <a href="" target="_blank">发票制度</a><br/>
-            <a href="" target="_blank">会员等级</a><br/>
-            <a href="" target="_blank">积分制度</a><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerpsfw.png" width="79" height="79"/></div>
-            <b>配送服务</b><br/>
-            <a href="" target="_blank">配送说明</a><br/>
-            <a href="" target="_blank">配送范围</a><br/>
-            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerzffs.png" width="79" height="79"/></div>
-            <b>支付方式</b><br/>
-            <a href="" target="_blank">支付宝支付</a><br/>
-            <a href="" target="_blank">银联在线支付</a><br/>
-            <a href="" target="_blank">货到付款</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footershfw.png" width="79" height="79"/></div>
-            <b>售后服务</b><br/>
-            <a href="" target="_blank">服务承诺</a><br/>
-            <a href="" target="_blank">退换货政策</a><br/>
-            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerright" style="padding-left:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-    <div class="footerright" style="padding-right:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-</div>
+<pre_temp id="8"></pre_temp>
 </body>
 </html>
