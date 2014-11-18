@@ -87,6 +87,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $newspaperPublicGen = new NewspaperPublicGen();
                 $result = $newspaperPublicGen->GenPublic();
                 break;
+            case "newspaper_article":
+                $newspaperArticlePublicGen = new NewspaperArticlePublicGen();
+                $result = $newspaperArticlePublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;

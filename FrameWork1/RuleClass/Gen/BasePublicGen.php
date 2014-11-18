@@ -52,8 +52,6 @@ class BasePublicGen extends BaseGen {
     {
         /** 1.处理预加载模板 */
 
-
-
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($templateContent);
         if (count($arrCustomTags) > 0) {
@@ -158,6 +156,38 @@ class BasePublicGen extends BaseGen {
                         $tableType = intval(str_ireplace("user_explore_", "", $tagId));
                         if ($tableType > 0) {
                             $templateContent = self::ReplaceTemplateOfUserExploreList($templateContent, $tableType, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        }
+                        break;
+                    case Template::TAG_TYPE_NEWSPAPER_ARTICLE_LIST:
+                        $newspaperPageId = intval(str_ireplace("newspaper_page_", "", $tagId));
+
+                        if ($newspaperPageId > 0) {
+                            $templateContent = self::ReplaceTemplateOfNewspaperArticleList(
+                                $templateContent,
+                                $newspaperPageId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
+                    case Template::TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST:
+                        $newspaperArticleId = intval(str_ireplace("newspaper_article_", "", $tagId));
+
+                        if ($newspaperArticleId > 0) {
+                            $templateContent = self::ReplaceTemplateOfNewspaperArticlePicList(
+                                $templateContent,
+                                $newspaperArticleId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
                         }
                         break;
                 }
@@ -369,6 +399,129 @@ class BasePublicGen extends BaseGen {
             }
             if (!empty($arrDocumentNewsList)) {
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+    /**
+     * 替换电子报文章列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $newspaperPageId 电子报版面id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfNewspaperArticleList(
+        $channelTemplateContent,
+        $newspaperPageId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($newspaperPageId > 0) {
+
+            //默认只显示已发状态的新闻
+            $state = 0;
+
+            $arrList = null;
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $newspaperArticlePublicData->GetList($newspaperPageId, $tagTopCount, $state, $orderBy);
+                    break;
+            }
+
+
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+    /**
+     * 替换电子报文章图片列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $newspaperArticleId 电子报文章id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfNewspaperArticlePicList(
+        $channelTemplateContent,
+        $newspaperArticleId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($newspaperArticleId > 0) {
+
+            //默认只显示已发状态的新闻
+            $state = 0;
+
+            $arrList = null;
+            $newspaperArticlePicPublicData = new NewspaperArticlePicPublicData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $newspaperArticlePicPublicData->GetList($newspaperArticleId);
+                    break;
+            }
+
+
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
             }else{

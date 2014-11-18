@@ -20,7 +20,7 @@ class NewspaperPublicData extends BasePublicData {
 
                 WHERE ChannelId = :ChannelId
 
-                ORDER BY CreateDate DESC,NewspaperId DESC LIMIT 1;
+                ORDER BY PublishDate DESC,NewspaperId DESC LIMIT 1;
 
                 ";
 

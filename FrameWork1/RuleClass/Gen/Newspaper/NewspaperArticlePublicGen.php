@@ -15,11 +15,64 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
-            case "async_get_list":
-                $result = self::AsyncGetList();
+            case "detail":
+                $result = self::GenDetail();
+                break;
+            case "list":
+                $result = self::GenList();
                 break;
 
         }
         return $result;
+    }
+
+    private function GenList() {
+        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+        $templateContent = "";
+
+        if($newspaperPageId>0){
+            $templateFileUrl = "newspaper/newspaper_article_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $templateContent);
+            parent::ReplaceFirst($templateContent);
+
+
+            $templateContent = parent::ReplaceTemplate($templateContent);
+
+
+            parent::ReplaceEnd($templateContent);
+
+        }
+        return $templateContent;
+    }
+
+    private function GenDetail(){
+        $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
+        $templateContent = "";
+
+        if($newspaperArticleId>0){
+            $templateFileUrl = "newspaper/newspaper_article_detail.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = parent::ReplaceTemplate($templateContent);
+
+
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+            $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
+            Template::ReplaceOne($templateContent, $arrOne);
+
+            $templateContent = parent::ReplaceTemplate($templateContent);
+
+
+            parent::ReplaceEnd($templateContent);
+
+        }
+        return $templateContent;
     }
 } 

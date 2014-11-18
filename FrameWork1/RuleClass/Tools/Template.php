@@ -53,6 +53,14 @@ class Template
      * 模板标签类型：浏览记录列表 type="user_explore_list"
      */
     const TAG_TYPE_USER_EXPLORE_LIST = "user_explore_list";
+    /**
+     * 模板标签类型：电子报文章列表 type="newspaper_article_list"
+     */
+    const TAG_TYPE_NEWSPAPER_ARTICLE_LIST = "newspaper_article_list";
+    /**
+     * 模板标签类型：电子报文章图片列表 type="newspaper_article_pic_list"
+     */
+    const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST = "newspaper_article_pic_list";
 
 
     /**
@@ -1152,11 +1160,13 @@ class Template
          * $tempContent = $temp1 . $replaceContent . $temp2;
          * return $tempContent;
          */
+
         if (!empty($tagId) && !empty($tagType)) {
             $patterns = "/\<$tagName id=\"$tagId\" type=\"$tagType\"(.*)\<\/$tagName>/imsU";
             $templateContent = preg_replace($patterns, $replaceContent, $templateContent, 1);
         } else if (!empty($tagId)) {
             $patterns = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
+            //    /\<icms id="newspaper_page_109"(.*)\<\/icms>/imsU
             $templateContent = preg_replace($patterns, $replaceContent, $templateContent, 1);
         } else {
             $patterns = "/\<$tagName(.*)\<\/$tagName>/imsU";

@@ -30,10 +30,7 @@ class NewspaperPublicGen extends BasePublicGen {
         $channelId = Control::GetRequest("channel_id", 0);
         $templateContent = "";
         if($channelId>0){
-
-
             $publishDate = Control::GetRequest("publish_date", "");
-
             $templateFileUrl = "newspaper/newspaper_page_one.html";
             $templateName = "default";
             $templatePath = "front_template";
@@ -59,7 +56,13 @@ class NewspaperPublicGen extends BasePublicGen {
 
                 $newspaperPagePublicData = new NewspaperPagePublicData();
 
-                $currentNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
+                $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+                if($newspaperPageId<=0){
+                    $currentNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
+                }else{
+                    $currentNewspaperPageId = $newspaperPageId;
+                }
+
 
                 $templateContent = str_ireplace("{CurrentNewspaperPageId}", $currentNewspaperPageId, $templateContent);
 
@@ -75,7 +78,10 @@ class NewspaperPublicGen extends BasePublicGen {
 
                     $nextNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext($currentNewspaperId,$currentNewspaperPageId);
 
-                    $templateContent = str_ireplace("{NextNewspaperPageId}", $nextNewspaperPageId, $templateContent);
+                    $templateContent = str_ireplace("{NextNewspaperPageId}",
+                        $nextNewspaperPageId,
+                        $templateContent
+                    );
 
                     $previousNewspaperPageId =
                         $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
@@ -83,16 +89,12 @@ class NewspaperPublicGen extends BasePublicGen {
                             $currentNewspaperPageId
                         );
 
-                    $templateContent = str_ireplace("{PreviousNewspaperPageId}", $previousNewspaperPageId, $templateContent);
-
+                    $templateContent = str_ireplace("{PreviousNewspaperPageId}",
+                        $previousNewspaperPageId,
+                        $templateContent
+                    );
                 }
-
-
-
             }
-
-
-
         }
         return $templateContent;
 

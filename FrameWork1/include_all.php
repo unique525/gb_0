@@ -33,6 +33,7 @@ foreach ($arrFiles as $fileName) {
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseClientData.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.php");
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider";
 $arrFiles = getFileNames($dir);
