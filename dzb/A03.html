@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>长沙晚报 2014-10-21</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="/system_js/jquery-1.9.1.min.js"></script>
+    <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript">
+        $(document).on("pageinit","#pageone",function(){
+            $("#img01").on("tap",function(){
+                window.location.href = 'A03-list.html'
+            });
+
+            $("#img01").on("swipeleft",function(){
+                //alert("您向左滑动！");
+                window.location.href = 'A03.html'
+            });
+
+
+            $("#img01").on("swiperight",function(){
+                window.location.href = 'A02.html'
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+
+    <div data-role="content">
+
+
+        <img id="img01" style="max-width:100%" src="A03/A0s.jpg" alt="" />
+
+
+
+    </div>
+
+
+</div>
+
+</body>
+</html>
+	
