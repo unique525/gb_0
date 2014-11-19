@@ -139,18 +139,17 @@ class UserCarPublicData extends BasePublicData
                             pp.ProductPriceId,
                             pp.ProductPriceValue,
                             pp.ProductUnit,
-                            pp.ProductPriceIntro,
-                            psp.SendPrice
+                            pp.ProductPriceIntro
                     FROM " . self::TableName_UserCar . " uc," . self::TableName_ProductPrice . " pp,"
-                . self::TableName_Product . " p LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId,"
-                . self::TableName_ProductSendPrice . " psp
+                . self::TableName_Product . " p LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId
                     WHERE uc.ProductPriceId = pp.ProductPriceId
-                    AND uc.ProductId = psp.ProductId
+
                     AND uc.ProductId = p.ProductId
                     AND uc.UserId = :UserId AND uc.UserCarId IN (" . $strUserCarIds . ");";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
         }
         return $result;
     }
