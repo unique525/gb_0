@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        body{background:#efefef;}
+        img, object { max-width: 100%;}
+    </style>
+
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
@@ -40,6 +45,14 @@
                     dateFormat: 'yy-mm-dd'
                 });
             });
+
+            $("#img_logo").load(function(){
+                var screenWidth = $(document).width();
+
+                $(this).css("width",screenWidth);
+
+                //alert($(this).css("width"));
+            });
         });
     </script>
 </head>
@@ -48,8 +61,8 @@
 <div data-role="page" id="pageone">
 
     <div>
-        <div style="float:left"><img src="/image_02/2_05.jpg" alt="" id="img_logo" /></div>
-        <div style="float:right;vertical-align:middle;">{NewspaperTitle}</div>
+        <div style="float:left"><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
+        <div style="float:right;vertical-align:middle;">{NewspaperTitle} {NewspaperPageName} - {NewspaperPageNo}</div>
         <div style="clear:both;padding:0;margin:0;width:0;height:0;"></div>
     </div>
     <div>

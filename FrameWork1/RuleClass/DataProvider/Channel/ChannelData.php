@@ -69,6 +69,10 @@ class ChannelData {
      */
     const CHANNEL_TYPE_INFORMATION = 14;
     /**
+     * 频道类型 电子报 15
+     */
+    const CHANNEL_TYPE_NEWSPAPER = 15;
+    /**
      * 频道类型 外部接口类 50
      */
     const CHANNEL_TYPE_INTERFACE = 50;

@@ -1,6 +1,6 @@
 <div id="left_site">
     <div class="left">
-        <div id="div_now_selected_site" idvalue="1" title="http://">XXX</div>
+        <div id="div_now_selected_site" idvalue="0" title=""></div>
         <div id="div_select_site_list" style="display:none;">
             <icms id="select_site" type="list">
                 <item>

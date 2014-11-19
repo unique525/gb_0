@@ -65,6 +65,11 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
             $newspaperArticlePublicData = new NewspaperArticlePublicData();
             $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
+
+            $arrOne["NewspaperArticleContent"] =
+                str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
+
+
             Template::ReplaceOne($templateContent, $arrOne);
 
             $templateContent = parent::ReplaceTemplate($templateContent);

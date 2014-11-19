@@ -152,6 +152,7 @@ class SiteManageData extends BaseManageData {
 
             $dataProperty->AddField("ManageUserId1", $manageUserId);
             $dataProperty->AddField("ManageUserId2", $manageUserId);
+
         }
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
@@ -182,7 +183,7 @@ class SiteManageData extends BaseManageData {
                 }
             }
             $sql = "SELECT s.*,mu.ManageUserName FROM ".self::TableName_Site." s,".self::TableName_ManageUser." mu
-                        WHERE s.State<100 AND s.ManageUserId=mu.ManageUserId $searchSql
+                        WHERE s.ManageUserId=mu.ManageUserId $searchSql
                         ORDER BY s.Sort DESC,convert(s.SiteName USING gbk)
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
             $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site."s,".self::TableName_ManageUser." mu
@@ -202,7 +203,7 @@ class SiteManageData extends BaseManageData {
                 }
             }
 
-            $sql = "SELECT * FROM ".self::TableName_Site." WHERE State<100 AND
+            $sql = "SELECT * FROM ".self::TableName_Site." WHERE
                 SiteId IN
                 ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
                   UNION
@@ -212,7 +213,7 @@ class SiteManageData extends BaseManageData {
                  ) $searchSql
                  ORDER BY Sort DESC,convert(SiteName USING gbk)
                  LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site." WHERE State<100 AND
+            $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site." WHERE
                 SiteId IN
                 ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
                   UNION
@@ -221,6 +222,7 @@ class SiteManageData extends BaseManageData {
                         (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
                  ) $searchSql
                  ;";
+
 
             $dataProperty->AddField("ManageUserId1", $manageUserId);
             $dataProperty->AddField("ManageUserId2", $manageUserId);

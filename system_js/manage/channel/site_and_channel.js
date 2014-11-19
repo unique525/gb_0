@@ -327,6 +327,10 @@ window.CHANNEL_TYPE_EXAM = 13;
  */
 window.CHANNEL_TYPE_INFORMATION = 14;
 /**
+ * 频道类型 电子报 15
+ */
+window.CHANNEL_TYPE_NEWSPAPER = 15;
+/**
  * 频道类型 外部接口类 50
  */
 window.CHANNEL_TYPE_INTERFACE = 50;
@@ -385,7 +389,11 @@ function _ChannelClick() {
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=information&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
             addTab();
-        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_HOME) { //站点首页
+        } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_NEWSPAPER) { //电子报
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=newspaper&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
+        }else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_HOME) { //站点首页
 
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_INTERFACE) { //接口
 

@@ -9,6 +9,7 @@
     <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <style>
         body{background:#efefef;}
+        img, object { max-width: 100%;}
     </style>
     <script type="text/javascript">
         $(function () {
@@ -31,7 +32,7 @@
 <body>
 
 <div data-role="page" id="pageone">
-    <div>
+    <div data-role="content">
         <div style="text-align:center;background:#efefef;">
             <h4 style="text-align:center;background:#efefef;">{NewspaperArticleCiteTitle}</h4>
             <h2 style="text-align:center;background:#efefef;">{NewspaperArticleTitle}</h2>

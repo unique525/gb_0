@@ -195,6 +195,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $ftpManageGen = new FtpManageGen();
                     $result = $ftpManageGen->Gen();
                     break;
+                case "newspaper":
+                    $newspaperManageGen = new NewspaperManageGen();
+                    $result = $newspaperManageGen->Gen();
+                    break;
+                case "newspaper_page":
+                    $newspaperPageManageGen = new NewspaperPageManageGen();
+                    $result = $newspaperPageManageGen->Gen();
+                    break;
+                case "newspaper_article":
+                    $newspaperArticleManageGen = new NewspaperArticleManageGen();
+                    $result = $newspaperArticleManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
@@ -249,6 +261,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tagId = "select_site";
         $siteManageData = new SiteManageData();
         $arrSiteList = $siteManageData->GetListForSelect($manageUserId);
+
         Template::ReplaceList($tempContent, $arrSiteList, $tagId);
 
 
