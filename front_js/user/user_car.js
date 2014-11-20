@@ -26,7 +26,7 @@ function addUserCar(siteId,productId,buyCount,productPriceId,activityProductId){
 
 $(function(){
     $.ajax({
-        url:"/default.php?mod=user_car&a=async_get_count&site_id=1",
+        url:"/default.php?mod=user_car&a=async_get_count",
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){

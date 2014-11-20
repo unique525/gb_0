@@ -101,16 +101,7 @@
 
 </div>
 <div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div class="goods" id="leftmenu"><ul><li><span>所有商品分类</span></li></ul></div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="/images/icon_new.png" width="29" height="30"/></div>
-    </div>
-</div>
+<pre_temp id="12"></pre_temp>
 
 <div class="wrapper3">
     <div class="new_buy">
