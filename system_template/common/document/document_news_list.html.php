@@ -8,7 +8,13 @@
         $(function() {
 
 
-
+            $(".link_view").each(function(){
+                var documentNewsId = $(this).attr("idvalue");
+                var publishDate = $(this).attr("pub_date");
+                if(publishDate.length>0){
+                    $(this).attr("href","/h/{ChannelId}/"+publishDate+"/"+documentNewsId+".html");
+                }
+            });
 
 
 
@@ -96,7 +102,7 @@
                             </td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_DocumentNewsId}" alt="预览" title="预览文档"/></td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_publish" src="/system_template/{template_name}/images/manage/publish.gif" idvalue="{f_DocumentNewsId}" title="发布文档" alt="发布"/></td>
-                            <td class="spe_line2" style="padding-left:10px;"><a target="_blank" href="{view_url}"><span style="color:{f_DocumentNewsTitleColor};font-weight:{f_DocumentNewsTitleBold};">{f_DocumentNewsTitle}</span></a></td>
+                            <td class="spe_line2" style="padding-left:10px;"><a target="_blank" class="link_view" idvalue="{f_DocumentNewsId}" pub_date="{f_year}{f_month}{f_day}"><span style="color:{f_DocumentNewsTitleColor};font-weight:{f_DocumentNewsTitleBold};">{f_DocumentNewsTitle}</span></a></td>
                             <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_DocumentNewsId}" title="向上移动" alt="向上"/><img style="cursor:pointer;" class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_DocumentNewsId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:60px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的推荐级别，用在特定的模板中">{f_RecLevel}</td>

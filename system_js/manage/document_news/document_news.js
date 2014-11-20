@@ -143,18 +143,16 @@ $(function() {
             resultbox: $(this).html()
         }, function(result) {
             dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
-            if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED) {
-                dialogContent.html('发布完成');
-                var spanState = $("#span_state_" + documentNewsId);
-                spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
-            }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR) {
+            if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR) {
                 dialogContent.html('资讯id小于0');
             }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR) {
                 dialogContent.html('频道id小于0');
             }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR) {
                 dialogContent.html('状态不正确，必须为[终审]或[已发]状态的文档才能发布!');
-            }else{
-                dialogContent.html('未知结果');
+            }else {
+                dialogContent.html("发布完成<br />"+result);
+                var spanState = $("#span_state_" + documentNewsId);
+                spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
             }
         });
     });

@@ -93,6 +93,7 @@
          * @return {string}
          */
         function formatChannelTemplateState(state){
+            state = state.toString();
             switch (state){
                 case "0":
                     return "启用";
