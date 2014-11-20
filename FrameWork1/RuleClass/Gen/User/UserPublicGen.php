@@ -77,6 +77,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceEnd($templateContent);
+
         return $templateContent;
     }
 
@@ -92,6 +97,12 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceEnd($templateContent);
+
         return $templateContent;
     }
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>会员注册</title>
 <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
 <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet"/>
 <style type="text/css">
@@ -388,7 +388,7 @@ $(function () {
   <tr>
     <td class="registerleft"></td>
     <td class="change">
-        <input type="checkbox" id="accept_item" name="accept_item"/>&nbsp;我已同意并阅读<a href="#"><font color="#00A93C">《星滋味用户注册协议》</font></a>
+        <input type="checkbox" id="accept_item" name="accept_item"/>&nbsp;我已同意并阅读<a href="/h/4/14.html" target="_blank" style="color:#00A93C;">《星滋味用户注册协议》</a>
     </td>
   </tr>
   <tr>
@@ -406,6 +406,8 @@ $(function () {
   </tr>
 </table>
 </div>
+    <div style="height:50px;"></div>
+    <pre_temp id="8"></pre_temp>
 </form>
 </body>
 </html>
