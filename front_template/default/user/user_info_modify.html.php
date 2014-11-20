@@ -65,7 +65,7 @@
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">
-        <div class="goods" id="leftmenu">
+        <div id="leftmenu">
             <ul>
                 <li><span>会员中心</span></li>
             </ul>
@@ -86,7 +86,7 @@
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">
                 <div class="rightbar">
-                    <div class="rightbar2"><a href="">星滋味首页</a> ><a href="">会员中心</a>&gt;会员信息</div>
+                    <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>修改会员信息</div>
                 </div>
                 <div class="change_info">
                     <form id="userInfoForm" enctype="multipart/form-data" action="/default.php?mod=user_info&a=modify&user_id={UserId}"

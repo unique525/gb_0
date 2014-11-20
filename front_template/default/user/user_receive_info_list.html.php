@@ -119,7 +119,7 @@
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">
-        <div class="goods" id="leftmenu">
+        <div id="leftmenu">
             <ul>
                 <li><span>会员中心</span></li>
             </ul>

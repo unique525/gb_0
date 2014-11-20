@@ -45,7 +45,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
         if ($userId > 0 && $siteId > 0) {
-            $templateFileUrl = "/user/user_info_modify.html";
+            $templateFileUrl = "user/user_info_modify.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -113,12 +113,15 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         }
     }
 
+    /**
+     * @return mixed|string
+     */
     private function GenModifyAvatar()
     {
         $userId = Control::GetUserId();
         $siteId =parent::GetSiteIdByDomain();
         if ($userId > 0) {
-            $templateFileUrl = "/user/user_modify_avatar.html";
+            $templateFileUrl = "user/user_modify_avatar.html";
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
