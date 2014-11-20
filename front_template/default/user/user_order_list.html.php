@@ -23,6 +23,21 @@
 
         $(function () {
 
+            var state = parseInt(Request["state"]);
+            switch(state){
+                case -1:
+                    $("#order_state_-1").addClass("selected");
+                    break;
+                case 10:
+                    $("#order_state_10").addClass("selected");
+                    break;
+                case 20:
+                    $("#order_state_20").addClass("selected");
+                    break;
+                case 70:
+                    $("#order_state_70").addClass("selected");
+                    break;
+            }
 
 //            $(".right").click(function () {
 //                var idvalue = $(this).attr("idvalue");
@@ -60,7 +75,7 @@
 <div class="clean"></div>
 <div class="mainbav">
     <div class="wrapper">
-        <div class="goods" id="leftmenu">
+        <div id="leftmenu">
             <ul>
                 <li><span>会员中心</span></li>
             </ul>
@@ -81,15 +96,16 @@
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">
                 <div class="rightbar">
-                    <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
-                </div>
+                    <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的订单</div>
                     <div style="padding:20px 50px;">
                         <div class="order_class">
                             <ul>
-                                <li><a class="selected" href="#">所有订单</a></li>
-                                <li><a href="#">待付款<span>2</span></a></li>
-                                <li><a href="#">待发货<span>2</span></a></li>
-                                <li><a href="#">待评价<span>2</span></a></li>
+                                <li><a id="order_state_-1" href="/default.php?mod=user_order&a=list&state=-1">所有订单</a></li>
+                                <li>
+                                    <a id="order_state_10" href="/default.php?mod=user_order&a=list&state=10">待付款<span>{UserOrderCountOfNonPayment}</span></a>
+                                </li>
+                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">待发货<span>{UserOrderCountOfPayment}</span></a></li>
+                                <li><a id="order_state_70" href="/default.php?mod=user_order&a=list&state=70">待评价<span>{UserOrderCountOfUnComment}</span></a></li>
                             </ul>
                             <div class="clean"></div>
                         </div>
