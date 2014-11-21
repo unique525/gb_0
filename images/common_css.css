@@ -383,13 +383,13 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 /* pager css */
 #pager_btn{margin-top:3px;font-size:16px;}
 #pager_btn a{font-size:16px;}
-.pb1{float:left;padding:0 12px;height:28px;line-height:28px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
-.pb1_over{float:left;padding:0 12px;height:28px;line-height:28px;background:#CEE3E6;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
-.pb2{float:left;padding:0 12px;height:28px;line-height:28px;margin-right:2px;text-align:center;}
-.pb3{float:left;width:60px;height:28px;line-height:28px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
-.pb3_over{float:left;width:60px;height:28px;line-height:28px;background:#CEE3E6;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
+.pb1{float:left; width:40px;height:40px;line-height:40px;border:solid 1px #ccc;margin-right:5px;text-align:center;}
+.pb1_over{float:left; width:40px;height:40px;line-height:40px;background:#CEE3E6;border:solid 1px #ccc;margin-right:5px;text-align:center;}
+.pb2{float:left; width:40px;height:40px;line-height:40px;margin-right:5px;text-align:center; border:1px solid #FF3D00; background:#FF3D00;}
+.pb3{float:left;width:60px;height:40px;line-height:40px;border:solid 1px #ccc;margin-right:5px;text-align:center;}
+.pb3_over{float:left;width:60px;height:40px;line-height:40px;background:#CEE3E6;border:solid 1px #ccc;margin-right:2px;text-align:center;}
 .pb1 a{}
-.pb2 a{font-weight:bold;text-decoration:underline;}
-.pb4{float:left;padding:0 3px;background:#efefef;border:solid 1px #d5d5d5;text-align:center;}
-.pb5{float:left;padding:0 3px;height:28px;line-height:28px;background:#efefef;border:solid 1px #d5d5d5;margin-right:2px;text-align:center;}
-.pager_input{color:#999;background:#efefef;ime-mode:disabled;width:68px;border:0;height:22px;padding-top:3px;padding-bottom:3px;font-size: 16px;}
+.pb2 a{font-weight:bold;text-decoration:none; color:#fff;}
+.pb4{float:left;padding:0 3px;border:solid 1px #ccc;text-align:center;}
+.pb5{float:left;padding:0 10px;height:40px;line-height:40px;border:solid 1px #ccc;margin-right:5px;text-align:center;}
+.pager_input{color:#999;ime-mode:disabled;width:68px;border:0;height:40px;padding-top:3px;padding-bottom:3px;font-size: 16px; border:1px solid #ccc;}
