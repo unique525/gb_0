@@ -20,6 +20,14 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
+                case "manage_user":
+                    $manageUserManageGen = new ManageUserManageGen();
+                    $result = $manageUserManageGen->Gen();
+                    break;
+                case "manage_user_group":
+                    $manageUserGroupManageGen = new ManageUserGroupManageGen();
+                    $result = $manageUserGroupManageGen->Gen();
+                    break;
                 case "channel":
                     $channelManageGen = new ChannelManageGen();
                     $result = $channelManageGen->Gen();

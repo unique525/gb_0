@@ -20,7 +20,7 @@
                 var siteId=$(this).attr("idvalue");
                 var siteName=$(this).attr("title");
                 parent.G_TabUrl = '/default.php?secu=manage&mod=site&m=modify' + '&site_id=' + siteId + '';
-                parent.G_TabTitle = siteName;
+                parent.G_TabTitle = siteName + '-编辑';
                 parent.addTab();
             });
 
@@ -94,10 +94,11 @@
         }
 
         /**
-         * 格式化站点状态值
+         * 格式化状态值
          * @return {string}
          */
         function formatSiteState(state){
+            state = state.toString();
             switch (state){
                 case "0":
                     return "启用";

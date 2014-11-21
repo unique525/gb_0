@@ -573,7 +573,7 @@ class ChannelManageData extends BaseManageData
                         c.ChannelType,
                         c.ChannelName,
                         c.Rank,
-                        (SELECT count(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
+                        (SELECT count(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100 AND Invisible=0) AS ChildCount
                     FROM " . self::TableName_Channel . " c
                     WHERE
                         c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
@@ -585,7 +585,7 @@ class ChannelManageData extends BaseManageData
                             c.ChannelType,
                             c.ChannelName,
                             c.Rank,
-                            (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100) AS ChildCount
+                            (SELECT COUNT(*) FROM " . self::TableName_Channel . " WHERE ParentId=c.ChannelId AND State<100 AND Invisible=0) AS ChildCount
                         FROM " . self::TableName_Channel . " c
                         WHERE
                             c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0

@@ -24,21 +24,22 @@ class ManageUserAuthorityManageData extends BaseManageData
             `ManageUserGroupId`,
             `ManageUserId`,
             `PopedomLevel`,
-            `Explore`, 
-            `Create`, 
-            `Modify`, 
-            `Delete`, 
-            `Disabled`, 
-            `Search`, 
-            `Rework`, 
-            `Audit1`, 
-            `Audit2`, 
-            `Audit3`, 
-            `Audit4`, 
-            `Refused`, 
-            `DoOthers`,
-            `DoOthersInSameGroup`,
-            `Publish`
+            `ChannelExplore`,
+            `ChannelCreate`,
+            `ChannelModify`,
+            `ChannelDelete`,
+            `ChannelDisabled`,
+            `ChannelSearch`,
+            `ChannelRework`,
+            `ChannelAudit1`,
+            `ChannelAudit2`,
+            `ChannelAudit3`,
+            `ChannelAudit4`,
+            `ChannelRefused`,
+            `ChannelDoOthers`,
+            `ChannelDoOthersInSameGroup`,
+            `ChannelPublish`,
+            `ChannelManageTemplate`
             )
             VALUES
 	        (
@@ -61,6 +62,7 @@ class ManageUserAuthorityManageData extends BaseManageData
 	        1,
 	        1,
 	        1,
+            1,
             1
 	        );";
         $dataProperty = new DataProperty();
@@ -483,9 +485,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有浏览权限
      */
-    public function CanExplore($siteId, $channelId, $manageUserId)
+    public function CanChannelExplore($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Explore");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelExplore");
     }
 
     /**
@@ -495,9 +497,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有新增权限
      */
-    public function CanCreate($siteId, $channelId, $manageUserId)
+    public function CanChannelCreate($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Create");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelCreate");
     }
 
     /**
@@ -507,9 +509,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有编辑权限
      */
-    public function CanModify($siteId, $channelId, $manageUserId)
+    public function CanChannelModify($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Modify");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelModify");
     }
 
     /**
@@ -519,9 +521,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有删除权限
      */
-    public function CanDelete($siteId, $channelId, $manageUserId)
+    public function CanChannelDelete($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Delete");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelDelete");
     }
 
     /**
@@ -531,9 +533,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有停用权限
      */
-    public function CanDisabled($siteId, $channelId, $manageUserId)
+    public function CanChannelDisabled($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Disabled");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelDisabled");
     }
 
     /**
@@ -543,9 +545,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有查询权限
      */
-    public function CanSearch($siteId, $channelId, $manageUserId)
+    public function CanChannelSearch($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Search");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelSearch");
     }
 
     /**
@@ -699,9 +701,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有返工权限
      */
-    public function CanRework($siteId, $channelId, $manageUserId)
+    public function CanChannelRework($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Rework");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelRework");
     }
 
     /**
@@ -711,9 +713,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有一审权限
      */
-    public function CanAudit1($siteId, $channelId, $manageUserId)
+    public function CanChannelAudit1($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit1");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelAudit1");
     }
 
     /**
@@ -723,9 +725,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有二审权限
      */
-    public function CanAudit2($siteId, $channelId, $manageUserId)
+    public function CanChannelAudit2($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit2");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelAudit2");
     }
 
     /**
@@ -735,9 +737,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有三审权限
      */
-    public function CanAudit3($siteId, $channelId, $manageUserId)
+    public function CanChannelAudit3($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit3");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelAudit3");
     }
 
     /**
@@ -747,9 +749,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有终审权限
      */
-    public function CanAudit4($siteId, $channelId, $manageUserId)
+    public function CanChannelAudit4($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Audit4");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelAudit4");
     }
 
     /**
@@ -759,9 +761,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有已否权限
      */
-    public function CanRefused($siteId, $channelId, $manageUserId)
+    public function CanChannelRefused($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Refused");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelRefused");
     }
 
     /**
@@ -771,9 +773,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有操作他人权限
      */
-    public function CanDoOthers($siteId, $channelId, $manageUserId)
+    public function CanChannelDoOthers($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoOthers");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelDoOthers");
     }
 
     /**
@@ -783,9 +785,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有操作同一组内他人权限
      */
-    public function CanDoOthersInSameGroup($siteId, $channelId, $manageUserId)
+    public function CanChannelDoOthersInSameGroup($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoOthersInSameGroup");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelDoOthersInSameGroup");
     }
 
 
@@ -796,9 +798,9 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool 是否有操作同一组中他人的权限
      */
-    public function CanDoSameGroupOthers($siteId, $channelId, $manageUserId)
+    public function CanChannelDoSameGroupOthers($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "DoSameGroupOthers");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelDoSameGroupOthers");
     }
 
     /**
@@ -808,9 +810,21 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageUserId 后台管理员id
      * @return bool  是否有发布权限
      */
-    public function CanPublish($siteId, $channelId, $manageUserId)
+    public function CanChannelPublish($siteId, $channelId, $manageUserId)
     {
-        return self::GetFieldValue($siteId, $channelId, $manageUserId, "Publish");
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelPublish");
+    }
+
+    /**
+     * 是否有管理频道模板的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool  是否有管理频道模板的权限
+     */
+    public function CanChannelManageTemplate($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ChannelManageTemplate");
     }
 
     /**
@@ -907,6 +921,116 @@ class ManageUserAuthorityManageData extends BaseManageData
     public function CanManageConfig($siteId, $channelId, $manageUserId)
     {
         return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageConfig");
+    }
+
+    /**
+     * 是否有管理员任务修改状态权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有管理员任务修改状态权限
+     */
+    public function CanManageUserTaskManageState($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserTaskManageState");
+    }
+
+    /**
+     * 是否有管理员任务查看所有任务权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有管理员任务查看所有任务权限
+     */
+    public function CanManageUserTaskViewAll($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserTaskViewAll");
+    }
+
+    /**
+     * 是否有管理员任务查看同一分组任务权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有管理员任务查看同一分组任务权限
+     */
+    public function CanManageUserTaskViewSameGroup($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserTaskViewSameGroup");
+    }
+
+
+    /**
+     * 是否有浏览管理员列表权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览管理员列表权限
+     */
+    public function CanManageUserExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserExplore");
+    }
+
+    /**
+     * 是否有新增管理员的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有新增管理员的权限
+     */
+    public function CanManageUserCreate($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserCreate");
+    }
+
+    /**
+     * 是否有编辑管理员的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑管理员的权限
+     */
+    public function CanManageUserModify($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserModify");
+    }
+
+
+    /**
+     * 是否有浏览管理员分组列表权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览管理员分组列表权限
+     */
+    public function CanManageUserGroupExplore($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserGroupExplore");
+    }
+
+    /**
+     * 是否有新增管理员分组的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有浏览管理员分组列表权限
+     */
+    public function CanManageUserGroupCreate($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserGroupCreate");
+    }
+
+    /**
+     * 是否有编辑管理员分组的权限
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑管理员分组的权限
+     */
+    public function CanManageUserGroupModify($siteId, $channelId, $manageUserId)
+    {
+        return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserGroupModify");
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台框架左部导航生成类
+ * 后台框架 左部导航 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Manage
  * @author zhangchi

@@ -93,8 +93,8 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
 
             if ($manageUserId > 0) {
                 if (!$isSecurityIp) { //不是内网IP才需要附加认证
-                    $openPublicLogin = $manageUserManageData->GetOpenPublicLogin($manageUserName);
-                    $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLogin($manageUserName);
+                    $openPublicLogin = $manageUserManageData->GetOpenPublicLogin($manageUserId, true);
+                    $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLogin($manageUserId, true);
 
                     if (isset($openPublicLogin) && !empty($openPublicLogin)) { //允许外网登录
                         if (isset($otpVerifyLogin) && !empty($otpVerifyLogin)) { //使用了Otp认证
@@ -155,8 +155,8 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
             Control::SetManageUserCookie($manageUserId, $manageUserName, 10000, $webAppDomain);
         }
 
-        $userId = $manageUserManageData->GetUserId($manageUserId);
-        $userName = $manageUserManageData->GetUserName($manageUserId);
+        $userId = $manageUserManageData->GetUserId($manageUserId, true);
+        $userName = $manageUserManageData->GetUserName($manageUserId, true);
         if ($userId > 0) {
             Control::SetUserCookie($userId, $userName);
         }
@@ -200,11 +200,11 @@ class ManageLoginPublicGen extends BasePublicGen implements IBasePublicGen
         if (!$isSecurityIp) { //不是内网IP再判断是否需要额外验证
             $manageUserName = Control::GetRequest("manage_user_name", "");
             $manageUserManageData = new ManageUserManageData();
-            $openPublicLogin = $manageUserManageData->GetOpenPublicLogin($manageUserName);
+            $openPublicLogin = $manageUserManageData->GetOpenPublicLoginByManageUserName($manageUserName, true);
             //允许外网登陆
             if ($openPublicLogin === 1) {
                 $arrVerifyType["open_public_login"] = "1";
-                $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLogin($manageUserName);
+                $otpVerifyLogin = $manageUserManageData->GetOtpVerifyLoginByManageUserName($manageUserName, true);
                 if ($otpVerifyLogin === 1) { //开启了口令牌认证
                     $arrVerifyType["otp_verify_login"] = "1";
                 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 后台管理 分组 数据类
+ * 后台管理 管理员分组 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Manage
  * @author zhangchi
@@ -83,24 +83,6 @@ class ManageUserGroupManageData extends BaseManageData {
         }
     }
 
-    /**
-     * 取得adminusergroupname 根据管理组ID adminusergroupid 或是管理员ID adminuserid
-     * @param <type> $tableidvalue
-     * @param <type> $gettype   为0时根据adminusergroupid 否则根据 adminuserid
-     * @return <type> 
-     */
-    public function GetAdminUserGroupName($tableidvalue, $gettype = 0) {
-        $dataProperty = new DataProperty();
-        if (intval($gettype) === 0) {
-            $sql = "SELECT adminusergroupname FROM " . self::tableName . " WHERE " . self::tableIdName . "=:" . self::tableIdName;
-            $dataProperty->AddField(self::tableIdName, $tableidvalue);
-        } else {
-            $sql = "SELECT adminusergroupname FROM " . self::tableName . " WHERE " . self::tableIdName . " in (SELECT adminusergroupid FROM cst_adminuser WHERE adminuserid=:adminuserid)";
-            $dataProperty->AddField("adminuserid", $tableidvalue);
-        }
-        $result = $this->dbOperator->GetString($sql, $dataProperty);
-        return $result;
-    }
 }
 
 ?>
