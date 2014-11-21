@@ -74,6 +74,24 @@
                 </td>
             </tr>
 
+
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_IssueDepartment">签发部门：</label></td>
+                <td class="spe_line">
+                    <input name="f_IssueDepartment" id="f_IssueDepartment" value="{IssueDepartment}" type="text"
+                           maxlength="100" class="input_box" style="width:150px;"/>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_Issuer">签发人：</label></td>
+                <td class="spe_line">
+                    <input name="f_Issuer" id="f_Issuer" value="{Issuer}" type="text"
+                           maxlength="100" class="input_box" style="width:150px;"/>
+                </td>
+            </tr>
+
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_CreateDate">创建时间：</label></td>
                 <td class="spe_line"><input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:180px;"/></td>
@@ -93,6 +111,22 @@
                 <td class="spe_line" height="30" align="right"><label for="f_PicCount">图片数量：</label></td>
                 <td class="spe_line">
                     <input id="f_PicCount" name="f_PicCount" type="text" value="{PicCount}" maxlength="10" class="input_number"/>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_PageWidth">版面宽度：</label></td>
+                <td class="spe_line">
+                    <input id="f_PageWidth" name="f_PageWidth" type="text" value="{PageWidth}" maxlength="10" class="input_number"/>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_PageHeight">版面高度：</label></td>
+                <td class="spe_line">
+                    <input id="f_PageHeight" name="f_PageHeight" type="text" value="{PageHeight}" maxlength="10" class="input_number"/>
                 </td>
             </tr>
 

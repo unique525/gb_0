@@ -67,10 +67,27 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
             if(count($arrUserOrderList) != 0){
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?mod=user_order&a=list&p={0}&ps=$pageSize&state=".$state;
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
                 Template::ReplaceList($templateContent,$arrUserOrderList,$tagId);
+                $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
             }else{
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_order",7));
             }
+
+
+            $userOrderCountOfNonPayment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_NON_PAYMENT);
+            $userOrderCountOfPayment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_PAYMENT);
+            $userOrderCountOfUnComment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_UNCOMMENT);
+
+            $templateContent = str_ireplace("{UserOrderCountOfNonPayment}", $userOrderCountOfNonPayment, $templateContent);
+            $templateContent = str_ireplace("{UserOrderCountOfPayment}", $userOrderCountOfPayment, $templateContent);
+            $templateContent = str_ireplace("{UserOrderCountOfUnComment}", $userOrderCountOfUnComment, $templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

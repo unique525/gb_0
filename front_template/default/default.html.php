@@ -259,7 +259,7 @@
 <div class="part_3 wrapper">
     <div class="box_1">
         <div class="left left_bar">
-            <div class="title3 green_bg">每日生鲜<span id="channel_27"></span></div>
+            <div class="title3 green_bg">食品生鲜<span id="channel_27"></span></div>
             <div class="nav">
                 <ul>
                 <icms id="channel_27" type="channel_list" where="parent">
@@ -526,7 +526,7 @@
     </div>
     <div class="side_tag">
         <ul>
-            <li><a href="#channel_27">每日生鲜</a></li>
+            <li><a href="#channel_27">食品生鲜</a></li>
             <li><a href="#channel_28">时令水果</a></li>
             <li><a href="#channel_33">家居用品</a></li>
             <li><a href="#channel_35">办公家电</a></li>

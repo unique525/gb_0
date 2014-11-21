@@ -65,6 +65,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "homepage":
                 $result = self::GenHomePage();
                 break;
+            case "modify_user_pass": //生成修改密码界面
+                $result = self::GenModifyPassword();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -77,6 +80,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceEnd($templateContent);
+
         return $templateContent;
     }
 
@@ -92,6 +100,12 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceEnd($templateContent);
+
         return $templateContent;
     }
 
@@ -344,6 +358,30 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             return false;
         }
     }
+
+    /**
+     * @return mixed|string
+     */
+    private function GenModifyPassword(){
+        $userId = Control::GetUserId();
+        if($userId > 0){
+            $siteId = parent::GetSiteIdByDomain();
+            $templateFileUrl = "user/user_pass_modify.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
+
+
+            $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
+            parent::ReplaceSiteConfig($siteId,$templateContent);
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            return "";
+        }
+    }
+
 }
 
 ?>

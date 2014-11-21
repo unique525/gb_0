@@ -97,6 +97,25 @@ class ChannelTemplateManageData extends BaseManageData
     }
 
 
+    /**
+     * 修改状态
+     * @param int $channelTemplateId 模板id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($channelTemplateId, $state)
+    {
+        $result = 0;
+        if ($channelTemplateId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ChannelTemplate . "
+                        SET `State`=:State WHERE ".self::TableId_ChannelTemplate."=:".self::TableId_ChannelTemplate.";";
+            $dataProperty->AddField(self::TableId_ChannelTemplate, $channelTemplateId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 修改模板附件
@@ -219,6 +238,26 @@ class ChannelTemplateManageData extends BaseManageData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
             $cacheFile = 'channel_template_get_publish_type.cache_' . $channelTemplateId . '';
             $sql = "SELECT PublishType FROM " . self::TableName_ChannelTemplate . " WHERE ChannelTemplateId = :ChannelTemplateId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得频道模板站点id
+     * @param int $channelTemplateId 频道模板id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 频道模板的站点id
+     */
+    public function GetSiteId($channelTemplateId, $withCache)
+    {
+        $result = -1;
+        if ($channelTemplateId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
+            $cacheFile = 'channel_template_get_site_id.cache_' . $channelTemplateId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_ChannelTemplate . " WHERE ChannelTemplateId = :ChannelTemplateId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

@@ -543,16 +543,29 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function AsyncPublish()
     {
-        $result = -1;
+        $result = '';
         $documentNewsId = Control::GetRequest("document_news_id", -1);
         if ($documentNewsId > 0) {
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;
             $publishChannel = true;
             $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
-            if ($result == BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED) {
-                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
-                    $publishQueueManageData->Queue[$i]["Content"] = "";
+            if ($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED)) {
+                $result = '';
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                    $publishResult = "";
+
+                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                    ){
+                        $publishResult = "Ok";
+                    }
+
+
+                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                        .'<br />'
+                    ;
                 }
                 //print_r($publishQueueManageData->Queue);
             }

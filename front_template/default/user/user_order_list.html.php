@@ -14,7 +14,6 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-    <script type="text/javascript" src="/front_js/user/user_car.js"></script>
 
     <script type="text/javascript">
 
@@ -23,6 +22,21 @@
 
         $(function () {
 
+            var state = parseInt(Request["state"]);
+            switch(state){
+                case -1:
+                    $("#order_state_-1").addClass("selected");
+                    break;
+                case 10:
+                    $("#order_state_10").addClass("selected");
+                    break;
+                case 20:
+                    $("#order_state_20").addClass("selected");
+                    break;
+                case 70:
+                    $("#order_state_70").addClass("selected");
+                    break;
+            }
 
 //            $(".right").click(function () {
 //                var idvalue = $(this).attr("idvalue");
@@ -43,35 +57,9 @@
 
 <body>
 
-<div class="wrapper2">
-    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
-    <div class="search">
-        <div class="search_green"><input name="" type="text" class="text"/></div>
-        <div class="searchbtn"><img src="/images/search.png" width="46" height="28"/></div>
-        <div class="searchbottom">平谷大桃 哈密瓜 新鲜葡萄 红炉磨坊 太湖鲜鱼</div>
-    </div>
-    <div class="service">
-        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
-        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
-        <div class="number" id="user_car_count">0</div>
-    </div>
-</div>
+<pre_temp id="4"></pre_temp>
 <div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div class="goods" id="leftmenu">
-            <ul>
-                <li><span>会员中心</span></li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="/images/icon_new.png" width="29" height="30"/></div>
-    </div>
-</div>
+<pre_temp id="12"></pre_temp>
 <div class="wrapper">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -81,15 +69,16 @@
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">
                 <div class="rightbar">
-                    <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
-                </div>
+                    <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的订单</div>
                     <div style="padding:20px 50px;">
                         <div class="order_class">
                             <ul>
-                                <li><a class="selected" href="#">所有订单</a></li>
-                                <li><a href="#">待付款<span>2</span></a></li>
-                                <li><a href="#">待发货<span>2</span></a></li>
-                                <li><a href="#">待评价<span>2</span></a></li>
+                                <li><a id="order_state_-1" href="/default.php?mod=user_order&a=list&state=-1">所有订单</a></li>
+                                <li>
+                                    <a id="order_state_10" href="/default.php?mod=user_order&a=list&state=10">待付款<span>{UserOrderCountOfNonPayment}</span></a>
+                                </li>
+                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">待发货<span>{UserOrderCountOfPayment}</span></a></li>
+                                <li><a id="order_state_70" href="/default.php?mod=user_order&a=list&state=70">待评价<span>{UserOrderCountOfUnComment}</span></a></li>
                             </ul>
                             <div class="clean"></div>
                         </div>
@@ -120,6 +109,7 @@
                             </icms>
 
                         </div>
+                        {pagerButton}
                         <div class="flips">
                             <ul>
                                 <li><a href="#">首页</a></li>

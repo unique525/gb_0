@@ -72,7 +72,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         $fileElementName = Control::PostOrGetRequest("file_element_name", "");
         $tableType = Control::PostOrGetRequest("table_type", 0);
         $tableId = Control::PostOrGetRequest("table_id", 0);
-        if (!empty($fileElementName) && $tableType > 0) {
+        if (strlen($fileElementName)>0 && $tableType > 0) {
 
             $imgMaxWidth = 0;
             $imgMaxHeight = 0;
@@ -116,7 +116,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         } else {
             $result = '{';
             $result .= '"error":"param error",';
-            $result .= '"result_html":"",';
+            $result .= '"result_html":"file_element_name:'.$fileElementName.';table_type:'.$tableType.'",';
             $result .= '"upload_file_id":"",';
             $result .= '"upload_file_path":""';
             $result .= '}';
@@ -173,7 +173,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             } else {
                 $result = '{';
                 $result .= '"error":"system error",';
-                $result .= '"result_html":"",';
+                $result .= '"result_html":"UploadFileThumbPath2",';
                 $result .= '"upload_file_id":"",';
                 $result .= '"upload_file_path":""';
                 $result .= '}';
@@ -181,7 +181,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         } else {
             $result = '{';
             $result .= '"error":"param error",';
-            $result .= '"result_html":"",';
+            $result .= '"result_html":"UploadFileThumbPath2",';
             $result .= '"upload_file_id":"",';
             $result .= '"upload_file_path":""';
             $result .= '}';
@@ -238,7 +238,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         } else {
             $result = '{';
             $result .= '"error":"param error",';
-            $result .= '"result_html":"",';
+            $result .= '"result_html":"UploadFilePathForCutImage",';
             $result .= '"upload_file_id":"",';
             $result .= '"upload_file_path":""';
             $result .= '}';

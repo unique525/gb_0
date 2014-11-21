@@ -223,12 +223,6 @@ $(function () {
 </head>
 
 <body>
-<div class="loginbg">
-    <div class="wrapper">
-        <div class="loginleft">您好，欢迎来到星滋味 请<a href="">登陆</a> <a href="">免费注册</a></div>
-        <div class="loginright"><a href="">我的星滋味</a> <a href="">收藏本站</a></div>
-    </div>
-</div>
 <div class="wrapper">
     <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
     <div class="step">
@@ -245,20 +239,7 @@ $(function () {
 
 </div>
 <div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div class="goods" id="leftmenu">
-            <ul>
-                <li><span>所有商品分类</span></li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="/images/icon_new.png" width="29" height="30"/></div>
-    </div>
-</div>
+<pre_temp id="12"></pre_temp>
 <div class="wrapper">
     <div class="shoppingcart">
         <div class="lefttext">我的购物车</div>

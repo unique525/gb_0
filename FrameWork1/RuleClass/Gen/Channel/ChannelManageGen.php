@@ -433,7 +433,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      * @return int 返回发布结果
      */
     private function Publish(){
-        $result = -1;
+        $result = '';
         $channelId = Control::GetRequest("channel_id", -1);
         if($channelId>0){
             $publishQueueManageData = new PublishQueueManageData();

@@ -216,25 +216,28 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function AsyncModifyState() {
         $result = -1;
-        $siteId = Control::GetRequest("site_id", 0);
+        $channelTemplateId = Control::GetRequest("channel_template_id", 0);
         $state = Control::GetRequest("state", -1);
         $manageUserId = Control::GetManageUserId();
 
-        if($siteId>0 && $state>=0 && $manageUserId>0){
+        if($channelTemplateId>0 && $state>=0 && $manageUserId>0){
             //判断权限
             /**********************************************************************
              ******************************判断是否有操作权限**********************
              **********************************************************************/
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = 0;
+            $channelTemplateManageData = new ChannelTemplateManageData();
+            $siteId = $channelTemplateManageData->GetSiteId($channelTemplateId, true);
+
             $can = $manageUserAuthorityManageData->CanManageSite($siteId,$channelId,$manageUserId);
             if(!$can){
                 $result = -10;
             }else{
-                $siteManageData = new SiteManageData();
-                $result = $siteManageData->ModifyState($siteId,$state);
+
+                $result = $channelTemplateManageData->ModifyState($channelTemplateId,$state);
                 //加入操作日志
-                $operateContent = 'Modify State Site,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
+                $operateContent = 'Modify State Channel Template,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
                 self::CreateManageUserLog($operateContent);
             }
         }

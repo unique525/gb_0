@@ -123,11 +123,11 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
             parent::ReplaceSiteInfo($siteId, $templateContent);
 
             $pageIndex = Control::GetRequest("p",1);
-            $pageSize = Control::GetRequest("ps",0);
+            $pageSize = Control::GetRequest("ps",16);
 
             $tagId = "user_favorite_list";
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $pageSize = 5;
+            $pageSize = 16;
             $allCount = 0;
             $userFavoritePublicData = new UserFavoritePublicData();
             $arrUserFavoriteList = $userFavoritePublicData->GetList($userId,$siteId,$pageBegin,$pageSize,$allCount);

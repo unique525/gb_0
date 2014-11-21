@@ -863,7 +863,15 @@ class BaseManageGen extends BaseGen
                                 //发布文件名，资讯id构成
                                 $publishFileName = strval($documentNewsId).'.html';
                                 //发布路径，频道id+日期
-                                $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+
+                                $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
+                                if(strlen($publishDate)>10){
+                                    //已经有发布日期了
+                                    $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+                                }else{
+                                    $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                }
+
 
                                 //修改发布时间和发布人，只有发布时间为空时才进行操作
                                 $documentNewsManageData->ModifyPublishDate(
