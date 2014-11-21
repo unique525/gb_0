@@ -70,6 +70,7 @@
             <td width="1006" valign="top">
                 <div class="rightbar">
                     <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的订单</div>
+                </div>
                     <div style="padding:20px 50px;">
                         <div class="order_class">
                             <ul>
@@ -124,7 +125,6 @@
                             <div class="clean"></div>
                         </div>
                     </div>
-                </div>
             </td>
         </tr>
     </table>
