@@ -27,9 +27,12 @@ ul{list-style-type:none;}
 .more_content{color:#7bc204;}
 
 
-.list_left{float:left;text-align:left;width:16%;}
+.list_left{float:left;text-align:left;width:16%;height:165px;}
+.list_left img{margin-left:5px;}
+
 .list_right{float:left;text-align:left;width:84%;}
 
 .document_news_content {padding:5px;}
 .document_news_content h3{line-height:300%;}
 .document_news_content div{line-height:180%;}
+.document_news_content img{width:100%;}
