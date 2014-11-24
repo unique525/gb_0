@@ -524,7 +524,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 生成资讯管理列表页面
+     * 生成列表页面
      */
     private function GenList() {
         $channelId = Control::GetRequest("channel_id", 0);
