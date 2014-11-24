@@ -138,7 +138,7 @@ class ManageUserManageData extends BaseManageData
             if ($searchType == 0) { //名称
                 $searchSql = " AND (mu.ManageUserName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-            } else { //站点名称
+            } else { //名称
                 $searchSql = " AND (mu.ManageUserName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
@@ -347,7 +347,7 @@ class ManageUserManageData extends BaseManageData
     }
 
     /**
-     * 根据$adminUserId取得管理员帐号信息
+     * 根据Id取得管理员帐号信息
      * @param int $manageUserId 管理员id
      * @return array 管理员帐号信息数组
      */

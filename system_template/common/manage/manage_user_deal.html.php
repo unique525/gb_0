@@ -8,7 +8,11 @@
         <!--
 
         $(function () {
-
+            $("#f_EndDate").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                showButtonPanel: true
+            });
 
         });
 
@@ -80,6 +84,10 @@
                 </td>
             </tr>
             <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_EndDate">到期时间：</label></td>
+                <td class="spe_line"><input id="f_EndDate" name="f_EndDate" value="{EndDate}" type="text" class="input_box" style="width:75px;"/></td>
+            </tr>
+            <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_UserId">绑定的会员id：</label></td>
                 <td class="spe_line">
                     <input id="f_UserId" name="f_UserId" type="text" value="{UserId}" class="input_number"
@@ -145,7 +153,7 @@
 
 
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="f_OtpBarCode">密钥：</label></td>
+                <td class="spe_line" height="30" align="right"><label for="f_OtpAuthorityKey">密钥：</label></td>
                 <td class="spe_line">
                     <input id="f_OtpAuthorityKey" name="f_OtpAuthorityKey" type="text" value="{OtpAuthorityKey}" class="input_box"
                            style="width:400px;" maxlength="50"/>

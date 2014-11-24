@@ -8,63 +8,190 @@
  */
 class ManageUserGroupManageData extends BaseManageData {
 
-    public function Create() {
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ManageUserGroup){
+        return parent::GetFields($tableName);
+    }
+
+    /**
+     * 新增
+     * @param array $httpPostData $_POST数组
+     * @return int 新增的id
+     */
+    public function Create($httpPostData)
+    {
+        $result = -1;
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql(self::tableName, $dataProperty);
-        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array("CreateDate");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()));
+        if (!empty($httpPostData)) {
+            $sql = parent::GetInsertSql(
+                $httpPostData,
+                self::TableName_ManageUserGroup,
+                $dataProperty,
+                $addFieldName,
+                $addFieldValue,
+                $preNumber,
+                $addFieldNames,
+                $addFieldValues
+            );
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
         return $result;
     }
 
-    public function Modify($tableidvalue) {
+    /**
+     * 修改
+     * @param array $httpPostData $_POST数组
+     * @param int $manageUserGroupId id
+     * @return int 返回影响的行数
+     */
+    public function Modify($httpPostData, $manageUserGroupId)
+    {
+        $result = -1;
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql(self::tableName, self::tableIdName, $tableidvalue, $dataProperty);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
+        $addFieldName = "";
+        $addFieldValue = "";
+        $preNumber = "";
+        $addFieldNames = array();
+        $addFieldValues = array();
+
+        if (!empty($httpPostData)) {
+            $sql = parent::GetUpdateSql(
+                $httpPostData,
+                self::TableName_ManageUserGroup,
+                self::TableId_ManageUserGroup,
+                $manageUserGroupId,
+                $dataProperty,
+                $addFieldName,
+                $addFieldValue,
+                $preNumber,
+                $addFieldNames,
+                $addFieldValues
+            );
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
         return $result;
     }
 
-    public function RemoveBin($groupid) {
-        $sql = "update " . self::tableName . " set state=100 where adminusergroupid=:adminusergroupid";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("adminusergroupid", $groupid);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
-        return $result;
-    }
-
-    //根据State的值取得列表
-    public function GetList($state = -1) {
-        if ($state == -1) {
-            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName;
-            $result = $this->dbOperator->GetArrayList($sql, null);
-        } else {
-            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE state=:state";
+    /**
+     * 删除管理分组到回收站
+     * @param int $manageUserGroupId 管理分组id
+     * @return int 返回影响的行数
+     */
+    public function RemoveToBin($manageUserGroupId)
+    {
+        $result = -1;
+        if ($manageUserGroupId > 0) {
+            $sql = "UPDATE " . self::TableName_ManageUserGroup . " SET State=100 WHERE ManageUserGroupId=:ManageUserGroupId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("state", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+
+    /**
+     * 修改状态
+     * @param int $manageUserGroupId id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($manageUserGroupId, $state)
+    {
+        $result = 0;
+        if ($manageUserGroupId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ManageUserGroup . " SET `State`=:State WHERE ".self::TableId_ManageUserGroup."=:".self::TableId_ManageUserGroup.";";
+            $dataProperty->AddField(self::TableId_ManageUserGroup, $manageUserGroupId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
 
-    //根据用户组ID或用户组名取值
-    public function GetAdminUserGroupOne($str, $type) {
+
+
+    /**
+     * 根据Id取得一条记录
+     * @param int $manageUserGroupId 管理分组id
+     * @return array 一条记录数组
+     */
+    public function GetOne($manageUserGroupId)
+    {
+        $result = null;
+        if ($manageUserGroupId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_ManageUserGroup . " WHERE " . self::TableId_ManageUserGroup . "=:" . self::TableId_ManageUserGroup . "";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ManageUserGroup, $manageUserGroupId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 根据管理分组列表数据集
+     * @param int $pageBegin 分页起始位置
+     * @param int $pageSize 分页大小
+     * @param int $allCount 记录总数（输出参数）
+     * @param string $searchKey 查询关键字
+     * @param int $searchType 查询字段类型
+     * @return array 管理分组列表数据集
+     */
+    public function GetList(
+        $pageBegin,
+        $pageSize,
+        &$allCount,
+        $searchKey,
+        $searchType
+    )
+    {
         $dataProperty = new DataProperty();
-        if ($type == 0) {
-            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE adminusergroupid=:adminusergroupid";
-            $dataProperty->AddField("adminusergroupid", $str);
-        } else {
-            $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM " . self::tableName . " WHERE adminusergroupname=:adminusergroupname";
-            $dataProperty->AddField("adminusergroupname", $str);
+        $searchSql = "";
+
+        //查询
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            if ($searchType == 0) { //名称
+                $searchSql = " AND (ManageUserGroupName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else { //名称
+                $searchSql = " AND (ManageUserGroupName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
         }
-        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+
+        $sql = "SELECT * FROM " . self::TableName_ManageUserGroup . "
+                        WHERE
+                            State<".ManageUserGroupData::STATE_DELETE."
+
+
+                            $searchSql
+
+                        ORDER BY Sort DESC,convert(ManageUserGroupName USING gbk)
+                        LIMIT " . $pageBegin . "," . $pageSize . ";";
+        $sqlCount = "SELECT Count(*) FROM " . self::TableName_ManageUserGroup . "
+                        WHERE
+                            State<".ManageUserGroupData::STATE_DELETE."
+
+                            $searchSql;";
+
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
-    public function GetListPager($pagebegin, $pagesize, &$allcount, $gruopid=0) {
-        $sql = "SELECT adminusergroupid,adminusergroupname,sort,state,adminleftnavids FROM cst_adminusergroup ORDER BY sort DESC LIMIT " . $pagebegin . "," . $pagesize . "";
-        $result = $this->dbOperator->GetArrayList($sql, null);
-        $sql = "SELECT count(*) FROM " . self::tableName;
-        $allcount = $this->dbOperator->GetInt($sql, null);
-        return $result;
-    }
 
     /**
      * 根据用户ID取得左边导航权限

@@ -205,13 +205,12 @@
             <td>管理员帐号</td>
             <td style="width: 70px; text-align: center;">排序号</td>
             <td style="width: 180px;text-align:center;">管理分组</td>
-            <td style="width: 150px;text-align:center;">联系电话</td>
             <td style="width: 100px;text-align:center;">绑定会员</td>
-            <td style="width: 80px;text-align:center;">公网登录</td>
-            <td style="width: 80px;text-align:center;">短信认证</td>
-            <td style="width: 80px;text-align:center;">口令牌认证</td>
-            <td style="width: 180px;text-align:center;">创建时间</td>
-            <td style="width: 180px;text-align:center;">到期时间</td>
+            <td style="width: 70px;text-align:center;">公网登录</td>
+            <td style="width: 70px;text-align:center;">短信认证</td>
+            <td style="width: 70px;text-align:center;">口令牌认证</td>
+            <td style="width: 160px;text-align:center;">创建时间</td>
+            <td style="width: 160px;text-align:center;">到期时间</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
             <td style="width: 100px;text-align:center;">相关管理</td>
@@ -232,20 +231,19 @@
                             <td class="spe_line2">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:70px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="管理分组">{f_ManageUserGroupName}</td>
-                            <td class="spe_line2" style="width:150px;text-align:center;" title="联系电话">{f_Mobile}</td>
                             <td class="spe_line2" style="width:100px;text-align:center;" title="绑定会员">{f_UserName}</td>
-                            <td class="spe_line2" style="width:80px;text-align:center;" title="公网登录"><span class="span_open_public_login" idvalue="{f_OpenPublicLogin}">{f_OpenPublicLogin}</span></td>
-                            <td class="spe_line2" style="width:80px;text-align:center;" title="短信认证"><span class="span_sms_verify_login" idvalue="{f_SmsVerifyLogin}">{f_SmsVerifyLogin}</span></td>
-                            <td class="spe_line2" style="width:80px;text-align:center;" title="口令牌认证"><span class="span_otp_verify_login" idvalue="{f_OtpVerifyLogin}">{f_OtpVerifyLogin}</span></td>
-                            <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:180px;text-align:center;" title="到期时间"><span class="span_end_date" idvalue="{f_EndDate}">{f_EndDate}</span></td>
+                            <td class="spe_line2" style="width:70px;text-align:center;" title="公网登录"><span class="span_open_public_login" idvalue="{f_OpenPublicLogin}">{f_OpenPublicLogin}</span></td>
+                            <td class="spe_line2" style="width:70px;text-align:center;" title="短信认证"><span class="span_sms_verify_login" idvalue="{f_SmsVerifyLogin}">{f_SmsVerifyLogin}</span></td>
+                            <td class="spe_line2" style="width:70px;text-align:center;" title="口令牌认证"><span class="span_otp_verify_login" idvalue="{f_OtpVerifyLogin}">{f_OtpVerifyLogin}</span></td>
+                            <td class="spe_line2" style="width:160px;text-align:center;" title="创建时间">{f_CreateDate}</td>
+                            <td class="spe_line2" style="width:160px;text-align:center;" title="到期时间"><span class="span_end_date" idvalue="{f_EndDate}">{f_EndDate}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_ManageUserId}" class="span_state" idvalue="{f_ManageUserId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;">
                                 <img class="img_open" idvalue="{f_ManageUserId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <img class="img_close" idvalue="{f_ManageUserId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
                             </td>
                             <td class="spe_line2" style="width:100px;text-align:center;">
-                                <a href="/default.php?secu=manage&mod=manage_user_authority&m=set&manage_user_id={f_ManageUserId}">设置权限</a>
+                                <a href="/default.php?secu=manage&mod=manage_user_authority&m=set_by_manage_user&manage_user_id={f_ManageUserId}">设置权限</a>
                             </td>
                         </tr>
                     </table>

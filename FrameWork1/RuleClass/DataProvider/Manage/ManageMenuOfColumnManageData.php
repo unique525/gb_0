@@ -30,7 +30,7 @@ class ManageMenuOfColumnManageData extends BaseManageData {
      */
     public function GetListOfAll() {
         $dataProperty = null;
-        $sql = "SELECT * FROM " . self::TableId_ManageMenuOfColumn . " ORDER BY Sort DESC;";
+        $sql = "SELECT * FROM " . self::TableName_ManageMenuOfColumn . " ORDER BY Sort DESC;";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
@@ -41,7 +41,7 @@ class ManageMenuOfColumnManageData extends BaseManageData {
      */
     public function GetListOfOpen() {
         $dataProperty = null;
-        $sql = "SELECT * FROM " . self::TableId_ManageMenuOfColumn . " WHERE State<100 ORDER BY Sort DESC;";
+        $sql = "SELECT * FROM " . self::TableName_ManageMenuOfColumn . " WHERE State<100 ORDER BY Sort DESC;";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
