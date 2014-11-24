@@ -540,7 +540,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        $canExplore = $manageUserAuthorityManageData->CanChannelExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
             return Language::Load('channel', 4);
         }

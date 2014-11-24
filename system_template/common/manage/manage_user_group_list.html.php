@@ -31,33 +31,33 @@
 
             //开启
             $(".img_open").click(function(){
-                var siteId = parseInt($(this).attr("idvalue"));
+                var manageUserGroupId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
-                modifyState(siteId, state);
+                modifyState(manageUserGroupId, state);
             });
             //停用
             $(".img_close").click(function(){
-                var siteId = parseInt($(this).attr("idvalue"));
+                var manageUserGroupId = parseInt($(this).attr("idvalue"));
                 var state = 100; //开启状态
-                modifyState(siteId, state);
+                modifyState(manageUserGroupId, state);
             });
         });
 
 
 
-        function modifyState(siteId,state){
-            if(siteId>0){
+        function modifyState(manageUserGroupId,state){
+            if(manageUserGroupId>0){
                 $.ajax({
                     type: "get",
                     url: "/default.php?secu=manage&mod=manage_user_group&m=async_modify_state",
                     data: {
-                        site_id: siteId,
+                        manage_user_group_id: manageUserGroupId,
                         state:state
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        $("#span_state_"+siteId).html(formatState(state));
+                        $("#span_state_"+manageUserGroupId).html(formatState(state));
                     }
                 });
             }
@@ -116,7 +116,7 @@
         </tr>
     </table>
     <ul id="sort_grid">
-        <icms id="site_list" type="list">
+        <icms id="manage_user_group_list" type="list">
             <item>
                 <![CDATA[
                 <li id="sort_{f_ManageUserGroupId}">
@@ -126,7 +126,7 @@
                                     <input class="input_select" type="checkbox" name="input_select"
                                            value="{f_ManageUserGroupId}"/>
                                 </label></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_ManageUserGroupName}编辑" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ManageUserGroupId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_ManageUserGroupName}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ManageUserGroupId}" alt="编辑"/></td>
                             <td class="spe_line2">{f_ManageUserGroupName}</td>
                             <td class="spe_line2" style="width:70px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>

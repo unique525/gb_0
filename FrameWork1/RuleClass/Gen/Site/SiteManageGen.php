@@ -120,10 +120,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
         } else {
             $tempContent = Language::Load("site", 8);
         }
-
         return $tempContent;
-
-
     }
 
     /**

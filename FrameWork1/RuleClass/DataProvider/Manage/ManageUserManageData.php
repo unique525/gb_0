@@ -8,6 +8,17 @@
  */
 class ManageUserManageData extends BaseManageData
 {
+
+    /**
+     * 取得字段数据集
+     * @param string $tableName 表名
+     * @return array 字段数据集
+     */
+    public function GetFields($tableName = self::TableName_ManageUser){
+        return parent::GetFields(self::TableName_ManageUser);
+    }
+
+
     /**
      * 管理后台登录
      * @param string $manageUserName 帐号
@@ -76,7 +87,7 @@ class ManageUserManageData extends BaseManageData
     public function RemoveToBin($manageUserId)
     {
         $result = -1;
-        if($manageUserId>0){
+        if ($manageUserId > 0) {
             $sql = "UPDATE " . self::TableName_ManageUser . " SET State=100 WHERE ManageUserId=:ManageUserId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ManageUserId", $manageUserId);
@@ -85,6 +96,84 @@ class ManageUserManageData extends BaseManageData
 
         return $result;
     }
+
+
+
+    /**
+     * 修改状态
+     * @param int $manageUserId id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($manageUserId, $state)
+    {
+        $result = 0;
+        if ($manageUserId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ManageUser . " SET `State`=:State WHERE ".self::TableId_ManageUser."=:".self::TableId_ManageUser.";";
+            $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据管理员列表数据集
+     * @param int $pageBegin 分页起始位置
+     * @param int $pageSize 分页大小
+     * @param int $allCount 记录总数（输出参数）
+     * @param string $searchKey 查询关键字
+     * @param int $searchType 查询字段类型
+     * @param int $manageUserGroupId 管理分组id
+     * @return array 根据管理员列表数据集
+     */
+    public function GetList($pageBegin, $pageSize, &$allCount, $searchKey, $searchType, $manageUserGroupId)
+    {
+        $dataProperty = new DataProperty();
+        $searchSql = "";
+
+        //查询
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            if ($searchType == 0) { //名称
+                $searchSql = " AND (mu.ManageUserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            } else { //站点名称
+                $searchSql = " AND (mu.ManageUserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
+        }
+
+        if($manageUserGroupId>0){
+
+            $searchSql = " AND mu.ManageUserGroupId=:ManageUserGroupId";
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+
+        }
+
+
+
+        $sql = "SELECT mu.*,mug.ManageUserGroupName FROM " . self::TableName_ManageUser . " mu,".self::TableName_ManageUserGroup." mug
+                        WHERE
+                            mu.State<".ManageUserData::STATE_DELETE."
+                            AND mu.ManageUserGroupId = mug.ManageUserGroupId
+
+                            $searchSql
+
+                        ORDER BY mu.Sort DESC,convert(mu.ManageUserName USING gbk)
+                        LIMIT " . $pageBegin . "," . $pageSize . ";";
+        $sqlCount = "SELECT Count(*) FROM " . self::TableName_ManageUser . " mu,".self::TableName_ManageUserGroup." mug
+                        WHERE
+                            mu.State<".ManageUserData::STATE_DELETE."
+                            AND mu.ManageUserGroupId = mug.ManageUserGroupId
+
+                            $searchSql;";
+
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        return $result;
+    }
+
 
     /**
      * 取得后台管理员帐号
@@ -265,7 +354,7 @@ class ManageUserManageData extends BaseManageData
     public function GetOne($manageUserId)
     {
         $result = null;
-        if($manageUserId>0){
+        if ($manageUserId > 0) {
             $sql = "SELECT * FROM " . self::TableName_ManageUser . " WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . "";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
@@ -285,7 +374,7 @@ class ManageUserManageData extends BaseManageData
     public function ModifyForOtp($manageUserId, $otpCurrentSuccess, $otpCurrentDrift)
     {
         $result = -1;
-        if($manageUserId>0){
+        if ($manageUserId > 0) {
             $sql = "UPDATE " . self::TableName_ManageUser . " SET OtpCurrentSuccess=:OtpCurrentSuccess,OtpCurrentDrift=:OtpCurrentDrift WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);

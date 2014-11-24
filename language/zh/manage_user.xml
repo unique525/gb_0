@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <module id="1">
+        <content><![CDATA[新增成功！]]></content>
+    </module>
+    <module id="2">
+        <content><![CDATA[新增失败！]]></content>
+    </module>
+    <module id="3">
+        <content><![CDATA[编辑成功！]]></content>
+    </module>
+    <module id="4">
+        <content><![CDATA[编辑失败！]]></content>
+    </module>
+    <module id="5">
+        <content><![CDATA[停用成功！]]></content>
+    </module>
+    <module id="6">
+        <content><![CDATA[停用失败！]]></content>
+    </module>
+    <module id="7">
+        <content><![CDATA[对不起，您未被授权浏览此页面！]]></content>
+    </module>
+    <module id="8">
+        <content><![CDATA[<div style="padding:5px;">未查到任何相关数据！</div>]]></content>
+    </module>
+    <module id="9">
+        <content><![CDATA[管理员信息不正确！]]></content>
+    </module>
+</root>
