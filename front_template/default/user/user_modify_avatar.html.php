@@ -18,6 +18,7 @@
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/front_js/jquery.Jcrop.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
+    <script type="text/javascript" src="/front_js/user/user_car.js"></script>
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
 
@@ -134,7 +135,6 @@
                 }
                 var inputTextId = null;
                 var previewImageId = null;
-                var uploadFileId = 0;
                 var editor = null;
                 AjaxFileUpload(
                     fileElementId,
@@ -243,9 +243,35 @@
 
 <body>
 
-<pre_temp id="4"></pre_temp>
+<div class="wrapper2">
+    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
+    <div class="search">
+        <div class="search_green"><input name="" type="text" class="text"/></div>
+        <div class="searchbtn"><img src="/images/search.png" width="46" height="28"/></div>
+        <div class="searchbottom">平谷大桃 哈密瓜 新鲜葡萄 红炉磨坊 太湖鲜鱼</div>
+    </div>
+    <div class="service">
+        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
+        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
+        <div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
+        <div class="number" id="user_car_count">0</div>
+    </div>
+</div>
 <div class="clean"></div>
-<pre_temp id="12"></pre_temp>
+<div class="mainbav">
+    <div class="wrapper">
+        <div class="goods" id="leftmenu">
+            <ul>
+                <li><span>会员中心</span></li>
+            </ul>
+        </div>
+        <div class="column1"><a href="">首页</a></div>
+        <div class="column2"><a href="">超市量贩</a></div>
+        <div class="column2"><a href="">团购</a></div>
+        <div class="column2"><a href="">最新预售</a></div>
+        <div class="new"><img src="/images/icon_new.png" width="29" height="30"/></div>
+    </div>
+</div>
 <div class="wrapper">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>

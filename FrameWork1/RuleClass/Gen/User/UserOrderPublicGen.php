@@ -78,6 +78,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
             }else{
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_order",7));
+                $templateContent = str_ireplace("{pagerButton}", "", $templateContent);
             }
 
 

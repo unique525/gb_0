@@ -25,14 +25,14 @@
                 if(newPassword  == confirmPassword){
                     $.ajax({
                         url:"/default.php?mod=user&a=modify_user_pass",
-                        data: {a:"user",f:"modify_password",old_password:oldPassword,new_password:newPassword},
+                        data: {old_password:oldPassword,new_password:newPassword},
                         dataType:"jsonp",
                         jsonp:"jsonpcallback",
                         success:function(data){
                             alert(data["result"]);
                             if(data["result"] > 0){
                                 alert("修改成功");
-                                window.location.href="center.html";
+                                window.location.href="/default.php?mod=user&a=modify_pass";
                             }else if(data["result"] > -1){
                                 alert("网络错误，请联系管理员");
                             }else{

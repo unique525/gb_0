@@ -71,30 +71,14 @@
                 }
             });
 
-            $("#submit").click(function(){
-
+            $("#sub").click(function(){
+                $("#main_form").submit();
             });
         });
     </script>
 </head>
 <body>
 <div style="margin: 0 auto;width:800px">
-    <icms id="product_comment_list" type="list">
-        <item>
-        <![CDATA[
-            <div>
-                <div>
-                    {f_Content}
-                </div>
-                {child}
-            </div>
-        ]]>
-        </item>
-        <child><![CDATA[
-            <div style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;{f_Content}</div>
-            ]]>
-        </child>
-    </icms>
     <div id="product_star" class="star" idvalue="product">
         <span>评分：</span>
         <ul>
@@ -134,7 +118,7 @@
         <p id="service_display_score" class="display_score" idvalue="service"></p>
     </div>
     <div style="clear:both"></div>
-    <form id="main_form" action="/default.php?mod=product_comment&a=create" method="post">
+    <form id="main_form" action="/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}" method="post">
     差评：<input type="radio" name="appraisal" value="0"/>
     中评：<input type="radio" name="appraisal" value="1"/>
     好评：<input type="radio" name="appraisal" value="2"/>
@@ -142,13 +126,12 @@
         <textarea style="width:100%;height:100px" name="content"></textarea>
 
         <div style="float:right;width:50px">
-            <input type="button" value="发表" id="submit" />
+            <input type="button" value="发表" id="sub" />
         </div>
         <div style="clear:both;"></div>
-        <input type="hidden" name="product_score" id="product_score"autocomplete="off" value="0"/>
+        <input type="hidden" name="product_score" id="product_score" autocomplete="off" value="0"/>
         <input type="hidden" name="send_score" id="send_score" autocomplete="off" value="0"/>
         <input type="hidden" name="service_score" id="service_score" autocomplete="off" value="0"/>
-        <input type="hidden" name="product_id" autocomplete="off" value="0"/>
         <input type="hidden" name="site_id" autocomplete="off" value="0"/>
     </div>
         </form>

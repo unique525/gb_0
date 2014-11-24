@@ -256,13 +256,15 @@ class UserInfoPublicData extends BasePublicData
                             ul.UserLevelPic,
                             ul.UserLevel,
                             ur.UserGroupID,
-                            ug.UserGroupName
+                            ug.UserGroupName,
+                            uf.*
                             FROM ".self::TableName_User." u
                             INNER JOIN ".self::TableName_UserInfo." ui ON (u.UserID = ui.UserID)
                             LEFT JOIN ".self::TableName_UserSiteLevel." usl ON (u.UserID = usl.UserId) AND usl.SiteId=:SiteId
                             LEFT JOIN ".self::TableName_UserRole." ur ON (u.UserID = ur.UserID) AND ur.SiteID = :SiteId2
                             LEFT JOIN ".self::TableName_UserLevel." ul ON (usl.SiteId = ul.SiteID) AND (usl.UserLevelId = ul.UserLevelID)
                             LEFT JOIN ".self::TableName_UserGroup." ug ON (ur.UserGroupID = ug.UserGroupID) AND (ur.SiteID = ug.SiteID)
+                            LEFT JOIN ".self::TableName_UploadFile." uf ON u.UserId = uf.TableId AND uf.TableType = ".UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR."
                             WHERE u.UserId=:UserId AND u.State<".self::State_Unavailable_User.";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId",$siteId);

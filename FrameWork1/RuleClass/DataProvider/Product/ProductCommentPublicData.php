@@ -46,6 +46,7 @@ class ProductCommentPublicData extends BasePublicData
     {
         $result = -1;
         if ($productId > 0 && !empty($content) && $userId > 0 && !empty($userName) && $siteId > 0 && $channelId > 0) {
+
             $sql = "INSERT INTO " . self::TableName_ProductComment
                 . " (ParentId,Rank,ProductId,Subject,Content,UserId,UserName,CreateDate,
                 Appraisal,ProductScore,SendScore,ServiceScore,SiteId,ChannelId,State,Sort)
@@ -53,6 +54,7 @@ class ProductCommentPublicData extends BasePublicData
                  :ParentId,:Rank,:ProductId,:Subject,:Content,:UserId,:UserName,now(),
                  :Appraisal,:ProductScore,:SendScore,:ServiceScore,:SiteId,:ChannelId,:State,:Sort
                  );";
+            echo $sql;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $parentId);
             $dataProperty->AddField("Rank", $rank);

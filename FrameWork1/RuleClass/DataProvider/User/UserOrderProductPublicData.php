@@ -12,15 +12,19 @@ class UserOrderProductPublicData extends BasePublicData{
     /**
      * @param $userId
      * @param $productId
+     * @param $userOrderId
      * @return int
      */
-    public function CheckIsBought($userId,$productId){
+    public function CheckIsBought($userId,$productId,$userOrderId){
         $result = -1;
-        if($userId > 0 && $productId > 0){
-            $sql = "SELECT count(*) FROM ".self::TableName_UserOrderProduct." WHERE UserId = :UserId AND ProductId = :ProductId;";
+        if($userId > 0 && $productId > 0 && $userOrderId > 0){
+            $sql = "SELECT count(*) FROM ".self::TableName_UserOrderProduct." uop,".self::TableName_UserOrder." uo"
+                ." WHERE  uo.UserId = :UserId AND uop.UserOrderId = uo.UserOrderId AND uop.ProductId = :ProductId"
+                ." AND uop.UserOrderId = :UserOrderId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("ProductId",$productId);
+            $dataProperty->AddField("UserOrderId",$userOrderId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;

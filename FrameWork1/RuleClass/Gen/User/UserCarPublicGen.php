@@ -98,8 +98,11 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenList()
     {
-        $userId = Control::GetUserId();
+//        $userId = Control::GetUserId();
+        $userId = 1;
         $siteId =parent::GetSiteIdByDomain();
+
+        $tagId = "user_car_list";
         if ($userId > 0) {
             $templateFileUrl = "user/user_car_list.html";
             $templateName = "default";
@@ -107,7 +110,6 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             parent::ReplaceFirst($templateContent);
 
-            $tagId = "user_car_list";
             $userCarPublicData = new UserCarPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
             $userFavoritePublicData = new UserFavoritePublicData();

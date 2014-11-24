@@ -37,6 +37,9 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "check_is_bought":
+                $result = self::AsyncCheckIsBought();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
@@ -48,20 +51,21 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenCreate()
     {
-        $userId = Control::GetUserId();
+        $userId = intval(Control::GetUserId());
         $userName = Control::GetUserName();
 
-        $productId = Control::PostRequest("product_id", 0);
+        $productId = intval(Control::GetRequest("product_id", 0));
+        $userOrderId =intval(Control::GetRequest("user_order_id",0));
+        $siteId = parent::GetSiteIdByDomain();
 
-        if ($userId > 0 && $productId > 0 && !empty($userName)) {
+        if ($userId > 0 && $productId > 0 && $userOrderId > 0 && !empty($userName)) {
             $userOrderProductPublicData = new UserOrderProductPublicData();
-            $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId);
+            $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId,$userOrderId);
 
             if ($isBought > 0) {
                 if (!empty($_POST)) {
                     $content = Control::PostRequest("content", "");
                     $appraisal = Control::PostRequest("appraisal", -1);
-                    $siteId = Control::PostRequest("site_id", 0);
                     $parentId = Control::PostRequest("parent_id", 0);
                     $productScore = Control::PostRequest("product_score", 0);
                     $sendScore = Control::PostRequest("send_score", 0);
@@ -73,6 +77,8 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
 
                     $productPublicData = new ProductPublicData();
                     $channelId = $productPublicData->GetChannelIdByProductId($productId);
+                    //判断订单状态
+                    //
                     if (
                         $channelId > 0 &&
                         $serviceScore >= 0 &&
@@ -91,10 +97,13 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
                     }
 
                 } else {
-                    $templateFileUrl = "product/comment_template_test.html";
+                    $templateFileUrl = "product/comment_template_add.html";
                     $templatePath = "front_template";
                     $templateName = "default";
                     $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+                    $templateContent = str_ireplace("{ProductId}", $productId, $templateContent);
+                    $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
                     return $templateContent;
                 }
             } else {
@@ -106,6 +115,24 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
             } else {
                 return "";
             }
+        }
+    }
+
+    private function AsyncCheckIsBought(){
+        $userId = intval(Control::GetUserId());
+        $productId = intval(Control::GetRequest("product_id",0));
+        $userOrderId =intval(Control::GetRequest("user_order_id",0));
+        if($userId > 0 && $productId > 0){
+            $userOrderProductPublicData = new UserOrderProductPublicData();
+            $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId,$userOrderId);
+
+            if($isBought ){
+                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SUCCESS. '})';
+            }else{
+                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::IS_NOT_BOUGHT. '})';
+            }
+        }else{
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SYSTEM_ERROR. '})';
         }
     }
 
