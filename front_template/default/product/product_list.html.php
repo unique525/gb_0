@@ -29,10 +29,10 @@
                         }
                     }
                 });
-            //var channelid = Request["channel_id"];
-            //$("#categoryListSum").find('dl').removeClass("listhover");
-            //$("#categoryListSum div[class='listsum-1'] dl").removeClass("listhover");
-            //$("#categoryListSum div[class='listsum-1'] dl[title='+channelid+']").addClass("listhover");
+            var channelId = Request["channel_id"];
+            $("#categoryListSum div[class='listsum-1'] dl").removeClass("listhover");
+            $("#categoryListSum div[class='listsum-1'] dl[title="+channelId+"]").addClass("listhover").find('a').addClass("on");
+            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[title="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
 
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
@@ -81,7 +81,7 @@
 
 <div class="box1200">
     <div class="myseatnew">
-        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a></div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}">{ChannelName}</a></div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -105,7 +105,7 @@
             </item>
             <child>
                 <![CDATA[
-                <li><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                <li><a title="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
                 ]]>
             </child>
         </icms>

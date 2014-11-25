@@ -123,26 +123,6 @@
                 $("#jqimg").attr("src",originThumb1pic).attr("longdesc",originPic);
             });
 
-
-            //左侧产品类别树形效果
-            $("#categoryListSum").delegate('.listsum-1', "click",
-                function (e) {
-                    if (e.target != "javascript:;" && e.target != 'javascript:void(0);') {
-                        var className = $(this).find('dl').attr("class");
-                        $("#categoryListSum dt").find('a').removeClass("on");
-                        var datalink = $(this).attr("data-link");
-                        if (datalink) {
-                            $("#categoryListSum dt a").attr("href", datalink);
-                        }
-                        if (className == "listhover") {
-                            $(this).find('dl').removeClass("listhover");
-                        } else {
-                            $(this).find('dl').find('dt').find('a').addClass("on");
-                            $(this).find('dl').addClass('listhover').end().siblings().find("dl").removeClass("listhover")
-                        }
-                    }
-                });
-
             //产品详情展示TAB页切换
             $('#detail_desc_tab a').click(function () {
                 $(this).siblings().each(function(){
