@@ -265,32 +265,6 @@
 </div>
 <div class="box1200">
 <div class="box194 fl">
-    <!--小类列表菜单-->
-    <div class="listsum" id="categoryListSum">
-        <div class="tit">{ChannelFirstName}</div>
-        <icms id="channel_{ChannelFirstId}" type="channel_list" where="parent">
-            <item>
-                <![CDATA[
-                <div class="listsum-1">
-                    <dl title="{f_ChannelId}">
-                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
-                        <dd><ul>
-                                {child}
-                            </ul>
-                            <div class="clear"></div>
-                        </dd>
-                    </dl>
-                </div>
-                ]]>
-            </item>
-            <child>
-                <![CDATA[
-                <li><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
-                ]]>
-            </child>
-        </icms>
-    </div>
-    <div class="blank10">        </div>
     <div class="similar_hot">
         <ul class="title">
             <div class="fl">热销榜</div>
