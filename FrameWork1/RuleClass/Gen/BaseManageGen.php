@@ -1408,26 +1408,26 @@ class BaseManageGen extends BaseGen
     }
 
     /**
-     * 发布资讯详细页 返回值 资讯id小于0
+     * 发布活动详细页 返回值 资讯id小于0
      */
     const PUBLISH_ACTIVITY_RESULT_DOCUMENT_NEWS_ID_ERROR = -311;
     /**
-     * 发布资讯详细页 返回值 频道id小于0
+     * 发布活动详细页 返回值 频道id小于0
      */
     const PUBLISH_ACTIVITY_RESULT_CHANNEL_ID_ERROR = -312;
     /**
-     * 发布资讯详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
+     * 发布活动详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
      */
     const PUBLISH_ACTIVITY_RESULT_STATE_ERROR = -313;
 
     /**
-     * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中
+     * 发布活动详细页 返回值 操作完成，结果存储于结果数组中
      */
     const PUBLISH_ACTIVITY_RESULT_FINISHED = 311;
 
 
     /**
-     * 发布资讯详细页面
+     * 发布活动详细页面
      * @param int $activityId
      * @param PublishQueueManageData $publishQueueManageData
      * @param bool $executeTransfer 是否执行发布
@@ -1458,7 +1458,7 @@ class BaseManageGen extends BaseGen
                 $publishLogManageData = new PublishLogManageData();
                 $publishLogManageData->Create(
                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                    PublishLogManageData::TABLE_TYPE_ACTIVITY,
                     $activityId,
                     "",
                     "",
@@ -1490,7 +1490,7 @@ class BaseManageGen extends BaseGen
                         //传输日志 取得模板
                         $publishLogManageData->Create(
                             PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                            PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                            PublishLogManageData::TABLE_TYPE_ACTIVITY,
                             $activityId,
                             "",
                             "",
@@ -1515,7 +1515,7 @@ class BaseManageGen extends BaseGen
                                 //传输日志 替换模板
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                    PublishLogManageData::TABLE_TYPE_ACTIVITY,
                                     $activityId,
                                     "",
                                     "",
@@ -1568,7 +1568,7 @@ class BaseManageGen extends BaseGen
                                 $timeEnd = Control::GetMicroTime();
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                    PublishLogManageData::TABLE_TYPE_ACTIVITY,
                                     $activityId,
                                     "",
                                     "",
@@ -1590,7 +1590,7 @@ class BaseManageGen extends BaseGen
                         $timeEnd = Control::GetMicroTime();
                         $publishLogManageData->Create(
                             PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                            PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                            PublishLogManageData::TABLE_TYPE_ACTIVITY,
                             $activityId,
                             "",
                             "",
@@ -1602,7 +1602,7 @@ class BaseManageGen extends BaseGen
                     $result = abs(DefineCode::PUBLISH) + self::PUBLISH_ACTIVITY_RESULT_FINISHED;
 
                     //修改状态
-                    $activityManageData->ModifyState($activityId, DocumentNewsData::STATE_PUBLISHED);
+                    $activityManageData->ModifyState($activityId, 30);  //30 已发
 
                     //同步发布频道
                     if($publishChannel){
@@ -1639,7 +1639,7 @@ class BaseManageGen extends BaseGen
             $publishLogManageData = new PublishLogManageData();
             $publishLogManageData->Create(
                 PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                PublishLogManageData::TABLE_TYPE_ACTIVITY,
                 $activityId,
                 "",
                 "",
@@ -1662,6 +1662,261 @@ class BaseManageGen extends BaseGen
         return $result;
     }
 
+
+    /**
+     * 发布分类信息详细页 返回值 资讯id小于0
+     */
+    const PUBLISH_INFORMATION_RESULT_DOCUMENT_NEWS_ID_ERROR = -321;
+    /**
+     * 发布分类信息详细页 返回值 频道id小于0
+     */
+    const PUBLISH_INFORMATION_RESULT_CHANNEL_ID_ERROR = -322;
+    /**
+     * 发布分类信息详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
+     */
+    const PUBLISH_INFORMATION_RESULT_STATE_ERROR = -323;
+
+    /**
+     * 发布分类信息详细页 返回值 操作完成，结果存储于结果数组中
+     */
+    const PUBLISH_INFORMATION_RESULT_FINISHED = 321;
+
+
+    /**
+     * 发布活动详细页面
+     * @param int $informationId
+     * @param PublishQueueManageData $publishQueueManageData
+     * @param bool $executeTransfer 是否执行发布
+     * @param bool $publishChannel 是否同时发布频道
+     * @return int 发布结果
+     */
+    protected function PublishInformation(
+        $informationId,
+        PublishQueueManageData $publishQueueManageData,
+        $executeTransfer = false,
+        $publishChannel = false
+    )
+    {
+        $manageUserId = Control::GetManageUserId();
+        if($informationId>0){
+            $informationManageData = new InformationManageData();
+            //取得并判断状态
+            $state = $informationManageData->GetState($informationId, false);
+            if($state === 0 || $state === 30){  //0 活动已审状态 30 已发状态 100 停用状态
+                /******************** 发布方式说明 ************************
+                 * 1.根据PublishType读取详细页模板
+                 * 2.进行模板替换
+                 * 3.优先级为Rank越高越优先
+                 *
+                 *********************************************************/
+
+                /**************** 传输日志 ********************/
+                $publishLogManageData = new PublishLogManageData();
+                $publishLogManageData->Create(
+                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                    PublishLogManageData::TABLE_TYPE_INFORMATION,
+                    $informationId,
+                    "",
+                    "",
+                    0,
+                    "begin transfer"
+                );
+
+                /**************** 取得模板 ********************/
+
+                $channelId = $informationManageData->GetChannelId($informationId, true);
+
+                if($channelId>0){
+                    $channelManageData = new ChannelManageData();
+                    $channelTemplateManageData = new ChannelTemplateManageData();
+                    $rank = $channelManageData->GetRank($channelId, true);
+                    $siteId = $channelManageData->GetSiteId($channelId, true);
+                    $channelName = $channelManageData->GetChannelName($channelId, true);
+                    $nowChannelId = $channelId;
+
+                    //循环Rank进行发布
+                    while ($rank >= 0) {
+
+                        $timeStart = Control::GetMicroTime();
+                        $publishType = ChannelTemplateData::PUBLISH_TYPE_INFORMATION_DETAIL;
+
+                        $arrChannelTemplateList = $channelTemplateManageData->GetListByPublishType($nowChannelId, $publishType);
+                        $timeEnd = Control::GetMicroTime();
+
+                        //传输日志 取得模板
+                        $publishLogManageData->Create(
+                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                            PublishLogManageData::TABLE_TYPE_INFORMATION,
+                            $informationId,
+                            "",
+                            "",
+                            $timeEnd - $timeStart,
+                            "get template list"
+                        );
+                        if (!empty($arrChannelTemplateList)) {
+                            for ($i = 0; $i < Count($arrChannelTemplateList); $i++) {
+                                //1.取得模板数据
+
+                                //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
+                                $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
+                                //$publishType = $arrChannelTemplateList[$i]["PublishType"];
+                                //$publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
+
+                                //2.替换列表类的模板内容
+                                $timeStart = Control::GetMicroTime();
+                                $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+                                $timeEnd = Control::GetMicroTime();
+
+
+                                //传输日志 替换模板
+                                $publishLogManageData->Create(
+                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                    PublishLogManageData::TABLE_TYPE_INFORMATION,
+                                    $informationId,
+                                    "",
+                                    "",
+                                    $timeEnd - $timeStart,
+                                    "now activity id:$informationId replace template"
+                                );
+
+
+                                //3.替换资讯内容和其他一些内容
+                                $arrOne = $informationManageData->GetOne($informationId);
+                                Template::ReplaceOne($channelTemplateContent, $arrOne);
+
+                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+
+
+
+                                //4.根据PublishType和PublishFileName生成目标文件
+                                //触发频道id $channelId
+                                $timeStart = Control::GetMicroTime();
+
+                                //发布文件名，分类信息id前面加i构成
+                                $publishFileName = 'i'.strval($informationId).'.html';
+                                //发布路径，频道id+日期
+
+                                $publishDate = $informationManageData->GetPublishDate($informationId, false);
+                                if(strlen($publishDate)>10){
+                                    //已经有发布日期了
+                                    $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+                                }else{
+                                    $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                }
+
+
+                                //修改发布时间和发布人，只有发布时间为空时才进行操作
+                                $informationManageData->ModifyPublishDate(
+                                    $informationId,
+                                    date("Y-m-d H:i:s", time())
+                                );
+
+                                $result = self::AddToPublishQueueForChannelTemplate(
+                                    $channelId,
+                                    $rank,
+                                    $channelTemplateContent,
+                                    $publishType,
+                                    $publishFileName,
+                                    $publishQueueManageData,
+                                    $publishPath
+                                );
+
+                                $timeEnd = Control::GetMicroTime();
+                                $publishLogManageData->Create(
+                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                    PublishLogManageData::TABLE_TYPE_INFORMATION,
+                                    $informationId,
+                                    "",
+                                    "",
+                                    $timeEnd - $timeStart,
+                                    "now document news id:$informationId add to publish queue result:$result"
+                                );
+                            }
+                        }
+
+
+                        $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
+                        $rank--;
+                    }
+
+                    if($executeTransfer){
+
+                        $timeStart = Control::GetMicroTime();
+                        self::TransferPublishQueue($publishQueueManageData, $siteId);
+                        $timeEnd = Control::GetMicroTime();
+                        $publishLogManageData->Create(
+                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                            PublishLogManageData::TABLE_TYPE_INFORMATION,
+                            $informationId,
+                            "",
+                            "",
+                            $timeEnd - $timeStart,
+                            "now channel id:$nowChannelId transfer publish queue"
+                        );
+                    }
+
+                    $result = abs(DefineCode::PUBLISH) + self::PUBLISH_INFORMATION_RESULT_FINISHED;
+
+                    //修改状态
+                    $informationManageData->ModifyState($informationId, 30);  //30为已发
+
+                    //同步发布频道
+                    if($publishChannel){
+                        self::PublishChannel($channelId, $publishQueueManageData);
+                    }
+
+
+                }else{
+                    $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_CHANNEL_ID_ERROR;
+                }
+            }else{
+                $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_STATE_ERROR;
+            }
+        }else{
+            $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_DOCUMENT_NEWS_ID_ERROR;
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * 取消发布（删除已发布的文件）
+     * @param PublishQueueManageData $publishQueueManageData 发布队列对象，传出参数，包括了发布文件的结果值
+     * @param int $informationId 活动id
+     * @param int $siteId 站点id
+     * @return int 结果
+     */
+    protected function CancelPublishInformation(PublishQueueManageData $publishQueueManageData, $informationId, $siteId)
+    {
+        $result = -1;
+        if($informationId>0){
+            /**************** 传输日志 ********************/
+            $publishLogManageData = new PublishLogManageData();
+            $publishLogManageData->Create(
+                PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                PublishLogManageData::TABLE_TYPE_INFORMATION,
+                $informationId,
+                "",
+                "",
+                0,
+                "begin cancel"
+            );
+            $activityManageData = new ActivityManageData();
+            $channelId = $activityManageData->GetChannelId($informationId, true);
+            $publishDate = $activityManageData->GetPublishDate($informationId, true);
+            //发布文件名，资讯id构成
+            $publishFileName = 'i'.strval($informationId).'.html';
+            //发布路径，频道id+日期
+            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+            $destinationPath = $publishPath . '/' .$publishFileName;
+            $sourcePath = '';
+            $publishContent = '';
+            $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
+            self::DeleteByPublishQueue($publishQueueManageData, $siteId);
+        }
+        return $result;
+    }
 }
 
 ?>
