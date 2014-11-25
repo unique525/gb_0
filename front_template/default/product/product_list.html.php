@@ -38,7 +38,7 @@
             $('.price-2 a').attr("class", "listup");
             var ps = Request["ps"];
             if(ps==null||ps=="") ps="12";
-            var url = "/default.php?&mod=product&a=list&channel_id={ChannelId}&p=1&ps="+ps;
+            var url = "/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
             var direction="";
