@@ -69,7 +69,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-            $can = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelCreate($siteId, $channelId, $manageUserId);
             if (!$can) {
                 $resultJavaScript = Control::GetJqueryMessage(Language::Load('document', 26));
 
@@ -281,7 +281,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             if ($lockEditManageUserId > 0 && $lockEdit > 0 && $lockEditDateSpan > $dateNowSpan && empty($_POST) && $lockEditManageUserId != $nowManageUserId) {
                 //当前已经锁定，并且锁定时间在5分钟内
 
-                $lockEditManageUserName = $manageUserManageData->GetManageUserName($lockEditManageUserId);
+                $lockEditManageUserName = $manageUserManageData->GetManageUserName($lockEditManageUserId, true);
                 $returnInfo = Language::Load('document', 36);
                 $returnInfo = str_ireplace("{manage_user_name}", $lockEditManageUserName, $returnInfo);
                 return $returnInfo;
@@ -293,31 +293,31 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $channelManageData = new ChannelManageData();
-            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, false);
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $withCache = FALSE;
             $siteId = $channelManageData->GetSiteId($channelId, $withCache);
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             //1 编辑本频道文档权限
-            $can = $manageUserAuthorityManageData->CanModify($siteId, $channelId, $nowManageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $nowManageUserId);
             if ($can) { //有编辑本频道文档权限
                 //2 检查是否有在本频道编辑他人文档的权限
-                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
+                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, true);
                 if ($documentNewsManageUserId !== $nowManageUserId) { //发稿人与当前操作人不是同一人时才判断
-                    $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $nowManageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelDoOthers($siteId, $channelId, $nowManageUserId);
                 } else {
                     //如果发稿人与当前操作人是同一人，则不处理
                 }
                 //3 检查是否有在本频道编辑同一管理组他人文档的权限
                 if (!$can) {
                     //是否是同一管理组
-                    $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
-                    $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($nowManageUserId);
+                    $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId, true);
+                    $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($nowManageUserId, true);
 
                     if ($documentNewsManageUserGroupId == $nowManageUserGroupId) {
                         //是同一组才进行判断
-                        $can = $manageUserAuthorityManageData->CanDoSameGroupOthers($siteId, $channelId, $nowManageUserId);
+                        $can = $manageUserAuthorityManageData->CanChannelDoSameGroupOthers($siteId, $channelId, $nowManageUserId);
                     }
                 }
             }
@@ -591,7 +591,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        $canExplore = $manageUserAuthorityManageData->CanChannelExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
             die(Language::Load('channel', 4));
         }
@@ -605,15 +605,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         ////////////////////////////////////////////////////
         ///////////////输出权限到页面///////////////////
         ////////////////////////////////////////////////////
-        $canRework = $manageUserAuthorityManageData->CanRework($siteId, $channelId, $manageUserId);
-        $canAudit1 = $manageUserAuthorityManageData->CanAudit1($siteId, $channelId, $manageUserId);
-        $canAudit2 = $manageUserAuthorityManageData->CanAudit2($siteId, $channelId, $manageUserId);
-        $canAudit3 = $manageUserAuthorityManageData->CanAudit3($siteId, $channelId, $manageUserId);
-        $canAudit4 = $manageUserAuthorityManageData->CanAudit4($siteId, $channelId, $manageUserId);
-        $canRefused = $manageUserAuthorityManageData->CanRefused($siteId, $channelId, $manageUserId);
-        $canPublish = $manageUserAuthorityManageData->CanPublish($siteId, $channelId, $manageUserId);
-        $canModify = $manageUserAuthorityManageData->CanModify($siteId, $channelId, $manageUserId);
-        $canCreate = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
+        $canRework = $manageUserAuthorityManageData->CanChannelRework($siteId, $channelId, $manageUserId);
+        $canAudit1 = $manageUserAuthorityManageData->CanChannelAudit1($siteId, $channelId, $manageUserId);
+        $canAudit2 = $manageUserAuthorityManageData->CanChannelAudit2($siteId, $channelId, $manageUserId);
+        $canAudit3 = $manageUserAuthorityManageData->CanChannelAudit3($siteId, $channelId, $manageUserId);
+        $canAudit4 = $manageUserAuthorityManageData->CanChannelAudit4($siteId, $channelId, $manageUserId);
+        $canRefused = $manageUserAuthorityManageData->CanChannelRefused($siteId, $channelId, $manageUserId);
+        $canPublish = $manageUserAuthorityManageData->CanChannelPublish($siteId, $channelId, $manageUserId);
+        $canModify = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $manageUserId);
+        $canCreate = $manageUserAuthorityManageData->CanChannelCreate($siteId, $channelId, $manageUserId);
 
 
         $templateContent = str_ireplace("{CanRework}", $canRework == 1 ? "" : "display:none", $templateContent);
@@ -636,7 +636,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $hit = Control::GetRequest("hit", "");
 
         if (isset($searchKey) && strlen($searchKey) > 0) {
-            $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
+            $canSearch = $manageUserAuthorityManageData->CanChannelSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
                 die(Language::Load('channel', 4));
             }
@@ -741,40 +741,40 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             $can = false;
             switch ($state) {
                 case DocumentNewsData::STATE_REDO :
-                    $can = $manageUserAuthorityManageData->CanRework($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelRework($siteId, $channelId, $manageUserId);
                     break;
                 case DocumentNewsData::STATE_FIRST_VERIFY :
-                    $can = $manageUserAuthorityManageData->CanAudit1($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelAudit1($siteId, $channelId, $manageUserId);
                     break;
                 case DocumentNewsData::STATE_SECOND_VERIFY :
-                    $can = $manageUserAuthorityManageData->CanAudit2($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelAudit2($siteId, $channelId, $manageUserId);
                     break;
                 case DocumentNewsData::STATE_THIRD_VERIFY :
-                    $can = $manageUserAuthorityManageData->CanAudit3($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelAudit3($siteId, $channelId, $manageUserId);
                     break;
                 case DocumentNewsData::STATE_FINAL_VERIFY :
-                    $can = $manageUserAuthorityManageData->CanAudit4($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelAudit4($siteId, $channelId, $manageUserId);
                     break;
                 case DocumentNewsData::STATE_REFUSE :
-                    $can = $manageUserAuthorityManageData->CanRefused($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelRefused($siteId, $channelId, $manageUserId);
                     break;
             }
             if ($can) { //有修改状态权限
                 //2 检查是否有在本频道编辑他人文档的权限
-                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, false);
+                $documentNewsManageUserId = $documentNewsManageData->GetManageUserId($documentNewsId, true);
                 if ($documentNewsManageUserId !== $manageUserId) { //发稿人与当前操作人不是同一人时才判断
-                    $can = $manageUserAuthorityManageData->CanDoOthers($siteId, $channelId, $manageUserId);
+                    $can = $manageUserAuthorityManageData->CanChannelDoOthers($siteId, $channelId, $manageUserId);
                 } else {
                     //如果发稿人与当前操作人是同一人，则不处理
                 }
                 //3 检查是否有在本频道编辑同一管理组他人文档的权限
                 if (!$can) {
                     //是否是同一管理组
-                    $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId);
-                    $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($manageUserId);
+                    $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($documentNewsManageUserId, true);
+                    $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($manageUserId, true);
                     if ($documentNewsManageUserGroupId == $nowManageUserGroupId) {
                         //是同一组才进行判断
-                        $can = $manageUserAuthorityManageData->CanDoSameGroupOthers($siteId, $channelId, $manageUserId);
+                        $can = $manageUserAuthorityManageData->CanChannelDoSameGroupOthers($siteId, $channelId, $manageUserId);
                     }
                 }
             }
