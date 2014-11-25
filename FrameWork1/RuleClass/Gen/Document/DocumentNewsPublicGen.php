@@ -109,26 +109,10 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     $resultArrList[] = $columnValue;
                 }
 
-
                 $arrResult["result_list"] = $resultArrList;
-
-
-
-
-                //$pagerButton = str_ireplace('"','\"',$pagerButton);
-                //$pagerButton = str_ireplace("'","\\'",$pagerButton);
-                //$pagerButton = str_ireplace('\r','',$pagerButton);
-                //$pagerButton = str_ireplace('\n','',$pagerButton);
                 $arrResult["pager_button"] = $pagerButton;
-
-
-
                 $result = Format::FixJsonEncode($arrResult);
 
-                //print_r($result);
-//die();
-
-                //$result = '"result_list":' . $result . ',"pager_button":"'.$pagerButton.'"';
             }
         }
 

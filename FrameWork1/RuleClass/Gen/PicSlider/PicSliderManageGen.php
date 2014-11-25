@@ -60,7 +60,7 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-        $can = $manageUserAuthorityManageData->CanCreate($siteId, $channelId, $manageUserId);
+        $can = $manageUserAuthorityManageData->CanChannelCreate($siteId, $channelId, $manageUserId);
         if (!$can) {
             die(Language::Load('channel', 4));
         }
@@ -268,7 +268,7 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        $canExplore = $manageUserAuthorityManageData->CanChannelExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
             die(Language::Load('channel', 4));
         }
@@ -286,7 +286,7 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
         $searchKey = urldecode($searchKey);
 
         if (isset($searchKey) && strlen($searchKey) > 0) {
-            $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
+            $canSearch = $manageUserAuthorityManageData->CanChannelSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
                 die(Language::Load('channel', 4));
             }

@@ -560,7 +560,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $saleCount = Control::GetRequest("sale_count", "");
 
         if (isset($searchKey) && strlen($searchKey) > 0) {
-            $canSearch = $manageUserAuthorityManageData->CanSearch($siteId, $channelId, $manageUserId);
+            $canSearch = $manageUserAuthorityManageData->CanChannelSearch($siteId, $channelId, $manageUserId);
             if (!$canSearch) {
                 return Language::Load('channel', 4);
             }
