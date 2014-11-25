@@ -8,6 +8,7 @@
  */
 class ActivityManageData extends BaseManageData{
 
+    const STATE_FINAL_VERIFY=30;
     /**
      * 新增活动
      * @param array $httpPostData $_post数组
@@ -262,6 +263,99 @@ class ActivityManageData extends BaseManageData{
         $dataProperty->AddField("ActivityId", $activityId);
         $dataProperty->AddField("UserCount", $userCount);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+
+    /**
+     * 取得活动审核状态
+     * @param int $activityId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 文档的状态
+     */
+    public function GetState($activityId, $withCache=FALSE)
+    {
+        $result = -1;
+        if ($activityId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'activity_data';
+            $cacheFile = 'activity_get_state.cache_' . $activityId . '';
+            $sql = "SELECT State FROM " . self::TableName_Activity . " WHERE ActivityId=:ActivityId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得活动所属频道id
+     * @param int $activityId 活动id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 所属频道id
+     */
+    public function GetChannelId($activityId, $withCache=FALSE)
+    {
+        $result = -1;
+        if ($activityId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'activity_data';
+            $cacheFile = 'activity_get_channel_id.cache_' . $activityId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_Activity . " WHERE ActivityId=:ActivityId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改发布时间只有发布时间为空时才进行操作
+     * @param int $activityId 活动id
+     * @param int $publishDate 发布时间
+     * @return int 操作结果
+     */
+    public function ModifyPublishDate($activityId, $publishDate)
+    {
+        $result = 0;
+        if ($activityId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Activity . "
+                SET
+
+                    PublishDate=:PublishDate
+
+                WHERE
+                        ActivityId=:ActivityId
+                    AND PublishDate is NULL
+
+                    ;";
+
+
+            $dataProperty->AddField("ActivityId", $activityId);
+            $dataProperty->AddField("PublishDate", $publishDate);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得活动发布时间
+     * @param int $activityId 活动id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 文档的发布时间
+     */
+    public function GetPublishDate($activityId, $withCache=FALSE)
+    {
+        $result = "";
+        if ($activityId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'activity_data';
+            $cacheFile = 'activity_get_publish_date.cache_' . $activityId . '';
+            $sql = "SELECT PublishDate FROM " . self::TableName_Activity . " WHERE ActivityId=:ActivityId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 }

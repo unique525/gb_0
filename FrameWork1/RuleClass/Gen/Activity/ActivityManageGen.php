@@ -44,6 +44,9 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_publish":
+                $result = self::AsyncPublish();
+                break;
             case "modify_state":
                 $result = self::ModifyState();
                 break;
@@ -250,7 +253,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 );
                 $classId=$activityClassManageData->Create($InsertArray);
                 if($classId<0)
-                    Control::GetJqueryMessage(Language::Load('activity', 6));//警告：新增活动类别失败！
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('activity', 6));//警告：新增活动类别失败！
                 $listOfClassArray = $activityClassManageData->GetList($channelId, $activityType);
             }
             Template::ReplaceList($tempContent, $listOfClassArray, $listName);
@@ -506,7 +509,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     );
                     $classId=$activityClassManageData->Create($InsertArray);
                     if($classId<0)
-                        Control::GetJqueryMessage(Language::Load('activity', 6));//警告：新增活动类别失败！
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('activity', 6));//警告：新增活动类别失败！
                     $listOfClassArray = $activityClassManageData->GetList($channelId, $activityType);
                 }
                 Template::ReplaceList($tempContent, $listOfClassArray, $listName);
@@ -516,7 +519,8 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                 $manageUserData = new ManageUserManageData();
                 $userId = $manageUserData->GetUserId($manageUserId); //取后台管理员挂接的USERId号
                 if (intval($userId) <= 0) {
-                    $resultJavaScript .= Control::GetCloseTab();
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('activity', 22));//警告：获取对应用户名失败！用户名为空！
+                    //$resultJavaScript .= Control::GetCloseTab();
                 }
 
 
@@ -568,10 +572,56 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             //加入操作日志
             $operateContent = 'ModifyState Activity,Get FORM:' . implode('|', $_GET) . ';\r\nResult:ActivityId:' . $activityId;
             self::CreateManageUserLog($operateContent);
+
+            if($state==100){   //停用，删除活动
+                //$publishQueueManageData = new PublishQueueManageData();
+                //$channelId=$activityManageData->GetChannelId($activityId);
+                //
+                //$channelManageData=new ChannelManageData();
+                //$siteId=$channelManageData->GetSiteId($channelId,FALSE);
+                //parent::CancelPublishActivity($publishQueueManageData,$activityId,$siteId);
+            }
         } else {
             $result = -1;
         }
         return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
+
+
+    /**
+     * 发布活动详细页面
+     * @return int 返回发布结果
+     */
+    private function AsyncPublish()
+    {
+        $result = '';
+        $activityId = Control::GetRequest("activity_id", -1);
+        if ($activityId > 0) {
+            $publishQueueManageData = new PublishQueueManageData();
+            $executeTransfer = true;
+            $publishChannel = true;
+            $result = parent::PublishActivity($activityId, $publishQueueManageData, $executeTransfer, $publishChannel);
+            if ($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_ACTIVITY_RESULT_FINISHED)) {
+                $result = '';
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                    $publishResult = "";
+
+                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                    ){
+                        $publishResult = "Ok";
+                    }
+
+
+                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                        .'<br />'
+                    ;
+                }
+                //print_r($publishQueueManageData->Queue);
+            }
+        }
+        return $result;
     }
 }
 
