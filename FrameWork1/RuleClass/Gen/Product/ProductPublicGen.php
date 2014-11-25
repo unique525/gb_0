@@ -40,14 +40,21 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
+        $channelFirstId = Control::GetRequest("channel_first_id", 0);
         $templateContent = self::LoadListTemp($temp, $channelId);
 
         parent::ReplaceFirst($templateContent);
 
 
-        //加载产品类别数据
+        //得到顶级频道名称
         $channelPublicData = new ChannelPublicData();
+        $arrFirstOne = $channelPublicData->GetOne($channelFirstId);
+        $channelFirstName = $arrFirstOne["ChannelName"];
+        $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
+        $templateContent = str_ireplace("{ChannelFirstName}", strval($channelFirstName), $templateContent);
+        //加载产品类别数据
         $arrOne = $channelPublicData->GetOne($channelId);
+        $channelFirstName = $arrOne[""];
         Template::ReplaceOne($templateContent, $arrOne);
 
         $channelId = Control::GetRequest("channel_id", 0);
@@ -104,16 +111,25 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
+        $channelFirstId = Control::GetRequest("channel_first_id", 0);
         $productId = Control::GetRequest("product_id", 0);
         $templateContent = "";
 
         if ($productId > 0) {
             $templateContent = self::loadDetailTemp($temp, $channelId);
 
+            $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
+
             parent::ReplaceFirst($templateContent);
 
-            //加载产品类别数据
+            //得到顶级频道名称
             $channelPublicData = new ChannelPublicData();
+            $arrFirstOne = $channelPublicData->GetOne($channelFirstId);
+            $channelFirstName = $arrFirstOne["ChannelName"];
+            $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
+            $templateContent = str_ireplace("{ChannelFirstName}", strval($channelFirstName), $templateContent);
+
+            //加载产品类别数据
             $arrOne = $channelPublicData->GetOne($channelId);
             Template::ReplaceOne($templateContent, $arrOne);
 

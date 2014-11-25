@@ -230,7 +230,7 @@ class BasePublicGen extends BaseGen {
         }
 
 
-        if ($siteId > 0 || $channelId>0) {
+        if ($siteId > 0 || $channelId > 0) {
             $arrChannelList = null;
             $arrChannelChildList = null;
             $arrChannelThirdList = null;
@@ -242,7 +242,7 @@ class BasePublicGen extends BaseGen {
             switch ($tagWhere) {
                 case "parent":
 
-                    if($tagTopCount<=0){
+                    if ($tagTopCount <= 0) {
                         $tagTopCount = 100;
                     }
                     $channelPublicData = new ChannelPublicData();
@@ -255,17 +255,18 @@ class BasePublicGen extends BaseGen {
 
                     $sbChildChannelId = '';
                     $sbThirdChannelId = '';
-                    if(count($arrChannelList)>0){
+                    if (count($arrChannelList) > 0) {
 
-                        for($i = 0;$i<count($arrChannelList); $i++){
-                            $sbChildChannelId .= ','.$arrChannelList[$i]["ChannelId"];
+                        $channelFirstId = $arrChannelList[0]["ChannelId"];
+                        for ($i = 0; $i < count($arrChannelList); $i++) {
+                            $sbChildChannelId .= ',' . $arrChannelList[$i]["ChannelId"];
                         }
 
-                        if(strpos($sbChildChannelId,',') == 0){
-                            $sbChildChannelId = substr($sbChildChannelId,1);
+                        if (strpos($sbChildChannelId, ',') == 0) {
+                            $sbChildChannelId = substr($sbChildChannelId, 1);
                         }
 
-                        if(strlen($sbChildChannelId)>0){
+                        if (strlen($sbChildChannelId) > 0) {
                             //echo $sbChildChannelId;
                             //二级
                             $arrChannelChildList = $channelPublicData->GetListByParentId(
@@ -274,34 +275,41 @@ class BasePublicGen extends BaseGen {
                                 $tagOrder
                             );
 
-                            if(count($arrChannelChildList)>0){
-                                for($j = 0;$j<count($arrChannelChildList); $j++){
-                                    $sbThirdChannelId .= ','.$arrChannelChildList[$j]["ChannelId"];
+                            if (count($arrChannelChildList) > 0) {
+                                $channelSecondId = $arrChannelChildList[0]["ChannelId"];
+                                for ($j = 0; $j < count($arrChannelChildList); $j++) {
+                                    $sbThirdChannelId .= ',' . $arrChannelChildList[$j]["ChannelId"];
+                                    $arrChannelChildList[$j]["ChannelFirstId"] = $channelFirstId;
+                                }
+
+
+                                if (strpos($sbThirdChannelId, ',') == 0) {
+                                    $sbThirdChannelId = substr($sbThirdChannelId, 1);
+                                }
+
+                                if (strlen($sbThirdChannelId) > 0) {
+                                    //三级
+                                    $arrChannelThirdList = $channelPublicData->GetListByParentId(
+                                        $tagTopCount,
+                                        $sbThirdChannelId,
+                                        $tagOrder
+                                    );
+                                    if (count($arrChannelThirdList) > 0) {
+                                        for ($k = 0; $k < count($arrChannelThirdList); $k++) {
+                                            $sbThirdChannelId .= ',' . $arrChannelThirdList[$k]["ChannelId"];
+                                            $arrChannelThirdList[$k]["ChannelFirstId"] = $channelFirstId;
+                                            $arrChannelThirdList[$k]["ChannelSecondId"] = $channelSecondId;
+                                        }
+                                    }
                                 }
                             }
 
                         }
-
-                        if(strpos($sbThirdChannelId,',') == 0){
-                            $sbThirdChannelId = substr($sbThirdChannelId,1);
-                        }
-
-                        if(strlen($sbThirdChannelId)>0){
-                            //三级
-                            $arrChannelThirdList = $channelPublicData->GetListByParentId(
-                                $tagTopCount,
-                                $sbThirdChannelId,
-                                $tagOrder
-                            );
-                        }
-
-
                     }
-
 
                     break;
                 case "rank":
-                    if($siteId>0){
+                    if ($siteId > 0) {
                         $rank = intval($tagWhereValue);
                         $channelPublicData = new ChannelPublicData();
                         $arrChannelList = $channelPublicData->GetListByRank(
@@ -340,7 +348,7 @@ class BasePublicGen extends BaseGen {
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
                 $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
             }
 

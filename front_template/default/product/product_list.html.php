@@ -78,6 +78,7 @@
 <pre_temp id="3"></pre_temp>
 <pre_temp id="4"></pre_temp>
 <pre_temp id="9"></pre_temp>
+
 <div class="box1200">
     <div class="myseatnew">
         <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a></div>
@@ -86,13 +87,13 @@
 <div class="box194 fl">
     <!--小类列表菜单-->
     <div class="listsum" id="categoryListSum">
-        <div class="tit">{ChannelName}</div>
-        <icms id="channel_{ChannelId}" type="channel_list" where="parent">
+        <div class="tit">{ChannelFirstName}</div>
+        <icms id="channel_{ChannelFirstId}" type="channel_list" where="parent">
             <item>
                 <![CDATA[
                 <div class="listsum-1">
                     <dl title="{f_ChannelId}">
-                        <dt><a href="javascript:;" hidefocus="true">{f_ChannelName}</a></dt>
+                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
                         <dd><ul>
                                 {child}
                             </ul>
@@ -104,7 +105,7 @@
             </item>
             <child>
                 <![CDATA[
-                <li><a href="/default.php?&mod=product&a=list&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                <li><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
                 ]]>
             </child>
         </icms>
