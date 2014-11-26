@@ -28,6 +28,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $manageUserGroupManageGen = new ManageUserGroupManageGen();
                     $result = $manageUserGroupManageGen->Gen();
                     break;
+                case "manage_user_authority":
+                    $manageUserAuthorityManageGen = new ManageUserAuthorityManageGen();
+                    $manageUserAuthorityManageGen->Gen();
+                    break;
                 case "channel":
                     $channelManageGen = new ChannelManageGen();
                     $result = $channelManageGen->Gen();

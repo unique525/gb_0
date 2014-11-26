@@ -16,7 +16,7 @@
         window.AjaxFileUploadCallBack = function(fileElementId,data){
             var uploadFileId =  data.upload_file_id;
             var uploadFilePath = data.upload_file_path;
-            var fileElementId = fileElementId;
+
             if(fileElementId == "user_default_male_avatar"){
                 $( "#cfg_UserDefaultMaleAvatar_5" ).val(uploadFileId);
                 $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
@@ -34,18 +34,27 @@
             btnUploadToMaleAvatar.click(function () {
 
                 var fileElementId = 'user_default_male_avatar';
+                var fUploadFile = null;
+                var editor = null;
+                var attachWatermark = 0;
                 var loadingImageId = "loadingOfUserDefaultMaleAvatar";
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+
+
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfUserAvatar,
                     tableId,
                     loadingImageId,
                     $(this),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId,
+                    uploadFileId
                 );
             });
 
@@ -54,18 +63,27 @@
             btnUploadToFemaleAvatar.click(function () {
 
                 var fileElementId = 'user_default_female_avatar';
+                var fUploadFile = null;
+                var editor = null;
+                var attachWatermark = 0;
                 var loadingImageId = "loadingOfUserDefaultFemaleAvatar";
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+
+
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfUserAvatar,
                     tableId,
                     loadingImageId,
                     $(this),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId,
+                    uploadFileId
                 );
             });
 

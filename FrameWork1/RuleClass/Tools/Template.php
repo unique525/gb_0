@@ -379,6 +379,9 @@ class Template
                             $list = $itemTempContent;
                         }
 
+                        //根级id赋值
+                        $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
+
                         $columns = $arrList[$i];
                         $itemType = "item";
                         $list = self::ReplaceListItem(
@@ -400,15 +403,12 @@ class Template
                         if(count($arrChildList)>0){
 
                             for($j = 0; $j<count($arrChildList); $j++){
+                                $arrChildList[$j]["FirstId"] = $arrList[$i][$tableIdName];
 
                                 $listOfChild = $childTempContent;
                                 $columnsOfChild = $arrChildList[$j];
 
                                 if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
-
-
-
-
 
 
 
@@ -430,6 +430,8 @@ class Template
                                     if(count($arrThirdList)>0){
 
                                         for($k = 0; $k<count($arrThirdList); $k++){
+                                            $arrThirdList[$k]["SecondId"] = $arrChildList[$j][$tableIdName];
+                                            $arrThirdList[$k]["FirstId"] = $arrList[$i][$tableIdName];
 
                                             $listOfThird = $thirdTempContent;
                                             $columnsOfThird = $arrThirdList[$k];
