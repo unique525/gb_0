@@ -86,7 +86,7 @@
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li class="first_li"><a href="javascript:;"><img src="{f_icon}" width="37" height="35" />{f_ChannelName}</a>
+                                <li class="first_li"><a href="/default.php?&mod=product&a=list&channel_first_id={f_ChannelId}&channel_id={f_ChannelId}"><img src="{f_icon}" width="37" height="35" />{f_ChannelName}</a>
                                     <div class="menu2" style="display: none;">
                                     <ul>
                                         {child}
@@ -97,13 +97,13 @@
                             </item>
                             <child>
                                 <![CDATA[
-                                <li><div class="title">{f_ChannelName}</div>
+                                <li><div class="title"><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a></div>
                                 <div class="dd">{third}</div>
                                 </li>
                                 ]]>
                             </child>
                             <third>
-                                <![CDATA[<a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
                                 ]]>
                             </third>
 
