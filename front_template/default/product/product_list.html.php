@@ -165,8 +165,7 @@
                                             <a  target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
                                         </div>
                                         <div class="jg" style="color:#eb6100;">
-                                            ￥{f_SalePrice}
-                                            <span >原价：￥{f_MarketPrice}</span>
+                                            <span >原价：￥{f_MarketPrice}</span>￥{f_SalePrice}
                                         </div>
                                     </div>
                                 </td>
@@ -231,8 +230,8 @@
                 ]]>
         </item_splitter>
     </icms>
-    <div class="line"></div>
     </ul>
+    <div class="line"></div>
 </div>
 <div style="float: right;">
     {pager_button}

@@ -6,7 +6,7 @@ img{font-size:12px;vertical-align:middle;}
 input{outline: none;}
 td{ font-family:Arial}
 table{border-collapse:collapse;border-spacing:0;}
-ul, li{vertical-align:bottom;padding:0; margin:0;}
+ul, li{padding:0; margin:0;}
 em, i{font-style:normal;}
 li{list-style: none;}
 ol{list-style-type: none;list-style: none;}
@@ -223,11 +223,9 @@ element.style {height: 350px;margin-bottom: 0; margin-left: 0;margin-top: 0;over
 .gdmsg {float: left;margin-bottom: 20px;width:990px;}
 .gdmsg_tab {background-color: #ffffff;    border: 1px solid #e5e5e5; box-shadow: 1px 1px 2px rgba(221, 221, 221, 0.6);height: 40px;}
 .gdmsg_tab .des_tabbox {background-color: #ffffff;float: left;}
-.gdmsg_tab li {color: #333;font: 14px/50px '微软雅黑';height: 100%;}
+.gdmsg_tab li {color: #333;font: 14px/50px '微软雅黑';height:40px;}
 .gdmsg_tab .des_tabbox .tab {width: 110px;}
-.gdmsg_tab .tab {border-right: 1px solid #e1e1e1;color: #333;
-    float: left;font-family: 'microsoft yahei';font-size: 14px;height: 42px;left: -1px;
-    line-height: 40px;outline: 0 none;position: relative;text-align: center;top: -1px;width: 120px;z-index: 30;}
+.gdmsg_tab .tab {border-right: 1px solid #e1e1e1;color: #333;display:block; float:left;font-family: 'microsoft yahei';font-size: 14px;height: 40px;line-height: 40px;outline: 0 none;text-align: center;width: 120px; *margin-top:-3px;}
 .gdmsg_tab .cur { background-color: #00a93d; color: white;}
 .gdmsg_tab .tab em {color: #ff3c00;font-family: tahoma;font-size: 12px;}
 .gdmsg .gdmsgcont {padding: 25px; width: 940px;}
