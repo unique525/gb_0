@@ -38,13 +38,15 @@
         }
         $(function () {
             /* 顶部banner类别菜单初始化 */
-            $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-            $('#leftmenu>ul>li>ul li').bind('mouseover',function () // 子菜单的鼠标移入操作
+            //$('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+            $('#leftmenu div[class="menu1"]>ul>li').bind('mouseover',function () // 子菜单的鼠标移入操作
             {
-                $(this).children('ul').css('display', '');
+                //有下级菜单的才显示
+                if($(this).children('div').find('ul>li').length>0)
+                $(this).children('div').css('display', '');
             }).bind('mouseleave', function () // 子菜单的鼠标移出操作
                 {
-                    $(this).children('ul').css('display', 'none');
+                    $(this).children('div').css('display', 'none');
                 });
             //爆品抢购、新品速递、好评单品TAB页切换
             $('#sales>div[alt]').bind('mouseover', function () // 子菜单的鼠标移入操作
@@ -79,37 +81,38 @@
 <div class="main">
 <div class="first_part">
     <div class="wrapper">
-        <div class="left_bar left" id="leftmenu" style="background:#00a93c;height:429px;">
-
+        <div id="leftmenu" style="background:#00a93c;height:429px;">
             <ul>
-                <li>
-                    <ul style="display: block;">
+            <div class="menu1">
+                    <ul>
                         <icms id="channel_3" type="channel_list" where="parent">
                             <item>
                                 <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="javascript:;">{f_ChannelName}</a>
-                                    <ul style="display: none;">
+                                <li class="first_li"><a href="/default.php?&mod=product&a=list&channel_first_id={f_ChannelId}&channel_id={f_ChannelId}"><img src="{f_icon}" width="37" height="35" />{f_ChannelName}</a>
+                                    <div class="menu2" style="display: none;">
+                                    <ul>
                                         {child}
                                     </ul>
+                                    </div>
                                 </li>
                                 ]]>
                             </item>
                             <child>
                                 <![CDATA[
-                                <li><span>{f_ChannelName}</span></li>
-                                <dd>{third}</dd>
+                                <li><div class="title"><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a></div>
+                                <div class="dd">{third}</div>
+                                </li>
                                 ]]>
                             </child>
                             <third>
-                                <![CDATA[<a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}<span>|</span></a>
                                 ]]>
                             </third>
 
                         </icms>
                     </ul>
-                </li>
+            </div>
             </ul>
-
         </div>
         <div class="middle left">
             <ul class="bx_slider">

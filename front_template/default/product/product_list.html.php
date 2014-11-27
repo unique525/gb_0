@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>星滋味--{ChannelName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
@@ -31,8 +32,8 @@
                 });
             var channelId = Request["channel_id"];
             $("#categoryListSum div[class='listsum-1'] dl").removeClass("listhover");
-            $("#categoryListSum div[class='listsum-1'] dl[title="+channelId+"]").addClass("listhover").find('a').addClass("on");
-            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[title="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
+            $("#categoryListSum div[class='listsum-1'] dl[alt="+channelId+"]").addClass("listhover").find('a').addClass("on");
+            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[alt="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
 
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
@@ -92,8 +93,8 @@
             <item>
                 <![CDATA[
                 <div class="listsum-1">
-                    <dl title="{f_ChannelId}">
-                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
+                    <dl title="{f_ChannelName}">
+                        <dt><a alt="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
                         <dd><ul>
                                 {child}
                             </ul>
@@ -105,7 +106,7 @@
             </item>
             <child>
                 <![CDATA[
-                <li><a title="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                <li><a alt="{f_ChannelId}" title="{f_ChannelName}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="">{f_ChannelName}</a></li>
                 ]]>
             </child>
         </icms>
@@ -164,8 +165,7 @@
                                             <a  target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
                                         </div>
                                         <div class="jg" style="color:#eb6100;">
-                                            ￥{f_SalePrice}
-                                            <span >原价：￥{f_MarketPrice}</span>
+                                            <span >原价：￥{f_MarketPrice}</span>￥{f_SalePrice}
                                         </div>
                                     </div>
                                 </td>
@@ -230,8 +230,8 @@
                 ]]>
         </item_splitter>
     </icms>
-    <div class="line"></div>
     </ul>
+    <div class="line"></div>
 </div>
 <div style="float: right;">
     {pager_button}
