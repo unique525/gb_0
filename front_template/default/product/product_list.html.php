@@ -31,14 +31,14 @@
                 });
             var channelId = Request["channel_id"];
             $("#categoryListSum div[class='listsum-1'] dl").removeClass("listhover");
-            $("#categoryListSum div[class='listsum-1'] dl[title="+channelId+"]").addClass("listhover").find('a').addClass("on");
-            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[title="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
+            $("#categoryListSum div[class='listsum-1'] dl[alt="+channelId+"]").addClass("listhover").find('a').addClass("on");
+            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[alt="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
 
             //根据不同的排序字段顺序显示产品列表
             $('.price-2 a').attr("class", "listup");
             var ps = Request["ps"];
             if(ps==null||ps=="") ps="12";
-            var url = "/default.php?&mod=product&a=list&channel_first_id={FirstId}&channel_id={ChannelId}&p=1&ps="+ps;
+            var url = "/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
             var direction="";
@@ -142,7 +142,7 @@
 
 <div class="box1200">
     <div class="myseatnew">
-        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={FirstId}&channel_id={ChannelId}">{ChannelName}</a></div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}">{ChannelName}</a></div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -153,8 +153,8 @@
             <item>
                 <![CDATA[
                 <div class="listsum-1">
-                    <dl title="{f_ChannelId}">
-                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
+                    <dl title="{f_ChannelName}">
+                        <dt><a alt="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
                         <dd><ul>
                                 {child}
                             </ul>
@@ -166,7 +166,7 @@
             </item>
             <child>
                 <![CDATA[
-                <li><a title="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                <li><a alt="{f_ChannelId}" title="{f_ChannelName}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="">{f_ChannelName}</a></li>
                 ]]>
             </child>
         </icms>
