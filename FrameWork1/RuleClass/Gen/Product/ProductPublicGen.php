@@ -25,6 +25,9 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "hyper":
+                $result = self::GenHyper();
+                break;
             default:
                 break;
         }
@@ -54,7 +57,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = str_ireplace("{ChannelFirstName}", strval($channelFirstName), $templateContent);
         //加载产品类别数据
         $arrOne = $channelPublicData->GetOne($channelId);
-        $channelFirstName = $arrOne[""];
         Template::ReplaceOne($templateContent, $arrOne);
 
         $channelId = Control::GetRequest("channel_id", 0);
@@ -244,6 +246,33 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+        return $templateContent;
+    }
+
+    /**
+     * 生成产品量贩页
+     * @return string 产品量贩页列表HTML
+     */
+    private function GenHyper()
+    {
+        $temp = Control::GetRequest("temp", "");
+        $channelId = Control::GetRequest("channel_id", 0);
+        $templateContent = self::LoadHyperTemp($temp, $channelId);
+
+        parent::ReplaceFirst($templateContent);
+        return $templateContent;
+    }
+
+    private function LoadHyperTemp($temp, $channelId)
+    {
+        $templateFileUrl = "product/product_hyper.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+        parent::ReplaceFirst($templateContent);
+        $templateContent = parent::ReplaceTemplate($templateContent);
+        parent::ReplaceEnd($templateContent);
         return $templateContent;
     }
 

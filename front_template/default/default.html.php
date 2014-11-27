@@ -41,6 +41,8 @@
             //$('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
             $('#leftmenu div[class="menu1"]>ul>li').bind('mouseover',function () // 子菜单的鼠标移入操作
             {
+                //有下级菜单的才显示
+                if($(this).children('div').find('ul>li').length>0)
                 $(this).children('div').css('display', '');
             }).bind('mouseleave', function () // 子菜单的鼠标移出操作
                 {
@@ -103,7 +105,7 @@
                                 ]]>
                             </child>
                             <third>
-                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}<span>|</span></a>
                                 ]]>
                             </third>
 
