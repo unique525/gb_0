@@ -257,7 +257,6 @@ class BasePublicGen extends BaseGen {
                     $sbThirdChannelId = '';
                     if (count($arrChannelList) > 0) {
 
-                        $channelFirstId = $arrChannelList[0]["ChannelId"];
                         for ($i = 0; $i < count($arrChannelList); $i++) {
                             $sbChildChannelId .= ',' . $arrChannelList[$i]["ChannelId"];
                         }
@@ -276,10 +275,8 @@ class BasePublicGen extends BaseGen {
                             );
 
                             if (count($arrChannelChildList) > 0) {
-                                $channelSecondId = $arrChannelChildList[0]["ChannelId"];
                                 for ($j = 0; $j < count($arrChannelChildList); $j++) {
                                     $sbThirdChannelId .= ',' . $arrChannelChildList[$j]["ChannelId"];
-                                    $arrChannelChildList[$j]["ChannelFirstId"] = $channelFirstId;
                                 }
 
 
@@ -297,8 +294,6 @@ class BasePublicGen extends BaseGen {
                                     if (count($arrChannelThirdList) > 0) {
                                         for ($k = 0; $k < count($arrChannelThirdList); $k++) {
                                             $sbThirdChannelId .= ',' . $arrChannelThirdList[$k]["ChannelId"];
-                                            $arrChannelThirdList[$k]["ChannelFirstId"] = $channelFirstId;
-                                            $arrChannelThirdList[$k]["ChannelSecondId"] = $channelSecondId;
                                         }
                                     }
                                 }

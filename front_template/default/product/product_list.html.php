@@ -38,7 +38,7 @@
             $('.price-2 a').attr("class", "listup");
             var ps = Request["ps"];
             if(ps==null||ps=="") ps="12";
-            var url = "/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}&p=1&ps="+ps;
+            var url = "/default.php?&mod=product&a=list&channel_first_id={FirstId}&channel_id={ChannelId}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
             var direction="";
@@ -77,11 +77,72 @@
 <body>
 <pre_temp id="3"></pre_temp>
 <pre_temp id="4"></pre_temp>
-<pre_temp id="9"></pre_temp>
+<div class="clean"></div>
+<script type="text/javascript">
+
+    $(function(){
+        /* 顶部banner类别菜单初始化 */
+        $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
+        $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
+        {
+            $(this).children('ul').css('display','');
+        }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
+            {
+                $(this).children('ul').css('display','none');
+            });
+        $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
+        {
+            $(this).children('ul').css('display','');
+        }).bind('mouseleave',function() // 子菜单的鼠标移出操作
+            {
+                $(this).children('ul').css('display','none');
+            });
+    });
+</script>
+<div class="mainbav">
+    <div class="wrapper">
+        <div id="leftmenu">
+            <ul>
+                <li><span>所有商品分类</span>
+                    <ul style="display: none;">
+
+                        <icms id="channel_3" type="channel_list" where="parent">
+                            <item>
+                                <![CDATA[
+                                <li><img src="{f_icon}" width="37" height="35" /><a href="/default.php?&mod=product&a=list&channel_first_id={f_ChannelId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
+                                    <ul style="display: none;">
+                                        {child}
+                                    </ul>
+                                </li>
+                                ]]>
+                            </item>
+                            <child>
+                                <![CDATA[
+                                <li><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                                <dd>{third}</dd>
+                                ]]>
+                            </child>
+                            <third>
+                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
+                                ]]>
+                            </third>
+
+                        </icms>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="column1"><a href="/">首页</a></div>
+        <div class="column2"><a href="">超市量贩</a></div>
+        <div class="column2"><a style="display:none;" href="">团购</a></div>
+        <div class="column2"><a style="display:none;" href="">最新预售</a></div>
+        <div class="new"><img style="display:none;" src="/images/icon_new.png" width="29" height="30" /></div>
+    </div>
+</div>
 
 <div class="box1200">
     <div class="myseatnew">
-        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}">{ChannelName}</a></div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={FirstId}&channel_id={ChannelId}">{ChannelName}</a></div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
@@ -93,7 +154,7 @@
                 <![CDATA[
                 <div class="listsum-1">
                     <dl title="{f_ChannelId}">
-                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
+                        <dt><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}" hidefocus="true">{f_ChannelName}</a></dt>
                         <dd><ul>
                                 {child}
                             </ul>
@@ -105,7 +166,7 @@
             </item>
             <child>
                 <![CDATA[
-                <li><a title="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
+                <li><a title="{f_ChannelId}" href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}" class="" title="{f_ChannelName}">{f_ChannelName}</a></li>
                 ]]>
             </child>
         </icms>
