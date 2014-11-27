@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>星滋味--{ChannelName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
@@ -77,68 +78,7 @@
 <body>
 <pre_temp id="3"></pre_temp>
 <pre_temp id="4"></pre_temp>
-<div class="clean"></div>
-<script type="text/javascript">
-
-    $(function(){
-        /* 顶部banner类别菜单初始化 */
-        $('#leftmenu>ul>li>ul').find('li:has(ul:not(:empty))>a').append("<span class='arrow'>></span>"); // 为有子菜单的菜单项添加'>'符号
-        $("#leftmenu>ul>li").bind('mouseover',function() // 顶级菜单项的鼠标移入操作
-        {
-            $(this).children('ul').css('display','');
-        }).bind('mouseleave',function() // 顶级菜单项的鼠标移出操作
-            {
-                $(this).children('ul').css('display','none');
-            });
-        $('#leftmenu>ul>li>ul li').bind('mouseover',function() // 子菜单的鼠标移入操作
-        {
-            $(this).children('ul').css('display','');
-        }).bind('mouseleave',function() // 子菜单的鼠标移出操作
-            {
-                $(this).children('ul').css('display','none');
-            });
-    });
-</script>
-<div class="mainbav">
-    <div class="wrapper">
-        <div id="leftmenu">
-            <ul>
-                <li><span>所有商品分类</span>
-                    <ul style="display: none;">
-
-                        <icms id="channel_3" type="channel_list" where="parent">
-                            <item>
-                                <![CDATA[
-                                <li><img src="{f_icon}" width="37" height="35" /><a href="/default.php?&mod=product&a=list&channel_first_id={f_ChannelId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
-                                    <ul style="display: none;">
-                                        {child}
-                                    </ul>
-                                </li>
-                                ]]>
-                            </item>
-                            <child>
-                                <![CDATA[
-                                <li><a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
-                                <dd>{third}</dd>
-                                ]]>
-                            </child>
-                            <third>
-                                <![CDATA[<a href="/default.php?&mod=product&a=list&channel_first_id={f_FirstId}&channel_id={f_ChannelId}">{f_ChannelName}</a>
-                                ]]>
-                            </third>
-
-                        </icms>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="column1"><a href="/">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a style="display:none;" href="">团购</a></div>
-        <div class="column2"><a style="display:none;" href="">最新预售</a></div>
-        <div class="new"><img style="display:none;" src="/images/icon_new.png" width="29" height="30" /></div>
-    </div>
-</div>
+<pre_temp id="9"></pre_temp>
 
 <div class="box1200">
     <div class="myseatnew">

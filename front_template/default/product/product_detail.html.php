@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>星滋味--{ProductName}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <link href="/images/common.css" rel="stylesheet" type="text/css" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
@@ -361,7 +362,7 @@
                         <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
                     </tr>
                     <tr>
-                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　<img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>
+                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /><div style="display: none"> <a href="#">降价通知</a> 　</div><img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>
                     </tr>
                     <tr>
                         <td align="left" style="padding:20px 0;"><div class="jiathis_style">
