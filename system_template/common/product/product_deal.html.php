@@ -652,6 +652,16 @@
                 </td>
             </tr>
             <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_IsDiscount">是否量贩产品：</label></td>
+                <td class="spe_line">
+                    <select id="f_IsDiscount" name="f_IsDiscount">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    {s_IsDiscount}
+                </td>
+            </tr>
+            <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_GetScore">赠送积分：</label></td>
                 <td class="spe_line">
                     <input id="f_GetScore" name="f_GetScore" type="text" value="{GetScore}" maxlength="10" style="width:80px;" class="input_number"/>
