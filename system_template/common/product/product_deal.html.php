@@ -107,6 +107,7 @@
 
             });
 
+
             var btnCreateProductPrice = $("#btn_create_product_price");
             btnCreateProductPrice.click(function () {
 
