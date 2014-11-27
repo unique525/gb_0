@@ -231,8 +231,8 @@
                 ]]>
         </item_splitter>
     </icms>
-    <div class="line"></div>
     </ul>
+    <div class="line"></div>
 </div>
 <div style="float: right;">
     {pager_button}
