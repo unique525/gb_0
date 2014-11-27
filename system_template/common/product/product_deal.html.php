@@ -91,6 +91,7 @@
                 var loadingImageId = null;
                 var inputTextId = null;
                 var previewImageId = null;
+                var uploadFileId = 0;
 
                 AjaxFileUpload(
                     fileElementId,
@@ -102,7 +103,8 @@
                     fUploadFile,
                     attachWatermark,
                     inputTextId,
-                    previewImageId
+                    previewImageId,
+                    uploadFileId
                 );
 
             });
