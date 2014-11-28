@@ -109,30 +109,32 @@
                                 <td class="spe_line product_num">数量</td>
                                 <td class="spe_line product_unit">单位</td>
                                 <td class="spe_line product_finalprice">小计</td>
+                                <td class="spe_line product_operation">操作</td>
                             </tr>
                             <icms id="user_order_product_list">
                                 <item>
                                     <![CDATA[
-                            <tr class="grid_item2" id="user_order_product_{f_UserOrderProductId}">
-                                <td class="spe_line product_pic"><img width="80px" height="80px" /></td>
-                                <td class="spe_line product_name">{f_ProductName}</td>
-                                <td class="spe_line product_fullprice">
-                                    ￥<span class="show_price">{f_ProductPrice}</span>
-                                </td>
-                                <td class="spe_line product_cutprice">
-                                    ￥<span class="show_price">{f_SalePrice}</span>
-                                </td>
-                                <td class="spe_line product_num">
-                                    {f_SaleCount}
-                                </td>
-                                <td class="spe_line product_unit">
-                                    {f_ProductUnit}
-                                </td>
-                                <td class="spe_line product_finalprice">
-                                    ￥<span class="UserOrderSubtotal show_price">{f_Subtotal}</span>
-                                </td>
-                            </tr>
-                                 ]]>
+                                    <tr class="grid_item2" id="user_order_product_{f_UserOrderProductId}">
+                                        <td class="spe_line product_pic"><img width="80px" height="80px" /></td>
+                                        <td class="spe_line product_name">{f_ProductName}</td>
+                                        <td class="spe_line product_fullprice">
+                                            ￥<span class="show_price">{f_ProductPrice}</span>
+                                        </td>
+                                        <td class="spe_line product_cutprice">
+                                            ￥<span class="show_price">{f_SalePrice}</span>
+                                        </td>
+                                        <td class="spe_line product_num">
+                                            {f_SaleCount}
+                                        </td>
+                                        <td class="spe_line product_unit">
+                                            {f_ProductUnit}
+                                        </td>
+                                        <td class="spe_line product_finalprice">
+                                            ￥<span class="UserOrderSubtotal show_price">{f_Subtotal}</span>
+                                        </td>
+                                        <td class="spe_line product_operation"><a href="#">评价商品</a></td>
+                                    </tr>
+                                    ]]>
                                 </item>
                             </icms>
                             <tr class="grid_item2 bottom_price">
@@ -140,6 +142,7 @@
                                 <td class="spe_line product_finalprice">
                                     ￥<span class="show_price" id="AllSaleProductPrice"></span>
                                 </td>
+                                <td class="spe_line product_finalprice">&nbsp;</td>
                             </tr>
                         </table>
                     </div>

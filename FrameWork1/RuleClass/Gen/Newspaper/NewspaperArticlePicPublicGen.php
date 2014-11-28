@@ -25,11 +25,12 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
 
     private function Import(){
         $newspaperArticlePicId = -1;
-        $authorityCode = Control::PostRequest("AuthorityCode", "");
-        $newspaperArticleId = Control::PostRequest("NewspaperArticleId",0);
-        $remark = Control::PostRequest("Remark","");
-        $uploadFileId = Control::PostRequest("UploadFileId",0);
-        $picMapping = Control::PostRequest("PicMapping","");
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperArticleId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleId",0,$removeXSS)));
+        $remark = str_ireplace("\r\n","",Control::PostRequest("Remark","",$removeXSS));
+        $uploadFileId = intval(str_ireplace("\r\n","",Control::PostRequest("UploadFileId",0,$removeXSS)));
+        $picMapping = str_ireplace("\r\n","",Control::PostRequest("PicMapping","",$removeXSS));
 
         if(
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&

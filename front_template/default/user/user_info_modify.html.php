@@ -65,12 +65,12 @@
                 <div class="change_info">
                     <form id="userInfoForm" enctype="multipart/form-data" action="/default.php?mod=user_info&a=modify&user_id={UserId}"
                           method="post">
-                        <table border="0" width="99%" align="center" cellpadding="0" cellspacing="0">
+                        <table border="0" width="100%" align="center" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="spe_line label">用户名：</td>
-                                <td class="spe_line" width="320">{UserName}</td>
+                                <td class="spe_line" width="348">{UserName}</td>
                                 <td class="spe_line label">真实姓名：</td>
-                                <td class="spe_line" width="320">
+                                <td class="spe_line" width="348">
                                     <input type="text" class="input_box" value="{RealName}" name="RealName"/>
                                 </td>
                             </tr>
@@ -122,13 +122,13 @@
                             <tr>
                                 <td class="spe_line label" valign="top">会员签名：</td>
                                 <td class="spe_line" colspan="3">
-                                    <textarea style="width:590px" name="Sign">{Sign}</textarea>
+                                    <textarea style="width:728px; margin-bottom:5px;" name="Sign">{Sign}</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="spe_line label">Email：</td>
                                 <td class="spe_line">
-                                    <input type="text" class="input_box" style="width: 250px" value="{Email}" name="Email"/>
+                                    <input type="text" class="input_box" value="{Email}" name="Email"/>
                                 </td>
                                 <td class="spe_line label">QQ：</td>
                                 <td class="spe_line">
@@ -148,7 +148,7 @@
                             <tr>
                                 <td class="spe_line label">生日：</td>
                                 <td class="spe_line">
-                                    <input type="text" id="f_Birthday" value="{Birthday}" name="Birthday"/>
+                                    <input type="text" class="input_box" id="f_Birthday" value="{Birthday}" name="Birthday"/>
                                 </td>
                                 <td class="spe_line label">身份证：</td>
                                 <td class="spe_line">
