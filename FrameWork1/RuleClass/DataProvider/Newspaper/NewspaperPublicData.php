@@ -44,6 +44,7 @@ class NewspaperPublicData extends BasePublicData
             $dataProperty->AddField("NewspaperTitle", $newsPaperTitle);
             $dataProperty->AddField("PublishDate", $publishDate);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+
         } else {
             $result = $newspaperId;
         }
