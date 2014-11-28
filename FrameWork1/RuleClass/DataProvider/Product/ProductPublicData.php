@@ -272,6 +272,38 @@ class ProductPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 根据频道ID获取量贩产品记录
+     * @param int $channelId 频道Id,可以是 id,id,id 的形式
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null  列表数组
+     */
+    public function GetDiscountListByChannelId($channelId, $order = "", $topCount = null)
+    {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if ($channelId > 0) {
+            switch ($order) {
+                default:
+                    $order = " ORDER BY t.Sort DESC,t.Createdate DESC";
+                    break;
+            }
+            $sql = "SELECT t.*,t1.*"
+                . " FROM " . self::TableName_Product ." t"
+                . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
+                . " WHERE t.ChannelId IN (".$channelId.") AND IsDiscount=1 AND t.State<100"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     public function GetOneForUserFavorite($productId){
         $result = null;
         if($productId > 0){
