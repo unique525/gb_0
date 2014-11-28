@@ -29,30 +29,31 @@ class NewspaperArticlePublicGen extends BasePublicGen {
     }
 
     private function Import(){
+        $removeXSS = false;
         $newspaperArticleId = -1;
-        $authorityCode = Control::PostRequest("AuthorityCode", "");
-        $newspaperPageId = Control::PostRequest("NewspaperPageId",0);
-        $newspaperArticleTitle = Control::PostRequest("NewspaperArticleTitle","");
-        $newspaperArticleContent = Control::PostRequest("NewspaperArticleContent","");
-        $newspaperArticleSubTitle = Control::PostRequest("NewspaperArticleSubTitle","");
-        $newspaperArticleCiteTitle = Control::PostRequest("NewspaperArticleCiteTitle","");
-        $publishType = Control::PostRequest("PublishType","");
-        $published = Control::PostRequest("Published","");
-        $informationId = Control::PostRequest("InformationId","");
-        $source = Control::PostRequest("Source","");
-        $author = Control::PostRequest("Author","");
-        $column = Control::PostRequest("Column","");
-        $picRemark = Control::PostRequest("PicRemark","");
-        $next = Control::PostRequest("Next","");
-        $previous = Control::PostRequest("Previous","");
-        $no = Control::PostRequest("No","");
-        $className = Control::PostRequest("ClassName","");
-        $genre = Control::PostRequest("Genre","");
-        $reprint = Control::PostRequest("Reprint","");
-        $fileName = Control::PostRequest("FileName","");
-        $abstractInfo = Control::PostRequest("AbstractInfo","");
-        $wordCount = Control::PostRequest("WordCount","");
-        $picMapping = Control::PostRequest("PicMapping","");
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "", $removeXSS));
+        $newspaperPageId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperPageId",0, $removeXSS)));
+        $newspaperArticleTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleTitle","", $removeXSS));
+        $newspaperArticleContent = str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleContent","", $removeXSS));
+        $newspaperArticleSubTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleSubTitle","", $removeXSS));
+        $newspaperArticleCiteTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleCiteTitle","", $removeXSS));
+        $publishType = str_ireplace("\r\n","",Control::PostRequest("PublishType","", $removeXSS));
+        $published = str_ireplace("\r\n","",Control::PostRequest("Published","", $removeXSS));
+        $informationId = str_ireplace("\r\n","",Control::PostRequest("InformationId","", $removeXSS));
+        $source = str_ireplace("\r\n","",Control::PostRequest("Source","", $removeXSS));
+        $author = str_ireplace("\r\n","",Control::PostRequest("Author","", $removeXSS));
+        $column = str_ireplace("\r\n","",Control::PostRequest("Column","", $removeXSS));
+        $picRemark = str_ireplace("\r\n","",Control::PostRequest("PicRemark","", $removeXSS));
+        $next = str_ireplace("\r\n","",Control::PostRequest("Next","", $removeXSS));
+        $previous = str_ireplace("\r\n","",Control::PostRequest("Previous","", $removeXSS));
+        $no = str_ireplace("\r\n","",Control::PostRequest("No","", $removeXSS));
+        $className = str_ireplace("\r\n","",Control::PostRequest("ClassName","", $removeXSS));
+        $genre = str_ireplace("\r\n","",Control::PostRequest("Genre","", $removeXSS));
+        $reprint = str_ireplace("\r\n","",Control::PostRequest("Reprint","", $removeXSS));
+        $fileName = str_ireplace("\r\n","",Control::PostRequest("FileName","", $removeXSS));
+        $abstractInfo = str_ireplace("\r\n","",Control::PostRequest("AbstractInfo","", $removeXSS));
+        $wordCount = str_ireplace("\r\n","",Control::PostRequest("WordCount","", $removeXSS));
+        $picMapping = str_ireplace("\r\n","",Control::PostRequest("PicMapping","", $removeXSS));
 
         if(
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
@@ -133,6 +134,10 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
             $arrOne["NewspaperArticleContent"] =
                 str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
+            $arrOne["NewspaperArticleContent"] =
+                str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
+            $arrOne["NewspaperArticleContent"] =
+                str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
 
 
             Template::ReplaceOne($templateContent, $arrOne);

@@ -28,23 +28,24 @@ class NewspaperPublicGen extends BasePublicGen {
 
 
     private function Import(){
-        $newspaperId = -1;
-        $authorityCode = Control::PostRequest("AuthorityCode", "");
-        $siteId = Control::PostRequest("SiteId",0);
-        $channelId = Control::PostRequest("ChannelId",0);
-        $newspaperTitle = Control::PostRequest("NewspaperTitle","");
-        $publicDate = Control::PostRequest("PublicDate","");
+        $newspaperId = -10;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", ""));
+        $removeXSS = false;
+        $siteId = intval(str_ireplace("\r\n","",Control::PostRequest("SiteId",0,$removeXSS)));
+        $channelId = intval(str_ireplace("\r\n","",Control::PostRequest("ChannelId",0,$removeXSS)));
+        $newspaperTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperTitle","",$removeXSS));
+        $publishDate = str_ireplace("\r\n","",Control::PostRequest("PublishDate","",$removeXSS));
 
         if(
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
             $siteId>0 &&
             $channelId>0 &&
             strlen($newspaperTitle)>0 &&
-            strlen($publicDate)>0
+            strlen($publishDate)>0
         ){
             $newspaperPublicData = new NewspaperPublicData();
 
-            $newspaperId = $newspaperPublicData->CreateForImport($siteId, $channelId, $newspaperTitle, $publicDate);
+            $newspaperId = $newspaperPublicData->CreateForImport($siteId, $channelId, $newspaperTitle, $publishDate);
         }
 
         return $newspaperId;

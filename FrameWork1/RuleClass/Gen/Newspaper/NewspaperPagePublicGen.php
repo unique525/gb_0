@@ -18,24 +18,31 @@ class NewspaperPagePublicGen extends BasePublicGen {
             case "import":
                 $result = self::Import();
                 break;
+            case "modify_pdf_upload_file_id_for_import":
+                $result = self::ModifyPdfUploadFileIdForImport();
+                break;
+            case "modify_pic_upload_file_id_for_import":
+                $result = self::ModifyPicUploadFileIdForImport();
+                break;
 
         }
         return $result;
     }
 
     private function Import(){
+        $removeXSS = false;
         $newspaperPageId = -1;
-        $authorityCode = Control::PostRequest("AuthorityCode", "");
-        $newspaperId = Control::PostRequest("NewspaperId",0);
-        $newspaperPageName = Control::PostRequest("NewspaperPageName","");
-        $newspaperPageNo = Control::PostRequest("NewspaperPageNo","");
-        $articleCount = Control::PostRequest("ArticleCount","");
-        $picCount = Control::PostRequest("PicCount","");
-        $editor = Control::PostRequest("Editor","");
-        $pageWidth = Control::PostRequest("PageWidth","");
-        $pageHeight = Control::PostRequest("PageHeight","");
-        $issueDepartment = Control::PostRequest("IssueDepartment","");
-        $issuer = Control::PostRequest("Issuer","");
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperId",0,$removeXSS)));
+        $newspaperPageName = str_ireplace("\r\n","",Control::PostRequest("NewspaperPageName","",$removeXSS));
+        $newspaperPageNo = str_ireplace("\r\n","",Control::PostRequest("NewspaperPageNo","",$removeXSS));
+        $articleCount = str_ireplace("\r\n","",Control::PostRequest("ArticleCount","",$removeXSS));
+        $picCount = str_ireplace("\r\n","",Control::PostRequest("PicCount","",$removeXSS));
+        $editor = str_ireplace("\r\n","",Control::PostRequest("Editor","",$removeXSS));
+        $pageWidth = str_ireplace("\r\n","",Control::PostRequest("PageWidth","",$removeXSS));
+        $pageHeight = str_ireplace("\r\n","",Control::PostRequest("PageHeight","",$removeXSS));
+        $issueDepartment = str_ireplace("\r\n","",Control::PostRequest("IssueDepartment","",$removeXSS));
+        $issuer = str_ireplace("\r\n","",Control::PostRequest("Issuer","",$removeXSS));
 
         if(
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
@@ -60,5 +67,49 @@ class NewspaperPagePublicGen extends BasePublicGen {
         }
 
         return $newspaperPageId;
+    }
+
+    public function ModifyPdfUploadFileIdForImport(){
+        $result = -1;
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperPageId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperPageId",0,$removeXSS)));
+        $pdfUploadFileId = intval(str_ireplace("\r\n","",Control::PostRequest("PdfUploadFileId",0,$removeXSS)));
+
+        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+            $newspaperPageId>0 &&
+            $pdfUploadFileId>0
+        )
+        {
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+
+            $result = $newspaperPagePublicData->ModifyPdfUploadFileIdForImport(
+                $newspaperPageId,
+                $pdfUploadFileId
+            );
+        }
+        return $result;
+    }
+
+    public function ModifyPicUploadFileIdForImport(){
+        $result = -1;
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperPageId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperPageId",0,$removeXSS)));
+        $picUploadFileId = intval(str_ireplace("\r\n","",Control::PostRequest("PicUploadFileId",0,$removeXSS)));
+
+        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+            $newspaperPageId>0 &&
+            $picUploadFileId>0
+        )
+        {
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+
+            $result = $newspaperPagePublicData->ModifyPicUploadFileIdForImport(
+                $newspaperPageId,
+                $picUploadFileId
+            );
+        }
+        return $result;
     }
 } 
