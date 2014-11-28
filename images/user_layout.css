@@ -37,8 +37,10 @@
 .order_detail .product_list .list_title .product_name{ width:500px;}
 .order_detail .product_list .product_name{ width:375px; line-height:24px; padding-right:15px;}
 .order_detail .product_list .product_pic{ padding:15px;}
-.order_detail .product_list .product_fullprice,.order_detail .product_list .product_cutprice,.order_detail .product_list .product_finalprice{ width:80px; text-align: center;}
+.order_detail .product_list .product_fullprice,.order_detail .product_list .product_cutprice,.order_detail .product_list .product_finalprice,.order_detail .product_list .product_operation{ width:80px; text-align: center;}
 .order_detail .product_list .product_num,.order_detail .product_list .product_unit{ width:50px; text-align: center;}
+.order_detail .product_list .product_operation a{ display:block; background:#00a93c; color:#fff; height:30px; line-height:30px; color:#fff; margin:0 10px; width:60px;}
+.order_detail .product_list .product_operation a:hover{ text-decoration:none;}
 /*---------订单detail-----------*/
 
 /*----------地址管理--------------*/
@@ -57,7 +59,8 @@
 /*-----------账户信息修改--------------*/
 .change_info{ padding:20px 0 20px 150px;}
 .change_info .label{ width:80px;}
-.change_info td{ line-height:40px;}
+.change_info td{ line-height:46px;}
+.change_info .input_box,.change_info .input_number{	background:#f9f9f9;	/* [disabled]border-bottom:1px solid #a0e0b7; */line-height:30px;height:30px;width:300px;text-indent:5px;}
 .change_info .btns{ height:30px; padding:25px 0 15px 10px;}
 .change_info .btns input{ border:none; background-color:#00a93c; color:#fff; height:30px; line-height:30px; width:80px; margin-right:30px;}
 /*-----------账户信息修改--------------*/
