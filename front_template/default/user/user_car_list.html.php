@@ -12,7 +12,29 @@
 <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript">
 var selected_car = new Array();
+
+function select_all(this_select) {
+    selected_car = new Array();
+    if (this_select.prop("checked")) {
+        $(".checkbox_car").prop("checked", true);//全选
+        $(".select_all").prop("checked", true);
+        $(".checkbox_car").each(function () {
+            selected_car.push(this_select.attr("idvalue"));
+        });
+    } else {
+        $(".checkbox_car").prop("checked", false);//取消全选
+        $(".select_all").prop("checked", false);
+    }
+    var all_price = 0;
+    for (var i = 0; i < selected_car.length; i++) {
+        all_price = all_price + parseFloat($("#buy_price_" + selected_car[i]).html());
+    }
+    $("#all_price").html(formatPrice(all_price));
+    $("#all_count").html(selected_car.length);
+}
+
 $(function () {
+    select_all($(".select_all"));
     $(".minus_count").click(function () {
         var user_car_id = $(this).attr("idvalue");
         var buy_count = parseInt($("#buy_count_" + user_car_id).val());
@@ -150,23 +172,7 @@ $(function () {
     });
 
     $(".select_all").click(function () {
-        selected_car = new Array();
-        if ($(this).prop("checked")) {
-            $(".checkbox_car").prop("checked", true);//全选
-            $(".select_all").prop("checked", true);
-            $(".checkbox_car").each(function () {
-                selected_car.push($(this).attr("idvalue"));
-            });
-        } else {
-            $(".checkbox_car").prop("checked", false);//取消全选
-            $(".select_all").prop("checked", false);
-        }
-        var all_price = 0;
-        for (var i = 0; i < selected_car.length; i++) {
-            all_price = all_price + parseFloat($("#buy_price_" + selected_car[i]).html());
-        }
-        $("#all_price").html(formatPrice(all_price));
-        $("#all_count").html(selected_car.length);
+        select_all($(this));
     });
 
     $("#batch_delete").click(function () {
@@ -225,7 +231,7 @@ $(function () {
 
 <body>
 <div class="wrapper">
-    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
+    <div class="logo"><a href="/"><img src="/images/mylogo.png" width="320" height="103"/></a></div>
     <div class="step">
         <div class="step1"><img src="/images/wdgwc.png" width="49" height="49"/></div>
         <div class="steptext"><font class="grey">第一步</font><br/><font class="green">我的购物车</font></div>
@@ -249,7 +255,7 @@ $(function () {
     <div class="contgreybg">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td width="30"><input name="" class="select_all" autocomplete="off" type="checkbox" value=""/></td>
+                <td width="30"><input name="" class="select_all" autocomplete="off" type="checkbox" checked="checked" value=""/></td>
                 <td width="58">全选</td>
                 <td width="400" align="center">商品</td>
                 <td width="155" align="center">单价</td>
