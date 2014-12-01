@@ -25,9 +25,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "discount":
-                $result = self::GenDiscount();
-                break;
             default:
                 break;
         }
@@ -61,7 +58,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
 
         $channelId = Control::GetRequest("channel_id", 0);
         $order = Control::GetRequest("order", 0);
-        $pageSize = Control::GetRequest("ps", 20);
+        $pageSize = Control::GetRequest("ps", 12);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
@@ -80,7 +77,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $templatePath = "front_template";
                 $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                 $isJs = FALSE;
-                $navUrl = "/default.php?mod=product&a=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order#product_list_anchor";
+                $navUrl = "/default.php?mod=product&a=list&channel_first_id=$channelFirstId&channel_id=$channelId&p={0}&ps=$pageSize&order=$order#product_list_anchor";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
@@ -248,35 +245,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         return $templateContent;
     }
-
-    /**
-     * 生成产品量贩页
-     * @return string 产品量贩页列表HTML
-     */
-    private function GenDiscount()
-    {
-        $temp = Control::GetRequest("temp", "");
-        $channelId = Control::GetRequest("channel_id", 0);
-        $templateContent = self::LoadDiscountTemp($temp, $channelId);
-
-        parent::ReplaceFirst($templateContent);
-        return $templateContent;
-    }
-
-    private function LoadDiscountTemp($temp, $channelId)
-    {
-        $templateFileUrl = "product/product_discount.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-        parent::ReplaceFirst($templateContent);
-        $templateContent = parent::ReplaceTemplate($templateContent);
-        parent::ReplaceEnd($templateContent);
-        return $templateContent;
-    }
-
-
 }
 
 ?>

@@ -62,7 +62,7 @@
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">
                 <div class="rightbar">
-                    <div class="rightbar2"><a href="">星滋味首页</a> > <a href="">会员中心</a> > <a href="/default.php?mod=user_order&a=list">我的订单</a>>{UserOrderNumber}</div>
+                    <div class="rightbar2"><a href="">星滋味首页</a> > <a href="/default.php?mod=user&a=homepage">会员中心</a> > <a href="/default.php?mod=user_order&a=list">我的订单</a>>{UserOrderNumber}</div>
                     <div class="order_detail" style="padding:20px 50px;">
                         <div class="title">基本信息</div>
                         <div style="padding:0 20px;">
@@ -132,7 +132,7 @@
                                         <td class="spe_line product_finalprice">
                                             ￥<span class="UserOrderSubtotal show_price">{f_Subtotal}</span>
                                         </td>
-                                        <td class="spe_line product_operation"><a href="#">评价商品</a></td>
+                                        <td class="spe_line product_operation"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}">评价商品</a></td>
                                     </tr>
                                     ]]>
                                 </item>
@@ -151,53 +151,6 @@
         </tr>
     </table>
 </div>
-<div class="footerline"></div>
-<div class="wrapper">
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footergwzn.png" width="79" height="79"/></div>
-            <b>交易条款</b><br/>
-            <a href="" target="_blank">购物流程</a><br/>
-            <a href="" target="_blank">发票制度</a><br/>
-            <a href="" target="_blank">会员等级</a><br/>
-            <a href="" target="_blank">积分制度</a><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerpsfw.png" width="79" height="79"/></div>
-            <b>配送服务</b><br/>
-            <a href="" target="_blank">配送说明</a><br/>
-            <a href="" target="_blank">配送范围</a><br/>
-            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerzffs.png" width="79" height="79"/></div>
-            <b>支付方式</b><br/>
-            <a href="" target="_blank">支付宝支付</a><br/>
-            <a href="" target="_blank">银联在线支付</a><br/>
-            <a href="" target="_blank">货到付款</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footershfw.png" width="79" height="79"/></div>
-            <b>售后服务</b><br/>
-            <a href="" target="_blank">服务承诺</a><br/>
-            <a href="" target="_blank">退换货政策</a><br/>
-            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerright" style="padding-left:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-    <div class="footerright" style="padding-right:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-</div>
+<pre_temp id="8"></pre_temp>
 </body>
 </html>

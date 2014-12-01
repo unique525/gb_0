@@ -72,7 +72,24 @@
             });
 
             $("#sub").click(function(){
-                $("#main_form").submit();
+                var parameter = $("#main_form").serialize();
+                $.ajax({
+                    url:"/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}",
+                    type:"post",
+                    data:parameter,
+                    dataType:"jsonp",
+                    jsonp:"jsonpcallback",
+                    success:function(data){
+                        var result = parseInt(data["result"]);
+                        if(result > 0 ){
+                            window.location.href="/default.php?mod=user_order&a=list";
+                        }else if(result == -3){
+                            alert("系统错误");
+                        }else if(result == -2){
+                            alert("您未购买本产品");
+                        }
+                    }
+                });
             });
         });
     </script>
@@ -118,7 +135,7 @@
         <p id="service_display_score" class="display_score" idvalue="service"></p>
     </div>
     <div style="clear:both"></div>
-    <form id="main_form" action="/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}" method="post">
+    <form id="main_form"  method="post">
     差评：<input type="radio" name="appraisal" value="0"/>
     中评：<input type="radio" name="appraisal" value="1"/>
     好评：<input type="radio" name="appraisal" value="2"/>

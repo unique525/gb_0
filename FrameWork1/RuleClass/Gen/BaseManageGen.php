@@ -390,6 +390,9 @@ class BaseManageGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_PRODUCT_LIST :
+                        $channelTemplateContent = self::ReplaceTemplateOfProductList($channelTemplateContent, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        break;
                 }
             }
         }
@@ -594,6 +597,54 @@ class BaseManageGen extends BaseGen
         }
 
         return $channelTemplateContent;
+    }
+
+    /**
+     * 替换产品列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfProductList(
+        $templateContent,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        $arrProductList = null;
+        $productManageData = new ProductManageData();
+        switch ($tagWhere) {
+            case "DiscountAllChild":
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $channelPublicData = new ChannelPublicData();
+                    $ChannelRow = $channelPublicData->GetOne($channelId);
+                    $ChildChannelId = $ChannelRow['ChildrenChannelId'];
+                    $arrProductList = $productManageData->GetDiscountListByChannelId($ChildChannelId, $tagOrder, $tagTopCount);
+                }
+                break;
+            default :
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $arrProductList = $productManageData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                }
+        }
+        if (!empty($arrProductList)) {
+            Template::ReplaceList($tagContent, $arrProductList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+        }
+        else Template::RemoveCustomTag($templateContent, $tagId);
+        return $templateContent;
     }
 
 

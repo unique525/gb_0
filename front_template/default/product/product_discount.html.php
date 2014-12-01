@@ -200,70 +200,15 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript">
-        $(function () {
-
-
-            //左侧产品类别树形效果
-            $("#categoryListSum").delegate('.listsum-1', "click",
-                function (e) {
-                    if (e.target != "javascript:;" && e.target != 'javascript:void(0);') {
-                        var className = $(this).find('dl').attr("class");
-                        $("#categoryListSum dt").find('a').removeClass("on");
-                        var datalink = $(this).attr("data-link");
-                        if (datalink) {
-                            $("#categoryListSum dt a").attr("href", datalink);
-                        }
-                        if (className == "listhover") {
-                            $(this).find('dl').removeClass("listhover");
-                        } else {
-                            $(this).find('dl').find('dt').find('a').addClass("on");
-                            $(this).find('dl').addClass('listhover').end().siblings().find("dl").removeClass("listhover")
-                        }
-                    }
-                });
-            var channelId = Request["channel_id"];
-            $("#categoryListSum div[class='listsum-1'] dl").removeClass("listhover");
-            $("#categoryListSum div[class='listsum-1'] dl[alt="+channelId+"]").addClass("listhover").find('a').addClass("on");
-            $("#categoryListSum div[class='listsum-1']>dl>dd>ul>li a[alt="+channelId+"]").addClass("onlinked").closest("dl").addClass("listhover").find('dt').find('a').addClass("on");
-
-            //根据不同的排序字段顺序显示产品列表
-            $('.price-2 a').attr("class", "listup");
-            var ps = Request["ps"];
-            if(ps==null||ps=="") ps="12";
-            var url = "/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}&p=1&ps="+ps;
-            var order = Request["order"];
-            var orderType="";
-            var direction="";
-            if (order != null&&order != "") {
-                orderType = order.split('_')[0];
-                direction = order.split('_')[1];
-                $('.price-2 a[title="'+orderType+'"]').attr("class", "listup on");
-            }
-            $('.price-2 a').click(function () {
-                if ($(this).attr("title") == orderType) {
-                    direction = (direction == "up" ? "down" : "up");
-                    url += "&order=" + orderType + "_" + direction;
-                }
-                else {
-                    url += "&order=" + $(this).attr("title") + "_up";
-                }
-                window.location.href=url+"#product_list_anchor";
-            });
-
-            //清空会员浏览记录ajax方法
-            $("#hrefClear").click(function(){
-                var url = "/default.php?mod=user_explore&a=async_delete";
-                $.ajax({
-                    url:url,
-                    data:{},
-                    dataType:"jsonp",
-                    jsonp:"jsonpcallback",
-                    success:function(data){
-                        $("#explore_list").html("");
-                    }
-                });
-            });
-        });
+        /**
+         * 计算节省的价格
+         */
+        function CalculateReducePrice(marketPrice,salePrice)
+        {
+            var reducePrice =  parseFloat(marketPrice)-parseFloat(salePrice);
+            reducePrice = formatPrice(reducePrice);
+            return reducePrice;
+        }
     </script>
 </head>
 <body>
@@ -282,10 +227,10 @@
 </div>
 <div class="fengnei">
     <ul>
-        <li class="fl">全部分类</li>
-        <li><a href="#">食品生鲜</a></li>
-        <li><a href="#">家居用品</a></li>
-        <li><a href="#">母婴用品</a></li>
+        <li><a href="#spsx_anchor">全部分类</a></li>
+        <li><a href="#spsx_anchor">食品生鲜</a></li>
+        <li><a href="#jjyp_anchor">家居用品</a></li>
+        <li><a href="#mybj_anchor">母婴保健</a></li>
     </ul>
 </div>
 <div class="clean"></div>
@@ -293,9 +238,9 @@
 <div class="part_2">
     <div class="foot_title">
         <img src="images/18_14.jpg" height="39" width="35"/>
-        <h3>食品生鲜</h3>
+        <h3>食品生鲜</h3><a name="spsx_anchor"></a>
     </div>
-    <span><a href="#">更多>></a></span>
+    <span><a target="_blank" href="/default.php?&mod=product&a=list&channel_first_id=27&channel_id=27">更多>></a></span>
     <div class="clean"></div>
 </div>
 <div class="foot_li">
@@ -305,17 +250,17 @@
             <![CDATA[
             <li>
             <div style="border:#E1E0DF solid 1px;">
-                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="{f_UploadFileThumbPath1}" height="267" width="267"/></a>
-                <p><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a></p>
+                <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="{f_UploadFileThumbPath1}" height="267" width="267"/></a>
+                <p><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a></p>
                 <div class="price_zone">
                     <div class="price_1">
                         <h4><span>￥</span>{f_SalePrice}</h4>
                         <div class="price_2">
-                            <span class="jia">省39.5</span>
+                            <span class="jia">省<script type="text/javascript">document.write(CalculateReducePrice({f_MarketPrice},{f_SalePrice}))</script></span>
                             <span class="p-del"><em>￥</em>{f_MarketPrice}</span>
                         </div>
                     </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
+                    <div class="price_3"><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">立即购买</a></div>
                     <div class="clean"></div>
                 </div>
             </div>
@@ -331,205 +276,36 @@
 <div class="part_2">
     <div class="foot_title">
         <img src="images/19_28.jpg" height="55" width="23"/>
-        <h3>家具用品</h3>
+        <h3>家居用品</h3><a name="jjyp_anchor"></a>
     </div>
-    <span><a href="#">更多>></a></span>
+    <span><a target="_blank" href="/default.php?&mod=product&a=list&channel_first_id=33&channel_id=33">更多>></a></span>
     <div class="clean"></div>
 </div>
 <div class="foot_li">
     <ul>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
+        <icms id="product_33" type="product_list" where="DiscountAllChild" top="12">
+            <item>
+                <![CDATA[
+                <li>
+                    <div style="border:#E1E0DF solid 1px;">
+                        <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="{f_UploadFileThumbPath1}" height="267" width="267"/></a>
+                        <p><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a></p>
+                        <div class="price_zone">
+                            <div class="price_1">
+                                <h4><span>￥</span>{f_SalePrice}</h4>
+                                <div class="price_2">
+                                    <span class="jia">省<script type="text/javascript">document.write(CalculateReducePrice({f_MarketPrice},{f_SalePrice}))</script></span>
+                                    <span class="p-del"><em>￥</em>{f_MarketPrice}</span>
+                                </div>
+                            </div>
+                            <div class="price_3"><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">立即购买</a></div>
+                            <div class="clean"></div>
                         </div>
                     </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
+                </li>
+                ]]>
+            </item>
+        </icms>
     </ul>
     <div class="clean"></div>
 </div>
@@ -538,205 +314,36 @@
 <div class="part_2">
     <div class="foot_title">
         <img src="images/20_03.jpg" height="42" width="25"/>
-        <h3>母婴用品</h3>
+        <h3>母婴保健</h3><a name="mybj_anchor"></a>
     </div>
-    <span><a href="#">更多>></a></span>
+    <span><a target="_blank" href="/default.php?&mod=product&a=list&channel_first_id=34&channel_id=34">更多>></a></span>
     <div class="clean"></div>
 </div>
 <div class="foot_li">
     <ul>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
+        <icms id="product_34" type="product_list" where="DiscountAllChild" top="12">
+            <item>
+                <![CDATA[
+                <li>
+                    <div style="border:#E1E0DF solid 1px;">
+                        <a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"><img src="{f_UploadFileThumbPath1}" height="267" width="267"/></a>
+                        <p><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a></p>
+                        <div class="price_zone">
+                            <div class="price_1">
+                                <h4><span>￥</span>{f_SalePrice}</h4>
+                                <div class="price_2">
+                                    <span class="jia">省<script type="text/javascript">document.write(CalculateReducePrice({f_MarketPrice},{f_SalePrice}))</script></span>
+                                    <span class="p-del"><em>￥</em>{f_MarketPrice}</span>
+                                </div>
+                            </div>
+                            <div class="price_3"><a target="_blank" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">立即购买</a></div>
+                            <div class="clean"></div>
                         </div>
                     </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
-        <li><div style="border:#E1E0DF solid 1px;">
-                <a href="#"><img src="images/1.jpg" height="267" width="267"/></a>
-                <p><a href="#">蓝月亮3000洗衣液-薰+2000洁净洗衣液-自然+500手洗翻盖*2+1000洗衣液</a></p>
-                <div class="price_zone">
-                    <div class="price_1">
-                        <h4><span>￥</span>118</h4>
-                        <div class="price_2">
-                            <span class="jia">省39.5</span>
-                            <span class="p-del"><em>￥</em>9.5</span>
-                        </div>
-                    </div>
-                    <div class="price_3"><a href="#">立即购买</a></div>
-                    <div class="clean"></div>
-                </div>
-            </div>
-        </li>
+                </li>
+                ]]>
+            </item>
+        </icms>
     </ul>
     <div class="clean"></div>
 </div>

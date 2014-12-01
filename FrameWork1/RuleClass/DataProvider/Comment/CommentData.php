@@ -16,4 +16,29 @@ class CommentData {
      */
     const COMMENT_TYPE_SHORT_TEXT = 1;
 
+    /**
+     * 评论状态 未审
+     */
+    const COMMENT_STATE_UN_CHECK= 0;
+
+    /**
+     * 评论状态 先审后发
+     */
+    const COMMENT_STATE_FIRST_CHECK_THEN_PUBLISH = 10;
+
+    /**
+     * 评论状态 先发后审
+     */
+    const COMMENT_STATE_FIRST_PUBLISH_THEN_CHECK = 20;
+
+    /**
+     * 评论状态 已审
+     */
+    const COMMENT_STATE_CHECKED = 30;
+
+    /**
+     * 评论状态 已否
+     */
+    const COMMENT_STATE_REMOVE = 100;
+
 } 

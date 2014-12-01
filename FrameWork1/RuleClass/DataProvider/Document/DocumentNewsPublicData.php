@@ -213,6 +213,28 @@ class DocumentNewsPublicData extends BasePublicData {
 
         return $result;
     }
+
+    public function GetOpenComment($documentNewsId){
+        $result = -1;
+        if($documentNewsId > 0){
+            $sql = "SELECT OpenComment FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetChannelId($documentNewsId){
+        $result = -1;
+        if($documentNewsId > 0){
+            $sql = "SELECT ChannelId FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>
