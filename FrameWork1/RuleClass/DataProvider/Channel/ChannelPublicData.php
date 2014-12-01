@@ -126,6 +126,16 @@ class ChannelPublicData extends BasePublicData {
         return $result;
     }
 
+    public function GetOpenComment($channelId){
+        $result = -1;
+        if($channelId > 0){
+            $sql = "SELECT OpenComment FROM ".self::TableName_DocumentNews." WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

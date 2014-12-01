@@ -143,9 +143,18 @@
                 var buyCount = $("#productNum").val();
                 var activityProductId = 0;
                 if(selectProductPriceId  > 0){
-                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId);
+                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId,false);
                 }
             });
+
+            $("#immediately_buy").click(function(){
+                var buyCount = $("#productNum").val();
+                var activityProductId = 0;
+                if(selectProductPriceId  > 0){
+                    addUserCar('{SiteId}','{ProductId}',buyCount,selectProductPriceId,activityProductId,true);
+                }
+            });
+
 
             //清空会员浏览记录ajax方法
             $("#hrefClear").click(function(){
@@ -359,7 +368,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<a href="＃"><img src="images/2_09.gif" width="155" height="36" /></a></td>
+                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<span id="immediately_buy"><img src="images/2_09.gif" width="155" height="36" /></span></td>
                     </tr>
                     <tr>
                         <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /><div style="display: none"> <a href="#">降价通知</a> 　</div><img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>

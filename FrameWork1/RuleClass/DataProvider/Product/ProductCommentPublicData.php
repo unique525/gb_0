@@ -54,7 +54,6 @@ class ProductCommentPublicData extends BasePublicData
                  :ParentId,:Rank,:ProductId,:Subject,:Content,:UserId,:UserName,now(),
                  :Appraisal,:ProductScore,:SendScore,:ServiceScore,:SiteId,:ChannelId,:State,:Sort
                  );";
-            echo $sql;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $parentId);
             $dataProperty->AddField("Rank", $rank);

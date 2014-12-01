@@ -81,6 +81,14 @@ class BaseData
      */
     const TableId_FtpLog = "FtpLogId";
 
+    /**
+     * 通用评论 数据表名
+     */
+    const TableName_Comment = "cst_comment";
+    /**
+     * 通用评论 数据表自增字段名
+     */
+    const TableId_Comment = "CommentId";
 
     /**
      * 图片轮换 数据表名

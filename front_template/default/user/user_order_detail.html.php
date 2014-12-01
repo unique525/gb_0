@@ -62,7 +62,7 @@
             <td width="1" bgcolor="#D4D4D4"></td>
             <td width="1006" valign="top">
                 <div class="rightbar">
-                    <div class="rightbar2"><a href="">星滋味首页</a> > <a href="">会员中心</a> > <a href="/default.php?mod=user_order&a=list">我的订单</a>>{UserOrderNumber}</div>
+                    <div class="rightbar2"><a href="">星滋味首页</a> > <a href="/default.php?mod=user&a=homepage">会员中心</a> > <a href="/default.php?mod=user_order&a=list">我的订单</a>>{UserOrderNumber}</div>
                     <div class="order_detail" style="padding:20px 50px;">
                         <div class="title">基本信息</div>
                         <div style="padding:0 20px;">
@@ -132,7 +132,7 @@
                                         <td class="spe_line product_finalprice">
                                             ￥<span class="UserOrderSubtotal show_price">{f_Subtotal}</span>
                                         </td>
-                                        <td class="spe_line product_operation"><a href="#">评价商品</a></td>
+                                        <td class="spe_line product_operation"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}">评价商品</a></td>
                                     </tr>
                                     ]]>
                                 </item>

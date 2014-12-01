@@ -67,9 +67,9 @@
                         我的积分：{UserScore} 分<br/>
                         <ul>
                             <!--<li>待处理订单（1）</li>-->
-                            <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待评价订单（{UserOrderOfUncommentCount}）</a>
+                            <li><a href="/default.php?mod=user_order&a=list&state=70" target="_blank">待评价订单（{UserOrderOfUncommentCount}）</a>
                             </li>
-                            <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待支付订单（{UserOrderOfNewCount}）</a>
+                            <li><a href="/default.php?mod=user_order&a=list&state=10" target="_blank">待支付订单（{UserOrderOfNewCount}）</a>
                             </li>
                         </ul>
                     </div>
