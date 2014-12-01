@@ -25,9 +25,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "discount":
-                $result = self::GenDiscount();
-                break;
             default:
                 break;
         }
@@ -248,35 +245,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         return $templateContent;
     }
-
-    /**
-     * 生成产品量贩页
-     * @return string 产品量贩页列表HTML
-     */
-    private function GenDiscount()
-    {
-        $temp = Control::GetRequest("temp", "");
-        $channelId = Control::GetRequest("channel_id", 0);
-        $templateContent = self::LoadDiscountTemp($temp, $channelId);
-
-        parent::ReplaceFirst($templateContent);
-        return $templateContent;
-    }
-
-    private function LoadDiscountTemp($temp, $channelId)
-    {
-        $templateFileUrl = "product/product_discount.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-        parent::ReplaceFirst($templateContent);
-        $templateContent = parent::ReplaceTemplate($templateContent);
-        parent::ReplaceEnd($templateContent);
-        return $templateContent;
-    }
-
-
 }
 
 ?>
