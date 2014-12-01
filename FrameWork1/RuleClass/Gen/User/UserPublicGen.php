@@ -292,7 +292,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             //------------------------------end
 
             //------------零散替换--------begin
-            $userOrderStateOfNew = UserOrderData::STATE_NEW;
+            $userOrderStateOfNew = UserOrderData::STATE_NON_PAYMENT;
             $userOrderStateOfUncomment = UserOrderData::STATE_UNCOMMENT;
             $userOrderOfNewCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfNew);
             $userOrderOfUncommentCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfUncomment);
