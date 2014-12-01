@@ -9,23 +9,109 @@
 class UserOrderPublicData extends BasePublicData
 {
 
-    public function Create($httpPostData, $siteId)
+    /**
+     * @param $userOrderName
+     * @param $userOrderNumber
+     * @param $userOrderNumberDes
+     * @param $userId
+     * @param $userIdDes
+     * @param $cookieId
+     * @param $allPrice
+     * @param $allPriceDes
+     * @param $sendPrice
+     * @param $userReceiveInfoId
+     * @param $sendTime
+     * @param $autoSendMessage
+     * @param $siteId
+     * @param $createDate
+     * @param $createDateDes
+     * @return int
+     */
+    public function Create(
+        $userOrderName,
+        $userOrderNumber,
+        $userOrderNumberDes,
+        $userId,
+        $userIdDes,
+        $cookieId,
+        $allPrice,
+        $allPriceDes,
+        $sendPrice,
+        $userReceiveInfoId,
+        $sendTime,
+        $autoSendMessage,
+        $siteId,
+        $createDate,
+        $createDateDes
+    )
     {
         $result = -1;
-        if (!empty($httpPostData) && $siteId > 0) {
-            $sql = "";
+        if (
+            strlen($userOrderNumber)>0 &&
+            $userId>0 &&
+            $siteId > 0
+        ) {
+            $sql = "INSERT INTO " . self::TableName_UserOrder ."
+
+                    (
+                    UserOrderName,
+                    UserOrderNumber,
+                    UserOrderNumberDes,
+                    UserId,
+                    UserIdDes,
+                    CookieId,
+                    AllPrice,
+                    AllPriceDes,
+                    SendPrice,
+                    UserReceiveInfoId,
+                    SendTime,
+                    AutoSendMessage,
+                    SiteId,
+                    CreateDate,
+                    CreateDateDes
+                    )
+                    VALUES
+                    (
+                    :UserOrderName,
+                    :UserOrderNumber,
+                    :UserOrderNumberDes,
+                    :UserId,
+                    :UserIdDes,
+                    :CookieId,
+                    :AllPrice,
+                    :AllPriceDes,
+                    :SendPrice,
+                    :UserReceiveInfoId,
+                    :SendTime,
+                    :AutoSendMessage,
+                    :SiteId,
+                    :CreateDate,
+                    :CreateDateDes
+                    );
+            ";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderName",$userOrderName);
+            $dataProperty->AddField("UserOrderNumber",$userOrderNumber);
+            $dataProperty->AddField("UserOrderNumberDes",$userOrderNumberDes);
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("UserIdDes",$userIdDes);
+            $dataProperty->AddField("CookieId",$cookieId);
+            $dataProperty->AddField("AllPrice",$allPrice);
+            $dataProperty->AddField("AllPriceDes",$allPriceDes);
+            $dataProperty->AddField("SendPrice",$sendPrice);
+            $dataProperty->AddField("UserReceiveInfoId",$userReceiveInfoId);
+            $dataProperty->AddField("SendTime",$sendTime);
+            $dataProperty->AddField("AutoSendMessage",$autoSendMessage);
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("CreateDate",$createDate);
+            $dataProperty->AddField("CreateDateDes",$createDateDes);
+            $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
+
         }
         return $result;
     }
 
-    public function Modify($httpPostData, $userOrderId, $userId)
-    {
-        $result = -1;
-        if (!empty($httpPostData) && $userOrderId > 0 && $userId > 0) {
-            $sql = "";
-        }
-        return $result;
-    }
 
     /**
      * @param $userId

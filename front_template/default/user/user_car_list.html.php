@@ -218,6 +218,7 @@ $(function () {
         $(".producttab ul").css("display","none");
         $(".producttab #ul_"+idvalue).css("display","block");
     });
+
 });
 </script>
 </head>

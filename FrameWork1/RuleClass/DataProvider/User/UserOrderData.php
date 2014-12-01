@@ -36,4 +36,18 @@ class UserOrderData extends BaseData {
      */
     const STATE_REMOVED = 100;
 
+
+    const USER_ORDER_DES_KEY = "SUDK2014";
+
+    /**
+     * 生成订单号
+     */
+    public static function GenUserOrderNumber(){
+
+        $date = strval(date('YmdHis', time()));
+
+        return strtoupper($date.md5(strval(uniqid())));
+
+    }
+
 } 

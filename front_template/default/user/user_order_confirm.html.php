@@ -13,8 +13,8 @@
         var nowSelectReceiveInfoId = 0;
 
 
-        var productObject = null;
-        var productArray = new Array();
+        var userOrderProductObject = null;
+        var userOrderProductArray = new Array();
 
         $(function () {
             $("#add_receive_info").click(function () {
@@ -77,8 +77,28 @@
             });
 
             $("#btn_submit").click(function () {
-                var json = JSON.stringify(productArray);
-                alert(json);
+                var json = JSON.stringify(userOrderProductArray);
+
+                var userReceiveInfoId =  parseInt($("input[name='r_userReceiveInfoId']:checked").val());
+                if(userReceiveInfoId<=0 || isNaN(userReceiveInfoId)){
+
+                    alert("请先选择或新增一个收货地址");
+                    return;
+                }
+                if(json == null || json.length<=0){
+                    alert("购买的商品出错，请重试");
+                    return;
+                }
+
+                $("#s_UserReceiveInfoId").val(userReceiveInfoId);
+                $("#s_UserOrderProductArray").val(json);
+
+                var form = $("#form_submit");
+                //alert(form.serialize());
+
+                form.attr("action", "/default.php?mod=user_order&a=submit");
+                form.submit();
+
             });
         });
     </script>
@@ -112,12 +132,13 @@
 
                 <table width="90%" border="0" cellspacing="0" cellpadding="0"
                        style="line-height:50px;margin:20px auto 0px auto;">
-                    <b><font color="#FF3C00">寄送至：</font></b>
+                    <tr><td style="color:#FF3C00;" colspan="2"><strong>寄送至：</strong></td></tr>
+
                     <icms id="user_receive">
                         <item><![CDATA[
                             <tr>
                                 <td width="25">
-                                    <input type="radio" name="radio" id="radio" value="radio"/>
+                                    <input type="radio" name="r_userReceiveInfoId" value="{f_UserReceiveInfoId}"/>
                                 </td>
                                 <td valign="top" style="font-size:14px;word-break:break-all; word-wrap:normal;">
                                     <b>
@@ -205,7 +226,8 @@
                         <tr class="com_list_tit">
                             <td>商品名称</td>
                             <td>数量</td>
-                            <td>单价</td>
+                            <td>原价</td>
+                            <td>折后价</td>
                             <td>金额小计</td>
                         </tr>
                         <icms id="product_with_product_price">
@@ -214,20 +236,27 @@
 
 
                                     //新增时确认
-                                    productObject = new Object();
-                                    productObject.ProductId = "{f_ProductId}";
+                                    userOrderProductObject = new Object();
+                                    userOrderProductObject.ProductId = "{f_ProductId}";
+                                    userOrderProductObject.ProductPriceId = "{f_ProductPriceId}";
+                                    userOrderProductObject.ProductPriceValue = "{f_ProductPriceValue}";
+                                    userOrderProductObject.SalePrice = "{f_SalePrice}";
+                                    userOrderProductObject.SaleCount = "{f_BuyCount}";
+                                    userOrderProductObject.Subtotal = "{f_BuyPrice}";
 
-
-                                    productArray.push(productObject);
+                                    userOrderProductArray.push(userOrderProductObject);
 
 
                                 </script>
                                 <tr>
                                     <td>
-                                        <a href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"
+                                        <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}"
                                            target="_blank">{f_ProductName}</a>
                                     </td>
                                     <td class="send_td01" style="text-align:center">{f_BuyCount}</td>
+                                    <td class="send_td01" style="text-align:center">
+                                        <span class="show_price">{f_ProductPriceValue}</span>
+                                    </td>
                                     <td class="send_td01" style="text-align:center">
                                         <span class="show_price">{f_SalePrice}</span>
                                     </td>
@@ -264,7 +293,16 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;您需为订单支付金额<span class="show_price">{TotalPrice}</span>元
             </div>
             <div class="red">请确认收货地址后进行订单提交！</div>
-            <div style="padding-top:15px;"><input id="btn_submit" type="button" class="btn_submit" value="提交"/></div>
+            <div style="padding-top:15px;">
+                <form id="form_submit" action="" method="post">
+                    <input id="s_UserReceiveInfoId" name="s_UserReceiveInfoId" value="" type="hidden" />
+                    <input id="s_AllPrice" name="s_AllPrice" value="{TotalProductPrice}" type="hidden" />
+                    <input id="s_SendPrice" name="s_SendPrice" value="{SendPrice}" type="hidden" />
+                    <input id="s_UserOrderProductArray" name="s_UserOrderProductArray" value="" type="hidden" />
+                    <input id="s_ArrUserCarId" name="s_ArrUserCarId" value="{ArrUserCarId}" type="hidden" />
+                    <input id="btn_submit" style="cursor:pointer;" type="button" class="btn_submit" value="提交"/>
+                </form>
+            </div>
         </div>
 
     </div>
