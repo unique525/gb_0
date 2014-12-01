@@ -53,8 +53,23 @@
                 spanPropon.attr("class","propon propondefault");//默认全部不选择
                 $(this).attr("class","propon proponselect");//点击选中
             });
-            //页面加载后默认选中第一个价格
+            //页面加载后计算优惠价格
+            if(spanPropon.length>0) //如果存在品种规格定的价格
+            {
+            //页面加载后默认选中第一个品种规格的价格进行优惠价格计算
             spanPropon.eq(0).click();
+            }
+            else //直接用市场价格减去促销价格得出优惠价格
+            {
+             //产品促销价格
+             var productPriceValue=$("#productPrice").text();
+             //产品市场价格
+             var productMarketPriceValue=$("#productMarketPrice").text();
+            //优惠的差价
+            var priceReduceValue = parseFloat(productMarketPriceValue)-parseFloat(productPriceValue);
+            priceReduceValue = formatPrice(priceReduceValue);
+            $("#priceReduce").text(priceReduceValue);
+            }
             //购买数量加减
             $("#dow").click(function () {
                 ProductNumChange(-1)
@@ -329,7 +344,7 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price"></span></span></p>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price">{SalePrice}</span></span></p>
                                 <p class="price_n">原　价：￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
                                 <p class="price_n"><span class="chaprice">已优惠：￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
