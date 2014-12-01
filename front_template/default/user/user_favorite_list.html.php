@@ -37,6 +37,23 @@
 //                    $("#" + idvalue + "_child").css("display", "none");
 //                }
 //            });
+
+            $(".delete_user_favorite").click(function(){
+                var userFavoriteId = $(this).attr("idvalue");
+                    $.ajax({
+                        url:"/default.php?mod=user_favorite&a=async_remove_bin&user_favorite_id="+userFavoriteId,
+                        dataType:"jsonp",
+                        jsonp:"jsonpcallback",
+                        success:function(data){
+                            var result = data["result"];
+                            if(result > 0){
+                                window.location.href=window.location.href;
+                            }else{
+                                alert("删除失败");
+                            }
+                        }
+                    });
+            });
         });
     </script>
 </head>
@@ -63,6 +80,7 @@
                                 <li class="order_number"> <a href="{f_UserFavoriteUrl}" target="_blank">
                                         <div><img src="{f_UploadFilePath}" width="200" height="200"/></div></a>
                                     <a class="faver_title" href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a>
+                                    <div class="delete_user_favorite" style="cursor:pointer" idvalue="{f_UserFavoriteId}">删除</div>
                                 </li>
                                 ]]></item>
                         </icms>
