@@ -26,12 +26,12 @@
             });
 
             $("#img01").on("swiperight",function(){
-                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&newspaper_page_id={PreviousNewspaperPageId}'
+                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}'
             });
 
             $("#img01").on("swipeleft",function(){
 
-                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&newspaper_page_id={NextNewspaperPageId}'
+                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={NextNewspaperPageId}'
             });
         });
         $(function() {
@@ -59,11 +59,26 @@
 <body>
 
 <div data-role="page" id="pageone">
+    <div style="background:#ebebeb;">
+        <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
+    </div>
+    <div style="background:#ebebeb;">
+        <div>
+            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                <tr>
+                    <td style="text-align:center;">首页</td>
+                    <td style="text-align:center;">版面</td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;">往期回顾</td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;">{NewspaperPageNo}</td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;"><img src="/image_02/2.jpg" alt="" id="" /></td>
+                </tr>
+            </table>
 
-    <div>
-        <div style="float:left"><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
-        <div style="float:right;vertical-align:middle;">{NewspaperTitle} {NewspaperPageName} - {NewspaperPageNo}</div>
-        <div style="clear:both;padding:0;margin:0;width:0;height:0;"></div>
+
+        </div>
     </div>
     <div>
         <a href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={CurrentNewspaperPageId}">

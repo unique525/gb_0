@@ -66,10 +66,13 @@ class NewspaperPublicGen extends BasePublicGen {
             $newspaperPublicData = new NewspaperPublicData();
             if(strlen($publishDate)>0){
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
+                $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+
             }else{
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
             }
 
+            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
             if($currentNewspaperId>0){
 
