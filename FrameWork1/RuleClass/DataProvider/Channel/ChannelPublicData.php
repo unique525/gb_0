@@ -25,6 +25,69 @@ class ChannelPublicData extends BasePublicData {
     }
 
     /**
+     * 取得频道名称
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 频道名称
+     */
+    public function GetChannelName($channelId, $withCache)
+    {
+        $result = "";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_channel_name.cache_' . $channelId . '';
+            $sql = "SELECT ChannelName FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 取得子节点id字符串
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 子节点id字符串
+     */
+    public function GetChildrenChannelId($channelId, $withCache)
+    {
+        $result = "";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_children_channel_id.cache_' . $channelId . '';
+            $sql = "SELECT ChildrenChannelId FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得上级频道id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 上级频道id
+     */
+    public function GetParentChannelId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_parent_channel_id.cache_' . $channelId . '';
+            $sql = "SELECT ParentId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 根据父id获取列表数据集
      * @param int $topCount 显示的条数
      * @param string $parentId 父id，可以是 id,id,id 的形式

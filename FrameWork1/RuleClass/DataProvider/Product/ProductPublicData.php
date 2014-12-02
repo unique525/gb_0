@@ -34,7 +34,7 @@ class ProductPublicData extends BasePublicData {
 
     /**
      * 获取产品记录
-     * @param int $channelId 频道Id
+     * @param int $channelId 频道Id,可以是 id,id,id 的形式
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null  列表数组
@@ -45,7 +45,7 @@ class ProductPublicData extends BasePublicData {
         if ($topCount != null)
             $topCount = " limit " . $topCount;
         else $topCount = "";
-        if ($channelId > 0) {
+        if (!empty($channelId)) {
             switch ($order) {
                 case "time_desc":
                     $order = " ORDER BY Createdate DESC";
@@ -78,11 +78,10 @@ class ProductPublicData extends BasePublicData {
             $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId=:ChannelId AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
@@ -90,7 +89,7 @@ class ProductPublicData extends BasePublicData {
 
     /**
      * 取得前台产品分页列表
-     * @param int $channelId 频道id
+     * @param int $channelId 频道Id,可以是 id,id,id 的形式
      * @param int $pageBegin 起始记录行
      * @param int $pageSize 页大小
      * @param int $allCount 记录总数
@@ -102,7 +101,7 @@ class ProductPublicData extends BasePublicData {
     public function GetListForPager($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $order = "")
     {
         $result = null;
-        if ($channelId > 0) {
+        if (!empty($channelId)) {
             switch ($order) {
                 case "time_down":
                     $order = " ORDER BY t.Createdate DESC";
@@ -134,7 +133,6 @@ class ProductPublicData extends BasePublicData {
             }
             $searchSql = "";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
             if (strlen($searchKey) > 0 && $searchKey != "undefined") {
                 if ($searchType == 0) { //产品名称
                     $searchSql = " AND (ProductName like :SearchKey)";
@@ -170,12 +168,12 @@ class ProductPublicData extends BasePublicData {
             FROM
             " . self::TableName_Product . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
-            WHERE t.ChannelId=:ChannelId AND t.State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
+            WHERE  t.ChannelId IN (".$channelId.") AND t.State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sql = "SELECT count(*) FROM " . self::TableName_Product . "
-                WHERE ChannelId=:ChannelId AND State<100 "  . " " . $searchSql . ";";
+                WHERE ChannelId IN (".$channelId.") AND State<100 "  . " " . $searchSql . ";";
             $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         }
 
@@ -195,7 +193,7 @@ class ProductPublicData extends BasePublicData {
         if ($topCount != null)
             $topCount = " limit " . $topCount;
         else $topCount = "";
-        if ($channelId > 0) {
+        if (!empty($channelId)) {
             switch ($order) {
                 default:
                     $order = " ORDER BY t.Sort DESC,t.Createdate DESC";

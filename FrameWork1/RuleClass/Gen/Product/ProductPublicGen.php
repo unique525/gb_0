@@ -58,17 +58,19 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
 
         $channelId = Control::GetRequest("channel_id", 0);
         $order = Control::GetRequest("order", 0);
-        $pageSize = Control::GetRequest("ps", 12);
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
 
         if ($pageIndex > 0 && $channelId > 0) {
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "product_list";
+            $tagId = "product_page_".$channelId;
             $allCount = 0;
+            $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
+            $pageSize = Template::GetParamValue($tagContent,"top");
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $AllChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
             $productPublicData = new ProductPublicData();
-            $arrList = $productPublicData->GetListForPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
+            $arrList = $productPublicData->GetListForPager($AllChannelId, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
                 $styleNumber = 1;
@@ -81,10 +83,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
+                $templateContent = str_ireplace("{".$tagId."_pager_button}", $pagerButton, $templateContent);
+                $templateContent = str_ireplace("{".$tagId."_item_count}", $allCount, $templateContent);
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{pager_button}", Language::Load("product", 101), $templateContent);
+                $templateContent = str_ireplace("{".$tagId."_pager_button}", Language::Load("product", 101), $templateContent);
+                $templateContent = str_ireplace("{".$tagId."_item_count}", 0, $templateContent);
             }
         }
         $templateContent = parent::ReplaceTemplate($templateContent);

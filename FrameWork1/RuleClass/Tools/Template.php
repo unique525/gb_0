@@ -1146,6 +1146,23 @@ class Template
     }
 
     /**
+     * 取得页面中第一个匹配TagId的标记段
+     * @param string $tagId 替换标签的id
+     * @param string $templateContent 要取的模板内容
+     * @param string $tagName 标签名称
+     * @return string 返回标记段内容
+     */
+    public static function GetCustomTagByTagId($tagId, $templateContent, $tagName = self::DEFAULT_TAG_NAME){
+        $result = "";
+        $preg = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
+        preg_match_all($preg, $templateContent, $matches);
+        if(count($matches)>0){
+            $result = $matches[0][0];
+        }
+        return $result;
+    }
+
+    /**
      * 把对应id的自定义标签替换成指定内容，可以识别标记的type属性
      * @param string $templateContent 要替换的模板内容
      * @param string $tagId 标签的id

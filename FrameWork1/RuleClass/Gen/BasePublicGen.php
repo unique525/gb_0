@@ -620,10 +620,17 @@ class BasePublicGen extends BaseGen {
         $arrProductList = null;
         $productPublicData = new ProductPublicData();
         switch ($tagWhere) {
-            case "channel":
+            case "CurrentChannel":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
                     $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                }
+                break;
+            case "AllChannel":
+                $channelId = intval(str_ireplace("product_", "", $tagId));
+                if ($channelId > 0) {
+                    $AllChannelId=self::GetProductAllChannelId($channelId);
+                    $arrProductList = $productPublicData->GetListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
             case "RecLevel":
@@ -635,28 +642,18 @@ class BasePublicGen extends BaseGen {
             case "SaleCount":
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
                 break;
-            case "AllChild":
+            case "AllDiscount":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $channelPublicData = new ChannelPublicData();
-                    $ChannelRow = $channelPublicData->GetOne($channelId);
-                    $ChildChannelId = $ChannelRow['ChildrenChannelId'];
-                    $arrProductList = $productPublicData->GetListByChannelId($ChildChannelId, $tagOrder, $tagTopCount);
-                }
-                break;
-            case "DiscountAllChild":
-                $channelId = intval(str_ireplace("product_", "", $tagId));
-                if ($channelId > 0) {
-                    $channelPublicData = new ChannelPublicData();
-                    $ChannelRow = $channelPublicData->GetOne($channelId);
-                    $ChildChannelId = $ChannelRow['ChildrenChannelId'];
-                    $arrProductList = $productPublicData->GetDiscountListByChannelId($ChildChannelId, $tagOrder, $tagTopCount);
+                    $AllChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $arrProductList = $productPublicData->GetDiscountListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
             default :
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
+                    $AllChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $arrProductList = $productPublicData->GetListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
                 }
         }
         if (!empty($arrProductList)) {
@@ -666,6 +663,27 @@ class BasePublicGen extends BaseGen {
         }
         else Template::RemoveCustomTag($templateContent, $tagId);
         return $templateContent;
+    }
+
+    /**
+     * 根据频道ID获取包含本频道ID及以下子频道ID字符串，为id,id,id 的形式
+     * @param int $channelId 频道id
+     * @return string 频道id字符串
+     */
+    protected function GetOwnChannelIdAndChildChannelId($channelId)
+    {
+        $allChannelId="";
+        if ($channelId > 0) {
+            $channelPublicData = new ChannelPublicData();
+            $childChannelId = $channelPublicData->GetChildrenChannelId($channelId,true);
+            if(empty($childChannelId)){
+                $allChannelId = $channelId;
+            }
+            else{
+                $allChannelId = $channelId.",".$childChannelId;
+            }
+        }
+        return $allChannelId;
     }
 
     /**

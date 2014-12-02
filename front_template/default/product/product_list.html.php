@@ -180,7 +180,7 @@
 </div>
 <div class="clear"> </div>
     <a name="product_list_anchor"></a>
-<div class="list_tit"><h1>{ChannelName}</h1> <div class="eb6100">相关商品<span>238</span>款
+<div class="list_tit"><h1>{ChannelName}</h1> <div class="eb6100">相关商品<span>{product_page_{ChannelId}_item_count}</span>款
     </div>
 </div>
 <div class="clear"> </div>
@@ -198,7 +198,7 @@
 <div class="clear"> </div>
 <div class="listgooods" id="product_list" style=" width:990px;">
     <ul>
-    <icms id="product_list" type="list" item_splitter_count="4">
+    <icms id="product_page_{ChannelId}" type="product_list" top="12" item_splitter_count="4">
         <item>
             <![CDATA[
             <li id="p_0">
@@ -234,7 +234,7 @@
     <div class="line"></div>
 </div>
 <div style="float: right;">
-    {pager_button}
+    {product_page_{ChannelId}_pager_button}
     <div class="clear"></div>
 </div>
 
