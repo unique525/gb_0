@@ -12,19 +12,24 @@
     <style>
         body{background:#efefef;}
         img, object { max-width: 100%;}
+        #datepicker {margin:0 auto;position:relative}
     </style>
     <script type="text/javascript">
         $(function() {
-
-            $("#showold").click(function(){
                 $( "#datepicker" ).datepicker({
+                    changeMonth: true,
+                    changeYear: true,
                     onSelect: function(dateText, inst) {
-                        window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date='+dateText;
+                        var today=new Date();
+                        var dateArray=dateText.substr(0,10).split("-");
+                        var date=new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+                        if(date<=today){
+                            window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date='+dateText;
+                        }
 
                     },
                     dateFormat: 'yy-mm-dd'
                 });
-            });
 
         });
         $(document).on("pageinit","#pageone",function(){
