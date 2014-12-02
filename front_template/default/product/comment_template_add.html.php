@@ -3,6 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>星级评分系统</title>
+    <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
+    <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style>
         body,div,ul,li,p{margin:0;padding:0;}
         body{color:#666;font:12px/1.5 Arial;}
@@ -95,63 +97,156 @@
     </script>
 </head>
 <body>
-<div style="margin: 0 auto;width:800px">
-    <div id="product_star" class="star" idvalue="product">
-        <span>评分：</span>
-        <ul>
-            <li><a href="javascript:;">1</a></li>
-            <li><a href="javascript:;">2</a></li>
-            <li><a href="javascript:;">3</a></li>
-            <li><a href="javascript:;">4</a></li>
-            <li><a href="javascript:;">5</a></li>
-        </ul>
-        <div id="product_result" class="result" idvalue="product"></div>
-        <p id="product_display_score" class="display_score" idvalue="product"></p>
+<div class="wrapper2">
+    <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103"/></a></div>
+    <div class="search">
+        <div class="search_green"><input name="" type="text" class="text"/></div>
+        <div class="searchbtn"><img src="images/search.png" width="46" height="28"/></div>
+        <div class="searchbottom">平谷大桃 哈密瓜 新鲜葡萄 红炉磨坊 太湖鲜鱼</div>
     </div>
-    <div style="clear:both"></div>
-    <div id="send_star" class="star" idvalue="send">
-        <span>评分：</span>
-        <ul>
-            <li><a href="javascript:;">1</a></li>
-            <li><a href="javascript:;">2</a></li>
-            <li><a href="javascript:;">3</a></li>
-            <li><a href="javascript:;">4</a></li>
-            <li><a href="javascript:;">5</a></li>
-        </ul>
-        <div id="send_result" class="result" idvalue="send"></div>
-        <p id="send_display_score" class="display_score" idvalue="send"></p>
+    <div class="service">
+        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
+        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
+        <div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
+        <div class="number" id="user_car_count">0</div>
     </div>
-    <div style="clear:both"></div>
-    <div id="service_star" class="star" idvalue="service">
-        <span>评分：</span>
-        <ul>
-            <li><a href="javascript:;">1</a></li>
-            <li><a href="javascript:;">2</a></li>
-            <li><a href="javascript:;">3</a></li>
-            <li><a href="javascript:;">4</a></li>
-            <li><a href="javascript:;">5</a></li>
-        </ul>
-        <div id="service_result" class="result" idvalue="service"></div>
-        <p id="service_display_score" class="display_score" idvalue="service"></p>
-    </div>
-    <div style="clear:both"></div>
-    <form id="main_form"  method="post">
-    差评：<input type="radio" name="appraisal" value="0"/>
-    中评：<input type="radio" name="appraisal" value="1"/>
-    好评：<input type="radio" name="appraisal" value="2"/>
-    <div style="width:100%;">
-        <textarea style="width:100%;height:100px" name="content"></textarea>
-
-        <div style="float:right;width:50px">
-            <input type="button" value="发表" id="sub" />
+</div>
+<div class="clean"></div>
+<div class="mainbav">
+    <div class="wrapper">
+        <div id="leftmenu">
+            <ul>
+                <li><span>会员中心</span></li>
+            </ul>
         </div>
-        <div style="clear:both;"></div>
-        <input type="hidden" name="product_score" id="product_score" autocomplete="off" value="0"/>
-        <input type="hidden" name="send_score" id="send_score" autocomplete="off" value="0"/>
-        <input type="hidden" name="service_score" id="service_score" autocomplete="off" value="0"/>
-        <input type="hidden" name="site_id" autocomplete="off" value="0"/>
+        <div class="column1"><a href="">首页</a></div>
+        <div class="column2"><a href="">超市量贩</a></div>
+        <div class="column2"><a href="">团购</a></div>
+        <div class="column2"><a href="">最新预售</a></div>
+        <div class="new"><img src="images/icon_new.png" width="29" height="30"/></div>
     </div>
+</div>
+
+<div class="wrapper">
+    <div class="comment_zone">
+        <div class="left left_pic"> <img width="100" height="100" /></div>
+        <div class="right right_part">
+            <div class="star_zone">
+                <div id="product_star" class="star" idvalue="product">
+                    <span>评分：</span>
+                    <ul>
+                        <li><a href="javascript:;">1</a></li>
+                        <li><a href="javascript:;">2</a></li>
+                        <li><a href="javascript:;">3</a></li>
+                        <li><a href="javascript:;">4</a></li>
+                        <li><a href="javascript:;">5</a></li>
+                    </ul>
+                    <div id="product_result" class="result" idvalue="product"></div>
+                    <p id="product_display_score" class="display_score" idvalue="product"></p>
+                    <div class="clean"></div>
+                </div>
+                <div style="clear:both"></div>
+                <div id="send_star" class="star" idvalue="send">
+                    <span>评分：</span>
+                    <ul>
+                        <li><a href="javascript:;">1</a></li>
+                        <li><a href="javascript:;">2</a></li>
+                        <li><a href="javascript:;">3</a></li>
+                        <li><a href="javascript:;">4</a></li>
+                        <li><a href="javascript:;">5</a></li>
+                    </ul>
+                    <div id="send_result" class="result" idvalue="send"></div>
+                    <p id="send_display_score" class="display_score" idvalue="send"></p>
+                    <div class="clean"></div>
+                </div>
+                <div style="clear:both"></div>
+                <div id="service_star" class="star" idvalue="service">
+                    <span>评分：</span>
+                    <ul>
+                        <li><a href="javascript:;">1</a></li>
+                        <li><a href="javascript:;">2</a></li>
+                        <li><a href="javascript:;">3</a></li>
+                        <li><a href="javascript:;">4</a></li>
+                        <li><a href="javascript:;">5</a></li>
+                    </ul>
+                    <div id="service_result" class="result" idvalue="service"></div>
+                    <p id="service_display_score" class="display_score" idvalue="service"></p>
+                    <div class="clean"></div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+        <div class="clean"></div>
+        <form id="main_form" action="/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}" method="post">
+            <div class="vote">
+                <input type="radio" name="appraisal" value="2"/><label>好评</label>
+                <input type="radio" name="appraisal" value="1"/><label>中评</label>
+                <input type="radio" name="appraisal" value="0"/><label>差评</label>
+            </div>
+            <div style="width:100%;">
+                <textarea style="width:100%;height:100px" name="content"></textarea>
+
+                <div class="comment_submit">
+                    <input type="button" value="发  表" id="sub" />
+                </div>
+                <div style="clear:both;"></div>
+                <input type="hidden" name="product_score" id="product_score" autocomplete="off" value="0"/>
+                <input type="hidden" name="send_score" id="send_score" autocomplete="off" value="0"/>
+                <input type="hidden" name="service_score" id="service_score" autocomplete="off" value="0"/>
+                <input type="hidden" name="site_id" autocomplete="off" value="0"/>
+            </div>
         </form>
+
+    </div>
+</div>
+
+<div class="footerline"></div>
+<div class="wrapper">
+    <div class="footerleft">
+        <div class="cont">
+            <div><img src="images/footergwzn.png" width="79" height="79"/></div>
+            <b>交易条款</b><br/>
+            <a href="" target="_blank">购物流程</a><br/>
+            <a href="" target="_blank">发票制度</a><br/>
+            <a href="" target="_blank">会员等级</a><br/>
+            <a href="" target="_blank">积分制度</a><br/><br/>
+        </div>
+    </div>
+    <div class="footerleft">
+        <div class="cont">
+            <div><img src="images/footerpsfw.png" width="79" height="79"/></div>
+            <b>配送服务</b><br/>
+            <a href="" target="_blank">配送说明</a><br/>
+            <a href="" target="_blank">配送范围</a><br/>
+            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
+        </div>
+    </div>
+    <div class="footerleft">
+        <div class="cont">
+            <div><img src="images/footerzffs.png" width="79" height="79"/></div>
+            <b>支付方式</b><br/>
+            <a href="" target="_blank">支付宝支付</a><br/>
+            <a href="" target="_blank">银联在线支付</a><br/>
+            <a href="" target="_blank">货到付款</a><br/><br/><br/>
+        </div>
+    </div>
+    <div class="footerleft">
+        <div class="cont">
+            <div><img src="images/footershfw.png" width="79" height="79"/></div>
+            <b>售后服务</b><br/>
+            <a href="" target="_blank">服务承诺</a><br/>
+            <a href="" target="_blank">退换货政策</a><br/>
+            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
+        </div>
+    </div>
+    <div class="footerright" style="padding-left:50px;">
+        手机客户端下载
+        <div><img src="images/weixin.png" width="104" height="104"/></div>
+    </div>
+    <div class="footerright" style="padding-right:50px;">
+        手机客户端下载
+        <div><img src="images/weixin.png" width="104" height="104"/></div>
+    </div>
 </div>
 </body>
 </html>
