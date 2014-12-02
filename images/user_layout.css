@@ -3,7 +3,7 @@
 
 /*------翻页----------*/
 .flips li{ float:left; text-align:center; width:40px; line-height:40px; height:40px; padding:0 5px;}
-.flips{ float:right;}
+.flips{ float:right; padding-bottom:20px;}
 .flips li a{ display:block; border:1px solid #ccc; color:#ccc; font-size:14px;}
 .flips li a:hover,.flips li .recent{ background:#ff3d00; border:1px solid #ff3d00; color:#333; text-decoration:none;}
 /*------翻页----------*/
@@ -46,8 +46,8 @@
 /*----------地址管理--------------*/
 .add_list td{ height:50px; vertical-align:middle; border-bottom:1px solid #efefef;}
 .add_list .add_title td{ background:#efefef; border-bottom:1px solid #00a93c; text-align:center;}
-.add_list .receive_id{ width:100px;}
-.add_list .add_title .address{ width:300px;}
+.add_list .receive_id{ width:100px;text-align:center;}
+.add_list .add_title .address{ width:500px;}
 .post_code,.mobile,.home_tel,.opretion{ width:100px; text-align:center;}
 .opretion span,.add_new dt span{ color:#ff3d00;}
 .add_new{ padding:25px; border:1px dashed #ccc; width:770px;}
