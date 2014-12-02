@@ -21,6 +21,9 @@ class NewspaperPublicGen extends BasePublicGen {
             case "gen_one":
                 $result = self::GenOne();
                 break;
+            case "gen_select":
+                $result = self::GenSelect();
+                break;
 
         }
         return $result;
