@@ -620,17 +620,17 @@ class BasePublicGen extends BaseGen {
         $arrProductList = null;
         $productPublicData = new ProductPublicData();
         switch ($tagWhere) {
-            case "CurrentChannel":
+            case "OwnChannel":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
                     $arrProductList = $productPublicData->GetListByChannelId($channelId, $tagOrder, $tagTopCount);
                 }
                 break;
-            case "AllChannel":
+            case "BelongChannel":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $AllChannelId=self::GetProductAllChannelId($channelId);
-                    $arrProductList = $productPublicData->GetListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
+                    $belongChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $arrProductList = $productPublicData->GetListByChannelId($belongChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
             case "RecLevel":
@@ -642,11 +642,11 @@ class BasePublicGen extends BaseGen {
             case "SaleCount":
                 $arrProductList = $productPublicData->GetListBySaleCount($tagOrder, $tagTopCount);
                 break;
-            case "AllDiscount":
+            case "BelongChannelDiscount":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $AllChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
-                    $arrProductList = $productPublicData->GetDiscountListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
+                    $OwnChannelAndChildChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $arrProductList = $productPublicData->GetDiscountListByChannelId($OwnChannelAndChildChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
             default :
