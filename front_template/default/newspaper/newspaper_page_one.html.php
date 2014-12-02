@@ -5,15 +5,14 @@
     <title>{NewspaperTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
-    <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <style>
         body{background:#efefef;}
         img, object { max-width: 100%;}
+        a { text-decoration:none;}
     </style>
 
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
     <script type="text/javascript">
         $(document).on("pageinit","#pageone",function(){
 
@@ -35,16 +34,6 @@
             });
         });
         $(function() {
-
-            $("#showold").click(function(){
-                $( "#datepicker" ).datepicker({
-                    onSelect: function(dateText, inst) {
-                        window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date='+dateText;
-
-                    },
-                    dateFormat: 'yy-mm-dd'
-                });
-            });
 
             $("#img_logo").load(function(){
                 var screenWidth = $(document).width();
@@ -69,7 +58,7 @@
                     <td style="text-align:center;">首页</td>
                     <td style="text-align:center;">版面</td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;">往期回顾</td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#333;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">往期回顾</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                     <td style="text-align:center;">{NewspaperPageNo}</td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
@@ -85,14 +74,6 @@
        <img id="img01" style="max-width:100%" src="{UploadFilePath}" alt="" />
         </a>
     </div>
-
-    <div style="">
-        <div id="datepicker"></div>
-        <div id="showold" style="background:#eeeeee;height:40px;text-align:center;vertical-align: middle;padding-top:10px;">往期报纸</div>
-
-    </div>
-
-
 </div>
 
 </body>

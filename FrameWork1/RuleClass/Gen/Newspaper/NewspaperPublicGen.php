@@ -21,6 +21,9 @@ class NewspaperPublicGen extends BasePublicGen {
             case "gen_one":
                 $result = self::GenOne();
                 break;
+            case "gen_select":
+                $result = self::GenSelect();
+                break;
 
         }
         return $result;
@@ -124,6 +127,22 @@ class NewspaperPublicGen extends BasePublicGen {
                     );
                 }
             }
+        }
+        return $templateContent;
+
+    }
+
+
+
+    private function GenSelect(){
+        $channelId = Control::GetRequest("channel_id", 0);
+        $templateContent = "";
+        if($channelId>0){
+            $templateFileUrl = "newspaper/newspaper_select.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         }
         return $templateContent;
 
