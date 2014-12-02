@@ -110,20 +110,12 @@
                             </icms>
 
                         </div>
-                        {pagerButton}
+
                         <div class="flips">
-                            <ul>
-                                <li><a href="#">首页</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a class="recent" href="#">2</a></li>
-                                <li><a href="#">...</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">共5页</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">5</a></li>
-                            </ul>
-                            <div class="clean"></div>
+                            {pagerButton}
+
                         </div>
+                        <div class="clean"></div>
                     </div>
             </td>
         </tr>
