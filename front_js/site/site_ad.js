@@ -182,11 +182,11 @@ function IsInTime(adContent){
     var times=timeValue.split("_");  //id="起始时间_结束时间_广告id"
     var beginDateStr=times[0];
     var beginDateArr=beginDateStr.substr(0,10).split("-");
-    var beginDate=new Date(beginDateArr[0],beginDateArr[1],beginDateArr[2]);
+    var beginDate=new Date(beginDateArr[0],beginDateArr[1]-1,beginDateArr[2]);
     if(beginDate<today){
         var endDateStr=times[1];
         var endDateArr=endDateStr.substr(0,10).split("-");
-        var endDate=new Date(endDateArr[0],endDateArr[1],endDateArr[2]);
+        var endDate=new Date(endDateArr[0],endDateArr[1]-1,endDateArr[2]);
         if(endDate<today){  //过期
             adContent.setAttribute("idvalue","-1");   //idvalue存储广告显示时间，若过期则置-1
             console.warn("有广告已到期！title:"+adContent.getAttribute("title")+" 广告id:"+times[2]);

@@ -269,7 +269,7 @@ class Format
             if ($result = json_decode($json,$decodeArray)) {
                 return $result;
             } else {
-                return "";//json_last_error();
+                return "json decode error";//json_last_error();
             }
         } else {
             $x = null;

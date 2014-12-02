@@ -88,14 +88,14 @@ function createshortComment(domain,tid,ttype,siteid){
     }
 }
 
-function comment_show(p, table_id,table_type,domain,template) {
+function comment_show(p, table_id,table_type,default_avatar) {
     //修正补丁，用来分页按钮初始化
     if(p==0) {
         p=1;
     }
     $.ajax({
         async: false,
-        url: domain+"/default.php?mod=comment&a=list",
+        url: "/default.php?mod=comment&a=list",
         data: {
             p: p,
             ps: "10",
@@ -106,55 +106,48 @@ function comment_show(p, table_id,table_type,domain,template) {
         jsonp: "jsonpcallback",
         success: function (data) {
             result = data["result"];
-            $.each(result, function (i, v) {
-                    var username = "";
-                    var avatarsmall = "/upload/user/default.gif";
-                    if(v["avatarsmall"] != null && v["avatarsmall"].length > 1){
-                        avatarsmall = v["avatarsmall"];
-                    }
-            });
-            var listcontent = '<style>.commentcontent div{border:1px solid #D1D5DB;background:#FFFEF5;padding:5px;} .commentcontent span{color:black;display:block}</style>';
+            var listContent = '<style>.commentcontent div{border:1px solid #D1D5DB;background:#FFFEF5;padding:5px;} .commentcontent span{color:black;display:block}</style>';
             if(data != null){
                 var result = new Array();
-                var pagerbutton = data["pagebutton"];
+                var pagerButton = data["page_button"];
                 comment_count =data["count"];
                 result = data["result"];
                 $.each(result, function (i, v) {
                     var username = "";
-                    var avatarsmall = "/upload/user/default.gif";
-                    if(v["avatarsmall"] != null && v["avatarsmall"].length > 1){
-                        avatarsmall = v["avatarsmall"];
+                    var avatar = default_avatar;
+                    if(v["Avatar"] != null && v["Avatar"].length > 1){
+                        avatar = v["Avatar"];
                     }
 
-                    var showUserUrl = '<a href="'+domain+'/user/showuser.html?uid='+v["UserId"]+'"><img src="'+domain+"/"+avatarsmall+'" style="width:50px;height:50px;" /></a>';
+                    var showUserUrl = '<img src="'+avatar+'" style="width:50px;height:50px;" />';
 
-                    if(v["nickname"] != "" && v["nickname"] != null){
-                        username = v["nickname"];
+                    if(v["NickName"] != "" && v["NickName"] != null){
+                        username = v["NickName"];
                     }else{
-                        if(v["username"] == "" && v["username"] != null){
+                        if(v["UserName"] == "" && v["UserName"] != null){
                             username = "游客";
-                            showUserUrl = '<img src="'+domain+"/"+avatarsmall+'" style="width:50px;height:50px;" />';
+                            showUserUrl = '<img src="'+default_avatar+'" style="width:50px;height:50px;" />';
                         }else{
-                            username = v["username"];
+                            username = v["UserName"];
                         }
                     }
 
 
-                    listcontent = listcontent+'<div id="'+v["CommentId"]+'" style="border-bottom:2px dashed #CCC; width:98%; margin:8px 4px;">'+
+                    listContent = listContent+'<div id="'+v["CommentId"]+'" style="border-bottom:2px dashed #CCC; width:98%; margin:8px 4px;">'+
                         '<table width="99%" cellpadding="0" cellspacing="0">'+
                         '<tr><td width="60" valign="top" style="padding:5px;">'+ showUserUrl + '</td>'+
                         '<td style="padding:5px;">'+
-                        '<div style="text-align:left;line-height:180%;"><a style="font-size:14px;" href="'+domain+'/user/showuser.html?uid='+v["UserId"]+'">'+username+'</a>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#666666;font-size:10px;">'+v["createdate"]+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" onclick="comment_reply('+v["commentid"]+');">[回复]</span></div>'+
-                        '<div class="commentcontent" style="color:#666;text-align:left;line-height:180%;font-size:14px;"><table width="100%" style="table-layout:fixed"><tr><td style="word-wrap:break-word">'+v["content"]+'</td></tr></table></div>'+
+                        '<div style="text-align:left;line-height:180%;">'+username+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#666666;font-size:10px;">'+v["CreateDate"]+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" onclick="comment_reply('+v["CommentId"]+');">[回复]</span></div>'+
+                        '<div class="commentcontent" style="color:#666;text-align:left;line-height:180%;font-size:14px;"><table width="100%" style="table-layout:fixed"><tr><td style="word-wrap:break-word">'+v["Content"]+'</td></tr></table></div>'+
 
                         '</td></tr></table>'+
 
                         '<div class="reply" id="reply_'+v["CommentId"]+'" style="margin-left:70px;width:85%;display:none">'+
-                        '<form id="replyform_'+v["CommentId"]+'" action="'+domain+'/index.php?a=comment&f=add&citeid='+v["CommentId"]+'" method="post">'+
+                        '<form id="replyform_'+v["CommentId"]+'" action="/index.php?a=comment&f=add&citeid='+v["CommentId"]+'" method="post">'+
                         '<table width="95%">'+
                         '<tr>'+
                         '<td valign="top" align="center" width="15%"><span id="reply_label_user_name">留言人:</span></td>'+
-                        '<td width="85%"><input type="text" name="f_guestname" />'+
+                        '<td width="85%"><input type="text" name="f_GuestName" />'+
                         '</tr>'+
                         '<tr>'+
                         '<td valign="top" align="center" width="15%"><span id="reply_label__content_name">留言内容:</span></td>'+
@@ -175,16 +168,16 @@ function comment_show(p, table_id,table_type,domain,template) {
 
 
             }else{
-                listcontent = listcontent + '目前还没有评论，赶快来评论吧。';
+                listContent = listContent + '目前还没有评论，赶快来评论吧。';
             }
 
-            listcontent = listcontent.replaceAll("{box}","<div>");
-            listcontent = listcontent.replaceAll("{/box}","</div>");
-            listcontent = listcontent.replaceAll("{span}","<span>");
-            listcontent = listcontent.replaceAll("{/span}","</span>");
+            listContent = listContent.replaceAll("{box}","<div>");
+            listContent = listContent.replaceAll("{/box}","</div>");
+            listContent = listContent.replaceAll("{span}","<span>");
+            listContent = listContent.replaceAll("{/span}","</span>");
 
-            $("#commentmessage").html(listcontent);
-            $("#comment_pagerbutton").html(pagerbutton);
+            $("#commentmessage").html(listContent);
+            $("#comment_pagerbutton").html(pagerButton);
             $("#count").html(comment_count);
         }
     });

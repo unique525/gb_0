@@ -156,8 +156,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function AsyncRemoveBin(){
-        $userFavoriteId = Control::GetRequest("user_favorite_id",0);
-        $userId = Control::GetUserId();
+        $userFavoriteId = intval(Control::GetRequest("user_favorite_id",0));
+        $userId = intval(Control::GetUserId());
         if($userId > 0 && $userFavoriteId > 0){
             $userFavoritePublicData = new UserFavoritePublicData();
             $result = $userFavoritePublicData->Delete($userFavoriteId,$userId);

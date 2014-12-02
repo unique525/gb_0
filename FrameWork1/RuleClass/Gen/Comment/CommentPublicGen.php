@@ -159,7 +159,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenList(){
         $tableId = intval(Control::GetRequest("table_id",0));
         $tableType = intval(Control::GetRequest("table_type",0));
-        $commentType = Control::GetRequest("comment_type", 1);
+        $commentType = intval(Control::GetRequest("comment_type", 1));
         $siteId = intval(parent::GetSiteIdByDomain());
 
         if($tableId > 0 && $tableType > 0 && $siteId > 0){
@@ -175,19 +175,16 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 $pageBegin = ($pageIndex - 1) * $pageSize;
                 $allCount = 0;
                 $arrList = $commentPublicData->GetList($tableId,$tableType,$siteId,$commentType,$allCount,$pageBegin,$pageSize);
-                $result = "\"\"";
-                $pagerButton = "\"\"";
                 if (count($arrList) > 0) {
-                    $host = strtolower($_SERVER['HTTP_HOST']);
                     $templateFileUrl = "comment/pager_comment_js.html";
                     $templateName = "default";
                     $templatePath = "front_template";
                     $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                     $isJs = true;
                     $jsFunctionName = "comment_show";
-                    $jsParamList = "," . $tableId . "," . $tableType . ",'" . $host . "'";
+                    $jsParamList = "," . $tableId . "," . $tableType . ",'".' '."'";
                     $pagerButton = Pager::ShowPageButton(
-                        "",
+                        $pagerTemplate,
                         "",
                         $allCount,
                         $pageSize,
@@ -200,7 +197,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                         $pageSize,
                         TRUE,
                         TRUE,
-                        $pagerTemplate
+                        ""
                     );
                     $result = Format::FixJsonEncode($arrList);
                     $pagerButton = Format::FixJsonEncode($pagerButton);

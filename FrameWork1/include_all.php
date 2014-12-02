@@ -68,6 +68,12 @@ foreach ($arrFiles as $fileName) {
     include_once($fileName);
 }
 
+
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
 $arrFiles = getFileNames($dir);
 foreach ($arrFiles as $fileName) {
@@ -100,10 +106,25 @@ function _getFileNames($dir, &$arrFileNames) {
             if (is_dir($dir . '/' . $fileName)){
                 _getFileNames($dir . '/' . $fileName, $arrFileNames);
             }else{
-                $arrFileNames[] = $dir . '/' . $fileName;
+
+                if(
+                    _getExtension($fileName) == "php"
+                ){
+                    $arrFileNames[] = $dir . '/' . $fileName;
+                }
             }
         }
     closedir($dh);
+}
+
+/**
+ *
+ * @param $file
+ * @return string
+ */
+function _getExtension($file)
+{
+    return substr(strrchr($file, '.'), 1);
 }
 
 ?>

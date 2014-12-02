@@ -10,6 +10,109 @@ class UserOrderProductPublicData extends BasePublicData{
     const STATE_REMOVED = 100;
 
     /**
+     * @param $userOrderId
+     * @param $siteId
+     * @param $productId
+     * @param $productIdDes
+     * @param $productPriceId
+     * @param $saleCount
+     * @param $saleCountDes
+     * @param $productPrice
+     * @param $productPriceDes
+     * @param $salePrice
+     * @param $salePriceDes
+     * @param $subtotal
+     * @param $subtotalDes
+     * @param $autoSendMessage
+     * @return int
+     */
+    public function Create(
+        $userOrderId,
+        $siteId,
+        $productId,
+        $productIdDes,
+        $productPriceId,
+        $saleCount,
+        $saleCountDes,
+        $productPrice,
+        $productPriceDes,
+        $salePrice,
+        $salePriceDes,
+        $subtotal,
+        $subtotalDes,
+        $autoSendMessage
+    ){
+        $result = -1;
+        if(
+            $userOrderId>0
+            && $productId>0
+            && $productPriceId>0
+            && $saleCount>0
+        ){
+
+            $sql = "INSERT INTO ".self::TableName_UserOrderProduct."
+                    (
+                        UserOrderId,
+                        SiteId,
+                        ProductId,
+                        ProductIdDes,
+                        ProductPriceId,
+                        SaleCount,
+                        SaleCountDes,
+                        ProductPrice,
+                        ProductPriceDes,
+                        SalePrice,
+                        SalePriceDes,
+                        Subtotal,
+                        SubtotalDes,
+                        AutoSendMessage,
+                        CreateDate
+                    )
+                    VALUES
+                    (
+                        :UserOrderId,
+                        :SiteId,
+                        :ProductId,
+                        :ProductIdDes,
+                        :ProductPriceId,
+                        :SaleCount,
+                        :SaleCountDes,
+                        :ProductPrice,
+                        :ProductPriceDes,
+                        :SalePrice,
+                        :SalePriceDes,
+                        :Subtotal,
+                        :SubtotalDes,
+                        :AutoSendMessage,
+                        now()
+                    );
+
+            ";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId",$userOrderId);
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("ProductId",$productId);
+            $dataProperty->AddField("ProductIdDes",$productIdDes);
+            $dataProperty->AddField("ProductPriceId",$productPriceId);
+            $dataProperty->AddField("SaleCount",$saleCount);
+            $dataProperty->AddField("SaleCountDes",$saleCountDes);
+            $dataProperty->AddField("ProductPrice",$productPrice);
+            $dataProperty->AddField("ProductPriceDes",$productPriceDes);
+            $dataProperty->AddField("SalePrice",$salePrice);
+            $dataProperty->AddField("SalePriceDes",$salePriceDes);
+            $dataProperty->AddField("Subtotal",$subtotal);
+            $dataProperty->AddField("SubtotalDes",$subtotalDes);
+            $dataProperty->AddField("AutoSendMessage",$autoSendMessage);
+            $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
+
+        }
+
+
+        return $result;
+    }
+
+
+    /**
      * @param $userId
      * @param $productId
      * @param $userOrderId

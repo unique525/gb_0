@@ -84,14 +84,17 @@ class CommentPublicData extends BasePublicData {
                             c.Content,
                             c.GuestName,
                             c.GuestEmail,
-                            c.siteid,
+                            c.SiteId,
                             c.ChannelId,
-                            ui.NickName
-                          from "
-                            . self::TableName_Comment . " c LEFT JOIN ".self::TableName_UserInfo." ui on c.UserId = ui.UserId
-                          where (c.state=30 or c.state=0) and c.TableType=:TableType and c.TableId=:TableId and c.CommentType=:CommentType order by c.CreateDate desc limit " . $pageBegin . "," . $pageSize . "";
-            $sqlCount = "select count(*) from " . self::TableName_Comment . " c left join ".self::TableName_UserInfo." ui on c.UserId = ui.UserId "
-                . " where (c.state=30 or c.state=0) and c.TableType=:TableType and c.TableId=:TableId and c.CommentType=:CommentType order by c.CreateDate desc";
+                            ui.NickName,
+                            uf.UploadFileThumbPath2 AS Avatar
+                          FROM "
+                            . self::TableName_Comment . " c
+                            LEFT JOIN ".self::TableName_UserInfo." ui on c.UserId = ui.UserId
+                            LEFT JOIN ".self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                          WHERE (c.state=30 OR c.state=0) AND c.TableType=:TableType AND c.TableId=:TableId AND c.CommentType=:CommentType ORDER BY c.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_Comment . " c LEFT JOIN ".self::TableName_UserInfo." ui ON c.UserId = ui.UserId "
+                . " WHERE (c.State=30 OR c.state=0) AND c.TableType=:TableType AND c.TableId=:TableId AND c.CommentType=:CommentType ORDER BY c.CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("TableId", $tableId);
             $dataProperty->AddField("TableType", $tableType);

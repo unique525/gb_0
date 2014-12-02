@@ -242,36 +242,9 @@
 </head>
 
 <body>
-
-<div class="wrapper2">
-    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
-    <div class="search">
-        <div class="search_green"><input name="" type="text" class="text"/></div>
-        <div class="searchbtn"><img src="/images/search.png" width="46" height="28"/></div>
-        <div class="searchbottom">平谷大桃 哈密瓜 新鲜葡萄 红炉磨坊 太湖鲜鱼</div>
-    </div>
-    <div class="service">
-        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
-        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
-        <div class="number" id="user_car_count">0</div>
-    </div>
-</div>
+<pre_temp id="4"></pre_temp>
 <div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div class="goods" id="leftmenu">
-            <ul>
-                <li><span>会员中心</span></li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="/images/icon_new.png" width="29" height="30"/></div>
-    </div>
-</div>
+<pre_temp id="12"></pre_temp>
 <div class="wrapper">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -351,53 +324,6 @@
 </tr>
 </table>
 </div>
-<div class="footerline"></div>
-<div class="wrapper">
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footergwzn.png" width="79" height="79"/></div>
-            <b>交易条款</b><br/>
-            <a href="" target="_blank">购物流程</a><br/>
-            <a href="" target="_blank">发票制度</a><br/>
-            <a href="" target="_blank">会员等级</a><br/>
-            <a href="" target="_blank">积分制度</a><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerpsfw.png" width="79" height="79"/></div>
-            <b>配送服务</b><br/>
-            <a href="" target="_blank">配送说明</a><br/>
-            <a href="" target="_blank">配送范围</a><br/>
-            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerzffs.png" width="79" height="79"/></div>
-            <b>支付方式</b><br/>
-            <a href="" target="_blank">支付宝支付</a><br/>
-            <a href="" target="_blank">银联在线支付</a><br/>
-            <a href="" target="_blank">货到付款</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footershfw.png" width="79" height="79"/></div>
-            <b>售后服务</b><br/>
-            <a href="" target="_blank">服务承诺</a><br/>
-            <a href="" target="_blank">退换货政策</a><br/>
-            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerright" style="padding-left:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-    <div class="footerright" style="padding-right:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-</div>
+<pre_temp id="8"></pre_temp>
 </body>
 </html>

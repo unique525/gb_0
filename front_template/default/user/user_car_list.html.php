@@ -12,7 +12,29 @@
 <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript">
 var selected_car = new Array();
+
+function select_all(this_select) {
+    selected_car = new Array();
+    if (this_select.prop("checked")) {
+        $(".checkbox_car").prop("checked", true);//全选
+        $(".select_all").prop("checked", true);
+        $(".checkbox_car").each(function () {
+            selected_car.push(this_select.attr("idvalue"));
+        });
+    } else {
+        $(".checkbox_car").prop("checked", false);//取消全选
+        $(".select_all").prop("checked", false);
+    }
+    var all_price = 0;
+    for (var i = 0; i < selected_car.length; i++) {
+        all_price = all_price + parseFloat($("#buy_price_" + selected_car[i]).html());
+    }
+    $("#all_price").html(formatPrice(all_price));
+    $("#all_count").html(selected_car.length);
+}
+
 $(function () {
+    select_all($(".select_all"));
     $(".minus_count").click(function () {
         var user_car_id = $(this).attr("idvalue");
         var buy_count = parseInt($("#buy_count_" + user_car_id).val());
@@ -150,23 +172,7 @@ $(function () {
     });
 
     $(".select_all").click(function () {
-        selected_car = new Array();
-        if ($(this).prop("checked")) {
-            $(".checkbox_car").prop("checked", true);//全选
-            $(".select_all").prop("checked", true);
-            $(".checkbox_car").each(function () {
-                selected_car.push($(this).attr("idvalue"));
-            });
-        } else {
-            $(".checkbox_car").prop("checked", false);//取消全选
-            $(".select_all").prop("checked", false);
-        }
-        var all_price = 0;
-        for (var i = 0; i < selected_car.length; i++) {
-            all_price = all_price + parseFloat($("#buy_price_" + selected_car[i]).html());
-        }
-        $("#all_price").html(formatPrice(all_price));
-        $("#all_count").html(selected_car.length);
+        select_all($(this));
     });
 
     $("#batch_delete").click(function () {
@@ -218,13 +224,14 @@ $(function () {
         $(".producttab ul").css("display","none");
         $(".producttab #ul_"+idvalue).css("display","block");
     });
+
 });
 </script>
 </head>
 
 <body>
 <div class="wrapper">
-    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
+    <div class="logo"><a href="/"><img src="/images/mylogo.png" width="320" height="103"/></a></div>
     <div class="step">
         <div class="step1"><img src="/images/wdgwc.png" width="49" height="49"/></div>
         <div class="steptext"><font class="grey">第一步</font><br/><font class="green">我的购物车</font></div>
@@ -248,7 +255,7 @@ $(function () {
     <div class="contgreybg">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td width="30"><input name="" class="select_all" autocomplete="off" type="checkbox" value=""/></td>
+                <td width="30"><input name="" class="select_all" autocomplete="off" type="checkbox" checked="checked" value=""/></td>
                 <td width="58">全选</td>
                 <td width="400" align="center">商品</td>
                 <td width="155" align="center">单价</td>
@@ -496,53 +503,6 @@ $(function () {
     </div>
 </div>
 
-<div class="footerline"></div>
-<div class="wrapper">
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footergwzn.png" width="79" height="79"/></div>
-            <b>交易条款</b><br/>
-            <a href="" target="_blank">购物流程</a><br/>
-            <a href="" target="_blank">发票制度</a><br/>
-            <a href="" target="_blank">会员等级</a><br/>
-            <a href="" target="_blank">积分制度</a><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerpsfw.png" width="79" height="79"/></div>
-            <b>配送服务</b><br/>
-            <a href="" target="_blank">配送说明</a><br/>
-            <a href="" target="_blank">配送范围</a><br/>
-            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerzffs.png" width="79" height="79"/></div>
-            <b>支付方式</b><br/>
-            <a href="" target="_blank">支付宝支付</a><br/>
-            <a href="" target="_blank">银联在线支付</a><br/>
-            <a href="" target="_blank">货到付款</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footershfw.png" width="79" height="79"/></div>
-            <b>售后服务</b><br/>
-            <a href="" target="_blank">服务承诺</a><br/>
-            <a href="" target="_blank">退换货政策</a><br/>
-            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerright" style="padding-left:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-    <div class="footerright" style="padding-right:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-</div>
+<pre_temp id="8"></pre_temp>
 </body>
 </html>

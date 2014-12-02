@@ -117,7 +117,7 @@
                     <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
                 </div>
                 <div style="padding:20px 50px;">
-                    <table class="add_list" width="800" border="0" cellspacing="0" cellpadding="0">
+                    <table class="add_list" width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr class="add_title">
                             <td class="receive_id">收件人</td>
                             <td class="address">收件地址</td>
@@ -204,53 +204,6 @@
         </tr>
     </table>
 </div>
-<div class="footerline"></div>
-<div class="wrapper">
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footergwzn.png" width="79" height="79"/></div>
-            <b>交易条款</b><br/>
-            <a href="" target="_blank">购物流程</a><br/>
-            <a href="" target="_blank">发票制度</a><br/>
-            <a href="" target="_blank">会员等级</a><br/>
-            <a href="" target="_blank">积分制度</a><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerpsfw.png" width="79" height="79"/></div>
-            <b>配送服务</b><br/>
-            <a href="" target="_blank">配送说明</a><br/>
-            <a href="" target="_blank">配送范围</a><br/>
-            <a href="" target="_blank">配送状态查询</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footerzffs.png" width="79" height="79"/></div>
-            <b>支付方式</b><br/>
-            <a href="" target="_blank">支付宝支付</a><br/>
-            <a href="" target="_blank">银联在线支付</a><br/>
-            <a href="" target="_blank">货到付款</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerleft">
-        <div class="cont">
-            <div><img src="/images/footershfw.png" width="79" height="79"/></div>
-            <b>售后服务</b><br/>
-            <a href="" target="_blank">服务承诺</a><br/>
-            <a href="" target="_blank">退换货政策</a><br/>
-            <a href="" target="_blank">退换货流程</a><br/><br/><br/>
-        </div>
-    </div>
-    <div class="footerright" style="padding-left:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-    <div class="footerright" style="padding-right:50px;">
-        手机客户端下载
-        <div><img src="/images/weixin.png" width="104" height="104"/></div>
-    </div>
-</div>
+<pre_temp id="8"></pre_temp>
 </body>
 </html>
