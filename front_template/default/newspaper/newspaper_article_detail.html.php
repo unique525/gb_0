@@ -34,9 +34,9 @@
 <div data-role="page" id="pageone">
     <div data-role="content">
         <div style="text-align:center;background:#efefef;">
-            <h4 style="text-align:center;background:#efefef;">{NewspaperArticleCiteTitle}</h4>
-            <h2 style="text-align:center;background:#efefef;">{NewspaperArticleTitle}</h2>
-            <h4 style="text-align:center;background:#efefef;">{NewspaperArticleSubTitle}</h4>
+            <h4 style="text-align:center;">{NewspaperArticleCiteTitle}</h4>
+            <h2 style="text-align:center;">{NewspaperArticleTitle}</h2>
+            <h4 style="text-align:center;">{NewspaperArticleSubTitle}</h4>
         </div>
 
         <div>

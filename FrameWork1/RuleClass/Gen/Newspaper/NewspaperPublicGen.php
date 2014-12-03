@@ -24,6 +24,9 @@ class NewspaperPublicGen extends BasePublicGen {
             case "gen_select":
                 $result = self::GenSelect();
                 break;
+            case "get_newspaper_id_for_import":
+                $result = self::GetNewspaperIdForImport();
+                break;
 
         }
         return $result;
@@ -70,6 +73,7 @@ class NewspaperPublicGen extends BasePublicGen {
             if(strlen($publishDate)>0){
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
                 $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+
             }else{
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
             }
@@ -124,16 +128,6 @@ class NewspaperPublicGen extends BasePublicGen {
                         $previousNewspaperPageId,
                         $templateContent
                     );
-
-                    //版面选择
-                    $arrNewsPaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
-                    $listName = "news_paper_page";
-
-                    if(count($arrNewsPaperPages)>0){
-                        Template::ReplaceList($templateContent, $arrNewsPaperPages, $listName);
-                    }else{
-                        Template::RemoveCustomTag($tempContent, $listName);
-                    }
                 }
             }
         }
@@ -155,5 +149,26 @@ class NewspaperPublicGen extends BasePublicGen {
         }
         return $templateContent;
 
+    }
+
+
+    private function GetNewspaperIdForImport(){
+        $result = -1;
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $publishDate = str_ireplace("\r\n","",Control::PostRequest("PublishDate","",$removeXSS));
+
+        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+
+            strlen($publishDate)>0
+        )
+        {
+            $newspaperPublicData = new NewspaperPublicData();
+
+            $result = $newspaperPublicData->GetNewspaperIdByPublishDateForImport(
+                $publishDate
+            );
+        }
+        return $result;
     }
 } 
