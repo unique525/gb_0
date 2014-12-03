@@ -70,7 +70,6 @@ class NewspaperPublicGen extends BasePublicGen {
             if(strlen($publishDate)>0){
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
                 $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
-
             }else{
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
             }
@@ -125,6 +124,16 @@ class NewspaperPublicGen extends BasePublicGen {
                         $previousNewspaperPageId,
                         $templateContent
                     );
+
+                    //版面选择
+                    $arrNewsPaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
+                    $listName = "news_paper_page";
+
+                    if(count($arrNewsPaperPages)>0){
+                        Template::ReplaceList($templateContent, $arrNewsPaperPages, $listName);
+                    }else{
+                        Template::RemoveCustomTag($tempContent, $listName);
+                    }
                 }
             }
         }
