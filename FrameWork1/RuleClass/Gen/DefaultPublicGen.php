@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台Gen总引导类
+ * Web Gen总引导类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen
  * @author zhangchi

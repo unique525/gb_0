@@ -19,7 +19,7 @@ class VerifyCode {
             $num = rand(1000, 9999);
             $_SESSION[$sessionName] = $num;
             //创建图片，定义颜色值
-            header("Content-type: image/PNG");
+
             srand((double) microtime() * 1000000);
             $im = imagecreate(60, 20);
             $black = ImageColorAllocate($im, 0, 0, 0);
@@ -46,6 +46,7 @@ class VerifyCode {
                 imagestring($im, 5, $strNum, $strPos, substr($num, $i, 1), $black);
                 $strNum+=rand(8, 12);
             }
+            header("Content-type: image/PNG");
             ImagePNG($im);
             ImageDestroy($im);
         }
@@ -95,7 +96,7 @@ class VerifyCode {
         if(strlen($sessionName)<=0){
             return;
         }
-        Session_start();
+        session_start();
         $_SESSION[$sessionName] = $authority;
         $boardWidth = $width;
         $boardHeight = $height;
@@ -108,24 +109,24 @@ class VerifyCode {
             imagecolorallocate($image, 0, 0, 0);
 
             // 设定文字颜色数组
-            $colorList[] = ImageColorAllocate($image, 15, 73, 210);
-            $colorList[] = ImageColorAllocate($image, 0, 64, 0);
-            $colorList[] = ImageColorAllocate($image, 0, 0, 64);
-            $colorList[] = ImageColorAllocate($image, 0, 128, 128);
-            $colorList[] = ImageColorAllocate($image, 27, 52, 47);
-            $colorList[] = ImageColorAllocate($image, 51, 0, 102);
-            $colorList[] = ImageColorAllocate($image, 0, 0, 145);
-            $colorList[] = ImageColorAllocate($image, 0, 0, 113);
-            $colorList[] = ImageColorAllocate($image, 0, 51, 51);
-            $colorList[] = ImageColorAllocate($image, 158, 180, 35);
-            $colorList[] = ImageColorAllocate($image, 59, 59, 59);
-            $colorList[] = ImageColorAllocate($image, 0, 0, 0);
-            $colorList[] = ImageColorAllocate($image, 1, 128, 180);
-            $colorList[] = ImageColorAllocate($image, 0, 153, 51);
-            $colorList[] = ImageColorAllocate($image, 60, 131, 1);
-            $colorList[] = ImageColorAllocate($image, 0, 0, 0);
-            $fontcolor = ImageColorAllocate($image, 0, 0, 0);
-            $gray = ImageColorAllocate($image, 245, 245, 245);
+            $colorList[] = imagecolorallocate($image, 15, 73, 210);
+            $colorList[] = imagecolorallocate($image, 0, 64, 0);
+            $colorList[] = imagecolorallocate($image, 0, 0, 64);
+            $colorList[] = imagecolorallocate($image, 0, 128, 128);
+            $colorList[] = imagecolorallocate($image, 27, 52, 47);
+            $colorList[] = imagecolorallocate($image, 51, 0, 102);
+            $colorList[] = imagecolorallocate($image, 0, 0, 145);
+            $colorList[] = imagecolorallocate($image, 0, 0, 113);
+            $colorList[] = imagecolorallocate($image, 0, 51, 51);
+            $colorList[] = imagecolorallocate($image, 158, 180, 35);
+            $colorList[] = imagecolorallocate($image, 59, 59, 59);
+            $colorList[] = imagecolorallocate($image, 0, 0, 0);
+            $colorList[] = imagecolorallocate($image, 1, 128, 180);
+            $colorList[] = imagecolorallocate($image, 0, 153, 51);
+            $colorList[] = imagecolorallocate($image, 60, 131, 1);
+            $colorList[] = imagecolorallocate($image, 0, 0, 0);
+            $fontcolor = imagecolorallocate($image, 0, 0, 0);
+            $gray = imagecolorallocate($image, 245, 245, 245);
             $color = imagecolorallocate($image, 255, 255, 255);
             $color2 = imagecolorallocate($image, 255, 0, 0);
             imagefill($image, 0, 0, $gray);
@@ -166,7 +167,7 @@ class VerifyCode {
         }
 
         $gif = new GifEncoder($imageData, 100, 0, 2, 0, 0, 1, "bin");
-        Header('Content-type:image/gif');
+        header('Content-type:image/gif');
         echo $gif->GetAnimation();
     }
 

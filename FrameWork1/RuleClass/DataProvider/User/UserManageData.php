@@ -9,7 +9,7 @@
 class UserManageData extends BaseManageData
 {
 
-    public function GetFields(){
+    public function GetFields($tableName = self::TableName_User){
         return parent::GetFields(self::TableName_User);
     }
 

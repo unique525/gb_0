@@ -8,11 +8,9 @@
 class UserOrderManageData extends BaseManageData{
 
     const STATE_REMOVED = 100;
-    /**
-     * 获取会员订单表中的字段
-     * @return array
-     */
-    public function GetFields(){
+
+
+    public function GetFields($tableName = self::TableName_UserOrder){
         return parent::GetFields(self::TableName_UserOrder);
     }
 
