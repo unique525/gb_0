@@ -82,6 +82,7 @@ class SitePublicData extends BasePublicData {
             $sql = "SELECT
                 SiteId,
                 SiteName,
+                SiteUrl,
                 BrowserTitle,
                 BrowserDescription,
                 BrowserKeywords
