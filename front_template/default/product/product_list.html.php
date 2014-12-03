@@ -237,7 +237,7 @@
     {product_page_{ChannelId}_pager_button}
     <div class="clear"></div>
 </div>
-
+<div class="blank20">        </div>
 </div>
 </div>
 </div>
