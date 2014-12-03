@@ -55,7 +55,7 @@
         <div>
             <table cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;">首页</td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#333;" href="/" target="_blank">首页</a></td>
                     <td style="text-align:center;">版面</td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                     <td style="text-align:center;"><a style="text-decoration:none;color:#333;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">往期回顾</a></td>
