@@ -60,8 +60,6 @@
 <body>
 
 <div data-role="page" id="pageone">
-
-
     <div style="background:#ebebeb;">
         <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
     </div>
