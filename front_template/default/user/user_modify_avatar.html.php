@@ -256,7 +256,7 @@
     <div class="rightbar">
         <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>修改头像</div>
     </div>
-    <div id="upload" style="padding:25px;">
+    <div id="upload" style="padding:20px 50px;">
           <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
              <tr>
                 <td width="169">
@@ -277,7 +277,8 @@
              </tr>
           </table>
     </div>
-            <div id="outer" style="display:none">
+            <div id="outer" style="display:none;padding:20px 50px;">
+                <div style="background: #f6f6f6;">
                 <div class="jcExample">
                     <div class="article" >
                         <table cellspacing="25">
@@ -312,12 +313,14 @@
                     <input type="hidden" value="" id="width" name="width"/>
                     <input type="hidden" value="" id="source" name="source"/>
                     <input type="hidden" value="/default.php?mod=user&a=homepage" id="source" name="re_url"/>
-                    <div id="sub" style="background-color: #CCC;width:80px;height:25px;cursor:pointer;float:left">确定</div>
+                    <div style="padding-left:25px; padding-bottom: 25px;">
+                        <div id="sub" style="background-color:#00a93c;width:90px;height:30px;line-height:30px;font-size:16px;text-align:center;color:#fff;cursor:pointer;">确  定</div>
+                    </div>
                     <div style="float:left"><img id="loadingOfFinish" src="/system_template/common/images/loading1.gif" style="display:none;"/></div>
-                    <div style="clear:left"></div>
+                    <div style="clear:both"></div>
                 </form>
             </div>
-                </div>
+            </div></div>
             </div>
 
 </td>
