@@ -70,13 +70,17 @@ img,input{ vertical-align:middle;border:none; padding:0; margin:0;}
 .rightbar{border:solid 1px #D4D4D4;border-width:0px 0px 1px 0px;}
 .rightbar2{margin-left:48px; background:url(icon1.png) no-repeat; text-indent:35px;font-size:14px;line-height:66px;}
 
-.rightmember{padding:40px 0px 0px 0px;width:893px;margin:0px auto;}
+.rightmember{padding:20px 0px 0px 0px;width:893px;margin:0px auto;}
 .rightmember .leftperson{width:120px;padding-right:24px; float:left;}
-.rightmember h3{font-weight:normal;font-style:normal;font-size:14px; text-align:center;line-height:40px;}
+.rightmember h3{font-weight:normal;font-style:normal;font-size:14px; text-align:center;line-height:30px;}
 .rightmember .rightinfo{ float:left;line-height:35px;font-size:14px;}
-.rightmember .rightinfo ul{padding-top:20px;}
-.rightmember .rightinfo li{width:132px; line-height:28px; text-align:center;margin-right:10px; background:#F4F7EB; display:block; float:left;height:28px;font-size:14px;}
+.rightmember .rightinfo .change_info{ padding:5px 0; line-height:16px;}
+.rightmember .rightinfo .change_info a,.rightmember h3 a{ color:#10651a; text-decoration:underline; font-size:12px;}
+.rightmember .rightinfo span{ padding-right:30px;}
+.rightmember .rightinfo ul{ padding-top:15px;}
+.rightmember .rightinfo li{width:132px; line-height:28px; text-align:center;margin-right:10px; background:#fff; display:block; float:left;height:28px;font-size:14px;}
 .rightmember .rightinfo li a{font-size:14px;}
+.rightmember .rightinfo li a span{ color:#ff3d00; padding:0 0;}
 
 #tab{position:relative;}
 #tab .tabList ul li{

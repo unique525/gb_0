@@ -56,25 +56,24 @@
                     <div class="rightbar2"><a href="/">星滋味首页</a> >会员中心</div>
                 </div>
                 <div class="rightmember">
-                    <div class="leftperson"><img src="{UploadFilePath}" width="120" height="120"/>
-
-                        <h3><a href="/default.php?mod=user_info&a=modify">编辑个人资料</a></h3>
+                    <div style="padding:20px; background:#f6f6f6;">
+                    <div class="leftperson"><img src="images/pic_person.png" width="120" height="120"/>
                         <h3><a href="/default.php?mod=user_info&a=modify_avatar">修改头像</a></h3>
                     </div>
                     <div class="rightinfo">
                         <b>您好！ {UserAccount}</b><br/>
-                        会员级别：{UserGroupName}<br/>
-                        我的积分：{UserScore} 分<br/>
+                        <div class="change_info"><a href="/default.php?mod=user_info&a=modify">编辑个人资料</a></div>
+                        <span><strong>会员级别：</strong>{UserGroupName}</span><span><strong>我的积分：</strong>{UserScore} 分</span>
                         <ul>
                             <!--<li>待处理订单（1）</li>-->
-                            <li><a href="/default.php?mod=user_order&a=list&state=70" target="_blank">待评价订单（{UserOrderOfUncommentCount}）</a>
+                            <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待评价订单（<span>{UserOrderOfUncommentCount}</span>）</a>
                             </li>
-                            <li><a href="/default.php?mod=user_order&a=list&state=10" target="_blank">待支付订单（{UserOrderOfNewCount}）</a>
+                            <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待支付订单（<span>{UserOrderOfNewCount}</span>)</a>
                             </li>
                         </ul>
                     </div>
-
                     <div class="clean"></div>
+                </div>
                 </div>
                 <div class="rightmember">
                     <div id="tab">
