@@ -8,8 +8,8 @@
     <style>
         body{background:#efefef;}
         img, object { max-width: 100%;}
-        a { text-decoration:none;}
-        .page_button{list-style: none;margin:2px;padding:10px;text-align: center;float: left;background-color: #ebebeb}
+        a { text-decoration:none; color: #000000;}
+        .page_button{list-style: none;margin:2px;padding:5px;text-align:center;float: left;background-color: #D3D3D3;}
     </style>
 
     <script src="/system_js/jquery-1.9.1.min.js"></script>
@@ -67,8 +67,8 @@
         <div>
             <table cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;cursor:pointer"><a href="/">首页</a>
-                        <div id="select_page" style="position:absolute;background-color:#ccc;padding-bottom:20px;display:none">
+                    <td style="text-align:center;cursor:pointer"><a style="color:#000000;" href="/">首页</a>
+                        <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:20px;display:none">
                             <ul>
                                 <icms id="news_paper_page" type="list" >
                                     <item>
@@ -86,10 +86,10 @@
 
 
                     </td>
-                    <td style="text-align:center;cursor:pointer" id="pages">版面</td>
+                    <td style="text-align:center;cursor:pointer;color:#ef1b27;" id="pages" >版面</td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                     <td style="text-align:center;cursor:pointer" id="select_date">
-                        <a href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">
+                        <a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">
                             往期回顾
                         </a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
