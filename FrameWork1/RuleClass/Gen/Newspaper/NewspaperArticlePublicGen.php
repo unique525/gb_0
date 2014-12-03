@@ -24,6 +24,9 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "get_newspaper_article_id_for_import":
+                $result = self::GetNewspaperArticleIdForImport();
+                break;
         }
         return $result;
     }
@@ -149,5 +152,26 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
         }
         return $templateContent;
+    }
+
+    private function GetNewspaperArticleIdForImport(){
+        $result = -1;
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperPageId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperPageId",0,$removeXSS)));
+        $newspaperArticleTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperArticleTitle","",$removeXSS));
+
+        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+            $newspaperPageId>0 &&
+            strlen($newspaperArticleTitle)>0
+        )
+        {
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
+            $result = $newspaperArticlePublicData->GetNewspaperArticleIdForImport(
+                $newspaperArticleTitle, $newspaperPageId
+            );
+        }
+        return $result;
     }
 } 

@@ -24,6 +24,9 @@ class NewspaperPagePublicGen extends BasePublicGen {
             case "modify_pic_upload_file_id_for_import":
                 $result = self::ModifyPicUploadFileIdForImport();
                 break;
+            case "get_newspaper_page_id_for_import":
+                $result = self::GetNewspaperPageIdForImport();
+                break;
 
         }
         return $result;
@@ -69,7 +72,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
         return $newspaperPageId;
     }
 
-    public function ModifyPdfUploadFileIdForImport(){
+    private function ModifyPdfUploadFileIdForImport(){
         $result = -1;
         $removeXSS = false;
         $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
@@ -91,7 +94,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
         return $result;
     }
 
-    public function ModifyPicUploadFileIdForImport(){
+    private function ModifyPicUploadFileIdForImport(){
         $result = -1;
         $removeXSS = false;
         $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
@@ -108,6 +111,28 @@ class NewspaperPagePublicGen extends BasePublicGen {
             $result = $newspaperPagePublicData->ModifyPicUploadFileIdForImport(
                 $newspaperPageId,
                 $picUploadFileId
+            );
+        }
+        return $result;
+    }
+
+    private function GetNewspaperPageIdForImport(){
+        $result = -1;
+        $removeXSS = false;
+        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
+        $newspaperId = intval(str_ireplace("\r\n","",Control::PostRequest("NewspaperId",0,$removeXSS)));
+        $newspaperPageNo = str_ireplace("\r\n","",Control::PostRequest("NewspaperPageNo","",$removeXSS));
+
+        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+            $newspaperId>0 &&
+            strlen($newspaperPageNo)>0
+        )
+        {
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+
+            $result = $newspaperPagePublicData->GetNewspaperPageIdForImport(
+                $newspaperPageNo,
+                $newspaperId
             );
         }
         return $result;
