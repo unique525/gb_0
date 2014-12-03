@@ -289,7 +289,7 @@
         <div class="left middle green_top">
             <div class="sales">
                 <ul>
-                    <icms id="product_27" type="product_list" where="AllChild" top="4">
+                    <icms id="product_27" type="product_list" where="BelongChannel" top="4">
                         <item>
                             <![CDATA[
                             <li>
@@ -356,7 +356,7 @@
         <div class="left middle red_top">
             <div class="sales">
                 <ul>
-                    <icms id="product_28" type="product_list" where="AllChild" top="4">
+                    <icms id="product_28" type="product_list" where="BelongChannel" top="4">
                         <item>
                             <![CDATA[
                             <li>
@@ -423,7 +423,7 @@
             <div class="sales">
 
                 <ul>
-                    <icms id="product_33" type="product_list" where="AllChild" top="4">
+                    <icms id="product_33" type="product_list" where="BelongChannel" top="4">
                         <item>
                             <![CDATA[
                             <li>
@@ -489,7 +489,7 @@
         <div class="left middle purple_top">
             <div class="sales">
                 <ul>
-                    <icms id="product_35" type="product_list" where="AllChild" top="4">
+                    <icms id="product_35" type="product_list" where="BelongChannel" top="4">
                         <item>
                             <![CDATA[
                             <li>

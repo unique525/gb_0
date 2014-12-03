@@ -262,4 +262,28 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
 
+    /**
+     * 取得版面列表
+     * @param int $newspaperId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return array 电子报版面信息数据集
+     */
+    public function GetListForSelectPage($newspaperId, $withCache=FALSE)
+    {
+        $result=-1;
+        if($newspaperId>0){
+            $withCache=FALSE;
+            $cacheDir = "";//CACHE_PATH . DIRECTORY_SEPARATOR . '_data';
+            $cacheFile = "";
+            $sql = "SELECT NewsPaperPageId,NewspaperPageName
+
+
+                FROM " . self::TableName_NewspaperPage . "
+
+                WHERE NewsPaperId =:NewsPaperId ORDER BY NewspaperPageId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewsPaperId", $newspaperId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}
+        return $result;
+    }
 }

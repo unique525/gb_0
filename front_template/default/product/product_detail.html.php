@@ -266,7 +266,7 @@
 
 <div class="box1200">
     <div class="myseatnew">
-        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
+        <a href="/">首页</a> &gt; <a href="/default.php?&mod=product&a=list&channel_first_id={ChannelFirstId}&channel_id={ChannelId}">{ChannelName}</a> &gt; {ProductName}</div>
 </div>
 <div class="box1200">
 <div class="box194 fl">
