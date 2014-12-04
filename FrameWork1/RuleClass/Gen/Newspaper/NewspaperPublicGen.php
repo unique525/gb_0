@@ -24,6 +24,9 @@ class NewspaperPublicGen extends BasePublicGen {
             case "gen_select":
                 $result = self::GenSelect();
                 break;
+            case "gen_page_list":
+                $result = self::GenPageList();
+                break;
             case "get_newspaper_id_for_import":
                 $result = self::GetNewspaperIdForImport();
                 break;
@@ -128,6 +131,16 @@ class NewspaperPublicGen extends BasePublicGen {
                         $previousNewspaperPageId,
                         $templateContent
                     );
+
+                    //版面选择
+                    $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
+                    $listName = "newspaper_page";
+
+                    if(count($arrNewspaperPages)>0){
+                        Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
+                    }else{
+                        Template::RemoveCustomTag($tempContent, $listName);
+                    }
                 }
             }
         }
@@ -136,6 +149,9 @@ class NewspaperPublicGen extends BasePublicGen {
     }
 
 
+    /**
+     * 版面选择
+     */
 
     private function GenSelect(){
         $channelId = Control::GetRequest("channel_id", 0);
@@ -146,6 +162,60 @@ class NewspaperPublicGen extends BasePublicGen {
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+
+        }
+        return $templateContent;
+
+    }
+
+
+    /**
+     * 版面选择列表
+     */
+
+    private function GenPageList(){
+        $channelId = Control::GetRequest("channel_id", 0);
+        $newspaperId = Control::GetRequest("newspaper_id", 0);
+        $templateContent = "";
+        if($channelId>0){
+            $templateFileUrl = "newspaper/newspaper_page_list.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+            //版面列表数据集
+            $newspaperPagePublicData=new NewspaperPagePublicData();
+            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+
+            if(count($arrNewspaperPages)>0){
+
+                //默认只显示已发状态的新闻
+                $state = 0;
+
+                $newspaperPageIds="";
+                foreach($arrNewspaperPages as $page){
+                    $newspaperPageIds.=",".$page["NewspaperPageId"];
+                }
+
+                if(strpos($newspaperPageIds,',') == 0){
+                    $newspaperPageIds = substr($newspaperPageIds,1);
+                }
+
+                //文章列表数据集
+                $newspaperArticlePublicData= new NewspaperArticlePublicData();
+                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+
+                $listName = "newspaper_page_and_article";
+                $tagName = Template::DEFAULT_TAG_NAME;
+                $tableIdName = "NewspaperPageId";
+                $parentIdName = "NewspaperPageId";
+                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName,$arrNewspaperArticles,$tableIdName,$parentIdName);
+            }else{
+                $listName = "newspaper_page_and_article";
+                Template::RemoveCustomTag($tempContent, $listName);
+            }
         }
         return $templateContent;
 

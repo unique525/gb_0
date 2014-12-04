@@ -185,7 +185,7 @@ class NewspaperArticlePublicData extends BasePublicData
             $cacheFile = 'newspaper_article_get_channel_id.cache_' . $newspaperArticleId . '';
             $sql = "SELECT ChannelId FROM " . self::TableName_Newspaper . "
 
-                    WHERE NewsPaperId IN
+                    WHERE NewspaperId IN
                     (
                     SELECT NewspaperId FROM ".self::TableName_NewspaperPage." WHERE NewspaperPageId IN
                     (SELECT NewspaperPageId FROM ".self::TableName_NewspaperArticle." WHERE NewspaperArticleId=:NewspaperArticleId)
@@ -276,4 +276,57 @@ class NewspaperArticlePublicData extends BasePublicData
         }
         return $result;
     }
+
+
+    /**
+     * 取得多个版面的电子报文章列表
+     * @param string $newspaperPageId 电子报版面id集合
+     * @param int $state 状态
+     * @param int $orderBy 排序方式
+     * @return array|null 返回资讯列表
+     */
+    public function GetListOfMultiPage($newspaperPageId, $state, $orderBy = 0)
+    {
+
+        $result = null;
+
+        if ($newspaperPageId > 0) {
+
+            $orderBySql = 'Sort DESC, CreateDate DESC';
+
+            switch ($orderBy) {
+
+                case 0:
+                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    break;
+
+            }
+
+
+            $selectColumn = '
+            *,
+            (SELECT uf.UploadFilePath FROM
+                ' . self::TableName_NewspaperArticlePic . ' nap,
+                ' . self::TableName_UploadFile . ' uf
+                WHERE uf.UploadFileId=nap.UploadFileId
+                AND nap.NewspaperArticleId=' . self::TableName_NewspaperArticle . '.NewspaperArticleId
+                LIMIT 1
+                ) AS UploadFilePath
+            ';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . "
+                WHERE
+                    NewspaperPageId IN ($newspaperPageId)
+                    AND State=:State
+                ORDER BY $orderBySql " ;
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("NewspaperPageId", "(" . $newspaperPageId . ")");
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+
+        return $result;
+    }
+
 } 
