@@ -287,7 +287,6 @@ class NewspaperArticlePublicData extends BasePublicData
      */
     public function GetListOfMultiPage($newspaperPageId, $state, $orderBy = 0)
     {
-
         $result = null;
 
         if ($newspaperPageId > 0) {

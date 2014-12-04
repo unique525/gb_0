@@ -8,8 +8,14 @@
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <style>
-        body{background:#efefef;}
+        body{background:#efefef;font-family:SimSun, verdana,serif;}
         img, object { max-width: 100%;}
+        @font-face {
+            font-family: 'Son';
+            /*src: url('/image_02/simsun.ttf') format('truetype');*/
+            font-weight: normal;
+            font-style: normal;
+        }
     </style>
     <script type="text/javascript">
         $(function () {
@@ -34,9 +40,9 @@
 <div data-role="page" id="pageone">
     <div data-role="content">
         <div style="text-align:center;">
-            <h4 style="text-align:center;">{NewspaperArticleCiteTitle}</h4>
-            <h2 style="text-align:center;">{NewspaperArticleTitle}</h2>
-            <h4 style="text-align:center;">{NewspaperArticleSubTitle}</h4>
+            <h4 style='text-align:left;'>{NewspaperArticleCiteTitle}</h4>
+            <h1 style='text-align:left; font-family: "Son",sans-serif'>{NewspaperArticleTitle}</h1>
+            <h4 style='text-align:left; font-family: "Son",sans-serif'>{NewspaperArticleSubTitle}</h4>
         </div>
 
         <div>
@@ -45,7 +51,7 @@
                 <item>
                     <![CDATA[
                     <div style="text-align:center;margin-bottom:10px;"><img src="{f_UploadFilePath}" alt="{f_Remark}" /></div>
-                    <div style="text-align:center;margin-top:10px;margin-bottom:10px;">{f_Remark}</div>
+                    <div style='text-align:center;margin-top:10px;margin-bottom:10px;font-family:宋体,verdana,serif '>{f_Remark}</div>
                     ]]>
                 </item>
             </icms>
@@ -54,13 +60,14 @@
         </div>
 
         <div>
-            <p style="margin:5px;line-height:130%;" id="content">{NewspaperArticleContent}</p>
+            <p style='margin:5px;line-height:150%;font-family:"Son",sans-serif; font-size:120%;' id="content">{NewspaperArticleContent}</p>
         </div>
 
     </div>
     <div style="padding:10px;">
 
-        <div class="bshare-custom"><div class="bsPromo bsPromo2"></div><a title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到电子邮件" class="bshare-email" href="javascript:void(0);"></a><a title="分享到手机快传" class="bshare-189share" href="javascript:void(0);"></a><a title="分享到手机" class="bshare-shouji" href="javascript:void(0);"></a><a title="分享到i贴吧" class="bshare-itieba" href="javascript:void(0);"></a><a title="分享到百度空间" class="bshare-baiduhi" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="分享到复制网址" class="bshare-clipboard" href="javascript:void(0);"></a><a title="分享到凤凰微博" class="bshare-ifengmb" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count" style="float: none;">33.4K</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script></div>
+
+    </div>
 
 
 </div>

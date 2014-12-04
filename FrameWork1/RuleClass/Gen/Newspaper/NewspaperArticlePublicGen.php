@@ -156,7 +156,6 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
 
             parent::ReplaceEnd($templateContent);
-
         }
         return $templateContent;
     }
