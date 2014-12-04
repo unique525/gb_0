@@ -78,16 +78,16 @@
 
                     </td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;cursor:pointer;color:#ef1b27;"><a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_page_list&channel_id={ChannelId}&newspaper_id={NewspaperId}" target="_blank">版面</a></td>
+                    <td style="text-align:center;cursor:pointer;"><a style="color:#ef1b27;" id="pages">版面</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                     <td style="text-align:center;cursor:pointer" id="select_date">
                         <a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">
                             往期回顾
                         </a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;" ><a style="color:#000000;" id="pages">{NewspaperPageNo}</a></td>
+                    <td style="text-align:center;" ><a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_page_list&channel_id={ChannelId}&newspaper_id={NewspaperId}" target="_blank">{NewspaperPageNo}</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;"><img src="/image_02/2.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
                 </tr>
             </table>
 

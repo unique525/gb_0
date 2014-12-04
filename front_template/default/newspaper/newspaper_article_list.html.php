@@ -44,15 +44,12 @@
             <tr>
                 <td style="text-align:center;cursor:pointer"><a style="color:#000000;" href="/" target="_blank">首页</a>
                 </td>
-                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                <td style="text-align:center;cursor:pointer;color:#ef1b27;"><a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_page_list&channel_id={ChannelId}&newspaper_id={NewspaperId}" target="_blank">版面</a></td>
-                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                 <td style="text-align:center;cursor:pointer" id="select_date">
                     <a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">
                         往期回顾
                     </a></td>
                 <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                <td style="text-align:center;"><img src="/image_02/2.jpg" alt="" id="" /></td>
+                <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
             </tr>
         </table>
 
@@ -70,11 +67,11 @@
                     <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top">
                         <div class="am-list-thumb am-u-sm-12">
                             <a href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">
-                                <img src="" width="100%" alt="{f_NewspaperArticleTitle}"
+                                <img src="{f_UploadFilePath}" width="100%" alt="{f_NewspaperArticleTitle}"
                                     />
                             </a>
                         </div>
-                        <div class=" am-list-main">
+                        <div class=" am-list-main" style="padding:0 5px">
                             <h3 class="am-list-item-hd">
                                 <a href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a>
                             </h3>
