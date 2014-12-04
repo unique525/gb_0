@@ -21,17 +21,12 @@ class PicSliderPublicData extends BasePublicData {
         $result = null;
 
         if($channelId>0 && !empty($topCount)){
-
             $orderBySql = 'ps.Sort DESC, ps.CreateDate DESC';
-
             switch($orderBy){
-
                 case 0:
                     $orderBySql = 'ps.Sort DESC, ps.CreateDate DESC';
                     break;
-
             }
-
 
             $selectColumn = '
                 ps.PicSliderId,
@@ -60,7 +55,6 @@ class PicSliderPublicData extends BasePublicData {
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-
         }
 
         return $result;
