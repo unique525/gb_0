@@ -51,7 +51,7 @@
                 <item>
                     <![CDATA[
                     <div style="text-align:center;margin-bottom:10px;"><img src="{f_UploadFilePath}" alt="{f_Remark}" /></div>
-                    <div style='text-align:center;margin-top:10px;margin-bottom:10px;font-family:宋体,verdana,serif '>{f_Remark}</div>
+                    <div style='text-align:center;margin-top:10px;margin-bottom:10px;'>{f_Remark}</div>
                     ]]>
                 </item>
             </icms>
