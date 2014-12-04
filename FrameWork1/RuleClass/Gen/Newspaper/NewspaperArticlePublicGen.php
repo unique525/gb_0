@@ -97,6 +97,8 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
     private function GenList() {
         $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+        $newspaperId = Control::GetRequest("newspaper_id",0);
+        $channelId= Control::GetRequest("channel_id",0);
         $templateContent = "";
 
         if($newspaperPageId>0){
@@ -105,6 +107,8 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $templateContent);
+            $templateContent = str_ireplace("{NewspaperId}", $newspaperId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
             parent::ReplaceFirst($templateContent);
 
 

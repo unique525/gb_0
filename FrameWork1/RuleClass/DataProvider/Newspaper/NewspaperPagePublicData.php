@@ -275,14 +275,14 @@ class NewspaperPagePublicData extends BasePublicData
             $withCache=FALSE;
             $cacheDir = "";//CACHE_PATH . DIRECTORY_SEPARATOR . '_data';
             $cacheFile = "";
-            $sql = "SELECT NewsPaperPageId,NewspaperPageName
+            $sql = "SELECT NewspaperPageId,NewspaperPageName
 
 
                 FROM " . self::TableName_NewspaperPage . "
 
-                WHERE NewsPaperId =:NewsPaperId ORDER BY NewspaperPageId ;";
+                WHERE NewspaperId =:NewspaperId ORDER BY NewspaperPageId ;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("NewsPaperId", $newspaperId);
+            $dataProperty->AddField("NewspaperId", $newspaperId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}
         return $result;
     }
