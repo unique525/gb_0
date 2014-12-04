@@ -715,6 +715,7 @@ class BaseData
                 $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
                 if (strlen($cacheContent) <= 0) {
                     $result = $this->dbOperator->GetString($sql, $dataProperty);
+                    DataCache::Set($cacheDir, $cacheFile, $result);
                 } else {
                     $result = $cacheContent;
                 }

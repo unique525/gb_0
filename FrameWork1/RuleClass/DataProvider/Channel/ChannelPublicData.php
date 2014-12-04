@@ -97,12 +97,20 @@ class ChannelPublicData extends BasePublicData {
     public function GetListByParentId($topCount, $parentId, $order){
         $result = null;
         if($parentId >0){
-            switch($order){
-                default:
-                    $order = "ORDER BY Sort,Createdate,".self::TableId_Channel."";
-                    break;
-            }
-            $sql = "SELECT
+            $parentId = Format::FormatSql($parentId);
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'arr_channel_get_list_by_parent_id.cache_' .
+                str_ireplace(",","_",$parentId) .
+                '_' . $topCount . '_' . $order;
+            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            if (strlen($cacheContent) <= 0) {
+
+                switch($order){
+                    default:
+                        $order = "ORDER BY Sort,Createdate,".self::TableId_Channel."";
+                        break;
+                }
+                $sql = "SELECT
                         ChannelId,
                         ChannelName,
                         SiteId,
@@ -130,9 +138,23 @@ class ChannelPublicData extends BasePublicData {
                         LIMIT $topCount;
                         ";
 
-            $dataProperty = new DataProperty();
-            //$dataProperty->AddField("ParentId", $parentId);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+                $dataProperty = new DataProperty();
+                //$dataProperty->AddField("ParentId", $parentId);
+                $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+                DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
+
+            }else{
+
+
+                $result = Format::FixJsonDecode($cacheContent);
+
+            }
+
+
+
+
+
         }
         return $result;
     }

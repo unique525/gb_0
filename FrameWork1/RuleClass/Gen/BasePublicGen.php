@@ -291,7 +291,7 @@ class BasePublicGen extends BaseGen {
                                         $sbThirdChannelId,
                                         $tagOrder
                                     );
-                                    if (count($arrChannelThirdList) > 0) {
+                                    if (is_array($arrChannelThirdList) && count($arrChannelThirdList) > 0) {
                                         for ($k = 0; $k < count($arrChannelThirdList); $k++) {
                                             $sbThirdChannelId .= ',' . $arrChannelThirdList[$k]["ChannelId"];
                                         }
