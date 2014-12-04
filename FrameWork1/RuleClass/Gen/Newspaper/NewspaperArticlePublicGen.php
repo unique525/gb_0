@@ -128,11 +128,14 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
             parent::ReplaceFirst($templateContent);
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+            $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
             $templateContent = parent::ReplaceTemplate($templateContent);
 
 
-            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
             $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
 
             $arrOne["NewspaperArticleContent"] =

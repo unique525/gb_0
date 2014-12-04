@@ -172,6 +172,37 @@ class NewspaperArticlePublicData extends BasePublicData
     }
 
     /**
+     * 取得文章的频道id
+     * @param int $newspaperArticleId 文章id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 文章的频道id
+     */
+    public function GetChannelId($newspaperArticleId, $withCache){
+
+        $result = "";
+        if ($newspaperArticleId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_channel_id.cache_' . $newspaperArticleId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_Newspaper . "
+
+                    WHERE NewsPaperId IN
+                    (
+                    SELECT NewspaperId FROM ".self::TableName_NewspaperPage." WHERE NewspaperPageId IN
+                    (SELECT NewspaperPageId FROM ".self::TableName_NewspaperArticle." WHERE NewspaperArticleId=:NewspaperArticleId)
+
+
+                    );";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+
+
+    }
+
+    /**
      * 取得电子报文章列表
      * @param int $newspaperPageId 电子报版面id
      * @param string $topCount 显示条数  1或 1,10
