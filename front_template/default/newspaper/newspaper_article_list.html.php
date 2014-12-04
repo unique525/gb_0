@@ -65,7 +65,9 @@
             <icms id="newspaper_page_{NewspaperPageId}" type="newspaper_article_list" top="100">
                 <item>
                     <![CDATA[
-                    <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top">
+                    <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top"
+                        style="margin-bottom:5px;"
+                        >
                         <div class="am-list-thumb am-u-sm-12">
                             <a href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">
                                 <img src="{f_UploadFilePath}" width="100%" alt="{f_NewspaperArticleTitle}"

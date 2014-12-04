@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $oe; ?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta name="googlebot" content="index,noarchive,nofollow,noodp" />
@@ -22,7 +23,7 @@ a:hover { text-decoration: underline; }
 form#q-form { margin: 0; }
 #q-input { overflow: hidden; zoom: 1; clear: both; }
 #q-input .text { 
-	float: left; width: 333px;
+	float: left; width:90%;
 	padding: 0 3px; line-height: 26px; 
     -moz-border-bottom-colors: none;
     -moz-border-image: none;
@@ -35,8 +36,8 @@ form#q-form { margin: 0; }
     padding: 4px 7px; vertical-align: top;
     background: url("/images/spis_167a8734.png") no-repeat scroll 0 0 transparent;
 }
-#q-input .button { 
-	float: left; font-size: 14px; margin-left: 10px;
+#q-input2 .button {
+	float: left; font-size: 14px; margin-top:3px;
     background: url("/images/spis_167a8734.png") repeat scroll 0 -35px #DDDDDD;
     border: 0 none; cursor: pointer; height: 32px; padding: 0; width: 95px;	
 }
@@ -87,9 +88,10 @@ form#q-form { margin: 0; }
 	<!-- search form -->
 	<form id="q-form" method="get">
 	<div id="q-input">
-		<input class="text" type="text" name="q" size="40" title="输入任意关键词皆可搜索" value="<?php echo htmlspecialchars($q); ?>" />	
-		<input class="button" type="submit" value="  搜索!  " />
+	<input class="text" type="text" name="q" size="40" title="输入任意关键词皆可搜索" value="<?php echo htmlspecialchars($q); ?>" />
+
 	</div>
+    <div id="q-input2"><input class="button" type="submit" value="  搜索!  " /></div>
 	<div id="q-options">
 		<h4>选项</h4>
 		<ul>
