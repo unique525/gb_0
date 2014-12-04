@@ -53,7 +53,7 @@
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
                     <td style="text-align:center;"><a style="text-decoration:none;color:#ef1b27;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">往期回顾</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;"><img src="/image_02/2.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
                 </tr>
             </table>
 
