@@ -165,14 +165,25 @@ class ImageObject {
         }
 
         //获取源文件的详细信息(源文件的宽度 高度等信息)
+
+        $sourceFileFullPath = str_ireplace('//','/',PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+
         list($sourceWidth, $sourceHeight, $type) = getimagesize(
-            PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceFileFullPath);
+
+        if(!file_exists($sourceFileFullPath)){
+            return ""; //文件名错误
+        }
+
         if (1 == $type) {
-            $sourceImage = imagecreatefromgif(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefromgif(
+                $sourceFileFullPath);
         } else if (2 == $type) {
-            $sourceImage = imagecreatefromjpeg(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefromjpeg(
+                $sourceFileFullPath);
         } else if (3 == $type) {
-            $sourceImage = imagecreatefrompng(PHYSICAL_PATH . $sourceFilePath . DIRECTORY_SEPARATOR . $sourceFileName . "." . $sourceFileExName);
+            $sourceImage = imagecreatefrompng(
+                $sourceFileFullPath);
         }else{
             $sourceImage = null;
         }

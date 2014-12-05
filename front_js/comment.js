@@ -23,7 +23,7 @@ function getURL() {
     var url = encodeURIComponent(location.href);
     return url;
 }
-function CreateLongComment(table_id, table_type, channel_id) {
+function CreateLongComment(table_id, table_type, channel_id, is_callback) {
     $.ajax({
         url: "/default.php?mod=user&a=async_get_one",
         async: false,
@@ -31,42 +31,46 @@ function CreateLongComment(table_id, table_type, channel_id) {
         dataType: "jsonp",
         jsonp: "jsonpcallback",
         success: function (data) {
-            var tableId = parseInt(table_id);
-            var tableType = parseInt(table_type);
-            var channelId = parseInt(channel_id);
-            var re_url = window.location.href;
-            var username = "";
-            var result = data["result"];
-            var name = '<span class="guest" style="text-align:left">您还未<a href="/default.php?mod=user&a=login&re_url="' + re_url + ' style="font-weight:bold">登录</a>,目前的身份是游客</span>';
-            if (result != "") {
-                if (result["NickName"] != "") {
-                    username = result["NickName"];
-                } else {
-                    username = result["UserName"];
-                }
+            if (!is_callback) {
+                var tableId = parseInt(table_id);
+                var tableType = parseInt(table_type);
+                var channelId = parseInt(channel_id);
+                var re_url = window.location.href;
+                var username = "";
+                var result = data["result"];
+                var name = '<span class="guest" style="text-align:left">您还未<a href="/default.php?mod=user&a=login&re_url="' + re_url + ' style="font-weight:bold">登录</a>,目前的身份是游客</span>';
+                if (result != "") {
+                    if (result["NickName"] != "") {
+                        username = result["NickName"];
+                    } else {
+                        username = result["UserName"];
+                    }
 
-                if (username != undefined && username != "" && username != null) {
-                    name = '<span class="username" style="text-align:left">' + username + '</span>';
+                    if (username != undefined && username != "" && username != null) {
+                        name = '<span class="username" style="text-align:left">' + username + '</span>';
+                    }
                 }
-            }
-            if (tableId > 0) {
-                $('#comment').append('<form id="mainForm" action="/default.php?mod=comment&a=create" data-ajax="false" method="post">'
-                    + '<table width="95%" class="">'
-                    + '<tr>'
-                    + '<td height="35px" width="15%" align="center"><span>用&nbsp;户&nbsp;名:</span></td>'
-                    + '<td  align="left"><span style="float:right">已经有<span id="count">0</span>人评论</span>'
-                    + name + '</td>'
-                    + '</tr>'
-                    + '<tr>'
-                    + '<td valign="top" align="center"><span>评论内容:</span></td>'
-                    + '<td><textarea name="content" style="width:99%" rows="5" class="comment_content"></textarea>'
-                    + '<input type="hidden" value="' + tableId + '" name="table_id"/>'
-                    + '<input type="hidden" value="' + tableType + '" name="table_type"/>'
-                    + '<input type="hidden" name="channel_id" value="' + channelId + '"/>'
-                    + '<input type="hidden" id="url" name="url" value="' + getURL() + '"/></td>'
-                    + '</tr>'
-                    + '<tr><td colspan="2" align="right"><input onclick="sub_comment()" class="publish" type="button" value="发表评论"/></td></tr>'
-                    + '</table></form>');
+                if (tableId > 0) {
+                    $('#comment').append('<form id="mainForm" action="/default.php?mod=comment&a=create" data-ajax="false" method="post">'
+                        + '<table width="95%" class="">'
+                        + '<tr>'
+                        + '<td height="35px" width="15%" align="center"><span>用&nbsp;户&nbsp;名:</span></td>'
+                        + '<td  align="left"><span style="float:right">已经有<span id="count">0</span>人评论</span>'
+                        + name + '</td>'
+                        + '</tr>'
+                        + '<tr>'
+                        + '<td valign="top" align="center"><span>评论内容:</span></td>'
+                        + '<td><textarea name="content" style="width:99%" rows="5" class="comment_content"></textarea>'
+                        + '<input type="hidden" value="' + tableId + '" name="table_id"/>'
+                        + '<input type="hidden" value="' + tableType + '" name="table_type"/>'
+                        + '<input type="hidden" name="channel_id" value="' + channelId + '"/>'
+                        + '<input type="hidden" id="url" name="url" value="' + getURL() + '"/></td>'
+                        + '</tr>'
+                        + '<tr><td colspan="2" align="right"><input onclick="sub_comment()" class="publish" type="button" value="发表评论"/></td></tr>'
+                        + '</table></form>');
+                }
+            } else {
+                window.CreateLongCommentCallback(data,table_id,table_type,channel_id);
             }
         }
     });
@@ -175,7 +179,7 @@ function CommentShow(p, table_id, table_type, default_avatar, is_callback) {
                 $("#commentmessage").html(listContent);
                 $("#comment_pagerbutton").html(pagerButton);
                 $("#count").html(comment_count);
-            }else {
+            } else {
                 window.CommentShowCallBack(data);
             }
         }
