@@ -54,7 +54,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         $channelId = intval(Control::PostRequest("channel_id", 0));
         $guestName = Format::FormatHtmlTag(Control::PostRequest("guest_name", ""));
         $guestEmail = Format::FormatHtmlTag(Control::PostRequest("guest_email", ""));
-        $url = urldecode(Control::PostRequest("url", ""));
+        $reUrl = urldecode(Control::PostRequest("url", ""));
         $commentType = intval(Control::PostRequest("comment_type", CommentData::COMMENT_TYPE_SHORT_TEXT));
 
         $commentPublicData = new CommentPublicData();
@@ -151,12 +151,12 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
         }
 
-        $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType);
+        $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType,$reUrl);
         if ($result > 0) {
             if ($tableType == 1) { //更新相册和会员信息表的统计
 
             }
-            Control::GoUrl($url);
+            Control::GoUrl($reUrl);
         } else {
             Control::ShowMessage("评论发表失败,请再尝试.");
         }

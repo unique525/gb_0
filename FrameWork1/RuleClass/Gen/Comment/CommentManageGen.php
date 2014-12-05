@@ -7,9 +7,17 @@
  */
 class CommentManageGen extends BaseManageGen implements IBaseManageGen
 {
+
+    /**
+     * 操作失败
+     */
+    const FAIL = -1;
+
+
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m","");
+
         switch($method){
             case "list":
                 $result = self::GenList();
@@ -19,6 +27,9 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
                 break;
             case "list_for_channel":
                 $result = self::GenListForChannel();
+                break;
+            case "async_modify_state":
+                $result = self::AsyncModifyState();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -35,7 +46,9 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
             $pageSize = Control::GetRequest("ps",20);
             $allCount = 0;
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $templateContent = Template::Load("comment/comment_list.htm","common");
+            $templateContent = Template::Load("comment/comment_list.html","common");
+            parent::ReplaceFirst($templateContent);
+
             $tagId = "comment_list";
 
             $commentManageData = new CommentManageData();
@@ -48,6 +61,7 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("comment",1));
             }
 
+            parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
             return "";
@@ -70,5 +84,19 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
 
         if($siteId > 0 && $channelId > 0){}
         return "";
+    }
+
+    private function AsyncModifyState(){
+        $commentId = Control::GetRequest("comment_id",0);
+        $state = Control::GetRequest("state",0);
+
+        if($commentId > 0 && $state > 0){
+            $commentManageData = new CommentManageData();
+
+            $result = $commentManageData->ModifyState($commentId,$state);
+            return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::FAIL.'})';
+        }
     }
 }

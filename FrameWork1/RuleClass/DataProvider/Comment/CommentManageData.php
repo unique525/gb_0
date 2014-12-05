@@ -27,4 +27,16 @@ class CommentManageData extends BaseManageData{
         return $result;
 
     }
+
+    public function ModifyState($commentId,$state){
+        $result = -1;
+        if($commentId > 0 && $state > 0){
+            $sql = "UPDATE ".self::TableName_Comment." SET State = :State WHERE CommentId = :CommentId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State",$state);
+            $dataProperty->AddField("CommentId",$commentId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
