@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{NewspaperArticleCiteTitle} - 长沙晚报</title>
+    <title>{NewspaperArticleTitle} - 长沙晚报</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
     <script src="/system_js/jquery-1.9.1.min.js"></script>

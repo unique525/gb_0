@@ -18,6 +18,9 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
             case "modify_by_table_id":
                 $result = self::GenModifyByTableId();
                 break;
+            case "batch_modify":
+                self::GenBatchModify();
+                break;
         }
         return $result;
     }
@@ -38,5 +41,62 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
         }else{
             return null;
         }
+    }
+
+    private function GenBatchModify(){
+        //$result = -1;
+
+        $do = intval(Control::GetRequest("do", 0));
+
+        if ($do > 0) {
+
+
+
+
+        }else{
+
+            $url = $_SERVER["PHP_SELF"];
+
+            //echo '正在操作，请不要关闭本窗口<br /><br />';
+
+            $uploadFileManageData = new UploadFileManageData();
+
+            $tableType = Control::GetRequest("table_type", 0);
+            $topCount = Control::GetRequest("top_count", 10);
+
+            $arrList = $uploadFileManageData->GetListOfIsNotBatchOperate($tableType, $topCount);
+
+            if(count($arrList)>0){
+                for($i = 0;$i < count($arrList); $i++){
+
+                    $uploadFileId = intval($arrList[$i]["UploadFileId"]);
+
+                    $mobileWidth = 640;
+
+                    parent::GenUploadFileMobile($uploadFileId, $mobileWidth);
+
+                    parent::GenUploadFileCompress1($uploadFileId, $mobileWidth,0, 80);
+
+                    $uploadFileManageData->ModifyIsBatchOperate($uploadFileId, 1);
+
+                    //echo $uploadFileId . ' : Gen UploadFile Mobile Done <br />';
+
+                }
+                header('refresh:0 ' . $url);
+            }else{
+                echo "任务已完成";
+            }
+
+
+
+
+
+
+
+        }
+
+
+
+        //return $result;
     }
 } 

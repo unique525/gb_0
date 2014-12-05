@@ -1092,9 +1092,10 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $mobileWidth 移动客户端使用的图片的宽度
      * @param int $mobileHeight 移动客户端使用的图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 质量，默认90
      * @return int 操作结果
      */
-    protected function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0)
+    protected function GenUploadFileMobile($uploadFileId, $mobileWidth, $mobileHeight = 0, $jpgQuality = 90)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($mobileWidth > 0 || $mobileHeight > 0)) {
@@ -1105,7 +1106,7 @@ class BaseGen
             //2.制作缩略图
             if (!empty($uploadFilePath)) {
                 $thumbFileName = "mobile";
-                $jpgQuality = 90;
+
                 $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath, $mobileWidth, $mobileHeight, $thumbFileName, $jpgQuality);
 
                 if (!empty($uploadFileMobilePath)) {
@@ -1125,9 +1126,10 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $padWidth 图片的宽度
      * @param int $padHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 质量，默认90
      * @return int 操作结果
      */
-    protected function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0)
+    protected function GenUploadFilePad($uploadFileId, $padWidth, $padHeight = 0, $jpgQuality = 90)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($padWidth > 0 || $padHeight > 0)) {
@@ -1138,7 +1140,7 @@ class BaseGen
             //2.制作缩略图
             if (!empty($uploadFilePath)) {
                 $thumbFileName = "pad";
-                $jpgQuality = 90;
+
                 $uploadFileMobilePath = ImageObject::GenThumb($uploadFilePath, $padWidth, $padHeight, $thumbFileName, $jpgQuality);
 
                 if (!empty($uploadFileMobilePath)) {
@@ -1158,9 +1160,10 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $imageWidth 图片的宽度
      * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 质量，默认90
      * @return int 操作结果
      */
-    protected function GenUploadFileThumb1($uploadFileId, $imageWidth, $imageHeight = 0)
+    protected function GenUploadFileThumb1($uploadFileId, $imageWidth, $imageHeight = 0, $jpgQuality = 90)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
@@ -1171,7 +1174,6 @@ class BaseGen
             //2.制作缩略图
             if (!empty($uploadFilePath)) {
                 $thumbFileName = "thumb1";
-                $jpgQuality = 90;
                 $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
                 if (!empty($newUploadFilePath)) {
@@ -1191,9 +1193,10 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $imageWidth 图片的宽度
      * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 质量，默认90
      * @return int 操作结果
      */
-    protected function GenUploadFileThumb2($uploadFileId, $imageWidth, $imageHeight = 0)
+    protected function GenUploadFileThumb2($uploadFileId, $imageWidth, $imageHeight = 0, $jpgQuality = 90)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
@@ -1204,7 +1207,6 @@ class BaseGen
             //2.制作缩略图
             if (!empty($uploadFilePath)) {
                 $thumbFileName = "thumb2";
-                $jpgQuality = 90;
                 $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
                 if (!empty($newUploadFilePath)) {
@@ -1224,9 +1226,10 @@ class BaseGen
      * @param int $uploadFileId 上传文件id
      * @param int $imageWidth 图片的宽度
      * @param int $imageHeight 图片的高度，默认为0，不按高度缩放
+     * @param int $jpgQuality 质量，默认90
      * @return int 操作结果
      */
-    protected function GenUploadFileThumb3($uploadFileId, $imageWidth, $imageHeight = 0)
+    protected function GenUploadFileThumb3($uploadFileId, $imageWidth, $imageHeight = 0, $jpgQuality = 90)
     {
         $result = -1;
         if ($uploadFileId > 0 && ($imageWidth > 0 || $imageHeight > 0)) {
@@ -1237,7 +1240,6 @@ class BaseGen
             //2.制作缩略图
             if (!empty($uploadFilePath)) {
                 $thumbFileName = "thumb3";
-                $jpgQuality = 90;
                 $newUploadFilePath = ImageObject::GenThumb($uploadFilePath, $imageWidth, $imageHeight, $thumbFileName, $jpgQuality);
 
                 if (!empty($newUploadFilePath)) {

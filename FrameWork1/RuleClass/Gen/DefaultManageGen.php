@@ -30,7 +30,11 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     break;
                 case "manage_user_authority":
                     $manageUserAuthorityManageGen = new ManageUserAuthorityManageGen();
-                    $manageUserAuthorityManageGen->Gen();
+                    $result = $manageUserAuthorityManageGen->Gen();
+                    break;
+                case "upload_file":
+                    $uploadFileManageGen = new UploadFileManageGen();
+                    $result = $uploadFileManageGen->Gen();
                     break;
                 case "channel":
                     $channelManageGen = new ChannelManageGen();

@@ -1,11 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: zcoffice
- * Date: 14-8-22
- * Time: 下午12:13
+ * 公共 上传文件 数据类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_UploadFile
+ * @author zhangchi
  */
-
 class UploadFilePublicData extends BasePublicData{
     /**
      * @param $uploadFileId
