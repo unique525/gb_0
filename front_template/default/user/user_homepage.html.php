@@ -57,7 +57,7 @@
                 </div>
                 <div class="rightmember">
                     <div style="padding:20px; background:#f6f6f6;">
-                    <div class="leftperson"><img src="images/pic_person.png" width="120" height="120"/>
+                    <div class="leftperson"><img src="{UploadFileThumbPath2}" width="120" height="120"/>
                         <h3><a href="/default.php?mod=user_info&a=modify_avatar">修改头像</a></h3>
                     </div>
                     <div class="rightinfo">

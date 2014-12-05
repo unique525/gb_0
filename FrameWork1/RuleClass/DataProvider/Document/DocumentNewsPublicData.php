@@ -214,24 +214,28 @@ class DocumentNewsPublicData extends BasePublicData {
         return $result;
     }
 
-    public function GetOpenComment($documentNewsId){
+    public function GetOpenComment($documentNewsId,$withCache){
         $result = -1;
         if($documentNewsId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'channel_get_children_channel_id.cache_' . $documentNewsId . '';
             $sql = "SELECT OpenComment FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId",$documentNewsId);
-            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+            $result = $this->GetInfoOfIntValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
         }
         return $result;
     }
 
-    public function GetChannelId($documentNewsId){
+    public function GetChannelId($documentNewsId,$withCache){
         $result = -1;
         if($documentNewsId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'channel_get_children_channel_id.cache_' . $documentNewsId . '';
             $sql = "SELECT ChannelId FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId",$documentNewsId);
-            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+            $result = $this->GetInfoOfIntValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
         }
         return $result;
     }

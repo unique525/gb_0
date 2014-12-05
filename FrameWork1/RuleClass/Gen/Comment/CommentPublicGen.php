@@ -3,7 +3,7 @@
 /**
  * 通用评论 前台 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Product
+ * @package iCMS_Rules_Gen_Comment
  * @author yin
  */
 class CommentPublicGen extends BasePublicGen implements IBasePublicGen
@@ -54,7 +54,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         $channelId = intval(Control::PostRequest("channel_id", 0));
         $guestName = Format::FormatHtmlTag(Control::PostRequest("guest_name", ""));
         $guestEmail = Format::FormatHtmlTag(Control::PostRequest("guest_email", ""));
-        $url = Control::PostRequest("url", "");
+        $url = urldecode(Control::PostRequest("url", ""));
         $commentType = intval(Control::PostRequest("comment_type", CommentData::COMMENT_TYPE_SHORT_TEXT));
 
         $commentPublicData = new CommentPublicData();
@@ -98,29 +98,38 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         $userName = Control::GetUserName();
         $openState = 0;
         switch ($tableType) {
-            case 1: //相册
+            case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
                 $openState = 10;
                 break;
-            case 2: //相片
+            case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
                 break;
-            case 3: //活动
+            case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
 //                    $activityData = new ActivityData();
 //                    $openState = $activityData->GetOpenComment($tableId);
                 break;
-            case 4: //产品
+            case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
                 break;
-            case 5: //站点内容
+            case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
                 $openState = 10;
                 break;
-            case 6: //频道评论
+            case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
                 $channelPublicData = new ChannelPublicData();
                 $openState = $channelPublicData->GetOpenComment($tableId);
                 break;
-            case 7: //新闻资讯
+            case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
                 $documentNewsPublicData = new DocumentNewsPublicData();
-                $openState = $documentNewsPublicData->GetOpenComment($tableId);
+                $openState = $documentNewsPublicData->GetOpenComment($tableId,TRUE);
                 if ($openState == 40) { //根据频道设置而定
-                    $channelId = $documentNewsPublicData->GetChannelID($tableId);
+                    $channelId = $documentNewsPublicData->GetChannelID($tableId,TRUE);
+                    $channelPublicData = new ChannelPublicData();
+                    $openState = $channelPublicData->GetOpenComment($channelId);
+                }
+                break;
+            case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
+                $documentNewsPublicData = new DocumentNewsPublicData();
+                $openState = $documentNewsPublicData->GetOpenComment($tableId,TRUE);
+                if ($openState == 40) { //根据频道设置而定
+                    $channelId = $documentNewsPublicData->GetChannelID($tableId,TRUE);
                     $channelPublicData = new ChannelPublicData();
                     $openState = $channelPublicData->GetOpenComment($channelId);
                 }
@@ -142,7 +151,6 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
         }
 
-
         $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType);
         if ($result > 0) {
             if ($tableType == 1) { //更新相册和会员信息表的统计
@@ -150,7 +158,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
             }
             Control::GoUrl($url);
         } else {
-            //Control::ShowMessage("评论发表失败,请再尝试.");
+            Control::ShowMessage("评论发表失败,请再尝试.");
         }
 
         return $result;
@@ -181,7 +189,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                     $templatePath = "front_template";
                     $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                     $isJs = true;
-                    $jsFunctionName = "comment_show";
+                    $jsFunctionName = "CommentShow";
                     $jsParamList = "," . $tableId . "," . $tableType . ",'".' '."'";
                     $pagerButton = Pager::ShowPageButton(
                         $pagerTemplate,
