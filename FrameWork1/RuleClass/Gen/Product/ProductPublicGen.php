@@ -25,6 +25,9 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "search":
+                $result = self::GenSearch();
+                break;
             default:
                 break;
         }
@@ -243,6 +246,79 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     private function loadDetailTemp($temp, $channelId)
     {
         $templateFileUrl = "product/product_detail.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+        return $templateContent;
+    }
+
+    /**
+     * 生成产品搜索列表
+     * @return string 产品列表HTML
+     */
+    private function GenSearch()
+    {
+        $temp = Control::GetRequest("temp", "");
+        $channelId = Control::GetRequest("channel_id", "");
+        $templateContent = self::LoadSearchTemp($temp, $channelId);
+
+        parent::ReplaceFirst($templateContent);
+
+        //加载产品类别数据
+        if ($channelId > 0) {
+            $channelPublicData = new ChannelPublicData();
+            $arrOne = $channelPublicData->GetOne($channelId);
+            Template::ReplaceOne($templateContent, $arrOne);
+        }
+
+        $order = Control::GetRequest("order", 0);
+        $searchKey = Control::GetRequest("search_key", "");
+        $searchKey = urldecode($searchKey);
+        $pageIndex = Control::GetRequest("p", 1);
+
+        if ($pageIndex > 0) {
+            $tagId = "product_page_search";
+            $allCount = 0;
+            $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
+            $pageSize = Template::GetParamValue($tagContent, "top");
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+
+            $AllChannelId = "";
+            if ($channelId > 0) {
+                $AllChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
+            }
+            $productPublicData = new ProductPublicData();
+            $arrList = $productPublicData->GetListForSearchPager($AllChannelId, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
+            if (count($arrList) > 0) {
+                Template::ReplaceList($templateContent, $arrList, $tagId);
+                $styleNumber = 1;
+                $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+                $isJs = FALSE;
+                $navUrl = "/default.php?mod=product&a=list&channel_id=$channelId&p={0}&ps=$pageSize&order=$order&search_key=" . urlencode($searchKey) . "#product_list_anchor";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", $pagerButton, $templateContent);
+                $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
+            } else {
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("product", 101), $templateContent);
+                $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
+            }
+            $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
+        }
+        $templateContent = parent::ReplaceTemplate($templateContent);
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
+    }
+
+    private function LoadSearchTemp($temp, $channelId)
+    {
+        $templateFileUrl = "product/product_search.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
