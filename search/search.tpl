@@ -21,9 +21,9 @@ a:hover { text-decoration: underline; }
 #footer a { color: #666; text-decoration: underline; }
 /* form */
 form#q-form { margin: 0; }
-#q-input { overflow: hidden; zoom: 1; clear: both; }
+#q-input { overflow: hidden; zoom: 1; clear: both; height:32px}
 #q-input .text { 
-	float: left; width:90%;
+	float: left; width:80%;
 	padding: 0 3px; line-height: 26px; 
     -moz-border-bottom-colors: none;
     -moz-border-image: none;
@@ -32,14 +32,14 @@ form#q-form { margin: 0; }
     -moz-border-top-colors: none;
     border-color: #9A9A9A #CDCDCD #CDCDCD #9A9A9A;
     border-style: solid; border-width: 1px;
-    font: 16px arial; height: 22px;
+    font: 16px arial; height: 32px;
     padding: 4px 7px; vertical-align: top;
     background: url("/images/spis_167a8734.png") no-repeat scroll 0 0 transparent;
 }
-#q-input2 .button {
-	float: left; font-size: 14px; margin-top:3px;
+#q-input .button {
+	float: left; font-size: 14px;
     background: url("/images/spis_167a8734.png") repeat scroll 0 -35px #DDDDDD;
-    border: 0 none; cursor: pointer; height: 32px; padding: 0; width: 95px;	
+    border: 0 none; cursor: pointer; height: 32px; padding: 0; width: 20%;
 }
 #q-input .tips { color: #aaa; font-size: 12px; }
 #q-options { overflow: hidden; zoom: 1; margin: 10px 0; font-size: 12px; clear: both; }
@@ -76,8 +76,17 @@ form#q-form { margin: 0; }
 .res-doc ul { overflow: hidden; zoom: 1; margin: 0; padding: 0; }
 .res-doc li { list-style: none; padding: 0; margin: 0 20px 0 0; float: left; font-size: 12px; color: #666; }
 .res-doc li span { border-bottom: 1px dotted #aaa; font-family: arial; color: #444; }
-.ui-autocomplete li.ui-menu-item { font-size: 12px; }
+.ui-autocomplete li.ui-menu-item { font-size: 12px;}
+
+li.ui-menu-item { font-size: 12px;width:80% !important }
+em{color:rgba(0, 112, 143, 1)}
+
 </style>
+    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+    <script src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
 </head>
 <!-- search.tpl Csol 搜索模板 -->	
 <body>
@@ -88,11 +97,10 @@ form#q-form { margin: 0; }
 	<!-- search form -->
 	<form id="q-form" method="get">
 	<div id="q-input">
-	<input class="text" type="text" name="q" size="40" title="输入任意关键词皆可搜索" value="<?php echo htmlspecialchars($q); ?>" />
-
+	<input class="text" type="text" name="q" size="40" title="输入任意关键词皆可搜索" width="80%" value="<?php echo htmlspecialchars($q); ?>" />
+        <input class="button" type="submit" width="20%" value="  搜索!  " />
 	</div>
-    <div id="q-input2"><input class="button" type="submit" value="  搜索!  " /></div>
-	<div id="q-options">
+	<div id="q-options" style="display: none">
 		<h4>选项</h4>
 		<ul>
 			<li><input type="radio" name="f" value="s_title" <?php echo $f_s_title; ?> />标题</li>
@@ -188,9 +196,15 @@ $domain=array(
 
 ?>	
 	<!-- result doc list -->
-	<div id="res-list">
+	<!--<div id="res-list">-->
+        <div class="am-list-news-bd">
+            <ul class="am-list">
 		<?php foreach ($docs as $doc): ?>
-		<div class="res-doc">
+		<!--<div class="res-doc">-->
+
+                <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-top"
+                    style="margin-bottom:5px;"
+                        >
 <?php
 if ($doc->DirectUrl==null){
     $DirectUrl=$domain[$doc->s_site_id][0]."/default.php?mod=newspaper_article&a=detail&newspaper_article_id=".$doc->s_id;
@@ -202,9 +216,11 @@ if ($doc->DirectUrl==null){
 ?>
 
 
-			<h2>
-				<?php echo $doc->rank(); ?>. 
-				
+			<!--<h2>-->
+				<!--<?php echo $doc->rank(); ?>. -->
+
+                    <div class=" am-list-main" style="padding:0 5px">
+                        <h3 class="am-list-item-hd">
 <!--对域名进行判断 无域名否不进行处理-->
 	<!--
 		<a href="<?php echo $DirectUrl?>" target="_blank"><?php echo $search->highlight(htmlspecialchars($doc->s_title)); ?></a>
@@ -218,15 +234,21 @@ if ($domain[$doc->s_site_id][0]==null){
 	echo '<a href="'.$DirectUrl.'" target="_blank">'.$NewsTitle.'</a>';
 }
 ?>	
-	</h2>
+	<!--</h2>
 			<p><?php echo $search->highlight(strip_tags($doc->s_content)); ?></p>
 			<ul>
 				<li><?php echo $DirectUrl?>&nbsp;&nbsp;<?php echo date("Y-m-d",strtotime($doc->s_create_date))?>&nbsp;&nbsp;编辑:<?php echo $doc->UserName?>&nbsp;&nbsp;<a href="<?php echo $domain[$doc->s_site_id][0]?>" target="_blank"><?php echo $domain[$doc->SiteID][1]?></a></li>
-			</ul>
+			</ul>-->
 
 
-		</div>
+
+                        </h3>
+                        <div class="am-list-item-text"><?php echo $search->highlight(strip_tags($doc->s_content)); ?></div>
+                    </div>
+		<!--</div>-->
+    </li>
 		<?php endforeach; ?>
+        </ul>
 	</div>
 
 	<!-- pager -->
