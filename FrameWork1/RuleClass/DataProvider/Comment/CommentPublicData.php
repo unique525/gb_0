@@ -21,8 +21,9 @@ class CommentPublicData extends BasePublicData {
         $state,
         $commentType
     ){
+        echo $siteId."--".$content."--".$channelId."--".$userName."--".$tableId."--".$tableType;
         $result = -1;
-        if($siteId > 0  && !empty($content) && $channelId && $userId > 0 && !empty($userName) && $tableId > 0 && $tableType > 0){
+        if($siteId > 0  && !empty($content)  && $channelId > 0 && $tableId > 0 && $tableType > 0){
             $sql = "
                 INSERT INTO " . self::TableName_Comment . " (
                     TableId,

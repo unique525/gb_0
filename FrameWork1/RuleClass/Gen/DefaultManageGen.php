@@ -219,6 +219,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $newspaperArticleManageGen = new NewspaperArticleManageGen();
                     $result = $newspaperArticleManageGen->Gen();
                     break;
+                case "comment":
+                    $commentManageGen = new CommentManageGen();
+                    $result = $commentManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
