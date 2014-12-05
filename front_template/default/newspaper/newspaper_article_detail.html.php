@@ -46,7 +46,43 @@
                 $("#comment_pagerbutton").html(pagerButton);
                 $("#count").html(comment_count);
             };
-            CreateLongComment({NewspaperArticleId},7,{ChannelId});
+
+            window.CreateLongCommentCallback = function(data,tableId,tableType,channelId){
+                var re_url = window.location.href;
+                var username = "";
+                var result = data["result"];
+                var name = '<span class="guest" style="text-align:left">您还未<a href="/default.php?mod=user&a=login&re_url="' + re_url + ' style="font-weight:bold">登录</a>,目前的身份是游客</span>';
+                if (result != "") {
+                    if (result["NickName"] != "") {
+                        username = result["NickName"];
+                    } else {
+                        username = result["UserName"];
+                    }
+
+                    if (username != undefined && username != "" && username != null) {
+                        name = '<span class="username" style="text-align:left">' + username + '</span>';
+                    }
+                }
+                if (tableId > 0) {
+                    $('#comment').append('<form id="mainForm" action="/default.php?mod=comment&a=create" data-ajax="false" method="post">'
+                        + '<table width="95%" class="">'
+                        + '<tr>'
+                        + '<td  align="left"><span style="float:right">已经有<span id="count">0</span>人评论</span>'
+                        + name + '</td>'
+                        + '</tr>'
+                        + '<tr>'
+                        + '<td><textarea name="content" style="width:99%" rows="5" class="comment_content"></textarea>'
+                        + '<input type="hidden" value="' + tableId + '" name="table_id"/>'
+                        + '<input type="hidden" value="' + tableType + '" name="table_type"/>'
+                        + '<input type="hidden" name="channel_id" value="' + channelId + '"/>'
+                        + '<input type="hidden" id="url" name="url" value="' + getURL() + '"/></td>'
+                        + '</tr>'
+                        + '<tr><td colspan="2" align="right"><input onclick="sub_comment()" class="publish" type="button" value="发表评论"/></td></tr>'
+                        + '</table></form>');
+                }
+            };
+
+            CreateLongComment({NewspaperArticleId},7,{ChannelId},true);
             CommentShow(0,{NewspaperArticleId},7,"",true);
         });
 
