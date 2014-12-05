@@ -4,32 +4,17 @@
     <meta charset="UTF-8">
     <title>长沙晚报</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <script src="/system_js/jquery-1.9.1.min.js"></script>
-    <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <script type="text/javascript">
-        $(document).on("pageinit","#pageone",function(){
-            /**
-            $(".img_title").each(function(){
-                var imgSrc = $(this).attr("src");
-                if(imgSrc.length<=0){
-                    $(this).remove();
-                }
-            });
-            */
-
-
+        $().ready(function(){
             $("#img_logo").load(function(){
                 var screenWidth = $(document).width();
 
                 $(this).css("width",screenWidth);
 
             });
-        });
-
-        $().ready(function(){
             $("img[src='']").hide();
         });
     </script>

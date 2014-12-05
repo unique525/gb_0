@@ -98,7 +98,7 @@
     <div>
 
         <a href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={CurrentNewspaperPageId}&newspaper_id={NewspaperId}&channel_id={ChannelId}" target="_blank">
-            <img id="img01" style="max-width:100%" src="{UploadFilePath}" alt="" />
+            <img id="img01" style="max-width:100%" src="{UploadFileCompressPath1}" alt="" />
         </a>
     </div>
 
