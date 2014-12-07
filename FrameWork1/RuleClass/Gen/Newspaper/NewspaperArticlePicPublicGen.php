@@ -48,6 +48,14 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
                 $uploadFileId,
                 $picMapping
             );
+
+            $mobileWidth = 640;
+
+            parent::GenUploadFileMobile($uploadFileId, $mobileWidth);
+
+            parent::GenUploadFileCompress1($uploadFileId, $mobileWidth,0, 80);
+
+            //$uploadFileManageData->ModifyIsBatchOperate($uploadFileId, 1);
         }
 
         return $newspaperArticlePicId;
