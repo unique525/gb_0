@@ -36,22 +36,16 @@ class PicSliderClientGen extends BaseClientGen implements IBaseClientGen {
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId>0){
-            $pageSize = Control::GetRequest("ps", 20);
-            $pageIndex = Control::GetRequest("p", 1);
-            $searchKey = Control::GetRequest("search_key", "");
-            $searchType = Control::GetRequest("search_type", -1);
-            $searchKey = urldecode($searchKey);
+            $topCount = Control::GetRequest("top", 5);
+            $state = Control::GetRequest("state", 30);
+            $orderBy = Control::GetRequest("order", 0);
 
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $allCount = 0;
             $picSliderClientData = new PicSliderClientData();
             $arrList = $picSliderClientData->GetList(
                 $channelId,
-                $pageBegin,
-                $pageSize,
-                $allCount,
-                $searchKey,
-                $searchType
+                $topCount,
+                $state,
+                $orderBy
             );
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);

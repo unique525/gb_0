@@ -19,7 +19,7 @@ class PicSliderClientData extends BaseClientData {
 
         $result = null;
 
-        if($channelId>0 && !empty($topCount)){
+        if($channelId>0 && strlen($topCount)>0){
 
             $orderBySql = 'ps.Sort DESC, ps.CreateDate DESC';
 

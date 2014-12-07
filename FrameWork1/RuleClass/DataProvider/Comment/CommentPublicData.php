@@ -19,9 +19,9 @@ class CommentPublicData extends BasePublicData {
         $guestName,
         $guestEmail,
         $state,
-        $commentType
+        $commentType,
+        $sourceUrl
     ){
-        echo $siteId."--".$content."--".$channelId."--".$userName."--".$tableId."--".$tableType;
         $result = -1;
         if($siteId > 0  && !empty($content)  && $channelId > 0 && $tableId > 0 && $tableType > 0){
             $sql = "
@@ -38,7 +38,8 @@ class CommentPublicData extends BasePublicData {
                     CreateDate,
                     GuestEmail,
                     State,
-                    CommentType
+                    CommentType,
+                    SourceUrl
                 ) VALUES (
                     :TableId,
                     :TableType,
@@ -52,7 +53,8 @@ class CommentPublicData extends BasePublicData {
                     now(),
                     :GuestEmail,
                     :State,
-                    :CommentType
+                    :CommentType,
+                    :SourceUrl
                 );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("TableId", $tableId);
@@ -67,6 +69,7 @@ class CommentPublicData extends BasePublicData {
             $dataProperty->AddField("GuestEmail", $guestEmail);
             $dataProperty->AddField("State", $state);
             $dataProperty->AddField("CommentType", $commentType);
+            $dataProperty->AddField("SourceUrl", $sourceUrl);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
         return $result;
