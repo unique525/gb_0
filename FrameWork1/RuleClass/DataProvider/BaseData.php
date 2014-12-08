@@ -624,6 +624,22 @@ class BaseData
      */
     const TableId_NewspaperArticlePic = "NewspaperArticlePicId";
 
+    /**
+     * 访问统计 数据表名
+     */
+    const TableName_Visit = "cst_visit";
+    /**
+     * 访问统计 数据表自增字段名
+     */
+    const TableId_Visit = "VisitId";
+    /**
+     * 访问统计缓存 数据表名
+     */
+    const TableName_Visit_Result = "cst_visit_result";
+    /**
+     * 访问统计缓存 数据表自增字段名
+     */
+    const TableId_Visit_Result = "VisitResultId";
 
 
     /**
