@@ -20,6 +20,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $picSliderClientGen = new PicSliderClientGen();
                 $result = $picSliderClientGen->GenClient();
                 break;
+            case "product":
+                $productClientGen = new ProductClientGen();
+                $result = $productClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;

@@ -400,7 +400,7 @@ function AjaxFileUpload(
 
                     if(editor != undefined && editor != null){
 
-                        editor.pasteHTML("<br /><br />"+UploadFileFormatHtml(uploadFilePath));
+                        editor.pasteHTML(""+UploadFileFormatHtml(uploadFilePath));
 
                     }
 

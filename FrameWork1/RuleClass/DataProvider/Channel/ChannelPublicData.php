@@ -145,16 +145,8 @@ class ChannelPublicData extends BasePublicData {
                 DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
 
             }else{
-
-
                 $result = Format::FixJsonDecode($cacheContent);
-
             }
-
-
-
-
-
         }
         return $result;
     }

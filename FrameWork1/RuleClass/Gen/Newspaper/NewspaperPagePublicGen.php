@@ -33,6 +33,8 @@ class NewspaperPagePublicGen extends BasePublicGen {
     }
 
     private function Import(){
+        DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+
         $removeXSS = false;
         $newspaperPageId = -1;
         $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
@@ -84,6 +86,9 @@ class NewspaperPagePublicGen extends BasePublicGen {
             $pdfUploadFileId>0
         )
         {
+
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+
             $newspaperPagePublicData = new NewspaperPagePublicData();
 
             $result = $newspaperPagePublicData->ModifyPdfUploadFileIdForImport(
@@ -106,12 +111,22 @@ class NewspaperPagePublicGen extends BasePublicGen {
             $picUploadFileId>0
         )
         {
+
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+
             $newspaperPagePublicData = new NewspaperPagePublicData();
 
             $result = $newspaperPagePublicData->ModifyPicUploadFileIdForImport(
                 $newspaperPageId,
                 $picUploadFileId
             );
+
+
+            $mobileWidth = 640;
+
+            parent::GenUploadFileMobile($picUploadFileId, $mobileWidth);
+
+            parent::GenUploadFileCompress1($picUploadFileId, $mobileWidth,0, 80);
         }
         return $result;
     }

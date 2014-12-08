@@ -5,6 +5,9 @@
     <title>{NewspaperTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link href="/image_02/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon-precomposed">
+    <link href="/image_02/apple-touch-icon-114x114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+    <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico">
     <style>
         body{background:#efefef;}
         img, object { max-width: 100%;}

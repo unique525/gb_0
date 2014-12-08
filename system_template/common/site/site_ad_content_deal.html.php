@@ -124,6 +124,7 @@
                 var loadingImageId = null;
                 var inputTextId = null;
                 var previewImageId = null;
+                var uploadFileId = 0;
                 AjaxFileUpload(
                     fileElementId,
                     tableType,
@@ -134,7 +135,8 @@
                     fUploadFile,
                     attachWatermark,
                     inputTextId,
-                    previewImageId
+                    previewImageId,
+                    uploadFileId
                 );
             });
 
@@ -256,7 +258,7 @@
                         <tr>
                             <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label for="f_SiteAdUrl">链接地址：</label></td>
                             <td class="spe_line" style="text-align: left">
-                                <input type="text" class="input_box" id="f_SiteAdUrl" name="f_SiteAdUrl" value="{SiteAdUrl}"  style=" width: 200px;font-size:14px;" maxlength="20"  />
+                                <input type="text" class="input_box" id="f_SiteAdUrl" name="f_SiteAdUrl" value="{SiteAdUrl}"  style=" width: 200px;font-size:14px;" maxlength="500"  />
                             </td>
                         </tr>
                         <tr>

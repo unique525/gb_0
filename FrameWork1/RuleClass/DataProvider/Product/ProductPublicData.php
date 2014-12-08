@@ -43,8 +43,12 @@ class ProductPublicData extends BasePublicData {
     {
         $result = null;
         if ($topCount != null)
+        {
             $topCount = " limit " . $topCount;
-        else $topCount = "";
+        }
+        else {
+            $topCount = "";
+        }
         if (!empty($channelId)) {
             switch ($order) {
                 case "time_desc":

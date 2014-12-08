@@ -113,10 +113,13 @@ class NewspaperPageManageGen extends BaseManageGen {
             $newspaperId = $newspaperPageManageData->GetNewspaperId($newspaperPageId, true);
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
-            $can = $manageUserAuthorityManageData->CanModify(0, $channelId, $manageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelModify(0, $channelId, $manageUserId);
             if (!$can) {
                 $result = -10;
             } else {
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+
                 $result = $newspaperPageManageData->ModifyState($newspaperPageId, $state);
                 //加入操作日志
                 $operateContent = 'Modify State Newspaper Page,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
