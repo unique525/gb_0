@@ -7,7 +7,13 @@
  */
 class ProductClientData extends BaseClientData {
 
-    public function GetList($channelId, $order = "", $topCount = null)
+    /**
+     * @param $channelId
+     * @param string $order
+     * @param null $topCount
+     * @return array|null
+     */
+    public function GetListOfChannelId($channelId, $order = "", $topCount = null)
     {
         $result = null;
         if ($topCount != null)

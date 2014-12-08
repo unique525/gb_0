@@ -16,8 +16,8 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "list":
-                $result = self::GenList();
+            case "list_of_channel_id":
+                $result = self::GenListOfChannelId();
                 break;
 
         }
@@ -29,7 +29,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenList(){
+    public function GenListOfChannelId(){
 
         $result = "";
 
@@ -44,7 +44,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
 
             $productClientData = new ProductClientData();
-            $arrList = $productClientData->GetList(
+            $arrList = $productClientData->GetListOfChannelId(
                 $channelIds,
                 $orderBy,
                 $topCount
