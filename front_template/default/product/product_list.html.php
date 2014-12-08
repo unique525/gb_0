@@ -218,7 +218,7 @@
                     ￥{f_SalePrice}
                     <span>已有{f_ProductCommentCount}人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
                 </div>
-                <a class="sclist" onclick="AddWiths(37693)" hidefocus="true" href="#"> 收藏</a>
+                <a class="sclist" onclick="AddWiths({f_ProductId})" hidefocus="true" href="#"> 收藏</a>
             </li>
             ]]>
         </item>
