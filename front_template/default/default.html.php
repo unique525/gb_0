@@ -145,14 +145,14 @@
             <div class="fuwu">
                 <div class="title1"><span class="right"><a href="#">更多</a></span>便民服务</div>
                 <div class="fuwu_tags">
-                    <div class="fuwu_class gray"><a href="/h/19/list.html" class="jiazhen" target="_blank">家政服务</a></div>
-                    <div class="fuwu_class"><a href="/h/20/list.html" class="weixiu" target="_blank">维修清洗</a></div>
-                    <div class="fuwu_class gray"><a href="/h/21/list.html" class="fanxin" target="_blank">翻新保养</a></div>
-                    <div class="fuwu_class"><a href="/h/22/list.html" class="jiaju" target="_blank">家居安全</a></div>
-                    <div class="fuwu_class"><a href="/h/23/list.html" class="jiaotong" target="_blank">交通旅游</a></div>
-                    <div class="fuwu_class gray"><a href="/h/24/list.html" class="jiaoyu" target="_blank">教育培训</a></div>
-                    <div class="fuwu_class"><a href="/h/25/list.html" class="jinrong" target="_blank">金融服务</a></div>
-                    <div class="fuwu_class gray"><a href="/h/26/list.html" class="qita" target="_blank">其他服务</a></div>
+                    <div class="fuwu_class gray"><a href="/h/19/20141114/25.html" class="jiazhen" target="_blank">家政服务</a></div>
+                    <div class="fuwu_class"><a href="/h/20/20141120/27.html" class="weixiu" target="_blank">维修清洗</a></div>
+                    <div class="fuwu_class gray"><a href="/h/21/20141120/29.html" class="fanxin" target="_blank">翻新保养</a></div>
+                    <div class="fuwu_class"><a href="/h/22/20141121/38.html" class="jiaju" target="_blank">家居安全</a></div>
+                    <div class="fuwu_class"><a href="/h/23/20141121/30.html" class="jiaotong" target="_blank">交通旅游</a></div>
+                    <div class="fuwu_class gray"><a href="/h/24/20141121/31.html" class="jiaoyu" target="_blank">教育培训</a></div>
+                    <div class="fuwu_class"><a href="/h/25/20141121/10.html" class="jinrong" target="_blank">金融服务</a></div>
+                    <div class="fuwu_class gray"><a href="/h/26/20141208/11.html" class="qita" target="_blank">其他服务</a></div>
                 </div>
             </div>
         </div>
