@@ -1703,7 +1703,7 @@ class BaseManageGen extends BaseGen
             //发布文件名，资讯id构成
             $publishFileName = 'a'.strval($activityId).'.html';
             //发布路径，频道id+日期
-            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+            $publishPath = 'h/'.strval($channelId).'/'.Format::DateStringToSimple($publishDate);
             $destinationPath = $publishPath . '/' .$publishFileName;
             $sourcePath = '';
             $publishContent = '';
