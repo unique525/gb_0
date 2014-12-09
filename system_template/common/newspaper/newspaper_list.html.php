@@ -122,7 +122,7 @@
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_NewspaperId}"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_NewspaperTitle}编辑" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_NewspaperId}编辑" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperId}" alt="编辑"/></td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={f_PublishDate}">{f_NewspaperTitle}</a></td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="发布时间">{f_PublishDate}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>

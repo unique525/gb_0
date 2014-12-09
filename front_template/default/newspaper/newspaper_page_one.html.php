@@ -50,13 +50,16 @@
             });
         });
     </script>
+    <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
 </head>
 <body>
-
+.site_ad_{SiteAdId}
 <div data-role="page" id="pageone">
     <div style="background:#ebebeb;">
         <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
     </div>
+
+    <div class="site_ad_265"></div><script language='javascript' src='/front_js/site_ad/2/site_ad_265.js' charset="utf-8"></script>
     <div style="background:#ebebeb;">
         <div>
             <table cellpadding="0" cellspacing="0" width="100%" border="0">
@@ -107,7 +110,6 @@
 
 
 </div>
-
 </body>
 </html>
 

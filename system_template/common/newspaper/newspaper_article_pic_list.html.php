@@ -17,10 +17,10 @@
 
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
-                var newspaperArticleId=$(this).attr("idvalue");
-                var newspaperArticleTitle=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article&m=modify' + '&newspaper_article_id=' + newspaperArticleId + '';
-                parent.G_TabTitle = newspaperArticleTitle;
+                var newspaperArticlePicId=$(this).attr("idvalue");
+                var newspaperArticlePicTitle=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article_pic&m=modify' + '&newspaper_article_pic_id=' + newspaperArticlePicId + '';
+                parent.G_TabTitle = newspaperArticlePicTitle;
                 parent.addTab();
             });
 
@@ -31,33 +31,33 @@
 
             //开启站点
             $(".img_open").click(function(){
-                var newspaperArticleId = parseInt($(this).attr("idvalue"));
+                var newspaperArticlePicId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
-                modifyState(newspaperArticleId, state);
+                modifyState(newspaperArticlePicId, state);
             });
             //停用站点
             $(".img_close").click(function(){
-                var newspaperArticleId = parseInt($(this).attr("idvalue"));
+                var newspaperArticlePicId = parseInt($(this).attr("idvalue"));
                 var state = 100; //开启状态
-                modifyState(newspaperArticleId, state);
+                modifyState(newspaperArticlePicId, state);
             });
         });
 
 
 
-        function modifyState(newspaperArticleId,state){
-            if(newspaperArticleId>0){
+        function modifyState(newspaperArticlePicId,state){
+            if(newspaperArticlePicId>0){
                 $.ajax({
                     type: "get",
-                    url: "/default.php?secu=manage&mod=newspaper_article&m=async_modify_state",
+                    url: "/default.php?secu=manage&mod=newspaper_article_pic&m=async_modify_state",
                     data: {
-                        newspaper_article_id: newspaperArticleId,
+                        newspaper_article_pic_id: newspaperArticlePicId,
                         state:state
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        $("#span_state_"+newspaperArticleId).html(formatState(state));
+                        $("#span_state_"+newspaperArticlePicId).html(formatState(state));
                     }
                 });
             }
@@ -83,11 +83,15 @@
     </script>
 </head>
 <body>
+<div id="dialog_box" title="提示" style="display:none;">
+    <div id="dialog_content">
+    </div>
+</div>
 <div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
-                <a class="btn2" style="padding:3px 10px" href="/default.php?secu=manage&mod=newspaper_page&m=list&newspaper_id={NewspaperId}" idvalue="{NewspaperId}" title="返回版面管理">返回版面管理</a>
+                 <a class="btn2" style="padding:3px 10px" href="/default.php?secu=manage&mod=newspaper_article&m=list&newspaper_page_id={NewspaperPageId}" idvalue="{NewspaperPageId}" title="返回文档管理">返回文档管理</a>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
@@ -110,27 +114,27 @@
             <td style="width: 180px;text-align:center;">创建时间</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
-            <td style="width:80px;text-align:left;padding:0 10px 0 10px">相关管理</td>
+            <td style="width:80px;text-align:left;padding:0 10px 0 10px">预览</td>
         </tr>
     </table>
     <ul id="sort_grid">
-        <icms id="newspaper_article_list" type="list">
+        <icms id="newspaper_article_pic_list" type="list">
             <item>
                 <![CDATA[
-                <li id="sort_{f_NewspaperArticleId}">
+                <li id="sort_{f_NewspaperArticlePicId}">
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item">
-                            <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_NewspaperArticleId}"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_NewspaperArticleId}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticleId}" alt="编辑"/></td>
-                            <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a></td>
+                            <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_NewspaperArticlePicId}"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="文章编辑" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticlePicId}" alt="编辑"/></td>
+                            <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail&newspaper_article_pic_id={f_NewspaperArticlePicId}">{f_Remark}</a></td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_NewspaperArticleId}" class="span_state" idvalue="{f_NewspaperArticleId}">{f_State}</span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_NewspaperArticlePicId}" class="span_state" idvalue="{f_NewspaperArticlePicId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;">
-                                <img class="img_open" idvalue="{f_NewspaperArticleId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <img class="img_close" idvalue="{f_NewspaperArticleId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
+                                <img class="img_open" idvalue="{f_NewspaperArticlePicId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <img class="img_close" idvalue="{f_NewspaperArticlePicId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
 
                             <td class="spe_line2" style="width:80px;text-align:left;padding:0 10px 0 10px">
-                                <a href="/default.php?secu=manage&mod=newspaper_article_pic&&m=list&newspaper_article_id={f_NewspaperArticleId}">图片管理</a>
+                                <span  class="show_title_pic" idvalue="{f_UploadFileId}">预览</span>
                             </td>
                         </tr>
                     </table>

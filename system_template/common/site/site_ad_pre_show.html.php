@@ -9,6 +9,6 @@
     </style>
 </head>
 <body>
-<script language='javascript' src='/front_js/site_ad/{SiteId}/site_ad_{SiteAdId}.js' charset="utf-8"></script>
+<div class="site_ad_{SiteAdId}"></div><script language='javascript' src='/front_js/site_ad/{SiteId}/site_ad_{SiteAdId}.js' charset="utf-8"></script>
 </body>
 </html>

@@ -202,6 +202,9 @@ class NewspaperArticleManageGen extends BaseManageGen {
                 Template::RemoveCustomTag($tempContent, $tagId);
                 $tempContent = str_ireplace("{pager_button}", Language::Load("newspaper", 7), $tempContent);
             }
+
+            $newspaperId=$newspaperPageManageData->GetNewspaperId($newspaperPageId,true);
+            $tempContent = str_ireplace("{NewspaperId}", $newspaperId, $tempContent);
         }
 
         parent::ReplaceEnd($tempContent);
