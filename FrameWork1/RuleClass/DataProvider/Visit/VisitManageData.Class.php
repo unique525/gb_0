@@ -30,17 +30,17 @@ class VisitManageData extends BaseManageData {
      * 修改IP地址信息
      * @param string $tableName 表名
      * @param int $tableIdValue
-     * @param string $country   国
+     * @param string $Country   国
      * @param string $province 省
      * @param string $city  城市
      * @param string $operators 运营商
      * @return int 返回执行标识值
      */
-    public function ModifyIpLocation($tableName, $tableIdValue, $country, $province, $city, $operators) {
+    public function ModifyIpLocation($tableName, $tableIdValue, $Country, $province, $city, $operators) {
         $dataProperty = new DataProperty();
         $sql = "UPDATE " . $tableName . " SET Country=:Country,Province=:Province,City=:City,Operators=:Operators WHERE " . self::TableId_Visit . "=:" . self::TableId_Visit . "";
 
-        $dataProperty->AddField("Country", $country);
+        $dataProperty->AddField("Country", $Country);
         $dataProperty->AddField("Province", $province);
         $dataProperty->AddField("City", $city);
         $dataProperty->AddField("Operators", $operators);
@@ -108,18 +108,18 @@ class VisitManageData extends BaseManageData {
             $limitStr = " LIMIT " . $pageBegin . "," . $pageSize . "";
         }
         if ($siteId > 0) {
-            $sql = "SELECT count(*) as PvCount,v.siteid
-,(SELECT SiteName from cst_site where siteid=v.siteid)  as SiteName
-,(SELECT SiteUrl from cst_site where siteid=v.siteid) as SiteUrl
- FROM " . $tableName . " v WHERE v.siteid=:siteid " . $searchSql . $limitStr;
-            $sqlCount = "SELECT COUNT(DISTINCT v.siteid) FROM " . $tableName . " v WHERE v.siteid=:siteid " . $searchSql;
-            $dataProperty->AddField("siteid", $siteId);
+            $sql = "SELECT COUNT(*) AS PvCount,v.SiteId
+,(SELECT SiteName FROM cst_site WHERE SiteId=v.SiteId)  AS SiteName
+,(SELECT SiteUrl FROM cst_site WHERE SiteId=v.SiteId) AS SiteUrl
+ FROM " . $tableName . " v WHERE v.SiteId=:SiteId " . $searchSql . $limitStr;
+            $sqlCount = "SELECT COUNT(DISTINCT v.SiteId) FROM " . $tableName . " v WHERE v.SiteId=:SiteId " . $searchSql;
+            $dataProperty->AddField("SiteId", $siteId);
         } else {
-            $sql = "SELECT count(*) as CountSiteId,v.siteid
- ,(SELECT SiteName from cst_site where siteid=v.siteid)  as SiteName  
- ,(SELECT SiteUrl from cst_site where siteid=v.siteid)  as SiteUrl
- FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.siteid ORDER BY CountSiteId DESC " . $limitStr;
-            $sqlCount = "SELECT COUNT(DISTINCT v.siteid) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId
+ ,(SELECT SiteName FROM cst_site WHERE SiteId=v.SiteId)  AS SiteName  
+ ,(SELECT SiteUrl FROM cst_site WHERE SiteId=v.SiteId)  AS SiteUrl
+ FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.SiteId ORDER BY CountSiteId DESC " . $limitStr;
+            $sqlCount = "SELECT COUNT(DISTINCT v.SiteId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         }
         $result = $dbOperator->ReturnArray($sql, $dataProperty);
         $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
@@ -152,8 +152,8 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("searchKey3", "%" . $searchKey . "%");
         }
         if ($siteId > 0) {
-            $searchSql .= " AND v.siteid=:siteid";
-            $dataProperty->AddField("siteid", $siteId);
+            $searchSql .= " AND v.SiteId=:SiteId";
+            $dataProperty->AddField("SiteId", $siteId);
         }
 
         if ($channelId > 0) {
@@ -174,8 +174,8 @@ class VisitManageData extends BaseManageData {
         if ($pageSize > 0) {
             $limitStr = " LIMIT " . $pageBegin . "," . $pageSize . "";
         }
-        $sql = "SELECT count(*) as CountSiteId,v.siteid,v.ChannelId
-,(SELECT ChannelName from cst_channel where ChannelId=v.ChannelId) as ChannelName
+        $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.ChannelId
+,(SELECT ChannelName FROM cst_channel WHERE ChannelId=v.ChannelId) AS ChannelName
  FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.ChannelId ORDER BY CountSiteId DESC " . $limitStr;
         $sqlCount = "SELECT COUNT(DISTINCT v.ChannelId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
@@ -248,10 +248,10 @@ class VisitManageData extends BaseManageData {
             $searchSql .= " AND v.TableId>0";
         }
         if ($siteId > 0) {
-            $sql = "SELECT count(*) as CountSiteId,v.TableType,v.TableId,v.VisitUrl,v.VisitTitle FROM " . $tableName . " v WHERE v.siteid=:siteid " . $searchSql . " GROUP BY v.TableId ORDER BY CountSiteId DESC " . $limitStr;
-            $dataProperty->AddField("siteid", $siteId);
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.TableType,v.TableId,v.VisitUrl,v.VisitTitle FROM " . $tableName . " v WHERE v.SiteId=:SiteId " . $searchSql . " GROUP BY v.TableId ORDER BY CountSiteId DESC " . $limitStr;
+            $dataProperty->AddField("SiteId", $siteId);
         } else {
-            $sql = "SELECT count(*) as CountSiteId,v.TableType,v.siteid,v.TableId,v.VisitUrl,v.VisitTitle FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.TableId ORDER BY CountSiteId DESC " . $limitStr;
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.TableType,v.SiteId,v.TableId,v.VisitUrl,v.VisitTitle FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.TableId ORDER BY CountSiteId DESC " . $limitStr;
         }
         $sqlCount = "SELECT COUNT(DISTINCT v.TableId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
@@ -286,8 +286,8 @@ class VisitManageData extends BaseManageData {
         } else {
             $searchSql .= " AND v.TableId>0";
         }
-        $sql = "SELECT v.CreateDate,v.IpAddress,v.VisitTitle,v.RefUrl,v.country,v.province,v.city,v.operators FROM " . $tableName . " v WHERE 1=1 " . $searchSql . "  ORDER BY " . self::TableId_Visit . " DESC LIMIT " . $pageBegin . "," . $pageSize . "";
-        $sqlCount = "SELECT count(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
+        $sql = "SELECT v.CreateDate,v.IpAddress,v.VisitTitle,v.RefUrl,v.Country,v.province,v.city,v.operators FROM " . $tableName . " v WHERE 1=1 " . $searchSql . "  ORDER BY " . self::TableId_Visit . " DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+        $sqlCount = "SELECT COUNT(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
         $result = $dbOperator->ReturnArray($sql, $dataProperty);
         $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
@@ -323,8 +323,8 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("searchKey3", "%" . $searchKey . "%");
         }
         if ($siteId > 0) {
-            $searchSql .= " AND v.siteid=:siteid";
-            $dataProperty->AddField("siteid", $siteId);
+            $searchSql .= " AND v.SiteId=:SiteId";
+            $dataProperty->AddField("SiteId", $siteId);
         }
 
         if ($channelId > 0) {
@@ -358,7 +358,7 @@ class VisitManageData extends BaseManageData {
                 $limitStr = " LIMIT " . $pageBegin . "," . $pageSize . "";
             }
         }
-        $sql = "SELECT count(*) as CountSiteId,v.siteid,v.TableId,v.RefDomain FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.RefDomain ORDER BY CountSiteId DESC " . $limitStr;
+        $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.TableId,v.RefDomain FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.RefDomain ORDER BY CountSiteId DESC " . $limitStr;
         $sqlCount = "SELECT COUNT(DISTINCT v.RefDomain) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
         $result = $dbOperator->ReturnArray($sql, $dataProperty);
@@ -397,7 +397,7 @@ class VisitManageData extends BaseManageData {
 
         if ($tableType == 1) {
             if ($adminUserId > 0) {
-                $searchSql .= " AND v.TableId IN (SELECT DocumentNewsID from cst_document_news where ManageUserId=:ManageUserId";
+                $searchSql .= " AND v.TableId IN (SELECT DocumentNewsID FROM cst_document_news WHERE ManageUserId=:ManageUserId";
                 $dataProperty->AddField("ManageUserId", $adminUserId);
                 if (strlen($beginDate) > 1) {
                     $searchSql .= " AND CreateDate>='" . $beginDate . "'";
@@ -408,7 +408,7 @@ class VisitManageData extends BaseManageData {
                 $searchSql .= ")";
             } else {
                 if ($adminUserGroupId > 0) {
-                    $searchSql .= " AND v.TableId IN (SELECT DocumentNewsId from cst_document_news where ManageUserId IN (SELECT ManageUserId from cst_manage_user where ManageUserGroupId=:ManageUserGroupId)";
+                    $searchSql .= " AND v.TableId IN (SELECT DocumentNewsId FROM cst_document_news WHERE ManageUserId IN (SELECT ManageUserId FROM cst_manage_user WHERE ManageUserGroupId=:ManageUserGroupId)";
                     $dataProperty->AddField("ManageUserGroupId", $adminUserGroupId);
                     if (strlen($beginDate) > 1) {
                         $searchSql .= " AND CreateDate>='" . $beginDate . "'";
@@ -421,7 +421,7 @@ class VisitManageData extends BaseManageData {
             }
         } elseif ($tableType == 2) {
             if ($adminUserId > 0) {
-                $searchSql .= " AND v.TableId IN (SELECT DocumentNewsID from cst_document_news where ManageUserId=:ManageUserId";
+                $searchSql .= " AND v.TableId IN (SELECT DocumentNewsID FROM cst_document_news WHERE ManageUserId=:ManageUserId";
                 $dataProperty->AddField("ManageUserId", $adminUserId);
                 if (strlen($beginDate) > 1) {
                     $searchSql .= " AND CreateDate>='" . $beginDate . "'";
@@ -432,7 +432,7 @@ class VisitManageData extends BaseManageData {
                 $searchSql .= ")";
             } else {
                 if ($adminUserGroupId > 0) {
-                    $searchSql .= " AND v.TableId IN (SELECT DocumentNewsId from cst_document_news where ManageUserId IN (SELECT ManageUserId from cst_manage_user where ManageUserGroupId=:ManageUserGroupId)";
+                    $searchSql .= " AND v.TableId IN (SELECT DocumentNewsId FROM cst_document_news WHERE ManageUserId IN (SELECT ManageUserId FROM cst_manage_user WHERE ManageUserGroupId=:ManageUserGroupId)";
                     $dataProperty->AddField("ManageUserGroupId", $adminUserGroupId);
                     if (strlen($beginDate) > 1) {
                         $searchSql .= " AND CreateDate>='" . $beginDate . "'";
@@ -460,8 +460,8 @@ class VisitManageData extends BaseManageData {
      * @param int $searchDate   时间间隔
      * @param string $beginDate     起始时间
      * @param string $endDate       结束时间
-     * @param int $searchType    统计归组 0为按country(国)进行统计，1为Province(省)按进行统计 2为按City(市)进行统计
-     * @param string $country 国家
+     * @param int $searchType    统计归组 0为按Country(国)进行统计，1为Province(省)按进行统计 2为按City(市)进行统计
+     * @param string $Country 国家
      * @param string $province 省份
      * @param string $city 城市
      * @param int $siteId  站点ID号
@@ -469,7 +469,7 @@ class VisitManageData extends BaseManageData {
      * @param int $tableId  对应表ID号
      * @return int  返回记录数
      */
-    public function GetCountByIpLocation($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $searchType = 0, $country = "", $province = "", $city = "", $siteId = 0, $channelId = 0, $tableId = 0) {
+    public function GetCountByIpLocation($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $searchType = 0, $Country = "", $province = "", $city = "", $siteId = 0, $channelId = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
         $dbOperator = DBOperator::getInstance();
         $searchSql = "";
@@ -486,8 +486,8 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("ChannelId", $channelId);
         } else {
             if ($siteId > 0) {
-                $searchSql .= " AND v.siteid=:siteid";
-                $dataProperty->AddField("siteid", $siteId);
+                $searchSql .= " AND v.SiteId=:SiteId";
+                $dataProperty->AddField("SiteId", $siteId);
             }
         }
 
@@ -508,9 +508,9 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("TableId", $tableId);
         }
         //国家
-        if (!empty($country) && strlen($country) > 0 && $country != "undefined") {
-            $searchSql .= " AND v.country=:country";
-            $dataProperty->AddField("country", $country);
+        if (!empty($Country) && strlen($Country) > 0 && $Country != "undefined") {
+            $searchSql .= " AND v.Country=:Country";
+            $dataProperty->AddField("Country", $Country);
         }
         //按省级
         if (!empty($province) && strlen($province) > 0 && $province != "undefined") {
@@ -524,14 +524,14 @@ class VisitManageData extends BaseManageData {
         }
         $sql="";
         $sqlCount="";
-        if ($searchType == 0) {     //按country(国际)进行统计
-            $sql = "SELECT count(*) as CountSiteId,v.siteid,v.RefDomain,v.country as name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.country ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
-            $sqlCount = "SELECT COUNT(DISTINCT v.country) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
+        if ($searchType == 0) {     //按Country(国际)进行统计
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.RefDomain,v.Country AS name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.Country ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            $sqlCount = "SELECT COUNT(DISTINCT v.Country) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         } elseif ($searchType == 1) {   //按Province(省)进行统计
-            $sql = "SELECT count(*) as CountSiteId,v.siteid,v.RefDomain,v.province as name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.province ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.RefDomain,v.province AS name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.province ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
             $sqlCount = "SELECT COUNT(DISTINCT v.province) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         } elseif ($searchType == 2) {   //按city(城市)进行统计
-            $sql = "SELECT count(*) as CountSiteId,v.siteid,v.RefDomain,v.city as name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.city ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+            $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.RefDomain,v.city AS name FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.city ORDER BY CountSiteId DESC LIMIT " . $pageBegin . "," . $pageSize . "";
             $sqlCount = "SELECT COUNT(DISTINCT v.city) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         }
 
@@ -572,8 +572,8 @@ class VisitManageData extends BaseManageData {
         $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if ($siteId > 0) {
-            $searchSql .= " AND v.siteid=:siteid";
-            $dataProperty->AddField("siteid", $siteId);
+            $searchSql .= " AND v.SiteId=:SiteId";
+            $dataProperty->AddField("SiteId", $siteId);
         }
 
         if ($channelId > 0) {
@@ -591,7 +591,7 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("RefDomain", $refDomain);
         }
 
-        $sql = "SELECT count(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
+        $sql = "SELECT COUNT(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
         $result = $dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
@@ -612,8 +612,8 @@ class VisitManageData extends BaseManageData {
         $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if ($siteId > 0) {
-            $searchSql .= " AND v.siteid=:siteid";
-            $dataProperty->AddField("siteid", $siteId);
+            $searchSql .= " AND v.SiteId=:SiteId";
+            $dataProperty->AddField("SiteId", $siteId);
         }
 
         if ($channelId > 0) {
@@ -631,7 +631,7 @@ class VisitManageData extends BaseManageData {
             $dataProperty->AddField("RefDomain", $refDomain);
         }
 
-        $sql = "SELECT count(DISTINCT IpAddress) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
+        $sql = "SELECT COUNT(DISTINCT IpAddress) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         $result = $dbOperator->ReturnInt($sql, $dataProperty);
         return $result;
     }
