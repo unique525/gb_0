@@ -51,11 +51,11 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_SiteAdWidth">广告位宽：</label></td>
-                <td class="spe_line"><input name="f_SiteAdWidth" id="f_SiteAdWidth" value="{SiteAdWidth}" type="text" class="input_number" style=" width: 300px;" /></td>
+                <td class="spe_line"><input name="f_SiteAdWidth" id="f_SiteAdWidth" value="{SiteAdWidth}" type="text" class="input_box" style=" width: 300px;" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_SiteAdHeight">广告位高：</label></td>
-                <td class="spe_line"><input name="f_SiteAdHeight" id="f_SiteAdHeight" value="{SiteAdHeight}" type="text" class="input_number" style=" width: 300px;" /></td>
+                <td class="spe_line"><input name="f_SiteAdHeight" id="f_SiteAdHeight" value="{SiteAdHeight}" type="text" class="input_box" style=" width: 300px;" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_SiteAdType">广告位类型：</label></td>

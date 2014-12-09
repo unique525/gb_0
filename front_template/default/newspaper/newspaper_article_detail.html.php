@@ -96,6 +96,7 @@
 </head>
 <body>
 
+<div class="site_ad_266"></div><script language='javascript' src='/front_js/site_ad/2/site_ad_266.js' charset="utf-8"></script>
 <div data-role="page" id="pageone">
     <div data-role="content">
         <div style="text-align:center;">

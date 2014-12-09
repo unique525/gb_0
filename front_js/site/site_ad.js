@@ -13,130 +13,133 @@ window.runSiteAdJs = function(siteAdId,switchClassName){
 };
 
 $().ready(function() {
-    //检查所有广告是否到期
-    var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
-    for(var i=0;i<arrOfAllAdContents.length;i++){
-        IsInTime(arrOfAllAdContents[i]);
-    }
+
+    $().ready(function() {
+        //检查所有广告是否到期
+        var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
+        for(var i=0;i<arrOfAllAdContents.length;i++){
+            IsInTime(arrOfAllAdContents[i]);
+        }
 
 
-    //轮换
-    var switchAdId="0";
-    var adItems=$(".site_ad_show_type_2"); //取所有type2(轮换)广告位
-    for(i=0;i<adItems.length;i++){
-        switchAdId=adItems[i].getAttribute("idvalue");
+        //轮换
+        var switchAdId="0";
+        var adItems=$(".site_ad_show_type_2"); //取所有type2(轮换)广告位
+        for(i=0;i<adItems.length;i++){
+            switchAdId=adItems[i].getAttribute("idvalue");
 
-        //若广告位所有广告都过期或不在时间，则保留第一条显示，取消轮换
-        var arrAdContent=$(".switch_"+switchAdId);
-        var oneAvailable=0;
-        for(var j=0;j<arrAdContent.length;j++){
-            if(parseInt(arrAdContent[j].getAttribute("idvalue"))>0){  //广告div的idvalue存储显示时间 -1为过期广告
-                oneAvailable=1
+            //若广告位所有广告都过期或不在时间，则保留第一条显示，取消轮换
+            var arrAdContent=$(".switch_"+switchAdId);
+            var oneAvailable=0;
+            for(var j=0;j<arrAdContent.length;j++){
+                if(parseInt(arrAdContent[j].getAttribute("idvalue"))>0){  //广告div的idvalue存储显示时间 -1为过期广告
+                    oneAvailable=1
+                }else{
+                    arrAdContent[j].setAttribute("idvalue","0");
+                }
+            }
+            if(oneAvailable>0){
+                adSwitch(switchAdId, 1);  //有可用广告，开始轮换；
             }else{
-                arrAdContent[j].setAttribute("idvalue","0");
+                $(".switch_"+switchAdId+"_1").show();
             }
         }
-        if(oneAvailable>0){
-            adSwitch(switchAdId, 1);  //有可用广告，开始轮换；
-        }else{
-            $(".switch_"+switchAdId+"_1").show();
-        }
-    }
 
-    //下拉落幕广告
-    var pullItems=$(".site_ad_show_type_4"); //取所有type4(落幕)广告位
-    var lastingTime=0;
-    for(i=0;i<pullItems.length;i++){
-        var id=pullItems[i].getAttribute("idvalue"); //广告位div的idvalue存储广告位id
-        lastingTime=$(".pull_"+id).attr("idvalue");  //广告div的idvalue存储显示时间 -1为过期广告
-        if(lastingTime>0){
-            $("#site_ad_"+id).show();
-            setTimeout('PullUp('+id+')',parseInt(lastingTime)*1000);
+        //下拉落幕广告
+        var pullItems=$(".site_ad_show_type_4"); //取所有type4(落幕)广告位
+        var lastingTime=0;
+        for(i=0;i<pullItems.length;i++){
+            var id=pullItems[i].getAttribute("idvalue"); //广告位div的idvalue存储广告位id
+            lastingTime=$(".pull_"+id).attr("idvalue");  //广告div的idvalue存储显示时间 -1为过期广告
+            if(lastingTime>0){
+                $("#site_ad_"+id).show();
+                setTimeout('PullUp('+id+')',parseInt(lastingTime)*1000);
+            }
+
+
         }
 
+        //随机
+        var randomAdId="0";
+        var randomItems=$(".site_ad_show_type_3");  //取所有type3(随机)广告位
+        for(i=0;i<randomItems.length;i++){
+            randomAdId=randomItems[i].getAttribute("idvalue");
 
-    }
-
-    //随机
-    var randomAdId="0";
-    var randomItems=$(".site_ad_show_type_3");  //取所有type3(随机)广告位
-    for(i=0;i<randomItems.length;i++){
-        randomAdId=randomItems[i].getAttribute("idvalue");
-
-        //若广告位所有广告都过期或不在时间，则第一条显示，取消随机
-        var arrRandomAdContent=$(".random_"+randomAdId);
-        var arrForRandom=new Array();
-        var randomIndex=0;
-        for(j=0;j<arrRandomAdContent.length;j++){
-            if(parseInt(arrRandomAdContent[j].getAttribute("idvalue"))>=0){  //广告div的idvalue存储显示时间 -1为过期广告
-                arrForRandom[randomIndex]=j+1; // j+1={c_no}   取所有可用广告的{c_no}并加入数组
-                randomIndex++;
+            //若广告位所有广告都过期或不在时间，则第一条显示，取消随机
+            var arrRandomAdContent=$(".random_"+randomAdId);
+            var arrForRandom=new Array();
+            var randomIndex=0;
+            for(j=0;j<arrRandomAdContent.length;j++){
+                if(parseInt(arrRandomAdContent[j].getAttribute("idvalue"))>=0){  //广告div的idvalue存储显示时间 -1为过期广告
+                    arrForRandom[randomIndex]=j+1; // j+1={c_no}   取所有可用广告的{c_no}并加入数组
+                    randomIndex++;
+                }
+            }
+            if(randomIndex>0){ //有可用广告，随机可用；
+                $(".random_"+randomAdId).hide();
+                var randomNumber=parseInt(Math.random()*randomIndex);   //随机范围 0~数组长度
+                $(".random_"+randomAdId+"_"+arrForRandom[randomNumber]).show();  //按数组内存储的{c_no}找到广告并显示
+            }else{
+                $(".random_"+randomAdId+"_1").show();
             }
         }
-        if(randomIndex>0){ //有可用广告，随机可用；
-            $(".random_"+randomAdId).hide();
-            var randomNumber=parseInt(Math.random()*randomIndex);   //随机范围 0~数组长度
-            $(".random_"+randomAdId+"_"+arrForRandom[randomNumber]).show();  //按数组内存储的{c_no}找到广告并显示
-        }else{
-            $(".random_"+randomAdId+"_1").show();
-        }
-    }
 
 
-    //点击
-    $(".open_count_1").click(function(){
-        var adContentId = $(this).attr("idvalue");
-        $.ajax({
-            url:"/default.php",
-            data:{
-                mod:"site_ad_content",
-                m:"site_ad_click",
-                id:adContentId
-            },
-            dataType:"jsonp",
-            jsonp:"jsonpcallback",
-            success:function(data){
-                $.each(data,function(i,v){
-                    if (v["ReCommon"] < 0){
-                        console.warn(v["ReCommon"]+" 广告id:"+id);
-                    }
-                });
-            }
-        });
-    });
-
-    //点击
-    $.each($(".open_virtual_click_1"),function(){
-        var available=$(this).closest("div") .attr("idvalue"); //找父元素div的idvalue  如果为-1则过期不做处理
-        if(available>=0){
-            var adUrl=$(this).attr("href");
+        //点击
+        $(".open_count_1").click(function(){
             var adContentId = $(this).attr("idvalue");
             $.ajax({
                 url:"/default.php",
                 data:{
-                    "mod":"site_ad_content",
-                    "m":"site_ad_virtual_click",
-                    "id":adContentId
+                    mod:"site_ad_content",
+                    m:"site_ad_click",
+                    id:adContentId
                 },
                 dataType:"jsonp",
                 jsonp:"jsonpcallback",
                 success:function(data){
                     $.each(data,function(i,v){
                         if (v["ReCommon"] < 0){
-                            console.warn(v["ReCommon"]+" 广告id:"+adContentId);
-                            var siteAdFrame = document.createElement("iframe");
-                            siteAdFrame.src = adUrl;
-                            siteAdFrame.style.width = "0px";
-                            siteAdFrame.style.height = "0px";
-                            siteAdFrame.style.display = "none";
-                            document.body.appendChild(siteAdFrame);
+                            console.warn(v["ReCommon"]+" 广告id:"+id);
                         }
                     });
                 }
             });
-        }
-    });
+        });
 
+        //点击
+        $.each($(".open_virtual_click_1"),function(){
+            var available=$(this).closest("div") .attr("idvalue"); //找父元素div的idvalue  如果为-1则过期不做处理
+            if(available>=0){
+                var adUrl=$(this).attr("href");
+                var adContentId = $(this).attr("idvalue");
+                $.ajax({
+                    url:"/default.php",
+                    data:{
+                        "mod":"site_ad_content",
+                        "m":"site_ad_virtual_click",
+                        "id":adContentId
+                    },
+                    dataType:"jsonp",
+                    jsonp:"jsonpcallback",
+                    success:function(data){
+                        $.each(data,function(i,v){
+                            if (v["ReCommon"] < 0){
+                                console.warn(v["ReCommon"]+" 广告id:"+adContentId);
+                                var siteAdFrame = document.createElement("iframe");
+                                siteAdFrame.src = adUrl;
+                                siteAdFrame.style.width = "0px";
+                                siteAdFrame.style.height = "0px";
+                                siteAdFrame.style.display = "none";
+                                document.body.appendChild(siteAdFrame);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    });
 });
 
 

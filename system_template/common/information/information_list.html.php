@@ -14,6 +14,23 @@
 <body>
 {common_body_deal}
 <script type="text/javascript">
+    /**
+     * 发布资讯详细页 返回值 资讯id小于0
+     */
+    window.PUBLISH_INFORMATION_RESULT_DOCUMENT_NEWS_ID_ERROR = -130321;
+    /**
+     * 发布资讯详细页 返回值 频道id小于0
+     */
+    window.PUBLISH_INFORMATION_RESULT_CHANNEL_ID_ERROR = -130322;
+    /**
+     * 发布资讯详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
+     */
+    window.PUBLISH_INFORMATION_RESULT_STATE_ERROR = -130323;
+    /**
+     * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中
+     */
+    window.PUBLISH_INFORMATION_RESULT_FINISHED = 130321;
+
     $("document").ready(function () {
 
         var channelId = Request["channel_id"];
@@ -57,6 +74,38 @@
             parent.addTab();
         });
 
+        var btnPublish = $(".btn_publish");
+        btnPublish.css("cursor", "pointer");
+        btnPublish.click(function(event) {
+            var informationId = $(this).attr('idvalue');
+            event.preventDefault();
+
+            var dialogBox = $("#dialog_box");
+            dialogBox.attr("title","发布文档");
+            dialogBox.dialog({
+                height: 140,
+                modal: true
+            });
+
+            var dialogContent = $("#dialog_content");
+            dialogContent.html("开始发布");
+
+            $.post("/default.php?secu=manage&mod=information&m=async_publish&activity_id=" + informationId + "", {
+                resultbox: $(this).html()
+            }, function(result) {
+                dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
+                if (parseInt(result) == window.PUBLISH_INFORMATION_RESULT_DOCUMENT_NEWS_ID_ERROR) {
+                    dialogContent.html('活动id小于0');
+                }else if (parseInt(result) == window.PUBLISH_INFORMATION_RESULT_CHANNEL_ID_ERROR) {
+                    dialogContent.html('频道id小于0');
+                }else if (parseInt(result) == window.PUBLISH_INFORMATION_RESULT_STATE_ERROR) {
+                    dialogContent.html('状态不正确，必须为[已审]状态的文档才能发布!');
+                }else {
+                    dialogContent.html("发布完成<br />"+result);
+                    var spanState = $("#span_state_" + informationId);
+                    spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
+                }
+            });
 
         $(".span_state").each(function () {
             $(this).html(FormatState($(this).attr("title")));
@@ -91,11 +140,11 @@
             <td style="width:40px;text-align:center;">状态</td>
             <td style="width:40px;text-align:center;">启用</td>
             <td style="width:40px;text-align:center;">停用</td>
+            <td style="width:40px;text-align:center;">发布</td>
             <td>标题</td>
             <td style="width:160px;text-align:center;" title="停留查看开始与结束时间">开始时间</td>
             <td style="width:100px;text-align:center;">发布人</td>
             <td style="width:30px;text-align:center;">排序</td>
-            <td style="width:40px;text-align:center;">审核</td>
             <td style="width:40px;text-align:center;">删除</td>
         </tr>
         <icms id="information" type="list">
@@ -123,6 +172,11 @@
                                 style=" cursor: pointer" alt="停用或删除"
                                 src="/system_template/default/images/manage/stop.jpg"
                                 onclick="ModifyState('information', '{f_InformationId}', '100')"/></span></td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_publish"
+                                                                                     style="cursor: pointer"
+                                                                                     src="/system_template/default/images/manage/publish.gif"
+                                                                                     title="{f_InformationId}" idvalue="{f_ActivityId}" alt="发布"/>
+                    </td>
                     <td class="spe_line2"
                         style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
                         title="{f_InformationTitle}">{f_InformationTitle}
@@ -136,11 +190,7 @@
                         title="{f_UserId}__{f_UserName}">{f_UserName}
                     </td>
                     <td class="spe_line2" style="width:30px;text-align:center;">{f_sort}</td>
-                    <td class="spe_line2" style="width:40px;text-align:center;"><img class="img_publish"
-                                                                                     style="cursor: pointer"
-                                                                                     src="/system_template/default/images/manage/publish.gif"
-                                                                                     title="{f_InformationId}" alt="发布"/>
-                    </td>
+
                     <td class="spe_line2" style="width:80px;text-align:center;"><img class="pic_manage"
                                                                                      style="cursor: pointer"
                                                                                      src="/system_template/default/images/manage/delete.jpg"
