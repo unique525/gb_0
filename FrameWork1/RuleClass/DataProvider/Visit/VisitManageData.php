@@ -467,7 +467,7 @@ class VisitManageData extends BaseManageData {
      * @param int $siteId  站点ID号
      * @param int $channelId    频道ID号
      * @param int $tableId  对应表ID号
-     * @return int  返回记录数
+     * @return array  返回记录
      */
     public function GetCountByIpLocation($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $searchType = 0, $Country = "", $province = "", $city = "", $siteId = 0, $channelId = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
