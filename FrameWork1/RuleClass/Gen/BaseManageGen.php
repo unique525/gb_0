@@ -1329,9 +1329,11 @@ class BaseManageGen extends BaseGen
                 $arrayOfOneSiteAd = $siteAdManageData->GetOne($siteAdId);
                 if (count($arrayOfOneSiteAd) > 0) {
                     if (intval($arrayOfOneSiteAd["State"]) === 0) {
-                        $showNumber = intval($arrayOfOneSiteAd["ShowNumber"]);//轮换类广告位是否显示轮换数字
-                        $siteAdWidth = intval($arrayOfOneSiteAd["SiteAdWidth"]);
+                        $showNumber = $arrayOfOneSiteAd["ShowNumber"];//轮换类广告位是否显示轮换数字
+                        $siteAdWidth = $arrayOfOneSiteAd["SiteAdWidth"];
+                        if(stripos($siteAdWidth,"%")==false)$siteAdWidth.="px";
                         $siteAdHeight = intval($arrayOfOneSiteAd["SiteAdHeight"]);
+                        if(stripos($siteAdHeight,"%")==false)$siteAdHeight.="px";
                         $showType = $arrayOfOneSiteAd["ShowType"];     //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
                         $siteAdContentManageData = new SiteAdContentManageData();
                         if ($showType < 0) {

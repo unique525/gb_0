@@ -223,6 +223,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $newspaperArticleManageGen = new NewspaperArticleManageGen();
                     $result = $newspaperArticleManageGen->Gen();
                     break;
+                case "newspaper_article_pic":
+                    $newspaperArticlePicManageGen = new NewspaperArticlePicManageGen();
+                    $result = $newspaperArticlePicManageGen->Gen();
+                    break;
                 case "comment":
                     $commentManageGen = new CommentManageGen();
                     $result = $commentManageGen->Gen();
