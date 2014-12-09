@@ -8,9 +8,6 @@
  */
 class VisitManageData extends BaseManageData {
 
-    const tableName = "cst_visit";
-    const tableIdName = "visitId";
-
     /**
      * 修改isLocation值
      * @param string $tableName 表名
@@ -21,9 +18,9 @@ class VisitManageData extends BaseManageData {
     public function ModifyIsLocation($tableName, $tableIdValue, $isLocation) {
         $dataProperty = new DataProperty();
         //$tableName = parent::CreateAndGetTableName(self::tableName);
-        $sql = "UPDATE $tableName SET isLocation=:isLocation WHERE " . self::tableIdName . "=:" . self::tableIdName . "";
+        $sql = "UPDATE $tableName SET isLocation=:isLocation WHERE " . self::TableName_Visit . "=:" . self::TableId_Visit . "";
         $dataProperty->AddField("isLocation", $isLocation);
-        $dataProperty->AddField(self::tableIdName, $tableIdValue);
+        $dataProperty->AddField(self::TableId_Visit, $tableIdValue);
         $dbOperator = DBOperator::getInstance();
         $result = $dbOperator->Execute($sql, $dataProperty);
         return $result;
@@ -41,13 +38,13 @@ class VisitManageData extends BaseManageData {
      */
     public function ModifyIpLocation($tableName, $tableIdValue, $country, $province, $city, $operators) {
         $dataProperty = new DataProperty();
-        $sql = "UPDATE " . $tableName . " SET Country=:Country,Province=:Province,City=:City,Operators=:Operators WHERE " . self::tableIdName . "=:" . self::tableIdName . "";
+        $sql = "UPDATE " . $tableName . " SET Country=:Country,Province=:Province,City=:City,Operators=:Operators WHERE " . self::TableId_Visit . "=:" . self::TableId_Visit . "";
 
         $dataProperty->AddField("Country", $country);
         $dataProperty->AddField("Province", $province);
         $dataProperty->AddField("City", $city);
         $dataProperty->AddField("Operators", $operators);
-        $dataProperty->AddField(self::tableIdName, $tableIdValue);
+        $dataProperty->AddField(self::TableId_Visit, $tableIdValue);
         $dbOperator = DBOperator::getInstance();
         $result = $dbOperator->Execute($sql, $dataProperty);
         return $result;
@@ -289,7 +286,7 @@ class VisitManageData extends BaseManageData {
         } else {
             $searchSql .= " AND v.TableId>0";
         }
-        $sql = "SELECT v.CreateDate,v.IpAddress,v.VisitTitle,v.RefUrl,v.country,v.province,v.city,v.operators FROM " . $tableName . " v WHERE 1=1 " . $searchSql . "  ORDER BY " . self::tableIdName . " DESC LIMIT " . $pageBegin . "," . $pageSize . "";
+        $sql = "SELECT v.CreateDate,v.IpAddress,v.VisitTitle,v.RefUrl,v.country,v.province,v.city,v.operators FROM " . $tableName . " v WHERE 1=1 " . $searchSql . "  ORDER BY " . self::TableId_Visit . " DESC LIMIT " . $pageBegin . "," . $pageSize . "";
         $sqlCount = "SELECT count(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
         $result = $dbOperator->ReturnArray($sql, $dataProperty);
