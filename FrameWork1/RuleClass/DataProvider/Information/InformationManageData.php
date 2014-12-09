@@ -3,7 +3,7 @@
  * 后台管理 分类信息 数据类
  *
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_DataProvider_Activity
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Information
  * @author 525
  */
 class InformationManageData extends BaseManageData{
@@ -163,7 +163,7 @@ class InformationManageData extends BaseManageData{
     }
 
     /**
-     * 修改活动状态
+     * 修改审核状态
      * @param string $informationId 题目Id
      * @param string $state 状态
      * @return int 执行结果
@@ -178,6 +178,98 @@ class InformationManageData extends BaseManageData{
         $dataProperty->AddField("InformationId", $informationId);
         $dataProperty->AddField("State", $state);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得审核状态
+     * @param int $informationId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 文档的状态
+     */
+    public function GetState($informationId, $withCache=FALSE)
+    {
+        $result = -1;
+        if ($informationId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'information_data';
+            $cacheFile = 'information_get_state.cache_' . $informationId . '';
+            $sql = "SELECT State FROM " . self::TableName_Information . " WHERE InformationId=:InformationId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("InformationId", $informationId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得分类信息所属频道id
+     * @param int $informationId 活动id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 所属频道id
+     */
+    public function GetChannelId($informationId, $withCache=FALSE)
+    {
+        $result = -1;
+        if ($informationId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'information_data';
+            $cacheFile = 'information_get_channel_id.cache_' . $informationId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_Information . " WHERE InformationId=:InformationId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("InformationId", $informationId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改发布时间只有发布时间为空时才进行操作
+     * @param int $informationId 分类信息id
+     * @param int $publishDate 发布时间
+     * @return int 操作结果
+     */
+    public function ModifyPublishDate($informationId, $publishDate)
+    {
+        $result = 0;
+        if ($informationId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Information . "
+                SET
+
+                    PublishDate=:PublishDate
+
+                WHERE
+                        InformationId=:InformationId
+                    AND PublishDate is NULL
+
+                    ;";
+
+
+            $dataProperty->AddField("InformationId", $informationId);
+            $dataProperty->AddField("PublishDate", $publishDate);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得分类信息发布时间
+     * @param int $informationId 分类信息id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 文档的发布时间
+     */
+    public function GetPublishDate($informationId, $withCache=FALSE)
+    {
+        $result = "";
+        if ($informationId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'information_data';
+            $cacheFile = 'information_get_publish_date.cache_' . $informationId . '';
+            $sql = "SELECT PublishDate FROM " . self::TableName_Information . " WHERE InformationId=:InformationId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("InformationId", $informationId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 }

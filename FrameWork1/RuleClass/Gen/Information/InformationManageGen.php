@@ -30,6 +30,9 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify_state":
                 $result = self::ModifyState();
                 break;
+            case "async_publish":
+                $result = self::AsyncPublish();
+                break;
         }
         $replace_arr = array(
             "{method}" => $method
@@ -382,6 +385,43 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $result = -1;
         }
         return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
+
+
+    /**
+     * 发布分类信息详细页面
+     * @return int 返回发布结果
+     */
+    private function AsyncPublish()
+    {
+        $result = '';
+        $informationId = Control::GetRequest("information_id", -1);
+        if ($informationId > 0) {
+            $publishQueueManageData = new PublishQueueManageData();
+            $executeTransfer = true;
+            $publishChannel = true;
+            $result = parent::PublishInformation($informationId, $publishQueueManageData, $executeTransfer, $publishChannel);
+            if ($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_INFORMATION_RESULT_FINISHED)) {
+                $result = '';
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                    $publishResult = "";
+
+                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                    ){
+                        $publishResult = "Ok";
+                    }
+
+
+                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                        .'<br />'
+                    ;
+                }
+                //print_r($publishQueueManageData->Queue);
+            }
+        }
+        return $result;
     }
 }
 
