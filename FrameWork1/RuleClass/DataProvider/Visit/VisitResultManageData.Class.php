@@ -3,7 +3,7 @@
 /**
  * 访问数据统计缓存数据类 后台
  * @category iCMS
- * @package  iCMS_FrameWork1_RuleClass_DataProvider_VisitResult
+ * @package  iCMS_FrameWork1_RuleClass_DataProvider_Visit
  * @author Liujunyi
  */
 class VisitResultManageData extends BaseManageData {
