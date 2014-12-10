@@ -9,7 +9,7 @@
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
     <style>
-        body{background:#efefef;}
+        body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
         #datepicker {margin:0 auto;position:relative}
     </style>

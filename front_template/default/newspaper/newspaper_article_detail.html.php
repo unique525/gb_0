@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/comment.js"></script>
-
+    <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
     <style>
-        body{background:#efefef;}
+        body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
     </style>
     <script type="text/javascript">
@@ -104,6 +104,7 @@
     </script>
 </head>
 <body>
+<div style="margin:0;">
 <div style="background:#ebebeb;">
     <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
 </div>
@@ -125,10 +126,10 @@
 <div class="site_ad_266"></div><script language='javascript' src='/front_js/site_ad/2/site_ad_266.js' charset="utf-8"></script>
 
 
-        <div style="text-align:center;">
-            <h4 style="text-align:center;">{NewspaperArticleCiteTitle}</h4>
-            <h2 style="text-align:center;">{NewspaperArticleTitle}</h2>
-            <h4 style="text-align:center;">{NewspaperArticleSubTitle}</h4>
+        <div style="text-align:left;margin:5px;">
+            <h4 style="text-align:left;">{NewspaperArticleCiteTitle}</h4>
+            <h2 style="text-align:left;">{NewspaperArticleTitle}</h2>
+            <h4 style="text-align:left;">{NewspaperArticleSubTitle}</h4>
         </div>
 
         <div>
@@ -146,7 +147,7 @@
         </div>
 
         <div>
-            <p style="margin:5px;line-height:130%;" id="content">{NewspaperArticleContent}</p>
+            <p style="margin:10px;line-height:150%;font-size:120%;" id="content">{NewspaperArticleContent}</p>
         </div>
 
 
@@ -165,6 +166,6 @@
         <div class="bshare-custom icon-medium-plus"><div class="bsPromo bsPromo2"></div><a title="分享到收藏夹" class="bshare-favorite" href="javascript:void(0);"></a><a title="分享到复制网址" class="bshare-clipboard" href="javascript:void(0);"></a><a title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a><a title="分享到朋友网" class="bshare-qqxiaoyou" href="javascript:void(0);"></a><a title="分享到凤凰微博" class="bshare-ifengmb" href="javascript:void(0);"></a><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到QQ好友" class="bshare-qqim" href="javascript:void(0);"></a><a title="分享到人民微博" class="bshare-peoplemb" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count" style="float: none;"></span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
 
     </div>
-
+</div>
 </body>
 </html>
