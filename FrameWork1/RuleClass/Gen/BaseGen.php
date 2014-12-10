@@ -312,6 +312,24 @@ class BaseGen
         }
     }
 
+    /**
+     * 加入visit统计代码
+     * @param string $templateContent 模板内容
+     * @param string $funcUrl 统计程序url地址
+     * @param string $siteId 站点Id
+     * @param string $channelId 频道Id
+     * @param string $tableType 对应表类型
+     * @param string $tableId 对应表Id
+     * @param string $visitTag 访问标签类别
+     */
+    protected function AddVisitJsToTemplate(&$templateContent, $funcUrl, $siteId, $channelId, $tableType, $tableId, $visitTag = '')
+    {
+        $templateContent .= '<script type="text/javascript">';
+        $templateContent .= 'var visitConfig = encodeURIComponent("' . $funcUrl . '") +"||' . $siteId . '||' . $channelId . '||' . $tableType . '||' . $tableId . '||"+encodeURI("' . $visitTag . '");';
+        $templateContent .= '</script>';
+        $templateContent .= '<script type="text/javascript" src="' . $funcUrl . '/common/js/visit.js" charset="utf-8"></script>';
+    }
+
 
     /**
      * 取得Web客户端的综合信息
