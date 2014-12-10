@@ -612,7 +612,7 @@ class BaseGen
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_SITE_AD_CONTENT:
                 /**广告图片上传 tableId 为 siteId */
-                $uploadFilePath = $uploadPath . "ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $uploadFilePath = $uploadPath . "site_ad" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_ACTIVITY_TITLE_PIC_1:
