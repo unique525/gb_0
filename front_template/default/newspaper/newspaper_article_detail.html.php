@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>{NewspaperArticleTitle} - 长沙晚报</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/comment.js"></script>
     <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <style>
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
@@ -34,8 +36,8 @@
                     if (v["UserName"] == "" && v["UserName"] != null) {
                         v["UserName"] = "游客";
                     }
-                    listContent = listContent + '<div id="'+v["CommentId"]+'" style="border-bottom:2px dashed #CCC; width:98%; margin:8px 4px;">'+
-                        '<table width="99%" cellpadding="0" cellspacing="0">'+
+                    listContent = listContent + '<div id="'+v["CommentId"]+'" style="border-bottom:2px dashed #CCC; width:100%; margin:8px 4px;">'+
+                        '<table width="100%" cellpadding="0" cellspacing="0">'+
                         '<tr>'+
                         '<td style="padding:5px;">'+
                         '<div style="text-align:left;line-height:180%;">'+v["UserName"]+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#666666;font-size:10px;">'+v["CreateDate"]+'</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>'+
@@ -70,13 +72,13 @@
 
                 if (tableId > 0) {
                     $('#comment').append('<form id="mainForm" action="/default.php?mod=comment&a=create" data-ajax="false" method="post">'
-                        + '<table width="95%" class="">'
+                        + '<table width="100%" class="">'
                         + '<tr>'
                         + '<td  align="left"><span style="float:right">已经有<span id="count">0</span>人评论</span>'
                         + name + '</td>'
                         + '</tr>'
                         + '<tr>'
-                        + '<td><textarea name="content" style="width:99%" rows="5" class="comment_content"></textarea>'
+                        + '<td><textarea name="content" style="width:100%" rows="5" class="comment_content"></textarea>'
                         + '<input type="hidden" value="' + tableId + '" name="table_id"/>'
                         + '<input type="hidden" value="' + tableType + '" name="table_type"/>'
                         + '<input type="hidden" name="channel_id" value="' + channelId + '"/>'
@@ -137,8 +139,12 @@
             <icms id="newspaper_article_{NewspaperArticleId}" type="newspaper_article_pic_list" top="100">
                 <item>
                     <![CDATA[
-                    <div style="text-align:center;margin-bottom:10px;"><img src="{f_UploadFilePath}" alt="{f_Remark}" /></div>
-                    <div style="text-align:center;margin-top:10px;margin-bottom:10px;">{f_Remark}</div>
+                    <figure data-am-widget="figure" class="am am-figure am-figure-default "
+                            data-am-figure="{  autoZoom: 1 }">
+                        <img src="{f_UploadFilePath}" data-rel=""
+                             alt="{f_Remark}" />
+                        <figcaption class="am-figure-capition-btm">{f_Remark}</figcaption>
+                    </figure>
                     ]]>
                 </item>
             </icms>
@@ -152,8 +158,8 @@
 
 
     <!-----------comment------------>
-    <div id="comment" idvalue="2" style="width:100%;margin:5px auto;{OpenComment}"></div>
-    <div style="width:100%;margin:5px auto;{OpenComment}">
+    <div id="comment" idvalue="2" style="width:98%;margin:5px auto;{OpenComment}"></div>
+    <div style="width:98%;margin:5px auto;{OpenComment}">
         <dl id="commentmessage"></dl>
         <a name="comment"></a>
         <div id="comment_pagerbutton"></div>
