@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta name="googlebot" content="index,noarchive,nofollow,noodp" />
 <meta name="robots" content="index,nofollow,noarchive,noodp" />
-<title><?php if (!empty($q)) echo "搜索：" . strip_tags($q) . " - "; ?>站内搜索</title>
+<title><?php if (!empty($q)) echo "搜索：" . strip_tags($q) . " - "; ?>搜索</title>
 <meta http-equiv="keywords" content="Fulltext Search Engine Csol xunsearch" />
 <meta http-equiv="description" content="Fulltext Search for Csol, Powered by xunsearch/1.3.1 " />
 <style type="text/css">
@@ -91,11 +91,28 @@ em{color:rgba(0, 112, 143, 1)}
 <!-- search.tpl Csol 搜索模板 -->	
 <body>
 <div class="outer">
+<div style="background:#ebebeb;">
+    <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
+</div>
+<div style="background:#ebebeb;">
+    <div>
+        <table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <tr>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#333;" href="/" target="_blank">首页</a></td>
+                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#ef1b27;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">往期回顾</a></td>
+                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
+            </tr>
+        </table>
+
+
+    </div>
+</div>
 	<!-- page header -->
-	<div id="header" style="line-height:130%;"><h1 style="line-height:130%;"><a href="index.php">长沙晚报 全文搜索</a></h1></div>
-	
+
 	<!-- search form -->
-	<form id="q-form" method="get">
+	<form id="q-form" method="get" style="margin:10px;">
 	<div id="q-input">
 	<input class="text" type="text" name="q" size="40" title="输入任意关键词皆可搜索" width="80%" value="<?php echo htmlspecialchars($q); ?>" />
         <input class="button" type="submit" width="20%" value="  搜索!  " />
@@ -276,7 +293,7 @@ if ($domain[$doc->s_site_id][0]==null){
 
 	<!-- footer -->
 	<div id="footer">
-		(C)opyright - 星辰在线 - 页面处理总时间：<?php printf('%.4f', $total_cost); ?>秒　<br />
+		(C)opyright - 长沙晚报 - 页面处理总时间：<?php printf('%.4f', $total_cost); ?>秒　<br />
 <!--		Powered by <a href="http://www.xunsearch.com" target="_blank"><?php echo PACKAGE_NAME . '/' . PACKAGE_VERSION; ?></a> -->
 	</div>
 </div><!-- outer -->

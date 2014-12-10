@@ -13,6 +13,7 @@
         a { text-decoration:none; color: #000000;cursor:pointer}
         .page_button{list-style: none;margin:2px;padding:5px;text-align:center;float: left;background-color: #D3D3D3;}
         #page_list{cursor: pointer}
+        .icms_ad_item img{width: 100%;}
     </style>
 
     <script src="/system_js/jquery-1.9.1.min.js"></script>

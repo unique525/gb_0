@@ -61,6 +61,10 @@ class Template
      * 模板标签类型：电子报文章图片列表 type="newspaper_article_pic_list"
      */
     const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST = "newspaper_article_pic_list";
+    /**
+     * 模板标签类型：电子报文章图片列表(轮换) type="newspaper_article_pic_list_slider"
+     */
+    const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER = "newspaper_article_pic_list_slider";
 
 
     /**

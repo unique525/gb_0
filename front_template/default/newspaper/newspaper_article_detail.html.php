@@ -12,6 +12,7 @@
     <style>
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
+        .icms_ad_item img{width: 100%;}
     </style>
     <script type="text/javascript">
         $(function () {
@@ -149,7 +150,22 @@
                 </item>
             </icms>
 
+        </div>
 
+        <div data-am-widget="slider" class="am-slider am-slider-a4" data-am-slider='{&quot;directionNav&quot;:false}'>
+            <ul class="am-slides">
+            <icms id="newspaper_article_slider_{NewspaperArticleId}" type="newspaper_article_pic_list_slider" top="100">
+                <item>
+                    <![CDATA[
+                    <li>
+                        <img src="{f_UploadFilePath}" alt="{f_Remark}" />
+                        <br />
+                        {f_Remark}
+                    </li>
+                    ]]>
+                </item>
+            </icms>
+            </ul>
         </div>
 
         <div>
