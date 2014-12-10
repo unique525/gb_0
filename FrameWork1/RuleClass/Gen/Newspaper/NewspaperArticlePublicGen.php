@@ -27,6 +27,9 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             case "get_newspaper_article_id_for_import":
                 $result = self::GetNewspaperArticleIdForImport();
                 break;
+            case "add_hit_count":
+                $result = self::AddHitCount();
+                break;
         }
         return $result;
     }
@@ -179,5 +182,24 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             );
         }
         return $result;
+    }
+
+    private function AddHitCount(){
+
+        $result = -1;
+
+        $newspaperArticleId = Control::GetRequest("newspaper_article_id",0);
+
+        if($newspaperArticleId>0){
+
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
+            $result = $newspaperArticlePublicData->AddHitCount($newspaperArticleId);
+        }
+
+
+
+        return $result;
+
     }
 } 

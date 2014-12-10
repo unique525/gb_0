@@ -18,6 +18,10 @@
             $("img[src='']").hide();
         });
     </script>
+    <style>
+        body{background:#efefef;margin:0;}
+        img, object { max-width: 100%;}
+    </style>
 </head>
 <body>
 <div style="background:#ebebeb;">

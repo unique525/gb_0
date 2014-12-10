@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <title>{NewspaperTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
     <link href="/image_02/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon-precomposed">
     <link href="/image_02/apple-touch-icon-114x114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed">
     <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico">
     <style>
-        body{background:#efefef;}
+        body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
         a { text-decoration:none; color: #000000;cursor:pointer}
         .page_button{list-style: none;margin:2px;padding:5px;text-align:center;float: left;background-color: #D3D3D3;}
@@ -17,9 +16,10 @@
     </style>
 
     <script src="/system_js/jquery-1.9.1.min.js"></script>
-    <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="/system_js/hammer.js"></script>
+
     <script type="text/javascript">
-        $(document).on("pageinit","#pageone",function(){
+        $(function() {
 
             $("#img_logo").load(function(){
                 var screenWidth = $(document).width();
@@ -29,14 +29,33 @@
                 //alert($(this).css("width"));
             });
 
-            $("#img01").on("swiperight",function(){
-                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}'
+            var myElement = document.getElementById('img01');
+
+// create a simple instance
+// by default, it only adds horizontal recognizers
+            var mc = new Hammer(myElement);
+
+// listen to events...
+            mc.on("swipeleft", function(ev) {
+                //alert(ev.type);
+                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={NextNewspaperPageId}';
+                //myElement.textContent = ev.type +" gesture detected.";
             });
 
-            $("#img01").on("swipeleft",function(){
+            mc.on("swiperight", function(ev) {
 
-                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={NextNewspaperPageId}'
+                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}';
             });
+
+
+            //$("#img01").on("swiperight",function(){
+            //
+            //});
+
+            //$("#img01").on("swipeleft",function(){
+
+            //
+            //});
             $("#pages").click(function(){
 
                 if($("#select_page").css("display")=="none")
@@ -53,8 +72,7 @@
     <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
 </head>
 <body>
-.site_ad_{SiteAdId}
-<div data-role="page" id="pageone">
+<div>
     <div style="background:#ebebeb;">
         <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
     </div>
@@ -100,7 +118,6 @@
     </div>
     <div class="site_ad_265"></div><script type="text/javascript" src='/front_js/site_ad/2/site_ad_265.js' charset="utf-8"></script>
     <div>
-
         <a href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={CurrentNewspaperPageId}&newspaper_id={NewspaperId}&channel_id={ChannelId}" target="_blank">
             <img id="img01" style="max-width:100%" src="{UploadFileCompressPath1}" alt="" />
         </a>
