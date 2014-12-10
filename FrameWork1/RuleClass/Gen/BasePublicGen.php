@@ -191,7 +191,7 @@ class BasePublicGen extends BaseGen {
                         }
                         break;
                     case Template::TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER:
-                        $newspaperArticleId = intval(str_ireplace("newspaper_article_slider", "", $tagId));
+                        $newspaperArticleId = intval(str_ireplace("newspaper_article_slider_", "", $tagId));
 
                         if ($newspaperArticleId > 0) {
                             $templateContent = self::ReplaceTemplateOfNewspaperArticlePicList(
@@ -538,9 +538,25 @@ class BasePublicGen extends BaseGen {
                     break;
             }
 
+            //echo 'ddd'.$tagId.':'.stripos($tagId,"newspaper_article_slider_").'<br>';
 
             if (!empty($arrList)) {
-                Template::ReplaceList($tagContent, $arrList, $tagId);
+
+                if(stripos($tagId,"newspaper_article_slider_") !== false){ //轮换图
+                    if(count($arrList)>1){ //只显示多图
+                        Template::ReplaceList($tagContent, $arrList, $tagId);
+                    }else{
+                        $tagContent = "";
+                    }
+                }elseif(stripos($tagId,"newspaper_article_") !== false){ //单图
+                    if(count($arrList)<2){ //只显示单图
+                        Template::ReplaceList($tagContent, $arrList, $tagId);
+                    }else{
+                        $tagContent = "";
+                    }
+                }
+
+                //Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
             }else{
