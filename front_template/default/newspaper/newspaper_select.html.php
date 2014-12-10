@@ -6,8 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <style>
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}

@@ -7,6 +7,7 @@
     <link href="/image_02/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon-precomposed">
     <link href="/image_02/apple-touch-icon-114x114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed">
     <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico">
+    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <style>
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
@@ -17,6 +18,7 @@
     </style>
 
     <script src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <script type="text/javascript" src="/system_js/hammer.js"></script>
 
     <script type="text/javascript">
@@ -74,6 +76,14 @@
 </head>
 <body>
 <div>
+    <header class="am-topbar am-topbar-fixed-bottom">
+        <div>
+            <div style="float:left;"><a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}"><img src="/image_02/left.png" /></a></div>
+            <div style="float:right;"><a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={NextNewspaperPageId}"><img src="/image_02/right.png" /></a></div>
+            <div style="clear:both;"></div>
+
+        </div>
+    </header>
     <div style="background:#ebebeb;">
         <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
     </div>
