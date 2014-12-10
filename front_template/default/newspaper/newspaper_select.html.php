@@ -5,21 +5,16 @@
     <title>长沙晚报</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css" />
     <link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
     <script src="/system_js/jquery-1.9.1.min.js"></script>
-    <script src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
     <style>
-        body{background:#efefef;}
+        body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
         #datepicker {margin:0 auto;position:relative}
     </style>
     <script type="text/javascript">
         $(function() {
-
-        });
-        $(document).on("pageinit","#pageone",function(){
             $( "#datepicker" ).datepicker({
                 changeMonth: true,
                 changeYear: true,
@@ -40,7 +35,6 @@
 </head>
 <body>
 
-<div data-role="page" id="pageone">
 
     <div style="background:#ebebeb;">
         <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
@@ -61,6 +55,6 @@
         </div>
     </div>
     <div id="datepicker" style="margin:10px;width:100%"></div>
-</div>
+
 </body>
 </html>

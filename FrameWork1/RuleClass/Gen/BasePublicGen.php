@@ -190,6 +190,22 @@ class BasePublicGen extends BaseGen {
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER:
+                        $newspaperArticleId = intval(str_ireplace("newspaper_article_slider", "", $tagId));
+
+                        if ($newspaperArticleId > 0) {
+                            $templateContent = self::ReplaceTemplateOfNewspaperArticlePicList(
+                                $templateContent,
+                                $newspaperArticleId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
                 }
             }
         }

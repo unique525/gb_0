@@ -319,11 +319,56 @@ class NewspaperArticlePublicData extends BasePublicData
                     AND State=:State
                 ORDER BY $orderBySql " ;
             $dataProperty = new DataProperty();
-            //$dataProperty->AddField("NewspaperPageId", "(" . $newspaperPageId . ")");
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
+
+        return $result;
+    }
+
+    /**
+     * 增加点击数
+     * @param int $newspaperArticleId 文章id
+     * @return int
+     */
+    public function AddHitCount($newspaperArticleId){
+        $result = -1;
+
+        if($newspaperArticleId>0){
+
+            $sql = "UPDATE ".self::TableName_NewspaperArticle."
+                    SET HitCount=HitCount+1
+                    WHERE NewspaperArticleId=:NewspaperArticleId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 增加评论数
+     * @param int $newspaperArticleId 文章id
+     * @return int
+     */
+    public function AddCommentCount($newspaperArticleId){
+        $result = -1;
+
+        if($newspaperArticleId>0){
+
+            $sql = "UPDATE ".self::TableName_NewspaperArticle."
+                    SET CommentCount=CommentCount+1
+                    WHERE NewspaperArticleId=:NewspaperArticleId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
 
         return $result;
     }
