@@ -108,6 +108,8 @@
             <td style="width: 40px; text-align: center;">编辑</td>
             <td>标题</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
+            <td style="width: 80px; text-align: center;">点击数</td>
+            <td style="width: 80px; text-align: center;">评论数</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
             <td style="width:80px;text-align:left;padding:0 10px 0 10px">相关管理</td>
@@ -124,6 +126,8 @@
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_NewspaperArticleId}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticleId}" alt="编辑"/></td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a></td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>
+                            <td class="spe_line2" style="width:80px;text-align:center;" title="">{f_HitCount}</td>
+                            <td class="spe_line2" style="width:80px;text-align:center;" title="">{f_CommentCount}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_NewspaperArticleId}" class="span_state" idvalue="{f_NewspaperArticleId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;">
                                 <img class="img_open" idvalue="{f_NewspaperArticleId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
