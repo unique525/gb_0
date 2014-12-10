@@ -56,7 +56,7 @@
                     <div class="am-panel am-panel-default">
                         <div class="am-panel-hd">
                             <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-{c_no}'}">
-                                {f_NewspaperPageName}
+                                {f_NewspaperPageName}（{f_NewspaperPageNo}）
                             </h4>
                         </div>
                         <div id="do-not-say-{c_no}" class="am-panel-collapse am-collapse">

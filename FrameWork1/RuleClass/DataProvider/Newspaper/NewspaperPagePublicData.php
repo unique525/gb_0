@@ -275,7 +275,7 @@ class NewspaperPagePublicData extends BasePublicData
             $withCache=FALSE;
             $cacheDir = "";//CACHE_PATH . DIRECTORY_SEPARATOR . '_data';
             $cacheFile = "";
-            $sql = "SELECT NewspaperPageId,NewspaperPageName
+            $sql = "SELECT NewspaperPageId,NewspaperPageName,NewspaperPageNo
 
 
                 FROM " . self::TableName_NewspaperPage . "
