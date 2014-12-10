@@ -1332,12 +1332,12 @@ class BaseManageGen extends BaseGen
                         $showNumber = $arrayOfOneSiteAd["ShowNumber"];//轮换类广告位是否显示轮换数字
                         $siteAdWidth = $arrayOfOneSiteAd["SiteAdWidth"];
 
-                        if(stripos($siteAdWidth,"%") <= 0){
+                        if(stripos($siteAdWidth,"%") <= 0 && strtolower($siteAdWidth)!="auto"){
                             $siteAdWidth.="px";
                         }
 
                         $siteAdHeight = $arrayOfOneSiteAd["SiteAdHeight"];
-                        if(stripos($siteAdHeight,"%") <= 0){
+                        if(stripos($siteAdHeight,"%") <= 0 && strtolower($siteAdHeight)!="auto"){
                             $siteAdHeight.="px";
                         }
                         $showType = $arrayOfOneSiteAd["ShowType"];     //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
