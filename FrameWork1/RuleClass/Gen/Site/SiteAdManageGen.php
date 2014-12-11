@@ -3,10 +3,9 @@
 /**
  * 广告位页面生成类
  * @category iCMS
- * @package iCMS_FrameWork1_RuleClass_Gen_CustomForm
+ * @package iCMS_FrameWork1_RuleClass_Gen_Site
  * @author 525
  */
-
 class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
 
 

@@ -5,7 +5,6 @@
  * Date: 14-6-5
  * Time: 下午1:34
  */
-
 class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
 
 

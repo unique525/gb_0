@@ -78,20 +78,19 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
 //            }
 
         /*******************过滤字符 begin********************** */
-//            $mutiFilterContent = array();
-//            $mutiFilterContent[0] = $subject;
-//            $mutiFilterContent[1] = $content;
-//            $mutiFilterContent[2] = $guestName;
-//            $mutiFilterContent[3] = $guestEmail;
-//            $siteFilterGen = new SiteFilterGen();
-//            $useArea = 4;  //过滤范围 4:评论
-//            $stop = FALSE; //是否停止执行
-//            $filterContent = null;
-//            $stopWord = $siteFilterGen->DoFilter($siteId, $useArea, $stop, $filterContent, $mutiFilterContent);
-//            $subject = $mutiFilterContent[0];
-//            $content = $mutiFilterContent[1];
-//            $guestName = $mutiFilterContent[2];
-//            $guestEmail = $mutiFilterContent[3];
+        $multiFilterContent = array();
+        $multiFilterContent[0] = $subject;
+        $multiFilterContent[1] = $content;
+        $multiFilterContent[2] = $guestName;
+        $multiFilterContent[3] = $guestEmail;
+        $useArea = 4;  //过滤范围 4:评论
+        $stop = FALSE; //是否停止执行
+        $filterContent = null;
+        $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
+        $subject = $multiFilterContent[0];
+        $content = $multiFilterContent[1];
+        $guestName = $multiFilterContent[2];
+        $guestEmail = $multiFilterContent[3];
         /*******************过滤字符 end********************** */
 
         $userId = Control::GetUserId();
