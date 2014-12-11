@@ -122,7 +122,7 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                     $hourInCache=$hourSection;  //如果没有缓冲或者缓冲为空  设置默认值:当前小时, 0点击
                     $clickInCache=0;
                     $filePath=self::VIRTUAL_CLICK_CACHE_FILE_PATH;
-                    $fileName="site_ad_content_".$siteAdContentId.".txt";
+                    $fileName="site_ad_content_".$siteAdContentId."_";
                     $cacheContent=DataCache::Get($filePath.$fileName);   //取缓冲中虚拟点击状态   小时_点击数
                     if($cacheContent&&$cacheContent!=""){
                         $arrayOfVClickState=mb_split("_",$cacheContent);
