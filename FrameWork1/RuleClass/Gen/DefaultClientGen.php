@@ -14,7 +14,6 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
         $module = Control::GetRequest("mod", "");
 
         $authKey = Control::GetRequest("auth_key","");
-
         switch ($module) {
             case "pic_slider":
                 $picSliderClientGen = new PicSliderClientGen();

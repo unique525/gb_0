@@ -1715,6 +1715,28 @@ class BaseGen
 
         return $errorMessage;
     }
+
+
+    /**
+     * 根据频道ID获取包含本频道ID及以下子频道ID字符串，为id,id,id 的形式
+     * @param int $channelId 频道id
+     * @return string 频道id字符串
+     */
+    protected function GetOwnChannelIdAndChildChannelId($channelId)
+    {
+        $allChannelId="";
+        if ($channelId > 0) {
+            $channelPublicData = new ChannelPublicData();
+            $childChannelId = $channelPublicData->GetChildrenChannelId($channelId,true);
+            if(empty($childChannelId)){
+                $allChannelId = $channelId;
+            }
+            else{
+                $allChannelId = $channelId.",".$childChannelId;
+            }
+        }
+        return $allChannelId;
+    }
 }
 
 ?>

@@ -163,7 +163,7 @@
     <div class="left_bar left">
         <div class="xianshi">
             <div class="title2"><a href="#" target="_blank">限时抢购</a></div>
-            <icms id="product_1" type="product_list" where="RecLevel" top="1">
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="1" top="1">
                 <item>
                     <![CDATA[
                     <div class="sale_goods" id="sale_goods">
