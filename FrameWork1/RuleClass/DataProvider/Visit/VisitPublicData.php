@@ -26,7 +26,7 @@ class VisitPublicData extends BasePublicData {
      */
     public function Create($siteId, $channelId, $tableType, $tableId, $createDate, $visitTitle, $visitTag, $visitUrl, $ipAddress, $agent, $refDomain, $refUrl) {
         $tableName = parent::CreateAndGetTableName(self::TableName_Visit);
-        $sql = "INSERT INTO $tableName (siteid,documentchannelid,tabletype,tableid,createdate,visittitle,visittag,visiturl,ipaddress,agent,refdomain,refurl) values (:siteid,:documentchannelid,:tabletype,:tableid,:createdate,:visittitle,:visittag,:visiturl,:ipaddress,:agent,:refdomain,:refurl)";
+        $sql = "INSERT INTO $tableName (SiteId,ChannelId,TableType,TableId,CreateDate,VisitTitle,VisitTag,VisitUrl,IpAddress,Agent,RefDomain,RefUrl) values (:SiteId,:ChannelId,:TableType,:TableId,:CreateDate,:VisitTitle,:VisitTag,:VisitUrl,:IpAddress,:Agent,:RefDomain,:RefUrl)";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
@@ -40,8 +40,7 @@ class VisitPublicData extends BasePublicData {
         $dataProperty->AddField("Agent", $agent);
         $dataProperty->AddField("RefDomain", $refDomain);
         $dataProperty->AddField("RefUrl", $refUrl);
-        $dbOperator = DBOperator::getInstance();
-        $insertId = $dbOperator->LastInsertId($sql, $dataProperty);
+        $insertId = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $insertId;
     }
 

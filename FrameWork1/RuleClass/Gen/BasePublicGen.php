@@ -125,7 +125,16 @@ class BasePublicGen extends BaseGen {
                         }
                         break;
                     case Template::TAG_TYPE_PRODUCT_LIST :
-                        $templateContent = self::ReplaceTemplateOfProductList($templateContent, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
+                        $templateContent = self::ReplaceTemplateOfProductList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
                         break;
                     case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_CLASS_LIST :
                         $channelId = intval(str_ireplace("product_param_type_class_", "", $tagId));
@@ -635,6 +644,7 @@ class BasePublicGen extends BaseGen {
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件的值
      * @param string $tagOrder 排序方式
      * @param int $state 状态
      * @return mixed|string 内容模板
@@ -645,6 +655,7 @@ class BasePublicGen extends BaseGen {
         $tagContent,
         $tagTopCount,
         $tagWhere,
+        $tagWhereValue,
         $tagOrder,
         $state
     )
@@ -666,9 +677,10 @@ class BasePublicGen extends BaseGen {
                 }
                 break;
             case "RecLevel":
-                $recLevel = intval(str_ireplace("product_", "", $tagId));
+                $siteId = intval(str_ireplace("product_", "", $tagId));
+                $recLevel = intval($tagWhereValue);
                 if ($recLevel > 0) {
-                    $arrProductList = $arrProductList = $productPublicData->GetListByRecLevel($recLevel, $tagOrder, $tagTopCount);
+                    $arrProductList = $arrProductList = $productPublicData->GetListByRecLevel($siteId, $recLevel, $tagOrder, $tagTopCount);
                 }
                 break;
             case "SaleCount":
@@ -684,7 +696,7 @@ class BasePublicGen extends BaseGen {
             default :
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $AllChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $AllChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
                     $arrProductList = $productPublicData->GetListByChannelId($AllChannelId, $tagOrder, $tagTopCount);
                 }
         }
@@ -697,26 +709,6 @@ class BasePublicGen extends BaseGen {
         return $templateContent;
     }
 
-    /**
-     * 根据频道ID获取包含本频道ID及以下子频道ID字符串，为id,id,id 的形式
-     * @param int $channelId 频道id
-     * @return string 频道id字符串
-     */
-    protected function GetOwnChannelIdAndChildChannelId($channelId)
-    {
-        $allChannelId="";
-        if ($channelId > 0) {
-            $channelPublicData = new ChannelPublicData();
-            $childChannelId = $channelPublicData->GetChildrenChannelId($channelId,true);
-            if(empty($childChannelId)){
-                $allChannelId = $channelId;
-            }
-            else{
-                $allChannelId = $channelId.",".$childChannelId;
-            }
-        }
-        return $allChannelId;
-    }
 
     /**
      * 替换产品参数类别列表的内容

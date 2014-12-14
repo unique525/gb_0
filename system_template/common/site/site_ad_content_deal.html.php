@@ -17,14 +17,35 @@
         var tableType = window.UPLOAD_TABLE_TYPE_SITE_AD_CONTENT;
         var tableId = parseInt('{SiteAdId}');
 
+        var siteAdWidth="{SiteAdWidth}";
+        var siteAdHeight="{SiteAdHeight}";
 
         //上传回调函数
-        window.AjaxFileUploadCallBack = function(data){
-
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
+        var siteAdType=$("#f_SiteAdType").val();
+        switch (siteAdType) {
+            case "0":
+                editor.setSource('<img src="'+data.upload_file_path+'" width="'+siteAdWidth+'" border="0" height="'+siteAdHeight+'" style="display:block"/>');
+                break;
+            case "1":     //SWF默认模式
+                editor.setSource('<embed src="'+data.upload_file_path+'" width="'+siteAdWidth+'" border="0" height="'+siteAdHeight+'" style="display:block" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>');
+                break;
+            case "2":    //SWF_透明
+                editor.setSource('<embed src="'+data.upload_file_path+'" width="'+siteAdWidth+'" border="0" height="'+siteAdHeight+'" style="display:block" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent"></embed>');
+                break;
+            case "3":    //SWF_降级
+                editor.setSource('<embed src="'+data.upload_file_path+'" width="'+siteAdWidth+'" border="0" height="'+siteAdHeight+'" style="display:block" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="opaque"></embed>');
+                break;
+            case "4":    //html代码
+                break;
+        }
         }
 
         $(function(){
 
+            $("#f_SiteAdType").change(function(){
+                editor.setSource('');
+            });
             if ($.browser.msie) {
                 $('input:checkbox').click(function () {
                     this.blur();
@@ -266,10 +287,11 @@
                             <td class="spe_line" style="text-align: left">
 
                                 <select id="f_SiteAdType" name="f_SiteAdType">
-                                    <option value="0" selected="selected">GIF</option>
+                                    <option value="0" selected="selected">图片</option>
                                     <option value="1">SWF默认模式</option>
                                     <option value="2">SWF_透明</option>
                                     <option value="3">SWF_降级</option>
+                                    <option value="4">HTML代码</option>
                                 </select>
                                 {s_SiteAdType}
                             </td>

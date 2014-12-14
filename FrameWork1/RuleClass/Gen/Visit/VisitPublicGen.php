@@ -6,25 +6,17 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Visit
  * @author hy
  */
-class VisitGen extends BasePublicGen implements IBasePublicGen
+class VisitPublicGen extends BasePublicGen implements IBasePublicGen
 {
 
     /**
      * 引导方法
-     * @return string 返回执行结果
+     *  @return string 返回执行结果
      */
     public function GenPublic()
     {
-    }
-
-    /**
-     * 主生成方法(继承接口)
-     * @return string 返回输出的HTML内容
-     */
-    public function GenFront()
-    {
         $result = "";
-        $method = Control::GetRequest("m", "");
+        $method = Control::GetRequest("a", "");
         switch ($method) {
             case "create": //统计访问量
                 $result = self::GenCreate();

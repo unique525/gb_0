@@ -180,7 +180,7 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
 
                     //重新格式化内容
                     $siteAdContent=$siteAdContentManageData->GetContent($siteAdContentId);
-                    $siteAdType=Control::PostRequest("f_SiteAdType","");//广告文件类型0:GIF,1:SWF,2:SWFT透明,3:SWFO降级,4:MMS
+                    $siteAdType=Control::PostRequest("f_SiteAdType","");//广告文件类型0:GIF,1:SWF,2:SWFT透明,3:SWFO降级,4:html
                     if($siteAdContent!=""){
                         $siteAdContent=strtolower($siteAdContent);
                         $contentSet=-1;
@@ -192,23 +192,21 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                                 break;
                             case 1:
                                 $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
-                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "/>") + strlen("/>"));
                                 $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
                                 break;
                             case 2:
                                 $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
-                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("/>"));
                                 $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
                                 break;
                             case 3:
                                 $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
-                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
+                                $contentFile = substr($contentFile, 0, strpos($contentFile, "/>") + strlen("/>"));
                                 $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
                                 break;
                             case 4:
-                                $contentFile = substr($siteAdContent, strpos($siteAdContent, "<embed"));
-                                $contentFile = substr($contentFile, 0, strpos($contentFile, "</embed>") + strlen("</embed>"));
-                                $contentSet=$siteAdContentManageData->ModifyContent($siteAdContentId,$contentFile);
+                                $contentSet=1;
                                 break;
                         }
                         if($contentSet<0){
@@ -249,8 +247,11 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
 
-
+            $siteAdManageData=new SiteAdManageData();
+            $arrayOfOneSiteAd=$siteAdManageData->GetOne($siteAdId);
             $replace_arr = array(
+                "{SiteAdWidth}" => $arrayOfOneSiteAd["SiteAdWidth"],
+                "{SiteAdHeight}" => $arrayOfOneSiteAd["SiteAdHeight"],
                 "{TabIndex}" => $tabIndex,
                 "{display}" => "none"
             );

@@ -668,8 +668,14 @@ class BaseData
         $nowYear = date('Y');
         $nowMonth = date('m');
 
+        $databaseInfo = explode('|',DATABASE_INFO);
+        $dbName="";
+        if (!empty($databaseInfo)) {
+            $dbName= $databaseInfo[2];
+        }
+
         $tableName = $sourceTableName . "_" . $nowYear . $nowMonth;
-        $sqlHasCount = "SELECT count(*) FROM information_schema.TABLES WHERE TABLE_NAME='$tableName'";
+        $sqlHasCount = "SELECT count(*) FROM information_schema.TABLES WHERE table_schema = '$dbName' AND TABLE_NAME='$tableName'";
 
         $hasCount = $this->dbOperator->GetInt($sqlHasCount, null);
 

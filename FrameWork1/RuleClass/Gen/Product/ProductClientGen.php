@@ -14,10 +14,17 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
     public function GenClient(){
         $result = "";
         $function = Control::GetRequest("f", "");
+
         switch ($function) {
 
             case "list_of_channel_id":
                 $result = self::GenListOfChannelId();
+                break;
+            case "list_of_discount": //打折商品
+                $result = self::GenListOfDiscount();
+                break;
+            case "list_of_rec_level"://推荐商品
+                $result = self::GenListOfRecLevel();
                 break;
 
         }
@@ -29,7 +36,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenListOfChannelId(){
+    private function GenListOfChannelId(){
 
         $result = "";
 
@@ -57,4 +64,37 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"product":{"product_list":' . $result . '}}';
     }
 
+    private function GenListOfDiscount(){
+        $result = "";
+        $channelId = Control::GetRequest("channel_id", 0);
+        if ($channelId > 0) {
+            $topCount = Control::GetRequest("top", 5);
+            $orderBy = Control::GetRequest("order", 0);
+
+            $productClientData = new ProductClientData();
+            $ownChannelAndChildChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
+            $arrProductList = $productClientData->GetDiscountListByChannelId($ownChannelAndChildChannelId, $orderBy, $topCount);
+            if (count($arrProductList) > 0) {
+                $result = Format::FixJsonEncode($arrProductList);
+            }
+        }
+        return '{"product":{"product_list":' . $result . '}}';
+    }
+
+    private function GenListOfRecLevel(){
+        $result = "";
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId > 0) {
+            $topCount = Control::GetRequest("top", 5);
+            $recLevel = Control::GetRequest("rec_level", 0);
+            $orderBy = Control::GetRequest("order", 0);
+
+            $productClientData = new ProductClientData();
+            $arrProductList = $productClientData->GetListByRecLevel($siteId, $recLevel, $orderBy, $topCount);
+            if (count($arrProductList) > 0) {
+                $result = Format::FixJsonEncode($arrProductList);
+            }
+        }
+        return '{"product":{"product_list":' . $result . '}}';
+    }
 } 
