@@ -251,7 +251,7 @@ class DbOperator {
             $stmt = null;
             return $result;
         } catch (PDOException $e) {
-            echo $this->pdo->rollBack();
+            $this->pdo->rollBack();
             return -1;
         }
     }

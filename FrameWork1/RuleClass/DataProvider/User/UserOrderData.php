@@ -22,6 +22,14 @@ class UserOrderData extends BaseData {
      * 状态：已付款，未发货
      */
     const STATE_PAYMENT = 20;
+    /**
+     * 状态：交易完成
+     */
+    const STATE_DONE = 30;
+    /**
+     * 状态：交易关闭
+     */
+    const STATE_CLOSE = 40;
 
 
 
@@ -35,6 +43,10 @@ class UserOrderData extends BaseData {
      * 状态：已删
      */
     const STATE_REMOVED = 100;
+    /**
+     * 状态：退货
+     */
+    const STATE_RETURN = 110;
 
 
     const USER_ORDER_DES_KEY = "SUDK2014";

@@ -82,7 +82,7 @@ function subForm() {
         if (canSubmit) {
             $("#btnsubmit").attr("disabled", true);
             var param = $("#main_form").serialize();
-            var url = "/default.php?mod=user&a=register&site_id=1";
+            var url = "/default.php?mod=user&a=async_register";
             $.ajax({
                 url: url,
                 type: "post",

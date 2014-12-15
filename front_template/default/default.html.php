@@ -190,7 +190,7 @@
             <div class="clean"></div>
             <div class="good" id="tabdiv1">
                 <ul>
-                    <icms id="product_2" type="product_list" where="RecLevel" top="3">
+                    <icms id="product_1" type="product_list" where="RecLevel" where_value="2" top="3">
                         <item>
                             <![CDATA[
                             <li>
@@ -205,7 +205,7 @@
             </div>
             <div class="good" id="tabdiv2" style="display: none">
                 <ul>
-                    <icms id="product_3" type="product_list" where="RecLevel" top="3">
+                    <icms id="product_1" type="product_list" where="RecLevel" where_value="3" top="3">
                         <item>
                             <![CDATA[
                             <li>
@@ -220,7 +220,7 @@
             </div>
             <div class="good" id="tabdiv3" style="display: none">
                 <ul>
-                    <icms id="product_4" type="product_list" where="RecLevel" top="3">
+                    <icms id="product_1" type="product_list" where="RecLevel" where_value="4" top="3">
                         <item>
                             <![CDATA[
                             <li>
@@ -238,7 +238,7 @@
     <div class="right_bar right">
         <div class="sales">
             <div class="title2 recent"><a href="#" target="_blank">下期预售</a></div>
-            <icms id="product_5" type="product_list" where="RecLevel" top="1">
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="5" top="1">
                 <item>
                     <![CDATA[
                     <div class="sale_goods" id="sale_goods2">
@@ -592,5 +592,6 @@
 </div>
 
 <pre_temp id="8"></pre_temp>
+><script type="text/javascript">var visitConfig = encodeURIComponent("http://xzw.changsha.cn") +"||11||209||0||0||"+encodeURI("");</script><script type="text/javascript" src="http://xzw.changsha.cn/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>

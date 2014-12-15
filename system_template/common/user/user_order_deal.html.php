@@ -65,16 +65,19 @@
             <tr>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">订单总价：</td>
                 <td class="spe_line" height="30">
-                    ￥<span id="display_AllPrice" class="show_price">{AllPrice}</span>
+                    ￥<input type="text" class="input_price" id="display_AllPrice" name="f_AllPrice" value="{AllPrice}"/>
                 </td>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">订单状态：</td>
                 <td class="spe_line" height="30">
                     <select name="f_State" id="f_State">
-                        <option value="0">未付款</option>
-                        <option value="10">已付款</option>
-                        <option value="20">已发货</option>
+                        <option value="0">新建</option>
+                        <option value="10">未付款</option>
+                        <option value="20">已付款，未发货</option>
                         <option value="30">交易完成</option>
                         <option value="40">交易关闭</option>
+                        <option value="70">未评价</option>
+                        <option value="100">已删除</option>
+                        <option value="110">已退货</option>
                         {s_state}
                     </select>
                 </td>
@@ -125,7 +128,7 @@
                             ￥<span class="UserOrderSubtotal">{f_Subtotal}</span>
                         </td>
                         <td class="spe_line" height="30">
-                            <div class="btn2 delete_order_product" idvalue="{f_UserOrderProductId}" title="{f_UserOrderId}" style="cursor:pointer;width:50px;text-align: center">删除</div>
+                            <div class="delete_order_product btn2 " idvalue="{f_UserOrderProductId}" title="{f_UserOrderId}" style="cursor:pointer;width:50px;text-align: center">删除</div>
                         </td>
                     </tr>
                     ]]>
@@ -142,7 +145,6 @@
         <input name="PageIndex" type="hidden" value="{PageIndex}"/>
         <input name="PageSize" type="hidden" value="{PageSize}"/>
         <input name="TabIndex" type="hidden" value="{TabIndex}"/>
-        <input name="f_AllPrice" id="AllPrice" type="hidden" value="{AllPrice}"/>
     </form>
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>

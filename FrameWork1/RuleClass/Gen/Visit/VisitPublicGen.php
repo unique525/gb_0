@@ -21,6 +21,9 @@ class VisitPublicGen extends BasePublicGen implements IBasePublicGen
             case "create": //统计访问量
                 $result = self::GenCreate();
                 break;
+            case "async_get_visit_data":
+                $result = self::AsyncGetVisitData();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -62,6 +65,10 @@ class VisitPublicGen extends BasePublicGen implements IBasePublicGen
         return "";
     }
 
+    private function AsyncGetVisitData(){
+        
+        return Control::GetRequest("jsonpcallback","");
+    }
 }
 
 ?>
