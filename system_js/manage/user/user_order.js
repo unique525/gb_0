@@ -5,10 +5,10 @@ function FormatOrderState(state,idvalue){
             result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
         case "10":
-            result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
         case "20":
-            result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'">已付款,未发货</span>';
             break;
         case "30":
             result = '<span class="span_state" id="State_'+idvalue+'">交易完成</span>';
@@ -16,6 +16,9 @@ function FormatOrderState(state,idvalue){
         case "40":
             result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
             break;
+        case "70":
+        result = '<span class="span_state" id="State_'+idvalue+'" >未评论</span>';
+        break;
     }
     return result;
 }
@@ -168,10 +171,28 @@ $(document).ready(function(){
     $(".btn_user_order_list_pay_info").click(function(){
         var userOrderId = $(this).attr("idvalue");
         var pageIndex = Request["p"]==null?1:Request["p"];
-        var url='/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=' + userOrderId + '&site_id='
+        var url='/default.php?secu=manage&mod=user_order_send&m=list&user_order_id=' + userOrderId + '&site_id='
             +parent.G_NowSiteId+'&p=' + pageIndex;
         $("#user_order_pay_dialog_frame").attr("src",url);
         $("#dialog_user_order_pay_box").dialog({
+            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:650,
+            width:1250,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'订单中的发货信息',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+    });
+
+    //在订单列表页打开物流信息
+    $(".btn_user_order_list_send_info").click(function(){
+        var userOrderId = $(this).attr("idvalue");
+        var pageIndex = Request["p"]==null?1:Request["p"];
+        var url='/default.php?secu=manage&mod=user_order_send&m=list&user_order_id=' + userOrderId + '&site_id='
+            +parent.G_NowSiteId+'&p=' + pageIndex;
+        $("#user_order_send_dialog_frame").attr("src",url);
+        $("#dialog_user_order_send_box").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
             height:650,
@@ -204,12 +225,13 @@ $(document).ready(function(){
     });
     $("#AllSaleProductPrice").html(formatPrice(AllSaleProductPrice));
 
-    $("#SendPrice").blur(function(){
-        var SendPrice = parseFloat($("#SendPrice").val());
-        var AllPrice = AllSaleProductPrice+SendPrice;
-        $("#display_AllPrice").html(AllPrice);
-        $("#AllPrice").val(AllPrice);
-    });
+//
+//    $("#SendPrice").blur(function(){
+//        var SendPrice = parseFloat($("#SendPrice").val());
+//        var AllPrice = AllSaleProductPrice+SendPrice;
+//        $("#display_AllPrice").html(formatPrice(AllPrice));
+//        $("#AllPrice").val(AllPrice);
+//    });
 
     $(".delete_order_product").click(function(){
         var user_order_product_id = $(this).attr("idvalue");
@@ -223,8 +245,14 @@ $(document).ready(function(){
             success:function(data){
                 if(data["result"] > 0){
                     $("#user_order_product_"+user_order_product_id).remove();
-                    $("#display_AllPrice").html("￥"+data["all_price"]);
+                    $("#display_AllPrice").val(formatPrice(data["all_price"]));
                     $("#AllPrice").val(data["all_price"]);
+                    var AllSaleProductPrice = 0;
+                    $(".UserOrderSubtotal").each(function(){
+                        var ProductPrice = parseFloat($(this).html());
+                        AllSaleProductPrice = ProductPrice+AllSaleProductPrice;
+                    });
+                    $("#AllSaleProductPrice").html(formatPrice(AllSaleProductPrice));
                 }else{
                     alert("修改失败,请联系管理员");
                 }

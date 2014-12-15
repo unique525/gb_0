@@ -168,15 +168,18 @@ class UserOrderPublicData extends BasePublicData
     /**
      * 获取一个订单的详细信息
      * @param int $userOrderId 订单Id
+     * @param int $userId 用户Id
      * @param int $siteId 站点Id
      * @return array|null 一个会员订单的数组
      */
-    public function GetOne($userOrderId,$siteId){
+    public function GetOne($userOrderId,$userId,$siteId){
         $result = null;
-        if($userOrderId > 0 && $siteId > 0){
-            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM ".self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
+        if($userOrderId > 0 && $userId > 0 && $siteId > 0){
+            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM "
+                .self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.UserId = :UserId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
+            $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArray($sql,$dataProperty);
         }

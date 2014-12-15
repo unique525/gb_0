@@ -7,7 +7,51 @@
  */
 class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
     public function Gen(){
+        $result = "";
+        $method = Control::GetRequest("m","");
+        switch($method){
+            case "list":
+                $result = self::GenList();
+                break;
+            case "async_modify":
+                $result = self::AsyncModify();
+                break;
+            case "async_create":
+                $result = self::AsyncCreate();
+                break;
+            case "async_remove":
+                $result = self::AsyncRemove();
+                break;
+        }
+        $result = str_ireplace("{method}", $method, $result);
+        return $result;
+    }
+
+    private function GenList(){
+        $siteId = Control::GetRequest("site_id",0);
+        $userOrderId = Control::GetRequest("user_order_id",0);
+
         return "";
     }
 
+    private function AsyncModify(){
+        $siteId = Control::GetRequest("site_id",0);
+        $userOrderId = Control::GetRequest("user_order_id",0);
+
+        return Control::GetRequest("jsonpcallback","")."";
+    }
+
+    private function AsyncCreate(){
+        $siteId = Control::GetRequest("site_id",0);
+        $userOrderId = Control::GetRequest("user_order_id",0);
+
+        return Control::GetRequest("jsonpcallback","")."";
+    }
+
+    private function AsyncRemove(){
+        $siteId = Control::GetRequest("site_id",0);
+        $userOrderId = Control::GetRequest("user_order_id",0);
+
+        return Control::GetRequest("jsonpcallback","")."";
+    }
 }

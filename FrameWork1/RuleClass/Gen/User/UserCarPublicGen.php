@@ -98,8 +98,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenList()
     {
-//        $userId = Control::GetUserId();
-        $userId = 1;
+        $userId = Control::GetUserId();
         $siteId =parent::GetSiteIdByDomain();
 
         $tagId = "user_car_list";
