@@ -68,8 +68,8 @@ class UserOrderProductManageData extends BaseManageData
                 WHERE uo.UserOrderId = :UserOrderId2;";//重新计算会员订单的总价
 
             $dataPropertyUserOrderProduct->AddField("State",$state);
-            $dataPropertyUserOrderProduct->AddField("State2",self::STATE_REMOVED);
             $dataPropertyUserOrderProduct->AddField("UserOrderProductId",$userOrderProductId);
+            $dataPropertyUserOrder->AddField("State2",self::STATE_REMOVED);
             $dataPropertyUserOrder->AddField("UserOrderId1",$userOrderId);
             $dataPropertyUserOrder->AddField("UserOrderId2",$userOrderId);
 

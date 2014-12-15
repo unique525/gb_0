@@ -153,8 +153,26 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
 
         $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType,$reUrl);
         if ($result > 0) {
-            if ($tableType == 1) { //更新相册和会员信息表的统计
+            switch ($tableType) {
+                case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
 
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
+                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                    $newspaperArticlePublicData->AddCommentCount($tableId);
+                    break;
             }
             Control::GoUrl($reUrl);
         } else {

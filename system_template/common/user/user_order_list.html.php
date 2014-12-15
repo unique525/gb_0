@@ -4,18 +4,30 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
     <script type="text/javascript" src="/system_js/manage/user/user_order.js"></script>
-    <style type="text/css">
-        .order{margin-bottom: 5px}
-        .order .title{font-size: 16px;color:#000000}
-        .product_pic{width:110px;height:110px;float:left;margin-left: 15px;background-size:cover}
-        .product_name{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:780px;height:110px;float:left;margin-left: 5px}
-        .product_price{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:130px;height:110px;float:left;margin-left: 5px}
-        .product_count{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:80px;height:110px;float:left;margin-left: 5px}
-        .freight_price{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:130px;height:110px;float:left;margin-left: 5px}
-        .order_price{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:130px;height:110px;float:left;margin-left: 5px}
-        .order_state{text-align:center;line-height: 110px;font-size: 16px;background-color:#ccc;width:130px;height:110px;float:left;margin-left: 5px}
-        .order_operate{background-color:#ccc;width:130px;height:110px;float:left;margin-left: 5px}
-    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#begin_date").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                showButtonPanel: true
+            });
+            $("#end_date").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                showButtonPanel: true
+            });
+
+            $("#btn_search").click(function(){
+                var site_id = 1;
+                var user_order_number = $("#user_order_number").val();
+                var state = $("#state").val();
+                var begin_date = $("#begin_date").val();
+                var end_date = $("#end_date").val();
+                window.location.href="/default.php?secu=manage&mod=user_order&m=list_for_search" +"&site_id="+site_id+
+                    "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date;
+            });
+        })
+    </script>
 </head>
 <body>
     <div id="dialog_user_order_pay_box" title="提示信息" style="display: none;">
@@ -23,8 +35,27 @@
             <iframe id="user_order_pay_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
         </div>
     </div>
+    <div id="dialog_user_order_send_box" title="提示信息" style="display: none;">
+        <div id="user_order_send__table" style="font-size: 14px;">
+            <iframe id="user_order_send_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="400px"></iframe>
+        </div>
+    </div>
     <div class="div_list">
-        <div class="search" style="width:99%;height:30px"></div>
+        <div class="search" style="width:99%;height:30px">
+            订单号：<input type="text" id="user_order_number" value=""/>
+            订单状态：
+            <select id="state">
+                <option value="">全部</option>
+                <option value="0">未付款</option>
+                <option value="20">已付款，未发货</option>
+                <option value="30">交易完成</option>
+                <option value="40">交易关闭</option>
+                <option value="70">未评价</option>
+            </select>
+            起始时间：<input  id="begin_date" value="" type="text" class="input_box" style="width:80px;"/>
+            -结束时间：<input id="end_date" value="" type="text" class="input_box" style="width:80px;"/>
+            <input id="btn_search" type="button" class="btn2" value="查询"/>
+        </div>
         <div class="advance_search" style="width:99%;height:150px;border:1px #CCC solid;display: none">
 
         </div>
@@ -72,6 +103,7 @@
                             </td>
                             <td class="spe_line2" style="width:150px;text-align: center">
                                 <div class="btn2 btn_user_order_list_pay_info" idvalue="{f_UserOrderId}" style="width:80px;">支付信息</div>
+                                <div class="btn2 btn_user_order_list_send_info" idvalue="{f_UserOrderId}" style="width:80px;">物流信息</div>
                             </td>
                         </tr>
                     </table>
@@ -116,6 +148,7 @@
                 <div style="clear:left"></div>
             </div>
         </div>-->
+        {pagerButton}
     </div>
 </body>
 </html>

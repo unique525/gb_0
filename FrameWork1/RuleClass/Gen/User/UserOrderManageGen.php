@@ -20,6 +20,9 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             case "list":
                 $result = self::GenList();
                 break;
+            case "list_for_search":
+                $result = self::GenListForSearch();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -118,7 +121,7 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         if($siteId > 0){
             $pageIndex = Control::GetRequest("p",1);
-            $pageSize = Control::GetRequest("ps",0);
+            $pageSize = Control::GetRequest("ps",27);
             $templateContent = Template::Load("user/user_order_list.html","common");
 
             $allCount = 0;
@@ -132,6 +135,55 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html","common");
                 $isJs = FALSE;
                 $navUrl = "/default.php?secu=manage&mod=user_order&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                Template::ReplaceList($templateContent,$arrUserOrderList,$tagId);
+                $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
+            }else{
+                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = str_ireplace("{pagerButton}","", $templateContent);
+            }
+            $arrReplace = array(
+                "{SiteId}" => $siteId
+            );
+
+
+            $templateContent = strtr($templateContent,$arrReplace);
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            return null;
+        }
+    }
+
+    private function GenListForSearch(){
+        $siteId = Control::GetRequest("site_id",0);
+
+        if($siteId > 0){
+            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = Control::GetRequest("ps",27);
+
+            $templateContent = Template::Load("user/user_order_list.html","common");
+
+            $allCount = 0;
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+
+            $userOrderNumber = Control::GetRequest("user_order_number","");
+            $state = Control::GetRequest("state",0);
+            $beginDate = Control::GetRequest("begin_date","");
+            $endDate = Control::GetRequest("end_date","");
+            $userOrderManageData = new UserOrderManageData();
+            $arrUserOrderList = $userOrderManageData->GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,$allCount);
+
+            $tagId = "user_order_list";
+            if(count($arrUserOrderList) > 0){
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html","common");
+                $isJs = FALSE;
+                $navUrl = "/default.php?secu=manage&mod=user_order&m=list_for_search&site_id=$siteId"
+                    ."&user_order_number=".$userOrderNumber."&state=".$state."&begin_date=".$beginDate
+                    ."&end_date=".$endDate."&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

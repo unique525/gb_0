@@ -19,7 +19,7 @@ function select_all(this_select) {
         $(".checkbox_car").prop("checked", true);//全选
         $(".select_all").prop("checked", true);
         $(".checkbox_car").each(function () {
-            selected_car.push(this_select.attr("idvalue"));
+            selected_car.push($(this).attr("idvalue"));
         });
     } else {
         $(".checkbox_car").prop("checked", false);//取消全选

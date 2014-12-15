@@ -53,6 +53,59 @@ class UserOrderManageData extends BaseManageData{
         return $result;
     }
 
+    public function GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,&$allCount){
+        $result = null;
+        if($siteId > 0){
+            $sql = "SELECT uo.*,ui.NickName AS UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_UserInfo
+                ." ui ON uo.UserId = ui.UserId WHERE uo.SiteId = :SiteId ";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo WHERE uo.SiteId = :SiteId ";
+
+            $dataProperty = new DataProperty();
+
+            $addSql = "";
+            if ($beginDate !="" || $endDate != "") {
+                if ($beginDate !="" && $endDate == "") {
+                    $addSql = " AND uo.CreateDate > date(:BeginDate) ";
+                    $dataProperty->AddField("BeginDate", $beginDate);
+                } else  if($beginDate =="" && $endDate != ""){
+                    $addSql = " AND uo.CreateDate < data(:EndDate) ";
+                    $dataProperty->AddField("EndDate", $endDate);
+                }else  if($beginDate !="" && $endDate != ""){
+                    $addSql = " AND uo.CreateDate > date(:BeginDate) AND uo.CreateDate < date(:EndDate) ";
+                    $dataProperty->AddField("BeginDate", $beginDate);
+                    $dataProperty->AddField("EndDate", $endDate);
+                }
+                $sql = $sql . $addSql;
+                $sqlCount = $sqlCount . $addSql;
+            }
+
+            if ($userOrderNumber != "") {
+                $addSql = " AND uo.UserOrderNumber LIKE :UserOrderNumber";
+                $dataProperty->AddField("UserOrderNumber", "%" . $userOrderNumber . "%");
+                $sql = $sql . $addSql;
+                $sqlCount = $sqlCount . $addSql;
+            }
+
+            if ($state != "") {
+                if($state == 10 || $state == 0){
+                    $addSql = " AND (State = :State1 OR State = :State2) ";
+                    $dataProperty->AddField("State1", "0");
+                    $dataProperty->AddField("State2", "10");
+                }else{
+                    $addSql = " AND State = :State";
+                    $dataProperty->AddField("State", $state);
+                }
+                $sql = $sql . $addSql;
+                $sqlCount = $sqlCount . $addSql;
+            }
+            $sql = $sql . " ORDER BY uo.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
+            $dataProperty->AddField("SiteId",$siteId);
+
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+            $allCount = $this->dbOperator->GetInt($sqlCount,$dataProperty);
+        }
+        return $result;
+    }
     /**
      * 获取一个订单的详细信息
      * @param int $userOrderId 订单Id
