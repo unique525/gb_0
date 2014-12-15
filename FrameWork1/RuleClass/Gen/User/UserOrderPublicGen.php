@@ -98,6 +98,15 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             $siteId = parent::GetSiteIdByDomain();
             $userOrderId = Control::GetRequest("user_order_id",0);
             if($userOrderId > 0 && $siteId > 0){
+
+                /////权限验证//////////////////////
+                /////会员id和订单所属会员id要一致
+                //////////////////////////////////
+
+
+
+
+
                 $templateFileUrl = "user/user_order_detail.html";
                 $templateName = "default";
                 $templatePath = "front_template";
@@ -156,6 +165,15 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         if($strUserCarIds != "" && $userId > 0 && $siteId > 0){
+
+
+            /////权限验证//////////////////////
+            /////会员id和购物车所属会员id要一致
+            //////////////////////////////////
+
+
+
+
             parent::ReplaceFirst($templateContent);
 
 
@@ -326,9 +344,13 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 //支付方式选择
                 //默认支付宝
 
+                if(strlen($userOrderName)<=0){
+                    $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
+                }
+
                 $alipay = new Alipay();
                 $userOrderIntro = "";
-                $userOrderProductUrl = "";
+                $userOrderProductUrl = "http://".$_SERVER['HTTP_HOST']."/default.php?mod=user_order&a=detail&user_order_id=$userOrderId";
                 $alipayConfig = $alipay->Init($siteId);
                 $result = $alipay->Submit(
                     $siteId,

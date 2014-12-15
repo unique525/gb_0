@@ -37,6 +37,12 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_modify_upload_file_path_for_cut_image":
                 $result = self::AsyncModifyUploadFilePathForCutImage();
                 break;
+            case "async_get_count_by_table_type_and_table_id":
+                $result = self::AsyncGetCountByTableTypeAndTableId();
+                break;
+            case "async_get_count_by_table_type_and_table_id_and_org_name":
+                $result = self::AsyncGetCountByTableTypeAndTableIdAndOrgName();
+                break;
         }
 
         return $result;
@@ -48,20 +54,51 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function AsyncGetOne()
     {
-
         $result = "";
-
         $uploadFileId = Control::GetRequest("upload_file_id", 0);
         if ($uploadFileId > 0) {
             $uploadFileData = new UploadFileData();
             $uploadFile = $uploadFileData->Fill($uploadFileId);
             $result = $uploadFile->GetJson();
         }
+        return $result;
+    }
 
+    /**
+     *
+     * @return int
+     */
+    private function AsyncGetCountByTableTypeAndTableId()
+    {
+        $result = -1;
+        $tableId = Control::PostOrGetRequest("table_id", 0);
+        $tableType = Control::PostOrGetRequest("table_type", 0);
+        if ($tableId > 0 && $tableType > 0) {
+            $uploadFileData = new UploadFileData();
+            $result = $uploadFileData->GetCountByTableTypeAndTableId($tableId, $tableType);
+        }
         return $result;
 
+    }
+
+    /**
+     *
+     * @return int
+     */
+    private function AsyncGetCountByTableTypeAndTableIdAndOrgName()
+    {
+        $result = -1;
+        $tableId = Control::PostOrGetRequest("table_id", 0);
+        $tableType = Control::PostOrGetRequest("table_type", 0);
+        $orgName = Control::PostOrGetRequest("org_name", "");
+        if ($tableId > 0 && $tableType > 0) {
+            $uploadFileData = new UploadFileData();
+            $result = $uploadFileData->GetCountByTableTypeAndTableIdAndOrgName($tableId, $tableType, $orgName);
+        }
+        return $result;
 
     }
+
 
     /**
      * Ajax上传文件

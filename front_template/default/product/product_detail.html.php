@@ -371,19 +371,19 @@
                     <tr>
                         <td align="left" style="font-size:14px;">
                             <div class=quantity>
-                                <p>购买数量： </P>
-                                <p><a hidefocus class=dow id="dow" href="#"><img
+                                <p>购买数量：</P>
+                                <p><a hidefocus class="dow" id="dow" href="#"><img
                                             src="images/dy_03.gif" width=15
-                                            height=15></a> </p>
-                                <P class=mt0><INPUT id=productNum class=textgt_n value=1 maxLength=4
-                                                    type=text> </p>
-                                <P><a hideFocus class=up id="up" href="#"><img
-                                            src="images/dy_05.gif" width=15
-                                            height=15></a> </p></div>
+                                            height=15></a></p>
+                                <P class="mt0"><input id="productNum" class="textgt_n" value="1" maxLength="4"
+                                                    type="text" /></p>
+                                <P><a hideFocus class="up" id="up" href="#"><img
+                                            src="images/dy_05.gif" width="15"
+                                            height="15"></a></p></div>
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<span id="immediately_buy"><img src="images/2_09.gif" width="155" height="36" /></span></td>
+                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<span id="immediately_buy"><img style="cursor:pointer;" src="images/2_09.gif" width="155" height="36" /></span></td>
                     </tr>
                     <tr>
                         <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /><div style="display: none"> <a href="#">降价通知</a> 　</div><img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>

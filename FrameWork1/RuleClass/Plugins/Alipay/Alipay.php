@@ -32,7 +32,6 @@ class Alipay
             $alipayConfig['cacert'] = PHYSICAL_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/cacert.pem";
             //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
             $alipayConfig['transport'] = 'http';
-
         }
 
         return $alipayConfig;
@@ -49,6 +48,8 @@ class Alipay
         $userOrderProductUrl
     )
     {
+        //$sitePublicData = new SitePublicData();
+        $siteUrl = $_SERVER['HTTP_HOST'];//$sitePublicData->GetSiteUrl($siteId, true);
 
         $siteConfigData = new SiteConfigData($siteId);
         //建立请求
@@ -57,15 +58,18 @@ class Alipay
         $payment_type = "1";
         //必填，不能修改
         //服务器异步通知页面路径
-        $notify_url = "http:///create_direct_pay_by_user-PHP-UTF-8/notify_url.php";
+        $notify_url = "http://$siteUrl/default.php?mod=user_order&a=list";
         //需http://格式的完整路径，不能加?id=123这类自定义参数        //页面跳转同步通知页面路径
-        $return_url = "http:///create_direct_pay_by_user-PHP-UTF-8/return_url.php";
+        $return_url = "http://$siteUrl/default.php?mod=user_order&a=list";
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/        //卖家支付宝帐户
         $seller_email = $siteConfigData->PayAlipaySellerEmail;
         //必填        //商户订单号
         $out_trade_no = $userOrderNumber;
         //商户网站订单系统中唯一订单号，必填        //订单名称
         $subject = $userOrderName;
+
+
+
         //必填        //付款金额
         $total_fee = $totalFee;
         //必填        //订单描述
@@ -103,10 +107,6 @@ class Alipay
         $html_text = $alipaySubmit->buildRequestForm($parameter, "get", "确认");
 
         return $html_text;
-
-        //return $html_text;
-
-
     }
 
 

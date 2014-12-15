@@ -773,6 +773,48 @@ class UploadFileData extends BaseData
         return $result;
     }
 
+    /**
+     * 根据$tableId和$tableType取得记录数
+     * @param int $tableId 对象表id
+     * @param int $tableType 表类型
+     * @return int 记录数
+     */
+    public function GetCountByTableTypeAndTableId($tableId, $tableType){
+        $result = -1;
+        if($tableId>0 && $tableType>0){
+            $sql = "SELECT count(*) FROM " . self::TableName_UploadFile . " WHERE TableId=:TableId AND TableType=:TableType;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据$tableId、$tableType和原始文件名取得记录数
+     * @param int $tableId 对象表id
+     * @param int $tableType 表类型
+     * @param string $uploadFileOrgName 原始文件名
+     * @return int 记录数
+     */
+    public function GetCountByTableTypeAndTableIdAndOrgName($tableId, $tableType, $uploadFileOrgName){
+        $result = -1;
+        if($tableId>0 && $tableType>0){
+            $sql = "SELECT count(*) FROM " . self::TableName_UploadFile . "
+                    WHERE TableId=:TableId
+                        AND TableType=:TableType
+                        AND UploadFileOrgName=:UploadFileOrgName
+
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+            $dataProperty->AddField("UploadFileOrgName", $uploadFileOrgName);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 返回一行数据
