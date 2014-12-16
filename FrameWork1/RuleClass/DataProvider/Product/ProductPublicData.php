@@ -429,4 +429,53 @@ class ProductPublicData extends BasePublicData {
         }
         return $result;
     }
+
+    /**
+     * 判断商品是否超过下架时间，并对超时商品更新下架状态值为下架状态
+     * @param int $productId 产品id
+     * @return string 是否下架
+     */
+    public function ModifySaleStateIfOutAutoRemoveDate($productId)
+    {
+        $isOutDate = false; //默认为不超时，不需要做处理
+        if ($productId > 0) {
+            $nowTime = date("Y-m-d H:i:s");
+            $autoRemoveDate = self::GetAutoRemoveDate($productId);
+            if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
+                $isOutDate = true;
+            }
+            if ($isOutDate == true) {
+                $dataProperty = new DataProperty();
+                $sql = "UPDATE " . self::TableName_Product . " SET
+                    SaleState = :SaleState
+                    WHERE ProductId = :ProductId AND OpenAutoRemove=1
+                    ;";
+                $dataProperty->AddField("SaleState", 100);
+                $dataProperty->AddField("ProductId", $productId);
+                $this->dbOperator->Execute($sql, $dataProperty);
+            }
+        }
+        return $isOutDate;
+    }
+
+    /**
+     * 取得产品的下架时间
+     * @param int $productId 产品id
+     * @return string 产品下架时间
+     */
+    public function GetAutoRemoveDate($productId)
+    {
+        $withCache=false;//不缓存
+        $result = "";
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_auto_remove_date.cache_' . $productId . '';
+            $sql = "SELECT AutoRemoveDate FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
 }

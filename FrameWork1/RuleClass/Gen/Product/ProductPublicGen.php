@@ -142,7 +142,14 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             //加载产品表数据
             $productPublicData = new ProductPublicData();
             $arrOne = $productPublicData->GetOne($productId);
-
+            //判断商品是否超过下架时间，并对超时商品更新下架状态值为下架状态
+            $isOutDate=$productPublicData->ModifySaleStateIfOutAutoRemoveDate($productId);
+            //超过下架时间设置前台IsOnSaleFlagValue的值为False
+            $IsOnSaleFlagValue="false";
+            if($isOutDate==false){
+                $IsOnSaleFlagValue="true";
+            }
+            $templateContent = str_ireplace("{IsOnSaleFlagValue}", $IsOnSaleFlagValue, $templateContent);
             if(count($arrOne)>0){
                 Template::ReplaceOne($templateContent, $arrOne);
 

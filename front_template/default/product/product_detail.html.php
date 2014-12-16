@@ -34,6 +34,18 @@
                 preload:1,
                 lens:1
             });
+            //页面加载后根据是否已下架标志做隐藏或显示相关元素处理
+            var isOnSaleFlag={IsOnSaleFlagValue};
+            if(isOnSaleFlag)
+            {
+              $("div [class='OnSale']").css("display","");
+              $("div [class='OutSale']").css("display","none");
+            }
+            else
+            {
+                $("div [class='OnSale']").css("display","none");
+                $("div [class='OutSale']").css("display","");
+            }
             //价格选择
             var spanPropon=$('.propon');
             spanPropon.click(function(){
@@ -344,9 +356,9 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price">{SalePrice}</span></span></p>
-                                <p class="price_n">原　价：￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></p>
-                                <p class="price_n"><span class="chaprice">已优惠：￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<div class="OnSale">￥<span id="productPrice" class="newprice show_price">{SalePrice}</span></div></span></p>
+                                <p class="price_n">原　价：<div class="OnSale">￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></div></p>
+                                <p class="price_n"><span class="chaprice">已优惠：<div class="OnSale">￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></div></span></p></div>
                     </tr>
                     <tr>
                         <td align="left">
@@ -383,7 +395,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left" style="padding:20px 0;"><span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>　<span id="immediately_buy"><img style="cursor:pointer;" src="images/2_09.gif" width="155" height="36" /></span></td>
+                        <td align="left" style="padding:20px 0;">
+                            <div class="OnSale">
+                            <span id="add_car" style="cursor: pointer"><img src="images/2_07.gif" width="155" height="36" /></span>
+                            <span id="immediately_buy"><img style="cursor:pointer;" src="images/2_09.gif" width="155" height="36" /></span>
+                            </div>
+                            <div class="OutSale">
+                                <p>此商品已下架，不能购买！</p>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /><div style="display: none"> <a href="#">降价通知</a> 　</div><img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>
