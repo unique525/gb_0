@@ -58,9 +58,9 @@ class Alipay
         $payment_type = "1";
         //必填，不能修改
         //服务器异步通知页面路径
-        $notify_url = "http://$siteUrl/default.php?mod=user_order&a=list";
+        $notify_url = "http://$siteUrl/default.php?mod=user_order&a=alipay_notify";
         //需http://格式的完整路径，不能加?id=123这类自定义参数        //页面跳转同步通知页面路径
-        $return_url = "http://$siteUrl/default.php?mod=user_order&a=list";
+        $return_url = "http://$siteUrl/pay/alipay/return.php";
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/        //卖家支付宝帐户
         $seller_email = $siteConfigData->PayAlipaySellerEmail;
         //必填        //商户订单号
@@ -142,6 +142,9 @@ class Alipay
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
 
+                self::DealUserOrder($out_trade_no);
+                //增加付款记录
+
                 //注意：
                 //该种交易状态只在两种情况下出现
                 //1、开通了普通即时到账，买家付款成功后。
@@ -153,7 +156,7 @@ class Alipay
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
-
+                self::DealUserOrder($out_trade_no);
                 //注意：
                 //该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
 
@@ -175,6 +178,10 @@ class Alipay
         }
     }
 
+    /**
+     * @param $alipayConfig
+     * @return string
+     */
     public function ReturnUrl($alipayConfig)
     {
         //计算得出通知验证结果
@@ -203,11 +210,12 @@ class Alipay
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
+                self::DealUserOrder($out_trade_no);
             } else {
                 echo "trade_status=" . $_GET['trade_status'];
             }
 
-            echo "验证成功<br />";
+            return "success";
 
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 
@@ -215,12 +223,31 @@ class Alipay
         } else {
             //验证失败
             //如要调试，请看alipay_notify.php页面的verifyReturn函数
-            echo "验证失败";
+            return "fail";
         }
 
 
     }
 
+
+    private function DealUserOrder($out_trade_no){
+        $userOrderPublicData = new UserOrderPublicData();
+        $userOrderId = $userOrderPublicData->GetUserOrderIdByUserOrderNumber($out_trade_no);
+        $allPrice = $userOrderPublicData->GetAllPrice($userOrderId);
+        if($userOrderId>0 && $allPrice>0){
+            //已付款
+            $orderState = UserOrderData::STATE_PAYMENT;
+            //改变订单状态
+            $userOrderPublicData->ModifyState($userOrderId, $orderState);
+            //增加订单付款记录
+            $userOrderPayPublicData = new UserOrderPayPublicData();
+            $userOrderPayPublicData->Create(
+                $userOrderId,
+                $allPrice,
+                "支付宝"
+            );
+        }
+    }
 }
 
 ?>

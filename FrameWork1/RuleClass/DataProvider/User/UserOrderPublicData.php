@@ -129,7 +129,7 @@ class UserOrderPublicData extends BasePublicData
         $result = null;
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT * FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+                . " WHERE UserId = :UserId AND SiteId = :SiteId LIMIT " . $pageBegin . "," . $pageSize . ";";
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId;";
             $dataProperty = new DataProperty();
