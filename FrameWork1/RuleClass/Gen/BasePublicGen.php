@@ -486,6 +486,7 @@ class BasePublicGen extends BaseGen {
             }
 
 
+
             if (!empty($arrList)) {
                 Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容

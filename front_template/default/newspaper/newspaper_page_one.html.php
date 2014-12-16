@@ -84,14 +84,13 @@
 
         </div>
     </header>
-    <div style="background:#ebebeb;">
-        <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
-    </div>
-    <div style="background:#ebebeb;">
+
+    <div style="">
         <div>
-            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <img src="/image_02/top_bg.jpg" style="width:100%;" />
+            <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;cursor:pointer"><a style="color:#000000;" href="/">首页</a>
+                    <td style="text-align:center;cursor:pointer"><a style="color:#ffffff;" href="/">首页</a>
                         <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:20px;display:none">
                             <ul>
                                 <icms id="newspaper_page" type="list" >
@@ -99,7 +98,7 @@
                                         <![CDATA[
                                         <li class="page_button" idvalue="{f_NewspaperPageId}">
                                             <a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={f_NewspaperPageId}">
-                                            {f_NewspaperPageName}
+                                                {f_NewspaperPageName}
                                             </a>
                                         </li>
                                         ]]>
@@ -110,23 +109,22 @@
 
 
                     </td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;cursor:pointer;"><a style="color:#ef1b27;" id="pages">版面</a></td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
+                    <td style="text-align:center;cursor:pointer;"><a style="color:#FFE56C;" id="pages">版面</a></td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
                     <td style="text-align:center;cursor:pointer" id="select_date">
-                        <a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">
+                        <a style="color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">
                             往期回顾
                         </a></td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;" ><a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_page_list&channel_id={ChannelId}&newspaper_id={NewspaperId}">{NewspaperPageNo}</a></td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                    <td style="text-align:center;" ><a style="color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_page_list&channel_id={ChannelId}&newspaper_id={NewspaperId}">{NewspaperPageNo}</a></td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img style="width:20px;" src="/image_02/2-2.png" alt="" id="" /></a></td>
                 </tr>
             </table>
-
-
         </div>
     </div>
+
+
     <div class="site_ad_265"></div><script type="text/javascript" src='/front_js/site_ad/2/site_ad_265.js' charset="utf-8"></script>
     <div>
         <a href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={CurrentNewspaperPageId}&newspaper_id={NewspaperId}&channel_id={ChannelId}">
