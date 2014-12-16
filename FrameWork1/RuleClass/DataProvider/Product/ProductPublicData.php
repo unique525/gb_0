@@ -431,7 +431,7 @@ class ProductPublicData extends BasePublicData {
     }
 
     /**
-     * 判断商品是否超过下架时间，并对超时商品更新下架状态值为下架状态
+     * 判断商品是否超过下架时间，并对设置了自动下架的超时商品更新下架状态值为下架状态
      * @param int $productId 产品id
      * @return string 是否下架
      */
