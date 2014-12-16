@@ -82,7 +82,7 @@ class ProductPublicData extends BasePublicData {
             $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100 AND SaleState<50"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
@@ -173,12 +173,12 @@ class ProductPublicData extends BasePublicData {
             FROM
             " . self::TableName_Product . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
-            WHERE  t.ChannelId IN (".$channelId.") AND t.State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
+            WHERE  t.ChannelId IN (".$channelId.") AND t.State<100 AND SaleState<50 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sql = "SELECT count(*) FROM " . self::TableName_Product . "
-                WHERE ChannelId IN (".$channelId.") AND State<100 "  . " " . $searchSql . ";";
+                WHERE ChannelId IN (".$channelId.") AND State<100 AND SaleState<50 "  . " " . $searchSql . ";";
             $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         }
 
@@ -270,12 +270,12 @@ class ProductPublicData extends BasePublicData {
             FROM
             " . self::TableName_Product . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
-            WHERE t.State<100 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
+            WHERE t.State<100  AND t.SaleState<50" . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sql = "SELECT count(*) FROM " . self::TableName_Product . " t
-                WHERE State<100 "  . " " . $searchSql . ";";
+                WHERE State<100  AND SaleState<50"  . " " . $searchSql . ";";
             $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
@@ -304,7 +304,7 @@ class ProductPublicData extends BasePublicData {
             $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100 AND SaleState<50"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
@@ -336,7 +336,7 @@ class ProductPublicData extends BasePublicData {
         $sql = "SELECT *"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-            . " WHERE t.RecLevel=:RecLevel AND t.SiteId=:SiteId AND t.State<100"
+            . " WHERE t.RecLevel=:RecLevel AND t.SiteId=:SiteId AND t.State<100 AND SaleState<50"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
@@ -368,7 +368,7 @@ class ProductPublicData extends BasePublicData {
         $sql = "SELECT t.*,t1.*"
             . " FROM " . self::TableName_Product ." t"
             . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-            . " WHERE t.State<100"
+            . " WHERE t.State<100 AND SaleState<50"
             . $order
             . $topCount;
         $dataProperty = new DataProperty();
@@ -398,7 +398,7 @@ class ProductPublicData extends BasePublicData {
             $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId IN (".$channelId.") AND IsDiscount=1 AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") AND IsDiscount=1 AND t.State<100 AND SaleState<50"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();
