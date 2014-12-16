@@ -1010,11 +1010,11 @@ class BasePublicGen extends BaseGen {
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
             if (strlen(Control::GetUserExploreCookie($userId))>0) {
-
-            } else {
                 //读取cookie
                 $cookieStr = Control::GetUserExploreCookie($userId);
                 $userExploreCollection->UserExplores = $cookieStr;
+            } else {
+
             }
 
             //将当前访问信息保存到数组中
