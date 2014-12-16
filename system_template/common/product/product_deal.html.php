@@ -452,7 +452,11 @@
                     {s_SaleState}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="f_OpenAutoRemove">开启自动下架：</label>
-                    <input type="checkbox" id="f_OpenAutoRemove" name="f_OpenAutoRemove"/>
+                    <select id="f_OpenAutoRemove" name="f_OpenAutoRemove">
+                        <option value="0">关闭</option>
+                        <option value="1">开启</option>
+                    </select>
+                    {s_OpenAutoRemove}
                     <label for="f_AutoRemoveDate">自动下架日期：</label>
                     <input type="text" class="input_box" id="f_AutoRemoveDate" name="f_AutoRemoveDate" value="{AutoRemoveDate}"
                            style=" width: 90px;font-size:14px;" maxlength="10" readonly="readonly"/>
