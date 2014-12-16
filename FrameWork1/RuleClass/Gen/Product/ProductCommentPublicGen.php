@@ -64,6 +64,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $productId = intval(Control::GetRequest("product_id", 0));
         $userOrderId =intval(Control::GetRequest("user_order_id",0));
+        $userOrderProductId =intval(Control::GetRequest("user_order_product_id",0));
 
         $templateFileUrl = "product/product_comment_create.html";
         $templatePath = "front_template";
@@ -72,6 +73,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
 
         $templateContent = str_ireplace("{ProductId}", $productId, $templateContent);
         $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+        $templateContent = str_ireplace("{UserOrderProductId}", $userOrderProductId, $templateContent);
         return $templateContent;
 
     }
@@ -80,6 +82,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = intval(Control::GetUserId());
         $userName = Control::GetUserName();
         $productId = intval(Control::GetRequest("product_id", 0));
+        $userOrderProductId = intval(Control::GetRequest("user_order_product_id", 0));
         $userOrderId =intval(Control::GetRequest("user_order_id",0));
 
         $userOrderPublicData = new UserOrderPublicData();
@@ -101,6 +104,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         //订单未交易完成
 
         $state = $userOrderPublicData->GetState($userOrderId);
+        echo $state;
         if($state != UserOrderData::STATE_DONE){
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_DONE . '})';
         }
@@ -120,16 +124,10 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         $serviceScore = Control::PostRequest("service_score", 0);
         $rank = Control::PostRequest("rank", 0);
         $subject = Control::PostRequest("subject", "");
-        $state = 0;
         $sort = 0;
 
         $productPublicData = new ProductPublicData();
         $channelId = $productPublicData->GetChannelIdByProductId($productId);
-        //判断订单状态
-        if($state != UserOrderData::STATE_DONE){  //交易完成才能评价
-            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_DONE . '})';
-        }
-
 
         //
         if (
@@ -143,6 +141,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         ) {
             $productCommentPublicData = new ProductCommentPublicData();
             $result = $productCommentPublicData->Create(
+                $userOrderProductId,
                 $productId,
                 $content,
                 $userId,

@@ -46,11 +46,12 @@
             $("#AllSaleProductPrice").html(formatPrice(AllSaleProductPrice));
 
             var userOrderState = parseInt("{State}");
-            if(userOrderState == 70){
+            if(userOrderState != 30){
                 $(".cant_comment").css("display","block");
             }else{
                 $(".is_comment").each(function(){
                     var isComment = parseInt($(this).html());
+                    alert(isComment);
                     var idvalue = $(this).attr("idvalue");
                     if(isComment == 0){
                         $("#non_comment_"+idvalue).css("display","block");

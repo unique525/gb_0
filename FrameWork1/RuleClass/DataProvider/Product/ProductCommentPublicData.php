@@ -9,6 +9,7 @@
 class ProductCommentPublicData extends BasePublicData
 {
     /**
+     * @param $userOrderProductId
      * @param $productId
      * @param $content
      * @param $userId
@@ -27,6 +28,7 @@ class ProductCommentPublicData extends BasePublicData
      * @return int
      */
     public function Create(
+        $userOrderProductId,
         $productId,
         $content,
         $userId,
@@ -48,15 +50,16 @@ class ProductCommentPublicData extends BasePublicData
         if ($productId > 0 && !empty($content) && $userId > 0 && !empty($userName) && $siteId > 0 && $channelId > 0) {
 
             $sql = "INSERT INTO " . self::TableName_ProductComment
-                . " (ParentId,Rank,ProductId,Subject,Content,UserId,UserName,CreateDate,
+                . " (ParentId,Rank,UserOrderProductId,ProductId,Subject,Content,UserId,UserName,CreateDate,
                 Appraisal,ProductScore,SendScore,ServiceScore,SiteId,ChannelId,State,Sort)
                  VALUES (
-                 :ParentId,:Rank,:ProductId,:Subject,:Content,:UserId,:UserName,now(),
+                 :ParentId,:Rank,:UserOrderProductId,:ProductId,:Subject,:Content,:UserId,:UserName,now(),
                  :Appraisal,:ProductScore,:SendScore,:ServiceScore,:SiteId,:ChannelId,:State,:Sort
                  );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $parentId);
             $dataProperty->AddField("Rank", $rank);
+            $dataProperty->AddField("UserOrderProductId", $userOrderProductId);
             $dataProperty->AddField("ProductId", $productId);
             $dataProperty->AddField("Subject", $subject);
             $dataProperty->AddField("Content", $content);
@@ -98,9 +101,7 @@ class ProductCommentPublicData extends BasePublicData
             WHERE
                 ParentId = :ParentId
 
-            ORDER BY CreateDate DESC;
-
-                ";
+            ORDER BY CreateDate DESC;";
 
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ParentId", $parentId);
