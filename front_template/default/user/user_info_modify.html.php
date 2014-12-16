@@ -7,7 +7,10 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
-        .rightbar input{
+        .input_box{
+            border: 1px solid #CCC;
+        }
+        .input_number{
             border: 1px solid #CCC;
         }
         .right {
