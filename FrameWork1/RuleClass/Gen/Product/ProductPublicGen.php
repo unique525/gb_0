@@ -116,42 +116,39 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenDetail()
     {
         $temp = Control::GetRequest("temp", "");
-        $channelId = Control::GetRequest("channel_id", 0);
         $channelFirstId = Control::GetRequest("channel_first_id", 0);
         $productId = Control::GetRequest("product_id", 0);
         $templateContent = "";
 
         if ($productId > 0) {
-            $templateContent = self::loadDetailTemp($temp, $channelId);
-
-            $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
-
+            $templateContent = self::loadDetailTemp();
             parent::ReplaceFirst($templateContent);
-
-            //得到顶级频道名称
-            $channelPublicData = new ChannelPublicData();
-            $arrFirstOne = $channelPublicData->GetOne($channelFirstId);
-            $channelFirstName = $arrFirstOne["ChannelName"];
-            $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
-            $templateContent = str_ireplace("{ChannelFirstName}", strval($channelFirstName), $templateContent);
-
-            //加载产品类别数据
-            $arrOne = $channelPublicData->GetOne($channelId);
-            Template::ReplaceOne($templateContent, $arrOne);
 
             //加载产品表数据
             $productPublicData = new ProductPublicData();
             $arrOne = $productPublicData->GetOne($productId);
-            //判断商品是否超过下架时间，并对超时商品更新下架状态值为下架状态
-            $isOutDate=$productPublicData->ModifySaleStateIfOutAutoRemoveDate($productId);
-            //超过下架时间设置前台IsOnSaleFlagValue的值为False
-            $IsOnSaleFlagValue="false";
-            if($isOutDate==false){
-                $IsOnSaleFlagValue="true";
-            }
-            $templateContent = str_ireplace("{IsOnSaleFlagValue}", $IsOnSaleFlagValue, $templateContent);
-            if(count($arrOne)>0){
-                Template::ReplaceOne($templateContent, $arrOne);
+            Template::ReplaceOne($templateContent, $arrOne);
+            if (count($arrOne) > 0) {
+                $channelId = $arrOne["ChannelId"];
+                //判断商品是否超过下架时间，并对超时商品更新下架状态值为下架状态
+                $isOutDate = $productPublicData->ModifySaleStateIfOutAutoRemoveDate($productId);
+                //超过下架时间设置前台IsOnSaleFlagValue的值为False
+                $IsOnSaleFlagValue = "false";
+                if ($isOutDate == false) {
+                    $IsOnSaleFlagValue = "true";
+                }
+                $templateContent = str_ireplace("{IsOnSaleFlagValue}", $IsOnSaleFlagValue, $templateContent);
+
+                //得到顶级频道名称
+                $channelPublicData = new ChannelPublicData();
+                $arrFirstOne = $channelPublicData->GetOne($channelFirstId);
+                $channelFirstName = $arrFirstOne["ChannelName"];
+                $templateContent = str_ireplace("{ChannelFirstId}", strval($channelFirstId), $templateContent);
+                $templateContent = str_ireplace("{ChannelFirstName}", strval($channelFirstName), $templateContent);
+
+                //加载产品类别数据
+                $arrChannel = $channelPublicData->GetOne($channelId);
+                Template::ReplaceOne($templateContent, $arrChannel);
 
                 //存入用户浏览记录进CooKie
                 $tableId = $productId;
@@ -250,13 +247,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
 
-    private function loadDetailTemp($temp, $channelId)
+    private function loadDetailTemp()
     {
         $templateFileUrl = "product/product_detail.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
         return $templateContent;
     }
 
