@@ -437,7 +437,7 @@ class ProductPublicData extends BasePublicData {
      */
     public function ModifySaleStateIfOutAutoRemoveDate($productId)
     {
-        $isOutDate = false; //默认为不超时，不需要做处理
+        $isOutDate = false; //默认为不下架
         if ($productId > 0) {
             $nowTime = date("Y-m-d H:i:s");
             $arrOne = self::GetOne($productId);
