@@ -76,7 +76,7 @@
             $("#sub").click(function(){
                 var parameter = $("#main_form").serialize();
                 $.ajax({
-                    url:"/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}",
+                    url:"/default.php?mod=product_comment&a=async_create&product_id={ProductId}&user_order_id={UserOrderId}&user_order_product_id={UserOrderProductId}",
                     type:"post",
                     data:parameter,
                     dataType:"jsonp",
