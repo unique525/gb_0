@@ -440,19 +440,23 @@ class ProductPublicData extends BasePublicData {
         $isOutDate = false; //默认为不超时，不需要做处理
         if ($productId > 0) {
             $nowTime = date("Y-m-d H:i:s");
-            $autoRemoveDate = self::GetAutoRemoveDate($productId);
-            if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
-                $isOutDate = true;
-            }
-            if ($isOutDate == true) {
-                $dataProperty = new DataProperty();
-                $sql = "UPDATE " . self::TableName_Product . " SET
+            $arrOne = self::GetOne($productId);
+            $autoRemoveDate = $arrOne["ProductId"];
+            $OpenAutoRemove = $arrOne["OpenAutoRemove"];
+            if ($OpenAutoRemove == 1) {
+                if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
+                    $dataProperty = new DataProperty();
+                    $sql = "UPDATE " . self::TableName_Product . " SET
                     SaleState = :SaleState
-                    WHERE ProductId = :ProductId AND OpenAutoRemove=1
+                    WHERE ProductId = :ProductId
                     ;";
-                $dataProperty->AddField("SaleState", 100);
-                $dataProperty->AddField("ProductId", $productId);
-                $this->dbOperator->Execute($sql, $dataProperty);
+                    $dataProperty->AddField("SaleState", 100);
+                    $dataProperty->AddField("ProductId", $productId);
+                    $result = $this->dbOperator->Execute($sql, $dataProperty);
+                    if($result>0){
+                        $isOutDate=true;
+                    }
+                }
             }
         }
         return $isOutDate;
