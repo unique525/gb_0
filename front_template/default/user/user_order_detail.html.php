@@ -44,6 +44,21 @@
                 AllSaleProductPrice = ProductPrice+AllSaleProductPrice;
             });
             $("#AllSaleProductPrice").html(formatPrice(AllSaleProductPrice));
+
+            var userOrderState = parseInt("{State}");
+            if(userOrderState == 70){
+                $(".cant_comment").css("display","block");
+            }else{
+                $(".is_comment").each(function(){
+                    var isComment = parseInt($(this).html());
+                    var idvalue = $(this).attr("idvalue");
+                    if(isComment == 0){
+                        $("#non_comment_"+idvalue).css("display","block");
+                    }else{
+                        $("#commented_"+idvalue).css("display","block");
+                    }
+                });
+            }
         });
     </script>
 </head>
@@ -132,7 +147,12 @@
                                         <td class="spe_line product_finalprice">
                                             ￥<span class="UserOrderSubtotal show_price">{f_Subtotal}</span>
                                         </td>
-                                        <td class="spe_line product_operation"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}">评价商品</a></td>
+                                        <td class="spe_line product_operation">
+                                            <div idvalue="{f_UserOrderProductId}" style="display:none" class="is_comment">{f_CommentCount}</div>
+                                            <div id="non_comment_{f_UserOrderProductId}" class="non_comment" style="display:none"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}">评价商品</a></div>
+                                            <div id="commented_{f_UserOrderProductId}" class="commented" style="display:none">已评价过了</div>
+                                            <div id="cant_comment_{f_UserOrderProductId}" class="cant_comment" style="display:none">不能评论</div>
+                                        </td>
                                     </tr>
                                     ]]>
                                 </item>

@@ -31,6 +31,9 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
+        if($siteId > 0 && $userOrderId > 0){
+
+        }
         return "";
     }
 
@@ -38,6 +41,10 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
+        if($siteId > 0 && $userOrderId > 0){
+            $templateContent = Template::Load("user/user_order_send_list.html","common");
+            $userOrderSendManageData = new UserOrderSendManageData();
+        }
         return Control::GetRequest("jsonpcallback","")."";
     }
 

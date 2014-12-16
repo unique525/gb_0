@@ -35,8 +35,8 @@
           method="post">
         <table  width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="spe_line" height="30" style="width:300px;text-align: right">订单编号：</td>
-                <td class="spe_line" height="30" style="width:300px">{UserOrderNumber}</td>
+                <td class="spe_line" height="30" style="width:50px;text-align: right">订单编号：</td>
+                <td class="spe_line" height="30" style="width:400px">{UserOrderNumber}</td>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">订单名：</td>
                 <td class="spe_line" height="30">
                     <input type="text" class="input_box" name="f_UserOrderName" value="{UserOrderName}"/>
@@ -73,6 +73,7 @@
                         <option value="0">新建</option>
                         <option value="10">未付款</option>
                         <option value="20">已付款，未发货</option>
+                        <option value="25">已发货</option>
                         <option value="30">交易完成</option>
                         <option value="40">交易关闭</option>
                         <option value="70">未评价</option>

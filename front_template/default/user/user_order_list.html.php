@@ -23,13 +23,13 @@
         function FormatOrderState(state,idvalue){
             var result;
             switch(state){
-                case "0":
+                case "10":
                     result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
                     break;
-                case "10":
+                case "20":
                     result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
                     break;
-                case "20":
+                case "25":
                     result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
                     break;
                 case "30":
@@ -61,6 +61,12 @@
                     break;
                 case 20:
                     $("#order_state_20").addClass("selected");
+                    break;
+                case 25:
+                    $("#order_state_25").addClass("selected");
+                    break;
+                case 30:
+                    $("#order_state_30").addClass("selected");
                     break;
                 case 70:
                     $("#order_state_70").addClass("selected");
@@ -105,10 +111,12 @@
                             <ul>
                                 <li><a id="order_state_-1" href="/default.php?mod=user_order&a=list&state=-1">所有订单</a></li>
                                 <li>
-                                    <a id="order_state_10" href="/default.php?mod=user_order&a=list&state=10">待付款<span>{UserOrderCountOfNonPayment}</span></a>
+                                    <a id="order_state_10" href="/default.php?mod=user_order&a=list&state=10">未付款<span>{UserOrderCountOfNonPayment}</span></a>
                                 </li>
-                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">待发货<span>{UserOrderCountOfPayment}</span></a></li>
-                                <li><a id="order_state_70" href="/default.php?mod=user_order&a=list&state=70">待评价<span>{UserOrderCountOfUnComment}</span></a></li>
+                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">已付款<span>{UserOrderCountOfPayment}</span></a></li>
+                                <li><a id="order_state_25" href="/default.php?mod=user_order&a=list&state=25">已发货<span>{UserOrderCountOfSent}</span></a></li>
+                                <li><a id="order_state_30" href="/default.php?mod=user_order&a=list&state=30">交易完成<span>{UserOrderCountOfDone}</span></a></li>
+                                <li><a id="order_state_70" href="/default.php?mod=user_order&a=list&state=70">未评价<span>{UserOrderCountOfUnComment}</span></a></li>
                             </ul>
                             <div class="clean"></div>
                         </div>

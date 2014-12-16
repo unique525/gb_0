@@ -142,6 +142,13 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * @param $productId
+     * @param $allCount
+     * @param $pageBegin
+     * @param $pageSize
+     * @return array|null
+     */
     public function GetListOfParent($productId, &$allCount, $pageBegin, $pageSize)
     {
         $result = null;
@@ -174,6 +181,12 @@ class ProductCommentPublicData extends BasePublicData
         return $result;
     }
 
+
+    /**
+     * @param $productId
+     * @param $appraisalType
+     * @return int
+     */
     public function GetAppraisalCount($productId,$appraisalType)
     {
         $result = 0;
@@ -183,6 +196,20 @@ class ProductCommentPublicData extends BasePublicData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId",$productId);
             $dataProperty->AddField("AppraisalType",$appraisalType);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    public function IsComment($userId, $userOrderId)
+    {
+        $result = -1;
+        if ($userId > 0 && $userOrderId > 0) {
+            $sql = "SELECT count(*) FROM " . self::TableName_UserOrder . " WHERE UserId = :UserId AND UserOrderId = :UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserOrderId", $userOrderId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
         return $result;
