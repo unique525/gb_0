@@ -78,8 +78,8 @@
                                 </div>
                             </td>
                             <td class="spe_line2" style="width:20px;text-align:center;"><img class="btn_preview" src="/system_template/{template_name}/images/manage/preview.gif" idvalue="{f_ProductId}" alt="预览" title="预览文档"/></td>
-                            <td class="spe_line2" style="width:150px;text-align:left;"><a target="_blank" href="{view_url}"><span style="">{f_ProductNumber}</span></a></td>
-                            <td class="spe_line2" style="text-align:left;"><a target="_blank" href="{view_url}"><span style="">{f_ProductName}</span></a></td>
+                            <td class="spe_line2" style="width:150px;text-align:left;"><a target="_blank" href="/default.php?&mod=product&a=detail&product_id={f_ProductId}"><span style="">{f_ProductNumber}</span></a></td>
+                            <td class="spe_line2" style="text-align:left;"><a target="_blank" href="/default.php?&mod=product&a=detail&product_id={f_ProductId}"><span style="">{f_ProductName}</span></a></td>
                             <td class="spe_line2" style="width:36px;text-align:center;"><img style="cursor:pointer;" class="btn_up" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ProductId}" title="向上移动" alt="向上"/><img style="cursor:pointer;" class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ProductId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:80px;text-align:center;" title="排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:100px;" title="">￥<span class="show_price">{f_SalePrice}</span></td>
