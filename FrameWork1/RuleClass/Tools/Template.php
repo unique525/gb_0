@@ -1175,7 +1175,7 @@ class Template
      * @param string $tagType 标签的type
      * @return string 替换后的内容
      */
-    public static function ReplaceCustomTag($templateContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
+    public static function ReplaceCustomTag(&$templateContent, $tagId, $replaceContent, $tagName = self::DEFAULT_TAG_NAME, $tagType = null)
     {
         /**
          * if($tagType != null && strlen($tagType)>0){
