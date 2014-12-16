@@ -139,21 +139,24 @@ class UserOrderProductPublicData extends BasePublicData{
      * @param int $siteId 站点Id
      * @return array 多个会员订单的数组
      */
-    public function GetList($userOrderId,$siteId)
+    public function GetList($userOrderId,$userId,$siteId)
     {
         $result = null;
-        if ($userOrderId > 0) {
+        if ($userOrderId > 0 && $userId > 0) {
             $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit
-                FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp
+                FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp,".self::TableName_UserOrder." uo
                 WHERE uop.ProductId = p.ProductId
                 AND uop.State < :State
                 AND uop.ProductPriceId = pp.ProductPriceId
-                AND uop.UserOrderId = :UserOrderId
+                AND uop.UserOrderId = uo.UserOrderId
+                AND uo.UserId = :UserId
+                AND uo.UserOrderId = :UserOrderId
                 AND uop.SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId", $userOrderId);
             $dataProperty->AddField("State", self::STATE_REMOVED);
             $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;

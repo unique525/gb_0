@@ -117,8 +117,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $userOrderPublicData = new UserOrderPublicData();
                 $userOrderProductPublicData = new UserOrderProductPublicData();
 
-                $arrUserOrderOne = $userOrderPublicData->GetOne($userOrderId,$siteId);
-                $arrUserOrderProductList = $userOrderProductPublicData->GetList($userOrderId,$siteId);
+                $arrUserOrderOne = $userOrderPublicData->GetOne($userOrderId,$userId,$siteId);
+                $arrUserOrderProductList = $userOrderProductPublicData->GetList($userOrderId,$userId,$siteId);
 
                 $tagUserOrderProductListId = "user_order_product_list";
                 if(count($arrUserOrderProductList) > 0){
