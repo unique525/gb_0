@@ -443,20 +443,26 @@ class ProductPublicData extends BasePublicData {
             $arrOne = self::GetOne($productId);
             $autoRemoveDate = $arrOne["ProductId"];
             $OpenAutoRemove = $arrOne["OpenAutoRemove"];
-            if ($OpenAutoRemove == 1) {
-                if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
-                    $dataProperty = new DataProperty();
-                    $sql = "UPDATE " . self::TableName_Product . " SET
+            $SaleState = $arrOne["SaleState"];
+            if ($SaleState != "100") {
+                if ($OpenAutoRemove == 1) {
+                    if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
+                        $dataProperty = new DataProperty();
+                        $sql = "UPDATE " . self::TableName_Product . " SET
                     SaleState = :SaleState
                     WHERE ProductId = :ProductId
                     ;";
-                    $dataProperty->AddField("SaleState", 100);
-                    $dataProperty->AddField("ProductId", $productId);
-                    $result = $this->dbOperator->Execute($sql, $dataProperty);
-                    if($result>0){
-                        $isOutDate=true;
+                        $dataProperty->AddField("SaleState", 100);
+                        $dataProperty->AddField("ProductId", $productId);
+                        $result = $this->dbOperator->Execute($sql, $dataProperty);
+                        if ($result > 0) {
+                            $isOutDate = true;
+                        }
                     }
                 }
+            }
+            else{
+                $isOutDate = true;
             }
         }
         return $isOutDate;

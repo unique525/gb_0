@@ -36,15 +36,16 @@
             });
             //页面加载后根据是否已下架标志做隐藏或显示相关元素处理
             var isOnSaleFlag={IsOnSaleFlagValue};
+            //alert($("span [class='OnSale']"));
             if(isOnSaleFlag)
             {
-              $("div [class='OnSale']").css("display","");
-              $("div [class='OutSale']").css("display","none");
+              $(".OnSale").css("display","");
+              $(".OutSale").css("display","none");
             }
             else
             {
-                $("div [class='OnSale']").css("display","none");
-                $("div [class='OutSale']").css("display","");
+                $(".OnSale").css("display","none");
+                $(".OutSale").css("display","");
             }
             //价格选择
             var spanPropon=$('.propon');
@@ -356,9 +357,9 @@
                         <td align="left"><img src="images/2_03.gif" style="padding:15px 0px;" width="89" height="26" /></td>
                     </tr>
                     <tr>
-                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：<div class="OnSale">￥<span id="productPrice" class="newprice show_price">{SalePrice}</span></div></span></p>
-                                <p class="price_n">原　价：<div class="OnSale">￥<span id="productMarketPrice" class="oldprice show_price" style="text-decoration: line-through">{MarketPrice}</span></div></p>
-                                <p class="price_n"><span class="chaprice">已优惠：<div class="OnSale">￥<span class="show_price" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></div></span></p></div>
+                        <td align="left"><div class="goodstopr"><p class="price_n"><span class="newprice">限时促销价：￥<span id="productPrice" class="newprice show_price OnSale">{SalePrice}</span></span></p>
+                                <p class="price_n">原　价：￥<span id="productMarketPrice" class="oldprice show_price OnSale" style="text-decoration: line-through">{MarketPrice}</span></p>
+                                <p class="price_n"><span class="chaprice">已优惠：￥<span class="show_price OnSale" id="priceReduce" style="padding-right: 5px; color:#ff3c00"></span></span></p></div>
                     </tr>
                     <tr>
                         <td align="left">
