@@ -26,7 +26,10 @@
                 window.location.href="/default.php?secu=manage&mod=user_order&m=list_for_search" +"&site_id="+site_id+
                     "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date;
             });
+
+
         })
+
     </script>
 </head>
 <body>

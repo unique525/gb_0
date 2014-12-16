@@ -25,6 +25,10 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
      */
     const SUCCESS = 1;
     /**
+     *不是交易完成的订单
+     */
+    const NOT_FINISHED = -5;
+    /**
      *参数错误
      */
     const PARAMETER_ERROR = -1;
@@ -58,6 +62,24 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         $userOrderId =intval(Control::GetRequest("user_order_id",0));
         $siteId = parent::GetSiteIdByDomain();
 
+        /////参数不正确，返回
+        if ($userId <= 0 || $productId <= 0 || $userOrderId <= 0 || empty($userName)){
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::PARAMETER_ERROR . '})';
+        }
+        //不是买家
+        $userOrderProductPublicData = new UserOrderProductPublicData();
+        $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId,$userOrderId);
+
+        if($isBought<=0){
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::IS_NOT_BOUGHT . '})';
+        }
+        //订单未交易完成
+
+
+        //已经评价过了，不能重复评价
+
+
+
         if ($userId > 0 && $productId > 0 && $userOrderId > 0 && !empty($userName)) {
             $userOrderProductPublicData = new UserOrderProductPublicData();
             $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId,$userOrderId);
@@ -78,6 +100,11 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
                     $productPublicData = new ProductPublicData();
                     $channelId = $productPublicData->GetChannelIdByProductId($productId);
                     //判断订单状态
+                    if($state != UserOrderData::STATE_DONE){  //交易完成才能评价
+                        return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_FINISHED . '})';
+                    }
+
+
                     //
                     if (
                         $channelId > 0 &&
@@ -89,8 +116,23 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
                         !empty($content)
                     ) {
                         $productCommentPublicData = new ProductCommentPublicData();
-                        $result = $productCommentPublicData->Create($productId, $content, $userId, $userName, $siteId, $channelId,
-                            $parentId, $rank, $subject, $appraisal, $productScore, $sendScore, $serviceScore, $state, $sort);
+                        $result = $productCommentPublicData->Create(
+                            $productId,
+                            $content,
+                            $userId,
+                            $userName,
+                            $siteId,
+                            $channelId,
+                            $parentId,
+                            $rank,
+                            $subject,
+                            $appraisal,
+                            $productScore,
+                            $sendScore,
+                            $serviceScore,
+                            $state,
+                            $sort
+                        );
                         return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
                     } else {
                         return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SYSTEM_ERROR . '})';

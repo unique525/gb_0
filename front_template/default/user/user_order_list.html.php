@@ -20,7 +20,36 @@
         var siteId = parseInt("{SiteId}");
 
 
+        function FormatOrderState(state,idvalue){
+            var result;
+            switch(state){
+                case "0":
+                    result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
+                    break;
+                case "10":
+                    result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
+                    break;
+                case "20":
+                    result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
+                    break;
+                case "30":
+                    result = '<span class="span_state" id="State_'+idvalue+'">交易完成</span>';
+                    break;
+                case "40":
+                    result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
+                    break;
+            }
+            return result;
+        }
+
         $(function () {
+
+            $(".span_state").each(function(){
+                var state = $(this).html();
+                var idvalue = $(this).attr("idvalue");
+                $(this).html(FormatOrderState(state,idvalue));
+            });
+
 
             var state = parseInt(Request["state"]);
             switch(state){
@@ -71,7 +100,7 @@
                 <div class="rightbar">
                     <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的订单</div>
                 </div>
-                    <div style="padding:20px 50px;">
+                    <div style="padding:10px 10px;">
                         <div class="order_class">
                             <ul>
                                 <li><a id="order_state_-1" href="/default.php?mod=user_order&a=list&state=-1">所有订单</a></li>
@@ -87,10 +116,10 @@
                             <table class="title" width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="order_number">订单号</td>
-                                    <td class="all_price">原价</td>
-                                    <td class="send_price">优惠价</td>
+                                    <td class="all_price" style="text-align:center;">原价（元）</td>
+                                    <td class="send_price" style="text-align:center;">运费（元）</td>
                                     <td class="create_date">下单日期</td>
-                                    <td class="state">数量</td>
+                                    <td class="state">状态</td>
                                     <td class="option">交易操作</td>
                                 </tr>
                             </table>
@@ -99,10 +128,10 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td class="order_number"><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">{f_UserOrderNumber}</a></td>
-                                            <td class="all_price">{f_AllPrice}</td>
-                                            <td class="send_price">{f_SendPrice}</td>
+                                            <td class="all_price" style="text-align:center;">{f_AllPrice}</td>
+                                            <td class="send_price" style="text-align:center;">{f_SendPrice}</td>
                                             <td class="create_date">{f_CreateDate}</td>
-                                            <td class="state">{f_State}</td>
+                                            <td class="state"><span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span></td>
                                             <td class="option"><a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></td>
                                         </tr>
                                     </table>

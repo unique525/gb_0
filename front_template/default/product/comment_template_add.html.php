@@ -84,6 +84,7 @@
                     success:function(data){
                         var result = parseInt(data["result"]);
                         if(result > 0 ){
+                            alert("评价成功");
                             window.location.href="/default.php?mod=user_order&a=list";
                         }else if(result == -3){
                             alert("系统错误");

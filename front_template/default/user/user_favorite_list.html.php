@@ -73,7 +73,7 @@
                 <div class="rightbar">
                     <div class="rightbar2"><a href="/">星滋味首页</a> ><a href="/default.php?mod=user&a=homepage">会员中心</a>>我的收藏</div>
                 </div>
-                <div style="padding:20px 0 20px 50px;">
+                <div style="padding:10px 10px;">
                     <ul class="faver_list">
                         <icms id="user_favorite_list">
                             <item><![CDATA[

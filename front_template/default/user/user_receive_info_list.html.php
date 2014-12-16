@@ -116,7 +116,7 @@
                 <div class="rightbar">
                     <div class="rightbar2"><a href="">星滋味首页</a> >会员中心</div>
                 </div>
-                <div style="padding:20px 50px;">
+                <div style="padding:10px 10px;">
                     <table class="add_list" width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr class="add_title">
                             <td class="receive_id">收件人</td>
