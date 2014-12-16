@@ -51,6 +51,7 @@
                 <option value="">全部</option>
                 <option value="0">未付款</option>
                 <option value="20">已付款，未发货</option>
+                <option value="25">已发货</option>
                 <option value="30">交易完成</option>
                 <option value="40">交易关闭</option>
                 <option value="70">未评价</option>

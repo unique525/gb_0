@@ -136,6 +136,7 @@ class UserOrderProductPublicData extends BasePublicData{
     /**
      * 获取订单中的产品列表
      * @param int $userOrderId 会员订单Id
+     * @param int $userId 会员Id
      * @param int $siteId 站点Id
      * @return array 多个会员订单的数组
      */
@@ -143,8 +144,12 @@ class UserOrderProductPublicData extends BasePublicData{
     {
         $result = null;
         if ($userOrderId > 0 && $userId > 0) {
-            $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit
-                FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp,".self::TableName_UserOrder." uo
+            $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit,(SELECT count(*) FROM "
+                                .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
+                FROM " . self::TableName_UserOrderProduct . " uop, "
+                                . self::TableName_Product . " p,"
+                                . self::TableName_ProductPrice . " pp,"
+                                .self::TableName_UserOrder." uo,
                 WHERE uop.ProductId = p.ProductId
                 AND uop.State < :State
                 AND uop.ProductPriceId = pp.ProductPriceId

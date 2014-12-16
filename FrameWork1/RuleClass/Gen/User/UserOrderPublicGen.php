@@ -80,10 +80,14 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             $userOrderCountOfNonPayment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_NON_PAYMENT);
             $userOrderCountOfPayment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_PAYMENT);
+            $userOrderCountOfSent = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_SENT);
+            $userOrderCountOfDone = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_DONE);
             $userOrderCountOfUnComment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_UNCOMMENT);
 
             $templateContent = str_ireplace("{UserOrderCountOfNonPayment}", $userOrderCountOfNonPayment, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfPayment}", $userOrderCountOfPayment, $templateContent);
+            $templateContent = str_ireplace("{UserOrderCountOfSent}", $userOrderCountOfSent, $templateContent);
+            $templateContent = str_ireplace("{UserOrderCountOfDone}", $userOrderCountOfDone, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfUnComment}", $userOrderCountOfUnComment, $templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;

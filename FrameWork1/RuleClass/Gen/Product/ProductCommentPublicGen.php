@@ -27,7 +27,11 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
     /**
      *不是交易完成的订单
      */
-    const NOT_FINISHED = -5;
+    const NOT_DONE = -5;
+    /**
+     *不能重复评论
+     */
+    const IS_COMMENT = -6;
     /**
      *参数错误
      */
@@ -40,6 +44,9 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         switch ($action) {
             case "create":
                 $result = self::GenCreate();
+                break;
+            case "async_create":
+                $result = self::AsyncCreate();
                 break;
             case "check_is_bought":
                 $result = self::AsyncCheckIsBought();
@@ -55,12 +62,30 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenCreate()
     {
-        $userId = intval(Control::GetUserId());
-        $userName = Control::GetUserName();
-
         $productId = intval(Control::GetRequest("product_id", 0));
         $userOrderId =intval(Control::GetRequest("user_order_id",0));
-        $siteId = parent::GetSiteIdByDomain();
+
+        $templateFileUrl = "product/product_comment_create.html";
+        $templatePath = "front_template";
+        $templateName = "default";
+        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $templateContent = str_ireplace("{ProductId}", $productId, $templateContent);
+        $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+        return $templateContent;
+
+    }
+
+    private function AsyncCreate(){
+        $userId = intval(Control::GetUserId());
+        $userName = Control::GetUserName();
+        $productId = intval(Control::GetRequest("product_id", 0));
+        $userOrderId =intval(Control::GetRequest("user_order_id",0));
+
+        $userOrderPublicData = new UserOrderPublicData();
+        $productCommentPublicData = new ProductCommentPublicData();
+
+
 
         /////参数不正确，返回
         if ($userId <= 0 || $productId <= 0 || $userOrderId <= 0 || empty($userName)){
@@ -75,88 +100,68 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         }
         //订单未交易完成
 
+        $state = $userOrderPublicData->GetState($userOrderId);
+        if($state != UserOrderData::STATE_DONE){
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_DONE . '})';
+        }
 
         //已经评价过了，不能重复评价
+        $isComment = $productCommentPublicData->IsComment($productId,$userId,$userOrderId);
+        if($isComment > 0){
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::IS_COMMENT . '})';
+        }
+
+        $siteId = parent::GetSiteIdByDomain();
+        $content = Control::PostRequest("content", "");
+        $appraisal = Control::PostRequest("appraisal", -1);
+        $parentId = Control::PostRequest("parent_id", 0);
+        $productScore = Control::PostRequest("product_score", 0);
+        $sendScore = Control::PostRequest("send_score", 0);
+        $serviceScore = Control::PostRequest("service_score", 0);
+        $rank = Control::PostRequest("rank", 0);
+        $subject = Control::PostRequest("subject", "");
+        $state = 0;
+        $sort = 0;
+
+        $productPublicData = new ProductPublicData();
+        $channelId = $productPublicData->GetChannelIdByProductId($productId);
+        //判断订单状态
+        if($state != UserOrderData::STATE_DONE){  //交易完成才能评价
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_DONE . '})';
+        }
 
 
-
-        if ($userId > 0 && $productId > 0 && $userOrderId > 0 && !empty($userName)) {
-            $userOrderProductPublicData = new UserOrderProductPublicData();
-            $isBought = $userOrderProductPublicData->CheckIsBought($userId, $productId,$userOrderId);
-
-            if ($isBought > 0) {
-                if (!empty($_POST)) {
-                    $content = Control::PostRequest("content", "");
-                    $appraisal = Control::PostRequest("appraisal", -1);
-                    $parentId = Control::PostRequest("parent_id", 0);
-                    $productScore = Control::PostRequest("product_score", 0);
-                    $sendScore = Control::PostRequest("send_score", 0);
-                    $serviceScore = Control::PostRequest("service_score", 0);
-                    $rank = Control::PostRequest("rank", 0);
-                    $subject = Control::PostRequest("subject", "");
-                    $state = 0;
-                    $sort = 0;
-
-                    $productPublicData = new ProductPublicData();
-                    $channelId = $productPublicData->GetChannelIdByProductId($productId);
-                    //判断订单状态
-                    if($state != UserOrderData::STATE_DONE){  //交易完成才能评价
-                        return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_FINISHED . '})';
-                    }
-
-
-                    //
-                    if (
-                        $channelId > 0 &&
-                        $serviceScore >= 0 &&
-                        $sendScore >= 0 &&
-                        $productScore >= 0 &&
-                        $siteId > 0 &&
-                        $appraisal >= 0 &&
-                        !empty($content)
-                    ) {
-                        $productCommentPublicData = new ProductCommentPublicData();
-                        $result = $productCommentPublicData->Create(
-                            $productId,
-                            $content,
-                            $userId,
-                            $userName,
-                            $siteId,
-                            $channelId,
-                            $parentId,
-                            $rank,
-                            $subject,
-                            $appraisal,
-                            $productScore,
-                            $sendScore,
-                            $serviceScore,
-                            $state,
-                            $sort
-                        );
-                        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
-                    } else {
-                        return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SYSTEM_ERROR . '})';
-                    }
-
-                } else {
-                    $templateFileUrl = "product/comment_template_add.html";
-                    $templatePath = "front_template";
-                    $templateName = "default";
-                    $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-                    $templateContent = str_ireplace("{ProductId}", $productId, $templateContent);
-                    $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
-                    return $templateContent;
-                }
-            } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::IS_NOT_BOUGHT . '})';
-            }
+        //
+        if (
+            $channelId > 0 &&
+            $serviceScore >= 0 &&
+            $sendScore >= 0 &&
+            $productScore >= 0 &&
+            $siteId > 0 &&
+            $appraisal >= 0 &&
+            !empty($content)
+        ) {
+            $productCommentPublicData = new ProductCommentPublicData();
+            $result = $productCommentPublicData->Create(
+                $productId,
+                $content,
+                $userId,
+                $userName,
+                $siteId,
+                $channelId,
+                $parentId,
+                $rank,
+                $subject,
+                $appraisal,
+                $productScore,
+                $sendScore,
+                $serviceScore,
+                $state,
+                $sort
+            );
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
         } else {
-            if ($userId < 0) {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::IS_NOT_LOGIN . '})';
-            } else {
-                return "";
-            }
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::SYSTEM_ERROR . '})';
         }
     }
 

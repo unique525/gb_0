@@ -23,6 +23,10 @@ class UserOrderData extends BaseData {
      */
     const STATE_PAYMENT = 20;
     /**
+     * 状态：已发货
+     */
+    const STATE_SENT = 25;
+    /**
      * 状态：交易完成
      */
     const STATE_DONE = 30;
