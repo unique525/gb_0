@@ -68,7 +68,8 @@ class UserOrderPublicData extends BasePublicData
                     AutoSendMessage,
                     SiteId,
                     CreateDate,
-                    CreateDateDes
+                    CreateDateDes,
+                    State
                     )
                     VALUES
                     (
@@ -86,7 +87,8 @@ class UserOrderPublicData extends BasePublicData
                     :AutoSendMessage,
                     :SiteId,
                     :CreateDate,
-                    :CreateDateDes
+                    :CreateDateDes,
+                    :State
                     );
             ";
 
@@ -106,6 +108,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("SiteId",$siteId);
             $dataProperty->AddField("CreateDate",$createDate);
             $dataProperty->AddField("CreateDateDes",$createDateDes);
+            $dataProperty->AddField("State",UserOrderData::STATE_NON_PAYMENT);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
         }
