@@ -233,7 +233,7 @@
                         +'<td style="width:40px;text-align:center;">编辑</td>'
                         +'<td>价格说明</td>'
                         +'<td style="width:60px;text-align:center">价格</td>'
-                        +'<td style="width:60px;text-align:center">数量</td>'
+                        +'<td style="width:60px;text-align:center">库存数量</td>'
                         +'<td style="width:60px;text-align:center;">单位</td>'
                         +'<td style="width:60px;text-align:center;">状态</td>'
                         +'<td style="width:80px;text-align:center;">启用|停用</td>'
@@ -269,7 +269,7 @@
                         +'<td style="width:40px;text-align:center;">编辑</td>'
                         +'<td>价格说明</td>'
                         +'<td style="width:60px;text-align:center">价格</td>'
-                        +'<td style="width:60px;text-align:center">数量</td>'
+                        +'<td style="width:60px;text-align:center">库存数量</td>'
                         +'<td style="width:60px;text-align:center;">单位</td>'
                         +'<td style="width:60px;text-align:center;">状态</td>'
                         +'</tr>';
@@ -351,7 +351,7 @@
             <td class="spe_line"><input name="x_ProductPriceValue" id="x_ProductPriceValue" value="" type="text" class="input_price" style=" width: 100px;" /></td>
         </tr>
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="x_ProductCount">数量：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="x_ProductCount">库存数量：</label></td>
             <td class="spe_line"><input name="x_ProductCount" id="x_ProductCount" value="" type="text" class="input_number" style=" width: 100px;" /></td>
         </tr>
         <tr>
