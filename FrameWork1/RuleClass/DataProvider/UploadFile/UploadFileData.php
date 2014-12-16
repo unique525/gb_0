@@ -798,6 +798,31 @@ class UploadFileData extends BaseData
      * @param string $uploadFileOrgName 原始文件名
      * @return int 记录数
      */
+    public function GetUploadFileIdByTableTypeAndTableIdAndOrgName($tableId, $tableType, $uploadFileOrgName){
+        $result = -1;
+        if($tableId>0 && $tableType>0){
+            $sql = "SELECT UploadFileId FROM " . self::TableName_UploadFile . "
+                    WHERE TableId=:TableId
+                        AND TableType=:TableType
+                        AND UploadFileOrgName=:UploadFileOrgName
+                    LIMIT 1
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+            $dataProperty->AddField("UploadFileOrgName", $uploadFileOrgName);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据$tableId、$tableType和原始文件名取得记录数
+     * @param int $tableId 对象表id
+     * @param int $tableType 表类型
+     * @param string $uploadFileOrgName 原始文件名
+     * @return int 记录数
+     */
     public function GetCountByTableTypeAndTableIdAndOrgName($tableId, $tableType, $uploadFileOrgName){
         $result = -1;
         if($tableId>0 && $tableType>0){

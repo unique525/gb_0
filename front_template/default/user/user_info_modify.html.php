@@ -7,7 +7,10 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
-        .rightbar input{
+        .input_box{
+            border: 1px solid #CCC;
+        }
+        .input_number{
             border: 1px solid #CCC;
         }
         .right {
@@ -122,7 +125,7 @@
                             <tr>
                                 <td class="spe_line label" valign="top">会员签名：</td>
                                 <td class="spe_line" colspan="3">
-                                    <textarea style="width:728px; margin-bottom:5px;" name="Sign">{Sign}</textarea>
+                                    <textarea style="width:728px; height:100px; margin-bottom:5px;" name="Sign">{Sign}</textarea>
                                 </td>
                             </tr>
                             <tr>

@@ -21,7 +21,7 @@
                 }
                 else if(productCount == ''){
                     $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("请输入产品数量");
+                    $("#dialog_content").html("请输入产品库存数量");
                 }
                 else if(productUnit == ''){
                     $("#dialog_box").dialog({width: 300, height: 100});
@@ -49,7 +49,7 @@
                      <td class="spe_line" title="{ProductPriceValue}"><input name="f_ProductPriceValue" id="f_ProductPriceValue" value="{ProductPriceValue}" type="text" class="input_price" style=" width: 100px;" /></td>
                 </tr>
                 <tr>
-                    <td class="spe_line" height="30" align="right"><label for="f_ProductCount">数量：</label></td>
+                    <td class="spe_line" height="30" align="right"><label for="f_ProductCount">库存数量：</label></td>
                     <td class="spe_line" title="{ProductCount}"><input name="f_ProductCount" id="f_ProductCount" value="{ProductCount}" type="text" class="input_number" style=" width: 100px;" /></td>
                 </tr>
                 <tr>

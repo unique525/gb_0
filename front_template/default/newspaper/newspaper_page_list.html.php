@@ -24,26 +24,18 @@
 <body>
 
 <div style="margin:0;">
-    <div style="background:#ebebeb;">
-        <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
-    </div>
-    <div style="background:#ebebeb;">
+    <div style="">
         <div>
-            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <img src="/image_02/top_bg.jpg" style="width:100%;" />
+            <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;cursor:pointer"><a style="color:#000000;" href="/">首页</a>
-                    </td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;cursor:pointer" id="select_date">
-                        <a style="color:#000000;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">
-                            往期回顾
-                        </a></td>
-                    <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a></td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
+                    <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                    <td style="text-align:center;"><a href="/search/search.php" target="_self"><img style="width:20px;" src="/image_02/2-2.png" alt="" id="" /></a></td>
                 </tr>
             </table>
-
-
         </div>
     </div>
     <div id="" style="margin:10px auto;width:90%">

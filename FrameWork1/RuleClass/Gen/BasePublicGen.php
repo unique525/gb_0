@@ -486,6 +486,7 @@ class BasePublicGen extends BaseGen {
             }
 
 
+
             if (!empty($arrList)) {
                 Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
@@ -1009,11 +1010,11 @@ class BasePublicGen extends BaseGen {
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
             if (strlen(Control::GetUserExploreCookie($userId))>0) {
-
-            } else {
                 //读取cookie
                 $cookieStr = Control::GetUserExploreCookie($userId);
                 $userExploreCollection->UserExplores = $cookieStr;
+            } else {
+
             }
 
             //将当前访问信息保存到数组中

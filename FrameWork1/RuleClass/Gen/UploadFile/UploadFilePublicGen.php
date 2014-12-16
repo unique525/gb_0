@@ -43,6 +43,10 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_count_by_table_type_and_table_id_and_org_name":
                 $result = self::AsyncGetCountByTableTypeAndTableIdAndOrgName();
                 break;
+            case "async_get_upload_file_id_by_table_type_and_table_id_and_org_name":
+                $result = self::AsyncGetUploadFileIdByTableTypeAndTableIdAndOrgName();
+                break;
+
         }
 
         return $result;
@@ -76,6 +80,25 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         if ($tableId > 0 && $tableType > 0) {
             $uploadFileData = new UploadFileData();
             $result = $uploadFileData->GetCountByTableTypeAndTableId($tableId, $tableType);
+        }
+        return $result;
+
+    }
+
+
+    /**
+     *
+     * @return int
+     */
+    private function AsyncGetUploadFileIdByTableTypeAndTableIdAndOrgName()
+    {
+        $result = -1;
+        $tableId = Control::PostOrGetRequest("table_id", 0);
+        $tableType = Control::PostOrGetRequest("table_type", 0);
+        $orgName = Control::PostOrGetRequest("org_name", "");
+        if ($tableId > 0 && $tableType > 0) {
+            $uploadFileData = new UploadFileData();
+            $result = $uploadFileData->GetUploadFileIdByTableTypeAndTableIdAndOrgName($tableId, $tableType, $orgName);
         }
         return $result;
 
