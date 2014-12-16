@@ -449,9 +449,9 @@ class ProductPublicData extends BasePublicData {
                     if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
                         $dataProperty = new DataProperty();
                         $sql = "UPDATE " . self::TableName_Product . " SET
-                    SaleState = :SaleState
-                    WHERE ProductId = :ProductId
-                    ;";
+                        SaleState = :SaleState
+                        WHERE ProductId = :ProductId
+                        ;";
                         $dataProperty->AddField("SaleState", 100);
                         $dataProperty->AddField("ProductId", $productId);
                         $result = $this->dbOperator->Execute($sql, $dataProperty);
