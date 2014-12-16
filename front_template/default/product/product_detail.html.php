@@ -436,7 +436,7 @@
         <div class="zi"> 商品推荐</div>
         <div class="fctl">
             <ul>
-                <icms id="product_6" type="product_list" where="RecLevel" top="4">
+                <icms id="product_1" type="product_list" where="RecLevel" where_value="6" top="4">
                     <item>
                         <![CDATA[
                         <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFilePath}" width="150" height="175" ></a>
