@@ -303,6 +303,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $templateContent);
             $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
 
+            $templateContent = parent::ReplaceTemplate($templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

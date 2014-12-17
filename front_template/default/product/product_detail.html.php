@@ -537,7 +537,24 @@
                     <tr>
                         <td background="images/5_22.gif" height="39" style="padding-left:30px;">
                             <div class="star">
+                                产品评分：
                                 <ul class="product_comment_ul" idvalue="{f_ProductScore}">
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                                物流评分：
+                                <ul class="product_comment_ul" idvalue="{f_SendScore}">
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                                服务评分：
+                                <ul class="product_comment_ul" idvalue="{f_ServiceScore}">
                                     <li>1</li>
                                     <li>2</li>
                                     <li>3</li>
