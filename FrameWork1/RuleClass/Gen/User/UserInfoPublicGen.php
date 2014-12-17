@@ -160,6 +160,9 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0) {
             $uploadFileId = Control::GetRequest("upload_file_id", "");
             if ($uploadFileId > 0) {
+                $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data' . DIRECTORY_SEPARATOR .$userId;
+                $cacheFile = 'user_get_avatar_upload_file_id.cache_' . $userId . '';
+                DataCache::Remove($cacheDir. DIRECTORY_SEPARATOR .$cacheFile);
                 $userInfoPublicData = new UserInfoPublicData();
                 $result = $userInfoPublicData->ModifyAvatarUploadFileId($userId, $uploadFileId);
             }

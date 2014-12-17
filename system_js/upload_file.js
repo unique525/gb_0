@@ -608,7 +608,7 @@ function GetOneUploadFile(uploadFileId){
         secureUri:false,
         dataType:"json",
         success:function(data){
-            window.GetOneCallBack(data);
+            window.GetOneUploadFileCallBack(data);
         },
         error: function (data, status, e)
         {

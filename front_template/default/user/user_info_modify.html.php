@@ -222,8 +222,8 @@
                             </tr>-->
                         </table>
                         <div class="btns">
-                            <input class="btn" value="确&nbsp;&nbsp;认" type="button" onclick="submitUserInfoForm()"/>
-                            <input id="cancel_dialog" class="btn" value="取&nbsp;&nbsp;消" onclick="window.location.href  = '/default.php?mod=user&a=homepage';" type="button"/>
+                            <input class="btn" style="cursor:pointer" value="确&nbsp;&nbsp;认" type="button" onclick="submitUserInfoForm()"/>
+                            <input id="cancel_dialog" class="btn" style="cursor:pointer" value="取&nbsp;&nbsp;消" onclick="window.location.href  = '/default.php?mod=user&a=homepage';" type="button"/>
                         </div>
                     </form>
                 </div>

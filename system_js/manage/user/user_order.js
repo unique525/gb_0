@@ -19,6 +19,9 @@ function FormatOrderState(state,idvalue){
         case "70":
         result = '<span class="span_state" id="State_'+idvalue+'" >未评论</span>';
         break;
+        case "110":
+            result = '<span class="span_state" id="State_'+idvalue+'" >退货</span>';
+            break;
     }
     return result;
 }

@@ -63,7 +63,7 @@
                 </div>
                 <div class="rightmember">
                     <div style="padding:20px; background:#f6f6f6;">
-                    <div class="leftperson"><img src="{UploadFileThumbPath2}" width="120" height="120"/>
+                    <div class="leftperson"><img src="{UploadFilePath}" width="120" height="120"/>
                         <h3><a href="/default.php?mod=user_info&a=modify_avatar">修改头像</a></h3>
                     </div>
                     <div class="rightinfo">
@@ -72,7 +72,7 @@
                         <div style="display:none"><span><strong>会员级别：</strong>{UserGroupName}</span><span><strong>我的积分：</strong>{UserScore} 分</span></div>
                         <ul>
                             <!--<li>待处理订单（1）</li>-->
-                            <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待评价订单（<span>{UserOrderOfUncommentCount}</span>）</a>
+                            <li><a href="/default.php?mod=user_order&a=list&state=20" target="_blank">待发货订单（<span>{UserOrderOfPayment}</span>）</a>
                             </li>
                             <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待支付订单（<span>{UserOrderOfNewCount}</span>)</a>
                             </li>

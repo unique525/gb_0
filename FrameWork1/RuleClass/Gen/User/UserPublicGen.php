@@ -293,14 +293,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             //------------零散替换--------begin
             $userOrderStateOfNew = UserOrderData::STATE_NON_PAYMENT;
-            $userOrderStateOfUncomment = UserOrderData::STATE_UNCOMMENT;
+            $userOrderStateOfPayment = UserOrderData::STATE_PAYMENT;
             $userOrderOfNewCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfNew);
-            $userOrderOfUncommentCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfUncomment);
+            $userOrderOfPaymentCount = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,$userOrderStateOfPayment);
 
 
             $templateContent = str_ireplace("{UserAccount}", $userAccount, $templateContent);
             $templateContent = str_ireplace("{UserOrderOfNewCount}", $userOrderOfNewCount, $templateContent);
-            $templateContent = str_ireplace("{UserOrderOfUncommentCount}", $userOrderOfUncommentCount, $templateContent);
+            $templateContent = str_ireplace("{UserOrderOfPayment}", $userOrderOfPaymentCount, $templateContent);
             $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
 
             $templateContent = parent::ReplaceTemplate($templateContent);

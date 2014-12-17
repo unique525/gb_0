@@ -297,7 +297,7 @@ class UserInfoPublicData extends BasePublicData
     {
         $result = -1;
         if ($userId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data' . DIRECTORY_SEPARATOR .$userId;
             $cacheFile = 'user_get_avatar_upload_file_id.cache_' . $userId . '';
             $sql = "SELECT AvatarUploadFileId FROM " . self::TableName_UserInfo . " WHERE UserId=:UserId;";
             $dataProperty = new DataProperty();
