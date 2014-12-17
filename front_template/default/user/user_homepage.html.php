@@ -35,6 +35,12 @@
 //                    $("#" + idvalue + "_child").css("display", "none");
 //                }
 //            });
+
+            $(".producttab2 .title").mouseover(function(){
+                var idvalue=$(this).attr("idvalue");
+                $(".tabCon .content").css("display","none");
+                $(".tabCon #div_"+idvalue).css("display","block");
+            });
         });
     </script>
 </head>
@@ -63,7 +69,7 @@
                     <div class="rightinfo">
                         <b>您好！ {UserAccount}</b><br/>
                         <div class="change_info"><a href="/default.php?mod=user_info&a=modify">编辑个人资料</a></div>
-                        <span><strong>会员级别：</strong>{UserGroupName}</span><span><strong>我的积分：</strong>{UserScore} 分</span>
+                        <div style="display:none"><span><strong>会员级别：</strong>{UserGroupName}</span><span><strong>我的积分：</strong>{UserScore} 分</span></div>
                         <ul>
                             <!--<li>待处理订单（1）</li>-->
                             <li><a href="/default.php?mod=user_order&a=list&state=0" target="_blank">待评价订单（<span>{UserOrderOfUncommentCount}</span>）</a>
@@ -78,16 +84,16 @@
                 <div class="rightmember">
                     <div id="tab">
                         <div class="tabList">
-                            <ul>
-                                <li class="cur">最近收藏</li>
-                                <li>最近浏览</li>
-                                <li>爆品抢购</li>
-                                <li>新品速递</li>
-                                <li>好评单品</li>
+                            <ul class="producttab2">
+                                <li class="title" idvalue="zjsc">最近收藏</li>
+                                <li class="title" idvalue="zjll">最近浏览</li>
+                                <li class="title" idvalue="bpqg">爆品抢购</li>
+                                <li class="title" idvalue="xpsd">新品速递</li>
+                                <li class="title" idvalue="hpdp">好评单品</li>
                             </ul>
                         </div>
                         <div class="tabCon">
-                            <div class="cur">
+                            <div  id="div_zjsc" class="content">
                                 <icms id="recent_user_favorite_list" type="list">
                                     <item><![CDATA[
                                         <dl>
@@ -100,93 +106,63 @@
                                     </item>
                                 </icms>
                             </div>
-                            <div style="display:none;">
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼2</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼2</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼2</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼2</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
+                            <div id="div_zjll" class="content" style="display:none">
+                                <icms id="user_explore_1" type="user_explore_list" top="4">
+                                    <item>
+                                        <![CDATA[
+                                        <dl>
+                                            <dd>
+                                            <a class="lookpic" href="{f_Url}" target="_blank" title="">
+                                                <img src="{f_TitlePic}" width="180" height="160" style="display: inline; ">
+                                            </a>
+                                            </dd>
+                                            <dt>
+                                                    <a href="{f_Url}" target="_blank" title="">{f_Title}</a>
+                                            </dt>
+                                            <h3￥{f_Price}</h3>
+                                        </dl>
+                                        ]]>
+                                    </item>
+                                </icms>
                             </div>
-                            <div style="display:none;">
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼3</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼3</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼3</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼3</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
+                            <div id="div_bpqg" class="content" style="display:none">
+                                <icms id="product_1" type="product_list" where="RecLevel" where_value="2" top="4">
+                                    <item>
+                                        <![CDATA[
+                                        <li>
+                                            <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                            <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                            <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                        </li>
+                                        ]]>
+                                    </item>
+                                </icms>
                             </div>
-                            <div style="display:none;">
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼4</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼4</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼4</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼4</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
+                            <div id="div_xpsd" class="content" style="display:none">
+                                <icms id="product_1" type="product_list" where="RecLevel" where_value="3" top="4">
+                                    <item>
+                                        <![CDATA[
+                                        <li>
+                                            <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                            <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                            <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                        </li>
+                                        ]]>
+                                    </item>
+                                </icms>
                             </div>
-                            <div style="display:none;">
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼5</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼5</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼5</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
-                                <dl>
-                                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                                    <dt>妈咪宝贝满299减30送豪礼5</dt>
-                                    <h3>￥25.90</h3>
-                                </dl>
+                            <div id="div_hpdp" class="content" style="display:none">
+                                <icms id="product_1" type="product_list" where="RecLevel" where_value="4" top="4">
+                                    <item>
+                                        <![CDATA[
+                                        <li>
+                                            <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                                            <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                            <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                        </li>
+                                        ]]>
+                                    </item>
+                                </icms>
                             </div>
                         </div>
                     </div>

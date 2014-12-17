@@ -5,9 +5,12 @@ function FormatOrderState(state,idvalue){
             result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
         case "10":
-            result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
         case "20":
+            result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
+            break;
+        case "25":
             result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
             break;
         case "30":

@@ -142,7 +142,8 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
                 Template::ReplaceList($templateContent,$arrUserFavoriteList,$tagId);
                 $templateContent = str_ireplace("{pagerButton}", $pagerButton, $templateContent);
             }else{
-                Template::RemoveCustomTag($templateContent, $tagId);
+                $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_favorite",1));
+                $templateContent = str_ireplace("{pagerButton}", "", $templateContent);
             }
             parent::ReplaceEnd($templateContent);
             return $templateContent;

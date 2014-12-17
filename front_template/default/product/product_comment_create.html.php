@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>星级评分系统</title>
+    <title>商品评分</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <link href="/images/user_layout.css" rel="stylesheet" type="text/css" />
     <style>
@@ -90,6 +90,11 @@
                             alert("系统错误");
                         }else if(result == -2){
                             alert("您未购买本产品");
+                        }else if(result == -5){
+                            alert("交易未完成，您不能评论");
+                        }else if(result == -4){
+                            alert("您还没有登录");
+                            window.location.href="/default.php?mod=user&a=login&re_url="+encodeURIComponent(window.location.href);
                         }
                     }
                 });
@@ -98,43 +103,16 @@
     </script>
 </head>
 <body>
-<div class="wrapper2">
-    <div class="logo"><a href=""><img src="images/mylogo.png" width="320" height="103"/></a></div>
-    <div class="search">
-        <div class="search_green"><input name="" type="text" class="text"/></div>
-        <div class="searchbtn"><img src="images/search.png" width="46" height="28"/></div>
-        <div class="searchbottom">平谷大桃 哈密瓜 新鲜葡萄 红炉磨坊 太湖鲜鱼</div>
-    </div>
-    <div class="service">
-        <div class="hottel"><span><a href="" target="_blank">热线96333</a></span></div>
-        <div class="online"><span><a href="" target="_blank">在线客服</a></span></div>
-        <div class="shopping"><a href="/default.php?mod=user_car&a=list"><span>购物车</span></a></div>
-        <div class="number" id="user_car_count">0</div>
-    </div>
-</div>
+<pre_temp id="4"></pre_temp>
 <div class="clean"></div>
-<div class="mainbav">
-    <div class="wrapper">
-        <div id="leftmenu">
-            <ul>
-                <li><span>会员中心</span></li>
-            </ul>
-        </div>
-        <div class="column1"><a href="">首页</a></div>
-        <div class="column2"><a href="">超市量贩</a></div>
-        <div class="column2"><a href="">团购</a></div>
-        <div class="column2"><a href="">最新预售</a></div>
-        <div class="new"><img src="images/icon_new.png" width="29" height="30"/></div>
-    </div>
-</div>
-
+<pre_temp id="12"></pre_temp>
 <div class="wrapper">
     <div class="comment_zone">
-        <div class="left left_pic"> <img width="100" height="100" /></div>
+        <div class="left left_pic"> <img src="{ProductTitlePic}" width="100" height="100" /></div>
         <div class="right right_part">
             <div class="star_zone">
                 <div id="product_star" class="star" idvalue="product">
-                    <span>评分：</span>
+                    <span>产品评分：</span>
                     <ul>
                         <li><a href="javascript:;">1</a></li>
                         <li><a href="javascript:;">2</a></li>
@@ -148,7 +126,7 @@
                 </div>
                 <div style="clear:both"></div>
                 <div id="send_star" class="star" idvalue="send">
-                    <span>评分：</span>
+                    <span>物流评分：</span>
                     <ul>
                         <li><a href="javascript:;">1</a></li>
                         <li><a href="javascript:;">2</a></li>
@@ -162,7 +140,7 @@
                 </div>
                 <div style="clear:both"></div>
                 <div id="service_star" class="star" idvalue="service">
-                    <span>评分：</span>
+                    <span>服务评分：</span>
                     <ul>
                         <li><a href="javascript:;">1</a></li>
                         <li><a href="javascript:;">2</a></li>

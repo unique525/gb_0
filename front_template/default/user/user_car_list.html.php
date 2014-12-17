@@ -375,129 +375,57 @@ $(function () {
             </icms>
         </ul>
         <ul id="ul_zjll" style="display: none">
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
+            <icms id="user_explore_1" type="user_explore_list" top="3">
+                <item>
+                    <![CDATA[
+                    <li><a class="lookpic" href="{f_Url}" target="_blank" title="">
+                            <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
+                        <div class="lookmis">
+                            <p class="lookname">
+                                <a href="{f_Url}" target="_blank" title="">{f_Title}</a></p><p>￥{f_Price} </p></div>
+                    </li>    <div class="clear">    </div>
+                    ]]>
+                </item>
+            </icms>
         </ul>
         <ul id="ul_bpqg" style="display: none">
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="2" top="3">
+                <item>
+                    <![CDATA[
+                    <li>
+                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                    </li>
+                    ]]>
+                </item>
+            </icms>
         </ul>
         <ul id="ul_xpsd" style="display: none">
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="3" top="3">
+                <item>
+                    <![CDATA[
+                    <li>
+                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                    </li>
+                    ]]>
+                </item>
+            </icms>
         </ul>
         <ul id="ul_hpdp" style="display: none">
-            <li>
-                <dl>
-                    <dd><img src="/images/pic_prduct.png" width="180" height="160"/></dd>
-                    <dt>妈咪宝贝满299减30送豪礼</dt>
-                    <span style="padding-right:50px;"><font class="pricenew">￥25.90</font></span><span><font
-                            class="priceold">￥49</font></span>
-                </dl>
-                <div class="btn_jrgwc"><a href=""><img src="/images/btn_jrgwc.png" width="91" height="26"/></a></div>
-            </li>
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="4" top="3">
+                <item>
+                    <![CDATA[
+                    <li>
+                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
+                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                    </li>
+                    ]]>
+                </item>
+            </icms>
         </ul>
         <div class="clean"></div>
     </div>

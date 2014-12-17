@@ -51,7 +51,6 @@
             }else{
                 $(".is_comment").each(function(){
                     var isComment = parseInt($(this).html());
-                    alert(isComment);
                     var idvalue = $(this).attr("idvalue");
                     if(isComment == 0){
                         $("#non_comment_"+idvalue).css("display","block");
@@ -150,9 +149,9 @@
                                         </td>
                                         <td class="spe_line product_operation">
                                             <div idvalue="{f_UserOrderProductId}" style="display:none" class="is_comment">{f_CommentCount}</div>
-                                            <div id="non_comment_{f_UserOrderProductId}" class="non_comment" style="display:none"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}">评价商品</a></div>
-                                            <div id="commented_{f_UserOrderProductId}" class="commented" style="display:none">已评价过了</div>
-                                            <div id="cant_comment_{f_UserOrderProductId}" class="cant_comment" style="display:none">不能评论</div>
+                                            <div id="non_comment_{f_UserOrderProductId}" class="non_comment" style="display:none"><a href="/default.php?mod=product_comment&a=create&product_id={f_ProductId}&user_order_id={f_UserOrderId}&user_order_product_id={f_UserOrderProductId}">评价商品</a></div>
+                                            <div id="commented_{f_UserOrderProductId}" class="commented" style="display:none">已评价</div>
+                                            <div id="cant_comment_{f_UserOrderProductId}" class="cant_comment" style="display:none">交易完成才能评论</div>
                                         </td>
                                     </tr>
                                     ]]>

@@ -23,6 +23,9 @@
         function FormatOrderState(state,idvalue){
             var result;
             switch(state){
+                case "0":
+                    result = '<span class="span_state" id="State_'+idvalue+'">新订单</span>';
+                    break;
                 case "10":
                     result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
                     break;
@@ -116,7 +119,7 @@
                                 <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">已付款<span>{UserOrderCountOfPayment}</span></a></li>
                                 <li><a id="order_state_25" href="/default.php?mod=user_order&a=list&state=25">已发货<span>{UserOrderCountOfSent}</span></a></li>
                                 <li><a id="order_state_30" href="/default.php?mod=user_order&a=list&state=30">交易完成<span>{UserOrderCountOfDone}</span></a></li>
-                                <li><a id="order_state_70" href="/default.php?mod=user_order&a=list&state=70">未评价<span>{UserOrderCountOfUnComment}</span></a></li>
+
                             </ul>
                             <div class="clean"></div>
                         </div>
