@@ -49,8 +49,8 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);
             }
+            return '{"channel":{"channel_list":' . $result . '}}';
         }
-
-        return '{"channel":{"channel_list":' . $result . '}}';
+        else return "";
     }
 } 
