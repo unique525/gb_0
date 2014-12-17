@@ -431,41 +431,36 @@ class ProductPublicData extends BasePublicData {
     }
 
     /**
-     * 判断商品是否超过下架时间，并对设置了自动下架的超时商品更新下架状态值为下架状态
+     * 对设置了自动下架并超过下架时间的商品修改状态值为下架，并返回该商品目前上架情况最新状态值
      * @param int $productId 产品id
      * @return string 是否下架
      */
     public function ModifySaleStateIfOutAutoRemoveDate($productId)
     {
-        $isOutDate = false; //默认为不下架
+        $SaleState = -1;
         if ($productId > 0) {
             $nowTime = date("Y-m-d H:i:s");
             $arrOne = self::GetOne($productId);
             $autoRemoveDate = $arrOne["ProductId"];
             $OpenAutoRemove = $arrOne["OpenAutoRemove"];
             $SaleState = $arrOne["SaleState"];
-            if ($SaleState != "100") {
-                if ($OpenAutoRemove == 1) {
-                    if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
-                        $dataProperty = new DataProperty();
-                        $sql = "UPDATE " . self::TableName_Product . " SET
+            if ($SaleState != "100" && $OpenAutoRemove == 1) {
+                if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
+                    $dataProperty = new DataProperty();
+                    $sql = "UPDATE " . self::TableName_Product . " SET
                         SaleState = :SaleState
                         WHERE ProductId = :ProductId
                         ;";
-                        $dataProperty->AddField("SaleState", 100);
-                        $dataProperty->AddField("ProductId", $productId);
-                        $result = $this->dbOperator->Execute($sql, $dataProperty);
-                        if ($result > 0) {
-                            $isOutDate = true;
-                        }
+                    $dataProperty->AddField("SaleState", 100);
+                    $dataProperty->AddField("ProductId", $productId);
+                    $result = $this->dbOperator->Execute($sql, $dataProperty);
+                    if ($result > 0) {
+                        $SaleState = 100;
                     }
                 }
             }
-            else{
-                $isOutDate = true;
-            }
         }
-        return $isOutDate;
+        return $SaleState;
     }
 
     /**
