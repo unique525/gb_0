@@ -23,6 +23,9 @@
         function FormatOrderState(state,idvalue){
             var result;
             switch(state){
+                case "0":
+                    result = '<span class="span_state" id="State_'+idvalue+'">新订单</span>';
+                    break;
                 case "10":
                     result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
                     break;
