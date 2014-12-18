@@ -431,46 +431,104 @@ class ProductPublicData extends BasePublicData {
     }
 
     /**
-     * 对设置了自动下架并超过下架时间的商品修改状态值为下架，并返回该商品目前上架情况最新状态值
-     * @param int $productId 产品id
-     * @return string 是否下架
+     * @param int $productId
+     * @param int $saleState
+     * @return int
      */
-    public function ModifySaleStateIfOutAutoRemoveDate($productId)
-    {
-        $SaleState = -1;
-        if ($productId > 0) {
-            $nowTime = date("Y-m-d H:i:s");
-            $arrOne = self::GetOne($productId);
-            $autoRemoveDate = $arrOne["ProductId"];
-            $OpenAutoRemove = $arrOne["OpenAutoRemove"];
-            $SaleState = $arrOne["SaleState"];
-            if ($SaleState != "100" && $OpenAutoRemove == 1) {
-                if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
-                    $dataProperty = new DataProperty();
-                    $sql = "UPDATE " . self::TableName_Product . " SET
+    public function ModifySaleState($productId, $saleState){
+        $result = -1;
+        if($productId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Product . " SET
                         SaleState = :SaleState
                         WHERE ProductId = :ProductId
                         ;";
-                    $dataProperty->AddField("SaleState", 100);
-                    $dataProperty->AddField("ProductId", $productId);
-                    $result = $this->dbOperator->Execute($sql, $dataProperty);
-                    if ($result > 0) {
-                        $SaleState = 100;
+            $dataProperty->AddField("SaleState", $saleState);
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_sale_state.cache_' . $productId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 对设置了自动下架并超过下架时间的商品修改状态值为下架，并返回该商品目前上架情况最新状态值
+     * @param int $productId 产品id
+     */
+    public function ModifySaleStateIfOutAutoRemoveDate($productId)
+    {
+        if ($productId > 0) {
+            $openAutoRemove = self::GetOpenAutoRemove($productId, true);
+            if($openAutoRemove > 0){
+                $nowTime = date("Y-m-d H:i:s");
+                $autoRemoveDate = self::GetAutoRemoveDate($productId, true);
+                $saleState = self::GetSaleState($productId, true);
+                if ($saleState < ProductData::SALE_STATE_REMOVE) {
+                    if (!empty($autoRemoveDate) && (strtotime($nowTime) > strtotime($autoRemoveDate))) {
+                        $saleState = ProductData::SALE_STATE_REMOVE;
+                        self::ModifySaleState($productId, $saleState);
                     }
                 }
             }
         }
-        return $SaleState;
+    }
+
+    /**
+     * 取得产品的是否自动下架
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return int 是否自动下架
+     */
+    public function GetOpenAutoRemove($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_open_auto_remove.cache_' . $productId . '';
+            $sql = "SELECT OpenAutoRemove FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得产品的上架状态
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return int 上架状态
+     */
+    public function GetSaleState($productId, $withCache)
+    {
+        $result = -1;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_sale_state.cache_' . $productId . '';
+            $sql = "SELECT SaleState FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
     }
 
     /**
      * 取得产品的下架时间
      * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
      * @return string 产品下架时间
      */
-    public function GetAutoRemoveDate($productId)
+    public function GetAutoRemoveDate($productId, $withCache)
     {
-        $withCache=false;//不缓存
         $result = "";
         if ($productId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
