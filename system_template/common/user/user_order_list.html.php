@@ -18,7 +18,8 @@
             });
 
             $("#btn_search").click(function(){
-                var site_id = 1;
+                var site_id = window.G_NowSiteId;
+                alert(site_id);
                 var user_order_number = $("#user_order_number").val();
                 var state = $("#state").val();
                 var begin_date = $("#begin_date").val();
@@ -72,7 +73,7 @@
                 <td style="width:80px;text-align: center">订单总价</td>
                 <td style="width:80px;text-align: center">运费</td>
                 <td style="width:150px;text-align: center">创建日期</td>
-                <td  style="width:80px;text-align: center">状态</td>
+                <td  style="width:120px;text-align: center">状态</td>
                 <td  style="width:150px;text-align: center">相关信息</td>
             </tr>
         </table>
@@ -102,7 +103,7 @@
                             <td class="spe_line2" style="width:150px;text-align: center">
                                 <span>{f_CreateDate}</span>
                             </td>
-                            <td class="spe_line2" style="width:80px;text-align: center">
+                            <td class="spe_line2" style="width:120px;text-align: center">
                                 <span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span>
                             </td>
                             <td class="spe_line2" style="width:150px;text-align: center">

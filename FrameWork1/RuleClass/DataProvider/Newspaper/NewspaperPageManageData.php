@@ -100,6 +100,149 @@ class NewspaperPageManageData extends BaseManageData {
         return $result;
     }
 
+
+    /**
+     * 修改排序
+     * @param int $sort 大于0向上移动，否则向下移动
+     * @param int $newspaperPageId 资讯id
+     * @return int 返回结果
+     */
+    public function ModifySort($sort, $newspaperPageId) {
+        $result = 0;
+        if ($newspaperPageId > 0) {
+
+            $newspaperId = $this->GetNewspaperId($newspaperPageId, false);
+
+            $currentSort = $this->GetSort($newspaperPageId, false);
+
+            if ($sort > 0) { //向上移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_NewspaperPage . "
+
+                        WHERE
+                            NewspaperId=:NewspaperId
+                        AND NewspaperPageId<>:NewspaperPageId
+                        AND sort>=:CurrentSort
+
+                        ORDER BY Sort DESC LIMIT 1;
+                        ";
+                $dataProperty->AddField("NewspaperId", $newspaperId);
+                $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            } else{//向下移动
+                $dataProperty = new DataProperty();
+                $sql = "SELECT
+                            Sort
+                        FROM " . self::TableName_NewspaperPage . "
+
+                        WHERE NewspaperId=:NewspaperId
+                        AND NewspaperPageId<>:NewspaperPageId
+                        AND Sort<=:CurrentSort
+
+                        ORDER BY Sort LIMIT 1;
+                        ";
+                $dataProperty->AddField("NewspaperId", $newspaperId);
+                $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+                $dataProperty->AddField("CurrentSort", $currentSort);
+                $newSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            }
+
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $newSort = $newSort + $sort;
+
+
+            //2011.12.8 zc 排序号禁止负数
+            if ($newSort < 0) {
+                $newSort = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_NewspaperPage . "
+                    SET `Sort`=:NewSort
+                    WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty->AddField("NewSort", $newSort);
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 拖动排序
+     * @param array $arrNewspaperPageId 待处理的文档编号数组
+     * @return int 操作结果
+     */
+    public function ModifySortForDrag($arrNewspaperPageId)
+    {
+        if (count($arrNewspaperPageId) > 1) { //大于1条时排序才有意义
+            $strNewspaperPageId = join(',', $arrNewspaperPageId);
+            $strNewspaperPageId = Format::FormatSql($strNewspaperPageId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId IN ($strNewspaperPageId);";
+            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $arrSql = array();
+            for ($i = 0; $i < count($arrNewspaperPageId); $i++) {
+                $newSort = $maxSort - $i;
+                if ($newSort < 0) {
+                    $newSort = 0;
+                }
+                $newSort = intval($newSort);
+                $newspaperPageId = intval($arrNewspaperPageId[$i]);
+                $sql = "UPDATE " . self::TableName_NewspaperPage . " SET Sort=$newSort WHERE NewspaperPageId=$newspaperPageId;";
+                $arrSql[] = $sql;
+            }
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
+        }
+    }
+
+    /**
+     * 取得所属电子报id
+     * @param int $newspaperPageId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 电子报id
+     */
+    public function GetNewspaperId($newspaperPageId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_newspaper_id.cache_' . $newspaperPageId . '';
+            $sql = "SELECT NewspaperId FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序号
+     * @param int $newspaperPageId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序号
+     */
+    public function GetSort($newspaperPageId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_sort.cache_' . $newspaperPageId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
     /**
      * 根据后台管理员id返回此管理员可以管理的站点列表数据集
      * @param int $newspaperId 电子报id
@@ -163,26 +306,6 @@ class NewspaperPageManageData extends BaseManageData {
         return $result;
     }
 
-
-    /**
-     * 取得电子报id
-     * @param int $newspaperPageId id
-     * @param bool $withCache 是否从缓冲中取
-     * @return string 状态
-     */
-    public function GetNewspaperId($newspaperPageId, $withCache)
-    {
-        $result = "";
-        if ($newspaperPageId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
-            $cacheFile = 'newspaper_page_get_newspaper_id.cache_' . $newspaperPageId . '';
-            $sql = "SELECT NewspaperId FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId=:NewspaperPageId;";
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
-            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
-        }
-        return $result;
-    }
 
     /**
      * 返回一行数据

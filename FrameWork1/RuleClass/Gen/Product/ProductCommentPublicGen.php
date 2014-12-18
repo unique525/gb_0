@@ -114,7 +114,7 @@ class ProductCommentPublicGen extends BasePublicGen implements IBasePublicGen
         }
 
         //订单未交易完成
-        $userOrderState = $userOrderPublicData->GetState($userOrderId);
+        $userOrderState = $userOrderPublicData->GetState($userOrderId,true);
         if($userOrderState != UserOrderData::STATE_DONE){
             echo $userOrderState;
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::NOT_DONE . '})';

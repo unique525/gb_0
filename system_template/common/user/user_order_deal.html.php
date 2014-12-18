@@ -85,10 +85,12 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" style="width:100px;text-align: right">支付信息：</td>
-                <td colspan="3" class="spe_line" height="30" style="text-align: left">
+                <td class="spe_line" height="30" style="text-align: left">
                     <div class="btn2" id="btn_user_order_pay" style="width:80px;text-align: center;float:left" idvalue="{UserOrderId}">点击查看</div>
                     <div style="clear:left"></div>
                 </td>
+                <td class="spe_line"></td>
+                <td class="spe_line">支付宝交易号：{AlipayTradeNo} &nbsp;&nbsp;&nbsp; 支付宝交易状态：{AlipayTradeStatus}</td>
             </tr>
         </table>
         <div style="height:30px"></div>
@@ -111,7 +113,11 @@
                         <td class="spe_line" height="30" style="text-align: center">
                             <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="btn_order_product_edit" idvalue="{f_UserOrderProductId}" title={f_UserOrderId}/>
                         </td>
-                        <td class="spe_line" height="30" style="text-align: center">{f_ProductName}</td>
+                        <td class="spe_line" height="30" style="text-align: center">
+                            <a href="/default.php?mod=product&a=detail&product_id={f_ProductId}" target="_blank">
+                            {f_ProductName}
+                            </a>
+                        </td>
                         <td class="spe_line" height="30" style="text-align: center">{f_ProductPriceIntro}</td>
                         <td class="spe_line " height="30">
                             ￥<span class="show_price">{f_ProductPrice}</span>

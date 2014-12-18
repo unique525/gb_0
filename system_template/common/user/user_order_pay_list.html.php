@@ -59,7 +59,7 @@
                                 <span id="span_order_pay_state_{f_UserOrderPayId}" class="span_order_pay_state" idvalue="{f_UserOrderPayId}">{f_State}</span>
                             </td>
                             <td class="spe_line" height="30" width="80" align="center">
-                               <span id="manage_username_{f_UserOrderPayId}"> {f_ManageUserName}</span>
+                               <span id="manage_username_{f_UserOrderPayId}">{f_ManageUserName}</span>
                             </td>
                         </tr>
                     </table>

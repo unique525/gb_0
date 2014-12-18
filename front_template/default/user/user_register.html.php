@@ -298,6 +298,7 @@ $(function () {
             } else {
                 $("#td_confirm_pass").attr("class", "ok1");
                 $("#span_confirm_pass_error").text("");
+                canSubmit = true;
             }
         }
     });
@@ -316,6 +317,7 @@ $(function () {
             } else {
                 $("#td_check_code").attr("class", "ok1");
                 $("#span_check_code_error").text("");
+                canSubmit = true;
             }
         });
     });

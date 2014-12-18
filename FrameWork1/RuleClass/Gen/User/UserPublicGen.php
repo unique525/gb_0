@@ -213,14 +213,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $userInfoPublicData = new UserInfoPublicData();
             $userRolePublicData = new UserRolePublicData();
             $siteConfigData = new SiteConfigData($siteId);
-            $result = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
-            if ($result > 0) {
-                $userInfoPublicData->Init($result, $siteId);//插入会员信息表
+            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
+            if ($newUserId > 0) {
+                $userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
 
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-                $userRolePublicData->Init($result, $siteId, $newMemberGroupId);//插入会员角色表
+                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
 
-                Control::SetUserCookie($result, $userName);
+                Control::SetUserCookie($newUserId, $userName);
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
             } else {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';

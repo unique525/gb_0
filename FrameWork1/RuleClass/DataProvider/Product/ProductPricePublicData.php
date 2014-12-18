@@ -9,6 +9,8 @@
 class ProductPricePublicData extends BasePublicData
 {
 
+
+
     /**
      * 一个产品价格的信息
      * @param int $productPriceId 产品价格Id
@@ -92,6 +94,57 @@ class ProductPricePublicData extends BasePublicData
         SELECT COUNT(*) FROM " . self::TableName_ProductPrice . "
         WHERE ProductId=:ProductId" . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+    /**
+     * 修改库存数量
+     * @param int $productPriceId
+     * @param int $productCount
+     * @return int
+     */
+    public function ModifyProductCount($productPriceId, $productCount){
+        $result = -1;
+        if($productPriceId>0){
+
+            if(intval($productCount)<0){
+                $productCount = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ProductPrice . " SET
+                        ProductCount = :ProductCount
+                        WHERE ProductPriceId = :ProductPriceId
+                        ;";
+            $dataProperty->AddField("ProductCount", $productCount);
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_price_data';
+            $cacheFile = 'product_price_get_product_count.cache_' . $productPriceId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得库存数量
+     * @param int $productPriceId
+     * @param bool $withCache
+     * @return int
+     */
+    public function GetProductCount($productPriceId, $withCache)
+    {
+        $result = -1;
+        if ($productPriceId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_price_data';
+            $cacheFile = 'product_price_get_product_count.cache_' . $productPriceId . '';
+            $sql = "SELECT ProductCount FROM " . self::TableName_ProductPrice . " WHERE ProductPriceId=:ProductPriceId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 

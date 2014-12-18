@@ -324,23 +324,36 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $subtotal = floatval($arrProduct[$i]["Subtotal"]);
                     $subtotalDes = Des::Encrypt($subtotal, UserOrderData::USER_ORDER_DES_KEY);
 
-                    $autoSendMessage = "";
-                    $userOrderProductPublicData->Create(
-                        $userOrderId,
-                        $siteId,
-                        $productId,
-                        $productIdDes,
-                        $productPriceId,
-                        $saleCount,
-                        $saleCountDes,
-                        $productPrice,
-                        $productPriceDes,
-                        $salePrice,
-                        $salePriceDes,
-                        $subtotal,
-                        $subtotalDes,
-                        $autoSendMessage
-                    );
+                    //判断库存
+                    $productPricePublicData = new ProductPricePublicData();
+                    //即时库存，不缓存
+                    $productCount = $productPricePublicData->GetProductCount($productPriceId, false);
+                    if($saleCount > 0 && $saleCount <= $productCount){
+                        $autoSendMessage = "";
+                        $resultOfUserOrderProduct = $userOrderProductPublicData->Create(
+                            $userOrderId,
+                            $siteId,
+                            $productId,
+                            $productIdDes,
+                            $productPriceId,
+                            $saleCount,
+                            $saleCountDes,
+                            $productPrice,
+                            $productPriceDes,
+                            $salePrice,
+                            $salePriceDes,
+                            $subtotal,
+                            $subtotalDes,
+                            $autoSendMessage
+                        );
+                        if($resultOfUserOrderProduct>0){
+                            //修改库存数
+                            $newProductCount = $productCount - $saleCount;
+                            $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
+                        }
+                    }
+
+
 
                 }
 
@@ -356,7 +369,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //支付方式选择
                 //默认支付宝
-
+/**
                 if(strlen($userOrderName)<=0){
                     $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
                 }
@@ -374,7 +387,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $userOrderIntro,
                     $userOrderProductUrl
                 );
-
+*/
                 return $result;
 
             }else{

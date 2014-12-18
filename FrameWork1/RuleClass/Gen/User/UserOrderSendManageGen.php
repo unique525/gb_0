@@ -31,10 +31,26 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
+        $templateContent = "";
         if($siteId > 0 && $userOrderId > 0){
+            $templateContent = Template::Load("user/user_order_send_list.html","common");
+            parent::ReplaceFirst($templateContent);
+            $userOrderSendManageData = new UserOrderSendManageData();
+            $arrUserOrderSendList = $userOrderSendManageData->GetList($userOrderId,$siteId);
 
+            $tagId = "user_order_send_list";
+            if(count($arrUserOrderSendList) > 0){
+                Template::ReplaceList($templateContent,$arrUserOrderSendList,$tagId);
+            }else{
+                Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("user_order_send",1));
+            }
         }
-        return "";
+
+        $templateContent = str_ireplace("{UserOrderId}",$userOrderId,$templateContent);
+
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
+
     }
 
     private function AsyncModify(){
@@ -42,15 +58,16 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $userOrderId = Control::GetRequest("user_order_id",0);
 
         if($siteId > 0 && $userOrderId > 0){
-            $templateContent = Template::Load("user/user_order_send_list.html","common");
-            $userOrderSendManageData = new UserOrderSendManageData();
+
         }
-        return Control::GetRequest("jsonpcallback","")."";
+        return "";
     }
 
     private function AsyncCreate(){
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
+
+        if($siteId > 0 && $userOrderId > 0){}
 
         return Control::GetRequest("jsonpcallback","")."";
     }

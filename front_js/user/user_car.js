@@ -11,7 +11,14 @@ function addUserCar(siteId,productId,buyCount,productPriceId,activityProductId,i
                 //失败
                 alert("加入失败");
                 location.replace(location);
-            }else if(result == -2){
+            }else if(result == -10){
+                alert("加入失败,库存不够");
+                location.replace(location);
+            }else if(result == -20){
+                alert("加入失败,购买数量小于1或者库存数量大于购买数量");
+                location.replace(location);
+            }
+            else if(result == -2){
                 var returnUrl = encodeURIComponent(location);
                 window.location.href = "/default.php?mod=user&a=login&re_url="+returnUrl;
             }else{
