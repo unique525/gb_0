@@ -47,9 +47,14 @@
                 $(".OnSale").css("display","none");
                 $(".OutSale").css("display","");
             }
-            //价格选择
+            //品种规格选择
             var spanPropon=$('.propon');
             spanPropon.click(function(){
+                //重置购买数量为1
+                $("#productNum").val(1);
+                //对应规格产品数量
+                var productCount=$(this).attr("productcount");
+                $("#productCount").text(productCount);
                 //产品促销价格
                 var productPriceValue=$(this).attr("pricevalue");
                 selectProductPriceId = $(this).attr("idvalue");
@@ -69,7 +74,7 @@
             //页面加载后计算优惠价格
             if(spanPropon.length>0) //如果存在品种规格定的价格
             {
-            //页面加载后默认选中第一个品种规格的价格进行优惠价格计算
+            //页面加载后默认选中第一个品种规格的价格进行优惠价格计算和库存显示
             spanPropon.eq(0).click();
             }
             else //直接用市场价格减去促销价格得出优惠价格
@@ -245,12 +250,18 @@
         });
         //产品数量增减
         function ProductNumChange(changeNum) {
+            var productCount = $("#productCount").text();
             var inputProductNum=$("#productNum");
             var productNum = inputProductNum.val();
             if (Number(productNum)) {
                 productNum = parseInt(productNum) + parseInt(changeNum);
                 if (productNum == 0) {
-                    productNum = 1
+                    productNum = 1;
+                }
+                else if(productNum>productCount)
+                {
+                    alert("购买数量超过了库存数量！");
+                    return;
                 }
                 inputProductNum.val(productNum)
             } else {
@@ -371,7 +382,7 @@
                                             <icms id="product_price_{ProductId}" type="product_price_list">
                                                 <item>
                                                     <![CDATA[
-                                                    <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}">{f_ProductPriceIntro}（库存：{f_ProductCount}）</span></li>
+                                                    <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}" productcount="{f_ProductCount}">{f_ProductPriceIntro}</span></li>
                                                     ]]>
                                                 </item>
                                             </icms>
@@ -379,6 +390,11 @@
                                     </dd>
                                 </dl>
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                          <p class="price_n">库存数量：<span id="productCount" class="OnSale"></span></p>
                         </td>
                     </tr>
                     <tr>
