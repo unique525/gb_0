@@ -261,7 +261,7 @@
                 else if(productNum>productCount)
                 {
                     alert("购买数量超过了库存数量！");
-                    productNum=productCount;
+                    return;
                 }
                 inputProductNum.val(productNum)
             } else {
