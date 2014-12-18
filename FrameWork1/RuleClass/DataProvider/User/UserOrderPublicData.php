@@ -189,6 +189,12 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * @param $userId
+     * @param $siteId
+     * @param $state
+     * @return int
+     */
     public function GetUserOrderCountByState($userId, $siteId, $state)
     {
         $result = -1;
@@ -203,13 +209,20 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetState($userOrderId){
+    /**
+     * @param $userOrderId
+     * @param $withCache
+     * @return int
+     */
+    public function GetState($userOrderId,$withCache){
         $result = -1;
         if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId = :UserOrderId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId", $userOrderId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+            $result = $this->GetInfoOfIntValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
         }
         return $result;
     }

@@ -42,9 +42,11 @@ class UserOrderManageData extends BaseManageData{
     public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($siteId > 0){
-            $sql = "SELECT uo.*,ui.NickName AS UserName FROM ".self::TableName_UserOrder." uo,".self::TableName_UserInfo
-                ." ui WHERE uo.UserId = ui.UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
-            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." WHERE SiteId = :SiteId;";
+            $sql = "SELECT uo.*,u.UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN "
+                .self::TableName_User." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId
+                 ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo LEFT JOIN "
+                .self::TableName_User." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId",$siteId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
@@ -56,8 +58,8 @@ class UserOrderManageData extends BaseManageData{
     public function GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($siteId > 0){
-            $sql = "SELECT uo.*,ui.NickName AS UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_UserInfo
-                ." ui ON uo.UserId = ui.UserId WHERE uo.SiteId = :SiteId ";
+            $sql = "SELECT uo.*,u.UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_User
+                ." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId ";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo WHERE uo.SiteId = :SiteId ";
 
             $dataProperty = new DataProperty();
