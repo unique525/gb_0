@@ -29,13 +29,14 @@ class ChannelClientData extends BaseClientData {
     }
 
     /**
-     * 根据父id获取列表数据集
-     * @param string $parentId 父id，可以是 id,id,id 的形式
+     * 根据频道id号得到当前频道下所有子节点数据
+     * @param string $parentId 父频道id
+     * @param string $channelId 频道id，可以是 id,id,id 的形式
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
      * @return array|null 列表数据集
      */
-    public function GetListByParentId($parentId, $order = "", $topCount = null){
+    public function GenAllChildListByChannelId($parentId,$channelId, $order = "", $topCount = null){
         $result = null;
         if ($topCount != null)
         {
@@ -44,10 +45,10 @@ class ChannelClientData extends BaseClientData {
         else {
             $topCount = "";
         }
-        if($parentId >0){
-            $parentId = Format::FormatSql($parentId);
+        if($channelId >0){
+            $channelId = Format::FormatSql($channelId);
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
-            $cacheFile = 'arr_channel_get_list_by_parent_id_.cache_' .
+            $cacheFile = 'arr_channel_get_all_child_list_by_channel_id_.cache_' .
                 str_ireplace(",","_",$parentId) .
                 '_' . $topCount . '_' . $order;
             $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
@@ -80,14 +81,14 @@ class ChannelClientData extends BaseClientData {
                     WHERE
 
                         State<100
-                        AND ParentId IN ($parentId)
+                        AND ChannelId IN ($channelId)
                         AND IsCircle=1
                         $order
                         $topCount
                         ";
 
                 $dataProperty = new DataProperty();
-                //$dataProperty->AddField("ParentId", $parentId);
+                //$dataProperty->AddField("ParentId", $channelId);
                 $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
                 DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
