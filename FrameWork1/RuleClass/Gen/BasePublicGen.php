@@ -973,7 +973,20 @@ class BasePublicGen extends BaseGen {
                 }
 
                 if (count($userExploreCollection->UserExplores)>0) {
-                    Template::ReplaceList($tagContent, $userExploreCollection->UserExplores, $tagId);
+
+                    //限制$tagTopCount
+                    $arrList = array();
+                    if($tagTopCount>0){
+                        for($x = 0; $x<$tagTopCount; $x++){
+
+                            $arrList[] = $userExploreCollection->UserExplores[$x];
+
+                        }
+                    }
+
+
+
+                    Template::ReplaceList($tagContent, $arrList, $tagId);
                     //把对应ID的CMS标记替换成指定内容
                     $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
                 } else {

@@ -23,21 +23,6 @@
 
         $(function () {
 
-
-//            $(".right").click(function () {
-//                var idvalue = $(this).attr("idvalue");
-//                var state = $("#" + idvalue + "_child").css("display");
-//                if (state == "none") {
-//                    $(".right_child").css("display", "none");
-//                    $(".right_img").attr("src", "/images/icon_jia.png");
-//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
-//                    $("#" + idvalue + "_child").css("display", "inline");
-//                } else {
-//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
-//                    $("#" + idvalue + "_child").css("display", "none");
-//                }
-//            });
-
             var AllSaleProductPrice = 0;
             $(".UserOrderSubtotal").each(function(){
                 var ProductPrice = parseFloat($(this).html());
@@ -59,6 +44,12 @@
                     }
                 });
             }
+
+            var spanState = $("#span_state");
+            var userOrderId = spanState.attr("idvalue");
+            var state = spanState.attr("title");
+            spanState.html(FormatOrderState(state, userOrderId));
+
         });
     </script>
 </head>
@@ -109,7 +100,7 @@
                                     </td>
                                     <td class="spe_line infor_title">订单状态：</td>
                                     <td class="spe_line">
-                                        <span style="color:#ff3d00;"><script type="text/javascript">document.write(FormatOrderState("{State}",{UserOrderId}));</script></span>
+                                        <span id="span_state" idvalue="{UserOrderId}" title="{State}" style="color:#ff3d00;"></span>
                                     </td>
                                 </tr>
                             </table>

@@ -17,11 +17,11 @@
 
 .order_form{ padding:20px 0;}
 .order_form table{ margin-bottom:15px; border-bottom:1px solid #e8e8e8; padding-bottom:5px;}
-.order_form table .order_number{ width:320px; text-indent:24px;}
+.order_form table .order_number{ width:415px; text-indent:24px;}
 .order_form table .all_price,.order_form table .send_price,.order_form table .create_date{ width:117px; text-align:center;}
 .order_form table .state{ width:107px; text-align:center;}
 .order_form table .option{ width:127px; text-align:center;}
-.order_form table td{ line-height:45px;}
+.order_form table td{ line-height:30px; font-size:14px;}
 .order_form .title td{ text-align:center; text-indent:0;}
 .order_form .title{ background:#efefef; border:none; padding:0;}
 .order_form table .ckxq{ display:block; width:80px; background:#00a93c; height:30px; line-height:30px; color:#fff; margin-left:23px;}

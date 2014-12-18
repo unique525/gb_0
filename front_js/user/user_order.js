@@ -5,7 +5,7 @@ function FormatOrderState(state,idvalue){
             result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
         case "10":
-            result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'">未付款</span><br /><a href="/default.php?mod=user_order&a=pay&user_order_id='+ idvalue +'" target="_blank">[立即付款]</a>';
             break;
         case "15":
             result = '<span class="span_state" id="State_'+idvalue+'">货到付款</span>';

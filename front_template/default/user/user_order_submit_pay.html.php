@@ -10,20 +10,25 @@
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
     <script type="text/javascript" src="/system_js/json.js"></script>
     <script type="text/javascript">
-
         $(function () {
 
             $("#btn_submit1").click(function () {
 
-                window.location.href = "/default.php?mod=user_order&a=submit_pay&pay_method=1&user_order_id="+Request["user_order_id"];
+                window.location.href = "/";
 
             });
 
             $("#btn_submit2").click(function () {
 
-                window.location.href = "/default.php?mod=user_order&a=submit_pay&pay_method=2&user_order_id="+Request["user_order_id"];
+                window.location.href = "/default.php?mod=user_order&a=list";
 
             });
+
+
+            if(Request["pay_method"] == "2"){
+                $("#pay_method_2").css("display","block");
+            }
+
         });
     </script>
 </head>
@@ -51,14 +56,21 @@
     <div class="new_buy">
 
         <div class="new_con">
-            <div class="new_con_tit">支付<br/>方式</div>
+            <div class="new_con_tit">支付<br/>结果</div>
             <div class="new_con_box">
                 <div class="new_con_arw"><img src="/images/cart_n_arrowl.gif" width="11" height="21" alt=""/></div>
                 <div class="new_commodity">
 
-                    <input id="btn_submit1" style="cursor:pointer;" type="button" class="btn_submit" value="支付宝在线支付"/>
-<br /><br />
-                    <input id="btn_submit2" style="cursor:pointer;" type="button" class="btn_submit" value="货到付款"/>
+                    <div id="pay_method_2" style="display:none;">
+
+                        <h2 style="line-height:300%;font-size:24px;">您的订单信息已经更新为货到付款状态，我们会及时给您发货，请耐心等待！</h2>
+
+                        <input id="btn_submit1" style="cursor:pointer;" type="button" class="btn_submit" value="转到首页"/>
+                        <br /><br />
+                        <input id="btn_submit2" style="cursor:pointer;" type="button" class="btn_submit" value="转到我的订单"/>
+
+                    </div>
+
 
                 </div>
                 <div class="clean"></div>

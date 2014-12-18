@@ -31,6 +31,9 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             case "pay":
                 $result = self::GenPay();
                 break;
+            case "submit_pay":
+                $result = self::GenSubmitPay();
+                break;
             case "receive_pay":
                 $result = self::GenReceivePay();
                 break;
@@ -170,7 +173,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
      */
     private function GenConfirm(){
         $userId = Control::GetUserId();
-        $siteId = intval(Control::GetRequest("site_id",0));
+        $siteId = parent::GetSiteIdByDomain();
         $strUserCarIds = Control::GetRequest("arr_user_car_id","");
         $templateFileUrl = "user/user_order_confirm.html";
         $templateName = "default";
@@ -365,7 +368,10 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $resultOfDeleteUserCar = $userCarPublicData->BatchDelete($arrUserCarId, $userId);
 
 
-                //支付
+                //支付选择页面
+                Control::GoUrl("/default.php?mod=user_order&a=pay&user_order_id=$userOrderId");
+
+
 
                 //支付方式选择
                 //默认支付宝
@@ -388,7 +394,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $userOrderProductUrl
                 );
 */
-                return $result;
+                //return $result;
 
             }else{
                 //编号出错
@@ -404,19 +410,111 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenPay(){
 
 
+        $userId = Control::GetUserId();
+        $siteId = parent::GetSiteIdByDomain();
+        $userOrderId = Control::GetRequest("user_order_id",0);
+        $templateContent = "";
 
+        if($userOrderId > 0 && $userId > 0 && $siteId > 0){
+
+            $templateFileUrl = "user/user_order_pay.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+            /////权限验证//////////////////////
+            /////会员id和订单所属会员id要一致
+            //////////////////////////////////
+            $userOrderPublicData = new UserOrderPublicData();
+            $userOrderUserId = $userOrderPublicData->GetUserId($userOrderId, true);
+
+            if($userId != $userOrderUserId){
+                return "";
+            }
+
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+
+            parent::ReplaceEnd($templateContent);
+        }
+
+
+        return $templateContent;
 
 
 
     }
 
     /**
-     * 接收支付
+     * 提交支付
      */
-    private function GenReceivePay(){
+    private function GenSubmitPay(){
+
+        $userId = Control::GetUserId();
+        $siteId = parent::GetSiteIdByDomain();
+        $userOrderId = Control::GetRequest("user_order_id",0);
+        $templateContent = "";
+        if($userOrderId > 0 && $userId > 0 && $siteId > 0){
+
+            $templateFileUrl = "user/user_order_submit_pay.html";
+            $templateName = "default";
+            $templatePath = "front_template";
+            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            parent::ReplaceFirst($templateContent);
+
+            /////权限验证//////////////////////
+            /////会员id和订单所属会员id要一致
+            //////////////////////////////////
+            $userOrderPublicData = new UserOrderPublicData();
+            $userOrderUserId = $userOrderPublicData->GetUserId($userOrderId, true);
+
+            if($userId != $userOrderUserId){
+                return "";
+            }
+
+            $payMethod = Control::GetRequest("pay_method", 0);
+
+            if($payMethod == 1){ //支付宝
+
+                $userOrderName = $userOrderPublicData->GetUserOrderName($userOrderId, true);
+                $userOrderNumber = $userOrderPublicData->GetUserOrderNumber($userOrderId, true);
+                $allPrice = $userOrderPublicData->GetAllPrice($userOrderId);
+
+                if(strlen($userOrderName)<=0){
+                    $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
+                }
+
+                $alipay = new Alipay();
+                $userOrderIntro = "";
+                $userOrderProductUrl = "http://".$_SERVER['HTTP_HOST']."/default.php?mod=user_order&a=detail&user_order_id=$userOrderId";
+                $alipayConfig = $alipay->Init($siteId);
+                $result = $alipay->Submit(
+                    $siteId,
+                    $alipayConfig,
+                    $userOrderNumber,
+                    $userOrderName,
+                    $allPrice,
+                    $userOrderIntro,
+                    $userOrderProductUrl
+                );
+                return $result;
+
+            }elseif ($payMethod == 2){ //货到付款
+
+                //直接修改订单状态为货到付款
+                $state = UserOrderData::STATE_PAYMENT_AFTER_RECEIVE;
+
+                $userOrderPublicData->ModifyState($userOrderId, $state);
 
 
 
+            }
+
+            parent::ReplaceEnd($templateContent);
+        }
+        return $templateContent;
 
     }
 

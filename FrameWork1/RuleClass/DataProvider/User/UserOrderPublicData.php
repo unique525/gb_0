@@ -299,6 +299,71 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
+
+    /**
+     * 取得订单名称
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单名称
+     */
+    public function GetUserOrderName($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_user_order_name.cache_' . $userOrderId . '';
+            $sql = "SELECT UserOrderName FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 取得订单编号
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单编号
+     */
+    public function GetUserOrderNumber($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
+            $sql = "SELECT UserOrderNumber FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得订单会员id
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单会员id
+     */
+    public function GetUserId($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_user_id.cache_' . $userOrderId . '';
+            $sql = "SELECT UserId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
     /**
      * 修改支付宝交易号
      * @param int $userOrderId 订单id

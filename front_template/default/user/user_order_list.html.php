@@ -14,36 +14,11 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/common.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
-
+    <script type="text/javascript" src="/front_js/user/user_order.js"></script>
     <script type="text/javascript">
 
         var siteId = parseInt("{SiteId}");
 
-
-        function FormatOrderState(state,idvalue){
-            var result;
-            switch(state){
-                case "0":
-                    result = '<span class="span_state" id="State_'+idvalue+'">新订单</span>';
-                    break;
-                case "10":
-                    result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
-                    break;
-                case "20":
-                    result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
-                    break;
-                case "25":
-                    result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
-                    break;
-                case "30":
-                    result = '<span class="span_state" id="State_'+idvalue+'">交易完成</span>';
-                    break;
-                case "40":
-                    result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
-                    break;
-            }
-            return result;
-        }
 
         $(function () {
 
@@ -76,19 +51,6 @@
                     break;
             }
 
-//            $(".right").click(function () {
-//                var idvalue = $(this).attr("idvalue");
-//                var state = $("#" + idvalue + "_child").css("display");
-//                if (state == "none") {
-//                    $(".right_child").css("display", "none");
-//                    $(".right_img").attr("src", "/images/icon_jia.png");
-//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jian.png");
-//                    $("#" + idvalue + "_child").css("display", "inline");
-//                } else {
-//                    $("#" + idvalue + "_img").attr("src", "/images/icon_jia.png");
-//                    $("#" + idvalue + "_child").css("display", "none");
-//                }
-//            });
         });
     </script>
 </head>
@@ -127,8 +89,8 @@
                             <table class="title" width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="order_number">订单号</td>
-                                    <td class="all_price" style="text-align:center;">原价（元）</td>
-                                    <td class="send_price" style="text-align:center;">运费（元）</td>
+                                    <td class="all_price">原价（元）</td>
+                                    <td class="send_price">运费（元）</td>
                                     <td class="create_date">下单日期</td>
                                     <td class="state">状态</td>
                                     <td class="option">交易操作</td>
@@ -139,8 +101,8 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td class="order_number"><a href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">{f_UserOrderNumber}</a></td>
-                                            <td class="all_price" style="text-align:center;">{f_AllPrice}</td>
-                                            <td class="send_price" style="text-align:center;">{f_SendPrice}</td>
+                                            <td class="all_price">{f_AllPrice}</td>
+                                            <td class="send_price">{f_SendPrice}</td>
                                             <td class="create_date">{f_CreateDate}</td>
                                             <td class="state"><span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span></td>
                                             <td class="option"><a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></td>
