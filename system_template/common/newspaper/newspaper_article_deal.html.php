@@ -13,6 +13,8 @@
             editor = $('#f_NewspaperArticleContent').xheditor();
         });
 
+
+
         function submitForm(closeTab) {
             if ($('#f_NewspaperArticleTitle').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});

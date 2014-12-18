@@ -371,7 +371,7 @@
                                             <icms id="product_price_{ProductId}" type="product_price_list">
                                                 <item>
                                                     <![CDATA[
-                                                    <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}">{f_ProductPriceIntro}</span></li>
+                                                    <li><span class="propon propondefault" idvalue="{f_ProductPriceId}" pricevalue="{f_ProductPriceValue}">{f_ProductPriceIntro}（库存：{f_ProductCount}）</span></li>
                                                     ]]>
                                                 </item>
                                             </icms>

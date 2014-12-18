@@ -13,9 +13,17 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
      */
     const ADD_USER_CAR_SUCCESS = 1;
     /**
-     * 加入购物车成功
+     * 加入购物车失败
      */
     const ADD_USER_CAR_FAIL = -1;
+    /**
+     * 加入购物车失败，库存不够
+     */
+    const ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT = -10;
+    /**
+     * 加入购物车失败，购买数量小于1或者库存数量大于购买数量
+     */
+    const ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER = -20;
     /**
      * 修改购买数量成功
      */
@@ -81,6 +89,20 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $activityProductId = Control::GetRequest("activity_product_id", 0);
         if ($userId > 0) {
             if ($productPriceId > 0 && $productId > 0 && $siteId > 0) {
+
+                //检查库存
+                $productPricePublicData = new ProductPricePublicData();
+                //即时库存，不缓存
+                $productCount = $productPricePublicData->GetProductCount($productPriceId, false);
+                //if($productCount <= 0){
+                    //return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT.'})';
+                //}
+                if($buyCount <= 0 || $buyCount > $productCount){
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER.'})';
+                }
+
+
+
                 $userCarPublicData = new UserCarPublicData();
                 $result = $userCarPublicData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $activityProductId);
                 if ($result > 0) {
