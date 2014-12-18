@@ -18,7 +18,8 @@
             });
 
             $("#btn_search").click(function(){
-                var site_id = 1;
+                var site_id = window.G_NowSiteId;
+                alert(site_id);
                 var user_order_number = $("#user_order_number").val();
                 var state = $("#state").val();
                 var begin_date = $("#begin_date").val();

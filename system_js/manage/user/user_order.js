@@ -174,7 +174,7 @@ $(document).ready(function(){
     $(".btn_user_order_list_pay_info").click(function(){
         var userOrderId = $(this).attr("idvalue");
         var pageIndex = Request["p"]==null?1:Request["p"];
-        var url='/default.php?secu=manage&mod=user_order_send&m=list&user_order_id=' + userOrderId + '&site_id='
+        var url='/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=' + userOrderId + '&site_id='
             +parent.G_NowSiteId+'&p=' + pageIndex;
         $("#user_order_pay_dialog_frame").attr("src",url);
         $("#dialog_user_order_pay_box").dialog({
