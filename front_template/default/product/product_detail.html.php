@@ -50,6 +50,8 @@
             //品种规格选择
             var spanPropon=$('.propon');
             spanPropon.click(function(){
+                //重置购买数量为1
+                $("#productNum").val(1);
                 //对应规格产品数量
                 var productCount=$(this).attr("productcount");
                 $("#productCount").text(productCount);
