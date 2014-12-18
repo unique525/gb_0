@@ -375,7 +375,7 @@ $(function () {
             </icms>
         </ul>
         <ul id="ul_zjll" style="display: none">
-            <icms id="user_explore_1" type="user_explore_list" top="3">
+            <icms id="user_explore_1" type="user_explore_list" top="5">
                 <item>
                     <![CDATA[
                     <li>
@@ -396,7 +396,7 @@ $(function () {
             </icms>
         </ul>
         <ul id="ul_bpqg" style="display: none">
-            <icms id="product_1" type="product_list" where="RecLevel" where_value="2" top="3">
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="2" top="5">
                 <item>
                     <![CDATA[
                     <li>
@@ -417,7 +417,7 @@ $(function () {
             </icms>
         </ul>
         <ul id="ul_xpsd" style="display: none">
-            <icms id="product_1" type="product_list" where="RecLevel" where_value="3" top="3">
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="3" top="5">
                 <item>
                     <![CDATA[
                     <li>
@@ -438,7 +438,7 @@ $(function () {
             </icms>
         </ul>
         <ul id="ul_hpdp" style="display: none">
-            <icms id="product_1" type="product_list" where="RecLevel" where_value="4" top="3">
+            <icms id="product_1" type="product_list" where="RecLevel" where_value="4" top="5">
                 <item>
                     <![CDATA[
                     <li>

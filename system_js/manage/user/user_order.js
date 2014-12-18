@@ -7,6 +7,9 @@ function FormatOrderState(state,idvalue){
         case "10":
             result = '<span class="span_state" id="State_'+idvalue+'">未付款</span>';
             break;
+        case "15":
+            result = '<span class="span_state" id="State_'+idvalue+'">货到付款</span>';
+            break;
         case "20":
             result = '<span class="span_state" id="State_'+idvalue+'">已付款,未发货</span>';
             break;

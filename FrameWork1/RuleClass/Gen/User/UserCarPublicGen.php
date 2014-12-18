@@ -157,7 +157,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             //-----------替换最近收藏----------begin
             $recentUserFavoriteTagId = "recent_user_favorite_list";
             $pageBegin = 0;
-            $pageSize = 5;
+            $pageSize = 4;
             $allCount = 0;
             $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
             if(count($arrUserFavoriteList) > 0){

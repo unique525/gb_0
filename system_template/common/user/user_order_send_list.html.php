@@ -23,8 +23,8 @@
                         '<td class="spe_line" height="30" width="100" align="center">' +
                         '<input type="text" class="input_box" id="accept_tel"  style="width:85px">' +
                         '</td>'+
-                        '<td class="spe_line" height="30" width="100" align="center">' +
-                        '<input type="text" class="input_box" id="accept_time"  style="width:85px">' +
+                        '<td class="spe_line" height="30" width="165" align="center">' +
+                        '<input type="text" class="input_box" id="accept_time" value="" style="width:160px">' +
                         '</td>'+
                         '<td class="spe_line" height="30" width="80" align="center">' +
                         '<input type="text" class="input_box" id="send_company"  style="width:65px">' +
@@ -45,6 +45,8 @@
 
                     $("#accept_time").datetimepicker({
                         showSecond: true,
+                        dateFormat: 'yy-mm-dd',
+                        numberOfMonths: 1,
                         timeFormat: 'hh:mm:ss',
                         stepHour: 1,
                         stepMinute: 1,
@@ -105,7 +107,7 @@
             <td class="spe_line" height="30" width="80" align="center">接收人姓名</td>
             <td class="spe_line" height="30" width="600" align="center">接收地址</td>
             <td class="spe_line" height="30" width="100" align="center">接收人电话</td>
-            <td class="spe_line" height="30" width="100" align="center">接收时间</td>
+            <td class="spe_line" height="30" width="165" align="center">接收时间</td>
             <td class="spe_line" height="30" width="80" align="center">公司名</td>
             <td class="spe_line" height="30" align="center"></td>
         </tr>
@@ -120,7 +122,7 @@
                             <td class="spe_line" height="30" width="80" align="center">{f_AcceptPersonName}</td>
                             <td class="spe_line" height="30" width="600" align="center">{f_AcceptAddress}</td>
                             <td class="spe_line" height="30" width="100" align="center">{f_AcceptTel}</td>
-                            <td class="spe_line" height="30" width="100" align="center">{f_AcceptTime}</td>
+                            <td class="spe_line" height="30" width="165" align="center">{f_AcceptTime}</td>
                             <td class="spe_line" height="30" width="80" align="center">{f_SendCompany}</td>
                             <td class="spe_line" height="30" align="center">
                                 <div idvalue="{f_UserOrderSendId}" class="delete">删除</div>
