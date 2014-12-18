@@ -18,7 +18,7 @@
                         '<input type="text" class="input_box" id="accept_person_name" style="width:65px">' +
                         '</td>'+
                         '<td class="spe_line" height="30" width="600" align="center">' +
-                            '<input type="text" class="input_box" id="accept_address" style="width:575px">' +
+                        '<input type="text" class="input_box" id="accept_address" style="width:575px">' +
                         '</td>'+
                         '<td class="spe_line" height="30" width="100" align="center">' +
                         '<input type="text" class="input_box" id="accept_tel"  style="width:85px">' +
@@ -56,18 +56,17 @@
                         var acceptAddress = $("#accept_address").val();
                         var acceptTel = $("#accept_tel").val();
                         var acceptTime = $("#accept_time").val();
-                        var acceptCompany = $("#send_company").val();
+                        var sendCompany = $("#send_company").val();
+                        var userOrderId = parseInt("{UserOrderId}");
                         $.ajax({
                             type:"post",
-                            url:"/default.php?mod=user_order_send&m=create",
+                            url:"/default.php?secu=manage&mod=user_order_send&m=async_create&site_id="+parent.parent.G_NowSiteId+"&user_order_id="+userOrderId,
                             data:{
                                 acceptPersonName:acceptPersonName,
                                 acceptAddress:acceptAddress,
                                 acceptTel:acceptTel,
                                 acceptTime:acceptTime,
-                                acceptCompany:acceptCompany,
-                                siteId:parent.parent.G_NowSiteId,
-                                userOrderId:{UserOrderId}
+                                sendCompany:sendCompany
                             },
                             dataType:"jsonp",
                             jsonp:"jsonpcallback",
@@ -115,6 +114,8 @@
         <icms id="user_order_send_list">
             <item>
                 <![CDATA[
+                <li>
+                <table class="grid" width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item2" id="user_order_send_{f_UserOrderSendId}">
                             <td class="spe_line" height="30" width="80" align="center">{f_AcceptPersonName}</td>
                             <td class="spe_line" height="30" width="600" align="center">{f_AcceptAddress}</td>

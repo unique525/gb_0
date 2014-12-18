@@ -6,6 +6,11 @@
  * @Author yin
  */
 class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
+    /**
+     *
+     */
+    const FAIL = 0;
+
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m","");
@@ -36,7 +41,7 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
             $templateContent = Template::Load("user/user_order_send_list.html","common");
             parent::ReplaceFirst($templateContent);
             $userOrderSendManageData = new UserOrderSendManageData();
-            $arrUserOrderSendList = $userOrderSendManageData->GetList($userOrderId,$siteId);
+            $arrUserOrderSendList = $userOrderSendManageData->GetList($userOrderId);
 
             $tagId = "user_order_send_list";
             if(count($arrUserOrderSendList) > 0){
@@ -67,9 +72,20 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
-        if($siteId > 0 && $userOrderId > 0){}
+        if($siteId > 0 && $userOrderId > 0){
+            $acceptPersonName = Control::PostRequest("acceptPersonName","");
+            $acceptAddress = Control::PostRequest("acceptAddress","");
+            $acceptTel = Control::PostRequest("acceptTel","");
+            $acceptTime = Control::PostRequest("acceptTime","");
+            $sendCompany = Control::PostRequest("sendCompany","");
 
-        return Control::GetRequest("jsonpcallback","")."";
+            $userOrderSendManageData = new UserOrderSendManageData();
+            $result = $userOrderSendManageData->Create($userOrderId,$acceptPersonName,$acceptAddress,$acceptTel,$acceptTime,$sendCompany);
+            if($result > 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+            }
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":'.self::FAIL.'})';
     }
 
     private function AsyncRemove(){

@@ -19,6 +19,10 @@ class UserOrderData extends BaseData {
      */
     const STATE_NON_PAYMENT = 10;
     /**
+     * 状态：货到付款
+     */
+    const STATE_PAYMENT_AFTER_RECEIVE = 15;
+    /**
      * 状态：已付款，未发货
      */
     const STATE_PAYMENT = 20;

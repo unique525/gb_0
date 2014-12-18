@@ -336,7 +336,7 @@ $(function () {
                            align="right">
                         <tr>
                             <td width="15"><img src="/images/arrow3.png" width="7" height="13"/></td>
-                            <td width="100"><a href="/index.html">继续购物</a></td>
+                            <td width="100"><a href="/">继续购物</a></td>
                             <td width="155">
                                 <span id="to_order" style="cursor: pointer"><img src="/images/btn_js.png" width="155"
                                                                                  height="43"/></span>

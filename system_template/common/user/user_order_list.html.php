@@ -19,7 +19,6 @@
 
             $("#btn_search").click(function(){
                 var site_id = window.G_NowSiteId;
-                alert(site_id);
                 var user_order_number = $("#user_order_number").val();
                 var state = $("#state").val();
                 var begin_date = $("#begin_date").val();
@@ -50,7 +49,8 @@
             订单状态：
             <select id="state">
                 <option value="">全部</option>
-                <option value="0">未付款</option>
+                <option value="10">未付款</option>
+                <option value="15">货到付款</option>
                 <option value="20">已付款，未发货</option>
                 <option value="25">已发货</option>
                 <option value="30">交易完成</option>
