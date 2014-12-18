@@ -11,7 +11,7 @@ class UserOrderPublicData extends BasePublicData
 
     /**
      * 新增订单
-     * @param $userOrderName
+     * @param string $userOrderName
      * @param $userOrderNumber
      * @param $userOrderNumberDes
      * @param $userId
