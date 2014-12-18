@@ -378,12 +378,19 @@ $(function () {
             <icms id="user_explore_1" type="user_explore_list" top="3">
                 <item>
                     <![CDATA[
-                    <li><a class="lookpic" href="{f_Url}" target="_blank" title="">
-                            <img src="{f_TitlePic}" width="60" height="60" style="display: inline; "></a>
-                        <div class="lookmis">
-                            <p class="lookname">
-                                <a href="{f_Url}" target="_blank" title="">{f_Title}</a></p><p>￥{f_Price} </p></div>
-                    </li>    <div class="clear">    </div>
+                    <li>
+                        <dl>
+                            <dd>
+                                <a class="lookpic" href="{f_Url}" target="_blank" title="">
+                                    <img src="{f_TitlePic}" width="180" height="160" style="display: inline; "/>
+                                </a>
+                            </dd>
+                            <dt>
+                                <a href="{f_Url}" target="_blank">{f_Title}</a>
+                            </dt>
+                            <h3><a href="{f_Url}" target="_blank">￥{f_Price}</a></h3>
+                        </dl>
+                    </li>
                     ]]>
                 </item>
             </icms>
@@ -393,9 +400,17 @@ $(function () {
                 <item>
                     <![CDATA[
                     <li>
-                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
-                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                        <dl>
+                            <dd>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a>
+                            </dd>
+                            <dt>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a>
+                            </dt>
+                            <h3>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a>
+                            </h3>
+                        </dl>
                     </li>
                     ]]>
                 </item>
@@ -406,9 +421,17 @@ $(function () {
                 <item>
                     <![CDATA[
                     <li>
-                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
-                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                        <dl>
+                            <dd>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a>
+                            </dd>
+                            <dt>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a>
+                            </dt>
+                            <h3>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a>
+                            </h3>
+                        </dl>
                     </li>
                     ]]>
                 </item>
@@ -419,9 +442,17 @@ $(function () {
                 <item>
                     <![CDATA[
                     <li>
-                        <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                        <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
-                        <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                        <dl>
+                            <dd>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a>
+                            </dd>
+                            <dt>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a>
+                            </dt>
+                            <h3>
+                                <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a>
+                            </h3>
+                        </dl>
                     </li>
                     ]]>
                 </item>

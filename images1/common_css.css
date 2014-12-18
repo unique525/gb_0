@@ -300,11 +300,10 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
     float:right;
     padding-right:5px;
 }
-#leftmenu ul{height:30px;} /* 即使没有菜单项也能保持顶级菜单栏的高度。 */
+/* 即使没有菜单项也能保持顶级菜单栏的高度。 */
 /* 一级菜单 */
 #leftmenu ul li{
     text-align:center;
-    display:inline-block;
     position:relative;
     line-height:30px;
 }
@@ -350,12 +349,9 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
     float:right;
     padding-right:5px;
 }
-#leftmenu2 ul{
-    height:30px;
-} /* 即使没有菜单项也能保持顶级菜单栏的高度。 */
-/* 一级菜单 */
+
 #leftmenu2 ul li{
-    display:inline-block;
+
     position:relative;
     line-height:30px;
 }
@@ -365,7 +361,7 @@ input.cart_n_box2{float:left;margin:5px 5px 0px 0px;*margin:2px 5px 0px 0px;}
 #leftmenu2 ul li ul{
     width:194px;
     position:absolute;
-    z-index: 100;
+    z-index: 0;
 
     background:#00A93C;
 }

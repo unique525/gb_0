@@ -83,22 +83,7 @@ img,input{ vertical-align:middle;border:1px; padding:0; margin:0;}
 .rightmember .rightinfo li a span{ color:#ff3d00; padding:0 0;}
 
 #tab{position:relative;}
-#tab .tabList ul li{
-    float:left;
-    background:#fefefe;
-    background:-moz-linear-gradient(top, #fefefe, #ededed);
-    background:-o-linear-gradient(left top,left bottom, from(#fefefe), to(#ededed));
-    background:-webkit-gradient(linear,left top,left bottom, from(#fefefe), to(#ededed));
-    border:1px solid #ccc;
-    padding:5px 0;
-    width:100px;
-    text-align:center;
-    margin-left:-1px;
-    position:relative;
-    cursor:pointer;
-    font-size:14px;
-    line-height:25px;
-}
+
 #tab .tabCon{
     position:absolute;
     left:-1px;
@@ -107,9 +92,9 @@ img,input{ vertical-align:middle;border:1px; padding:0; margin:0;}
     width:893px;
     height:100px;
 }
+#tab .tabCon li{ width:200px; float: left; padding:8px;}
 #tab .tabCon div{
     padding:10px;
-    position:absolute;
 }
 #tab .tabList li.cur{
     border-bottom:none;
@@ -170,9 +155,9 @@ img,input{ vertical-align:middle;border:1px; padding:0; margin:0;}
 .producttab li{width:240px; float:left;}
 
 .producttab2{}
-.producttab2 .title{height:47px;line-height:45px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat; text-align:center;width:20%; float:left;}
-.producttab2 .title a{height:47px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat;}
-.producttab2 .title a:hover{height:47px;display:block; background:url(tab_red.png) no-repeat;font-size:16px;font-family:"Microsoft YaHei"; text-decoration:none;}
+.producttab2 .title{height:47px;line-height:45px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat center; text-align:center;width:20%; float:left;}
+.producttab2 .title a{height:47px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat center;}
+.producttab2 .title a:hover{height:47px;display:block; background:url(tab_red.png) no-repeat center;font-size:16px;font-family:"Microsoft YaHei"; text-decoration:none;}
 
 .producttab dl{width:180px;margin:20px auto;}
 .producttab dd{width:180px;}

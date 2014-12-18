@@ -521,9 +521,9 @@
     <icms id="product_comment_list" type="list">
         <item>
             <![CDATA[
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table width="990px" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td width="11%" align="center" valign="top" style="padding-top:10px;">
+            <td width="70px" align="center" valign="top" style="padding-top:10px;">
                 <table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileThumbPath2}" width="50" height="50" /></a></td>
@@ -531,44 +531,44 @@
                 </table>
                 {f_UserName}</br>
                 <span class="grenn">{f_UserGroupName}</span></td>
-            <td width="89%" align="left" valign="top">
-                <table width="882" border="0" cellspacing="0" cellpadding="0">
-                    <tr> </tr>
+            <td width="882px" align="left" valign="top">
+                <table width="882px" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td background="images/5_22.gif" height="39" style="padding-left:30px;">
-                            <div class="star">
-                                产品评分：
-                                <ul class="product_comment_ul" idvalue="{f_ProductScore}">
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
-                                    <li>5</li>
-                                </ul>
-                                物流评分：
-                                <ul class="product_comment_ul" idvalue="{f_SendScore}">
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
-                                    <li>5</li>
-                                </ul>
-                                服务评分：
-                                <ul class="product_comment_ul" idvalue="{f_ServiceScore}">
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
-                                    <li>5</li>
-                                </ul>
-                            </div>
                             <span style="float:right; padding-right:20px; color:#8b8a8a">{f_CreateDate}</span>
+                            <div class="star">
+                                <ul class="product_comment_ul" idvalue="{f_ProductScore}">
+                                    <span class="left">产品评分：</span>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                                <ul class="product_comment_ul" idvalue="{f_SendScore}">
+                                    <span class="left">物流评分：</span>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                                <ul class="product_comment_ul" idvalue="{f_ServiceScore}">
+                                    <span class="left">服务评分：</span>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
+                                    <li>5</li>
+                                </ul>
+                                <div class="clean"></div>
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td background="images/5_29.gif" style="padding:20px 30px; font-size:14px; line-height:24px;">
+                        <td background="images/5_29.gif" style="word-wrap:break-word;word-break:break-all;padding:20px 30px; font-size:14px; line-height:24px;">
                             {f_Content}
-                            <div style="margin-left: 10px">
+                            <div style="margin-left: 10px;">
                                 {child}
                             </div>
                         </td>

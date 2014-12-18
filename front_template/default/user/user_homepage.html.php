@@ -85,23 +85,21 @@
                     <div id="tab">
                         <div class="tabList">
                             <ul class="producttab2">
-                                <li class="title" idvalue="zjsc">最近收藏</li>
-                                <li class="title" idvalue="zjll">最近浏览</li>
-                                <li class="title" idvalue="bpqg">爆品抢购</li>
-                                <li class="title" idvalue="xpsd">新品速递</li>
-                                <li class="title" idvalue="hpdp">好评单品</li>
+                                <li class="title" idvalue="zjsc"><a>最近收藏</a></li>
+                                <li class="title" idvalue="zjll"><a>最近浏览</a></li>
+                                <li class="title" idvalue="bpqg"><a>爆品抢购</a></li>
+                                <li class="title" idvalue="xpsd"><a>新品速递</a></li>
+                                <li class="title" idvalue="hpdp"><a>好评单品</a></li>
                             </ul>
                         </div>
                         <div class="tabCon">
                             <div  id="div_zjsc" class="content">
                                 <icms id="recent_user_favorite_list" type="list">
                                     <item><![CDATA[
-                                        <dl>
-                                            <dd><a href="{f_UserFavoriteUrl}" target="_blank"><img
-                                                        src="{f_UploadFilePath}" width="180" height="160"/></a></dd>
-                                            <dt><a href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a>
-                                            </dt>
-                                        </dl>
+                                        <li>
+                                            <div><a href="{f_UserFavoriteUrl}" target="_blank"><img src="{f_UploadFilePath}" width="194" height="194" /></a></div>
+                                            <div class="name"><a href="{f_UserFavoriteUrl}" target="_blank">{f_UserFavoriteTitle}</a></div>
+                                        </li>
                                         ]]>
                                     </item>
                                 </icms>
@@ -110,18 +108,12 @@
                                 <icms id="user_explore_1" type="user_explore_list" top="4">
                                     <item>
                                         <![CDATA[
-                                        <dl>
-                                            <dd>
-                                            <a class="lookpic" href="{f_Url}" target="_blank" title="">
-                                                <img src="{f_TitlePic}" width="180" height="160" style="display: inline; ">
-                                            </a>
-                                            </dd>
-                                            <dt>
-                                                    <a href="{f_Url}" target="_blank" title="">{f_Title}</a>
-                                            </dt>
-                                            <h3￥{f_Price}</h3>
-                                        </dl>
-                                        ]]>
+                                        <li>
+                                            <div><a href="{f_Url}" target="_blank"><img src="{f_TitlePic}" width="194" height="194" /></a></div>
+                                            <div class="name"><a href="{f_Url}" target="_blank">{f_Title}</a></div>
+                                            <div class="price"><a href="{f_Url}" target="_blank">￥{f_Price}</a></div>
+                                        </li>
+                                         ]]>
                                     </item>
                                 </icms>
                             </div>
