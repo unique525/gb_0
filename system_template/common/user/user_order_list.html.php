@@ -72,7 +72,7 @@
                 <td style="width:80px;text-align: center">订单总价</td>
                 <td style="width:80px;text-align: center">运费</td>
                 <td style="width:150px;text-align: center">创建日期</td>
-                <td  style="width:80px;text-align: center">状态</td>
+                <td  style="width:120px;text-align: center">状态</td>
                 <td  style="width:150px;text-align: center">相关信息</td>
             </tr>
         </table>
@@ -102,7 +102,7 @@
                             <td class="spe_line2" style="width:150px;text-align: center">
                                 <span>{f_CreateDate}</span>
                             </td>
-                            <td class="spe_line2" style="width:80px;text-align: center">
+                            <td class="spe_line2" style="width:120px;text-align: center">
                                 <span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span>
                             </td>
                             <td class="spe_line2" style="width:150px;text-align: center">

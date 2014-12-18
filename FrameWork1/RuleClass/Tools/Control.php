@@ -175,7 +175,7 @@ class Control {
      */
     public static function SetUserCookie($userId, $userName, $hour = 24) {
         setcookie("UID", Des::Encrypt($userId,"su141022"), time() + $hour * 3600);
-        $userName = Des::Encrypt(urlencode($userName),"su141022");
+        $userName = Des::Encrypt($userName,"su141022");
         setcookie("USERNAME", $userName, time() + $hour * 3600);
     }
 
@@ -197,7 +197,7 @@ class Control {
      */
     public static function GetUserName() {
         if (isset($_COOKIE["USERNAME"])) {
-            return Des::Decrypt(urldecode($_COOKIE["USERNAME"]),"su141022");
+            return Des::Decrypt($_COOKIE["USERNAME"],"su141022");
         } else {
             return "";
         }

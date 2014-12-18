@@ -277,7 +277,7 @@
                     </item>
                     <child>
                         <![CDATA[
-                        <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                        <li><a href="/default.php?mod=product&a=list&channel_first_id=27&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                         ]]>
                     </child>
                 </icms>
@@ -345,7 +345,7 @@
                         </item>
                         <child>
                             <![CDATA[
-                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                            <li><a href="/default.php?mod=product&a=list&channel_first_id=28&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                             ]]>
                         </child>
                     </icms>
@@ -411,7 +411,7 @@
                         </item>
                         <child>
                             <![CDATA[
-                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                            <li><a href="/default.php?mod=product&a=list&channel_first_id=33&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                             ]]>
                         </child>
                     </icms>
@@ -478,7 +478,7 @@
                         </item>
                         <child>
                             <![CDATA[
-                            <li><a href="/default.php?mod=product&a=list&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
+                            <li><a href="/default.php?mod=product&a=list&channel_first_id=35&channel_id={f_ChannelId}">{f_ChannelName}</a></li>
                             ]]>
                         </child>
                     </icms>

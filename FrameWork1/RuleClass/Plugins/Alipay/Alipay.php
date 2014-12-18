@@ -142,7 +142,7 @@ class Alipay
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
 
-                self::DealUserOrder($out_trade_no);
+                self::DealUserOrder($out_trade_no, $trade_no, $trade_status);
                 //增加付款记录
 
                 //注意：
@@ -156,7 +156,7 @@ class Alipay
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
-                self::DealUserOrder($out_trade_no);
+                self::DealUserOrder($out_trade_no, $trade_no, $trade_status);
                 //注意：
                 //该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
 
@@ -210,7 +210,7 @@ class Alipay
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
-                self::DealUserOrder($out_trade_no);
+                self::DealUserOrder($out_trade_no, $trade_no, $trade_status);
             } else {
                 echo "trade_status=" . $_GET['trade_status'];
             }
@@ -229,16 +229,23 @@ class Alipay
 
     }
 
-
-    private function DealUserOrder($out_trade_no){
+    /**
+     * 处理订单表
+     * @param $out_trade_no
+     * @param $trade_no
+     * @param $trade_status
+     */
+    private function DealUserOrder($out_trade_no, $trade_no, $trade_status){
         $userOrderPublicData = new UserOrderPublicData();
-        $userOrderId = $userOrderPublicData->GetUserOrderIdByUserOrderNumber($out_trade_no);
+        $userOrderId = $userOrderPublicData->GetUserOrderIdByUserOrderNumber($out_trade_no, true);
         $allPrice = $userOrderPublicData->GetAllPrice($userOrderId);
         if($userOrderId>0 && $allPrice>0){
             //已付款
             $orderState = UserOrderData::STATE_PAYMENT;
             //改变订单状态
             $userOrderPublicData->ModifyState($userOrderId, $orderState);
+            $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
+            $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
             //增加订单付款记录
             $userOrderPayPublicData = new UserOrderPayPublicData();
             $userOrderPayPublicData->Create(

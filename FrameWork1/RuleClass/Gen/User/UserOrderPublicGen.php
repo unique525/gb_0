@@ -350,7 +350,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                             //修改库存数
                             $newProductCount = $productCount - $saleCount;
                             $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
-
                         }
                     }
 
@@ -370,7 +369,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //支付方式选择
                 //默认支付宝
-
+/**
                 if(strlen($userOrderName)<=0){
                     $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
                 }
@@ -388,7 +387,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $userOrderIntro,
                     $userOrderProductUrl
                 );
-
+*/
                 return $result;
 
             }else{

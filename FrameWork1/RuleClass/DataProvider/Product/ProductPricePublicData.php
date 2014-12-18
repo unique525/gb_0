@@ -115,7 +115,7 @@ class ProductPricePublicData extends BasePublicData
                         ProductCount = :ProductCount
                         WHERE ProductPriceId = :ProductPriceId
                         ;";
-            $dataProperty->AddField("SaleState", $productCount);
+            $dataProperty->AddField("ProductCount", $productCount);
             $dataProperty->AddField("ProductPriceId", $productPriceId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 

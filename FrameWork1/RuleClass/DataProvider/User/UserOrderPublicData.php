@@ -10,6 +10,7 @@ class UserOrderPublicData extends BasePublicData
 {
 
     /**
+     * 新增订单
      * @param $userOrderName
      * @param $userOrderNumber
      * @param $userOrderNumberDes
@@ -116,6 +117,8 @@ class UserOrderPublicData extends BasePublicData
     }
 
 
+
+
     /**
      * @param $userId
      * @param $siteId
@@ -129,9 +132,9 @@ class UserOrderPublicData extends BasePublicData
         $result = null;
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT * FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId LIMIT " . $pageBegin . "," . $pageSize . ";";
+                . " WHERE UserId = :UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId;";
+                . " WHERE UserId = :UserId AND SiteId = :SiteId  ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
@@ -142,6 +145,7 @@ class UserOrderPublicData extends BasePublicData
     }
 
     /**
+     *
      * @param $userId
      * @param $siteId
      * @param $state
@@ -155,9 +159,9 @@ class UserOrderPublicData extends BasePublicData
         $result = null;
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT * FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State LIMIT " . $pageBegin . "," . $pageSize . ";";
+                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
             $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State;";
+                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
@@ -189,6 +193,12 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * @param $userId
+     * @param $siteId
+     * @param $state
+     * @return int
+     */
     public function GetUserOrderCountByState($userId, $siteId, $state)
     {
         $result = -1;
@@ -203,13 +213,134 @@ class UserOrderPublicData extends BasePublicData
         return $result;
     }
 
-    public function GetState($userOrderId){
+    /**
+     * 取得订单总价(不提供缓存)
+     * @param int $userOrderId 订单id
+     * @return float 订单总价
+     */
+    public function GetAllPrice($userOrderId){
         $result = -1;
-        if ($userOrderId > 0) {
-            $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId = :UserOrderId";
+        if($userOrderId>0){
+
+            $sql = "SELECT AllPrice FROM " . self::TableName_UserOrder . " WHERE UserOrderId = :UserOrderId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId", $userOrderId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+            $result = $this->dbOperator->GetFloat($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 根据订单编号取得订单id
+     * @param string $userOrderNumber 订单编号
+     * @param bool $withCache 是否从缓冲中取
+     * @return float 订单总价
+     */
+    public function GetUserOrderIdByUserOrderNumber($userOrderNumber, $withCache){
+        $result =-1;
+        if(strlen($userOrderNumber)>0){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_user_order_id_by_user_order_number.cache_' . $userOrderNumber . '';
+            $sql = "SELECT UserOrderId FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderNumber", $userOrderNumber);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改状态
+     * @param int $userOrderId 订单id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($userOrderId, $state)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得订单状态
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单状态
+     */
+    public function GetState($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
+            $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改支付宝交易号
+     * @param int $userOrderId 订单id
+     * @param int $alipayTradeNo 支付宝交易号
+     * @return int 操作结果
+     */
+    public function ModifyAlipayTradeNo($userOrderId, $alipayTradeNo)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `AlipayTradeNo`=:AlipayTradeNo WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("AlipayTradeNo", $alipayTradeNo);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_alipay_trade_no.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改支付宝交易状态
+     * @param int $userOrderId 订单id
+     * @param int $alipayTradeStatus 支付宝交易状态
+     * @return int 操作结果
+     */
+    public function ModifyAlipayTradeStatus($userOrderId, $alipayTradeStatus)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `AlipayTradeStatus`=:AlipayTradeStatus WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("AlipayTradeStatus", $alipayTradeStatus);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_alipay_trade_status.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
         return $result;
     }
