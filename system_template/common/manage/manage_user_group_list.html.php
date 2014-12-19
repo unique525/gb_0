@@ -136,7 +136,7 @@
                                 <img class="img_close" idvalue="{f_ManageUserGroupId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
                             </td>
                             <td class="spe_line2" style="width:200px;text-align:center;">
-                                <a href="/default.php?secu=manage&mod=manage_user_authority&m=set_by_manage_user_group&manage_user_group_id={f_ManageUserGroupId}">设置权限</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/default.php?secu=manage&mod=manage_user_authority&m=set_by_manage_user_group&manage_user_group_id={f_ManageUserGroupId}&manage_user_group_name={f_ManageUserGroupName}">设置权限</a>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="/default.php?secu=manage&mod=manage_user&m=list&manage_user_group_id={f_ManageUserGroupId}">所属管理员</a>
                             </td>
                         </tr>

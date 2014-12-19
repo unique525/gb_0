@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    {common_head}
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#tabs').tabs();
+
+            $(".select_all").click(function(){
+                var type=$(this).attr("idvalue");
+                var checkboxes=$("."+type+"[type='checkbox']");
+
+                if (checkboxes.prop("checked")) {
+                    checkboxes.prop("checked", false);//取消全选
+                    $(this).html("全选");
+                } else {
+                    checkboxes.prop("checked", true);//全选
+                    $(this).html("取消全选");
+                }
+
+            });
+
+
+            $("#sel_site").change(function() {
+                var siteId = parseInt($("#sel_site").val());
+                if(siteId>0){
+                    window.location.href="/default.php?secu=manage&mod=manage_user_authority&m=set_by_manage_user_group&manage_user_group_id={ManageUserGroupId}&manage_user_group_name={ManageUserGroupName}&site_id="+siteId;
+                }
+                $("#selectall").html("全选");
+            });
+        });
+
+        function submitForm(closeTab) {
+
+            if (closeTab == 1) {
+                $("#CloseTab").val("1");
+            } else {
+                $("#CloseTab").val("0");
+            }
+            var siteId= parseInt($("#sel_site").val());
+            $("#mainForm").attr("action", "/default.php?secu=manage&mod=manage_user_authority&m=set_by_manage_user_group&manage_user_group_id={ManageUserGroupId}&site_id="+siteId+"&tab_index=" + parent.G_TabIndex + "");
+            $('#mainForm').submit();
+
+        }
+
+    </script>
+    <style>
+        .check_box{float:left;margin-left:20px}
+    </style>
+</head>
+<body>
+{common_body_deal}
+<div class="div_deal">
+<form id="mainForm" enctype="multipart/form-data" method="post">
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="spe_line" height="40" align="right">
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
+            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+        </td>
+    </tr>
+</table>
+<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+    <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;">
+        <label for="sel_site">选择一个站点： </label>
+        <select id="sel_site" name="f_SiteId">
+            <option value="-1">请选择一个站点</option>
+            <icms id="site_list" type="list">
+                <item>
+                    <![CDATA[
+                    <option value="{f_SiteId}">{f_SiteName}</option>
+                    ]]>
+                </item>
+            </icms>
+        </select><!--，为<span style="color:red;"> {ManageUserGroupName} </span>授权-->
+    </td>
+    <script type="text/javascript">
+        $("#sel_site").find("option[value='{SiteId}']").attr("selected",true);
+    </script>
+</tr>
+<tr>
+    <td>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-1">站点权限</a></li>
+                <li><a href="#tabs-2">频道权限</a></li>
+                <li><a href="#tabs-3">会员权限</a></li>
+                <li><a href="#tabs-4">系统权限</a></li>
+            </ul>
+            <div id="tabs-1">
+                <div style="">
+                    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="site_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageSite">管理站点：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageSite" name="auth_ManageSite" type="checkbox" class="site_manage" {c_ManageSite}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageComment">管理评论：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageComment" name="auth_ManageComment" type="checkbox" class="site_manage" {c_ManageComment}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageTemplateLibrary">管理模板：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageTemplateLibrary" name="auth_ManageTemplateLibrary" type="checkbox" class="site_manage" {c_ManageTemplateLibrary}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageFilter">管理过滤：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageFilter" name="auth_ManageFilter" type="checkbox" class="site_manage" {c_ManageFilter}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageFtp">管理FTP：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageFtp" name="auth_ManageFtp" type="checkbox" class="site_manage" {c_ManageFtp}/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageAd">管理广告：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageAd" name="auth_ManageAd" type="checkbox" class="site_manage" {c_ManageAd}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageDocumentTag">管理文档标签：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageDocumentTag" name="auth_ManageDocumentTag" type="checkbox" class="site_manage" {c_ManageDocumentTag}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <label for="auth_ManageConfig">管理配置：</label></td>
+                            <td class="spe_line">
+                                <input id="auth_ManageConfig" name="auth_ManageConfig" type="checkbox" class="site_manage" {c_ManageConfig}/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tabs-2">
+                <div>
+                    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="spe_line" height="40" align="right">全站点：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="channel_manage_all" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                            <td class="spe_line" height="40">
+                                <div>
+                                    <ul>
+                                        <li class="check_box"><label for="f_ChannelExplore">浏览</label><input class="channel_manage_all" type="checkbox" id="f_ChannelExplore" name="f_ChannelExplore" {c_ChannelExplore}/></li>
+                                        <li class="check_box"><label for="f_ChannelCreate">新增</label><input class="channel_manage_all" type="checkbox" id="f_ChannelCreate" name="f_ChannelCreate" {c_ChannelCreate}/></li>
+                                        <li class="check_box"><label for="f_ChannelModify">编辑</label><input class="channel_manage_all" type="checkbox" id="f_ChannelModify" name="f_ChannelModify" {c_ChannelModify}/></li>
+                                        <li class="check_box"><label for="f_ChannelDisabled">停用</label><input class="channel_manage_all" type="checkbox" id="f_ChannelDisabled" name="f_ChannelDisabled" {c_ChannelDisabled}/></li>
+                                        <li class="check_box"><label for="f_ChannelDelete">删除</label><input class="channel_manage_all" type="checkbox" id="f_ChannelDelete" name="f_ChannelDelete" {c_ChannelDelete}/></li>
+                                        <li class="check_box"><label for="f_ChannelSearch">查询</label><input class="channel_manage_all" type="checkbox" id="f_ChannelSearch" name="f_ChannelSearch" {c_ChannelSearch}/></li>
+                                        <li class="check_box"><label for="f_ChannelRework">返工</label><input class="channel_manage_all" type="checkbox" id="f_ChannelRework" name="f_ChannelRework" {c_ChannelRework}/></li>
+                                        <li class="check_box"><label for="f_ChannelAudit1">一审</label><input class="channel_manage_all" type="checkbox" id="f_ChannelAudit1" name="f_ChannelAudit1" {c_ChannelAudit1}/></li>
+                                        <li class="check_box"><label for="f_ChannelAudit2">二审</label><input class="channel_manage_all" type="checkbox" id="f_ChannelAudit2" name="f_ChannelAudit2" {c_ChannelAudit2}/></li>
+                                        <li class="check_box"><label for="f_ChannelAudit3">三审</label><input class="channel_manage_all" type="checkbox" id="f_ChannelAudit3" name="f_ChannelAudit3" {c_ChannelAudit3}/></li>
+                                        <li class="check_box"><label for="f_ChannelAudit4">终审</label><input class="channel_manage_all" type="checkbox" id="f_ChannelAudit4" name="f_ChannelAudit4" {c_ChannelAudit4}/></li>
+                                        <li class="check_box"><label for="f_ChannelRefused">已否</label><input class="channel_manage_all" type="checkbox" id="f_ChannelRefused" name="f_ChannelRefused" {c_ChannelRefused}/></li>
+                                        <li class="check_box"><label for="f_ChannelPublish">发布</label><input class="channel_manage_all" type="checkbox" id="f_ChannelPublish" name="f_ChannelPublish" {c_ChannelPublish}/></li>
+                                        <li class="check_box"><label for="f_ChannelDoOthers">操作他人</label><input class="channel_manage_all" type="checkbox" id="f_ChannelDoOthers" name="f_ChannelDoOthers" {c_ChannelDoOthers}/></li>
+                                        <li class="check_box"><label for="f_ChannelDoOthersInSameGroup">操作同组</label><input class="channel_manage_all" type="checkbox" id="f_ChannelDoOthersInSameGroup" name="f_ChannelDoOthersInSameGroup" {c_ChannelDoOthersInSameGroup}/></li>
+                                        <li class="check_box"><label for="f_ChannelManageTemplate">管理模板</label><input class="channel_manage_all" type="checkbox" id="f_ChannelManageTemplate" name="f_ChannelManageTemplate" {c_ChannelManageTemplate}/></li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tabs-3">
+                <div>
+
+                    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="spe_line" height="40" align="right">本版所有：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="user_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="spe_line" height="40" align="right">会员：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="user_basic_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                            <td class="spe_line" height="40">
+                                <div>
+                                    <ul>
+                                        <li class="check_box"><label for="f_UserExplore">浏览会员</label><input class="user_basic_manage user_manage" type="checkbox" id="f_UserExplore" name="f_UserExplore" {c_UserExplore}/></li>
+                                        <li class="check_box"><label for="f_UserAdd">新增会员</label><input class="user_basic_manage user_manage" type="checkbox" id="f_UserAdd" name="f_UserAdd" {c_UserAdd}/></li>
+                                        <li class="check_box"><label for="f_UserEdit">编辑会员</label><input class="user_basic_manage user_manage" type="checkbox" id="f_UserEdit" name="f_UserEdit" {c_UserEdit}/></li>
+                                        <li class="check_box"><label for="f_UserDelete">删除会员</label><input class="user_basic_manage user_manage" type="checkbox" id="f_UserDelete" name="f_UserDelete" {c_UserDelete}/></li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="spe_line" height="40" align="right">会员权限：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="user_role_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                            <td class="spe_line" height="40">
+                                <div>
+                                    <ul>
+                                        <li class="check_box"><label for="f_UserRoleExplore">会员权限浏览</label><input class="user_role_manage user_manage" type="checkbox" id="f_UserRoleExplore" name="f_UserRoleExplore" {c_UserRoleExplore}/></li>
+                                        <li class="check_box"><label for="f_UserRoleAdd">会员权限新增</label><input class="user_role_manage user_manage" type="checkbox" id="f_UserRoleAdd" name="f_UserRoleAdd" {c_UserRoleAdd}/></li>
+                                        <li class="check_box"><label for="f_UserRoleEdit">会员权限编辑</label><input class="user_role_manage user_manage" type="checkbox" id="f_UserRoleEdit" name="f_UserRoleEdit" {c_UserRoleEdit}/></li>
+                                        <li class="check_box"><label for="f_UserRoleDelete">会员权限删除</label><input class="user_role_manage user_manage" type="checkbox" id="f_UserRoleDelete" name="f_UserRoleDelete" {c_UserRoleDelete}/></li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="spe_line" height="40" align="right">会员相册：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="user_album_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                            <td class="spe_line" height="40">
+                                <div>
+                                    <ul>
+                                        <li class="check_box"><label for="f_UserAlbumExplore">会员相册浏览</label><input class="user_album_manage user_manage" type="checkbox" id="f_UserAlbumExplore" name="f_UserAlbumExplore" {c_UserAlbumExplore}/></li>
+                                        <li class="check_box"><label for="f_UserAlbumAdd">会员相册新增</label><input class="user_album_manage user_manage" type="checkbox" id="f_UserAlbumAdd" name="f_UserAlbumAdd" {c_UserAlbumAdd}/></li>
+                                        <li class="check_box"><label for="f_UserAlbumEdit">会员相册编辑</label><input class="user_album_manage user_manage" type="checkbox" id="f_UserAlbumEdit" name="f_UserAlbumEdit" {c_UserAlbumEdit}/></li>
+                                        <li class="check_box"><label for="f_UserAlbumDelete">会员相册删除</label><input class="user_album_manage user_manage" type="checkbox" id="f_UserAlbumDelete" name="f_UserAlbumDelete" {c_UserAlbumDelete}/></li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="spe_line" height="40" align="right">其他：</td>
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="user_other_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                            <td class="spe_line" height="40">
+                                <div>
+                                    <ul>
+                                        <li class="check_box"><label for="f_UserGroupExplore">会员组浏览</label><input   class="user_other_manage user_manage" type="checkbox" id="f_UserGroupExplore" name="f_UserGroupExplore"  {c_UserGroupExplore}/></li>
+                                        <li class="check_box"><label for="f_UserLevelExplore">会员等级浏览</label><input class="user_other_manage user_manage" type="checkbox" id="f_UserLevelExplore" name="f_UserLevelExplore" {c_UserLevelExplore}/></li>
+                                        <li class="check_box"><label for="f_UserOrderExplore">会员订单浏览</label><input class="user_other_manage user_manage" type="checkbox" id="f_UserOrderExplore" name="f_UserOrderExplore"  {c_UserOrderExplore}/></li>
+                                        </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tabs-4">
+                <div>
+
+                    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+
+                            <td width="100" class="spe_line" height="40" align="right">
+                                <span class="select_all" idvalue="system_manage" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserTaskManageState">修改管理员任务：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserTaskManageState" name="f_ManageUserTaskManageState" type="checkbox" class="system_manage" {c_ManageUserTaskManageState}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserTaskViewAll">查看所有管理员任务：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserTaskViewAll" name="f_ManageUserTaskViewAll" type="checkbox" class="system_manage" {c_ManageUserTaskViewAll}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserTaskViewSameGroup">查看同组管理员任务：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserTaskViewSameGroup" name="f_ManageUserTaskViewSameGroup" type="checkbox" class="system_manage" {c_ManageUserTaskViewSameGroup}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserExplore">查看管理员：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserExplore" name="f_ManageUserExplore" type="checkbox" class="system_manage" {c_ManageUserExplore}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserCreate">新增管理员：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserCreate" name="f_ManageUserCreate" type="checkbox" class="system_manage" {c_ManageUserCreate}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserModify">编辑管理员信息：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserModify" name="f_ManageUserModify" type="checkbox" class="system_manage" {c_ManageUserModify}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserGroupExplore">查看管理员组：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserGroupExplore" name="f_ManageUserGroupExplore" type="checkbox" class="system_manage" {c_ManageUserGroupExplore}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserGroupCreate">新增管理员组：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserGroupCreate" name="f_ManageUserGroupCreate" type="checkbox" class="system_manage" {c_ManageUserGroupCreate}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" class="spe_line" height="40" align="right">
+                                <label for="f_ManageUserGroupModify">修改管理员组：</label></td>
+                            <td class="spe_line">
+                                <input id="f_ManageUserGroupModify" name="f_ManageUserGroupModify" type="checkbox" class="system_manage" {c_ManageUserGroupModify}/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>
+</table>
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td height="60" align="center">
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
+            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+</body>
+</html>
