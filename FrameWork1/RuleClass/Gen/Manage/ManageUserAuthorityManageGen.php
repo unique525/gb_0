@@ -101,7 +101,11 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
         $manageUserAuthorityManageData=new ManageUserAuthorityManageData();
         /**检查登陆管理员是否有该站点的权限**/
         $manageUserId = Control::GetManageUserId();
-
+        $can_group=$manageUserAuthorityManageData->CanManageUserGroupModify($siteId,$channelId,$manageUserId);
+        $can_site=$manageUserAuthorityManageData->CanManageSite($siteId,$channelId,$manageUserId);
+        if(!$can_group||!$can_site){
+            return Language::Load('document', 26);
+        }
         /**                           **/
 
         $resultJavaScript = "";
