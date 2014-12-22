@@ -39,4 +39,38 @@ class UserOrderSendManageData extends BaseManageData{
         }
         return $result;
     }
+
+    public function Modify($userOrderSendId,$acceptPersonName,$acceptAddress,$acceptTel,$acceptTime,$sendCompany){
+        $result = -1;
+        if($userOrderSendId > 0){
+            $sql = "UPDATE ".self::TableName_UserOrderSend." SET
+                AcceptPersonName = :AcceptPersonName,
+                AcceptAddress=:AcceptAddress,
+                AcceptTel=:AcceptTel,
+                AcceptTime=:AcceptTime,
+                SendCompany=:SendCompany
+                WHERE UserOrderSendId = :UserOrderSendId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("AcceptPersonName",$acceptPersonName);
+            $dataProperty->AddField("AcceptAddress",$acceptAddress);
+            $dataProperty->AddField("AcceptTel",$acceptTel);
+            $dataProperty->AddField("AcceptTime",$acceptTime);
+            $dataProperty->AddField("SendCompany",$sendCompany);
+            $dataProperty->AddField("UserOrderSendId",$userOrderSendId);
+
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function Delete($userOrderSendId){
+        $result = -1;
+        if($userOrderSendId > 0){
+            $sql = "DELETE FROM ".self::TableName_UserOrderSend." WHERE UserOrderSendId = :UserOrderSendId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderSendId",$userOrderSendId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
