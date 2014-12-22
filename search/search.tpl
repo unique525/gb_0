@@ -2,6 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="/image_02/logo57.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/image_02/logo120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/image_02/logo152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $oe; ?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta name="googlebot" content="index,noarchive,nofollow,noodp" />
@@ -91,22 +97,18 @@ em{color:rgba(0, 112, 143, 1)}
 <!-- search.tpl Csol 搜索模板 -->	
 <body>
 <div class="outer">
-<div style="background:#ebebeb;">
-    <div><img src="/image_02/2_05.jpg" width="100%" alt="" id="img_logo" /></div>
-</div>
-<div style="background:#ebebeb;">
+<div style="">
     <div>
-        <table cellpadding="0" cellspacing="0" width="100%" border="0">
+        <img src="/image_02/top_bg.jpg" style="width:100%;" />
+        <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
             <tr>
-                <td style="text-align:center;"><a style="text-decoration:none;color:#333;" href="/" target="_blank">首页</a></td>
-                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                <td style="text-align:center;"><a style="text-decoration:none;color:#ef1b27;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}" target="_blank">往期回顾</a></td>
-                <td style="text-align:center;"><img src="/image_02/1.jpg" alt="" id="" /></td>
-                <td style="text-align:center;"><a href="/search/search.php" target="_self"><img src="/image_02/2.jpg" alt="" id="" /></a></td>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a></td>
+                <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
+                <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
+                <td style="text-align:center;"><a href="/search/search.php" target="_self"><img style="width:20px;" src="/image_02/2-2.png" alt="" id="" /></a></td>
             </tr>
         </table>
-
-
     </div>
 </div>
 	<!-- page header -->

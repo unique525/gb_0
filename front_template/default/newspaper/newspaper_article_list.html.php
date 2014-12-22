@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>长沙晚报</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="/image_02/logo57.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/image_02/logo120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/image_02/logo152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
     <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>

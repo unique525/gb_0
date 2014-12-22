@@ -101,6 +101,45 @@ class NewspaperArticleManageData extends BaseManageData {
     }
 
     /**
+     * 拖动排序
+     * @param array $arrNewspaperArticleId 待处理的文档编号数组
+     * @return int 操作结果
+     */
+    public function ModifySortForDrag($arrNewspaperArticleId)
+    {
+        if (count($arrNewspaperArticleId) > 1) { //大于1条时排序才有意义
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            DataCache::RemoveDir($cacheDir);
+
+            $strNewspaperArticleId = join(',', $arrNewspaperArticleId);
+            $strNewspaperArticleId = Format::FormatSql($strNewspaperArticleId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_NewspaperArticle . " WHERE NewspaperArticleId IN ($strNewspaperArticleId);";
+            $maxSort = $this->dbOperator->GetInt($sql, null);
+
+            if($maxSort<=0){
+                //$maxSort = 0;
+                $maxSort = 100;
+            }
+
+            $arrSql = array();
+            for ($i = 0; $i < count($arrNewspaperArticleId); $i++) {
+                $newSort = $maxSort - $i;
+                if ($newSort < 0) {
+                    $newSort = 0;
+                }
+                $newSort = intval($newSort);
+                $newspaperArticleId = intval($arrNewspaperArticleId[$i]);
+                $sql = "UPDATE " . self::TableName_NewspaperArticle . " SET Sort=$newSort WHERE NewspaperArticleId=$newspaperArticleId;";
+                $arrSql[] = $sql;
+            }
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
+        }
+    }
+
+    /**
      * 根据后台管理员id返回此管理员可以管理的站点列表数据集
      * @param int $newspaperPageId 电子报版面id
      * @param int $pageBegin 分页起始位置

@@ -133,7 +133,7 @@
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_Sort">排序号：</label></td>
                 <td class="spe_line">
-                    <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number"/>
+                    <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number"/> (越小越靠前)
                 </td>
             </tr>
 

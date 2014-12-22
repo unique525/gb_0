@@ -5,6 +5,12 @@
     <title>{NewspaperArticleTitle} - 长沙晚报</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
+    <link rel="apple-touch-icon" href="/image_02/logo57.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/image_02/logo120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/image_02/logo152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/comment.js"></script>
     <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
@@ -131,8 +137,8 @@
             <h4 style="text-align:left;">{NewspaperArticleSubTitle}</h4>
         </div>
 
-        <div>
 
+    <div>
             <icms id="newspaper_article_{NewspaperArticleId}" type="newspaper_article_pic_list" top="100">
                 <item>
                     <![CDATA[
@@ -178,12 +184,8 @@
     </div>
 
     <!-----------comment-->
+    <img src="/image_02/logo50.jpg" alt="长沙晚报" style="width:0;height:0;" />
 
-    <div style="padding:10px;">
-
-        <div class="bshare-custom icon-medium-plus"><div class="bsPromo bsPromo2"></div><a title="分享到收藏夹" class="bshare-favorite" href="javascript:void(0);"></a><a title="分享到复制网址" class="bshare-clipboard" href="javascript:void(0);"></a><a title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a><a title="分享到朋友网" class="bshare-qqxiaoyou" href="javascript:void(0);"></a><a title="分享到凤凰微博" class="bshare-ifengmb" href="javascript:void(0);"></a><a title="分享到QQ空间" class="bshare-qzone" href="javascript:void(0);"></a><a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);"></a><a title="分享到QQ好友" class="bshare-qqim" href="javascript:void(0);"></a><a title="分享到人民微博" class="bshare-peoplemb" href="javascript:void(0);"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count" style="float: none;"></span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
-
-    </div>
 </div>
 </body>
 </html>

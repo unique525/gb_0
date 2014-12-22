@@ -89,6 +89,11 @@ class NewspaperPageManageData extends BaseManageData {
     {
         $result = 0;
         if ($newspaperPageId > 0) {
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_state.cache_' . $newspaperPageId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
             $dataProperty = new DataProperty();
             $sql = "UPDATE " . self::TableName_NewspaperPage . "
                         SET `State`=:State
@@ -110,6 +115,10 @@ class NewspaperPageManageData extends BaseManageData {
     public function ModifySort($sort, $newspaperPageId) {
         $result = 0;
         if ($newspaperPageId > 0) {
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            DataCache::RemoveDir($cacheDir);
+
 
             $newspaperId = $this->GetNewspaperId($newspaperPageId, false);
 
@@ -181,13 +190,23 @@ class NewspaperPageManageData extends BaseManageData {
     public function ModifySortForDrag($arrNewspaperPageId)
     {
         if (count($arrNewspaperPageId) > 1) { //大于1条时排序才有意义
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            DataCache::RemoveDir($cacheDir);
+
             $strNewspaperPageId = join(',', $arrNewspaperPageId);
             $strNewspaperPageId = Format::FormatSql($strNewspaperPageId);
-            $sql = "SELECT max(Sort) FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId IN ($strNewspaperPageId);";
-            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $sql = "SELECT min(Sort) FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId IN ($strNewspaperPageId);";
+            $minSort = $this->dbOperator->GetInt($sql, null);
+
+            if($minSort<=0){
+                $minSort = 0;
+                //$maxSort = 100;
+            }
+
             $arrSql = array();
             for ($i = 0; $i < count($arrNewspaperPageId); $i++) {
-                $newSort = $maxSort - $i;
+                $newSort = $minSort + $i;
                 if ($newSort < 0) {
                     $newSort = 0;
                 }
@@ -271,7 +290,7 @@ class NewspaperPageManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableName_NewspaperPage . "
                         WHERE
                             NewspaperId = :NewspaperId
-                        ORDER BY NewspaperPageNo
+                        ORDER BY Sort,NewspaperPageNo
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
         $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperPage . "
                         WHERE

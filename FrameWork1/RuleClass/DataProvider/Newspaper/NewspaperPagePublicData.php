@@ -79,12 +79,48 @@ class NewspaperPagePublicData extends BasePublicData
             $dataProperty->AddField("IssueDepartment", $issueDepartment);
             $dataProperty->AddField("Issuer", $issuer);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+
+            if($result > 0){
+
+                self::ModifySort($result, $result); //修改排序号为本身的id
+
+            }
+
         } else {
             $result = $newspaperPageId;
         }
 
         return $result;
 
+    }
+
+
+    /**
+     * 修改排序号
+     * @param int $newspaperPageId 版面id
+     * @param int $sort 排序号
+     * @return int 修改结果
+     */
+    public function ModifySort($newspaperPageId, $sort)
+    {
+        $result = -1;
+
+        if ($newspaperPageId > 0 && $sort > 0) {
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_sort.cache_' . $newspaperPageId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+
+            $sql = "UPDATE " . self::TableName_NewspaperPage . "
+                            SET Sort=:Sort WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $sort);
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
     }
 
     /**
@@ -173,7 +209,7 @@ class NewspaperPagePublicData extends BasePublicData
 
                 WHERE NewspaperId = :NewspaperId
 
-                ORDER BY NewspaperPageId LIMIT 1;
+                ORDER BY Sort,NewspaperPageId LIMIT 1;
 
                 ";
 
@@ -194,17 +230,20 @@ class NewspaperPagePublicData extends BasePublicData
     {
         $result = -1;
         if ($newspaperId > 0) {
+
+            $sort = self::GetSort($newspaperPageId, true);
+
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
 
                 WHERE NewspaperId = :NewspaperId
-                    AND NewspaperPageId>:NewspaperPageId
+                    AND Sort>:Sort
 
-                ORDER BY NewspaperPageId LIMIT 1;
+                ORDER BY Sort LIMIT 1;
 
                 ";
 
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $dataProperty->AddField("Sort", $sort);
             $dataProperty->AddField("NewspaperId", $newspaperId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
@@ -221,23 +260,46 @@ class NewspaperPagePublicData extends BasePublicData
     {
         $result = -1;
         if ($newspaperId > 0) {
+
+            $sort = self::GetSort($newspaperPageId, true);
+
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
 
                 WHERE NewspaperId = :NewspaperId
-                 AND NewspaperPageId<:NewspaperPageId
+                 AND Sort<:Sort
 
-                ORDER BY NewspaperPageId DESC LIMIT 1;
+                ORDER BY Sort DESC LIMIT 1;
 
                 ";
 
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $dataProperty->AddField("Sort", $sort);
             $dataProperty->AddField("NewspaperId", $newspaperId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
         return $result;
     }
 
+
+    /**
+     * 取得排序号
+     * @param int $newspaperPageId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序号
+     */
+    public function GetSort($newspaperPageId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_sort.cache_' . $newspaperPageId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
     /**
      * 取得一条信息
@@ -280,7 +342,7 @@ class NewspaperPagePublicData extends BasePublicData
 
                 FROM " . self::TableName_NewspaperPage . "
 
-                WHERE NewspaperId =:NewspaperId ORDER BY NewspaperPageId ;";
+                WHERE NewspaperId =:NewspaperId ORDER BY Sort,NewspaperPageId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperId", $newspaperId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}

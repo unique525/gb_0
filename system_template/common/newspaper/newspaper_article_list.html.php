@@ -41,6 +41,19 @@
                 var state = 100; //开启状态
                 modifyState(newspaperArticleId, state);
             });
+
+            //拖动排序变化
+            var sortGrid = $("#sort_grid");
+            sortGrid.sortable();
+            sortGrid.bind("sortstop", function(event, ui) {
+                var sortList = $("#sort_grid").sortable("serialize");
+                $.post("/default.php?secu=manage&mod=newspaper_article&m=async_modify_sort_by_drag&" + sortList, {
+                    resultbox: $(this).html()
+                }, function() {
+                    window.location.href = window.location.href;
+                });
+            });
+            sortGrid.disableSelection();
         });
 
 
@@ -106,6 +119,7 @@
         <tr class="grid_title">
             <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
             <td style="width: 40px; text-align: center;">编辑</td>
+            <td style="width: 100px;text-align:center;">排序号</td>
             <td>标题</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
             <td style="width: 80px; text-align: center;">点击数</td>
@@ -124,6 +138,7 @@
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_NewspaperArticleId}"/></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_NewspaperArticleId}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticleId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:100px;text-align:center;" title="排序号">{f_Sort}</td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a></td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:80px;text-align:center;" title="">{f_HitCount}</td>

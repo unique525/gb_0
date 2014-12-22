@@ -27,6 +27,9 @@ class NewspaperArticleManageGen extends BaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
@@ -209,5 +212,24 @@ class NewspaperArticleManageGen extends BaseManageGen {
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+
+
+    /**
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifySortByDrag()
+    {
+        $arrNewspaperArticleId = Control::GetRequest("sort", null);
+        if (!empty($arrNewspaperArticleId)) {
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_data');
+            $newspaperArticleManageData = new NewspaperArticleManageData();
+            $result = $newspaperArticleManageData->ModifySortForDrag($arrNewspaperArticleId);
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+        } else {
+            return "";
+        }
     }
 }

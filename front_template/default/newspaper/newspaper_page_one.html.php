@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{NewspaperTitle}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/image_02/apple-touch-icon-57x57-precomposed.png" rel="apple-touch-icon-precomposed">
-    <link href="/image_02/apple-touch-icon-114x114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed">
-    <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico">
-    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" href="/image_02/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/image_02/logo120.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/image_02/logo152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
+
+
+    <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico" />
+    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css" />
     <style>
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}

@@ -28,6 +28,12 @@ class NewspaperPageManageGen extends BaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_modify_sort":
+                $result = self::AsyncModifySort();
+                break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
@@ -89,6 +95,41 @@ class NewspaperPageManageGen extends BaseManageGen {
         return $tempContent;
     }
 
+
+    /**
+     * 修改排序号
+     * @return int 修改结果
+     */
+    private function AsyncModifySort()
+    {
+        $result = -1;
+        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+        $sort = Control::GetRequest("sort", 0);
+        if ($newspaperPageId > 0) {
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            $newspaperPageManageData = new NewspaperPageManageData();
+            $result = $newspaperPageManageData->ModifySort($sort, $newspaperPageId);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifySortByDrag()
+    {
+        $arrNewspaperPageId = Control::GetRequest("sort", null);
+        if (!empty($arrNewspaperPageId)) {
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            $newspaperPageManageData = new NewspaperPageManageData();
+            $result = $newspaperPageManageData->ModifySortForDrag($arrNewspaperPageId);
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+        } else {
+            return "";
+        }
+    }
 
     /**
      * 修改文档状态 状态值定义在Data类中
