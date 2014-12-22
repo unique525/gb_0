@@ -59,19 +59,27 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
     }
 
     private function AsyncModify(){
-        $siteId = Control::GetRequest("site_id",0);
-        $userOrderId = Control::GetRequest("user_order_id",0);
+        $userOrderSendId = Control::GetRequest("user_order_send_id",0);
 
-        if($siteId > 0 && $userOrderId > 0){
+        $result = self::FAIL;
+        if($userOrderSendId > 0){
+            $acceptPersonName = Control::PostRequest("accept_person_name","");
+            $acceptAddress = Control::PostRequest("accept_address","");
+            $acceptTel = Control::PostRequest("accept_tel","");
+            $acceptTime = Control::PostRequest("accept_time","");
+            $sendCompany = Control::PostRequest("send_company","");
 
+            $userOrderSendManageData = new UserOrderSendManageData();
+            $result = $userOrderSendManageData->Modify($userOrderSendId,$acceptPersonName,$acceptAddress,$acceptTel,$acceptTime,$sendCompany);
         }
-        return "";
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 
     private function AsyncCreate(){
         $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
+        $result = self::FAIL;
         if($siteId > 0 && $userOrderId > 0){
             $acceptPersonName = Control::PostRequest("acceptPersonName","");
             $acceptAddress = Control::PostRequest("acceptAddress","");
@@ -81,17 +89,19 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
 
             $userOrderSendManageData = new UserOrderSendManageData();
             $result = $userOrderSendManageData->Create($userOrderId,$acceptPersonName,$acceptAddress,$acceptTel,$acceptTime,$sendCompany);
-            if($result > 0){
-                return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
-            }
         }
-        return Control::GetRequest("jsonpcallback","").'({"result":'.self::FAIL.'})';
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 
     private function AsyncRemove(){
-        $siteId = Control::GetRequest("site_id",0);
-        $userOrderId = Control::GetRequest("user_order_id",0);
+        $userOrderSendId = Control::GetRequest("user_order_send_id",0);
 
-        return Control::GetRequest("jsonpcallback","")."";
+        $result = self::FAIL;
+        if($userOrderSendId > 0){
+            $userOrderSendManageData = new UserOrderSendManageData();
+            $result = $userOrderSendManageData->Delete($userOrderSendId);
+        }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 }
