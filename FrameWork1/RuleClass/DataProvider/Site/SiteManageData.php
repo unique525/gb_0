@@ -195,24 +195,28 @@ class SiteManageData extends BaseManageData {
             //查询
             if (strlen($searchKey) > 0 && $searchKey != "undefined") {
                 if ($searchType == 0) { //站点名称
-                    $searchSql = " AND (SiteName like :SearchKey)";
+                    $searchSql = " AND (s.SiteName like :SearchKey)";
                     $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
                 } else { //站点名称
-                    $searchSql = " AND (SiteName like :SearchKey)";
+                    $searchSql = " AND (s.SiteName like :SearchKey)";
                     $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
                 }
             }
 
-            $sql = "SELECT * FROM ".self::TableName_Site." WHERE
-                SiteId IN
-                ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
-                  UNION
-                  SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
-                    WHERE ManageUserGroupId IN
-                        (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
-                 ) $searchSql
-                 ORDER BY Sort DESC,convert(SiteName USING gbk)
-                 LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sql = "SELECT s.*,mu.ManageUserName FROM ".self::TableName_Site." s,".self::TableName_ManageUser." mu
+
+                    WHERE
+                        s.ManageUserId=mu.ManageUserId
+                        AND
+                        s.SiteId IN
+                        (   SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1
+                            UNION
+                            SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
+                                WHERE ManageUserGroupId IN
+                                (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
+                        ) $searchSql
+                    ORDER BY s.Sort DESC,convert(s.SiteName USING gbk)
+                    LIMIT " . $pageBegin . "," . $pageSize . ";";
             $sqlCount = "SELECT Count(*) FROM ".self::TableName_Site." WHERE
                 SiteId IN
                 ( SELECT SiteId FROM ".self::TableName_Site." WHERE ManageUserId=:ManageUserId1

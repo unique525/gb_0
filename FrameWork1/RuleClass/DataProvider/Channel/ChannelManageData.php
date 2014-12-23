@@ -590,20 +590,30 @@ class ChannelManageData extends BaseManageData
                         WHERE
                             c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
                             AND c.ChannelId in
-                                ( SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserId=:ManageUserId
+                                ( SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND ManageUserId=:ManageUserId
                                   UNION
-                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId2)
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId2)
                                   UNION
-                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE Explore=1 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId3))
+                                  SELECT ChannelId FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId3))
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_Channel . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND SiteId=:SiteId2 AND ChannelId=0 AND ManageUserId=:ManageUserId4 AND ManageUserGroupId = 0)
+                                  UNION
+                                  SELECT ChannelId FROM " . self::TableName_Channel . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND SiteId=:SiteId3 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId5))
+
                                 )
                         ORDER BY c.Sort DESC,c.ChannelId;";
                 $dataProperty->AddField("ManageUserId", $manageUserId);
                 $dataProperty->AddField("ManageUserId2", $manageUserId);
                 $dataProperty->AddField("ManageUserId3", $manageUserId);
+                $dataProperty->AddField("ManageUserId4", $manageUserId);
+                $dataProperty->AddField("ManageUserId5", $manageUserId);
+                $dataProperty->AddField("SiteId2", $siteId);
+                $dataProperty->AddField("SiteId3", $siteId);
             }
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
+
 
         return $result;
     }
