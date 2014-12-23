@@ -57,7 +57,7 @@
     <tr>
         <td class="spe_line" height="30" align="right"><label for="f_DirectUrl">转向网址：</label></td>
         <td class="spe_line">
-            <input id="f_DirectUrl" name="f_DirectUrl" type="text" value="{DirectUrl}" maxlength="10" class="input_box" style="width:500px;"/>
+            <input id="f_DirectUrl" name="f_DirectUrl" type="text" value="{DirectUrl}" maxlength="200" class="input_box" style="width:500px;"/>
         </td>
     </tr>
 
