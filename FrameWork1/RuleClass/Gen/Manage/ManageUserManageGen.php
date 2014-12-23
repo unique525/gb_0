@@ -76,6 +76,11 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
 
             }
 
+            $manageUserGroupManageData=new ManageUserGroupManageData();
+            $arrayOfManageUserGroupList=$manageUserGroupManageData->GetAll();
+            $listName="manage_user_group_list";
+            Template::ReplaceList($tempContent,$arrayOfManageUserGroupList,$listName);
+
             $fields = $manageUserManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fields);
 
@@ -110,9 +115,6 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
 
             $manageUserManageData = new ManageUserManageData();
 
-            //加载原有数据
-            $arrOne = $manageUserManageData->GetOne($manageUserIdOfGet);
-            Template::ReplaceOne($tempContent, $arrOne);
 
 
             if (!empty($_POST)) {
@@ -137,6 +139,16 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('manage_user', 4)); //编辑失败！
                 }
             }
+
+            $manageUserGroupManageData=new ManageUserGroupManageData();
+            $arrayOfManageUserGroupList=$manageUserGroupManageData->GetAll();
+            $listName="manage_user_group_list";
+            Template::ReplaceList($tempContent,$arrayOfManageUserGroupList,$listName);
+
+
+            //加载原有数据
+            $arrOne = $manageUserManageData->GetOne($manageUserIdOfGet);
+            Template::ReplaceOne($tempContent, $arrOne);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);

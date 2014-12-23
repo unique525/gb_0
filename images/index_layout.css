@@ -61,7 +61,7 @@
 .nav li{ float:left; width:80px; padding-left:17px; line-height:28px;}
 .nav li a{ font-weight:bold; color:#7e7e7e; font-size:14px;}
 .nav .sec_title{ font-size: 16px; font-weight: bold; color: #666;}
-.part_3 .sales li{ display:block; float:left; width:340px; padding:20px 10px 10px;}
+.part_3 .sales li{ display:inline; float:left; width:340px; padding:30px 10px 0px; *+padding-top:20px;}
 .part_3 .sales li .left{width:160px; padding:0 10px;}
 .part_3 .sales li .right{ width:145px; padding-top:15px;}
 .part_3 .sales li .name{  line-height:18px; height:100px;}

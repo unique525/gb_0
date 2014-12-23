@@ -210,6 +210,29 @@ class ManageUserGroupManageData extends BaseManageData {
         }
     }
 
+    /**
+     * 获取所有分组的id与组名数据集
+     * @return array 管理分组列表数据集
+     */
+    public function GetAll(
+    )
+    {
+        $dataProperty = new DataProperty();
+        $searchSql = "";
+
+
+        $sql = "SELECT ManageUserGroupId,ManageUserGroupName FROM " . self::TableName_ManageUserGroup . "
+                        WHERE
+                            State<".ManageUserGroupData::STATE_DELETE."
+
+
+                            $searchSql
+
+                        ORDER BY Sort DESC,convert(ManageUserGroupName USING gbk);";
+
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
 }
 
 ?>
