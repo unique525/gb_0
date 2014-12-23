@@ -4,22 +4,42 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
     <script type="text/javascript" src="/system_js/manage/user/user_order.js"></script>
-    <style type="text/css">
+    <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-timepicker-addon.js"></script>
+    <style>
+        /* css for timepicker */
+        .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+        .ui-timepicker-div dl { text-align: left; }
+        .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+        .ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
+        .ui-timepicker-div td { font-size: 90%; }
+        .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
+        .ui-timepicker-rtl{ direction: rtl; }
+        .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+        .ui-timepicker-rtl dl dt{ float: right; clear: right; }
+        .ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
     </style>
     <script type="text/javascript">
         <!--
 
         $(function () {
             $("#f_SendTime").datepicker({
+                showSecond: true,
                 dateFormat: 'yy-mm-dd',
                 numberOfMonths: 1,
-                showButtonPanel: true
+                timeFormat: 'hh:mm:ss',
+                stepHour: 1,
+                stepMinute: 1,
+                stepSecond: 1
             });
             $("#f_AcceptTime").datepicker({
+                showSecond: true,
                 dateFormat: 'yy-mm-dd',
                 numberOfMonths: 1,
-                showButtonPanel: true
+                timeFormat: 'hh:mm:ss',
+                stepHour: 1,
+                stepMinute: 1,
+                stepSecond: 1
             });
         });
 
@@ -61,7 +81,7 @@
                 <td class="spe_line" style="height:40px;" align="right">签收人：</td>
                 <td class="spe_line"><input type="text" class="input_box" id="f_AcceptPersonName" value="{AcceptPersonName}" name="f_AcceptPersonName"/></td>
                 <td class="spe_line" align="right">收货地址：</td>
-                <td class="spe_line"><input type="text" class="input_box" id="f_AcceptAddress" style="width:200px;" value="{AcceptAddress}" name="f_AcceptAddress"/></td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_AcceptAddress" style="width:300px;" value="{AcceptAddress}" name="f_AcceptAddress"/></td>
             </tr>
             <tr>
                 <td class="spe_line" style="height:40px;" align="right">收货时间：</td>
