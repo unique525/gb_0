@@ -54,7 +54,10 @@
                 <option value="20">已付款，未发货</option>
                 <option value="25">已发货</option>
                 <option value="30">交易完成</option>
+                <option value="31">交易完成,已评价</option>
                 <option value="40">交易关闭</option>
+                <option value="50">申请退款</option>
+                <option value="55">退款完成</option>
                 <option value="70">未评价</option>
             </select>
             起始时间：<input  id="begin_date" value="" type="text" class="input_box" style="width:80px;"/>
