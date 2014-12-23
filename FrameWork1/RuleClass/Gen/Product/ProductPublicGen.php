@@ -119,6 +119,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $channelFirstId = Control::GetRequest("channel_first_id", 0);
         $productId = Control::GetRequest("product_id", 0);
         $templateContent = "";
+        $siteId = parent::GetSiteIdByDomain();
 
         if ($productId > 0) {
             $templateContent = self::loadDetailTemp();
@@ -240,6 +241,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
 
                 $patterns = '/\{s_(.*?)\}/';
                 $templateContent = preg_replace($patterns, "", $templateContent);
+                parent::ReplaceSiteConfig($siteId,$templateContent);
                 parent::ReplaceEnd($templateContent);
             }
 

@@ -105,13 +105,11 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
 
 
         /////////////////////////////////////////
-
         if ($userOrderSendId > 0 && $manageUserId > 0) {
 
             parent::ReplaceFirst($tempContent);
 
             $userOrderSendManageData = new UserOrderSendManageData();
-
             //加载原有数据
             $arrOne = $userOrderSendManageData->GetOne($userOrderSendId);
             Template::ReplaceOne($tempContent, $arrOne);
@@ -153,11 +151,10 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
 
 
     private function GenList(){
-        $siteId = Control::GetRequest("site_id",0);
         $userOrderId = Control::GetRequest("user_order_id",0);
 
         $templateContent = "";
-        if($siteId > 0 && $userOrderId > 0){
+        if($userOrderId > 0){
             $templateContent = Template::Load("user/user_order_send_list.html","common");
             parent::ReplaceFirst($templateContent);
             $userOrderSendManageData = new UserOrderSendManageData();

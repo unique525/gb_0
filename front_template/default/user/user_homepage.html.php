@@ -41,6 +41,13 @@
                 $(".tabCon .content").css("display","none");
                 $(".tabCon #div_"+idvalue).css("display","block");
             });
+
+            var userAvatar = $("#user_avatar").attr("src");
+            if(userAvatar == ""){
+                $("#user_avatar").attr("src","{cfg_UserDefaultMaleAvatar_5_upload_file_path}");
+            }
+
+
         });
     </script>
 </head>
@@ -63,7 +70,7 @@
                 </div>
                 <div class="rightmember">
                     <div style="padding:20px; background:#f6f6f6;">
-                    <div class="leftperson"><img src="{UploadFilePath}" width="120" height="120"/>
+                    <div class="leftperson"><img src="{UploadFilePath}" id="user_avatar" width="120" height="120"/>
                         <h3><a href="/default.php?mod=user_info&a=modify_avatar">修改头像</a></h3>
                     </div>
                     <div class="rightinfo">

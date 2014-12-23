@@ -55,6 +55,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $userExplorePublicGen = new UserExplorePublicGen();
                 $result = $userExplorePublicGen->GenPublic();
                 break;
+            case "user_order_send":
+                $userOrderSendPublicGen = new UserOrderSendPublicGen();
+                $result = $userOrderSendPublicGen->GenPublic();
+                break;
             case "forum":
                 $forumPublicGen = new ForumPublicGen();
                 $result = $forumPublicGen->GenPublic();

@@ -27,8 +27,8 @@
             });
 
             $(".btn_modify").click(function(){
-                var userOrderPayId = $(this).attr("idvalue");
-                window.location.href = "/default.php?secu=manage&mod=user_order_send&m=modify&user_order_pay_id="+userOrderPayId+"&user_order_id={UserOrderId}";
+                var userOrderSendId = $(this).attr("idvalue");
+                window.location.href = "/default.php?secu=manage&mod=user_order_send&m=modify&user_order_send_id="+userOrderSendId+"&user_order_id={UserOrderId}";
             });
 
 

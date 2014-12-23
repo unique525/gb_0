@@ -81,10 +81,7 @@
                                 <li>
                                     <a id="order_state_10" href="/default.php?mod=user_order&a=list&state=10">未付款<span>{UserOrderCountOfNonPayment}</span></a>
                                 </li>
-                                <li>
-                                    <a id="order_state_15" href="/default.php?mod=user_order&a=list&state=15">货到付款<span>{UserOrderCountOfPaymentAfterReceive}</span></a>
-                                </li>
-                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">已付款未发货<span>{UserOrderCountOfPayment}</span></a></li>
+                                <li><a id="order_state_20" href="/default.php?mod=user_order&a=list&state=20">已付款<span>{UserOrderCountOfPayment}</span></a></li>
                                 <li><a id="order_state_25" href="/default.php?mod=user_order&a=list&state=25">已发货<span>{UserOrderCountOfSent}</span></a></li>
                                 <li><a id="order_state_30" href="/default.php?mod=user_order&a=list&state=30">交易完成<span>{UserOrderCountOfDone}</span></a></li>
 

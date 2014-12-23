@@ -166,7 +166,7 @@
                 <textarea style="width:100%;height:100px" name="content"></textarea>
 
                 <div class="comment_submit">
-                    <input type="button" value="发  表" id="sub" />
+                    <input type="button" style="cursor:pointer" value="发  表" id="sub" />
                 </div>
                 <div style="clear:both;"></div>
                 <input type="hidden" name="product_score" id="product_score" autocomplete="off" value="0"/>

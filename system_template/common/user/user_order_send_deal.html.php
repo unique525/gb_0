@@ -23,20 +23,20 @@
         <!--
 
         $(function () {
-            $("#f_SendTime").datepicker({
+            $("#f_SendTime").datetimepicker({
                 showSecond: true,
                 dateFormat: 'yy-mm-dd',
                 numberOfMonths: 1,
-                timeFormat: 'hh:mm:ss',
+                timeFormat: 'HH:mm:ss',
                 stepHour: 1,
                 stepMinute: 1,
                 stepSecond: 1
             });
-            $("#f_AcceptTime").datepicker({
+            $("#f_AcceptTime").datetimepicker({
                 showSecond: true,
                 dateFormat: 'yy-mm-dd',
                 numberOfMonths: 1,
-                timeFormat: 'hh:mm:ss',
+                timeFormat: 'HH:mm:ss',
                 stepHour: 1,
                 stepMinute: 1,
                 stepSecond: 1

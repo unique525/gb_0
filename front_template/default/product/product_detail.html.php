@@ -214,6 +214,13 @@
                 });
             });
 
+            $(".user_avatar").each(function(){
+                var user_avatar_path = $(this).attr("src");
+                if(user_avatar_path == ""){
+                    $(this).attr("src", "{cfg_UserDefaultMaleAvatar_5_upload_file_path}");
+                }
+            });
+
             $.ajax({
                 url:"/default.php?mod=product_comment&a=async_get_appraisal",
                 data:{product_id:{ProductId}},
@@ -542,11 +549,11 @@
             <td width="70px" align="center" valign="top" style="padding-top:10px;">
                 <table width="70" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img src="{f_UploadFileThumbPath2}" width="50" height="50" /></a></td>
+                        <td width="70" height="70" align="center" valign="middle" background="images/5_25.gif"><a href="#"><img class="user_avatar" src="{f_UploadFileThumbPath2}" width="50" height="50" /></a></td>
                     </tr>
                 </table>
                 {f_UserName}</br>
-                <span class="grenn">{f_UserGroupName}</span></td>
+            </td>
             <td width="882px" align="left" valign="top">
                 <table width="882px" border="0" cellspacing="0" cellpadding="0">
                     <tr>

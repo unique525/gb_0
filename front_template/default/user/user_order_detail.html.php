@@ -90,8 +90,10 @@
                                 <tr>
                                     <td class="spe_line infor_title">发货费用：</td>
                                     <td class="spe_line" >￥<input type="text" class="input_price" id="SendPrice" name="f_SendPrice" value="{SendPrice}"/></td>
-                                    <td class="spe_line infor_title">发货时间：</td>
-                                    <td class="spe_line">{SendTime}</td>
+                                    <td class="spe_line infor_title">发货信息：</td>
+                                    <td class="spe_line">
+                                        <a href="/default.php?mod=user_order_send&a=list&user_order_id={UserOrderId}&user_order_number={UserOrderNumber}" target="_blank">点击查看</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="spe_line infor_title">订单总价：</td>
@@ -121,8 +123,7 @@
                                 <item>
                                     <![CDATA[
                                     <tr class="grid_item2" id="user_order_product_{f_UserOrderProductId}">
-                                        <td class="spe_line product_pic"><img width="80px" height="80px" /></td>
-                                        <td class="spe_line product_name">{f_ProductName}</td>
+                                        <td colspan="2" class="spe_line product_name">{f_ProductName}</td>
                                         <td class="spe_line product_fullprice">
                                             ￥<span class="show_price">{f_ProductPrice}</span>
                                         </td>

@@ -437,13 +437,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             parent::ReplaceFirst($templateContent);
 
-
-            //重新生成订单编号
-            $userOrderNumber = UserOrderData::GenUserOrderNumber();
-            $userOrderNumberDes = Des::Encrypt($userOrderNumber, UserOrderData::USER_ORDER_DES_KEY);
-
-            $userOrderPublicData->ModifyUserOrderNumber($userOrderId,$userOrderNumber,$userOrderNumberDes);
-
             $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
 
             parent::ReplaceEnd($templateContent);

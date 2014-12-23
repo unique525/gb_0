@@ -154,15 +154,14 @@ class ProductCommentPublicData extends BasePublicData
     {
         $result = null;
         if ($productId > 0) {
-            $sql = "SELECT pc.*,ug.UserGroupName,uf.UploadFileThumbPath2 FROM "
+            $sql = "SELECT pc.*,uf.UploadFileThumbPath2 FROM "
                 . self::TableName_ProductComment . " pc,"
                 . self::TableName_UserRole . " ur,"
-                . self::TableName_UserGroup . " ug,"
                 . self::TableName_UserInfo . " ui LEFT JOIN "
                 . self::TableName_UploadFile . " uf ON ui.AvatarUploadFileId = uf.UploadFileId
                 WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
                 AND ui.UserId = pc.UserId
-                AND pc.UserId = ur.UserId AND ur.UserGroupId = ug.UserGroupId
+                AND pc.UserId = ur.UserId
                 LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
