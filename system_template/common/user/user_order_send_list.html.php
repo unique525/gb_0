@@ -5,6 +5,20 @@
     {common_head}
     <script type="text/javascript" src="/system_js/manage/user/user_order.js"></script>
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-timepicker-addon.js"></script>
+    <style>
+        /* css for timepicker */
+        .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+        .ui-timepicker-div dl { text-align: left; }
+        .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+        .ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
+        .ui-timepicker-div td { font-size: 90%; }
+        .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+        .ui-timepicker-rtl{ direction: rtl; }
+        .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+        .ui-timepicker-rtl dl dt{ float: right; clear: right; }
+        .ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
+    </style>
     <script type="text/javascript">
         $(function(){
             var isCreate = true;
@@ -34,10 +48,10 @@
                         '<input type="text" class="input_box" id="accept_tel"  style="width:85px">' +
                         '</td>'+
                         '<td class="spe_line" height="30" width="165" align="center">' +
-                        '<input type="text" class="input_box" id="accept_time" value="" style="width:160px">' +
+                        '<input type="text" class="input_box" id="accept_time" value="" style="width:150px">' +
                         '</td>'+
-                        '<td class="spe_line" height="30" width="80" align="center">' +
-                        '<input type="text" class="input_box" id="send_company"  style="width:65px">' +
+                        '<td class="spe_line" height="30" width="100" align="center">' +
+                        '<input type="text" class="input_box" id="send_company"  style="width:90px">' +
                         '</td>'+
                         '<td class="spe_line" height="30" align="center">'+
                         '<input type="button" class="btn" id="sub" value="确定">&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -57,7 +71,7 @@
                         showSecond: true,
                         dateFormat: 'yy-mm-dd',
                         numberOfMonths: 1,
-                        timeFormat: 'hh:mm:ss',
+                        timeFormat: 'HH:mm:ss',
                         stepHour: 1,
                         stepMinute: 1,
                         stepSecond: 1
@@ -188,9 +202,8 @@
 </head>
 <body>
 <div class="div_list">
-    <div style="width:99%;">
-        <div class="btn" id="create" style="float:left;width:50px;text-align: center">新增</div>
-        <div style="clear:left"></div>
+    <div style="width:100%;">
+        <input id="create" class="btn2" value="新增发货信息" title="新增发货信息" type="button"/>
     </div>
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
         <tr  class="grid_title2">
@@ -198,7 +211,7 @@
             <td class="spe_line" height="30" width="600" align="center">接收地址</td>
             <td class="spe_line" height="30" width="100" align="center">接收人电话</td>
             <td class="spe_line" height="30" width="165" align="center">接收时间</td>
-            <td class="spe_line" height="30" width="80" align="center">送货公司名称</td>
+            <td class="spe_line" height="30" width="100" align="center">送货公司名称</td>
             <td class="spe_line" height="30" align="center"></td>
         </tr>
     </table>
@@ -223,11 +236,11 @@
                             </td>
                             <td class="spe_line" height="30" width="165" align="center">
                                 <div id="accept_time_{f_UserOrderSendId}">{f_AcceptTime}</div>
-                                <input type="text" id="modify_accept_time_{f_UserOrderSendId}" class="input_box modify_accept_time" value="{f_AcceptTime}" style="display:none;width:155px"/>
+                                <input type="text" id="modify_accept_time_{f_UserOrderSendId}" class="input_box modify_accept_time" value="{f_AcceptTime}" style="display:none;width:150px"/>
                             </td>
-                            <td class="spe_line" height="30" width="80" align="center">
+                            <td class="spe_line" height="30" width="100" align="center">
                                 <div id="send_company_{f_UserOrderSendId}">{f_SendCompany}</div>
-                                <input type="text" id="modify_send_company_{f_UserOrderSendId}" value="{f_SendCompany}" class="input_box" style="display:none;width:70px"/>
+                                <input type="text" id="modify_send_company_{f_UserOrderSendId}" value="{f_SendCompany}" class="input_box" style="display:none;width:90px"/>
                             </td>
                             <td class="spe_line" height="30" align="center" id="operator_{f_UserOrderSendId}">
                                 <div id="operator_div_{f_UserOrderSendId}">

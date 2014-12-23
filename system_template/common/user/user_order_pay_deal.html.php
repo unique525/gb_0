@@ -16,17 +16,17 @@
           method="post">
         <table border="0" width="99%" align="center" cellpadding="0" cellspacing="0">
             <tr>
-                <td class="spe_line" align="right">商品名：</td>
-                <td class="spe_line">{ProductName}</td>
-                <td class="spe_line" align="right">商品参数：</td>
-                <td class="spe_line">{ProductPriceIntro}</td>
+                <td class="spe_line" align="right">支付方式：</td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_PayWay" value="{PayWay}" name="f_PayWay"/> （银行、第三方支付等名称）</td>
+                <td class="spe_line" align="right">支付价格：</td>
+                <td class="spe_line"><input type="text" class="input_price" id="f_PayPrice" value="{PayPrice}" name="f_PayPrice"/>元</td>
             </tr>
             <tr>
                 <td class="spe_line" align="right">商品价格：</td>
                 <td class="spe_line">{ProductPrice}元</td>
                 <td class="spe_line" align="right">购买价：</td>
                 <td class="spe_line">
-                    <input type="text" class="input_price" id="SalePrice" value="{SalePrice}" name="f_SalePrice"/>元
+
                 </td>
             </tr>
             <tr>
