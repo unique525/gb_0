@@ -198,7 +198,7 @@
             <td class="spe_line" height="30" width="600" align="center">接收地址</td>
             <td class="spe_line" height="30" width="100" align="center">接收人电话</td>
             <td class="spe_line" height="30" width="165" align="center">接收时间</td>
-            <td class="spe_line" height="30" width="80" align="center">公司名</td>
+            <td class="spe_line" height="30" width="80" align="center">送货公司名称</td>
             <td class="spe_line" height="30" align="center"></td>
         </tr>
     </table>

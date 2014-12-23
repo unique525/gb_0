@@ -88,9 +88,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="spe_line infor_title">送货价格：</td>
+                                    <td class="spe_line infor_title">发货费用：</td>
                                     <td class="spe_line" >￥<input type="text" class="input_price" id="SendPrice" name="f_SendPrice" value="{SendPrice}"/></td>
-                                    <td class="spe_line infor_title">送货时间：</td>
+                                    <td class="spe_line infor_title">发货时间：</td>
                                     <td class="spe_line">{SendTime}</td>
                                 </tr>
                                 <tr>

@@ -57,9 +57,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" style="width:100px;text-align: right">送货价格：</td>
+                <td class="spe_line" height="30" style="width:100px;text-align: right">发货费用：</td>
                 <td class="spe_line" height="30">￥<input type="text" class="input_price" id="SendPrice" name="f_SendPrice" value="{SendPrice}"/></td>
-                <td class="spe_line" height="30" style="width:100px;text-align: right">送货时间：</td>
+                <td class="spe_line" height="30" style="width:100px;text-align: right">发货时间：</td>
                 <td class="spe_line" height="30">{SendTime}</td>
             </tr>
             <tr>
@@ -75,11 +75,13 @@
                         <option value="20">已付款，未发货</option>
                         <option value="25">已发货</option>
                         <option value="30">交易完成</option>
+                        <option value="31">交易完成，已评价</option>
                         <option value="40">交易关闭</option>
+                        <option value="50">申请退款</option>
+                        <option value="55">退款完成</option>
                         <option value="70">未评价</option>
                         <option value="100">已删除</option>
-                        <option value="110">已退货</option>
-                        {s_state}
+                        {s_State}
                     </select>
                 </td>
             </tr>

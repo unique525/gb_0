@@ -11,8 +11,8 @@
 <body>
 <div class="div_list">
     {common_body_deal}
-    <form id="userOrderProductForm"
-          action="/default.php?secu=manage&mod=user_order_product&m={method}&user_order_product_id={UserOrderProductId}&user_order_id={UserOrderId}&site_id={SiteId}"
+    <form id="userOrderPayForm"
+          action="/default.php?secu=manage&mod=user_order_pay&m={method}&user_order_pay_id={UserOrderPayId}&user_order_id={UserOrderId}&site_id={SiteId}"
           method="post">
         <table border="0" width="99%" align="center" cellpadding="0" cellspacing="0">
             <tr>

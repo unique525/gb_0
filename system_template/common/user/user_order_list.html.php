@@ -74,7 +74,7 @@
                 <td style="width:80px;text-align: center">运费</td>
                 <td style="width:150px;text-align: center">创建日期</td>
                 <td  style="width:120px;text-align: center">状态</td>
-                <td  style="width:150px;text-align: center">相关信息</td>
+                <td  style="width:250px;text-align: center">相关信息</td>
             </tr>
         </table>
         <ul id="type_list">
@@ -106,9 +106,9 @@
                             <td class="spe_line2" style="width:120px;text-align: center">
                                 <span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span>
                             </td>
-                            <td class="spe_line2" style="width:150px;text-align: center">
-                                <div class="btn2 btn_user_order_list_pay_info" idvalue="{f_UserOrderId}" style="width:80px;">支付信息</div>
-                                <div class="btn2 btn_user_order_list_send_info" idvalue="{f_UserOrderId}" style="width:80px;">物流信息</div>
+                            <td class="spe_line2" style="width:250px;text-align: center">
+                                <input class="btn2 btn_user_order_list_pay_info" idvalue="{f_UserOrderId}" type="button" style="width:80px;" value="支付信息" />
+                                <input class="btn2 btn_user_order_list_send_info" idvalue="{f_UserOrderId}" type="button" style="width:80px;" value="发货信息" />
                             </td>
                         </tr>
                     </table>
