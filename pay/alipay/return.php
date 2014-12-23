@@ -50,26 +50,13 @@ function GetSiteIdByDomain() {
     return $siteId;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>订单确认</title>
+    <title>支付结果</title>
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
@@ -78,7 +65,6 @@ function GetSiteIdByDomain() {
     <script type="text/javascript">
 
         $(function () {
-
             $("#btn_submit1").click(function () {
                 window.location.href = "/";
             });
