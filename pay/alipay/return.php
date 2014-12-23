@@ -80,15 +80,11 @@ function GetSiteIdByDomain() {
         $(function () {
 
             $("#btn_submit1").click(function () {
-
                 window.location.href = "/";
-
             });
 
             $("#btn_submit2").click(function () {
-
                 window.location.href = "/default.php?mod=user_order&a=list";
-
             });
         });
     </script>
