@@ -95,12 +95,14 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             $userOrderCountOfSent = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_SENT);
             $userOrderCountOfDone = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_DONE);
             $userOrderCountOfUnComment = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_UNCOMMENT);
+            $userOrderCountOfPaymentAfterReceive  = $userOrderPublicData->GetUserOrderCountByState($userId,$siteId,UserOrderData::STATE_PAYMENT_AFTER_RECEIVE);
 
             $templateContent = str_ireplace("{UserOrderCountOfNonPayment}", $userOrderCountOfNonPayment, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfPayment}", $userOrderCountOfPayment, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfSent}", $userOrderCountOfSent, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfDone}", $userOrderCountOfDone, $templateContent);
             $templateContent = str_ireplace("{UserOrderCountOfUnComment}", $userOrderCountOfUnComment, $templateContent);
+            $templateContent = str_ireplace("{UserOrderCountOfPaymentAfterReceive}", $userOrderCountOfPaymentAfterReceive, $templateContent);
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
@@ -434,6 +436,13 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
             parent::ReplaceFirst($templateContent);
+
+
+            //重新生成订单编号
+            $userOrderNumber = UserOrderData::GenUserOrderNumber();
+            $userOrderNumberDes = Des::Encrypt($userOrderNumber, UserOrderData::USER_ORDER_DES_KEY);
+
+            $userOrderPublicData->ModifyUserOrderNumber($userOrderId,$userOrderNumber,$userOrderNumberDes);
 
             $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
 

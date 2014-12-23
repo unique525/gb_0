@@ -12,23 +12,12 @@
 
         $(function () {
             $("#btn_create").click(function(){
-
-
-
                 window.location.href = "/default.php?secu=manage&mod=user_order_pay&m=create&user_order_id={UserOrderId}";
-
-
-
             });
 
             $(".btn_modify").click(function(){
-
                 var userOrderPayId = $(this).attr("idvalue");
-
                 window.location.href = "/default.php?secu=manage&mod=user_order_pay&m=modify&user_order_pay_id="+userOrderPayId+"&user_order_id={UserOrderId}";
-
-
-
             });
 
             $(".span_pay_type").each(function(){

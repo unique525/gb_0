@@ -21,6 +21,17 @@
     </style>
     <script type="text/javascript">
         $(function(){
+
+            $("#btn_create").click(function(){
+                window.location.href = "/default.php?secu=manage&mod=user_order_send&m=create&user_order_id={UserOrderId}";
+            });
+
+            $(".btn_modify").click(function(){
+                var userOrderPayId = $(this).attr("idvalue");
+                window.location.href = "/default.php?secu=manage&mod=user_order_send&m=modify&user_order_pay_id="+userOrderPayId+"&user_order_id={UserOrderId}";
+            });
+
+
             var isCreate = true;
             var isModify = true;
             $(".modify_accept_time").datetimepicker({
@@ -203,16 +214,18 @@
 <body>
 <div class="div_list">
     <div style="width:100%;">
-        <input id="create" class="btn2" value="新增发货信息" title="新增发货信息" type="button"/>
+        <input id="btn_create" class="btn2" value="新增发货信息" title="新增发货信息" type="button"/>
     </div>
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
-        <tr  class="grid_title2">
+        <tr class="grid_title2">
+            <td class="spe_line" height="30" width="40" align="center">编辑</td>
             <td class="spe_line" height="30" width="80" align="center">接收人姓名</td>
-            <td class="spe_line" height="30" width="600" align="center">接收地址</td>
+            <td class="spe_line" height="30" align="center">接收地址</td>
             <td class="spe_line" height="30" width="100" align="center">接收人电话</td>
             <td class="spe_line" height="30" width="165" align="center">接收时间</td>
             <td class="spe_line" height="30" width="100" align="center">送货公司名称</td>
-            <td class="spe_line" height="30" align="center"></td>
+            <td class="spe_line" height="30" width="100" align="center">送货人</td>
+            <td class="spe_line" height="30" width="140" align="center">发货时间</td>
         </tr>
     </table>
     <ul id="type_list">
@@ -222,11 +235,14 @@
                 <li>
                 <table class="grid" width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item2" id="user_order_send_{f_UserOrderSendId}">
+                            <td class="spe_line" height="30" width="40" align="center">
+                                <img class="btn_modify" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_UserOrderSendId}" alt="编辑"/>
+                            </td>
                             <td class="spe_line" height="30" width="80" align="center">
                                 <div id="accept_person_name_{f_UserOrderSendId}">{f_AcceptPersonName}</div>
                                 <input type="text" value="{f_AcceptPersonName}" class="input_box" id="modify_accept_person_name_{f_UserOrderSendId}" style="display:none;width:70px"/>
                             </td>
-                            <td class="spe_line" height="30" width="600" align="center">
+                            <td class="spe_line" height="30" align="center">
                                 <div id="accept_address_{f_UserOrderSendId}">{f_AcceptAddress}</div>
                                 <input type="text" value="{f_AcceptAddress}" class="input_box" id="modify_accept_address_{f_UserOrderSendId}" style="display:none;width:590px"/>
                             </td>
@@ -242,19 +258,8 @@
                                 <div id="send_company_{f_UserOrderSendId}">{f_SendCompany}</div>
                                 <input type="text" id="modify_send_company_{f_UserOrderSendId}" value="{f_SendCompany}" class="input_box" style="display:none;width:90px"/>
                             </td>
-                            <td class="spe_line" height="30" align="center" id="operator_{f_UserOrderSendId}">
-                                <div id="operator_div_{f_UserOrderSendId}">
-                                    <div idvalue="{f_UserOrderSendId}" class="modify btn" style="float:left">修改</div>
-                                    <div style="width:5px;height:20px;float:left"></div>
-                                    <div idvalue="{f_UserOrderSendId}" class="delete btn" style="float:left">删除</div>
-                                </div>
-                                <div id="modify_div_{f_UserOrderSendId}" style="display:none">
-                                    <div class="confirm_modify btn" idvalue="{f_UserOrderSendId}" style="float:left">确定</div>
-                                    <div style="width:5px;height:20px;float:left"></div>
-                                    <div class="cancel_modify btn" idvalue="{f_UserOrderSendId}" style="float:left">取消</div>
-                                </div>
-                                <div style="clear:left"></div>
-                            </td>
+                            <td class="spe_line" height="30" width="100" align="center">{f_SendPersonName}</td>
+                            <td class="spe_line" height="30" width="140" align="center">{f_SendTime}</td>
                         </tr>
                     </table>
                 </li>

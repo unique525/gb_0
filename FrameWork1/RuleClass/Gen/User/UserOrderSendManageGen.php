@@ -15,6 +15,12 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $result = "";
         $method = Control::GetRequest("m","");
         switch($method){
+            case "create":
+                $result = self::GenCreate();
+                break;
+            case "modify":
+                $result = self::GenModify();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
@@ -31,6 +37,120 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
+
+
+    private function GenCreate(){
+        $manageUserId = Control::GetManageUserId();
+        $userOrderId = Control::GetRequest("user_order_id", 0);
+        $resultJavaScript = "";
+
+        if ($manageUserId > 0 && $userOrderId>0) {
+            $userOrderSendManageData = new UserOrderSendManageData();
+            $templateContent = Template::Load("user/user_order_send_deal.html", "common");
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+
+            if (!empty($_POST)) {
+
+                $httpPostData = $_POST;
+
+                $userOrderPayId = $userOrderSendManageData->Create($httpPostData, $userOrderId, $manageUserId);
+                //加入操作日志
+                $operateContent = 'Create User Order Send,POST FORM:' . implode('|', $_POST) . ';\r\nResult:User Order Send Id:' . $userOrderPayId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($userOrderPayId > 0) {
+                    $userOrderManageData = new UserOrderManageData();
+                    $siteId = $userOrderManageData->GetSiteId($userOrderId, true);
+                    //返回列表页
+                    Control::GoUrl("/default.php?secu=manage&mod=user_order_send&m=list&user_order_id=$userOrderId&site_id=$siteId&p=1");
+
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order_send', 3)); //新增失败！
+
+                }
+
+            }
+
+            $fields = $userOrderSendManageData->GetFields();
+            parent::ReplaceWhenCreate($templateContent, $fields);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $templateContent = preg_replace($patterns, "", $templateContent);
+
+            parent::ReplaceEnd($templateContent);
+
+
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+
+        } else {
+            $templateContent = Language::Load("user_order_send", 9);
+        }
+        return $templateContent;
+    }
+
+    /**
+     * 编辑
+     * @return string 模板内容页面
+     */
+    private function GenModify()
+    {
+        $tempContent = Template::Load("user/user_order_send_deal.html", "common");
+        $userOrderSendId = Control::GetRequest("user_order_send_id", 0);
+        $resultJavaScript = "";
+        $manageUserId = Control::GetManageUserId();
+
+        //判断权限
+
+
+        /////////////////////////////////////////
+
+        if ($userOrderSendId > 0 && $manageUserId > 0) {
+
+            parent::ReplaceFirst($tempContent);
+
+            $userOrderSendManageData = new UserOrderSendManageData();
+
+            //加载原有数据
+            $arrOne = $userOrderSendManageData->GetOne($userOrderSendId);
+            Template::ReplaceOne($tempContent, $arrOne);
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $userOrderSendManageData->Modify($httpPostData, $userOrderSendId);
+                //加入操作日志
+                $operateContent = 'Modify UserOrderSend,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/user_order_send_data');
+
+                    $userOrderId = $userOrderSendManageData->GetUserOrderId($userOrderSendId, true);
+                    $userOrderManageData = new UserOrderManageData();
+                    $siteId = $userOrderManageData->GetSiteId($userOrderId, true);
+
+                    //返回列表页
+                    Control::GoUrl("/default.php?secu=manage&mod=user_order_send&m=list&user_order_id=$userOrderId&site_id=$siteId&p=1");
+
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order_send', 5)); //编辑失败！
+                }
+            }
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
+
+
 
     private function GenList(){
         $siteId = Control::GetRequest("site_id",0);

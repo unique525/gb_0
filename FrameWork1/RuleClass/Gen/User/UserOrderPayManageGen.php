@@ -53,7 +53,7 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
 
                 $userOrderPayId = $userOrderPayManageData->Create($httpPostData, $userOrderId, $manageUserId);
                 //加入操作日志
-                $operateContent = 'Create User Order Pay,POST FORM:' . implode('|', $_POST) . ';\r\nResult:siteId:' . $userOrderPayId;
+                $operateContent = 'Create User Order Pay,POST FORM:' . implode('|', $_POST) . ';\r\nResult:User Order Pay Id:' . $userOrderPayId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($userOrderPayId > 0) {

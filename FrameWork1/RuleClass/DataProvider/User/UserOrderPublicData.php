@@ -117,6 +117,30 @@ class UserOrderPublicData extends BasePublicData
     }
 
 
+    /**
+     * 修改订单编号
+     * @param int $userOrderId 订单id
+     * @param string $userOrderNumber 订单编号
+     * @param string $userOrderNumberDes 订单编号加密
+     * @return int 操作结果
+     */
+    public function ModifyUserOrderNumber($userOrderId, $userOrderNumber, $userOrderNumberDes)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `UserOrderNumber`=:UserOrderNumber,UserOrderNumberDes=:UserOrderNumberDes WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("UserOrderNumber", $userOrderNumber);
+            $dataProperty->AddField("UserOrderNumberDes", $userOrderNumberDes);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
 
 
     /**
