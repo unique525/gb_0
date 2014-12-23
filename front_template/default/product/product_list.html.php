@@ -133,7 +133,7 @@
             <span class="fl">最近浏览</span><a href="javascript:;" id="hrefClear"  class="fr mr5" >清空</a></div>
         <div class="clear">    </div>
         <ul id="explore_list">
-            <icms id="user_explore_1" type="user_explore_list" top="3">
+            <icms id="user_explore_1" type="user_explore_list" top="5">
                 <item>
                     <![CDATA[
                     <li><a class="lookpic" href="{f_Url}" target="_blank" title="">

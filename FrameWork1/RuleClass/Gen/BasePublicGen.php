@@ -976,6 +976,12 @@ class BasePublicGen extends BaseGen {
 
                     //限制$tagTopCount
                     $arrList = array();
+
+                    if($tagTopCount > count($userExploreCollection->UserExplores)){
+                        $tagTopCount = count($userExploreCollection->UserExplores);
+                    }
+
+
                     if($tagTopCount>0){
                         for($x = 0; $x<$tagTopCount; $x++){
 
