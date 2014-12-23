@@ -477,7 +477,7 @@
             <a  id="id_1" alt="1" class="tab cur" tabindex="0" href="javascript:;">商品介绍</a>
             <a  id="id_2" alt="2" class="tab"  href="javascript:;" tabindex="1">属性</a>
             <a  id="id_3" alt="3" class="tab"  href="javascript:;">评价
-                <em id="total_appraisal">661</em>
+                <em id="total_appraisal">0</em>
             </a></li>
     </ul>
     <div id="tabdiv1" class="gdmsgcont" >
