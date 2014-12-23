@@ -61,14 +61,22 @@
                 <td class="spe_line" style="height:40px;" align="right">签收人：</td>
                 <td class="spe_line"><input type="text" class="input_box" id="f_AcceptPersonName" value="{AcceptPersonName}" name="f_AcceptPersonName"/></td>
                 <td class="spe_line" align="right">收货地址：</td>
-                <td class="spe_line"><input type="text" class="input_box" id="f_AcceptAddress" value="{AcceptAddress}" name="f_AcceptAddress"/></td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_AcceptAddress" style="width:200px;" value="{AcceptAddress}" name="f_AcceptAddress"/></td>
             </tr>
             <tr>
                 <td class="spe_line" style="height:40px;" align="right">收货时间：</td>
                 <td class="spe_line"><input type="text" class="input_box" id="f_AcceptTime" value="{AcceptTime}" name="f_AcceptTime"/></td>
-                <td class="spe_line" align="right">备注：</td>
+                <td class="spe_line" align="right">签收人电话：</td>
                 <td class="spe_line">
-                    <input type="text" class="input_box" id="f_Remark" value="{Remark}" name="f_Remark"/>
+                    <input type="text" class="input_box" id="f_AcceptTel" value="{AcceptTel}" name="f_AcceptTel"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" style="height:40px;" align="right">备注：</td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_Remark" value="{Remark}" name="f_Remark"/></td>
+                <td class="spe_line" align="right"></td>
+                <td class="spe_line">
+
                 </td>
             </tr>
         </table>
