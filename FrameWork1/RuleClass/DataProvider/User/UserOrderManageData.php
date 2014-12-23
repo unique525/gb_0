@@ -141,4 +141,28 @@ class UserOrderManageData extends BaseManageData{
         }
         return $result;
     }
+
+
+    /**
+     * 取得订单状态
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单状态
+     */
+    public function GetSiteId($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_site_id.cache_' . $userOrderId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
 }

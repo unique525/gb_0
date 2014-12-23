@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <module id="1"><content><![CDATA[添加成功!]]></content></module>
+    <module id="2"><content><![CDATA[添加失败!]]></content></module>
+    <module id="3"><content><![CDATA[编辑成功!]]></content></module>
+    <module id="4"><content><![CDATA[编辑失败!]]></content></module>
+    <module id="5"><content><![CDATA[删除成功!]]></content></module>
+    <module id="6"><content><![CDATA[删除失败!]]></content></module>
+    <module id="7"><content><![CDATA[没有订单数据!]]></content></module>
+    <module id="8"><content><![CDATA[参数错误!]]></content></module>
+    <module id="9"><content><![CDATA[您没有操作此功能的权限!]]></content></module>
+</root>

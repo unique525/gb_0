@@ -7,54 +7,76 @@
     <style type="text/css">
 
     </style>
+    <script type="text/javascript">
+        <!--
+
+        $(function () {
+            $("#f_PayDate").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                showButtonPanel: true
+            });
+            $("#f_ConfirmDate").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 1,
+                showButtonPanel: true
+            });
+        });
+
+        function submitForm() {
+            $('#mainForm').submit();
+        }
+        function cancel(){
+            window.history.back();
+        }
+        -->
+    </script>
 </head>
 <body>
 <div class="div_list">
     {common_body_deal}
-    <form id="userOrderPayForm"
-          action="/default.php?secu=manage&mod=user_order_pay&m={method}&user_order_pay_id={UserOrderPayId}&user_order_id={UserOrderId}&site_id={SiteId}"
+    <form id="mainForm"
+          action="/default.php?secu=manage&mod=user_order_pay&m={method}&user_order_pay_id={UserOrderPayId}&user_order_id={UserOrderId}"
           method="post">
         <table border="0" width="99%" align="center" cellpadding="0" cellspacing="0">
             <tr>
-                <td class="spe_line" align="right">支付方式：</td>
+                <td class="spe_line" style="height:40px;" align="right">支付方式：</td>
                 <td class="spe_line"><input type="text" class="input_box" id="f_PayWay" value="{PayWay}" name="f_PayWay"/> （银行、第三方支付等名称）</td>
                 <td class="spe_line" align="right">支付价格：</td>
                 <td class="spe_line"><input type="text" class="input_price" id="f_PayPrice" value="{PayPrice}" name="f_PayPrice"/>元</td>
             </tr>
             <tr>
-                <td class="spe_line" align="right">商品价格：</td>
-                <td class="spe_line">{ProductPrice}元</td>
-                <td class="spe_line" align="right">购买价：</td>
+                <td class="spe_line" style="height:40px;" align="right">支付时间：</td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_PayDate" value="{PayDate}" name="f_PayDate"/></td>
+                <td class="spe_line" align="right">交易类型：</td>
                 <td class="spe_line">
-
-                </td>
-            </tr>
-            <tr>
-                <td class="spe_line" align="right">数量：</td>
-                <td class="spe_line">
-                    <input type="text" class="input_number" id="SaleCount" value="{SaleCount}" name="f_SaleCount"/>
-                </td>
-                <td class="spe_line" align="right">是否自动发货：</td>
-                <td class="spe_line">
-                    <select id="f_AutoSendMessage" name="f_AutoSendMessage">
-                        <option value="否">否</option>
-                        <option value="是">是</option>
+                    <select id="f_PayType" name="f_PayType">
+                        <option value="0">收款</option>
+                        <option value="10">退款</option>
                     </select>
-                    {s_AutoSendMessage}
+                    {s_PayType}
                 </td>
             </tr>
             <tr>
-                <td class="spe_line" align="right">小计：</td>
-                <td class="spe_line" colspan="3" id="display_subtotal">
-                    {Subtotal}元
+                <td class="spe_line" style="height:40px;" align="right">确认支付方式：</td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_ConfirmWay" value="{ConfirmWay}" name="f_ConfirmWay"/> （银行、第三方支付等名称）</td>
+                <td class="spe_line" align="right">确认支付价格：</td>
+                <td class="spe_line"><input type="text" class="input_price" id="f_ConfirmPrice" value="{ConfirmPrice}" name="f_ConfirmPrice"/>元</td>
+            </tr>
+            <tr>
+                <td class="spe_line" style="height:40px;" align="right">确认支付时间：</td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_ConfirmDate" value="{ConfirmDate}" name="f_ConfirmDate"/></td>
+                <td class="spe_line" align="right">备注：</td>
+                <td class="spe_line">
+                    <input type="text" class="input_box" id="f_Remark" value="{Remark}" name="f_Remark"/>
                 </td>
             </tr>
         </table>
-        <input type="hidden" id="Subtotal" value="" name="f_Subtotal"/>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td height="60" align="center">
-                    <input class="btn" value="确认" type="button" onclick="submitUserProductForm()"/>
+                    <input class="btn" value="确认" type="button" onclick="submitForm()"/>
+                    <input class="btn" value="取消" type="button" onclick="cancel()"/>
                 </td>
             </tr>
         </table>

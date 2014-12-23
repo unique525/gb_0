@@ -18,6 +18,12 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
         $result = "";
         $method = Control::GetRequest("m", "");
         switch($method){
+            case "create":
+                $result = self::GenCreate();
+                break;
+            case "modify":
+                $result = self::GenModify();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
@@ -28,6 +34,117 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
+
+    private function GenCreate(){
+        $manageUserId = Control::GetManageUserId();
+        $userOrderId = Control::GetRequest("user_order_id", 0);
+        $resultJavaScript = "";
+
+        if ($manageUserId > 0 && $userOrderId>0) {
+            $userOrderPayManageData = new UserOrderPayManageData();
+            $templateContent = Template::Load("user/user_order_pay_deal.html", "common");
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+
+            if (!empty($_POST)) {
+
+                $httpPostData = $_POST;
+
+                $userOrderPayId = $userOrderPayManageData->Create($httpPostData, $userOrderId, $manageUserId);
+                //加入操作日志
+                $operateContent = 'Create User Order Pay,POST FORM:' . implode('|', $_POST) . ';\r\nResult:siteId:' . $userOrderPayId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($userOrderPayId > 0) {
+                    $userOrderManageData = new UserOrderManageData();
+                    $siteId = $userOrderManageData->GetSiteId($userOrderId, true);
+                    //返回列表页
+                    Control::GoUrl("/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=$userOrderId&site_id=$siteId&p=1");
+
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order_pay', 2)); //新增失败！
+
+                }
+
+            }
+
+            $fields = $userOrderPayManageData->GetFields();
+            parent::ReplaceWhenCreate($templateContent, $fields);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $templateContent = preg_replace($patterns, "", $templateContent);
+
+            parent::ReplaceEnd($templateContent);
+
+
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+
+        } else {
+            $templateContent = Language::Load("user_order_pay", 8);
+        }
+        return $templateContent;
+    }
+
+    /**
+     * 编辑
+     * @return string 模板内容页面
+     */
+    private function GenModify()
+    {
+        $tempContent = Template::Load("user/user_order_pay_deal.html", "common");
+        $userOrderPayId = Control::GetRequest("user_order_pay_id", 0);
+        $resultJavaScript = "";
+        $manageUserId = Control::GetManageUserId();
+
+        //判断权限
+
+
+        /////////////////////////////////////////
+
+        if ($userOrderPayId > 0 && $manageUserId > 0) {
+
+            parent::ReplaceFirst($tempContent);
+
+            $userOrderPayManageData = new UserOrderPayManageData();
+
+            //加载原有数据
+            $arrOne = $userOrderPayManageData->GetOne($userOrderPayId);
+            Template::ReplaceOne($tempContent, $arrOne);
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $userOrderPayManageData->Modify($httpPostData, $userOrderPayId);
+                //加入操作日志
+                $operateContent = 'Modify UserOrderPay,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/user_order_pay_data');
+
+                    $userOrderId = $userOrderPayManageData->GetUserOrderId($userOrderPayId, true);
+                    $userOrderManageData = new UserOrderManageData();
+                    $siteId = $userOrderManageData->GetSiteId($userOrderId, true);
+
+                    //返回列表页
+                    Control::GoUrl("/default.php?secu=manage&mod=user_order_pay&m=list&user_order_id=$userOrderId&site_id=$siteId&p=1");
+
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order_pay', 4)); //编辑失败！
+                }
+            }
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
 
     /**
      * AJAX 会员支付信息确认
@@ -72,6 +189,8 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
         if($userOrderId > 0){
             $templateContent = Template::Load("user/user_order_pay_list.html","common");
             parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
 
             $userOrderPayManageData = new UserOrderPayManageData();
 

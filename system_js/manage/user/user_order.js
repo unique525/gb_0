@@ -187,7 +187,7 @@ $(document).ready(function(){
         var idvalue = $(this).attr("idvalue");
         $(this).html(FormatOrderState(state,idvalue));
     });
-
+/**
     $(".span_order_pay_state").each(function(){
         var state = $(this).html();
         var idvalue = $(this).attr("idvalue");
@@ -202,7 +202,7 @@ $(document).ready(function(){
         }
 
     });
-
+*/
     var btnOrderProductEdit = $(".btn_order_product_edit");
     btnOrderProductEdit.css("cursor", "pointer");
     btnOrderProductEdit.click(function(event) {
