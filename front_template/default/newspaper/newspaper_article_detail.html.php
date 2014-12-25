@@ -160,7 +160,7 @@
                 <item>
                     <![CDATA[
                     <li>
-                        <img src="{f_UploadFilePath}" alt="{f_Remark}" style="max-height:300px;" />
+                        <img src="{f_UploadFilePath}" alt="{f_Remark}" />
                         <br />
                         {f_Remark}
                     </li>
