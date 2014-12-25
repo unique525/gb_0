@@ -167,7 +167,7 @@ class NewspaperArticleManageData extends BaseManageData {
         $sql = "SELECT * FROM " . self::TableName_NewspaperArticle . "
                         WHERE
                             NewspaperPageId = :NewspaperPageId
-                        ORDER BY Sort DESC,CreateDate
+                        ORDER BY Sort ,CreateDate
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
         $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperArticle . "
                         WHERE

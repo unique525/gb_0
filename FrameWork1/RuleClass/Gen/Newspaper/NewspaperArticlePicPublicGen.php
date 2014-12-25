@@ -31,12 +31,13 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
         $remark = str_ireplace("\r\n","",Control::PostRequest("Remark","",$removeXSS));
         $uploadFileId = intval(str_ireplace("\r\n","",Control::PostRequest("UploadFileId",0,$removeXSS)));
         $picMapping = str_ireplace("\r\n","",Control::PostRequest("PicMapping","",$removeXSS));
+        $fileName = str_ireplace("\r\n","",Control::PostRequest("FileName","",$removeXSS));
 
         if(
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
             $newspaperArticleId>0 &&
             $uploadFileId>0 &&
-            strlen($remark)>0 &&
+            strlen($fileName)>0 &&
             strlen($picMapping)>0
         )
         {
@@ -46,7 +47,8 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
                 $newspaperArticleId,
                 $remark,
                 $uploadFileId,
-                $picMapping
+                $picMapping,
+                $fileName
             );
 
             $mobileWidth = 640;
@@ -55,7 +57,18 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
 
             parent::GenUploadFileCompress1($uploadFileId, $mobileWidth,0, 80);
 
-            //$uploadFileManageData->ModifyIsBatchOperate($uploadFileId, 1);
+            //水印图
+            $siteId = parent::GetSiteIdByDomain();
+            if($siteId>0){
+                $siteConfigData = new SiteConfigData($siteId);
+                $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
+                if($watermarkUploadFileId>0){
+                    $uploadFileData = new UploadFileData();
+                    $watermarkUploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, true);
+                    parent::GenUploadFileWatermark1($uploadFileId, $watermarkUploadFilePath);
+                }
+            }
+
         }
 
         return $newspaperArticlePicId;

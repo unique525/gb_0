@@ -52,6 +52,16 @@
                 parent.addTab();
             });
 
+            $(".span_site_config").click(function (event) {
+                event.preventDefault();
+                var siteId=$(this).attr("idvalue");
+                var siteName=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=0' + '&site_id=' + siteId + '&site_name=' + siteName;
+                parent.G_TabTitle = siteName + '-站点配置';
+                parent.addTab();
+            });
+
+
 
 
             //格式化站点状态
@@ -167,6 +177,7 @@
                                 <span class="span_filter" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">过滤</span>
                                 <span class="span_ad" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">广告</span>
                                 <span class="span_ftp" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">ftp</span>
+                                <span class="span_site_config" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">配置</span>
                             </td>
                         </tr>
                     </table>

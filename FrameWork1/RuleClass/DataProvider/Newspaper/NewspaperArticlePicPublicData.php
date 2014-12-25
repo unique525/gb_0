@@ -15,17 +15,19 @@ class NewspaperArticlePicPublicData extends BasePublicData
      * @param string $remark
      * @param int $uploadFileId
      * @param string $picMapping
+     * @param string $fileName
      * @return int
      */
     public function CreateForImport(
         $newspaperArticleId,
         $remark,
         $uploadFileId,
-        $picMapping
+        $picMapping,
+        $fileName
     )
     {
 
-        $newspaperArticlePicId = self::GetNewspaperArticlePicIdForImport($remark, $newspaperArticleId);
+        $newspaperArticlePicId = self::GetNewspaperArticlePicIdForImport($fileName, $newspaperArticleId);
 
         if ($newspaperArticlePicId <= 0 && $newspaperArticleId > 0) {
             $sql = "INSERT INTO " . self::TableName_NewspaperArticlePic . "
@@ -34,13 +36,15 @@ class NewspaperArticlePicPublicData extends BasePublicData
                     Remark,
                     CreateDate,
                     UploadFileId,
-                    PicMapping
+                    PicMapping,
+                    FileName
                 ) VALUES (
                     :NewspaperArticleId,
                     :Remark,
                      now(),
                     :UploadFileId,
-                    :PicMapping
+                    :PicMapping,
+                    :FileName
 
                 );";
             $dataProperty = new DataProperty();
@@ -48,6 +52,7 @@ class NewspaperArticlePicPublicData extends BasePublicData
             $dataProperty->AddField("Remark", $remark);
             $dataProperty->AddField("UploadFileId", $uploadFileId);
             $dataProperty->AddField("PicMapping", $picMapping);
+            $dataProperty->AddField("FileName", $fileName);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         } else {
             $result = $newspaperArticlePicId;
@@ -57,19 +62,19 @@ class NewspaperArticlePicPublicData extends BasePublicData
     }
 
     /**
-     * @param string $remark
+     * @param string $fileName
      * @param int $newspaperArticleId
      * @return int
      */
-    public function GetNewspaperArticlePicIdForImport($remark, $newspaperArticleId)
+    public function GetNewspaperArticlePicIdForImport($fileName, $newspaperArticleId)
     {
         $result = -1;
-        if (strlen($remark) > 0 && $newspaperArticleId > 0) {
+        if (strlen($fileName) > 0 && $newspaperArticleId > 0) {
             $sql = "SELECT NewspaperArticlePicId FROM " . self::TableName_NewspaperArticlePic . "
-                        WHERE Remark=:Remark AND NewspaperArticleId=:NewspaperArticleId;";
+                        WHERE FileName=:FileName AND NewspaperArticleId=:NewspaperArticleId;";
 
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("Remark", $remark);
+            $dataProperty->AddField("FileName", $fileName);
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }

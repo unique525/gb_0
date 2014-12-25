@@ -63,7 +63,7 @@
 
                     <div id="pay_method_2" style="display:none;">
 
-                        <h2 style="line-height:300%;font-size:24px;">您的订单信息已经更新为货到付款状态，我们会及时给您发货，请耐心等待！</h2>
+                        <h2 style="line-height:300%;font-size:24px;">改为您的订单我们已经收到，我们将尽快为发出，预计您将于2天内收到货物。</h2>
 
                         <input id="btn_submit1" style="cursor:pointer;" type="button" class="btn_submit" value="转到首页"/>
                         <br /><br />
@@ -82,7 +82,6 @@
 
             <div class="red">温馨提示！</div>
             <div style="padding-top:15px;">
-                请选择一个支付方式进行付款！
             </div>
         </div>
 

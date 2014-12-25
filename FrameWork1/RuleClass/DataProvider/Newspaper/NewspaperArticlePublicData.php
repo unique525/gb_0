@@ -88,7 +88,8 @@ class NewspaperArticlePublicData extends BasePublicData
                     `FileName`,
                     `Abstract`,
                     `WordCount`,
-                    `PicMapping`
+                    `PicMapping`,
+                    `Sort`
                     ) VALUES (
                     :NewspaperPageId,
                     :NewspaperArticleTitle,
@@ -112,8 +113,11 @@ class NewspaperArticlePublicData extends BasePublicData
                     :FileName,
                     :Abstract,
                     :WordCount,
-                    :PicMapping
+                    :PicMapping,
+                    :Sort
                     );";
+
+            $sort = intval($no);
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
@@ -138,6 +142,7 @@ class NewspaperArticlePublicData extends BasePublicData
             $dataProperty->AddField("Abstract", $abstractInfo);
             $dataProperty->AddField("WordCount", $wordCount);
             $dataProperty->AddField("PicMapping", $picMapping);
+            $dataProperty->AddField("Sort", $sort);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         } else {
             $result = $newspaperArticleId;
@@ -217,12 +222,12 @@ class NewspaperArticlePublicData extends BasePublicData
 
         if ($newspaperPageId > 0 && !empty($topCount)) {
 
-            $orderBySql = 'Sort DESC, CreateDate DESC';
+            $orderBySql = 'Sort , CreateDate DESC';
 
             switch ($orderBy) {
 
                 case 0:
-                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    $orderBySql = 'Sort , CreateDate DESC';
                     break;
 
             }
@@ -291,12 +296,12 @@ class NewspaperArticlePublicData extends BasePublicData
 
         if ($newspaperPageId > 0) {
 
-            $orderBySql = 'Sort DESC, CreateDate DESC';
+            $orderBySql = 'Sort , CreateDate DESC';
 
             switch ($orderBy) {
 
                 case 0:
-                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    $orderBySql = 'Sort , CreateDate DESC';
                     break;
 
             }

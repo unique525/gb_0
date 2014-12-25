@@ -126,6 +126,9 @@
  * @property int $ActivityTitlePic3MobileWidth
  * @property int $ActivityTitlePic3PadWidth
  *
+ *
+ * @property string $NewspaperArticlePicWatermarkUploadFileId
+ *
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
@@ -272,7 +275,8 @@ class SiteConfigData extends BaseData {
      */
     private $ArrSiteConfigTypes_5 = array(
         "UserDefaultMaleAvatar",
-        "UserDefaultFemaleAvatar"
+        "UserDefaultFemaleAvatar",
+        "NewspaperArticlePicWatermark"
     );
 
     private $SiteId = 1;
@@ -418,7 +422,28 @@ class SiteConfigData extends BaseData {
     private $ActivityTitlePic2MobileWidth = 0; //为适配手机客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic2PadWidth = 0;    //为适配平板客户端，活动题图2的同比缩小宽度值
     private $ActivityTitlePic3MobileWidth = 0; //为适配手机客户端，活动题图3的同比缩小宽度值
-    private $ActivityTitlePic3PadWidth = 0;
+    private $ActivityTitlePic3PadWidth = 0;    //为适配平板客户端，活动题图3的同比缩小宽度值
+
+    private $NewspaperArticlePicWatermarkUploadFileId = 0;//报纸文章附件上传的图片中的水印图
+
+    /**
+     * @param mixed $NewspaperArticlePicWatermarkUploadFileId
+     */
+    public function setNewspaperArticlePicWatermarkUploadFileId($NewspaperArticlePicWatermarkUploadFileId)
+    {
+        $this->NewspaperArticlePicWatermarkUploadFileId = $NewspaperArticlePicWatermarkUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewspaperArticlePicWatermarkUploadFileId()
+    {
+        return $this->NewspaperArticlePicWatermarkUploadFileId;
+    }
+
+
+
 
     /**
      * @param mixed $UserAvatarMaxHeight
@@ -482,7 +507,7 @@ class SiteConfigData extends BaseData {
     public function getUserAvatarMinWidth()
     {
         return $this->UserAvatarMinWidth;
-    } //为适配平板客户端，活动题图3的同比缩小宽度值
+    }
 
 
 
