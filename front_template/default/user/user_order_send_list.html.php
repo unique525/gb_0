@@ -33,9 +33,9 @@
                             <td class="spe_line" style="text-align: center">送货人</td>
                             <td class="spe_line">送货时间</td>
                             <td class="spe_line">送货公司</td>
-                            <td class="spe_line">接收人</td>
-                            <td class="spe_line">接收地址</td>
-                            <td class="spe_line">接收电话</td>
+                            <td class="spe_line">签收人</td>
+                            <td class="spe_line">签收地址</td>
+                            <td class="spe_line">签收人电话</td>
                         </tr>
                         <icms id="user_order_send_list" type="list">
                             <item>

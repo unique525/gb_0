@@ -239,11 +239,12 @@ class Alipay
         $userOrderPublicData = new UserOrderPublicData();
         $userOrderId = $userOrderPublicData->GetUserOrderIdByUserOrderNumber($out_trade_no, true);
         $allPrice = $userOrderPublicData->GetAllPrice($userOrderId);
+        $userId = Control::GetUserId();
         if($userOrderId>0 && $allPrice>0){
             //已付款
             $orderState = UserOrderData::STATE_PAYMENT;
             //改变订单状态
-            $userOrderPublicData->ModifyState($userOrderId, $orderState);
+            $userOrderPublicData->ModifyState($userOrderId,$userId,$orderState);
             $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
             $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
             //增加订单付款记录

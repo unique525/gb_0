@@ -158,9 +158,9 @@
         <div class="clean"></div>
         <form id="main_form" action="/default.php?mod=product_comment&a=create&product_id={ProductId}&user_order_id={UserOrderId}" method="post">
             <div class="vote">
-                <input type="radio" name="appraisal" value="2"/><label>好评</label>
+                <input type="radio" name="appraisal" value="0"/><label>好评</label>
                 <input type="radio" name="appraisal" value="1"/><label>中评</label>
-                <input type="radio" name="appraisal" value="0"/><label>差评</label>
+                <input type="radio" name="appraisal" value="2"/><label>差评</label>
             </div>
             <div style="width:100%;">
                 <textarea style="width:100%;height:100px" name="content"></textarea>

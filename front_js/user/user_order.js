@@ -32,7 +32,7 @@ window.USER_ORDER_STATE_COMMENT_FINISHED = 31;
  */
 window.USER_ORDER_STATE_CLOSE = 40;
 /**
- * 状态：申请退款
+ * 状态：申请退货
  */
 window.USER_ORDER_STATE_APPLY_REFUND = 50;
 /**
@@ -86,7 +86,7 @@ function FormatOrderState(state,idvalue){
             result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">交易关闭</span>';
             break;
         case USER_ORDER_STATE_APPLY_REFUND:
-            result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">申请退款</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">申请退货</span>';
             break;
         case USER_ORDER_STATE_REFUND_FINISHED:
             result = '<span class="span_state" id="State_'+idvalue+'" style="color:red">退款完成</span>';
