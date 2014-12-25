@@ -6,6 +6,8 @@
  * @author yin
  */
 class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
+
+    const ERROR_STATE = -2;
     /**
      * @return string
      */
@@ -42,6 +44,9 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 break;
             case "alipay_return":
                 $result = self::AlipayReturn();
+                break;
+            case "async_modify_state":
+                $result = self::AsyncModifyState();
                 break;
         }
         return $result;
@@ -508,7 +513,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 //直接修改订单状态为货到付款
                 $state = UserOrderData::STATE_PAYMENT_AFTER_RECEIVE;
 
-                $userOrderPublicData->ModifyState($userOrderId, $state);
+                $userOrderPublicData->ModifyState($userOrderId,$userId,$state);
 
 
 
@@ -544,4 +549,29 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
     }
 
+    private function AsyncModifyState(){
+        $userId = Control::GetUserId();
+        $userOrderId = Control::GetRequest("user_order_id",0);
+        $state = Control::GetRequest("state",-1);
+
+        $result = -1;
+        if($userId > 0 && $userOrderId > 0 && $state > 0){
+            $userOrderPublicData = new UserOrderPublicData();
+            if($state == UserOrderData::STATE_APPLY_REFUND){
+                $nowState = $userOrderPublicData->GetState($userOrderId,false);
+                if(
+                    $nowState != UserOrderData::STATE_PAYMENT  ||
+                    $nowState != UserOrderData::STATE_SENT  ||
+                    $nowState != UserOrderData::STATE_DONE  ||
+                    $nowState != UserOrderData::STATE_COMMENT_FINISHED  ||
+                    $nowState != UserOrderData::STATE_UNCOMMENT
+                ){
+                    return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_STATE.'})';
+                }
+            }
+            $result = $userOrderPublicData->ModifyState($userOrderId,$userId,$state);
+        }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+    }
 }

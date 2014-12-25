@@ -54,6 +54,41 @@
                     break;
             }
 
+            $(".apply_return_btn").click(function(){
+                var state =USER_ORDER_STATE_APPLY_REFUND;
+                var idvalue = $(this).attr("idvalue");
+                $.ajax({
+                    url:"/default.php?mod=user_order&a=async_modify_state&user_order_id="+idvalue+"&state="+state,
+                    dataType:"jsonp",
+                    jsonp:"jsonpcallback",
+                    success:function(data){
+                        if(data["result"] > 0){
+                            $("#span_state_"+idvalue).html(FormatOrderState(state,idvalue));
+                        }else if(data["result"] == -2){
+                            alert("当前订单不能申请退货");
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                });
+            });
+
+            $(".cancel_order_btn").click(function(){
+                var state =USER_ORDER_STATE_CLOSE;
+                var idvalue = $(this).attr("idvalue");
+                $.ajax({
+                    url:"/default.php?mod=user_order&a=async_modify_state&user_order_id="+idvalue+"&state="+state,
+                    dataType:"jsonp",
+                    jsonp:"jsonpcallback",
+                    success:function(data){
+                        if(data["result"] > 0){
+                            $("#span_state_"+idvalue).html(FormatOrderState(state,idvalue));
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                });
+            });
         });
     </script>
 </head>
@@ -110,8 +145,12 @@
                                             <td class="all_price">{f_AllPrice}</td>
                                             <td class="send_price">{f_SendPrice}</td>
                                             <td class="create_date">{f_CreateDate}</td>
-                                            <td class="state"><span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span></td>
-                                            <td class="option"><a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a></td>
+                                            <td class="state"><span class="span_state" id="span_state_{f_UserOrderId}" idvalue="{f_UserOrderId}">{f_State}</span></td>
+                                            <td class="option">
+                                                <a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a>
+                                                <input type="button" class="btn apply_return_btn" idvalue="{f_UserOrderId}" value="申请退货">
+                                                <input type="button" class="btn cancel_order_btn" idvalue="{f_UserOrderId}" value="取消订单">
+                                            </td>
                                         </tr>
                                     </table>
                                     ]]></item>
