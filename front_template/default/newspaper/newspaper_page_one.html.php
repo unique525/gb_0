@@ -72,10 +72,10 @@
                 else
                     $("#select_page").hide();
             });
-            $(".page_button").click(function(){
-                var newspaperPageId=$(this).attr("idvalue");
-                window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id='+newspaperPageId
-            });
+            //$(".page_button").click(function(){
+                //var newspaperPageId=$(this).attr("idvalue");
+                //window.location.href = '/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id='+newspaperPageId
+            //});
         });
     </script>
     <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
@@ -97,7 +97,7 @@
             <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
                     <td style="text-align:center;cursor:pointer"><a style="color:#ffffff;" href="/">首页</a>
-                        <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:20px;display:none">
+                        <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none">
                             <ul>
                                 <icms id="newspaper_page" type="list" >
                                     <item>
