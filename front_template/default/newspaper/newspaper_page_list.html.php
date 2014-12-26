@@ -21,9 +21,7 @@
     </style>
     <script type="text/javascript">
         $(function() {
-            $("#do-not-say-1").attr("class","am-panel-collapse am-collapse am-in");
-
-
+            //$("#do-not-say-1").attr("class","am-panel-collapse am-collapse am-in");
         });
     </script>
 </head>

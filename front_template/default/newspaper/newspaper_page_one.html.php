@@ -104,7 +104,7 @@
                                         <![CDATA[
                                         <li class="page_button" idvalue="{f_NewspaperPageId}">
                                             <a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={f_NewspaperPageId}">
-                                                {f_NewspaperPageName}
+                                                {f_NewspaperPageName}({f_NewspaperPageNo})
                                             </a>
                                         </li>
                                         ]]>
