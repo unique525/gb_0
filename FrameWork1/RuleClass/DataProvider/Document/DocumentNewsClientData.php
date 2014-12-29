@@ -33,25 +33,25 @@ class DocumentNewsClientData extends BaseClientData {
         $dataProperty->AddField("ChannelId", $channelId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             if ($searchType == 0) { //标题
-                $searchSql = " AND (DocumentNewsTitle like :SearchKey)";
+                $searchSql = " AND (dn.DocumentNewsTitle like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else if ($searchType == 1) { //来源
-                $searchSql = " AND (SourceName like :SearchKey)";
+                $searchSql = " AND (dn.SourceName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else if ($searchType == 2) { //发布人
-                $searchSql = " AND (ManageUserName like :SearchKey)";
+                $searchSql = " AND (dn.ManageUserName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else if ($searchType == 3) { //标签
-                $searchSql = " AND (DocumentNewsTag like :SearchKey)";
+                $searchSql = " AND (dn.DocumentNewsTag like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else if ($searchType == 4) { //投稿人
-                $searchSql = " AND (UserName like :SearchKey)";
+                $searchSql = " AND (dn.UserName like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else { //模糊
-                $searchSql = " AND (DocumentNewsTitle LIKE :SearchKey1
-                                    OR ManageUserName LIKE :SearchKey2
-                                    OR UserName LIKE :SearchKey3
-                                    OR DocumentNewsTag LIKE :SearchKey4)";
+                $searchSql = " AND (dn.DocumentNewsTitle LIKE :SearchKey1
+                                    OR dn.ManageUserName LIKE :SearchKey2
+                                    OR dn.UserName LIKE :SearchKey3
+                                    OR dn.DocumentNewsTag LIKE :SearchKey4)";
                 $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
@@ -61,13 +61,84 @@ class DocumentNewsClientData extends BaseClientData {
 
         $sql = "
             SELECT
-            DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
-            CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,
-            RecLevel,Hit,DocumentNewsContent
+                dn.DocumentNewsId,
+                dn.DocumentNewsType,
+                dn.DocumentNewsTitle,
+                dn.DocumentNewsShortTitle,
+                dn.DocumentNewsSubTitle,
+                dn.DocumentNewsCiteTitle,
+                dn.DocumentNewsIntro,
+                dn.State,
+                dn.Sort,
+                dn.ChannelId,
+                dn.PublishDate,
+                dn.CreateDate,
+                dn.ManageUserId,
+                dn.ManageUserName,
+                dn.UserId,
+                dn.UserName,
+                dn.DocumentNewsTitleColor,
+                dn.DocumentNewsTitleBold,
+                dn.RecLevel,
+                dn.Hit,
+                dn.DocumentNewsContent,
+                dn.Author,
+                dn.DirectUrl,
+                dn.ShowDate,
+                dn.SourceName,
+                dn.DocumentNewsMainTag,
+                dn.DocumentNewsTag,
+                dn.TitlePic1UploadFileId,
+                dn.TitlePic2UploadFileId,
+                dn.TitlePic3UploadFileId,
+                dn.OpenComment,
+                dn.ShowHour,
+                dn.ShowMinute,
+                dn.ShowSecond,
+                dn.IsHot,
+                dn.CommentCount,
+
+                        uf1.UploadFilePath AS TitlePic1UploadFilePath,
+                        uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+                        uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+                        uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+                        uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+                        uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+                        uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+                        uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+                        uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+                        uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+                        uf2.UploadFilePath AS TitlePic2UploadFilePath,
+                        uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+                        uf2.UploadFilePadPath AS TitlePic1Up2oadFilePadPath,
+                        uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+                        uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+                        uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+                        uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+                        uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+                        uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+                        uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+                        uf3.UploadFilePath AS TitlePic3UploadFilePath,
+                        uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+                        uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+                        uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+                        uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+                        uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+                        uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+                        uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+                        uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+                        uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2
             FROM
-            " . self::TableName_DocumentNews . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . "
-            ORDER BY Sort Sort DESC, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            " . self::TableName_DocumentNews . " dn
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+            WHERE dn.ChannelId=:ChannelId AND dn.State<100 " . $searchSql . "
+            ORDER BY dnSort DESC, dn.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
