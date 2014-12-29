@@ -76,7 +76,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthority = new ManageUserAuthorityManageData();
-            $can = $manageUserAuthority->CanCreate($siteId, $channelId, $manageUserId);
+            $can = $manageUserAuthority->CanChannelCreate($siteId, $channelId, $manageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
@@ -166,7 +166,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthority = new ManageUserAuthorityManageData();
             //编辑权限
-            $can = $manageUserAuthority->CanModify($siteId, $channelId, $nowManageUserId);
+            $can = $manageUserAuthority->CanChannelModify($siteId, $channelId, $nowManageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";
@@ -175,7 +175,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
 
             $createUserId = $customFormManageData->GetManageUserId($customFormId,FALSE);
             if ($createUserId !== $nowManageUserId) { //操作人不是发布人
-                $can = $manageUserAuthority->CanDoOthers($siteId, $channelId, $nowManageUserId);
+                $can = $manageUserAuthority->CanChannelDoOthers($siteId, $channelId, $nowManageUserId);
                 if ($can != 1) {
                     Control::ShowMessage(Language::Load('custom_form', 3));
                     return "";
@@ -252,7 +252,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $siteId = $channelData->GetSiteId($channelId,FALSE);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
-        $can = $manageUserAuthority->CanExplore($siteId, $channelId, $manageUserId);
+        $can = $manageUserAuthority->CanChannelExplore($siteId, $channelId, $manageUserId);
         if ($can != 1) {
             Control::ShowMessage(Language::Load('custom_form', 3));//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
             return "";
@@ -267,7 +267,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         $searchKey = urldecode($searchKey);
         if (isset($searchKey) && strlen($searchKey) > 0) {
             ///////////////判断是否有操作权限///////////////////
-            $can = $manageUserAuthority->CanSearch($siteId, $channelId, $manageUserId);
+            $can = $manageUserAuthority->CanChannelSearch($siteId, $channelId, $manageUserId);
             if ($can != 1) {
                 Control::ShowMessage(Language::Load('custom_form', 3));
                 return "";

@@ -9,43 +9,9 @@
  */
 class CustomFormContentPublicData extends BaseManageData {
 
-    /**
-     * 新增表单记录的内容
-     * @param array $_POST post数组
-     * @param int $customFormRecordId 表单记录id
-     * @return int 执行结果
-     *
-    public function Create($_POST,$customFormRecordId) {
-        $result="-1";
-        if (!empty($_POST)) {
-            $result="";
-            $dataProperty = new DataProperty();
-            foreach ($_POST as $key => $value) {
-                //读取表单 cf_customFormId_customFormFieldId
-                if (strpos($key, "cf_") === 0) { //
-                    $arr = Format::ToSplit($key, '_');
-                    if (count($arr) == 3) {
-                        $customFormId = $arr[1];
-                        $customFormFieldId = $arr[2];
-                        //为数组则转化为逗号分割字符串,对应checkbox应用
-                        if (is_array($value)) {
-                            $value = implode(",", $value);
-                        }
-                        $value = stripslashes($value);
-                        $insertId = self::SqlInsertCustomFormContent($dataProperty, $customFormRecordId, $customFormId, $customFormFieldId, -1, $value);
-                        if($insertId<0){
-                            $result.="_".$customFormFieldId;
-                        }
-                    }
-                }
-            }
-        }
-        return $result;
 
-    }
     /**
      * 新增表单记录的内容
-     * @param object $dataProperty
      * @param int $customFormRecordId 被操作的表单记录的id
      * @param int $customFormId 被操作的表单的id
      * @param int $customFormFieldId 被操作的表单字段id
@@ -54,7 +20,7 @@ class CustomFormContentPublicData extends BaseManageData {
      * @param int $customFormFieldType 字段类型
      * @return int 执行结果
      */
-    public function SqlInsertCustomFormContent(&$dataProperty, $customFormRecordId, $customFormId, $customFormFieldId, $userId=-1, $content, $customFormFieldType = 1) {
+    public function Create($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content, $customFormFieldType = 1) {
         $result=-1;
         if($customFormRecordId>0&&$customFormId>0&&$customFormFieldId>0){
             $dataProperty = new DataProperty();
@@ -63,7 +29,7 @@ class CustomFormContentPublicData extends BaseManageData {
             $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
             $dataProperty->AddField("UserId", $userId);
 
-
+            $sql="";
 
             switch ($customFormFieldType) {
                 case 0:
@@ -86,19 +52,8 @@ class CustomFormContentPublicData extends BaseManageData {
                     $dataProperty->AddField("ContentOfDatetime", $content);
                     $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfDatetime) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfDatetime) ;";
                     break;
-                case 5:
-                    if (!empty($_FILES)) {
-                        if (!empty($_FILES["file_attachment"]["tmp_name"])) {
-                            $fileName = $_FILES["file_attachment"]["tmp_name"];
-                            $attachment = file_get_contents($fileName);
-                            $dataProperty->AddField("ContentOfBlob", $attachment);
-                            $sql = "INSERT INTO " . self::TableName_CustomFormContent . " (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob) VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob) ;";
-                        }
-                    }
-                    break;
             }
-
-            if (!empty($sql)) {
+            if ($sql!="") {
                 $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
             }
         }
@@ -107,6 +62,21 @@ class CustomFormContentPublicData extends BaseManageData {
 
 
 
+    /**
+     * 按CustomFormRecordId 删除该表单下所有记录的内容
+     * @param int $customFormRecordId 被操作的表单记录的id
+     * @return int 执行结果
+     */
+    public function Delete($customFormRecordId) {
+        $result="-1";
+        if($customFormRecordId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
+            $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 按$customFormRecordId获取表单记录下所有记录内容的列表
@@ -121,6 +91,39 @@ class CustomFormContentPublicData extends BaseManageData {
             $sql = "SELECT * FROM " . self::TableName_CustomFormContent . " WHERE CustomFormRecordId=:CustomFormRecordId ORDER BY Sort DESC ;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
+        return $result;
+    }
+
+    /**
+     * 创建附件
+     * @param int $customFormRecordId 被操作的表单记录的id
+     * @param int $customFormId 被操作的表单的id
+     * @param int $customFormFieldId 被操作的表单字段id
+     * @param int $userId 操作用户的id
+     * @param mixed $content 新增的内容
+     * @param int $fileName 格式化文件名 存入ContentOfText字段
+     * @param int $fileType 文件type 存入ContentOfString字段
+     * @return int 新增id
+     */
+    public function CreateAttachment($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content, $fileName, $fileType){
+        $result = -1;
+        if($customFormRecordId>0&&$customFormId>0&&$customFormFieldId>0 && !empty($content)){
+            $sql = "INSERT INTO
+                        " . self::TableName_CustomFormContent . "
+                    (CustomFormRecordId,CustomFormId,CustomFormFieldId,UserId,ContentOfBlob,ContentOfText,ContentOfString)
+                    VALUES (:CustomFormRecordId,:CustomFormId,:CustomFormFieldId,:UserId,:ContentOfBlob,:ContentOfText,:ContentOfString) ;";
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("attachment", $attachment, PDO::PARAM_LOB);
+            $dataProperty->AddField("ContentOfBlob", $content);
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("ContentOfText", $fileName);
+            $dataProperty->AddField("ContentOfString", $fileType);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+
         return $result;
     }
 
