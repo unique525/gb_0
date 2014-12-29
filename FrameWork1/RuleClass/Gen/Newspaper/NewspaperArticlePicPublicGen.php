@@ -64,7 +64,7 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
                 $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
                 if($watermarkUploadFileId>0){
                     $uploadFileData = new UploadFileData();
-                    $watermarkUploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, true);
+                    $watermarkUploadFilePath = $uploadFileData->GetUploadFilePath($watermarkUploadFileId, true);
                     parent::GenUploadFileWatermark1($uploadFileId, $watermarkUploadFilePath);
                 }
             }

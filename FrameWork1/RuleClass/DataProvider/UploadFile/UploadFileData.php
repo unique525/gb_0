@@ -264,11 +264,6 @@ class UploadFileData extends BaseData
      */
     const UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC = 350;
 
-    /**
-     * 报纸文章附件上传的图片中的水印图
-     */
-    const UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC_WATERMARK = 351;
-
 
     /**
      * 上传文件增加到数据表

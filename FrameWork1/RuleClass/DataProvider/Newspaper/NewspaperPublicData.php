@@ -135,4 +135,28 @@ class NewspaperPublicData extends BasePublicData
         return $result;
     }
 
+
+    /**
+     * 取得发布时间
+     * @param int $newspaperId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 发布时间
+     */
+    public function GetPublishDate($newspaperId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_data';
+            $cacheFile = 'newspaper_get_publish_date.cache_' . $newspaperId . '';
+            $sql = "SELECT PublishDate FROM " . self::TableName_Newspaper . " WHERE NewspaperId=:NewspaperId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperId", $newspaperId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+            $result = Format::DateStringToDate($result);
+        }
+        return $result;
+    }
+
+
 } 

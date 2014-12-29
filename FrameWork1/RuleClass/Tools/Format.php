@@ -178,6 +178,26 @@ class Format
     }
 
     /**
+     * 格式化时间字符串为日期格式（有-的形式）
+     * @param string $dateString 要处理的字符串形式的时间 例如：2012-11-12 12:01:02
+     * @return string 格式化后字符串形式的时间 例如：20121112
+     */
+    public static function DateStringToDate($dateString)
+    {
+        $date1 = explode(' ', $dateString);
+        $date2 = explode('-', $date1[0]);
+
+        if(strlen($date2[1])<2){ //月份补位
+            $date2[1] = '0'.$date2[1];
+        }
+        if(strlen($date2[2])<2){ //天数补位
+            $date2[2] = '0'.$date2[2];
+        }
+
+        return $date2[0] . '-' .$date2[1] . '-' .$date2[2];
+    }
+
+    /**
      * 分隔字符串为数组
      * @param string $content 被分隔的字符串
      * @param string $char 分隔字符

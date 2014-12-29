@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>长沙晚报</title>
+    <title>{BrowserTitle}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="{BrowserKeywords}" />
+    <meta name="description" content="{BrowserDescription}" />
     <link rel="apple-touch-icon" href="/image_02/logo57.png" />
     <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
     <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />

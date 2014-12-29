@@ -68,6 +68,26 @@ class ChannelPublicData extends BasePublicData {
     }
 
     /**
+     * 取得站点id
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 站点id
+     */
+    public function GetSiteId($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_site_id.cache_' . $channelId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE ChannelId = :ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得上级频道id
      * @param int $channelId 频道id
      * @param bool $withCache 是否从缓冲中取

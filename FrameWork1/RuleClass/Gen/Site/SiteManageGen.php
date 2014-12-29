@@ -64,6 +64,9 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($siteId > 0) {
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/site_data');
+
                     if (!empty($_FILES)) {
                         //title pic1
                         $fileElementName = "file_title_pic";
@@ -228,6 +231,8 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
             } else {
                 $siteManageData = new SiteManageData();
                 $result = $siteManageData->ModifyState($siteId, $state);
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/site_data');
                 //加入操作日志
                 $operateContent = 'Modify State Site,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);

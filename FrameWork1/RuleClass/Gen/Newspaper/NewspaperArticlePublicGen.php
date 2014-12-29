@@ -113,7 +113,28 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templateContent = str_ireplace("{NewspaperId}", $newspaperId, $templateContent);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
             parent::ReplaceFirst($templateContent);
+            $channelPublicData = new ChannelPublicData();
+            $siteId = $channelPublicData->GetSiteId($channelId, true);
 
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+
+            //版面选择
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+
+            $newspaperPublicData = new NewspaperPublicData();
+            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+
+            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+
+            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+            $listName = "newspaper_page";
+
+            if(count($arrNewspaperPages)>0){
+                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+            }
 
             $templateContent = parent::ReplaceTemplate($templateContent);
 
@@ -135,6 +156,9 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
             parent::ReplaceFirst($templateContent);
+            $siteId = parent::GetSiteIdByDomain();
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+
             $newspaperArticlePublicData = new NewspaperArticlePublicData();
             $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
@@ -154,6 +178,25 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
 
             Template::ReplaceOne($templateContent, $arrOne);
+
+            //版面选择
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+            $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
+            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+
+            $newspaperPublicData = new NewspaperPublicData();
+            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+
+            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+
+            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+            $listName = "newspaper_page";
+
+            if(count($arrNewspaperPages)>0){
+                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+            }
 
             $templateContent = parent::ReplaceTemplate($templateContent);
 

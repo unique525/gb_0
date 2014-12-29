@@ -177,6 +177,32 @@ class NewspaperArticlePublicData extends BasePublicData
     }
 
     /**
+     * 取得文章的版面id
+     * @param int $newspaperArticleId 文章id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 版面id
+     */
+    public function GetNewspaperPageId($newspaperArticleId, $withCache){
+
+        $result = "";
+        if ($newspaperArticleId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_newspaper_page_id.cache_' . $newspaperArticleId . '';
+            $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperArticle . "
+
+                    WHERE NewspaperArticleId=:NewspaperArticleId
+                     ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+
+
+    }
+
+    /**
      * 取得文章的频道id
      * @param int $newspaperArticleId 文章id
      * @param bool $withCache 是否从缓冲中取
@@ -199,7 +225,7 @@ class NewspaperArticlePublicData extends BasePublicData
                     );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
-            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
 
         return $result;
@@ -235,7 +261,7 @@ class NewspaperArticlePublicData extends BasePublicData
 
             $selectColumn = '
             *,
-            (SELECT uf.UploadFilePath FROM
+            (SELECT uf.UploadFileWatermarkPath1 FROM
                 ' . self::TableName_NewspaperArticlePic . ' nap,
                 ' . self::TableName_UploadFile . ' uf
                 WHERE uf.UploadFileId=nap.UploadFileId

@@ -342,20 +342,24 @@ class ImageObject {
         $sourceFileName = strtolower(FileObject::GetName($sourceFilePath));
         $newFileName = strtolower($sourceFileName . "_" . $addFileName);
         $saveFilePath = PHYSICAL_PATH . $sourceFileDir . DIRECTORY_SEPARATOR . $newFileName . "." . $sourceFileExName;
+        $saveFilePath = str_ireplace('//','/',$saveFilePath);
 
-        $sourceFileInfo = @getimagesize($sourceFilePath);
+        //获取源文件的详细信息(源文件的宽度 高度等信息)
+        $sourceFileFullPath = str_ireplace('//','/',PHYSICAL_PATH . $sourceFilePath);
+
+        $sourceFileInfo = @getimagesize($sourceFileFullPath);
         if (!$sourceFileInfo) {
             return -1;  //原文件不存在
         }
-        $watermarkFileInfo = @getimagesize(PHYSICAL_PATH . DIRECTORY_SEPARATOR .$watermarkFilePath);
+        $watermarkFileInfo = @getimagesize(PHYSICAL_PATH . DIRECTORY_SEPARATOR . $watermarkFilePath);
         if (!$watermarkFileInfo) {
             return -2;  //水印图片不存在
         }
-        $sourceImageObject = self::CreateImageByExtention($sourceFilePath);
+        $sourceImageObject = self::CreateImageByExtention($sourceFileFullPath);
         if (!$sourceImageObject) {
             return -3;  //原文件图像对象建立失败
         }
-        $watermarkImageObject = self::CreateImageByExtention($watermarkFilePath);
+        $watermarkImageObject = self::CreateImageByExtention(PHYSICAL_PATH . DIRECTORY_SEPARATOR . $watermarkFilePath);
         if (!$watermarkImageObject) {
             return -4;  //水印文件图像对象建立失败
         }
@@ -411,6 +415,10 @@ class ImageObject {
         }
         imagedestroy($sourceImageObject);
         imagedestroy($watermarkImageObject);
+
+        $saveFilePath = str_ireplace(PHYSICAL_PATH,'',$saveFilePath);
+        $saveFilePath = str_ireplace('upload','/upload',$saveFilePath);
+
         return $saveFilePath;
 
     }

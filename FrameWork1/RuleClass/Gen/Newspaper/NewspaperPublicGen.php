@@ -70,6 +70,14 @@ class NewspaperPublicGen extends BasePublicGen {
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+            parent::ReplaceFirst($templateContent);
+            $channelPublicData = new ChannelPublicData();
+            $siteId = $channelPublicData->GetSiteId($channelId, true);
+
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+
+
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
             $newspaperPublicData = new NewspaperPublicData();
@@ -162,7 +170,11 @@ class NewspaperPublicGen extends BasePublicGen {
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            parent::ReplaceFirst($templateContent);
+            $channelPublicData = new ChannelPublicData();
+            $siteId = $channelPublicData->GetSiteId($channelId, true);
 
+            parent::ReplaceSiteInfo($siteId, $templateContent);
 
         }
         return $templateContent;
@@ -184,7 +196,11 @@ class NewspaperPublicGen extends BasePublicGen {
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            parent::ReplaceFirst($templateContent);
+            $channelPublicData = new ChannelPublicData();
+            $siteId = $channelPublicData->GetSiteId($channelId, true);
 
+            parent::ReplaceSiteInfo($siteId, $templateContent);
             //版面列表数据集
             $newspaperPagePublicData=new NewspaperPagePublicData();
             $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);

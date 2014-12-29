@@ -98,7 +98,12 @@ class SitePublicData extends BasePublicData {
     public function GetOne($siteId){
         $result = null;
         if($siteId>0){
-            $sql = "SELECT
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data';
+            $cacheFile = 'arr_site_get_one.cache_' .
+                str_ireplace(",","_",$siteId);
+            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            if (strlen($cacheContent) <= 0) {
+                $sql = "SELECT
                 SiteId,
                 SiteName,
                 SiteUrl,
@@ -110,9 +115,19 @@ class SitePublicData extends BasePublicData {
 
             WHERE SiteId=:SiteId;";
 
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("SiteId", $siteId);
-            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("SiteId", $siteId);
+                $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+                DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
+            }else{
+                $result = Format::FixJsonDecode($cacheContent);
+            }
+
+
+
+
+
         }
         return $result;
     }

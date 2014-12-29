@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{NewspaperArticleTitle} - 长沙晚报</title>
+    <title>{NewspaperArticleTitle} - {BrowserTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="{BrowserKeywords}" />
+    <meta name="description" content="{BrowserDescription}" />
     <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css">
     <link rel="apple-touch-icon" href="/image_02/logo57.png" />
     <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
@@ -19,6 +21,8 @@
         body{background:#efefef;margin:0;}
         img, object { max-width: 100%;}
         .icms_ad_item img{width: 100%;}
+        .page_button{list-style: none;margin:2px;padding:5px;text-align:center;float: left;background-color: #D3D3D3;}
+        #page_list{cursor: pointer}
     </style>
     <script type="text/javascript">
         $(function () {
@@ -27,6 +31,14 @@
                 resultbox: $(this).html()
             }, function(result) {
 
+            });
+
+            $("#pages").click(function(){
+
+                if($("#select_page").css("display")=="none")
+                    $("#select_page").show();
+                else
+                    $("#select_page").hide();
             });
 
 
@@ -119,7 +131,24 @@
             <img src="/image_02/top_bg.jpg" style="width:100%;" />
             <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a></td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
+                        <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none;z-index:999;">
+                            <ul>
+                                <icms id="newspaper_page" type="list" >
+                                    <item>
+                                        <![CDATA[
+                                        <li class="page_button" idvalue="{f_NewspaperPageId}">
+                                            <a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={f_NewspaperPageId}">
+                                                {f_NewspaperPageName}({f_NewspaperPageNo})
+                                            </a>
+                                        </li>
+                                        ]]>
+                                    </item>
+                                </icms>
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="text-align:center;cursor:pointer;"><a style="color:#FFE56C;" id="pages">版面</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
                     <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
@@ -144,7 +173,7 @@
                     <![CDATA[
                     <figure data-am-widget="figure" class="am am-figure am-figure-default "
                             data-am-figure="{  autoZoom: 1 }">
-                        <img src="{f_UploadFilePath}" data-rel=""
+                        <img src="{f_UploadFileWatermarkPath1}" data-rel=""
                              alt="{f_Remark}" />
                         <figcaption class="am-figure-capition-btm">{f_Remark}</figcaption>
                     </figure>
@@ -160,7 +189,7 @@
                 <item>
                     <![CDATA[
                     <li>
-                        <img src="{f_UploadFilePath}" alt="{f_Remark}" />
+                        <img src="{f_UploadFileWatermarkPath1}" alt="{f_Remark}" />
                         <br />
                         {f_Remark}
                     </li>
