@@ -276,7 +276,7 @@ class SiteConfigData extends BaseData {
     private $ArrSiteConfigTypes_5 = array(
         "UserDefaultMaleAvatar",
         "UserDefaultFemaleAvatar",
-        "NewspaperArticlePicWatermark"
+        "NewspaperArticlePicWatermarkUploadFileId"
     );
 
     private $SiteId = 1;
