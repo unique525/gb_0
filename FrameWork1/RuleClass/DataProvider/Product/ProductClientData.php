@@ -111,7 +111,7 @@ class ProductClientData extends BaseClientData {
 
                         uf2.UploadFilePath AS TitlePic2UploadFilePath,
                         uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
-                        uf2.UploadFilePadPath AS TitlePic1Up2oadFilePadPath,
+                        uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
                         uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
                         uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
                         uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
