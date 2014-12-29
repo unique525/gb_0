@@ -16,8 +16,8 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "list":
-                $result = self::GenList();
+            case "list_of_channel":
+                $result = self::GenListOfChannel();
                 break;
 
         }
@@ -29,12 +29,11 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenList(){
+    public function GenListOfChannel(){
 
         $result = "";
 
         $channelId = Control::GetRequest("channel_id", 0);
-        $authKey = Control::GetRequest("auth_key","");
 
         if($channelId>0){
             $pageSize = Control::GetRequest("ps", 20);

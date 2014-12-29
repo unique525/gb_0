@@ -198,7 +198,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 Template::RemoveCustomTag($tempContent, $listName);
             }
 
-            $templateContent = parent::ReplaceTemplate($templateContent);
+            //$templateContent = parent::ReplaceTemplate($templateContent);
 
 
             parent::ReplaceEnd($templateContent);

@@ -40,6 +40,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = Template::Load("site/site_config_deal.html", "common");
         }
         $manageUserId = Control::GetManageUserId();
+        //删除缓冲
+        DataCache::RemoveDir(CACHE_PATH . '/site_config_data');
         parent::ReplaceFirst($tempContent);
         $siteConfigData = new SiteConfigData($siteId);
         if ($siteId > 0) {

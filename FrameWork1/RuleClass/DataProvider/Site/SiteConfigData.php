@@ -1806,7 +1806,7 @@ class SiteConfigData extends BaseData {
                 $dataProperty->AddField("SiteConfigType", $siteConfigType);
                 $this->dbOperator->Execute($sql, $dataProperty);
             }
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data' . DIRECTORY_SEPARATOR . $siteId;
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
             DataCache::Set($cacheDir, $cacheFile, $fieldValue);
         }
@@ -1824,7 +1824,7 @@ class SiteConfigData extends BaseData {
     private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null)
     {
         if (intval($siteId) > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data' . DIRECTORY_SEPARATOR . $siteId;
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
                 switch ($siteConfigType) {
