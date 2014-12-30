@@ -27,6 +27,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $channelClientGen = new ChannelClientGen();
                 $result = $channelClientGen->GenClient();
                 break;
+            case "document_news":
+                $documentNewsClientGen = new DocumentNewsClientGen();
+                $result = $documentNewsClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;
