@@ -151,7 +151,6 @@
                             <td class="spe_line2" style="width:80px;text-align:center;" title="">{f_HitCount}</td>
                             <td class="spe_line2" style="width:80px;text-align:center;" title="">{f_CommentCount}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_NewspaperArticleId}" class="span_state" idvalue="{f_NewspaperArticleId}">{f_State}</span></td>
-
                         </tr>
                     </table>
                 </li>

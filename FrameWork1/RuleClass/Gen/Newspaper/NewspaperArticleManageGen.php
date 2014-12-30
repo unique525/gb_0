@@ -222,7 +222,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
      */
     private function AsyncModifySortByDrag()
     {
-        $arrNewspaperArticleId = Control::GetRequest("sort", null);
+        $arrNewspaperArticleId = Control::GetRequest("sort", null, false);
         if (!empty($arrNewspaperArticleId)) {
             DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_data');
             $newspaperArticleManageData = new NewspaperArticleManageData();

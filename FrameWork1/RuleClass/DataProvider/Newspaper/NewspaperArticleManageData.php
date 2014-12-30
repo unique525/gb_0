@@ -114,17 +114,17 @@ class NewspaperArticleManageData extends BaseManageData {
 
             $strNewspaperArticleId = join(',', $arrNewspaperArticleId);
             $strNewspaperArticleId = Format::FormatSql($strNewspaperArticleId);
-            $sql = "SELECT max(Sort) FROM " . self::TableName_NewspaperArticle . " WHERE NewspaperArticleId IN ($strNewspaperArticleId);";
-            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $sql = "SELECT min(Sort) FROM " . self::TableName_NewspaperArticle . " WHERE NewspaperArticleId IN ($strNewspaperArticleId);";
+            $minSort = $this->dbOperator->GetInt($sql, null);
 
-            if($maxSort<=0){
+            if($minSort<=0){
                 //$maxSort = 0;
-                $maxSort = 100;
+                $minSort = 0;
             }
 
             $arrSql = array();
             for ($i = 0; $i < count($arrNewspaperArticleId); $i++) {
-                $newSort = $maxSort - $i;
+                $newSort = $minSort + $i;
                 if ($newSort < 0) {
                     $newSort = 0;
                 }

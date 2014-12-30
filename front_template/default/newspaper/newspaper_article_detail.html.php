@@ -135,9 +135,6 @@
                         <a style="color:#FFE56C;" href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={NewspaperPageId}">
                             返回
                         </a>
-                    </td>
-
-                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
                         <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none;z-index:999;">
                             <ul>
                                 <icms id="newspaper_page" type="list" >
@@ -153,6 +150,10 @@
                                 </icms>
                             </ul>
                         </div>
+                    </td>
+
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
+
                     </td>
                     <td style="text-align:center;cursor:pointer;"><a style="color:#FFE56C;" id="pages">版面</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>

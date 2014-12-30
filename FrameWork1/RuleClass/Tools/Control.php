@@ -89,9 +89,10 @@ class Control {
      * 返回Get方式得到的传参数据
      * @param string $paramName 参数名称
      * @param mixed $defaultValue 参数默认值，支持string,int,float
+     * @param bool $removeXSS 是否删除XSS信息
      * @return mixed 返回值
      */
-    public static function GetRequest($paramName, $defaultValue) {
+    public static function GetRequest($paramName, $defaultValue, $removeXSS = true) {
         $paramName = strtolower($paramName);
         if (isset($_GET[$paramName])) {
             if (is_float($_GET[$paramName])) {
@@ -106,8 +107,11 @@ class Control {
         } else {
             $result = $defaultValue;
         }
-        $result = Format::RemoveXSS($result);
-        $result = Format::FormatHtmlTag($result);
+        if($removeXSS){
+            $result = Format::RemoveXSS($result);
+            $result = Format::FormatHtmlTag($result);
+        }
+
         return $result;
     }
 
