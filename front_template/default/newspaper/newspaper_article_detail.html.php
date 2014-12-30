@@ -131,6 +131,12 @@
             <img src="/image_02/top_bg.jpg" style="width:100%;" />
             <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
+                    <td style="text-align:center;cursor:pointer;">
+                        <a style="color:#FFE56C;" href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={NewspaperPageId}">
+                            返回
+                        </a>
+                    </td>
+
                     <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
                         <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none;z-index:999;">
                             <ul>

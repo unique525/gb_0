@@ -100,8 +100,8 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
     private function GenList() {
         $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
-        $newspaperId = Control::GetRequest("newspaper_id",0);
-        $channelId= Control::GetRequest("channel_id",0);
+        //$newspaperId = Control::GetRequest("newspaper_id",0);
+        //$channelId= Control::GetRequest("channel_id",0);
         $templateContent = "";
 
         if($newspaperPageId>0){
@@ -109,21 +109,30 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templateName = "default";
             $templatePath = "front_template";
             $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $templateContent);
-            $templateContent = str_ireplace("{NewspaperId}", $newspaperId, $templateContent);
-            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
             parent::ReplaceFirst($templateContent);
-            $channelPublicData = new ChannelPublicData();
-            $siteId = $channelPublicData->GetSiteId($channelId, true);
 
-            parent::ReplaceSiteInfo($siteId, $templateContent);
-
-            //版面选择
             $newspaperPagePublicData = new NewspaperPagePublicData();
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
 
             $newspaperPublicData = new NewspaperPublicData();
             $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+            $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
+
+
+            $channelPublicData = new ChannelPublicData();
+            $siteId = $channelPublicData->GetSiteId($channelId, true);
+
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+
+
+            $templateContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $templateContent);
+            $templateContent = str_ireplace("{NewspaperId}", $newspaperId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+            //版面选择
+
+
+
 
             $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
