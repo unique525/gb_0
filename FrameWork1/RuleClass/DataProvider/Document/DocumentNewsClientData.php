@@ -135,7 +135,8 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.ChannelId=:ChannelId AND dn.State<100 " . $searchSql . "
-            ORDER BY dnSort DESC, dn.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY dn.Sort DESC, dn.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
