@@ -443,6 +443,459 @@ class ManageUserAuthorityManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 为后台帐号设置权限（新增或修改）
+     * @param int $siteId 站点id
+     * @param int $manageUserId
+     * @param int $explore
+     * @param int $create
+     * @param int $modify
+     * @param int $delete
+     * @param int $disabled
+     * @param int $search
+     * @param int $rework
+     * @param int $audit1
+     * @param int $audit2
+     * @param int $audit3
+     * @param int $audit4
+     * @param int $refused
+     * @param int $doOthers
+     * @param int $doOthersInSameGroup
+     * @param int $publish
+     * @param int $channelManageTemplate
+     * @param int $userExplore
+     * @param int $userAdd
+     * @param int $userEdit
+     * @param int $userDelete
+     * @param int $userRoleExplore
+     * @param int $userRoleAdd
+     * @param int $userRoleEdit
+     * @param int $userRoleDelete
+     * @param int $userAlbumExplore
+     * @param int $userAlbumAdd
+     * @param int $userAlbumEdit
+     * @param int $userAlbumDelete
+     * @param int $userGroupExplore
+     * @param int $userLevelExplore
+     * @param int $userOrderExplore
+     * @param int $manageSite
+     * @param int $manageComment
+     * @param int $manageTemplateLibrary
+     * @param int $manageFilter
+     * @param int $manageFtp
+     * @param int $manageAd
+     * @param int $manageDocumentTag
+     * @param int $manageConfig
+     * @param int $manageUserTaskManageState
+     * @param int $manageUserTaskViewAll
+     * @param int $manageUserTaskViewSameGroup
+     * @param int $manageUserExplore
+     * @param int $manageUserCreate
+     * @param int $manageUserModify
+     * @param int $manageUserGroupExplore
+     * @param int $manageUserGroupCreate
+     * @param int $manageUserGroupModify
+     * @return int
+     */
+    public function CreateOrModifyForSiteAndManageUser(
+        $siteId, $manageUserId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $channelManageTemplate, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig, $manageUserTaskManageState, $manageUserTaskViewAll, $manageUserTaskViewSameGroup, $manageUserExplore, $manageUserCreate, $manageUserModify, $manageUserGroupExplore, $manageUserGroupCreate, $manageUserGroupModify
+    )
+    {
+        //判断是否存在数据
+        $sql = "SELECT Count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId AND ManageUserGroupId=0 AND ChannelId=0;";
+
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        if ($hasCount <= 0) {
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . "
+	            (
+	                `SiteId`,
+	                `ManageUserId`,
+	                `ChannelExplore`,
+	                `ChannelCreate`,
+	                `ChannelModify`,
+	                `ChannelDelete`,
+	                `ChannelDisabled`,
+	                `ChannelSearch`,
+	                `ChannelRework`,
+	                `ChannelAudit1`,
+	                `ChannelAudit2`,
+	                `ChannelAudit3`,
+	                `ChannelAudit4`,
+	                `ChannelRefused`,
+	                `ChannelDoOthers`,
+		            `ChannelDoOthersInSameGroup`,
+		            `ChannelPublish`,
+	                `ChannelManageTemplate`,
+		            `UserExplore`,
+		            `UserAdd`,
+		            `UserEdit`,
+		            `UserDelete`,
+		            `UserRoleExplore`,
+		            `UserRoleAdd`,
+		            `UserRoleEdit`,
+		            `UserRoleDelete`,
+		            `UserAlbumExplore`,
+		            `UserAlbumAdd`,
+		            `UserAlbumEdit`,
+		            `UserAlbumDelete`,
+		            `UserGroupExplore`,
+		            `UserLevelExplore`,
+		            `UserOrderExplore`,
+    	            `ManageSite`,
+    	            `ManageComment`,
+    	            `ManageTemplateLibrary`,
+    	            `ManageFilter`,
+    	            `ManageFtp`,
+    	            `ManageAd`,
+    	            `ManageDocumentTag`,
+    	            `ManageConfig`,
+                    `ManageUserTaskManageState`,
+                    `ManageUserTaskViewAll`,
+                    `ManageUserTaskViewSameGroup`,
+                    `ManageUserExplore`,
+                    `ManageUserCreate`,
+                    `ManageUserModify`,
+                    `ManageUserGroupExplore`,
+                    `ManageUserGroupCreate`,
+                    `ManageUserGroupModify`
+		            )
+		            VALUES
+		            (
+		            :SiteId,
+		            :ManageUserId,
+		            :ChannelExplore,
+		            :ChannelCreate,
+		            :ChannelModify,
+		            :ChannelDelete,
+		            :ChannelDisabled,
+		            :ChannelSearch,
+		            :ChannelRework,
+		            :ChannelAudit1,
+		            :ChannelAudit2,
+		            :ChannelAudit3,
+		            :ChannelAudit4,
+		            :ChannelRefused,
+		            :ChannelDoOthers,
+        	        :ChannelDoOthersInSameGroup,
+		            :ChannelPublish,
+	                :ChannelManageTemplate,
+		            :UserExplore,
+		            :UserAdd,
+		            :UserEdit,
+		            :UserDelete,
+		            :UserRoleExplore,
+		            :UserRoleAdd,
+		            :UserRoleEdit,
+		            :UserRoleDelete,
+		            :UserAlbumExplore,
+		            :UserAlbumAdd,
+		            :UserAlbumEdit,
+		            :UserAlbumDelete,
+		            :UserGroupExplore,
+		            :UserLevelExplore,
+		            :UserOrderExplore,
+    	            :ManageSite,
+    	            :ManageComment,
+    	            :ManageTemplateLibrary,
+    	            :ManageFilter,
+    	            :ManageFtp,
+    	            :ManageAd,
+    	            :ManageDocumentTag,
+    	            :ManageConfig,
+    	            :ManageUserTaskManageState,
+                    :ManageUserTaskViewAll,
+                    :ManageUserTaskViewSameGroup,
+                    :ManageUserExplore,
+                    :ManageUserCreate,
+                    :ManageUserModify,
+                    :ManageUserGroupExplore,
+                    :ManageUserGroupCreate,
+                    :ManageUserGroupModify
+		            );";
+
+            $dataProperty->AddField("ChannelExplore", $explore);
+            $dataProperty->AddField("ChannelCreate", $create);
+            $dataProperty->AddField("ChannelModify", $modify);
+            $dataProperty->AddField("ChannelDelete", $delete);
+            $dataProperty->AddField("ChannelDisabled", $disabled);
+            $dataProperty->AddField("ChannelSearch", $search);
+            $dataProperty->AddField("ChannelRework", $rework);
+            $dataProperty->AddField("ChannelAudit1", $audit1);
+            $dataProperty->AddField("ChannelAudit2", $audit2);
+            $dataProperty->AddField("ChannelAudit3", $audit3);
+            $dataProperty->AddField("ChannelAudit4", $audit4);
+            $dataProperty->AddField("ChannelRefused", $refused);
+            $dataProperty->AddField("ChannelDoOthers", $doOthers);
+            $dataProperty->AddField("ChannelDoOthersInSameGroup", $doOthersInSameGroup);
+            $dataProperty->AddField("ChannelPublish", $publish);
+            $dataProperty->AddField("ChannelManageTemplate", $channelManageTemplate);
+            $dataProperty->AddField("UserExplore", $userExplore);
+            $dataProperty->AddField("UserAdd", $userAdd);
+            $dataProperty->AddField("UserEdit", $userEdit);
+            $dataProperty->AddField("UserDelete", $userDelete);
+            $dataProperty->AddField("UserRoleExplore", $userRoleExplore);
+            $dataProperty->AddField("UserRoleAdd", $userRoleAdd);
+            $dataProperty->AddField("UserRoleEdit", $userRoleEdit);
+            $dataProperty->AddField("UserRoleDelete", $userRoleDelete);
+            $dataProperty->AddField("UserAlbumExplore", $userAlbumExplore);
+            $dataProperty->AddField("UserAlbumAdd", $userAlbumAdd);
+            $dataProperty->AddField("UserAlbumEdit", $userAlbumEdit);
+            $dataProperty->AddField("UserAlbumDelete", $userAlbumDelete);
+            $dataProperty->AddField("UserGroupExplore", $userGroupExplore);
+            $dataProperty->AddField("UserLevelExplore", $userLevelExplore);
+            $dataProperty->AddField("UserOrderExplore", $userOrderExplore);
+            $dataProperty->AddField("ManageSite", $manageSite);
+            $dataProperty->AddField("ManageComment", $manageComment);
+            $dataProperty->AddField("ManageTemplateLibrary", $manageTemplateLibrary);
+            $dataProperty->AddField("ManageFilter", $manageFilter);
+            $dataProperty->AddField("ManageFtp", $manageFtp);
+            $dataProperty->AddField("ManageAd", $manageAd);
+            $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
+            $dataProperty->AddField("ManageConfig", $manageConfig);
+
+            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
+            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
+            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
+            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
+            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
+            $dataProperty->AddField("ManageUserModify", $manageUserModify);
+            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
+            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
+            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        } else {
+
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . "
+	                SET
+	                    `ChannelExplore` = :ChannelExplore,
+	                    `ChannelCreate` = :ChannelCreate,
+	                    `ChannelModify` = :ChannelModify,
+	                    `ChannelDelete` = :ChannelDelete,
+	                    `ChannelDisabled` = :ChannelDisabled,
+	                    `ChannelSearch` = :ChannelSearch,
+	                    `ChannelRework` = :ChannelRework,
+	                    `ChannelAudit1` = :ChannelAudit1,
+	                    `ChannelAudit2` = :ChannelAudit2,
+	                    `ChannelAudit3` = :ChannelAudit3,
+	                    `ChannelAudit4` = :ChannelAudit4,
+	                    `ChannelRefused` = :ChannelRefused,
+	                    `ChannelDoOthers` = :ChannelDoOthers,
+	                    `ChannelDoOthersInSameGroup` = :ChannelDoOthersInSameGroup,
+	                    `ChannelPublish` = :ChannelPublish,
+	                    `ChannelManageTemplate` = :ChannelManageTemplate,
+	                    `UserExplore` = :UserExplore,
+	                    `UserAdd` = :UserAdd,
+	                    `UserEdit` = :UserEdit,
+	                    `UserDelete` = :UserDelete,
+	                    `UserRoleExplore` = :UserRoleExplore,
+	                    `UserRoleAdd` = :UserRoleAdd,
+	                    `UserRoleEdit` = :UserRoleEdit,
+	                    `UserRoleDelete` = :UserRoleDelete,
+	                    `UserAlbumExplore` = :UserAlbumExplore,
+	                    `UserAlbumAdd` = :UserAlbumAdd,
+	                    `UserAlbumEdit` = :UserAlbumEdit,
+	                    `UserAlbumDelete` = :UserAlbumDelete,
+	                    `UserGroupExplore` = :UserGroupExplore,
+	                    `UserLevelExplore` = :UserLevelExplore,
+	                    `UserOrderExplore` = :UserOrderExplore,
+                        `ManageSite` = :ManageSite,
+                        `ManageComment` = :ManageComment,
+                        `ManageTemplateLibrary` = :ManageTemplateLibrary,
+                        `ManageFilter` = :ManageFilter,
+                        `ManageFtp` = :ManageFtp,
+                        `ManageAd` = :ManageAd,
+                        `ManageDocumentTag` = :ManageDocumentTag,
+                        `ManageConfig` = :ManageConfig,
+                        `ManageUserTaskManageState` = :ManageUserTaskManageState,
+                        `ManageUserTaskViewAll` = :ManageUserTaskViewAll,
+                        `ManageUserTaskViewSameGroup` = :ManageUserTaskViewSameGroup,
+                        `ManageUserExplore` = :ManageUserExplore,
+                        `ManageUserCreate` = :ManageUserCreate,
+                        `ManageUserModify` = :ManageUserModify,
+                        `ManageUserGroupExplore` = :ManageUserGroupExplore,
+                        `ManageUserGroupCreate` = :ManageUserGroupCreate,
+                        `ManageUserGroupModify` = :ManageUserGroupModify
+	                WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId AND ManageUserId=0 AND ChannelId=0;";
+
+            $dataProperty->AddField("ChannelExplore", $explore);
+            $dataProperty->AddField("ChannelCreate", $create);
+            $dataProperty->AddField("ChannelModify", $modify);
+            $dataProperty->AddField("ChannelDelete", $delete);
+            $dataProperty->AddField("ChannelDisabled", $disabled);
+            $dataProperty->AddField("ChannelSearch", $search);
+            $dataProperty->AddField("ChannelRework", $rework);
+            $dataProperty->AddField("ChannelAudit1", $audit1);
+            $dataProperty->AddField("ChannelAudit2", $audit2);
+            $dataProperty->AddField("ChannelAudit3", $audit3);
+            $dataProperty->AddField("ChannelAudit4", $audit4);
+            $dataProperty->AddField("ChannelRefused", $refused);
+            $dataProperty->AddField("ChannelDoOthers", $doOthers);
+            $dataProperty->AddField("ChannelDoOthersInSameGroup", $doOthersInSameGroup);
+            $dataProperty->AddField("ChannelPublish", $publish);
+            $dataProperty->AddField("ChannelManageTemplate", $channelManageTemplate);
+
+            $dataProperty->AddField("UserExplore", $userExplore);
+            $dataProperty->AddField("UserAdd", $userAdd);
+            $dataProperty->AddField("UserEdit", $userEdit);
+            $dataProperty->AddField("UserDelete", $userDelete);
+            $dataProperty->AddField("UserRoleExplore", $userRoleExplore);
+            $dataProperty->AddField("UserRoleAdd", $userRoleAdd);
+            $dataProperty->AddField("UserRoleEdit", $userRoleEdit);
+            $dataProperty->AddField("UserRoleDelete", $userRoleDelete);
+            $dataProperty->AddField("UserAlbumExplore", $userAlbumExplore);
+            $dataProperty->AddField("UserAlbumAdd", $userAlbumAdd);
+            $dataProperty->AddField("UserAlbumEdit", $userAlbumEdit);
+            $dataProperty->AddField("UserAlbumDelete", $userAlbumDelete);
+            $dataProperty->AddField("UserGroupExplore", $userGroupExplore);
+            $dataProperty->AddField("UserLevelExplore", $userLevelExplore);
+            $dataProperty->AddField("UserOrderExplore", $userOrderExplore);
+
+            $dataProperty->AddField("ManageSite", $manageSite);
+            $dataProperty->AddField("ManageComment", $manageComment);
+            $dataProperty->AddField("ManageTemplateLibrary", $manageTemplateLibrary);
+            $dataProperty->AddField("ManageFilter", $manageFilter);
+            $dataProperty->AddField("ManageFtp", $manageFtp);
+            $dataProperty->AddField("ManageAd", $manageAd);
+            $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
+            $dataProperty->AddField("ManageConfig", $manageConfig);
+
+            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
+            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
+            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
+            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
+            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
+            $dataProperty->AddField("ManageUserModify", $manageUserModify);
+            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
+            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
+            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 授权频道相关权限
+     * @param int $siteId 站点id
+     * @param int $manageUserId 后台管理员id
+     * @param int $manageUserGroupId 后台管理员组id
+     * @param int $manageUserGroupId 后台管理员组id
+     * @param array $arrChannelList 相关频道id
+     * @param array $arrValueList 权限对应值
+     * @return int 结果
+     */
+    public function ChannelAuthorityModify($siteId,$manageUserId=0, $manageUserGroupId=0, $arrChannelList, $arrValueList)
+    {
+        $result=-1;
+        if($siteId>0&&($manageUserId>0||$manageUserGroupId>0)&&count($arrChannelList)>0&&count($arrValueList)>0){
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+            foreach($arrChannelList as $key => $channelId){
+                $sql = "SELECT count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId AND ManageUserGroupId=:ManageUserGroupId;";
+                $dataProperty->AddField("ChannelId", $channelId);
+                $count = $this->dbOperator->GetInt($sql, $dataProperty);
+                if($count<=0){
+                    self::CreateEmptyOneForChannel($siteId,$channelId,$manageUserId,$manageUserGroupId);
+                }else{
+                    self::UpdateToEmptyOneForChannel($siteId,$channelId,$manageUserId,$manageUserGroupId);
+                }
+            }
+            $arraySql=array();
+            $arrayDataProperty=array();
+            foreach($arrValueList as $key => $value){
+                $updateSql="UPDATE " . self::TableName_ManageUserAuthority . " SET ".$value["Field"]."=1 WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId AND ManageUserGroupId=:ManageUserGroupId;";
+                array_push($arraySql,$updateSql);
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("SiteId", $siteId);
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+                $dataProperty->AddField("ChannelId", $value["ChannelId"]);
+                array_push($arrayDataProperty,$dataProperty);
+            }
+            $result = $this->dbOperator->ExecuteBatch($arraySql, $arrayDataProperty);
+
+        }
+        return $result;
+    }
+
+    /**
+     * 授权时为管理员或组新增该频道的空记录
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @param int $manageUserGroupId 后台管理员组id
+     * @return int 结果
+     */
+    public function CreateEmptyOneForChannel($siteId, $channelId, $manageUserId=0, $manageUserGroupId=0)
+    {
+        $result=-1;
+        if($siteId>0&&$channelId>0&&($manageUserId>0||$manageUserGroupId>0)){
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . "
+            (SiteId,ChannelId,ManageUserId,ManageUserGroupId)
+            VALUES(:SiteId,:ChannelId,:ManageUserId,:ManageUserGroupId) ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 授权时为管理员或组修改该频道的权限为空
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @param int $manageUserGroupId 后台管理员组id
+     * @return int 结果
+     */
+    public function UpdateToEmptyOneForChannel($siteId, $channelId, $manageUserId=0, $manageUserGroupId=0)
+    {
+        $result=-1;
+        if($siteId>0&&$channelId>0&&($manageUserId>0||$manageUserGroupId>0)){
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . "
+            Set
+
+	                    `ChannelExplore` = 0,
+	                    `ChannelCreate` = 0,
+	                    `ChannelModify` = 0,
+	                    `ChannelDelete` = 0,
+	                    `ChannelDisabled` = 0,
+	                    `ChannelSearch` = 0,
+	                    `ChannelRework` = 0,
+	                    `ChannelAudit1` = 0,
+	                    `ChannelAudit2` = 0,
+	                    `ChannelAudit3` = 0,
+	                    `ChannelAudit4` = 0,
+	                    `ChannelRefused` = 0,
+	                    `ChannelDoOthers` = 0,
+	                    `ChannelDoOthersInSameGroup` = 0,
+	                    `ChannelPublish` = 0,
+	                    `ChannelManageTemplate` = 0
+
+            WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId AND ManageUserGroupId=:ManageUserGroupId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
     /**
      * 删除权限
      * @param int $siteId 站点id
@@ -478,7 +931,7 @@ class ManageUserAuthorityManageData extends BaseManageData
     }
 
     /**
-     * 根据siteId，channelId，manageUserGroupId取得一条记录（已经缓冲）
+     * 根据siteId，channelId，manageUserGroupId取得一条记录
      * @param int $siteId 站点id
      * @param int $channelId 频道id
      * @param int $manageUserGroupId 后台管理员分组id
@@ -494,6 +947,30 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("ChannelId", $channelId);
         } else {
             $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserGroupId=:ManageUserGroupId AND ChannelId=0 AND ManageUserId=0;";
+        }
+
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        return $result;
+    }
+
+
+    /**
+     * 根据siteId，channelId，manageUserGroupId取得一条记录（已经缓冲）
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $manageUserId 后台管理员id
+     * @return array 一条权限记录
+     */
+    public function GetOneByManageUserId($siteId, $channelId, $manageUserId)
+    {
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+        if ($channelId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserId=:ManageUserId AND ManageUserGroupId=0;";
+            $dataProperty->AddField("ChannelId", $channelId);
+        } else {
+            $sql = "SELECT * FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId AND ChannelId=0 AND ManageUserGroupId=0;";
         }
 
         $result = $this->dbOperator->GetArray($sql, $dataProperty);

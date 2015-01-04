@@ -631,6 +631,9 @@ class ChannelManageData extends BaseManageData
         $result = null;
         if ($channelId > 0) {
             switch ($order) {
+                case "channel_id":
+                    $order = "ORDER BY Sort DESC," . self::TableId_Channel . " ";
+                    break;
                 default:
                     $order = "ORDER BY Sort DESC,Createdate DESC," . self::TableId_Channel . " DESC";
                     break;
@@ -648,6 +651,133 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 根据父id获取列表数据集来管理授权
+     * @param int $channelId 频道id
+     * @param int $manageUserId 管理员id
+     * @param int $topCount 显示的条数
+     * @param string $order 排序方式
+     * @return array|null 列表数据集
+     */
+    public function GetListByParentIdForManageUserAuthority($channelId,$manageUserId, $topCount, $order)
+    {
+        $result = null;
+        if ($channelId > 0) {
+            switch ($order) {
+                case "channel_id":
+                    $order = "ORDER BY channel.Sort DESC,channel." . self::TableId_Channel . " ";
+                    break;
+                default:
+                    $order = "ORDER BY channel.Sort DESC,channel.Createdate DESC,channel." . self::TableId_Channel . " DESC";
+                    break;
+            }
+            $sql = "SELECT
+                        channel.*,
+	                    auth.`ChannelExplore`,
+	                    auth.`ChannelCreate`,
+	                    auth.`ChannelModify`,
+	                    auth.`ChannelDelete`,
+	                    auth.`ChannelDisabled`,
+	                    auth.`ChannelSearch`,
+	                    auth.`ChannelRework`,
+	                    auth.`ChannelAudit1`,
+	                    auth.`ChannelAudit2`,
+	                    auth.`ChannelAudit3`,
+	                    auth.`ChannelAudit4`,
+	                    auth.`ChannelRefused`,
+	                    auth.`ChannelDoOthers`,
+		                auth.`ChannelDoOthersInSameGroup`,
+		                auth.`ChannelPublish`,
+	                    auth.`ChannelManageTemplate`
+
+                        FROM " . self::TableName_Channel .  " channel
+                        LEFT JOIN " . self::TableName_ManageUserAuthority . " auth
+                        ON channel.ChannelId=auth.ChannelId AND auth.ManageUserId=:ManageUserId AND auth.ManageUserGroupId=0
+                        WHERE channel.ParentId=:ChannelId
+                        $order
+                        LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 根据父id获取列表数据集来管理授权
+     * @param int $channelId 频道id
+     * @param int $manageUserGroupId 管理员组id
+     * @param int $topCount 显示的条数
+     * @param string $order 排序方式Group
+     * @return array|null 列表数据集
+     */
+    public function GetListByParentIdForManageUserGroupAuthority($channelId,$manageUserGroupId, $topCount, $order)
+    {
+        $result = null;
+        if ($channelId > 0) {
+            switch ($order) {
+                case "channel_id":
+                    $order = "ORDER BY channel.Sort DESC,channel." . self::TableId_Channel . " ";
+                    break;
+                default:
+                    $order = "ORDER BY channel.Sort DESC,channel.Createdate DESC,channel." . self::TableId_Channel . " DESC";
+                    break;
+            }
+            $sql = "SELECT
+                        channel.*,
+	                    auth.`ChannelExplore`,
+	                    auth.`ChannelCreate`,
+	                    auth.`ChannelModify`,
+	                    auth.`ChannelDelete`,
+	                    auth.`ChannelDisabled`,
+	                    auth.`ChannelSearch`,
+	                    auth.`ChannelRework`,
+	                    auth.`ChannelAudit1`,
+	                    auth.`ChannelAudit2`,
+	                    auth.`ChannelAudit3`,
+	                    auth.`ChannelAudit4`,
+	                    auth.`ChannelRefused`,
+	                    auth.`ChannelDoOthers`,
+		                auth.`ChannelDoOthersInSameGroup`,
+		                auth.`ChannelPublish`,
+	                    auth.`ChannelManageTemplate`
+
+                        FROM " . self::TableName_Channel .  " channel
+                        LEFT JOIN " . self::TableName_ManageUserAuthority . " auth
+                        ON channel.ChannelId=auth.ChannelId AND auth.ManageUserGroupId=:ManageUserGroupId AND auth.ManageUserId=0
+                        WHERE channel.ParentId=:ChannelId
+                        $order
+                        LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据站点id获取该站点根节点的id
+     * @param int $siteId 频道id
+     * @return array|null 列表数据集
+     */
+    public function GetRootChannelId($siteId)
+    {
+        $result = null;
+        if ($siteId > 0) {
+            $sql = "SELECT
+                        *
+                        FROM " . self::TableName_Channel . "
+                        WHERE State<100 AND Rank=0 AND SiteId=:SiteId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 }
 
