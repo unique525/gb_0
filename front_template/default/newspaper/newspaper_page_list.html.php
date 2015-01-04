@@ -46,6 +46,7 @@
     </div>
     <div id="" style="margin:10px auto;width:90%">
 
+
         <div class="am-panel-group" id="accordion">
 
             <icms id="newspaper_page_and_article" type="list" >

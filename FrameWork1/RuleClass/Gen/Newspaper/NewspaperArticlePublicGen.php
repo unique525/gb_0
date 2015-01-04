@@ -114,6 +114,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $newspaperPagePublicData = new NewspaperPagePublicData();
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
 
+
             $newspaperPublicData = new NewspaperPublicData();
             $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
             $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
@@ -125,16 +126,17 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             parent::ReplaceSiteInfo($siteId, $templateContent);
 
 
+            $newspaperPageName = $newspaperPagePublicData->GetNewspaperPageName($newspaperPageId, true);
+            $newspaperPageNo = $newspaperPagePublicData->GetNewspaperPageNo($newspaperPageId, true);
+
+            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+            $templateContent = str_ireplace("{NewspaperPageName}", $newspaperPageName, $templateContent);
+            $templateContent = str_ireplace("{NewspaperPageNo}", $newspaperPageNo, $templateContent);
             $templateContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $templateContent);
             $templateContent = str_ireplace("{NewspaperId}", $newspaperId, $templateContent);
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
             //版面选择
-
-
-
-
-            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
             $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
             $listName = "newspaper_page";

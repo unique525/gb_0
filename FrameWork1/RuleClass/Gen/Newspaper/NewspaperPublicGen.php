@@ -63,6 +63,18 @@ class NewspaperPublicGen extends BasePublicGen {
 
     private function GenOne(){
         $channelId = Control::GetRequest("channel_id", 0);
+        $newspaperPagePublicData = new NewspaperPagePublicData();
+        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+
+        $newspaperPublicData = new NewspaperPublicData();
+
+        if($newspaperPageId>0 && $channelId<=0){
+            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+            $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
+        }
+
+
+
         $templateContent = "";
         if($channelId>0){
             $publishDate = Control::GetRequest("publish_date", "");
@@ -80,7 +92,7 @@ class NewspaperPublicGen extends BasePublicGen {
 
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
-            $newspaperPublicData = new NewspaperPublicData();
+
             if(strlen($publishDate)>0){
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
                 $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
@@ -100,9 +112,7 @@ class NewspaperPublicGen extends BasePublicGen {
 
                 $templateContent = str_ireplace("{CurrentNewspaperId}", $currentNewspaperId, $templateContent);
 
-                $newspaperPagePublicData = new NewspaperPagePublicData();
 
-                $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
                 if($newspaperPageId<=0){
                     $currentNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
                 }else{

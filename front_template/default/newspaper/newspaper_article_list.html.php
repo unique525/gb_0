@@ -48,7 +48,10 @@
         <img src="/image_02/top_bg.jpg" style="width:100%;" />
         <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
             <tr>
-                <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
+                <td style="text-align:center;">
+                <a style="color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_one&newspaper_page_id={NewspaperPageId}">
+                    返回
+                </a>
                     <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none;z-index:999;">
                         <ul>
                             <icms id="newspaper_page" type="list" >
@@ -65,6 +68,9 @@
                         </ul>
                     </div>
                 </td>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a>
+
+                </td>
                 <td style="text-align:center;cursor:pointer;"><a style="color:#FFE56C;" id="pages">版面</a></td>
                 <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
                 <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
@@ -74,6 +80,8 @@
         </table>
     </div>
 </div>
+
+<div style="line-height:150%;margin:10px;"> 长沙晚报 {PublishDate} {NewspaperPageName}（{NewspaperPageNo}） </div>
 
 <div data-am-widget="list_news" class="am-list-news am-list-news-default">
     <!--列表标题-->
