@@ -18,10 +18,10 @@
             var uploadFilePath = data.upload_file_path;
 
             if(fileElementId == "user_default_male_avatar"){
-                $( "#cfg_UserDefaultMaleAvatar_5" ).val(uploadFileId);
+                $( "#cfg_UserDefaultMaleAvatar" ).val(uploadFileId);
                 $( "#preview_UserDefaultMaleImage").attr("src",uploadFilePath);
             }else{
-                $( "#cfg_UserDefaultFemaleAvatar_5" ).val(uploadFileId);
+                $( "#cfg_UserDefaultFemaleAvatar" ).val(uploadFileId);
                 $( "#preview_UserDefaultFemaleImage").attr("src",uploadFilePath);
             }
         }
@@ -131,92 +131,92 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserCount_3">会员总数：</label></td>
+                                            <label for="cfg_UserCount">会员总数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserCount_3" id="cfg_UserCount_3" value="{cfg_UserCount_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserCount" id="cfg_UserCount" value="{cfg_UserCount}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserNameLength_3">注册会员名的最大长度：</label></td>
+                                            <label for="cfg_UserNameLength">注册会员名的最大长度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserNameLength_3" id="cfg_UserNameLength_3" value="{cfg_UserNameLength_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserNameLength" id="cfg_UserNameLength" value="{cfg_UserNameLength}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserDefaultState_3">注册会员默认状态：</label></td>
+                                            <label for="cfg_UserDefaultState">注册会员默认状态：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserDefaultState_3" id="cfg_UserDefaultState_3" value="{cfg_UserDefaultState_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserDefaultState" id="cfg_UserDefaultState" value="{cfg_UserDefaultState}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员相册图片缩略图宽度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员相册图片缩略图宽度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAlbumThumbWidth_3" id="cfg_UserAlbumThumbWidth_3" value="{cfg_UserAlbumThumbWidth_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAlbumThumbWidth" id="cfg_UserAlbumThumbWidth" value="{cfg_UserAlbumThumbWidth}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员相册图片缩略图高度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员相册图片缩略图高度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAlbumThumbHeight_3" id="cfg_UserAlbumThumbHeight_3" value="{cfg_UserAlbumThumbHeight_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAlbumThumbHeight" id="cfg_UserAlbumThumbHeight" value="{cfg_UserAlbumThumbHeight}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员大头像宽度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员大头像宽度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAvatarBigWidth_3" id="cfg_UserAvatarBigWidth_3" value="{cfg_UserAvatarBigWidth_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAvatarBigWidth" id="cfg_UserAvatarBigWidth" value="{cfg_UserAvatarBigWidth}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员大头像高度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员大头像高度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAvatarBigHeight_3" id="cfg_UserAvatarBigHeight_3" value="{cfg_UserAvatarBigHeight_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAvatarBigHeight" id="cfg_UserAvatarBigHeight" value="{cfg_UserAvatarBigHeight}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员小头像宽度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员小头像宽度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAvatarSmallWidth_3" id="cfg_UserAvatarSmallWidth_3" value="{cfg_UserAvatarSmallWidth_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAvatarSmallWidth" id="cfg_UserAvatarSmallWidth" value="{cfg_UserAvatarSmallWidth}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumThumbWidth_3">会员小头像高度：</label></td>
+                                            <label for="cfg_UserAlbumThumbWidth">会员小头像高度：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAvatarSmallHeight_3" id="cfg_UserAvatarSmallHeight_3" value="{cfg_UserAvatarSmallHeight_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAvatarSmallHeight" id="cfg_UserAvatarSmallHeight" value="{cfg_UserAvatarSmallHeight}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserAlbumToBestMustVoteCount_3">升级成精华册需要的支持票数：</label></td>
+                                            <label for="cfg_UserAlbumToBestMustVoteCount">升级成精华册需要的支持票数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_UserAlbumToBestMustVoteCount_3" id="cfg_UserAlbumToBestMustVoteCount_3" value="{cfg_UserAlbumToBestMustVoteCount_3}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
+                                            <input name="cfg_UserAlbumToBestMustVoteCount" id="cfg_UserAlbumToBestMustVoteCount" value="{cfg_UserAlbumToBestMustVoteCount}" maxlength="200" type="text" class="input_number" style=" width: 200px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserDefaultMaleAvatar_5">站点默认男性用户头像：</label></td>
+                                            <label for="cfg_UserDefaultMaleAvatar">站点默认男性用户头像：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_UserDefaultMaleImage" src="{cfg_UserDefaultMaleAvatar_5_upload_file_path}" /><br/>
+                                            <img id="preview_UserDefaultMaleImage" src="{cfg_UserDefaultMaleAvatar_upload_file_path}" /><br/>
                                             <input id="user_default_male_avatar" name="user_default_male_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_UserDefaultMaleAvatar_5" name="cfg_UserDefaultMaleAvatar_5" type="hidden" value="{cfg_UserDefaultMaleAvatar_5}"/>
+                                            <input id="cfg_UserDefaultMaleAvatar" name="cfg_UserDefaultMaleAvatar" type="hidden" value="{cfg_UserDefaultMaleAvatar}"/>
                                             <img id="loadingOfUserDefaultMaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToMaleAvatar" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_UserDefaultFemaleAvatar_5">站点默认女性用户头像：</label></td>
+                                            <label for="cfg_UserDefaultFemaleAvatar">站点默认女性用户头像：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_5_upload_file_path}" /><br/>
+                                            <img id="preview_UserDefaultFemaleImage" src="{cfg_UserDefaultFemaleAvatar_upload_file_path}" /><br/>
                                             <input id="user_default_female_avatar" name="user_default_female_avatar" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_UserDefaultFemaleAvatar_5" name="cfg_UserDefaultFemaleAvatar_5" type="hidden" value="{cfg_UserDefaultFemaleAvatar_5}"/>
+                                            <input id="cfg_UserDefaultFemaleAvatar" name="cfg_UserDefaultFemaleAvatar" type="hidden" value="{cfg_UserDefaultFemaleAvatar}"/>
                                             <img id="loadingOfUserDefaultFemaleAvatar" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnUploadToFemaleAvatar" type="button" value="上传"/>
                                         </td>

@@ -14,11 +14,10 @@
         var tableId = parseInt("{SiteId}");
 
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-            var uploadFileId =  data.upload_file_id;
-            var uploadFilePath = data.upload_file_path;
-
             if(fileElementId == "file_newspaper_article_pic_watermark"){
-                $( "#cfg_NewspaperArticlePicWatermarkUploadFileId_5" ).val(uploadFileId);
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
+                $( "#cfg_NewspaperArticlePicWatermarkUploadFileId" ).val(uploadFileId);
                 $( "#preview_NewspaperArticlePicWatermarkUploadFileId").attr("src",uploadFilePath);
             }
         }
@@ -99,11 +98,11 @@
 
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_NewspaperArticlePicWatermarkUploadFileId_5">报纸文章附件上传的图片中的水印图：</label></td>
+                                            <label for="cfg_NewspaperArticlePicWatermarkUploadFileId">报纸文章附件上传的图片中的水印图：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_NewspaperArticlePicWatermarkUploadFileId" src="{cfg_NewspaperArticlePicWatermarkUploadFileId_5_upload_file_path}" /><br/>
+                                            <img id="preview_NewspaperArticlePicWatermarkUploadFileId" src="{cfg_NewspaperArticlePicWatermarkUploadFileId_upload_file_path}" /><br/>
                                             <input id="file_newspaper_article_pic_watermark" name="file_newspaper_article_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId_5" name="cfg_NewspaperArticlePicWatermarkUploadFileId_5" type="hidden" value="{cfg_NewspaperArticlePicWatermarkUploadFileId_5}"/>
+                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId" name="cfg_NewspaperArticlePicWatermarkUploadFileId" type="hidden" value="{cfg_NewspaperArticlePicWatermarkUploadFileId}"/>
                                             <img id="loadingOfNewspaperArticlePicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnNewspaperArticlePicWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
