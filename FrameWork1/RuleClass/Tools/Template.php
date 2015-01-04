@@ -708,6 +708,28 @@ class Template
             $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
         }
         $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
+
+        //处理常规去掉HTML代码的值
+        $templateContent = str_ireplace("{f_" . $columnName . "_no_html}", strip_tags($columnValue), $templateContent);
+
+        //处理下拉菜单的默认值
+
+        $selectedOption = '<script type="text/javascript">
+                    $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("selected",true);
+                </script>';
+
+        $templateContent = str_ireplace("{" . "s_" . $columnName . "}", $selectedOption, $templateContent);
+
+        $checkedOption = '<script type="text/javascript">
+                    $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("checked",true);
+                </script>';
+
+        $templateContent = str_ireplace("{" . "r_" . $columnName . "}", $checkedOption, $templateContent);
+
+        if (intval($columnValue) === 1) {
+            $templateContent = str_ireplace("{c_" . $columnName . "}", 'checked="checked"', $templateContent);
+        }
+
     }
 
 
