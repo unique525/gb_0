@@ -27,4 +27,13 @@
     <module id="9">
         <content><![CDATA[管理员信息不正确！]]></content>
     </module>
+    <module id="10">
+        <content><![CDATA[授权对象信息不正确！]]></content>
+    </module>
+    <module id="11">
+        <content><![CDATA[授权站点信息不正确！]]></content>
+    </module>
+    <module id="12">
+        <content><![CDATA[业务类型不明确！]]></content>
+    </module>
 </root>
