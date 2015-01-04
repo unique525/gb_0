@@ -142,31 +142,31 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumIeTitle_0">论坛浏览器标题：</label></td>
+                                            <label for="cfg_ForumIeTitle">论坛浏览器标题：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeTitle_0" id="cfg_ForumIeTitle_0" value="{cfg_ForumIeTitle_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeTitle" id="cfg_ForumIeTitle" value="{cfg_ForumIeTitle}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumIeKeywords_0">论坛浏览器关键字 Keyword：</label></td>
+                                            <label for="cfg_ForumIeKeywords">论坛浏览器关键字 Keyword：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeKeywords_0" id="cfg_ForumIeKeywords_0" value="{cfg_ForumIeKeywords_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeKeywords" id="cfg_ForumIeKeywords" value="{cfg_ForumIeKeywords}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumIeDescription_0">论坛浏览器描述文字 Description：</label></td>
+                                            <label for="cfg_ForumIeDescription">论坛浏览器描述文字 Description：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumIeDescription_0" id="cfg_ForumIeDescription_0" value="{cfg_ForumIeDescription_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <input name="cfg_ForumIeDescription" id="cfg_ForumIeDescription" value="{cfg_ForumIeDescription}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumLogoImage_0">论坛LOGO图片：</label></td>
+                                            <label for="cfg_ForumLogoImage">论坛LOGO图片：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_ForumLogoImage" src="{cfg_ForumLogoImage_0}" /><br/>
-                                            <input id="cfg_ForumLogoImage_0" name="cfg_ForumLogoImage_0" value="{cfg_ForumLogoImage_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <img id="preview_ForumLogoImage" src="{cfg_ForumLogoImage_upload_file_path}" /><br/>
+                                            <input id="cfg_ForumLogoImage" name="cfg_ForumLogoImage" value="{cfg_ForumLogoImage}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                             <br/>
                                             <input id="forum_logo_image_upload" name="forum_logo_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
                                             <img id="loadingOfForumLogo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
@@ -175,9 +175,9 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumBackground_0">论坛背景图片：</label></td>
+                                            <label for="cfg_ForumBackground">论坛背景图片：</label></td>
                                         <td class="spe_line">
-                                            <input id="cfg_ForumBackground_0" name="cfg_ForumBackground_0" value="{cfg_ForumBackground_0}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
+                                            <input id="cfg_ForumBackground" name="cfg_ForumBackground" value="{cfg_ForumBackground}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
                                             [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
                                             <input id="forum_background_image_upload" name="forum_background_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
                                             <img id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
@@ -186,9 +186,9 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumCssDefault_0">论坛默认的样式：</label></td>
+                                            <label for="cfg_ForumCssDefault">论坛默认的样式：</label></td>
                                         <td class="spe_line">
-                                            <select id="cfg_ForumCssDefault_0" name="cfg_ForumCssDefault_0">
+                                            <select id="cfg_ForumCssDefault" name="cfg_ForumCssDefault">
                                                 <option value="default">银灰色</option>
                                                 <option value="black_1">黑色_1</option>
                                                 <option value="blue_1">蓝色_1</option>
@@ -209,9 +209,9 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumCssDefaultWidth_0">论坛默认的样式宽度文件：</label></td>
+                                            <label for="cfg_ForumCssDefaultWidth">论坛默认的样式宽度文件：</label></td>
                                         <td class="spe_line">
-                                            <select id="cfg_ForumCssDefaultWidth_0" name="cfg_ForumCssDefaultWidth_0">
+                                            <select id="cfg_ForumCssDefaultWidth" name="cfg_ForumCssDefaultWidth">
                                                 <option value="w980">980像素宽</option>
                                                 <option value="w80p">80%宽</option>
                                                 <option value="w90p">90%宽</option>
@@ -222,9 +222,9 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumCssDefaultFontSize_0">论坛默认的样式字体文件：</label></td>
+                                            <label for="cfg_ForumCssDefaultFontSize">论坛默认的样式字体文件：</label></td>
                                         <td class="spe_line">
-                                            <select id="cfg_ForumCssDefaultFontSize_0" name="cfg_ForumCssDefaultFontSize_0">
+                                            <select id="cfg_ForumCssDefaultFontSize" name="cfg_ForumCssDefaultFontSize">
                                                 <option value="12">12像素（标准）</option>
                                                 <option value="14">14像素（较大）</option>
                                             </select>
@@ -240,7 +240,7 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line">
-                                            <label for="cfg_ForumTopInfo_2"></label><textarea id="cfg_ForumTopInfo_2" name="cfg_ForumTopInfo_2" style="width:90%;height:380px;">{cfg_ForumTopInfo_2}</textarea><br/>
+                                            <label for="cfg_ForumTopInfo"></label><textarea id="cfg_ForumTopInfo" name="cfg_ForumTopInfo" style="width:90%;height:380px;">{cfg_ForumTopInfo}</textarea><br/>
                                             <input id="file_upload_to_forum_top_info" name="file_upload_to_forum_top_info" type="file"
                                                    class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
                                                 id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif"
@@ -256,7 +256,7 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line">
-                                            <label for="cfg_ForumBotInfo_2"></label><textarea id="cfg_ForumBotInfo_2" name="cfg_ForumBotInfo_2" style="width:90%;height:380px;">{cfg_ForumBotInfo_2}</textarea><br/>
+                                            <label for="cfg_ForumBotInfo"></label><textarea id="cfg_ForumBotInfo" name="cfg_ForumBotInfo" style="width:90%;height:380px;">{cfg_ForumBotInfo}</textarea><br/>
                                             <input id="file_upload_to_forum_bot_info" name="file_upload_to_forum_bot_info" type="file"
                                                    class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
                                                 id="loadingOfForumBotInfo" src="/system_template/common/images/loading1.gif"
@@ -272,16 +272,16 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line" style="width:20%;" height="40" align="right">
-                                            <label for="cfg_ForumTopicPageSize_3">主题列表每页记录数：</label></td>
+                                            <label for="cfg_ForumTopicPageSize">主题列表每页记录数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumTopicPageSize_3" id="cfg_ForumTopicPageSize_3" value="{cfg_ForumTopicPageSize_3}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
+                                            <input name="cfg_ForumTopicPageSize" id="cfg_ForumTopicPageSize" value="{cfg_ForumTopicPageSize}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" style="width:20%;" height="40" align="right">
-                                            <label for="cfg_ForumPostPageSize_3">帖子列表每页记录数：</label></td>
+                                            <label for="cfg_ForumPostPageSize">帖子列表每页记录数：</label></td>
                                         <td class="spe_line">
-                                            <input name="cfg_ForumPostPageSize_3" id="cfg_ForumPostPageSize_3" value="{cfg_ForumPostPageSize_3}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
+                                            <input name="cfg_ForumPostPageSize" id="cfg_ForumPostPageSize" value="{cfg_ForumPostPageSize}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
                                         </td>
                                     </tr>
                                 </table>

@@ -40,12 +40,16 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = Template::Load("site/site_config_deal.html", "common");
         }
         $manageUserId = Control::GetManageUserId();
-        //删除缓冲
-        DataCache::RemoveDir(CACHE_PATH . '/site_config_data');
         parent::ReplaceFirst($tempContent);
         $siteConfigData = new SiteConfigData($siteId);
         if ($siteId > 0) {
             if (!empty($_POST)) {
+
+
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/site_config_data');
+
+
                 //读取表单
                 foreach ($_POST as $key => $value) {
                     if (strpos($key, "cfg_") === 0) { //

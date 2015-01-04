@@ -1693,25 +1693,8 @@ class SiteConfigData extends BaseData {
      */
     public function __get($siteConfigName)
     {
-        $siteConfigType = self::SITE_CONFIG_TYPE_STRING_200;
         $defaultValue = '';
-
-        if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_STRING_2000;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_2)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_TEXT;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_3)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_INT;
-            $defaultValue = 0;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
-            $defaultValue = 0;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
-            $defaultValue = 0;
-        }
-
-        return self::GetValue($this->SiteId, $siteConfigName, $siteConfigType, $defaultValue);
+        return self::GetValue($this->SiteId, $siteConfigName, $defaultValue);
     }
 
     /**
@@ -1721,19 +1704,7 @@ class SiteConfigData extends BaseData {
      */
     public function __set($siteConfigName, $fieldValue)
     {
-        $siteConfigType = self::SITE_CONFIG_TYPE_STRING_200;
-        if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_STRING_2000;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_2)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_TEXT;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_3)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_INT;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
-        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
-            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
-        }
-        self::SetValue($this->SiteId, $siteConfigName, $fieldValue, $siteConfigType);
+        self::SetValue($this->SiteId, $siteConfigName, $fieldValue);
     }
 
     /**
@@ -1741,10 +1712,10 @@ class SiteConfigData extends BaseData {
      * @param int $siteId 站点id
      * @param string $siteConfigName 配置名称
      * @param string $fieldValue 配置值
-     * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      */
-    public function SetValue($siteId, $siteConfigName, $fieldValue, $siteConfigType = 0)
+    public function SetValue($siteId, $siteConfigName, $fieldValue)
     {
+        $siteConfigType = self::GetSiteConfigType($siteConfigName);
         if(intval($siteId>0)){
             switch ($siteConfigType) {
                 case self::SITE_CONFIG_TYPE_STRING_200:
@@ -1812,18 +1783,33 @@ class SiteConfigData extends BaseData {
         }
     }
 
+    private function GetSiteConfigType($siteConfigName){
+        $siteConfigType = self::SITE_CONFIG_TYPE_STRING_200;
+        if (in_array($siteConfigName, $this->ArrSiteConfigTypes_1)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_STRING_2000;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_2)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_TEXT;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_3)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_INT;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_4)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_NUMBER;
+        } else if (in_array($siteConfigName, $this->ArrSiteConfigTypes_5)) {
+            $siteConfigType = self::SITE_CONFIG_TYPE_UPLOAD_FILE_ID;
+        }
+        return $siteConfigType;
+    }
 
     /**
      * 取得配置值（已缓冲）
      * @param int $siteId 站点id
      * @param string $siteConfigName 配置名称
-     * @param int $siteConfigType 配置类型（0:普通string,1:中长度string,2:text,3:int,4:number）
      * @param mixed $defaultValue 默认值
      * @return mixed 配置值
      */
-    private function GetValue($siteId, $siteConfigName, $siteConfigType = 0, $defaultValue = null)
+    private function GetValue($siteId, $siteConfigName, $defaultValue = null)
     {
         if (intval($siteId) > 0) {
+            $siteConfigType = self::GetSiteConfigType($siteConfigName);
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
             if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {

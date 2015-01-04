@@ -230,10 +230,6 @@ class BaseGen
                         $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "}", $uploadFileId, $templateContent);
                         $templateContent = str_ireplace("{cfg_" . $siteConfigName . "}", $uploadFileId, $templateContent);
 
-
-                        //echo "{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}";
-
-
                         /**
                          * 上传文件id替换
                          * {cfg_$siteConfigName_$siteConfigType_upload_file_mobile_path}
