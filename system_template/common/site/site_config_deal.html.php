@@ -14,35 +14,16 @@
         var tableId = parseInt("{SiteId}");
 
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-            var uploadFileId =  data.upload_file_id;
-            var uploadFilePath = data.upload_file_path;
-
             if(fileElementId == "file_newspaper_article_pic_watermark"){
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
                 $( "#cfg_NewspaperArticlePicWatermarkUploadFileId" ).val(uploadFileId);
                 $( "#preview_NewspaperArticlePicWatermarkUploadFileId").attr("src",uploadFilePath);
             }
         }
 
-        //取单个文件回调函数
-        window.GetOneUploadFileCallBack = function(data){
-            var uploadFileId =  data.upload_file_id;
-            var uploadFilePath = data.upload_file_path;
-alert(uploadFileId);
-            if(uploadFileId == parseInt($("#cfg_NewspaperArticlePicWatermarkUploadFileId").val())){
-                //$( "#cfg_NewspaperArticlePicWatermarkUploadFileId_5" ).val(uploadFileId);
-                $("#preview_NewspaperArticlePicWatermarkUploadFileId").attr("src",uploadFilePath);
-            }
-        }
-
         $(function () {
             $('#tabs').tabs();
-
-            //加载图片
-            var newspaperArticlePicWatermarkUploadFileId = parseInt($("#cfg_NewspaperArticlePicWatermarkUploadFileId").val());
-            if(newspaperArticlePicWatermarkUploadFileId>0){
-                GetOneUploadFile(newspaperArticlePicWatermarkUploadFileId);
-            }
-
 
             //报纸文章附件上传的图片中的水印图
             var btnNewspaperArticlePicWatermarkUploadFileId = $("#btnNewspaperArticlePicWatermarkUploadFileId");
