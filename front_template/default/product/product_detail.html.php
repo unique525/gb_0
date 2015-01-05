@@ -432,7 +432,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="left"  style="font-size:14px;" ><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /><div style="display: none"> <a href="#">降价通知</a> 　</div><img src="images/2_24.gif" width="18" height="14" align="absmiddle" /> <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span></td>
+                        <td align="left"  style="font-size:14px;" ><span style="display: none"><img src="images/2_22.gif" width="13" height="14" align="absmiddle" /> <a href="#">降价通知</a> 　</span><img src="images/2_24.gif" width="18" height="14" align="absmiddle" />
+                            <span style="cursor:pointer" onclick="addUserFavorite('{ProductId}','{ProductName}','1','商品');">我要收藏</span>
+                             <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service2.png" alt="联系客服" title="联系客服"/></a>
+                        </td>
                     </tr>
                     <tr>
                         <td align="left" style="padding:20px 0;"><div class="jiathis_style">

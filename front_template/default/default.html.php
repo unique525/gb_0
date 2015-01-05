@@ -195,8 +195,8 @@
                             <![CDATA[
                             <li>
                                 <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><span class="right"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a></span><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                             </li>
                             ]]>
                         </item>
@@ -210,8 +210,8 @@
                             <![CDATA[
                             <li>
                                 <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><span class="right"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a></span><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                             </li>
                             ]]>
                         </item>
@@ -225,8 +225,8 @@
                             <![CDATA[
                             <li>
                                 <div><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFileThumbPath2}" width="194" height="194" /></a></div>
-                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                <div class="price"><span class="right"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a></span><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="right old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                             </li>
                             ]]>
                         </item>
@@ -297,8 +297,8 @@
                                     <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="150" height="150" /></a>
                                 </div>
                                 <div class="right">
-                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a style="float:right;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                                 </div>
                                 <div class="clean"></div>
                             </li>
@@ -364,8 +364,8 @@
                                     <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="150" height="150" /></a>
                                 </div>
                                 <div class="right">
-                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a style="float:right;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                                 </div>
                                 <div class="clean"></div>
                             </li>
@@ -431,8 +431,8 @@
                                     <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="150" height="150" /></a>
                                 </div>
                                 <div class="right">
-                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a style="float:right;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                                 </div>
                                 <div class="clean"></div>
                             </li>
@@ -497,8 +497,8 @@
                                     <a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="150" height="150" /></a>
                                 </div>
                                 <div class="right">
-                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a></div>
-                                    <div class="price"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
+                                    <div class="name"><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
+                                    <div class="price"><a style="float:right;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank"><span class="old_price">￥{f_MarketPrice}</span>￥{f_SalePrice}</a></div>
                                 </div>
                                 <div class="clean"></div>
                             </li>
@@ -592,6 +592,6 @@
 </div>
 
 <pre_temp id="8"></pre_temp>
-><script type="text/javascript">var visitConfig = encodeURIComponent("http://xzw.changsha.cn") +"||11||209||0||0||"+encodeURI("");</script><script type="text/javascript" src="http://xzw.changsha.cn/front_js/visit.js" charset="utf-8"></script>
+><script type="text/javascript">var visitConfig = encodeURIComponent("http://xzw.changsha.cn") +"||11||209||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>

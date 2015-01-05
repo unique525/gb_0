@@ -212,9 +212,10 @@
                     </a>
                 </div>
                 <div class="name" style="margin-top:5px;">
-                    <a target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2957670343:52" alt="联系客服" title="联系客服"/></a>
+                    <a target="_blank" href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}</a>
                 </div>
                 <div class="price" style="color:#eb6100;">
+                    <a style="float:right;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2957670343&site=qq&menu=yes"><img border="0" src="/images1/service.png" alt="联系客服" title="联系客服"/></a>
                     ￥{f_SalePrice}
                     <span>已有{f_ProductCommentCount}人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
                 </div>
