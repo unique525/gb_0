@@ -180,7 +180,7 @@
                     <![CDATA[
                     <figure data-am-widget="figure" class="am am-figure am-figure-default "
                             data-am-figure="{  autoZoom: 1 }">
-                        <img src="{f_UploadFileWatermarkPath1}" data-rel=""
+                        <img src="{f_UploadFilePath}" data-rel=""
                              alt="{f_Remark}" />
                         <figcaption class="am-figure-capition-btm">{f_Remark}</figcaption>
                     </figure>
@@ -196,7 +196,7 @@
                 <item>
                     <![CDATA[
                     <li>
-                        <img src="{f_UploadFileWatermarkPath1}" alt="{f_Remark}" />
+                        <img src="{f_UploadFilePath}" alt="{f_Remark}" />
                         <br />
                         {f_Remark}
                     </li>
