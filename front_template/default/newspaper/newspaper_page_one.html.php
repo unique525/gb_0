@@ -84,6 +84,7 @@
 </head>
 <body>
 <div>
+    <div class="site_ad_268"></div><script language='javascript' src='/front_js/site_ad/2/site_ad_268.js' charset="utf-8"></script><!--落幕-->
     <header class="am-topbar am-topbar-fixed-bottom">
         <div>
             <div style="float:left;"><a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}"><img src="/image_02/left.png" /></a></div>

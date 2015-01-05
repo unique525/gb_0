@@ -8,18 +8,18 @@
  * @param {int} siteAdId
  * @param {string} switchClassName
  */
-window.runSiteAdJs = function(siteAdId,switchClassName){
 
-};
 
 $().ready(function() {
 
     $().ready(function() {
+
         //检查所有广告是否到期
         var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
         for(var i=0;i<arrOfAllAdContents.length;i++){
             IsInTime(arrOfAllAdContents[i]);
         }
+
 
 
         //轮换
@@ -199,4 +199,22 @@ function IsInTime(adContent){
     adContent.setAttribute("id",times[2]);
 }
 
-
+function setcookie(name, value) {
+    var Days = 1000;
+    var exp = new Date();
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";
+}
+function getcookie(name) {
+    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+    if (arr != null)
+        return unescape(arr[2]);
+    return "";
+}
+function delCookie(name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval = getCookie(name);
+    if (cval != null)
+        document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}

@@ -1,9 +1,10 @@
 /**
 *   落幕
 */
+
 var str='';
 var siteAdUrl = '';
-str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidth}; height:{SiteAdHeight};overflow:hidden;display:none" class="icms_site_ad site_ad_show_type_{ShowType}" title="{ShowNumber}" >';
+str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidth}; height:{SiteAdHeight};overflow:hidden;display:none" class="icms_site_ad site_ad_show_type_{ShowType} show_once_{ShowOnce}" title="{ShowNumber}" >';
     <icms id="site_ad_content" type="list">
         <header><![CDATA[
             str+='<div class="icms_ad_item pull_{f_SiteAdId}" idvalue="{f_ResidenceTime}" id="{f_BeginDate}_{f_EndDate}_{f_SiteAdContentId}" title="{f_SiteAdContentTitle}" style="">';
@@ -21,3 +22,10 @@ str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidt
 str+='</div>';
 
 $(".site_ad_{SiteAdId}").html(str);
+
+
+var showOnce=getcookie('show_once_{SiteAdId}');
+if(showOnce==1){
+$(".site_ad_{SiteAdId}").hide();
+}
+setcookie('show_once_{SiteAdId}', {ShowOnce});
