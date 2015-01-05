@@ -91,6 +91,16 @@
                 </td>
             </tr>
             <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_ShowOnce">是否只显示一次：</label></td>
+                <td class="spe_line">
+                    <select id="f_ShowOnce" name="f_ShowOnce">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    {s_ShowOnce}
+                </td>
+            </tr>
+            <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_State">是否启用：</label></td>
                 <td class="spe_line">
                     <select id="f_State" name="f_State">

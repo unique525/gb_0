@@ -1329,6 +1329,7 @@ class BaseManageGen extends BaseGen
                 $arrayOfOneSiteAd = $siteAdManageData->GetOne($siteAdId);
                 if (count($arrayOfOneSiteAd) > 0) {
                     if (intval($arrayOfOneSiteAd["State"]) === 0) {
+                        $showOnce = $arrayOfOneSiteAd["ShowOnce"];//是否只显示一次
                         $showNumber = $arrayOfOneSiteAd["ShowNumber"];//轮换类广告位是否显示轮换数字
                         $siteAdWidth = $arrayOfOneSiteAd["SiteAdWidth"];
 
@@ -1362,7 +1363,8 @@ class BaseManageGen extends BaseGen
                                 "{SiteAdWidth}" => $siteAdWidth,
                                 "{SiteAdHeight}" => $siteAdHeight,
                                 "{ShowType}" => $showType,
-                                "{ShowNumber}" => $showNumber
+                                "{ShowNumber}" => $showNumber,
+                                "{ShowOnce}" => $showOnce
                             );
                             $siteAdJsContent = strtr($siteAdJsContent, $replaceArr);
                             //解jquery与其他$的JS冲突问题
