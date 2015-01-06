@@ -65,9 +65,9 @@
                         if(data["result"] > 0){
                             $("#span_state_"+idvalue).html(FormatOrderState(state,idvalue));
                         }else if(data["result"] == -2){
-                            alert("当前订单不能申请退货");
+                            alert("只有已付款订单才能申请退货");
                         }else{
-                            alert("修改失败");
+                            alert("申请失败");
                         }
                     }
                 });
@@ -148,8 +148,8 @@
                                             <td class="state"><span class="span_state" id="span_state_{f_UserOrderId}" idvalue="{f_UserOrderId}">{f_State}</span></td>
                                             <td class="option">
                                                 <a class="ckxq" href="/default.php?mod=user_order&a=detail&user_order_id={f_UserOrderId}" target="_blank">订单详情</a>
-                                                <input type="button" class="btn apply_return_btn" idvalue="{f_UserOrderId}" value="申请退货">
-                                                <input type="button" class="btn cancel_order_btn" idvalue="{f_UserOrderId}" value="取消订单">
+                                                <input style="cursor: pointer;" type="button" class="btn apply_return_btn" idvalue="{f_UserOrderId}" value="申请退货">
+                                                <input style="cursor: pointer;" type="button" class="btn cancel_order_btn" idvalue="{f_UserOrderId}" value="取消订单">
                                             </td>
                                         </tr>
                                     </table>

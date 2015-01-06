@@ -184,26 +184,26 @@
 
 
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserTitle">浏览器标题：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="f_ChannelBrowserTitle">浏览器标题：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserTitle" name="f_BrowserTitle" type="text" value="{BrowserTitle}" class="input_box"
+                <input id="f_ChannelBrowserTitle" name="f_ChannelBrowserTitle" type="text" value="{ChannelBrowserTitle}" class="input_box"
                        style="width:400px;" maxlength="200"/>
             </td>
         </tr>
 
 
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserKeywords">浏览器关键字：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="f_ChannelBrowserKeywords">浏览器关键字：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserKeywords" name="f_BrowserKeywords" type="text" value="{BrowserKeywords}"
+                <input id="f_ChannelBrowserKeywords" name="f_ChannelBrowserKeywords" type="text" value="{ChannelBrowserKeywords}"
                        class="input_box" style="width:400px;" maxlength="200"/>
             </td>
         </tr>
 
         <tr>
-            <td class="spe_line" height="30" align="right"><label for="f_BrowserDescription">浏览器描述文字：</label></td>
+            <td class="spe_line" height="30" align="right"><label for="f_ChannelBrowserDescription">浏览器描述文字：</label></td>
             <td class="spe_line">
-                <input id="f_BrowserDescription" name="f_BrowserDescription" type="text" value="{BrowserDescription}"
+                <input id="f_ChannelBrowserDescription" name="f_ChannelBrowserDescription" type="text" value="{ChannelBrowserDescription}"
                        class="input_box" style=" width: 400px;" maxlength="200"/>
             </td>
         </tr>

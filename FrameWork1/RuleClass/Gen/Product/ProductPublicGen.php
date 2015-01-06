@@ -43,6 +43,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
         $channelFirstId = Control::GetRequest("channel_first_id", 0);
         $templateContent = self::LoadListTemp($temp, $channelId);
 
@@ -64,6 +65,11 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
+
+        if($siteId>0){
+            parent::ReplaceSiteInfo($siteId, $templateContent);
+        }
+
 
         if ($pageIndex > 0 && $channelId > 0) {
             $tagId = "product_page_".$channelId;
@@ -124,6 +130,10 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         if ($productId > 0) {
             $templateContent = self::loadDetailTemp();
             parent::ReplaceFirst($templateContent);
+
+            if($siteId>0){
+                parent::ReplaceSiteInfo($siteId, $templateContent);
+            }
 
             //加载产品表数据
             $productPublicData = new ProductPublicData();

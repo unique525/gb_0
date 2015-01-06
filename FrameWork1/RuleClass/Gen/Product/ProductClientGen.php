@@ -43,18 +43,26 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId>0){
-            $topCount = Control::GetRequest("top", 5);
+            $pageSize = Control::GetRequest("ps", 20);
             $orderBy = Control::GetRequest("order", 0);
 
             $channelClientData = new ChannelClientData();
 
             $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
 
+
+            if(strlen($channelIds)>0){
+                $channelIds = $channelIds . ',' . $channelId;
+            }else{
+                $channelIds = $channelId;
+            }
+
+
             $productClientData = new ProductClientData();
             $arrList = $productClientData->GetListOfChannelId(
                 $channelIds,
                 $orderBy,
-                $topCount
+                $pageSize
             );
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);
