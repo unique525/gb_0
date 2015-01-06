@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>长沙晚报微报纸</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="长沙晚报 长沙新闻 长沙晚报微报纸 长沙晚报数字报 长沙晚报手机报" />
+    <meta name="description" content="长沙晚报“微报纸”，是长沙晚报报业集团在移动阅读时代推出的一款适应移动手机阅读的数字报产品" />
+    <script src="/system_js/jquery-1.9.1.min.js"></script>
+    <script>
+
+        $(function() {
+
+            $("#main").load('/default.php?mod=newspaper&a=gen_one&channel_id=15');
+
+        });
+        //window.location.href='/default.php?mod=newspaper&a=gen_one&channel_id=15';
+
+    </script>
+</head>
+<body>
+<div id="main"></div>
+</body>
+</html>

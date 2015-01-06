@@ -17,8 +17,8 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "list_of_channel_id":
-                $result = self::GenListOfChannelId();
+            case "list_of_channel":
+                $result = self::GenListOfChannel();
                 break;
             case "list_of_discount": //打折商品
                 $result = self::GenListOfDiscount();
@@ -36,7 +36,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    private function GenListOfChannelId(){
+    private function GenListOfChannel(){
 
         $result = "";
 
