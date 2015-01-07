@@ -559,13 +559,17 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             $userOrderPublicData = new UserOrderPublicData();
             if($state == UserOrderData::STATE_APPLY_REFUND){
                 $nowState = $userOrderPublicData->GetState($userOrderId,false);
+
                 if(
-                    $nowState != UserOrderData::STATE_PAYMENT  ||
-                    $nowState != UserOrderData::STATE_SENT  ||
-                    $nowState != UserOrderData::STATE_DONE  ||
-                    $nowState != UserOrderData::STATE_COMMENT_FINISHED  ||
-                    $nowState != UserOrderData::STATE_UNCOMMENT
+                    $nowState == UserOrderData::STATE_PAYMENT  ||
+                    $nowState == UserOrderData::STATE_SENT  ||
+                    $nowState == UserOrderData::STATE_DONE  ||
+                    $nowState == UserOrderData::STATE_COMMENT_FINISHED  ||
+                    $nowState == UserOrderData::STATE_UNCOMMENT
                 ){
+
+                }
+                else{
                     return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_STATE.'})';
                 }
             }

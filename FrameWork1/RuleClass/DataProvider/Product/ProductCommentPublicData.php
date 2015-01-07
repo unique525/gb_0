@@ -162,6 +162,7 @@ class ProductCommentPublicData extends BasePublicData
                 WHERE pc.ParentId = 0 AND pc.ProductId = :ProductId
                 AND ui.UserId = pc.UserId
                 AND pc.UserId = ur.UserId
+                ORDER BY CreateDate DESC
                 LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
