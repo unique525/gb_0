@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>会员中心</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .right {

@@ -57,6 +57,7 @@ function GetSiteIdByDomain() {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>支付结果</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
@@ -79,7 +80,7 @@ function GetSiteIdByDomain() {
 <body>
 
 <div class="wrapper">
-    <div class="logo"><a href=""><img src="/images/mylogo.png" width="320" height="103"/></a></div>
+    <div class="logo"><a href="/"><img src="/images/mylogo.png" border="0" /></a></div>
     <div class="step">
         <div class="step1"><img src="/images/wdgwc.png" width="49" height="49"/></div>
         <div class="steptext"><font class="grey">第一步</font><br/><font class="green">我的购物车</font></div>

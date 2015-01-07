@@ -11,7 +11,8 @@ ul,li{list-style:none;}
 dl,dd,dt{margin:0;padding:0;}
 a{ color:#444444; text-decoration:none;}
 a:hover{ text-decoration:underline;}
-img,input{ vertical-align:middle;border:1px; padding:0; margin:0;}
+img{ vertical-align:middle;border:none; padding:0; margin:0;}
+input{ vertical-align:middle;border:1px; padding:0; margin:0;}
 .clean{ clear:both;}
 .left{ float:left;}
 .right{ float:right;}
@@ -155,7 +156,7 @@ img,input{ vertical-align:middle;border:1px; padding:0; margin:0;}
 .producttab li{width:240px; float:left;}
 
 .producttab2{}
-.producttab2 .title{height:47px;line-height:45px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat center; text-align:center;width:20%; float:left;}
+.producttab2 .title{height:47px;line-height:45px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat center; text-align:center;width:19.5%; float:left;}
 .producttab2 .title a{height:47px;font-size:16px;font-family:"Microsoft YaHei"; display:block; background:url(tab_grey.png) no-repeat center;}
 .producttab2 .title a:hover{height:47px;display:block; background:url(tab_red.png) no-repeat center;font-size:16px;font-family:"Microsoft YaHei"; text-decoration:none;}
 
