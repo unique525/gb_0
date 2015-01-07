@@ -101,6 +101,89 @@ class DocumentNewsPublicData extends BasePublicData {
     }
 
     /**
+     * 取得子节点资讯列表
+     * @param int $channelId 频道id
+     * @param string $topCount 显示条数  1或 1,10
+     * @param int $state 状态
+     * @param int $orderBy 排序方式
+     * @return array|null 返回资讯列表
+     */
+    public function GetListOfChild($channelId, $topCount, $state, $orderBy = 0) {
+
+        $result = null;
+
+        if($channelId>0 && !empty($topCount)){
+
+            $orderBySql = 'Sort DESC, CreateDate DESC';
+
+            switch($orderBy){
+
+                case 0:
+                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    break;
+
+            }
+
+
+            $selectColumn = '
+            DocumentNewsId,
+            SiteId,
+            ChannelId,
+            DocumentNewsTitle,
+            DocumentNewsSubTitle,
+            DocumentNewsCiteTitle,
+            DocumentNewsShortTitle,
+            DocumentNewsIntro,
+            CreateDate,
+            ManageUserId,
+            ManageUserName,
+            UserId,
+            UserName,
+            Author,
+            State,
+            DocumentNewsType,
+            DirectUrl,
+            ShowDate,
+            SourceName,
+            DocumentNewsMainTag,
+            DocumentNewsTag,
+            Sort,
+            TitlePic1UploadFileId,
+            TitlePic2UploadFileId,
+            TitlePic3UploadFileId,
+            DocumentNewsTitleColor,
+            DocumentNewsTitleBold,
+            OpenComment,
+            ShowHour,
+            ShowMinute,
+            ShowSecond,
+            IsHot,
+            RecLevel,
+            ShowPicMethod,
+            ClosePosition,
+            Hit,
+            PublishDate,
+            (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
+                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1Path
+            ';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
+                WHERE
+                    ParentId=:ChannelId
+                    AND State=:State
+                ORDER BY $orderBySql LIMIT " . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
+
+    /**
      * 取得分页显示的资讯列表
      * @param int $channelId 频道id
      * @param int $pageBegin 记录开始位置

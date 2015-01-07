@@ -847,6 +847,52 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 子节点的列表数据集
+     * @param int $channelId 频道id
+     * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
+     * @param int $state 状态
+     * @param int $orderBy 排序方式
+     * @return array|null 返回子节点的列表数据集
+     */
+    public function GetListOfChild($channelId, $topCount, $state, $orderBy) {
+
+        $result = null;
+
+        if(!empty($topCount)){
+            $selectColumn = '
+            dn.*,
+            uf1.UploadFilePath AS TitlePic1,
+            uf2.UploadFilePath AS TitlePic2,
+            uf3.UploadFilePath AS TitlePic3
+
+
+            ';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . " dn
+
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+
+                WHERE
+                    dn.ChannelId IN (SELECT ChannelId FROM ".self::TableName_Channel." WHERE ParentId=:ParentId)
+                    AND dn.State=:State
+
+
+
+                ORDER BY dn.Sort DESC, dn.CreateDate DESC
+                LIMIT " . $topCount;
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ParentId", $channelId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
 }
 
 ?>

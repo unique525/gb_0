@@ -580,9 +580,25 @@ class BaseManageGen extends BaseGen
         if ($channelId > 0) {
             $arrDocumentNewsList = null;
             $documentNewsManageData = new DocumentNewsManageData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            $state = DocumentNewsData::STATE_PUBLISHED;
+
             switch ($tagWhere) {
                 case "new":
                     $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                case "child":
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
                     break;
                 default :
                     //new

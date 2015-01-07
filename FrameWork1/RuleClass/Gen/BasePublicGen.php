@@ -421,6 +421,9 @@ class BasePublicGen extends BaseGen {
             }
 
             switch ($tagWhere) {
+                case "child":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
+                    break;
                 default :
                     $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
                     break;
