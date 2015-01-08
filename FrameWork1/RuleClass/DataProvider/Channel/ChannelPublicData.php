@@ -123,7 +123,7 @@ class ChannelPublicData extends BasePublicData {
                 str_ireplace(",","_",$parentId) .
                 '_' . $topCount . '_' . $order;
             $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-            if (strlen($cacheContent) <= 0) {
+            if (strlen($cacheContent) <= 2) {
 
                 switch($order){
                     default:
@@ -140,9 +140,9 @@ class ChannelPublicData extends BasePublicData {
                         TitlePic1UploadFileId,
                         TitlePic2UploadFileId,
                         TitlePic3UploadFileId,
-                        BrowserTitle,
-                        BrowserDescription,
-                        BrowserKeywords,
+                        ChannelBrowserTitle,
+                        ChannelBrowserDescription,
+                        ChannelBrowserKeywords,
                         CreateDate,
                         Sort,
                         ChannelIntro,
