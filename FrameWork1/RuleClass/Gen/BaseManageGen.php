@@ -600,6 +600,9 @@ class BaseManageGen extends BaseGen
                 case "child":
                     $arrDocumentNewsList = $documentNewsManageData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
                     break;
+                case "grandson":
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
+                    break;
                 default :
                     //new
                     $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);

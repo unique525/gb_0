@@ -688,11 +688,7 @@ class Template
                     $templateContent = str_ireplace("{f_month}", $month, $templateContent);
                     $templateContent = str_ireplace("{f_day}", $day, $templateContent);
                 }
-
-
-
             }
-
         }
 
         $pos = stripos(strtolower($columnName), strtolower("CreateDate"));
