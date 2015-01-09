@@ -125,7 +125,7 @@ class BaseManageGen extends BaseGen
             $siteId = $channelManageData->GetSiteId($channelId, true);
             $channelName = $channelManageData->GetChannelName($channelId, true);
             $currentChannelId = $channelId;
-            $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
+
             $currentRank = $rank;
 
             $arrChannelIds = array();
@@ -164,6 +164,8 @@ class BaseManageGen extends BaseGen
                         //2.替换模板内容
                         $timeStart = Control::GetMicroTime();
                         self::ReplaceFirst($channelTemplateContent);
+
+                        $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
 
                         $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
