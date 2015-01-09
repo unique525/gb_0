@@ -125,6 +125,7 @@ class BaseManageGen extends BaseGen
             $siteId = $channelManageData->GetSiteId($channelId, true);
             $channelName = $channelManageData->GetChannelName($channelId, true);
             $currentChannelId = $channelId;
+            $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
             $currentRank = $rank;
 
             $arrChannelIds = array();
@@ -168,6 +169,8 @@ class BaseManageGen extends BaseGen
                         $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
+                        $channelTemplateContent = str_ireplace("{CurrentChannelId}",$currentChannelId, $channelTemplateContent);
+                        $channelTemplateContent = str_ireplace("{CurrentChannelName}",$currentChannelName, $channelTemplateContent);
 
 
 
