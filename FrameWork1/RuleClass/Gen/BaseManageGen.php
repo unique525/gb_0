@@ -394,6 +394,21 @@ class BaseManageGen extends BaseGen
                     case Template::TAG_TYPE_PRODUCT_LIST :
                         $channelTemplateContent = self::ReplaceTemplateOfProductList($channelTemplateContent, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         break;
+                    case Template::TAG_TYPE_PIC_SLIDER_LIST :
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($channelId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfPicSlider(
+                                $channelTemplateContent,
+                                $channelId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
                 }
             }
         }
@@ -665,6 +680,66 @@ class BaseManageGen extends BaseGen
         }
         else Template::RemoveCustomTag($templateContent, $tagId);
         return $templateContent;
+    }
+
+    /**
+     * 替换图片轮换列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfPicSlider(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($channelId > 0) {
+
+            //只显示已审状态
+            $state = PicSliderData::STATE_VERIFY;
+
+
+            $arrList = null;
+            $picSliderManageData = new PicSliderManageData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $picSliderManageData->GetListForPublish($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+            }
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
     }
 
 
