@@ -164,13 +164,16 @@ class BaseManageGen extends BaseGen
                         //2.替换模板内容
                         $timeStart = Control::GetMicroTime();
                         self::ReplaceFirst($channelTemplateContent);
-                        $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
-                        self::ReplaceEnd($channelTemplateContent);
+
                         $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{CurrentChannelId}",$currentChannelId, $channelTemplateContent);
                         $channelTemplateContent = str_ireplace("{CurrentChannelName}",$currentChannelName, $channelTemplateContent);
+
+                        $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+                        self::ReplaceEnd($channelTemplateContent);
+
 
 
 
