@@ -1220,6 +1220,7 @@ class BaseManageGen extends BaseGen
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
                                 $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
 
 
 
@@ -1646,6 +1647,7 @@ class BaseManageGen extends BaseGen
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
                                 $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
 
 
 
@@ -1902,6 +1904,7 @@ class BaseManageGen extends BaseGen
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
                                 $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
 
 
 
