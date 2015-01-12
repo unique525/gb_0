@@ -632,20 +632,65 @@ class ChannelManageData extends BaseManageData
         if ($channelId > 0) {
             switch ($order) {
                 case "channel_id":
-                    $order = "ORDER BY Sort DESC," . self::TableId_Channel . " ";
+                    $order = "ORDER BY c.Sort DESC," . self::TableId_Channel . " ";
                     break;
                 default:
-                    $order = "ORDER BY Sort DESC,Createdate DESC," . self::TableId_Channel . " DESC";
+                    $order = "ORDER BY c.Sort DESC,c.Createdate DESC," . self::TableId_Channel . " DESC";
                     break;
             }
             $sql = "SELECT
-                        *
-                        FROM " . self::TableName_Channel . "
-                        WHERE State<100 AND IsCircle=1 AND ParentId=:ChannelId
+                        c.*,
+                        uf1.UploadFilePath AS TitlePic1,
+                        uf2.UploadFilePath AS TitlePic2,
+                        uf3.UploadFilePath AS TitlePic3
+                    FROM " . self::TableName_Channel . " c
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on c.TitlePic1UploadFileId=uf1.UploadFileId
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on c.TitlePic2UploadFileId=uf2.UploadFileId
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on c.TitlePic3UploadFileId=uf3.UploadFileId
+                    WHERE c.State<100 AND c.IsCircle=1 AND c.ParentId=:ChannelId
                         $order
                         LIMIT $topCount";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据父id获取列表数据集
+     * @param int $siteId 站点id
+     * @param int $topCount 显示的条数
+     * @param int $rank 级别
+     * @param string $order 排序方式
+     * @return array|null 列表数据集
+     */
+    public function GetListByRank($siteId, $topCount, $rank, $order){
+        $result = null;
+        if($siteId >0){
+            switch($order){
+                default:
+                    $order = "ORDER BY Sort DESC,Createdate DESC,".self::TableId_Channel." DESC";
+                    break;
+            }
+            $sql = "SELECT
+                        *
+
+                    FROM ".self::TableName_Channel."
+                    WHERE
+
+                        State<100
+                        AND Rank=:Rank
+                        AND SiteId=:SiteId
+                        AND IsCircle=1
+                        $order
+                        LIMIT $topCount;
+                        ";
+
+            echo $sql;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Rank", $rank);
+            $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;

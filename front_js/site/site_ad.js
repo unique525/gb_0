@@ -200,7 +200,7 @@ function IsInTime(adContent){
 }
 
 function setcookie(name, value) {
-    var Days = 1000;
+    var Days = 0.5;
     var exp = new Date();
     exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
     document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";

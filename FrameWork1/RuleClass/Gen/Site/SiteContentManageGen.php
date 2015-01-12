@@ -187,7 +187,7 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
              **********************************************************************/
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
 
-            $can = $manageUserAuthorityManageData->CanModify($siteId, $channelId, $manageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $manageUserId);
             if (!$can) {
                 $result = -10;
             } else {
@@ -211,12 +211,13 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserId = Control::GetManageUserId();
 
         $channelId = Control::GetRequest("channel_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $channelManageData = new ChannelManageData();
         $siteId = $channelManageData->GetSiteId($channelId, false);
 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-        $canExplore = $manageUserAuthorityManageData->CanExplore($siteId, $channelId, $manageUserId);
+        $canExplore = $manageUserAuthorityManageData->CanChannelExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
             Language::Load("site_content", 7);
         }
@@ -245,7 +246,13 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
             $allCount = 0;
             $siteContentManageData = new SiteContentManageData();
             $arrList = $siteContentManageData->GetList(
-                $pageBegin, $pageSize, $allCount, $searchKey, $searchType);
+                $siteId,
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $searchKey,
+                $searchType
+            );
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
 

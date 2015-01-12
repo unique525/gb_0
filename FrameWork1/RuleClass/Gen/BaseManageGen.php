@@ -473,66 +473,20 @@ class BaseManageGen extends BaseGen
                     if($tagTopCount<=0){
                         $tagTopCount = 100;
                     }
-                    $channelPublicData = new ChannelPublicData();
+                    $channelManageData = new ChannelManageData();
 
-                    $arrChannelList = $channelPublicData->GetListByParentId(
-                        $tagTopCount,
+                    $arrChannelList = $channelManageData->GetListByParentId(
                         $channelId,
+                        $tagTopCount,
                         $tagOrder
                     );
-
-                    $sbChildChannelId = '';
-                    $sbThirdChannelId = '';
-                    if(count($arrChannelList)>0){
-
-                        for($i = 0;$i<count($arrChannelList); $i++){
-                            $sbChildChannelId .= ','.$arrChannelList[$i]["ChannelId"];
-                        }
-
-                        if(strpos($sbChildChannelId,',') == 0){
-                            $sbChildChannelId = substr($sbChildChannelId,1);
-                        }
-
-                        if(strlen($sbChildChannelId)>0){
-                            //echo $sbChildChannelId;
-                            //二级
-                            $arrChannelChildList = $channelPublicData->GetListByParentId(
-                                $tagTopCount,
-                                $sbChildChannelId,
-                                $tagOrder
-                            );
-
-                            if(count($arrChannelChildList)>0){
-                                for($j = 0;$j<count($arrChannelChildList); $j++){
-                                    $sbThirdChannelId .= ','.$arrChannelChildList[$j]["ChannelId"];
-                                }
-                            }
-
-                        }
-
-                        if(strpos($sbThirdChannelId,',') == 0){
-                            $sbThirdChannelId = substr($sbThirdChannelId,1);
-                        }
-
-                        if(strlen($sbThirdChannelId)>0){
-                            //三级
-                            $arrChannelThirdList = $channelPublicData->GetListByParentId(
-                                $tagTopCount,
-                                $sbThirdChannelId,
-                                $tagOrder
-                            );
-                        }
-
-
-                    }
-
 
                     break;
                 case "rank":
                     if($siteId>0){
                         $rank = intval($tagWhereValue);
-                        $channelPublicData = new ChannelPublicData();
-                        $arrChannelList = $channelPublicData->GetListByRank(
+                        $channelManageData = new ChannelManageData();
+                        $arrChannelList = $channelManageData->GetListByRank(
                             $siteId,
                             $tagTopCount,
                             $rank,
@@ -1007,8 +961,7 @@ class BaseManageGen extends BaseGen
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
                                 $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-
-
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
 
                                 //4.根据PublishType和PublishFileName生成目标文件
                                 //触发频道id $channelId

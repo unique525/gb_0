@@ -184,6 +184,7 @@ class SiteContentManageData extends BaseManageData
 
     /**
      * 根据后台管理员id返回此管理员可以管理的列表数据集
+     * @param int $siteId 站点id
      * @param int $pageBegin 分页起始位置
      * @param int $pageSize 分页大小
      * @param int $allCount 记录总数（输出参数）
@@ -191,7 +192,7 @@ class SiteContentManageData extends BaseManageData
      * @param int $searchType 查询字段类型
      * @return array 列表数据集
      */
-    public function GetList($pageBegin, $pageSize, &$allCount, $searchKey, $searchType)
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $searchKey, $searchType)
     {
         $dataProperty = new DataProperty();
         $searchSql = "";
@@ -207,7 +208,7 @@ class SiteContentManageData extends BaseManageData
 
                     FROM " . self::TableName_SiteContent . " s," . self::TableName_ManageUser . " mu
 
-                        WHERE s.State<100 AND s.ManageUserId=mu.ManageUserId $searchSql
+                        WHERE s.State<100 AND s.ManageUserId=mu.ManageUserId AND SiteId=:SiteId $searchSql
                         ORDER BY s.Sort DESC
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
         $sqlCount = "
@@ -215,7 +216,10 @@ class SiteContentManageData extends BaseManageData
 
                     FROM " . self::TableName_SiteContent . "s," . self::TableName_ManageUser . " mu
 
-                    WHERE s.ManageUserId=mu.ManageUserId $searchSql;";
+                    WHERE s.ManageUserId=mu.ManageUserId AND SiteId=:SiteId $searchSql;";
+
+
+        $dataProperty->AddField("SiteId", $siteId);
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
