@@ -99,10 +99,23 @@ em{color:rgba(0, 112, 143, 1)}
 <div class="outer">
 <div style="">
     <div>
-        <img src="/image_02/top_bg.jpg" style="width:100%;" />
-        <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
+        <script type="text/javascript">
+            $(function() {
+                var d = new Date()
+                $(".top_date").html(d.getFullYear()+"年"+(d.getMonth()+1)+"月"+ d.getDate()+"日");
+            });
+        </script>
+        <style>
+            .top{height:35px;line-height: 35px;overflow: hidden}
+            .top_logo{float:left;height:35px;line-height: 30px;}
+            .top_logo img{height:30px;margin:2px 0 6px 0}
+            .top_date{float:right;margin-right:4%;color:#444}
+        </style>
+        <div class="top"><div class="top_logo"><a href="/default.html"><img src="/image_02/logo2.jpg" /></a></div><div class="top_date"></div></div>
+        <img src="/image_02/top_bg.jpg" style="width:100%;height:35px;" />
+        <table style="position:absolute; top: 40px;" cellpadding="0" cellspacing="0" width="100%" border="0">
             <tr>
-                <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a></td>
+                <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/default.php?mod=newspaper&a=gen_one&channel_id=15">首页</a></td>
                 <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
                 <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
                 <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>

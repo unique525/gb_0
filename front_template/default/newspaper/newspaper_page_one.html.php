@@ -17,7 +17,7 @@
     <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico" />
     <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css" />
     <style>
-        body{background:#efefef;margin:0;}
+        body{margin:0;}
         img, object { max-width: 100%;}
         a { text-decoration:none; color: #000000;cursor:pointer}
         .page_button{list-style: none;margin:2px;padding:5px;text-align:center;float: left;background-color: #D3D3D3;}
@@ -84,6 +84,7 @@
 </head>
 <body>
 <div>
+
     <div class="site_ad_268"></div><script language='javascript' src='/front_js/site_ad/2/site_ad_268.js' charset="utf-8"></script><!--落幕-->
     <header class="am-topbar am-topbar-fixed-bottom">
         <div>
@@ -96,10 +97,11 @@
 
     <div style="">
         <div>
-            <img src="/image_02/top_bg.jpg" style="width:100%;" />
-            <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
+            <pre_temp id="26"></pre_temp>
+            <img src="/image_02/top_bg.jpg" style="width:100%;height:35px;" />
+            <table style="position:absolute; top: 40px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;cursor:pointer"><a style="color:#ffffff;" href="/">首页</a>
+                    <td style="text-align:center;cursor:pointer"><a style="color:#ffffff;" href="/default.php?mod=newspaper&a=gen_one&channel_id=15">首页</a>
                         <div id="select_page" style="position:absolute;background-color:#ebebeb;padding-bottom:80px;display:none">
                             <ul>
                                 <icms id="newspaper_page" type="list" >

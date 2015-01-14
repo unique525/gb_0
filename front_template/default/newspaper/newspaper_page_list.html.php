@@ -18,7 +18,7 @@
     <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <style>
-        body{background:#efefef;margin:0;}
+        body{margin:0;}
         img, object { max-width: 100%;}
     </style>
     <script type="text/javascript">
@@ -32,10 +32,11 @@
 <div style="margin:0;">
     <div style="">
         <div>
-            <img src="/image_02/top_bg.jpg" style="width:100%;" />
-            <table style="position:absolute; top: 10px;" cellpadding="0" cellspacing="0" width="100%" border="0">
+            <pre_temp id="26"></pre_temp>
+            <img src="/image_02/top_bg.jpg" style="width:100%;height:35px;" />
+            <table style="position:absolute; top: 40px;" cellpadding="0" cellspacing="0" width="100%" border="0">
                 <tr>
-                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/">首页</a></td>
+                    <td style="text-align:center;"><a style="text-decoration:none;color:#ffffff;" href="/default.php?mod=newspaper&a=gen_one&channel_id=15">首页</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
                     <td style="text-align:center;"><a style="text-decoration:none;color:#FFE56C;" href="/default.php?mod=newspaper&a=gen_select&channel_id={ChannelId}">往期回顾</a></td>
                     <td style="text-align:center;"><img src="/image_02/1.jpg" style="height:20px;" alt="" id="" /></td>
