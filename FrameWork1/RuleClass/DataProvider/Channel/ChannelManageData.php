@@ -618,6 +618,30 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 根据站点id返回频道数据集
+     * @param int $siteId 站点id
+     * @param int $topCount 显示的条数
+     * @return array|null
+     */
+    public function GetListBySiteId($siteId, $topCount)
+    {
+        $result = null;
+        if ($siteId > 0) {
+
+            $sql = "SELECT
+                        *
+                    FROM " . self::TableName_Channel . "
+
+                    WHERE State<100 AND SiteId=:SiteId
+
+                    LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 根据父id获取列表数据集

@@ -91,9 +91,10 @@ class BaseManageGen extends BaseGen
      * 发布频道
      * @param int $channelId 频道id
      * @param PublishQueueManageData $publishQueueManageData 发布队列对象，传出参数，包括了发布文件的结果值
+     * @param bool $executeTransfer 是否执行传送（默认执行）
      * @return int 发布结果
      */
-    protected function PublishChannel($channelId, PublishQueueManageData &$publishQueueManageData)
+    protected function PublishChannel($channelId, PublishQueueManageData &$publishQueueManageData, $executeTransfer = true)
     {
         //$result = self::PUBLISH_CHANNEL_RESULT_NO_ACTION;
 
@@ -310,18 +311,21 @@ class BaseManageGen extends BaseGen
                 $rank--;
             }
 
-            $timeStart = Control::GetMicroTime();
-            self::TransferPublishQueue($publishQueueManageData, $siteId);
-            $timeEnd = Control::GetMicroTime();
-            $publishLogManageData->Create(
-                PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                PublishLogManageData::TABLE_TYPE_CHANNEL,
-                $channelId,
-                "",
-                "",
-                $timeEnd - $timeStart,
-                "now channel id:$currentChannelId transfer publish queue"
-            );
+            if($executeTransfer){
+                $timeStart = Control::GetMicroTime();
+                self::TransferPublishQueue($publishQueueManageData, $siteId);
+                $timeEnd = Control::GetMicroTime();
+                $publishLogManageData->Create(
+                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                    PublishLogManageData::TABLE_TYPE_CHANNEL,
+                    $channelId,
+                    "",
+                    "",
+                    $timeEnd - $timeStart,
+                    "now channel id:$currentChannelId transfer publish queue"
+                );
+            }
+
             $result = abs(DefineCode::PUBLISH) + self::PUBLISH_CHANNEL_RESULT_FINISHED;
         } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR;
@@ -763,7 +767,7 @@ class BaseManageGen extends BaseGen
      * @param PublishQueueManageData $publishQueueManageData 发布队列对象
      * @param int $siteId 站点id
      */
-    private function TransferPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
+    public function TransferPublishQueue(PublishQueueManageData $publishQueueManageData, $siteId)
     {
         $ftpManageData = new FtpManageData();
         $ftp = new Ftp();

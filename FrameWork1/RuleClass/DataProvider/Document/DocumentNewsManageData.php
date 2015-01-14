@@ -862,6 +862,7 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+
     /**
      * 子和孙节点的列表数据集
      * @param int $channelId 频道id
@@ -911,6 +912,10 @@ class DocumentNewsManageData extends BaseManageData
         }
 
         return $result;
+    }
+
+    public function GetWaitPublishListOfSiteId($siteId){
+
     }
 }
 

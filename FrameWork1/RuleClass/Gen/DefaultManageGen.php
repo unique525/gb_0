@@ -20,6 +20,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
+                case "common":
+                    $commonManageGen = new CommonManageGen();
+                    $result = $commonManageGen->Gen();
+                    break;
                 case "manage_user":
                     $manageUserManageGen = new ManageUserManageGen();
                     $result = $manageUserManageGen->Gen();
