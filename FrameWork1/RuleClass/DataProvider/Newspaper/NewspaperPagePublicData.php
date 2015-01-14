@@ -224,15 +224,18 @@ class NewspaperPagePublicData extends BasePublicData
      * 取得第一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
+     * @param bool $withCache 是否从缓冲中取
      * @return int
      */
-    public function GetNewspaperPageIdOfNext($newspaperId, $newspaperPageId)
+    public function GetNewspaperPageIdOfNext($newspaperId, $newspaperPageId, $withCache = false)
     {
         $result = -1;
-        if ($newspaperId > 0) {
+        if ($newspaperId > 0 && $newspaperPageId >0) {
 
             $sort = self::GetSort($newspaperPageId, true);
 
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_next_newspaper_page_id.cache_' . $newspaperId . '_' . $newspaperPageId;
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
 
                 WHERE NewspaperId = :NewspaperId
@@ -241,11 +244,11 @@ class NewspaperPagePublicData extends BasePublicData
                 ORDER BY Sort LIMIT 1;
 
                 ";
-
             $dataProperty = new DataProperty();
             $dataProperty->AddField("Sort", $sort);
             $dataProperty->AddField("NewspaperId", $newspaperId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
         }
         return $result;
     }
@@ -254,15 +257,18 @@ class NewspaperPagePublicData extends BasePublicData
      * 取得第一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
+     * @param bool $withCache 是否从缓冲中取
      * @return int
      */
-    public function GetNewspaperPageIdOfPrevious($newspaperId, $newspaperPageId)
+    public function GetNewspaperPageIdOfPrevious($newspaperId, $newspaperPageId, $withCache = false)
     {
         $result = -1;
-        if ($newspaperId > 0) {
+        if ($newspaperId > 0 && $newspaperPageId >0) {
 
             $sort = self::GetSort($newspaperPageId, true);
 
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_previous_newspaper_page_id.cache_' . $newspaperId . '_' . $newspaperPageId;
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
 
                 WHERE NewspaperId = :NewspaperId
@@ -271,11 +277,11 @@ class NewspaperPagePublicData extends BasePublicData
                 ORDER BY Sort DESC LIMIT 1;
 
                 ";
-
             $dataProperty = new DataProperty();
             $dataProperty->AddField("Sort", $sort);
             $dataProperty->AddField("NewspaperId", $newspaperId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
         }
         return $result;
     }

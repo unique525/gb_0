@@ -91,7 +91,6 @@
             <div style="float:left;"><a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={PreviousNewspaperPageId}"><img src="/image_02/left.png" /></a></div>
             <div style="float:right;"><a href="/default.php?mod=newspaper&a=gen_one&channel_id={ChannelId}&publish_date={PublishDate}&newspaper_page_id={NextNewspaperPageId}"><img src="/image_02/right.png" /></a></div>
             <div style="clear:both;"></div>
-
         </div>
     </header>
 
