@@ -270,13 +270,10 @@ class NewspaperPagePublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
             $cacheFile = 'newspaper_page_get_previous_newspaper_page_id.cache_' . $newspaperId . '_' . $newspaperPageId;
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
-
-                WHERE NewspaperId = :NewspaperId
-                 AND Sort<:Sort
-
-                ORDER BY Sort DESC LIMIT 1;
-
-                ";
+                        WHERE NewspaperId = :NewspaperId
+                            AND Sort<:Sort
+                        ORDER BY Sort DESC LIMIT 1;
+                    ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("Sort", $sort);
             $dataProperty->AddField("NewspaperId", $newspaperId);
