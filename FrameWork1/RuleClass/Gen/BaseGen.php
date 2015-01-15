@@ -393,7 +393,7 @@ class BaseGen
         $resultMessage = "";
         $uploadFilePath = "";
         if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
-            sleep(1);
+            usleep(1000000 * 0.1); //0.1秒
             $newFileName = "";
             $fileExtension = strtolower(FileObject::GetExtension($_FILES[$fileElementName]['name']));
             $manageUserId = Control::GetManageUserId();
