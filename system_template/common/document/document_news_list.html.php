@@ -34,6 +34,75 @@
             });
 
 
+            /**
+             * 移动
+             * **/
+            $("#btn_move").click(function (event) {
+                event.preventDefault();
+                var channelId=$(this).attr("idvalue");
+                var docIdString = "";
+                var w = 500;
+                var h = $(window).height() - 100;
+
+                $('input[name=input_select]').each(function (i) {
+                    if (this.checked) {
+                        docIdString = docIdString + ',' + $(this).val();
+                    }
+                });
+
+                docIdString=docIdString.substr(1);
+                if (docIdString.length <= 0) {
+                    alert("请先选择要操作的文档");
+                } else {
+
+                    var url='/default.php?secu=manage&mod=document_news&m=move&channel_id='+channelId+'&doc_id_string='+docIdString;
+                    $("#dialog_frame").attr("src",url);
+                    $("#dialog_resultbox").dialog({
+                        hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                        autoOpen:true,
+                        height:w,
+                        width:h,
+                        modal:true, //蒙层（弹出会影响页面大小）
+                        title:'移动',
+                        overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                    });
+                }
+            });
+
+            /**
+             * 复制
+             * **/
+            $("#btn_copy").click(function (event) {
+                event.preventDefault();
+                var channelId=$(this).attr("idvalue");
+                var docIdString = "";
+                var w = 500;
+                var h = $(window).height() - 100;
+
+                $('input[name=input_select]').each(function (i) {
+                    if (this.checked) {
+                        docIdString = docIdString + ',' + $(this).val();
+                    }
+                });
+
+                docIdString=docIdString.substr(1);
+                if (docIdString.length <= 0) {
+                    alert("请先选择要操作的文档");
+                } else {
+
+                    var url='/default.php?secu=manage&mod=document_news&m=copy&channel_id='+channelId+'&doc_id_string='+docIdString;
+                    $("#dialog_frame").attr("src",url);
+                    $("#dialog_resultbox").dialog({
+                        hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                        autoOpen:true,
+                        height:w,
+                        width:h,
+                        modal:true, //蒙层（弹出会影响页面大小）
+                        title:'复制',
+                        overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                    });
+                }
+            });
 
 
 
@@ -54,8 +123,8 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" idvalue="{ChannelId}" value="新建文档" title="在本频道新建资讯类的文档" type="button"/>
-                <input id="btn_move" class="btn2" value="移动" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
-                <input id="btn_copy" class="btn2" value="复制" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button"/>
+                <input id="btn_move" class="btn2" value="移动" idvalue="{ChannelId}" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
+                <input id="btn_copy" class="btn2" value="复制" idvalue="{ChannelId}" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button"/>
                 <input id="btn_batch_publish" class="btn2" value="批量发布" title="批量发布" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">

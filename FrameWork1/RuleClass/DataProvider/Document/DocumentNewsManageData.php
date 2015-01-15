@@ -1027,6 +1027,406 @@ class DocumentNewsManageData extends BaseManageData
 
         return $result;
     }
+
+    /**
+     * 以从其他频道取出的数组新增稿件到目的频道 (复制)
+     * @param int $targetSiteId 站点id
+     * @param int $targetCid 频道id
+     * @param array $arrayOfDocumentNewsList DocumentNews数据数组
+     * @param int $manageUserId 操作人id
+     * @param string $manageUserName 操作人用户名
+     * @return int 执行结果
+     */
+    public function Copy($targetSiteId,$targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName){
+        $result=-1;
+        if(count($arrayOfDocumentNewsList)>0&&$targetCid>0){
+            $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
+            if($sort<0){
+                $sort=0;
+            }
+            foreach($arrayOfDocumentNewsList as $documentNews){
+                $sort+=1;                           //排序号+1
+                $sql="INSERT INTO " . self::TableName_DocumentNews . "
+                (
+                    `SiteId`,
+                    `ChannelId`,
+                    `DocumentNewsTitle`,
+                    `DocumentNewsSubTitle`,
+                    `DocumentNewsCiteTitle`,
+                    `DocumentNewsShortTitle`,
+                    `DocumentNewsIntro`,
+                    `CreateDate`,
+                    `ManageUserId`,
+                    `ManageUserName`,
+                    `UserId`,
+                    `UserName`,
+                    `Author`,
+                    `DocumentNewsType`,
+                    `DirectUrl`,
+                    `DocumentNewsContent`,
+                    `PublishDate`,
+                    `PublishManageUserId`,
+                    `ShowDate`,
+                    `SourceName`,
+                    `DocumentNewsMainTag`,
+                    `DocumentNewsTag`,
+                    `Sort`,
+                    `TitlePic1UploadFileId`,
+                    `TitlePic2UploadFileId`,
+                    `TitlePic3UploadFileId`,
+                    `DocumentNewsTitleColor`,
+                    `DocumentNewsTitleBold`,
+                    `OpenComment`,
+                    `ShowHour`,
+                    `ShowMinute`,
+                    `ShowSecond`,
+                    `UploadFiles`,
+                    `IsHot`,
+                    `RecLevel`,
+                    `WaitPublish`,
+                    `ShowPicMethod`,
+                    `IsCopy`,
+                    `IsAddToFullText`,
+                    `ClosePosition`,
+                    `Hit`,
+                    `LockEdit`,
+                    `LockEditDate`,
+                    `LockEditManageUserId`,
+                    `CommentCount`
+                )
+                VALUES
+                (
+                    :SiteId,
+                    :ChannelId,
+                    :DocumentNewsTitle,
+                    :DocumentNewsSubTitle,
+                    :DocumentNewsCiteTitle,
+                    :DocumentNewsShortTitle,
+                    :DocumentNewsIntro,
+                    :CreateDate,
+                    :ManageUserId,
+                    :ManageUserName,
+                    :UserId,
+                    :UserName,
+                    :Author,
+                    :DocumentNewsType,
+                    :DirectUrl,
+                    :DocumentNewsContent,
+                    :PublishDate,
+                    :PublishManageUserId,
+                    :ShowDate,
+                    :SourceName,
+                    :DocumentNewsMainTag,
+                    :DocumentNewsTag,
+                    :Sort,
+                    :TitlePic1UploadFileId,
+                    :TitlePic2UploadFileId,
+                    :TitlePic3UploadFileId,
+                    :DocumentNewsTitleColor,
+                    :DocumentNewsTitleBold,
+                    :OpenComment,
+                    :ShowHour,
+                    :ShowMinute,
+                    :ShowSecond,
+                    :UploadFiles,
+                    :IsHot,
+                    :RecLevel,
+                    :WaitPublish,
+                    :ShowPicMethod,
+                    :IsCopy,
+                    :IsAddToFullText,
+                    :ClosePosition,
+                    :Hit,
+                    :LockEdit,
+                    :LockEditDate,
+                    :LockEditManageUserId,
+                    :CommentCount
+                ) ;";
+                $dataProperty = new DataProperty();
+//$dataProperty->AddField("SiteId", $documentNews["SiteId"]);
+//$dataProperty->AddField("ChannelId", $documentNews["ChannelId"]);
+                $dataProperty->AddField("DocumentNewsTitle", $documentNews["DocumentNewsTitle"]);
+                $dataProperty->AddField("DocumentNewsSubTitle", $documentNews["DocumentNewsSubTitle"]);
+                $dataProperty->AddField("DocumentNewsCiteTitle", $documentNews["DocumentNewsCiteTitle"]);
+                $dataProperty->AddField("DocumentNewsShortTitle", $documentNews["DocumentNewsShortTitle"]);
+                $dataProperty->AddField("DocumentNewsIntro", $documentNews["DocumentNewsIntro"]);
+                $dataProperty->AddField("CreateDate", $documentNews["CreateDate"]);
+//$dataProperty->AddField("ManageUserId", $documentNews["ManageUserId"]);
+//$dataProperty->AddField("ManageUserName", $documentNews["ManageUserName"]);
+                $dataProperty->AddField("UserId", $documentNews["UserId"]);
+                $dataProperty->AddField("UserName", $documentNews["UserName"]);
+                $dataProperty->AddField("Author", $documentNews["Author"]);
+//$dataProperty->AddField("State", $documentNews["State"]);
+                $dataProperty->AddField("DocumentNewsType", $documentNews["DocumentNewsType"]);
+                $dataProperty->AddField("DirectUrl", $documentNews["DirectUrl"]);
+                $dataProperty->AddField("DocumentNewsContent", $documentNews["DocumentNewsContent"]);
+                $dataProperty->AddField("PublishDate", $documentNews["PublishDate"]);
+                $dataProperty->AddField("PublishManageUserId", $documentNews["PublishManageUserId"]);
+                $dataProperty->AddField("ShowDate", $documentNews["ShowDate"]);
+                $dataProperty->AddField("SourceName", $documentNews["SourceName"]);
+                $dataProperty->AddField("DocumentNewsMainTag", $documentNews["DocumentNewsMainTag"]);
+                $dataProperty->AddField("DocumentNewsTag", $documentNews["DocumentNewsTag"]);
+//$dataProperty->AddField("Sort", $documentNews["Sort"]);
+                $dataProperty->AddField("TitlePic1UploadFileId", $documentNews["TitlePic1UploadFileId"]);
+                $dataProperty->AddField("TitlePic2UploadFileId", $documentNews["TitlePic2UploadFileId"]);
+                $dataProperty->AddField("TitlePic3UploadFileId", $documentNews["TitlePic3UploadFileId"]);
+                $dataProperty->AddField("DocumentNewsTitleColor", $documentNews["DocumentNewsTitleColor"]);
+                $dataProperty->AddField("DocumentNewsTitleBold", $documentNews["DocumentNewsTitleBold"]);
+                $dataProperty->AddField("OpenComment", $documentNews["OpenComment"]);
+                $dataProperty->AddField("ShowHour", $documentNews["ShowHour"]);
+                $dataProperty->AddField("ShowMinute", $documentNews["ShowMinute"]);
+                $dataProperty->AddField("ShowSecond", $documentNews["ShowSecond"]);
+                $dataProperty->AddField("UploadFiles", $documentNews["UploadFiles"]);
+                $dataProperty->AddField("IsHot", $documentNews["IsHot"]);
+                $dataProperty->AddField("RecLevel", $documentNews["RecLevel"]);
+                $dataProperty->AddField("WaitPublish", $documentNews["WaitPublish"]);
+                $dataProperty->AddField("ShowPicMethod", $documentNews["ShowPicMethod"]);
+                $dataProperty->AddField("IsCopy", $documentNews["IsCopy"]);
+                $dataProperty->AddField("IsAddToFullText", $documentNews["IsAddToFullText"]);
+                $dataProperty->AddField("ClosePosition", $documentNews["ClosePosition"]);
+                $dataProperty->AddField("Hit", $documentNews["Hit"]);
+                $dataProperty->AddField("LockEdit", $documentNews["LockEdit"]);
+                $dataProperty->AddField("LockEditDate", $documentNews["LockEditDate"]);
+                $dataProperty->AddField("LockEditManageUserId", $documentNews["LockEditManageUserId"]);
+                $dataProperty->AddField("CommentCount", $documentNews["CommentCount"]);
+
+
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserName", $manageUserName);
+
+                $dataProperty->AddField("ChannelId", $targetCid);
+                $dataProperty->AddField("SiteId", $targetSiteId);
+                $dataProperty->AddField("Sort", $sort);
+
+                $newId = $this->dbOperator->Execute($sql, $dataProperty);
+
+                $result = $newId;
+                /*if ($newId > 0) {
+                    //操作上传的附件
+                    $sqlUploadFiles = "select UploadFiles from " . self::TableName_DocumentNews . " where DocumentNewsId=" . $newId . "";
+                    $stringOfUploadFileId = $this->dbOperator->GetString($sqlUploadFiles, NULL);
+
+                    if (!empty($stringOfUploadFileId)) {
+                        $arrOfFileId = Format::ToSplit($stringOfUploadFileId, ',');
+                        $newStringOfUploadFiles = "";
+                        for ($j = 0; $j < count($arrOfFileId); $j++) {
+                            if (!empty($arrOfFileId[$j])) {
+                                //复制upload_file
+                                $sqlCopyFile = "
+                                    INSERT INTO " . self::TableName_UploadFile . "
+                                    (
+                                    	UploadFileName,
+                                    	UploadFileSize,
+                                    	UploadFileType,
+                                    	UploadFileOrgName,
+                                    	UploadFilePath,
+                                    	UploadFileTitle,
+                                    	UploadFileInfo,
+                                    	TableType,
+                                    	TableId,
+                                    	UploadYear,
+                                    	UploadMonth,
+                                    	UploadDay,
+                                    	AdminUserId,
+                                    	UserId,
+                                    	CreateDate,
+                                    	IsBatchUpload
+                                    )
+
+                                    SELECT
+
+                                    UploadFileName,
+                                    	UploadFileSize,
+                                    	UploadFileType,
+                                    	UploadFileOrgName,
+                                    	UploadFilePath,
+                                    	UploadFileTitle,
+                                    	UploadFileInfo,
+                                    	TableType,
+                                    	" . $newId . ",
+                                    	UploadYear,
+                                    	UploadMonth,
+                                    	UploadDay,
+                                    	AdminUserId,
+                                    	UserId,
+                                    	CreateDate,
+                                    	IsBatchUpload
+
+                                    FROM " . self::TableName_UploadFile . " WHERE UploadFileId=" . $arrOfFileId[$j] . ";
+
+                                    ";
+                                $newFileId = $this->dbOperator->Execute($sqlCopyFile, NULL);
+
+                                $newStringOfUploadFiles = $newStringOfUploadFiles . "," . $newFileId;
+                            }
+                        }
+
+                        //修改news表的UploadFiles
+                        $sqlModifyUploadFile = "UPDATE " . self::TableName_DocumentNews . " SET UploadFiles='" . $newStringOfUploadFiles . "' WHERE DocumentNewsId=" . $newId . "";
+                        $this->dbOperator->Execute($sqlModifyUploadFile, NULL);
+                    }
+                }*/
+            }
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 移动文档到另一个频道
+     * @param int $targetSiteId 目的站点id
+     * @param int $targetChannelId 目的节点id
+     * @param array $arrayOfDocumentNewsList 要移动的文档数据集
+     * @param int $manageUserId 操作人id
+     * @param string $manageUserName 操作人用户名
+     * @return int
+     */
+    public function Move($targetSiteId, $targetChannelId, $arrayOfDocumentNewsList,$manageUserId,$manageUserName) {
+        $result=-1;
+        if($targetChannelId>0&&count($arrayOfDocumentNewsList)>0){
+            $sort=self::GetMaxSortOfChannel($targetChannelId);  //排序号处理
+            if($sort<0){
+                $sort=0;
+            }
+
+            foreach($arrayOfDocumentNewsList as $documentNews){
+                $sort++;
+                $sql = "UPDATE " . self::TableName_DocumentNews . "
+                 SET `SiteId`=:SiteId,`ChannelId`=:ChannelId,`ManageUserId`=:ManageUserId,`ManageUserName`=:ManageUserName,Sort=" . $sort . "
+                 WHERE DocumentNewsId =:DocumentNewsId ;";
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("SiteId", $targetSiteId);
+                $dataProperty->AddField("ChannelId", $targetChannelId);
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserName", $manageUserName);
+                $dataProperty->AddField("DocumentNewsId", $documentNews["DocumentNewsId"]);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
+
+
+    /**
+     * 以从newspaper取出的数组新增稿件到频道 (复制)
+     * @param int $targetSiteId 站点id
+     * @param int $targetCid 频道id
+     * @param array $arrayOfNewspaperList newspaper数据数组
+     * @param int $manageUserId 操作人id
+     * @param string $manageUserName 操作人用户名
+     * @return int 执行结果
+     */
+    public function CopyFromNewsPaperArticle($targetSiteId, $targetCid, $arrayOfNewspaperList, $manageUserId, $manageUserName){
+        $result=-1;
+        if(count($arrayOfNewspaperList)>0&&$targetCid>0){
+            $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
+            //$arraySql=array();
+            //$arrayDataProperty=array();
+            foreach($arrayOfNewspaperList as $newspaper){
+                $sort+=1;                       //排序号+1
+                $sql="INSERT INTO " . self::TableName_DocumentNews . "
+                (
+                    DocumentNewsTitle,
+                    DocumentNewsSubTitle,
+                    DocumentNewsCiteTitle,
+                    DocumentNewsContent,
+                    State,
+                    CreateDate,
+                    SourceName,
+                    Author,
+                    DirectUrl,
+                    ManageUserId,
+                    ManageUserName,
+                    ChannelId,
+                    SiteId,
+                    Sort
+                )
+                VALUES
+                (
+                    :DocumentNewsTitle,
+                    :DocumentNewsSubTitle,
+                    :DocumentNewsCiteTitle,
+                    :DocumentNewsContent,
+                    :State,
+                    :CreateDate,
+                    :SourceName,
+                    :Author,
+                    :DirectUrl,
+                    :ManageUserId,
+                    :ManageUserName,
+                    :ChannelId,
+                    :SiteId,
+                    :Sort
+                ) ;";
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("DocumentNewsTitle", $newspaper["NewspaperArticleTitle"]);
+                $dataProperty->AddField("DocumentNewsSubTitle", $newspaper["NewspaperArticleSubTitle"]);
+                $dataProperty->AddField("DocumentNewsCiteTitle", $newspaper["NewspaperArticleCiteTitle"]);
+                $dataProperty->AddField("DocumentNewsContent", $newspaper["NewspaperArticleContent"]);
+                $dataProperty->AddField("State", $newspaper["State"]);
+                $dataProperty->AddField("CreateDate", $newspaper["CreateDate"]);
+                $dataProperty->AddField("SourceName", $newspaper["Source"]);
+                $dataProperty->AddField("Author", $newspaper["Author"]);
+                $dataProperty->AddField("DirectUrl", $newspaper["DirectUrl"]);
+
+
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserName", $manageUserName);
+
+                $dataProperty->AddField("ChannelId", $targetCid);
+                $dataProperty->AddField("SiteId", $targetSiteId);
+                $dataProperty->AddField("Sort", $sort);
+
+                $newId = $this->dbOperator->Execute($sql, $dataProperty);
+
+                $result=$newId;
+
+            }
+
+            //$result = $this->dbOperator->ExecuteBatch($arraySql, $arrayDataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得频道下最大的排序号 (用于批量移动&复制稿件)
+     * @param int $channelId id
+     * @return int 对应排序号
+     */
+    public function GetMaxSortOfChannel($channelId)
+    {
+        $result = 0;
+        if ($channelId > 0) {
+            $sql = "select max(sort) as MaxSort from " . self::TableName_DocumentNews . " where ChannelId=:ChannelId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 由id集合组成的字符串返回对应id稿件集合的数据集
+     * @param string $documentNewsIdString id
+     * @return array|null 取得对应数组
+     */
+    public function GetListByIDString($documentNewsIdString)
+    {
+        $result = null;
+        if ($documentNewsIdString !="") {
+            $sql = "SELECT * FROM
+            " . self::TableName_DocumentNews . "
+            WHERE DocumentNewsId IN ($documentNewsIdString)
+            ;";
+            $dataProperty = new DataProperty();
+//$dataProperty->AddField("NewspaperArticleIdString", $newspaperArticleIdString);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 }
 
 ?>

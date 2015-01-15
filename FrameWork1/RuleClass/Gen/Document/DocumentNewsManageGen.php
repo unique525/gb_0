@@ -45,6 +45,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             case "copy":
                 $result = self::GenDeal($method);
                 break;
+            case "move":
+                $result = self::GenDeal($method);
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -858,6 +861,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                             switch($method){
                                 case "copy":
                                     $result = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                    break;
+                                case "move":
+                                    $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
                                     break;
                                 default:
                                     $result=-1;

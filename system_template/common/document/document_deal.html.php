@@ -30,11 +30,11 @@
             var items=$(".channel_item[idvalue="+rank+"]");
             if(items.length>0){
                 for(var i=0;i<items.length;i++){  //id=sorted_id   idvalue=id   title=parentId
+                    parentId=items[i].getAttribute("title")
                     itemContent='<li id="sorted_'+items[i].getAttribute("id")+'" title="'+parentId+'_last" idvalue="'+items[i].getAttribute("id")+'" style="margin-left: '+rank*3+'em">'+items[i].innerHTML+'</li>';
                     if(rank==0){
                         $("#sorted_tree").append(itemContent);
                     }else{
-                        parentId=items[i].getAttribute("title")
                         var prevItem=$("[title='"+parentId+"_last']");
                         if(prevItem.length<=0){
                             $("#sorted_"+parentId).after(itemContent);//父节点下没有子节点，新增一条  并更新自己为最后一个子节点
