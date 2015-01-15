@@ -8,6 +8,17 @@
     <script type="text/javascript">
         $("document").ready(function () {
 
+
+            $("#btn_select_all").click(function(event) {
+                event.preventDefault();
+                var inputSelect = $("[name='input_select']");
+                if (inputSelect.prop("checked")) {
+                    inputSelect.prop("checked", false);//取消全选
+                } else {
+                    inputSelect.prop("checked", true);//全选
+                }
+            });
+
             $("#btn_create").click(function (event) {
                 event.preventDefault();
                 //parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper&m=create';
@@ -22,6 +33,41 @@
                 parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article&m=modify' + '&newspaper_article_id=' + newspaperArticleId + '';
                 parent.G_TabTitle = newspaperArticleTitle;
                 parent.addTab();
+            });
+
+            /**
+             * 复制
+             * **/
+            $("#btn_copy").click(function (event) {
+                event.preventDefault();
+                var channelId=$(this).attr("idvalue");
+                var docIdString = "";
+                var w = 500;
+                var h = $(window).height() - 100;
+
+                $('input[name=input_select]').each(function (i) {
+                    if (this.checked) {
+                        docIdString = docIdString + ',' + $(this).val();
+                    }
+                });
+
+                docIdString=docIdString.substr(1);
+                if (docIdString.length <= 0) {
+                    alert("请先选择要操作的文档");
+                } else {
+
+                    var url='/default.php?secu=manage&mod=newspaper_article&m=copy&channel_id='+channelId+'&doc_id_string='+docIdString;
+                    $("#dialog_frame").attr("src",url);
+                    $("#dialog_resultbox").dialog({
+                        hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                        autoOpen:true,
+                        height:w,
+                        width:h,
+                        modal:true, //蒙层（弹出会影响页面大小）
+                        title:'复制',
+                        overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                    });
+                }
             });
 
             //格式化站点状态
@@ -96,11 +142,17 @@
     </script>
 </head>
 <body>
+<div id="dialog_resultbox" title="提示信息" style="display: none;">
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src="" style="border: 0; " width="100%" height="500px"></iframe>
+    </div>
+</div>
 <div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
                 <a class="btn2" style="padding:3px 10px" href="/default.php?secu=manage&mod=newspaper_page&m=list&newspaper_id={NewspaperId}" idvalue="{NewspaperId}" title="返回版面管理">返回版面管理</a>
+                <a id="btn_copy" class="btn2" style="padding:3px 10px;cursor: pointer" idvalue="{ChannelId}" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" >复制</a>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
