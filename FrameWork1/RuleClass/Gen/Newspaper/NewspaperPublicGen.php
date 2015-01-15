@@ -132,17 +132,21 @@ class NewspaperPublicGen extends BasePublicGen {
 
                     Template::ReplaceOne($templateContent,$arrOneNewspaperPage);
 
-                    $nextNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext($currentNewspaperId,$currentNewspaperPageId);
+                    $nextNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
+                        $currentNewspaperId,
+                        $currentNewspaperPageId,
+                        true
+                    );
 
                     $templateContent = str_ireplace("{NextNewspaperPageId}",
                         $nextNewspaperPageId,
                         $templateContent
                     );
 
-                    $previousNewspaperPageId =
-                        $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
+                    $previousNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
                             $currentNewspaperId,
-                            $currentNewspaperPageId
+                            $currentNewspaperPageId,
+                            true
                         );
 
                     $templateContent = str_ireplace("{PreviousNewspaperPageId}",

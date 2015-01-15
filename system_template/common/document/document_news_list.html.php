@@ -16,6 +16,23 @@
                 }
             });
 
+            //批量发布
+            var btnBatchPublish = $("#btn_batch_publish");
+            btnBatchPublish.click(function () {
+
+                $("#dialog_frame").attr("src","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
+                    +parent.G_NowSiteId+"&publish_type=1&do=0");
+
+                $("#dialog_resultbox").dialog({
+                    title: "批量发布",
+                    width: 600,
+                    height: 550
+                });
+
+
+
+            });
+
 
 
 
@@ -25,6 +42,13 @@
 
 </head>
 <body>
+
+<div id="dialog_resultbox" title="" style="display: none;">
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src=""  style="border: 0; " width="100%" height="460"></iframe>
+    </div>
+</div>
+
 <div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
@@ -32,6 +56,7 @@
                 <input id="btn_create" class="btn2" idvalue="{ChannelId}" value="新建文档" title="在本频道新建资讯类的文档" type="button"/>
                 <input id="btn_move" class="btn2" value="移动" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
                 <input id="btn_copy" class="btn2" value="复制" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button"/>
+                <input id="btn_batch_publish" class="btn2" value="批量发布" title="批量发布" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
