@@ -628,7 +628,8 @@ function submitForm(closeTab) {
                 <script type="text/javascript">
                     $(function () {
                         var hit=$("#f_Hit").attr("value");
-                        if(hit==""){
+                        var siteId={SiteId};
+                        if((hit==""||hit=="0")&&siteId==2){
                             var addHit=GetRandomNum(500,700);
                             $("#f_Hit").attr("value",addHit);
                         }
