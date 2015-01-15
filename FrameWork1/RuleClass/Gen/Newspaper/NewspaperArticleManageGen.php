@@ -27,6 +27,9 @@ class NewspaperArticleManageGen extends BaseManageGen {
             case "list":
                 $result = self::GenList();
                 break;
+            case "copy":
+                $result = self::GenCopyToDocChannel($method);
+                break;
             case "async_modify_sort_by_drag":
                 $result = self::AsyncModifySortByDrag();
                 break;
@@ -231,5 +234,89 @@ class NewspaperArticleManageGen extends BaseManageGen {
         } else {
             return "";
         }
+    }
+
+    /**
+     * 处理复制操作
+     * @return string 操作结果
+     */
+    private function GenCopyToDocChannel() {
+        $tempContent = Template::Load("document/document_deal.html", "common");
+        parent::ReplaceFirst($tempContent);
+        $mod=Control::GetRequest("mod","");
+        $method=Control::GetRequest("m","");
+        $channelId = Control::GetRequest("channel_id", 0);
+        $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
+        $manageUserId = Control::GetManageUserID();
+        $manageUserName = Control::GetManageUserName();
+        if ($channelId > 0) {
+            $newspaperArticleManageData=new NewspaperArticleManageData();
+            $channelManageData = new ChannelManageData();
+            $documentNewsManageData = new DocumentNewsManageData();
+
+            $arrayOfNewspaperList = $newspaperArticleManageData->GetListByIDString($docIdString);
+            if (!empty($_POST)) { //提交
+                $targetCid = Control::PostRequest("pop_cid", 0); //目标频道ID
+                $targetSiteId = $channelManageData->GetSiteId($targetCid,true);
+
+
+                if( $targetCid > 0){
+                    $channelType = $channelManageData->GetChannelType($targetCid,true);
+
+                            if (strlen($docIdString) > 0) {
+                                if ($channelType === 1) {   //新闻资讯类
+                                    $result = $documentNewsManageData->CopyFromNewsPaperArticle($targetSiteId,$targetCid, $arrayOfNewspaperList, $manageUserId, $manageUserName);
+
+                                    //加入操作日志
+                                    $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                                    self::CreateManageUserLog($operateContent);
+
+
+                                    if ($result > 0) {
+                                        $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                                        Control::RunJavascript($jsCode);
+                                    } else {
+                                        Control::ShowMessage(Language::Load('document', 17));
+                                    }
+                                }
+                            }
+            }
+            }
+
+            $documentList = "";
+
+            //显示操作文档的标题
+            //for ($i = 0; $i < count($arrList); $i++) {
+            //    $columns = $arrList[$i];
+                foreach ($arrayOfNewspaperList as $columnName => $columnValue) {
+                    $documentList = $documentList . $columnValue["NewspaperArticleTitle"] . '<br>';
+                }
+            //}
+            //显示当前站点的节点树
+            $siteId = $channelManageData->GetSiteID($channelId,true);
+            $order="";
+            $arrayChannelTree=$channelManageData->GetListForManageLeft($siteId,$manageUserId,$order);
+            $listName="channel_tree";
+            Template::ReplaceList($tempContent,$arrayChannelTree,$listName);
+
+            $methodName = "复制";
+            $replaceArr = array(
+                "{mod}" => $mod,
+                "{method}" => $method,
+                "{SiteId}" => $siteId,
+                "{ChannelId}" => $channelId,
+                "{ChannelName}" => "",
+                "{Method}" => $methodName,
+                "{MethodName}" => $methodName,
+                "{DealType}" => $methodName,
+                "{DocumentList}" => $documentList,
+                "{DocIdString}" => $docIdString
+            );
+
+            $tempContent = strtr($tempContent, $replaceArr);
+        }
+
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
     }
 }
