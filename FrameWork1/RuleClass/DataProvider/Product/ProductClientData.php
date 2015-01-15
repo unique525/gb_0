@@ -7,6 +7,28 @@
  */
 class ProductClientData extends BaseClientData {
 
+
+    /**
+     * 返回一行数据
+     * @param int $productId 产品id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($productId){
+        $result = null;
+        if($productId>0){
+            $sql = "
+            SELECT t.*,t1.*
+            FROM
+            " . self::TableName_ProductPic . " t
+            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
+            WHERE t.ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * @param $channelId
      * @param string $order

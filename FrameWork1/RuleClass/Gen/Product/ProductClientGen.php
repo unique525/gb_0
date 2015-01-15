@@ -17,6 +17,9 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
+            case "list_of_product_id":
+                $result = self::GenListOfProductId();
+                break;
             case "list_of_channel":
                 $result = self::GenListOfChannel();
                 break;
@@ -101,6 +104,20 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrProductList = $productClientData->GetListByRecLevel($siteId, $recLevel, $orderBy, $topCount);
             if (count($arrProductList) > 0) {
                 $result = Format::FixJsonEncode($arrProductList);
+            }
+        }
+        return '{"product":{"product_list":' . $result . '}}';
+    }
+
+    private function GenListOfProductId(){
+        $result = "";
+        $productId = Control::GetRequest("product_id", 0);
+        if ($productId > 0) {
+
+            $productClientData = new ProductClientData();
+            $arrOne = $productClientData->GetOne($productId);
+            if (count($arrOne) > 0) {
+                $result = Format::FixJsonEncode($arrOne);
             }
         }
         return '{"product":{"product_list":' . $result . '}}';
