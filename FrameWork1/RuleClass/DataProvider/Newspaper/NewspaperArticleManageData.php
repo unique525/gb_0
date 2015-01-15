@@ -244,4 +244,25 @@ class NewspaperArticleManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+    /**
+     * 由id集合组成的字符串返回对应id稿件集合的数据集
+     * @param string $newspaperArticleIdString id
+     * @return array|null 取得对应数组
+     */
+    public function GetListByIDString($newspaperArticleIdString)
+    {
+        $result = null;
+        if ($newspaperArticleIdString !="") {
+            $sql = "SELECT * FROM
+                        " . self::TableName_NewspaperArticle . "
+                    WHERE NewspaperArticleId IN ($newspaperArticleIdString)
+                    ;";
+            $dataProperty = new DataProperty();
+            //$dataProperty->AddField("NewspaperArticleIdString", $newspaperArticleIdString);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
