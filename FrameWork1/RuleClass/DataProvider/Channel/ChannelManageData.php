@@ -559,12 +559,21 @@ class ChannelManageData extends BaseManageData
      * 返回所有此站点下的频道列表数据集,供后台左部导航使用
      * @param int $siteId 站点id
      * @param int $manageUserId 管理员id
+     * @param string $order 排序方式
      * @return array|null 频道列表数据集
      */
-    public function GetListForManageLeft($siteId, $manageUserId)
+    public function GetListForManageLeft($siteId, $manageUserId, $order="")
     {
         $result = null;
         if ($siteId > 0 && $manageUserId > 0) {
+            switch($order){
+                case "ChannelIdDesc":
+                    $order=" c.Sort DESC,c.ChannelId DESC";
+                    break;
+                default:
+                    $order=" c.Sort DESC,c.ChannelId";
+                    break;
+            }
             $dataProperty = new DataProperty();
             if ($manageUserId == 1) {
                 $sql = "SELECT
@@ -577,7 +586,7 @@ class ChannelManageData extends BaseManageData
                     FROM " . self::TableName_Channel . " c
                     WHERE
                         c.State<100 AND c.SiteId=:SiteId AND c.Invisible=0
-                    ORDER BY c.Sort DESC,c.ChannelId;";
+                        ORDER BY ".$order." ;";
             } else {
                 $sql = "SELECT
                             c.ChannelId,
@@ -601,7 +610,7 @@ class ChannelManageData extends BaseManageData
                                   SELECT ChannelId FROM " . self::TableName_Channel . " WHERE SiteId IN (SELECT SiteId from " . self::TableName_ManageUserAuthority . " WHERE ChannelExplore=1 AND SiteId=:SiteId3 AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId5))
 
                                 )
-                        ORDER BY c.Sort DESC,c.ChannelId;";
+                        ORDER BY ".$order." ;";
                 $dataProperty->AddField("ManageUserId", $manageUserId);
                 $dataProperty->AddField("ManageUserId2", $manageUserId);
                 $dataProperty->AddField("ManageUserId3", $manageUserId);
@@ -618,6 +627,30 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 根据站点id返回频道数据集
+     * @param int $siteId 站点id
+     * @param int $topCount 显示的条数
+     * @return array|null
+     */
+    public function GetListBySiteId($siteId, $topCount)
+    {
+        $result = null;
+        if ($siteId > 0) {
+
+            $sql = "SELECT
+                        *
+                    FROM " . self::TableName_Channel . "
+
+                    WHERE State<100 AND SiteId=:SiteId
+
+                    LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 根据父id获取列表数据集

@@ -165,7 +165,7 @@ function LoadSite(siteId, siteName, siteUrl) {
         $("#div_manage_menu_of_column").html("<img style='margin:10px;' src='/system_template/common/images/spinner2.gif' />");
         _LoadChannelListForManage(siteId);
         //site name
-        $(".site_name").html(siteName);
+        $(".site_name").html("<a href='"+siteUrl+"' target='_blank'>"+siteName+"</a>");
         if (siteUrl.length > 1) {
             $("#btn_go_site_url").attr("href", siteUrl);
         }

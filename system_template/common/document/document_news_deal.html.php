@@ -618,6 +618,32 @@ function submitForm(closeTab) {
                 {s_ClosePosition}
             </td>
         </tr>
+        <!-- 加点击 -->
+        <tr>
+            <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label
+                    for="f_Hit">初始点击数：</label></td>
+            <td class="spe_line" style="text-align: left">
+                <input type="text" class="input_box" id="f_Hit" name="f_Hit"
+                       value="{Hit}" style="width:95%;font-size:14px;" maxlength="200" />
+                <script type="text/javascript">
+                    $(function () {
+                        var hit=$("#f_Hit").attr("value");
+                        var siteId={SiteId};
+                        if((hit==""||hit=="0")&&siteId==2){
+                            var addHit=GetRandomNum(500,700);
+                            $("#f_Hit").attr("value",addHit);
+                        }
+                    });
+                    function GetRandomNum(Min,Max)
+                    {
+                        var Range = Max - Min;
+                        var Rand = Math.random();
+                        return(Min + Math.round(Rand * Range));
+                    }
+                </script>
+            </td>
+        </tr>
+        <!-- 加点击 end -->
     </table>
 </div>
 </div>
