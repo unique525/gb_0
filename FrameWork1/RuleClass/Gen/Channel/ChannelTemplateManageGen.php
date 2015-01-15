@@ -51,6 +51,7 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
 
         $channelId = Control::GetRequest("channel_id", 0);
         $resultJavaScript = "";
+        $tabIndex = Control::GetRequest("tab_index", 0);
 
         if($channelId>0 && $manageUserId>0){
 
@@ -89,7 +90,15 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=channel_template
+                            &m=list
+                            &channel_id=$channelId
+                            &tab_index=$tabIndex
+                            ");
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -146,12 +155,15 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
         $channelTemplateId = Control::GetRequest("channel_template_id", 0);
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
+        $tabIndex = Control::GetRequest("tab_index", 0);
 
         if ($channelTemplateId > 0 && $manageUserId > 0) {
             $tempContent = Template::Load("channel/channel_template_deal.html", "common");
             parent::ReplaceFirst($tempContent);
 
             $channelTemplateManageData = new ChannelTemplateManageData();
+
+            $channelId = $channelTemplateManageData->GetChannelId($channelTemplateId, true);
 
             //加载原有数据
             $arrOne = $channelTemplateManageData->GetOne($channelTemplateId);
@@ -189,7 +201,14 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                     DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=channel_template
+                            &m=list
+                            &channel_id=$channelId
+                            &tab_index=$tabIndex
+                            ");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

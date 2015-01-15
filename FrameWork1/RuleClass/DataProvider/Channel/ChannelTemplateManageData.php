@@ -245,6 +245,27 @@ class ChannelTemplateManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 取得频道模板站点id
+     * @param int $channelTemplateId 频道模板id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 频道模板的站点id
+     */
+    public function GetChannelId($channelTemplateId, $withCache)
+    {
+        $result = -1;
+        if ($channelTemplateId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
+            $cacheFile = 'channel_template_get_channel_id.cache_' . $channelTemplateId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_ChannelTemplate . " WHERE ChannelTemplateId = :ChannelTemplateId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
     /**
      * 取得频道模板站点id
      * @param int $channelTemplateId 频道模板id

@@ -86,10 +86,12 @@ $(function() {
         if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage' +
-            '&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
-        parent.G_TabTitle = parent.G_SelectedChannelName + '-新增文档';
-        parent.addTab();
+        //parent.G_TabUrl = '/default.php?secu=manage' +
+        //    '&mod=document_news&m=create&p=' + pageIndex + '&channel_id=' + channelId;
+        //parent.G_TabTitle = parent.G_SelectedChannelName + '-新增文档';
+        //parent.addTab();
+        window.location.href = '/default.php?secu=manage' +
+            '&mod=document_news&m=create&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex + '&channel_id=' + channelId;
     });
 
     var btnModify = $(".btn_modify");
@@ -101,11 +103,14 @@ $(function() {
         if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
             pageIndex = 1;
         }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='
-            + documentNewsId + '&p=' + pageIndex + '&channel_id='
+        //parent.G_TabUrl = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='
+        //    + documentNewsId + '&p=' + pageIndex + '&channel_id='
+        //    + parent.G_SelectedChannelId;
+        //parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
+        //parent.addTab();
+        window.location.href = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='
+            + documentNewsId + '&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex + '&channel_id='
             + parent.G_SelectedChannelId;
-        parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
-        parent.addTab();
     });
 
     //改变状态按钮事件捕获

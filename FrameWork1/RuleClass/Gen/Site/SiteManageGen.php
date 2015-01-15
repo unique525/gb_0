@@ -45,7 +45,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
     private function GenCreate()
     {
         $manageUserId = Control::GetManageUserId();
-
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $resultJavaScript = "";
 
         if ($manageUserId > 0) {
@@ -56,7 +56,6 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
             if (!empty($_POST)) {
 
                 $httpPostData = $_POST;
-
 
                 $siteId = $siteManageData->Create($httpPostData);
                 //加入操作日志
@@ -98,7 +97,13 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //Control::CloseTab();
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=site
+                            &m=list
+                            &tab_index=$tabIndex
+                            ");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -134,6 +139,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
     {
         $tempContent = Template::Load("site/site_deal.html", "common");
         $siteId = Control::GetRequest("site_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
@@ -189,7 +195,13 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     DataCache::RemoveDir(CACHE_PATH . '/site_data');
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=site
+                            &m=list
+                            &tab_index=$tabIndex
+                            ");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

@@ -64,6 +64,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
         $pageIndex = Control::GetRequest("p", 1);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $resultJavaScript = "";
         parent::ReplaceFirst($templateContent);
 
@@ -234,7 +235,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                         $closeTab = Control::PostRequest("CloseTab", 0);
                         if ($closeTab == 1) {
-                            $resultJavaScript .= Control::GetCloseTab();
+                            //$resultJavaScript .= Control::GetCloseTab();
+                            Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=document_news
+                            &m=list
+                            &channel_id=$channelId
+                            &tab_index=$tabIndex
+                            &ps=$pageIndex");
                         } else {
                             Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                         }
@@ -271,6 +279,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
         $nowManageUserId = Control::GetManageUserId();
         $pageIndex = Control::GetRequest("p", 1);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $resultJavaScript = "";
         parent::ReplaceFirst($templateContent);
         if ($documentNewsId > 0) {
@@ -524,7 +533,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php
+                            ?secu=manage
+                            &mod=document_news
+                            &m=list
+                            &channel_id=$channelId
+                            &tab_index=$tabIndex
+                            &ps=$pageIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

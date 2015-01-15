@@ -7,10 +7,12 @@
         $("document").ready(function () {
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template' +
-                    '&m=create&channel_id={ChannelId}';
-                parent.G_TabTitle =  '新增模板';
-                parent.addTab();
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template' +
+                //    '&m=create&channel_id={ChannelId}';
+                //parent.G_TabTitle =  '新增模板';
+                //parent.addTab();
+
+                window.location.href = '/default.php?secu=manage&mod=channel_template&m=create&tab_index='+ parent.G_TabIndex +'&channel_id={ChannelId}';
             });
 
 
@@ -18,9 +20,10 @@
                 event.preventDefault();
                 var channelTemplateId=$(this).attr("idvalue");
                 var channelTemplateName=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template&m=modify' + '&channel_template_id=' + channelTemplateId + '';
-                parent.G_TabTitle = channelTemplateName+'-模板编辑';
-                parent.addTab();
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=channel_template&m=modify' + '&channel_template_id=' + channelTemplateId + '';
+                //parent.G_TabTitle = channelTemplateName+'-模板编辑';
+                //parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=channel_template&m=modify&tab_index='+ parent.G_TabIndex +'&channel_template_id=' + channelTemplateId + '';
             });
 
             //格式化状态
