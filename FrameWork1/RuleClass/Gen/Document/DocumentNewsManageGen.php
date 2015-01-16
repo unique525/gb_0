@@ -116,7 +116,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     $httpPostData = $_POST;
 
 
-                    $documentNewsId = $documentNewsManageData->Create($httpPostData);
+                    $documentNewsId = $documentNewsManageData->Create($httpPostData,$manageUserId,$manageUserName);
 
                     //加入操作日志
                     $operateContent = 'Create DocumentNews,POST FORM:' . implode('|', $_POST) . ';\r\nResult:documentNewsId:' . $documentNewsId;
@@ -236,13 +236,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                         $closeTab = Control::PostRequest("CloseTab", 0);
                         if ($closeTab == 1) {
                             //$resultJavaScript .= Control::GetCloseTab();
-                            Control::GoUrl("/default.php
-                            ?secu=manage
-                            &mod=document_news
-                            &m=list
-                            &channel_id=$channelId
-                            &tab_index=$tabIndex
-                            &ps=$pageIndex");
+                            Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
                         } else {
                             Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                         }
@@ -534,13 +528,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php
-                            ?secu=manage
-                            &mod=document_news
-                            &m=list
-                            &channel_id=$channelId
-                            &tab_index=$tabIndex
-                            &ps=$pageIndex");
+                        Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

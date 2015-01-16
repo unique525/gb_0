@@ -98,12 +98,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     if ($closeTab == 1) {
                         //Control::CloseTab();
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php
-                            ?secu=manage
-                            &mod=site
-                            &m=list
-                            &tab_index=$tabIndex
-                            ");
+                        Control::GoUrl("/default.php?secu=manage&mod=site&m=list&tab_index=$tabIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -196,12 +191,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php
-                            ?secu=manage
-                            &mod=site
-                            &m=list
-                            &tab_index=$tabIndex
-                            ");
+                        Control::GoUrl("/default.php?secu=manage&mod=site&m=list&tab_index=$tabIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

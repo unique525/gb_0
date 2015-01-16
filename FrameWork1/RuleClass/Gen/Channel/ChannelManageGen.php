@@ -404,8 +404,13 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenRemoveToBin(){
         $tempContent = Template::Load("channel/channel_remove_to_bin.html", "common");
         $channelId = Control::GetRequest("channel_id", 0);
-        $channelManageData = new ChannelManageData();
-        $channelManageData->UpdateParentChildrenChannelId($channelId);
+
+        if($channelId > 0){
+            $channelManageData = new ChannelManageData();
+            $channelManageData->UpdateParentChildrenChannelId($channelId);
+            $channelManageData->ModifyState($channelId, ChannelData::STATE_REMOVED);
+        }
+
 
         return $tempContent;
     }

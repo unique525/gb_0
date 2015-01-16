@@ -212,6 +212,33 @@ class ChannelManageData extends BaseManageData
     }
 
     /**
+     * 修改频道状态
+     * @param int $channelId 频道id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($channelId, $state)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_state.cache_' . $channelId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Channel . " SET
+                    State = :State
+                    WHERE ChannelId = :ChannelId
+                    ;";
+            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 更新子节点id字符串
      * @param int $channelId 频道id
      */

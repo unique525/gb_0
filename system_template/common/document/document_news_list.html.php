@@ -159,8 +159,8 @@
             <td id="btn_sort_by_hit" class="grid_can_sort" title="按点击排序" style="width: 50px; text-align: center;">
                 点击<img id="btn_sort_by_hit_down" src="/system_template/{template_name}/images/manage/arrow1.gif" alt="down" /><img id="btn_sort_by_hit_up" style="display:none;" src="/system_template/{template_name}/images/manage/arrow2.gif" alt="up" />
             </td>
-            <td style="width: 180px;">创建时间</td>
-            <td style="width: 100px;">发稿人</td>
+            <td style="width: 180px; text-align: center;">创建时间</td>
+            <td style="width: 100px; text-align: center;">发稿人</td>
             <td style="width: 40px;"></td>
         </tr>
     </table>

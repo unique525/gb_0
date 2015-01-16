@@ -239,7 +239,6 @@ class Control {
             $cookieStr = $_COOKIE['UserExploreHistory'.'_'.$userId];
             return Format::FixJsonDecode(base64_decode($cookieStr));
 
-            //return Des::Decrypt(urldecode($_COOKIE["USERNAME"]),"su141022");
         } else {
             return null;
         }

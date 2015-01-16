@@ -9,6 +9,16 @@
 class ChannelData {
 
     /**
+     * 频道状态 正常 0
+     */
+    const STATE_NORMAL = 0;
+    /**
+     * 频道状态 删除 100
+     */
+    const STATE_REMOVED = 100;
+
+
+    /**
      * 频道类型 站点首页类 0
      */
     const CHANNEL_TYPE_HOME = 0;
