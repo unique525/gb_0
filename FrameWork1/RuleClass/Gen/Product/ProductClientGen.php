@@ -41,26 +41,21 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
      */
     private function GetListByChannel(){
 
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
 
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId>0){
             $pageSize = Control::GetRequest("ps", 20);
             $orderBy = Control::GetRequest("order", 0);
-
             $channelClientData = new ChannelClientData();
-
             $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
-
-
             if(strlen($channelIds)>0){
                 $channelIds = $channelIds . ',' . $channelId;
             }else{
                 $channelIds = $channelId;
             }
-
-
             $productClientData = new ProductClientData();
             $arrList = $productClientData->GetListOfChannelId(
                 $channelIds,
@@ -69,14 +64,20 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             );
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);
+            }else{
+                $resultCode = -2;
             }
         }
+        else{
+            $resultCode = -1;
+        }
 
-        return '{"product":{"product_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
     }
 
     private function GetListOfDiscount(){
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
         $channelId = Control::GetRequest("channel_id", 0);
         if ($channelId > 0) {
             $topCount = Control::GetRequest("top", 5);
@@ -87,13 +88,19 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrProductList = $productClientData->GetDiscountListByChannelId($ownChannelAndChildChannelId, $orderBy, $topCount);
             if (count($arrProductList) > 0) {
                 $result = Format::FixJsonEncode($arrProductList);
+            }else{
+                $resultCode = -2;
             }
         }
-        return '{"product":{"product_list":' . $result . '}}';
+        else{
+            $resultCode = -1;
+        }
+        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
     }
 
     private function GetListOfRecLevel(){
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
         $siteId = Control::GetRequest("site_id", 0);
         if ($siteId > 0) {
             $topCount = Control::GetRequest("top", 5);
@@ -104,13 +111,19 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrProductList = $productClientData->GetListByRecLevel($siteId, $recLevel, $orderBy, $topCount);
             if (count($arrProductList) > 0) {
                 $result = Format::FixJsonEncode($arrProductList);
+            }else{
+                $resultCode = -2;
             }
         }
-        return '{"product":{"product_list":' . $result . '}}';
+        else{
+            $resultCode = -1;
+        }
+        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
     }
 
     private function GetListByProduct(){
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {
 
@@ -118,8 +131,13 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrOne = $productClientData->GetOne($productId);
             if (count($arrOne) > 0) {
                 $result = Format::FixJsonEncode($arrOne);
+            }else{
+                $resultCode = -2;
             }
         }
-        return '{"product":{"product_list":' . $result . '}}';
+        else{
+            $resultCode = -1;
+        }
+        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
     }
 } 
