@@ -22,17 +22,19 @@ class DocumentNewsManageData extends BaseManageData
     /**
      * 新增资讯
      * @param array $httpPostData $_POST数组
+     * @param int $manageUserId 管理员id
+     * @param string $manageUserName 管理员帐号
      * @return int 新增的资讯id
      */
-    public function Create($httpPostData)
+    public function Create($httpPostData, $manageUserId, $manageUserName)
     {
         $result = -1;
         $dataProperty = new DataProperty();
         $addFieldName = "";
         $addFieldValue = "";
         $preNumber = "";
-        $addFieldNames = array("CreateDate");
-        $addFieldValues = array(date("Y-m-d H:i:s", time()));
+        $addFieldNames = array("CreateDate","ManageUserId","ManageUserName");
+        $addFieldValues = array(date("Y-m-d H:i:s", time()),$manageUserId,$manageUserName);
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql($httpPostData, self::TableName_DocumentNews, $dataProperty, $addFieldName, $addFieldValue, $preNumber, $addFieldNames, $addFieldValues);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
@@ -959,7 +961,7 @@ class DocumentNewsManageData extends BaseManageData
                 " . $recLevelSelection . "
 
 
-                ORDER BY dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC
+                ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
@@ -1016,7 +1018,7 @@ class DocumentNewsManageData extends BaseManageData
 
 
 
-                ORDER BY dn.RecLevel DESC, dn.CreateDate DESC
+                ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
