@@ -18,7 +18,7 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
         switch ($function) {
 
             case "all_child_list_by_parent_id":
-                $result = self::GenAllChildListByParentId();
+                $result = self::GetAllChildListByParentId();
                 break;
 
         }
@@ -30,7 +30,7 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
      * 根据父频道id返回其下所有子频道数组
      * @return array 数组
      */
-    private function GenAllChildListByParentId(){
+    private function GetAllChildListByParentId(){
 
         $parentId = Control::GetRequest("parent_id", 0);
 
