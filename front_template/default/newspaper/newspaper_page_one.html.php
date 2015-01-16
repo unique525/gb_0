@@ -135,7 +135,7 @@
     </div>
 
 
-
+    <div class="site_ad_269"></div><script type="text/javascript" src='/front_js/site_ad/2/site_ad_269.js' charset="utf-8"></script>
     <div>
         <a href="/default.php?mod=newspaper_article&a=list&newspaper_page_id={CurrentNewspaperPageId}&newspaper_id={NewspaperId}&channel_id={ChannelId}">
             <img id="img01" style="max-width:100%;width:100%;" src="{UploadFileCompressPath1}" alt="" />
