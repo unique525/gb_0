@@ -31,7 +31,8 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
      * @return string
      */
     private function GetListByProduct(){
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
         $productId = Control::PostOrGetRequest("product_id", 0);
         if ($productId > 0) {
             $topCount = Control::GetRequest("top", 100);
@@ -41,8 +42,13 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
             $arrProductPicList = $productPicClientData->GetList($productId, $orderBy, $topCount);
             if (count($arrProductPicList) > 0) {
                 $result = Format::FixJsonEncode($arrProductPicList);
+                //$result = ;
+            }else{
+                $resultCode = -2;
             }
+        }else{
+            $resultCode = -1;
         }
-        return '{"product":{"product_pic_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","product":{"product_pic_list":' . $result . '}}';
     }
 } 

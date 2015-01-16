@@ -51,7 +51,17 @@ class ProductPicClientData extends BaseClientData {
                     break;
             }
             $sql = "
-            SELECT t.ProductPicId,t.ProductId,t.UploadFileId,t.ProductPicTag,t.Sort,t.State,t.CreateDate,t1.*
+            SELECT
+
+                t.ProductPicId,
+                t.ProductId,
+                t.UploadFileId,
+                t.ProductPicTag,
+                t.Sort,
+                t.State,
+                t.CreateDate,
+                t1.*
+
             FROM " . self::TableName_ProductPic . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.UploadFileId=t1.UploadFileId
             WHERE t.State=0 AND t.ProductId=:ProductId"
@@ -60,6 +70,7 @@ class ProductPicClientData extends BaseClientData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
         }
         return $result;
     }
