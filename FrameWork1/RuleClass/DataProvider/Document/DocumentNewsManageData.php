@@ -959,7 +959,7 @@ class DocumentNewsManageData extends BaseManageData
                 " . $recLevelSelection . "
 
 
-                ORDER BY dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC
+                ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
@@ -1016,7 +1016,7 @@ class DocumentNewsManageData extends BaseManageData
 
 
 
-                ORDER BY dn.RecLevel DESC, dn.CreateDate DESC
+                ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
