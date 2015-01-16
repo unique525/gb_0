@@ -17,8 +17,8 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "list_of_product_id":
-                $result = self::GenListOfProductId();
+            case "list_of_product":
+                $result = self::GenListOfProduct();
                 break;
 
         }
@@ -30,7 +30,7 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    private function GenListOfProductId(){
+    private function GenListOfProduct(){
         $result = "";
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {

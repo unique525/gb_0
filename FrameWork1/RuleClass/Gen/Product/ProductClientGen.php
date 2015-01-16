@@ -17,8 +17,8 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "list_of_product_id":
-                $result = self::GenListOfProductId();
+            case "list_of_product":
+                $result = self::GenListOfProduct();
                 break;
             case "list_of_channel":
                 $result = self::GenListOfChannel();
@@ -109,7 +109,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"product":{"product_list":' . $result . '}}';
     }
 
-    private function GenListOfProductId(){
+    private function GenListOfProduct(){
         $result = "";
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {
