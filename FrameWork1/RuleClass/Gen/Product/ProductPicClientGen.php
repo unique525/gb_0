@@ -17,7 +17,7 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "get_list_by_product":
+            case "list_by_product":
                 $result = self::GetListByProduct();
                 break;
 

@@ -17,16 +17,16 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "get_list_by_product":
+            case "list_by_product":
                 $result = self::GetListByProduct();
                 break;
-            case "get_list_by_channel":
+            case "list_by_channel":
                 $result = self::GetListByChannel();
                 break;
-            case "get_list_of_discount": //打折商品
+            case "list_of_discount": //打折商品
                 $result = self::GetListOfDiscount();
                 break;
-            case "get_list_of_rec_level"://推荐商品
+            case "list_of_rec_level"://推荐商品
                 $result = self::GetListOfRecLevel();
                 break;
 
