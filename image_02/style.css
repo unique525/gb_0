@@ -90,7 +90,7 @@ a { text-decoration:none; color: #000000;cursor:pointer}
 
 
 /**新闻 乐和长沙**/
-.box_left{width:33%;float:left;}
+.box_left{;float:left;}/*width:33%*/
 .box_left img{width:120px;height:90px;display:block}
 .box_right{width:66.5%;float:left;vertical-align:top;line-height:120%;}
 .content{padding:0 5px 5px 0;vertical-align:top;}
