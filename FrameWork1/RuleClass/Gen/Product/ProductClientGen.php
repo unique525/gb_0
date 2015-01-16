@@ -17,17 +17,17 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
         switch ($function) {
 
-            case "list_of_product":
-                $result = self::GenListOfProduct();
+            case "get_list_by_product":
+                $result = self::GetListByProduct();
                 break;
-            case "list_of_channel":
-                $result = self::GenListOfChannel();
+            case "get_list_by_channel":
+                $result = self::GetListByChannel();
                 break;
-            case "list_of_discount": //打折商品
-                $result = self::GenListOfDiscount();
+            case "get_list_of_discount": //打折商品
+                $result = self::GetListOfDiscount();
                 break;
-            case "list_of_rec_level"://推荐商品
-                $result = self::GenListOfRecLevel();
+            case "get_list_of_rec_level"://推荐商品
+                $result = self::GetListOfRecLevel();
                 break;
 
         }
@@ -39,7 +39,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    private function GenListOfChannel(){
+    private function GetListByChannel(){
 
         $result = "";
 
@@ -75,7 +75,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"product":{"product_list":' . $result . '}}';
     }
 
-    private function GenListOfDiscount(){
+    private function GetListOfDiscount(){
         $result = "";
         $channelId = Control::GetRequest("channel_id", 0);
         if ($channelId > 0) {
@@ -92,7 +92,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"product":{"product_list":' . $result . '}}';
     }
 
-    private function GenListOfRecLevel(){
+    private function GetListOfRecLevel(){
         $result = "";
         $siteId = Control::GetRequest("site_id", 0);
         if ($siteId > 0) {
@@ -109,7 +109,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"product":{"product_list":' . $result . '}}';
     }
 
-    private function GenListOfProduct(){
+    private function GetListByProduct(){
         $result = "";
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {
