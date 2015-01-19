@@ -261,13 +261,16 @@ class NewspaperArticleManageGen extends BaseManageGen {
         $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
         $manageUserId = Control::GetManageUserID();
         $manageUserName = Control::GetManageUserName();
+        $tableType=350; //NewspaperArticle
         if ($channelId > 0) {
             $newspaperArticleManageData=new NewspaperArticleManageData();
             $channelManageData = new ChannelManageData();
             $documentNewsManageData = new DocumentNewsManageData();
+            $uploadFileManageData=new UploadFileManageData();
 
             $arrayOfNewspaperList = $newspaperArticleManageData->GetListByIDString($docIdString);
             if (!empty($_POST)) { //提交
+                $result="";
                 $targetCid = Control::PostRequest("pop_cid", 0); //目标频道ID
                 $targetSiteId = $channelManageData->GetSiteId($targetCid,true);
 
@@ -277,22 +280,46 @@ class NewspaperArticleManageGen extends BaseManageGen {
 
                             if (strlen($docIdString) > 0) {
                                 if ($channelType === 1) {   //新闻资讯类
-                                    $result = $documentNewsManageData->CopyFromNewsPaperArticle($targetSiteId,$targetCid, $arrayOfNewspaperList, $manageUserId, $manageUserName);
+                                    $toTableType=15; //DocumentNews
+                                    foreach($arrayOfNewspaperList as $oneNewspaperForCopy){
+                                        $newId = $documentNewsManageData->CopyFromNewsPaperArticle($targetSiteId,$targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName);
 
-                                    //加入操作日志
-                                    $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
-                                    self::CreateManageUserLog($operateContent);
+                                        //加入操作日志
+                                        $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $newId;
+                                        self::CreateManageUserLog($operateContent);
 
 
-                                    if ($result > 0) {
-                                        $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
-                                        Control::RunJavascript($jsCode);
-                                    } else {
-                                        Control::ShowMessage(Language::Load('document', 17));
+
+                                        /**处理附件**/
+                                        //复制
+                                        $uploadFileDuplication=$uploadFileManageData->DuplicateForOtherTableType($oneNewspaperForCopy["NewspaperArticleId"],$tableType,$newId,$toTableType);
+                                        if($uploadFileDuplication){
+                                            //新数据id加入UploadFiles字段
+                                            $strUploadFileId="";
+                                            $strPrependContent="";
+                                            $arrayOfUploadFiles=$uploadFileManageData->GetListByTableId($newId,$toTableType);
+                                            foreach($arrayOfUploadFiles as $oneUploadFile){
+                                                $strUploadFileId.=",".$oneUploadFile["UploadFileId"];
+                                                $strPrependContent.='<img src="'.$oneUploadFile["UploadFilePath"].$oneUploadFile["UploadFileName"].'" />';
+                                            }
+                                            $updateDocumentNewsUploadFilesResult=$documentNewsManageData->ModifyUploadFiles($newId,$strUploadFileId);
+                                            if($updateDocumentNewsUploadFilesResult){
+                                                $updateDocumentNewsContentResult=$documentNewsManageData->PrependContent($newId,$strPrependContent);
+                                            }
+
+                                        }
+
+                                        $result=$newId;
                                     }
                                 }
                             }
-            }
+                }
+                if ($result > 0) {
+                    $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                    Control::RunJavascript($jsCode);
+                } else {
+                    Control::ShowMessage(Language::Load('document', 17));
+                }
             }
 
             $documentList = "";
