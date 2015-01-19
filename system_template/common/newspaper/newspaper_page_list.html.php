@@ -24,6 +24,15 @@
                 parent.addTab();
             });
 
+            $("#btn_manage_all_newspaper_article").click(function (event) {
+                event.preventDefault();
+                var newspaperId=$(this).attr("idvalue");
+                //var newspaperTitle=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article&&m=list&type=1&newspaper_id=' + newspaperId + '';
+                parent.G_TabTitle = "本期文章管理";
+                parent.addTab();
+            });
+
             //格式化站点状态
             $(".span_state").each(function(){
                 $(this).html(formatState($(this).text()));
@@ -100,7 +109,7 @@
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
-                <input id="btn_manage_all_newspaper_article" class="btn2" value="本期全部文章管理" title="本期全部文章管理" type="button"/>
+                <input id="btn_manage_all_newspaper_article" idvalue="{NewspaperId}" class="btn2" value="本期全部文章管理" title="本期全部文章管理" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">

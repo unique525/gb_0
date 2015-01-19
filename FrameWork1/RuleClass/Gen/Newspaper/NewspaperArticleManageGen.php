@@ -163,11 +163,19 @@ class NewspaperArticleManageGen extends BaseManageGen {
         $newspaperPageManageData = new NewspaperPageManageData();
         $newspaperManageData = new NewspaperManageData();
 
-        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
-        $newspaperId = $newspaperPageManageData->GetNewspaperId($newspaperPageId, true);
-        $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
+        $type = Control::GetRequest("type", 0);
+        $newspaperPageId = 0;
+        if($type == 0){
+            $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+            $newspaperId = $newspaperPageManageData->GetNewspaperId($newspaperPageId, true);
+            $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
+        }else{
+            $newspaperId = Control::GetRequest("newspaper_id", 0);
+            $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
+        }
 
-        if ($pageIndex > 0 && $newspaperPageId > 0 && $channelId > 0) {
+
+        if ($pageIndex > 0 && $channelId > 0) {
 
             $tempContent = str_ireplace("{NewspaperPageId}", $newspaperPageId, $tempContent);
             $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
@@ -176,14 +184,18 @@ class NewspaperArticleManageGen extends BaseManageGen {
             $tagId = "newspaper_article_list";
             $allCount = 0;
 
-            $arrList = $newspaperArticleManageData->GetList($newspaperPageId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType);
+            $arrList = $newspaperArticleManageData->GetList($type, $newspaperId, $newspaperPageId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType);
             if (count($arrList) > 0) {
                 Template::ReplaceList($tempContent, $arrList, $tagId);
 
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=newspaper_article&newspaper_page_id=$newspaperPageId&m=list&p={0}&ps=$pageSize";
+                if($type == 0){
+                    $navUrl = "default.php?secu=manage&mod=newspaper_article&newspaper_page_id=$newspaperPageId&m=list&p={0}&ps=$pageSize";
+                }else{
+                    $navUrl = "default.php?secu=manage&mod=newspaper_article&type=1&newspaper_id=$newspaperId&m=list&p={0}&ps=$pageSize";
+                }
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton(

@@ -141,6 +141,8 @@ class NewspaperArticleManageData extends BaseManageData {
 
     /**
      * 根据后台管理员id返回此管理员可以管理的站点列表数据集
+     * @param int $type 查询类型
+     * @param int $newspaperId 电子报id
      * @param int $newspaperPageId 电子报版面id
      * @param int $pageBegin 分页起始位置
      * @param int $pageSize 分页大小
@@ -149,34 +151,69 @@ class NewspaperArticleManageData extends BaseManageData {
      * @param int $searchType 查询字段类型
      * @return array 站点列表数据集
      */
-    public function GetList($newspaperPageId, $pageBegin, $pageSize, &$allCount, $searchKey, $searchType)
+    public function GetList(
+        $type,
+        $newspaperId,
+        $newspaperPageId,
+        $pageBegin,
+        $pageSize,
+        &$allCount,
+        $searchKey,
+        $searchType
+    )
     {
         $dataProperty = new DataProperty();
         $searchSql = "";
 
+
         //查询
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             if ($searchType == 0) { //名称
-                $searchSql = " AND (NewspaperArticleTitle like :SearchKey)";
+                $searchSql = " AND (na.NewspaperArticleTitle like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             } else { //名称
-                $searchSql = " AND (NewspaperArticleTitle like :SearchKey)";
+                $searchSql = " AND (na.NewspaperArticleTitle like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
         }
-        $sql = "SELECT * FROM " . self::TableName_NewspaperArticle . "
+        if($type == 0){
+            $sql = "SELECT na.*,np.* FROM " . self::TableName_NewspaperArticle . " na,
+                                  " . self::TableName_NewspaperPage." np
                         WHERE
-                            NewspaperPageId = :NewspaperPageId
-                        ORDER BY Sort ,CreateDate
+                            na.NewspaperPageId = np.NewspaperPageId AND
+                            na.NewspaperPageId = :NewspaperPageId
+                        ORDER BY na.Sort ,na.CreateDate
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
-        $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperArticle . "
+            $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperArticle . "
                         WHERE
                             NewspaperPageId = :NewspaperPageId
                         $searchSql
                         ;";
 
 
-        $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+        }else{
+            $sql = "SELECT na.*,np.* FROM " . self::TableName_NewspaperArticle . " na,
+                                    " . self::TableName_NewspaperPage." np
+                        WHERE
+                            na.NewspaperPageId = np.NewspaperPageId AND
+                            na.NewspaperPageId IN
+                            (SELECT NewspaperPageId
+                                FROM " . self::TableName_NewspaperPage . "
+                                WHERE NewspaperId = :NewspaperId)
+                        ORDER BY na.NewspaperPageId,na.Sort ,na.CreateDate
+                        LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperArticle . "
+                        WHERE
+                            NewspaperPageId IN
+                            (SELECT NewspaperPageId
+                                FROM " . self::TableName_NewspaperPage . "
+                                WHERE NewspaperId = :NewspaperId)
+                        $searchSql
+                        ;";
+            $dataProperty->AddField("NewspaperId", $newspaperId);
+        }
+
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);

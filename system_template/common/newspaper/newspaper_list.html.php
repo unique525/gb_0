@@ -24,6 +24,8 @@
                 parent.addTab();
             });
 
+
+
             //格式化站点状态
             $(".span_state").each(function(){
                 $(this).html(formatState($(this).text()));
@@ -87,7 +89,7 @@
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
-                <input id="btn_manage_all_newspaper_article" class="btn2" value="全部文章管理" title="全部文章管理" type="button"/>
+                <input id="btn_manage_all_newspaper_article" style="display:none;" class="btn2" value="全部文章管理" title="全部文章管理" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
