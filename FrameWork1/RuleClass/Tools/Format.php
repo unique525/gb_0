@@ -523,6 +523,41 @@ class Format
         }
         return $val;
     }
+
+    /**
+     * 取得时间对象的小时
+     * @param string $strDate 时间string
+     * @return string 返回小时数
+     */
+    public static function GetHour($strDate)
+    {
+        $objectDate=self::ToMkDate($strDate);
+        $arrayDate=getdate($objectDate);
+        echo $strDate;
+        return $arrayDate["hours"];
+    }
+    /**
+     * 取得时间对象的分钟
+     * @param string $strDate 时间string
+     * @return string 返回小时数Minute
+     */
+    public static function GetMinute($strDate)
+    {
+        $objectDate=self::ToMkDate($strDate);
+        $arrayDate=getdate($objectDate);
+        return $arrayDate["minutes"];
+    }
+    /**
+     * 取得时间对象的秒钟
+     * @param string $strDate 二唯数组
+     * @return string 返回小时数Minute
+     */
+    public static function GetSecond($strDate)
+    {
+        $objectDate=self::ToMkDate($strDate);
+        $arrayDate=getdate($objectDate);
+        return $arrayDate["seconds"];
+    }
 }
 
 ?>

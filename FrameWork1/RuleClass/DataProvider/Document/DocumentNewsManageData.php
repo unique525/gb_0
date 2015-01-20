@@ -1333,6 +1333,9 @@ class DocumentNewsManageData extends BaseManageData
                     State,
                     CreateDate,
                     ShowDate,
+                    ShowHour,
+                    ShowMinute,
+                    ShowSecond,
                     SourceName,
                     Author,
                     DirectUrl,
@@ -1351,6 +1354,9 @@ class DocumentNewsManageData extends BaseManageData
                     :State,
                     :CreateDate,
                     :ShowDate,
+                    :ShowHour,
+                    :ShowMinute,
+                    :ShowSecond,
                     :SourceName,
                     :Author,
                     :DirectUrl,
@@ -1368,7 +1374,11 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("State", $oneNewspaperForCopy["State"]);
                 $dataProperty->AddField("CreateDate", $oneNewspaperForCopy["CreateDate"]);
 
+
                 $dataProperty->AddField("ShowDate", Format::DateStringToDate($oneNewspaperForCopy["CreateDate"]));
+                $dataProperty->AddField("ShowHour", Format::GetHour($oneNewspaperForCopy["CreateDate"]));
+                $dataProperty->AddField("ShowMinute", Format::GetMinute($oneNewspaperForCopy["CreateDate"]));
+                $dataProperty->AddField("ShowSecond", Format::GetSecond($oneNewspaperForCopy["CreateDate"]));
 
                 $dataProperty->AddField("SourceName", $oneNewspaperForCopy["Source"]);
                 $dataProperty->AddField("Author", $oneNewspaperForCopy["Author"]);
