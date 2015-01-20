@@ -224,5 +224,7 @@
     <img src="/image_02/logo50.jpg" alt="长沙晚报" style="width:0;height:0;" />
 
 </div>
+<script type="text/javascript">var visitConfig = encodeURIComponent("{SiteUrl}") +"||{SiteId}||{ChannelId}||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
+
 </body>
 </html>
