@@ -31,7 +31,8 @@ class PicSliderClientGen extends BaseClientGen implements IBaseClientGen {
      */
     public function GenList(){
 
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
 
         $channelId = Control::GetRequest("channel_id", 0);
 
@@ -49,10 +50,14 @@ class PicSliderClientGen extends BaseClientGen implements IBaseClientGen {
             );
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);
+            }else{
+                $resultCode = -2;
             }
+        }else{
+            $resultCode = -1;
         }
 
-        return '{"pic_slider":{"pic_slider_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","pic_slider":{"pic_slider_list":' . $result . '}}';
     }
 
 } 
