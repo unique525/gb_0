@@ -18,6 +18,9 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_get_list":
                 $result = self::AsyncGetList();
                 break;
+            case "async_add_hit":
+                $result = self::GenAsyncAddHit();
+                break;
 
         }
         return $result;
@@ -121,5 +124,23 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
 
+    /**
+     * 记录广告点击
+     * @return string
+     */
+    private function GenAsyncAddHit() {
+        $result="";
+            $documentNewsId = intval(Control::GetRequest("id", "0"));
+            if ($documentNewsId > 0) {
+                $documentNewsPublicData=new DocumentNewsPublicData();
+                $result = $documentNewsPublicData->AddHit($documentNewsId);
+                if($result>0){
+                    //if (isset($_GET['jsonpcallback'])) {
+                    //    echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
+                    //}
+                }
+            }
+        return $result;
+    }
 
 } 

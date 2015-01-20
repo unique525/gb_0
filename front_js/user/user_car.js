@@ -34,15 +34,23 @@ function addUserCar(siteId,productId,buyCount,productPriceId,activityProductId,i
     });
 }
 
-
-$(function(){
+/**
+ * 返回购物车中商品数量
+ * @returns {number}
+ */
+function getUserCarCount(){
+    var userCarCount = 0;
     $.ajax({
         url:"/default.php?mod=user_car&a=async_get_count",
         dataType:"jsonp",
         jsonp:"jsonpcallback",
         success:function(data){
-            var result = data["result"];
-            $("#user_car_count").html(result);
+            userCarCount = parseInt(data["result"]);
         }
     });
+    return userCarCount;
+}
+
+$(function(){
+
 });

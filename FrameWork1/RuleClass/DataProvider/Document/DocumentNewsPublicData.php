@@ -322,6 +322,23 @@ class DocumentNewsPublicData extends BasePublicData {
         }
         return $result;
     }
+
+
+    /**
+     * 增加一个点击
+     * @param int $documentNewsId id
+     * @return int 操作结果
+     */
+    public function AddHit($documentNewsId){
+        $result = -1;
+        if($documentNewsId > 0){
+            $sql = "UPDATE ".self::TableName_DocumentNews." SET Hit = Hit+1 WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

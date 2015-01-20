@@ -59,7 +59,7 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
     /**
-     * 统计广告点击
+     * 记录广告点击
      * @return string
      */
     private function GenAddSiteAdClick() {
