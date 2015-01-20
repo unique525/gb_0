@@ -31,7 +31,8 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
      */
     public function GenListOfChannel(){
 
-        $result = "";
+        $result = "[{}]";
+        $resultCode = 0;
 
         $channelId = Control::GetRequest("channel_id", 0);
 
@@ -56,8 +57,14 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
             if (count($arrDocumentNewsList) > 0) {
                 $result = Format::FixJsonEncode($arrDocumentNewsList);
             }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
         }
 
-        return '{"document_news":{"document_news_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
     }
 } 
