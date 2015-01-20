@@ -282,7 +282,8 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                 if ($channelType === 1) {   //新闻资讯类
                                     $toTableType=15; //DocumentNews
                                     foreach($arrayOfNewspaperList as $oneNewspaperForCopy){
-                                        $newId = $documentNewsManageData->CopyFromNewsPaperArticle($targetSiteId,$targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName);
+                                        $newId = $documentNewsManageData->CopyFromNewsPaperArticle(
+                                            $targetSiteId,$targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName);
 
                                         //加入操作日志
                                         $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $newId;
