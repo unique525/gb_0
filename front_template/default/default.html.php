@@ -592,6 +592,6 @@
 </div>
 
 <pre_temp id="8"></pre_temp>
-><script type="text/javascript">var visitConfig = encodeURIComponent("http://xzw.changsha.cn") +"||11||209||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
+<script type="text/javascript">var visitConfig = encodeURIComponent("http://www.96333xzw.com") +"||{SiteId}||{ChannelId}||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>
