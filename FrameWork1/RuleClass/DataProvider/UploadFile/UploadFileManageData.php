@@ -51,4 +51,100 @@ class UploadFileManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 根据TableId,TableType取得记录
+     * @param int $tableId
+     * @param int $tableType
+     * @return array|null id数组数据集
+     */
+    public function GetListByTableId($tableId,$tableType){
+        $result = null;
+        if ($tableId>0 && $tableType > 0) {
+
+            $sql = "SELECT * FROM " . self::TableName_UploadFile . "
+                    WHERE TableType = :TableType AND TableId=:TableId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+    /**
+     * 复制一个table_id的UploadFile数据到另外的table_id
+     * @param int $tableId    原table_id
+     * @param int $tableType  原table_type
+     * @param int $toTableId    目的table_id
+     * @param int $toTableType     目的table_type
+     * @return array|null 所有未批量操作的记录
+     */
+    public function DuplicateForOtherTableType($tableId, $tableType, $toTableId, $toTableType){
+        $result = -1;
+        if ($tableType > 0 && $tableId>0 && $toTableId>0 && $toTableType>0) {
+            $sql = "INSERT INTO " . self::TableName_UploadFile . "
+                    (
+                    `UploadFileName`,
+                    `UploadFileExtentionName`,
+                    `UploadFileSize`,
+                    `UploadFileType`,
+                    `UploadFileOrgName`,
+                    `UploadFilePath`,
+                    `UploadFileMobilePath`,
+                    `UploadFilePadPath`,
+                    `UploadFileThumbPath1`,
+                    `UploadFileThumbPath2`,
+                    `UploadFileThumbPath3`,
+                    `UploadFileWatermarkPath1`,
+                    `UploadFileWatermarkPath2`,
+                    `UploadFileCompressPath1`,
+                    `UploadFileCompressPath2`,
+                    `UploadFileTitle`,
+                    `UploadFileInfo`,
+                    `TableType`,
+                    `TableId`,
+                    `ManageUserId`,
+                    `UserId`,
+                    `CreateDate`,
+                    `IsBatchUpload`,
+                    `IsBatchOperate`
+                    )
+                    SELECT
+                    `UploadFileName`,
+                    `UploadFileExtentionName`,
+                    `UploadFileSize`,
+                    `UploadFileType`,
+                    `UploadFileOrgName`,
+                    `UploadFilePath`,
+                    `UploadFileMobilePath`,
+                    `UploadFilePadPath`,
+                    `UploadFileThumbPath1`,
+                    `UploadFileThumbPath2`,
+                    `UploadFileThumbPath3`,
+                    `UploadFileWatermarkPath1`,
+                    `UploadFileWatermarkPath2`,
+                    `UploadFileCompressPath1`,
+                    `UploadFileCompressPath2`,
+                    `UploadFileTitle`,
+                    `UploadFileInfo`,
+                    $toTableType,
+                    $toTableId,
+                    `ManageUserId`,
+                    `UserId`,
+                    `CreateDate`,
+                    `IsBatchUpload`,
+                    `IsBatchOperate`
+                     FROM " . self::TableName_UploadFile . " WHERE TableId=:TableId AND TableType=:TableType ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
 }

@@ -1314,18 +1314,15 @@ class DocumentNewsManageData extends BaseManageData
      * 以从newspaper取出的数组新增稿件到频道 (复制)
      * @param int $targetSiteId 站点id
      * @param int $targetCid 频道id
-     * @param array $arrayOfNewspaperList newspaper数据数组
+     * @param array $oneNewspaperForCopy newspaper数据数组
      * @param int $manageUserId 操作人id
      * @param string $manageUserName 操作人用户名
      * @return int 执行结果
      */
-    public function CopyFromNewsPaperArticle($targetSiteId, $targetCid, $arrayOfNewspaperList, $manageUserId, $manageUserName){
+    public function CopyFromNewsPaperArticle($targetSiteId, $targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName){
         $result=-1;
-        if(count($arrayOfNewspaperList)>0&&$targetCid>0){
+        if($oneNewspaperForCopy&&$targetCid>0){
             $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
-            //$arraySql=array();
-            //$arrayDataProperty=array();
-            foreach($arrayOfNewspaperList as $newspaper){
                 $sort+=1;                       //排序号+1
                 $sql="INSERT INTO " . self::TableName_DocumentNews . "
                 (
@@ -1362,15 +1359,15 @@ class DocumentNewsManageData extends BaseManageData
                     :Sort
                 ) ;";
                 $dataProperty = new DataProperty();
-                $dataProperty->AddField("DocumentNewsTitle", $newspaper["NewspaperArticleTitle"]);
-                $dataProperty->AddField("DocumentNewsSubTitle", $newspaper["NewspaperArticleSubTitle"]);
-                $dataProperty->AddField("DocumentNewsCiteTitle", $newspaper["NewspaperArticleCiteTitle"]);
-                $dataProperty->AddField("DocumentNewsContent", $newspaper["NewspaperArticleContent"]);
-                $dataProperty->AddField("State", $newspaper["State"]);
-                $dataProperty->AddField("CreateDate", $newspaper["CreateDate"]);
-                $dataProperty->AddField("SourceName", $newspaper["Source"]);
-                $dataProperty->AddField("Author", $newspaper["Author"]);
-                $dataProperty->AddField("DirectUrl", $newspaper["DirectUrl"]);
+                $dataProperty->AddField("DocumentNewsTitle", $oneNewspaperForCopy["NewspaperArticleTitle"]);
+                $dataProperty->AddField("DocumentNewsSubTitle", $oneNewspaperForCopy["NewspaperArticleSubTitle"]);
+                $dataProperty->AddField("DocumentNewsCiteTitle", $oneNewspaperForCopy["NewspaperArticleCiteTitle"]);
+                $dataProperty->AddField("DocumentNewsContent", $oneNewspaperForCopy["NewspaperArticleContent"]);
+                $dataProperty->AddField("State", $oneNewspaperForCopy["State"]);
+                $dataProperty->AddField("CreateDate", $oneNewspaperForCopy["CreateDate"]);
+                $dataProperty->AddField("SourceName", $oneNewspaperForCopy["Source"]);
+                $dataProperty->AddField("Author", $oneNewspaperForCopy["Author"]);
+                $dataProperty->AddField("DirectUrl", $oneNewspaperForCopy["DirectUrl"]);
 
 
                 $dataProperty->AddField("ManageUserId", $manageUserId);
@@ -1380,11 +1377,11 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("SiteId", $targetSiteId);
                 $dataProperty->AddField("Sort", $sort);
 
-                $newId = $this->dbOperator->Execute($sql, $dataProperty);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
-                $result=$newId;
 
-            }
+
+
 
             //$result = $this->dbOperator->ExecuteBatch($arraySql, $arrayDataProperty);
         }
@@ -1410,7 +1407,7 @@ class DocumentNewsManageData extends BaseManageData
     }
 
     /**
-     * 由id集合组成的字符串返回对应id稿件集合的数据集
+     * 由id字符串返回对应id稿件的数据集
      * @param string $documentNewsIdString id
      * @return array|null 取得对应数组
      */
@@ -1425,6 +1422,54 @@ class DocumentNewsManageData extends BaseManageData
             $dataProperty = new DataProperty();
 //$dataProperty->AddField("NewspaperArticleIdString", $newspaperArticleIdString);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 修改UploadFileIds(附件id字符串)
+     * @param int $documentNewsId id
+     * @param string $strUploadFileId 附件id字符串
+     * @return int 操作结果
+     */
+    public function ModifyUploadFiles($documentNewsId,$strUploadFileId)
+    {
+        $result = -1;
+        if ($documentNewsId>0) {
+            $sql = "UPDATE
+            " . self::TableName_DocumentNews . "
+            SET UploadFiles=:UploadFiles
+            WHERE DocumentNewsId=:DocumentNewsId
+            ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFiles", $strUploadFileId);
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 在文档最前端插入内容
+     * @param int $documentNewsId id
+     * @param string $strPrepend 插入字符串
+     * @return int 操作结果
+     */
+    public function PrependContent($documentNewsId,$strPrepend)
+    {
+        $result = -1;
+        if ($documentNewsId>0) {
+            $sql = "UPDATE
+            " . self::TableName_DocumentNews . "
+            SET DocumentNewsContent=concat('".$strPrepend."',DocumentNewsContent)
+            WHERE DocumentNewsId=:DocumentNewsId
+            ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
