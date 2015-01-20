@@ -143,6 +143,7 @@
     <div class="site_ad_265"></div><script type="text/javascript" src='/front_js/site_ad/2/site_ad_265.js' charset="utf-8"></script>
 
 </div>
+<script type="text/javascript">var visitConfig = encodeURIComponent("{SiteUrl}") +"||{SiteId}||{ChannelId}||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>
 
