@@ -55,7 +55,7 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
 
             parent::GenUploadFileMobile($uploadFileId, $mobileWidth);
 
-            parent::GenUploadFileCompress1($uploadFileId, $mobileWidth,0, 80);
+            parent::GenUploadFileCompress1($uploadFileId, $mobileWidth,0, 60);
 
             //水印图
             $siteId = parent::GetSiteIdByDomain();
