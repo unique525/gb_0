@@ -632,5 +632,6 @@
 </div>
 <div class="clear"></div>
 <pre_temp id="8"></pre_temp>
+<script type="text/javascript">var visitConfig = encodeURIComponent("{SiteUrl}") +"||{SiteId}||{ChannelId}||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>

@@ -276,15 +276,15 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenSearch()
     {
         $temp = Control::GetRequest("temp", "");
-        $channelId = Control::GetRequest("channel_id", "");
-        $templateContent = self::LoadSearchTemp($temp, $channelId);
+        $siteId = Control::GetRequest("site_id", "");
+        $templateContent = self::LoadSearchTemp($temp, $siteId);
 
         parent::ReplaceFirst($templateContent);
 
-        //加载产品类别数据
-        if ($channelId > 0) {
-            $channelPublicData = new ChannelPublicData();
-            $arrOne = $channelPublicData->GetOne($channelId);
+        //加载站点信息
+        if ($siteId > 0) {
+            $sitePublicData = new SitePublicData();
+            $arrOne = $sitePublicData->GetOne($siteId);
             Template::ReplaceOne($templateContent, $arrOne);
         }
 
@@ -332,13 +332,13 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    private function LoadSearchTemp($temp, $channelId)
+    private function LoadSearchTemp($temp, $siteId)
     {
         $templateFileUrl = "product/product_search.html";
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+        $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         return $templateContent;
     }
 }
