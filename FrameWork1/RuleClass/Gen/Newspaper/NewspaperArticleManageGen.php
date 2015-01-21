@@ -301,7 +301,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                             $arrayOfUploadFiles=$uploadFileManageData->GetListByTableId($newId,$toTableType);
                                             foreach($arrayOfUploadFiles as $oneUploadFile){
                                                 $strUploadFileId.=",".$oneUploadFile["UploadFileId"];
-                                                $strPrependContent.='<img src="'.$oneUploadFile["UploadFilePath"].$oneUploadFile["UploadFileName"].'" />';
+                                                $strPrependContent.='<img src="'.$oneUploadFile["UploadFilePath"].'" />';
                                             }
                                             $updateDocumentNewsUploadFilesResult=$documentNewsManageData->ModifyUploadFiles($newId,$strUploadFileId);
                                             if($updateDocumentNewsUploadFilesResult){
