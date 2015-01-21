@@ -119,7 +119,7 @@ class DocumentNewsPublicData extends BasePublicData {
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    $orderBySql = 'CreateDate DESC, Sort DESC';
                     break;
 
             }
