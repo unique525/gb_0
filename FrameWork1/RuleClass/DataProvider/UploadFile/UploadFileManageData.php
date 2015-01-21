@@ -158,6 +158,15 @@ class UploadFileManageData extends BaseManageData {
     public function DuplicateByUploadFileId($strUploadFileIds, $toTableId, $toTableType){
         $result = -1;
         if ($strUploadFileIds!="" && $toTableId>0 && $toTableType>0) {
+            $dataProperty = new DataProperty();
+            $whereSql="";
+            if(!strstr($strUploadFileIds,",")){
+                $whereSql=" WHERE UploadFileId=:UploadFileId ";
+                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+            }else{
+                $whereSql=" WHERE UploadFileId IN (:UploadFileId) ";
+                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+            }
             $sql = "INSERT INTO " . self::TableName_UploadFile . "
                     (
                     `UploadFileName`,
@@ -211,9 +220,7 @@ class UploadFileManageData extends BaseManageData {
                     `IsBatchUpload`,
                     `IsBatchOperate`
                      FROM " . self::TableName_UploadFile . "
-                     WHERE UploadFileId IN (:UploadFileId);";
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+                     $whereSql;";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
         }
