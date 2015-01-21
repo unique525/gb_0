@@ -852,7 +852,7 @@ class DocumentNewsManageData extends BaseManageData
 
 
 
-                ORDER BY dn.Sort DESC, dn.CreateDate DESC
+                ORDER BY dn.CreateDate DESC, dn.Sort DESC
                 LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
