@@ -206,4 +206,25 @@ class NewspaperArticlePicManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+    /**
+     * 返回电子报文档所有附件的id
+     * @param int $newspaperArticleId id
+     * @return array|null 取得对应数组
+     */
+    public function GetIdList($newspaperArticleId)
+    {
+        $result = null;
+        if ($newspaperArticleId > 0) {
+            $sql = "SELECT UploadFileId FROM
+                        " . self::TableName_NewspaperArticlePic . "
+                    WHERE NewspaperArticleId=:NewspaperArticleId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 
