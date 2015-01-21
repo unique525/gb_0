@@ -533,7 +533,6 @@ class Format
     {
         $objectDate=self::ToMkDate($strDate);
         $arrayDate=getdate($objectDate);
-        echo $strDate;
         return $arrayDate["hours"];
     }
     /**
