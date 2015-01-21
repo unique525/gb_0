@@ -147,4 +147,83 @@ class UploadFileManageData extends BaseManageData {
         return $result;
     }
 
+
+    /**
+     * 复制数据到另外的table_id
+     * @param string $strUploadFileIds 要复制的UploadFile的id
+     * @param int $toTableId    目的table_id
+     * @param int $toTableType     目的table_type
+     * @return array|null 所有未批量操作的记录
+     */
+    public function DuplicateByUploadFileId($strUploadFileIds, $toTableId, $toTableType){
+        $result = -1;
+        if ($strUploadFileIds!="" && $toTableId>0 && $toTableType>0) {
+            $dataProperty = new DataProperty();
+            $whereSql="";
+            if(!strstr($strUploadFileIds,",")){
+                $whereSql=" WHERE UploadFileId=:UploadFileId ";
+                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+            }else{
+                $whereSql=" WHERE UploadFileId IN (:UploadFileId) ";
+                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+            }
+            $sql = "INSERT INTO " . self::TableName_UploadFile . "
+                    (
+                    `UploadFileName`,
+                    `UploadFileExtentionName`,
+                    `UploadFileSize`,
+                    `UploadFileType`,
+                    `UploadFileOrgName`,
+                    `UploadFilePath`,
+                    `UploadFileMobilePath`,
+                    `UploadFilePadPath`,
+                    `UploadFileThumbPath1`,
+                    `UploadFileThumbPath2`,
+                    `UploadFileThumbPath3`,
+                    `UploadFileWatermarkPath1`,
+                    `UploadFileWatermarkPath2`,
+                    `UploadFileCompressPath1`,
+                    `UploadFileCompressPath2`,
+                    `UploadFileTitle`,
+                    `UploadFileInfo`,
+                    `TableType`,
+                    `TableId`,
+                    `ManageUserId`,
+                    `UserId`,
+                    `CreateDate`,
+                    `IsBatchUpload`,
+                    `IsBatchOperate`
+                    )
+                    SELECT
+                    `UploadFileName`,
+                    `UploadFileExtentionName`,
+                    `UploadFileSize`,
+                    `UploadFileType`,
+                    `UploadFileOrgName`,
+                    `UploadFilePath`,
+                    `UploadFileMobilePath`,
+                    `UploadFilePadPath`,
+                    `UploadFileThumbPath1`,
+                    `UploadFileThumbPath2`,
+                    `UploadFileThumbPath3`,
+                    `UploadFileWatermarkPath1`,
+                    `UploadFileWatermarkPath2`,
+                    `UploadFileCompressPath1`,
+                    `UploadFileCompressPath2`,
+                    `UploadFileTitle`,
+                    `UploadFileInfo`,
+                    $toTableType,
+                    $toTableId,
+                    `ManageUserId`,
+                    `UserId`,
+                    `CreateDate`,
+                    `IsBatchUpload`,
+                    `IsBatchOperate`
+                     FROM " . self::TableName_UploadFile . "
+                     $whereSql;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+        return $result;
+    }
 }
