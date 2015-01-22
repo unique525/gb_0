@@ -30,6 +30,9 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
+            case "modify_password":
+                $result = self::ModifyPassword();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -156,6 +159,14 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
         parent::ReplaceEnd($tempContent);
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
+    }
+
+
+    private function ModifyPassword(){
+        $templateContent = Template::Load("manage/manage_user_modify_password.html", "common");
+
+
+        return $templateContent;
     }
 
 
