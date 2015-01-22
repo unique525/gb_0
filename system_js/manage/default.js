@@ -49,6 +49,23 @@ $(function () {
         $(".channel_name").html("");
     });
 
+    //修改密码
+    $("#btn_modify_manage_user_pass").click(function () {
+
+        var url='/default.php?secu=manage&mod=product_price&m=create&product_id='+productId+'&p=' + pageIndex;
+        $("#dialog_modify_password_frame").attr("src",url);
+        $("#dialog_modify_password_box").dialog({
+            hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:280,
+            width:800,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'产品价格新增',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+
+    });
+
     var aw = $(window).height() - 108 - 35;
     var size = aw / 28;
     window.G_PageSize = parseInt(size) - 1;
