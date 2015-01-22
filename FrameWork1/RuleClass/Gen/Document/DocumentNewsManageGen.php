@@ -842,7 +842,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      * @return string 返回Jsonp修改结果
      */
     private function GenDeal($method){
-        $tempContent = Template::Load("document/document_deal.html", "common");
+        $tempContent = Template::Load("document/document_news_list_deal.html", "common");
         parent::ReplaceFirst($tempContent);
         $mod=Control::GetRequest("mod","");
         $channelId = Control::GetRequest("channel_id", 0);
@@ -917,7 +917,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 "{MethodName}" => $methodName,
                 "{DealType}" => $methodName,
                 "{DocumentList}" => $documentList,
-                "{DocIdString}" => $docIdString
+                "{DocIdString}" => $docIdString,
+                "{PicStyleSelector}" =>"none"
             );
 
             $tempContent = strtr($tempContent, $replaceArr);

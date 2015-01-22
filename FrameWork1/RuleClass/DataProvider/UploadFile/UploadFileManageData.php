@@ -161,11 +161,9 @@ class UploadFileManageData extends BaseManageData {
             $dataProperty = new DataProperty();
             $whereSql="";
             if(!strstr($strUploadFileIds,",")){
-                $whereSql=" WHERE UploadFileId=:UploadFileId ";
-                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+                $whereSql=" WHERE UploadFileId=$strUploadFileIds ";
             }else{
-                $whereSql=" WHERE UploadFileId IN (:UploadFileId) ";
-                $dataProperty->AddField("UploadFileId", $strUploadFileIds);
+                $whereSql=" WHERE UploadFileId IN ($strUploadFileIds) ";
             }
             $sql = "INSERT INTO " . self::TableName_UploadFile . "
                     (

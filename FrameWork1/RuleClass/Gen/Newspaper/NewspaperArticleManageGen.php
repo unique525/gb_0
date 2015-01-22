@@ -253,7 +253,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
      * @return string 操作结果
      */
     private function GenCopyToDocChannel() {
-        $tempContent = Template::Load("document/document_deal.html", "common");
+        $tempContent = Template::Load("document/document_news_list_deal.html", "common");
         parent::ReplaceFirst($tempContent);
         $mod=Control::GetRequest("mod","");
         $method=Control::GetRequest("m","");
@@ -303,13 +303,29 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                         $uploadFileDuplication=$uploadFileManageData->DuplicateByUploadFileId($strArticlePicId,$newId,$toTableType);
                                         if($uploadFileDuplication){
                                             //新数据id加入UploadFiles字段
+                                            $picStyle=Control::PostRequest("PicStyle","default");
+                                            switch($picStyle){
+                                                case "default":
+                                                    $picPathType="UploadFilePath";
+                                                    break;
+                                                case "mobile":
+                                                    $picPathType="UploadFileMobilePath";
+                                                    break;
+                                                case "pad":
+                                                    $picPathType="UploadFilePadPath";
+                                                    break;
+                                                default:
+                                                    $picPathType="UploadFilePath";
+                                                    break;
+                                            }
                                             $strDuplicatedUploadFileId="";
-                                            $strPrependContent="";
+                                            $strPrependContent='<div align="center">';
                                             $arrayOfUploadFiles=$uploadFileManageData->GetListByTableId($newId,$toTableType);
                                             foreach($arrayOfUploadFiles as $oneArticlePic){
                                                 $strDuplicatedUploadFileId.=",".$oneArticlePic["UploadFileId"];
-                                                $strPrependContent.='<img src="'.$oneArticlePic["UploadFilePath"].'" />';
+                                                $strPrependContent.='<p><img src="'.$oneArticlePic[$picPathType].'" /></p>';
                                             }
+                                            $strPrependContent.='</div>';
                                             $updateDocumentNewsUploadFilesResult=$documentNewsManageData->ModifyUploadFiles($newId,$strDuplicatedUploadFileId);  //更新UploadFiles字段
                                             if($updateDocumentNewsUploadFilesResult){
                                                 $updateDocumentNewsContentResult=$documentNewsManageData->PrependContent($newId,$strPrependContent); //在content前面加入图片标签
@@ -357,7 +373,8 @@ class NewspaperArticleManageGen extends BaseManageGen {
                 "{MethodName}" => $methodName,
                 "{DealType}" => $methodName,
                 "{DocumentList}" => $documentList,
-                "{DocIdString}" => $docIdString
+                "{DocIdString}" => $docIdString,
+                "{PicStyleSelector}" =>"block"
             );
 
             $tempContent = strtr($tempContent, $replaceArr);

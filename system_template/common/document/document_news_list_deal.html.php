@@ -73,8 +73,19 @@
         </tr>
     </table>
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <tr style="display:{PicStyleSelector}">
+            <td class="spe_line" style="width:150px;height:35px;text-align: right;"><label
+                    for="PicStyle">内容图片大小格式：</label></td>
+            <td class="spe_line" style="text-align: left">
+                <select id="PicStyle" name="PicStyle">
+                    <option value="default">默认</option>
+                    <option value="mobile">手机</option>
+                    <option value="pad">平板</option>
+                </select>
+            </td>
+        </tr>
         <tr>
-            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;">
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
                 请选择您要{MethodName}到的频道
             </td>
         </tr>
