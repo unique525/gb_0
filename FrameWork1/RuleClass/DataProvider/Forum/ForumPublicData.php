@@ -50,7 +50,6 @@ class ForumPublicData extends BasePublicData {
      */
     public function GetListByForumRank($siteId, $forumRank) {
         $result = null;
-
         if($siteId>0 && $forumRank>=0){
             $sql = "SELECT
                 ForumId,

@@ -30,11 +30,11 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 论坛首页HTML
      */
     private function GenDefault() {
-
         $siteId = Control::GetRequest("siteid", 0);
         if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdBySubDomain();
+            $siteId = parent::GetSiteIdByDomain();
         }
+
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";
@@ -54,6 +54,9 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
         $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+
+
+
         $forumRank = 1;
         $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
@@ -63,7 +66,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $forumListTwoType0Template = Template::Load("forum/forum_default_list_two_0.html", $templateName, $templatePath);
 
             $resultOneTemplate = "";
-
+            //print_r($arrRankOneList);
             for ($i = 0; $i < count($arrRankOneList); $i++) {
                 $rankOneForumId = intval($arrRankOneList[$i]["ForumId"]);
                 $rankOneForumName = $arrRankOneList[$i]["ForumName"];

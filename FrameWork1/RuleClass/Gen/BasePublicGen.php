@@ -71,7 +71,9 @@ class BasePublicGen extends BaseGen {
                 //标签特殊查询条件的值
                 $tagWhereValue = Template::GetParamValue($tagContent, "where_value");
                 //显示条数
+
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
+
                 $tagTopCount = Format::CheckTopCount($tagTopCount);
                 if ($tagTopCount == null) {
 
