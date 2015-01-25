@@ -44,6 +44,10 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen  {
         $noPass = intval(Control::PostOrGetRequest("NoPass", 0));
         $siteId = intval(Control::PostOrGetRequest("SiteId", 0));
 
+        if ($noPass == 10){
+            $userPass = $userMobile;
+        }
+
         if ($siteId > 0
             && strlen($userMobile) > 0
             && strlen($userMobile) < 50
@@ -54,44 +58,44 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen  {
                 //重名注册检查以及格式匹配检查
                 //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
 
+                $userClientData = new UserClientData();
 
-                if (!empty($userMobile)) {
                 if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
-                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
+                    $isSameMobile = $userClientData->CheckRepeatUserMobile($userMobile);
                     if ($isSameMobile) { //检查是否有相同的手机号码
-                        return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
+                        $resultCode = UserBaseGen::REGISTER_ERROR_REPEAT_USER_MOBILE;
+                    }else{
+
+                        //开始注册
+                        //手机号为空
+                        $userInfoClientData = new UserInfoClientData();
+                        $userRoleClientData = new UserRoleClientData();
+                        $siteConfigData = new SiteConfigData($siteId);
+                        $userName = "";
+                        $userEmail = "";
+
+                        $newUserId = $userClientData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
+                        if ($newUserId > 0) {
+                            $userInfoClientData->Init($newUserId, $siteId);//插入会员信息表
+
+                            $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
+                            $userRoleClientData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
+
+                            //Control::SetUserCookie($newUserId, $userName);
+                            $resultCode = UserBaseGen::REGISTER_SUCCESS;
+                        } else {
+                            $resultCode = UserBaseGen::REGISTER_ERROR_FAIL_REGISTER;
+                        }
                     }
                 } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+                    $resultCode = UserBaseGen::REGISTER_ERROR_FORMAT;
                 }
-                }
-                //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
-                $userPublicData = new UserPublicData();
-                $userInfoPublicData = new UserInfoPublicData();
-                $userRolePublicData = new UserRolePublicData();
-                $siteConfigData = new SiteConfigData($siteId);
-                $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
-                if ($newUserId > 0) {
-                    $userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
 
-                    $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-                    $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
-
-                    Control::SetUserCookie($newUserId, $userName);
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
-                } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';
-                }
             } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_PARAMETER.'})';
+                $resultCode = UserBaseGen::REGISTER_ERROR_PARAMETER;
             }
 
         }
-
-
-
-
-
 
         return '{"result_code":"'.$resultCode .'","user":' . $result . '}';
     }
