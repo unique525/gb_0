@@ -51,10 +51,10 @@ class UserBaseGen {
     /**
      * 非法参数
      */
-    const REGISTER_ILLEGAL_PARAMETER = -2;
+    const LOGIN_ILLEGAL_PARAMETER = -2;
 
     /**
      * 账号密码错误
      */
-    const REGISTER_ERROR_USER_PASS = -1;
+    const LOGIN_ERROR_USER_PASS = -1;
 } 

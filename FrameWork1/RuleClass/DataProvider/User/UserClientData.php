@@ -98,5 +98,25 @@ class UserClientData extends BaseClientData {
         }
         return $result;
     }
+
+    /**
+     * 根据userId得到一行信息信息
+     * @param int $userId 会员id
+     * @param bool $withCache 是否缓存
+     * @return array 会员信息列表数据集
+     */
+    public function GetOne($userId, $withCache = false)
+    {
+        $result = null;
+        if ($userId > 0) {
+            $sql = "SELECT u.*,ui.* FROM " . self::TableName_User . " u, ".self::TableName_UserInfo." ui
+                    WHERE u.UserId = ui.UserId
+                    AND u.UserId=:UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 ?>
