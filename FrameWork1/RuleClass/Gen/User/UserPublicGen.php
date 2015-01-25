@@ -168,10 +168,10 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncRegister()
     {
         $siteId = parent::GetSiteIdByDomain();
-        $userName = htmlspecialchars(Control::PostRequest("UserName", ""));
-        $userEmail = htmlspecialchars(Control::PostRequest("UserEmail", ""));
-        $userMobile = htmlspecialchars(Control::PostRequest("UserMobile", ""));
-        $userPass = htmlspecialchars(Control::PostRequest("UserPass", ""));
+        $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", ""));
+        $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", ""));
+        $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
+        $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
