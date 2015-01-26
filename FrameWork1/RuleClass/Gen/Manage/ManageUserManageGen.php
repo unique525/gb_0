@@ -181,6 +181,7 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
                     $arr = $manageUserManageData->GetOne($manageUserId);
                     if($arr["ManageUserPass"] == $manageUserPassWord){
 
+
                         $result = $manageUserManageData->ModifyUserPassWord($manageUserId,$manageUserNewPass);
                         if($result > 0){
 
