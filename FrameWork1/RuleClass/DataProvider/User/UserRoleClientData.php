@@ -1,14 +1,12 @@
 <?php
 
 /**
- * 公共访问 会员角色 数据类
+ * 客户端 会员角色 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * @author yin
  */
-class UserRolePublicData extends BasePublicData
-{
-
+class UserRoleClientData extends BaseClientData {
     /**
      * 初始化
      * @param int $userId 会员id
@@ -37,5 +35,3 @@ class UserRolePublicData extends BasePublicData
         return $result;
     }
 }
-
-?>

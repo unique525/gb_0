@@ -197,6 +197,27 @@ class ManageUserManageData extends BaseManageData
     }
 
     /**
+     * 取得后台管理员密码
+     * @param int $manageUserId 管理员id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 后台管理员密码
+     */
+    public function GetManageUserPass($manageUserId, $withCache)
+    {
+        $result = "";
+        if ($manageUserId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'manage_user_data';
+            $cacheFile = 'manage_user_get_manage_user_pass.cache_' . $manageUserId . '';
+            $sql = "SELECT ManageUserPass FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得是否允许外网登陆
      * @param int $manageUserId 管理员id
      * @param bool $withCache 是否从缓冲中取
@@ -385,7 +406,24 @@ class ManageUserManageData extends BaseManageData
 
         return $result;
     }
-
+    /**
+     * 管理后台修改密码
+     * @param string $manageUserId 账号ID
+     * @param string $manageUserPass 密码
+     * @return int 后台管理员id
+     */
+    public function ModifyManageUserPass($manageUserId, $manageUserPass)
+    {
+        $result = -1;
+        if ($manageUserId > 0) {
+            $sql = "UPDATE " . self::TableName_ManageUser . " SET ManageUserPass=:ManageUserPass   WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
+            $dataProperty->AddField("ManageUserPass", $manageUserPass);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

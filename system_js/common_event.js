@@ -61,5 +61,18 @@ $().ready(function() {
 
     });
 
+    $(".btnCloseDialogBox").click(function(){
+
+
+        if($("#dialog_box") != undefined){
+
+            $("#dialog_box").dialog({
+                close: function(event, ui) {}
+            });
+
+        }
+
+
+    });
 
 });

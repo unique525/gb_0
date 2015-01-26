@@ -1,11 +1,13 @@
 <?php
+
 /**
  * 后台管理 管理员帐号 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Manage
  * @author zhangchi
  */
-class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
+class ManageUserManageGen extends BaseManageGen implements IBaseManageGen
+{
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -31,7 +33,7 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
                 $result = self::AsyncModifyState();
                 break;
             case "modify_password":
-                $result = self::ModifyPassword();
+                $result = self::GenModifyUserPass();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -79,10 +81,10 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
 
             }
 
-            $manageUserGroupManageData=new ManageUserGroupManageData();
-            $arrayOfManageUserGroupList=$manageUserGroupManageData->GetAll();
-            $listName="manage_user_group_list";
-            Template::ReplaceList($tempContent,$arrayOfManageUserGroupList,$listName);
+            $manageUserGroupManageData = new ManageUserGroupManageData();
+            $arrayOfManageUserGroupList = $manageUserGroupManageData->GetAll();
+            $listName = "manage_user_group_list";
+            Template::ReplaceList($tempContent, $arrayOfManageUserGroupList, $listName);
 
             $fields = $manageUserManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $fields);
@@ -119,7 +121,6 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
             $manageUserManageData = new ManageUserManageData();
 
 
-
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
@@ -143,10 +144,10 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
                 }
             }
 
-            $manageUserGroupManageData=new ManageUserGroupManageData();
-            $arrayOfManageUserGroupList=$manageUserGroupManageData->GetAll();
-            $listName="manage_user_group_list";
-            Template::ReplaceList($tempContent,$arrayOfManageUserGroupList,$listName);
+            $manageUserGroupManageData = new ManageUserGroupManageData();
+            $arrayOfManageUserGroupList = $manageUserGroupManageData->GetAll();
+            $listName = "manage_user_group_list";
+            Template::ReplaceList($tempContent, $arrayOfManageUserGroupList, $listName);
 
 
             //加载原有数据
@@ -162,8 +163,41 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
     }
 
 
-    private function ModifyPassword(){
-        $templateContent = Template::Load("manage/manage_user_modify_password.html", "common");
+    private function GenModifyUserPass()
+    {
+        $templateContent = "";
+        $manageUserId = Control::GetManageUserId();
+        $resultJavaScript = "";
+
+        if ($manageUserId > 0) {
+            $templateContent = Template::Load("manage/manage_user_modify_manage_user_pass.html", "common");
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{ManageUserName}", Control::GetManageUserName(), $templateContent);
+
+            if (!empty($_POST)) {
+
+                $manageUserPassOfOld = Control::PostRequest("f_ManageUserPassOfOld", "");
+                $manageUserPassOfNew = Control::PostRequest("f_ManageUserPassOfNew", "");
+
+                $manageUserManageData = new ManageUserManageData();
+                $currentManageUserPass = $manageUserManageData->GetManageUserPass($manageUserId, false);
+                if ($currentManageUserPass == $manageUserPassOfOld) {
+                    $result = $manageUserManageData->ModifyManageUserPass($manageUserId, $manageUserPassOfNew);
+                    if ($result > 0) {
+                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('manage_user', 13));
+                    } else {
+                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('manage_user', 14));
+                    }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('manage_user', 15));
+                }
+
+            }
+
+            parent::ReplaceEnd($templateContent);
+            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
+        }
 
 
         return $templateContent;
@@ -208,7 +242,8 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
      * 返回列表页面
      * @return mixed|string
      */
-    private function GenList(){
+    private function GenList()
+    {
         $manageUserId = Control::GetManageUserId();
 
         $siteId = 0;

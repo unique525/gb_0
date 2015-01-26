@@ -46,6 +46,8 @@ class ForumTopicPublicData extends BasePublicData {
     )
     {
         $result = -1;
+
+
         if(
             $siteId>0
             && $forumId>0
@@ -53,6 +55,8 @@ class ForumTopicPublicData extends BasePublicData {
             && $userId>0
             && strlen($userName)>0
         ){
+
+
             $sql = "INSERT INTO " . self::TableName_ForumTopic . "
                     (
                     ForumTopicTitle,
@@ -107,6 +111,62 @@ class ForumTopicPublicData extends BasePublicData {
             $dataProperty->AddField("TitleBgImage", $titleBgImage);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
+        return $result;
+    }
+    public function Modify(
+        $forumTopicID,
+        $forumTopicTitle,
+        $forumTopicTypeId,
+        $forumTopicTypeName,
+        $forumTopicAudit,
+        $forumTopicAccess,
+        $postTime,
+        $userId,
+        $userName,
+        $forumTopicMood,
+        $forumTopicAttach,
+        $titleBold,
+        $titleColor,
+        $titleBgImage
+    ){
+        $result = -1;
+        if(
+            strlen($forumTopicTitle)>0
+            && $userId>0
+            && strlen($userName)>0
+        ){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumTopicTitle", $forumTopicTitle);
+            $dataProperty->AddField("ForumTopicTypeId", $forumTopicTypeId);
+            $dataProperty->AddField("ForumTopicTypeName", $forumTopicTypeName);
+            $dataProperty->AddField("ForumTopicAudit", $forumTopicAudit);
+            $dataProperty->AddField("ForumTopicAccess", $forumTopicAccess);
+            $dataProperty->AddField("PostTime", $postTime);
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserName", $userName);
+            $dataProperty->AddField("ForumTopicMood", $forumTopicMood);
+            $dataProperty->AddField("ForumTopicAttach", $forumTopicAttach);
+            $dataProperty->AddField("TitleBold", $titleBold);
+            $dataProperty->AddField("TitleColor", $titleColor);
+            $dataProperty->AddField("TitleBgImage", $titleBgImage);
+            $fieldNames= "ForumTopicTitle=:ForumTopicTitle,ForumTopicTypeId=:ForumTopicTypeId,ForumTopicTypeName=:ForumTopicTypeName,ForumTopicAudit=:ForumTopicAudit,ForumTopicAccess=:ForumTopicAccess,PostTime=:PostTime,UserId=:UserId,UserName=:UserName,ForumTopicMood=:ForumTopicMood,ForumTopicAttach=:ForumTopicAttach,TitleBold=:TitleBold,TitleColor=:TitleColor,TitleBgImage=:TitleBgImage";
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames ." WHERE forumTopicId =". $forumTopicID ."";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+    /**
+     * 取得一条信息
+     * @param int $forumTopicId 管理员id
+     * @return array 管理员帐号信息数组
+     */
+    public function GetOne($forumTopicId)
+    {
+        $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . ";";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+        //print_r($dataProperty->ArrayField);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 } 

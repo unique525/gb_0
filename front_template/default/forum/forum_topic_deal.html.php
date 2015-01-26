@@ -28,15 +28,22 @@
 
             /************** title **************/
             var forumTopicTitle = $("#f_ForumTopicTitle");
-            if(forumTopicTitle.val() == '{ForumTopicTitle}' || forumTopicTitle.val() == ''){
-                forumTopicTitle.val("标题");
-                forumTopicTitle.css("color","#999999");
-            }
-            forumTopicTitle.focus(function(){
-                if(forumTopicTitle.val() == '标题'){
-                    forumTopicTitle.val("");
+
+            var forumTopicId = Request["forum_topic_id"];
+
+            if (forumTopicId == undefined || forumTopicId <=0){
+                if(forumTopicTitle.val() == '{ForumTopicTitle}' || forumTopicTitle.val() == ''){
+                    forumTopicTitle.val("标题");
+                    forumTopicTitle.css("color","#999999");
                 }
-            });
+                forumTopicTitle.focus(function(){
+                    if(forumTopicTitle.val() == '标题'){
+                        forumTopicTitle.val("");
+                    }
+                });
+            }
+
+
 
             var editorHeight = $(window).height() - 320;
             editorHeight = parseInt(editorHeight);
@@ -51,6 +58,8 @@
                 localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
                 remoteImgSaveUrl:''
             });
+
+
 
 
             $('#tabs').tabs();
@@ -121,17 +130,25 @@
 
             var btnConfirm = $("#btnConfirm");
             btnConfirm.click(function(){
-                var forumTopicTitle = $("#f_ForumTopicTitle");
-                if (forumTopicTitle.val() == ''
-                    || forumTopicTitle.val() == '{ForumTopicTitle}'
-                    || forumTopicTitle.val() == '标题'
-                    ) {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("请输入标题");
-                } else {
+                if (forumTopicId == undefined || forumTopicId <=0){
+                    var forumTopicTitle = $("#f_ForumTopicTitle");
+                    if (forumTopicTitle.val() == ''
+                        || forumTopicTitle.val() == '{ForumTopicTitle}'
+                        || forumTopicTitle.val() == '标题'
+                        ) {
+                        $("#dialog_box").dialog({width: 300, height: 100});
+                        $("#dialog_content").html("请输入标题");
+                    } else {
+
+                        $("#mainForm").attr("action",
+                        "/default.php?mod=forum_topic&a={action}&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                        $('#mainForm').submit();
+                         }
+                }
+                else {
 
                     $("#mainForm").attr("action",
-                        "/default.php?mod=forum&m={action}&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                        "/default.php?mod=forum_topic&a={action}&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
                     $('#mainForm').submit();
                 }
             });
@@ -308,7 +325,7 @@
                                     <icms id="user_group_list" type="list">
                                         <item>
                                             <![CDATA[
-                                            <div style="float:left;width:20%;"><input name="f_AccessLimitUserGroupId" type="checkbox" value="{f_UserGroupId}" /> {f_UserGroupName}</div>
+                                            <div style="float:left;width:20%;"><input name="AccessLimitUserGroupId" type="checkbox" value="{f_UserGroupId}" /> {f_UserGroupName}</div>
                                             ]]>
                                         </item>
                                     </icms>

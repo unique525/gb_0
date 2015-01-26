@@ -30,11 +30,11 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 论坛首页HTML
      */
     private function GenDefault() {
-
         $siteId = Control::GetRequest("siteid", 0);
         if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdBySubDomain();
+            $siteId = parent::GetSiteIdByDomain();
         }
+
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";
@@ -42,28 +42,67 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         parent::ReplaceFirstForForum($tempContent);
 
-        /*         * *****************  顶部推荐栏  ********************** */
+        /******************  顶部推荐栏  ********************** */
         $templateForumRecTopicFileUrl = "forum/forum_rec_1.html";
         $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
         $tempContent = str_ireplace("{forum_rec_1}", $templateForumRecTopic, $tempContent);
 
-        /*         * *****************  版块栏  ********************** */
+        /******************  版块栏  ***********************/
         $templateForumBoardFileUrl = "forum/forum_default_list.html";
         $templateForumBoard = Template::Load($templateForumBoardFileUrl, $templateName, $templatePath);
 
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
         $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+
+
+
         $forumRank = 1;
         $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
+
+        $tagId = "forum_".$siteId;
+        $tagName = Template::DEFAULT_TAG_NAME;
+        $tableIdName = BaseData::TableId_Forum;
+        $parentIdName = "ParentId";
+
+        $arrRankThreeList = null;
+        $thirdTableIdName = null;
+        $thirdParentIdName = null;
+
+        Template::ReplaceList(
+            $tempContent,
+            $arrRankOneList,
+            $tagId,
+            $tagName,
+            $arrRankTwoList,
+            $tableIdName,
+            $parentIdName,
+            $arrRankThreeList,
+            $thirdTableIdName,
+            $thirdParentIdName
+        );
+
+
+
+
+
+
+
+
+
+
+        /**
         if (count($arrRankOneList) > 0) {
+
+
+
 
             $forumListOneType0Template = Template::Load("forum/forum_default_list_one_0.html", $templateName, $templatePath);
             $forumListTwoType0Template = Template::Load("forum/forum_default_list_two_0.html", $templateName, $templatePath);
 
             $resultOneTemplate = "";
-
+            //print_r($arrRankOneList);
             for ($i = 0; $i < count($arrRankOneList); $i++) {
                 $rankOneForumId = intval($arrRankOneList[$i]["ForumId"]);
                 $rankOneForumName = $arrRankOneList[$i]["ForumName"];
@@ -156,7 +195,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         } else {
             $tempContent = str_ireplace("{forum_list}", "", $tempContent);
         }
-
+        **/
 
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);

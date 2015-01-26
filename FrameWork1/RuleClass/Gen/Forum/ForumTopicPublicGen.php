@@ -23,6 +23,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "modify":
+                $result = self::GenModify();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -35,9 +38,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 返回模板页面
      */
     private function GenList() {
+
         $siteId = Control::GetRequest("site_id", 0);
+
         if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdBySubDomain();
+            $siteId = parent::GetSiteIdByDomain();
         }
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
@@ -71,7 +76,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $siteId = Control::GetRequest("site_id", 0);
         if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdBySubDomain();
+            $siteId = parent::GetSiteIdByDomain();
         }
 
         $templateFileUrl = "forum/forum_topic_deal.html";
@@ -99,23 +104,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             Template::RemoveCustomTag($tempContent, $tagId);
         }
 
-
         if(!empty($_POST)){
-
-/**
-        $forumTopicTypeId ,
-        $forumTopicTypeName,
-        $forumTopicAudit,
-        $forumTopicAccess,
-        $postTime,
-        $userId,
-        $userName,
-        $forumTopicMood,
-        $forumTopicAttach,
-        $titleBold,
-        $titleColor,
-        $titleBgImage
-*/
 
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
@@ -124,16 +113,243 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
+            $forumTopicTypeId = Control::PostRequest("f_ForumTopicTypeId", "");
+            $forumTopicTypeName = Control::PostRequest("f_ForumTopicTypeName", "");
+            $forumTopicAudit = Control::PostRequest("f_ForumTopicAudit", "");
+            $forumTopicAccess = Control::PostRequest("f_ForumTopicAccess", "");
+            $postTime = date("Y-m-d H:i:s");
+            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
+            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
+            $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
+            $titleBold = Control::PostRequest("f_TitleBold", "");
+            $titleColor = Control::PostRequest("f_TitleColor", "");
+            $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
+            $forumTopicCreate = new ForumTopicPublicData();
 
 
+
+            $forumTopicId = $forumTopicCreate->Create(
+                $siteId,
+                $forumId,
+                $forumTopicTitle,
+                $forumTopicTypeId,
+                $forumTopicTypeName,
+                $forumTopicAudit,
+                $forumTopicAccess,
+                $postTime,
+                $userId,
+                $userName,
+                $forumTopicMood,
+                $forumTopicAttach,
+                $titleBold,
+                $titleColor,
+                $titleBgImage
+            );
+            if($forumTopicId>0){
+
+                //新增到ForumPost表
+                $isTopic = 1;
+                $forumPostTitle = $forumTopicTitle;
+                $accessLimitNumber = 0;
+                $accessLimitContent = "";
+                $showSign = 0;
+                $postIp = Control::GetIp();
+                $isOneSal = 0;
+                $addMoney = 0;
+                $addScore = 0;
+                $addCharm = 0;
+                $addExp = 0;
+                $showBoughtUser = 0;
+                $sort = 0;
+                $state = 0;
+                $uploadFiles = Control::PostRequest("file_upload_to_content", "");
+                $forumTopicPostCreate = new ForumPostPublicDate();
+                $forumPostId = $forumTopicPostCreate->Create(
+                    $siteId,
+                    $forumId,
+                    $forumTopicId,
+                    $isTopic,
+                    $userId,
+                    $userName,
+                    $forumPostTitle,
+                    $forumPostContent,
+                    $postTime,
+                    $forumTopicAudit,
+                    $forumTopicAccess,
+                    $accessLimitNumber,
+                    $accessLimitContent,
+                    $showSign,
+                    $postIp,
+                    $isOneSal,
+                    $addMoney,
+                    $addScore,
+                    $addCharm,
+                    $addExp,
+                    $showBoughtUser,
+                    $sort,
+                    $state,
+                    $uploadFiles
+                );
+
+                if($forumPostId > 0 ){
+
+                }
+            }
         }
 
 
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+        $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
         $tempContent = str_ireplace("{ForumPostContent}", "", $tempContent);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
+        return $tempContent;
+    }
+    private function GenModify() {
+        $forumId = Control::GetRequest("forum_id", 0);
+        if ($forumId <= 0) {
+            die("");
+        }
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        if ($forumTopicId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+
+        $templateFileUrl = "forum/forum_topic_deal.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        //forum topic type list
+        $forumTopicTypePublicData = new ForumTopicTypePublicData();
+        $tagId = "forum_topic_type_list";
+        $arrList = $forumTopicTypePublicData->GetList($forumId);
+        if (count($arrList) > 0) {
+            Template::ReplaceList($tempContent, $arrList, $tagId);
+
+        } else {
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        //user group list
+        $userGroupPublicData = new UserGroupPublicData();
+        $tagId = "user_group_list";
+        $arrList = $userGroupPublicData->GetList($siteId);
+        if (count($arrList) > 0) {
+            Template::ReplaceList($tempContent, $arrList, $tagId);
+        } else {
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        $forumTopicPublicData = new ForumTopicPublicData();
+        $arrOne = $forumTopicPublicData->GetOne($forumTopicId);
+        //print_r($arrOne["ForumTopicId"]);
+        Template::ReplaceOne($tempContent, $arrOne, false, false);
+
+        $forumPostPublicDate = new ForumPostPublicDate();
+        $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
+        Template::ReplaceOne($tempContent, $arrOne, false, false);
+
+        //print_r($arrOne["UserName"]);
+        //print_r($arrOne);
+        if(!empty($_POST)){
+            $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
+            $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
+
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            //内容中不允许脚本等
+            $forumPostContent = Format::RemoveScript($forumPostContent);
+
+            $forumTopicTypeId = Control::PostRequest("f_ForumTopicTypeId", "");
+            $forumTopicTypeName = Control::PostRequest("f_ForumTopicTypeName", "");
+            $forumTopicAudit = Control::PostRequest("f_ForumTopicAudit", "");
+            $forumTopicAccess = Control::PostRequest("f_ForumTopicAccess", "");
+            $postTime = date("Y-m-d H:i:s");
+            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
+            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
+            $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
+            $titleBold = Control::PostRequest("f_TitleBold", "");
+            $titleColor = Control::PostRequest("f_TitleColor", "");
+            $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
+            $forumTopicModify = new ForumTopicPublicData();
+            $result = $forumTopicModify->Modify(
+                $forumTopicId,
+                $forumTopicTitle,
+                $forumTopicTypeId,
+                $forumTopicTypeName,
+                $forumTopicAudit,
+                $forumTopicAccess,
+                $postTime,
+                $userId,
+                $userName,
+                $forumTopicMood,
+                $forumTopicAttach,
+                $titleBold,
+                $titleColor,
+                $titleBgImage
+            );
+            if($result > 0){
+                $siteId = Control::PostRequest("f_SiteId", "");
+                $isTopic = 1;
+                $forumPostTitle = $forumTopicTitle;
+                $accessLimitNumber = "";
+                $accessLimitContent = "";
+                $showSign = 0;
+                $postIp = Control::GetIp();
+                $isOneSale = 0;
+                $addMoney = 0;
+                $addScore = 0;
+                $addCharm = 0;
+                $addExp = 0;
+                $showBoughtUser = 0;
+                $sort = 0;
+                $state = 0;
+                $uploadFiles = Control::PostRequest("file_upload_to_content", "");
+                $forumPostPublicDate = new ForumPostPublicDate();
+                $result = $forumPostPublicDate->Modify(
+                    $siteId,
+                    $forumTopicId,
+                    $isTopic,
+                    $forumPostTitle,
+                    $forumPostContent,
+                    $postTime,
+                    $forumTopicAudit,
+                    $forumTopicAccess,
+                    $accessLimitNumber,
+                    $accessLimitContent,
+                    $showSign,
+                    $postIp,
+                    $isOneSale,
+                    $addMoney,
+                    $addScore,
+                    $addCharm,
+                    $addExp,
+                    $showBoughtUser,
+                    $sort,
+                    $state,
+                    $uploadFiles
+                );
+                if($result > 0){
+
+                }
+            }
+        }
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+        $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
+        //$tempContent = str_ireplace("{ForumPostContent}", "", $tempContent);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+       //echo $tempContent;
         return $tempContent;
     }
 
