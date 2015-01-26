@@ -42,12 +42,12 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         parent::ReplaceFirstForForum($tempContent);
 
-        /*         * *****************  顶部推荐栏  ********************** */
+        /******************  顶部推荐栏  ********************** */
         $templateForumRecTopicFileUrl = "forum/forum_rec_1.html";
         $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
         $tempContent = str_ireplace("{forum_rec_1}", $templateForumRecTopic, $tempContent);
 
-        /*         * *****************  版块栏  ********************** */
+        /******************  版块栏  ***********************/
         $templateForumBoardFileUrl = "forum/forum_default_list.html";
         $templateForumBoard = Template::Load($templateForumBoardFileUrl, $templateName, $templatePath);
 
@@ -60,7 +60,43 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $forumRank = 1;
         $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
+
+        $tagId = "forum_".$siteId;
+        $tagName = Template::DEFAULT_TAG_NAME;
+        $tableIdName = BaseData::TableId_Forum;
+        $parentIdName = "ParentId";
+
+        $arrRankThreeList = null;
+        $thirdTableIdName = null;
+        $thirdParentIdName = null;
+
+        Template::ReplaceList(
+            $tempContent,
+            $arrRankOneList,
+            $tagId,
+            $tagName,
+            $arrRankTwoList,
+            $tableIdName,
+            $parentIdName,
+            $arrRankThreeList,
+            $thirdTableIdName,
+            $thirdParentIdName
+        );
+
+
+
+
+
+
+
+
+
+
+        /**
         if (count($arrRankOneList) > 0) {
+
+
+
 
             $forumListOneType0Template = Template::Load("forum/forum_default_list_one_0.html", $templateName, $templatePath);
             $forumListTwoType0Template = Template::Load("forum/forum_default_list_two_0.html", $templateName, $templatePath);
@@ -159,7 +195,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         } else {
             $tempContent = str_ireplace("{forum_list}", "", $tempContent);
         }
-
+        **/
 
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
