@@ -171,7 +171,6 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
             parent::ReplaceFirst($templateContent);
 
 
-
             if($_POST){
                 $manageUserPassWord =  Control::PostRequest("manage_user_old_pass", "");
                 $manageUserNewPass = Control::PostRequest("manage_user_new_pass", "");
