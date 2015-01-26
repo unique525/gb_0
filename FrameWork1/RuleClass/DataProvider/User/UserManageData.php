@@ -123,9 +123,9 @@ class UserManageData extends BaseManageData
         if ($userId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data';
             $cacheFile = 'user_get_user_name.cache_' . $userId . '';
-            $sql = "SELECT username FROM " . self::TableName_User . " WHERE userId=:userId;";
+            $sql = "SELECT UserName FROM " . self::TableName_User . " WHERE UserId=:UserId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("userId", $userId);
+            $dataProperty->AddField("UserId", $userId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
@@ -140,9 +140,9 @@ class UserManageData extends BaseManageData
     {
         $result = null;
         if ($userId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_User . " WHERE userId=:userId;";
+            $sql = "SELECT * FROM " . self::TableName_User . " WHERE UserId=:UserId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("userId", $userId);
+            $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
         }
         return $result;
