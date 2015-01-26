@@ -120,6 +120,7 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
 
 
 
+
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
