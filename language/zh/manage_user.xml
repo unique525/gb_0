@@ -36,4 +36,16 @@
     <module id="12">
         <content><![CDATA[业务类型不明确！]]></content>
     </module>
+    <module id="13">
+        <content><![CDATA[密码修改成功！]]></content>
+    </module>
+    <module id="14">
+        <content><![CDATA[密码修改失败！]]></content>
+    </module>
+    <module id="15">
+        <content><![CDATA[旧密码错误！]]></content>
+    </module>
+    <module id="16">
+        <content><![CDATA[请输入相同的新密码！]]></content>
+    </module>
 </root>

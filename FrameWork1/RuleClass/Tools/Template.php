@@ -383,8 +383,7 @@ class Template
                             $list = $itemTempContent;
                         }
 
-                        //根级id赋值
-                        $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
+
 
                         $columns = $arrList[$i];
                         $itemType = "item";
@@ -405,7 +404,8 @@ class Template
                         //处理子表数据
                         $sbChild = "";
                         if(count($arrChildList)>0){
-
+                            //根级id赋值
+                            $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
                             for($j = 0; $j<count($arrChildList); $j++){
                                 $arrChildList[$j]["FirstId"] = $arrList[$i][$tableIdName];
 

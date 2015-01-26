@@ -385,7 +385,24 @@ class ManageUserManageData extends BaseManageData
 
         return $result;
     }
-
+    /**
+     * 管理后台修改密码
+     * @param string $manageUserId 账号ID
+     * @param string $manageUserPass 密码
+     * @return int 后台管理员id
+     */
+    public function ModifyUserPassWord($manageUserId, $manageUserPass)
+    {
+        $result = -1;
+        if ($manageUserId > 0) {
+            $sql = "UPDATE " . self::TableName_ManageUser . " SET ManageUserPass=:ManageUserPass   WHERE " . self::TableId_ManageUser . "=:" . self::TableId_ManageUser . ";";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ManageUser, $manageUserId);
+            $dataProperty->AddField("ManageUserPass", $manageUserPass);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

@@ -163,7 +163,50 @@ class ManageUserManageGen extends BaseManageGen implements IBaseManageGen {
 
 
     private function ModifyPassword(){
-        $templateContent = Template::Load("manage/manage_user_modify_password.html", "common");
+        $templateContent = "";
+        $manageUserId = Control::GetManageUserId();
+
+        if ($manageUserId>0){
+            $templateContent = Template::Load("manage/manage_user_modify_password.html", "common");
+            parent::ReplaceFirst($templateContent);
+
+
+
+            if($_POST){
+                $manageUserPassWord =  Control::PostRequest("manage_user_old_pass", "");
+                $manageUserNewPass = Control::PostRequest("manage_user_new_pass", "");
+                $manageUserNewPassConfirm = Control::PostRequest("manage_user_new_pass_confirm","");
+                if($manageUserNewPass = $manageUserNewPassConfirm){
+                    $manageUserManageData = new ManageUserManageData();
+                    $arr = $manageUserManageData->GetOne($manageUserId);
+                    if($arr["ManageUserPass"] == $manageUserPassWord){
+                        $result = $manageUserManageData->ModifyUserPassWord($manageUserId,$manageUserNewPass);
+                        if($result > 0){
+
+                            Control::ShowMessage(Language::Load("manage_user",13));
+
+
+                            //$templateContent = str_ireplace("{user_prompt_message}", "密码修改成功!", $templateContent);
+                        }
+                        else{
+                            Control::ShowMessage(Language::Load("manage_user",14));
+                            //$templateContent = str_ireplace("{user_prompt_message}", "密码修改失败!", $templateContent);
+                        }
+                    }
+                    else{
+                        Control::ShowMessage(Language::Load("manage_user",15));
+                        //$templateContent = str_ireplace("{user_prompt_message}", "请确认旧密码!", $templateContent);
+                    }
+                }
+                else{
+                    Control::ShowMessage(Language::Load("manage_user",16));
+                    //$templateContent = str_ireplace("{user_prompt_message}", "请输入相同的新密码!", $templateContent);
+                }
+            }
+
+            parent::ReplaceEnd($templateContent);
+        }
+
 
 
         return $templateContent;
