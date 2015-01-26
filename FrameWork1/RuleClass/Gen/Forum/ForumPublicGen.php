@@ -71,7 +71,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $thirdParentIdName = null;
 
         Template::ReplaceList(
-            $tempContent,
+            $templateForumBoard,
             $arrRankOneList,
             $tagId,
             $tagName,
@@ -197,6 +197,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         **/
 
+        $tempContent = str_ireplace("{forum_list}", $templateForumBoard, $tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
         return $tempContent;
