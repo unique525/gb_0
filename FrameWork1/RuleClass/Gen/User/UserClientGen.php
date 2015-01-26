@@ -18,8 +18,8 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "login":
-                $result = self::GenLogin();
+            case "login_by_user_mobile":
+                $result = self::GenLoginByUserMobile();
                 break;
 
             case "register_with_user_mobile":
@@ -31,12 +31,38 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         return $result;
     }
 
-    private function GenLogin()
+    private function GenLoginByUserMobile()
     {
-        $result = "";
+        $result = "[{}]";
 
+        $userMobile = Format::FormatHtmlTag(Control::PostOrGetRequest("UserMobile", ""));
+        $userPass = Control::PostOrGetRequest("UserPass", "");
+        $regIp = Control::GetIp();
 
-        return $result;
+        if (strlen($userMobile) > 0
+            && !empty($userPass)
+            && !empty($regIp)
+        ) {
+
+            $userClientData = new UserClientData();
+
+            $userId = $userClientData->Login($userMobile, $userPass);
+
+            if($userId <= 0){
+                $resultCode = UserBaseGen::LOGIN_ERROR_USER_PASS;
+            }else {
+                $resultCode = UserBaseGen::LOGIN_SUCCESS;
+                $withCache = FALSE;
+                $arrUserOne = $userClientData->GetOne($userId,$withCache);
+
+                $result = Format::FixJsonEncode($arrUserOne);
+            }
+
+        } else {
+            $resultCode = UserBaseGen::LOGIN_ILLEGAL_PARAMETER;
+        }
+
+        return '{"result_code":"' . $resultCode . '","user":' . $result . '}';
     }
 
     private function GenRegisterWithUserMobile()

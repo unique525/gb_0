@@ -9,52 +9,57 @@
 class UserBaseGen {
 
     /**
-     * 重复的用户账号
+     * 会员注册 重复的会员账号
      */
     const REGISTER_ERROR_REPEAT_USER_NAME = -1;
 
     /**
-     * 重复的用户邮箱
+     * 会员注册 重复的会员邮箱
      */
     const REGISTER_ERROR_REPEAT_USER_EMAIL = -2;
 
     /**
-     * 重复的手机号码
+     * 会员注册 重复的手机号码
      */
     const REGISTER_ERROR_REPEAT_USER_MOBILE = -3;
 
     /**
-     * 参数错误
+     * 会员注册 参数错误
      */
     const REGISTER_ERROR_PARAMETER = -4;
 
     /**
-     * 注册失败
+     * 会员注册 注册失败
      */
     const REGISTER_ERROR_FAIL_REGISTER = -5;
 
     /**
-     * 格式错误
+     * 会员注册 格式错误
      */
     const REGISTER_ERROR_FORMAT = -6;
 
     /**
-     * 注册成功
+     * 会员注册 注册成功
      */
     const REGISTER_SUCCESS = 1;
 
     /**
-     * 没有重复的
+     * 会员注册 没有重复的帐号
      */
     const REGISTER_NO_REPEAT = 0;
 
     /**
-     * 非法参数
+     * 会员登录 非法参数
      */
     const LOGIN_ILLEGAL_PARAMETER = -2;
 
     /**
-     * 账号密码错误
+     * 会员登录 账号密码错误
      */
     const LOGIN_ERROR_USER_PASS = -1;
+
+    /**
+     * 会员登录 成功
+     */
+    const LOGIN_SUCCESS = 1;
 } 
