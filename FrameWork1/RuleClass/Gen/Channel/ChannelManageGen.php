@@ -75,7 +75,6 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                     $hasRepeatPublishPath = $channelManageData->CheckRepeatPublishPath($siteId, $publishPath, $channelId);
                     if ($hasRepeatPublishPath) {
                         $resultJavaScript = Control::GetJqueryMessage(Language::Load('channel', 2)); //同一站点内已经有重复的发布文件夹了，请修改发布文件夹！
-                        //Control::ShowMessage(Language::Load('document', 9));
                     }
                 }
 

@@ -56,8 +56,8 @@ $(function () {
         $("#dialog_modify_password_box").dialog({
             hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:280,
-            width:350,
+            height:300,
+            width:480,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'管理员密码修改',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
