@@ -31,7 +31,7 @@ $().ready(function () {
 
 //广告点击统计JS
 function Visit(funcUrl,siteId,channelId,tableType,tableId,title,tag,url,refUrl,flagCookie) {
-    alert(funcUrl+"|"+siteId+"|"+channelId+"|"+tableType+"|"+tableId+"|"+title+"|"+tag+"|"+url);
+    //alert(funcUrl+"|"+siteId+"|"+channelId+"|"+tableType+"|"+tableId+"|"+title+"|"+tag+"|"+url);
     $.ajax({
         url:funcUrl+"/default.php",
         data:{
