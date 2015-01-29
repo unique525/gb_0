@@ -71,15 +71,13 @@
 </head>
 
 <body>
-<div style="text-align:center;"><img src="/images1/ad2015zs.jpg" alt=""/></div>
 
 
-<div style="display: none;">
+<div style="">
 
 <span id="top"></span>
 
 <div class="head">
-
     <pre_temp id="3"></pre_temp>
     <pre_temp id="4"></pre_temp>
     <pre_temp id="5"></pre_temp>

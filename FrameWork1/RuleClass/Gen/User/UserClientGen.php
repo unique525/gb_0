@@ -18,8 +18,8 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "login_by_user_mobile":
-                $result = self::GenLoginByUserMobile();
+            case "login":
+                $result = self::GenLogin();
                 break;
 
             case "register_with_user_mobile":
@@ -31,22 +31,22 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         return $result;
     }
 
-    private function GenLoginByUserMobile()
+    private function GenLogin()
     {
         $result = "[{}]";
 
-        $userMobile = Format::FormatHtmlTag(Control::PostOrGetRequest("UserMobile", ""));
+        $userAccount = Format::FormatHtmlTag(Control::PostOrGetRequest("UserAccount", ""));
         $userPass = Control::PostOrGetRequest("UserPass", "");
         $regIp = Control::GetIp();
 
-        if (strlen($userMobile) > 0
+        if (strlen($userAccount) > 0
             && !empty($userPass)
             && !empty($regIp)
         ) {
 
             $userClientData = new UserClientData();
 
-            $userId = $userClientData->Login($userMobile, $userPass);
+            $userId = $userClientData->Login($userAccount, $userPass);
 
             if($userId <= 0){
                 $resultCode = UserBaseGen::LOGIN_ERROR_USER_PASS;

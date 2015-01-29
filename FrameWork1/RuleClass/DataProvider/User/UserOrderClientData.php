@@ -8,21 +8,6 @@
  */
 class UserOrderClientData extends BaseClientData {
 
-/**
-UserOrderName
-UserOrderNumber
-CreateDate
-UserId
-AllPrice
-SendPrice
-UserReceiveInfoId
-State
-SendTime
-AutoSendMessage
-SiteId
-BuyerRemark
-SellerRemark
-*/
 
 
 
