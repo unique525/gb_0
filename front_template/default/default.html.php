@@ -71,8 +71,15 @@
 </head>
 
 <body>
+<div style="text-align:center;"><img src="/images1/ad2015zs.jpg" alt=""/></div>
+
+
+<div style="display: none;">
+
 <span id="top"></span>
+
 <div class="head">
+
     <pre_temp id="3"></pre_temp>
     <pre_temp id="4"></pre_temp>
     <pre_temp id="5"></pre_temp>
@@ -593,5 +600,6 @@
 
 <pre_temp id="8"></pre_temp>
 <script type="text/javascript">var visitConfig = encodeURIComponent("http://www.96333xzw.com") +"||{SiteId}||{ChannelId}||0||0||"+encodeURI("");</script><script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
+</div>
 </body>
 </html>

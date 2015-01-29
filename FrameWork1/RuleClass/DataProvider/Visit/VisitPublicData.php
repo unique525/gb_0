@@ -22,11 +22,12 @@ class VisitPublicData extends BasePublicData {
      * @param string $agent 访问者浏览器
      * @param string $refDomain 来路跨地区
      * @param string $refUrl    来路地址
+     * @param string $flagCookie  来路唯一标识符
      * @return int  返回执行结果
      */
-    public function Create($siteId, $channelId, $tableType, $tableId, $createDate, $visitTitle, $visitTag, $visitUrl, $ipAddress, $agent, $refDomain, $refUrl) {
+    public function Create($siteId, $channelId, $tableType, $tableId, $createDate, $visitTitle, $visitTag, $visitUrl, $ipAddress, $agent, $refDomain, $refUrl, $flagCookie) {
         $tableName = parent::CreateAndGetTableName(self::TableName_Visit);
-        $sql = "INSERT INTO $tableName (SiteId,ChannelId,TableType,TableId,CreateDate,VisitTitle,VisitTag,VisitUrl,IpAddress,Agent,RefDomain,RefUrl) values (:SiteId,:ChannelId,:TableType,:TableId,:CreateDate,:VisitTitle,:VisitTag,:VisitUrl,:IpAddress,:Agent,:RefDomain,:RefUrl)";
+        $sql = "INSERT INTO $tableName (SiteId,ChannelId,TableType,TableId,CreateDate,VisitTitle,VisitTag,VisitUrl,IpAddress,Agent,RefDomain,RefUrl,FlagCookie) values (:SiteId,:ChannelId,:TableType,:TableId,:CreateDate,:VisitTitle,:VisitTag,:VisitUrl,:IpAddress,:Agent,:RefDomain,:RefUrl,:FlagCookie)";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $dataProperty->AddField("ChannelId", $channelId);
@@ -40,6 +41,7 @@ class VisitPublicData extends BasePublicData {
         $dataProperty->AddField("Agent", $agent);
         $dataProperty->AddField("RefDomain", $refDomain);
         $dataProperty->AddField("RefUrl", $refUrl);
+        $dataProperty->AddField("FlagCookie", $flagCookie);
         $insertId = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $insertId;
     }
