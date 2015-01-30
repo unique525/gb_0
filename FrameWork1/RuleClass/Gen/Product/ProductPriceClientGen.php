@@ -20,6 +20,7 @@ class ProductPriceClientGen extends BaseClientGen implements IBaseClientGen {
             case "list_by_product":
                 $result = self::GetListByProduct();
                 break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;

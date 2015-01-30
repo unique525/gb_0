@@ -16,9 +16,14 @@ class ProductPriceClientData extends BasePublicData {
     public function GetList($productId, $order = "", $topCount = null)
     {
         $result = null;
-        if ($topCount != null)
+
+        if ($topCount != null){
             $topCount = " limit " . $topCount;
-        else $topCount = "";
+        }
+
+        else {
+            $topCount = "";
+        }
         if ($productId > 0) {
             switch ($order) {
                 default:

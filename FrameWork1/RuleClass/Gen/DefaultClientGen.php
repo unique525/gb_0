@@ -27,6 +27,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $productPicClientGen = new ProductPicClientGen();
                 $result = $productPicClientGen->GenClient();
                 break;
+            case "product_price":
+                $productPriceClientGen = new ProductPriceClientGen();
+                $result = $productPriceClientGen->GenClient();
+                break;
             case "channel":
                 $channelClientGen = new ChannelClientGen();
                 $result = $channelClientGen->GenClient();
