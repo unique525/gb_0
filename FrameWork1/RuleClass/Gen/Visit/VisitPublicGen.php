@@ -41,6 +41,7 @@ class VisitPublicGen extends BasePublicGen implements IBasePublicGen
             $visitTag = urldecode(Control::GetRequest("tag", ""));
             $visitUrl = urldecode(Control::GetRequest("url", ""));
             $refUrl = urldecode(Control::GetRequest("ref_url", ""));
+            $flagCookie = urldecode(Control::GetRequest("flag_cookie", ""));
 
             $createDate = date("Y-m-d H:i:s", time());
             $ipAddress = Control::GetIP();
@@ -51,7 +52,7 @@ class VisitPublicGen extends BasePublicGen implements IBasePublicGen
             }
             $refDomain = strtolower(preg_replace('/https?:\/\/([^\:\/]+).*/i', "\\1", $refUrl)); //来路域名
             $visitPublicData = new VisitPublicData();
-            $insertId = $visitPublicData->Create($siteId, $channelId, $tableType, $tableId, $createDate, $visitTitle, $visitTag, $visitUrl, $ipAddress, $agent, $refDomain, $refUrl);
+            $insertId = $visitPublicData->Create($siteId, $channelId, $tableType, $tableId, $createDate, $visitTitle, $visitTag, $visitUrl, $ipAddress, $agent, $refDomain, $refUrl,$flagCookie);
             if ($insertId > 0) {
                 $reCommon = 1;
             } else {

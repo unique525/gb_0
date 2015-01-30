@@ -175,9 +175,36 @@ $(function () {
         closeAbstractBox();
     });
 
+    ///文本框获取焦点 开始监听
+    $('.input_title').focus(function(){
+            var id=$(this).attr("id");
+        strLengthRefresh=1;
+        setTimeout('StrLength("'+id+'")', 100);
+        });
 
+
+    ///文本框失去焦点 停止监听
+    $('.input_title').blur(function(){
+        strLengthRefresh=0;
+        });
 
 });
+
+var strLengthRefresh=0;  //全局变量 是否监听input框字符长度
+///监听函数
+function StrLength(id) {
+    var str =  $('#'+id).val();
+    var realLength = 0, len = str.length, charCode = -1;
+    for (var i = 0; i < len; i++) {
+        charCode = str.charCodeAt(i);
+        if (charCode >= 0 && charCode <= 128) realLength += 1;
+        else realLength += 2;
+    }
+    $('#length_'+id).html("字符长度:" + realLength);
+    if(strLengthRefresh==1){
+        setTimeout('StrLength("'+id+'")', 100);
+    }
+}
 
 function ChangeToBold() {
 
@@ -257,7 +284,7 @@ function submitForm(closeTab) {
             <tr>
                 <td style=" width: 60px;"><label for="f_DocumentNewsTitle">标题：</label></td>
                 <td style=" width: 600px;">
-                    <input type="text" class="iColorPicker input_box" id="f_DocumentNewsTitle"
+                    <input type="text" class="iColorPicker input_box input_title" id="f_DocumentNewsTitle"
                            name="f_DocumentNewsTitle" value="{DocumentNewsTitle}"
                            style="width:480px;font-size:14px; background-color: #ffffff;" maxlength="200"/>
                     <input type="hidden" id="f_DocumentNewsTitleColor" name="f_DocumentNewsTitleColor"
@@ -271,6 +298,7 @@ function submitForm(closeTab) {
                 <td>
                     <input type="checkbox" id="cbTitleBold"/> <label for="cbTitleBold">加粗</label>
                     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+                    <span id="length_f_DocumentNewsTitle"></span>
                 </td>
             </tr>
         </table>
@@ -409,32 +437,35 @@ function submitForm(closeTab) {
         <tr>
             <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label
                     for="f_DocumentNewsShortTitle">短标题：</label></td>
-            <td class="spe_line" style="text-align: left"><input type="text" class="input_box"
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
                                                                  id="f_DocumentNewsShortTitle"
                                                                  name="f_DocumentNewsShortTitle"
                                                                  value="{DocumentNewsShortTitle}"
                                                                  style=" width: 600px;font-size:14px;" maxlength="100"/>
+            <span id="length_f_DocumentNewsShortTitle"></span>
             </td>
         </tr>
         <tr>
             <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_DocumentNewsSubTitle">副标题：</label>
             </td>
-            <td class="spe_line" style="text-align: left"><input type="text" class="input_box"
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
                                                                  id="f_DocumentNewsSubTitle"
                                                                  name="f_DocumentNewsSubTitle"
                                                                  value="{DocumentNewsSubTitle}"
                                                                  style=" width: 600px;font-size:14px;" maxlength="100"/>
+                <span id="length_f_DocumentNewsSubTitle"></span>
             </td>
         </tr>
 
         <tr>
             <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label
                     for="f_DocumentNewsCiteTitle">引题：</label></td>
-            <td class="spe_line" style="text-align: left"><input type="text" class="input_box"
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
                                                                  id="f_DocumentNewsCiteTitle"
                                                                  name="f_DocumentNewsCiteTitle"
                                                                  value="{DocumentNewsCiteTitle}"
                                                                  style=" width: 600px;font-size:14px;" maxlength="100"/>
+                <span id="length_f_DocumentNewsCiteTitle"></span>
             </td>
         </tr>
 
@@ -444,9 +475,10 @@ function submitForm(closeTab) {
                 <input type="button" class="btn4" value="编 写"
                        onclick='showModalDialog("/system_js/manage/document_news/edit_abstract.html", window, "dialogWidth:850px;dialogHeight:400px;help:no;scroll:no;status:no");'/>&nbsp;
             </td>
-            <td class="spe_line" style="text-align: left"><textarea class="input_box" id="f_DocumentNewsIntro"
+            <td class="spe_line" style="text-align: left"><textarea class="input_box input_title" id="f_DocumentNewsIntro"
                                                                     name="f_DocumentNewsIntro"
                                                                     style="width: 600px; height: 80px;font-size:14px;">{DocumentNewsIntro}</textarea>
+                <span id="length_f_DocumentNewsIntro"></span>
             </td>
         </tr>
         <tr>
