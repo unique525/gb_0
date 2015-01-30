@@ -17,6 +17,7 @@ class UserPublicData extends BasePublicData {
      */
     public function Login($userAccount,$userPass){
         $result = -1;
+
         if(!empty($userAccount) && !empty($userPass)){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
