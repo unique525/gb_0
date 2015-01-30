@@ -190,7 +190,7 @@ $(function () {
 
 });
 
-var strLengthRefresh=0;  //全局变量 是否监听
+var strLengthRefresh=0;  //全局变量 是否监听input框字符长度
 ///监听函数
 function StrLength(id) {
     var str =  $('#'+id).val();
