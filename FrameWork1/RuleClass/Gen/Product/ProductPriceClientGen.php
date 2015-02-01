@@ -43,7 +43,7 @@ class ProductPriceClientGen extends BaseClientGen implements IBaseClientGen {
         else{
             $resultCode = -1;
         }
-        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","product":{"product_price_list":' . $result . '}}';
     }
 
 } 
