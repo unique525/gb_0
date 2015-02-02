@@ -1,3 +1,13 @@
+/**
+ * 评论表的TableType
+ */
+window.COMMENT_TABLE_TYPE_USER_ALBUM = 1;
+/**
+ * 评论表的TableType
+ */
+window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE = 7;
+
+
 String.prototype.replaceAll = function (s1, s2) {
     return this.replace(new RegExp(s1, "gm"), s2);
 };

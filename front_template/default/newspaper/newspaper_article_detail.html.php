@@ -110,8 +110,8 @@
 
             };
 
-            CreateLongComment({NewspaperArticleId},7,{ChannelId},true);
-            CommentShow(0,{NewspaperArticleId},7,"",true);
+            CreateLongComment({NewspaperArticleId},window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE,{ChannelId},true);
+            CommentShow(0,{NewspaperArticleId},window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE,"",true);
 
         });
 
