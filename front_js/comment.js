@@ -5,7 +5,16 @@ window.COMMENT_TABLE_TYPE_USER_ALBUM = 1;
 /**
  * 评论表的TableType
  */
-window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE = 7;
+window.COMMENT_TABLE_TYPE_DOCUMENT_NEWS = 7;
+/**
+ * 评论表的TableType
+ */
+window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE = 8;
+
+/**
+ * 评论的开放状态 不允许评论
+ */
+window.COMMENT_OPEN_COMMENT_NON_COMMENT=0;
 
 
 String.prototype.replaceAll = function (s1, s2) {
@@ -27,6 +36,21 @@ function sub_comment_replay(id) {
     } else {
         $('#replyform_' + id).submit();
     }
+}
+
+function AsyncGetOpenComment(table_id, table_type) {
+    var openComment = 0;
+    $.ajax({
+        async:false,
+        url:"/default.php?mod=comment&a=async_get_open_comment",
+        data:{table_id:table_id,table_type:table_type},
+        dataType:"jsonp",
+        jsonp:"jsonpcallback",
+        success:function(data){
+            openComment = data["result"];
+        }
+    });
+    return openComment;
 }
 
 function getURL() {

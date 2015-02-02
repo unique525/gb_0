@@ -70,10 +70,10 @@
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
         <tr  class="grid_title2">
             <td style="width:80px;text-align: center">ID</td>
-            <td style="text-align: center">内容</td>
-            <td style="width:100px;text-align: center">用户名</td>
             <td style="width:80px;text-align: center">状态</td>
             <td  style="width:80px;text-align: center">启用  停用</td>
+            <td style="text-align: left;padding-left: 4px">内容</td>
+            <td style="width:100px;text-align: center">用户名</td>
         </tr>
     </table>
     <ul id="type_list">
@@ -84,12 +84,6 @@
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item2">
                             <td class="spe_line2" style="width:80px;text-align: center">{f_CommentId}</td>
-                            <td class="spe_line2" style="text-align: center">
-                                {f_Content}
-                            </td>
-                            <td class="spe_line2" style="width:100px;text-align: center">
-                                <div title="{f_UserId}">{f_UserName}</div>
-                            </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
                                 <span class="span_state" idvalue="{f_CommentId}">{f_State}</span>
                             </td>
@@ -97,6 +91,12 @@
                                 <img class="div_start" idvalue="{f_CommentId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
                                 &nbsp;&nbsp;
                                 <img class="div_stop" idvalue="{f_CommentId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
+                            </td>
+                            <td class="spe_line2" style="text-align: left;padding-left: 4px">
+                                <a href="{f_SourceUrl}" target="_blank">{f_Content}</a>
+                            </td>
+                            <td class="spe_line2" style="width:100px;text-align: center">
+                                <div title="{f_UserId}">{f_UserName}</div>
                             </td>
                         </tr>
                     </table>

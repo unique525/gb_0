@@ -40,6 +40,9 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_get_open_comment":
+                $result = self::AsyncGetOpenComment();
+                break;
         }
         return $result;
     }
@@ -83,7 +86,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         $multiFilterContent[1] = $content;
         $multiFilterContent[2] = $guestName;
         $multiFilterContent[3] = $guestEmail;
-        $useArea = 4;  //过滤范围 4:评论
+        $useArea = 4; //过滤范围 4:评论
         $stop = FALSE; //是否停止执行
         $filterContent = null;
         $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
@@ -96,6 +99,8 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $userName = Control::GetUserName();
         $openState = 0;
+
+        //开放评论状态 0:不允许 10:先审后发 20:先发后审 30:自由评论 40:根据频道设置而定
         switch ($tableType) {
             case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
                 $openState = 10;
@@ -113,30 +118,26 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
             case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
                 $channelPublicData = new ChannelPublicData();
-                $openState = $channelPublicData->GetOpenComment($tableId);
+                $openState = $channelPublicData->GetOpenComment($tableId, TRUE);
                 break;
             case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
                 $documentNewsPublicData = new DocumentNewsPublicData();
-                $openState = $documentNewsPublicData->GetOpenComment($tableId,FALSE);
+                $openState = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
                 if ($openState == 40) { //根据频道设置而定
-                    $thisChannelId = $documentNewsPublicData->GetChannelID($tableId,FALSE);
+                    $channelId = $documentNewsPublicData->GetChannelId($tableId, FALSE);
                     $channelPublicData = new ChannelPublicData();
-                    $openState = $channelPublicData->GetOpenComment($thisChannelId);
+                    $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
                 }
                 break;
             case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
-                $documentNewsPublicData = new DocumentNewsPublicData();
-                $openState = $documentNewsPublicData->GetOpenComment($tableId,TRUE);
-                if ($openState == 40) { //根据频道设置而定
-                    $channelId = $documentNewsPublicData->GetChannelID($tableId,TRUE);
-                    $channelPublicData = new ChannelPublicData();
-                    $openState = $channelPublicData->GetOpenComment($channelId);
-                }
+                $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                $channelId = $newspaperArticlePublicData->GetChannelId($tableId, TRUE);
+                $channelPublicData = new ChannelPublicData();
+                $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
                 break;
         }
 
-        //开放评论状态 0:不允许 10:先审后发 20:先发后审 30:自由评论 40:根据频道设置而定
-        //评论状态 0:未审 10:先审后发 20:先发后审 40:已否
+        //评论状态 0:未审 10:先审后发 20:先发后审 30:已审 100:已否
         $state = 0;
         switch ($openState) {
             case 10:
@@ -150,7 +151,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
         }
 
-        $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType,$reUrl);
+        $result = $commentPublicData->Create($siteId, $subject, $content, $channelId, $tableId, $tableType, $userId, $userName, $guestName, $guestEmail, $state, $commentType, $reUrl);
         if ($result > 0) {
             switch ($tableType) {
                 case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
@@ -184,13 +185,14 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         return $result;
     }
 
-    private function GenList(){
-        $tableId = intval(Control::GetRequest("table_id",0));
-        $tableType = intval(Control::GetRequest("table_type",0));
+    private function GenList()
+    {
+        $tableId = intval(Control::GetRequest("table_id", 0));
+        $tableType = intval(Control::GetRequest("table_type", 0));
         $commentType = intval(Control::GetRequest("comment_type", 1));
         $siteId = intval(parent::GetSiteIdByDomain());
 
-        if($tableId > 0 && $tableType > 0 && $siteId > 0){
+        if ($tableId > 0 && $tableType > 0 && $siteId > 0) {
             $pageSize = Control::GetRequest("ps", 5);
             $pageIndex = Control::GetRequest("p", 1);
             if ($pageIndex === 0) {
@@ -203,7 +205,8 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
             if ($pageIndex > 0 && $tableId > 0) {
                 $pageBegin = ($pageIndex - 1) * $pageSize;
                 $allCount = 0;
-                $arrList = $commentPublicData->GetList($tableId,$tableType,$siteId,$commentType,$allCount,$pageBegin,$pageSize);
+
+                    $arrList = $commentPublicData->GetList($tableId, $tableType, $siteId, $commentType, $allCount, $pageBegin, $pageSize);
                 if (count($arrList) > 0) {
                     $templateFileUrl = "comment/pager_comment_js.html";
                     $templateName = "default";
@@ -211,13 +214,13 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                     $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                     $isJs = true;
                     $jsFunctionName = "CommentShow";
-                    $jsParamList = "," . $tableId . "," . $tableType . ",'".' '."'";
+                    $jsParamList = "," . $tableId . "," . $tableType . ",'" . ' ' . "'";
                     $pagerButton = Pager::ShowPageButton(
                         $pagerTemplate,
                         "",
                         $allCount,
                         $pageSize,
-                        $pageIndex ,
+                        $pageIndex,
                         1,
                         $isJs,
                         $jsFunctionName,
@@ -231,15 +234,62 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                     $result = Format::FixJsonEncode($arrList);
                     $pagerButton = Format::FixJsonEncode($pagerButton);
 
-                    return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . ',"count":' . $allCount . ',"page_button":' . $pagerButton . '})';
-                }else{
-                    return Control::GetRequest("jsonpcallback","") . '({"result":""})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . ',"count":' . $allCount . ',"page_button":' . $pagerButton . '})';
+                } else {
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":""})';
                 }
-            }else{
-                return Control::GetRequest("jsonpcallback","") . '({"result":""})';
+            } else {
+                return Control::GetRequest("jsonpcallback", "") . '({"result":""})';
             }
-        }else{
-            return Control::GetRequest("jsonpcallback","") . '({"result":""})';
+        } else {
+            return Control::GetRequest("jsonpcallback", "") . '({"result":""})';
         }
+    }
+
+    private function AsyncGetOpenComment()
+    {
+        $tableId = intval(Control::GetRequest("table_id", 0));
+        $tableType = intval(Control::GetRequest("table_type", 0));
+
+        $openComment = -1;
+
+        if ($tableId > 0 && $tableType > 0) {
+            switch ($tableType) {
+                case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
+                    //$openState = 10;
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
+//                    $activityData = new ActivityData();
+//                    $openState = $activityData->GetOpenComment($tableId);
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
+                    $openState = 10;
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
+                    $channelPublicData = new ChannelPublicData();
+                    $openComment = $channelPublicData->GetOpenComment($tableId, TRUE);
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
+                    $documentNewsPublicData = new DocumentNewsPublicData();
+                    $openState = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
+                    if ($openState == 40) { //根据频道设置而定
+                        $channelId = $documentNewsPublicData->GetChannelId($tableId, FALSE);
+                        $channelPublicData = new ChannelPublicData();
+                        $openComment = $channelPublicData->GetOpenComment($channelId, TRUE);
+                    }
+                    break;
+                case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
+                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                    $channelId = $newspaperArticlePublicData->GetChannelId($tableId, TRUE);
+                    $channelPublicData = new ChannelPublicData();
+                    $openComment = $channelPublicData->GetOpenComment($channelId, TRUE);
+                    break;
+            }
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$openComment.'})';
     }
 }
