@@ -25,6 +25,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_upload":
                 $result = self::AsyncUpload();
                 break;
+            case "async_upload_batch":
+                $result = self::AsyncUploadBatch();
+                break;
             case "async_save_remote_image":
                 $result = self::AsyncSaveRemoteImage();
                 break;
@@ -185,6 +188,53 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         return $result;
     }
 
+    /**
+     * Ajax批量上传文件
+     * @return string 返回Json结果
+     */
+    private function AsyncUploadBatch()
+    {
+        $debug=new DebugLogManageData();
+        //$debug->Create(json_encode($_FILES));
+        //$debug->Create(json_encode($_REQUEST));
+        $fileElementName = Control::PostOrGetRequest("file_element_name", "");
+        $tableType = Control::PostOrGetRequest("table_type", 0);
+        $tableId = Control::PostOrGetRequest("table_id", 0);
+        if (strlen($fileElementName)>0 && $tableType > 0) {
+
+            $imgMaxWidth = 0;
+            $imgMaxHeight = 0;
+            $imgMinWidth = 0;
+            $imgMinHeight = 0;
+
+
+            $uploadFile = new UploadFile();
+
+            parent::UploadBatch(
+                $fileElementName,
+                $tableType,
+                $tableId,
+                $uploadFile,
+                $uploadFileId,
+                $imgMaxWidth,
+                $imgMaxHeight,
+                $imgMinWidth,
+                $imgMinHeight
+            );
+
+            $result = $uploadFile->FormatToJson();
+
+        } else {
+            $result = '{';
+            $result .= '"error":"param error",';
+            $result .= '"result_html":"file_element_name:'.$fileElementName.';table_type:'.$tableType.'",';
+            $result .= '"upload_file_id":"",';
+            $result .= '"upload_file_path":""';
+            $result .= '}';
+        }
+
+        return $result;
+    }
 
     /**
      * 异步保存远程图片，xhEditor用

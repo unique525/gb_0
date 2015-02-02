@@ -484,6 +484,135 @@ class BaseGen
         return $result;
     }
 
+
+    /**
+     * 批量上传文件
+     * @param string $fileElementName 控件名称
+     * @param int $tableType 上传文件对应的表类型
+     * @param int $tableId 上传文件对应的表id
+     * @param UploadFile $uploadFile 返回的上传文件对象
+     * @param int $uploadFileId 返回新的上传文件id
+     * @param int $imgMaxWidth 图片最大宽度限制
+     * @param int $imgMaxHeight 图片最大高度限制
+     * @param int $imgMinWidth 图片最小宽度限制
+     * @param int $imgMinHeight 图片最小高度限制
+     * @return int 返回成功或错误代码
+     */
+    protected function UploadBatch(
+        $fileElementName = "file",   //plUpload控件默认指定
+        $tableType = 0,
+        $tableId = 0,
+        UploadFile &$uploadFile = null,
+        &$uploadFileId = 0,
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
+    )
+    {
+        $errorMessage = self::UploadPreCheck(
+            $fileElementName,
+            $imgMaxWidth,
+            $imgMaxHeight,
+            $imgMinWidth,
+            $imgMinHeight
+        );
+        $resultMessage = "";
+        $uploadFilePath = "";
+        if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
+            usleep(1000000 * 0.1); //0.1秒
+            $newFileName = "";
+            $fileExtension = strtolower(FileObject::GetExtension($_FILES[$fileElementName]['name']));
+            $manageUserId = Control::GetManageUserId();
+            $userId = Control::GetUserId();
+
+            $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
+
+            $dirPath = self::GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, $newFileName);
+
+            $debug=new DebugLogManageData();
+            $debug->Create($dirPath);
+            if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
+                FileObject::CreateDir($dirPath);
+                $moveResult = move_uploaded_file($_FILES[$fileElementName]['tmp_name'], $dirPath . $newFileName);
+
+                if ($moveResult) {
+                    //数据库操作
+                    $uploadFileData = new UploadFileData();
+                    if ($uploadFileId > 0) {
+                        //修改原有uploadFile数据
+
+                        //1.删除原有原图文件
+
+                        self::ClearUploadFile($uploadFileId);
+
+                        //2.清空数据表
+                        $uploadFileData->Clear($uploadFileId);
+
+                        //3.修改数据表
+                        $uploadFileData->Modify(
+                            $uploadFileId,
+                            $newFileName,
+                            $_FILES[$fileElementName]['size'], //文件大小，字节
+                            $fileExtension,
+                            $_FILES[$fileElementName]['name'], //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
+                    }else{
+                        //创建新的uploadFile数据
+                        $uploadFileId = $uploadFileData->Create(
+                            $newFileName,
+                            $_FILES[$fileElementName]['size'], //文件大小，字节
+                            $fileExtension,
+                            $_FILES[$fileElementName]['name'], //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
+                    }
+
+
+                    if ($uploadFileId > 0) {
+                        //返回值处理
+                        $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
+
+                        $uploadFilePath = $returnDirPath . $newFileName;
+                        $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
+
+                        $resultMessage = Format::FormatUploadFileToHtml(
+                            $uploadFilePath,
+                            $fileExtension,
+                            $uploadFileId,
+                            $_FILES[$fileElementName]['name']
+                        );
+
+
+                    }
+
+                    $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
+                    $errorMessage = $result;
+                } else { //移动上传文件时失败
+                    $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
+                    $errorMessage = $result;
+                }
+            } else {
+                $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
+                $errorMessage = $result;
+            }
+        } else {
+            $result = $errorMessage;
+        }
+
+        $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+
+        return $result;
+    }
     /**
      * 根据不同的业务，构建不同的存储文件夹和文件名
      * @param int $tableType 对应表类型
