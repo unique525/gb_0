@@ -199,6 +199,7 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
 
             $commentPublicData = new CommentPublicData();
 
+
             if ($pageIndex > 0 && $tableId > 0) {
                 $pageBegin = ($pageIndex - 1) * $pageSize;
                 $allCount = 0;
