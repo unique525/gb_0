@@ -188,7 +188,7 @@ $(function () {
         ],
 
         // Resize images on clientside if we can
-        resize : {width : 320, height : 240, quality : 90},
+        //resize : {width : 320, height : 240, quality : 90},
 
         flash_swf_url : '/system_js/plupload-2.1.2/js/Moxie.swf',
         silverlight_xap_url : '/system_js/plupload-2.1.2/js/Moxie.xap',
