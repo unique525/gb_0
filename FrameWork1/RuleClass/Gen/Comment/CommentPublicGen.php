@@ -117,11 +117,11 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 break;
             case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
                 $documentNewsPublicData = new DocumentNewsPublicData();
-                $openState = $documentNewsPublicData->GetOpenComment($tableId,TRUE);
+                $openState = $documentNewsPublicData->GetOpenComment($tableId,FALSE);
                 if ($openState == 40) { //根据频道设置而定
-                    $channelId = $documentNewsPublicData->GetChannelID($tableId,TRUE);
+                    $thisChannelId = $documentNewsPublicData->GetChannelID($tableId,FALSE);
                     $channelPublicData = new ChannelPublicData();
-                    $openState = $channelPublicData->GetOpenComment($channelId);
+                    $openState = $channelPublicData->GetOpenComment($thisChannelId);
                 }
                 break;
             case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
@@ -167,6 +167,9 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                 case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
+                    $documentNewsPublicData = new DocumentNewsPublicData();
+                    $documentNewsPublicData->AddCommentCount($tableId);
+                    break;
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
                     $newspaperArticlePublicData = new NewspaperArticlePublicData();

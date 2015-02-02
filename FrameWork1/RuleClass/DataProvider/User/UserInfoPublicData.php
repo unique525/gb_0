@@ -212,7 +212,6 @@ class UserInfoPublicData extends BasePublicData
                             u.UserName,
                             u.UserEmail,
                             u.UserMobile,
-                            u.UserId,
                             u.State,
                             ui.NickName,
                             ui.RealName,
@@ -257,7 +256,8 @@ class UserInfoPublicData extends BasePublicData
                             ul.UserLevel,
                             ur.UserGroupID,
                             ug.UserGroupName,
-                            uf.*
+                            uf.*,
+                            u.UserId AS UserId
                             FROM ".self::TableName_User." u
                             INNER JOIN ".self::TableName_UserInfo." ui ON (u.UserID = ui.UserID)
                             LEFT JOIN ".self::TableName_UserSiteLevel." usl ON (u.UserID = usl.UserId) AND usl.SiteId=:SiteId

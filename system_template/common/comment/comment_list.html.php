@@ -67,10 +67,6 @@
 </head>
 <body>
 <div class="div_list">
-    <div class="search" style="width:99%;height:30px"></div>
-    <div class="advance_search" style="width:99%;height:150px;border:1px #CCC solid;display: none">
-
-    </div>
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
         <tr  class="grid_title2">
             <td style="width:80px;text-align: center">ID</td>
@@ -109,7 +105,7 @@
             </item>
         </icms>
     </ul>
-
+    <div>{pager_button}</div>
 </div>
 </body>
 </html>

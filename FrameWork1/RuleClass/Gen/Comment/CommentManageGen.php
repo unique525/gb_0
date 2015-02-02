@@ -57,6 +57,15 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
 
             if(count($arrCommentList) > 0){
                 Template::ReplaceList($templateContent,$arrCommentList,$tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=comment&m=list_for_channel&channel_id=".$channelId."&table_type=".$tableType."&p={0}&ps=".$pageSize;
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
             }else{
                 $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("comment",1));
             }
@@ -70,19 +79,80 @@ class CommentManageGen extends BaseManageGen implements IBaseManageGen
 
     private function GenListForSite(){
         $siteId = Control::GetRequest("site_id",0);
+        $tableType = Control::GetRequest("table_type",0);
 
-        if($siteId > 0){
+        if($siteId > 0 && $tableType > 0){
+            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = Control::GetRequest("ps",20);
+            $allCount = 0;
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $templateContent = Template::Load("comment/comment_list.html","common");
+            parent::ReplaceFirst($templateContent);
 
+            $tagId = "comment_list";
+
+            $commentManageData = new CommentManageData();
+
+            $arrCommentList = $commentManageData->GetListForSite($tableType,$siteId,$pageBegin,$pageSize,$allCount);
+
+            if(count($arrCommentList) > 0){
+                Template::ReplaceList($templateContent,$arrCommentList,$tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=comment&m=list_for_site&site_id=".$siteId."&table_type=".$tableType."&p={0}&ps=".$pageSize;
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("comment",1));
+            }
+
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
         }
 
         return "";
     }
 
     private function GenListForChannel(){
-        $siteId = Control::GetRequest("site_id",0);
         $channelId = Control::GetRequest("channel_id",0);
+        $tableType = Control::GetRequest("table_type",0);
 
-        if($siteId > 0 && $channelId > 0){}
+        if($channelId > 0 && $tableType > 0){
+            $pageIndex = Control::GetRequest("p",1);
+            $pageSize = Control::GetRequest("ps",20);
+            $allCount = 0;
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $templateContent = Template::Load("comment/comment_list.html","common");
+            parent::ReplaceFirst($templateContent);
+
+            $tagId = "comment_list";
+
+            $commentManageData = new CommentManageData();
+
+            $arrCommentList = $commentManageData->GetListForChannel($tableType,$channelId,$pageBegin,$pageSize,$allCount);
+
+            if(count($arrCommentList) > 0){
+                Template::ReplaceList($templateContent,$arrCommentList,$tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=comment&m=list_for_channel&channel_id=".$channelId."&table_type=".$tableType."&p={0}&ps=".$pageSize;
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
+            }else{
+                $templateContent = Template::ReplaceCustomTag($templateContent,$tagId,Language::Load("comment",1));
+            }
+
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }
+
         return "";
     }
 

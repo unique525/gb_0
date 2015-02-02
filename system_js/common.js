@@ -144,6 +144,15 @@ function checkEmail(me) {
     }
 }
 
+function checkMobileNumber(me) {
+    var reg = /^13\d{9}$|^15\d{9}$|^18\d{9}$/;
+    if(reg.test(me)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function JsLoader() {
     this.load = function(url) {
         //获取所有的<script>标记
