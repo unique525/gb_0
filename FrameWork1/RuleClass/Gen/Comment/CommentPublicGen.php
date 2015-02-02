@@ -171,7 +171,6 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                     $documentNewsPublicData = new DocumentNewsPublicData();
                     $documentNewsPublicData->AddCommentCount($tableId);
                     break;
-                    break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
                     $newspaperArticlePublicData = new NewspaperArticlePublicData();
                     $newspaperArticlePublicData->AddCommentCount($tableId);
