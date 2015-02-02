@@ -217,6 +217,9 @@ class BasePublicGen extends BaseGen {
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_USER_EXPLORE_LIST:
+
+                        break;
                 }
             }
         }
