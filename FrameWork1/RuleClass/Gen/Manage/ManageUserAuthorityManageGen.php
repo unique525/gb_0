@@ -54,7 +54,8 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
 
         if ($manageUserId > 0) {
             if($manageUserIdForSet > 0){
-                $arrayOfOneAuthority=$manageUserAuthorityManageData->GetOneByManageUserId($siteId,$channelId,$manageUserIdForSet);
+                $arrayOfOneSiteAuthority=$manageUserAuthorityManageData->GetOneByManageUserId($siteId,$channelId,$manageUserIdForSet);  //siteId 的站点权限
+                $arrayOfOneSystemAuthority=$manageUserAuthorityManageData->GetOneByManageUserId(0,$channelId,$manageUserIdForSet); //系统权限
                 $tempContent = Template::Load("manage/manage_user_authority_set.html", "common");
                 parent::ReplaceFirst($tempContent);
 
@@ -302,7 +303,7 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageUserGroupModify = "1";
                         }
 
-                        $manageUserAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSiteAndManageUser(
+                        $manageUserAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSiteAuthorityOfManageUser(
                             $siteId,
                             $manageUserIdForSet,
                             $explore,
@@ -343,7 +344,16 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageFtp,
                             $manageAd,
                             $manageDocumentTag,
-                            $manageConfig,
+                            $manageConfig
+                        );
+
+
+
+                        //系统授权
+
+
+                        $manageUserSystemAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSystemAuthorityOfManageUser(
+                            $manageUserIdForSet,
                             $manageUserTaskManageState,
                             $manageUserTaskViewAll,
                             $manageUserTaskViewSameGroup,
@@ -354,7 +364,6 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageUserGroupCreate,
                             $manageUserGroupModify
                         );
-
 
                         //频道授权
 
@@ -382,11 +391,13 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
 
 
                         //加入操作日志
-                        $operateContent = 'Create Manage User Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdOfNew;  //站点
+                        $operateContent = 'Create Manage User Site Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdOfNew;  //站点
                         self::CreateManageUserLog($operateContent);
 
+                        $operateContent = 'Create Manage User System Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserSystemAuthorityIdOfNew;  //站点
+                        self::CreateManageUserLog($operateContent);
 
-                        $operateContent = 'Create Manage User Authority For Channel,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdForChannel;  //频道
+                        $operateContent = 'Create Manage User Channel Authority For Channel,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdForChannel;  //频道
                         self::CreateManageUserLog($operateContent);
 
                         if ($manageUserAuthorityIdOfNew > 0) {
@@ -411,11 +422,30 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('manage_user', 11)); //授权站点信息不正确！
                     }
                 }
-                if(count($arrayOfOneAuthority)>0){
-                    Template::ReplaceOne($tempContent, $arrayOfOneAuthority);
+                if($siteId<0){
+                      //没选择站点
+                }elseif($siteId==0){
+                    if(count($arrayOfOneSystemAuthority)>0)
+                        Template::ReplaceOne($tempContent, $arrayOfOneSystemAuthority);  //siteid=0 仅系统权限
                 }else{
-                    $fields = $manageUserAuthorityManageData->GetFields();  //如果没有则新增
-                    parent::ReplaceWhenCreate($tempContent, $fields);
+                  if  (count($arrayOfOneSiteAuthority)>0){     //siteid存在
+                    if(count($arrayOfOneSystemAuthority)>0){  //将系统权限替换站点权限一起做标签替换
+                        $arrayOfOneSiteAuthority["ManageUserTaskManageState"]=$arrayOfOneSystemAuthority["ManageUserTaskManageState"];
+                        $arrayOfOneSiteAuthority["ManageUserTaskViewAll"]=$arrayOfOneSystemAuthority["ManageUserTaskViewAll"];
+                        $arrayOfOneSiteAuthority["ManageUserTaskViewSameGroup"]=$arrayOfOneSystemAuthority["ManageUserTaskViewSameGroup"];
+                        $arrayOfOneSiteAuthority["ManageUserExplore"]=$arrayOfOneSystemAuthority["ManageUserExplore"];
+                        $arrayOfOneSiteAuthority["ManageUserCreate"]=$arrayOfOneSystemAuthority["ManageUserCreate"];
+                        $arrayOfOneSiteAuthority["ManageUserModify"]=$arrayOfOneSystemAuthority["ManageUserModify"];
+                        $arrayOfOneSiteAuthority["ManageUserGroupExplore"]=$arrayOfOneSystemAuthority["ManageUserGroupExplore"];
+                        $arrayOfOneSiteAuthority["ManageUserGroupCreate"]=$arrayOfOneSystemAuthority["ManageUserGroupCreate"];
+                        $arrayOfOneSiteAuthority["ManageUserGroupModify"]=$arrayOfOneSystemAuthority["ManageUserGroupModify"];
+                    }
+                    Template::ReplaceOne($tempContent, $arrayOfOneSiteAuthority);
+                    }
+                else{
+                        $fields = $manageUserAuthorityManageData->GetFields();  //如果没有则新增
+                        parent::ReplaceWhenCreate($tempContent, $fields);
+                    }
                 }
 
 
@@ -473,7 +503,8 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
 
         if ($manageUserId > 0) {
             if($manageUserGroupIdForSet > 0){
-                $arrayOfOneAuthority=$manageUserAuthorityManageData->GetOneByManageUserGroupId($siteId,$channelId,$manageUserGroupIdForSet);
+                $arrayOfOneSiteAuthority=$manageUserAuthorityManageData->GetOneByManageUserGroupId($siteId,$channelId,$manageUserGroupIdForSet); //站点=siteId的站点权限
+                $arrayOfOneSystemAuthority=$manageUserAuthorityManageData->GetOneByManageUserGroupId(0,$channelId,$manageUserGroupIdForSet); //系统权限
                 $tempContent = Template::Load("manage/manage_user_group_authority_set.html", "common");
                 parent::ReplaceFirst($tempContent);
 
@@ -721,7 +752,8 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageUserGroupModify = "1";
                         }
 
-                        $manageUserAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSiteAndManageUserGroup(
+                        //站点授权
+                        $manageUserSiteAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSiteAuthorityOfManageUserGroup(
                             $siteId,
                             $manageUserGroupIdForSet,
                             $explore,
@@ -762,7 +794,15 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageFtp,
                             $manageAd,
                             $manageDocumentTag,
-                            $manageConfig,
+                            $manageConfig
+                        );
+
+
+                        //系统授权
+
+
+                        $manageUserSystemAuthorityIdOfNew = $manageUserAuthorityManageData->CreateOrModifyForSystemAuthorityOfManageUserGroup(
+                            $manageUserGroupIdForSet,
                             $manageUserTaskManageState,
                             $manageUserTaskViewAll,
                             $manageUserTaskViewSameGroup,
@@ -773,7 +813,6 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                             $manageUserGroupCreate,
                             $manageUserGroupModify
                         );
-
 
                         //频道授权
 
@@ -801,14 +840,16 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
 
 
                         //加入操作日志
-                        $operateContent = 'Create Manage User Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdOfNew;//站点
+                        $operateContent = 'Create Manage User Group Site Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserSiteAuthorityIdOfNew;//站点
                         self::CreateManageUserLog($operateContent);
 
-
-                        $operateContent = 'Create Manage User Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdForChannel;//频道
+                        $operateContent = 'Create Manage User Group System Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserSystemAuthorityIdOfNew;//系统
                         self::CreateManageUserLog($operateContent);
 
-                        if ($manageUserAuthorityIdOfNew > 0) {
+                        $operateContent = 'Create Manage User Group Channel Authority,POST FORM:' . implode('|', $_POST) . ';\r\nResult:manageUserAuthorityId:' . $manageUserAuthorityIdForChannel;//频道
+                        self::CreateManageUserLog($operateContent);
+
+                        if ($manageUserSiteAuthorityIdOfNew > 0) {
 
                             //删除缓冲
                             DataCache::RemoveDir(CACHE_PATH . '/channel_data');
@@ -830,11 +871,30 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                         $resultJavaScript .= Control::GetJqueryMessage(Language::Load('manage_user_group', 11)); //授权站点信息不正确！
                     }
                 }
-                if(count($arrayOfOneAuthority)>0){
-                    Template::ReplaceOne($tempContent, $arrayOfOneAuthority);
+                if($siteId<0){
+                      //没选择站点
+                }elseif($siteId==0){
+                    if(count($arrayOfOneSystemAuthority)>0)
+                        Template::ReplaceOne($tempContent, $arrayOfOneSystemAuthority);  //siteid=0 仅系统权限
                 }else{
-                    $fields = $manageUserAuthorityManageData->GetFields();  //如果没有则新增
-                    parent::ReplaceWhenCreate($tempContent, $fields);
+                    if  (count($arrayOfOneSiteAuthority)>0){     //siteid存在
+                        if(count($arrayOfOneSystemAuthority)>0){  //将系统权限替换站点权限一起做标签替换
+                            $arrayOfOneSiteAuthority["ManageUserTaskManageState"]=$arrayOfOneSystemAuthority["ManageUserTaskManageState"];
+                            $arrayOfOneSiteAuthority["ManageUserTaskViewAll"]=$arrayOfOneSystemAuthority["ManageUserTaskViewAll"];
+                            $arrayOfOneSiteAuthority["ManageUserTaskViewSameGroup"]=$arrayOfOneSystemAuthority["ManageUserTaskViewSameGroup"];
+                            $arrayOfOneSiteAuthority["ManageUserExplore"]=$arrayOfOneSystemAuthority["ManageUserExplore"];
+                            $arrayOfOneSiteAuthority["ManageUserCreate"]=$arrayOfOneSystemAuthority["ManageUserCreate"];
+                            $arrayOfOneSiteAuthority["ManageUserModify"]=$arrayOfOneSystemAuthority["ManageUserModify"];
+                            $arrayOfOneSiteAuthority["ManageUserGroupExplore"]=$arrayOfOneSystemAuthority["ManageUserGroupExplore"];
+                            $arrayOfOneSiteAuthority["ManageUserGroupCreate"]=$arrayOfOneSystemAuthority["ManageUserGroupCreate"];
+                            $arrayOfOneSiteAuthority["ManageUserGroupModify"]=$arrayOfOneSystemAuthority["ManageUserGroupModify"];
+                        }
+                        Template::ReplaceOne($tempContent, $arrayOfOneSiteAuthority);
+                    }
+                    else{
+                        $fields = $manageUserAuthorityManageData->GetFields();  //如果没有则新增
+                        parent::ReplaceWhenCreate($tempContent, $fields);
+                    }
                 }
 
 

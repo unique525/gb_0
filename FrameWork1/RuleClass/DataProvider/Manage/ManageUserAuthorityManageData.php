@@ -110,7 +110,99 @@ class ManageUserAuthorityManageData extends BaseManageData
 
 
     /**
-     * 为后台帐号分组和站点设置权限（新增或修改）
+     * 为后台帐号分组设置系统权限（新增或修改）
+     * @param int $manageUserGroupId
+    * @param int $manageUserTaskManageState
+    * @param int $manageUserTaskViewAll
+    * @param int $manageUserTaskViewSameGroup
+    * @param int $manageUserExplore
+    * @param int $manageUserCreate
+    * @param int $manageUserModify
+    * @param int $manageUserGroupExplore
+    * @param int $manageUserGroupCreate
+    * @param int $manageUserGroupModify
+     * @return int
+     */
+    public function CreateOrModifyForSystemAuthorityOfManageUserGroup(
+         $manageUserGroupId, $manageUserTaskManageState, $manageUserTaskViewAll, $manageUserTaskViewSameGroup, $manageUserExplore, $manageUserCreate, $manageUserModify, $manageUserGroupExplore, $manageUserGroupCreate, $manageUserGroupModify
+    )
+    {
+        //判断是否存在数据
+        $sql = "SELECT Count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=0 AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0 AND ChannelId=0;";
+
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
+
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        if ($hasCount <= 0) {
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . "
+	            (
+	                `SiteId`,
+	                `ManageUserGroupId`,
+                    `ManageUserTaskManageState`,
+                    `ManageUserTaskViewAll`,
+                    `ManageUserTaskViewSameGroup`,
+                    `ManageUserExplore`,
+                    `ManageUserCreate`,
+                    `ManageUserModify`,
+                    `ManageUserGroupExplore`,
+                    `ManageUserGroupCreate`,
+                    `ManageUserGroupModify`
+		            )
+		            VALUES
+		            (
+		            0,
+		            :ManageUserGroupId,
+    	            :ManageUserTaskManageState,
+                    :ManageUserTaskViewAll,
+                    :ManageUserTaskViewSameGroup,
+                    :ManageUserExplore,
+                    :ManageUserCreate,
+                    :ManageUserModify,
+                    :ManageUserGroupExplore,
+                    :ManageUserGroupCreate,
+                    :ManageUserGroupModify
+		            );";
+            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
+            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
+            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
+            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
+            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
+            $dataProperty->AddField("ManageUserModify", $manageUserModify);
+            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
+            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
+            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        } else {
+
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . "
+	                SET
+                        `ManageUserTaskManageState` = :ManageUserTaskManageState,
+                        `ManageUserTaskViewAll` = :ManageUserTaskViewAll,
+                        `ManageUserTaskViewSameGroup` = :ManageUserTaskViewSameGroup,
+                        `ManageUserExplore` = :ManageUserExplore,
+                        `ManageUserCreate` = :ManageUserCreate,
+                        `ManageUserModify` = :ManageUserModify,
+                        `ManageUserGroupExplore` = :ManageUserGroupExplore,
+                        `ManageUserGroupCreate` = :ManageUserGroupCreate,
+                        `ManageUserGroupModify` = :ManageUserGroupModify
+	                WHERE SiteId=0 AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0 AND ChannelId=0;";
+            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
+            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
+            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
+            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
+            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
+            $dataProperty->AddField("ManageUserModify", $manageUserModify);
+            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
+            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
+            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 为后台帐号分组设置站点权限（新增或修改）
      * @param int $siteId 站点id
      * @param int $manageUserGroupId
      * @param int $explore
@@ -152,19 +244,10 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageAd
      * @param int $manageDocumentTag
      * @param int $manageConfig
-    * @param int $manageUserTaskManageState
-    * @param int $manageUserTaskViewAll
-    * @param int $manageUserTaskViewSameGroup
-    * @param int $manageUserExplore
-    * @param int $manageUserCreate
-    * @param int $manageUserModify
-    * @param int $manageUserGroupExplore
-    * @param int $manageUserGroupCreate
-    * @param int $manageUserGroupModify
      * @return int
      */
-    public function CreateOrModifyForSiteAndManageUserGroup(
-        $siteId, $manageUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $channelManageTemplate, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig, $manageUserTaskManageState, $manageUserTaskViewAll, $manageUserTaskViewSameGroup, $manageUserExplore, $manageUserCreate, $manageUserModify, $manageUserGroupExplore, $manageUserGroupCreate, $manageUserGroupModify
+    public function CreateOrModifyForSiteAuthorityOfManageUserGroup(
+        $siteId, $manageUserGroupId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $channelManageTemplate, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
     )
     {
         //判断是否存在数据
@@ -218,16 +301,7 @@ class ManageUserAuthorityManageData extends BaseManageData
     	            `ManageFtp`,
     	            `ManageAd`,
     	            `ManageDocumentTag`,
-    	            `ManageConfig`,
-                    `ManageUserTaskManageState`,
-                    `ManageUserTaskViewAll`,
-                    `ManageUserTaskViewSameGroup`,
-                    `ManageUserExplore`,
-                    `ManageUserCreate`,
-                    `ManageUserModify`,
-                    `ManageUserGroupExplore`,
-                    `ManageUserGroupCreate`,
-                    `ManageUserGroupModify`
+    	            `ManageConfig`
 		            )
 		            VALUES
 		            (
@@ -271,16 +345,7 @@ class ManageUserAuthorityManageData extends BaseManageData
     	            :ManageFtp,
     	            :ManageAd,
     	            :ManageDocumentTag,
-    	            :ManageConfig,
-    	            :ManageUserTaskManageState,
-                    :ManageUserTaskViewAll,
-                    :ManageUserTaskViewSameGroup,
-                    :ManageUserExplore,
-                    :ManageUserCreate,
-                    :ManageUserModify,
-                    :ManageUserGroupExplore,
-                    :ManageUserGroupCreate,
-                    :ManageUserGroupModify
+    	            :ManageConfig
 		            );";
 
             $dataProperty->AddField("ChannelExplore", $explore);
@@ -322,16 +387,6 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("ManageAd", $manageAd);
             $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
             $dataProperty->AddField("ManageConfig", $manageConfig);
-
-            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
-            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
-            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
-            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
-            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
-            $dataProperty->AddField("ManageUserModify", $manageUserModify);
-            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
-            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
-            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         } else {
 
@@ -375,16 +430,7 @@ class ManageUserAuthorityManageData extends BaseManageData
                         `ManageFtp` = :ManageFtp,
                         `ManageAd` = :ManageAd,
                         `ManageDocumentTag` = :ManageDocumentTag,
-                        `ManageConfig` = :ManageConfig,
-                        `ManageUserTaskManageState` = :ManageUserTaskManageState,
-                        `ManageUserTaskViewAll` = :ManageUserTaskViewAll,
-                        `ManageUserTaskViewSameGroup` = :ManageUserTaskViewSameGroup,
-                        `ManageUserExplore` = :ManageUserExplore,
-                        `ManageUserCreate` = :ManageUserCreate,
-                        `ManageUserModify` = :ManageUserModify,
-                        `ManageUserGroupExplore` = :ManageUserGroupExplore,
-                        `ManageUserGroupCreate` = :ManageUserGroupCreate,
-                        `ManageUserGroupModify` = :ManageUserGroupModify
+                        `ManageConfig` = :ManageConfig
 	                WHERE SiteId=:SiteId AND ManageUserGroupId=:ManageUserGroupId AND ManageUserId=0 AND ChannelId=0;";
 
             $dataProperty->AddField("ChannelExplore", $explore);
@@ -428,6 +474,90 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("ManageAd", $manageAd);
             $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
             $dataProperty->AddField("ManageConfig", $manageConfig);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 为后台帐号设置系统权限（新增或修改）
+     * @param int $manageUserId
+     * @param int $manageUserTaskManageState
+     * @param int $manageUserTaskViewAll
+     * @param int $manageUserTaskViewSameGroup
+     * @param int $manageUserExplore
+     * @param int $manageUserCreate
+     * @param int $manageUserModify
+     * @param int $manageUserGroupExplore
+     * @param int $manageUserGroupCreate
+     * @param int $manageUserGroupModify
+     * @return int
+     */
+    public function CreateOrModifyForSystemAuthorityOfManageUser(
+         $manageUserId, $manageUserTaskManageState, $manageUserTaskViewAll, $manageUserTaskViewSameGroup, $manageUserExplore, $manageUserCreate, $manageUserModify, $manageUserGroupExplore, $manageUserGroupCreate, $manageUserGroupModify
+    )
+    {
+        //判断是否存在数据
+        $sql = "SELECT Count(*) FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=0 AND ManageUserId=:ManageUserId AND ManageUserGroupId=0 AND ChannelId=0;";
+
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ManageUserId", $manageUserId);
+
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        if ($hasCount <= 0) {
+            $sql = "INSERT INTO " . self::TableName_ManageUserAuthority . "
+	            (
+	                `SiteId`,
+	                `ManageUserId`,
+                    `ManageUserTaskManageState`,
+                    `ManageUserTaskViewAll`,
+                    `ManageUserTaskViewSameGroup`,
+                    `ManageUserExplore`,
+                    `ManageUserCreate`,
+                    `ManageUserModify`,
+                    `ManageUserGroupExplore`,
+                    `ManageUserGroupCreate`,
+                    `ManageUserGroupModify`
+		            )
+		            VALUES
+		            (
+		            0,
+		            :ManageUserId,
+    	            :ManageUserTaskManageState,
+                    :ManageUserTaskViewAll,
+                    :ManageUserTaskViewSameGroup,
+                    :ManageUserExplore,
+                    :ManageUserCreate,
+                    :ManageUserModify,
+                    :ManageUserGroupExplore,
+                    :ManageUserGroupCreate,
+                    :ManageUserGroupModify
+		            );";
+
+            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
+            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
+            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
+            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
+            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
+            $dataProperty->AddField("ManageUserModify", $manageUserModify);
+            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
+            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
+            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        } else {
+
+            $sql = "UPDATE " . self::TableName_ManageUserAuthority . "
+	                SET
+                        `ManageUserTaskManageState` = :ManageUserTaskManageState,
+                        `ManageUserTaskViewAll` = :ManageUserTaskViewAll,
+                        `ManageUserTaskViewSameGroup` = :ManageUserTaskViewSameGroup,
+                        `ManageUserExplore` = :ManageUserExplore,
+                        `ManageUserCreate` = :ManageUserCreate,
+                        `ManageUserModify` = :ManageUserModify,
+                        `ManageUserGroupExplore` = :ManageUserGroupExplore,
+                        `ManageUserGroupCreate` = :ManageUserGroupCreate,
+                        `ManageUserGroupModify` = :ManageUserGroupModify
+	                WHERE SiteId=0 AND ManageUserId=:ManageUserId AND ManageUserGroupId=0 AND ChannelId=0;";
 
             $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
             $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
@@ -443,9 +573,8 @@ class ManageUserAuthorityManageData extends BaseManageData
         return $result;
     }
 
-
     /**
-     * 为后台帐号设置权限（新增或修改）
+     * 为后台帐号设置站点权限（新增或修改）
      * @param int $siteId 站点id
      * @param int $manageUserId
      * @param int $explore
@@ -487,19 +616,10 @@ class ManageUserAuthorityManageData extends BaseManageData
      * @param int $manageAd
      * @param int $manageDocumentTag
      * @param int $manageConfig
-     * @param int $manageUserTaskManageState
-     * @param int $manageUserTaskViewAll
-     * @param int $manageUserTaskViewSameGroup
-     * @param int $manageUserExplore
-     * @param int $manageUserCreate
-     * @param int $manageUserModify
-     * @param int $manageUserGroupExplore
-     * @param int $manageUserGroupCreate
-     * @param int $manageUserGroupModify
      * @return int
      */
-    public function CreateOrModifyForSiteAndManageUser(
-        $siteId, $manageUserId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $channelManageTemplate, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig, $manageUserTaskManageState, $manageUserTaskViewAll, $manageUserTaskViewSameGroup, $manageUserExplore, $manageUserCreate, $manageUserModify, $manageUserGroupExplore, $manageUserGroupCreate, $manageUserGroupModify
+    public function CreateOrModifyForSiteAuthorityOfManageUser(
+        $siteId, $manageUserId, $explore, $create, $modify, $delete, $disabled, $search, $rework, $audit1, $audit2, $audit3, $audit4, $refused, $doOthers, $doOthersInSameGroup, $publish, $channelManageTemplate, $userExplore, $userAdd, $userEdit, $userDelete, $userRoleExplore, $userRoleAdd, $userRoleEdit, $userRoleDelete, $userAlbumExplore, $userAlbumAdd, $userAlbumEdit, $userAlbumDelete, $userGroupExplore, $userLevelExplore, $userOrderExplore, $manageSite, $manageComment, $manageTemplateLibrary, $manageFilter, $manageFtp, $manageAd, $manageDocumentTag, $manageConfig
     )
     {
         //判断是否存在数据
@@ -553,16 +673,7 @@ class ManageUserAuthorityManageData extends BaseManageData
     	            `ManageFtp`,
     	            `ManageAd`,
     	            `ManageDocumentTag`,
-    	            `ManageConfig`,
-                    `ManageUserTaskManageState`,
-                    `ManageUserTaskViewAll`,
-                    `ManageUserTaskViewSameGroup`,
-                    `ManageUserExplore`,
-                    `ManageUserCreate`,
-                    `ManageUserModify`,
-                    `ManageUserGroupExplore`,
-                    `ManageUserGroupCreate`,
-                    `ManageUserGroupModify`
+    	            `ManageConfig`
 		            )
 		            VALUES
 		            (
@@ -606,16 +717,7 @@ class ManageUserAuthorityManageData extends BaseManageData
     	            :ManageFtp,
     	            :ManageAd,
     	            :ManageDocumentTag,
-    	            :ManageConfig,
-    	            :ManageUserTaskManageState,
-                    :ManageUserTaskViewAll,
-                    :ManageUserTaskViewSameGroup,
-                    :ManageUserExplore,
-                    :ManageUserCreate,
-                    :ManageUserModify,
-                    :ManageUserGroupExplore,
-                    :ManageUserGroupCreate,
-                    :ManageUserGroupModify
+    	            :ManageConfig
 		            );";
 
             $dataProperty->AddField("ChannelExplore", $explore);
@@ -658,15 +760,6 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
             $dataProperty->AddField("ManageConfig", $manageConfig);
 
-            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
-            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
-            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
-            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
-            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
-            $dataProperty->AddField("ManageUserModify", $manageUserModify);
-            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
-            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
-            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         } else {
 
@@ -710,17 +803,8 @@ class ManageUserAuthorityManageData extends BaseManageData
                         `ManageFtp` = :ManageFtp,
                         `ManageAd` = :ManageAd,
                         `ManageDocumentTag` = :ManageDocumentTag,
-                        `ManageConfig` = :ManageConfig,
-                        `ManageUserTaskManageState` = :ManageUserTaskManageState,
-                        `ManageUserTaskViewAll` = :ManageUserTaskViewAll,
-                        `ManageUserTaskViewSameGroup` = :ManageUserTaskViewSameGroup,
-                        `ManageUserExplore` = :ManageUserExplore,
-                        `ManageUserCreate` = :ManageUserCreate,
-                        `ManageUserModify` = :ManageUserModify,
-                        `ManageUserGroupExplore` = :ManageUserGroupExplore,
-                        `ManageUserGroupCreate` = :ManageUserGroupCreate,
-                        `ManageUserGroupModify` = :ManageUserGroupModify
-	                WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId AND ManageUserId=0 AND ChannelId=0;";
+                        `ManageConfig` = :ManageConfig
+	                WHERE SiteId=:SiteId AND ManageUserId=:ManageUserId AND ManageUserGroupId=0 AND ChannelId=0;";
 
             $dataProperty->AddField("ChannelExplore", $explore);
             $dataProperty->AddField("ChannelCreate", $create);
@@ -764,15 +848,6 @@ class ManageUserAuthorityManageData extends BaseManageData
             $dataProperty->AddField("ManageDocumentTag", $manageDocumentTag);
             $dataProperty->AddField("ManageConfig", $manageConfig);
 
-            $dataProperty->AddField("ManageUserTaskManageState", $manageUserTaskManageState);
-            $dataProperty->AddField("ManageUserTaskViewAll", $manageUserTaskViewAll);
-            $dataProperty->AddField("ManageUserTaskViewSameGroup", $manageUserTaskViewSameGroup);
-            $dataProperty->AddField("ManageUserExplore", $manageUserExplore);
-            $dataProperty->AddField("ManageUserCreate", $manageUserCreate);
-            $dataProperty->AddField("ManageUserModify", $manageUserModify);
-            $dataProperty->AddField("ManageUserGroupExplore", $manageUserGroupExplore);
-            $dataProperty->AddField("ManageUserGroupCreate", $manageUserGroupCreate);
-            $dataProperty->AddField("ManageUserGroupModify", $manageUserGroupModify);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;

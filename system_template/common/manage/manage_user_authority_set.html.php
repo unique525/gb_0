@@ -199,6 +199,7 @@
                     ]]>
                 </item>
             </icms>
+            <option value="0">仅系统权限</option>
         </select><!--，为<span style="color:red;"> {ManageUserGroupName} </span>授权-->
     </td>
     <script type="text/javascript">

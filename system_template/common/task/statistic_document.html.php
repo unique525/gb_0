@@ -70,13 +70,7 @@
 
     </script>
     <style>
-        div.one_child_line{}
-        .child_title{float:left;line-height: 39px;height:40px}
-        div.checkbox_area{height:39px;line-height: 39px;border-bottom: 1px dashed #D5D5D5;}
-        .channel_children li{height:40px;line-height: 40px;text-align: left}
-        #channel_list{margin-top:20px;width:99%}
-        .check_box{float:left;margin-left:20px}
-        .channel_name{width:100px;overflow:hidden;float:left;margin-left:5px;}
+        .statistician_list {width:88%;margin:0 auto;padding:30px;box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.2)}
     </style>
 </head>
 <body>
@@ -149,10 +143,10 @@
         </tr>
     </table>
 </form>
-<table>
+<table width="99%">
 <tr>
 <td>
-<div id="tabs">
+<div class="statistician_list">
 
     <icms id="statistician_result_list" type="list">
         <item>
