@@ -58,15 +58,17 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                 } else {
 
                     $userCarClientData = new UserCarClientData();
-                    $result = $userCarClientData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $activityProductId);
+                    $result = $userCarClientData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
                     if ($result > 0) {
                         $resultCode = 1; //加入购物车成功
+                    } elseif ($result == -20) {
+                        $resultCode = -20; //如果新的产品数量大于库存数量，不新增，返回-20
                     } else {
-                        $resultCode = -1; //加入购物车失败,数据库原因
+                        $resultCode = -5; //加入购物车失败,数据库原因
                     }
                 }
             } else {
-                $resultCode = -1; //加入购物车失败,参数错误;
+                $resultCode = -15; //加入购物车失败,参数错误;
             }
 
         }
