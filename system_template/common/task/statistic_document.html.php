@@ -70,7 +70,7 @@
 
     </script>
     <style>
-        .statistician_list {width:88%;margin:0 auto;padding:30px;box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.2)}
+        .statistician_list {width:88%;margin:0 auto;padding:0 30px;box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.2)}
     </style>
 </head>
 <body>
@@ -149,6 +149,13 @@
 <div class="statistician_list">
 
     <icms id="statistician_result_list" type="list">
+        <header>
+            <![CDATA[
+            <div id="{f_ManageUserId}" class="grid_item" style="padding-top:30px">
+                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇。
+            </div>
+            ]]>
+        </header>
         <item>
             <![CDATA[
             <div id="{f_ManageUserId}" class="grid_item">
@@ -156,6 +163,13 @@
             </div>
             ]]>
         </item>
+        <footer>
+            <![CDATA[
+            <div id="{f_ManageUserId}" class="grid_item" style="padding-bottom:30px">
+                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇。
+            </div>
+            ]]>
+        </footer>
     </icms>
 
 
