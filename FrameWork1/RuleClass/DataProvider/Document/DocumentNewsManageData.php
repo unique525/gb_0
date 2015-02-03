@@ -1489,6 +1489,40 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 获取管理员在时间范围内所有稿件
+     * @param int $siteId 站点id
+     * @param string $strSiteIds 站点id字符串
+     * @param int $manageUserId 编辑id
+     * @param string $beginDate 开始时间
+     * @param string $endDate 结束时间
+     * @return array 稿件数据集
+     */
+    public function GetListOfManageUser($siteId,$strSiteIds,$manageUserId,$beginDate,$endDate){
+        $result=null;
+        if($siteId>=0&&$manageUserId>=0){
+            $dataProperty = new DataProperty();
+            if($siteId>0){
+                $strSelectSite=" SiteId=:SiteId ";
+                $dataProperty->AddField("SiteId", $siteId);
+            }else{
+                $strSelectSite=" SiteId IN ($strSiteIds) ";
+            }
+            if($beginDate!=""&&$endDate!=""){
+                $strSelectDate=" AND CreateDate>='$beginDate' AND CreateDate<='$endDate' ";
+            }else{
+                $strSelectDate="";
+            }
+
+            $sql="SELECT * FROM ".self::TableName_DocumentNews." WHERE $strSelectSite AND ManageUserId=:ManageUserId $strSelectDate ;";
+
+            $dataProperty->AddField("ManageUserId", $manageUserId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+
+    }
+
 }
 
 ?>
