@@ -35,6 +35,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $productParamClientGen = new ProductParamClientGen();
                 $result = $productParamClientGen->GenClient();
                 break;
+            case "product_comment":
+                $productCommentClientGen = new ProductCommentClientGen();
+                $result = $productCommentClientGen->GenClient();
+                break;
             case "channel":
                 $channelClientGen = new ChannelClientGen();
                 $result = $channelClientGen->GenClient();
