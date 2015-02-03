@@ -151,7 +151,10 @@ class ManageUserManageData extends BaseManageData
 
         }
 
-
+        $limit="";
+        if($pageBegin>=0&&$pageSize>=0){
+            $limit.=" LIMIT " . $pageBegin . "," . $pageSize;
+        }
 
         $sql = "SELECT mu.*,mug.ManageUserGroupName FROM " . self::TableName_ManageUser . " mu,".self::TableName_ManageUserGroup." mug
                         WHERE
@@ -161,7 +164,7 @@ class ManageUserManageData extends BaseManageData
                             $searchSql
 
                         ORDER BY mu.Sort DESC,convert(mu.ManageUserName USING gbk)
-                        LIMIT " . $pageBegin . "," . $pageSize . ";";
+                         ". $limit . " ;";
         $sqlCount = "SELECT Count(*) FROM " . self::TableName_ManageUser . " mu,".self::TableName_ManageUserGroup." mug
                         WHERE
                             mu.State<".ManageUserData::STATE_DELETE."
