@@ -83,10 +83,15 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
         if($userId<=0){
             $resultCode = $userId;
         }else{
+
+            $pageSize = Control::GetRequest("ps", 20);
+            $pageIndex = Control::GetRequest("p", 1);
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+
             $userCarClientData = new UserCarClientData();
             $activityProductClientData = new ActivityProductClientData();
 
-            $arrUserCarProductList = $userCarClientData->GetList($userId);
+            $arrUserCarProductList = $userCarClientData->GetList($userId, $pageBegin, $pageSize);
 
             if (count($arrUserCarProductList) > 0){
                 $resultCode = 1;

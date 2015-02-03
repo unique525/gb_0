@@ -108,7 +108,7 @@ $(function () {
                     }
                 } else if(result == -21) {
 
-                    alert("修改失败，当前购买数量大小库存数");
+                    alert("修改失败，当前购买数量大于库存数");
 
                 } else {
 
@@ -290,13 +290,13 @@ $(function () {
                         <div class="a1"><input class="checkbox_car" id="checkbox_car_{f_UserCarId}"
                                                idvalue="{f_UserCarId}" autocomplete="off" name="" type="checkbox"
                                                value=""/></div>
-                        <div class="a2"><img src="{f_UploadFilePath}" width="72" height="72"/></div>
-                        <div class="a3">{f_ProductName}</div>
+                        <div class="a2"><a href="/default.php?mod=product&a=detail&product_id={f_ProductId}" target="_blank"><img src="{f_UploadFilePath}" width="72" height="72"/></a></div>
+                        <div class="a3"><a href="/default.php?mod=product&a=detail&product_id={f_ProductId}" target="_blank">{f_ProductName}</a></div>
                         <div class="a4">
                             ￥<span id="sale_price_value_{f_UserCarId}" class="show_price">{f_SalePrice}</span><br/>
                             <span style="font-size: 14px;color:#CCC">原价：￥</span><span
                                 id="product_price_value_{f_UserCarId}" class="show_price"
-                                style="TEXT-DECORATION: line-through;font-size: 14px;color:#CCC">{f_ProductPriceValue}</span>
+                                style="TEXT-DECORATION: line-through;font-size: 14px;color:#CCC">{f_MarketPrice}</span>
                         </div>
                         <div class="a5">
                             <div class="num">

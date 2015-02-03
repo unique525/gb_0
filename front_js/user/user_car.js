@@ -15,7 +15,7 @@ function addUserCar(siteId,productId,buyCount,productPriceId,activityProductId,i
                 alert("加入失败,库存不够");
                 location.replace(location);
             }else if(result == -20){
-                alert("加入失败,购买数量小于1或者库存数量大于购买数量");
+                alert("加入失败,购买数量小于1或者购买数量大于库存数量");
                 location.replace(location);
             }
             else if(result == -2){
