@@ -140,7 +140,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
                 $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
                 if($activityProductId>0){
-                    $discount = $activityProductPublicData->GetDiscount($activityProductId);
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
                     $salePrice = $discount * $productPriceValue;
                 }else{
                     $salePrice = $productPriceValue;
@@ -154,6 +154,8 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
+
+            parent::ReplaceTemplate($templateContent);
             //-----------替换最近收藏----------begin
             $recentUserFavoriteTagId = "recent_user_favorite_list";
             $pageBegin = 0;
@@ -169,7 +171,7 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         } else {
             Template::RemoveCustomTag($templateContent, $tagId);
             Control::GoUrl("/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=user_car&a=list"));
-    }
+        }
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;

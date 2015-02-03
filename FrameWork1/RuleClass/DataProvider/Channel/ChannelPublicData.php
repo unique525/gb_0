@@ -223,13 +223,21 @@ class ChannelPublicData extends BasePublicData {
         return $result;
     }
 
-    public function GetOpenComment($channelId){
+    /**
+     * 获取频道的评论审核类型
+     * @param $channelId
+     * @param $withCache
+     * @return int
+     */
+    public function GetOpenComment($channelId,$withCache){
         $result = -1;
-        if($channelId > 0){
-            $sql = "SELECT OpenComment FROM ".self::TableName_DocumentNews." WHERE ChannelId = :ChannelId;";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_channel_open_comment.cache_' . $channelId . '';
+            $sql = "SELECT OpenComment FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId",$channelId);
-            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }

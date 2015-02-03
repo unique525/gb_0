@@ -15,6 +15,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/front_js/comment.js"></script>
+    <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
     <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
     <style>
@@ -52,14 +53,18 @@
                 comment_count = data["count"];
                 var result = data["result"];
                 $.each(result, function (i, v) {
-                    if (v["UserName"] == "" && v["UserName"] != null) {
-                        v["UserName"] = "游客";
+                    var username = trim(v["UserName"]);
+                    if (username == undefined || username == "" || username.length == 0) {
+                        username = "游客";
+                    }else if(username.length > 30){
+                        var mphone =username.substr(3,4);
+                        username = username.replace(mphone,"****");
                     }
                     listContent = listContent + '<div id="'+v["CommentId"]+'" style="border-bottom:2px dashed #CCC; width:100%; margin:8px 4px;">'+
                         '<table width="100%" cellpadding="0" cellspacing="0">'+
                         '<tr>'+
                         '<td style="padding:5px;">'+
-                        '<div style="text-align:left;line-height:180%;">'+v["UserName"]+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#666666;font-size:10px;">'+v["CreateDate"]+'</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>'+
+                        '<div style="text-align:left;line-height:180%;">'+username+'&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#666666;font-size:10px;">'+v["CreateDate"]+'</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>'+
                         '<div class="commentcontent" style="color:#666;text-align:left;line-height:180%;font-size:14px;"><table width="100%" style="table-layout:fixed"><tr><td style="word-wrap:break-word">'+v["Content"]+'</td></tr></table></div>'+
                         '</td></tr></table>'+
                         '</div>';
@@ -72,20 +77,15 @@
             };
 
             window.CreateLongCommentCallback = function(data,tableId,tableType,channelId){
-                var re_url = window.location.href;
+                var re_url = UrlEncode(window.location.href);
                 var username = "";
                 var result = data["result"];
-                var name = '';//'<span class="guest" style="text-align:left">您还未<a href="/default.php?mod=user&a=login&re_url="' + re_url + ' style="font-weight:bold">登录</a>,目前的身份是游客</span>';
+                var name = '<span class="guest" style="text-align:left">您还未<a href="/user/login.html?re_url=' + re_url + '" style="font-weight:bold">登录</a>,目前的身份是游客</span>';
 
                 if (result != "") {
-                    if (result["NickName"] != "") {
-                        username = result["NickName"];
-                    } else {
-                        username = result["UserName"];
-                    }
-
+                    username = result["UserMobile"];
                     if (username != undefined && username != "" && username != null) {
-                        //name = '<span class="username" style="text-align:left">' + username + '</span>';
+                        name = '<span class="username" style="text-align:left">您已用' + username + '登录，点击<a href="/default.php?mod=user&a=logout">注销<a/></span>';
                     }
                 }
 
@@ -110,8 +110,12 @@
 
             };
 
-            CreateLongComment({NewspaperArticleId},7,{ChannelId},true);
-            CommentShow(0,{NewspaperArticleId},7,"",true);
+
+            var openComment = AsyncGetOpenComment({NewspaperArticleId},window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE);
+            if(openComment != window.COMMENT_OPEN_COMMENT_NON_COMMENT){
+                CreateLongComment({NewspaperArticleId},window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE,{ChannelId},true);
+                CommentShow(0,{NewspaperArticleId},window.COMMENT_TABLE_TYPE_NEWSPAPER_ARTICLE,"",true);
+            }
 
         });
 

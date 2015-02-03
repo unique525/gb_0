@@ -8,6 +8,14 @@
 <script type="text/javascript" src="/system_js/color_picker.js"></script>
 <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
 <script type="text/javascript" src="/system_js/upload_file.js"></script>
+
+<link rel="stylesheet" href="/system_js/plupload-2.1.2/js/jquery.ui.plupload/css/jquery.ui.plupload.css" type="text/css" />
+<link rel="stylesheet" href="/system_js/plupload-2.1.2/js/jquery.plupload.queue/css/jquery.plupload.queue.css" type="text/css" />
+<script type="text/javascript" src="/system_js/plupload-2.1.2/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="/system_js/plupload-2.1.2/js/plupload.dev.js"></script>
+<script type="text/javascript" src="/system_js/plupload-2.1.2/js/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <script type="text/javascript">
 <!--
 var editor;
@@ -21,9 +29,10 @@ window.AjaxFileUploadCallBack = function(data){
 
 }
 
-
-
 $(function () {
+
+
+
 
     var editorHeight = $(window).height() - 220;
     editorHeight = parseInt(editorHeight);
@@ -149,6 +158,81 @@ $(function () {
         );
     });
 
+
+
+    /**plupload**/
+    //组图上传
+
+    if ($("#batchAttachWatermark").attr("checked") == true) {
+        batchAttachWatermark = 1;
+    }
+    // Setup html5 version
+    $("#uploader").pluploadQueue({
+        // General settings
+        runtimes : 'html5,flash,silverlight,html4',
+
+        // Fake server response here
+        // url : '../upload.php',
+        url: '/default.php?mod=upload_file&a=async_upload_batch&file_element_name=file&table_type='+tableType+'&table_id='+tableId+'&batch_attach_watermark='+batchAttachWatermark,
+
+        max_file_size : '25mb',
+        chunks : {
+            size: '1mb',
+            send_chunk_number: false // set this to true, to send chunk and total chunk numbers instead of offset and total bytes
+        },
+        rename : true,
+        dragdrop: true,
+        filters : [
+            {title : "Image files", extensions : "jpg,gif,png"},
+            {title : "Zip files", extensions : "zip"}
+        ],
+
+        // Resize images on clientside if we can
+        //resize : {width : 320, height : 240, quality : 90},
+
+        flash_swf_url : '/system_js/plupload-2.1.2/js/Moxie.swf',
+        silverlight_xap_url : '/system_js/plupload-2.1.2/js/Moxie.xap',
+
+        init : {
+            FileUploaded: function(up, file, info) {
+                // Called when file has finished uploading
+
+                var dataSet = $.parseJSON(info.response);
+                var fUploadFile = $("#f_UploadFiles");
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+
+                var filePath=dataSet.upload_file_path;
+                //log('[FileUploaded] File:', file, "Info:", info);
+
+                    if(fUploadFile != undefined && fUploadFile != null){
+                    var uploadFiles = fUploadFile.val();
+                    uploadFiles = uploadFiles + "," + dataSet.upload_file_id;
+                    fUploadFile.val(uploadFiles);
+                }
+
+
+                if(editor != undefined && editor != null){
+                    editor.appendHTML(""+UploadFileFormatHtml(filePath));
+                }
+
+                if(inputTextId != undefined && inputTextId != null){
+                    $( "#"+inputTextId ).val(filePath);
+                }
+
+                if(previewImageId != undefined && previewImageId != null){
+                    $( "#"+previewImageId ).attr("src",filePath);
+                }
+            }
+        }
+
+
+    });
+    /****   plupload end   * **/
+
+
     var btnAddPreContent = $(".btn_add_pre_content");
     btnAddPreContent.click(function () {
 
@@ -246,6 +330,12 @@ function submitForm(closeTab) {
 }
 -->
 </script>
+<style>
+    .plupload_scroll {
+        background-color: #E6E8EC;
+    }
+
+</style>
 </head>
 <body>
 

@@ -659,6 +659,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         if ($pageIndex > 0 && $channelId > 0) {
 
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "document_news_list";

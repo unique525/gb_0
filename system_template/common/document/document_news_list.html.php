@@ -32,7 +32,11 @@
 
 
             });
-
+            //评论管理
+            var btn_batch_manage_comment = $("#btn_batch_manage_comment");
+            btn_batch_manage_comment.click(function () {
+                window.location.href="/default.php?secu=manage&mod=comment&m=list_for_channel&channel_id={ChannelId}&table_type=7";
+            });
 
             /**
              * 移动
@@ -126,6 +130,7 @@
                 <input id="btn_move" class="btn2" value="移动" idvalue="{ChannelId}" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
                 <input id="btn_copy" class="btn2" value="复制" idvalue="{ChannelId}" title="复制本频道文档至其它频道，请先在下面文档中勾选需要复制的文档" type="button"/>
                 <input id="btn_batch_publish" class="btn2" value="批量发布" title="批量发布" type="button"/>
+                <input id="btn_batch_manage_comment" class="btn2" value="评论管理" title="评论管理" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
@@ -203,7 +208,10 @@
                             <td class="spe_line2" style="width:50px;text-align:center;">{f_Hit}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="文档创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:100px;text-align:center;" title="发稿人：{f_ManageUserName}">{f_ManageUserName}</td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_manage_pic" src="/system_template/{template_name}/images/manage/pic.gif" idvalue="{f_DocumentNewsId}" alt="图片管理" title="文档中上传的图片管理"/> <img class="btn_manage_comment" src="/system_template/{template_name}/images/manage/comment.gif" idvalue="{f_DocumentNewsId}" alt="评论管理" title="文档的评论管理"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">
+                                <img class="btn_manage_pic" src="/system_template/{template_name}/images/manage/pic.gif" idvalue="{f_DocumentNewsId}" alt="图片管理" title="文档中上传的图片管理"/>
+                                <a href="/default.php?secu=manage&mod=comment&m=list&table_id={f_DocumentNewsId}&site_id={SiteId}&table_type=7"><img class="btn_manage_comment" src="/system_template/{template_name}/images/manage/comment.gif" idvalue="{f_DocumentNewsId}" alt="评论管理" title="文档的评论管理"/></a>
+                            </td>
                         </tr>
                     </table>
                 </li>

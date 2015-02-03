@@ -47,6 +47,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $userClientGen = new UserClientGen();
                 $result = $userClientGen->GenClient();
                 break;
+            case "user_car":
+                $userCarClientGen = new UserCarClientGen();
+                $result = $userCarClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;

@@ -730,6 +730,24 @@ class BaseData
     }
 
     /**
+     * 返回float型的信息值（某行某字段的值）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return float 返回查询结果
+     */
+    protected function GetInfoOfFloatValue($sql, DataProperty $dataProperty, $withCache, $cacheDir, $cacheFile)
+    {
+        $result = -1;
+        if (strlen($sql) > 0) {
+            $result = floatval(self::GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile));
+        }
+        return $result;
+    }
+
+    /**
      * 返回string型的信息值（某行某字段的值）
      * @param string $sql 要执行的SQL语句
      * @param DataProperty $dataProperty 数据库字段集合对象

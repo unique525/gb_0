@@ -199,14 +199,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
             if (!empty($userMobile)) {
-//                if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
-//                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
-//                    if ($isSameMobile) { //检查是否有相同的手机号码
-//                        return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
-//                    }
-//                } else {
-//                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
-//                }
+                if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
+                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
+                    if ($isSameMobile) { //检查是否有相同的手机号码
+                        return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
+                    }
+                } else {
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+                }
             }
             //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
             $userPublicData = new UserPublicData();
