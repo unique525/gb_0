@@ -27,7 +27,7 @@ class ProductParamClientData extends BasePublicData {
         if ($productId > 0) {
             switch ($order) {
                 default:
-                    $order = " ORDER BY t2.ProductParamTypeClassId ASC,t.ProductParamTypeId ASC,t.ProductParamId ASC";
+                    $order = " ORDER BY t2.ProductParamTypeClassId ASC,t.ProductParamId ASC";
                     break;
             }
             $sql = "

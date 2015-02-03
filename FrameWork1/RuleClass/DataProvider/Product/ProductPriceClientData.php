@@ -31,7 +31,7 @@ class ProductPriceClientData extends BasePublicData {
                     break;
             }
             $sql = "
-            SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate
+            SELECT ProductPriceId,ProductId,ProductPriceValue,ProductPriceIntro,ProductCount,ProductUnit,Remark,Sort,State,CreateDate,ManageUserId
             FROM " . self::TableName_ProductPrice . "
             WHERE State=0 AND ProductId=:ProductId"
                 . $order
