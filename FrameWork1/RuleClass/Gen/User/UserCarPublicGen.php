@@ -21,17 +21,21 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
      */
     const ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT = -10;
     /**
-     * 加入购物车失败，购买数量小于1或者库存数量大于购买数量
+     * 加入购物车失败，购买数量小于1或者库存数量小于购买数量
      */
     const ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER = -20;
     /**
      * 修改购买数量成功
      */
-    const MODIFY_BuyCount_SUCCESS = 1;
+    const MODIFY_BUY_COUNT_SUCCESS = 1;
     /**
      * 修改购买数量失败
      */
-    const MODIFY_BuyCount_FAIL = -1;
+    const MODIFY_BUY_COUNT_FAIL = -1;
+    /**
+     * 修改购买数量失败，库存数量小于购买数量
+     */
+    const MODIFY_BUY_COUNT_FAIL_FOR_PRODUCT_COUNT_OVER = -21;
     /**
      * 删除购物车产品成功
      */
@@ -101,12 +105,12 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                     return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER.'})';
                 }
 
-
-
                 $userCarPublicData = new UserCarPublicData();
-                $result = $userCarPublicData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $activityProductId);
+                $result = $userCarPublicData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
                 if ($result > 0) {
                     return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_SUCCESS.'})';
+                } elseif ($result == -20) {
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER.'})';
                 } else {
                     return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL.'})';
                 }
@@ -202,15 +206,26 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = intval(Control::GetUserId());
         if ($userCarId > 0 && $userId > 0 && $buyCount > 0) {
 
+            //检查库存
             $userCarPublicData = new UserCarPublicData();
+            $productPriceId = $userCarPublicData->GetProductPriceId($userCarId, TRUE);
+            $productPricePublicData = new ProductPricePublicData();
+            //即时库存，不缓存
+            $productCount = $productPricePublicData->GetProductCount($productPriceId, false);
+
+            if ($buyCount > $productCount){
+                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BUY_COUNT_FAIL_FOR_PRODUCT_COUNT_OVER . '})';
+            }
+
+
             $result = $userCarPublicData->ModifyBuyCount($userCarId, $buyCount, $userId);
             if ($result > 0) {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BuyCount_SUCCESS . '})';
+                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BUY_COUNT_SUCCESS . '})';
             } else {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BuyCount_FAIL . '})';
+                return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BUY_COUNT_FAIL . '})';
             }
         } else {
-            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BuyCount_FAIL . '})';
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . self::MODIFY_BUY_COUNT_FAIL . '})';
         }
     }
 

@@ -48,10 +48,9 @@ $(function () {
                 dataType: "jsonp",
                 jsonp: "jsonpcallback",
                 success: function (data) {
-                    if (data["result"] == -1) {
-                        //失败
-                    } else {
-                        //成功
+                    var result = parseInt(data["result"]);
+
+                    if (result > 0) {//成功
                         $("#buy_count_" + user_car_id).val(buy_count);
                         var product_price = parseFloat($("#sale_price_value_" + user_car_id).html());
                         //var send_price = parseFloat($("#send_price_"+user_car_id).html());
@@ -66,6 +65,14 @@ $(function () {
                             }
                             $("#all_price").html(formatPrice(all_price));
                         }
+                    } else if(result == -21) {
+
+                        alert("修改失败，当前购买数量大小库存数");
+
+                    } else {
+
+                        alert("修改失败");
+
                     }
                 }
             });
@@ -82,9 +89,9 @@ $(function () {
             dataType: "jsonp",
             jsonp: "jsonpcallback",
             success: function (data) {
-                if (data["result"] == -1) {
-                    //失败
-                } else {
+                var result = parseInt(data["result"]);
+
+                if (result > 0) {
                     //成功
                     $("#buy_count_" + user_car_id).val(buy_count);
                     var product_price = parseFloat($("#sale_price_value_" + user_car_id).html());
@@ -99,6 +106,14 @@ $(function () {
                         }
                         $("#all_price").html(formatPrice(all_price));
                     }
+                } else if(result == -21) {
+
+                    alert("修改失败，当前购买数量大小库存数");
+
+                } else {
+
+                    alert("修改失败");
+
                 }
             }
         });
@@ -289,9 +304,9 @@ $(function () {
                                        type="text" value="{f_BuyCount}"/>
                             </div>
                             <div class="arrow">
-                                <div><img class="add_count" id="add_{f_UserCarId}" idvalue="{f_UserCarId}"
+                                <div><img alt="增加" style="cursor:pointer;" class="add_count" id="add_{f_UserCarId}" idvalue="{f_UserCarId}"
                                           src="/images/arrow.png" width="13" height="10"/></div>
-                                <div><img class="minus_count" id="minus_{f_UserCarId}" idvalue="{f_UserCarId}"
+                                <div><img alt="减少" style="cursor:pointer;" class="minus_count" id="minus_{f_UserCarId}" idvalue="{f_UserCarId}"
                                           src="/images/arrow2.png" width="13" height="10"/></div>
                             </div>
                         </div>

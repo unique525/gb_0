@@ -116,7 +116,6 @@ class UserManageData extends BaseManageData
      * @param bool $withCache 是否从缓冲中取
      * @return string 返回会员名称
      */
-
     public function GetUserName($userId, $withCache)
     {
         $result = null;
