@@ -10,21 +10,16 @@ class ProductCommentClientData extends BaseClientData {
 
     /**
      * 根据产品id获取产品评论数据
-     * @param $productId
-     * @param string $order
-     * @param null $topCount
+     * @param int $productId 产品id
+     * @param string $pageBegin 页码
+     * @param string $pageSize 每页条数
+     * @param string $allCount 总记录数
+     * @param string $order 排序方式
      * @return array|null
      */
-    public function GetListByProductId($productId, $order = "", $topCount = null)
+    public function GetListByProductId($productId, $pageBegin, $pageSize, &$allCount,$order = "")
     {
         $result = null;
-        if ($topCount != null)
-        {
-            $topCount = " limit " . $topCount;
-        }
-        else {
-            $topCount = "";
-        }
         if (!empty($productId)) {
             switch ($order) {
                 default:
@@ -38,10 +33,16 @@ class ProductCommentClientData extends BaseClientData {
             FROM " . self::TableName_ProductComment . "
             WHERE ProductId=:ProductId"
             . $order
-            . $topCount;
+            . " LIMIT ".  $pageBegin . "," . $pageSize . "";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_ProductComment . "
+            WHERE ProductId=:ProductId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }

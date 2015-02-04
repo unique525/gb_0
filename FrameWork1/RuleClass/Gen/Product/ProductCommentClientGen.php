@@ -36,15 +36,19 @@ class ProductCommentClientGen extends BaseClientGen implements IBaseClientGen {
         $resultCode = 0;
 
         $productId = Control::GetRequest("product_id", 0);
-
-        if($productId>0){
-            $pageSize = Control::GetRequest("ps", 20);
-            $orderBy = Control::GetRequest("order", 0);
+        $pageIndex = Control::GetRequest("p", 1);
+        $pageSize = Control::GetRequest("ps", 20);
+        $order = Control::GetRequest("order", 0);
+        if($pageIndex > 0 && $productId>0){
+            $allCount = 0;
+            $pageBegin = ($pageIndex - 1) * $pageSize;
             $productCommentClientData = new ProductCommentClientData();
             $arrList = $productCommentClientData->GetListByProductId(
                 $productId,
-                $orderBy,
-                $pageSize
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $order
             );
             if (count($arrList) > 0) {
                 $result = Format::FixJsonEncode($arrList);
