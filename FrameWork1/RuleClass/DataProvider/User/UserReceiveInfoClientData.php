@@ -1,13 +1,11 @@
 <?php
-
 /**
- * 公共访问 会员收货信息 数据类
+ * 客户端 会员收货信息 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
- * @author yin
+ * @author zhangchi
  */
-class UserReceiveInfoPublicData extends BasePublicData
-{
+class UserReceiveInfoClientData extends BaseClientData {
     /**
      * 新增
      * @param int $userId 会员id
@@ -104,6 +102,4 @@ class UserReceiveInfoPublicData extends BasePublicData
         }
         return $result;
     }
-}
-
-?>
+} 

@@ -226,7 +226,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);
                 $productPriceValue = floatval($arrProductOrderList[$i]["ProductPriceValue"]);
                 if($activityProductId>0){
-                    $discount = $activityProductPublicData->GetDiscount($activityProductId);
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
                     $salePrice = $discount * $productPriceValue;
                 }else{
                     $salePrice = $productPriceValue;
@@ -372,7 +372,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 //删除购物车
                 $userCarPublicData = new UserCarPublicData();
                 $arrUserCarId = str_ireplace("_",",",$arrUserCarId);
-                $resultOfDeleteUserCar = $userCarPublicData->BatchDelete($arrUserCarId, $userId);
+                $userCarPublicData->BatchDelete($arrUserCarId, $userId);
 
 
                 //支付选择页面
@@ -382,26 +382,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //支付方式选择
                 //默认支付宝
-/**
-                if(strlen($userOrderName)<=0){
-                    $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
-                }
 
-                $alipay = new Alipay();
-                $userOrderIntro = "";
-                $userOrderProductUrl = "http://".$_SERVER['HTTP_HOST']."/default.php?mod=user_order&a=detail&user_order_id=$userOrderId";
-                $alipayConfig = $alipay->Init($siteId);
-                $result = $alipay->Submit(
-                    $siteId,
-                    $alipayConfig,
-                    $userOrderNumber,
-                    $userOrderName,
-                    $allPrice,
-                    $userOrderIntro,
-                    $userOrderProductUrl
-                );
-*/
-                //return $result;
 
             }else{
                 //编号出错
