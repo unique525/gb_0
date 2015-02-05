@@ -173,6 +173,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
+        $crateDate=date('Y-m-d H:i:s');
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
             //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
@@ -231,8 +232,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $question = Format::FormatHtmlTag(Control::PostOrGetRequest("question",""));
                 $answer = Format::FormatHtmlTag(Control::PostOrGetRequest("answer",""));
                 $sign = Control::PostOrGetRequest("sign","");
-                $lastVisitIP = Format::FormatHtmlTag(Control::PostOrGetRequest("last_visit_ip",""));
-                $lastVisitTime = Format::FormatHtmlTag(Control::PostOrGetRequest("last_visit_time",""));
+                $lastVisitIP = $regIp;
+                $lastVisitTime = $crateDate;
                 $email = Format::FormatHtmlTag(Control::PostOrGetRequest("email",""));
                 $qq = Format::FormatHtmlTag(Control::PostOrGetRequest("qq",""));
                 $country = Format::FormatHtmlTag(Control::PostOrGetRequest("country",""));
