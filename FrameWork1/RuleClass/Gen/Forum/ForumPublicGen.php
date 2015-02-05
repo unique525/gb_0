@@ -42,6 +42,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         parent::ReplaceFirstForForum($tempContent);
 
+
         /******************  顶部推荐栏  ********************** */
         $templateForumRecTopicFileUrl = "forum/forum_rec_1.html";
         $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
@@ -50,16 +51,16 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         /******************  版块栏  ***********************/
         $templateForumBoardFileUrl = "forum/forum_default_list.html";
         $templateForumBoard = Template::Load($templateForumBoardFileUrl, $templateName, $templatePath);
+        $templateForumBoard = str_ireplace("{SiteId}", $siteId, $templateForumBoard);
 
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
         $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
 
-
         $forumRank = 1;
         $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
-
+        //print_r($arrRankTwoList);
 
         $tagId = "forum_".$siteId;
         $tagName = Template::DEFAULT_TAG_NAME;
@@ -69,6 +70,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $arrRankThreeList = null;
         $thirdTableIdName = null;
         $thirdParentIdName = null;
+
 
         Template::ReplaceList(
             $templateForumBoard,
@@ -196,7 +198,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $tempContent = str_ireplace("{forum_list}", "", $tempContent);
         }
         **/
-
         $tempContent = str_ireplace("{forum_list}", $templateForumBoard, $tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);

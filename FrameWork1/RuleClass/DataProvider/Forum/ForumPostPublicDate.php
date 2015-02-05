@@ -182,7 +182,7 @@ class ForumPostPublicDate extends BasePublicData {
 
     /**
      * 取得一条信息
-     * @param int $forumPostId 管理员id
+     * @param int $forumTopicId 管理员id
      * @return array 管理员帐号信息数组
      */
 
@@ -192,6 +192,20 @@ class ForumPostPublicDate extends BasePublicData {
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        return $result;
+    }
+    /**
+     * 取得列表信息
+     * @param int $forumTopicId 管理员id
+     * @return array 管理员帐号信息数组
+     */
+
+    public function GetList($forumTopicId)
+    {
+        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " ORDER BY IsTopic DESC;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
 } 

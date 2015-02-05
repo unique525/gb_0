@@ -76,7 +76,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenLogin(){
-        $templateFileUrl = "user/user_login.html";
+        $temp = Control::GetRequest("temp","");
+        if($temp == "forum"){
+            $templateFileUrl = "user/user_login_for_forum.html";
+        }
+        else{
+            $templateFileUrl = "user/user_login.html";
+        }
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -96,7 +102,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenRegister(){
-        $templateFileUrl = "user/user_register.html";
+        $temp = Control::GetRequest("temp","");
+        if($temp == "forum"){
+            $templateFileUrl = "user/user_register_for_forum.html";
+        }
+        else{
+            $templateFileUrl = "user/user_register.html";
+        }
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);

@@ -19,6 +19,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $manageLoginGen = new ManageLoginPublicGen();
                 $result = $manageLoginGen->GenPublic();
                 break;
+            case "channel":
+                $channelPublicGen = new ChannelPublicGen();
+                $result = $channelPublicGen->GenPublic();
+                break;
             case "common":
                 $commonPublicGen = new CommonPublicGen();
                 $result = $commonPublicGen->GenPublic();
@@ -66,6 +70,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
             case "forum_topic":
                 $forumTopicPublicGen = new ForumTopicPublicGen();
                 $result = $forumTopicPublicGen->GenPublic();
+                break;
+            case "forum_post":
+                $forumPostPublicGen = new ForumPostPublicGen();
+                $result = $forumPostPublicGen->GenPublic();
                 break;
             case "upload_file":
                 $uploadFilePublicGen = new UploadFilePublicGen();

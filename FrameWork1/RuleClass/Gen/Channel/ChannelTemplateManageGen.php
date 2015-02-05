@@ -246,6 +246,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                 //加入操作日志
                 $operateContent = 'Modify State Channel Template,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
                 self::CreateManageUserLog($operateContent);
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
             }
         }
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
@@ -337,6 +339,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             $channelTemplateManageData = new ChannelTemplateManageData();
             $result = $channelTemplateManageData->DeleteAttachment($channelTemplateId);
         }
+        //删除缓冲
+        DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 

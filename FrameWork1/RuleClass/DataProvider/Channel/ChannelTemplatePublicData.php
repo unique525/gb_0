@@ -11,15 +11,17 @@ class ChannelTemplatePublicData extends BasePublicData {
 
     /**
      * 取得动态模板内容
-     * @param int $channelTemplateType 模板类型
+     * @param int $siteId 站点id
      * @param string $channelTemplateTag 模板标签
+     * @param int $channelTemplateType 模板类型
      * @param bool $withCache 是否启用缓冲
      * @return string 动态模板内容
      */
     public function GetChannelTemplateContentForDynamic(
-        $channelTemplateType,
+        $siteId,
         $channelTemplateTag,
-        $withCache
+        $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC,
+        $withCache = TRUE
     ){
         $result = "";
         if($channelTemplateType == ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC ){ //动态模板
@@ -35,12 +37,14 @@ class ChannelTemplatePublicData extends BasePublicData {
                             ChannelTemplateType=:ChannelTemplateType
                         AND
                             ChannelTemplateTag=:ChannelTemplateTag
+                        AND SiteId = :SiteId
                         AND
                             State<".ChannelTemplateData::STATE_REMOVED."
                         ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelTemplateType", $channelTemplateType);
             $dataProperty->AddField("ChannelTemplateTag", $channelTemplateTag);
+            $dataProperty->AddField("SiteId", $siteId);
             $result = $this->GetInfoOfStringValue(
                 $sql,
                 $dataProperty,
