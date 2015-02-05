@@ -168,17 +168,17 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncRegister()
     {
         $siteId = parent::GetSiteIdByDomain();
-        $nickName = Format::FormatHtmlTag(Control::PostRequest("NickName", ""));
+        $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", ""));
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", ""));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
-        if ($siteId > 0 && (!empty($nickName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
+        if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
             //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
-            if (!empty($nickName)) {
-                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $nickName)) {
-                    $isSameName = self::IsRepeatUserName($nickName);
+            if (!empty($userName)) {
+                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName)) {
+                    $isSameName = self::IsRepeatUserName($userName);
                     if ($isSameName) { //检查是否重名
                         return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_NAME.'})';
                     }
@@ -215,11 +215,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $siteConfigData = new SiteConfigData($siteId);
 
 
-            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $nickName, $userEmail, $userMobile);
+            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
             if ($newUserId > 0) {
                 //$userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
 
+
                 //插入userinfo表
+                $nickName = Format::FormatHtmlTag(Control::PostOrGetRequest("NickName", ""));
                 //$avatar = '';
                 //$avatarMedium = '';
                 //$avatarSmall = '';
