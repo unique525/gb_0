@@ -17,8 +17,8 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
-            case "channel":
-                $result = self::GenList();
+            case "default":
+                $result = self::GenDefault();
                 break;
         }
 
@@ -26,14 +26,15 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         return $result;
     }
-    private function GenList() {
+    private function GenDefault() {
+
         $siteId = parent::GetSiteIdByDomain();
-        $channelTemplateTag = Control::GetRequest("channel_id", 0);
-        $channelTemplatePublicData = new ChannelTemplatePublicData();
-        $tempContent = $channelTemplatePublicData->GetChannelTemplateContentForDynamic($siteId,$channelTemplateTag);
+
+        $tempContent = parent::GetDynamicTemplateContent();
+
+        parent::ReplaceFirst($tempContent);
         $tempContent =  parent::ReplaceTemplate($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
-        parent::ReplaceFirst($tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
