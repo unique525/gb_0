@@ -64,11 +64,9 @@ class UserOrderData extends BaseData {
      * 生成订单号
      */
     public static function GenUserOrderNumber(){
-
-        $date = strval(date('YmdHis', time()));
-
-        return strtoupper($date.md5(strval(uniqid())));
-
+        //$date = strval(date('YmdHis', time()));
+        //return strtoupper($date.md5(strval(uniqid())));
+        return strtoupper(strval(uniqid()));
     }
 
 } 

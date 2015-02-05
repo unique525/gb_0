@@ -26,6 +26,10 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenList();
                 break;
 
+            case "delete":
+                $result = self::GenDelete();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -80,9 +84,9 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
         $result = "[{}]";
         $userId = parent::GetUserId();
 
-        if($userId<=0){
+        if ($userId <= 0) {
             $resultCode = $userId;
-        }else{
+        } else {
 
             $pageSize = Control::GetRequest("ps", 20);
             $pageIndex = Control::GetRequest("p", 1);
@@ -93,29 +97,54 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
 
             $arrUserCarProductList = $userCarClientData->GetList($userId, $pageBegin, $pageSize);
 
-            if (count($arrUserCarProductList) > 0){
+            if (count($arrUserCarProductList) > 0) {
                 $resultCode = 1;
 
-                for($i=0;$i<count($arrUserCarProductList);$i++){
+                for ($i = 0; $i < count($arrUserCarProductList); $i++) {
                     $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
                     $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
-                    if($activityProductId>0){
+                    if ($activityProductId > 0) {
                         $discount = $activityProductClientData->GetDiscount($activityProductId, true);
                         $salePrice = $discount * $productPriceValue;
-                    }else{
+                    } else {
                         $salePrice = $productPriceValue;
                     }
                     $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                    $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
+                    $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"] * $salePrice;
                 }
 
                 $result = Format::FixJsonEncode($arrUserCarProductList);
 
-            }else{
+            } else {
                 $resultCode = -1;
             }
 
         }
-        return '{"result_code":"'.$resultCode.'","user_car":{"user_car_list":' . $result . '}}';
+        return '{"result_code":"' . $resultCode . '","user_car":{"user_car_list":' . $result . '}}';
+    }
+
+    private function GenDelete()
+    {
+        $result = "[{}]";
+        $userId = parent::GetUserId();
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $userCarId = Control::PostOrGetRequest("user_car_id", 0);
+            if ($userCarId > 0) {
+                $userCarClientData = new UserCarClientData();
+                $result = $userCarClientData->Delete($userCarId, $userId);
+                if ($result > 0) {
+                    $resultCode = 1; //删除购物车成功
+                } else {
+                    $resultCode = -5; //删除购物车失败,数据库原因
+                }
+
+            } else {
+                $resultCode = -6; //加入购物车失败,参数错误;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_car_delete":' . $result . '}';
     }
 } 
