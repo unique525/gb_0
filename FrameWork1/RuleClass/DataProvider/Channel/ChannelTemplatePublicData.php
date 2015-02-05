@@ -24,8 +24,8 @@ class ChannelTemplatePublicData extends BasePublicData {
         $withCache
     ){
         $result = "";
-        if($channelTemplateType == ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC ){ //动态模板
 
+        if($channelTemplateType == ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC ){ //动态模板
 
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
             $cacheFile = "channel_get_channel_template_content.cache
