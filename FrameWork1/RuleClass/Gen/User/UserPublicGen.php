@@ -168,17 +168,17 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncRegister()
     {
         $siteId = parent::GetSiteIdByDomain();
-        $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", ""));
+        $nickName = Format::FormatHtmlTag(Control::PostRequest("NickName", ""));
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", ""));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
-        if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
+        if ($siteId > 0 && (!empty($nickName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
             //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
-            if (!empty($userName)) {
-                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName)) {
-                    $isSameName = self::IsRepeatUserName($userName);
+            if (!empty($nickName)) {
+                if (preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $nickName)) {
+                    $isSameName = self::IsRepeatUserName($nickName);
                     if ($isSameName) { //检查是否重名
                         return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_NAME.'})';
                     }
@@ -213,14 +213,63 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $userInfoPublicData = new UserInfoPublicData();
             $userRolePublicData = new UserRolePublicData();
             $siteConfigData = new SiteConfigData($siteId);
-            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
+
+
+            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $nickName, $userEmail, $userMobile);
             if ($newUserId > 0) {
-                $userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
+                //$userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
+
+                //插入userinfo表
+                //$avatar = '';
+                //$avatarMedium = '';
+                //$avatarSmall = '';
+                //$userScore = 0;
+                //$userMoney = 0;
+                //$userCharm = 0;
+                //$userExp = 0;
+                //$userPoint = 0;
+                //$question = Control::PostOrGetRequest("question", "");
+                //$answer = Control::PostOrGetRequest("answer", "");
+                //$sign = Control::PostOrGetRequest("sign", "");
+                //$lastVisitIP = Control::GetIP();
+                //$lastVisitTime = strval(date('Ymd', time()));
+                //$email = Control::PostOrGetRequest("email", "");
+                //$qq = Control::PostOrGetRequest("qq", "");
+                //$comeFrom = Control::PostOrGetRequest("comefrom", "");
+                //$country = Control::PostOrGetRequest("country", "");
+                //$honor = Control::PostOrGetRequest("honor", "");
+                //$birthday = Control::PostOrGetRequest("birthday", "");
+                //$gender = Control::PostOrGetRequest("gender", "");
+                //$fansCount = 0;
+                //$postCode = Control::PostOrGetRequest("postcode", "");
+                //$address = Control::PostOrGetRequest("address", "");
+                //$tel = Control::PostOrGetRequest("tel", "");
+                //$mobile = Control::PostOrGetRequest("mobile", "");
+                //$idCard = Control::PostOrGetRequest("idcard", "");
+                //$province = Control::PostOrGetRequest("province", "");
+                //$occupational = Control::PostOrGetRequest("occupational", "");
+                //$city = Control::PostOrGetRequest("city", "");
+                //$district = Control::PostOrGetRequest("district", "");
+                //$hit = 0;
+                //$messageCount = 0;
+                //$userPostCount = 0;
+                //$userPostBestCount = 0;
+                //$userActivityCount = 0;
+                //$userAlbumCount = 0;
+                //$userBestAlbumCount = 0;
+                //$userRecAlbumCount = 0;
+                //$userAlbumCommentCount = 0;
+
+                $userInfoPublicData->Create($newUserId, "", $nickName);
+
+
+                //user role 表
+
 
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
                 $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
 
-                Control::SetUserCookie($newUserId, $userName);
+                Control::SetUserCookie($newUserId, $nickName);
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
             } else {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';
