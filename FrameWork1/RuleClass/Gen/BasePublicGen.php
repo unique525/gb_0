@@ -53,7 +53,6 @@ class BasePublicGen extends BaseGen {
             $siteId = self::GetSiteIdByDomain();
         }
 
-
         $channelTemplateTag = Control::PostOrGetRequest("temp","");
         if($siteId>0 && strlen($channelTemplateTag)>0){
             $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
