@@ -1,11 +1,13 @@
 <?php
+
 /**
  * 客户端 会员收货信息 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
  * @author zhangchi
  */
-class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen {
+class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
+{
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -33,50 +35,112 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen {
         return $result;
     }
 
-    private function GenList(){
+    private function GenCreate()
+    {
+        $result = "[{}]";
 
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+
+            $address = Control::PostOrGetRequest("Address", "");
+            $postcode = Control::PostOrGetRequest("Postcode", "");
+            $receivePersonName = Control::PostOrGetRequest("ReceivePersonName", "");
+            $homeTel = Control::PostOrGetRequest("HomeTel", "");
+            $mobile = Control::PostOrGetRequest("Mobile", "");
+            if (strlen($address) > 0) {
+                $userReceiveInfoClientData = new UserReceiveInfoClientData();
+                $result = $userReceiveInfoClientData->Create(
+                    $userId,
+                    $address,
+                    $postcode,
+                    $receivePersonName,
+                    $homeTel,
+                    $mobile
+                );
+                if ($result > 0) {
+                    $resultCode = 1; //新增成功
+                } else {
+                    $resultCode = -5; //新增失败,数据库原因
+                }
+            } else {
+                $resultCode = -6; //没有填写地址
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_receive_info_create":' . $result . '}';
+    }
+
+    private function GenModify()
+    {
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $userReceiveInfoId = intval(Control::PostOrGetRequest("UserReceiveInfoId", 0));
+            $address = Control::PostOrGetRequest("Address", "");
+            $postcode = Control::PostOrGetRequest("Postcode", "");
+            $receivePersonName = Control::PostOrGetRequest("ReceivePersonName", "");
+            $homeTel = Control::PostOrGetRequest("HomeTel", "");
+            $mobile = Control::PostOrGetRequest("Mobile", "");
+            if ($userReceiveInfoId > 0 && strlen($address) > 0) {
+                $userReceiveInfoClientData = new UserReceiveInfoClientData();
+                $result = $userReceiveInfoClientData->Modify(
+                    $userId,
+                    $userReceiveInfoId,
+                    $address,
+                    $postcode,
+                    $receivePersonName,
+                    $homeTel,
+                    $mobile
+                );
+                if ($result > 0) {
+                    $resultCode = 1; //修改成功
+                } else {
+                    $resultCode = -5; //修改失败,数据库原因
+                }
+            } else {
+                $resultCode = -6; //参数错误或没有填写地址
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_receive_info_create":' . $result . '}';
+    }
+
+
+    private function GenList()
+    {
 
         $result = "[{}]";
 
         $userId = parent::GetUserId();
 
-        if($userId<=0){
+        if ($userId <= 0) {
             $resultCode = $userId;
-        }else{
+        } else {
 
-            $pageSize = Control::GetRequest("ps", 20);
-            $pageIndex = Control::GetRequest("p", 1);
-            $pageBegin = ($pageIndex - 1) * $pageSize;
 
-            $userCarClientData = new UserCarClientData();
-            $activityProductClientData = new ActivityProductClientData();
+            $userReceiveInfoClientData = new UserReceiveInfoClientData();
 
-            $arrUserCarProductList = $userCarClientData->GetList($userId, $pageBegin, $pageSize);
+            $arrList = $userReceiveInfoClientData->GetList($userId);
 
-            if (count($arrUserCarProductList) > 0){
+            if (count($arrList) > 0) {
                 $resultCode = 1;
 
-                for($i=0;$i<count($arrUserCarProductList);$i++){
-                    $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
-                    $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
-                    if($activityProductId>0){
-                        $discount = $activityProductClientData->GetDiscount($activityProductId, true);
-                        $salePrice = $discount * $productPriceValue;
-                    }else{
-                        $salePrice = $productPriceValue;
-                    }
-                    $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                    $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
-                }
 
-                $result = Format::FixJsonEncode($arrUserCarProductList);
+                $result = Format::FixJsonEncode($arrList);
 
-            }else{
+            } else {
                 $resultCode = -1;
             }
 
         }
-        return '{"result_code":"'.$resultCode.'","user_car":{"user_car_list":' . $result . '}}';
+        return '{"result_code":"' . $resultCode . '","user_receive_info":{"user_receive_info_list":' . $result . '}}';
 
     }
 } 

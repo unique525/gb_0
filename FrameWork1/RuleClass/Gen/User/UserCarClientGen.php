@@ -41,11 +41,11 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
 
-            $siteId = Control::GetRequest("site_id", 0);
-            $productId = Control::GetRequest("product_id", 0);
-            $buyCount = Control::GetRequest("buy_count", 0);
-            $productPriceId = Control::GetRequest("product_price_id", 0);
-            $activityProductId = Control::GetRequest("activity_product_id", 0);
+            $siteId = Control::PostOrGetRequest("site_id", 0);
+            $productId = Control::PostOrGetRequest("product_id", 0);
+            $buyCount = Control::PostOrGetRequest("buy_count", 0);
+            $productPriceId = Control::PostOrGetRequest("product_price_id", 0);
+            $activityProductId = Control::PostOrGetRequest("activity_product_id", 0);
             if ($productPriceId > 0 && $productId > 0 && $siteId > 0) {
 
                 //检查库存
