@@ -37,7 +37,7 @@ class UserInfoPublicData extends BasePublicData
      * @param $userId
      * @param string $realName
      * @param string $nickName
-     * @param string $avatarUploadFileId
+     * @param int $avatarUploadFileId
      * @param int $userScore
      * @param int $userMoney
      * @param int $userCharm
@@ -64,7 +64,7 @@ class UserInfoPublicData extends BasePublicData
      * @param string $province
      * @param string $occupational
      * @param string $city
-     * @param string $district
+     * @param int $relationship
      * @param int $hit
      * @param int $messageCount
      * @param int $userPostCount
@@ -79,7 +79,7 @@ class UserInfoPublicData extends BasePublicData
      * @param int $userCommissionGrandson
      * @return int
      */
-    public function Create($userId, $realName = '', $nickName = '',$avatarUploadFileId="", $userScore = 0, $userMoney = 0, $userCharm = 0, $userExp = 0, $userPoint = 0, $question = '', $answer = '', $sign = '', $lastVisitIP = '', $lastVisitTime = '', $email = '', $qq = '', $country = '', $comeFrom = '', $honor = '', $birthday = '', $gender = 0, $fansCount = 0, $idCard = '', $postCode = '', $address = '', $tel = '', $mobile = '', $province = '', $occupational = '', $city = '', $relationship = '', $hit = 0, $messageCount = 0, $userPostCount = 0, $userPostBestCount = 0, $userActivityCount = 0, $userAlbumCount = 0, $userBestAlbumCount = 0, $userRecAlbumCount = 0, $userAlbumCommentCount = 0, $userCommissionOwn = 0, $userCommissionChild = 0, $userCommissionGrandson = 0)
+    public function Create($userId, $realName = '', $nickName = '',$avatarUploadFileId=0, $userScore = 0, $userMoney = 0, $userCharm = 0, $userExp = 0, $userPoint = 0, $question = '', $answer = '', $sign = '', $lastVisitIP = '', $lastVisitTime = '', $email = '', $qq = '', $country = '', $comeFrom = '', $honor = '', $birthday = '', $gender = 0, $fansCount = 0, $idCard = '', $postCode = '', $address = '', $tel = '', $mobile = '', $province = '', $occupational = '', $city = '', $relationship = 0, $hit = 0, $messageCount = 0, $userPostCount = 0, $userPostBestCount = 0, $userActivityCount = 0, $userAlbumCount = 0, $userBestAlbumCount = 0, $userRecAlbumCount = 0, $userAlbumCommentCount = 0, $userCommissionOwn = 0, $userCommissionChild = 0, $userCommissionGrandson = 0)
     {
         $result = -1;
         if ($userId > 0) {
