@@ -131,7 +131,6 @@ class Template
     {
         if (stripos($templateContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
-
                 $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
                 $endTagString = '</' . $tagName . '>';
                 $listTempContent = substr($templateContent, strpos($templateContent, $beginTagString));
@@ -400,10 +399,10 @@ class Template
                             $itemType
                         );
 
-
                         //处理子表数据
                         $sbChild = "";
                         if(count($arrChildList)>0){
+
                             //根级id赋值
                             $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
                             for($j = 0; $j<count($arrChildList); $j++){
@@ -411,11 +410,7 @@ class Template
 
                                 $listOfChild = $childTempContent;
                                 $columnsOfChild = $arrChildList[$j];
-
                                 if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
-
-
-
                                     $listOfChild = self::ReplaceListItem(
                                         $j,
                                         $type,
