@@ -46,15 +46,51 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
+
             return "";
         }
 
+        $pageSize = Control::GetRequest("ps", 30);
+        $pageIndex = Control::GetRequest("p", 1);
+        $pageBegin = ($pageIndex - 1) * $pageSize;
+        $allCount = 0;
+        $state = 0;
         $templateFileUrl = "forum/forum_topic_list.html";
         $templateName = "default";
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         $tempContent = str_ireplace("{ForumId}",$forumId,$tempContent);
+
+        $forumTopicPublicData = new ForumTopicPublicData();
+        $arrForumTopicList = $forumTopicPublicData->GetListPager(
+            $forumId,
+            $pageBegin,
+            $pageSize,
+            $allCount,
+            $state);
+        $tagId = "forum_topic_list_normal";
+        //print_r($arrForumTopicList);
+        if (count($arrForumTopicList) > 0) {
+            Template::ReplaceList($tempContent, $arrForumTopicList, $tagId);
+
+
+            $styleNumber = 1;
+            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+            $isJs = FALSE;
+            $navUrl = "default.php?mod=forum_topic&a=list&forum_id=$forumId&site_id=$siteId&p={0}&ps=$pageSize";
+            $jsFunctionName = "";
+            $jsParamList = "";
+            $pagerButton = Pager::ShowPageButton(
+            $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+            $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+
+        } else {
+            Template::RemoveCustomTag($tempContent, $tagId);
+            $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+        }
+
 
 
         parent::ReplaceFirstForForum($tempContent);
