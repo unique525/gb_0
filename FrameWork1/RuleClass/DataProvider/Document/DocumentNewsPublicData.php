@@ -277,7 +277,7 @@ class DocumentNewsPublicData extends BasePublicData {
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
             }
@@ -366,11 +366,12 @@ class DocumentNewsPublicData extends BasePublicData {
                         LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                         LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
                     WHERE
-                        dn.ParentId=:ChannelId
+                        dn.ChannelId IN (SELECT ChannelId FROM ".self::TableName_Channel." WHERE ParentId=:ParentId)
+
                         AND dn.State=:State
-                    $orderBySql LIMIT " . $topCount;
+                    $orderBySql LIMIT " . $topCount . ";";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("ParentId", $channelId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
