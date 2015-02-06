@@ -28,4 +28,114 @@ class UserOrderProductClientGen extends BaseClientGen implements IBaseClientGen 
         $result = str_ireplace("{function}", $function, $result);
         return $result;
     }
+
+    private function GenCreate()
+    {
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $siteId = Control::PostOrGetRequest("site_id", 0);
+            $userOrderId = intval(Control::PostOrGetRequest("UserOrderId",0));
+            $productId = intval(Control::PostOrGetRequest("ProductId",0));
+            $productIdDes = Des::Encrypt($productId, UserOrderData::USER_ORDER_DES_KEY);
+            $productPriceId = intval(Control::PostOrGetRequest("ProductPriceId",0));
+            $productPrice = floatval(Control::PostOrGetRequest("ProductPriceValue",0));
+            $productPriceDes = Des::Encrypt($productPrice, UserOrderData::USER_ORDER_DES_KEY);
+            $salePrice = floatval(Control::PostOrGetRequest("SalePrice",0));
+            $salePriceDes = Des::Encrypt($salePrice, UserOrderData::USER_ORDER_DES_KEY);
+            $saleCount = intval(Control::PostOrGetRequest("SaleCount",0));
+            $saleCountDes = Des::Encrypt($saleCount, UserOrderData::USER_ORDER_DES_KEY);
+            $subtotal = floatval(Control::PostOrGetRequest("Subtotal",0));
+            $subtotalDes = Des::Encrypt($subtotal, UserOrderData::USER_ORDER_DES_KEY);
+
+            if ($siteId > 0
+                && $userOrderId > 0
+                && $productId > 0
+                && $productPriceId > 0
+                && $productPrice > 0
+                && $salePrice > 0
+                && $saleCount > 0
+                && $subtotal > 0
+            ){
+                //判断库存
+                $productPricePublicData = new ProductPricePublicData();
+                //即时库存，不缓存
+                $productCount = $productPricePublicData->GetProductCount($productPriceId, false);
+                if($saleCount > 0 && $saleCount <= $productCount){
+                    $autoSendMessage = "";
+                    $userOrderProductClientData = new UserOrderProductClientData();
+                    $resultOfUserOrderProduct = $userOrderProductClientData->Create(
+                        $userOrderId,
+                        $siteId,
+                        $productId,
+                        $productIdDes,
+                        $productPriceId,
+                        $saleCount,
+                        $saleCountDes,
+                        $productPrice,
+                        $productPriceDes,
+                        $salePrice,
+                        $salePriceDes,
+                        $subtotal,
+                        $subtotalDes,
+                        $autoSendMessage
+                    );
+                    if($resultOfUserOrderProduct>0){
+                        $resultCode = 1;
+                        //修改库存数
+                        $newProductCount = $productCount - $saleCount;
+                        $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
+                    }else{
+                        $resultCode = -2; //数据库错误
+                    }
+                }else{
+                    $resultCode = -3; //库存数不够
+                }
+            }else{
+                $resultCode = -5;//参数不正确
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_order_product_create":' . $result . '}';
+    }
+
+    private function GenList()
+    {
+
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId;
+        } else {
+
+            $userOrderId = intval(Control::GetRequest("user_order_id",0));
+            $siteId = intval(Control::GetRequest("site_id",0));
+
+            if($userOrderId>0 && $siteId>0){
+                $userOrderProductClientData = new UserOrderProductClientData();
+
+                $arrList = $userOrderProductClientData->GetList($userOrderId,$userId,$siteId);
+
+                if (count($arrList) > 0) {
+                    $resultCode = 1;
+
+                    $result = Format::FixJsonEncode($arrList);
+
+                } else {
+                    $resultCode = -1;
+                }
+            }else{
+                $resultCode = -5;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_order_product":{"user_order_product_list":' . $result . '}}';
+
+    }
 } 

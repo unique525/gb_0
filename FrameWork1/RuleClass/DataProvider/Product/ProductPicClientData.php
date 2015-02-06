@@ -64,7 +64,7 @@ class ProductPicClientData extends BaseClientData {
 
             FROM " . self::TableName_ProductPic . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.UploadFileId=t1.UploadFileId
-            WHERE t.State=0 AND t.ProductId=:ProductId"
+            WHERE t.State<100 AND t.ProductId=:ProductId"
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();

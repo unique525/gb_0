@@ -42,7 +42,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $result = self::GenLogin();
                 break;
             case "logout":
-                $result = self::GenLogout();
+                self::GenLogout();
                 break;
             case "register":
                 $result = self::GenRegister();
@@ -185,7 +185,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
-        $crateDate=date('Y-m-d H:i:s');
+        $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
             //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
@@ -230,9 +230,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
             if ($newUserId > 0) {
-                //$userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
 
-
+                //插入会员信息表
                 $realName = Format::FormatHtmlTag(Control::PostOrGetRequest("real_name",""));
                 $nickName = Format::FormatHtmlTag(Control::PostOrGetRequest("nick_name",""));
                 $avatarUploadFileId = Format::FormatHtmlTag(Control::PostOrGetRequest("avatar_upload_fileId",0));
@@ -245,7 +244,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $answer = Format::FormatHtmlTag(Control::PostOrGetRequest("answer",""));
                 $sign = Control::PostOrGetRequest("sign","");
                 $lastVisitIP = $regIp;
-                $lastVisitTime = $crateDate;
+                $lastVisitTime = $createDate;
                 $email = Format::FormatHtmlTag(Control::PostOrGetRequest("email",""));
                 $qq = Format::FormatHtmlTag(Control::PostOrGetRequest("qq",""));
                 $country = Format::FormatHtmlTag(Control::PostOrGetRequest("country",""));
@@ -279,13 +278,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $userInfoPublicData->Create($newUserId, $realName, $nickName,$avatarUploadFileId, $userScore, $userMoney, $userCharm, $userExp, $userPoint, $question, $answer, $sign, $lastVisitIP, $lastVisitTime, $email, $qq, $country, $comeFrom, $honor, $birthday, $gender, $fansCount, $idCard, $postCode, $address, $tel, $mobile, $province, $occupational, $city, $relationship, $hit, $messageCount, $userPostCount, $userPostBestCount, $userActivityCount, $userAlbumCount, $userBestAlbumCount, $userRecAlbumCount, $userAlbumCommentCount, $userCommissionOwn, $userCommissionChild, $userCommissionGrandson);
 
 
-                //user role 表
-
-
+                //插入会员角色表
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
+                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);
 
-                Control::SetUserCookie($newUserId, $nickName);
+                Control::SetUserCookie($newUserId, $userName);
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
             } else {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';

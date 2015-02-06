@@ -455,8 +455,20 @@ class BasePublicGen extends BaseGen {
             }
 
             switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
                 case "child":
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+                case "grandson":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+                case "rec_level_child":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "",$orderBy);
+                    break;
+                case "rec_level_grandson":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
                     break;
                 default :
                     $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);

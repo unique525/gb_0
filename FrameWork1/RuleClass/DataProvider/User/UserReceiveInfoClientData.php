@@ -88,6 +88,26 @@ class UserReceiveInfoClientData extends BaseClientData {
     }
 
     /**
+     * 删除
+     * @param int $userReceiveInfoId 会员收货信息Id
+     * @param int $userId 会员Id
+     * @return int 影响行数
+     */
+    public function Delete($userReceiveInfoId, $userId)
+    {
+        $result = -1;
+        if ($userReceiveInfoId > 0 && $userId > 0) {
+            $sql = "DELETE FROM " . self::TableName_UserReceiveInfo . " WHERE UserId = :UserId AND UserReceiveInfoId = :UserReceiveInfoId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserReceiveInfoId", $userReceiveInfoId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
      * 返回列表
      * @param int $userId 会员id
      * @return array|null 返回列表数据集

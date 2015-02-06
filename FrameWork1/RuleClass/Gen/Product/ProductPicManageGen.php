@@ -83,27 +83,40 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
 
                         }
                         if($uploadFileId>0){
-                            $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                            $productPicManageData->ModifyUploadFileId($ProductPicId, $uploadFileId);
                         }
                         $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId>0){
-                            $ProductPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
-                            if($ProductPicThumb1Width<=0){
-                                $ProductPicThumb1Width  = 350; //默认350宽
+                            $productPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
+                            if($productPicThumb1Width<=0){
+                                $productPicThumb1Width  = 350; //默认350宽
                             }
-                            parent::GenUploadFileThumb1($uploadFileId,$ProductPicThumb1Width);
+                            parent::GenUploadFileThumb1($uploadFileId,$productPicThumb1Width);
 
-                            $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
-                            if($ProductPicThumb2Width<=0){
-                                $ProductPicThumb2Width  = 200; //默认200宽
+                            $productPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
+                            if($productPicThumb2Width<=0){
+                                $productPicThumb2Width  = 200; //默认200宽
                             }
-                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
+                            parent::GenUploadFileThumb2($uploadFileId,$productPicThumb2Width);
 
-                            $ProductPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
-                            if($ProductPicThumb3Width<=0){
-                                $ProductPicThumb3Width  = 100; //默认50宽
+                            $productPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
+                            if($productPicThumb3Width<=0){
+                                $productPicThumb3Width  = 100; //默认50宽
                             }
-                            parent::GenUploadFileThumb3($uploadFileId,$ProductPicThumb3Width);
+                            parent::GenUploadFileThumb3($uploadFileId,$productPicThumb3Width);
+
+                            $productPicMobileWidth = $siteConfigData->ProductPicMobileWidth;
+                            if($productPicMobileWidth<=0){
+                                $productPicMobileWidth  = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId,$productPicMobileWidth);
+
+                            $productPicPadWidth = $siteConfigData->ProductPicPadWidth;
+                            if($productPicPadWidth<=0){
+                                $productPicPadWidth  = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId,$productPicPadWidth);
+
                         }
                     }
                     //javascript 处理
@@ -197,32 +210,44 @@ class ProductPicManageGen extends BaseManageGen implements IBaseManageGen
                             //上传出错或没有选择文件上传
                         }else{
                             //删除原有题图
-                            $oldUploadFileId = $productPicManageData->GetPicUploadFileId($ProductPicId, false);
+                            $oldUploadFileId = $productPicManageData->GetUploadFileId($ProductPicId, false);
                             parent::DeleteUploadFile($oldUploadFileId);
 
                             //修改题图
-                            $productPicManageData->ModifyPicUploadFileId($ProductPicId, $uploadFileId);
+                            $productPicManageData->ModifyUploadFileId($ProductPicId, $uploadFileId);
                         }
 
                         $siteConfigData = new SiteConfigData($siteId);
                         if($uploadFileId>0){
-                            $ProductPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
-                            if($ProductPicThumb1Width<=0){
-                                $ProductPicThumb1Width  = 350; //默认350宽
+                            $productPicThumb1Width = $siteConfigData->ProductPicThumb1Width;
+                            if($productPicThumb1Width<=0){
+                                $productPicThumb1Width  = 350; //默认350宽
                             }
-                            parent::GenUploadFileThumb1($uploadFileId,$ProductPicThumb1Width);
+                            parent::GenUploadFileThumb1($uploadFileId,$productPicThumb1Width);
 
-                            $ProductPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
-                            if($ProductPicThumb2Width<=0){
-                                $ProductPicThumb2Width  = 200; //默认200宽
+                            $productPicThumb2Width = $siteConfigData->ProductPicThumb2Width;
+                            if($productPicThumb2Width<=0){
+                                $productPicThumb2Width  = 200; //默认200宽
                             }
-                            parent::GenUploadFileThumb2($uploadFileId,$ProductPicThumb2Width);
+                            parent::GenUploadFileThumb2($uploadFileId,$productPicThumb2Width);
 
-                            $ProductPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
-                            if($ProductPicThumb3Width<=0){
-                                $ProductPicThumb3Width  = 100; //默认100宽
+                            $productPicThumb3Width = $siteConfigData->ProductPicThumb3Width;
+                            if($productPicThumb3Width<=0){
+                                $productPicThumb3Width  = 100; //默认100宽
                             }
-                            parent::GenUploadFileThumb3($uploadFileId,$ProductPicThumb3Width);
+                            parent::GenUploadFileThumb3($uploadFileId,$productPicThumb3Width);
+
+                            $productPicMobileWidth = $siteConfigData->ProductPicMobileWidth;
+                            if($productPicMobileWidth<=0){
+                                $productPicMobileWidth  = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId,$productPicMobileWidth);
+
+                            $productPicPadWidth = $siteConfigData->ProductPicPadWidth;
+                            if($productPicPadWidth<=0){
+                                $productPicPadWidth  = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId,$productPicPadWidth);
                         }
                     }
                     //javascript 处理

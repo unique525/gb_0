@@ -59,6 +59,14 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $userOrderClientGen = new UserOrderClientGen();
                 $result = $userOrderClientGen->GenClient();
                 break;
+            case "user_order_product":
+                $userOrderProductClientGen = new UserOrderProductClientGen();
+                $result = $userOrderProductClientGen->GenClient();
+                break;
+            case "user_receive_info":
+                $userReceiveInfoClientGen = new UserReceiveInfoClientGen();
+                $result = $userReceiveInfoClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;
