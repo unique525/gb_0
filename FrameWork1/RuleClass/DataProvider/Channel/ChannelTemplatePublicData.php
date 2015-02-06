@@ -29,7 +29,7 @@ class ChannelTemplatePublicData extends BasePublicData {
 
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
             $cacheFile = "channel_get_channel_template_content.cache
-                            _type_".$channelTemplateType."
+                            _site_id_".$siteId."_type_".$channelTemplateType."
                             _tag_".$channelTemplateTag;
             $sql = "SELECT ChannelTemplateContent
                     FROM " . self::TableName_ChannelTemplate . "
