@@ -79,7 +79,7 @@ class DocumentNewsPublicData extends BasePublicData {
             Hit,
             PublishDate,
             (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1Path
+                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
             ';
 
             $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
@@ -114,9 +114,12 @@ class DocumentNewsPublicData extends BasePublicData {
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
             c.ChannelName
 
             ';
@@ -203,7 +206,7 @@ class DocumentNewsPublicData extends BasePublicData {
             Hit,
             PublishDate,
             (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1Path
+                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
             ';
 
             $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
@@ -236,9 +239,12 @@ class DocumentNewsPublicData extends BasePublicData {
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
             c.ChannelName
 
 
@@ -292,9 +298,12 @@ class DocumentNewsPublicData extends BasePublicData {
             }
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
             c.ChannelName
 
             ';
@@ -344,9 +353,12 @@ class DocumentNewsPublicData extends BasePublicData {
             }
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
             c.ChannelName
 
 
@@ -473,7 +485,7 @@ class DocumentNewsPublicData extends BasePublicData {
             Hit,
             PublishDate,
             (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1Path
+                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
             ';
 
         $sql = "
