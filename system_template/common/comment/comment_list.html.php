@@ -73,7 +73,7 @@
             <td style="width:80px;text-align: center">状态</td>
             <td  style="width:80px;text-align: center">启用  停用</td>
             <td style="text-align: left;padding-left: 4px">内容</td>
-            <td style="width:100px;text-align: center">用户名</td>
+            <td style="width:220px;text-align: center">会员帐号/手机帐号/邮箱帐号</td>
         </tr>
     </table>
     <ul id="type_list">
@@ -95,8 +95,8 @@
                             <td class="spe_line2" style="text-align: left;padding-left: 4px">
                                 <a href="{f_SourceUrl}" target="_blank">{f_Content}</a>
                             </td>
-                            <td class="spe_line2" style="width:100px;text-align: center">
-                                <div title="{f_UserId}">{f_UserName}</div>
+                            <td class="spe_line2" style="width:220px;text-align: center">
+                                <div title="{f_UserId}">{f_UserName}<br />{f_UserMobile}<br />{f_UserEmail}</div>
                             </td>
                         </tr>
                     </table>
