@@ -49,6 +49,7 @@ class BasePublicGen extends BaseGen {
      */
     protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
     {
+
         $result = "";
         if ($siteId <= 0){
             $siteId = self::GetSiteIdByDomain();
@@ -62,10 +63,12 @@ class BasePublicGen extends BaseGen {
 
 
         if($siteId>0 && strlen($channelTemplateTag)>0){
+
             $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
             $channelTemplatePublicData = new ChannelTemplatePublicData();
+
             $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                $siteId, $channelTemplateType, $channelTemplateTag, true);
+                $siteId, $channelTemplateType, $channelTemplateTag, false);
         }
         return $result;
     }
