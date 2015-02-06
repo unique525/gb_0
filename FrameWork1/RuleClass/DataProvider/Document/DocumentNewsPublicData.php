@@ -29,64 +29,103 @@ class DocumentNewsPublicData extends BasePublicData {
 
         if($channelId>0 && !empty($topCount)){
 
-            $orderBySql = 'Sort DESC, CreateDate DESC';
+            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
 
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'Sort DESC, CreateDate DESC';
+                    $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
                     break;
 
             }
 
 
             $selectColumn = '
-            DocumentNewsId,
-            SiteId,
-            ChannelId,
-            DocumentNewsTitle,
-            DocumentNewsSubTitle,
-            DocumentNewsCiteTitle,
-            DocumentNewsShortTitle,
-            DocumentNewsIntro,
-            CreateDate,
-            ManageUserId,
-            ManageUserName,
-            UserId,
-            UserName,
-            Author,
-            State,
-            DocumentNewsType,
-            DirectUrl,
-            ShowDate,
-            SourceName,
-            DocumentNewsMainTag,
-            DocumentNewsTag,
-            Sort,
-            TitlePic1UploadFileId,
-            TitlePic2UploadFileId,
-            TitlePic3UploadFileId,
-            DocumentNewsTitleColor,
-            DocumentNewsTitleBold,
-            OpenComment,
-            ShowHour,
-            ShowMinute,
-            ShowSecond,
-            IsHot,
-            RecLevel,
-            ShowPicMethod,
-            ClosePosition,
-            Hit,
-            PublishDate,
-            (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
+            c.ChannelName
             ';
 
-            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . " dn
+                    LEFT OUTER JOIN " .self::TableName_Channel." c on dn.ChannelId = c.ChannelId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
                 WHERE
-                    ChannelId=:ChannelId
-                    AND State=:State
-                ORDER BY $orderBySql LIMIT " . $topCount;
+                    dn.ChannelId=:ChannelId
+                    AND dn.State=:State
+                $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("State", $state);
@@ -105,21 +144,98 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $channelId 频道id
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $state 状态
+     * @param int $orderBy 排序
      * @return array|null 返回最新的列表数据集
      */
-    public function GetNewList($channelId, $topCount, $state) {
+    public function GetNewList($channelId, $topCount, $state, $orderBy = 0) {
 
         $result = null;
 
         if(!empty($topCount)){
+            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+
+            switch($orderBy){
+
+                case 0:
+                    $orderBySql = 'dn.Sort DESC,dn.CreateDate DESC';
+                    break;
+
+            }
+
             $selectColumn = '
-            dn.*,
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
             uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
             uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
             c.ChannelName
 
             ';
@@ -131,7 +247,7 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
                 WHERE dn.ChannelId=:ChannelId AND dn.State=:State
-                ORDER BY dn.Sort DESC, dn.CreateDate DESC LIMIT " . $topCount;
+                $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("State", $state);
@@ -156,64 +272,103 @@ class DocumentNewsPublicData extends BasePublicData {
 
         if($channelId>0 && !empty($topCount)){
 
-            $orderBySql = 'Sort DESC, CreateDate DESC';
+            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
 
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'CreateDate DESC, Sort DESC';
+                    $orderBySql = 'dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
             }
 
 
             $selectColumn = '
-            DocumentNewsId,
-            SiteId,
-            ChannelId,
-            DocumentNewsTitle,
-            DocumentNewsSubTitle,
-            DocumentNewsCiteTitle,
-            DocumentNewsShortTitle,
-            DocumentNewsIntro,
-            CreateDate,
-            ManageUserId,
-            ManageUserName,
-            UserId,
-            UserName,
-            Author,
-            State,
-            DocumentNewsType,
-            DirectUrl,
-            ShowDate,
-            SourceName,
-            DocumentNewsMainTag,
-            DocumentNewsTag,
-            Sort,
-            TitlePic1UploadFileId,
-            TitlePic2UploadFileId,
-            TitlePic3UploadFileId,
-            DocumentNewsTitleColor,
-            DocumentNewsTitleBold,
-            OpenComment,
-            ShowHour,
-            ShowMinute,
-            ShowSecond,
-            IsHot,
-            RecLevel,
-            ShowPicMethod,
-            ClosePosition,
-            Hit,
-            PublishDate,
-            (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
+            c.ChannelName
             ';
 
-            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "
-                WHERE
-                    ParentId=:ChannelId
-                    AND State=:State
-                ORDER BY $orderBySql LIMIT " . $topCount;
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . " dn
+                        LEFT OUTER JOIN ".self::TableName_Channel." c on dn.ChannelId = c.ChannelId
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                        LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+                    WHERE
+                        dn.ParentId=:ChannelId
+                        AND dn.State=:State
+                    $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("State", $state);
@@ -237,14 +392,92 @@ class DocumentNewsPublicData extends BasePublicData {
         $result = null;
 
         if(!empty($topCount)){
+
+            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+
+            switch($orderBy){
+
+                case 0:
+                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    break;
+
+            }
+
+
             $selectColumn = '
-            dn.*,
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
             uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
             uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
             c.ChannelName
 
 
@@ -264,10 +497,7 @@ class DocumentNewsPublicData extends BasePublicData {
                     )
                     AND dn.State=:State
 
-
-
-                ORDER BY dn.CreateDate DESC
-                LIMIT " . $topCount;
+                    $orderBySql LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
@@ -292,18 +522,95 @@ class DocumentNewsPublicData extends BasePublicData {
         $result = null;
 
         if(!empty($topCount)){
-            $recLevelSelection=" AND RecLevel Between 1 AND 10 ";
+
+            $orderBySql = 'ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC';
+
+            switch($orderBy){
+
+                case 0:
+                    $orderBySql = 'ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC';
+                    break;
+
+            }
+
+            $recLevelSelection=" AND dn.RecLevel Between 1 AND 10 ";
             if($recLevel!=""){
-                $recLevelSelection=" AND RecLevel Between ".$recLevel." ";
+                $recLevelSelection=" AND dn.RecLevel Between ".$recLevel." ";
             }
             $selectColumn = '
-            dn.*,
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
             uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
             uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
             c.ChannelName
 
             ';
@@ -320,9 +627,7 @@ class DocumentNewsPublicData extends BasePublicData {
                     AND dn.State=:State
                 " . $recLevelSelection . "
 
-
-                ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC
-                LIMIT " . $topCount;
+                $orderBySql LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
@@ -352,13 +657,79 @@ class DocumentNewsPublicData extends BasePublicData {
                 $recLevelSelection=" AND RecLevel Between ".$recLevel." ";
             }
             $selectColumn = '
-            dn.*,
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
             uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
             uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
             c.ChannelName
 
 
@@ -417,12 +788,12 @@ class DocumentNewsPublicData extends BasePublicData {
         $searchSql = "";
         $dataProperty = new DataProperty();
         if ($parentId > 0) {
-            $searchSql .= " AND ChannelId IN (SELECT ChannelId
+            $searchSql .= " AND dn.ChannelId IN (SELECT ChannelId
                                                 FROM ".self::TableName_Channel." WHERE ParentId=:ParentId) ";
             $dataProperty->AddField("ParentId", $parentId);
         } else {
             if ($channelId > 0) {
-                $searchSql .= " AND ChannelId=:ChannelId ";
+                $searchSql .= " AND dn.ChannelId=:ChannelId ";
                 $dataProperty->AddField("ChannelId", $channelId);
             }
         }
@@ -447,54 +818,94 @@ class DocumentNewsPublicData extends BasePublicData {
         }
 
         $selectColumn = '
-            DocumentNewsId,
-            SiteId,
-            ChannelId,
-            DocumentNewsTitle,
-            DocumentNewsSubTitle,
-            DocumentNewsCiteTitle,
-            DocumentNewsShortTitle,
-            DocumentNewsIntro,
-            CreateDate,
-            ManageUserId,
-            ManageUserName,
-            UserId,
-            UserName,
-            Author,
-            State,
-            DocumentNewsType,
-            DirectUrl,
-            ShowDate,
-            SourceName,
-            DocumentNewsMainTag,
-            DocumentNewsTag,
-            Sort,
-            TitlePic1UploadFileId,
-            TitlePic2UploadFileId,
-            TitlePic3UploadFileId,
-            DocumentNewsTitleColor,
-            DocumentNewsTitleBold,
-            OpenComment,
-            ShowHour,
-            ShowMinute,
-            ShowSecond,
-            IsHot,
-            RecLevel,
-            ShowPicMethod,
-            ClosePosition,
-            Hit,
-            PublishDate,
-            (SELECT UploadFilePath FROM '. self::TableName_UploadFile .' WHERE UploadFileId=
-                ' . self::TableName_DocumentNews . '.TitlePic1UploadFileId) AS TitlePic1UploadFilePath
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
+            c.ChannelName
             ';
 
         $sql = "
             SELECT
             $selectColumn
             FROM
-            " . self::TableName_DocumentNews . "
-            WHERE State=:State " . $searchSql . "
-            ORDER BY Sort DESC, PublishDate DESC
+            " . self::TableName_DocumentNews . " dn
+                    LEFT OUTER JOIN ".self::TableName_Channel." c on dn.ChannelId = c.ChannelId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+
+            WHERE dn.State=:State " . $searchSql . "
+            ORDER BY dn.Sort DESC, dn.PublishDate DESC
             LIMIT " . $pageBegin . "," . $pageSize . "";
 
 
