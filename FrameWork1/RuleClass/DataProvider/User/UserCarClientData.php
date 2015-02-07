@@ -135,6 +135,29 @@ class UserCarClientData extends BaseClientData {
     }
 
     /**
+     * 得到一行信息信息
+     * @param int $userId 会员id
+     * @param int $userCarId 会员购物车id
+     * @param bool $withCache 是否缓存
+     * @return array 单表数组
+     */
+    public function GetOne($userId, $userCarId, $withCache = false)
+    {
+        $result = null;
+        if ($userId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_UserCar . "
+                    WHERE UserId=:UserId
+                    AND UserCarId = :UserCarId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserCarId", $userCarId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 修改购物车中某个商品的购买数量
      * @param int $userCarId 会员购物车Id
      * @param int $buyCount 购买数量
