@@ -561,9 +561,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 if ($newState == UserOrderData::STATE_CLOSE){
 
                     /**
-                     *  关闭交易时，要恢复库存
-                     * @TODO xxx
-                     *
+                     * @TODO 关闭交易时，要恢复库存
                      */
 
 
