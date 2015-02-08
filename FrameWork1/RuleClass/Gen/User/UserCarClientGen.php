@@ -111,8 +111,11 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                     } else {
                         $salePrice = $productPriceValue;
                     }
-                    $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                    $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"] * $salePrice;
+                    //折后单价
+                    $arrUserCarProductList[$i]["SalePrice"] = strval($salePrice);
+                    $buyCount = intval($arrUserCarProductList[$i]["BuyCount"]);
+                    //小计价格
+                    $arrUserCarProductList[$i]["BuyPrice"] = strval($buyCount*$salePrice);
                 }
 
                 $result = Format::FixJsonEncode($arrUserCarProductList);
