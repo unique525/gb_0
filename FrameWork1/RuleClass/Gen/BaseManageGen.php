@@ -403,6 +403,20 @@ class BaseManageGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_DOCUMENT_NEWS_PIC_LIST :
+                        $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
+                        if ($documentNewsId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsPicList(
+                                $channelTemplateContent,
+                                $documentNewsId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder
+                            );
+                        }
+                        break;
                     case Template::TAG_TYPE_PRODUCT_LIST :
                         $channelTemplateContent = self::ReplaceTemplateOfProductList($channelTemplateContent, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         break;
@@ -605,6 +619,66 @@ class BaseManageGen extends BaseGen
 
         return $channelTemplateContent;
     }
+
+    /**
+     * 替换资讯内容图片控件内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $documentNewsId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param string $sliderType 组图控件样式
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfDocumentNewsPicList(
+        $channelTemplateContent,
+        $documentNewsId,
+        $tagId,
+        $tagContent="",
+        $tagTopCount=-1,
+        $tagWhere="",
+        $tagOrder="",
+        $sliderType="0"
+    )
+    {
+        if ($documentNewsId > 0) {
+            $arrDocumentNewsPicList = null;
+            $documentNewsPicManageData = new DocumentNewsPicManageData();
+            $showInPicSlider = 1;
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+
+            switch ($tagWhere) {
+                default :
+                    //new
+                    $arrDocumentNewsPicList = $documentNewsPicManageData->GetList($documentNewsId, $tagTopCount, $showInPicSlider);  //top count=-1时取所有
+                    break;
+            }
+            if (!empty($arrDocumentNewsPicList)) {
+                $sliderTypeName="document_news_pic_slider_type_".$sliderType; //轮换图样式模板：默认document_news_pic_slider_type_0
+                $sliderTemplate="document/".$sliderTypeName.".html";
+                $tagContent=Template::Load($sliderTemplate,"default","front_template");
+                Template::ReplaceList($tagContent, $arrDocumentNewsPicList, $sliderTypeName);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }
+            else Template::RemoveCustomTag($channelTemplateContent, $tagId);
+        }
+
+        return $channelTemplateContent;
+    }
+
 
     /**
      * 替换产品列表的内容
@@ -950,9 +1024,10 @@ class BaseManageGen extends BaseGen
 
                                 //2.替换列表类的模板内容
                                 $timeStart = Control::GetMicroTime();
+
+                                $channelTemplateContent = str_ireplace("{DocumentNewsId}",$documentNewsId, $channelTemplateContent);
                                 $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
                                 $timeEnd = Control::GetMicroTime();
-
 
                                 //传输日志 替换模板
                                 $publishLogManageData->Create(
@@ -1812,7 +1887,7 @@ class BaseManageGen extends BaseGen
 
 
     /**
-     * 发布活动详细页面
+     * 发布分类信息详细页面
      * @param int $informationId
      * @param PublishQueueManageData $publishQueueManageData
      * @param bool $executeTransfer 是否执行发布

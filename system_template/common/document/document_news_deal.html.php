@@ -8,6 +8,7 @@
 <script type="text/javascript" src="/system_js/color_picker.js"></script>
 <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
 <script type="text/javascript" src="/system_js/upload_file.js"></script>
+<script type="text/javascript" src="/system_js/manage/document_news/document_news_pic.js"></script>
 
 <link rel="stylesheet" href="/system_js/plupload-2.1.2/js/jquery.ui.plupload/css/jquery.ui.plupload.css" type="text/css" />
 <link rel="stylesheet" href="/system_js/plupload-2.1.2/js/jquery.plupload.queue/css/jquery.plupload.queue.css" type="text/css" />
@@ -24,9 +25,12 @@ var batchAttachWatermark = "0";
 var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
 var tableId = parseInt('{ChannelId}');
 
-//上传回调函数
-window.AjaxFileUploadCallBack = function(data){
+var templateName="{template_name}";
 
+//上传回调函数
+window.AjaxFileUploadCallBack = function(fileElementId,data){
+    //是图片则加入图片管理栏
+    SetNewUploadPic(data.upload_file_path,data.upload_file_id,0,templateName)//单张上传的图片默认不加入组图控件
 }
 
 $(function () {
@@ -213,10 +217,15 @@ $(function () {
                     fUploadFile.val(uploadFiles);
                 }
 
-
-                if(editor != undefined && editor != null){
-                    editor.appendHTML(""+UploadFileFormatHtml(filePath));
+                var showInSliderPic=$("#f_ShowPicMethod").val();
+                if(showInSliderPic==0){
+                    if(editor != undefined && editor != null){
+                        editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
+                    }
                 }
+
+                //加入图片管理栏
+                SetNewUploadPic(filePath,dataSet.upload_file_id,showInSliderPic,templateName);
 
                 if(inputTextId != undefined && inputTextId != null){
                     $( "#"+inputTextId ).val(filePath);
@@ -230,6 +239,7 @@ $(function () {
 
 
     });
+
     /****   plupload end   * **/
 
 
@@ -311,6 +321,8 @@ function setSourceName(sourceName) {
 }
 
 function submitForm(closeTab) {
+    SetDocumentNewsPic();
+
     if ($('#f_DocumentNewsTitle').val() == '') {
         $("#dialog_box").dialog({width: 300, height: 100});
         $("#dialog_content").html("请输入文档标题");
@@ -328,21 +340,41 @@ function submitForm(closeTab) {
         $('#mainForm').submit();
     }
 }
+
+
 -->
 </script>
 <style>
     .plupload_scroll {
         background-color: #E6E8EC;
     }
+    .plupload_filelist_footer{
+        position:relative;
+    }
+    .plupload_container{
+        min-height: 380px;
+    }
 
+    .li_pic_img_item{
+        width:256px;
+        float: left;
+        margin: 10px;
+        box-shadow: 0px 0px 5px #666;
+        padding-right: 4px;
+        background: none repeat scroll 0% 0% #EFEFEF;
+    }
+    .pic_img_container {width:260px;height:190px;background-color: rgb(253, 253, 253)}
+    .pic_img_container img{width:256px;max-height:186px}
+    .pic_img_state{padding:3px 5px}
+    .pic_img_state div{float:left;margin:0 10px 10px}
+    .pic_img_state img{vertical-align:middle;margin:0 5px}
 </style>
 </head>
 <body>
 
 {common_body_deal}
 <div id="dialog_abstract_box" title="选择来源" style="">
-    <div style="text-align:right;"><img id="btn_close_abstract_box" alt="关闭" title="关闭"
-                                        src="/system_template/{template_name}/images/manage/close3.gif"/></div>
+    <div style="text-align:right;"><img id="btn_close_abstract_box" alt="关闭" title="关闭" src="/system_template/{template_name}/images/manage/close3.gif"/></div>
     <div id="dialog_abstract_content">
 
     </div>
@@ -367,6 +399,7 @@ function submitForm(closeTab) {
     <li><a href="#tabs-2">文档参数</a></li>
     <li><a href="#tabs-3">批量上传</a></li>
     <li><a href="#tabs-4">其他属性</a></li>
+    <li><a href="#tabs-5">图片管理</a></li>
 </ul>
 <div id="tabs-1">
     <div class="spe_line" style="line-height: 40px;text-align: left;">
@@ -767,6 +800,47 @@ function submitForm(closeTab) {
         </tr>
         <!-- 加点击 end -->
     </table>
+</div>
+
+<div id="tabs-5">
+    <div class="div_list" id="">
+        <div>以往上传：</div>
+        <ul id="old_pic_list">
+            <icms id="document_news_pic" type="list">
+                <item>
+                    <![CDATA[
+                    <li class="li_pic_img_item" id="UploadFileId_{f_UploadFileId}" style="width:256px;height:220px">
+
+                        <table class="pic_img_container"><tr><td><img class="pic_slider_img" onclick="showOriImg('{f_UploadFilePath}')" idvalue="{f_UploadFileId}" src="{f_UploadFilePath}" style="cursor:pointer;" title="点击查看原始图片"/></td></tr></table>
+
+                        <div class="pic_img_state" style="padding:3px 5px;">
+                            <div class="keep_pic" idvalue="{f_DocumentNewsPicId}" title="{f_ShowInPicSlider}" id="FormValues_{f_UploadFileId}"></div>
+                            <script type="text/javascript">ModifyShowInPicSlider({f_UploadFileId}, {f_ShowInPicSlider}, "keep_pic")</script>
+                            <img class="btn_modify" src="/system_template/{template_name}/images/manage/start.jpg"
+                                  alt="在控件中显示" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '1', 'modify_pic')"/>
+                            <img class="btn_modify" src="/system_template/{template_name}/images/manage/stop.jpg"
+                                  alt="在控件中隐藏" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '0', 'modify_pic')"/>
+                            <img class="btn_modify" src="/system_template/{template_name}/images/manage/delete.jpg"
+                                  alt="删除" onclick="DeleteDocumentNewsPic('{f_UploadFileId}')"/>
+                        </div>
+
+                    </li>
+
+                    ]]>
+                </item>
+            </icms>
+            <li style="clear:left;"></li>
+        </ul>
+    </div>
+
+    <div class="div_list" id="">
+        <div style="border-top: 1px dashed #D5D5D5">新上传：</div>
+        <ul id="new_pic_list">
+        </ul>
+    </div>
+    <input id="delete_pic_list" name="delete_pic_list" value="" type="hidden"/>
+    <input id="modify_pic_list" name="modify_pic_list" value="" type="hidden"/>
+    <input id="create_pic_list" name="create_pic_list" value="" type="hidden"/>
 </div>
 </div>
 </td>

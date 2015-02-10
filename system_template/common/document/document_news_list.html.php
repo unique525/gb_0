@@ -32,11 +32,22 @@
 
 
             });
+            var pageIndex = parseInt(Request["p"]);
             //评论管理
             var btn_batch_manage_comment = $("#btn_batch_manage_comment");
             btn_batch_manage_comment.click(function () {
                 window.location.href="/default.php?secu=manage&mod=comment&m=list_for_channel&channel_id={ChannelId}&table_type=7";
             });
+
+            //内容图片管理
+            var btn_batch_manage_pic = $(".btn_manage_pic");
+            btn_batch_manage_pic.css("cursor","pointer");
+            btn_batch_manage_pic.click(function () {
+                var documentNewsId=$(this).attr("idvalue");
+                window.location.href = '/default.php?secu=manage&mod=document_news_pic&m=list&document_news_id='
+                    + documentNewsId + '&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex + '&channel_id={ChannelId}';
+            });
+
 
             /**
              * 移动
