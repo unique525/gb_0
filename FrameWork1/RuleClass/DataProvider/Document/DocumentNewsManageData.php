@@ -916,10 +916,6 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
-    public function GetWaitPublishListOfSiteId($siteId){
-
-    }
-
 
     /**
      * 子节点按推荐级别的列表数据集
@@ -1520,6 +1516,11 @@ class DocumentNewsManageData extends BaseManageData
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
+
+    }
+
+
+    public function GetWaitPublishListOfSiteId($siteId){
 
     }
 
