@@ -103,7 +103,7 @@
                             <tr>
                                 <td colspan="2">
                                     <div style="float:left;margin:2px 6px">状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
-                                    <div style="float:left;margin:2px 0"">
+                                    <div style="float:left;margin:2px 0">
                                         <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
                                         <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
                                     </div>
