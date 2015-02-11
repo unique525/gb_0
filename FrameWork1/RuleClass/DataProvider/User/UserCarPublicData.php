@@ -177,6 +177,46 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 根据产品和产品价格id删除
+     * @param int $userId
+     * @param int $siteId
+     * @param int $productId
+     * @param int $productPriceId
+     * @param int $activityProductId
+     * @return int 影响行数
+     */
+    public function DeleteByProductAndProductPrice(
+        $userId,
+        $siteId,
+        $productId,
+        $productPriceId,
+        $activityProductId
+    ){
+        $result = 0;
+        if ($userId > 0 && $productId > 0 && $siteId > 0 && $productPriceId > 0) {
+            $dataProperty = new DataProperty();
+
+            $sql = "DELETE FROM " . self::TableName_UserCar ."
+                    WHERE UserId = :UserId
+                        AND SiteId = :SiteId
+                        AND ProductId = :ProductId
+                        AND ProductPriceId = :ProductPriceId
+                        AND ActivityProductId = :ActivityProductId;
+                    ";
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ProductId", $productId);
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $dataProperty->AddField("ActivityProductId", $activityProductId);
+
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+
     public function BatchDelete($strUserCarIds, $userId)
     {
         $result = -1;

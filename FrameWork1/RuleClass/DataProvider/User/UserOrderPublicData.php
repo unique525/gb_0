@@ -435,4 +435,36 @@ class UserOrderPublicData extends BasePublicData
         }
         return $result;
     }
+
+    /**
+     * 重计订单总价
+     * @param $userOrderId
+     * @return int
+     */
+    public function ReCountAllPrice($userOrderId)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "SELECT sum(SubTotal) FROM " . self::TableName_UserOrderProduct . " WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $allPrice = $this->dbOperator->GetFloat($sql, $dataProperty);
+
+            $dataProperty2 = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . "
+                        SET
+                        `AllPrice`=:AllPrice,AllPriceDes=:AllPriceDes
+
+                    WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty2->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty2->AddField("AllPrice", $allPrice);
+            $dataProperty2->AddField("AllPriceDes", Des::Encrypt($allPrice, UserOrderData::USER_ORDER_DES_KEY));
+            $result = $this->dbOperator->Execute($sql, $dataProperty2);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheFile = 'user_order_get_all_price.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
 }

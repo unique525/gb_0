@@ -319,6 +319,9 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $arrProduct = Format::FixJsonDecode($userOrderProductArray);
 
                 $userOrderProductPublicData = new UserOrderProductPublicData();
+                $userCarPublicData = new UserCarPublicData();
+
+
 
                 for($i = 0;$i<count($arrProduct);$i++){
 
@@ -333,7 +336,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $saleCountDes = Des::Encrypt($saleCount, UserOrderData::USER_ORDER_DES_KEY);
                     $subtotal = floatval($arrProduct[$i]["Subtotal"]);
                     $subtotalDes = Des::Encrypt($subtotal, UserOrderData::USER_ORDER_DES_KEY);
-
+                    $activityProductId = intval($arrProduct[$i]["ActivityProductId"]);
                     //判断库存
                     $productPricePublicData = new ProductPricePublicData();
                     //即时库存，不缓存
@@ -360,6 +363,23 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                             //修改库存数
                             $newProductCount = $productCount - $saleCount;
                             $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
+
+                            //删除对应购物车中的产品
+
+                            $userCarPublicData->DeleteByProductAndProductPrice(
+                                $userId,
+                                $siteId,
+                                $productId,
+                                $productPriceId,
+                                $activityProductId
+                            );
+
+
+                            //重计订单总价
+
+                            $userOrderPublicData->ReCountAllPrice($userOrderId);
+
+
                         }
                     }
 
@@ -369,10 +389,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //Control::GoUrl("/default.php?mod=user_order&a=pay&no=$userOrderNumber");
 
-                //删除购物车
-                $userCarPublicData = new UserCarPublicData();
-                $arrUserCarId = str_ireplace("_",",",$arrUserCarId);
-                $userCarPublicData->BatchDelete($arrUserCarId, $userId);
+                //删除购物车，
+                //2015.2.11 取消 by zc 已经在单项订单产品中处理
+                //$userCarPublicData = new UserCarPublicData();
+                //$arrUserCarId = str_ireplace("_",",",$arrUserCarId);
+                //$userCarPublicData->BatchDelete($arrUserCarId, $userId);
 
 
                 //支付选择页面

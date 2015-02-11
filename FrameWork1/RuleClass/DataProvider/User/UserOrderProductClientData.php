@@ -166,4 +166,22 @@ class UserOrderProductClientData extends BaseClientData {
         }
         return $result;
     }
+
+    /**
+     * 获取一个会员订单产品的详细信息
+     * @param int $userOrderProductId 订单产品Id
+     * @return array|null 会员订单产品的数组
+     */
+    public function GetOne($userOrderProductId){
+        $result = null;
+        if($userOrderProductId > 0){
+            $sql = "SELECT *
+                    FROM " .self::TableName_UserOrderProduct."
+                    WHERE UserOrderProductId = :UserOrderProductId; ";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderProductId",$userOrderProductId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
 } 

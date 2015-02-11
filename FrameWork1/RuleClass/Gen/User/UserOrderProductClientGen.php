@@ -52,6 +52,11 @@ class UserOrderProductClientGen extends BaseClientGen implements IBaseClientGen 
             $subtotal = floatval(Control::PostOrGetRequest("Subtotal",0));
             $subtotalDes = Des::Encrypt($subtotal, UserOrderData::USER_ORDER_DES_KEY);
 
+            //购物车中的活动产品id，非必须
+
+            $activityProductId = intval(Control::PostOrGetRequest("ActivityProductId",0));
+
+
             if ($siteId > 0
                 && $userOrderId > 0
                 && $productId > 0
@@ -62,13 +67,13 @@ class UserOrderProductClientGen extends BaseClientGen implements IBaseClientGen 
                 && $subtotal > 0
             ){
                 //判断库存
-                $productPricePublicData = new ProductPricePublicData();
+                $productPriceClientData = new ProductPriceClientData();
                 //即时库存，不缓存
-                $productCount = $productPricePublicData->GetProductCount($productPriceId, false);
+                $productCount = $productPriceClientData->GetProductCount($productPriceId, false);
                 if($saleCount > 0 && $saleCount <= $productCount){
                     $autoSendMessage = "";
                     $userOrderProductClientData = new UserOrderProductClientData();
-                    $resultOfUserOrderProduct = $userOrderProductClientData->Create(
+                    $newUserOrderProductId = $userOrderProductClientData->Create(
                         $userOrderId,
                         $siteId,
                         $productId,
@@ -84,11 +89,29 @@ class UserOrderProductClientGen extends BaseClientGen implements IBaseClientGen 
                         $subtotalDes,
                         $autoSendMessage
                     );
-                    if($resultOfUserOrderProduct>0){
+                    if($newUserOrderProductId>0){
                         $resultCode = 1;
                         //修改库存数
                         $newProductCount = $productCount - $saleCount;
-                        $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
+                        $productPriceClientData->ModifyProductCount($productPriceId, $newProductCount);
+
+                        //删除对应购物车中的产品
+                        $userCarClientData = new UserCarClientData();
+                        $userCarClientData->DeleteByProductAndProductPrice(
+                            $userId,
+                            $siteId,
+                            $productId,
+                            $productPriceId,
+                            $activityProductId
+                        );
+
+
+                        //重计订单总价
+                        $userOrderClientData = new UserOrderClientData();
+                        $userOrderClientData->ReCountAllPrice($userOrderId);
+
+                        $result = Format::FixJsonEncode($userOrderProductClientData->GetOne($newUserOrderProductId));
+
                     }else{
                         $resultCode = -2; //数据库错误
                     }
