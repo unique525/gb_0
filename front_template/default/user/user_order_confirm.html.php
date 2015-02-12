@@ -228,7 +228,6 @@
                             <td>数量</td>
                             <td>原价</td>
                             <td>折后价</td>
-                            <td>运费</td>
                             <td>金额小计</td>
                         </tr>
                         <icms id="product_with_product_price">
