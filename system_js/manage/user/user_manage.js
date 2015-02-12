@@ -16,95 +16,7 @@ function FormatOrderState(state){
 
 $(document).ready(function() {
     //load user manage
-    $.ajax({
-        url: "/default.php",
-        data: {
-            secu: "manage",
-            mod: "manage_menu_of_user",
-            m: "async_list",
-            siteid: window.G_NowSiteId
-        },
-        dataType: "jsonp",
-        jsonp: "jsonpcallback",
-        success: function (data) {
-            if (data !== undefined) {
-                var aw = $(window).height() - 108 - 35;
-                var size = aw / 28;
-                window.G_PageSize = parseInt(size) - 1;
-
-                var aa = "";
-                $.each(data, function (i, v) {
-                    aa = aa + '<div class="line" id="btn' + v["ManageMenuOfUserTagName"] + '">' + v["ManageMenuOfUserName"] + '</div>';
-                });
-                $("#div_user_manage").html(aa);
-
-                //会员管理
-                $("#btnUserExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员组管理
-                $("#btnUserGroupExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员组管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_group&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员等级管理
-                $("#btnUserLevelExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员等级管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_level&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员相册管理
-                $("#btnUserAlbumExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员相册管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员相册分类管理
-                $("#btnUserAlbumTypeExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员相册分类管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album_type&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员订单管理
-                $("#btnUserOrderExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员订单管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_order&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员站点角色管理
-                $("#btnUserRoleExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员角色管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_role&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员收藏管理
-                $("#btnUserFavoriteExplore").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员收藏管理';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=user_favorite&m=list&site_id=' + window.G_NowSiteId;
-                    addTab();
-                });
-                //会员站点配置
-                $("#btnUserSiteConfig").click(function (event) {
-                    event.preventDefault();
-                    window.G_TabTitle = '会员参数设置';
-                    window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=2&site_id=' + window.G_NowSiteId + "&tab_index=" + parent.G_TabIndex + "";
-                    addTab();
-                });
-            }
-        }
-    });
-
+    GetManageMenuOfUser();
 
 
     //按用户名进行查找
@@ -205,3 +117,97 @@ function submitForm(continueCreate) {
     }
 }
 
+/***
+ * 获取站点下会员管理项目
+ * @constructor
+ */
+function GetManageMenuOfUser(){
+    $.ajax({
+        url: "/default.php",
+        data: {
+            secu: "manage",
+            mod: "manage_menu_of_user",
+            m: "async_list",
+            site_id: window.G_NowSiteId
+        },
+        dataType: "jsonp",
+        jsonp: "jsonpcallback",
+        success: function (data) {
+            if (data !== undefined) {
+                var aw = $(window).height() - 108 - 35;
+                var size = aw / 28;
+                window.G_PageSize = parseInt(size) - 1;
+
+                var aa = "";
+                $.each(data, function (i, v) {
+                    aa = aa + '<div class="line" id="btn' + v["ManageMenuOfUserTagName"] + '">' + v["ManageMenuOfUserName"] + '</div>';
+                });
+                $("#div_user_manage").html(aa);
+
+                //会员管理
+                $("#btnUserExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员组管理
+                $("#btnUserGroupExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员组管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_group&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员等级管理
+                $("#btnUserLevelExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员等级管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_level&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员相册管理
+                $("#btnUserAlbumExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员相册管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员相册分类管理
+                $("#btnUserAlbumTypeExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员相册分类管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_album_type&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员订单管理
+                $("#btnUserOrderExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员订单管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_order&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员站点角色管理
+                $("#btnUserRoleExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员角色管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_role&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员收藏管理
+                $("#btnUserFavoriteExplore").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员收藏管理';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=user_favorite&m=list&site_id=' + window.G_NowSiteId;
+                    addTab();
+                });
+                //会员站点配置
+                $("#btnUserSiteConfig").click(function (event) {
+                    event.preventDefault();
+                    window.G_TabTitle = '会员参数设置';
+                    window.G_TabUrl = '/default.php?secu=manage&mod=site_config&m=set&type=2&site_id=' + window.G_NowSiteId + "&tab_index=" + parent.G_TabIndex + "";
+                    addTab();
+                });
+            }
+        }
+    });
+}
