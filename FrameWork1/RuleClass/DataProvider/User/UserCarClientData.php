@@ -113,7 +113,18 @@ class UserCarClientData extends BaseClientData {
         if ($userId > 0) {
             $sql = "SELECT
                         uc.* ,
-                        up.* ,
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo,
                         p.ProductName,
                         p.ProductId,
                         pp.ProductPriceValue,
@@ -130,6 +141,29 @@ class UserCarClientData extends BaseClientData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 得到一行信息信息
+     * @param int $userId 会员id
+     * @param int $userCarId 会员购物车id
+     * @param bool $withCache 是否缓存
+     * @return array 单表数组
+     */
+    public function GetOne($userId, $userCarId, $withCache = false)
+    {
+        $result = null;
+        if ($userId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_UserCar . "
+                    WHERE UserId=:UserId
+                    AND UserCarId = :UserCarId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserCarId", $userCarId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
         }
         return $result;
     }
@@ -205,6 +239,19 @@ class UserCarClientData extends BaseClientData {
         $arrUserCarId = explode(",", $strUserCarIds);
         if (count($arrUserCarId) > 0) {
             $sql = "SELECT uc.*,(uc.BuyCount*pp.ProductPriceValue) AS BuyPrice,
+
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo,
                             p.ProductName,
                             p.ChannelId,
                             p.ProductId,

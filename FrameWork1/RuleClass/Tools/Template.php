@@ -28,6 +28,10 @@ class Template
     /**
      * 模板标签类型：图片轮换列表 type="pic_slider_list"
      */
+    const TAG_TYPE_DOCUMENT_NEWS_PIC_LIST = "document_news_pic_list";
+    /**
+     * 模板标签类型：图片轮换列表 type="pic_slider_list"
+     */
     const TAG_TYPE_PIC_SLIDER_LIST = "pic_slider_list";
     /**
      * 模板标签类型：产品列表 type="product_list"

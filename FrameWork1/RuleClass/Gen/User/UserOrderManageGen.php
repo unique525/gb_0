@@ -55,9 +55,31 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 $tabIndex = intval(Control::GetRequest("TabIndex",0));
                 $pageSize = intval(Control::GetRequest("PageSize",27));
                 $pageIndex  = intval(Control::GetRequest("PageIndex",1));
+
+                $oldState = $userOrderManageData->GetState($userOrderId, false);
+
+
                 $result = $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
                 //加入操作日志
                 if($result > 0){
+                    $newState = intval(Control::PostRequest("f_State",0));
+                    if (
+                        $oldState != UserOrderData::STATE_CLOSE
+                        && $newState == UserOrderData::STATE_CLOSE){
+
+                        /**
+                         * @TODO 关闭交易时，要恢复库存
+                         */
+
+
+
+
+                    }
+
+
+
+
+
                     $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
                     self::CreateManageUserLog($operateContent);
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user_order', 3));

@@ -916,10 +916,6 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
-    public function GetWaitPublishListOfSiteId($siteId){
-
-    }
-
 
     /**
      * 子节点按推荐级别的列表数据集
@@ -1521,6 +1517,91 @@ class DocumentNewsManageData extends BaseManageData
         }
         return $result;
 
+    }
+
+/**
+ * 修改站点下资讯文档的批量发布队列状态
+ * @param int $waitPublish 状态
+ * @param int $siteId 站点id,为0时为所有站点
+ * @param int $state 文档状态 -1时为所有状态
+ * @param string $strDocumentNewsId 文章id的字符串，空时为所有
+ * @return int 操作结果
+ */
+    public function UpdateWaitPublishForSite($waitPublish,$siteId=0,$state=-1,$strDocumentNewsId=""){
+        $result=-1;
+        if($siteId>=0&&$waitPublish>=0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("WaitPublish", $waitPublish);
+            $strSelect="";
+            if($siteId>0){
+                $strSelect.=" WHERE SiteId=:SiteId ";
+                $dataProperty->AddField("SiteId", $siteId);
+            }
+            if($state>=0){
+                if($strSelect==""){
+                    $strSelect.=" WHERE State=:State ";
+                }else{
+                    $strSelect.=" AND State=:State ";
+                }
+                $dataProperty->AddField("State", $state);
+            }
+            if($strDocumentNewsId!=""){
+                if($strSelect==""){
+                    $strSelect.=" WHERE DocumentNewsId IN ($strDocumentNewsId) ";
+                }else{
+                    $strSelect.=" AND DocumentNewsId IN ($strDocumentNewsId) ";
+                }
+            }
+
+            $sql = "UPDATE ".self::TableName_DocumentNews." SET WaitPublish=:WaitPublish $strSelect ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 获取剩余批量发布的前N条
+     * @param int $siteId 站点id,为0时为所有站点
+     * @param int $topCount 取前多少条
+     * @return array 资讯数据集
+     */
+    public function GetWaitPublishListOfSiteId($siteId,$topCount){
+        $result=null;
+        if($siteId>=0){
+            $dataProperty = new DataProperty();
+            $selectSite="";
+            if($siteId>0){
+                $selectSite=" AND SiteId=:SiteId ";
+                $dataProperty->AddField("SiteId", $siteId);
+            }
+            $sql = "SELECT * FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 ".$selectSite." LIMIT $topCount";
+            $dbOperator = DBOperator::getInstance();
+            $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+/***
+ * 获取剩余批量发布文章数
+ * @param $siteId
+ * @return int
+ */
+    public function GetCountOfWaitPublishList($siteId){
+        $result=-1;
+        if($siteId>=0){
+            $dataProperty = new DataProperty();
+            $selectSite="";
+            if($siteId>0){
+                $selectSite=" AND SiteId=:SiteId ";
+                $dataProperty->AddField("SiteId", $siteId);
+            }
+            $sql = "SELECT count(*) FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 ".$selectSite.";";
+            $dbOperator = DBOperator::getInstance();
+            $result = $dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
     }
 
 }

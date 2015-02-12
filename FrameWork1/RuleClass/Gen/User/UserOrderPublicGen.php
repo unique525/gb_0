@@ -536,20 +536,20 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     private function AsyncModifyState(){
         $userId = Control::GetUserId();
         $userOrderId = Control::GetRequest("user_order_id",0);
-        $state = Control::GetRequest("state",-1);
+        $newState = Control::GetRequest("state",-1);
 
         $result = -1;
-        if($userId > 0 && $userOrderId > 0 && $state > 0){
+        if($userId > 0 && $userOrderId > 0 && $newState > 0){
             $userOrderPublicData = new UserOrderPublicData();
-            if($state == UserOrderData::STATE_APPLY_REFUND){
-                $nowState = $userOrderPublicData->GetState($userOrderId,false);
+            if($newState == UserOrderData::STATE_APPLY_REFUND){
+                $oldState = $userOrderPublicData->GetState($userOrderId,false);
 
                 if(
-                    $nowState == UserOrderData::STATE_PAYMENT  ||
-                    $nowState == UserOrderData::STATE_SENT  ||
-                    $nowState == UserOrderData::STATE_DONE  ||
-                    $nowState == UserOrderData::STATE_COMMENT_FINISHED  ||
-                    $nowState == UserOrderData::STATE_UNCOMMENT
+                    $oldState == UserOrderData::STATE_PAYMENT  ||
+                    $oldState == UserOrderData::STATE_SENT  ||
+                    $oldState == UserOrderData::STATE_DONE  ||
+                    $oldState == UserOrderData::STATE_COMMENT_FINISHED  ||
+                    $oldState == UserOrderData::STATE_UNCOMMENT
                 ){
 
                 }
@@ -557,7 +557,25 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_STATE.'})';
                 }
             }
-            $result = $userOrderPublicData->ModifyState($userOrderId,$userId,$state);
+            $result = $userOrderPublicData->ModifyState($userOrderId,$userId,$newState);
+
+            if ($result >0){
+
+                if ($newState == UserOrderData::STATE_CLOSE){
+
+                    /**
+                     * @TODO 关闭交易时，要恢复库存
+                     */
+
+
+
+
+                }
+
+
+            }
+
+
         }
 
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';

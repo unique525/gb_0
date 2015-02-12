@@ -110,9 +110,16 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     Template::RemoveCustomTag($templateContent, $tagId);
                 }
 
+                //document news pic
+                Template::RemoveCustomTag($templateContent, $tagId);
+
+
+
+
                 parent::ReplaceWhenCreate($templateContent, $documentNewsManageData->GetFields());
 
                 if (!empty($_POST)) {
+
                     $httpPostData = $_POST;
 
 
@@ -213,6 +220,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                             if (intval($arrUploadFiles[$i]) > 0) {
                                 $uploadFileData->ModifyTableId(intval($arrUploadFiles[$i]), $documentNewsId);
                             }
+                        }
+
+
+                        //内容图片处理(DocumentNewsPic)
+                        $documentNewsPicManageData=new DocumentNewsPicManageData();
+                        $strCreatePicList=$_POST["create_pic_list"];  // 格式: 附件ID1_组图显示1,附件ID2_组图显示2....
+                        //$strModifyPicList=Control::PostRequest("modify_pic_list","");
+                        //$strDeletePicList=Control::PostRequest("delete_pic_list","");
+                        $arrCreatePicList=explode(",",$strCreatePicList);
+                        foreach($arrCreatePicList as $strCreatePic){
+                            $picUploadFileId=substr($strCreatePic, 0,strpos($strCreatePic, "_"));
+                            $picShowInPicSlider=substr($strCreatePic, strpos($strCreatePic, "_")+1);
+                            $documentNewsPicManageData->Create($documentNewsId,$picUploadFileId,$picShowInPicSlider);
                         }
 
                         //发布模式处理
@@ -362,6 +382,15 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
 
+            //document news pic
+            $documentNewsPicManageData = new DocumentNewsPicManageData();
+            $tagId = "document_news_pic";
+            $arrPicList = $documentNewsPicManageData->GetList($documentNewsId);
+            if (count($arrPicList) > 0) {
+                Template::ReplaceList($templateContent, $arrPicList, $tagId);
+            } else {
+                Template::RemoveCustomTag($templateContent, $tagId);
+            }
 
             $arrOne = $documentNewsManageData->GetOne($documentNewsId);
             Template::ReplaceOne($templateContent, $arrOne, false, false);
@@ -506,6 +535,34 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                             }
                         }
                     }
+
+
+                    //内容图片处理(DocumentNewsPic)
+                    $documentNewsPicManageData=new DocumentNewsPicManageData();
+                        //处理新增
+                    $strCreatePicList=$_POST["create_pic_list"];  // 格式: 附件ID1_组图显示1,附件ID2_组图显示2....
+                    $arrCreatePicList=explode(",",$strCreatePicList);
+                    foreach($arrCreatePicList as $strCreatePic){
+                        $picUploadFileId=substr($strCreatePic, 0,strpos($strCreatePic, "_"));
+                        $picShowInPicSlider=substr($strCreatePic, strpos($strCreatePic, "_")+1);
+                        $documentNewsPicManageData->Create($documentNewsId,$picUploadFileId,$picShowInPicSlider);
+                    }
+                        //处理修改
+                    $strModifyPicList=$_POST["modify_pic_list"];  // 格式: 内容图ID1_组图显示1,内容图ID2_组图显示2....
+                    $arrModifyPicList=explode(",",$strModifyPicList);
+                    foreach($arrModifyPicList as $strModifyPic){
+                        $picDocumentNewsPicId=substr($strModifyPic, 0,strpos($strModifyPic, "_"));
+                        $picShowInPicSlider=substr($strModifyPic, strpos($strModifyPic, "_")+1);
+                        $documentNewsPicManageData->ChangeShowingState($picDocumentNewsPicId,$picShowInPicSlider);
+                    }
+                        //处理删除
+                    $strDeletePicIdList=$_POST["delete_pic_list"];  // 格式: 内容图ID1_组图显示1,内容图ID2_组图显示2....
+                    $arrDeletePicIdList=explode(",",$strDeletePicIdList);
+                    foreach($arrDeletePicIdList as $strDeletePicId){
+                        $documentNewsPicManageData->Delete($strDeletePicId);
+                    }
+
+
 
                     //发布模式处理
                     $publishType = $channelManageData->GetPublishType($channelId, false);

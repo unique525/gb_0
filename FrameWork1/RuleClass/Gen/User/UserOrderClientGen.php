@@ -42,10 +42,10 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
             $siteId = Control::GetRequest("site_id", 0);
             $userIdDes = Des::Encrypt($userId, UserOrderData::USER_ORDER_DES_KEY);
             $cookieId = "";
-            $allPrice = floatval(Control::PostOrGetRequest("s_AllPrice", ""));
+            $allPrice = floatval(Control::PostOrGetRequest("AllPrice", ""));
             $allPriceDes = Des::Encrypt($allPrice, UserOrderData::USER_ORDER_DES_KEY);
-            $sendPrice = floatval(Control::PostOrGetRequest("s_SendPrice", ""));
-            $userReceiveInfoId = intval(Control::PostOrGetRequest("s_UserReceiveInfoId",""));
+            $sendPrice = floatval(Control::PostOrGetRequest("SendPrice", ""));
+            $userReceiveInfoId = intval(Control::PostOrGetRequest("UserReceiveInfoId",""));
             $sendTime = "";
             $autoSendMessage = "";
             $createDate = strval(date('Y-m-d H:i:s', time()));

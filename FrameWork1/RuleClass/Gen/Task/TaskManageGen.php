@@ -18,6 +18,9 @@ class TaskManageGen extends BaseManageGen {
             case "statistic_document_of_manage_user_group":
                 $result = self::GenStatisticDocumentOfManageUserGroup();
                 break;
+            case "get_lottery":
+                $result = self::GetLottery();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -120,4 +123,11 @@ class TaskManageGen extends BaseManageGen {
 
         return $result;
     }
+
+  public function GetLottery(){
+      $documentNewsPicManageData=new DocumentNewsPicManageData();
+      $arrList=$documentNewsPicManageData->GetOriginalList();
+      $result = Format::FixJsonEncode($arrList);
+      return $result;
+  }
 } 

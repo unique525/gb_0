@@ -150,8 +150,11 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 }else{
                     $salePrice = $productPriceValue;
                 }
-                $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
+                //折后单价
+                $arrUserCarProductList[$i]["SalePrice"] = strval($salePrice);
+                $buyCount = intval($arrUserCarProductList[$i]["BuyCount"]);
+                //小计价格
+                $arrUserCarProductList[$i]["BuyPrice"] = strval($buyCount*$salePrice);
             }
 
             if (count($arrUserCarProductList) > 0) {

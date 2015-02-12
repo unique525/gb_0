@@ -108,7 +108,22 @@ class UserCarPublicData extends BasePublicData
     {
         $result = null;
         if ($userId > 0) {
-            $sql = "SELECT uc.* ,up.UploadFilePath ,p.ProductName ,p.ProductId ,p.MarketPrice,pp.ProductPriceValue ,pp.ProductUnit ,pp.ProductPriceIntro ,psp.SendPrice
+            $sql = "SELECT uc.* ,
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo,
+
+
+            p.ProductName ,p.ProductId ,p.MarketPrice,pp.ProductPriceValue ,pp.ProductUnit ,pp.ProductPriceIntro ,psp.SendPrice
                             FROM " . self::TableName_UserCar . " uc
                             LEFT JOIN " . self::TableName_ProductSendPrice . " psp ON uc.ProductId = psp.ProductId
                             LEFT JOIN " . self::TableName_ProductPrice . " pp ON uc.ProductPriceId = pp.ProductPriceId
