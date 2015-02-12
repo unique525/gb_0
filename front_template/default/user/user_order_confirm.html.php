@@ -244,7 +244,6 @@
                                     userOrderProductObject.SalePrice = "{f_SalePrice}";
                                     userOrderProductObject.SaleCount = "{f_BuyCount}";
                                     userOrderProductObject.Subtotal = "{f_BuyPrice}";
-                                    userOrderProductObject.SendPrice = "{f_SendPrice}";
 
                                     userOrderProductArray.push(userOrderProductObject);
 
@@ -261,9 +260,6 @@
                                     </td>
                                     <td class="send_td01" style="text-align:center">
                                         <span class="show_price">{f_SalePrice}</span>
-                                    </td>
-                                    <td class="send_td01" style="text-align:center">
-                                        <span class="show_price">{f_SendPrice}</span>
                                     </td>
                                     <td class="send_td01" style="text-align:center">
                                         <span class="UserOrderSubtotal show_price">{f_BuyPrice}</span>
