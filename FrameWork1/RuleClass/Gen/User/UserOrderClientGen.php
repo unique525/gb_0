@@ -24,6 +24,11 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $result = self::GenList();
                 break;
 
+            case "send_price":
+                $result = self::GenSendPrice();
+                break;
+
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -102,6 +107,120 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
 
         }
         return '{"result_code":"' . $resultCode . '","user_order_create":' . $result . '}';
+
+    }
+
+    /**
+     * 计算发货费用（订单产品已经全部新增完成的情况下）
+     * @return string
+     */
+    private function GenSendPrice(){
+
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+
+            //验证数据
+            $siteId = Control::GetRequest("site_id", 0);
+
+            $userOrderId = intval(Control::PostOrGetRequest("UserOrderId", ""));
+
+            if(
+                $userOrderId>0
+                && $siteId>0
+                && $userId>0
+            ){
+                $resultCode = 1;
+
+                $userOrderProductClientData = new UserOrderProductClientData();
+                $arrUserOrderProductList = $userOrderProductClientData->GetList(
+                    $userOrderId,
+                    $userId,
+                    $siteId
+                );
+
+                $totalProductPrice = 0;//订单总价
+
+                $productPublicData = new ProductPublicData();
+
+                $maxProductSendPrice = 0;
+                $maxProductSendPriceAdd = 0;
+                $sumProductSendPrice = 0;
+                $sumProductSendPriceAdd = 0;
+
+                for($i=0;$i<count($arrUserOrderProductList);$i++){
+                    $buyCount = intval($arrUserOrderProductList[$i]["SaleCount"]);
+                    $subtotal = intval($arrUserOrderProductList[$i]["Subtotal"]);
+                    $productId = intval($arrUserOrderProductList[$i]["ProductId"]);
+
+                    $totalProductPrice = $subtotal;
+
+                    $currentProductSendPrice = $productPublicData->GetSendPrice($productId, TRUE);
+                    $currentProductSendPriceAdd = $productPublicData->GetSendPriceAdd($productId, TRUE);
+
+                    $sumProductSendPrice = $sumProductSendPrice + $currentProductSendPrice;
+                    if($buyCount>1){
+                        //续重费
+                        $sumProductSendPriceAdd = $sumProductSendPrice + $currentProductSendPriceAdd*($buyCount-1);
+                    }
+
+                    if ($currentProductSendPrice > $maxProductSendPrice){
+                        $maxProductSendPrice = $currentProductSendPrice;
+                        if($buyCount>1){
+                            //续重费
+                            $maxProductSendPriceAdd = $currentProductSendPriceAdd*($buyCount-1);
+                        }
+                    }
+
+                }
+
+
+                /******
+                 * 发货费用模式
+                 *   （0）全场免费
+                 *   （1）达到某金额免费，否则取最高项运费
+                 *   （2）所有运费累加，并计算续重费，然后客服手动修改运费
+                 *   （3）取最高的运费，并计算最高项的续重费
+                 */
+                $siteConfigData = new SiteConfigData($siteId);
+                $productSendPriceMode = $siteConfigData->ProductSendPriceMode;
+                $productSendPriceFreeLimit = $siteConfigData->ProductSendPriceFreeLimit;
+                $sendPrice = 0;
+                switch($productSendPriceMode){
+                    case 0:
+                        //全场免费
+                        $sendPrice = 0;
+                        break;
+                    case 1:
+                        //达到某金额免费，否则取最高项运费
+                        if ($totalProductPrice>= $productSendPriceFreeLimit){
+                            $sendPrice = 0;
+                        }else{
+                            $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                        }
+                        break;
+                    case 2:
+                        //所有运费累加，并计算续重费，然后客服手动修改运费
+                        $sendPrice = $sumProductSendPrice + $sumProductSendPriceAdd;
+                        break;
+                    case 3:
+                        $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                        break;
+                }
+
+                $result = $sendPrice;
+            }else{
+                $resultCode = -5;
+                //出错，返回
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_order_send_price":' . $result . '}';
+
 
     }
 } 

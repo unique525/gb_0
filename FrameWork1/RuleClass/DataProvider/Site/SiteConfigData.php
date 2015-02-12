@@ -115,6 +115,8 @@
  * @property int $ProductPicCompress1Width
  * @property int $ProductPicCompress2Width
  *
+ * @property int $ProductSendPriceMode
+ * @property float $ProductSendPriceFreeLimit
  *
  * @property int $InformationTitlePic1MobileWidth
  * @property int $InformationTitlePic1PadWidth
@@ -128,6 +130,7 @@
  *
  *
  * @property string $NewspaperArticlePicWatermarkUploadFileId
+ *
  *
  * @author zhangchi
  */
@@ -248,6 +251,7 @@ class SiteConfigData extends BaseData {
         "ProductPicWatermark2Width",
         "ProductPicCompress1Width",
         "ProductPicCompress2Width",
+        "ProductSendPriceMode",
 
         "InformationTitlePic1MobileWidth",
         "InformationTitlePic1PadWidth",
@@ -267,7 +271,8 @@ class SiteConfigData extends BaseData {
     private $ArrSiteConfigTypes_4 = array(
         "UserCommissionOwn",
         "UserCommissionChild",
-        "UserCommissionGrandson"
+        "UserCommissionGrandson",
+        "ProductSendPriceFreeLimit"
     );
 
     /**
@@ -413,6 +418,22 @@ class SiteConfigData extends BaseData {
     private $ProductPicWatermark2Width = 0;  //产品图片的水印图2宽度值
     private $ProductPicCompress1Width = 0;  //产品图片的压缩图1宽度值
     private $ProductPicCompress2Width = 0;  //产品图片的压缩图2宽度值
+
+    /**
+     * 发货费用模式
+     *   （0）全场免费
+     *   （1）达到某金额免费
+     *   （2）所有运费累加，并计算续重费，然后客服手动修改运费
+     *   （3）取最高的运费，并计算最高项的续重费
+     * @var int
+     */
+    private $ProductSendPriceMode = 0;
+    /**
+     * 发货费用模式（1）,达到某金额免费
+     * @var float
+     */
+    private $ProductSendPriceFreeLimit = 0;
+
 
     private $InformationTitlePic1MobileWidth = 0; //为适配手机客户端，分类信息题图的同比缩小宽度值
     private $InformationTitlePic1PadWidth = 0; //为适配平板客户端，分类信息题图的同比缩小宽度值
@@ -649,6 +670,39 @@ class SiteConfigData extends BaseData {
     public function getForumAdBotTopicList()
     {
         return $this->ForumAdBotTopicList;
+    }
+
+
+    /**
+     * @param mixed $ProductSendPriceFreeLimit
+     */
+    public function setProductSendPriceFreeLimit($ProductSendPriceFreeLimit)
+    {
+        $this->ProductSendPriceFreeLimit = $ProductSendPriceFreeLimit;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductSendPriceFreeLimit()
+    {
+        return $this->ProductSendPriceFreeLimit;
+    }
+
+    /**
+     * @param mixed $ProductSendPriceMode
+     */
+    public function setProductSendPriceMode($ProductSendPriceMode)
+    {
+        $this->ProductSendPriceMode = $ProductSendPriceMode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductSendPriceMode()
+    {
+        return $this->ProductSendPriceMode;
     }
 
     /**

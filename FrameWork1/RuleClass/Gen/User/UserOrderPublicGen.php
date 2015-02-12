@@ -188,7 +188,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         if($strUserCarIds != "" && $userId > 0 && $siteId > 0){
-
+            $userCarPublicData = new UserCarPublicData();
 
             /////权限验证//////////////////////
             /////会员id和购物车所属会员id要一致
@@ -204,7 +204,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
-            $userCarPublicData = new UserCarPublicData();
+
 
             $tagIdUserReceive = "user_receive";
             $arrUserReceiveInfoList = $userReceiveInfoPublicData->GetList($userId);
@@ -222,9 +222,20 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $userId
             );
             $totalProductPrice = 0;//订单总价
+
+            $productPublicData = new ProductPublicData();
+
+            $maxProductSendPrice = 0;
+            $maxProductSendPriceAdd = 0;
+            $sumProductSendPrice = 0;
+            $sumProductSendPriceAdd = 0;
+
             for($i=0;$i<count($arrProductOrderList);$i++){
                 $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);
                 $productPriceValue = floatval($arrProductOrderList[$i]["ProductPriceValue"]);
+                $buyPrice = floatval($arrProductOrderList[$i]["BuyPrice"]);
+                $buyCount = intval($arrProductOrderList[$i]["BuyCount"]);
+                $productId = intval($arrProductOrderList[$i]["ProductId"]);
                 if($activityProductId>0){
                     $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
                     $salePrice = $discount * $productPriceValue;
@@ -232,8 +243,27 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $salePrice = $productPriceValue;
                 }
                 $arrProductOrderList[$i]["SalePrice"] = $salePrice;
-                $arrProductOrderList[$i]["BuyPrice"] = $arrProductOrderList[$i]["BuyCount"]*$salePrice;
-                $totalProductPrice = $arrProductOrderList[$i]["BuyPrice"]+$totalProductPrice;
+                $arrProductOrderList[$i]["BuyPrice"] = $buyCount*$salePrice;
+                $totalProductPrice = $buyPrice+$totalProductPrice;
+
+                $currentProductSendPrice = $productPublicData->GetSendPrice($productId, TRUE);
+                $currentProductSendPriceAdd = $productPublicData->GetSendPriceAdd($productId, TRUE);
+
+                $sumProductSendPrice = $sumProductSendPrice + $currentProductSendPrice;
+                if($buyCount>1){
+                    //续重费
+                    $sumProductSendPriceAdd = $sumProductSendPrice + $currentProductSendPriceAdd*($buyCount-1);
+                }
+
+
+                if ($currentProductSendPrice > $maxProductSendPrice){
+                    $maxProductSendPrice = $currentProductSendPrice;
+                    if($buyCount>1){
+                        //续重费
+                        $maxProductSendPriceAdd = $currentProductSendPriceAdd*($buyCount-1);
+                    }
+                }
+
             }
             if(count($arrProductOrderList) > 0){
                 Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
@@ -241,7 +271,40 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 Template::ReplaceCustomTag($templateContent,$tagIdProductOrder,"");
             }
 
-            $sendPrice = $userCarPublicData->GetSendPriceForConfirmUserOrder($strUserCarIds,$userId);
+            //计算发货费用
+            /******
+             * 发货费用模式
+             *   （0）全场免费
+             *   （1）达到某金额免费，否则取最高项运费
+             *   （2）所有运费累加，并计算续重费，然后客服手动修改运费
+             *   （3）取最高的运费，并计算最高项的续重费
+             */
+            $siteConfigData = new SiteConfigData($siteId);
+            $productSendPriceMode = $siteConfigData->ProductSendPriceMode;
+            $productSendPriceFreeLimit = $siteConfigData->ProductSendPriceFreeLimit;
+            $sendPrice = 0;
+            switch($productSendPriceMode){
+                case 0:
+                    //全场免费
+                    $sendPrice = 0;
+                    break;
+                case 1:
+                    //达到某金额免费，否则取最高项运费
+                    if ($totalProductPrice>= $productSendPriceFreeLimit){
+                        $sendPrice = 0;
+                    }else{
+                        $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                    }
+                    break;
+                case 2:
+                    //所有运费累加，并计算续重费，然后客服手动修改运费
+                    $sendPrice = $sumProductSendPrice + $sumProductSendPriceAdd;
+                    break;
+                case 3:
+                    $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                    break;
+            }
+
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
 
             $replace_arr = array(

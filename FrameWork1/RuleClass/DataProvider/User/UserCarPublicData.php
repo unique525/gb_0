@@ -269,6 +269,12 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 取得发货费用的最高值
+     * @param $strUserCarIds
+     * @param $userId
+     * @return float|null
+     */
     public function GetSendPriceForConfirmUserOrder($strUserCarIds, $userId)
     {
         $result = null;

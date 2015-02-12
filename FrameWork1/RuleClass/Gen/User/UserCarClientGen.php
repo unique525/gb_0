@@ -63,7 +63,7 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
 
                     $userCarClientData = new UserCarClientData();
                     $newUserCarId = $userCarClientData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
-                    if ($result > 0) {
+                    if ($newUserCarId > 0) {
                         $arrOne = $userCarClientData->GetOne($userId, $newUserCarId, false);
                         $result = Format::FixJsonEncode($arrOne);
                         $resultCode = 1; //加入购物车成功
