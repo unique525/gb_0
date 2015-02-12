@@ -94,6 +94,9 @@ $(function () {
         btnSelectSite.attr("class", "btn_select_site_normal");
         divNowSelectedSite.css("display","block");
         divSelectSiteList.css("display","none");
+
+
+        GetManageMenuOfUser();//会员管理栏切换到对应站点
     });
 
     //create channel page
