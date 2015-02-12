@@ -78,14 +78,16 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenLogin(){
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
-            $templateFileUrl = "user/user_login_for_forum.html";
+            $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum");
+            //$templateFileUrl = "user/user_login_for_forum.html";
         }
         else{
-            $templateFileUrl = "user/user_login.html";
+            $templateContent = parent::GetDynamicTemplateContent("user_login");
+            //$templateFileUrl = "user/user_login.html";
         }
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         parent::ReplaceFirst($templateContent);
 
@@ -104,14 +106,16 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenRegister(){
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
-            $templateFileUrl = "user/user_register_for_forum.html";
+            $templateContent = parent::GetDynamicTemplateContent("user_register_for_forum");
+           // $templateFileUrl = "user/user_register_for_forum.html";
         }
         else{
-            $templateFileUrl = "user/user_register.html";
+            //$templateFileUrl = "user/user_register.html";
+            $templateContent = parent::GetDynamicTemplateContent("user_register");
         }
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
 
         parent::ReplaceFirst($templateContent);
@@ -322,11 +326,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $siteId = parent::GetSiteIdByDomain();
 
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/user_homepage.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+            //$templateFileUrl = "user/user_homepage.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_homepage");
             parent::ReplaceFirst($templateContent);
 
             $userAccount = Control::GetUserName();
@@ -430,10 +434,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         if($userId > 0){
             $siteId = parent::GetSiteIdByDomain();
-            $templateFileUrl = "user/user_pass_modify.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_pass_modify.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_pass_modify");
             parent::ReplaceFirst($templateContent);
 
 

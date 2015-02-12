@@ -129,10 +129,11 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
         $tagId = "user_car_list";
         if ($userId > 0) {
-            $templateFileUrl = "user/user_car_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_car_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_car_list");
             parent::ReplaceFirst($templateContent);
 
             $userCarPublicData = new UserCarPublicData();

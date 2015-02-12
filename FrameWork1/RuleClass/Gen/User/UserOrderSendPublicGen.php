@@ -27,11 +27,11 @@ class UserOrderSendPublicGen extends BasePublicGen implements IBasePublicGen{
 
         $templateContent = "";
         if($userOrderId > 0 && !empty($userOrderNumber)){
-            $templateFileUrl = "user/user_order_send_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+            //$templateFileUrl = "user/user_order_send_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_register_for_forum");
             parent::ReplaceFirst($templateContent);
             $userOrderSendPublicData = new UserOrderSendPublicData();
             $arrUserOrderSendList = $userOrderSendPublicData->GetList($userOrderId);

@@ -105,10 +105,11 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         $templateContent = "";
 
         if($newspaperPageId>0){
-            $templateFileUrl = "newspaper/newspaper_article_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "newspaper/newspaper_article_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("newspaper_article_list");
             parent::ReplaceFirst($templateContent);
 
             $newspaperPagePublicData = new NewspaperPagePublicData();
@@ -161,11 +162,13 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         $templateContent = "";
 
         if($newspaperArticleId>0){
-            $templateFileUrl = "newspaper/newspaper_article_detail.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "newspaper/newspaper_article_detail.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("newspaper_article_detail");
             $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
+
             parent::ReplaceFirst($templateContent);
             $siteId = parent::GetSiteIdByDomain();
             parent::ReplaceSiteInfo($siteId, $templateContent);

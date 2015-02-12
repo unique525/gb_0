@@ -117,7 +117,8 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         $siteId = parent::GetSiteIdByDomain();
 
         if ($productId > 0) {
-            $templateContent = self::loadDetailTemp();
+            //$templateContent = self::loadDetailTemp();
+            $templateContent = parent::GetDynamicTemplateContent("product_detail");
             parent::ReplaceFirst($templateContent);
 
             if($siteId>0){

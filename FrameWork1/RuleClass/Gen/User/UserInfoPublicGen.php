@@ -45,10 +45,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
         if ($userId > 0 && $siteId > 0) {
-            $templateFileUrl = "user/user_info_modify.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_info_modify.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_info_modify");
             parent::ReplaceFirst($templateContent);
 
             $userInfoPublicData = new UserInfoPublicData();
@@ -121,10 +122,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $siteId =parent::GetSiteIdByDomain();
         if ($userId > 0) {
-            $templateFileUrl = "user/user_modify_avatar.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_modify_avatar.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_modify_avatar");
             parent::ReplaceFirst($templateContent);
 
 

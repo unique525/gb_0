@@ -78,11 +78,11 @@ class NewspaperPublicGen extends BasePublicGen {
         $templateContent = "";
         if($channelId>0){
             $publishDate = Control::GetRequest("publish_date", "");
-            $templateFileUrl = "newspaper/newspaper_page_one.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+            //$templateFileUrl = "newspaper/newspaper_page_one.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("newspaper_page_one");
             parent::ReplaceFirst($templateContent);
             $channelPublicData = new ChannelPublicData();
             $siteId = $channelPublicData->GetSiteId($channelId, true);
@@ -179,10 +179,11 @@ class NewspaperPublicGen extends BasePublicGen {
         $channelId = Control::GetRequest("channel_id", 0);
         $templateContent = "";
         if($channelId>0){
-            $templateFileUrl = "newspaper/newspaper_select.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "newspaper/newspaper_select.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("newspaper_select");
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
             parent::ReplaceFirst($templateContent);
             $channelPublicData = new ChannelPublicData();
@@ -205,10 +206,11 @@ class NewspaperPublicGen extends BasePublicGen {
         $newspaperId = Control::GetRequest("newspaper_id", 0);
         $templateContent = "";
         if($channelId>0){
-            $templateFileUrl = "newspaper/newspaper_page_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "newspaper/newspaper_page_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("newspaper_page_list");
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
             parent::ReplaceFirst($templateContent);
             $channelPublicData = new ChannelPublicData();
