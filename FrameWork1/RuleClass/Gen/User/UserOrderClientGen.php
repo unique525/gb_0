@@ -137,13 +137,13 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
 
                 $userOrderClientData = new UserOrderClientData();
 
-                $result = $userOrderClientData->ModifyState(
+                $resultOfModify = $userOrderClientData->ModifyState(
                     $userOrderId,
                     $userId,
                     $state
                 );
 
-                if($result>0){
+                if($resultOfModify>0){
 
                     $resultCode = 1;
 
