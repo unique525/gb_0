@@ -658,6 +658,15 @@ class BaseData
      */
     const TableId_Visit_Result = "VisitResultId";
 
+    /**
+     * 客户端应用程序 数据表名
+     */
+    const TableName_Client_App = "cst_client_app";
+    /**
+     * 客户端应用程序 数据表自增字段名
+     */
+    const TableId_Client_App = "ClientAppId";
+
 
     /**
      * 调试 数据表名

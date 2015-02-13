@@ -67,6 +67,14 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $userReceiveInfoClientGen = new UserReceiveInfoClientGen();
                 $result = $userReceiveInfoClientGen->GenClient();
                 break;
+            case "user_favorite":
+                $userFavoriteClientGen = new UserFavoriteClientGen();
+                $result = $userFavoriteClientGen->GenClient();
+                break;
+            case "client_app":
+                $clientAppClientGen = new ClientAppClientGen();
+                $result = $clientAppClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;
