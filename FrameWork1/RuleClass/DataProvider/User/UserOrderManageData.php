@@ -7,9 +7,6 @@
  */
 class UserOrderManageData extends BaseManageData{
 
-    const STATE_REMOVED = 100;
-
-
     public function GetFields($tableName = self::TableName_UserOrder){
         return parent::GetFields(self::TableName_UserOrder);
     }
@@ -119,7 +116,7 @@ class UserOrderManageData extends BaseManageData{
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -177,7 +174,7 @@ class UserOrderManageData extends BaseManageData{
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_site_id.cache_' . $userOrderId . '';
             $sql = "SELECT SiteId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();

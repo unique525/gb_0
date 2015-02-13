@@ -24,6 +24,11 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $result = self::GenList();
                 break;
 
+            case "modify_state":
+                $result = self::ModifyState();
+
+                break;
+
             case "send_price":
                 $result = self::GenSendPrice();
                 break;
@@ -109,6 +114,58 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"result_code":"' . $resultCode . '","user_order_create":' . $result . '}';
 
     }
+
+    private function ModifyState(){
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+
+            //验证数据
+            $siteId = Control::GetRequest("site_id", 0);
+            $userOrderId = intval(Control::PostOrGetRequest("UserOrderId",""));
+            $state = intval(Control::PostOrGetRequest("State",""));
+
+            if(
+                $userOrderId>0
+                && $siteId>0
+                && $userId>0
+            ){
+
+                $userOrderClientData = new UserOrderClientData();
+
+                $result = $userOrderClientData->ModifyState(
+                    $userOrderId,
+                    $userId,
+                    $state
+                );
+
+                if($result>0){
+
+                    $resultCode = 1;
+
+                }else{
+                    //编号出错
+                    $resultCode = -4;
+                }
+            }else{
+                $resultCode = -5;
+                //出错，返回
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_order_modify_state":' . $result . '}';
+
+
+
+
+    }
+
+
+
 
     /**
      * 计算发货费用（订单产品已经全部新增完成的情况下）

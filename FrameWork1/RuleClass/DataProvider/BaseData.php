@@ -782,7 +782,6 @@ class BaseData
         }
         return $result;
     }
-
 }
 
 ?>

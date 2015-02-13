@@ -134,7 +134,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("UserOrderNumberDes", $userOrderNumberDes);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -147,22 +147,18 @@ class UserOrderClientData extends BaseClientData {
      * @param $siteId
      * @param $pageBegin
      * @param $pageSize
-     * @param $allCount
      * @return array|null
      */
-    public function GetList($userId, $siteId,  $pageBegin, $pageSize, &$allCount)
+    public function GetList($userId, $siteId,  $pageBegin, $pageSize)
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT * FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId  ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
@@ -174,23 +170,19 @@ class UserOrderClientData extends BaseClientData {
      * @param $state
      * @param $pageBegin
      * @param $pageSize
-     * @param $allCount
      * @return array|null
      */
-    public function GetListByState($userId, $siteId, $state, $pageBegin, $pageSize, &$allCount)
+    public function GetListByState($userId, $siteId, $state, $pageBegin, $pageSize)
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT * FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
@@ -266,7 +258,7 @@ class UserOrderClientData extends BaseClientData {
         $result =-1;
         if(strlen($userOrderNumber)>0){
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderNumber);
             $cacheFile = 'user_order_get_user_order_id_by_user_order_number.cache_' . $userOrderNumber . '';
             $sql = "SELECT UserOrderId FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
             $dataProperty = new DataProperty();
@@ -296,7 +288,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -313,7 +305,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -335,7 +327,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_name.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderName FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -357,7 +349,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderNumber FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -378,7 +370,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_id.cache_' . $userOrderId . '';
             $sql = "SELECT UserId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -405,7 +397,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("AlipayTradeNo", $alipayTradeNo);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_no.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -428,7 +420,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("AlipayTradeStatus", $alipayTradeStatus);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_status.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -461,7 +453,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty2->AddField("AllPriceDes", Des::Encrypt($allPrice, UserOrderData::USER_ORDER_DES_KEY));
             $result = $this->dbOperator->Execute($sql, $dataProperty2);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_all_price.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }

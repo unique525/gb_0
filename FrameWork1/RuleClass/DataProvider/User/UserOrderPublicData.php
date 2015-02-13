@@ -135,7 +135,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("UserOrderNumberDes", $userOrderNumberDes);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -267,7 +267,7 @@ class UserOrderPublicData extends BasePublicData
         $result =-1;
         if(strlen($userOrderNumber)>0){
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderNumber);
             $cacheFile = 'user_order_get_user_order_id_by_user_order_number.cache_' . $userOrderNumber . '';
             $sql = "SELECT UserOrderId FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
             $dataProperty = new DataProperty();
@@ -297,7 +297,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -314,7 +314,7 @@ class UserOrderPublicData extends BasePublicData
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -336,7 +336,7 @@ class UserOrderPublicData extends BasePublicData
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_name.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderName FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -358,7 +358,7 @@ class UserOrderPublicData extends BasePublicData
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderNumber FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -379,7 +379,7 @@ class UserOrderPublicData extends BasePublicData
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_id.cache_' . $userOrderId . '';
             $sql = "SELECT UserId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -406,7 +406,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("AlipayTradeNo", $alipayTradeNo);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_no.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -429,7 +429,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("AlipayTradeStatus", $alipayTradeStatus);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_status.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -461,7 +461,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty2->AddField("AllPriceDes", Des::Encrypt($allPrice, UserOrderData::USER_ORDER_DES_KEY));
             $result = $this->dbOperator->Execute($sql, $dataProperty2);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_all_price.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }

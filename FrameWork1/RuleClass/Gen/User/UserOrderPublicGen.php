@@ -37,10 +37,10 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $result = self::GenSubmitPay();
                 break;
             case "receive_pay":
-                $result = self::GenReceivePay();
+                //$result = self::GenReceivePay();
                 break;
             case "alipay_notify":
-                $result = self::AlipayNotify();
+                self::AlipayNotify();
                 break;
             case "alipay_return":
                 $result = self::AlipayReturn();
@@ -594,7 +594,16 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
      *
      */
     private function AlipayNotify(){
-
+        //$result = "";
+        $alipay = new Alipay();
+        $siteId = parent::GetSiteIdByDomain();
+        if($siteId>0){
+            $alipayConfig = $alipay->Init($siteId);
+            $alipay->NotifyUrl(
+                $alipayConfig
+            );
+        }
+        //return $result;
     }
 
     /**
