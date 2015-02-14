@@ -1,13 +1,13 @@
 <?php
 
 /**
- * 前台管理 会员订单发货信息 数据类
+ * 客户端 会员订单发货信息 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
- * Time: 下午12:09
+ * @author zhangchi
  */
-class UserOrderSendPublicData extends BasePublicData
-{
+class UserOrderSendClientData extends BaseClientData {
+
     /**
      * 取得会员订单发货信息列表
      * @param int $userOrderId 会员订单id
@@ -31,5 +31,4 @@ class UserOrderSendPublicData extends BasePublicData
         }
         return $result;
     }
-
-}
+} 

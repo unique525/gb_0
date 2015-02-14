@@ -159,9 +159,6 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
         }
         return '{"result_code":"' . $resultCode . '","user_order_modify_state":' . $result . '}';
 
-
-
-
     }
 
 
@@ -277,6 +274,47 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
 
         }
         return '{"result_code":"' . $resultCode . '","user_order_send_price":' . $result . '}';
+
+
+    }
+
+    private function GenList(){
+
+        $result = "[{}]";
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId;
+        } else {
+
+            $siteId = intval(Control::GetRequest("site_id", 0));
+
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageIndex = intval(Control::GetRequest("p", 1));
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $state = intval(Control::PostOrGetRequest("State", 20));
+
+            $userOrderClientData = new UserOrderClientData();
+
+            if($state<0){
+                $arrUserOrderList = $userOrderClientData->GetList($userId, $siteId, $pageBegin, $pageSize);
+            }else{
+                $arrUserOrderList = $userOrderClientData->GetListByState($userId, $siteId, $state, $pageBegin, $pageSize);
+            }
+
+            if (count($arrUserOrderList) > 0) {
+                $resultCode = 1;
+
+                $result = Format::FixJsonEncode($arrUserOrderList);
+
+            } else {
+                $resultCode = -1;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_order":{"user_order_list":' . $result . '}}';
+
+
 
 
     }

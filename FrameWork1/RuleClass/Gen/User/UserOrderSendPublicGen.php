@@ -24,9 +24,9 @@ class UserOrderSendPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenList(){
         $userOrderNumber = Control::GetRequest("user_order_number","");
         $userOrderId = Control::GetRequest("user_order_id",0);
-
+        $userId = Control::GetUserId();
         $templateContent = "";
-        if($userOrderId > 0 && !empty($userOrderNumber)){
+        if($userId > 0 && $userOrderId > 0 && !empty($userOrderNumber)){
             $templateFileUrl = "user/user_order_send_list.html";
             $templateName = "default";
             $templatePath = "front_template";
@@ -34,7 +34,7 @@ class UserOrderSendPublicGen extends BasePublicGen implements IBasePublicGen{
 
             parent::ReplaceFirst($templateContent);
             $userOrderSendPublicData = new UserOrderSendPublicData();
-            $arrUserOrderSendList = $userOrderSendPublicData->GetList($userOrderId);
+            $arrUserOrderSendList = $userOrderSendPublicData->GetList($userOrderId, $userId);
 
             $tagId = "user_order_send_list";
             if(count($arrUserOrderSendList) > 0){
