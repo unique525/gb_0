@@ -158,6 +158,19 @@ class UserOrderClientData extends BaseClientData {
                         ( SELECT count(*)
                             FROM ".self::TableName_UserOrderProduct."
                             WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
+
+                        (
+                            SELECT ProductId
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductId,
+
                         (
                             SELECT ProductName
                                 FROM ".self::TableName_Product."
@@ -229,6 +242,19 @@ class UserOrderClientData extends BaseClientData {
                         ( SELECT count(*)
                             FROM ".self::TableName_UserOrderProduct."
                             WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
+
+                        (
+                            SELECT ProductId
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductId,
+
                         (
                             SELECT ProductName
                                 FROM ".self::TableName_Product."
