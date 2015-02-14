@@ -153,7 +153,55 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_UserOrder
+            $sql = "SELECT
+                        *,
+                        ( SELECT count(*)
+                            FROM ".self::TableName_UserOrderProduct."
+                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
+                        (
+                            SELECT ProductName
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductName,
+
+                        (
+                            SELECT uf1.UploadFileMobilePath
+                                FROM ".self::TableName_Product." p
+                                LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on p.TitlePic1UploadFileId=uf1.UploadFileId
+                                WHERE
+                                    p.ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        )  AS TitlePic1UploadFileMobilePath,
+
+                        (
+                            SELECT SaleCount
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSaleCount,
+
+                        (
+                            SELECT SalePrice
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSalePrice
+
+
+
+                    FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
@@ -178,7 +226,7 @@ class UserOrderClientData extends BaseClientData {
         if ($userId > 0 && $siteId > 0) {
             $sql = "SELECT
                         *,
-                        (SELECT count(*)
+                        ( SELECT count(*)
                             FROM ".self::TableName_UserOrderProduct."
                             WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
                         (
