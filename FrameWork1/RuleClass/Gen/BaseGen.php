@@ -560,7 +560,10 @@ class BaseGen
                             $tableType,
                             $tableId,
                             $manageUserId,
-                            $userId
+                            $userId,
+                            "",
+                            "",
+                            1
                         );
                     }else{
                         //创建新的uploadFile数据
@@ -573,7 +576,10 @@ class BaseGen
                             $tableType,
                             $tableId,
                             $manageUserId,
-                            $userId
+                            $userId,
+                            "",
+                            "",
+                            1
                         );
                     }
 
