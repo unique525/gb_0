@@ -57,10 +57,10 @@ class AlipayNotify {
 			}
 			$log_text = "responseTxt=".$responseTxt."\n notify_url_log:isSign=".$isSignStr.",";
 			$log_text = $log_text.createLinkString($_POST);
-			//logResult($log_text);
+			logResult($log_text);
 
-            $debug = new DebugLogManageData();
-            $debug->Create($log_text);
+            //$debug = new DebugLogManageData();
+            //$debug->Create($log_text);
 
 			
 			//验证
