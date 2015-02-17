@@ -14,11 +14,22 @@ class UserCarClientData extends BaseClientData {
      * @param int $productId 产品id
      * @param int $productPriceId 产品价格id
      * @param int $buyCount 购买数量
+     * @param float $salePrice 折后价格
+     * @param float $buyPrice 小计价格
      * @param int $productCount 产品库存数量
      * @param int $activityProductId 活动产品id
      * @return int 返回新增结果
      */
-    public function Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId = 0)
+    public function Create(
+        $userId,
+        $siteId,
+        $productId,
+        $productPriceId,
+        $buyCount,
+        $salePrice,
+        $buyPrice,
+        $productCount,
+        $activityProductId = 0)
     {
         $result = -1;
         if ($userId > 0 && $productId > 0 && $siteId > 0 && $productPriceId > 0) {
@@ -51,8 +62,11 @@ class UserCarClientData extends BaseClientData {
 
 
                 if ($existBuyCount>0){
+
+                    //修改的时候，小计也要重计一下
+
                     $sql = "UPDATE " . self::TableName_UserCar . "
-                        SET BuyCount = BuyCount + $buyCount
+                        SET BuyCount = BuyCount + $buyCount,BuyPrice = BuyPrice + $buyPrice
                         WHERE UserId = :UserId
                             AND SiteId = :SiteId
                             AND ProductId = :ProductId
@@ -80,6 +94,8 @@ class UserCarClientData extends BaseClientData {
 
 
                     $dataProperty->AddField("BuyCount", $buyCount);
+                    $dataProperty->AddField("SalePrice", $salePrice);
+                    $dataProperty->AddField("BuyPrice", $buyPrice);
                     $sql = "INSERT INTO " . self::TableName_UserCar. "
                         (
                         UserId,
@@ -88,6 +104,8 @@ class UserCarClientData extends BaseClientData {
                         ProductPriceId,
                         ActivityProductId,
                         BuyCount,
+                        SalePrice,
+                        BuyPrice,
                         CreateDate
                         )
                         VALUES (
@@ -97,6 +115,8 @@ class UserCarClientData extends BaseClientData {
                         :ProductPriceId,
                         :ActivityProductId,
                         :BuyCount,
+                        :SalePrice,
+                        :BuyPrice,
                         now()
                         );";
 
