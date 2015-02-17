@@ -49,9 +49,9 @@ class Alipay
             //合作身份者id，以2088开头的16位纯数字
             $alipayConfig['partner'] = $siteConfigData->PayAlipayPartnerId;
             //商户的私钥（后缀是.pen）文件相对路径
-            $alipayConfig['private_key_path']	= PHYSICAL_PATH . '/FrameWork1/RuleClass/Plugins/Alipay/key/rsa_private_key.pem';
+            $alipayConfig['private_key_path']	=  '../../FrameWork1/RuleClass/Plugins/Alipay/key/rsa_private_key.pem';
             //支付宝公钥（后缀是.pen）文件相对路径
-            $alipayConfig['ali_public_key_path']= PHYSICAL_PATH . '/FrameWork1/RuleClass/Plugins/Alipay/key/alipay_public_key.pem';
+            $alipayConfig['ali_public_key_path'] = '../../FrameWork1/RuleClass/Plugins/Alipay/key/alipay_public_key.pem';
             //签名方式 不需修改
             $alipayConfig['sign_type']    = strtoupper('RSA');
 
@@ -60,7 +60,7 @@ class Alipay
 
             //ca证书路径地址，用于curl中ssl校验
             //请保证cacert.pem文件在当前文件夹目录中
-            $alipayConfig['cacert'] = PHYSICAL_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/cacert.pem";
+            $alipayConfig['cacert'] = "../../FrameWork1/RuleClass/Plugins/Alipay/cacert.pem";
             //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
             $alipayConfig['transport']    = 'http';
         }
@@ -259,11 +259,15 @@ class Alipay
 
     }
 
+    /**
+     * wap notify
+     * @param $alipayConfig
+     */
     public function NotifyUrlForWap($alipayConfig)
     {
         //计算得出通知验证结果
-        $alipayNotify = new AlipayNotify($alipayConfig);
-        $verify_result = $alipayNotify->verifyNotify();
+        $alipayNotifyWap = new AlipayNotifyWap($alipayConfig);
+        $verify_result = $alipayNotifyWap->verifyNotify();
 
         if ($verify_result) { //验证成功
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,7 +295,7 @@ class Alipay
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
 
-                self::DealUserOrder($out_trade_no, $trade_no, $trade_status);
+                self::DealUserOrderForWap($out_trade_no, $trade_no, $trade_status);
                 //增加付款记录
 
                 //注意：
@@ -305,7 +309,7 @@ class Alipay
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
-                self::DealUserOrder($out_trade_no, $trade_no, $trade_status);
+                self::DealUserOrderForWap($out_trade_no, $trade_no, $trade_status);
                 //注意：
                 //该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
 
@@ -345,6 +349,34 @@ class Alipay
             $userOrderPublicData->ModifyState($userOrderId,$userId,$orderState);
             $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
             $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
+            //增加订单付款记录
+            $userOrderPayPublicData = new UserOrderPayPublicData();
+            $userOrderPayPublicData->Create(
+                $userOrderId,
+                $allPrice,
+                "支付宝"
+            );
+        }
+    }
+
+    /**
+     * 处理订单表
+     * @param $out_trade_no
+     * @param $trade_no
+     * @param $trade_status
+     */
+    private function DealUserOrderForWap($out_trade_no, $trade_no, $trade_status){
+        $userOrderClientData = new UserOrderClientData();
+        $userOrderId = $userOrderClientData->GetUserOrderIdByUserOrderNumber($out_trade_no, true);
+        $allPrice = $userOrderClientData->GetAllPrice($userOrderId);
+
+        if($userOrderId>0 && $allPrice>0){
+                //已付款
+            $orderState = UserOrderData::STATE_PAYMENT;
+            //改变订单状态
+            $userOrderClientData->ModifyState($userOrderId,$orderState);
+            $userOrderClientData->ModifyAlipayTradeNo($userOrderId, $trade_no);
+            $userOrderClientData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
             //增加订单付款记录
             $userOrderPayPublicData = new UserOrderPayPublicData();
             $userOrderPayPublicData->Create(

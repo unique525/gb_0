@@ -35,7 +35,7 @@ class AlipayNotifyWap {
     }
     /**
      * 针对notify_url验证消息是否是支付宝发出的合法消息
-     * @return 验证结果
+     * @return bool 验证结果
      */
     function verifyNotify(){
         if(empty($_POST)) {//判断POST来的数组是否为空
@@ -72,7 +72,7 @@ class AlipayNotifyWap {
 
     /**
      * 针对return_url验证消息是否是支付宝发出的合法消息
-     * @return 验证结果
+     * @return string 验证结果
      */
     function verifyReturn(){
         if(empty($_GET)) {//判断POST来的数组是否为空

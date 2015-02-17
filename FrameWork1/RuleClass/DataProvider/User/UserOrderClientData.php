@@ -394,18 +394,16 @@ class UserOrderClientData extends BaseClientData {
     /**
      * 修改状态
      * @param int $userOrderId 订单id
-     * @param int $userId 会员id
      * @param int $state 状态
      * @return int 操作结果
      */
-    public function ModifyState($userOrderId,$userId,$state)
+    public function ModifyState($userOrderId,$state)
     {
         $result = 0;
         if ($userOrderId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder." AND UserId = :UserId;";
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
             $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
-            $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
