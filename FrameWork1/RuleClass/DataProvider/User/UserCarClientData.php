@@ -62,6 +62,18 @@ class UserCarClientData extends BaseClientData {
 
                     $result = $this->dbOperator->Execute($sql,$dataProperty);
 
+                    if ($result > 0){
+                        $result = self::GetUserCarIdOfOneProductAndProductPrice(
+                            $userId,
+                            $siteId,
+                            $productId,
+                            $productPriceId,
+                            $activityProductId
+                        );
+                    }else{
+                        $result = -1;
+                    }
+
 
 
                 }else{
@@ -156,10 +168,33 @@ class UserCarClientData extends BaseClientData {
     {
         $result = null;
         if ($userId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_UserCar . "
-                    WHERE UserId=:UserId
-                    AND UserCarId = :UserCarId
-                    ;";
+            $sql = "SELECT
+                        uc.* ,
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo,
+                        p.ProductName,
+                        p.ProductId,
+                        pp.ProductPriceValue,
+                        pp.ProductUnit,
+                        pp.ProductPriceIntro,
+                        psp.SendPrice
+                            FROM " . self::TableName_UserCar . " uc
+                            LEFT JOIN " . self::TableName_ProductSendPrice . " psp ON uc.ProductId = psp.ProductId
+                            LEFT JOIN " . self::TableName_ProductPrice . " pp ON uc.ProductPriceId = pp.ProductPriceId
+                            LEFT JOIN ". self::TableName_Product . " p ON uc.ProductId = p.ProductId
+                            LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId
+                            WHERE uc.UserId = :UserId AND uc.UserCarId = :UserCarId;";
+
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("UserCarId", $userCarId);
@@ -365,6 +400,44 @@ class UserCarClientData extends BaseClientData {
             $dataProperty = new DataProperty();
             //存在同一产品同一站点同一价格时，UPDATE
             $sql = "SELECT BuyCount FROM " . self::TableName_UserCar ."
+                    WHERE UserId = :UserId
+                        AND SiteId = :SiteId
+                        AND ProductId = :ProductId
+                        AND ProductPriceId = :ProductPriceId
+                        AND ActivityProductId = :ActivityProductId;
+                    ";
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ProductId", $productId);
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $dataProperty->AddField("ActivityProductId", $activityProductId);
+
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 返回某个产品某个价格的user car id
+     * @param int $userId 会员id
+     * @param int $siteId 站点id
+     * @param int $productId 产品id
+     * @param int $productPriceId 产品价格id
+     * @param int $activityProductId 活动产品id
+     * @return int 某个产品某个价格的购买数量
+     */
+    public function GetUserCarIdOfOneProductAndProductPrice(
+        $userId,
+        $siteId,
+        $productId,
+        $productPriceId,
+        $activityProductId
+    ){
+        $result = 0;
+        if ($userId > 0 && $productId > 0 && $siteId > 0 && $productPriceId > 0) {
+            $dataProperty = new DataProperty();
+            //存在同一产品同一站点同一价格时，UPDATE
+            $sql = "SELECT UserCarId FROM " . self::TableName_UserCar ."
                     WHERE UserId = :UserId
                         AND SiteId = :SiteId
                         AND ProductId = :ProductId

@@ -56,15 +56,35 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                 $productPriceClientData = new ProductPriceClientData();
                 //即时库存，不缓存
                 $productCount = $productPriceClientData->GetProductCount($productPriceId, false);
-
+                $productPriceValue = $productPriceClientData->GetProductPriceValue($productPriceId, false);
                 if ($buyCount <= 0 || $buyCount > $productCount) {
                     $resultCode = -20; //购买数量小于0或库存数不够
                 } else {
+                    $activityProductClientData = new ActivityProductClientData();
+
+                    if ($activityProductId > 0) {
+                        $discount = $activityProductClientData->GetDiscount($activityProductId, true);
+                        $salePrice = $discount * $productPriceValue;
+                    } else {
+                        $salePrice = $productPriceValue;
+                    }
+
 
                     $userCarClientData = new UserCarClientData();
-                    $newUserCarId = $userCarClientData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
+                    $newUserCarId = $userCarClientData->Create(
+                        $userId,
+                        $siteId,
+                        $productId,
+                        $productPriceId,
+                        $buyCount,
+                        $productCount,
+                        $activityProductId
+                    );
+
                     if ($newUserCarId > 0) {
                         $arrOne = $userCarClientData->GetOne($userId, $newUserCarId, false);
+
+
                         $result = Format::FixJsonEncode($arrOne);
                         $resultCode = 1; //加入购物车成功
                     } elseif ($newUserCarId == -20) {
@@ -95,13 +115,13 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
             $pageBegin = ($pageIndex - 1) * $pageSize;
 
             $userCarClientData = new UserCarClientData();
-            $activityProductClientData = new ActivityProductClientData();
+
 
             $arrUserCarProductList = $userCarClientData->GetList($userId, $pageBegin, $pageSize);
 
             if (count($arrUserCarProductList) > 0) {
                 $resultCode = 1;
-
+/**
                 for ($i = 0; $i < count($arrUserCarProductList); $i++) {
                     $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
                     $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
@@ -117,7 +137,7 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                     //小计价格
                     $arrUserCarProductList[$i]["BuyPrice"] = strval($buyCount*$salePrice);
                 }
-
+*/
                 $result = Format::FixJsonEncode($arrUserCarProductList);
 
             } else {
