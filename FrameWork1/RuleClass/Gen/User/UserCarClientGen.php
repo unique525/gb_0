@@ -57,6 +57,7 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                 //即时库存，不缓存
                 $productCount = $productPriceClientData->GetProductCount($productPriceId, false);
                 $productPriceValue = $productPriceClientData->GetProductPriceValue($productPriceId, false);
+
                 if ($buyCount <= 0 || $buyCount > $productCount) {
                     $resultCode = -20; //购买数量小于0或库存数不够
                 } else {
