@@ -41,7 +41,7 @@
                             <item>
                                 <![CDATA[
                                 <tr class="grid_item2" id="user_order_product_{f_UserOrderProductId}">
-                                    <td class="spe_line" style="text-align: center">{f_SendPersonName}</td>
+                                    <td class="spe_line" style="text-align: center">{f_SendPersonName}(电话：{f_SendPersonMobile})</td>
                                     <td class="spe_line">{f_SendTime}</td>
                                     <td class="spe_line">{f_SendCompany} </td>
                                     <td class="spe_line">{f_AcceptPersonName}</td>
