@@ -11,9 +11,10 @@ class ProductClientData extends BaseClientData {
     /**
      * 返回一行数据
      * @param int $productId 产品id
+     * @param bool $withCache 是否使用缓存
      * @return array|null 取得对应数组
      */
-    public function GetOne($productId){
+    public function GetOne($productId, $withCache = FALSE){
         $result = null;
         if($productId>0){
             $sql = "

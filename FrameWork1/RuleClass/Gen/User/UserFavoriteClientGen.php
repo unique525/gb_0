@@ -64,21 +64,22 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                 if($canAddFavorite > 0){
                     $resultCode = -2; //重复
                 }else{
-                    if($tableType == UserFavoriteData::TableType_Product){
-                        $userFavoriteTitle = Control::GetRequest("user_favorite_title","");
-                        $productPublicData = new ProductPublicData();
-                        $arrProductOne =$productPublicData->GetOneForUserFavorite($tableId);
-                        if($userFavoriteTitle == ""){
-                            $userFavoriteTitle = $arrProductOne["ProductName"];
+                    if($tableType == UserFavoriteData::TABLE_TYPE_PRODUCT){
+                        $userFavoriteTitle = Control::PostOrGetRequest("UserFavoriteTitle","");
+                        $productClientData = new ProductClientData();
+                        $arrProductOne =$productClientData->GetOne($tableId);
+                        if (count($arrProductOne)>0){
+                            if($userFavoriteTitle == ""){
+                                $userFavoriteTitle = $arrProductOne["ProductName"];
+                            }
+                            $channelId = $arrProductOne["ChannelId"];
+                            $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
+                            $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
                         }
-                        $channelId = $arrProductOne["ChannelId"];
-                        $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
-                        $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
-
                     }
-                    if($userFavoriteTitle != "" && $userFavoriteUrl != "" && $uploadFileId > 0){
-                        $userFavoritePublicData = new UserFavoritePublicData();
-                        $result = $userFavoritePublicData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
+                    if($userFavoriteTitle != "" && $uploadFileId > 0){
+                        $userFavoriteClientData = new UserFavoriteClientData();
+                        $result = $userFavoriteClientData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
                         if($result > 0){
                             $resultCode = 1;
                         }else{
@@ -104,10 +105,10 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
         if ($userId <= 0) {
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
-            $userReceiveInfoId = Control::PostOrGetRequest("UserReceiveInfoId", 0);
-            if ($userReceiveInfoId > 0) {
-                $userReceiveInfoClientData = new UserReceiveInfoClientData();
-                $result = $userReceiveInfoClientData->Delete($userReceiveInfoId, $userId);
+            $userFavoriteId = Control::PostOrGetRequest("UserFavoriteId", 0);
+            if ($userFavoriteId > 0) {
+                $userFavoriteClientData = new UserFavoriteClientData();
+                $result = $userFavoriteClientData->Delete($userFavoriteId, $userId);
                 if ($result > 0) {
                     $resultCode = 1; //删除成功
                 } else {
@@ -119,7 +120,7 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
             }
 
         }
-        return '{"result_code":"' . $resultCode . '","user_receive_info_delete":' . $result . '}';
+        return '{"result_code":"' . $resultCode . '","user_favorite_delete":' . $result . '}';
     }
 
     private function GenList()
@@ -152,7 +153,7 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
             }
 
         }
-        return '{"result_code":"' . $resultCode . '","user_receive_info":{"user_receive_info_list":' . $result . '}}';
+        return '{"result_code":"' . $resultCode . '","user_favorite":{"user_favorite_list":' . $result . '}}';
 
     }
 

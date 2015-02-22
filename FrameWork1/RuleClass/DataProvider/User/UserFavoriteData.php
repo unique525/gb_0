@@ -8,5 +8,12 @@
  */
 class UserFavoriteData extends BaseData
 {
-    const TableType_Product = 1;
+    /**
+     * 表类型 产品 1
+     */
+    const TABLE_TYPE_PRODUCT = 1;
+    /**
+     * 表类型 资讯 2
+     */
+    const TABLE_TYPE_DOCUMENT_NEWS = 2;
 } 
