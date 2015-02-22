@@ -79,9 +79,15 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                     }
                     if($userFavoriteTitle != "" && $uploadFileId > 0){
                         $userFavoriteClientData = new UserFavoriteClientData();
-                        $result = $userFavoriteClientData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
-                        if($result > 0){
+                        $newUserFavoriteId = $userFavoriteClientData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
+                        if($newUserFavoriteId > 0){
                             $resultCode = 1;
+
+                            $arrOne = $userFavoriteClientData->GetOne($userId, $newUserFavoriteId, false);
+
+                            $result = Format::FixJsonEncode($arrOne);
+
+
                         }else{
                             $resultCode = -5; //数据库操作错误;
                         }

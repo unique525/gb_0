@@ -92,4 +92,41 @@ class UserFavoriteClientData extends BaseClientData {
         return $result;
 
     }
+
+    /**
+     * 得到一行信息信息
+     * @param int $userId 会员id
+     * @param int $userFavoriteId 会员收藏id
+     * @param bool $withCache 是否缓存
+     * @return array 单表数组
+     */
+    public function GetOne($userId, $userFavoriteId, $withCache = false)
+    {
+        $result = null;
+        if ($userId > 0) {
+            $sql = "SELECT
+                        uf.* ,
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo
+                            FROM " . self::TableName_UserFavorite . " uf
+                            LEFT JOIN " . self::TableName_UploadFile . " up ON uf.UploadFileId = up.UploadFileId
+                            WHERE uf.UserId = :UserId AND uf.UserFavoriteId = :UserFavoriteId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserFavoriteId", $userFavoriteId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 
