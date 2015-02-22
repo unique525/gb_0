@@ -36,22 +36,26 @@ class ClientAppClientGen extends BaseClientGen implements IBaseClientGen {
         $result = "[{}]";
 
         $siteId = intval(Control::GetRequest("site_id", 0));
-        if($siteId>0){
-            /** 返回最新版本信息 **/
+        $clientAppType = intval(Control::GetRequest("client_app_type", 0));
 
+        if($siteId>0 && $clientAppType>0){
+            /** 返回最新版本信息 **/
             $clientAppClientData = new ClientAppClientData();
 
-            $arrOne = $clientAppClientData->GetNewVersion($siteId, TRUE);
+            $arrOne = $clientAppClientData->GetNewVersion(
+                $siteId,
+                $clientAppType,
+                false
+            );
 
             $resultCode = 1;
 
             $result = Format::FixJsonEncode($arrOne);
 
-
         }else{
             $resultCode = -6; //参数错误
         }
 
-        return '{"result_code":"'.$resultCode.'","client_app":{"client_app_start_check":' . $result . '}}';
+        return '{"result_code":"' . $resultCode . '","client_app_start_check":' . $result . '}';
     }
 } 
