@@ -40,7 +40,7 @@ class ChannelClientData extends BaseClientData {
         $result = null;
         if ($topCount != null)
         {
-            $topCount = " limit " . $topCount;
+            $topCount = " LIMIT " . $topCount;
         }
         else {
             $topCount = "";
