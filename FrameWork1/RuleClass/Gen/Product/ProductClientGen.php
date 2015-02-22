@@ -50,8 +50,11 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId>0){
-            $pageSize = Control::GetRequest("ps", 20);
-            $orderBy = Control::GetRequest("order", 0);
+            $pageIndex = intval(Control::GetRequest("p", 1));
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $orderBy = Control::GetRequest("order", "");
+
             $channelClientData = new ChannelClientData();
             $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
             if(strlen($channelIds)>0){
@@ -63,6 +66,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrList = $productClientData->GetListOfChannelId(
                 $channelIds,
                 $orderBy,
+                $pageBegin,
                 $pageSize
             );
             if (count($arrList) > 0) {

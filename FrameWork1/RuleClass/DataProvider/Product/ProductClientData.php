@@ -31,22 +31,25 @@ class ProductClientData extends BaseClientData {
     }
 
     /**
-     * @param $channelId
-     * @param string $order
-     * @param null $topCount
-     * @return array|null
+     * 返回对应频道的产品列表
+     * @param int $channelId 频道id
+     * @param string $order 排序方式
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @return array|null 对应频道的产品列表
      */
-    public function GetListOfChannelId($channelId, $order = "", $topCount = null)
+    public function GetListOfChannelId(
+        $channelId,
+        $order,
+        $pageBegin,
+        $pageSize
+    )
     {
         $result = null;
-        if ($topCount != null)
-        {
-            $topCount = " limit " . $topCount;
-        }
-        else {
-            $topCount = "";
-        }
+
+
         if (!empty($channelId)) {
+            $order = Format::FormatSql($order);
             switch ($order) {
                 case "time_desc":
                     $order = " ORDER BY Createdate DESC";
@@ -88,7 +91,7 @@ class ProductClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
                     WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
                 . $order
-                . $topCount;
+                . " LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }

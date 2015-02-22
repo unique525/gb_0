@@ -112,8 +112,8 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
             $resultCode = $userId;
         } else {
 
-            $pageSize = Control::GetRequest("ps", 20);
-            $pageIndex = Control::GetRequest("p", 1);
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageIndex = intval(Control::GetRequest("p", 1));
             $pageBegin = ($pageIndex - 1) * $pageSize;
 
             $userCarClientData = new UserCarClientData();
@@ -123,23 +123,7 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
 
             if (count($arrUserCarProductList) > 0) {
                 $resultCode = 1;
-/**
-                for ($i = 0; $i < count($arrUserCarProductList); $i++) {
-                    $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
-                    $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
-                    if ($activityProductId > 0) {
-                        $discount = $activityProductClientData->GetDiscount($activityProductId, true);
-                        $salePrice = $discount * $productPriceValue;
-                    } else {
-                        $salePrice = $productPriceValue;
-                    }
-                    //折后单价
-                    $arrUserCarProductList[$i]["SalePrice"] = strval($salePrice);
-                    $buyCount = intval($arrUserCarProductList[$i]["BuyCount"]);
-                    //小计价格
-                    $arrUserCarProductList[$i]["BuyPrice"] = strval($buyCount*$salePrice);
-                }
-*/
+
                 $result = Format::FixJsonEncode($arrUserCarProductList);
 
             } else {
