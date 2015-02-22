@@ -18,14 +18,16 @@ class ProductClientData extends BaseClientData {
         $result = null;
         if($productId>0){
             $sql = "
-            SELECT t.*,t1.*
+            SELECT p.*,uf.*
             FROM
-            " . self::TableName_ProductPic . " t
-            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
-            WHERE t.ProductId=:ProductId;";
+            " . self::TableName_Product . " p
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf
+                ON p.TitlePic1UploadFileId=uf.UploadFileId
+            WHERE p.ProductId=:ProductId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
         }
         return $result;
     }

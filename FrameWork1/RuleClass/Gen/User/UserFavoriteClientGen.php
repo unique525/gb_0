@@ -62,7 +62,7 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                 //判断是否重复
                 $canAddFavorite = $userFavoriteClientData->CheckIsExist($tableId,$tableType);
                 if($canAddFavorite > 0){
-                    $resultCode = -2; //重复
+                    $resultCode = -12; //重复
                 }else{
                     if($tableType == UserFavoriteData::TABLE_TYPE_PRODUCT){
                         $userFavoriteTitle = Control::PostOrGetRequest("UserFavoriteTitle","");
