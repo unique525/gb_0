@@ -33,7 +33,6 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
     private function GetAllChildListByParentId(){
 
         $result = "[{}]";
-        $resultCode = 0;
 
         $parentId = Control::GetRequest("parent_id", 0);
 
