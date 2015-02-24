@@ -95,6 +95,100 @@ class ProductClientData extends BaseClientData {
     }
 
     /**
+     * 按搜索条件取得前台产品分页列表
+     * @param int $channelId 频道Id,可以是 id,id,id 的形式
+     * @param int $pageBegin 起始记录行
+     * @param int $pageSize 页大小
+     * @param int $allCount 记录总数
+     * @param string $searchKey 查询字符
+     * @param int $searchType 查询下拉框的类别
+     * @param string $order 排序方式
+     * @return array 产品列表数据集
+     */
+    public function GetListForSearch($channelId, $pageBegin, $pageSize, &$allCount, $searchKey = "", $searchType = 0, $order = "")
+    {
+        $result = null;
+        if (!empty($channelId)) {
+            switch ($order) {
+                case "time_desc":
+                    $order = " ORDER BY Createdate DESC";
+                    break;
+                case "time_asc":
+                    $order = " ORDER BY Createdate ASC";
+                    break;
+                case "sale_desc":
+                    $order = " ORDER BY SaleCount DESC";
+                    break;
+                case "sale_asc":
+                    $order = " ORDER BY SaleCount ASC";
+                    break;
+                case "price_desc":
+                    $order = " ORDER BY SalePrice DESC";
+                    break;
+                case "price_asc":
+                    $order = " ORDER BY SalePrice ASC";
+                    break;
+                case "comment_asc":
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+                case "comment_desc":
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+                default:
+                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    break;
+            }
+            $searchSql = "";
+            $dataProperty = new DataProperty();
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                if ($searchType == 0) { //产品名称
+                    $searchSql = " AND (ProductName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 1) { //简介
+                    $searchSql = " AND (ProductIntro like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 2) { //发布人
+                    $searchSql = " AND (ManageUserName like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 3) { //标签
+                    $searchSql = " AND (ProductTag like :SearchKey)";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else { //模糊
+                    $searchSql = " AND (ProductName LIKE :SearchKey1
+                                    OR ManageUserName LIKE :SearchKey2
+                                    OR ProductIntro LIKE :SearchKey3
+                                    OR ProductTag LIKE :SearchKey4)";
+                    $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
+                }
+            }
+            $sql = "
+            SELECT
+            t.ProductId,t.ProductNumber,t.ProductName,t.SiteId,t.ChannelId,t.
+            ProductShortName,t.ProductIntro,t.ProductTag,t.
+            TitlePic1UploadFileId,t.TitlePic2UploadFileId,t.TitlePic3UploadFileId,t.TitlePic4UploadFileId,t.
+            SalePrice,t.CreateDate,t.ManageUserId,t.ManageUserName,t.UserId,t.UserName,t.
+            Sort,t.State,t.RecLevel,t.HitCount,t.RecCount,t.FavoriteCount,t.QuestionCount,t.IsHot,t.IsNew,t.
+            SaleState,t.GetScore,t.SendPrice,t.SendPriceAdd,t.DirectUrl,t.MarketPrice,t.SaleCount,t.PublishDate,t.ProductCommentCount,
+            t1.*
+            FROM
+            " . self::TableName_Product . " t
+            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
+            WHERE  t.ChannelId IN (".$channelId.") AND t.State<100 AND SaleState<50 " . $searchSql . $order . " LIMIT ".  $pageBegin . "," . $pageSize . ";";
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $sql = "SELECT count(*) FROM " . self::TableName_Product . "
+                WHERE ChannelId IN (".$channelId.") AND State<100 AND SaleState<50 "  . " " . $searchSql . ";";
+            $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 根据频道ID获取量贩产品记录
      * @param int $channelId 频道Id,可以是 id,id,id 的形式
      * @param string $order 排序方式

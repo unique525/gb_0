@@ -50,6 +50,7 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
                 $topCount
             );
             if (count($arrList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrList);
             }else{
                 $resultCode = -2;

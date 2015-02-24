@@ -41,6 +41,7 @@ class ProductPicClientGen extends BaseClientGen implements IBaseClientGen {
             $productPicClientData = new ProductPicClientData();
             $arrProductPicList = $productPicClientData->GetList($productId, $orderBy, $topCount);
             if (count($arrProductPicList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrProductPicList);
                 //$result = ;
             }else{
