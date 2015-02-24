@@ -42,7 +42,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $result = self::GenLogin();
                 break;
             case "logout":
-                $result = self::GenLogout();
+                self::GenLogout();
                 break;
             case "register":
                 $result = self::GenRegister();
@@ -76,7 +76,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenLogin(){
-        $templateFileUrl = "user/user_login.html";
+        $temp = Control::GetRequest("temp","");
+        if($temp == "forum"){
+            $templateFileUrl = "user/user_login_for_forum.html";
+        }
+        else{
+            $templateFileUrl = "user/user_login.html";
+        }
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -96,7 +102,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenRegister(){
-        $templateFileUrl = "user/user_register.html";
+        $temp = Control::GetRequest("temp","");
+        if($temp == "forum"){
+            $templateFileUrl = "user/user_register_for_forum.html";
+        }
+        else{
+            $templateFileUrl = "user/user_register.html";
+        }
         $templateName = "default";
         $templatePath = "front_template";
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
@@ -173,6 +185,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", ""));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", ""));
         $regIp = Control::GetIp();
+        $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
             //重名注册检查以及格式匹配检查
             //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
@@ -213,12 +226,61 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $userInfoPublicData = new UserInfoPublicData();
             $userRolePublicData = new UserRolePublicData();
             $siteConfigData = new SiteConfigData($siteId);
+
+
             $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
             if ($newUserId > 0) {
-                $userInfoPublicData->Init($newUserId, $siteId);//插入会员信息表
 
+                //插入会员信息表
+                $realName = Format::FormatHtmlTag(Control::PostOrGetRequest("real_name",""));
+                $nickName = Format::FormatHtmlTag(Control::PostOrGetRequest("nick_name",""));
+                $avatarUploadFileId = Format::FormatHtmlTag(Control::PostOrGetRequest("avatar_upload_fileId",0));
+                $userScore = Format::FormatHtmlTag(Control::PostOrGetRequest("user_score",0));
+                $userMoney = Format::FormatHtmlTag(Control::PostOrGetRequest("user_money",0));
+                $userCharm = Format::FormatHtmlTag(Control::PostOrGetRequest("user_charm",0));
+                $userExp = Format::FormatHtmlTag(Control::PostOrGetRequest("user_exp",0));
+                $userPoint = Format::FormatHtmlTag(Control::PostOrGetRequest("user_point",0));
+                $question = Format::FormatHtmlTag(Control::PostOrGetRequest("question",""));
+                $answer = Format::FormatHtmlTag(Control::PostOrGetRequest("answer",""));
+                $sign = Control::PostOrGetRequest("sign","");
+                $lastVisitIP = $regIp;
+                $lastVisitTime = $createDate;
+                $email = Format::FormatHtmlTag(Control::PostOrGetRequest("email",""));
+                $qq = Format::FormatHtmlTag(Control::PostOrGetRequest("qq",""));
+                $country = Format::FormatHtmlTag(Control::PostOrGetRequest("country",""));
+                $comeFrom = Format::FormatHtmlTag(Control::PostOrGetRequest("come_from",""));
+                $honor = Format::FormatHtmlTag(Control::PostOrGetRequest("honor",""));
+                $birthday = Format::FormatHtmlTag(Control::PostOrGetRequest("birthday",""));
+                $gender = Format::FormatHtmlTag(Control::PostOrGetRequest("gender",0));
+                $fansCount = Format::FormatHtmlTag(Control::PostOrGetRequest("fans_count",0));
+                $idCard = Format::FormatHtmlTag(Control::PostOrGetRequest("id_card",""));
+                $postCode = Format::FormatHtmlTag(Control::PostOrGetRequest("post_code",""));
+                $address = Format::FormatHtmlTag(Control::PostOrGetRequest("address",""));
+                $tel = Format::FormatHtmlTag(Control::PostOrGetRequest("tel",""));
+                $mobile = Format::FormatHtmlTag(Control::PostOrGetRequest("mobile",""));
+                $province = Format::FormatHtmlTag(Control::PostOrGetRequest("province",""));
+                $occupational = Format::FormatHtmlTag(Control::PostOrGetRequest("occupational",""));
+                $city = Format::FormatHtmlTag(Control::PostOrGetRequest("city",""));
+                $relationship = Format::FormatHtmlTag(Control::PostOrGetRequest("relationship",0));
+                $hit = Format::FormatHtmlTag(Control::PostOrGetRequest("hit",0));
+                $messageCount = Format::FormatHtmlTag(Control::PostOrGetRequest("message_count",0));
+                $userPostCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_count",0));
+                $userPostBestCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_best_count",0));
+                $userActivityCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_activity_count",0));
+                $userAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_count",0));
+                $userBestAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_best_album_count",0));
+                $userRecAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_rec_album_count",0));
+                $userAlbumCommentCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_comment_count",0));
+                $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
+                $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
+                $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
+
+                $userInfoPublicData->Create($newUserId, $realName, $nickName,$avatarUploadFileId, $userScore, $userMoney, $userCharm, $userExp, $userPoint, $question, $answer, $sign, $lastVisitIP, $lastVisitTime, $email, $qq, $country, $comeFrom, $honor, $birthday, $gender, $fansCount, $idCard, $postCode, $address, $tel, $mobile, $province, $occupational, $city, $relationship, $hit, $messageCount, $userPostCount, $userPostBestCount, $userActivityCount, $userAlbumCount, $userBestAlbumCount, $userRecAlbumCount, $userAlbumCommentCount, $userCommissionOwn, $userCommissionChild, $userCommissionGrandson);
+
+
+                //插入会员角色表
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);//插入会员角色表
+                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);
 
                 Control::SetUserCookie($newUserId, $userName);
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';

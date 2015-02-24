@@ -64,11 +64,16 @@ class UserOrderData extends BaseData {
      * 生成订单号
      */
     public static function GenUserOrderNumber(){
+        return strtoupper(strval(uniqid()));
+    }
 
-        $date = strval(date('YmdHis', time()));
-
-        return strtoupper($date.md5(strval(uniqid())));
-
+    /**
+     * 返回缓存文件目录
+     * @param mixed $id 业务表id或缓存关键字段
+     * @return string 缓存文件目录
+     */
+    public static function GetCachePath($id){
+        return CACHE_PATH . '/user_order_data/' . DataCache::GetSubPath($id);
     }
 
 } 

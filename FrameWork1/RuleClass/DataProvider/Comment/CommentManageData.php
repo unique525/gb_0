@@ -11,9 +11,16 @@ class CommentManageData extends BaseManageData{
     public function GetList($tableId,$tableType,$siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($tableType > 0 && $tableId > 0 && $siteId > 0){
-            $sql = "SELECT * FROM ".self::TableName_Comment."
-                WHERE TableId = :TableId AND TableType = :TableType AND SiteId = :SiteId
-                ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sql = "SELECT
+                        c.*,u.*,ui.*
+                    FROM ".self::TableName_Comment." c
+
+                        LEFT OUTER JOIN " .self::TableName_User." u on c.UserId=u.UserId
+                        LEFT OUTER JOIN " .self::TableName_UserInfo." ui on c.UserId=ui.UserId
+
+
+                WHERE c.TableId = :TableId AND c.TableType = :TableType AND c.SiteId = :SiteId
+                ORDER BY c.CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_Comment."
                 WHERE TableId = :TableId AND TableType = :TableType AND SiteId = :SiteId;";
             $dataProperty = new DataProperty();
@@ -31,9 +38,14 @@ class CommentManageData extends BaseManageData{
     public function GetListForSite($tableType,$siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($tableType > 0 && $siteId > 0){
-            $sql = "SELECT * FROM ".self::TableName_Comment."
-                WHERE TableType = :TableType AND SiteId = :SiteId
-                ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sql = "SELECT c.*,u.*,ui.*
+                    FROM ".self::TableName_Comment." c
+                        LEFT OUTER JOIN " .self::TableName_User." u on c.UserId=u.UserId
+                        LEFT OUTER JOIN " .self::TableName_UserInfo." ui on c.UserId=ui.UserId
+
+
+                WHERE c.TableType = :TableType AND c.SiteId = :SiteId
+                ORDER BY c.CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_Comment."
                 WHERE TableType = :TableType AND SiteId = :SiteId;";
             $dataProperty = new DataProperty();
@@ -50,9 +62,15 @@ class CommentManageData extends BaseManageData{
     public function GetListForChannel($tableType,$channelId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($tableType > 0 && $channelId > 0){
-            $sql = "SELECT * FROM ".self::TableName_Comment."
-                WHERE TableType = :TableType AND ChannelId = :ChannelId
-                ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+            $sql = "SELECT c.*,u.*,ui.*
+                        FROM ".self::TableName_Comment." c
+
+                        LEFT OUTER JOIN " .self::TableName_User." u on c.UserId=u.UserId
+                        LEFT OUTER JOIN " .self::TableName_UserInfo." ui on c.UserId=ui.UserId
+
+
+                WHERE c.TableType = :TableType AND c.ChannelId = :ChannelId
+                ORDER BY c.CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_Comment."
                 WHERE TableType = :TableType AND ChannelId = :ChannelId;";
             $dataProperty = new DataProperty();

@@ -167,7 +167,7 @@ class ProductPicManageData extends BaseManageData
      * @param int $PicUploadFileId 上传文件id
      * @return int 操作结果
      */
-    public function ModifyPicUploadFileId($productPicId, $PicUploadFileId)
+    public function ModifyUploadFileId($productPicId, $PicUploadFileId)
     {
         $result = -1;
         if($productPicId>0){
@@ -190,7 +190,7 @@ class ProductPicManageData extends BaseManageData
      * @param bool $withCache 是否从缓冲中取
      * @return int 图片的上传文件id
      */
-    public function GetPicUploadFileId($productPicId, $withCache)
+    public function GetUploadFileId($productPicId, $withCache)
     {
         $result = -1;
         if ($productPicId > 0) {

@@ -53,7 +53,7 @@
             });
 
 
-            var boxWidth = ($(document).width() - 96) / 5;
+            var boxWidth = 240;//($(document).width() - 96) / 3;
             $(".li_list_width_img").css("width", boxWidth);
         });
     </script>
@@ -94,10 +94,16 @@
                                 <td width="125">
                                     <img class="img_avatar" width="120" height="120" src="" style="display:block;" alt="会员头像"/>
                                 </td>
-                                <td>
-                                    <div>{f_UserName}</div>
-                                    <div>状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
-                                    <div>
+                                <td valign="top" align="left">
+                                    <div style="height:20px;line-height: 20px">{f_UserName}</div>
+                                    <div style="height:20px;line-height: 20px">{f_UserMobile}</div>
+                                    <div>{f_UserEMail}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div style="float:left;margin:2px 6px">状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
+                                    <div style="float:left;margin:2px 0">
                                         <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
                                         <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
                                     </div>

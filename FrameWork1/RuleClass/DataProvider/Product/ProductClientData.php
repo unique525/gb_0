@@ -11,41 +11,47 @@ class ProductClientData extends BaseClientData {
     /**
      * 返回一行数据
      * @param int $productId 产品id
+     * @param bool $withCache 是否使用缓存
      * @return array|null 取得对应数组
      */
-    public function GetOne($productId){
+    public function GetOne($productId, $withCache = FALSE){
         $result = null;
         if($productId>0){
             $sql = "
-            SELECT t.*,t1.*
+            SELECT p.*,uf.*
             FROM
-            " . self::TableName_ProductPic . " t
-            LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
-            WHERE t.ProductId=:ProductId;";
+            " . self::TableName_Product . " p
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf
+                ON p.TitlePic1UploadFileId=uf.UploadFileId
+            WHERE p.ProductId=:ProductId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
         }
         return $result;
     }
 
     /**
-     * @param $channelId
-     * @param string $order
-     * @param null $topCount
-     * @return array|null
+     * 返回对应频道的产品列表
+     * @param int $channelId 频道id
+     * @param string $order 排序方式
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @return array|null 对应频道的产品列表
      */
-    public function GetListOfChannelId($channelId, $order = "", $topCount = null)
+    public function GetListOfChannelId(
+        $channelId,
+        $order,
+        $pageBegin,
+        $pageSize
+    )
     {
         $result = null;
-        if ($topCount != null)
-        {
-            $topCount = " limit " . $topCount;
-        }
-        else {
-            $topCount = "";
-        }
+
+
         if (!empty($channelId)) {
+            $order = Format::FormatSql($order);
             switch ($order) {
                 case "time_desc":
                     $order = " ORDER BY Createdate DESC";
@@ -87,7 +93,7 @@ class ProductClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
                     WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
                 . $order
-                . $topCount;
+                . " LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
@@ -357,6 +363,47 @@ class ProductClientData extends BaseClientData {
         $dataProperty->AddField("RecLevel", $recLevel);
         $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得产品的发货费用
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return float 发货费用
+     */
+    public function GetSendPrice($productId, $withCache)
+    {
+        $result = 0;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_send_price.cache_' . $productId . '';
+            $sql = "SELECT SendPrice FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfFloatValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+    /**
+     * 取得产品的发货续重费用（暂定：商品超过1个时的费用）
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return float 发货续重费用（暂定：商品超过1个时的费用）
+     */
+    public function GetSendPriceAdd($productId, $withCache)
+    {
+        $result = 0;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_send_price_add.cache_' . $productId . '';
+            $sql = "SELECT SendPriceAdd FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfFloatValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
         return $result;
     }
 } 

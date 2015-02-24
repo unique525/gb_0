@@ -12,10 +12,45 @@
             $("#pub_site_channel").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
                 +parent.parent.G_NowSiteId+"&publish_type=1&do=1");
 
-            $("#pub_site_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
-                +parent.parent.G_NowSiteId+"&publish_type=2&do=1");
         });
 
+        function SetWaitPublish(state){
+            $.ajax({
+                url: "/default.php?secu=manage&mod=common&m=async_set_wait_publish&site_id="
+                    +parent.parent.G_NowSiteId,
+                data: { State: state},
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    if(data==true){
+                        $("#pub_site_document_news").css("cursor","pointer");
+                        $("#pub_site_document_news").css("color","#52596B");
+                        $("#pub_site_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
+                            +parent.parent.G_NowSiteId+"&publish_type=2&do=1");
+                    }else{
+                        alert("标记失败！");
+                    }
+                }
+            });
+        }
+
+        function CancelWaitPublish(){
+            $.ajax({
+                url: "/default.php?secu=manage&mod=common&m=async_cancel_wait_publish&site_id="
+                    +parent.parent.G_NowSiteId,
+                data: {},
+                type: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    if(data==true){
+                        alert("取消标记成功！");
+                        $("#pub_site_document_news").css("cursor","none");
+                        $("#pub_site_document_news").css("color","#bbb");
+                        $("#pub_site_document_news").removeAttr("href");
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -35,7 +70,7 @@
             <td>
 
                 [<a id="pub_site_channel" href="">发布当前站点下所有频道</a>] <br />
-                [<a id="pub_site_document_news" href="">发布当前站点下所有资讯文档</a>] <br />
+                <a id="pub_site_document_news" title="请先标记" style="color:#bbb">[发布当前站点下所有已标记的资讯文档]</a> [<a onclick="SetWaitPublish(30)">标记已发</a>] [<a onclick="SetWaitPublish(14)">标记终审</a>] [<a onclick="CancelWaitPublish()">取消所有标记</a>]<br />
 
             </td>
         </tr>

@@ -26,6 +26,10 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenList();
                 break;
 
+            case "delete":
+                $result = self::GenDelete();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -41,27 +45,51 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
 
-            $siteId = Control::GetRequest("site_id", 0);
-            $productId = Control::GetRequest("product_id", 0);
-            $buyCount = Control::GetRequest("buy_count", 0);
-            $productPriceId = Control::GetRequest("product_price_id", 0);
-            $activityProductId = Control::GetRequest("activity_product_id", 0);
+            $siteId = Control::PostOrGetRequest("site_id", 0);
+            $productId = Control::PostOrGetRequest("product_id", 0);
+            $buyCount = Control::PostOrGetRequest("buy_count", 0);
+            $productPriceId = Control::PostOrGetRequest("product_price_id", 0);
+            $activityProductId = Control::PostOrGetRequest("activity_product_id", 0);
             if ($productPriceId > 0 && $productId > 0 && $siteId > 0) {
 
                 //检查库存
                 $productPriceClientData = new ProductPriceClientData();
                 //即时库存，不缓存
                 $productCount = $productPriceClientData->GetProductCount($productPriceId, false);
-
                 if ($buyCount <= 0 || $buyCount > $productCount) {
                     $resultCode = -20; //购买数量小于0或库存数不够
                 } else {
+                    $activityProductClientData = new ActivityProductClientData();
+                    $productPriceValue = $productPriceClientData->GetProductPriceValue($productPriceId, false);
+
+                    if ($activityProductId > 0) {
+                        $discount = $activityProductClientData->GetDiscount($activityProductId, true);
+                        $salePrice = $discount * $productPriceValue;
+                    } else {
+                        $salePrice = $productPriceValue;
+                    }
+                    //小计
+                    $buyPrice = $salePrice*$buyCount;
 
                     $userCarClientData = new UserCarClientData();
-                    $result = $userCarClientData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
-                    if ($result > 0) {
+                    $newUserCarId = $userCarClientData->Create(
+                        $userId,
+                        $siteId,
+                        $productId,
+                        $productPriceId,
+                        $buyCount,
+                        $salePrice,
+                        $buyPrice,
+                        $productCount,
+                        $activityProductId
+                    );
+
+                    if ($newUserCarId > 0) {
+                        $arrOne = $userCarClientData->GetOne($userId, $newUserCarId, false);
+
+                        $result = Format::FixJsonEncode($arrOne);
                         $resultCode = 1; //加入购物车成功
-                    } elseif ($result == -20) {
+                    } elseif ($newUserCarId == -20) {
                         $resultCode = -20; //如果新的产品数量大于库存数量，不新增，返回-20
                     } else {
                         $resultCode = -5; //加入购物车失败,数据库原因
@@ -80,42 +108,54 @@ class UserCarClientGen extends BaseClientGen implements IBaseClientGen
         $result = "[{}]";
         $userId = parent::GetUserId();
 
-        if($userId<=0){
+        if ($userId <= 0) {
             $resultCode = $userId;
-        }else{
+        } else {
 
-            $pageSize = Control::GetRequest("ps", 20);
-            $pageIndex = Control::GetRequest("p", 1);
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageIndex = intval(Control::GetRequest("p", 1));
             $pageBegin = ($pageIndex - 1) * $pageSize;
 
             $userCarClientData = new UserCarClientData();
-            $activityProductClientData = new ActivityProductClientData();
+
 
             $arrUserCarProductList = $userCarClientData->GetList($userId, $pageBegin, $pageSize);
 
-            if (count($arrUserCarProductList) > 0){
+            if (count($arrUserCarProductList) > 0) {
                 $resultCode = 1;
-
-                for($i=0;$i<count($arrUserCarProductList);$i++){
-                    $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
-                    $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
-                    if($activityProductId>0){
-                        $discount = $activityProductClientData->GetDiscount($activityProductId, true);
-                        $salePrice = $discount * $productPriceValue;
-                    }else{
-                        $salePrice = $productPriceValue;
-                    }
-                    $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                    $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
-                }
 
                 $result = Format::FixJsonEncode($arrUserCarProductList);
 
-            }else{
+            } else {
                 $resultCode = -1;
             }
 
         }
-        return '{"result_code":"'.$resultCode.'","user_car":{"user_car_list":' . $result . '}}';
+        return '{"result_code":"' . $resultCode . '","user_car":{"user_car_list":' . $result . '}}';
+    }
+
+    private function GenDelete()
+    {
+        $result = "[{}]";
+        $userId = parent::GetUserId();
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $userCarId = Control::PostOrGetRequest("user_car_id", 0);
+            if ($userCarId > 0) {
+                $userCarClientData = new UserCarClientData();
+                $result = $userCarClientData->Delete($userCarId, $userId);
+                if ($result > 0) {
+                    $resultCode = 1; //删除购物车成功
+                } else {
+                    $resultCode = -5; //删除购物车失败,数据库原因
+                }
+
+            } else {
+                $resultCode = -6; //加入购物车失败,参数错误;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_car_delete":' . $result . '}';
     }
 } 

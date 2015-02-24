@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 前台管理 会员发货信息 数据类
+ * 前台管理 会员订单发货信息 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * Time: 下午12:09
@@ -9,15 +9,24 @@
 class UserOrderSendPublicData extends BasePublicData
 {
     /**
-     * @param $userOrderId
-     * @return array|null
+     * 取得会员订单发货信息列表
+     * @param int $userOrderId 会员订单id
+     * @param int $userId 会员id
+     * @return array|null 会员订单发货信息列表
      */
-    public function GetList($userOrderId){
+    public function GetList($userOrderId, $userId){
         $result = null;
         if($userOrderId > 0){
-            $sql = "SELECT * FROM ".self::TableName_UserOrderSend." WHERE UserOrderId = :UserOrderId;";
+            $sql = "SELECT uos.*
+                        FROM ".self::TableName_UserOrderSend." uos,".self::TableName_UserOrder." uo
+                        WHERE uos.UserOrderId = :UserOrderId
+
+                        AND uo.UserId = :UserId
+
+                        ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
+            $dataProperty->AddField("UserId",$userId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
         }
         return $result;

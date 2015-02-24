@@ -96,6 +96,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
                     break;
+                case "document_news_pic":
+                    $documentNewsManageGen = new DocumentNewsPicManageGen();
+                    $result = $documentNewsManageGen->Gen();
+                    break;
                 case "source":
                     $sourceManageGen = new SourceManageGen();
                     $result = $sourceManageGen->Gen();

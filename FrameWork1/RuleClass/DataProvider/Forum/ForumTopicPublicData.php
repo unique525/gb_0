@@ -165,8 +165,28 @@ class ForumTopicPublicData extends BasePublicData {
         $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . ";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
-        //print_r($dataProperty->ArrayField);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        return $result;
+    }
+    public function GetListPager($forumId, $pageBegin, $pageSize, &$allCount) {
+        $searchSql = "";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ForumId", $forumId);
+        $sql = "
+            SELECT
+            *
+            FROM
+            " . self::TableName_ForumTopic . "
+            WHERE ForumId=:ForumId  " . $searchSql . "
+            ORDER BY Sort DESC,PostTime DESC
+            LIMIT " .$pageBegin . "," . $pageSize . ";";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $dataProperty->AddField("ForumId", $forumId);
+        //统计总数
+        $sql = "SELECT count(*)
+                FROM " . self::TableName_ForumTopic  . "
+                WHERE ForumId=:ForumId  " . $searchSql . ";";
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 } 

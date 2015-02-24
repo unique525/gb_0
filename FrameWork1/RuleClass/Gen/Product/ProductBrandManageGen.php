@@ -91,7 +91,7 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
 
                         }
                         if($uploadFileId>0){
-                            $productBrandManageData->ModifyPicUploadFileId($productBrandId, $uploadFileId);
+                            $productBrandManageData->ModifyLogoUploadFileId($productBrandId, $uploadFileId);
                         }
                     }
 
@@ -171,11 +171,11 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
                             //上传出错或没有选择文件上传
                         }else{
                             //删除原有题图
-                            $oldUploadFileId = $productBrandManageData->GetPicUploadFileId($productBrandId, false);
+                            $oldUploadFileId = $productBrandManageData->GetLogoUploadFileId($productBrandId, false);
                             parent::DeleteUploadFile($oldUploadFileId);
 
                             //修改题图
-                            $productBrandManageData->ModifyPicUploadFileId($productBrandId, $uploadFileId);
+                            $productBrandManageData->ModifyLogoUploadFileId($productBrandId, $uploadFileId);
                         }
                     }
                     //javascript 处理

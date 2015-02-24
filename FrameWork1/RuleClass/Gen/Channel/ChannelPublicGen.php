@@ -14,8 +14,29 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
      */
     public function GenPublic() {
         $result = "";
-        
+
+        $action = Control::GetRequest("a", "");
+        switch ($action) {
+            case "default":
+                $result = self::GenDefault();
+                break;
+        }
+
+        $result = str_ireplace("{action}", $action, $result);
+
         return $result;
+    }
+    private function GenDefault() {
+
+        $siteId = parent::GetSiteIdByDomain();
+
+        $tempContent = parent::GetDynamicTemplateContent();
+
+        parent::ReplaceFirst($tempContent);
+        $tempContent =  parent::ReplaceTemplate($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
     }
 }
 

@@ -41,6 +41,35 @@ class BasePublicGen extends BaseGen {
         return $siteId;
     }
 
+    /**
+     * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
+     * @param string $defaultTemp 默认模板
+     * @param int $siteId 默认从域名取，可以不传入
+     * @return string 模板内容
+     */
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
+    {
+        $result = "";
+        if ($siteId <= 0){
+            $siteId = self::GetSiteIdByDomain();
+        }
+
+        $channelTemplateTag = Control::PostOrGetRequest("temp","");
+
+        if(strlen($channelTemplateTag)<=0){
+            $channelTemplateTag = $defaultTemp;
+        }
+
+
+        if($siteId>0 && strlen($channelTemplateTag)>0){
+            $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
+            $channelTemplatePublicData = new ChannelTemplatePublicData();
+            $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                $siteId, $channelTemplateType, $channelTemplateTag, true);
+        }
+        return $result;
+    }
+
 
 
     /**
@@ -217,7 +246,18 @@ class BasePublicGen extends BaseGen {
                             );
                         }
                         break;
-                    case Template::TAG_TYPE_USER_EXPLORE_LIST:
+                    case Template::TAG_TYPE_RECENT_USER_FAVORITE_LIST:
+                        $userId = Control::GetUserId();
+                        if($userId>0){
+                            $templateContent = self::ReplaceTemplateOfUserFavoriteList(
+                                $templateContent,
+                                $userId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere
+                            );
+                        }
 
                         break;
                 }
@@ -426,8 +466,20 @@ class BasePublicGen extends BaseGen {
             }
 
             switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
                 case "child":
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+                case "grandson":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+                case "rec_level_child":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "",$orderBy);
+                    break;
+                case "rec_level_grandson":
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
                     break;
                 default :
                     $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
@@ -534,29 +586,16 @@ class BasePublicGen extends BaseGen {
     {
         if ($newspaperArticleId > 0) {
 
-            //默认只显示已发状态的新闻
-            $state = 0;
+
 
             $arrList = null;
             $newspaperArticlePicPublicData = new NewspaperArticlePicPublicData();
-
-            //排序方式
-            switch ($tagOrder) {
-                case "new":
-                    $orderBy = 0;
-                    break;
-                default:
-                    $orderBy = 0;
-                    break;
-            }
 
             switch ($tagWhere) {
                 default :
                     $arrList = $newspaperArticlePicPublicData->GetList($newspaperArticleId);
                     break;
             }
-
-            //echo 'ddd'.$tagId.':'.stripos($tagId,"newspaper_article_slider_").'<br>';
 
             if (!empty($arrList)) {
 
@@ -584,6 +623,43 @@ class BasePublicGen extends BaseGen {
         }
 
         return $channelTemplateContent;
+    }
+
+    private function ReplaceTemplateOfUserFavoriteList(
+        $channelTemplateContent,
+        $userId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere
+    ){
+        if ($userId > 0) {
+            $siteId = self::GetSiteIdByDomain();
+            $arrList = null;
+            $userFavoritePublicData = new UserFavoritePublicData();
+
+            switch ($tagWhere) {
+                default :
+                    $pageBegin = 1;
+                    $pageSize = $tagTopCount;
+                    $arrList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
+                    break;
+            }
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+
+
+
+
     }
 
     /**

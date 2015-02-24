@@ -32,6 +32,9 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             case "list_of_rec_level"://推荐商品
                 $result = self::GetListOfRecLevel();
                 break;
+            case "get_one":
+                $result = self::GetOne();
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -94,8 +97,11 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId>0){
-            $pageSize = Control::GetRequest("ps", 20);
-            $orderBy = Control::GetRequest("order", 0);
+            $pageIndex = intval(Control::GetRequest("p", 1));
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $orderBy = Control::GetRequest("order", "");
+
             $channelClientData = new ChannelClientData();
             $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
             if(strlen($channelIds)>0){
@@ -107,6 +113,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $arrList = $productClientData->GetListOfChannelId(
                 $channelIds,
                 $orderBy,
+                $pageBegin,
                 $pageSize
             );
             if (count($arrList) > 0) {
@@ -187,5 +194,31 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $resultCode = -1;
         }
         return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
+    }
+
+    private function GetOne(){
+
+        $result = "[{}]";
+
+        $productId = intval(Control::PostOrGetRequest("product_id",0));
+
+
+            if(
+                $productId > 0
+            ){
+                $productClientData = new ProductClientData();
+                $arrOne = $productClientData->GetOne($productId, TRUE);
+
+                $result = Format::FixJsonEncode($arrOne);
+                $resultCode = 1; //加入购物车成功
+
+            }else{
+                $resultCode = -6; //参数错误;
+            }
+
+
+        return '{"result_code":"' . $resultCode . '","user_favorite_create":' . $result . '}';
+
+
     }
 } 

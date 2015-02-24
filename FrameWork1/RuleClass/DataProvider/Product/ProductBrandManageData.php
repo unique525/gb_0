@@ -137,7 +137,7 @@ class ProductBrandManageData extends BaseManageData {
      * @param int $PicUploadFileId 上传文件id
      * @return int 操作结果
      */
-    public function ModifyPicUploadFileId($productBrandId, $PicUploadFileId)
+    public function ModifyLogoUploadFileId($productBrandId, $PicUploadFileId)
     {
         $result = -1;
         if($productBrandId>0){
@@ -160,7 +160,7 @@ class ProductBrandManageData extends BaseManageData {
      * @param bool $withCache 是否从缓冲中取
      * @return int 图片的上传文件id
      */
-    public function GetPicUploadFileId($productBrandId, $withCache)
+    public function GetLogoUploadFileId($productBrandId, $withCache)
     {
         $result = -1;
         if ($productBrandId > 0) {

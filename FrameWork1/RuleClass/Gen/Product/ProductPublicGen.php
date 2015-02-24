@@ -41,12 +41,10 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function GenList()
     {
-        $temp = Control::GetRequest("temp", "");
         $channelId = Control::GetRequest("channel_id", 0);
         $siteId = parent::GetSiteIdByDomain();
         $channelFirstId = Control::GetRequest("channel_first_id", 0);
-        $templateContent = self::LoadListTemp($temp, $channelId);
-
+        $templateContent = parent::GetDynamicTemplateContent("product_list", $siteId);
         parent::ReplaceFirst($templateContent);
 
 
@@ -105,15 +103,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-    private function LoadListTemp($temp, $channelId)
-    {
-        $templateFileUrl = "product/product_list.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-        return $templateContent;
-    }
 
     /**
      * 生成产品详细页面

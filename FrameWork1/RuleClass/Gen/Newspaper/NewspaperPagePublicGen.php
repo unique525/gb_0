@@ -122,11 +122,11 @@ class NewspaperPagePublicGen extends BasePublicGen {
             );
 
 
-            $mobileWidth = 640;
+            $mobileWidth = 480;
 
             parent::GenUploadFileMobile($picUploadFileId, $mobileWidth);
 
-            parent::GenUploadFileCompress1($picUploadFileId, $mobileWidth,0, 80);
+            parent::GenUploadFileCompress1($picUploadFileId, $mobileWidth,0, 60);
         }
         return $result;
     }

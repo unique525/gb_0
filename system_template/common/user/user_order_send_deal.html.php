@@ -63,7 +63,9 @@
                 <td class="spe_line" style="height:40px;" align="right">发货公司：</td>
                 <td class="spe_line"><input type="text" class="input_box" id="f_SendCompany" value="{SendCompany}" name="f_SendCompany"/></td>
                 <td class="spe_line" align="right">送货人姓名：</td>
-                <td class="spe_line"><input type="text" class="input_box" id="f_SendPersonName" value="{SendPersonName}" name="f_SendPersonName"/></td>
+                <td class="spe_line"><input type="text" class="input_box" id="f_SendPersonName" value="{SendPersonName}" name="f_SendPersonName"/>
+                （电话：<input type="text" class="input_box" id="f_SendPersonMobile" value="{SendPersonMobile}" name="f_SendPersonMobile"/>）
+                </td>
             </tr>
             <tr>
                 <td class="spe_line" style="height:40px;" align="right">发货时间：</td>

@@ -52,6 +52,24 @@ class DataCache {
         $cacheDir = RELATIVE_PATH . '/' . $cacheDir;
         return FileObject::DeleteDir($cacheDir);
     }
+
+    /**
+     * 根据id，返回子目录路径，用在缓存数据较多的时候，必须建立多级子目录来保存缓存文件的情况
+     * @param mixed $id 业务表id或缓存关键字段 (每1000个分一段)
+     * @return string 子目录路径
+     */
+    public static function GetSubPath($id){
+
+        if (is_int($id)){
+            $id = intval($id);
+            $result = strval($id%1000) . "/" . $id;
+        }else{
+            $result = $id;
+        }
+
+
+        return $result;
+    }
 }
 
 ?>

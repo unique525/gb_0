@@ -148,4 +148,24 @@ class ProductPricePublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 取得价格
+     * @param int $productPriceId
+     * @param bool $withCache
+     * @return float 价格
+     */
+    public function GetProductPriceValue($productPriceId, $withCache)
+    {
+        $result = -1;
+        if ($productPriceId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_price_data';
+            $cacheFile = 'product_price_get_product_price_value.cache_' . $productPriceId . '';
+            $sql = "SELECT ProductPriceValue FROM " . self::TableName_ProductPrice . " WHERE ProductPriceId=:ProductPriceId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $result = $this->GetInfoOfFloatValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 } 

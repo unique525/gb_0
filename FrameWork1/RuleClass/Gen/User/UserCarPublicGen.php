@@ -104,9 +104,31 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
                 if($buyCount <= 0 || $buyCount > $productCount){
                     return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_FAIL_FOR_PRODUCT_COUNT_OVER.'})';
                 }
+                $activityProductPublicData = new ActivityProductPublicData();
+                $productPriceValue = $productPricePublicData->GetProductPriceValue($productPriceId, false);
+
+                if ($activityProductId > 0) {
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
+                    $salePrice = $discount * $productPriceValue;
+                } else {
+                    $salePrice = $productPriceValue;
+                }
+                //小计
+                $buyPrice = $salePrice*$buyCount;
+
 
                 $userCarPublicData = new UserCarPublicData();
-                $result = $userCarPublicData->Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId);
+                $result = $userCarPublicData->Create(
+                    $userId,
+                    $siteId,
+                    $productId,
+                    $productPriceId,
+                    $buyCount,
+                    $salePrice,
+                    $buyPrice,
+                    $productCount,
+                    $activityProductId
+                );
                 if ($result > 0) {
                     return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ADD_USER_CAR_SUCCESS.'})';
                 } elseif ($result == -20) {
@@ -124,8 +146,8 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenList()
     {
+        $templateContent = "";
         $userId = Control::GetUserId();
-        $siteId =parent::GetSiteIdByDomain();
 
         $tagId = "user_car_list";
         if ($userId > 0) {
@@ -136,22 +158,8 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             parent::ReplaceFirst($templateContent);
 
             $userCarPublicData = new UserCarPublicData();
-            $activityProductPublicData = new ActivityProductPublicData();
-            $userFavoritePublicData = new UserFavoritePublicData();
-            $arrUserCarProductList = $userCarPublicData->GetList($userId);
 
-            for($i=0;$i<count($arrUserCarProductList);$i++){
-                $activityProductId = intval($arrUserCarProductList[$i]["ActivityProductId"]);
-                $productPriceValue = floatval($arrUserCarProductList[$i]["ProductPriceValue"]);
-                if($activityProductId>0){
-                    $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
-                    $salePrice = $discount * $productPriceValue;
-                }else{
-                    $salePrice = $productPriceValue;
-                }
-                $arrUserCarProductList[$i]["SalePrice"] = $salePrice;
-                $arrUserCarProductList[$i]["BuyPrice"] = $arrUserCarProductList[$i]["BuyCount"]*$salePrice;
-            }
+            $arrUserCarProductList = $userCarPublicData->GetList($userId);
 
             if (count($arrUserCarProductList) > 0) {
                 Template::ReplaceList($templateContent, $arrUserCarProductList, $tagId);
@@ -160,24 +168,15 @@ class UserCarPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
             parent::ReplaceTemplate($templateContent);
+
+            //TODO 这里要放到ReplaceTemplate里去,zc,待测试
             //-----------替换最近收藏----------begin
-            $recentUserFavoriteTagId = "recent_user_favorite_list";
-            $pageBegin = 0;
-            $pageSize = 4;
-            $allCount = 0;
-            $arrUserFavoriteList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
-            if(count($arrUserFavoriteList) > 0){
-                Template::ReplaceList($templateContent,$arrUserFavoriteList,$recentUserFavoriteTagId);
-            }else{
-                $templateContent = Template::ReplaceCustomTag($templateContent, $recentUserFavoriteTagId,Language::Load("user_favorite",1));
-            }
-            //------------------------------end
+            parent::ReplaceEnd($templateContent);
         } else {
-            Template::RemoveCustomTag($templateContent, $tagId);
             Control::GoUrl("/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=user_car&a=list"));
         }
-        $templateContent = parent::ReplaceTemplate($templateContent);
-        parent::ReplaceEnd($templateContent);
+
+
         return $templateContent;
     }
 

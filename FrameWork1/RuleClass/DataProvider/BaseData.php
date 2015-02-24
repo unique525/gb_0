@@ -188,6 +188,14 @@ class BaseData
      */
     const TableId_DocumentNews = "DocumentNewsId";
     /**
+     * 新闻资讯内容图片 数据表名
+     */
+    const TableName_DocumentNewsPic = "cst_document_news_pic";
+    /**
+     * 新闻资讯内容图片 数据表自增字段名
+     */
+    const TableId_DocumentNewsPic = "DocumentNewsPicId";
+    /**
      * 活动 数据表名
      */
     const TableName_Activity = "cst_activity";
@@ -650,6 +658,15 @@ class BaseData
      */
     const TableId_Visit_Result = "VisitResultId";
 
+    /**
+     * 客户端应用程序 数据表名
+     */
+    const TableName_Client_App = "cst_client_app";
+    /**
+     * 客户端应用程序 数据表自增字段名
+     */
+    const TableId_Client_App = "ClientAppId";
+
 
     /**
      * 调试 数据表名
@@ -774,7 +791,6 @@ class BaseData
         }
         return $result;
     }
-
 }
 
 ?>

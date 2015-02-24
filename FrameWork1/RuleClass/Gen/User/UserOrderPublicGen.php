@@ -37,10 +37,10 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $result = self::GenSubmitPay();
                 break;
             case "receive_pay":
-                $result = self::GenReceivePay();
+                //$result = self::GenReceivePay();
                 break;
             case "alipay_notify":
-                $result = self::AlipayNotify();
+                self::AlipayNotify();
                 break;
             case "alipay_return":
                 $result = self::AlipayReturn();
@@ -188,7 +188,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         if($strUserCarIds != "" && $userId > 0 && $siteId > 0){
-
+            $userCarPublicData = new UserCarPublicData();
 
             /////权限验证//////////////////////
             /////会员id和购物车所属会员id要一致
@@ -204,7 +204,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
             $activityProductPublicData = new ActivityProductPublicData();
-            $userCarPublicData = new UserCarPublicData();
+
 
             $tagIdUserReceive = "user_receive";
             $arrUserReceiveInfoList = $userReceiveInfoPublicData->GetList($userId);
@@ -222,18 +222,48 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $userId
             );
             $totalProductPrice = 0;//订单总价
+
+            $productPublicData = new ProductPublicData();
+
+            $maxProductSendPrice = 0;
+            $maxProductSendPriceAdd = 0;
+            $sumProductSendPrice = 0;
+            $sumProductSendPriceAdd = 0;
+
             for($i=0;$i<count($arrProductOrderList);$i++){
                 $activityProductId = intval($arrProductOrderList[$i]["ActivityProductId"]);
                 $productPriceValue = floatval($arrProductOrderList[$i]["ProductPriceValue"]);
+                $buyPrice = floatval($arrProductOrderList[$i]["BuyPrice"]);
+                $buyCount = intval($arrProductOrderList[$i]["BuyCount"]);
+                $productId = intval($arrProductOrderList[$i]["ProductId"]);
                 if($activityProductId>0){
-                    $discount = $activityProductPublicData->GetDiscount($activityProductId);
+                    $discount = $activityProductPublicData->GetDiscount($activityProductId, true);
                     $salePrice = $discount * $productPriceValue;
                 }else{
                     $salePrice = $productPriceValue;
                 }
                 $arrProductOrderList[$i]["SalePrice"] = $salePrice;
-                $arrProductOrderList[$i]["BuyPrice"] = $arrProductOrderList[$i]["BuyCount"]*$salePrice;
-                $totalProductPrice = $arrProductOrderList[$i]["BuyPrice"]+$totalProductPrice;
+                $arrProductOrderList[$i]["BuyPrice"] = $buyCount*$salePrice;
+                $totalProductPrice = $buyPrice+$totalProductPrice;
+
+                $currentProductSendPrice = $productPublicData->GetSendPrice($productId, TRUE);
+                $currentProductSendPriceAdd = $productPublicData->GetSendPriceAdd($productId, TRUE);
+
+                $sumProductSendPrice = $sumProductSendPrice + $currentProductSendPrice;
+                if($buyCount>1){
+                    //续重费
+                    $sumProductSendPriceAdd = $sumProductSendPrice + $currentProductSendPriceAdd*($buyCount-1);
+                }
+
+
+                if ($currentProductSendPrice > $maxProductSendPrice){
+                    $maxProductSendPrice = $currentProductSendPrice;
+                    if($buyCount>1){
+                        //续重费
+                        $maxProductSendPriceAdd = $currentProductSendPriceAdd*($buyCount-1);
+                    }
+                }
+
             }
             if(count($arrProductOrderList) > 0){
                 Template::ReplaceList($templateContent,$arrProductOrderList,$tagIdProductOrder);
@@ -241,7 +271,40 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 Template::ReplaceCustomTag($templateContent,$tagIdProductOrder,"");
             }
 
-            $sendPrice = $userCarPublicData->GetSendPriceForConfirmUserOrder($strUserCarIds,$userId);
+            //计算发货费用
+            /******
+             * 发货费用模式
+             *   （0）全场免费
+             *   （1）达到某金额免费，否则取最高项运费
+             *   （2）所有运费累加，并计算续重费，然后客服手动修改运费
+             *   （3）取最高的运费，并计算最高项的续重费
+             */
+            $siteConfigData = new SiteConfigData($siteId);
+            $productSendPriceMode = $siteConfigData->ProductSendPriceMode;
+            $productSendPriceFreeLimit = $siteConfigData->ProductSendPriceFreeLimit;
+            $sendPrice = 0;
+            switch($productSendPriceMode){
+                case 0:
+                    //全场免费
+                    $sendPrice = 0;
+                    break;
+                case 1:
+                    //达到某金额免费，否则取最高项运费
+                    if ($totalProductPrice>= $productSendPriceFreeLimit){
+                        $sendPrice = 0;
+                    }else{
+                        $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                    }
+                    break;
+                case 2:
+                    //所有运费累加，并计算续重费，然后客服手动修改运费
+                    $sendPrice = $sumProductSendPrice + $sumProductSendPriceAdd;
+                    break;
+                case 3:
+                    $sendPrice = $maxProductSendPrice + $maxProductSendPriceAdd;
+                    break;
+            }
+
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
 
             $replace_arr = array(
@@ -319,6 +382,9 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $arrProduct = Format::FixJsonDecode($userOrderProductArray);
 
                 $userOrderProductPublicData = new UserOrderProductPublicData();
+                $userCarPublicData = new UserCarPublicData();
+
+
 
                 for($i = 0;$i<count($arrProduct);$i++){
 
@@ -333,7 +399,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $saleCountDes = Des::Encrypt($saleCount, UserOrderData::USER_ORDER_DES_KEY);
                     $subtotal = floatval($arrProduct[$i]["Subtotal"]);
                     $subtotalDes = Des::Encrypt($subtotal, UserOrderData::USER_ORDER_DES_KEY);
-
+                    $activityProductId = intval($arrProduct[$i]["ActivityProductId"]);
                     //判断库存
                     $productPricePublicData = new ProductPricePublicData();
                     //即时库存，不缓存
@@ -360,6 +426,23 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                             //修改库存数
                             $newProductCount = $productCount - $saleCount;
                             $productPricePublicData->ModifyProductCount($productPriceId, $newProductCount);
+
+                            //删除对应购物车中的产品
+
+                            $userCarPublicData->DeleteByProductAndProductPrice(
+                                $userId,
+                                $siteId,
+                                $productId,
+                                $productPriceId,
+                                $activityProductId
+                            );
+
+
+                            //重计订单总价
+
+                            $userOrderPublicData->ReCountAllPrice($userOrderId);
+
+
                         }
                     }
 
@@ -369,10 +452,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //Control::GoUrl("/default.php?mod=user_order&a=pay&no=$userOrderNumber");
 
-                //删除购物车
-                $userCarPublicData = new UserCarPublicData();
-                $arrUserCarId = str_ireplace("_",",",$arrUserCarId);
-                $resultOfDeleteUserCar = $userCarPublicData->BatchDelete($arrUserCarId, $userId);
+                //删除购物车，
+                //2015.2.11 取消 by zc 已经在单项订单产品中处理
+                //$userCarPublicData = new UserCarPublicData();
+                //$arrUserCarId = str_ireplace("_",",",$arrUserCarId);
+                //$userCarPublicData->BatchDelete($arrUserCarId, $userId);
 
 
                 //支付选择页面
@@ -382,26 +466,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                 //支付方式选择
                 //默认支付宝
-/**
-                if(strlen($userOrderName)<=0){
-                    $userOrderName = Control::GetUserId().'-'.strval(date('Ymd', time()));
-                }
 
-                $alipay = new Alipay();
-                $userOrderIntro = "";
-                $userOrderProductUrl = "http://".$_SERVER['HTTP_HOST']."/default.php?mod=user_order&a=detail&user_order_id=$userOrderId";
-                $alipayConfig = $alipay->Init($siteId);
-                $result = $alipay->Submit(
-                    $siteId,
-                    $alipayConfig,
-                    $userOrderNumber,
-                    $userOrderName,
-                    $allPrice,
-                    $userOrderIntro,
-                    $userOrderProductUrl
-                );
-*/
-                //return $result;
 
             }else{
                 //编号出错
@@ -529,7 +594,16 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
      *
      */
     private function AlipayNotify(){
-
+        //$result = "";
+        $alipay = new Alipay();
+        $siteId = parent::GetSiteIdByDomain();
+        if($siteId>0){
+            $alipayConfig = $alipay->Init($siteId);
+            $alipay->NotifyUrl(
+                $alipayConfig
+            );
+        }
+        //return $result;
     }
 
     /**
@@ -552,20 +626,20 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
     private function AsyncModifyState(){
         $userId = Control::GetUserId();
         $userOrderId = Control::GetRequest("user_order_id",0);
-        $state = Control::GetRequest("state",-1);
+        $newState = Control::GetRequest("state",-1);
 
         $result = -1;
-        if($userId > 0 && $userOrderId > 0 && $state > 0){
+        if($userId > 0 && $userOrderId > 0 && $newState > 0){
             $userOrderPublicData = new UserOrderPublicData();
-            if($state == UserOrderData::STATE_APPLY_REFUND){
-                $nowState = $userOrderPublicData->GetState($userOrderId,false);
+            if($newState == UserOrderData::STATE_APPLY_REFUND){
+                $oldState = $userOrderPublicData->GetState($userOrderId,false);
 
                 if(
-                    $nowState == UserOrderData::STATE_PAYMENT  ||
-                    $nowState == UserOrderData::STATE_SENT  ||
-                    $nowState == UserOrderData::STATE_DONE  ||
-                    $nowState == UserOrderData::STATE_COMMENT_FINISHED  ||
-                    $nowState == UserOrderData::STATE_UNCOMMENT
+                    $oldState == UserOrderData::STATE_PAYMENT  ||
+                    $oldState == UserOrderData::STATE_SENT  ||
+                    $oldState == UserOrderData::STATE_DONE  ||
+                    $oldState == UserOrderData::STATE_COMMENT_FINISHED  ||
+                    $oldState == UserOrderData::STATE_UNCOMMENT
                 ){
 
                 }
@@ -573,7 +647,25 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_STATE.'})';
                 }
             }
-            $result = $userOrderPublicData->ModifyState($userOrderId,$userId,$state);
+            $result = $userOrderPublicData->ModifyState($userOrderId,$userId,$newState);
+
+            if ($result >0){
+
+                if ($newState == UserOrderData::STATE_CLOSE){
+
+                    /**
+                     * @TODO 关闭交易时，要恢复库存
+                     */
+
+
+
+
+                }
+
+
+            }
+
+
         }
 
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';

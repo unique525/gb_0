@@ -14,13 +14,14 @@ class BaseClientGen extends BaseGen {
      */
     protected function GetUserId(){
         $userAccount = Format::FormatHtmlTag(Control::PostOrGetRequest("UserAccount", ""));
-        $userPass = Control::PostOrGetRequest("UserPass", "");
+        $userPass = Control::PostOrGetRequest("UserPass", "");//经过 MD5
 
         if (strlen($userAccount) <= 0
             || empty($userPass)
         ) {
             $userId = -10; //会员检验失败,参数错误
         } else {
+
             $userClientData = new UserClientData();
             $userId = $userClientData->Login($userAccount, $userPass);
             if ($userId <= 0) {

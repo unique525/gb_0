@@ -28,6 +28,10 @@ class Template
     /**
      * 模板标签类型：图片轮换列表 type="pic_slider_list"
      */
+    const TAG_TYPE_DOCUMENT_NEWS_PIC_LIST = "document_news_pic_list";
+    /**
+     * 模板标签类型：图片轮换列表 type="pic_slider_list"
+     */
     const TAG_TYPE_PIC_SLIDER_LIST = "pic_slider_list";
     /**
      * 模板标签类型：产品列表 type="product_list"
@@ -53,6 +57,10 @@ class Template
      * 模板标签类型：浏览记录列表 type="user_explore_list"
      */
     const TAG_TYPE_USER_EXPLORE_LIST = "user_explore_list";
+    /**
+     * 模板标签类型：最新收藏记录列表 type="user_explore_list"
+     */
+    const TAG_TYPE_RECENT_USER_FAVORITE_LIST = "recent_user_favorite_list";
     /**
      * 模板标签类型：电子报文章列表 type="newspaper_article_list"
      */
@@ -131,7 +139,6 @@ class Template
     {
         if (stripos($templateContent, $tagName) > 0) {
             if ($arrList != null && count($arrList) > 0) {
-
                 $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
                 $endTagString = '</' . $tagName . '>';
                 $listTempContent = substr($templateContent, strpos($templateContent, $beginTagString));
@@ -400,10 +407,10 @@ class Template
                             $itemType
                         );
 
-
                         //处理子表数据
                         $sbChild = "";
                         if(count($arrChildList)>0){
+
                             //根级id赋值
                             $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
                             for($j = 0; $j<count($arrChildList); $j++){
@@ -411,11 +418,7 @@ class Template
 
                                 $listOfChild = $childTempContent;
                                 $columnsOfChild = $arrChildList[$j];
-
                                 if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
-
-
-
                                     $listOfChild = self::ReplaceListItem(
                                         $j,
                                         $type,

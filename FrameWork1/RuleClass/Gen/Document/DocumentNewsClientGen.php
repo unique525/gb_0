@@ -34,27 +34,26 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         $result = "[{}]";
         $resultCode = 0;
 
-        $channelId = Control::GetRequest("channel_id", 0);
+        $channelId = intval(Control::GetRequest("channel_id", 0));
 
         if($channelId>0){
-            $pageSize = Control::GetRequest("ps", 20);
-            $pageIndex = Control::GetRequest("p", 1);
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageIndex = intval(Control::GetRequest("p", 1));
             $searchKey = Control::GetRequest("search_key", "");
-            $searchType = Control::GetRequest("search_type", -1);
+            $searchType = intval(Control::GetRequest("search_type", -1));
             $searchKey = urldecode($searchKey);
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $allCount = 0;
             $documentNewsClientData = new DocumentNewsClientData();
             $arrDocumentNewsList = $documentNewsClientData->GetList(
                 $channelId,
                 $pageBegin,
                 $pageSize,
-                $allCount,
                 $searchKey,
                 $searchType
             );
             if (count($arrDocumentNewsList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrDocumentNewsList);
             }
             else{

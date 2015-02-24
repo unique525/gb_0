@@ -7,9 +7,6 @@
  */
 class UserOrderManageData extends BaseManageData{
 
-    const STATE_REMOVED = 100;
-
-
     public function GetFields($tableName = self::TableName_UserOrder){
         return parent::GetFields(self::TableName_UserOrder);
     }
@@ -108,6 +105,30 @@ class UserOrderManageData extends BaseManageData{
         }
         return $result;
     }
+
+    /**
+     * 取得订单状态
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单状态
+     */
+    public function GetState($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
+            $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+
     /**
      * 获取一个订单的详细信息
      * @param int $userOrderId 订单Id
@@ -153,7 +174,7 @@ class UserOrderManageData extends BaseManageData{
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_site_id.cache_' . $userOrderId . '';
             $sql = "SELECT SiteId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
