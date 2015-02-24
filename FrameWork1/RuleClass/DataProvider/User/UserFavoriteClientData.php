@@ -51,7 +51,13 @@ class UserFavoriteClientData extends BaseClientData {
     public function GetList($userId,$siteId,$pageBegin,$pageSize){
         $result = null;
         if($userId > 0){
-            $sql = "SELECT uf.*,uf2.UploadFilePath FROM ".self::TableName_UserFavorite." uf LEFT JOIN ".self::TableName_UploadFile.
+            $sql = "SELECT
+                        uf.*,
+                        uf2.UploadFilePath AS UserFavoriteUploadFilePath,
+                        uf2.UploadFileMobilePath AS UserFavoriteUploadFileMobilePath
+                    FROM ".self::TableName_UserFavorite." uf
+
+                    LEFT JOIN ".self::TableName_UploadFile.
                 " uf2 ON uf.UserFavoriteUploadFileId = uf2.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);

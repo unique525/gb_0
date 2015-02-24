@@ -144,12 +144,18 @@ class UserOrderProductClientData extends BaseClientData {
     {
         $result = null;
         if ($userOrderId > 0 && $userId > 0 && $siteId > 0) {
-            $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit,(SELECT count(*) FROM "
-                .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
+            $sql = "SELECT
+
+                        uop.*,p.ProductName
+                        ,pp.ProductPriceIntro
+                        ,pp.ProductUnit,
+
+                        (SELECT count(*) FROM " .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
+
                 FROM " . self::TableName_UserOrderProduct . " uop, "
-                . self::TableName_Product . " p,"
-                . self::TableName_ProductPrice . " pp,"
-                .self::TableName_UserOrder." uo
+                        . self::TableName_Product . " p,"
+                        . self::TableName_ProductPrice . " pp,"
+                        .self::TableName_UserOrder." uo
                 WHERE uop.ProductId = p.ProductId
                 AND uop.State < :State
                 AND uop.ProductPriceId = pp.ProductPriceId
