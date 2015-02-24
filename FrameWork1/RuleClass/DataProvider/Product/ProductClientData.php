@@ -178,7 +178,8 @@ class ProductClientData extends BaseClientData {
             SalePrice,t.CreateDate,t.ManageUserId,t.ManageUserName,t.UserId,t.UserName,t.
             Sort,t.State,t.RecLevel,t.HitCount,t.RecCount,t.FavoriteCount,t.QuestionCount,t.IsHot,t.IsNew,t.
             SaleState,t.GetScore,t.SendPrice,t.SendPriceAdd,t.DirectUrl,t.MarketPrice,t.SaleCount,t.PublishDate,t.ProductCommentCount,
-            t1.*
+            t1.UploadFilePath AS TitlePic1UploadFilePath,
+            t1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath
             FROM
             " . self::TableName_Product . " t
             LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId
