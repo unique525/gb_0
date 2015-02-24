@@ -154,15 +154,14 @@ class UserOrderProductClientData extends BaseClientData {
 
                         (SELECT count(*) FROM " .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
 
-                FROM " . self::TableName_UserOrderProduct . " uop, "
-                        . self::TableName_Product . " p,"
-                        . self::TableName_ProductPrice . " pp,"
-                        .self::TableName_UserOrder." uo
-                LEFT OUTER JOIN " .self::TableName_UploadFile." uf on p.TitlePic1UploadFileId=uf.UploadFileId
-                WHERE uop.ProductId = p.ProductId
-                AND uop.State < :State
-                AND uop.ProductPriceId = pp.ProductPriceId
-                AND uop.UserOrderId = uo.UserOrderId
+                FROM " . self::TableName_UserOrderProduct . " uop
+                INNER JOIN " . self::TableName_Product . " p ON (uop.ProductId = p.ProductId)
+                INNER JOIN " . self::TableName_ProductPrice . " pp ON (uop.ProductPriceId = pp.ProductPriceId)
+                INNER JOIN " . self::TableName_UserOrder . " uo ON (uop.UserOrderId = uo.UserOrderId)
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (p.TitlePic1UploadFileId=uf.UploadFileId)
+                WHERE
+                uop.State < :State
+
                 AND uo.UserId = :UserId
                 AND uo.UserOrderId = :UserOrderId
                 AND uop.SiteId = :SiteId;";
