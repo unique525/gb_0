@@ -49,6 +49,7 @@ class PicSliderClientGen extends BaseClientGen implements IBaseClientGen {
                 $orderBy
             );
             if (count($arrList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrList);
             }else{
                 $resultCode = -2;

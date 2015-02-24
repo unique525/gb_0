@@ -20,6 +20,9 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             case "list_by_product":
                 $result = self::GetListByProduct();
                 break;
+            case "list_for_search":
+                $result = self::GetListForSearch();
+                break;
             case "list_by_channel":
                 $result = self::GetListByChannel();
                 break;
@@ -39,13 +42,57 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
     }
 
     /**
-     * 返回列表数据集
+     * 根据搜索条件返回列表数据集
+     * @return string
+     */
+    private function GetListForSearch(){
+
+        $result = "[{}]";
+
+        $channelId = Control::GetRequest("channel_id", 0);
+
+        if($channelId>0){
+            $pageSize = Control::GetRequest("ps", 20);
+            $order = Control::GetRequest("order", 0);
+            $pageIndex = Control::GetRequest("p", 1);
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $searchKey = Control::GetRequest("search_key", "");
+            $searchKey = urldecode($searchKey);
+            $channelClientData = new ChannelClientData();
+            $channelIds = $channelClientData->GetChildrenChannelId($channelId, true);
+            if(strlen($channelIds)>0){
+                $channelIds = $channelIds . ',' . $channelId;
+            }else{
+                $channelIds = $channelId;
+            }
+            if(strlen($channelIds)>0){
+                $channelIds = $channelIds . ',' . $channelId;
+            }else{
+                $channelIds = $channelId;
+            }
+            $productClientData = new ProductClientData();
+            $arrList = $productClientData->GetListForSearch($channelIds, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","product":{"product_list":' . $result . '}}';
+    }
+
+    /**
+     * 根据频道返回列表数据集
      * @return string
      */
     private function GetListByChannel(){
 
         $result = "[{}]";
-        $resultCode = 0;
 
         $channelId = Control::GetRequest("channel_id", 0);
 
@@ -70,6 +117,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
                 $pageSize
             );
             if (count($arrList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrList);
             }else{
                 $resultCode = -2;
@@ -84,7 +132,6 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
     private function GetListOfDiscount(){
         $result = "[{}]";
-        $resultCode = 0;
         $channelId = Control::GetRequest("channel_id", 0);
         if ($channelId > 0) {
             $topCount = Control::GetRequest("top", 5);
@@ -94,6 +141,7 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
             $ownChannelAndChildChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
             $arrProductList = $productClientData->GetDiscountListByChannelId($ownChannelAndChildChannelId, $orderBy, $topCount);
             if (count($arrProductList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrProductList);
             }else{
                 $resultCode = -2;
@@ -130,13 +178,13 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
 
     private function GetListByProduct(){
         $result = "[{}]";
-        $resultCode = 0;
         $productId = Control::GetRequest("product_id", 0);
         if ($productId > 0) {
 
             $productClientData = new ProductClientData();
             $arrOne = $productClientData->GetOne($productId);
             if (count($arrOne) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrOne);
             }else{
                 $resultCode = -2;

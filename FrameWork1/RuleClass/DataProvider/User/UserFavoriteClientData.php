@@ -109,7 +109,7 @@ class UserFavoriteClientData extends BaseClientData {
     public function GetOne($userId, $userFavoriteId, $withCache = false)
     {
         $result = null;
-        if ($userId > 0) {
+        if ($userId > 0 && $userFavoriteId > 0) {
             $sql = "SELECT
                         uf.* ,
                         up.UploadFilePath,
@@ -125,13 +125,14 @@ class UserFavoriteClientData extends BaseClientData {
                         up.UploadFileTitle,
                         up.UploadFileInfo
                             FROM " . self::TableName_UserFavorite . " uf
-                            LEFT JOIN " . self::TableName_UploadFile . " up ON uf.UploadFileId = up.UploadFileId
+                            LEFT JOIN " . self::TableName_UploadFile . " up ON uf.UserFavoriteUploadFileId = up.UploadFileId
                             WHERE uf.UserId = :UserId AND uf.UserFavoriteId = :UserFavoriteId;";
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("UserFavoriteId", $userFavoriteId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
         }
         return $result;
     }
