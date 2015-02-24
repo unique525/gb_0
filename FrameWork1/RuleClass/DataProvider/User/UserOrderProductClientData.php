@@ -149,6 +149,8 @@ class UserOrderProductClientData extends BaseClientData {
                         uop.*,p.ProductName
                         ,pp.ProductPriceIntro
                         ,pp.ProductUnit,
+                        uf.UploadFilePath AS ProductTitlePic1UploadFilePath,
+                        uf.UploadFileMobilePath AS ProductTitlePic1UploadFileMobilePath,
 
                         (SELECT count(*) FROM " .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
 
@@ -156,6 +158,7 @@ class UserOrderProductClientData extends BaseClientData {
                         . self::TableName_Product . " p,"
                         . self::TableName_ProductPrice . " pp,"
                         .self::TableName_UserOrder." uo
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf on p.TitlePic1UploadFileId=uf.UploadFileId
                 WHERE uop.ProductId = p.ProductId
                 AND uop.State < :State
                 AND uop.ProductPriceId = pp.ProductPriceId
