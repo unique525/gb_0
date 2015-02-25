@@ -71,10 +71,10 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
             $userFavoriteTitle = "";
             $uploadFileId = 0;
             $userFavoriteUrl = "";
-            if($tableType == UserFavoriteData::TableType_Product){
-                $userFavoriteTitle = Control::GetRequest("user_favorite_title","");
+            if($tableType == UserFavoriteData::TABLE_TYPE_PRODUCT){
+                $userFavoriteTitle = urldecode(Control::GetRequest("user_favorite_title",""));
                 $productPublicData = new ProductPublicData();
-                $arrProductOne =$productPublicData->GetOneForUserFavorite($tableId);
+                $arrProductOne =$productPublicData->GetOne($tableId);
                 if($userFavoriteTitle == ""){
                     $userFavoriteTitle = $arrProductOne["ProductName"];
                 }

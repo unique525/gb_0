@@ -11,23 +11,41 @@ class UserClientData extends BaseClientData {
     /**
      * 混合登录
      * @param string $userAccount 会员登录帐号，可以是会员名，会员邮箱，会员手机号码
-     * @param string $userPass 会员密码
+     * @param string $userPass 会员密码(md5)
      * @return int 返回userId
      */
     public function Login($userAccount,$userPass){
         $result = -1;
 
         if(!empty($userAccount) && !empty($userPass)){
-            $sql = "SELECT UserId FROM ".self::TableName_User."
+
+            $sql = "SELECT UserPass,UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                            AND UserPass = :UserPass
-                            ;";
+                        ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
             $dataProperty->AddField("UserEmail",$userAccount);
             $dataProperty->AddField("UserMobile",$userAccount);
-            $dataProperty->AddField("UserPass",$userPass);
-            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+
+            $arrUser = $this->dbOperator->GetArray($sql,$dataProperty);
+
+            if(count($arrUser)>0){
+
+                $userPassInDataBase = $arrUser["UserPass"];
+                $userId = intval($arrUser["UserId"]);
+
+                if (md5($userPassInDataBase) == $userPass){
+                    //密码正确
+                    $result = $userId;
+                }else{
+                    //密码错误
+                    $result = -2;
+                }
+
+            }else{
+                $result = -3;
+            }
+
         }
         return $result;
     }

@@ -14,7 +14,6 @@ class DocumentNewsClientData extends BaseClientData {
      * @param int $channelId 频道id
      * @param int $pageBegin 起始记录行
      * @param int $pageSize 页大小
-     * @param int $allCount 记录总数
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
      * @return array 资讯列表数据集
@@ -23,11 +22,11 @@ class DocumentNewsClientData extends BaseClientData {
         $channelId,
         $pageBegin,
         $pageSize,
-        &$allCount,
         $searchKey = "",
         $searchType = 0
     )
     {
+        $searchKey = Format::FormatSql($searchKey);
         $searchSql = "";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ChannelId", $channelId);
@@ -139,10 +138,6 @@ class DocumentNewsClientData extends BaseClientData {
 
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-
-        $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . "
-                WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . ";";
-        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
     }

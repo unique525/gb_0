@@ -58,6 +58,10 @@ class Template
      */
     const TAG_TYPE_USER_EXPLORE_LIST = "user_explore_list";
     /**
+     * 模板标签类型：最新收藏记录列表 type="user_explore_list"
+     */
+    const TAG_TYPE_RECENT_USER_FAVORITE_LIST = "recent_user_favorite_list";
+    /**
      * 模板标签类型：电子报文章列表 type="newspaper_article_list"
      */
     const TAG_TYPE_NEWSPAPER_ARTICLE_LIST = "newspaper_article_list";

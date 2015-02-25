@@ -134,7 +134,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("UserOrderNumberDes", $userOrderNumberDes);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -147,22 +147,79 @@ class UserOrderClientData extends BaseClientData {
      * @param $siteId
      * @param $pageBegin
      * @param $pageSize
-     * @param $allCount
      * @return array|null
      */
-    public function GetList($userId, $siteId,  $pageBegin, $pageSize, &$allCount)
+    public function GetList($userId, $siteId,  $pageBegin, $pageSize)
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_UserOrder
+            $sql = "SELECT
+                        *,
+                        ( SELECT count(*)
+                            FROM ".self::TableName_UserOrderProduct."
+                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
+
+                        (
+                            SELECT ProductId
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductId,
+
+                        (
+                            SELECT ProductName
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductName,
+
+                        (
+                            SELECT uf1.UploadFileMobilePath
+                                FROM ".self::TableName_Product." p
+                                LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on p.TitlePic1UploadFileId=uf1.UploadFileId
+                                WHERE
+                                    p.ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        )  AS TitlePic1UploadFileMobilePath,
+
+                        (
+                            SELECT SaleCount
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSaleCount,
+
+                        (
+                            SELECT SalePrice
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSalePrice
+
+
+
+                    FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId  ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
@@ -174,23 +231,79 @@ class UserOrderClientData extends BaseClientData {
      * @param $state
      * @param $pageBegin
      * @param $pageSize
-     * @param $allCount
      * @return array|null
      */
-    public function GetListByState($userId, $siteId, $state, $pageBegin, $pageSize, &$allCount)
+    public function GetListByState($userId, $siteId, $state, $pageBegin, $pageSize)
     {
         $result = null;
         if ($userId > 0 && $siteId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_UserOrder
+            $sql = "SELECT
+                        *,
+                        ( SELECT count(*)
+                            FROM ".self::TableName_UserOrderProduct."
+                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId) AS ProductCount,
+
+                        (
+                            SELECT ProductId
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductId,
+
+                        (
+                            SELECT ProductName
+                                FROM ".self::TableName_Product."
+                                WHERE
+                                    ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        ) AS FirstProductName,
+
+                        (
+                            SELECT uf1.UploadFileMobilePath
+                                FROM ".self::TableName_Product." p
+                                LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on p.TitlePic1UploadFileId=uf1.UploadFileId
+                                WHERE
+                                    p.ProductId=
+                                        (SELECT ProductId
+                                            FROM ".self::TableName_UserOrderProduct."
+                                            WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                            ORDER BY UserOrderProductId
+                                            LIMIT 1)
+                        )  AS TitlePic1UploadFileMobilePath,
+
+                        (
+                            SELECT SaleCount
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSaleCount,
+
+                        (
+                            SELECT SalePrice
+                                FROM ".self::TableName_UserOrderProduct."
+                                WHERE UserOrderId=".self::TableName_UserOrder.".UserOrderId
+                                ORDER BY UserOrderProductId
+                                LIMIT 1
+                        ) AS FirstProductSalePrice
+
+
+                    FROM " . self::TableName_UserOrder
                 . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserOrder
-                . " WHERE UserId = :UserId AND SiteId = :SiteId AND State = :State ORDER BY CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
@@ -266,7 +379,7 @@ class UserOrderClientData extends BaseClientData {
         $result =-1;
         if(strlen($userOrderNumber)>0){
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderNumber);
             $cacheFile = 'user_order_get_user_order_id_by_user_order_number.cache_' . $userOrderNumber . '';
             $sql = "SELECT UserOrderId FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
             $dataProperty = new DataProperty();
@@ -281,22 +394,20 @@ class UserOrderClientData extends BaseClientData {
     /**
      * 修改状态
      * @param int $userOrderId 订单id
-     * @param int $userId 会员id
      * @param int $state 状态
      * @return int 操作结果
      */
-    public function ModifyState($userOrderId,$userId,$state)
+    public function ModifyState($userOrderId,$state)
     {
         $result = 0;
         if ($userOrderId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder." AND UserId = :UserId;";
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
             $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
-            $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -313,7 +424,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
             $sql = "SELECT State FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -335,7 +446,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_name.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderName FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -357,7 +468,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_order_number.cache_' . $userOrderId . '';
             $sql = "SELECT UserOrderNumber FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -378,7 +489,7 @@ class UserOrderClientData extends BaseClientData {
     {
         $result = -1;
         if ($userOrderId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_user_id.cache_' . $userOrderId . '';
             $sql = "SELECT UserId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
             $dataProperty = new DataProperty();
@@ -405,7 +516,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("AlipayTradeNo", $alipayTradeNo);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_no.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -428,7 +539,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("AlipayTradeStatus", $alipayTradeStatus);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
 
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_order_data';
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
             $cacheFile = 'user_order_get_alipay_trade_status.cache_' . $userOrderId . '';
             DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
         }
@@ -436,6 +547,37 @@ class UserOrderClientData extends BaseClientData {
     }
 
 
+    /**
+     * 重计订单总价
+     * @param $userOrderId
+     * @return int
+     */
+    public function ReCountAllPrice($userOrderId)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "SELECT sum(SubTotal) FROM " . self::TableName_UserOrderProduct . " WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $allPrice = $this->dbOperator->GetFloat($sql, $dataProperty);
+
+            $dataProperty2 = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . "
+                        SET
+                        `AllPrice`=:AllPrice,AllPriceDes=:AllPriceDes
+
+                    WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty2->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty2->AddField("AllPrice", $allPrice);
+            $dataProperty2->AddField("AllPriceDes", Des::Encrypt($allPrice, UserOrderData::USER_ORDER_DES_KEY));
+            $result = $this->dbOperator->Execute($sql, $dataProperty2);
+
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_all_price.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
 
 }
 

@@ -249,7 +249,18 @@ class BasePublicGen extends BaseGen {
                             );
                         }
                         break;
-                    case Template::TAG_TYPE_USER_EXPLORE_LIST:
+                    case Template::TAG_TYPE_RECENT_USER_FAVORITE_LIST:
+                        $userId = Control::GetUserId();
+                        if($userId>0){
+                            $templateContent = self::ReplaceTemplateOfUserFavoriteList(
+                                $templateContent,
+                                $userId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere
+                            );
+                        }
 
                         break;
                 }
@@ -578,29 +589,16 @@ class BasePublicGen extends BaseGen {
     {
         if ($newspaperArticleId > 0) {
 
-            //默认只显示已发状态的新闻
-            $state = 0;
+
 
             $arrList = null;
             $newspaperArticlePicPublicData = new NewspaperArticlePicPublicData();
-
-            //排序方式
-            switch ($tagOrder) {
-                case "new":
-                    $orderBy = 0;
-                    break;
-                default:
-                    $orderBy = 0;
-                    break;
-            }
 
             switch ($tagWhere) {
                 default :
                     $arrList = $newspaperArticlePicPublicData->GetList($newspaperArticleId);
                     break;
             }
-
-            //echo 'ddd'.$tagId.':'.stripos($tagId,"newspaper_article_slider_").'<br>';
 
             if (!empty($arrList)) {
 
@@ -628,6 +626,43 @@ class BasePublicGen extends BaseGen {
         }
 
         return $channelTemplateContent;
+    }
+
+    private function ReplaceTemplateOfUserFavoriteList(
+        $channelTemplateContent,
+        $userId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere
+    ){
+        if ($userId > 0) {
+            $siteId = self::GetSiteIdByDomain();
+            $arrList = null;
+            $userFavoritePublicData = new UserFavoritePublicData();
+
+            switch ($tagWhere) {
+                default :
+                    $pageBegin = 1;
+                    $pageSize = $tagTopCount;
+                    $arrList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
+                    break;
+            }
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+
+
+
+
     }
 
     /**

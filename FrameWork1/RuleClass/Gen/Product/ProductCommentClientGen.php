@@ -33,7 +33,6 @@ class ProductCommentClientGen extends BaseClientGen implements IBaseClientGen {
     private function GetListByProduct(){
 
         $result = "[{}]";
-        $resultCode = 0;
 
         $productId = Control::GetRequest("product_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
@@ -51,6 +50,7 @@ class ProductCommentClientGen extends BaseClientGen implements IBaseClientGen {
                 $order
             );
             if (count($arrList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrList);
             }else{
                 $resultCode = -2;

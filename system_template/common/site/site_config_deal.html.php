@@ -88,7 +88,7 @@
                     <div id="tabs">
                         <ul>
                             <li><a href="#tabs-1">基本设置</a></li>
-                            <li><a href="#tabs-2">tabs-2</a></li>
+                            <li><a href="#tabs-2">产品设置</a></li>
                             <li><a href="#tabs-3">tabs-3</a></li>
                             <li><a href="#tabs-4">tabs-4</a></li>
                         </ul>
@@ -114,7 +114,118 @@
 
                         <div id="tabs-2">
                             <div>
-
+                                <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductTitlePic1MobileWidth">手机客户端产品题图1的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductTitlePic1MobileWidth" type="text" class="input_number" name="cfg_ProductTitlePic1MobileWidth" value="{cfg_ProductTitlePic1MobileWidth}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductTitlePic1PadWidth">平板客户端产品题图1的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductTitlePic1PadWidth" type="text" class="input_number" name="cfg_ProductTitlePic1PadWidth" value="{cfg_ProductTitlePic1PadWidth}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicMobileWidth">手机客户端产品图片的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicMobileWidth" type="text" class="input_number" name="cfg_ProductPicMobileWidth" value="{cfg_ProductPicMobileWidth}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicPadWidth">平板客户端产品图片的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicPadWidth" type="text" class="input_number" name="cfg_ProductPicPadWidth" value="{cfg_ProductPicPadWidth}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductTitlePic1MobileWidth">产品图片的缩略图1宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicThumb1Width" type="text" class="input_number" name="cfg_ProductPicThumb1Width" value="{cfg_ProductPicThumb1Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicThumb2Width">产品图片的缩略图2宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicThumb2Width" type="text" class="input_number" name="cfg_ProductPicThumb2Width" value="{cfg_ProductPicThumb2Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicThumb3Width">产品图片的缩略图3宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicThumb3Width" type="text" class="input_number" name="cfg_ProductPicThumb3Width" value="{cfg_ProductPicThumb3Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicWatermark1Width">产品图片的水印图1宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicWatermark1Width" type="text" class="input_number" name="cfg_ProductPicWatermark1Width" value="{cfg_ProductPicWatermark1Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicWatermark2Width">产品图片的水印图2宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicWatermark2Width" type="text" class="input_number" name="cfg_ProductPicWatermark2Width" value="{cfg_ProductPicWatermark2Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicCompress1Width">产品图片的压缩图1宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicCompress1Width" type="text" class="input_number" name="cfg_ProductPicCompress1Width" value="{cfg_ProductPicCompress1Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductPicCompress2Width">产品图片的压缩图2宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductPicCompress2Width" type="text" class="input_number" name="cfg_ProductPicCompress2Width" value="{cfg_ProductPicCompress2Width}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductSendPriceMode">发货费用模式：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <select id="cfg_ProductSendPriceMode" name="cfg_ProductSendPriceMode">
+                                                <option value="0">全场免费</option>
+                                                <option value="1">达到某金额免费</option>
+                                                <option value="2">所有运费累加，并计算续重费，然后客服手动修改运费</option>
+                                                <option value="3">取最高的运费，并计算最高项的续重费</option>
+                                            </select>
+                                            {sel_ProductSendPriceMode}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ProductSendPriceFreeLimit">发货费用模式（1）,达到某金额免费：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_ProductSendPriceFreeLimit" type="text" class="input_price" name="cfg_ProductSendPriceFreeLimit" value="{cfg_ProductSendPriceFreeLimit}"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 

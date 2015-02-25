@@ -15,11 +15,22 @@ class UserCarPublicData extends BasePublicData
      * @param int $productId 产品id
      * @param int $productPriceId 产品价格id
      * @param int $buyCount 购买数量
+     * @param float $salePrice 折后价格
+     * @param float $buyPrice 小计价格
      * @param int $productCount 产品库存数量
      * @param int $activityProductId 活动产品id
      * @return int 返回新增结果
      */
-    public function Create($userId, $siteId, $productId, $productPriceId, $buyCount, $productCount, $activityProductId = 0)
+    public function Create(
+        $userId,
+        $siteId,
+        $productId,
+        $productPriceId,
+        $buyCount,
+        $salePrice,
+        $buyPrice,
+        $productCount,
+        $activityProductId = 0)
     {
         $result = -1;
         if ($userId > 0 && $productId > 0 && $siteId > 0 && $productPriceId > 0) {
@@ -52,8 +63,11 @@ class UserCarPublicData extends BasePublicData
 
 
                 if ($existBuyCount>0){
+
+                    //修改的时候，小计也要重计一下
+
                     $sql = "UPDATE " . self::TableName_UserCar . "
-                        SET BuyCount = BuyCount + $buyCount
+                        SET BuyCount = BuyCount + $buyCount,BuyPrice = BuyPrice + $buyPrice
                         WHERE UserId = :UserId
                             AND SiteId = :SiteId
                             AND ProductId = :ProductId
@@ -63,12 +77,12 @@ class UserCarPublicData extends BasePublicData
 
                     $result = $this->dbOperator->Execute($sql,$dataProperty);
 
-
-
                 }else{
 
 
                     $dataProperty->AddField("BuyCount", $buyCount);
+                    $dataProperty->AddField("SalePrice", $salePrice);
+                    $dataProperty->AddField("BuyPrice", $buyPrice);
                     $sql = "INSERT INTO " . self::TableName_UserCar. "
                         (
                         UserId,
@@ -77,6 +91,8 @@ class UserCarPublicData extends BasePublicData
                         ProductPriceId,
                         ActivityProductId,
                         BuyCount,
+                        SalePrice,
+                        BuyPrice,
                         CreateDate
                         )
                         VALUES (
@@ -86,6 +102,8 @@ class UserCarPublicData extends BasePublicData
                         :ProductPriceId,
                         :ActivityProductId,
                         :BuyCount,
+                        :SalePrice,
+                        :BuyPrice,
                         now()
                         );";
 
@@ -177,6 +195,46 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 根据产品和产品价格id删除
+     * @param int $userId
+     * @param int $siteId
+     * @param int $productId
+     * @param int $productPriceId
+     * @param int $activityProductId
+     * @return int 影响行数
+     */
+    public function DeleteByProductAndProductPrice(
+        $userId,
+        $siteId,
+        $productId,
+        $productPriceId,
+        $activityProductId
+    ){
+        $result = 0;
+        if ($userId > 0 && $productId > 0 && $siteId > 0 && $productPriceId > 0) {
+            $dataProperty = new DataProperty();
+
+            $sql = "DELETE FROM " . self::TableName_UserCar ."
+                    WHERE UserId = :UserId
+                        AND SiteId = :SiteId
+                        AND ProductId = :ProductId
+                        AND ProductPriceId = :ProductPriceId
+                        AND ActivityProductId = :ActivityProductId;
+                    ";
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ProductId", $productId);
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $dataProperty->AddField("ActivityProductId", $activityProductId);
+
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+
     public function BatchDelete($strUserCarIds, $userId)
     {
         $result = -1;
@@ -229,6 +287,12 @@ class UserCarPublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 取得发货费用的最高值
+     * @param $strUserCarIds
+     * @param $userId
+     * @return float|null
+     */
     public function GetSendPriceForConfirmUserOrder($strUserCarIds, $userId)
     {
         $result = null;

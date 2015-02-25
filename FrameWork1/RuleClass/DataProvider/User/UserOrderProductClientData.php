@@ -144,16 +144,24 @@ class UserOrderProductClientData extends BaseClientData {
     {
         $result = null;
         if ($userOrderId > 0 && $userId > 0 && $siteId > 0) {
-            $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit,(SELECT count(*) FROM "
-                .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
-                FROM " . self::TableName_UserOrderProduct . " uop, "
-                . self::TableName_Product . " p,"
-                . self::TableName_ProductPrice . " pp,"
-                .self::TableName_UserOrder." uo
-                WHERE uop.ProductId = p.ProductId
-                AND uop.State < :State
-                AND uop.ProductPriceId = pp.ProductPriceId
-                AND uop.UserOrderId = uo.UserOrderId
+            $sql = "SELECT
+
+                        uop.*,p.ProductName
+                        ,pp.ProductPriceIntro
+                        ,pp.ProductUnit,
+                        uf.UploadFilePath AS ProductTitlePic1UploadFilePath,
+                        uf.UploadFileMobilePath AS ProductTitlePic1UploadFileMobilePath,
+
+                        (SELECT count(*) FROM " .self::TableName_ProductComment." pc WHERE uop.UserOrderProductId = pc.UserOrderProductId) AS CommentCount
+
+                FROM " . self::TableName_UserOrderProduct . " uop
+                INNER JOIN " . self::TableName_Product . " p ON (uop.ProductId = p.ProductId)
+                INNER JOIN " . self::TableName_ProductPrice . " pp ON (uop.ProductPriceId = pp.ProductPriceId)
+                INNER JOIN " . self::TableName_UserOrder . " uo ON (uop.UserOrderId = uo.UserOrderId)
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (p.TitlePic1UploadFileId=uf.UploadFileId)
+                WHERE
+                uop.State < :State
+
                 AND uo.UserId = :UserId
                 AND uo.UserOrderId = :UserOrderId
                 AND uop.SiteId = :SiteId;";
@@ -163,6 +171,24 @@ class UserOrderProductClientData extends BaseClientData {
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取一个会员订单产品的详细信息
+     * @param int $userOrderProductId 订单产品Id
+     * @return array|null 会员订单产品的数组
+     */
+    public function GetOne($userOrderProductId){
+        $result = null;
+        if($userOrderProductId > 0){
+            $sql = "SELECT *
+                    FROM " .self::TableName_UserOrderProduct."
+                    WHERE UserOrderProductId = :UserOrderProductId; ";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderProductId",$userOrderProductId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
         }
         return $result;
     }

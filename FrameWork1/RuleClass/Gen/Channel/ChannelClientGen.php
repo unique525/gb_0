@@ -33,7 +33,6 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
     private function GetAllChildListByParentId(){
 
         $result = "[{}]";
-        $resultCode = 0;
 
         $parentId = Control::GetRequest("parent_id", 0);
 
@@ -50,6 +49,7 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
                 $topCount
             );
             if (count($arrList) > 0) {
+                $resultCode = 1;
                 $result = Format::FixJsonEncode($arrList);
             }else{
                 $resultCode = -2;

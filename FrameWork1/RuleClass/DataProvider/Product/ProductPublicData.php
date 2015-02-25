@@ -408,17 +408,6 @@ class ProductPublicData extends BasePublicData {
         return $result;
     }
 
-    public function GetOneForUserFavorite($productId){
-        $result = null;
-        if($productId > 0){
-            $sql = "SELECT ProductName,ChannelId,TitlePic1UploadFileId FROM ".self::TableName_Product." WHERE ProductId = :ProductId;";
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("ProductId",$productId);
-            $result = $this->dbOperator->GetArray($sql,$dataProperty);
-        }
-        return $result;
-    }
-
     public function GetChannelIdByProductId($productId){
         $result = -1;
         if($productId > 0){
@@ -537,6 +526,47 @@ class ProductPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得产品的发货费用
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return float 发货费用
+     */
+    public function GetSendPrice($productId, $withCache)
+    {
+        $result = 0;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_send_price.cache_' . $productId . '';
+            $sql = "SELECT SendPrice FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfFloatValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+    /**
+     * 取得产品的发货续重费用（暂定：商品超过1个时的费用）
+     * @param int $productId 产品id
+     * @param bool $withCache 是否缓存
+     * @return float 发货续重费用（暂定：商品超过1个时的费用）
+     */
+    public function GetSendPriceAdd($productId, $withCache)
+    {
+        $result = 0;
+        if ($productId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'product_get_send_price_add.cache_' . $productId . '';
+            $sql = "SELECT SendPriceAdd FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ProductId", $productId);
+            $result = $this->GetInfoOfFloatValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
 
         return $result;
