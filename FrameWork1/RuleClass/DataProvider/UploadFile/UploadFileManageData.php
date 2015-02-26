@@ -74,6 +74,30 @@ class UploadFileManageData extends BaseManageData {
     }
 
     /**
+     * 根据id取得记录
+     * @param string $strUploadFileIds
+     * @return array|null id数组数据集
+     */
+    public function GetListById($strUploadFileIds){
+        $result = null;
+        if (strlen($strUploadFileIds)>0) {
+            $whereSql="";
+            if(!strstr($strUploadFileIds,",")){
+                $whereSql=" WHERE UploadFileId=$strUploadFileIds ";
+            }else{
+                $whereSql=" WHERE UploadFileId IN ($strUploadFileIds) ";
+            }
+
+            $sql = "SELECT * FROM " . self::TableName_UploadFile . $whereSql . " ;";
+            $dataProperty = new DataProperty();
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+    /**
      * 复制一个table_id的UploadFile数据到另外的table_id
      * @param int $tableId    原table_id
      * @param int $tableType  原table_type
@@ -153,19 +177,21 @@ class UploadFileManageData extends BaseManageData {
      * @param string $strUploadFileIds 要复制的UploadFile的id
      * @param int $toTableId    目的table_id
      * @param int $toTableType     目的table_type
-     * @return array|null 所有未批量操作的记录
+     * @return string 已复制的结果
      */
     public function DuplicateByUploadFileId($strUploadFileIds, $toTableId, $toTableType){
-        $result = -1;
+        $result = "";
         if ($strUploadFileIds!="" && $toTableId>0 && $toTableType>0) {
             $dataProperty = new DataProperty();
             $whereSql="";
-            if(!strstr($strUploadFileIds,",")){
-                $whereSql=" WHERE UploadFileId=$strUploadFileIds ";
-            }else{
-                $whereSql=" WHERE UploadFileId IN ($strUploadFileIds) ";
-            }
-            $sql = "INSERT INTO " . self::TableName_UploadFile . "
+
+            $arrUploadFileIds=explode(",",$strUploadFileIds);
+            if(count($arrUploadFileIds)>0){
+                foreach($arrUploadFileIds as $uploadFileId){
+
+                    $whereSql=" WHERE UploadFileId=$uploadFileId ";
+
+                    $sql = "INSERT INTO " . self::TableName_UploadFile . "
                     (
                     `UploadFileName`,
                     `UploadFileExtentionName`,
@@ -219,8 +245,10 @@ class UploadFileManageData extends BaseManageData {
                     `IsBatchOperate`
                      FROM " . self::TableName_UploadFile . "
                      $whereSql;";
-            $result = $this->dbOperator->Execute($sql, $dataProperty);
-
+                    $result .= ",".$insertId=$this->dbOperator->LastInsertId($sql, $dataProperty);  //所有insert的结果合并到字符串
+                }
+                $result=substr($result,1);
+            }
         }
         return $result;
     }
