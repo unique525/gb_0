@@ -294,14 +294,15 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                         /**处理附件**/
                                         //复制
                                         $newspaperArticlePicManageData=new NewspaperArticlePicManageData();
+                                        $documentNewsPicManageData= new DocumentNewsPicManageData();
                                         $strArticlePicId="";
                                         $arrayOfArticlePicId=$newspaperArticlePicManageData->GetIdList($oneNewspaperForCopy["NewspaperArticleId"]);
                                         foreach($arrayOfArticlePicId as $oneArticlePic){
                                             $strArticlePicId.=",".$oneArticlePic["UploadFileId"];
                                         }
                                         $strArticlePicId=substr($strArticlePicId,1);
-                                        $uploadFileDuplication=$uploadFileManageData->DuplicateByUploadFileId($strArticlePicId,$newId,$toTableType);
-                                        if($uploadFileDuplication){
+                                        $strDuplicatedUploadFileId=$uploadFileManageData->DuplicateByUploadFileId($strArticlePicId,$targetCid,$toTableType);
+                                        if(strlen($strDuplicatedUploadFileId)>0){
                                             //新数据id加入UploadFiles字段
                                             $picStyle=Control::PostRequest("PicStyle","default");
                                             switch($picStyle){
@@ -318,19 +319,17 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                                     $picPathType="UploadFilePath";
                                                     break;
                                             }
-                                            $strDuplicatedUploadFileId="";
                                             $strPrependContent='<div align="center">';
-                                            $arrayOfUploadFiles=$uploadFileManageData->GetListByTableId($newId,$toTableType);
+                                            $arrayOfUploadFiles=$uploadFileManageData->GetListById($strDuplicatedUploadFileId);
                                             foreach($arrayOfUploadFiles as $oneArticlePic){
-                                                $strDuplicatedUploadFileId.=",".$oneArticlePic["UploadFileId"];
                                                 $strPrependContent.='<p><img src="'.$oneArticlePic[$picPathType].'" /></p>';
+                                                $documentNewsPicManageData->Create($newId,$oneArticlePic["UploadFileId"],0);//加入DocumentNewsPic表
                                             }
                                             $strPrependContent.='</div>';
-                                            $updateDocumentNewsUploadFilesResult=$documentNewsManageData->ModifyUploadFiles($newId,$strDuplicatedUploadFileId);  //更新UploadFiles字段
+                                            $updateDocumentNewsUploadFilesResult=$documentNewsManageData->ModifyUploadFiles($newId,",".$strDuplicatedUploadFileId);  //更新UploadFiles字段
                                             if($updateDocumentNewsUploadFilesResult){
                                                 $updateDocumentNewsContentResult=$documentNewsManageData->PrependContent($newId,$strPrependContent); //在content前面加入图片标签
                                             }
-
                                         }
 
                                         $result=$newId;
