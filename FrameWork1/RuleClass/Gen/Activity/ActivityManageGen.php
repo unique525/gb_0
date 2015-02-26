@@ -517,7 +517,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
 
                 $manageUserData = new ManageUserManageData();
-                $userId = $manageUserData->GetUserId($manageUserId); //取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId,true); //取后台管理员挂接的USERId号
                 if (intval($userId) <= 0) {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('activity', 22));//警告：获取对应用户名失败！用户名为空！
                     //$resultJavaScript .= Control::GetCloseTab();
