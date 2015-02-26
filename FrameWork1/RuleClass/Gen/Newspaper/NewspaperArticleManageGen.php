@@ -120,7 +120,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
             $newspaperId = $newspaperPageManageData->GetNewspaperId($newspaperPageId, true);
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
-            $can = $manageUserAuthorityManageData->CanModify(0, $channelId, $manageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelModify(0, $channelId, $manageUserId);
             if (!$can) {
                 $result = -10;
             } else {
