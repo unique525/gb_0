@@ -253,6 +253,27 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 取得UploadFiles的上传文件id的字符串
+     * @param int $documentNewsId 资讯id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 上传文件id的字符串
+     */
+    public function GetUploadFiles($documentNewsId, $withCache=false)
+    {
+        $result = "";
+        if ($documentNewsId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'document_news_get_upload_files.cache_' . $documentNewsId . '';
+            $sql = "SELECT UploadFiles FROM " . self::TableName_DocumentNews . " WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
     /**
      * 取得后台资讯列表数据集
      * @param int $channelId 频道id
@@ -792,9 +813,43 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
             c.ChannelName
 
             ';
@@ -832,9 +887,40 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
             c.ChannelName
 
             ';
@@ -880,9 +966,40 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
             c.ChannelName
 
 
@@ -937,9 +1054,40 @@ class DocumentNewsManageData extends BaseManageData
             }
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
             c.ChannelName
 
             ';
@@ -989,9 +1137,41 @@ class DocumentNewsManageData extends BaseManageData
             }
             $selectColumn = '
             dn.*,
-            uf1.UploadFilePath AS TitlePic1,
-            uf2.UploadFilePath AS TitlePic2,
-            uf3.UploadFilePath AS TitlePic3,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
             c.ChannelName
 
 
@@ -1033,10 +1213,10 @@ class DocumentNewsManageData extends BaseManageData
      * @param array $arrayOfDocumentNewsList DocumentNews数据数组
      * @param int $manageUserId 操作人id
      * @param string $manageUserName 操作人用户名
-     * @return int 执行结果
+     * @return string 新增的所有id
      */
     public function Copy($targetSiteId,$targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName){
-        $result=-1;
+        $result="";
         if(count($arrayOfDocumentNewsList)>0&&$targetCid>0){
             $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
             if($sort<0){
@@ -1196,9 +1376,9 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("SiteId", $targetSiteId);
                 $dataProperty->AddField("Sort", $sort);
 
-                $newId = $this->dbOperator->Execute($sql, $dataProperty);
+                $newId = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
-                $result = $newId;
+                $result.=",".$newId;
                 /*if ($newId > 0) {
                     //操作上传的附件
                     $sqlUploadFiles = "select UploadFiles from " . self::TableName_DocumentNews . " where DocumentNewsId=" . $newId . "";
@@ -1266,6 +1446,7 @@ class DocumentNewsManageData extends BaseManageData
                 }*/
             }
         }
+        $result=substr($result,1);
         return $result;
     }
 
