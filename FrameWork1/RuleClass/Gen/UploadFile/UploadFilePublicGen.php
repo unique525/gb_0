@@ -242,7 +242,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function AsyncSaveRemoteImage()
     {
-        $arrUrls = explode('|', $_POST['urls']);
+        $arrUrls = explode('|', Control::PostOrGetRequest('urls',''));
         $urlCount = count($arrUrls);
         $tableType = Control::GetRequest("table_type", 0);
         $tableId = Control::GetRequest("table_id", 0);

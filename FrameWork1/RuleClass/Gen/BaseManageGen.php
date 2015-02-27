@@ -614,6 +614,8 @@ class BaseManageGen extends BaseGen
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                Template::RemoveCustomTag($channelTemplateContent, $tagId);
             }
         }
 

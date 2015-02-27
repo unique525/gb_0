@@ -56,7 +56,7 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
             $mobile = Control::PostOrGetRequest("Mobile", "");
             if (strlen($address) > 0) {
                 $userReceiveInfoClientData = new UserReceiveInfoClientData();
-                $result = $userReceiveInfoClientData->Create(
+                $newUserReceiveInfoId = $userReceiveInfoClientData->Create(
                     $userId,
                     $address,
                     $postcode,
@@ -64,7 +64,7 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
                     $homeTel,
                     $mobile
                 );
-                if ($result > 0) {
+                if ($newUserReceiveInfoId > 0) {
                     $resultCode = 1; //新增成功
                 } else {
                     $resultCode = -5; //新增失败,数据库原因

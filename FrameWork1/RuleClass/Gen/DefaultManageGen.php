@@ -243,6 +243,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $commentManageGen = new TaskManageGen();
                     $result = $commentManageGen->Gen();
                     break;
+                case "interface":
+                    $interfaceManageGen = new InterfaceManageGen();
+                    $result = $interfaceManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
