@@ -20,6 +20,9 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
             case "all_child_list_by_parent_id":
                 $result = self::GetAllChildListByParentId();
                 break;
+            case "list_for_news":
+                $result = self::GetListForNews();//得到新闻咨询类频道列表
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -42,9 +45,41 @@ class ChannelClientGen extends BaseClientGen implements IBaseClientGen {
 
             $channelClientData = new ChannelClientData();
             $channelIds = $channelClientData->GetChildrenChannelId($parentId, true);
-            $arrList = $channelClientData->GenAllChildListByChannelId(
+            $arrList = $channelClientData->GetAllChildListByChannelId(
                 $parentId,
                 $channelIds,
+                $order,
+                $topCount
+            );
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }else{
+                $resultCode = -2;
+            }
+        }else{
+            $resultCode = -1;
+        }
+        return '{"result_code":"'.$resultCode.'","channel":{"channel_list":' . $result . '}}';
+    }
+
+    /**
+     * 根据父频道id返回其下所有子频道数组
+     * @return array 数组
+     */
+    private function GetListForNews(){
+
+        $result = "[{}]";
+
+        $siteId = Control::GetRequest("site_id", 0);
+
+        if($siteId>0){
+            $topCount = Control::GetRequest("top", null);
+            $order = Control::GetRequest("order", "");
+
+            $channelClientData = new ChannelClientData();
+            $arrList = $channelClientData->GetListForNews(
+                $siteId,
                 $order,
                 $topCount
             );
