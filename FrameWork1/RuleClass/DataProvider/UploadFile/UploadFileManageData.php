@@ -82,6 +82,9 @@ class UploadFileManageData extends BaseManageData {
         $result = null;
         if (strlen($strUploadFileIds)>0) {
             $whereSql="";
+            if(strripos($strUploadFileIds,",")===0){ //若为 ",xxx,zzz" 则消掉最开始的逗号
+                $strUploadFileIds=substr($strUploadFileIds,1);
+            }
             if(!strstr($strUploadFileIds,",")){
                 $whereSql=" WHERE UploadFileId=$strUploadFileIds ";
             }else{
