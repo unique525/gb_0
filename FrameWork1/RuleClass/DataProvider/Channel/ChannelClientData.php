@@ -151,7 +151,7 @@ class ChannelClientData extends BaseClientData {
                     FROM ".self::TableName_Channel."
                     WHERE
                         Rank>0
-                        State<100
+                        AND State<100
                         AND SiteId=:SiteId
                         AND ChannelType=1
                         $order
