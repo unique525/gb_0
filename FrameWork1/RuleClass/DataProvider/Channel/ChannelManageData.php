@@ -884,6 +884,47 @@ class ChannelManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 取得频道外部接口url
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string url
+     */
+    public function GetPublishApiUrl($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_publish_api_url.cache_' . $channelId . '';
+            $sql = "SELECT PublishApiUrl FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得频道外部接口类型
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 类型对应值
+     */
+    public function GetPublishApiType($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_publish_api_type.cache_' . $channelId . '';
+            $sql = "SELECT PublishApiType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>
