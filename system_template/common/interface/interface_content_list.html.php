@@ -20,7 +20,8 @@
 
             $("#json_type").change(function() {
                 var jsonType = $("#json_type").val();
-                window.location.href='/default.php?secu=manage&mod=interface&m=list&channel_id={ChannelId}&json_type='+jsonType;
+                var tagId = $("#json_type").find("option[value='"+jsonType+"']").attr("idvalue") //列表类型
+                window.location.href='/default.php?secu=manage&mod=interface&m=list&channel_id={ChannelId}&json_type='+jsonType+'&tag_id='+tagId;
 
 
             });
@@ -109,8 +110,8 @@
                     for="json_type">解析格式：</label></td>
             <td class="spe_line" style="text-align: left">
                 <select id="json_type" name="PicStyle">
-                    <option value="default" idvalue="1">资讯-默认(icms2)</option>
-                    <option value="icms1" idvalue="1">资讯-旧ICMS(icms1)</option>
+                    <option value="default" idvalue="document_news_interface_content_list">资讯-默认(icms2)</option>
+                    <option value="icms1" idvalue="document_news_interface_content_list">资讯-旧ICMS(icms1)</option>
                 </select>
                 <script language="JavaScript">$("#json_type").find("option[value='{JsonType}']").attr("selected",true)</script>
             </td>
@@ -136,7 +137,7 @@
         </tr>
     </table>
     <ul id="sort_grid">
-        <icms id="interface_content_list" type="list">
+        <icms id="document_news_interface_content_list" type="list">
             <item>
                 <![CDATA[
                 <li id="sort_{f_DocumentNewsId}">

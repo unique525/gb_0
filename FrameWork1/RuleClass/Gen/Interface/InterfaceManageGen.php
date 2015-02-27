@@ -85,8 +85,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen{
                     break;
             }
 
-            //print_r($arrDocumentNews);
-            $tagId = Control::GetRequest("tag_id", "interface_content_list");
+            $tagId = Control::GetRequest("tag_id", "document_news_interface_content_list");//默认资讯列表
             if (count($arrDocumentNews) > 0) {
                 Template::ReplaceList($templateContent, $arrDocumentNews, $tagId);
             } else {
@@ -410,6 +409,10 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen{
                             $error.=$arrayOfItems[$i]["DocumentNewsTitle"].":<br>".$errorOfOne."<br>";
                         }
                     }
+                    break;
+
+                default:
+                    break;
             }
         }
         return $error;
