@@ -21,6 +21,9 @@ class DocumentNewsPicManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "async_modify_upload_file":
+                $result = self::AsyncModifyUploadFileTitle();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -113,6 +116,7 @@ class DocumentNewsPicManageGen extends BaseManageGen implements IBaseManageGen
         $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
         return $templateContent;
     }
+
 
 }
 

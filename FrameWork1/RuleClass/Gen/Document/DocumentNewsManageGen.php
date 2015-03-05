@@ -111,6 +111,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 }
 
                 //document news pic
+                $tagId = "document_news_pic";
                 Template::RemoveCustomTag($templateContent, $tagId);
 
 
@@ -920,7 +921,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                      ******************************判断是否有操作权限**********************
                      **********************************************************************/
                     $manageUserAuthorityManageData=new ManageUserAuthorityManageData();
-                    $can = $manageUserAuthorityManageData->CanChannelCreate(0, $targetCid, $manageUserId);
+                    $siteId=$channelManageData->GetSiteId($targetCid,true);
+                    $can = $manageUserAuthorityManageData->CanChannelCreate($siteId, $targetCid, $manageUserId);
                     if (!$can) {
                         $result = -10;
                         Control::ShowMessage(Language::Load('document', 26));

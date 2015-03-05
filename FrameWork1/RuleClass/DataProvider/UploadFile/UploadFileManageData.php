@@ -255,4 +255,49 @@ class UploadFileManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+
+    /**
+     * 修改UploadFileTitle
+     * @param int $uploadFileId
+     * @param string $uploadFileTitle
+     * @return bool 执行结果
+     */
+    public function ModifyUploadFileTitle($uploadFileId,$uploadFileTitle){
+        $result = false;
+        if ($uploadFileId > 0) {
+
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                    SET UploadFileTitle = :UploadFileTitle WHERE UploadFileId=:UploadFileId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $dataProperty->AddField("UploadFileTitle", $uploadFileTitle);
+
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+
+    /**
+     * 获取TableType跟TableId
+     * @param int $uploadFileId
+     * @return array tableType,tableId
+     */
+    public function GetTableTypeAndTableId($uploadFileId){
+        $result = null;
+        if ($uploadFileId>0) {
+
+            $sql = "SELECT TableType,TableId FROM " . self::TableName_UploadFile . "
+                    WHERE UploadFileId = :UploadFileId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+        }
+        return $result;
+    }
 }

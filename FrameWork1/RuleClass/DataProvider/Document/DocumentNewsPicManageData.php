@@ -110,7 +110,9 @@ class DocumentNewsPicManageData extends BaseManageData
             $sql = "SELECT p.*,
                            u.UploadFilePath AS UploadFilePath,
                            u.UploadFileMobilePath AS UploadFileMobilePath,
-                           u.UploadFilePadPath AS UploadFilePadPath
+                           u.UploadFilePadPath AS UploadFilePadPath,
+                           u.UploadFileTitle AS UploadFileTitle,
+                           u.UploadFileInfo AS UploadFileInfo
                     FROM " . self::TableName_DocumentNewsPic. " p
                     LEFT OUTER JOIN " .self::TableName_UploadFile." u on p.UploadFileId=u.UploadFileId
                     WHERE p.DocumentNewsId=:DocumentNewsId ".$selectShowInSlider." ".$limit.";";
@@ -150,6 +152,40 @@ class DocumentNewsPicManageData extends BaseManageData
     }
 
 
+    /**
+     * 取得资讯id
+     * @param int $documentNewsPicId 图片id
+     * @return int 资讯id
+     */
+    public function GetDocumentNewsId($documentNewsPicId)
+    {
+        $result = -1;
+        if ($documentNewsPicId>0) {
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsPicId", $documentNewsPicId);
+            $sql = "SELECT DocumentNewsId FROM " . self::TableName_DocumentNewsPic. " WHERE DocumentNewsPicId=:DocumentNewsPicId;";
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得UploadFileId
+     * @param int $documentNewsPicId 图片id
+     * @return int UploadFileId
+     */
+    public function GetUploadFileId($documentNewsPicId)
+    {
+        $result = -1;
+        if ($documentNewsPicId>0) {
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsPicId", $documentNewsPicId);
+            $sql = "SELECT UploadFileId FROM " . self::TableName_DocumentNewsPic. " WHERE DocumentNewsPicId=:DocumentNewsPicId;";
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 
 

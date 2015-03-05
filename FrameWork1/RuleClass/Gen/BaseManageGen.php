@@ -404,6 +404,7 @@ class BaseManageGen extends BaseGen
                         }
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_PIC_LIST :
+                        $style = Template::GetParamValue($tagContent, "style_type");
                         $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
                         if ($documentNewsId > 0) {
                             $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsPicList(
@@ -413,7 +414,8 @@ class BaseManageGen extends BaseGen
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
-                                $tagOrder
+                                $tagOrder,
+                                $style
                             );
                         }
                         break;
@@ -631,7 +633,7 @@ class BaseManageGen extends BaseGen
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
      * @param string $tagOrder 排序方式
-     * @param string $sliderType 组图控件样式
+     * @param string $style 组图控件样式
      * @return mixed|string 内容模板
      */
     private function ReplaceTemplateOfDocumentNewsPicList(
@@ -642,7 +644,7 @@ class BaseManageGen extends BaseGen
         $tagTopCount=-1,
         $tagWhere="",
         $tagOrder="",
-        $sliderType="0"
+        $style="0"
     )
     {
         if ($documentNewsId > 0) {
@@ -668,7 +670,10 @@ class BaseManageGen extends BaseGen
                     break;
             }
             if (!empty($arrDocumentNewsPicList)) {
-                $sliderTypeName="document_news_pic_slider_type_".$sliderType; //轮换图样式模板：默认document_news_pic_slider_type_0
+                if($style==""||!$style){
+                    $style="0"; //轮换图样式模板：默认document_news_pic_slider_type_0
+                }
+                $sliderTypeName="document_news_pic_slider_type_".$style;
                 $sliderTemplate="document/".$sliderTypeName.".html";
                 $tagContent=Template::Load($sliderTemplate,"default","front_template");
                 Template::ReplaceList($tagContent, $arrDocumentNewsPicList, $sliderTypeName);

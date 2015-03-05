@@ -10,7 +10,7 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
 {
     public function Gen(){
         $result = "";
-        $method = Control::GetRequest("m","");
+        $method = Control::GetRequest("m","",false);
         switch($method){
             case "modify":
                 $result = self::GenModify();
@@ -20,6 +20,9 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
                 break;
             case "batch_modify":
                 self::GenBatchModify();
+                break;
+            case "async_modify_upload_file_title":
+                $result = self::AsyncModifyUploadFileTitle();
                 break;
         }
         return $result;
@@ -98,5 +101,42 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
 
 
         //return $result;
+    }
+
+
+    /**
+     * 异步修改图片对应附件的标题
+     */
+    private function AsyncModifyUploadFileTitle(){
+        $result=0;
+        $uploadFileId=Control::PostRequest("UploadFileId",0);
+        if($uploadFileId>0){
+
+            /*********************
+             * 查看是否有修改权限 *
+             *********************/
+            $canModify=0;
+            $channelManageData=new ChannelManageData();
+            $manageUserAuthorityManageData=new ManageUserAuthorityManageData();
+            $uploadFileManageData=new UploadFileManageData();
+
+            $arrayTableInfo=$uploadFileManageData->GetTableTypeAndTableId($uploadFileId);
+            $manageUserId=Control::GetManageUserId();
+            if($arrayTableInfo["TableType"]==UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT){ //文章内容图片
+                $channelId=$arrayTableInfo["TableId"];
+                $siteId=$channelManageData->GetSiteId($channelId,true);
+                $canModify = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $manageUserId);
+            }
+
+
+            if (!$canModify) {
+                die(Language::Load('channel', 4));
+            }
+
+            $uploadFileTitle=$_POST["UploadFileTitle"];
+            $result=$uploadFileManageData->ModifyUploadFileTitle($uploadFileId,$uploadFileTitle);
+
+        }
+        return $result;
     }
 } 

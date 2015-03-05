@@ -218,14 +218,15 @@ $(function () {
                 }
 
                 var showInSliderPic=$("#f_ShowPicMethod").val();
+                //加入图片管理栏
+                SetNewUploadPic(filePath,dataSet.upload_file_id,showInSliderPic,templateName);
+
                 if(showInSliderPic==0){
                     if(editor != undefined && editor != null){
                         editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
                     }
                 }
 
-                //加入图片管理栏
-                SetNewUploadPic(filePath,dataSet.upload_file_id,showInSliderPic,templateName);
 
                 if(inputTextId != undefined && inputTextId != null){
                     $( "#"+inputTextId ).val(filePath);
@@ -359,15 +360,15 @@ function submitForm(closeTab) {
         width:256px;
         float: left;
         margin: 10px;
-        box-shadow: 0px 0px 5px #666;
+        box-shadow: 0 0 5px #666;
         padding-right: 4px;
-        background: none repeat scroll 0% 0% #EFEFEF;
+        background: none repeat scroll 0 0 #EFEFEF;
     }
     .pic_img_container {width:260px;height:190px;background-color: rgb(253, 253, 253)}
     .pic_img_container img{width:256px;max-height:186px}
     .pic_img_state{padding:3px 5px}
-    .pic_img_state div{float:left;margin:0 10px 10px}
-    .pic_img_state img{vertical-align:middle;margin:0 5px}
+    .pic_img_state div{float:left;}
+    .pic_img_state img{vertical-align:middle;}
 </style>
 </head>
 <body>
@@ -809,19 +810,24 @@ function submitForm(closeTab) {
             <icms id="document_news_pic" type="list">
                 <item>
                     <![CDATA[
-                    <li class="li_pic_img_item" id="UploadFileId_{f_UploadFileId}" style="width:256px;height:220px">
+                    <li class="li_pic_img_item" id="UploadFileId_{f_UploadFileId}" style="width:256px;height:245px">
 
                         <table class="pic_img_container"><tr><td><img class="pic_slider_img" onclick="showOriImg('{f_UploadFilePath}')" idvalue="{f_UploadFileId}" src="{f_UploadFilePath}" style="cursor:pointer;" title="点击查看原始图片"/></td></tr></table>
 
+
+                        <div class="pic_img_state" style="padding:3px 5px;">
+                            <input class="input_box" style="width:99%" idvalue="{f_UploadFileId}" title="{f_UploadFileTitle}" id="pic_title_{f_UploadFileId}" value="{f_UploadFileTitle}" onclick="SetEventForDocumentNewsPicTitle({f_UploadFileId})">
+                        </div>
                         <div class="pic_img_state" style="padding:3px 5px;">
                             <div class="keep_pic" idvalue="{f_DocumentNewsPicId}" title="{f_ShowInPicSlider}" id="FormValues_{f_UploadFileId}"></div>
                             <script type="text/javascript">ModifyShowInPicSlider({f_UploadFileId}, {f_ShowInPicSlider}, "keep_pic")</script>
                             <img class="btn_modify" src="/system_template/{template_name}/images/manage/start.jpg"
-                                  alt="在控件中显示" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '1', 'modify_pic')"/>
+                                 alt="在控件中显示" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '1', 'modify_pic')"/>
                             <img class="btn_modify" src="/system_template/{template_name}/images/manage/stop.jpg"
-                                  alt="在控件中隐藏" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '0', 'modify_pic')"/>
+                                 alt="在控件中隐藏" onclick="ModifyShowInPicSlider('{f_UploadFileId}', '0', 'modify_pic')"/>
                             <img class="btn_modify" src="/system_template/{template_name}/images/manage/delete.jpg"
-                                  alt="删除" onclick="DeleteDocumentNewsPic('{f_UploadFileId}')"/>
+                                 alt="删除" onclick="DeleteDocumentNewsPic('{f_UploadFileId}')"/>
+                            <div class="update_title" style="float:right;cursor: pointer;display: none" idvalue="{f_UploadFileId}" title="{f_ShowInPicSlider}" id="update_pic_title_{f_UploadFileId}" onclick="AjaxUpdateDocumentNewsPicTitle({f_UploadFileId})" >点击修改</div>
                         </div>
 
                     </li>
