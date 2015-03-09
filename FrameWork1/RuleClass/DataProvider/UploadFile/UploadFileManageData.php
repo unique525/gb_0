@@ -31,6 +31,53 @@ class UploadFileManageData extends BaseManageData {
     }
 
     /**
+     * 取得tableType
+     * @param int $uploadFileId 上传文件id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string tableId
+     */
+    public function GetTableType($uploadFileId, $withCache)
+    {
+        $result = "";
+        if ($uploadFileId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'upload_file_data';
+            $cacheFile = 'upload_file_get_table_type.cache_' . $uploadFileId . '';
+            $sql = "SELECT TableType
+                    FROM " . self::TableName_UploadFile . "
+                    WHERE UploadFileId=:UploadFileId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得tableId
+     * @param int $uploadFileId 上传文件id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string tableId
+     */
+    public function GetTableId($uploadFileId, $withCache)
+    {
+        $result = "";
+        if ($uploadFileId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'upload_file_data';
+            $cacheFile = 'upload_file_get_table_id.cache_' . $uploadFileId . '';
+            $sql = "SELECT TableId
+                    FROM " . self::TableName_UploadFile . "
+                    WHERE UploadFileId=:UploadFileId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * 根据TableType取得所有未批量操作的记录
      * @param int $tableType
      * @param int $topCount

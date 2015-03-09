@@ -36,7 +36,7 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         $result = "[{}]";
 
         $userAccount = Format::FormatHtmlTag(Control::PostOrGetRequest("UserAccount", ""));
-        $userPass = Control::PostOrGetRequest("UserPass", "");
+        $userPass = Format::FormatSql(Control::PostOrGetRequest("UserPass", ""));
         $regIp = Control::GetIp();
 
         if (strlen($userAccount) > 0
@@ -54,6 +54,11 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 $resultCode = UserBaseGen::LOGIN_SUCCESS;
                 $withCache = FALSE;
                 $arrUserOne = $userClientData->GetOne($userId,$withCache);
+
+                //将user pass 进行md5加密返回
+                if($arrUserOne["UserPass"]){
+                    $arrUserOne["UserPass"] = md5($arrUserOne["UserPass"]);
+                }
 
                 $result = Format::FixJsonEncode($arrUserOne);
             }
@@ -206,6 +211,10 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
 
                         $withCache = FALSE;
                         $arrUserOne = $userClientData->GetOne($newUserId,$withCache);
+                        //将user pass 进行md5加密返回
+                        if($arrUserOne["UserPass"]){
+                            $arrUserOne["UserPass"] = md5($arrUserOne["UserPass"]);
+                        }
 
                         $result = Format::FixJsonEncode($arrUserOne);
 

@@ -29,7 +29,105 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     private function GenModify(){
-        $templateContent = Template::Load("upload/upload_deal.html");
+        $templateContent = Template::Load("upload_file/upload_file_deal.html", "common");
+        parent::ReplaceFirst($templateContent);
+        $resultJavaScript = "";
+
+        $uploadFileId = intval(Control::GetRequest("upload_file_id", 0));
+        $tableId = intval(Control::GetRequest("table_id", 0));
+        $siteId = intval(Control::GetRequest("site_id", 0));
+
+        if ($uploadFileId > 0 && $tableId > 0 && $siteId > 0){
+
+
+
+            $templateContent = str_ireplace("{UploadFileId}",$uploadFileId,$templateContent);
+            $templateContent = str_ireplace("{TableId}",$uploadFileId,$templateContent);
+            $templateContent = str_ireplace("{SiteId}",$uploadFileId,$templateContent);
+            if(!empty($_POST)){
+                $fileElementName = "file_UploadFile";
+
+                $uploadFileManageData = new UploadFileManageData();
+
+                $tableType = $uploadFileManageData->GetTableType($uploadFileId, false); //channel
+
+                //if($tableId<=0){
+                //    $tableId = $uploadFileManageData->GetTableId($uploadFileId, false);
+                //}
+
+                $uploadFile = new UploadFile();
+                $newUploadFileId = 0;
+                $uploadResult = self::Upload(
+                    $fileElementName,
+                    $tableType,
+                    $tableId,
+                    $uploadFile,
+                    $newUploadFileId
+                );
+
+                if (intval($uploadResult) <= 0 && $newUploadFileId <= 0) {
+                    //上传出错或没有选择文件上传
+                } else {
+                    //删除原有题图
+                    parent::DeleteUploadFile($uploadFileId);
+
+                    switch ($tableType){
+
+                        case UploadFileData::UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC:
+                            //修改原图
+                            $newspaperArticlePicId = $tableId;
+
+                            $newspaperArticlePicManageData = new NewspaperArticlePicManageData();
+
+                            $modifyResult = $newspaperArticlePicManageData->ModifyUploadFileId(
+                                $newspaperArticlePicId, $newUploadFileId
+                            );
+
+                            if($modifyResult>0){
+
+                                $mobileWidth = 640;
+
+                                parent::GenUploadFileMobile($newUploadFileId, $mobileWidth);
+
+                                parent::GenUploadFileCompress1($newUploadFileId, $mobileWidth,0, 60);
+
+                                //水印图
+                                if($siteId>0){
+                                    $siteConfigData = new SiteConfigData($siteId);
+                                    $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
+                                    if($watermarkUploadFileId>0){
+                                        $uploadFileData = new UploadFileData();
+                                        $watermarkUploadFilePath =
+                                            $uploadFileData->GetUploadFilePath(
+                                                $watermarkUploadFileId, true);
+                                        parent::GenUploadFileWatermark1(
+                                            $newUploadFileId,
+                                            $watermarkUploadFilePath);
+                                    }
+                                }
+
+
+
+                            }
+
+                            break;
+
+
+
+
+                    }
+
+                }
+            }
+
+
+
+
+
+
+        }
+        parent::ReplaceEnd($templateContent);
+        $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
         return $templateContent;
     }
 
@@ -39,7 +137,7 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
         if($tableId > 0 && $tableType > 0){
             $templateContent = Template::Load("upload/upload_deal_by_table_id.html");
 
-            $uploadFileManageData = new UploadFileManagedData();
+            $uploadFileManageData = new UploadFileManageData();
             return $templateContent;
         }else{
             return null;

@@ -47,9 +47,12 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
-        if ($newspaperArticlePicId > 0 && $manageUserId > 0) {
+        $siteId = intval(Control::GetRequest("site_id",0));
 
+        if ($newspaperArticlePicId > 0 && $manageUserId > 0) {
             parent::ReplaceFirst($tempContent);
+
+            $tempContent = str_ireplace("{site_id}", $siteId, $tempContent);
 
             $newspaperArticlePicManageData = new NewspaperArticlePicManageData();
 
@@ -69,6 +72,16 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
                 if ($result > 0) {
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_pic_data');
+
+
+
+
+
+
+
+
+
+
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         $resultJavaScript .= Control::GetCloseTab();
@@ -115,7 +128,7 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
             $newspaperId = $newspaperPageManageData->GetNewspaperId($newspaperPageId, true);
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = $newspaperManageData->GetChannelId($newspaperId, true);
-            $can = $manageUserAuthorityManageData->CanModify(0, $channelId, $manageUserId);
+            $can = $manageUserAuthorityManageData->CanChannelModify(0, $channelId, $manageUserId);
             if (!$can) {
                 $result = -10;
             } else {
@@ -197,7 +210,7 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
 
             } else {
                 Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", Language::Load("newspaper", 7), $tempContent);
+                $tempContent = str_ireplace("{pager_button}", Language::Load("newspaper", 9), $tempContent);
             }
 
 

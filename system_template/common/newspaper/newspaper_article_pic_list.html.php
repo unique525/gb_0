@@ -19,7 +19,7 @@
                 event.preventDefault();
                 var newspaperArticlePicId=$(this).attr("idvalue");
                 var newspaperArticlePicTitle=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article_pic&m=modify' + '&newspaper_article_pic_id=' + newspaperArticlePicId + '';
+                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article_pic&m=modify' + '&newspaper_article_pic_id=' + newspaperArticlePicId + '&site_id=' + parent.G_NowSiteId;
                 parent.G_TabTitle = newspaperArticlePicTitle;
                 parent.addTab();
             });
