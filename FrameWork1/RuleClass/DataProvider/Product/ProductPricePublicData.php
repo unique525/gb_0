@@ -168,4 +168,34 @@ class ProductPricePublicData extends BasePublicData
         return $result;
     }
 
+    /**
+     * 增加库存数量
+     * @param $productPriceId
+     * @param $productCount
+     * @return int
+     */
+    public function AddProductCount($productPriceId,$productCount){
+        $result = -1;
+        if($productPriceId>0){
+
+            if(intval($productCount)<0){
+                $productCount = 0;
+            }
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ProductPrice . " SET
+                        ProductCount = ProductCount+:ProductCount
+                        WHERE ProductPriceId = :ProductPriceId
+                        ;";
+            $dataProperty->AddField("ProductCount", $productCount);
+            $dataProperty->AddField("ProductPriceId", $productPriceId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_price_data';
+            $cacheFile = 'product_price_get_product_count.cache_' . $productPriceId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+        }
+        return $result;
+    }
 } 

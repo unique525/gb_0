@@ -247,6 +247,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $interfaceManageGen = new InterfaceManageGen();
                     $result = $interfaceManageGen->Gen();
                     break;
+                case "visit":
+                    $visitManageGen = new VisitManageGen();
+                    $result = $visitManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;

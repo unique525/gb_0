@@ -630,6 +630,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
         $result = -1;
         if($userId > 0 && $userOrderId > 0 && $newState > 0){
+            $siteId = parent::GetSiteIdByDomain();
             $userOrderPublicData = new UserOrderPublicData();
             if($newState == UserOrderData::STATE_APPLY_REFUND){
                 $oldState = $userOrderPublicData->GetState($userOrderId,false);
@@ -651,13 +652,19 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
             if ($result >0){
 
-                if ($newState == UserOrderData::STATE_CLOSE){
+                if ($newState == UserOrderData::STATE_CLOSE || $newState == UserOrderData::STATE_REFUND_FINISHED){
 
                     /**
-                     * @TODO 关闭交易时，要恢复库存
+                     * @TODO 关闭交易或退款成功时，要恢复库存
                      */
-
-
+                    $userOrderProductPublicData = new UserOrderProductPublicData();
+                    $arrUserOrderProductList = $userOrderProductPublicData->GetList($userOrderId,$userId,$siteId);
+                    $productPricePublicData = new ProductPricePublicData();
+                    for($i=0;$i<count($arrUserOrderProductList);$i++){
+                        $productPriceId = $arrUserOrderProductList[$i]["ProductPriceId"];
+                        $saleCount = $arrUserOrderProductList[$i]["SaleCount"];
+                        $productPricePublicData->AddProductCount($productPriceId,$saleCount);
+                    }
 
 
                 }
