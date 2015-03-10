@@ -26,6 +26,10 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenModify();
                 break;
 
+            case "set_default":
+                $result = self::GenSetDefault();
+                break;
+
             case "delete":
                 $result = self::GenDelete();
                 break;
@@ -116,6 +120,34 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
         return '{"result_code":"' . $resultCode . '","user_receive_info_modify":' . $result . '}';
     }
 
+    private function GenSetDefault(){
+        $result = "[{}]";
+        $userId = parent::GetUserId();
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $userReceiveInfoId = intval(Control::PostOrGetRequest("UserReceiveInfoId", 0));
+            if ($userReceiveInfoId > 0) {
+                $userReceiveInfoClientData = new UserReceiveInfoClientData();
+                $result = $userReceiveInfoClientData->SetDefault($userReceiveInfoId, $userId);
+                if ($result > 0) {
+                    $resultCode = 1; //设置成功
+                } else {
+                    $resultCode = -5; //设置失败,数据库原因
+                }
+
+            } else {
+                $resultCode = -6; //设置失败,参数错误;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","user_receive_info_delete":' . $result . '}';
+
+
+
+
+    }
+
     private function GenDelete()
     {
         $result = "[{}]";
@@ -123,7 +155,7 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
         if ($userId <= 0) {
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
-            $userReceiveInfoId = Control::PostOrGetRequest("UserReceiveInfoId", 0);
+            $userReceiveInfoId = intval(Control::PostOrGetRequest("UserReceiveInfoId", 0));
             if ($userReceiveInfoId > 0) {
                 $userReceiveInfoClientData = new UserReceiveInfoClientData();
                 $result = $userReceiveInfoClientData->Delete($userReceiveInfoId, $userId);
