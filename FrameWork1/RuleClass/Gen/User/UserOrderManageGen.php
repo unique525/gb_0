@@ -70,15 +70,15 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                         /**
                          * @TODO 关闭交易时，要恢复库存
                          */
-
-
-
-
+                        $userOrderProductManageData = new UserOrderProductManageData();
+                        $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId,$siteId);
+                        $productPriceManageData = new ProductPriceManageData();
+                        for($i=0;$i<count($arrUserOrderProductList);$i++){
+                            $productPriceId = $arrUserOrderProductList[$i]["ProductPriceId"];
+                            $saleCount = $arrUserOrderProductList[$i]["SaleCount"];
+                            $productPriceManageData->AddProductCount($productPriceId,$saleCount);
+                        }
                     }
-
-
-
-
 
                     $operateContent = 'Modify UserOrder,POST FORM:'.implode('|',$_POST).';\r\nResult:'.$result;
                     self::CreateManageUserLog($operateContent);
