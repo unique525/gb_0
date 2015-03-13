@@ -44,6 +44,13 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
             $templateContent = str_ireplace("{UploadFileId}",$uploadFileId,$templateContent);
             $templateContent = str_ireplace("{TableId}",$uploadFileId,$templateContent);
             $templateContent = str_ireplace("{SiteId}",$uploadFileId,$templateContent);
+
+            $uploadFileData = new UploadFileData();
+
+            $arrOne = $uploadFileData->GetOne($uploadFileId);
+
+            Template::ReplaceOne($templateContent, $arrOne);
+
             if(!empty($_POST)){
                 $fileElementName = "file_UploadFile";
 
