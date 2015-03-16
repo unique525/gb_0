@@ -374,4 +374,23 @@ class ChannelTemplateManageData extends BaseManageData
         return $result;
 
     }
+
+    /**
+     * 删除
+     * @param $channelTemplateId
+     * @return int 结果
+     */
+    public function Delete($channelTemplateId){
+        $result=-1;
+        if($channelTemplateId>0){
+            $sql="DELETE FROM " . self::TableName_ChannelTemplate . "
+             WHERE ChannelTemplateId=:ChannelTemplateId ;";
+
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelTemplateId", $channelTemplateId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 

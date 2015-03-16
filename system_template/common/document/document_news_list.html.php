@@ -25,8 +25,7 @@
 
                 $("#dialog_resultbox").dialog({
                     title: "批量发布",
-                    width: 600,
-                    height: 550
+                    width: 600
                 });
 
 

@@ -57,17 +57,41 @@
             });
 
 
-            //开启站点
+            //开启
             $(".img_open").click(function(){
                 var channelTemplateId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
                 modifyState(channelTemplateId, state);
             });
-            //停用站点
+            //停用
             $(".img_close").click(function(){
                 var channelTemplateId = parseInt($(this).attr("idvalue"));
-                var state = 100; //开启状态
+                var state = 100;
                 modifyState(channelTemplateId, state);
+            });
+            //删除
+            $(".img_delete").click(function(){
+                if(confirm("是否确认删除")){
+                    var channelTemplateId = parseInt($(this).attr("idvalue"));
+                    if(channelTemplateId>0){
+                        $.ajax({
+                            type: "get",
+                            url: "/default.php?secu=manage&mod=channel_template&m=async_delete",
+                            data: {
+                                channel_template_id: channelTemplateId
+                            },
+                            dataType: "jsonp",
+                            jsonp: "jsonpcallback",
+                            success: function(data) {
+                                if(data.result>0){
+                                    $("#sort_"+channelTemplateId).hide();
+                                }else if(data.result==-10){
+                                    alert("你没有操作权限，请联系管理员");
+                                }
+                            }
+                        });
+                    }
+                }
             });
         });
 
@@ -205,7 +229,7 @@
             <td style="width: 160px;text-align:center;">创建时间</td>
             <td style="width: 120px;text-align:center;">创建人</td>
             <td style="width: 40px; text-align: center;">状态</td>
-            <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
+            <td style="width: 120px;text-align:center;">启用&nbsp;&nbsp;停用&nbsp;&nbsp;删除</td>
         </tr>
     </table>
     <ul id="sort_grid">
@@ -243,10 +267,12 @@
                             <td class="spe_line2" style="width:160px;text-align:center;" title="创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:120px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_ChannelTemplateId}" class="span_state" idvalue="{f_ChannelTemplateId}">{f_State}</span></td>
-                            <td class="spe_line2" style="width:80px;text-align:center;">
+                            <td class="spe_line2" style="width:120px;text-align:center;">
                                 <img class="img_open" idvalue="{f_ChannelTemplateId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <img class="img_close" idvalue="{f_ChannelTemplateId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <img class="img_delete" idvalue="{f_ChannelTemplateId}" src="/system_template/{template_name}/images/manage/delete.jpg" style="cursor:pointer"/>
                             </td>
                         </tr>
                     </table>
