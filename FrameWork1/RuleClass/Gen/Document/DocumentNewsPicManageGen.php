@@ -103,8 +103,8 @@ class DocumentNewsPicManageGen extends BaseManageGen implements IBaseManageGen
 
                 $closeTab = Control::PostRequest("CloseTab", 1);//默认跳到列表页
                 if ($closeTab == 1) {
-                    //$resultJavaScript .= Control::GetCloseTab();
-                    Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                    $resultJavaScript .= Control::GetCloseTab();
+                    //Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
                 } else {
                     Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                 }
