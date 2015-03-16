@@ -27,6 +27,19 @@
                         $("#pub_site_document_news").css("color","#52596B");
                         $("#pub_site_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
                             +parent.parent.G_NowSiteId+"&publish_type=2&do=1");
+                        if($("#pub_site_document_news").html().length<16){
+                            switch(state){
+                                case 0:
+                                    $("#pub_site_document_news").append(" 新稿 ");
+                                    break;
+                                case 14:
+                                    $("#pub_site_document_news").append(" 终审 ");
+                                    break;
+                                case 30:
+                                    $("#pub_site_document_news").append(" 已发 ");
+                                    break;
+                            }
+                        }
                     }else{
                         alert("标记失败！");
                     }
@@ -47,6 +60,9 @@
                         $("#pub_site_document_news").css("cursor","none");
                         $("#pub_site_document_news").css("color","#bbb");
                         $("#pub_site_document_news").removeAttr("href");
+
+                        $("#pub_site_document_news").html("批量发布");
+
                     }
                 }
             });
@@ -83,7 +99,7 @@
                 <script type="text/javascript">
                     $("#f_State").find("option[value='-1']").attr("selected",true);
                 </script>
-                <a id="pub_site_document_news" title="请先标记" class="btn2" style="padding: 5px 10px;color:#bbb;cursor: pointer">[批量发布所有已标记文档]</a>
+                <a id="pub_site_document_news" title="请先标记" class="btn2" style="margin-right: 5px;padding: 5px 10px;color:#bbb;cursor: pointer">批量发布</a>
                 <a onclick="CancelWaitPublish()" class="btn2" style="padding: 5px 10px;">重置发布标记</a><br />
 
             </td>
