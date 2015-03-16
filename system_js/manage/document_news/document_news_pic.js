@@ -15,7 +15,7 @@ function SetNewUploadPic(uploadFilePath,uploadFileId,showInPicSlider,templateNam
     var fileName = uploadFilePath.toLowerCase();
     var fileEx = fileName.substr(fileName.lastIndexOf(".")+1);
 
-    var text="<"+"span style='color:green;float:left'>在组图控件中隐藏<"+"/span>";
+    var text="<"+"span style='float:left'>在组图控件中隐藏<"+"/span>";
     if(showInPicSlider==1){
         text="<"+"span style='color:green;float:left'>在组图控件中显示<"+"/span>";
     }
