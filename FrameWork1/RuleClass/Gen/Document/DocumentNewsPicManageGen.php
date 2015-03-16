@@ -21,8 +21,8 @@ class DocumentNewsPicManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "async_modify_upload_file":
-                $result = self::AsyncModifyUploadFileTitle();
+            case "async_modify_showing_state":
+                $result = self::AsyncModifyShowingState();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -117,6 +117,44 @@ class DocumentNewsPicManageGen extends BaseManageGen implements IBaseManageGen
         return $templateContent;
     }
 
+
+    /**
+     * 异步修改图片状态:是否显示在组图控件中
+     */
+    private function AsyncModifyShowingState(){
+        $result = -1;
+        $documentNewsPicId = Control::GetRequest("document_news_pic_id", 0);
+        $state = Control::GetRequest("state", 0);
+        $documentNewsPicManageData= new DocumentNewsPicManageData();
+
+        if($documentNewsPicId>0){
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserId=Control::GetManageUserId();
+            $documentNewsManageData = new DocumentNewsManageData();
+            $channelManageData=new ChannelManageData();
+            $documentNewsId=$documentNewsPicManageData->GetDocumentNewsId($documentNewsPicId);
+            $channelId=$documentNewsManageData->GetChannelId($documentNewsId,true);
+            $siteId=$channelManageData->GetSiteId($channelId,true);
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $canModify = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $manageUserId);
+            if (!$canModify) {
+                die(Language::Load('channel', 4));
+            }
+
+            $result=$documentNewsPicManageData->ChangeShowingState($documentNewsPicId,$state);
+
+            //加入操作日志
+            $operateContent = 'Modify DocumentNewsPic,Get PARAM:' . implode('|', $_GET) . ';\r\n';
+            self::CreateManageUserLog($operateContent);
+
+
+        }
+
+
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+
+
+    }
 
 }
 
