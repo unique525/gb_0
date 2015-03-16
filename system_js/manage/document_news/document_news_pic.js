@@ -8,6 +8,7 @@
  * @param uploadFilePath 路径
  * @param uploadFileId id
  * @param showInPicSlider 是否加入组图控件
+ * @param templateName 样式
  */
 function SetNewUploadPic(uploadFilePath,uploadFileId,showInPicSlider,templateName){
     //加入document_news_pic
