@@ -958,7 +958,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                                         break;
                                     case "move":
-                                        $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                        $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfProductId, $manageUserId, $manageUserName);
                                         break;
                                     default:
                                         $result=-1;
@@ -967,6 +967,29 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                                 //加入操作日志
                                 $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                                self::CreateManageUserLog($operateContent);
+
+
+                                if ($result > 0) {
+                                    $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                                    Control::RunJavascript($jsCode);
+                                } else {
+                                    Control::ShowMessage(Language::Load('document', 17));
+                                }
+                            }
+                            else if ($channelType === 4) {   //产品类
+                                $productManageData=new ProductManageData();
+                                switch($method){
+                                    case "move":
+                                        $arrayOfProductId=explode(",", $docIdString);
+                                        $result = $productManageData->Move($targetSiteId, $targetCid, $arrayOfProductId, $manageUserId, $manageUserName);
+                                        break;
+                                    default:
+                                        $result=-1;
+                                        break;
+                                }
+                                //加入操作日志
+                                $operateContent = 'Move Product,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
                                 self::CreateManageUserLog($operateContent);
 
 

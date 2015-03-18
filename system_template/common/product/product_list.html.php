@@ -6,13 +6,17 @@
     <script type="text/javascript" src="/system_js/manage/product/product.js"></script>
 </head>
 <body>
+<div id="dialog_resultbox" title="" style="display: none;">
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_frame" src=""  style="border: 0; " width="100%" height="460"></iframe>
+    </div>
+</div>
 <div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新建产品" title="在本频道新建产品" type="button"/>
-                <input id="btn_move" class="btn2" value="移动" title="移动产品至其它分类，请先勾选需要移动的产品" type="button"/>
-                <input id="btn_copy" class="btn2" value="复制" title="复制产品至其它分类，请先勾选需要复制的产品" type="button"/>
+                <input id="btn_move" class="btn2" value="移动" idvalue="{ChannelId}" title="移动本频道文档至其它频道，请先在下面文档中勾选需要移动的文档" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
