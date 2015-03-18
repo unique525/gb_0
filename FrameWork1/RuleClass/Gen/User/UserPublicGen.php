@@ -89,7 +89,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         //$templatePath = "front_template";
         //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
+
+
+
         parent::ReplaceFirst($templateContent);
+        $reUrl = urlencode(Control::GetRequest("re_url", ""));
+        $templateContent = str_ireplace("{ReUrl}", $reUrl, $templateContent);
+
 
 
         parent::ReplaceEnd($templateContent);
