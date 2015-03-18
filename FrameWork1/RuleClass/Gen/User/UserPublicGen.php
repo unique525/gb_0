@@ -74,6 +74,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         return $result;
     }
 
+
     private function GenLogin(){
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
