@@ -47,6 +47,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "register":
                 $result = self::GenRegister();
                 break;
+
             case "async_login":
                 $result = self::AsyncLogin();
                 break;
