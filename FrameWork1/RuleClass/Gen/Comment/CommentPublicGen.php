@@ -291,4 +291,5 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
         }
         return Control::GetRequest("jsonpcallback","").'({"result":'.$openComment.'})';
     }
+
 }

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <module id="1"><content><![CDATA[没有评论!]]></content></module>
+    <module id="2"><content><![CDATA[评论回复成功!]]></content></module>
+    <module id="3"><content><![CDATA[评论回复失败!]]></content></module>
 </root>

@@ -71,7 +71,6 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }
 
         $result = str_ireplace("{action}", $action, $result);
-
         return $result;
     }
 
