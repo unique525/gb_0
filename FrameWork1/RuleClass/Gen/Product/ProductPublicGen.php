@@ -99,6 +99,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             }
         }
         $templateContent = parent::ReplaceTemplate($templateContent);
+        parent::ReplaceVisitCode($templateContent,$siteId,$channelId,VisitData::VISIT_TABLE_TYPE_PRODUCT,0);
         parent::ReplaceEnd($templateContent);
         return $templateContent;
     }
@@ -242,6 +243,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $patterns = '/\{s_(.*?)\}/';
                 $templateContent = preg_replace($patterns, "", $templateContent);
                 parent::ReplaceSiteConfig($siteId,$templateContent);
+                parent::ReplaceVisitCode($templateContent,$siteId,$channelId,VisitData::VISIT_TABLE_TYPE_PRODUCT,$productId);
                 parent::ReplaceEnd($templateContent);
             }
 
