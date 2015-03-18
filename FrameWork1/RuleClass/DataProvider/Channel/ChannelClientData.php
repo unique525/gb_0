@@ -36,7 +36,7 @@ class ChannelClientData extends BaseClientData {
      * @param int $topCount 显示的条数
      * @return array|null 列表数据集
      */
-    public function GenAllChildListByChannelId($parentId,$channelId, $order = "", $topCount = null){
+    public function GetAllChildListByChannelId($parentId,$channelId, $order = "", $topCount = null){
         $result = null;
         if ($topCount != null)
         {
@@ -89,6 +89,77 @@ class ChannelClientData extends BaseClientData {
 
                 $dataProperty = new DataProperty();
                 //$dataProperty->AddField("ParentId", $channelId);
+                $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+                DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
+
+            }else{
+                $result = Format::FixJsonDecode($cacheContent);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 得到新闻咨询类频道节点
+     * @param string $siteId 站点id
+     * @param string $order 排序方式
+     * @param int $topCount 显示的条数
+     * @return array|null 列表数据集
+     */
+    public function GetListForNews($siteId, $order = "", $topCount = null){
+        $result = null;
+        if ($topCount != null)
+        {
+            $topCount = " LIMIT " . $topCount;
+        }
+        else {
+            $topCount = "";
+        }
+        if($siteId >0){
+            $siteId = Format::FormatSql($siteId);
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'arr_channel_list_for_news_.cache_' .
+                str_ireplace(",","_",$siteId) .
+                '_' . $topCount . '_' . $order;
+            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            if (strlen($cacheContent) <= 2) {
+
+                switch($order){
+                    default:
+                        $order = "ORDER BY Sort DESC,".self::TableId_Channel."";
+                        break;
+                }
+                $sql = "SELECT
+                        ChannelId,
+                        ChannelName,
+                        SiteId,
+                        Icon,
+                        Rank,
+                        ParentId,
+                        TitlePic1UploadFileId,
+                        TitlePic2UploadFileId,
+                        TitlePic3UploadFileId,
+                        ChannelBrowserTitle,
+                        ChannelBrowserDescription,
+                        ChannelBrowserKeywords,
+                        CreateDate,
+                        Sort,
+                        ChannelIntro,
+                        ChildrenChannelId
+
+                    FROM ".self::TableName_Channel."
+                    WHERE
+                        Rank>0
+                        AND State<100
+                        AND SiteId=:SiteId
+                        AND ChannelType=1
+                        $order
+                        $topCount
+                        ";
+
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("SiteId", $siteId);
                 $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
                 DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));

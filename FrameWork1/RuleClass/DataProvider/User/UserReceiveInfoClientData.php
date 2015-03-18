@@ -88,6 +88,31 @@ class UserReceiveInfoClientData extends BaseClientData {
     }
 
     /**
+     * 设为默认
+     * @param int $userReceiveInfoId 会员收货信息Id
+     * @param int $userId 会员Id
+     * @return int 影响行数
+     */
+    public function SetDefault($userReceiveInfoId, $userId)
+    {
+        $result = -1;
+        if ($userReceiveInfoId > 0 && $userId > 0) {
+            //把其他的取消默认
+            $sql = "UPDATE " . self::TableName_UserReceiveInfo . " SET IsDefault=0 WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $this->dbOperator->Execute($sql, $dataProperty);
+
+
+
+            $sql = "UPDATE " . self::TableName_UserReceiveInfo . " SET IsDefault=1 WHERE UserId = :UserId AND UserReceiveInfoId = :UserReceiveInfoId;";
+            $dataProperty->AddField("UserReceiveInfoId", $userReceiveInfoId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 删除
      * @param int $userReceiveInfoId 会员收货信息Id
      * @param int $userId 会员Id

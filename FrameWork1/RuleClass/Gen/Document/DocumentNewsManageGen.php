@@ -111,6 +111,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 }
 
                 //document news pic
+                $tagId = "document_news_pic";
                 Template::RemoveCustomTag($templateContent, $tagId);
 
 
@@ -916,32 +917,65 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 $targetSiteId = $channelManageData->GetSiteId($targetCid,true);
 
                 if( $targetCid > 0){
-                    $channelType = $channelManageData->GetChannelType($targetCid,true);
-
-                    if (strlen($docIdString) > 0) {
-                        if ($channelType === 1) {   //新闻资讯类
-                            switch($method){
-                                case "copy":
-                                    $result = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
-                                    break;
-                                case "move":
-                                    $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
-                                    break;
-                                default:
-                                    $result=-1;
-                                    break;
-                            }
-
-                            //加入操作日志
-                            $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
-                            self::CreateManageUserLog($operateContent);
+                    /**********************************************************************
+                     ******************************判断是否有操作权限**********************
+                     **********************************************************************/
+                    $manageUserAuthorityManageData=new ManageUserAuthorityManageData();
+                    $siteId=$channelManageData->GetSiteId($targetCid,true);
+                    $can = $manageUserAuthorityManageData->CanChannelCreate($siteId, $targetCid, $manageUserId);
+                    if (!$can) {
+                        $result = -10;
+                        Control::ShowMessage(Language::Load('document', 26));
+                    } else {
 
 
-                            if ($result > 0) {
-                                $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
-                                Control::RunJavascript($jsCode);
-                            } else {
-                                Control::ShowMessage(Language::Load('document', 17));
+
+                        $channelType = $channelManageData->GetChannelType($targetCid,true);
+
+                        if (strlen($docIdString) > 0) {
+                            if ($channelType === 1) {   //新闻资讯类
+                                switch($method){
+                                    case "copy":
+                                        $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                        if(strlen($strResultId)>0){
+                                            $result=1;
+                                            /** 处理DocumentNewsPic */
+                                            $uploadFileManageData=new UploadFileManageData();
+                                            $documentNewsPicManageData=new DocumentNewsPicManageData();
+                                            $arrResultId=explode(",",$strResultId);
+                                            foreach($arrResultId as $oneResultId){
+                                                $strUploadFiles=$documentNewsManageData->GetUploadFiles($oneResultId);
+                                                $arrayOfUploadFiles=$uploadFileManageData->GetListById(substr($strUploadFiles,1));
+                                                if(count($arrayOfUploadFiles)>0){
+                                                    foreach($arrayOfUploadFiles as $oneArticlePic){
+                                                        $documentNewsPicManageData->Create($oneResultId,$oneArticlePic["UploadFileId"],0);//加入DocumentNewsPic表
+                                                    }
+                                                }
+                                            }
+                                        }else{
+                                            $result=-1;
+                                        }
+
+                                        break;
+                                    case "move":
+                                        $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                        break;
+                                    default:
+                                        $result=-1;
+                                        break;
+                                }
+
+                                //加入操作日志
+                                $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                                self::CreateManageUserLog($operateContent);
+
+
+                                if ($result > 0) {
+                                    $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                                    Control::RunJavascript($jsCode);
+                                } else {
+                                    Control::ShowMessage(Language::Load('document', 17));
+                                }
                             }
                         }
                     }

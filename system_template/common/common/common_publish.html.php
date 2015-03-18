@@ -27,6 +27,19 @@
                         $("#pub_site_document_news").css("color","#52596B");
                         $("#pub_site_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
                             +parent.parent.G_NowSiteId+"&publish_type=2&do=1");
+                        if($("#pub_site_document_news").html().length<16){
+                            switch(state){
+                                case 0:
+                                    $("#pub_site_document_news").append(" 新稿 ");
+                                    break;
+                                case 14:
+                                    $("#pub_site_document_news").append(" 终审 ");
+                                    break;
+                                case 30:
+                                    $("#pub_site_document_news").append(" 已发 ");
+                                    break;
+                            }
+                        }
                     }else{
                         alert("标记失败！");
                     }
@@ -47,6 +60,9 @@
                         $("#pub_site_document_news").css("cursor","none");
                         $("#pub_site_document_news").css("color","#bbb");
                         $("#pub_site_document_news").removeAttr("href");
+
+                        $("#pub_site_document_news").html("批量发布");
+
                     }
                 }
             });
@@ -67,10 +83,24 @@
         </tr>
 
         <tr>
-            <td>
+            <td style="line-height: 40px" valign="center">
 
-                [<a id="pub_site_channel" href="">发布当前站点下所有频道</a>] <br />
-                <a id="pub_site_document_news" title="请先标记" style="color:#bbb">[发布当前站点下所有已标记的资讯文档]</a> [<a onclick="SetWaitPublish(30)">标记已发</a>] [<a onclick="SetWaitPublish(14)">标记终审</a>] [<a onclick="CancelWaitPublish()">取消所有标记</a>]<br />
+                <a id="pub_site_channel" href="" class="btn2" style="padding: 5px 10px;">发布所有频道</a>
+                </td></tr>
+        <tr>
+
+            <td style="line-height: 40px" valign="center">
+                <select id="f_State" name="f_state" class="btn2" style="display: inline;float: left;margin: 5px 5px 0 0;border: 1px solid #CCC;height:29px;background-color: #fff" >
+                    <option value="-1">请选择要标记的文档</option>
+                    <option value="30" onclick="SetWaitPublish(30)">所有已发</option>
+                    <option value="14" onclick="SetWaitPublish(14)">所有终审</option>
+                    <option value="0" onclick="SetWaitPublish(0)">所有新稿</option>
+                </select>
+                <script type="text/javascript">
+                    $("#f_State").find("option[value='-1']").attr("selected",true);
+                </script>
+                <a id="pub_site_document_news" title="请先标记" class="btn2" style="margin-right: 5px;padding: 5px 10px;color:#bbb;cursor: pointer">批量发布</a>
+                <a onclick="CancelWaitPublish()" class="btn2" style="padding: 5px 10px;">重置发布标记</a><br />
 
             </td>
         </tr>
@@ -80,7 +110,7 @@
 
 
 
-    <div style="width:95%;height:150px;overflow:auto;margin:0;border:1px solid #cccccc;padding:5px;">
+    <div style="width:95%;height:335px;overflow:auto;margin:0;border:1px solid #cccccc;padding:5px;">
         发布结果：<br />
         {Result}
     </div>

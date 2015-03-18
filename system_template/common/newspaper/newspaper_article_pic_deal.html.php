@@ -55,13 +55,10 @@
             <tr>
                 <td class="spe_line" style="width:160px;height:40px;text-align: right;">图片：</td>
                 <td colspan="3" class="spe_line" style="text-align: left">
-                    <input id="UploadFileId" name="UploadFileId" type="file" class="input_box" style="width:400px; background: #ffffff;" />
-                    <span id="preview_title_pic" class="show_title_pic" idvalue="{UploadFileId}" style="cursor:pointer">[预览]</span>
+                    <a href="/default.php?secu=manage&mod=upload_file&m=modify&table_id={NewspaperArticlePicId}&site_id={site_id}&upload_file_id={UploadFileId}">文件管理</a>
 
                 </td>
             </tr>
-
-
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_ShowInSlider">控件显示：</label></td>
                 <td class="spe_line">

@@ -399,7 +399,9 @@ function _ChannelClick() {
         }else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_HOME) { //站点首页
 
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_INTERFACE) { //接口
-
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=interface&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
         }
     }
 

@@ -21,6 +21,9 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
+            case "async_delete":
+                $result = self::AsyncDelete();
+                break;
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
@@ -216,6 +219,31 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
         return $tempContent;
     }
 
+    /**
+     * 异步删除
+     */
+    private function AsyncDelete(){
+        $manageUserId=Control::GetManageUserId();
+        $channelTemplateId=Control::GetRequest("channel_template_id",0);
+        $channelTemplateManageData=new ChannelTemplateManageData();
+
+        /**********************************************************************
+         ******************************判断是否有操作权限**********************
+         **********************************************************************/
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $channelId = 0;
+        $siteId = $channelTemplateManageData->GetSiteId($channelTemplateId, true);
+
+        $can = $manageUserAuthorityManageData->CanManageTemplateLibrary($siteId,$channelId,$manageUserId);
+        if(!$can){
+            $result = -10;
+        }else{
+            $result = $channelTemplateManageData->Delete($channelTemplateId);
+        }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+
+    }
 
     /**
      * 修改文档状态 状态值定义在Data类中

@@ -24,4 +24,7 @@
     <module id="8">
         <content><![CDATA[管理员信息不正确！]]></content>
     </module>
+    <module id="9">
+        <content><![CDATA[还没有相关的数据！]]></content>
+    </module>
 </root>

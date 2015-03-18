@@ -80,6 +80,27 @@ class NewspaperArticlePicManageData extends BaseManageData {
     }
 
     /**
+     * 修改UploadFileId
+     * @param int $newspaperArticlePicId id
+     * @param int $uploadFileId 新的上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileId($newspaperArticlePicId, $uploadFileId)
+    {
+        $result = 0;
+        if ($newspaperArticlePicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_NewspaperArticlePic . "
+                        SET `UploadFileId`=:UploadFileId
+                        WHERE " . self::TableId_NewspaperArticlePic . "=:" . self::TableId_NewspaperArticlePic . ";";
+            $dataProperty->AddField(self::TableId_NewspaperArticlePic, $newspaperArticlePicId);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 修改状态
      * @param int $newspaperArticlePicId id
      * @param int $state 状态

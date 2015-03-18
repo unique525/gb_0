@@ -156,80 +156,54 @@ class BaseManageGen extends BaseGen
 
                 if (!empty($arrChannelTemplateList)) {
                     for ($i = 0; $i < count($arrChannelTemplateList); $i++) {
-                        //1.取得模板数据
-                        //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
-                        $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
-                        $publishType = $arrChannelTemplateList[$i]["PublishType"];
-                        $publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
+                        $arrChannelTemplateForPlatforms=array();  //不同平台的模板 分别发布
 
-                        //2.替换模板内容
-                        $timeStart = Control::GetMicroTime();
-                        self::ReplaceFirst($channelTemplateContent);
+                        $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"];//PC
+                        $publishFileNameForPC = $arrChannelTemplateList[$i]["PublishFileName"];
+                        $arrChannelTemplateForPlatforms["PC"]=array("Content"=>$channelTemplateContentForPC,"FileName"=>$publishFileNameForPC);
 
-                        $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
+                        $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"];//Mobile: xx_m.html
+                        $publishFileNameForMobile = str_ireplace(".","_m.",$arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["Mobile"]=array("Content"=>$channelTemplateContentForMobile,"FileName"=>$publishFileNameForMobile);
 
-                        $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
-                        $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
-                        $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
-                        $channelTemplateContent = str_ireplace("{CurrentChannelId}",$currentChannelId, $channelTemplateContent);
-                        $channelTemplateContent = str_ireplace("{CurrentChannelName}",$currentChannelName, $channelTemplateContent);
+                        $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"];//Pad: xx_p.html
+                        $publishFileNameForPad = str_ireplace(".","_p.",$arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["Pad"]=array("Content"=>$channelTemplateContentForPad,"FileName"=>$publishFileNameForPad);
 
-                        $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
-                        self::ReplaceEnd($channelTemplateContent);
+                        $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"];//TV: xx_t.html
+                        $publishFileNameForTV = str_ireplace(".","_t.",$arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["TV"]=array("Content"=>$channelTemplateContentForTV,"FileName"=>$publishFileNameForTV);
 
 
 
+                        foreach($arrChannelTemplateForPlatforms as $onePlatformTemplate){
+                            //1.取得模板数据
+                            //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
+                            $channelTemplateContent=$onePlatformTemplate["Content"];
+                            $publishType = $arrChannelTemplateList[$i]["PublishType"];
+                            $publishFileName=$onePlatformTemplate["FileName"];
 
-                        $timeEnd = Control::GetMicroTime();
-                        $publishLogManageData->Create(
-                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                            PublishLogManageData::TABLE_TYPE_CHANNEL,
-                            $channelId,
-                            "",
-                            "",
-                            $timeEnd - $timeStart,
-                            "now channel id:$currentChannelId replace template"
-                        );
 
-                        //3.根据PublishType和PublishFileName生成目标文件
-                        switch ($publishType) {
-                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
-                                //联动发布，只发布在本频道下(模板所属频道)
-                                //本频道id $currentChannelId
+                            if(strlen($channelTemplateContent)>0){
 
+                                //2.替换模板内容
                                 $timeStart = Control::GetMicroTime();
-                                $result = self::AddToPublishQueueForChannelTemplate(
-                                    $currentChannelId,
-                                    $rank,
-                                    $channelTemplateContent,
-                                    $publishType,
-                                    $publishFileName,
-                                    $publishQueueManageData
-                                );
-                                $timeEnd = Control::GetMicroTime();
-                                $publishLogManageData->Create(
-                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                    PublishLogManageData::TABLE_TYPE_CHANNEL,
-                                    $currentChannelId,
-                                    "",
-                                    "",
-                                    $timeEnd - $timeStart,
-                                    "now channel id:$currentChannelId add to publish queue result:$result"
-                                );
-                                break;
-                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
-                                //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
-                                //触发频道id $channelId
+                                self::ReplaceFirst($channelTemplateContent);
 
-                                $timeStart = Control::GetMicroTime();
-                                $result = self::AddToPublishQueueForChannelTemplate(
-                                    $channelId,
-                                    $currentRank,
-                                    $channelTemplateContent,
-                                    $publishType,
-                                    $publishFileName,
-                                    $publishQueueManageData
-                                );
+                                $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
+
+                                $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelId}",$currentChannelId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$currentChannelName, $channelTemplateContent);
+
+                                $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+                                self::ReplaceEnd($channelTemplateContent);
+
+
+
+
                                 $timeEnd = Control::GetMicroTime();
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
@@ -238,68 +212,121 @@ class BaseManageGen extends BaseGen
                                     "",
                                     "",
                                     $timeEnd - $timeStart,
-                                    "now channel id:$currentChannelId add to publish queue result:$result"
+                                    "now channel id:$currentChannelId replace template"
                                 );
-                                break;
-                            case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL:
-                                //联动发布，发布在所有继承树关系的频道下
 
-                                for($x = 0; $x < count($arrChannelIds);$x++){
+                                //3.根据PublishType和PublishFileName生成目标文件
+                                switch ($publishType) {
+                                    case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_SELF:
+                                        //联动发布，只发布在本频道下(模板所属频道)
+                                        //本频道id $currentChannelId
 
-                                    $timeStart = Control::GetMicroTime();
-                                    $result = self::AddToPublishQueueForChannelTemplate(
-                                        intval($arrChannelIds[$x]["ChannelId"]),
-                                        intval($arrChannelIds[$x]["Rank"]),
-                                        $channelTemplateContent,
-                                        $publishType,
-                                        $publishFileName,
-                                        $publishQueueManageData
-                                    );
-                                    $timeEnd = Control::GetMicroTime();
-                                    $publishLogManageData->Create(
-                                        PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                        PublishLogManageData::TABLE_TYPE_CHANNEL,
-                                        $arrChannelIds[$x],
-                                        "",
-                                        "",
-                                        $timeEnd - $timeStart,
-                                        "now channel id:$currentChannelId add to publish queue result:$result"
-                                    );
+                                        $timeStart = Control::GetMicroTime();
+                                        $result = self::AddToPublishQueueForChannelTemplate(
+                                            $currentChannelId,
+                                            $rank,
+                                            $channelTemplateContent,
+                                            $publishType,
+                                            $publishFileName,
+                                            $publishQueueManageData
+                                        );
+                                        $timeEnd = Control::GetMicroTime();
+                                        $publishLogManageData->Create(
+                                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                            PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                            $currentChannelId,
+                                            "",
+                                            "",
+                                            $timeEnd - $timeStart,
+                                            "now channel id:$currentChannelId add to publish queue result:$result"
+                                        );
+                                        break;
+                                    case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ONLY_TRIGGER:
+                                        //联动发布，只发布在触发频道下，有可能是本频道，也有可能是继承频道
+                                        //触发频道id $channelId
+
+                                        $timeStart = Control::GetMicroTime();
+                                        $result = self::AddToPublishQueueForChannelTemplate(
+                                            $channelId,
+                                            $currentRank,
+                                            $channelTemplateContent,
+                                            $publishType,
+                                            $publishFileName,
+                                            $publishQueueManageData
+                                        );
+                                        $timeEnd = Control::GetMicroTime();
+                                        $publishLogManageData->Create(
+                                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                            PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                            $channelId,
+                                            "",
+                                            "",
+                                            $timeEnd - $timeStart,
+                                            "now channel id:$currentChannelId add to publish queue result:$result"
+                                        );
+                                        break;
+                                    case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL:
+                                        //联动发布，发布在所有继承树关系的频道下
+
+                                        for($x = 0; $x < count($arrChannelIds);$x++){
+
+                                            $timeStart = Control::GetMicroTime();
+                                            $result = self::AddToPublishQueueForChannelTemplate(
+                                                intval($arrChannelIds[$x]["ChannelId"]),
+                                                intval($arrChannelIds[$x]["Rank"]),
+                                                $channelTemplateContent,
+                                                $publishType,
+                                                $publishFileName,
+                                                $publishQueueManageData
+                                            );
+                                            $timeEnd = Control::GetMicroTime();
+                                            $publishLogManageData->Create(
+                                                PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                                PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                                $arrChannelIds[$x],
+                                                "",
+                                                "",
+                                                $timeEnd - $timeStart,
+                                                "now channel id:$currentChannelId add to publish queue result:$result"
+                                            );
+                                        }
+
+
+
+                                        break;
+                                    case ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF:
+                                        //非联动发布，只发布在本频道下
+                                        //触发频道与当前频道一致时才处理
+
+                                        if($channelId == $currentChannelId){
+
+                                            $timeStart = Control::GetMicroTime();
+                                            $result = self::AddToPublishQueueForChannelTemplate(
+                                                $currentChannelId,
+                                                $rank,
+                                                $channelTemplateContent,
+                                                $publishType,
+                                                $publishFileName,
+                                                $publishQueueManageData
+                                            );
+                                            $timeEnd = Control::GetMicroTime();
+                                            $publishLogManageData->Create(
+                                                PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                                PublishLogManageData::TABLE_TYPE_CHANNEL,
+                                                $currentChannelId,
+                                                "",
+                                                "",
+                                                $timeEnd - $timeStart,
+                                                "now channel id:$currentChannelId add to publish queue result:$result"
+                                            );
+
+                                        }
+
+
+                                        break;
                                 }
 
-
-
-                                break;
-                            case ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF:
-                                //非联动发布，只发布在本频道下
-                                //触发频道与当前频道一致时才处理
-
-                                if($channelId == $currentChannelId){
-
-                                    $timeStart = Control::GetMicroTime();
-                                    $result = self::AddToPublishQueueForChannelTemplate(
-                                        $currentChannelId,
-                                        $rank,
-                                        $channelTemplateContent,
-                                        $publishType,
-                                        $publishFileName,
-                                        $publishQueueManageData
-                                    );
-                                    $timeEnd = Control::GetMicroTime();
-                                    $publishLogManageData->Create(
-                                        PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                        PublishLogManageData::TABLE_TYPE_CHANNEL,
-                                        $currentChannelId,
-                                        "",
-                                        "",
-                                        $timeEnd - $timeStart,
-                                        "now channel id:$currentChannelId add to publish queue result:$result"
-                                    );
-
-                                }
-
-
-                                break;
+                            }
                         }
                     }
                 }
@@ -404,6 +431,7 @@ class BaseManageGen extends BaseGen
                         }
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_PIC_LIST :
+                        $style = Template::GetParamValue($tagContent, "style_type");
                         $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
                         if ($documentNewsId > 0) {
                             $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsPicList(
@@ -413,7 +441,8 @@ class BaseManageGen extends BaseGen
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
-                                $tagOrder
+                                $tagOrder,
+                                $style
                             );
                         }
                         break;
@@ -614,6 +643,8 @@ class BaseManageGen extends BaseGen
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                Template::RemoveCustomTag($channelTemplateContent, $tagId);
             }
         }
 
@@ -629,7 +660,7 @@ class BaseManageGen extends BaseGen
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
      * @param string $tagOrder 排序方式
-     * @param string $sliderType 组图控件样式
+     * @param string $style 组图控件样式
      * @return mixed|string 内容模板
      */
     private function ReplaceTemplateOfDocumentNewsPicList(
@@ -640,7 +671,7 @@ class BaseManageGen extends BaseGen
         $tagTopCount=-1,
         $tagWhere="",
         $tagOrder="",
-        $sliderType="0"
+        $style="0"
     )
     {
         if ($documentNewsId > 0) {
@@ -666,7 +697,10 @@ class BaseManageGen extends BaseGen
                     break;
             }
             if (!empty($arrDocumentNewsPicList)) {
-                $sliderTypeName="document_news_pic_slider_type_".$sliderType; //轮换图样式模板：默认document_news_pic_slider_type_0
+                if($style==""||!$style){
+                    $style="0"; //轮换图样式模板：默认document_news_pic_slider_type_0
+                }
+                $sliderTypeName="document_news_pic_slider_type_".$style;
                 $sliderTemplate="document/".$sliderTypeName.".html";
                 $tagContent=Template::Load($sliderTemplate,"default","front_template");
                 Template::ReplaceList($tagContent, $arrDocumentNewsPicList, $sliderTypeName);
@@ -1015,84 +1049,111 @@ class BaseManageGen extends BaseGen
                         );
                         if (!empty($arrChannelTemplateList)) {
                             for ($i = 0; $i < Count($arrChannelTemplateList); $i++) {
-                                //1.取得模板数据
+                                $arrChannelTemplateForPlatforms=array();  //不同平台的模板 分别发布
 
-                                //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
-                                $channelTemplateContent = $arrChannelTemplateList[$i]["ChannelTemplateContent"];
-                                //$publishType = $arrChannelTemplateList[$i]["PublishType"];
-                                //$publishFileName = $arrChannelTemplateList[$i]["PublishFileName"];
+                                $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"];//PC
+                                $publishFileNameForPC = strval($documentNewsId).'.html';                          //发布文件名，资讯id构成
+                                $arrChannelTemplateForPlatforms["PC"]=array("Content"=>$channelTemplateContentForPC,"FileName"=>$publishFileNameForPC);
 
-                                //2.替换列表类的模板内容
-                                $timeStart = Control::GetMicroTime();
+                                $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"];//Mobile: xx_m.html
+                                $publishFileNameForMobile = strval($documentNewsId).'_m.html';
+                                $arrChannelTemplateForPlatforms["Mobile"]=array("Content"=>$channelTemplateContentForMobile,"FileName"=>$publishFileNameForMobile);
 
-                                $channelTemplateContent = str_ireplace("{DocumentNewsId}",$documentNewsId, $channelTemplateContent);
-                                $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
-                                $timeEnd = Control::GetMicroTime();
+                                $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"];//Pad: xx_p.html
+                                $publishFileNameForPad = strval($documentNewsId).'_p.html';
+                                $arrChannelTemplateForPlatforms["Pad"]=array("Content"=>$channelTemplateContentForPad,"FileName"=>$publishFileNameForPad);
 
-                                //传输日志 替换模板
-                                $publishLogManageData->Create(
-                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
-                                    $documentNewsId,
-                                    "",
-                                    "",
-                                    $timeEnd - $timeStart,
-                                    "now document news id:$documentNewsId replace template"
-                                );
+                                $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"];//TV: xx_t.html
+                                $publishFileNameForTV = strval($documentNewsId).'_t.html';
+                                $arrChannelTemplateForPlatforms["TV"]=array("Content"=>$channelTemplateContentForTV,"FileName"=>$publishFileNameForTV);
 
 
-                                //3.替换资讯内容和其他一些内容
-                                $arrOne = $documentNewsManageData->GetOne($documentNewsId);
-                                Template::ReplaceOne($channelTemplateContent, $arrOne);
 
-                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
+                                foreach($arrChannelTemplateForPlatforms as $onePlatformTemplate){
+                                    //1.取得模板数据
 
-                                //4.根据PublishType和PublishFileName生成目标文件
-                                //触发频道id $channelId
-                                $timeStart = Control::GetMicroTime();
+                                    //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
+                                    $channelTemplateContent=$onePlatformTemplate["Content"];
+                                    $publishType = $arrChannelTemplateList[$i]["PublishType"];
+                                    $publishFileName=$onePlatformTemplate["FileName"];
 
-                                //发布文件名，资讯id构成
-                                $publishFileName = strval($documentNewsId).'.html';
-                                //发布路径，频道id+日期
 
-                                $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
-                                if(strlen($publishDate)>10){
-                                    //已经有发布日期了
-                                    $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-                                }else{
-                                    $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                    if(strlen($channelTemplateContent)>0){
+
+
+
+
+                                        //2.替换列表类的模板内容
+                                        $timeStart = Control::GetMicroTime();
+
+                                        $channelTemplateContent = str_ireplace("{DocumentNewsId}",$documentNewsId, $channelTemplateContent);
+                                        $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
+                                        $timeEnd = Control::GetMicroTime();
+
+                                        //传输日志 替换模板
+                                        $publishLogManageData->Create(
+                                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                            PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                            $documentNewsId,
+                                            "",
+                                            "",
+                                            $timeEnd - $timeStart,
+                                            "now document news id:$documentNewsId replace template"
+                                        );
+
+
+                                        //3.替换资讯内容和其他一些内容
+                                        $arrOne = $documentNewsManageData->GetOne($documentNewsId);
+                                        Template::ReplaceOne($channelTemplateContent, $arrOne);
+
+                                        $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
+                                        $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
+
+                                        //4.根据PublishType和PublishFileName生成目标文件
+                                        //触发频道id $channelId
+                                        $timeStart = Control::GetMicroTime();
+
+                                        //发布路径，频道id+日期
+
+                                        $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
+                                        if(strlen($publishDate)>10){
+                                            //已经有发布日期了
+                                            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
+                                        }else{
+                                            $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                        }
+
+
+                                        //修改发布时间和发布人，只有发布时间为空时才进行操作
+                                        $documentNewsManageData->ModifyPublishDate(
+                                            $documentNewsId,
+                                            date("Y-m-d H:i:s", time()),
+                                            $manageUserId
+                                        );
+
+
+                                        $result = self::AddToPublishQueueForChannelTemplate(
+                                            $channelId,
+                                            $rank,
+                                            $channelTemplateContent,
+                                            $publishType,
+                                            $publishFileName,
+                                            $publishQueueManageData,
+                                            $publishPath
+                                        );
+
+                                        $timeEnd = Control::GetMicroTime();
+                                        $publishLogManageData->Create(
+                                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                            PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                            $documentNewsId,
+                                            "",
+                                            "",
+                                            $timeEnd - $timeStart,
+                                            "now document news id:$documentNewsId add to publish queue result:$result"
+                                        );
+                                    }
                                 }
-
-
-                                //修改发布时间和发布人，只有发布时间为空时才进行操作
-                                $documentNewsManageData->ModifyPublishDate(
-                                    $documentNewsId,
-                                    date("Y-m-d H:i:s", time()),
-                                    $manageUserId
-                                );
-
-
-                                $result = self::AddToPublishQueueForChannelTemplate(
-                                    $channelId,
-                                    $rank,
-                                    $channelTemplateContent,
-                                    $publishType,
-                                    $publishFileName,
-                                    $publishQueueManageData,
-                                    $publishPath
-                                );
-
-                                $timeEnd = Control::GetMicroTime();
-                                $publishLogManageData->Create(
-                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
-                                    $documentNewsId,
-                                    "",
-                                    "",
-                                    $timeEnd - $timeStart,
-                                    "now document news id:$documentNewsId add to publish queue result:$result"
-                                );
                             }
                         }
 

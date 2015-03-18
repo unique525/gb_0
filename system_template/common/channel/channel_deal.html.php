@@ -273,7 +273,8 @@
             <td class="spe_line" height="30" align="right"><label for="f_PublishApiType">发布API接口类型：</label></td>
             <td class="spe_line">
                 <select id="f_PublishApiType" name="f_PublishApiType">
-                    <option value="0">XML</option>
+                    <option value="0">JSON</option>
+                    <option value="1">XML</option>
                 </select> (在使用频道聚合页中时)
                 {s_PublishApiType}
             </td>
