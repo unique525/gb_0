@@ -114,11 +114,11 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
         if($userId > 0){
-            $templateFileUrl = "user/user_favorite_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+            //$templateFileUrl = "user/user_favorite_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_favorite_list");
             parent::ReplaceFirst($templateContent);
             parent::ReplaceSiteInfo($siteId, $templateContent);
 

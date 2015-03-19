@@ -52,7 +52,7 @@
 </head>
 <body>
 {common_body_deal}
-<form id="mainForm" action="/default.php?secu=manage&mod=manage_user&m=modify_user_pass" method="post">
+<form id="mainForm" action="/default.php?secu=manage&mod=manage_user&m=modify_password" method="post">
 
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>

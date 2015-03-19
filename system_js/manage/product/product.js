@@ -176,6 +176,41 @@ $(function () {
         parent.addTab();
     });
 
+    /**
+     * 移动产品结点
+     * **/
+    $("#btn_move").click(function (event) {
+        event.preventDefault();
+        var channelId=$(this).attr("idvalue");
+        var docIdString = "";
+        var w = 500;
+        var h = 520;
+
+        $('input[name=input_select]').each(function (i) {
+            if (this.checked) {
+                docIdString = docIdString + ',' + $(this).val();
+            }
+        });
+
+        docIdString=docIdString.substr(1);
+        if (docIdString.length <= 0) {
+            alert("请先选择要操作的产品");
+        } else {
+
+            var url='/default.php?secu=manage&mod=product&m=move&channel_id='+channelId+'&doc_id_string='+docIdString;
+            $("#dialog_frame").attr("src",url);
+            $("#dialog_resultbox").dialog({
+                hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                autoOpen:true,
+                height:h,
+                width:w,
+                modal:true, //蒙层（弹出会影响页面大小）
+                title:'移动',
+                overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+            });
+        }
+    });
+
 
 });
 

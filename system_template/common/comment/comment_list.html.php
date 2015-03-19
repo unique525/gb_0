@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+<link type="text/css" href="/system_template/default/images/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
@@ -61,11 +63,32 @@
                 var idvalue = $(this).attr("idvalue");
                 $(this).html(FormatState(state,idvalue));
             });
+            //评论回复
+            $(".btn_Comment").click(function () {
+                var commentId = $(this).attr("idvalue");
+                //var top = document.documentElement.clientWidth/2;
+                //var left = ($(document.body).width() - $("#dialog_manage_comment_answer_box").width())/2;
+                var url = '/default.php?secu=manage&mod=comment&m=reply&commentid='+ commentId+'&site_id={siteId}';
+                alert(url);
+                $("#dialog_manage_comment_reply_frame").attr("src", url);
+                $("#dialog_manage_comment_reply_box").dialog({
+                    hide: true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                    autoOpen: true,
+                    position: [400, 100],
+                    height: 400,
+                    width: 500,
+                    modal: true, //蒙层（弹出会影响页面大小）
+                    title: '评论回复',
+                    overlay: {opacity: 0.5, background: "black", overflow: 'auto'}
+                });
+            });
         });
+
     </script>
 
 </head>
 <body>
+{common_body_deal}
 <div class="div_list">
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
         <tr  class="grid_title2">
@@ -77,7 +100,7 @@
         </tr>
     </table>
     <ul id="type_list">
-        <icms id="comment_list">
+        <icms id="comment_list" type="comment_list" where="parent">
             <item>
                 <![CDATA[
                 <li>
@@ -85,7 +108,7 @@
                         <tr class="grid_item2">
                             <td class="spe_line2" style="width:80px;text-align: center">{f_CommentId}</td>
                             <td class="spe_line2" style="width:80px;text-align: center">
-                                <span class="span_state" idvalue="{f_CommentId}">{f_State}</span>
+                                <span class="span_state" idvalue="{f_CommentId}">{f_State}</span> | <span class="btn_Comment" idvalue="{f_CommentId}" style="cursor: pointer">回复</span>
                             </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
                                 <img class="div_start" idvalue="{f_CommentId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
@@ -94,6 +117,11 @@
                             </td>
                             <td class="spe_line2" style="text-align: left;padding-left: 4px">
                                 <a href="{f_SourceUrl}" target="_blank">{f_Content}</a>
+                                <table>
+                                    <tr><td width="100px"></td><td>{child}</td></tr>
+                                </table>
+
+                                <div class="spe"></div>
                             </td>
                             <td class="spe_line2" style="width:220px;text-align: center">
                                 <div title="{f_UserId}">{f_UserName}<br />{f_UserMobile}<br />{f_UserEmail}</div>
@@ -103,9 +131,22 @@
                 </li>
                 ]]>
             </item>
+            <child>
+                <![CDATA[
+                <div class="comment_two_item{itemflag}">
+                    回复：{f_Content}
+                </div>
+                ]]>
+            </child>
         </icms>
     </ul>
     <div>{pager_button}</div>
 </div>
+<div id="dialog_manage_comment_reply_box" title="评论回复" style="display: none;height:350px;">
+    <div id="dialog_manage_comment_reply_content" style="font-size: 14px;">
+        <iframe id="dialog_manage_comment_reply_frame" src=""  style="border: 0; " width="100%" height="320px"></iframe>
+    </div>
+</div>
+
 </body>
 </html>

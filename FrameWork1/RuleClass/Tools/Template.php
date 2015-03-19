@@ -414,6 +414,8 @@ class Template
                             //根级id赋值
                             $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
                             for($j = 0; $j<count($arrChildList); $j++){
+
+
                                 $arrChildList[$j]["FirstId"] = $arrList[$i][$tableIdName];
 
                                 $listOfChild = $childTempContent;

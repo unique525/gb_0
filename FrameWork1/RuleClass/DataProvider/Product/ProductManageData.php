@@ -669,4 +669,74 @@ class ProductManageData extends BaseManageData
         }
         return $result;
     }
+
+    /**
+     * 移动产品到另一个频道
+     * @param int $targetSiteId 目的站点id
+     * @param int $targetChannelId 目的节点id
+     * @param array $arrayOfProductList 要移动的产品数组
+     * @param int $manageUserId 操作人id
+     * @param string $manageUserName 操作人用户名
+     * @return int
+     */
+    public function Move($targetSiteId, $targetChannelId, $arrayOfProductList,$manageUserId,$manageUserName) {
+        $result=-1;
+        if($targetChannelId>0&&count($arrayOfProductList)>0){
+            $sort=self::GetMaxSortOfChannel($targetChannelId);  //排序号处理
+            if($sort<0){
+                $sort=0;
+            }
+
+            foreach($arrayOfProductList as $value){
+                $sort++;
+                $sql = "UPDATE " . self::TableName_Product . "
+                 SET `SiteId`=:SiteId,`ChannelId`=:ChannelId,`ManageUserId`=:ManageUserId,`ManageUserName`=:ManageUserName,Sort=" . $sort . "
+                 WHERE ProductId =:ProductId;";
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("SiteId", $targetSiteId);
+                $dataProperty->AddField("ChannelId", $targetChannelId);
+                $dataProperty->AddField("ManageUserId", $manageUserId);
+                $dataProperty->AddField("ManageUserName", $manageUserName);
+                $dataProperty->AddField("ProductId", $value["ProductId"]);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 取得频道下最大的排序号 (用于批量移动产品)
+     * @param int $channelId id
+     * @return int 对应排序号
+     */
+    public function GetMaxSortOfChannel($channelId)
+    {
+        $result = 0;
+        if ($channelId > 0) {
+            $sql = "select max(sort) as MaxSort from " . self::TableName_Product . " where ChannelId=:ChannelId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 由id字符串返回对应id产品的数据集
+     * @param string $productIdString
+     * @return array|null 取得对应数组
+     */
+    public function GetListByIDString($productIdString)
+    {
+        $result = null;
+        if ($productIdString !="") {
+            $sql = "SELECT * FROM
+            " . self::TableName_Product . "
+            WHERE ProductId IN ($productIdString)
+            ;";
+            $dataProperty = new DataProperty();
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 

@@ -20,24 +20,52 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
             case "default":
                 $result = self::GenDefault();
                 break;
+            case "list":
+                $result = self::GenList();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
 
         return $result;
     }
+
     private function GenDefault() {
 
         $siteId = parent::GetSiteIdByDomain();
-
         $tempContent = parent::GetDynamicTemplateContent();
-
         parent::ReplaceFirst($tempContent);
+
+        $channelId = Control::GetRequest("channel_id",0);
+        $channelPublicData = new ChannelPublicData();
+        $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+        $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
+
+
         $tempContent =  parent::ReplaceTemplate($tempContent);
-        parent::ReplaceSiteConfig($siteId, $tempContent);
+        //parent::ReplaceSiteConfig($siteId, $tempContent);
+        parent::ReplaceSiteInfo($siteId, $tempContent);
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
+    }
+
+    private function GenList() {
+        $siteId = parent::GetSiteIdByDomain();
+        $channelId = Control::GetRequest("channel_id",0);
+        $tempContent = parent::GetDynamicTemplateContent();
+        $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+        parent::ReplaceFirst($tempContent);
+
+        $channelPublicData = new ChannelPublicData();
+        $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+        $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
+        $tempContent = str_ireplace("{ChannelName}", $currentChannelName, $tempContent);
+
+        $tempContent =  parent::ReplaceTemplate($tempContent);
+
+        parent::ReplaceSiteInfo($siteId, $tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
 }
-
 ?>

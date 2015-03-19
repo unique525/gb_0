@@ -28,5 +28,9 @@ class VisitData {
      * 电子报文章
      */
     const VISIT_TABLE_TYPE_NEWSPAPER_ARTICLE = 5;
+    /**
+     * 产品
+     */
+    const VISIT_TABLE_TYPE_PRODUCT = 6;
 
 } 

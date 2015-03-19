@@ -36,6 +36,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
             case "async_modify_sort_by_drag":
                 $result = self::AsyncModifySortByDrag();
                 break;
+            case "move":
+                $result = self::GenDeal($method);
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -119,7 +122,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         //title pic1
                         $fileElementName = "file_title_pic_1";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1;
-                        $tableId = $channelId;
+                        $tableId = $productId;
                         $uploadFile1 = new UploadFile();
                         $uploadFileId1 = 0;
                         $titlePic1Result = self::Upload(
@@ -605,7 +608,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 $tempContent = str_ireplace("{pager_button}", Language::Load('channel', 5), $tempContent);
             }
         }
-
+        $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
@@ -860,6 +863,109 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                 $productParamValue=$arrProductParam[$i][$productParamColumnName];
         }
         return $productParamValue;
+    }
+
+    /**
+     * 移动产品处理
+     * @param string $method 操作类型名称
+     * @return string 返回Jsonp修改结果
+     */
+    private function GenDeal($method)
+    {
+        $tempContent = Template::Load("product/product_list_deal.html", "common");
+        parent::ReplaceFirst($tempContent);
+        $mod = Control::GetRequest("mod", "");
+        $channelId = Control::GetRequest("channel_id", 0);
+        $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
+        $manageUserId = Control::GetManageUserID();
+        $manageUserName = Control::GetManageUserName();
+        if ($channelId > 0) {
+            $channelManageData = new ChannelManageData();
+            $productManageData = new ProductManageData();
+            $arrayOfProductList = $productManageData->GetListByIDString($docIdString);
+            if (!empty($_POST)) { //提交
+                $targetCid = Control::PostRequest("pop_cid", 0); //目标频道ID
+                $targetSiteId = $channelManageData->GetSiteId($targetCid, true);
+
+                if ($targetCid > 0) {
+                    /**********************************************************************
+                     ******************************判断是否有操作权限**********************
+                     **********************************************************************/
+                    $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                    $siteId = $channelManageData->GetSiteId($targetCid, true);
+                    $can = $manageUserAuthorityManageData->CanChannelCreate($siteId, $targetCid, $manageUserId);
+                    if (!$can) {
+                        $result = -10;
+                        Control::ShowMessage(Language::Load('document', 26));
+                    } else {
+
+
+                        $channelType = $channelManageData->GetChannelType($targetCid, true);
+
+                        if (strlen($docIdString) > 0) {
+                            if ($channelType === 4) { //产品类
+                                $productManageData = new ProductManageData();
+                                switch ($method) {
+                                    case "move":
+                                        $methodName = "移动";
+                                        $result = $productManageData->Move($targetSiteId, $targetCid, $arrayOfProductList, $manageUserId, $manageUserName);
+                                        //加入操作日志
+                                        $operateContent = 'Move Product,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                                        self::CreateManageUserLog($operateContent);
+                                        break;
+                                    default:
+                                        $result = -1;
+                                        break;
+                                }
+
+                                if ($result > 0) {
+                                    $jsCode = 'parent.location.href=parent.location.href';
+                                    Control::RunJavascript($jsCode);
+                                } else {
+                                    Control::ShowMessage(Language::Load('document', 17));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $documentList = "";
+
+            //显示操作产品的标题
+            //for ($i = 0; $i < count($arrList); $i++) {
+            //    $columns = $arrList[$i];
+            foreach ($arrayOfProductList as $columnName => $columnValue) {
+                $documentList = $documentList . $columnValue["ProductName"] . '<br>';
+            }
+            //}
+            //显示当前站点的节点树
+            $siteId = $channelManageData->GetSiteID($channelId, true);
+            $order = "";
+            $arrayChannelTree = $channelManageData->GetListForManageLeft($siteId, $manageUserId, $order);
+            $listName = "channel_tree";
+            Template::ReplaceList($tempContent, $arrayChannelTree, $listName);
+
+
+            $replaceArr = array(
+                "{mod}" => $mod,
+                "{method}" => $method,
+                "{SiteId}" => $siteId,
+                "{ChannelId}" => $channelId,
+                "{ChannelName}" => "",
+                "{Method}" => $methodName,
+                "{MethodName}" => $methodName,
+                "{DealType}" => $methodName,
+                "{DocumentList}" => $documentList,
+                "{DocIdString}" => $docIdString,
+                "{PicStyleSelector}" => "none"
+            );
+
+            $tempContent = strtr($tempContent, $replaceArr);
+        }
+
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
     }
 
 } 

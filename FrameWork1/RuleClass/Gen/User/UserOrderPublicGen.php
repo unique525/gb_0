@@ -58,10 +58,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $siteId = parent::GetSiteIdByDomain();
 
         if($userId > 0 && $siteId > 0){
-            $templateFileUrl = "user/user_order_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_order_list.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_order_list");
             parent::ReplaceFirst($templateContent);
             parent::ReplaceSiteInfo($siteId, $templateContent);
 
@@ -130,10 +131,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
 
 
-                $templateFileUrl = "user/user_order_detail.html";
-                $templateName = "default";
-                $templatePath = "front_template";
-                $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+                //$templateFileUrl = "user/user_order_detail.html";
+                //$templateName = "default";
+                //$templatePath = "front_template";
+                //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+                $templateContent = parent::GetDynamicTemplateContent("user_order_detail");
                 parent::ReplaceFirst($templateContent);
                 parent::ReplaceSiteInfo($siteId, $templateContent);
 
@@ -182,11 +184,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
         $strUserCarIds = Control::GetRequest("arr_user_car_id","");
-        $templateFileUrl = "user/user_order_confirm.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+        //$templateFileUrl = "user/user_order_confirm.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateContent = parent::GetDynamicTemplateContent("user_order_confirm");
         if($strUserCarIds != "" && $userId > 0 && $siteId > 0){
             $userCarPublicData = new UserCarPublicData();
 
@@ -489,11 +491,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
         if($userOrderId > 0 && $userId > 0 && $siteId > 0){
 
-            $templateFileUrl = "user/user_order_pay.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
+            //$templateFileUrl = "user/user_order_pay.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_order_pay");
 
             /////权限验证//////////////////////
             /////会员id和订单所属会员id要一致
@@ -530,10 +532,11 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
         $templateContent = "";
         if($userOrderId > 0 && $userId > 0 && $siteId > 0){
 
-            $templateFileUrl = "user/user_order_submit_pay.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            //$templateFileUrl = "user/user_order_submit_pay.html";
+            //$templateName = "default";
+            //$templatePath = "front_template";
+            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_order_submit_pay");
             parent::ReplaceFirst($templateContent);
 
             /////权限验证//////////////////////

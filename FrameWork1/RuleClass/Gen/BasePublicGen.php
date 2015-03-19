@@ -49,6 +49,7 @@ class BasePublicGen extends BaseGen {
      */
     protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
     {
+
         $result = "";
         if ($siteId <= 0){
             $siteId = self::GetSiteIdByDomain();
@@ -62,10 +63,12 @@ class BasePublicGen extends BaseGen {
 
 
         if($siteId>0 && strlen($channelTemplateTag)>0){
+
             $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
             $channelTemplatePublicData = new ChannelTemplatePublicData();
+
             $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                $siteId, $channelTemplateType, $channelTemplateTag, true);
+                $siteId, $channelTemplateType, $channelTemplateTag, false);
         }
         return $result;
     }
@@ -1217,6 +1220,29 @@ class BasePublicGen extends BaseGen {
 
         return $result;
     }
+
+    /**
+     * 替换模板中的统计代码 {VisitCode}
+     * @param string $templateContent 模板
+     * @param int $siteId 站点id
+     * @param int $channelId 频道id
+     * @param int $tableType 表类型 (定义在 VisitData 中)
+     * @param int $tableId 表id
+     * @param string $tag 标签
+     */
+    protected function ReplaceVisitCode(&$templateContent, $siteId, $channelId, $tableType, $tableId, $tag = ""){
+
+        $sitePublicData = new SitePublicData();
+        $siteUrl = $sitePublicData->GetSiteUrl($siteId, true);
+
+
+        $jsCode = '<script type="text/javascript">var visitConfig = encodeURIComponent("'.$siteUrl.'") +"||'.$siteId.'||'.$channelId.'||'.$tableType.'||'.$tableId.'||"+encodeURI("'.$tag.'");</script>';
+        $scriptLoad = '<script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>';
+        $templateContent = str_ireplace("{VisitCode}", $jsCode.$scriptLoad, $templateContent);
+
+    }
+
+
 
 }
 

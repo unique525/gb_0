@@ -685,7 +685,7 @@ class BaseGen
 
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_1:
-                /**产品题图   tableId 为 channelId  */
+                /**产品题图   tableId 为 productId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
                         . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -693,7 +693,7 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_2:
-                /**产品题图   tableId 为 channelId  */
+                /**产品题图   tableId 为 productId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
                         . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -701,7 +701,7 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_3:
-                /**产品题图   tableId 为 channelId  */
+                /**产品题图   tableId 为 productId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
                         . strval($tableId) . DIRECTORY_SEPARATOR;
@@ -709,7 +709,7 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_PRODUCT_TITLE_PIC_4:
-                /**产品题图   tableId 为 channelId  */
+                /**产品题图   tableId 为 productId  */
                 if ($tableId > 0) {
                     $uploadFilePath = $uploadPath . "product" . DIRECTORY_SEPARATOR
                         . strval($tableId) . DIRECTORY_SEPARATOR;

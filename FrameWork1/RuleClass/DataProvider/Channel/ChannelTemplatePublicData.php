@@ -24,9 +24,7 @@ class ChannelTemplatePublicData extends BasePublicData {
         $withCache
     ){
         $result = "";
-
         if($channelTemplateType == ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC ){ //动态模板
-
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_template_data';
             $cacheFile = "channel_get_channel_template_content.cache
                             _site_id_".$siteId."_type_".$channelTemplateType."
@@ -42,6 +40,7 @@ class ChannelTemplatePublicData extends BasePublicData {
                         AND
                             State<".ChannelTemplateData::STATE_REMOVED."
                         ;";
+
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("ChannelTemplateType", $channelTemplateType);

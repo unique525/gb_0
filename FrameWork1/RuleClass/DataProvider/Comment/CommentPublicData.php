@@ -7,6 +7,7 @@
  * @author zhangchi
  */
 class CommentPublicData extends BasePublicData {
+
     public function Create(
         $siteId,
         $subject,
@@ -108,6 +109,92 @@ class CommentPublicData extends BasePublicData {
         }
         return $result;
     }
+    public function Reply(
+        $parentId,
+        $rank,
+        $tableId,
+        $tableType,
+        $subject,
+        $content,
+        $userId,
+        $userName,
+        $guestName,
+        $agreeCount,
+        $disagreeCount,
+        $guestEmail,
+        $state,
+        $commentType,
+        $siteId,
+        $channelId,
+        $sourceUrl
+    )
+    {
+        $result = -1;
+        //echo $siteId."|".$content."|".$channelId."|".$tableId."|".$tableType;
+        if($siteId > 0  && !empty($content)  && $channelId > 0 && $tableId > 0 && $tableType > 0){
+            $sql = "
+                INSERT INTO " . self::TableName_Comment . " (
+                    ParentId,
+                    Rank,
+                    TableId,
+                    TableType,
+                    Subject,
+                    Content,
+                    UserId,
+                    UserName,
+                    GuestName,
+                    CreateDate,
+                    AgreeCount,
+                    DisagreeCount,
+                    GuestEmail,
+                    State,
+                    CommentType,
+                    SiteId,
+                    ChannelId,
+                    SourceUrl
+                ) VALUES (
+                    :ParentId,
+                    :Rank,
+                    :TableId,
+                    :TableType,
+                    :Subject,
+                    :Content,
+                    :UserId,
+                    :UserName,
+                    :GuestName,
+                    now(),
+                    :AgreeCount,
+                    :DisagreeCount,
+                    :GuestEmail,
+                    :State,
+                    :CommentType,
+                    :SiteId,
+                    :ChannelId,
+                    :SourceUrl
+                );";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("AgreeCount", $agreeCount);
+            $dataProperty->AddField("DisagreeCount", $disagreeCount);
+            $dataProperty->AddField("ParentId", $parentId);
+            $dataProperty->AddField("Rank", $rank);
+            $dataProperty->AddField("TableId", $tableId);
+            $dataProperty->AddField("TableType", $tableType);
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("Subject", $subject);
+            $dataProperty->AddField("Content", $content);
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("UserName", $userName);
+            $dataProperty->AddField("GuestName", $guestName);
+            $dataProperty->AddField("GuestEmail", $guestEmail);
+            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("CommentType", $commentType);
+            $dataProperty->AddField("SourceUrl", $sourceUrl);
+            $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 }
 
 ?>
