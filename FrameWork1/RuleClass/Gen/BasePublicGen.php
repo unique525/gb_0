@@ -67,8 +67,13 @@ class BasePublicGen extends BaseGen {
             $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
             $channelTemplatePublicData = new ChannelTemplatePublicData();
 
-            $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                $siteId, $channelTemplateType, $channelTemplateTag, false);
+            if(self::IsMobile()){
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+            }else{
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+            }
         }
         return $result;
     }

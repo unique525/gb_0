@@ -1868,6 +1868,47 @@ class BaseGen
         }
         return $allChannelId;
     }
+
+    protected function IsMobile(){
+
+        $agent = self::GetUserAgent();
+
+        if($agent == "iPhone" || $agent == "iPad" || $agent == "android"){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
+    protected function GetUserAgent(){
+        //获取USER AGENT
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+        //分析数据
+        $is_pc = (strpos($agent, 'windows nt')) ? true : false;
+        $is_iPhone = (strpos($agent, 'iphone')) ? true : false;
+        $is_iPad = (strpos($agent, 'ipad')) ? true : false;
+        $is_android = (strpos($agent, 'android')) ? true : false;
+
+        //输出数据
+        if($is_pc){
+            return "PC";
+        }
+        if($is_iPhone){
+            return "iPhone";
+        }
+        if($is_iPad){
+            return "iPad";
+        }
+        if($is_android){
+            return "android";
+        }else{
+            return "unknown";
+        }
+    }
+
 }
 
 ?>
