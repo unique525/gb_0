@@ -37,6 +37,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         parent::ReplaceFirst($tempContent);
 
         $channelId = Control::GetRequest("channel_id",0);
+
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
