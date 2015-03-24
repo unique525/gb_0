@@ -255,8 +255,8 @@ $(document).ready(function(){
         $("#dialog_user_order_pay_box").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:650,
-            width:1250,
+            height:450,
+            width:850,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'订单中的支付信息',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
@@ -273,8 +273,8 @@ $(document).ready(function(){
         $("#dialog_user_order_send_box").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:650,
-            width:1250,
+            height:450,
+            width:850,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'订单中的发货信息',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
