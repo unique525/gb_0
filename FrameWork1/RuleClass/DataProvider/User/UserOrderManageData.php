@@ -87,11 +87,11 @@ class UserOrderManageData extends BaseManageData{
 
             if ($state != "") {
                 if($state == 10 || $state == 0){
-                    $addSql = " AND (State = :State1 OR State = :State2) ";
+                    $addSql = " AND (uo.State = :State1 OR uo.State = :State2) ";
                     $dataProperty->AddField("State1", "0");
                     $dataProperty->AddField("State2", "10");
                 }else{
-                    $addSql = " AND State = :State";
+                    $addSql = " AND uo.State = :State";
                     $dataProperty->AddField("State", $state);
                 }
                 $sql = $sql . $addSql;
