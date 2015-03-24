@@ -179,6 +179,54 @@ class UserCarClientData extends BaseClientData {
     }
 
     /**
+     * 获取会员购物车的列表
+     * @param int $userId 用户Id
+     * @param int $userCarIds
+     * @return array|null 会员购物车的列表
+     */
+    public function GetListByIds($userId, $userCarIds)
+    {
+        $result = null;
+        if ($userId > 0 && strlen($userCarIds)>0) {
+
+            $userCarIds = Format::FormatSql($userCarIds);
+
+            $sql = "SELECT
+                        uc.* ,
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo,
+                        p.ProductName,
+                        p.ProductId,
+                        pp.ProductPriceId,
+                        pp.ProductPriceValue,
+                        pp.ProductUnit,
+                        pp.ProductPriceIntro,
+                        psp.SendPrice
+                            FROM " . self::TableName_UserCar . " uc
+                            LEFT JOIN " . self::TableName_ProductSendPrice . " psp ON uc.ProductId = psp.ProductId
+                            LEFT JOIN " . self::TableName_ProductPrice . " pp ON uc.ProductPriceId = pp.ProductPriceId
+                            LEFT JOIN ". self::TableName_Product . " p ON uc.ProductId = p.ProductId
+                            LEFT JOIN " . self::TableName_UploadFile . " up ON p.TitlePic1UploadFileId = up.UploadFileId
+                            WHERE uc.UserId = :UserId AND uc.UserCarId in ($userCarIds);";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 得到一行信息信息
      * @param int $userId 会员id
      * @param int $userCarId 会员购物车id

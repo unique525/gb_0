@@ -183,7 +183,7 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
             $siteId = Control::GetRequest("site_id", 0);
 
             //用,拼接的$userCarIds
-            $userCarIds = intval(Control::PostOrGetRequest("UserCarIds", ""));
+            $userCarIds = Control::PostOrGetRequest("UserCarIds", "");
 
             if(
                 strlen($userCarIds)>0
@@ -193,7 +193,7 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $resultCode = 1;
 
                 $userCarClientData = new UserCarClientData();
-                $arrUserCarProductList = $userCarClientData->GetList($userId, 1, 1000);
+                $arrUserCarProductList = $userCarClientData->GetListByIds($userId, $userCarIds);
 
 
                 $totalProductPrice = 0;//订单总价
@@ -205,23 +205,26 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $sumProductSendPrice = 0;
                 $sumProductSendPriceAdd = 0;
 
+
+
                 for($i=0;$i<count($arrUserCarProductList);$i++){
                     $buyCount = intval($arrUserCarProductList[$i]["BuyCount"]); //购买数量
                     $subtotal = intval($arrUserCarProductList[$i]["BuyPrice"]); //小计
                     $productId = intval($arrUserCarProductList[$i]["ProductId"]);
-
                     $totalProductPrice = $subtotal;
 
                     $currentProductSendPrice = $productClientData->GetSendPrice($productId, TRUE);
                     $currentProductSendPriceAdd = $productClientData->GetSendPriceAdd($productId, TRUE);
-
                     $sumProductSendPrice = $sumProductSendPrice + $currentProductSendPrice;
                     if($buyCount>1){
                         //续重费
                         $sumProductSendPriceAdd = $sumProductSendPrice + $currentProductSendPriceAdd*($buyCount-1);
                     }
 
-                    if ($currentProductSendPrice > $maxProductSendPrice){
+                    $cop1 = $currentProductSendPrice+$currentProductSendPriceAdd;
+                    $cop2 = $maxProductSendPrice+$maxProductSendPriceAdd;
+
+                    if ($cop1 > $cop2){
                         $maxProductSendPrice = $currentProductSendPrice;
                         if($buyCount>1){
                             //续重费
