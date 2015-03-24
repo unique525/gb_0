@@ -72,6 +72,7 @@
                     <select name="f_State" id="f_State">
                         <option value="0">新建</option>
                         <option value="10">未付款</option>
+                        <option value="15">货到付款</option>
                         <option value="20">已付款，未发货</option>
                         <option value="25">已发货</option>
                         <option value="30">交易完成</option>
