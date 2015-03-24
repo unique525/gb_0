@@ -16,9 +16,20 @@ class UserReceiveInfoPublicData extends BasePublicData
      * @param string $receivePersonName 收件人姓名
      * @param string $homeTel 固定电话
      * @param string $mobile 手机号码
+     * @param string $city 城市
+     * @param string $district 区
      * @return int 返回新增的id
      */
-    public function Create($userId,$address,$postcode,$receivePersonName,$homeTel = "",$mobile=""){
+    public function Create(
+        $userId,
+        $address,
+        $postcode,
+        $receivePersonName,
+        $homeTel = "",
+        $mobile="",
+        $city = "",
+        $district = ""
+    ){
         $result = -1;
         if($userId > 0){
             $sql = "INSERT INTO ".self::TableName_UserReceiveInfo."
@@ -28,7 +39,9 @@ class UserReceiveInfoPublicData extends BasePublicData
                         PostCode,
                         ReceivePersonName,
                         HomeTel,
-                        Mobile
+                        Mobile,
+                        City,
+                        District
                         )
 
                     VALUES (
@@ -37,7 +50,9 @@ class UserReceiveInfoPublicData extends BasePublicData
                         :PostCode,
                         :ReceivePersonName,
                         :HomeTel,
-                        :Mobile
+                        :Mobile,
+                        :City,
+                        :District
                         );";
 
             $dataProperty = new DataProperty();
@@ -47,6 +62,8 @@ class UserReceiveInfoPublicData extends BasePublicData
             $dataProperty->AddField("ReceivePersonName",$receivePersonName);
             $dataProperty->AddField("HomeTel",$homeTel);
             $dataProperty->AddField("Mobile",$mobile);
+            $dataProperty->AddField("City",$city);
+            $dataProperty->AddField("District",$district);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
         }
         return $result;
@@ -61,9 +78,22 @@ class UserReceiveInfoPublicData extends BasePublicData
      * @param string $receivePersonName 收件人姓名
      * @param string $homeTel 固定电话
      * @param string $mobile 手机号码
+     * @param string $city 城市
+     * @param string $district 区
      * @return int 编辑结果
      */
-    public function Modify($userId,$userReceiveInfoId,$address,$postcode,$receivePersonName,$homeTel = "",$mobile=""){
+    public function Modify(
+        $userId,
+        $userReceiveInfoId,
+        $address,
+        $postcode,
+        $receivePersonName,
+        $homeTel = "",
+        $mobile="",
+        $city = "",
+        $district = ""
+
+    ){
         $result = -1;
         if($userId > 0){
             $sql = "UPDATE ".self::TableName_UserReceiveInfo." SET
@@ -71,7 +101,9 @@ class UserReceiveInfoPublicData extends BasePublicData
                             Postcode=:Postcode,
                             ReceivePersonName=:ReceivePersonName,
                             HomeTel=:HomeTel,
-                            Mobile=:Mobile
+                            Mobile=:Mobile,
+                            City=:City,
+                            District=:District
                             WHERE
                                 UserId = :UserId
                                 AND UserReceiveInfoId = :UserReceiveInfoId;";
@@ -84,6 +116,8 @@ class UserReceiveInfoPublicData extends BasePublicData
             $dataProperty->AddField("ReceivePersonName",$receivePersonName);
             $dataProperty->AddField("HomeTel",$homeTel);
             $dataProperty->AddField("Mobile",$mobile);
+            $dataProperty->AddField("City",$city);
+            $dataProperty->AddField("District",$district);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
         }
         return $result;

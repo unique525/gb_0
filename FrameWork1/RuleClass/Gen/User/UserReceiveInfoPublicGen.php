@@ -33,10 +33,21 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
         $receive_person_name = Control::PostRequest("receive_person_name","");
         $homeTel = Control::PostRequest("tel","");
         $mobile = Control::PostRequest("mobile","");
+        $city = Control::PostRequest("city","");
+        $district = Control::PostRequest("district","");
         if($userId > 0){
             if(!empty($address) && !empty($postcode) && !empty($receive_person_name) && (!empty($homeTel) || !empty($mobile))){
                 $userReceiveInfoData = new UserReceiveInfoPublicData();
-                $result = $userReceiveInfoData->Create($userId,$address,$postcode,$receive_person_name,$homeTel,$mobile);
+                $result = $userReceiveInfoData->Create(
+                    $userId,
+                    $address,
+                    $postcode,
+                    $receive_person_name,
+                    $homeTel,
+                    $mobile,
+                    $city,
+                    $district
+                );
 
                 if($result > 0){
                     return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
@@ -59,10 +70,23 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
         $receive_person_name = Control::PostRequest("receive_person_name","");
         $homeTel = Control::PostRequest("tel","");
         $mobile = Control::PostRequest("mobile","");
+        $city = Control::PostRequest("city","");
+        $district = Control::PostRequest("district","");
         if($userId > 0){
             if($userReceiveInfoId > 0 && !empty($address) && !empty($postcode) && !empty($receive_person_name) && (!empty($homeTel) || !empty($mobile))){
                 $userReceiveInfoData = new UserReceiveInfoPublicData();
-                $result = $userReceiveInfoData->Modify($userId,$userReceiveInfoId,$address,$postcode,$receive_person_name,$homeTel,$mobile);
+                $result = $userReceiveInfoData->Modify(
+                    $userId,
+                    $userReceiveInfoId,
+                    $address,
+                    $postcode,
+                    $receive_person_name,
+                    $homeTel,
+                    $mobile,
+                    $city,
+                    $district
+
+                );
 
                 if($result > 0){
                     return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';

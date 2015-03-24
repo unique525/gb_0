@@ -71,7 +71,7 @@ function FormatOrderState(state,idvalue){
             result = '<span class="span_state" id="State_'+idvalue+'">货到付款</span>';
             break;
         case USER_ORDER_STATE_PAYMENT:
-            result = '<span class="span_state" id="State_'+idvalue+'">已付款</span>';
+            result = '<span class="span_state" id="State_'+idvalue+'">已付款，未发货</span>';
             break;
         case USER_ORDER_STATE_SENT:
             result = '<span class="span_state" id="State_'+idvalue+'">已发货</span>';
