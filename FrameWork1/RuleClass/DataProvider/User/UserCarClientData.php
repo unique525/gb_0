@@ -159,6 +159,7 @@ class UserCarClientData extends BaseClientData {
                         up.UploadFileInfo,
                         p.ProductName,
                         p.ProductId,
+                        pp.ProductPriceId,
                         pp.ProductPriceValue,
                         pp.ProductUnit,
                         pp.ProductPriceIntro,
