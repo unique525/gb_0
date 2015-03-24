@@ -183,7 +183,7 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
             $siteId = Control::GetRequest("site_id", 0);
 
             //用,拼接的$userCarIds
-            $userCarIds = Control::PostOrGetRequest("UserCarIds", "");
+            $userCarIds = Control::PostOrGetRequest("UserCarIds", "", false);
 
             if(
                 strlen($userCarIds)>0
@@ -206,14 +206,14 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $sumProductSendPriceAdd = 0;
 
 
-
                 for($i=0;$i<count($arrUserCarProductList);$i++){
                     $buyCount = intval($arrUserCarProductList[$i]["BuyCount"]); //购买数量
-                    $subtotal = intval($arrUserCarProductList[$i]["BuyPrice"]); //小计
+                    $subtotal = floatval($arrUserCarProductList[$i]["BuyPrice"]); //小计
                     $productId = intval($arrUserCarProductList[$i]["ProductId"]);
                     $totalProductPrice = $subtotal;
 
                     $currentProductSendPrice = $productClientData->GetSendPrice($productId, TRUE);
+
                     $currentProductSendPriceAdd = $productClientData->GetSendPriceAdd($productId, TRUE);
                     $sumProductSendPrice = $sumProductSendPrice + $currentProductSendPrice;
                     if($buyCount>1){
