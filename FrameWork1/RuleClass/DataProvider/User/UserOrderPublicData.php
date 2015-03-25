@@ -437,6 +437,25 @@ class UserOrderPublicData extends BasePublicData
     }
 
     /**
+     * 取得订单发货费用(不提供缓存)
+     * @param int $userOrderId 订单id
+     * @return float 订单发货费用
+     */
+    public function GetSendPrice($userOrderId){
+        $result = -1;
+        if($userOrderId>0){
+
+            $sql = "SELECT SendPrice FROM " . self::TableName_UserOrder . " WHERE UserOrderId = :UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->dbOperator->GetFloat($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
+    /**
      * 重计订单总价
      * @param $userOrderId
      * @return int
@@ -449,6 +468,10 @@ class UserOrderPublicData extends BasePublicData
             $sql = "SELECT sum(SubTotal) FROM " . self::TableName_UserOrderProduct . " WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
             $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
             $allPrice = $this->dbOperator->GetFloat($sql, $dataProperty);
+
+            $sendPrice = self::GetSendPrice($userOrderId);
+
+            $allPrice = $allPrice + $sendPrice;
 
             $dataProperty2 = new DataProperty();
             $sql = "UPDATE " . self::TableName_UserOrder . "
