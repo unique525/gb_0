@@ -145,9 +145,10 @@ class Control {
      * 从POST请求取数据，如果没找到则从GET请求里找
      * @param string $paramName
      * @param mixed $defaultValue
+     * @param bool $removeXSS
      * @return float|int|string 请求数据值
      */
-    public static function PostOrGetRequest($paramName, $defaultValue) {
+    public static function PostOrGetRequest($paramName, $defaultValue, $removeXSS = true) {
 
         if (isset($_POST[$paramName])) {
             if (strlen($_POST[$paramName]) <= 0) {
@@ -164,7 +165,12 @@ class Control {
             } else if (is_int($_GET[$paramName])) {
                 return intval($_GET[$paramName]);
             } else {
-                return Format::RemoveXSS($_GET[$paramName]);
+                if($removeXSS){
+                    return Format::RemoveXSS($_GET[$paramName]);
+                }else{
+                    return $_GET[$paramName];
+                }
+
             }
         } else {
             return $defaultValue;

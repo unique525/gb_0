@@ -257,8 +257,10 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                     $sumProductSendPriceAdd = $sumProductSendPrice + $currentProductSendPriceAdd*($buyCount-1);
                 }
 
+                $cop1 = $currentProductSendPrice+$currentProductSendPriceAdd;
+                $cop2 = $maxProductSendPrice+$maxProductSendPriceAdd;
 
-                if ($currentProductSendPrice > $maxProductSendPrice){
+                if ($cop1 > $cop2){
                     $maxProductSendPrice = $currentProductSendPrice;
                     if($buyCount>1){
                         //续重费
