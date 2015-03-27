@@ -240,6 +240,12 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
                 $templateContent = str_ireplace("{product_comment_pager_button}", $pagerButton, $templateContent);
                 //----------end-------------
 
+                $siteConfigData = new SiteConfigData($siteId);
+                $userOrderFirstSubPrice = $siteConfigData->UserOrderFirstSubPrice;
+                $templateContent = str_ireplace("{UserOrderFirstSubPrice}", $userOrderFirstSubPrice, $templateContent);
+
+
+
                 $patterns = '/\{s_(.*?)\}/';
                 $templateContent = preg_replace($patterns, "", $templateContent);
                 parent::ReplaceSiteConfig($siteId,$templateContent);

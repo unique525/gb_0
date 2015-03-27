@@ -26,6 +26,7 @@ class UserOrderPublicData extends BasePublicData
      * @param $siteId
      * @param $createDate
      * @param $createDateDes
+     * @param $sellerRemark
      * @return int
      */
     public function Create(
@@ -43,7 +44,8 @@ class UserOrderPublicData extends BasePublicData
         $autoSendMessage,
         $siteId,
         $createDate,
-        $createDateDes
+        $createDateDes,
+        $sellerRemark = ""
     )
     {
         $result = -1;
@@ -70,7 +72,8 @@ class UserOrderPublicData extends BasePublicData
                     SiteId,
                     CreateDate,
                     CreateDateDes,
-                    State
+                    State,
+                    SellerRemark
                     )
                     VALUES
                     (
@@ -89,7 +92,8 @@ class UserOrderPublicData extends BasePublicData
                     :SiteId,
                     :CreateDate,
                     :CreateDateDes,
-                    :State
+                    :State,
+                    :SellerRemark
                     );
             ";
 
@@ -110,6 +114,9 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("CreateDate",$createDate);
             $dataProperty->AddField("CreateDateDes",$createDateDes);
             $dataProperty->AddField("State",UserOrderData::STATE_NON_PAYMENT);
+            $dataProperty->AddField("SellerRemark",$sellerRemark);
+
+
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
         }
@@ -456,11 +463,49 @@ class UserOrderPublicData extends BasePublicData
     }
 
     /**
-     * 重计订单总价
-     * @param $userOrderId
+     * 按已经购买成功的状态统计订单数
+     * @param int $userId 会员id
      * @return int
      */
-    public function ReCountAllPrice($userOrderId)
+    public function CountByFinished($userId)
+    {
+        $result = -1;
+        if($userId>0){
+
+            $sql = "SELECT Count(*) FROM " . self::TableName_UserOrder . "
+                    WHERE
+                        UserId = :UserId
+
+                        AND (
+                            State=".UserOrderData::STATE_PAYMENT."
+                            OR
+                            State=".UserOrderData::STATE_SENT."
+                            OR
+                            State=".UserOrderData::STATE_DONE."
+                            OR
+                            State=".UserOrderData::STATE_COMMENT_FINISHED."
+                            OR
+                            State=".UserOrderData::STATE_UNCOMMENT."
+                            )
+
+                        ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 重计订单总价
+     * @param $userId
+     * @param $userOrderId
+     * @param $userOrderFirstSubPrice
+     * @return int
+     */
+    public function ReCountAllPrice($userId, $userOrderId, $userOrderFirstSubPrice = 0)
     {
         $result = 0;
         if ($userOrderId > 0) {
@@ -472,6 +517,14 @@ class UserOrderPublicData extends BasePublicData
             $sendPrice = self::GetSendPrice($userOrderId);
 
             $allPrice = $allPrice + $sendPrice;
+
+            $hasBuy = self::CountByFinished($userId);
+            if($hasBuy<=0){
+                $allPrice = $allPrice - $userOrderFirstSubPrice;
+            }
+
+
+
 
             $dataProperty2 = new DataProperty();
             $sql = "UPDATE " . self::TableName_UserOrder . "

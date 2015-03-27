@@ -310,11 +310,26 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
             $totalPrice = floatval($sendPrice) + floatval($totalProductPrice);
+            $sellerRemark = "";
+
+            $siteConfigData = new SiteConfigData($siteId);
+            $userOrderFirstSubPrice = $siteConfigData->UserOrderFirstSubPrice;
+
+
+            $userOrderPublicData = new UserOrderPublicData();
+            $hasBuy = $userOrderPublicData->CountByFinished($userId);
+            if($hasBuy<=0 && $userOrderFirstSubPrice>0){
+                $totalPrice = $totalPrice - $userOrderFirstSubPrice;
+                $sellerRemark = "(首次下单，已优惠".$userOrderFirstSubPrice."元)";
+            }
+
+
 
             $replace_arr = array(
                 "{SendPrice}" => sprintf("%1\$.3f",$sendPrice),
                 "{TotalProductPrice}" => sprintf("%1\$.3f",$totalProductPrice),
-                "{TotalPrice}" => sprintf("%1\$.3f",$totalPrice)
+                "{TotalPrice}" => sprintf("%1\$.3f",$totalPrice),
+                "{SellerRemark}" => $sellerRemark
             );
 
             $templateContent = strtr($templateContent,$replace_arr);
@@ -356,7 +371,21 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
             && $userId>0
         ){
 
+
+
             $userOrderPublicData = new UserOrderPublicData();
+
+            $hasBuy = $userOrderPublicData->CountByFinished($userId);
+
+            $sellerRemark = "";
+            $siteConfigData = new SiteConfigData($siteId);
+            $userOrderFirstSubPrice = $siteConfigData->UserOrderFirstSubPrice;
+
+            if($hasBuy<=0 && $userOrderFirstSubPrice>0){
+
+                $sellerRemark = "第一单优惠".$userOrderFirstSubPrice."元";
+            }
+
 
             $userOrderName = "";
             $userOrderNumber = UserOrderData::GenUserOrderNumber();
@@ -377,7 +406,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
                 $autoSendMessage,
                 $siteId,
                 $createDate,
-                $createDateDes
+                $createDateDes,
+                $sellerRemark
             );
 
             if($userOrderId>0){
@@ -444,7 +474,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen{
 
                             //重计订单总价
 
-                            $userOrderPublicData->ReCountAllPrice($userOrderId);
+
+                            $userOrderPublicData->ReCountAllPrice($userId, $userOrderId, $userOrderFirstSubPrice);
 
 
                         }

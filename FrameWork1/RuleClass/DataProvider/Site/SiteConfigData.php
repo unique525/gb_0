@@ -67,6 +67,9 @@
  * @property int $UserAvatarSmallWidth
  * @property int $UserAvatarSmallHeight
  *
+ *
+ * @property int $UserOrderFirstSubPrice
+ *
  * @property int $NewRegisterUserId
  * @property string $NewRegisterUserName
  * @property string $NewUserMessageVoice
@@ -228,6 +231,8 @@ class SiteConfigData extends BaseData {
         "UserAvatarSmallWidth",
         "UserAvatarSmallHeight",
 
+        "UserOrderFirstSubPrice",
+
         "MailSmtpPort",
         "DocumentNewsTitlePicMobileWidth",
         "DocumentNewsTitlePicPadWidth",
@@ -358,6 +363,7 @@ class SiteConfigData extends BaseData {
     private $UserAvatarSmallWidth = 0;  //会员小头像宽度
     private $UserAvatarSmallHeight = 0; //会员小头像高度
 
+    private $UserOrderFirstSubPrice = 0; //会员订单第一次下单优惠的金额
 
     private $NewRegisterUserId = 0; //新注册的会员Id
     private $NewRegisterUserName = ''; //新注册的会员名
@@ -528,6 +534,22 @@ class SiteConfigData extends BaseData {
     public function getUserAvatarMinWidth()
     {
         return $this->UserAvatarMinWidth;
+    }
+
+    /**
+     * @param mixed $UserOrderFirstSubPrice
+     */
+    public function setUserOrderFirstSubPrice($UserOrderFirstSubPrice)
+    {
+        $this->UserOrderFirstSubPrice = $UserOrderFirstSubPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOrderFirstSubPrice()
+    {
+        return $this->UserOrderFirstSubPrice;
     }
 
 
