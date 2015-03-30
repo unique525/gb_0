@@ -205,6 +205,14 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_UserOrderFirstSubPrice">会员订单第一次下单优惠的金额：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_UserOrderFirstSubPrice" type="text" class="input_number" name="cfg_UserOrderFirstSubPrice" value="{cfg_UserOrderFirstSubPrice}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_ProductSendPriceMode">发货费用模式：</label>
                                         </td>
                                         <td class="spe_line">
