@@ -33,6 +33,9 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
             case "list_for_manage_tree":
                 $result = self::GenListForManageTree();
                 break;
+            case "list_for_select":
+                $result = self::GenListForSelect();
+                break;
             case "async_drag":
                 $result = self::AsyncDrag();
                 break;
@@ -218,6 +221,31 @@ class ProductBrandManageGen extends BaseManageGen implements IBaseManageGen
     public function GenListForManageTree()
     {
         $tempContent = Template::Load("product/product_brand_list.html", "common");
+        $siteId = Control::GetRequest("site_id", 0);
+        $adminUserId = Control::GetManageUserId();
+        if ($siteId > 0 && $adminUserId > 0) {
+            $productBrandManageData = new ProductBrandManageData();
+            $arrList = $productBrandManageData->GetList($siteId, "", -1);
+            $treeNodes = "";
+            for ($i = 0; $i < count($arrList); $i++) {
+                $treeNodes = $treeNodes . '{ id:' . $arrList[$i]["ProductBrandId"] . ', pId:' . $arrList[$i]["ParentId"] . ', name:"' . $arrList[$i]["ProductBrandName"] . '", rank:"' . $arrList[$i]["Rank"] . '"},';
+            }
+            $treeNodes = substr($treeNodes, 0, strlen($treeNodes) - 1);
+            $tempContent = str_ireplace("{treeNodes}", $treeNodes, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", "", $tempContent);
+            return $tempContent;
+        } else return "";
+    }
+
+    /**
+     * 产品品牌选择页面
+     * @return string 返回zTree的JSON数据结构
+     */
+    public function GenListForSelect()
+    {
+        $tempContent = Template::Load("product/product_brand_select.html", "common");
         $siteId = Control::GetRequest("site_id", 0);
         $adminUserId = Control::GetManageUserId();
         if ($siteId > 0 && $adminUserId > 0) {

@@ -21,7 +21,21 @@
 
         $(function () {
 
-
+            //产品品牌选择
+            var btnSelectProductBrand = $("#btn_select_product_brand");
+            btnSelectProductBrand.click(function () {
+                var url='/default.php?secu=manage&mod=product_brand&&m=list_for_select&site_id={SiteId}';
+                $("#dialog_product_brand_select_frame").attr("src",url);
+                $("#dialog_product_brand_select_box").dialog({
+                    hide:true,    //点击关闭时隐藏,如果不加这项,关闭弹窗后再点就会出错.
+                    autoOpen:true,
+                    height:500,
+                    width:440,
+                    modal:true, //蒙层（弹出会影响页面大小）
+                    title:'产品品牌选择',
+                    overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+                });
+            });
 
             var editorHeight = $(window).height() - 450;
             editorHeight = parseInt(editorHeight);
@@ -190,9 +204,6 @@
                 $("#dialog_create_product_price").dialog('close');
 
             });
-
-
-
             getProductPriceList();
         });
 
@@ -390,6 +401,11 @@
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
     <div id="result_table" style="font-size: 14px;">
         <iframe id="dialog_frame" src=""  style="border: 0; " width="100%" height="220px"></iframe>
+    </div>
+</div>
+<div id="dialog_product_brand_select_box" title="提示信息" style="display: none;">
+    <div id="result_table" style="font-size: 14px;">
+        <iframe id="dialog_product_brand_select_frame" src=""  style="border: 0; " width="100%" height="440px"></iframe>
     </div>
 </div>
 <form id="mainForm" enctype="multipart/form-data"
@@ -600,6 +616,14 @@
     </div>
     <div id="tabs-5">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductShortName">产品品牌：</label></td>
+                <td class="spe_line">
+                    <label id="s_ProductBrandName" style="width:200px;font-size:14px;"> </label>
+                    <input type="hidden" id="f_ProductBrandId" name="f_ProductBrandId" value="" />
+                    <input type="button"  id="btn_select_product_brand" name="btn_select_product_brand" value="选择品牌" />
+                </td>
+            </tr>
             <tr>
                 <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductShortName">产品简称：</label></td>
                 <td class="spe_line">
