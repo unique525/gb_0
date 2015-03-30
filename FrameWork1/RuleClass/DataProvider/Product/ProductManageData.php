@@ -499,7 +499,10 @@ class ProductManageData extends BaseManageData
     {
         $result = null;
         if ($productId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_Product . " WHERE ProductId=:ProductId;";
+            $sql = "SELECT t1.*,t2.ProductBrandName
+            FROM " . self::TableName_Product . " t1 LEFT OUTER JOIN " . self::TableName_ProductBrand ." t2
+            ON t1.ProductBrandId=t2.ProductBrandId
+            WHERE ProductId=:ProductId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ProductId", $productId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);

@@ -619,8 +619,8 @@
             <tr>
                 <td style=" width: 120px;" class="spe_line" height="30" align="right"><label for="f_ProductShortName">产品品牌：</label></td>
                 <td class="spe_line">
-                    <label id="s_ProductBrandName" style="width:200px;font-size:14px;"> </label>
-                    <input type="hidden" id="f_ProductBrandId" name="f_ProductBrandId" value="" />
+                    <label id="s_ProductBrandName" style="width:200px;font-size:14px;">{ProductBrandName}</label>
+                    <input type="hidden" id="f_ProductBrandId" name="f_ProductBrandId" value="{ProductBrandId}" />
                     <input type="button"  id="btn_select_product_brand" name="btn_select_product_brand" value="选择品牌" />
                 </td>
             </tr>
