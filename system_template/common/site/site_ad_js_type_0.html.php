@@ -3,7 +3,7 @@
 */
 var str='';
 var siteAdUrl = '';
-str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidth}; height:{SiteAdHeight};overflow:hidden;" class="icms_site_ad site_ad_show_type_{ShowType} show_once_{ShowOnce}" title="{ShowNumber}">';
+str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidth}; height:{SiteAdHeight};overflow:hidden;margin: 0px auto" class="icms_site_ad site_ad_show_type_{ShowType} show_once_{ShowOnce}" title="{ShowNumber}">';
     <icms id="site_ad_content" type="list">
         <header><![CDATA[
             siteAdUrl = '{f_SiteAdUrl}';
