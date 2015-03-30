@@ -10,6 +10,8 @@
     <link href="/images/common_css.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/front_js/user/user.js"></script>
+    <script type="text/javascript" src="/front_js/user/user_car.js"></script>
     <script type="text/javascript">
         $(function () {
             //根据不同的排序字段顺序显示产品列表
