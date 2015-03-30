@@ -257,16 +257,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         return $templateContent;
     }
 
-
-    private function loadDetailTemp()
-    {
-        $templateFileUrl = "product/product_detail.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        return $templateContent;
-    }
-
     /**
      * 生成产品搜索列表
      * @return string 产品列表HTML
@@ -275,7 +265,7 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
     {
         $temp = Control::GetRequest("temp", "");
         $siteId = Control::GetRequest("site_id", "");
-        $templateContent = self::LoadSearchTemp($temp, $siteId);
+        $templateContent = parent::GetDynamicTemplateContent("product_search", $siteId);
 
         parent::ReplaceFirst($templateContent);
 
@@ -299,9 +289,9 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
             $pageBegin = ($pageIndex - 1) * $pageSize;
 
             $AllChannelId = "";
-            if ($channelId > 0) {
-                $AllChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
-            }
+//            if ($channelId > 0) {
+//                $AllChannelId = parent::GetOwnChannelIdAndChildChannelId($channelId);
+//            }
             $productPublicData = new ProductPublicData();
             $arrList = $productPublicData->GetListForSearchPager($AllChannelId, $pageBegin, $pageSize, $allCount, $searchKey, 0, $order);
             if (count($arrList) > 0) {
@@ -327,16 +317,6 @@ class ProductPublicGen extends BasePublicGen implements IBasePublicGen
         }
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
-        return $templateContent;
-    }
-
-    private function LoadSearchTemp($temp, $siteId)
-    {
-        $templateFileUrl = "product/product_search.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         return $templateContent;
     }
 }
