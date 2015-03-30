@@ -16,7 +16,7 @@
             $('.price-2 a').attr("class", "listup");
             var ps = Request["ps"];
             if(ps==null||ps=="") ps="12";
-            var url = "/default.php?&mod=product&a=search&channel_id={ChannelId}&search_key={SearchKey}&p=1&ps="+ps;
+            var url = "/default.php?&mod=product&a=search&site_id={SiteId}&search_key={SearchKey}&p=1&ps="+ps;
             var order = Request["order"];
             var orderType="";
             var direction="";
@@ -72,7 +72,7 @@
                 <item>
                     <![CDATA[
                     <li > <a class="pic" href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" ><img src="{f_UploadFileThumbPath3}" width="90px" height="90px" ></a>
-                        <p><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">果胶和钾含量居水果之首，记忆力之果</font></a>  </p>现价: ￥{f_SalePrice}</li>
+                        <p><a href="/default.php?mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}" target="_blank" >{f_ProductName}<font class="cleb6100 ml5">{f_ProductIntro}</font></a>  </p>现价: ￥{f_SalePrice}</li>
                     ]]>
                 </item>
             </icms>
@@ -134,11 +134,11 @@
                 <div class="name">
                     <a target="_blank"
                        href="/default.php?&mod=product&a=detail&channel_id={f_ChannelId}&product_id={f_ProductId}">{f_ProductName}<font
-                            class="cleb6100 ml5">使用有机肥 人工除草 不使用化学农药</font> </a>
+                            class="cleb6100 ml5">{f_ProductIntro}</font> </a>
                 </div>
                 <div class="price" style="color:#eb6100;">
                     ￥{f_SalePrice}
-                    <span>已有13608人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
+                    <span>已有{f_ProductCommentCount}人评价</span><br/><font class="pricenew">原价：￥{f_MarketPrice}</font>
                 </div>
                 <a class="sclist" onclick="AddWiths({f_ProductId})" hidefocus="true" href="#"> 收藏</a>
             </li>
