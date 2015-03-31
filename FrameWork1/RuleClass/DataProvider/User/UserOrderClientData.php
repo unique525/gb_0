@@ -318,7 +318,7 @@ class UserOrderClientData extends BaseClientData {
     public function GetOne($userOrderId,$userId,$siteId){
         $result = null;
         if($userOrderId > 0 && $userId > 0 && $siteId > 0){
-            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM "
+            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile,uri.City,uri.District FROM "
                 .self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.UserId = :UserId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);

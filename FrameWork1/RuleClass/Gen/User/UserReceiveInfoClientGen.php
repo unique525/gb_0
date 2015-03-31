@@ -58,6 +58,8 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
             $receivePersonName = Control::PostOrGetRequest("ReceivePersonName", "");
             $homeTel = Control::PostOrGetRequest("HomeTel", "");
             $mobile = Control::PostOrGetRequest("Mobile", "");
+            $city = Control::PostOrGetRequest("City", "");
+            $district = Control::PostOrGetRequest("District", "");
             if (strlen($address) > 0) {
                 $userReceiveInfoClientData = new UserReceiveInfoClientData();
                 $newUserReceiveInfoId = $userReceiveInfoClientData->Create(
@@ -66,10 +68,16 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
                     $postcode,
                     $receivePersonName,
                     $homeTel,
-                    $mobile
+                    $mobile,
+                    $city,
+                    $district
                 );
                 if ($newUserReceiveInfoId > 0) {
                     $resultCode = 1; //新增成功
+
+                    $result = Format::FixJsonEncode($userReceiveInfoClientData->GetOne($newUserReceiveInfoId,$userId));
+
+
                 } else {
                     $resultCode = -5; //新增失败,数据库原因
                 }
@@ -96,6 +104,9 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
             $receivePersonName = Control::PostOrGetRequest("ReceivePersonName", "");
             $homeTel = Control::PostOrGetRequest("HomeTel", "");
             $mobile = Control::PostOrGetRequest("Mobile", "");
+            $city = Control::PostOrGetRequest("City", "");
+            $district = Control::PostOrGetRequest("District", "");
+
             if ($userReceiveInfoId > 0 && strlen($address) > 0) {
                 $userReceiveInfoClientData = new UserReceiveInfoClientData();
                 $result = $userReceiveInfoClientData->Modify(
@@ -105,10 +116,16 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
                     $postcode,
                     $receivePersonName,
                     $homeTel,
-                    $mobile
+                    $mobile,
+                    $city,
+                    $district
                 );
                 if ($result > 0) {
                     $resultCode = 1; //修改成功
+
+                    $result = Format::FixJsonEncode($userReceiveInfoClientData->GetOne($userReceiveInfoId,$userId));
+
+
                 } else {
                     $resultCode = -5; //修改失败,数据库原因
                 }
@@ -142,9 +159,6 @@ class UserReceiveInfoClientGen extends BaseClientGen implements IBaseClientGen
 
         }
         return '{"result_code":"' . $resultCode . '","user_receive_info_delete":' . $result . '}';
-
-
-
 
     }
 
