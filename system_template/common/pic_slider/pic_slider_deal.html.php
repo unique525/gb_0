@@ -76,6 +76,23 @@
         </td>
     </tr>
     <tr>
+        <td class="spe_line" height="30" align="right"><label for="f_TableType">表类型：</label></td>
+        <td class="spe_line">
+            <select id="f_TableType" name="f_TableType">
+                <option value="0">默认</option>
+                <option value="101">咨讯</option>
+                <option value="102">产品</option>
+            </select>
+            {s_TableType}
+        </td>
+    </tr>
+    <tr>
+        <td class="spe_line" height="30" align="right"><label for="f_TableId">表ID：</label></td>
+        <td class="spe_line">
+            <input id="f_TableId" name="f_TableId" type="text" value="{TableId}" maxlength="10" class="input_number"/>
+        </td>
+    </tr>
+    <tr>
         <td class="spe_line" height="30" align="right"><label for="f_State">状态：</label></td>
         <td class="spe_line">
             <select id="f_State" name="f_State">

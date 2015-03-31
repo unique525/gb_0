@@ -19,4 +19,13 @@ class PicSliderData {
      * 已删除 100
      */
     const STATE_REMOVED = 100;
+
+    /**
+     * 咨讯
+     */
+    const PIC_SLIDER_TABLE_TYPE_NEWS = 101;
+    /**
+     * 产品
+     */
+    const PIC_SLIDER_TABLE_TYPE_PRODUCT = 102;
 } 

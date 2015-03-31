@@ -406,6 +406,8 @@ class PicSliderManageData extends BaseManageData {
                 ps.ChannelId,
                 ps.PicSliderTitle,
                 ps.DirectUrl,
+                ps.TableType,
+                ps.TableId,
                 uf.UploadFilePath,
                 uf.UploadFileMobilePath,
                 uf.UploadFilePadPath,
