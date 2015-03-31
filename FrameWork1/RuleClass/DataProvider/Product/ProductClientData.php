@@ -102,10 +102,10 @@ class ProductClientData extends BaseClientData {
             $order = Format::FormatSql($order);
             switch ($order) {
                 case "time_desc":
-                    $order = " ORDER BY Createdate DESC";
+                    $order = " ORDER BY CreateDate DESC";
                     break;
                 case "time_asc":
-                    $order = " ORDER BY Createdate ASC";
+                    $order = " ORDER BY CreateDate ASC";
                     break;
                 case "sale_desc":
                     $order = " ORDER BY SaleCount DESC";
@@ -114,19 +114,19 @@ class ProductClientData extends BaseClientData {
                     $order = " ORDER BY SaleCount ASC";
                     break;
                 case "price_desc":
-                    $order = " ORDER BY SalePrice DESC";
+                    $order = " ORDER BY CONVERT(SalePrice,DECIMAL) DESC";
                     break;
                 case "price_asc":
-                    $order = " ORDER BY SalePrice ASC";
+                    $order = " ORDER BY CONVERT(SalePrice,DECIMAL) ASC";
                     break;
                 case "comment_asc":
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
                 case "comment_desc":
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
             }
             $sql = "SELECT
@@ -165,10 +165,10 @@ class ProductClientData extends BaseClientData {
         if (!empty($channelId)) {
             switch ($order) {
                 case "time_desc":
-                    $order = " ORDER BY Createdate DESC";
+                    $order = " ORDER BY CreateDate DESC";
                     break;
                 case "time_asc":
-                    $order = " ORDER BY Createdate ASC";
+                    $order = " ORDER BY CreateDate ASC";
                     break;
                 case "sale_desc":
                     $order = " ORDER BY SaleCount DESC";
@@ -177,19 +177,19 @@ class ProductClientData extends BaseClientData {
                     $order = " ORDER BY SaleCount ASC";
                     break;
                 case "price_desc":
-                    $order = " ORDER BY SalePrice DESC";
+                    $order = " ORDER BY CONVERT(SalePrice,DECIMAL) DESC";
                     break;
                 case "price_asc":
-                    $order = " ORDER BY SalePrice ASC";
+                    $order = " ORDER BY CONVERT(SalePrice,DECIMAL) ASC";
                     break;
                 case "comment_asc":
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
                 case "comment_desc":
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
                 default:
-                    $order = " ORDER BY Sort DESC,Createdate DESC";
+                    $order = " ORDER BY Sort DESC,CreateDate DESC";
                     break;
             }
             $searchSql = "";
