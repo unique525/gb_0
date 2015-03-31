@@ -122,7 +122,7 @@ class UserOrderProductManageData extends BaseManageData
     {
         $result = null;
         if ($userOrderId > 0) {
-            $sql = "SELECT uop.*,p.ProductName,pp.ProductPriceIntro,pp.ProductUnit
+            $sql = "SELECT uop.*,p.ProductName,p.ProductTag,pp.ProductPriceIntro,pp.ProductUnit
                 FROM " . self::TableName_UserOrderProduct . " uop," . self::TableName_Product . " p," . self::TableName_ProductPrice . " pp
                 WHERE uop.ProductId = p.ProductId
                 AND uop.State < :State

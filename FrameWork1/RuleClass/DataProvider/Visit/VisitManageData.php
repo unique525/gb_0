@@ -21,8 +21,7 @@ class VisitManageData extends BaseManageData {
         $sql = "UPDATE $tableName SET isLocation=:isLocation WHERE " . self::TableName_Visit . "=:" . self::TableId_Visit . "";
         $dataProperty->AddField("isLocation", $isLocation);
         $dataProperty->AddField(self::TableId_Visit, $tableIdValue);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -45,8 +44,7 @@ class VisitManageData extends BaseManageData {
         $dataProperty->AddField("City", $city);
         $dataProperty->AddField("Operators", $operators);
         $dataProperty->AddField(self::TableId_Visit, $tableIdValue);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -58,10 +56,9 @@ class VisitManageData extends BaseManageData {
      */
     public function GetOneListByIsLocation($tableName, $isLocation = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $sql = "SELECT v.visitId,v.IpAddress FROM " . $tableName . " v WHERE v.isLocation=:isLocation Limit 1 ";
         $dataProperty->AddField("isLocation", $isLocation);
-        $result = $dbOperator->ReturnRow($sql, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
@@ -81,7 +78,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountBySiteId($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $siteId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         $limitStr = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
@@ -121,8 +117,8 @@ class VisitManageData extends BaseManageData {
  FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.SiteId ORDER BY CountSiteId DESC " . $limitStr;
             $sqlCount = "SELECT COUNT(DISTINCT v.SiteId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         }
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -142,7 +138,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountByChannelId($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $siteId = 0, $channelId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         $limitStr = "";
         if (!empty($searchKey) && strlen($searchKey) > 0 && $searchKey != "undefined") {
@@ -179,8 +174,8 @@ class VisitManageData extends BaseManageData {
  FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.ChannelId ORDER BY CountSiteId DESC " . $limitStr;
         $sqlCount = "SELECT COUNT(DISTINCT v.ChannelId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -203,7 +198,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountByDocument($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $siteId = 0, $channelId = 0, $tableType = 0, $tableId = 0, $top = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         $limitStr = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
@@ -255,8 +249,8 @@ class VisitManageData extends BaseManageData {
         }
         $sqlCount = "SELECT COUNT(DISTINCT v.TableId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -272,7 +266,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetListByDocument($pageBegin, $pageSize, &$allCount, $tableName, $tableType = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if ($tableType > 0) {
             $searchSql .= " AND v.TableType=:TableType";
@@ -289,8 +282,8 @@ class VisitManageData extends BaseManageData {
         $sql = "SELECT v.CreateDate,v.IpAddress,v.VisitTitle,v.RefUrl,v.Country,v.province,v.city,v.operators FROM " . $tableName . " v WHERE 1=1 " . $searchSql . "  ORDER BY " . self::TableId_Visit . " DESC LIMIT " . $pageBegin . "," . $pageSize . "";
         $sqlCount = "SELECT COUNT(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -313,7 +306,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountBySource($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $siteId = 0, $channelId = 0, $tableType = 0, $tableId = 0, $top = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         $limitStr = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
@@ -361,8 +353,8 @@ class VisitManageData extends BaseManageData {
         $sql = "SELECT COUNT(*) AS CountSiteId,v.SiteId,v.TableId,v.RefDomain FROM " . $tableName . " v WHERE 1=1 " . $searchSql . " GROUP BY v.RefDomain ORDER BY CountSiteId DESC " . $limitStr;
         $sqlCount = "SELECT COUNT(DISTINCT v.RefDomain) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -379,7 +371,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountByUser($searchKey, $tableName, $beginDate = "", $endDate = "", $adminUserGroupId = 0, $adminUserId = 0, $tableType = 1) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             $searchSql .= " AND (v.TableId like :TableId OR v.VisitTitle like :searchKey1 OR v.VisitTag like :searchKey2 OR v.VisitUrl like :searchKey3)";
@@ -446,7 +437,7 @@ class VisitManageData extends BaseManageData {
         }
         $sql = "SELECT COUNT(v.TableId) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -471,7 +462,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCountByIpLocation($pageBegin, $pageSize, &$allCount, $searchKey, $tableName, $searchDate = 0, $beginDate = "", $endDate = "", $searchType = 0, $Country = "", $province = "", $city = "", $siteId = 0, $channelId = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if (!empty($searchKey) && strlen($searchKey) > 0 && $searchKey != "undefined") {
             $searchSql .= " AND (v.VisitTitle like :searchKey1 OR v.VisitTag like :searchKey2 OR v.VisitUrl like :searchKey3)";
@@ -535,8 +525,8 @@ class VisitManageData extends BaseManageData {
             $sqlCount = "SELECT COUNT(DISTINCT v.city) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
         }
 
-        $result = $dbOperator->ReturnArray($sql, $dataProperty);
-        $allCount = $dbOperator->ReturnInt($sqlCount, $dataProperty);
+        $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
 
@@ -546,10 +536,9 @@ class VisitManageData extends BaseManageData {
      * @return int 
      */
     public function CheckTableName($tableName) {
-        $dbOperator = DBOperator::getInstance();
         $sqlHasCount = "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME='$tableName'";
 
-        $hasCount = $dbOperator->ReturnInt($sqlHasCount, null);
+        $hasCount = $this->dbOperator->GetInt($sqlHasCount, null);
 
         if ($hasCount <= 0) {   //表不存在
             $hasCount = 0;
@@ -569,7 +558,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetCount($tableName, $refDomain = "", $siteId = 0, $channelId = 0, $tableType = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if ($siteId > 0) {
             $searchSql .= " AND v.SiteId=:SiteId";
@@ -593,7 +581,7 @@ class VisitManageData extends BaseManageData {
 
         $sql = "SELECT COUNT(*) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
 
-        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
@@ -609,7 +597,6 @@ class VisitManageData extends BaseManageData {
      */
     public function GetIpAddressCount($tableName, $refDomain = "", $siteId = 0, $channelId = 0, $tableType = 0, $tableId = 0) {
         $dataProperty = new DataProperty();
-        $dbOperator = DBOperator::getInstance();
         $searchSql = "";
         if ($siteId > 0) {
             $searchSql .= " AND v.SiteId=:SiteId";
@@ -632,10 +619,211 @@ class VisitManageData extends BaseManageData {
         }
 
         $sql = "SELECT COUNT(DISTINCT IpAddress) FROM " . $tableName . " v WHERE 1=1 " . $searchSql;
-        $result = $dbOperator->ReturnInt($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
         return $result;
     }
 
+    public function GetVisitCountByYearAndSite($year,$siteId,$dataBaseName){
+        $result = "";
+        if($siteId > 0 && $year > 0 && !empty($dataBaseName)){
+            $sqlGetTableName = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME LIKE 'cst_visit_".$year."%' AND TABLE_SCHEMA = :DataBaseName;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DataBaseName",$dataBaseName);
+            $resultTableName = $this->dbOperator->GetArrayList($sqlGetTableName,$dataProperty);
+
+            if(count($resultTableName) > 0){
+                $result = array();
+                for($i=0;$i<count($resultTableName);$i++){
+                    $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP  FROM ".$resultTableName[$i]["TABLE_NAME"]." WHERE SiteId = :SiteId;";
+                    $dataProperty = new DataProperty();
+                    $dataProperty->AddField("SiteId",$siteId);
+                    $result[$i] = $this->dbOperator->GetArray($sql,$dataProperty);
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function GetVisitCountByMonthAndSite($year,$month,$siteId){
+        $result = "";
+        if($month > 0 && $siteId > 0){
+            $sql = "SELECT DATE_FORMAT(CreateDate,'%d') AS days,COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP  FROM cst_visit_".$year.$month." WHERE SiteId = :SiteId GROUP BY days;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetVisitCountByHoursAndSite($year,$month,$day,$siteId){
+        $result = "";
+        if($month > 0 && $siteId > 0){
+            $sql = "SELECT DATE_FORMAT(CreateDate,'%H') AS hours,COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP  FROM cst_visit_".$year.$month.
+                " WHERE SiteId = :SiteId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') GROUP BY hours;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetVisitCountByMonthsAndChannel($year,$channelId,$dataBaseName){
+        $result = "";
+        if($channelId > 0 && $year > 0 && !empty($dataBaseName)){
+            $sqlGetTableName = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME LIKE 'cst_visit_".$year."%' AND TABLE_SCHEMA = :DataBaseName;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DataBaseName",$dataBaseName);
+            $resultTableName = $this->dbOperator->GetArrayList($sqlGetTableName,$dataProperty);
+
+            if(count($resultTableName) > 0){
+                $result = array();
+                for($i=0;$i<count($resultTableName);$i++){
+                    $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP
+                        FROM ".$resultTableName[$i]["TABLE_NAME"]." WHERE ChannelId = :ChannelId;";
+                    $dataProperty = new DataProperty();
+                    $dataProperty->AddField("ChannelId",$channelId);
+                    $result[$i] = $this->dbOperator->GetInt($sql,$dataProperty);
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function GetVisitCountByDaysAndChannel($year,$month,$channelId){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT DATE_FORMAT(CreateDate,'%d') AS days,COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,
+                COUNT(DISTINCT IPAddress) AS IP  FROM cst_visit_".$year.$month." WHERE ChannelId = :ChannelId GROUP BY days;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetVisitCountByHoursAndChannel($year,$month,$day,$channelId){
+        $result = "";
+        if($year > 0 && $month > 0 && $day > 0 && $channelId > 0){
+            $sql = "SELECT DATE_FORMAT(CreateDate,'%H') AS hours,COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP  FROM cst_visit_".$year.$month.
+                " WHERE ChannelId = :ChannelId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') GROUP BY hours;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetChannelVisitCountByYearAndSite($year,$siteId,$dataBaseName){
+        $result = "";
+        if($year > 0 && $siteId > 0){
+            $sqlGetTableName = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME LIKE 'cst_visit_".$year."%' AND TABLE_SCHEMA = :DataBaseName;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DataBaseName",$dataBaseName);
+            $resultTableName = $this->dbOperator->GetArrayList($sqlGetTableName,$dataProperty);
+
+            if(count($resultTableName) > 0){
+                $result = array();
+                for($i=0;$i<count($resultTableName);$i++){
+                    $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,c.ChannelName
+                        FROM ".$resultTableName[$i]["TABLE_NAME"]." v,".self::TableName_Channel." c WHERE v.SiteId = :SiteId
+                        AND c.ChannelId = v.ChannelId
+                        GROUP BY v.ChannelId ORDER BY PV DESC;";
+                    $dataProperty = new DataProperty();
+                    $dataProperty->AddField("SiteId",$siteId);
+                    $result[$i] = $this->dbOperator->GetArray($sql,$dataProperty);
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function GetChannelVisitCountByMonthAndSite($year,$month,$siteId){
+        $result = "";
+        if($year > 0 && $month > 0 && $siteId > 0){
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,c.ChannelName,c.ChannelId
+                FROM cst_visit_".$year.$month. " v,cst_channel c WHERE v.SiteId = :SiteId AND c.ChannelId = v.ChannelId
+                GROUP BY v.ChannelId ORDER BY PV DESC";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetChannelVisitCountByDayAndSite($year,$month,$day,$siteId){
+        $result = "";
+        if($year > 0 && $month > 0 && $day > 0 && $siteId > 0){
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,c.ChannelName,c.ChannelId
+                FROM cst_visit_".$year.$month. " v,cst_channel c WHERE v.SiteId = :SiteId AND c.ChannelId = v.ChannelId AND
+                TO_DAYS(v.CreateDate) = TO_DAYS('".$year."-".$month."-".$day."')
+                GROUP BY v.ChannelId ORDER BY PV DESC";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetDocumentVisitCountByYearAndChannel($year,$channelId,$dataBaseName){
+        $result = "";
+        if($year > 0 && $channelId > 0){
+            $sqlGetTableName = "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME LIKE 'cst_visit_".$year."%' AND TABLE_SCHEMA = :DataBaseName;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DataBaseName",$dataBaseName);
+            $resultTableName = $this->dbOperator->GetArrayList($sqlGetTableName,$dataProperty);
+
+            if(count($resultTableName) > 0){
+                $result = array();
+                for($i=0;$i<count($resultTableName);$i++){
+                    $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,c.ChannelName
+                        FROM ".$resultTableName[$i]["TABLE_NAME"]." v,".self::TableName_Channel." c WHERE v.ChannelId = :ChannelId
+                        AND c.ChannelId = v.ChannelId
+                        GROUP BY v.ChannelId ORDER BY PV DESC;";
+                    $dataProperty = new DataProperty();
+                    $dataProperty->AddField("ChannelId",$channelId);
+                    $result[$i] = $this->dbOperator->GetArray($sql,$dataProperty);
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function GetDocumentVisitCountByMonthAndChannel($year,$month,$channelId){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle
+                FROM cst_visit_".$year.$month. "  WHERE ChannelId = :ChannelId AND TableType = 3
+                GROUP BY TableId  ORDER BY PV DESC";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetDocumentVisitCountByDayAndChannel($year,$month,$day,$channelId){
+        $result = "";
+        if($year > 0 && $month > 0 && $day > 0 && $channelId > 0){
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle
+                FROM cst_visit_".$year.$month. " v WHERE TO_DAYS(v.CreateDate) = TO_DAYS('".$year."-".$month."-".$day."')
+                GROUP BY v.ChannelId ORDER BY PV DESC";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetRefDomainCountBySiteAndMonth($year,$month,$siteId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE SiteId = :SiteId AND RefDomain LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

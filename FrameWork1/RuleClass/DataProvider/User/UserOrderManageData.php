@@ -39,7 +39,7 @@ class UserOrderManageData extends BaseManageData{
     public function GetList($siteId,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($siteId > 0){
-            $sql = "SELECT uo.*,u.UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN "
+            $sql = "SELECT uo.*,u.UserName,u.UserMobile FROM ".self::TableName_UserOrder." uo LEFT JOIN "
                 .self::TableName_User." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId
                  ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo LEFT JOIN "
@@ -55,7 +55,7 @@ class UserOrderManageData extends BaseManageData{
     public function GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,&$allCount){
         $result = null;
         if($siteId > 0){
-            $sql = "SELECT uo.*,u.UserName FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_User
+            $sql = "SELECT uo.*,u.UserName,u.UserMobile FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_User
                 ." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId ";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo WHERE uo.SiteId = :SiteId ";
 
@@ -185,5 +185,24 @@ class UserOrderManageData extends BaseManageData{
         return $result;
     }
 
+    /**
+     * 取得订单状态
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单状态
+     */
+    public function GetUserReceiveInfoId($userOrderId, $withCache)
+    {
+        $result = -1;
+        if ($userOrderId > 0) {
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_user_receive_info_id.cache_' . $userOrderId . '';
+            $sql = "SELECT UserReceiveInfoId FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
 
+        return $result;
+    }
 }

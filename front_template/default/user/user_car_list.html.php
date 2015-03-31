@@ -365,7 +365,7 @@ $(function () {
     <div class="clean"></div>
 </div>
 
-<div class="wrapper">
+<div class="wrapper" style="display:none">
     <div class="producttab2">
         <div class="title" idvalue="zjsc"><a>最近收藏</a></div>
         <div class="title" idvalue="zjll"><a>最近浏览</a></div>

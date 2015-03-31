@@ -54,7 +54,7 @@
                 $("#receive_person_name").val($("#ReceivePersonName_"+receive_info_id).html());
                 $("#tel_no").val($("#HomeTel_"+receive_info_id).html());
                 $("#mobile").val($("#Mobile_"+receive_info_id).html());
-
+                $("#district").val($("#District_"+receive_info_id).html());
                 $("#new_receive_info_div").css("display", "block");
             });
 
@@ -64,6 +64,7 @@
                 var receive_person_name = $("#receive_person_name").val();
                 var tel = $("#tel_no").val();
                 var mobile = $("#mobile").val();
+                var district = $("#district").val();
                 if (address != "" && postcode != "" && receive_person_name != "" && (tel != "" || mobile != "")) {
                     var url = "";
                     if(nowSelectReceiveInfoId == 0){
@@ -74,7 +75,7 @@
                     $.ajax({
                         url: url,
                         type: "POST",
-                        data: {address: address, postcode: postcode, receive_person_name: receive_person_name, tel: tel, mobile: mobile},
+                        data: {address: address, postcode: postcode, receive_person_name: receive_person_name, tel: tel, mobile: mobile,district:district},
                         dataType: "jsonp",
                         jsonp: "jsonpcallback",
                         success: function (data) {
@@ -120,22 +121,24 @@
                     <table class="add_list" width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr class="add_title">
                             <td class="receive_id">收件人</td>
+                            <td class="district">所属区域</td>
                             <td class="address">收件地址</td>
                             <td class="post_code">邮编</td>
                             <td class="mobile">手机</td>
                             <td class="home_tel">电话</td>
-                            <td class="opretion">操作</td>
+                            <td class="operation">操作</td>
                         </tr>
                         <icms id="user_receive_info_list">
                             <item><![CDATA[
 
                                 <tr>
                                     <td id="ReceivePersonName_{f_UserReceiveInfoId}" class="receive_id">{f_ReceivePersonName}</td>
+                                    <td id="District_{f_UserReceiveInfoId}" class="district">{f_District}</td>
                                     <td id="Address_{f_UserReceiveInfoId}" class="address">{f_Address}</td>
                                     <td id="Postcode_{f_UserReceiveInfoId}" class="post_code">{f_Postcode}</td>
                                     <td id="Mobile_{f_UserReceiveInfoId}" class="mobile">{f_Mobile}</td>
                                     <td id="HomeTel_{f_UserReceiveInfoId}" class="home_tel">{f_HomeTel}</td>
-                                    <td class="opretion">
+                                    <td class="operation">
                                     <span class="modify_receive_info" idvalue="{f_UserReceiveInfoId}"
                                           style="cursor:pointer">修改本地址</span>
                                     </td>
@@ -151,6 +154,19 @@
                         </tr>
                     </table>
                     <div id="new_receive_info_div" class="add_new" style="display: none">
+                        <dl>
+                            <dt><span>*</span>所属区域：</dt>
+                            <dd>
+                                <select id="district" name="district">
+                                    <option value="芙蓉区">芙蓉区</option>
+                                    <option value="开福区">开福区</option>
+                                    <option value="雨花区">雨花区</option>
+                                    <option value="天心区">天心区</option>
+                                    <option value="岳麓区">岳麓区</option>
+                                    <option value="星沙（长沙县）">星沙（长沙县）</option>
+                                </select>
+                            </dd>
+                            </dl>
                         <dl>
                             <dt><span>*</span>详细地址：</dt>
                             <dd>

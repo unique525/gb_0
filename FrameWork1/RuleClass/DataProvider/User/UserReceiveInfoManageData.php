@@ -21,4 +21,15 @@ class UserReceiveInfoManageData extends BaseManageData{
         }
         return $result;
     }
+
+    public function GetOne($userReceiveInfoId){
+        $result = null;
+        if($userReceiveInfoId > 0){
+            $sql = "SELECT * FROM ".self::TableName_UserReceiveInfo." WHERE UserReceiveInfoId = :UserReceiveInfoId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserReceiveInfoId",$userReceiveInfoId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
 }

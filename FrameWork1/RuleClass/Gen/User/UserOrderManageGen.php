@@ -23,6 +23,9 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             case "list_for_search":
                 $result = self::GenListForSearch();
                 break;
+            case "print":
+                $result = self::GenPrint();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -221,6 +224,45 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
 
 
             $templateContent = strtr($templateContent,$arrReplace);
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            return null;
+        }
+    }
+
+    private function GenPrint(){
+        $userOrderId = Control::GetRequest("user_order_id",0);
+        $siteId = Control::GetRequest("site_id",0);
+
+        if($userOrderId > 0){
+            $templateContent = Template::Load("user/user_order_print.html","common");
+            parent::ReplaceFirst($templateContent);
+
+            $userOrderManageData = new UserOrderManageData();
+            $userOrderProductManageData = new UserOrderProductManageData();
+            $userReceiveInfoManageData = new UserReceiveInfoManageData();
+
+            $arrUserOrderOne = $userOrderManageData->GetOne($userOrderId,$siteId);
+            $arrUserOrderProductList = $userOrderProductManageData->GetList($userOrderId,$siteId);
+
+            $tagUserOrderProductListId = "user_order_product_list";
+            if(count($arrUserOrderProductList) > 0){
+                Template::ReplaceList($templateContent,$arrUserOrderProductList,$tagUserOrderProductListId);
+            }
+
+            if(intval($arrUserOrderOne["UserId"]) > 0){
+                $userReceiveInfoId = $arrUserOrderOne["UserReceiveInfoId"];
+                $arrUserReceiveInfoOne = $userReceiveInfoManageData->GetOne($userReceiveInfoId);
+                if(count($arrUserReceiveInfoOne) > 0){
+                    Template::ReplaceOne($templateContent,$arrUserReceiveInfoOne);
+                }
+            }
+
+            if(count($arrUserOrderOne) > 0){
+                Template::ReplaceOne($templateContent,$arrUserOrderOne);
+            }
+
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

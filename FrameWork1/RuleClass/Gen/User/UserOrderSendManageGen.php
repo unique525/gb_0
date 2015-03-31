@@ -48,8 +48,17 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
             $userOrderSendManageData = new UserOrderSendManageData();
             $templateContent = Template::Load("user/user_order_send_deal.html", "common");
             parent::ReplaceFirst($templateContent);
+            $userOrderManageData = new UserOrderManageData();
+            $userReceiveInfoId = $userOrderManageData->GetUserReceiveInfoId($userOrderId,TRUE);
+            $userReceiveInfoManageData = new UserReceiveInfoManageData();
+
+            $arrUserReceiveInfoOne = $userReceiveInfoManageData->GetOne($userReceiveInfoId);
+
 
             $templateContent = str_ireplace("{UserOrderId}", $userOrderId, $templateContent);
+            $templateContent = str_ireplace("{AcceptPersonName}", $arrUserReceiveInfoOne["ReceivePersonName"], $templateContent);
+            $templateContent = str_ireplace("{AcceptAddress}", $arrUserReceiveInfoOne["Address"], $templateContent);
+            $templateContent = str_ireplace("{AcceptTel}", $arrUserReceiveInfoOne["Mobile"], $templateContent);
 
             if (!empty($_POST)) {
 

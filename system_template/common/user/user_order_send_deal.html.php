@@ -41,6 +41,16 @@
                 stepMinute: 1,
                 stepSecond: 1
             });
+
+            $.ajax({
+                url:"",
+                data:{},
+                dataType:"jsonp",
+                jsonp:"jsonpcallback",
+                success:function(data){
+
+                }
+            });
         });
 
         function submitForm() {

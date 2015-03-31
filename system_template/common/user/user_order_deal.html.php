@@ -7,6 +7,11 @@
     <style type="text/css">
 
     </style>
+    <script type="text/javascript">
+        function OrderPrint(){
+            window.open("/default.php?secu=manage&mod=user_order&m=print&user_order_id={UserOrderId}&site_id={SiteId}");
+        }
+    </script>
 </head>
 <body>
 <div id="dialog_user_order_product_box" title="提示信息" style="display: none;">
@@ -24,6 +29,7 @@
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="spe_line" height="40" align="right">
+                <input class="btn" value="打印" type="button" onclick="OrderPrint()"/>
                 <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
                 <input class="btn" value="确认并继续" type="button" onclick="submitForm(1)"/>
                 <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
@@ -48,7 +54,7 @@
                     <select name="f_UserReceiveInfoId" id="f_UserReceiveInfoId">
                         <icms id="user_receive_info_list">
                             <item><![CDATA[
-                                <option value="{f_UserReceiveInfoId}">{f_ReceivePersonName},{f_Address},{f_Mobile}</option>
+                                <option value="{f_UserReceiveInfoId}">{f_District},{f_ReceivePersonName},{f_Address},{f_Mobile}</option>
                                 ]]>
                             </item>
                         </icms>

@@ -3,6 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
+    <style type="text/css">
+        .change_color:visited {
+            color: #FF0000;     //  颜色
+        text-decoration: none;    //   无下划线
+        }
+    </style>
     <script type="text/javascript" src="/system_js/manage/user/user_order.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -27,9 +33,18 @@
                     "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date;
             });
 
+            $(".username_span").each(function(){
+                var username = $(this).html();
+                var idvalue = $(this).attr("idvalue");
+                if(username == "" || username == undefined){
+                    $("#user_mobile_span_"+idvalue).css("display","block");
+                }
 
-        })
-
+            });
+        });
+        function OrderPrint(UserOrderId){
+            window.open("/default.php?secu=manage&mod=user_order&m=print&user_order_id="+UserOrderId+"&site_id={SiteId}");
+        }
     </script>
 </head>
 <body>
@@ -92,10 +107,11 @@
                                 <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="edit" idvalue="{f_UserOrderId}"/>
                             </td>
                             <td class="spe_line2" style="text-align: center">
-                                {f_UserOrderNumber}
+                                <a class="change_color" href="/default.php?secu=manage&mod=user_order&user_order_id={f_UserOrderId}&m=modify&site_id={f_SiteId}">{f_UserOrderNumber}</a>
                             </td>
                             <td class="spe_line2" style="width:100px;text-align: center">
-                                <span>{f_UserName}</span>
+                                <div idvalue="{f_UserOrderId}" class="username_span">{f_UserName}</div>
+                                <div id="user_mobile_span_{f_UserOrderId}" style="display:none">{f_UserMobile}</div>
                             </td>
                             <td class="spe_line2" style="width:80px;text-align: center">
                                 ￥<span class="show_price">{f_AllPrice}</span>
@@ -112,6 +128,7 @@
                             <td class="spe_line2" style="width:250px;text-align: center">
                                 <input class="btn2 btn_user_order_list_pay_info" idvalue="{f_UserOrderId}" type="button" style="width:80px;" value="支付信息" />
                                 <input class="btn2 btn_user_order_list_send_info" idvalue="{f_UserOrderId}" type="button" style="width:80px;" value="发货信息" />
+                                <a class="btn2 change_color" href="/default.php?secu=manage&mod=user_order&m=print&user_order_id={f_UserOrderId}&site_id={SiteId}" style="width:80px;" target="_blank">打印 </a>
                             </td>
                         </tr>
                     </table>
