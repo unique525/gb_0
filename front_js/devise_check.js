@@ -21,35 +21,55 @@ var Request=new QueryString();
 
 
 
-window.onload=function(){
+function checkDevice(){
     var stay=Request["stay"];
     if(stay<=0||stay==undefined){
 
         var devise=browserRedirect();
 
-        var oriUrl=location.href;
+        var oriUrl=location.href.toLowerCase();
         var url=oriUrl.replace("_m.html",".html");
         url=url.replace("_p.html",".html");
         url=url.replace("_t.html",".html");
         switch(devise){
             case "PC":
+
                 if(url!=oriUrl){
                     location.href=url;
                 }
                 break;
             case "Mobile":
+
+                if(url.indexOf(".htm")<0){
+                    //default
+                    location.href = url + "/default_m.html"
+                }
+
+
                 url=url.replace(".html","_m.html");
                 if(url!=oriUrl){
                     location.href=url;
                 }
                 break;
             case "Pad":
+
+                if(url.indexOf(".htm")<0){
+                    //default
+                    location.href = url + "/default_p.html"
+                }
+
                 url=url.replace(".html","_p.html");
                 if(url!=oriUrl){
                     location.href=url;
                 }
                 break;
             case "TV":
+
+                if(url.indexOf(".htm")<0){
+                    //default
+                    location.href = url + "/default_t.html"
+                }
+
                 url=url.replace(".html","_t.html");
                 if(url!=oriUrl){
                     location.href=url;
@@ -63,14 +83,16 @@ window.onload=function(){
         }
 
     }
+
+
+
 }
 
-
+checkDevice();
 
     function browserRedirect() {
         var devise="PC";
-        var sUserAgent = navigator.userAgent.toLowerCase();
-        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var sUserAgent = navigator.userAgent.toLowerCase();        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
         var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
         var bIsMidp = sUserAgent.match(/midp/i) == "midp";
         var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
@@ -91,3 +113,14 @@ window.onload=function(){
         }
         return devise;
     }
+
+
+
+
+function SetATagForUrl(idString){
+
+    var div = document.getElementById(idString);
+    var s=div.innerHTML;
+    var re = /(http:\/\/[\w.\/]+)(?![^<]+>)/gi;
+    div.innerHTML=s.replace(re,"<a href='$1' target='_blank'>$1</a>");
+}
