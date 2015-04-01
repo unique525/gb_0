@@ -107,7 +107,7 @@
                                 <img src="/system_template/{template_name}/images/manage/edit.gif" style="cursor:pointer" class="edit" idvalue="{f_UserOrderId}"/>
                             </td>
                             <td class="spe_line2" style="text-align: center">
-                                <a class="change_color" href="/default.php?secu=manage&mod=user_order&user_order_id={f_UserOrderId}&m=modify&site_id={f_SiteId}">{f_UserOrderNumber}</a>
+                                <a target="_blank" class="change_color" href="/default.php?secu=manage&mod=user_order&user_order_id={f_UserOrderId}&m=modify&site_id={f_SiteId}">{f_UserOrderNumber}</a>
                             </td>
                             <td class="spe_line2" style="width:100px;text-align: center">
                                 <div idvalue="{f_UserOrderId}" class="username_span">{f_UserName}</div>
