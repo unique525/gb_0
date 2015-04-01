@@ -119,8 +119,12 @@ checkDevice();
 
 function SetATagForUrl(idString){
 
-    var div = document.getElementById(idString);
-    var s=div.innerHTML;
+    var content = document.getElementById(idString);
+    var str=content.innerHTML;
     var re = /(http:\/\/[\w.\/]+)(?![^<]+>)/gi;
-    div.innerHTML=s.replace(re,"<a href='$1' target='_blank'>$1</a>");
+    content.innerHTML=str.replace(re,"<a href='$1' target='_blank'>$1</a>");//http
+
+    str=content.innerHTML;
+    var re2 = /(https:\/\/[\w.\/]+)(?![^<]+>)/gi;
+    content.innerHTML=str.replace(re2,"<a href='$1' target='_blank'>$1</a>");//https
 }
