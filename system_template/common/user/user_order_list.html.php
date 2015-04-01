@@ -90,7 +90,7 @@
                 <td style="width:100px;text-align: center">会员名</td>
                 <td style="width:80px;text-align: center">订单总价</td>
                 <td style="width:80px;text-align: center">运费</td>
-                <td style="width:150px;text-align: center">创建日期</td>
+                <td style="width:150px;text-align: center">付款时间</td>
                 <td  style="width:120px;text-align: center">状态</td>
                 <td  style="width:250px;text-align: center">相关信息</td>
             </tr>
@@ -120,7 +120,7 @@
                                 ￥<span class="show_price">{f_SendPrice}</span>
                             </td>
                             <td class="spe_line2" style="width:150px;text-align: center">
-                                <span>{f_CreateDate}</span>
+                                <span title="创建时间：{f_CreateDate}">{f_PayDate}</span>
                             </td>
                             <td class="spe_line2" style="width:120px;text-align: center">
                                 <span class="span_state" idvalue="{f_UserOrderId}">{f_State}</span>
@@ -137,42 +137,7 @@
             </item>
         </icms>
         </ul>
-        <!--
-        <div class="order" style="width:99%;height:160px;">
-            <div class="title" style="width:100%;height:30px;background-color: #3165CE;padding-top: 5px">
-                <input type="checkbox" style="margin-left: 5px;float:left"/>
-                <div style="margin-left: 15px;float:left">2014-02-11 11:22:33</div>
-                <div style="margin-left: 15px;float:left">订单号：</div>
-                <div style="float:left">5484131481000054</div>
-            </div>
-            <div class="detail" style="width:100%;height:120px;padding-top: 5px">
-                <div class="product_pic" style="background-image: url('/upload/Desert.jpg');filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/upload/Desert.jpg',sizingMethod='scale');">
-                    <img width="110" height="110" src="/upload/background.png"/>
-                </div>
-                <div class="product_name">
-                    沙漠西瓜
-                </div>
-                <div class="product_price">
-                    产品价格
-                </div>
-                <div class="product_count">
-                    产品数量
-                </div>
-                <div class="freight_price">
-                    运费
-                </div>
-                <div class="order_price">
-                    订单总价
-                </div>
-                <div class="order_state">
-                    交易状态
-                </div>
-                <div class="order_operate">
-                    交易操作
-                </div>
-                <div style="clear:left"></div>
-            </div>
-        </div>-->
+
         {pagerButton}
     </div>
 </body>

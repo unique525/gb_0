@@ -41,7 +41,7 @@ class UserOrderManageData extends BaseManageData{
         if($siteId > 0){
             $sql = "SELECT uo.*,u.UserName,u.UserMobile FROM ".self::TableName_UserOrder." uo LEFT JOIN "
                 .self::TableName_User." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId
-                 ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+                 ORDER BY PayDate DESC,CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $sqlCount = "SELECT count(*) FROM ".self::TableName_UserOrder." uo LEFT JOIN "
                 .self::TableName_User." u ON uo.UserId = u.UserId WHERE uo.SiteId = :SiteId;";
             $dataProperty = new DataProperty();

@@ -141,6 +141,51 @@ class UserOrderClientData extends BaseClientData {
         return $result;
     }
 
+    /**
+     * 修改状态，不带user id 支付接口使用
+     * @param int $userOrderId 订单id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyStateWithoutUserId($userOrderId,$state)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `State`=:State WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_state.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改支付时间
+     * @param int $userOrderId 订单id
+     * @param int $payDate 支付时间
+     * @return int 操作结果
+     */
+    public function ModifyPayDate($userOrderId, $payDate)
+    {
+        $result = 0;
+        if ($userOrderId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_UserOrder . " SET `PayDate`=:PayDate WHERE ".self::TableId_UserOrder."=:".self::TableId_UserOrder.";";
+            $dataProperty->AddField(self::TableId_UserOrder, $userOrderId);
+            $dataProperty->AddField("PayDate", $payDate);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_pay_date.cache_' . $userOrderId . '';
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+        }
+        return $result;
+    }
 
     /**
      * @param $userId
