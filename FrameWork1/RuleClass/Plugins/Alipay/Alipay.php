@@ -346,9 +346,14 @@ class Alipay
             //已付款
             $orderState = UserOrderData::STATE_PAYMENT;
             //改变订单状态
-            $userOrderPublicData->ModifyState($userOrderId,$userId,$orderState);
+            $userOrderPublicData->ModifyStateWithoutUserId($userOrderId,$userId,$orderState);
             $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
             $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
+
+            $date = strval(date('Y-m-d H:i:s', time()));
+            $userOrderPublicData->ModifyPayDate($userOrderId,$date);
+
+
             //增加订单付款记录
             $userOrderPayPublicData = new UserOrderPayPublicData();
             $userOrderPayPublicData->Create(
@@ -374,9 +379,14 @@ class Alipay
                 //已付款
             $orderState = UserOrderData::STATE_PAYMENT;
             //改变订单状态
-            $userOrderClientData->ModifyState($userOrderId,$orderState);
+            $userOrderClientData->ModifyStateWithoutUserId($userOrderId,$orderState);
             $userOrderClientData->ModifyAlipayTradeNo($userOrderId, $trade_no);
             $userOrderClientData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
+
+
+            $date = strval(date('Y-m-d H:i:s', time()));
+            $userOrderClientData->ModifyPayDate($userOrderId,$date);
+
             //增加订单付款记录
             $userOrderPayPublicData = new UserOrderPayPublicData();
             $userOrderPayPublicData->Create(
