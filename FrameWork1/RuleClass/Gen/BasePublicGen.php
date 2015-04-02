@@ -804,7 +804,10 @@ class BasePublicGen extends BaseGen {
             //把对应ID的CMS标记替换成指定内容
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
         }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+        else {
+            //替换为空
+            $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
+        }
         return $templateContent;
     }
 
