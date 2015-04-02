@@ -257,7 +257,7 @@ class FileObject
         while (false !== ($childDirPath = $dirHandler->read())) {
             if ($childDirPath != '.' && $childDirPath != '..') {
                 if (is_dir($dirPath . '/' . $childDirPath)) {
-                    echo $dirPath . '/' . $childDirPath;
+                    //echo $dirPath . '/' . $childDirPath;
                     FileObject::DeleteDir($dirPath . '/' . $childDirPath);
                 } else {
                     unlink($dirPath . '/' . $childDirPath);
