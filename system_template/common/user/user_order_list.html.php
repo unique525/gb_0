@@ -36,7 +36,7 @@
             $(".username_span").each(function(){
                 var username = $(this).html();
                 var idvalue = $(this).attr("idvalue");
-                if(username == "" || username == undefined){
+                if(username == "" || username == undefined ){
                     $("#user_mobile_span_"+idvalue).css("display","block");
                 }
 

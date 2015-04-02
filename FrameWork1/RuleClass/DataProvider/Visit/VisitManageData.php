@@ -778,7 +778,7 @@ class VisitManageData extends BaseManageData {
                     $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,c.ChannelName
                         FROM ".$resultTableName[$i]["TABLE_NAME"]." v,".self::TableName_Channel." c WHERE v.ChannelId = :ChannelId
                         AND c.ChannelId = v.ChannelId
-                        GROUP BY v.ChannelId ORDER BY PV DESC;";
+                        GROUP BY TableId,TableType ORDER BY PV DESC;";
                     $dataProperty = new DataProperty();
                     $dataProperty->AddField("ChannelId",$channelId);
                     $result[$i] = $this->dbOperator->GetArray($sql,$dataProperty);
@@ -791,9 +791,9 @@ class VisitManageData extends BaseManageData {
     public function GetDocumentVisitCountByMonthAndChannel($year,$month,$channelId){
         $result = "";
         if($year > 0 && $month > 0 && $channelId > 0){
-            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle
-                FROM cst_visit_".$year.$month. "  WHERE ChannelId = :ChannelId AND TableType = 3
-                GROUP BY TableId  ORDER BY PV DESC";
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle,VisitUrl
+                FROM cst_visit_".$year.$month. "  WHERE ChannelId = :ChannelId
+                GROUP BY TableId,TableType  ORDER BY PV DESC";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId",$channelId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
@@ -804,9 +804,9 @@ class VisitManageData extends BaseManageData {
     public function GetDocumentVisitCountByDayAndChannel($year,$month,$day,$channelId){
         $result = "";
         if($year > 0 && $month > 0 && $day > 0 && $channelId > 0){
-            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle
-                FROM cst_visit_".$year.$month. " v WHERE TO_DAYS(v.CreateDate) = TO_DAYS('".$year."-".$month."-".$day."')
-                GROUP BY v.ChannelId ORDER BY PV DESC";
+            $sql = "SELECT COUNT(*) AS PV,COUNT(DISTINCT FlagCookie) AS UV,COUNT(DISTINCT IPAddress) AS IP,VisitTitle,VisitUrl
+                FROM cst_visit_".$year.$month. " v WHERE ChannelId = :ChannelId AND TO_DAYS(v.CreateDate) = TO_DAYS('".$year."-".$month."-".$day."')
+                GROUP BY TableId,TableType  ORDER BY PV DESC";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId",$channelId);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
@@ -820,6 +820,83 @@ class VisitManageData extends BaseManageData {
             $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE SiteId = :SiteId AND RefDomain LIKE '%".$domain."%';";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetOutSiteRefDomainCountBySiteAndMonth($year,$month,$siteId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE SiteId = :SiteId AND RefDomain NOT LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetRefDomainCountBySiteAndDay($year,$month,$day,$siteId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE SiteId = :SiteId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') AND RefDomain LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetOutSiteRefDomainCountBySiteAndDay($year,$month,$day,$siteId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $siteId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE SiteId = :SiteId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') AND RefDomain NOT LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId",$siteId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetRefDomainCountByChannelAndMonth($year,$month,$channelId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE ChannelId = :ChannelId AND RefDomain LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetOutSiteRefDomainCountByChannelAndMonth($year,$month,$channelId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE ChannelId = :ChannelId AND RefDomain NOT LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetRefDomainCountByChannelAndDay($year,$month,$day,$channelId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE ChannelId = :ChannelId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') AND RefDomain LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    public function GetOutSiteRefDomainCountByChannelAndDay($year,$month,$day,$channelId,$domain){
+        $result = "";
+        if($year > 0 && $month > 0 && $channelId > 0){
+            $sql = "SELECT count(*) FROM cst_visit_".$year.$month. " WHERE ChannelId = :ChannelId AND TO_DAYS(CreateDate) = TO_DAYS('".$year."-".$month."-".$day."') AND RefDomain NOT LIKE '%".$domain."%';";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
