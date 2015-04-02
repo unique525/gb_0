@@ -33,4 +33,16 @@ class VisitData {
      */
     const VISIT_TABLE_TYPE_PRODUCT = 6;
 
+    /**
+     * 统计类型 年
+     */
+    const STATISTICS_BY_MONTH= 0;
+    /**
+     * 统计类型 月
+     */
+    const STATISTICS_BY_DAY = 1;
+    /**
+     * 统计类型 日
+     */
+    const STATISTICS_BY_HOUR= 2;
 } 
