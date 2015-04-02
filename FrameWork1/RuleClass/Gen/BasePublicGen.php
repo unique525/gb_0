@@ -70,6 +70,12 @@ class BasePublicGen extends BaseGen {
             if(self::IsMobile()){
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
+
+                //如果不存在手机模板，则加载默认电脑模板
+                if(strlen($result)<=0){
+                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                        $siteId, $channelTemplateType, $channelTemplateTag, false);
+                }
             }else{
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
