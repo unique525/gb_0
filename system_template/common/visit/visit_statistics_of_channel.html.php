@@ -70,12 +70,9 @@
                     type: 'pie',
                     name: 'Browser share',
                     data: [
-                        ['Firefox',   45.0],
-                        ['IE',       26.8],
-                        ['Chrome', 12.8],
-                        ['Safari',    8.5],
-                        ['Opera',     6.2],
-                        ['Others',   0.7]
+                        ['外部链接',   {outer_link}],
+                        ['内部链接',   {inner_link}],
+                        ['搜索引擎',   {search_link}]
                     ]
                 }]
             });
@@ -87,11 +84,12 @@
 <script src="/system_js/high_chart/highcharts.js"></script>
 <script src="/system_js/high_chart/modules/exporting.js"></script>
 
+<div class="btn2" style="width:50px; margin-left: 5px" onclick="window.history.go(-1);">返&nbsp;&nbsp;&nbsp;&nbsp;回</div>
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <div id="container2" style="min-width:700px;height:400px"></div>
 
 <div>
-    <!--PV总值：{TotalPVCount}     UV总值：{TotalUVCount}       IP总值：{TotalIPCount}-->
+    PV总值：{TotalPVCount}     UV总值：{TotalUVCount}       IP总值：{TotalIPCount}
     <table class="grid" width="100%" cellpadding="0" cellspacing="0">
         <tr class="grid_title2">
             <td style="text-align: center;width:300px">文档</td>
@@ -102,7 +100,7 @@
         <icms id="visit_count_of_document">
             <item><![CDATA[
                 <tr class="grid_item2">
-                    <td style="text-align: center;width:300px">{f_VisitTitle}</td>
+                    <td style="text-align: center;width:300px"><a href="{f_VisitUrl}" target="_blank">{f_VisitTitle}</a></td>
                     <td style="width: 100px">{f_PV}</td>
                     <td style="width: 100px">{f_UV}</td>
                     <td style="width: 100px">{f_IP}</td>

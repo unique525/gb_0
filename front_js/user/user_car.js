@@ -46,9 +46,19 @@ function getUserCarCount(){
         jsonp:"jsonpcallback",
         success:function(data){
             userCarCount = parseInt(data["result"]);
+
+            if(userCarCount<0){
+                userCarCount = 0;
+            }
+
+            if($("#user_car_count")){
+                $("#user_car_count").html(userCarCount);
+            }
+
+
         }
     });
-    return userCarCount;
+
 }
 
 $(function(){

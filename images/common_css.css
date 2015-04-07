@@ -26,11 +26,11 @@ input{ vertical-align:middle;border:1px; padding:0; margin:0;}
 }
 
 /*----------------------头部css------------------------------------*/
-.loginbg{height:36px; background:url(topbg.png) repeat-x; color:#8A8A8A; line-height:36px;font-size:12px; font-family:"Microsoft YaHei";}
-.loginbg a{color:#8A8A8A;font-size:12px;}
+.loginbg{height:38px; background:url(topbg.png) repeat-x; color:#8A8A8A; line-height:36px;font-size:14px; font-family:"Microsoft YaHei";}
+.loginbg a{color:#8A8A8A;font-size:14px;}
 
-.loginleft{width:260px; float:left;}
-.loginright{width:190px; float:right;}
+.loginleft{width:300px; float:left;}
+.loginright{width:200px; float:right;}
 
 .logo{width:320px;height:103px; float:left;}
 .search{width:381px;padding:30px 0px 0px 80px; float:left;}
