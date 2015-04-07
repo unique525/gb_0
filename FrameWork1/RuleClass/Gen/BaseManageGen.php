@@ -430,8 +430,25 @@ class BaseManageGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_RELATED_DOCUMENT_NEWS_LIST : //相关新闻
+                        $searchType = Template::GetParamValue($tagContent, "search_type"); //调用方式："tag", "main_tag", "all"
+                        $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
+                        if ($channelId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfRelatedDocumentNewsList(
+                                $channelTemplateContent,
+                                $documentNewsId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state,
+                                $searchType
+                            );
+                        }
+                        break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_PIC_LIST :
-                        $style = Template::GetParamValue($tagContent, "style_type");
+                        $style = Template::GetParamValue($tagContent, "style_type"); //轮换图样式
                         $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
                         if ($documentNewsId > 0) {
                             $channelTemplateContent = self::ReplaceTemplateOfDocumentNewsPicList(
@@ -650,6 +667,97 @@ class BaseManageGen extends BaseGen
 
         return $channelTemplateContent;
     }
+
+
+    /**
+     * 通过tag查找并替换资讯列表的内容（相关新闻）
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $documentNewsId 文档id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @param string $searchType 调用类型  tag,main tag,all
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfRelatedDocumentNewsList(
+        $channelTemplateContent,
+        $documentNewsId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state,
+        $searchType="all"
+    )
+    {
+        if ($documentNewsId > 0) {
+            $arrDocumentNewsList = null;
+            $documentNewsManageData = new DocumentNewsManageData();
+            $channelManageData= new ChannelManageData();
+            $channelId=$documentNewsManageData->GetChannelId($documentNewsId,TRUE);
+            $siteId=$channelManageData->GetSiteId($channelId,TRUE);
+
+
+            $replaceArray = array('：' => ',', '。' => ',','.' => ',', '、' => ',', '，' => ',', '、' => ',', '；' => ',', '〃' => '"','　' => ',',";"=>",");
+
+
+            $arrayTags=null;
+            $mainTag="";
+            switch($searchType){
+                case"tag":
+                    $strTag=$documentNewsManageData->GetDocumentNewsTag($documentNewsId);
+                    if($strTag!=""){
+                        $strTag=strtr($strTag, $replaceArray);
+                        $arrayTags=preg_split("/[\s,]+/", $strTag);
+                    }
+                    break;
+                case"main_tag":
+                    $mainTag=$documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
+                    break;
+                case "all":
+                    $strTag=$documentNewsManageData->GetDocumentNewsTag($documentNewsId);
+                    if($strTag!=""){
+                        $strTag=strtr($strTag, $replaceArray);
+                        $arrayTags=preg_split("/[\s,]+/", $strTag);
+                    }
+                    $mainTag=$documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
+                    break;
+            }
+
+
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+
+            $state = DocumentNewsData::STATE_PUBLISHED;
+
+
+            $arrDocumentNewsList = $documentNewsManageData->GetListOfRelated($mainTag,$arrayTags,$channelId,$siteId,$tagWhere,$tagTopCount,$state,"",$orderBy);
+
+            if (!empty($arrDocumentNewsList)) {
+                Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            }else{
+                Template::RemoveCustomTag($channelTemplateContent, $tagId);
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
 
     /**
      * 替换资讯内容图片控件内容

@@ -26,7 +26,11 @@ class Template
      */
     const TAG_TYPE_DOCUMENT_NEWS_LIST = "document_news_list";
     /**
-     * 模板标签类型：图片轮换列表 type="pic_slider_list"
+     * 模板标签类型：相关资讯列表 type="related_document_news_list"
+     */
+    const TAG_TYPE_RELATED_DOCUMENT_NEWS_LIST = "related_document_news_list";
+    /**
+     * 模板标签类型：图片轮换列表 type="document_news_pic_list"
      */
     const TAG_TYPE_DOCUMENT_NEWS_PIC_LIST = "document_news_pic_list";
     /**
@@ -574,6 +578,15 @@ class Template
                 $columns
             );
         }
+
+        if (strtolower($tagType) === 'related_document_news_list')
+        {
+            self::FormatDocumentNewsRow(
+                $listTemplate,
+                $columns
+            );
+        }
+
 
 
         foreach ($columns as $columnName => $columnValue) {
