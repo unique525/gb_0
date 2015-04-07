@@ -431,7 +431,7 @@ class BaseManageGen extends BaseGen
                         }
                         break;
                     case Template::TAG_TYPE_RELATED_DOCUMENT_NEWS_LIST : //相关新闻
-                        $searchType = Template::GetParamValue($tagContent, "search_type"); //调用方式："tag", "main_tag", "all"
+                        $searchType = Template::GetParamValue($tagContent, "tag_type"); //调用方式："tag", "main_tag", "all"
                         $documentNewsId = intval(str_ireplace("document_news_", "", $tagId));
                         if ($channelId > 0) {
                             $channelTemplateContent = self::ReplaceTemplateOfRelatedDocumentNewsList(
