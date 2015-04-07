@@ -302,4 +302,43 @@ class NewspaperArticleManageData extends BaseManageData {
         }
         return $result;
     }
+
+    /**
+     * 由点击量返回稿件数据集（点击越高越靠前）
+     * @param int $siteId 站点id
+     * @param string $stringSiteId 若为所有站点，站点id的string （”1,2,3,4“）
+     * @param int $count 前多少条（默认20）
+     * @param string $beginDate 起始日期
+     * @param string $endDate 结束日期
+     * @return array|null 取得对应数组
+     */
+    public function GetListByHit($siteId,$stringSiteId,$count=20,$beginDate="",$endDate=""){
+        $result = null;
+        if($siteId>=0){
+            $siteSelection=" WHERE NewspaperArticleId>0 ";
+            //if($siteId>0){   //没有siteid字段
+            //    $siteSelection.=" AND SiteId=:SiteId  ";
+            //}else{
+            //    $siteSelection.=" AND SiteId IN ($stringSiteId) ";
+            //}
+            $dateSelection="";
+            $limit="";
+            if($beginDate!=""){
+                $dateSelection.=" AND CreateDate>:BeginDate ";
+            }
+            if($endDate!=""){
+                $dateSelection.=" AND CreateDate<:EndDate ";
+            }
+            if($count>0){
+                $limit.=" LIMIT $count";
+            }
+            $sql="SELECT * FROM " . self::TableName_NewspaperArticle . $siteSelection .$dateSelection ." ORDER BY HitCount DESC ".$limit;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("BeginDate", $beginDate);
+            $dataProperty->AddField("EndDate", $endDate);
+            //$dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 }

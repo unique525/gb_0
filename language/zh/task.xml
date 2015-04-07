@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <module id="1"><content><![CDATA[提交成功!]]></content></module>
+    <module id="2"><content><![CDATA[提交失败!插入或修改数据库错误！]]></content></module>
+    <module id="3"><content><![CDATA[请选择日期！]]></content></module>
+    <module id="4"><content><![CDATA[请选择站点或组！]]></content></module>
+</root>

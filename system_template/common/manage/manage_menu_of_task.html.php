@@ -29,6 +29,15 @@
             window.G_TabUrl = '/default.php?secu=manage&mod=task&m=statistic_document_of_manage_user_group';
             addTab();
         });
+
+        var btnNewspaper = $("#btn_statistic_newspaper_hit_rank");
+        btnNewspaper.css("cursor","pointer");
+        btnNewspaper.click(function () {
+            //打开站点管理页面
+            window.G_TabTitle = "微报纸";
+            window.G_TabUrl = '/default.php?secu=manage&mod=task&m=statistic_newspaper_hit_rank';
+            addTab();
+        });
     });
 
 
@@ -52,5 +61,9 @@
         <div class="taskline1" id="btn_statistic_manage_user_document" onclick="adminusertaskclick(1,10002,-1,0)">文档统计</div>
         <div class="taskline2" id="btn_statistic_my_document" onclick="adminusertaskclick(1,10002,-1,0)">我的文档</div>
         <div class="taskline2" id="btn_statistic_manage_user_group_document" onclick="adminusertaskclick(1,10001,-1,0)">部门文档</div>
+    </div>
+    <div class="task_one">
+        <div class="taskline1" id="" onclick="">微报纸</div>
+        <div class="taskline2" id="btn_statistic_newspaper_hit_rank" onclick="">访问统计</div>
     </div>
 </div>

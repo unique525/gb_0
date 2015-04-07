@@ -18,8 +18,8 @@ class TaskManageGen extends BaseManageGen {
             case "statistic_document_of_manage_user_group":
                 $result = self::GenStatisticDocumentOfManageUserGroup();
                 break;
-            case "get_lottery":
-                $result = self::GetLottery();
+            case "statistic_newspaper_hit_rank";
+                $result = self::GenStatisticNewspaperHitRank();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -98,10 +98,10 @@ class TaskManageGen extends BaseManageGen {
                     Template::ReplaceList($tempContent,$arrayManageUser,$listNameOfStatistician);
 
                 }else{
-                    //日期错误
+                    //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('task', 3));//日期错误
                 }
             }else{
-                //站点或组参数错误
+                //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('task', 4)); //站点或组参数错误
             }
 
 
@@ -124,10 +124,63 @@ class TaskManageGen extends BaseManageGen {
         return $result;
     }
 
-  public function GetLottery(){
-      $documentNewsPicManageData=new DocumentNewsPicManageData();
-      $arrList=$documentNewsPicManageData->GetOriginalList();
-      $result = Format::FixJsonEncode($arrList);
-      return $result;
-  }
+    public function GenStatisticNewspaperHitRank(){
+        $result="";
+        $resultJavaScript="";
+        $resultText="";
+        $manageUserId=Control::GetManageUserId();
+        $tabIndex=Control::GetRequest("tab_index",0);
+
+
+            $siteId=Control::PostRequest("SiteId",-1);//0为所有
+            $beginDate=Control::PostRequest("BeginDate","");
+            $endDate=Control::PostRequest("EndDate","");
+        $count=Control::PostRequest("Count","20");
+            $tempContent=Template::Load("task/statistic_newspaper.html","common");
+            parent::ReplaceFirst($tempContent);
+
+            $siteManageData=New SiteManageData();
+            $arraySite=$siteManageData->GetListForSelect($manageUserId);
+            $listNameOfSite="site_list";
+            Template::ReplaceList($tempContent,$arraySite,$listNameOfSite);
+
+            if($siteId>=0){
+                if($beginDate!=""&&$endDate!=""){
+                    $strSiteIds="";
+                    foreach($arraySite as $site){
+                        $strSiteIds.=",".$site["SiteId"];
+                    }
+
+                    $newspaperArticleManageData=new NewspaperArticleManageData();
+                    $arrayNewspaper=$newspaperArticleManageData->GetListByHit($siteId,$strSiteIds,$count,$beginDate,$endDate);
+
+                    $listNameOfStatistician="newspaper_article_list";
+                    Template::ReplaceList($tempContent,$arrayNewspaper,$listNameOfStatistician);
+
+                }else{
+
+                    //$resultText .= Language::Load('task', 3); //请选择日期
+            }
+            }else{
+
+                //$resultText .= Language::Load('task', 4); //请选择站点或组
+            }
+
+
+
+
+
+            $listNameOfStatistician="newspaper_article_list";
+            Template::ReplaceCustomTag($tempContent, $listNameOfStatistician,$resultText);
+            $tempContent = str_ireplace("{TabIndex}", $tabIndex, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
+            $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+            $result=$tempContent;
+
+
+        return $result;
+    }
 } 
