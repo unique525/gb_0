@@ -106,6 +106,24 @@ class CustomFormFieldManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+    /**
+     * 取得表单下的唯一性字段
+     * @param int $customFormId
+     * @return array 字段数据集 （id,type）
+     */
+    public function GetUniqueField($customFormId) {
+        $result=null;
+
+        if ($customFormId > 0) {
+            $sql = "SELECT CustomFormFieldId,CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormId = :CustomFormId AND IsUnique=1;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

@@ -95,16 +95,16 @@ class CustomFormContentPublicData extends BaseManageData {
     }
 
     /**
-     * 创建附件
-     * @param int $customFormRecordId 被操作的表单记录的id
-     * @param int $customFormId 被操作的表单的id
-     * @param int $customFormFieldId 被操作的表单字段id
-     * @param int $userId 操作用户的id
-     * @param mixed $content 新增的内容
-     * @param int $fileName 格式化文件名 存入ContentOfText字段
-     * @param int $fileType 文件type 存入ContentOfString字段
-     * @return int 新增id
-     */
+ * 创建附件
+ * @param int $customFormRecordId 被操作的表单记录的id
+ * @param int $customFormId 被操作的表单的id
+ * @param int $customFormFieldId 被操作的表单字段id
+ * @param int $userId 操作用户的id
+ * @param mixed $content 新增的内容
+ * @param int $fileName 格式化文件名 存入ContentOfText字段
+ * @param int $fileType 文件type 存入ContentOfString字段
+ * @return int 新增id
+ */
     public function CreateAttachment($customFormRecordId, $customFormId, $customFormFieldId, $userId, $content, $fileName, $fileType){
         $result = -1;
         if($customFormRecordId>0&&$customFormId>0&&$customFormFieldId>0 && !empty($content)){
@@ -122,6 +122,56 @@ class CustomFormContentPublicData extends BaseManageData {
             $dataProperty->AddField("ContentOfText", $fileName);
             $dataProperty->AddField("ContentOfString", $fileType);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 检查表单字段内容是否有重复项
+     * @param int $customFormId 表单的id
+     * @param int $customFormFieldId 字段id
+     * @param int $customFormFieldType 字段类型
+     * @param string $customFormContent 字段内容
+     * @return int 重复数
+     */
+    public function CheckRepeat($customFormId, $customFormFieldId, $customFormFieldType, $customFormContent){
+        $result = 0;
+        if($customFormId>0&&$customFormFieldId>0){
+            $contentType="";
+            $contentSelection="";
+            switch($customFormFieldType){
+                case 0:
+                    $contentType="ContentOfInt";
+                    $contentSelection=" AND $contentType = $customFormContent ";
+                    break;
+                case 1:
+                    $contentType="ContentOfString";
+                    $contentSelection=" AND $contentType = '$customFormContent' ";
+                    break;
+                case 2:
+                    $contentType="ContentOfText";
+                    $contentSelection=" AND $contentType = '$customFormContent' ";
+                    break;
+                case 3:
+                    $contentType="ContentOfFloat";
+                    $contentSelection=" AND $contentType = $customFormContent ";
+                    break;
+                case 4:
+                    $contentType="ContentOfDateTime";
+                    break;
+                case 5:
+                    $contentType="ContentOfBlob";
+                    break;
+            }
+            $sql = "SELECT COUNT(*) FROM
+                        " . self::TableName_CustomFormContent . "
+                    WHERE CustomFormId=:CustomFormId AND CustomFormFieldId=:CustomFormFieldId $contentSelection ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
 
         return $result;

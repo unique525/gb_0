@@ -184,6 +184,51 @@ class CustomFormContentManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+    /**
+     * 检查表单字段内容是否有重复项
+     * @param int $customFormId 表单的id
+     * @param int $customFormFieldId 字段id
+     * @param int $customFormFieldType 字段类型
+     * @param string $customFormContent 字段内容
+     * @return int 重复数
+     */
+    public function CheckRepeat($customFormId, $customFormFieldId, $customFormFieldType, $customFormContent){
+        $result = 0;
+        if($customFormId>0&&$customFormFieldId>0){
+            $contentType="";
+            switch($customFormFieldType){
+                case 0:
+                    $contentType="ContentOfInt";
+                    break;
+                case 1:
+                    $contentType="ContentOfString";
+                    break;
+                case 2:
+                    $contentType="ContentOfText";
+                    break;
+                case 3:
+                    $contentType="ContentOfFloat";
+                    break;
+                case 4:
+                    $contentType="ContentOfDateTime";
+                    break;
+                case 5:
+                    $contentType="ContentOfBlob";
+                    break;
+            }
+            $sql = "SELECT COUNT(*) FROM
+                        " . self::TableName_CustomFormContent . "
+                    WHERE CustomFormId=:CustomFormId AND CustomFormFieldId=:CustomFormFieldId AND $contentType='$customFormContent' ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieldId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 }
 
 ?>

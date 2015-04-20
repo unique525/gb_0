@@ -45,6 +45,7 @@
             <td style="width:40px;text-align:center;">编辑</td>
             <td style="width:40px;text-align:center;">状态</td>
             <td>表单字段名称</td>
+            <td style="width:120px;text-align:center;">是否唯一</td>
             <td style="width:120px;">表单字段类型</td>
             <td style="width:60px;text-align:center;">排序</td>
         </tr>
@@ -56,6 +57,7 @@
                     <td class="spe_line2" style="text-align:center;"><img class="btn_edit_custom_form_field" src="/system_template/default/images/manage/edit.gif" alt="编辑" idvalue="{f_CustomFormFieldId}" title="{f_CustomFormId}" /></td>
                     <td class="spe_line2" style="text-align:center;">{f_State}</td>
                     <td class="spe_line2">{f_CustomFormFieldName}</td>
+                    <td class="spe_line2" style="text-align:center;">{f_IsUnique}</td>
                     <td class="spe_line2" style="text-align:center;">{f_CustomFormFieldType}</td>
                     <td class="spe_line2" style="text-align:center;">{f_Sort}</td>
                 </tr>

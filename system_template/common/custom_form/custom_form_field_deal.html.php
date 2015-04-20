@@ -85,6 +85,16 @@
                     {s_ShowInList}
                 </td>
             </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_IsUnique">是否唯一：</label>(新增时检查该字段是否存在相同数据)</td>
+                <td class="spe_line">
+                    <select id="f_IsUnique" name="f_IsUnique">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    {s_IsUnique}
+                </td>
+            </tr>
 
             <tr>
                 <td colspan="2" height="30" align="center">

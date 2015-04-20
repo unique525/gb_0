@@ -7,7 +7,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Customform
  * @author 525
  */
-class CustomFormFieldPublicData extends BasePublicData {
+class CustomFormFieldPublicData extends BaseManageData {
 
 
 
@@ -32,6 +32,42 @@ class CustomFormFieldPublicData extends BasePublicData {
     }
 
 
+    /**
+     * 取得表单下的唯一性字段
+     * @param int $customFormId
+     * @return array 字段数据集 （id,type）
+     */
+    public function GetUniqueField($customFormId) {
+        $result=null;
+
+        if ($customFormId > 0) {
+            $sql = "SELECT CustomFormFieldId,CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormId = :CustomFormId AND IsUnique=1;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 根据字段名称获取list
+     * @param int $customFormId
+     * @param string $customFormFieldName
+     * @return array 字段数据集 （id,type）
+     */
+    public function GetListByName($customFormId,$customFormFieldName) {
+        $result=null;
+
+        if ($customFormId > 0) {
+            $sql = "SELECT CustomFormFieldId,CustomFormFieldType FROM " . self::TableName_CustomFormField . " WHERE CustomFormId = :CustomFormId AND CustomFormFieldName=:CustomFormFieldName ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("CustomFormFieldName", $customFormFieldName);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

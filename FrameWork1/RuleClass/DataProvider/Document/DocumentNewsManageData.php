@@ -585,7 +585,7 @@ class DocumentNewsManageData extends BaseManageData
      */
     public function GetOne($documentNewsId)
     {
-        $sql = "SELECT * FROM " . self::TableName_DocumentNews . " WHERE " . self::TableId_DocumentNews. "=:" . self::TableId_DocumentNews . ";";
+        $sql = "SELECT *,(Hit+VirtualHit) AS AllHit FROM " . self::TableName_DocumentNews . " WHERE " . self::TableId_DocumentNews. "=:" . self::TableId_DocumentNews . ";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_DocumentNews, $documentNewsId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -813,6 +813,7 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
@@ -887,6 +888,7 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
             uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
@@ -966,6 +968,7 @@ class DocumentNewsManageData extends BaseManageData
         if(!empty($topCount)){
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
             uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
@@ -1054,6 +1057,7 @@ class DocumentNewsManageData extends BaseManageData
             }
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
             uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
@@ -1137,6 +1141,7 @@ class DocumentNewsManageData extends BaseManageData
             }
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -1284,6 +1289,7 @@ class DocumentNewsManageData extends BaseManageData
 
             $selectColumn = '
             dn.*,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,

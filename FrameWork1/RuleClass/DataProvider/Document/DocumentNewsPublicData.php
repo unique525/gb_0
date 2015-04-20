@@ -78,6 +78,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -200,6 +201,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -321,6 +323,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -443,6 +446,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -576,6 +580,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -695,6 +700,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.ClosePosition,
             dn.Hit,
             dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -858,6 +864,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.PublishDate,
 
             dn.DocumentNewsContent,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
@@ -1014,6 +1021,7 @@ class DocumentNewsPublicData extends BasePublicData {
             dn.PublishDate,
 
             dn.DocumentNewsContent,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
 
             uf1.UploadFilePath AS TitlePic1UploadFilePath,
             uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,

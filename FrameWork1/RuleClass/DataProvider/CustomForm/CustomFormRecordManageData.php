@@ -93,20 +93,28 @@ class CustomFormRecordManageData extends BaseManageData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("CustomFormId", $customFormId);
             $sqlSearch="";
-            if($searchArray>0&&$searchArray!=""){
+            if(count($searchArray)>0&&$searchArray!=null){
                 foreach($searchArray as $value){
+                    if($value["content"]==""){
+                        continue;
+                    }
                     switch ($value["type"]) {
-                        case 0:
-                            $dataProperty->AddField("ContentOfInt", $value["content"]);
-                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfInt LIKE :ContentOfInt ";
+                        case 0://int
+                            $arr = Format::ToSplit($value["content"], '_');
+                            if(count($arr)<2||$arr==null){
+                                break;
+                            }
+                            $dataProperty->AddField("Greater", $arr[0]);
+                            $dataProperty->AddField("Less", $arr[1]);
+                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfInt BETWEEN :Greater AND :Less ";
                             if($value["field"]>0&&$value["field"]!=""){
                                 $dataProperty->AddField("CustomFormFieldId", $value["field"]);
                                 $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
                             }
                             $sqlSearch.=" ) ";
                             break;
-                        case 1:
-                            $dataProperty->AddField("ContentOfString", $value["content"]);
+                        case 1://string
+                            $dataProperty->AddField("ContentOfString", "%".$value["content"]."%");
                             $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfString LIKE :ContentOfString ";
                             if($value["field"]>0&&$value["field"]!=""){
                                 $dataProperty->AddField("CustomFormFieldId", $value["field"]);
@@ -114,8 +122,8 @@ class CustomFormRecordManageData extends BaseManageData {
                             }
                             $sqlSearch.=" ) ";
                             break;
-                        case 2:
-                            $dataProperty->AddField("ContentOfText", $value["content"]);
+                        case 2://text
+                            $dataProperty->AddField("ContentOfText", "%".$value["content"]."%");
                             $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfText LIKE :ContentOfText ";
                             if($value["field"]>0&&$value["field"]!=""){
                                 $dataProperty->AddField("CustomFormFieldId", $value["field"]);
@@ -123,32 +131,23 @@ class CustomFormRecordManageData extends BaseManageData {
                             }
                             $sqlSearch.=" ) ";
                             break;
-                        case 3:
-                            $dataProperty->AddField("ContentOfFloat", $value["content"]);
-                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfFloat LIKE :ContentOfFloat ";
+                        case 3://float
+                            $arr = Format::ToSplit($value["content"], '_');
+                            if(count($arr)<2||$arr==null){
+                                break;
+                            }
+                            $dataProperty->AddField("Greater", $arr[0]);
+                            $dataProperty->AddField("Less", $arr[1]);
+                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfFloat BETWEEN :Greater AND :Less ";
                             if($value["field"]>0&&$value["field"]!=""){
                                 $dataProperty->AddField("CustomFormFieldId", $value["field"]);
                                 $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
                             }
                             $sqlSearch.=" ) ";
                             break;
-                        case 4:
-                            $dataProperty->AddField("ContentOfDatetime", $value["content"]);
-                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfDatetime LIKE :ContentOfDatetime ";
-                            if($value["field"]>0&&$value["field"]!=""){
-                                $dataProperty->AddField("CustomFormFieldId", $value["field"]);
-                                $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
-                            }
-                            $sqlSearch.=" ) ";
+                        case 4://date
                             break;
-                        case 5:
-                            $dataProperty->AddField("ContentOfBlob", $value["content"]);
-                            $sqlSearch.=" AND CustomFormRecordId IN (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent . " WHERE CustomFormId=:CustomFormId AND ContentOfBlob LIKE :ContentOfBlob ";
-                            if($value["field"]>0&&$value["field"]!=""){
-                                $dataProperty->AddField("CustomFormFieldId", $value["field"]);
-                                $sqlSearch.=" AND CustomFormFieldId=:CustomFormFieldId ";
-                            }
-                            $sqlSearch.=" ) ";
+                        case 5://blob
                             break;
                     }
 

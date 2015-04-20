@@ -38,6 +38,15 @@
                     $("#BeginDate").datepicker("option","maxDate",dateText);
                 }
             });
+
+            $(".ManageUser").click(function(){
+                var num=$(this).attr("idvalue");
+                if($("#DocumentNewsList_"+num).css("display")=="none"){
+                    $("#DocumentNewsList_"+num).show();
+                }else{
+                    $("#DocumentNewsList_"+num).hide();
+                }
+            });
         });
 
 
@@ -151,22 +160,31 @@
     <icms id="statistician_result_list" type="list">
         <header>
             <![CDATA[
-            <div id="{f_ManageUserId}" class="grid_item" style="padding-top:30px">
-                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇。
+            <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:30px 0 5px 0">
+                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇，总点击{f_HitCount}次。(点击每条可展开)
+            </div>
+            <div class="grid_item" id="DocumentNewsList_{c_no}" style="display:none;margin-left: 30px;color:#999">
+                <ul>{f_DocumentNewsList}</ul>
             </div>
             ]]>
         </header>
         <item>
             <![CDATA[
-            <div id="{f_ManageUserId}" class="grid_item">
-                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇。
+            <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:5px 0 5px 0">
+                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇，总点击{f_HitCount}次。
+            </div>
+            <div class="grid_item" id="DocumentNewsList_{c_no}" style="display:none;margin-left: 30px;color:#999">
+                <ul>{f_DocumentNewsList}</ul>
             </div>
             ]]>
         </item>
         <footer>
             <![CDATA[
-            <div id="{f_ManageUserId}" class="grid_item" style="padding-bottom:30px">
-                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇。
+            <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:5px 0 30px">
+                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇，总点击{f_HitCount}次。
+            </div>
+            <div class="grid_item" id="DocumentNewsList_{c_no}" style="display:none;margin-left: 30px;color:#999">
+                <ul>{f_DocumentNewsList}</ul>
             </div>
             ]]>
         </footer>

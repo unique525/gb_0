@@ -37,6 +37,10 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
      * 修改记录时 记录字段内容写入数据库失败
      */
     const DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING = -7;
+    /**
+     * 新增记录 字段内容重复
+     */
+    const REPEAT_CONTENT_IN_UNIQUE_FIELD = -8;
 
 
 
@@ -86,14 +90,38 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
 
         if (!empty($_POST)) {
+
+
             $customFormRecordManageData = new CustomFormRecordManageData();
-            $newId = $customFormRecordManageData->Create($_POST);
+            $customFormContentManageData = new CustomFormContentManageData();
+            $customFormFieldManageData = new CustomFormFieldManageData();
+
+            $newId=0;
+
+            //检查是否有唯一字段重复
+            if($customFormId>0){
+                $arrayUnique=$customFormFieldManageData->GetUniqueField($customFormId);
+                $isRepeat=0;
+                foreach($arrayUnique as $uniqueFiled){
+                    $uniqueContent=Control::PostRequest("cf_".$customFormId."_".$uniqueFiled["CustomFormFieldId"],"");
+                    $repeat=$customFormContentManageData->CheckRepeat($customFormId,$uniqueFiled["CustomFormFieldId"],$uniqueFiled["CustomFormFieldType"],$uniqueContent);
+                    if($repeat>0){
+                        $isRepeat=1;
+                    }
+                }
+                if($isRepeat==0){
+                    $newId = $customFormRecordManageData->Create($_POST);
+                }else{
+
+                    Control::ShowMessage(Language::Load('custom_form', 6));
+                    return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::REPEAT_CONTENT_IN_UNIQUE_FIELD;
+                }
+
+            }
+
 
             if ($newId > 0) {
 
-                //新增内容表
-                $customFormContentManageData = new CustomFormContentManageData();
-                $customFormFieldManageData = new CustomFormFieldManageData();
                 //先删除旧数据
                 $customFormContentManageData->Delete($newId);
                     //读取表单 cf_CustomFormId_CustomFormFieldId
@@ -521,14 +549,13 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
             ////////// 处理搜索 ////////////
             if($numberOfSearchKey>0){
-                $searchKeyContent=Control::GetRequest("content_1", "");
-                $searchKeyField=Control::GetRequest("field_1", 0);
-                $searchArray=array(array("type"=>1,"content"=>$searchKeyContent,"field"=>$searchKeyField));
-                for($i=2;$i<=$numberOfSearchKey;$i++){
+                $searchArray=array();
+                for($i=1;$i<=$numberOfSearchKey;$i++){
                     $searchKeyContent=Control::GetRequest("content_".$i, "");
                     $searchKeyField=Control::GetRequest("field_".$i, 0);
+                    $arr = Format::ToSplit($searchKeyField, '_');  //filedId_fieldType
                     if($searchKeyContent!=""){
-                        array_push($searchArray,array("type"=>1,"content"=>$searchKeyContent,"field"=>$searchKeyField));
+                        array_push($searchArray,array("type"=>$arr[1],"content"=>$searchKeyContent,"field"=>$arr[0]));
                     }
                 }
                 $listOfRecordArray = $customFormRecordManageData->GetListPagerOfContentSearch($customFormId,$pageBegin,$pageSize,$allCount,$searchArray);
@@ -552,7 +579,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
                 $listTable = self::GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray);
                 ////搜索字段选择框////
                 foreach($listOfFieldArray as $value){
-                    $fieldSelectionForSearch.='<option value = "'.$value["CustomFormFieldId"].'" >'.$value["CustomFormFieldName"].'</option>';
+                    $fieldSelectionForSearch.='<option value = "'.$value["CustomFormFieldId"].'_'.$value["CustomFormFieldType"].'" >'.$value["CustomFormFieldName"].'</option>';
                 }
             }else{
                 $tempContent = str_ireplace("{PagerButton}", Language::Load("custom_form", 4), $tempContent);

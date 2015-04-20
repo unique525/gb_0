@@ -37,6 +37,23 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
      * 修改记录时 记录字段内容写入数据库失败
      */
     const DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING = -7;
+    /**
+     *  唯一内容的字段已存在此内容
+     */
+    const REPEAT_CONTENT_IN_UNIQUE_FIELD = -8;
+    /**
+     *  随机字段的字段名重复
+     */
+    const REPEAT_FIELD_NAME = -9;
+    /**
+     *  找不到随机字段
+     */
+    const CANNOT_FIND_FIELD_FOR_RANDOM = -10;
+    /**
+     *  字段类型错误（随机数字段只允许int型）
+     */
+    const FALSE_CUSTOM_FORM_FIELD_TYPE = -11;
+
 
     /**
      * 主生成方法(继承接口)
@@ -46,8 +63,8 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
-            case "create":
-                $result = self::GenCreate();
+            case "async_create":
+                $result = self::AsyncCreate();
                 break;
             case "edit":
                 $result = self::GenModify();
@@ -69,21 +86,43 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
      * 前新增一条活动表单记录
      * @return string 新增表单记录字段内容表的html页面
      */
-private function GenCreate(){
+private function AsyncCreate(){
     $userId = 0;//游客
 
-    if (!empty($_POST)) {
+        $customFormId=Control::GetRequest("f_customformid","0");
         $customFormRecordPublicData = new CustomFormRecordPublicData();
-        $newId = $customFormRecordPublicData->Create($_POST);
+        $customFormFieldPublicData = new CustomFormFieldPublicData();
+        $customFormContentPublicData = new CustomFormContentPublicData();
+
+        $newId=0;
+
+        //检查是否有唯一字段重复
+        if($customFormId>0){
+            $arrayUnique=$customFormFieldPublicData->GetUniqueField($customFormId);
+            $isRepeat=0;
+            foreach($arrayUnique as $uniqueField){
+                $uniqueContent=Control::GetRequest("cf_".$customFormId."_".$uniqueField["CustomFormFieldId"],"");
+                $repeat=$customFormContentPublicData->CheckRepeat($customFormId,$uniqueField["CustomFormFieldId"],$uniqueField["CustomFormFieldType"],$uniqueContent);
+
+                if($repeat>0){
+                    $isRepeat=1;
+                }
+            }
+            if($isRepeat==0){
+                $newId = $customFormRecordPublicData->Create($_GET);
+            }else{
+                $result=DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::REPEAT_CONTENT_IN_UNIQUE_FIELD;
+                return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+            }
+
+        }
+
         if ($newId > 0) {
 
-            //新增内容表
-            $customFormContentPublicData = new CustomFormContentPublicData();
-            $customFormFieldPublicData = new CustomFormFieldPublicData();
             //先删除旧数据
             $customFormContentPublicData->Delete($newId);
             //读取表单 cf_CustomFormId_CustomFormFieldId
-            foreach ($_POST as $key => $value) {
+            foreach ($_GET as $key => $value) {
                 if (strpos($key, "cf_") === 0) { //
                     $arr = Format::ToSplit($key, '_');
                     if (count($arr) == 3) {
@@ -99,7 +138,8 @@ private function GenCreate(){
                         $contentId=$customFormContentPublicData->Create($newId, $customFormId, $customFormFieldId, $userId, $value, $customFormFieldType);
 
                         if($contentId<0){
-                            return DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::DATABASE_CREATE_FAILED_WHEN_CONTENT_CREATING."field_id:".$customFormFieldId;
+                            $result=DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::DATABASE_CREATE_FAILED_WHEN_CONTENT_CREATING;//."field_id:".$customFormFieldId;
+                            return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                         }
                     }
                 }
@@ -126,7 +166,9 @@ private function GenCreate(){
                                 $fileType
                             );
                             if($fileContentId<0){
-                                return DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING."field_id:".$fileCustomFormFieldId;
+                                $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::DATABASE_MODIFY_FAILED_WHEN_CONTENT_CREATING;//."field_id:".$fileCustomFormFieldId;
+
+                                return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                             }
                         }
                     }
@@ -134,19 +176,91 @@ private function GenCreate(){
             }
 
 
+            /**随机数字段操作  （抽奖结果，保留查询码等功能）**/
+            $randomFieldName=Control::GetRequest("random_field_name","");
+            if($randomFieldName!=""){
+                $arrayRandomField=$customFormFieldPublicData->GetListByName($customFormId,$randomFieldName);
+                if(count($arrayRandomField)<=0||$arrayRandomField==null){
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::CANNOT_FIND_FIELD_FOR_RANDOM;//随机字段找不到
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+                }
+                if(count($arrayRandomField)>1){
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::REPEAT_FIELD_NAME;//随机字段有重复
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+                }
+                if($arrayRandomField[0]["CustomFormFieldType"]!=0){
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::FALSE_CUSTOM_FORM_FIELD_TYPE;//字段类型错误（随机数字段只允许int型）
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+                }
+                $randomResult=self::GetRandomResult($customFormId,$arrayRandomField[0]["CustomFormFieldId"]);
+                $contentId=$customFormContentPublicData->Create($newId, $customFormId, $arrayRandomField[0]["CustomFormFieldId"], $userId, $randomResult, $arrayRandomField[0]["CustomFormFieldType"]);
 
-            Control::ShowMessage(Language::Load('custom_form', 1));
+                $randomResult+=100;//以防跟下面的”成功=1“混淆
+                //前台获取:
+                //result>100：对应奖项 result-100
+                //result=100：不获奖
+                //result=200：奖项剩余0
+                return Control::GetRequest("jsonpcallback","") . '('.$randomResult.')';
+
+
+            }
+
+            $result=1;//成功
+            return Control::GetRequest("jsonpcallback","") . '('.$result.')';
         }else{
-            Control::ShowMessage(Language::Load('custom_form', 2));
+            $result=-1;//失败
+            return Control::GetRequest("jsonpcallback","") . '('.$result.')';
             //return DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::DATABASE_INPUT_FAILED;
         }
 
 
-    }
 
-    
 }
 
+    /**
+     * 取得随机数，用于抽奖、查询码等功能
+     * 具体随机规则暂写在该函数内
+     * 由于具体规则是一个二维数组，今后可考虑用json，xml或其他文本存储在某个地方做调用
+     */
+    private function GetRandomResult($customFormId,$customFormFieldId){
+        $result=0;
+        $arrayWinType=array();
+        $winType=array();
+
+
+        $winType["chance"]=98;//获奖对应概率  随机值小于该值且大于之前奖的值则获此奖  （一次roll点圆桌理论）
+        $winType["total"]=5;//设奖数，若纪录内已达到该值，则返回0：不获奖
+        $arrayWinType[]=$winType;//数组的index 即为获奖对应码，若得此奖则纪录该值+1  例：一等奖代表$arrayWinType[0]  获奖则纪录0+1=1
+
+        $winType["chance"]=99;
+        $winType["total"]=5;
+        $arrayWinType[]=$winType;
+
+        $missResult=0;//不获奖，若没得奖则纪录该值
+
+        $random=rand(1,100);
+
+        $result=0;
+        for($i=0;$i<count($arrayWinType);$i++){
+            if($random<=$arrayWinType[$i]["chance"]){
+                $result=$i+1;
+                break;
+            }else{
+                continue;
+            }
+        }
+
+        if($result>0){
+            //检查该奖项是否有剩余
+            $customFormContentPublicData = new CustomFormContentPublicData();
+            $count=$customFormContentPublicData->CheckRepeat($customFormId,$customFormFieldId,0,$result);//0='ContentOfInt'
+            if($count>=$arrayWinType[$result]["total"]){
+                $result=100; //奖已发完
+            }
+        }
+
+        return $result;
+    }
 
 
 }

@@ -82,17 +82,20 @@ class TaskManageGen extends BaseManageGen {
                     $documentNewsManageData=new DocumentNewsManageData();
                     for($i=0;$i<count($arrayManageUser);$i++){
                         $arrDocumentNews=$documentNewsManageData->GetListOfManageUser($siteId,$strSiteIds,$arrayManageUser[$i]["ManageUserId"],$beginDate,$endDate);
-                        //$hitCount=0;
+                        $hitCount=0;
                         $publishCount=0;
+                        $documentNewsList="";
                         foreach($arrDocumentNews as $documentNews){
-                        //    $hitCount+=$documentNews["hit"];
+                            $hitCount+=$documentNews["Hit"];
                             if($documentNews["State"]==30){
                                 $publishCount++;
+                                $documentNewsList.="<li>点击：".$documentNews["Hit"]."，标题：".$documentNews["DocumentNewsTitle"]."</li>";
                             }
                         }
                         $arrayManageUser[$i]["DocumentNewsCount"]=count($arrDocumentNews);
                         $arrayManageUser[$i]["PublishCount"]=$publishCount;
-                        //$arrayManageUser[$i]["HitCount"]=$hitCount;
+                        $arrayManageUser[$i]["HitCount"]=$hitCount;
+                        $arrayManageUser[$i]["DocumentNewsList"]=$documentNewsList;
                     }
                     $listNameOfStatistician="statistician_result_list";
                     Template::ReplaceList($tempContent,$arrayManageUser,$listNameOfStatistician);

@@ -2,4 +2,5 @@
 <root>
 <module id="1"><content><![CDATA[提交成功!]]></content></module>
 <module id="2"><content><![CDATA[提交失败!]]></content></module>
+<module id="3"><content><![CDATA[重复了!]]></content></module>
 </root>

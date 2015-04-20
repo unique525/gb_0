@@ -701,7 +701,7 @@ class BaseManageGen extends BaseGen
             $channelId=$documentNewsManageData->GetChannelId($documentNewsId,TRUE);
             $siteId=$channelManageData->GetSiteId($channelId,TRUE);
 
-
+            //替换打错的符号或全角符号
             $replaceArray = array('：' => ',', '。' => ',','.' => ',', '、' => ',', '，' => ',', '、' => ',', '；' => ',', '〃' => '"','　' => ',',";"=>",");
 
 
