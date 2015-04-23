@@ -14,7 +14,13 @@
         var batchAttachWatermark = "0";
 
         var tableType = window.UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
-        var tableId = '{ForumId}';
+        var tableId = parseInt('{ForumId}');
+
+
+        //上传回调函数
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
+
+        }
 
         $(function(){
 
@@ -124,8 +130,24 @@
                 if($("#attachwatermark").attr("checked")==true){
                     attachWatermark = 1;
                 }
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
 
-                AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+                AjaxFileUpload(
+                    fileElementId,
+                    tableType,
+                    tableId,
+                    loadingImageId,
+                    btnUploadToContent,
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId,
+                    uploadFileId
+                );
             });
 
             var btnConfirm = $("#btnConfirm");

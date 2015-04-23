@@ -258,7 +258,7 @@
                         <div class="m_m_l">
                             <div id="bt1" style="display: inline">标题导航</div>
                             <div style="position:relative;">
-                                <div style="z-index:1"><img id="img1" src="http://www.icswb.com{UploadFilePath_First}" /></div>
+                                <div style="z-index:1"><img id="img1" src="{UploadFilePath_First}" /></div>
                                 <icms id="newspaper_page_{NewspaperFirstPageId}" top="100" type="newspaper_article_list">
                                     <item>
                                         <![CDATA[

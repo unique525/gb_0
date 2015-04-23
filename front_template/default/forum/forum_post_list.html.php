@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <style>
-        .replyBox { height: 250px;width: 600px; background:#F9F9F9;border:#E6E6E6 solid;border-width:1 1 1 1;};
+        .replyBox { height: 250px;width: 600px; background:#F9F9F9;border:#E6E6E6 solid 1px;};
     </style>
     <script type="text/javascript">
         <!--
@@ -51,6 +51,15 @@
                 }
             });
 
+            $(".img_avatar").each(function(){
+
+                if($(this).attr("src").length<=0){
+
+                    $(this).attr("src","/front_template/default/skins/gray/no_avatar_small.gif");
+
+                }
+            });
+
         });
 
 
@@ -79,7 +88,7 @@
                            cellspacing="0" width="100%">
                         <tr>
                             <td class="forum_topic_item" width="50px" style="padding-right:10px;">
-                                <img src="/front_template/default/skins/gray/no_avatar_small.gif"/>
+                                <img class="img_avatar" src="{f_UserAvatar}"/>
                             </td>
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
@@ -91,7 +100,7 @@
                                     </tr>
                                     <tr>
                                         <td class="forum_topic_user_name" style="color: #32A5E7;font-weight: bold;">
-                                            {f_UserName}
+                                            {f_NickName}
                                         </td>
                                         <td class="forum_topic_post_time" style="color: #A09999" align="right">
                                             {f_PostTime}
@@ -101,35 +110,64 @@
                             </td>
                         </tr>
                         <tr>
-                            <td height="350px" align="left" valign="top" style="padding-left: 10px;padding-top: 20px">
+                            <td height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
+                                <span>收藏</span> <span>分享</span> <span>举报</span> <span>主题管理</span>
+                            </td>
+                        </tr>
                     </table>
-
                     ]]>
                 </header>
                 <item>
                     <![CDATA[
-
                     <table cellpadding="0" cellspacing="0" width="100%">
-
-
                         <tr>
                             <td class="forum_topic_item" width="50px" style="padding-right:10px;">
-                                <img src="/front_template/default/skins/gray/no_avatar_small.gif"/>
+                                <img class="img_avatar" src="{f_UserAvatar}"/>
                             </td>
                             <td class="forum_topic_item" align="left" style="font-size: 16px;fpm">
                                 {f_ForumPostTitle}
                             </td>
                             <td class="forum_topic_item">
-                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_UserName}</div>
+                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_NickName}</div>
                                 <div class="forum_topic_post_time" style="color:#9999A0;">{f_PostTime}</div>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;vertical-align:top;">
+                                {f_ForumPostContent}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
+                                <span>回复此楼</span> <span>举报</span> <span>帖子管理</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
+
+                                    {child}
+
+                            </td>
+                        </tr>
+
                     </table>
                     ]]>
                 </item>
+                <child>
+                    <![CDATA[
+                    <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td style="width:150px;">{f_PostTime} {f_NickName}:</td>
+                        <td>{f_ForumPostContent}</td>
+                    </tr>
+                    </table>
+                    ]]>
+                </child>
             </icms>
             <form id="mainForm" enctype="multipart/form-data" method="post">
             <table cellpadding="0" cellspacing="0" width="100%">
@@ -138,7 +176,7 @@
                 </tr>
                 <tr>
                     <td width="51%"></td>
-                    <td align="left"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0px;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
+                    <td align="left"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
                 </tr>
             </table>
             </form>

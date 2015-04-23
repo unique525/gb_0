@@ -25,7 +25,9 @@
                     </div>
                 </div>
             </td>
-            <td class="spe_line2"><a target="_blank" href="#"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
+            <td class="spe_line2">
+                <a target="_blank" href="#"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a>
+                <a href="/default.php?secu=manage&mod=forum&m=create&parent_id={f_ForumId}&forum_rank=1&site_id={SiteId}">[新增子版块]</a></td>
             <td class="spe_line2" style="width:36px;">
                 <img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" />
             </td>

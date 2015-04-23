@@ -117,10 +117,8 @@
         <td class="spe_line" height="30" align="right"><label for="f_ForumMode">显示模式：</label></td>
         <td class="spe_line">
             <select id="f_ForumMode" name="f_ForumMode">
-                <option value="0">一排四个版块，附带5条最新主题</option>
-                <option value="5">一排三个版块，附带5条最新主题</option>
-                <option value="10">一排四个版块，不附带最新主题</option>
-                <option value="15">一排三个版块，不附带最新主题</option>
+                <option value="0">一排多个版块，附带多条最新主题</option>
+                <option value="10">一排多个版块，不附带最新主题</option>
                 <option value="20">一排一个版块，传统横排显示</option>
             </select>
             {s_ForumMode}

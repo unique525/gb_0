@@ -16,6 +16,70 @@
         <link type="text/css" href="/front_template/default/skins/gray/width_19.css" rel="stylesheet" />
         <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="/system_js/common.js"></script>
+        <script type="text/javascript">
+
+            $(function(){
+
+                /*二级版块*/
+                $(".div_forum_two_item").each(function(){
+
+                    var childCount = parseInt($(this).attr("tabindex"));
+                    var childNumber = parseInt($(this).attr("idvalue"));
+
+                    //处理情况 一排 2,3,4,5个
+
+                    if(childCount%5 == 0){ //5的倍数
+
+                        $(this).addClass("forum_two_item5");
+
+                        if(childNumber%5 == 0){ //最后一个
+                            $(this).addClass("forum_two_item5_right");
+                        }else{
+                            $(this).addClass("forum_two_item5_left");
+                        }
+
+                    }else if(childCount%4 == 0){ //4的倍数
+
+                        $(this).addClass("forum_two_item4");
+
+                        if(childNumber%4 == 0){ //最后一个
+                            $(this).addClass("forum_two_item4_right");
+                        }else{
+                            $(this).addClass("forum_two_item4_left");
+                        }
+
+                    }else if(childCount%3 == 0){ //3的倍数
+
+                        $(this).addClass("forum_two_item3");
+
+                        if(childNumber%3 == 0){ //最后一个
+                            $(this).addClass("forum_two_item3_right");
+                        }else{
+                            $(this).addClass("forum_two_item3_left");
+                        }
+
+                    }else if(childCount%2 == 0){ //2的倍数
+
+                        $(this).addClass("forum_two_item2");
+
+                        if(childNumber%2 == 1){ //第一个
+                            $(this).addClass("forum_two_item2_left");
+                        }else{
+                            $(this).addClass("forum_two_item2_right");
+                        }
+
+                    }
+
+
+
+
+                });
+
+
+
+            });
+
+        </script>
     </head>
     <body>
         {forum_top_nav}

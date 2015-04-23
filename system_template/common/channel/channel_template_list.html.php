@@ -226,7 +226,6 @@
             <td style="width: 100px; text-align: center;">发布模式</td>
             <td style="width: 80px; text-align: center;">模板类型</td>
             <td style="width: 200px; text-align: center;">模板标签</td>
-            <td style="width: 160px;text-align:center;">创建时间</td>
             <td style="width: 120px;text-align:center;">创建人</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 120px;text-align:center;">启用&nbsp;&nbsp;停用&nbsp;&nbsp;删除</td>
@@ -246,12 +245,12 @@
                                 </label>
                             </td>
                             <td class="spe_line2" style="width:40px;text-align:center;">
-                                <img class="btn_modify" style="cursor:pointer;" title="{f_ChannelTemplateName}" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ChannelTemplateId}" alt="编辑"/>
+                                <img class="btn_modify" style="cursor:pointer;" title="创建时间 {f_CreateDate}" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ChannelTemplateId}" alt="编辑"/>
                             </td>
                             <td class="spe_line2">
                                 [{f_ChannelTemplateId}]{f_ChannelTemplateName}
                             </td>
-                            <td class="spe_line2" style="width:200px;text-align:center;" title="发布文件名">{f_PublishFileName}</td>
+                            <td class="spe_line2" style="width:200px;text-align:center;" title="创建时间 {f_CreateDate}">{f_PublishFileName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;" title="是否带有附件">
                                 <span class="span_attachment_length" idvalue="{f_ChannelTemplateId}">{f_AttachmentLength}</span>
                             </td>
@@ -264,7 +263,6 @@
                             <td class="spe_line2" style="width:200px;text-align:center;" title="模板标签">
                                 <span class="span_channel_template_tag">{f_ChannelTemplateTag}</span>
                             </td>
-                            <td class="spe_line2" style="width:160px;text-align:center;" title="创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:120px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_ChannelTemplateId}" class="span_state" idvalue="{f_ChannelTemplateId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:120px;text-align:center;">

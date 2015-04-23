@@ -413,10 +413,16 @@ class Template
 
                         //处理子表数据
                         $sbChild = "";
+                        $childCount = 0; //匹配的子节点数量
+
                         if(count($arrChildList)>0){
 
                             //根级id赋值
                             $arrList[$i]["FirstId"] = $arrList[$i][$tableIdName];
+
+
+                            $childNumber = 0;
+
                             for($j = 0; $j<count($arrChildList); $j++){
 
 
@@ -425,6 +431,9 @@ class Template
                                 $listOfChild = $childTempContent;
                                 $columnsOfChild = $arrChildList[$j];
                                 if($arrList[$i][$tableIdName] == $arrChildList[$j][$parentIdName]){
+
+                                    $childCount++;
+
                                     $listOfChild = self::ReplaceListItem(
                                         $j,
                                         $type,
@@ -476,7 +485,9 @@ class Template
 
                                     }
 
+                                    $childNumber++;
                                     $listOfChild = str_ireplace("{third}", $sbThird, $listOfChild);
+                                    $listOfChild = str_ireplace("{c_child_no}", $childNumber, $listOfChild);
 
 
                                     $sbChild = $sbChild . $listOfChild;
@@ -489,6 +500,8 @@ class Template
 
 
                         $list = str_ireplace("{child}", $sbChild, $list);
+                        $list = str_ireplace("{child_count}", $childCount, $list);
+
                         $list = str_ireplace("{c_all_count}", count($arrList), $list);
                         $sb = $sb . $list;
 

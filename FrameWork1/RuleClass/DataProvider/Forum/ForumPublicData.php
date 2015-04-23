@@ -52,28 +52,7 @@ class ForumPublicData extends BasePublicData {
         $result = null;
         if($siteId>0 && $forumRank>=0){
             $sql = "SELECT
-                ForumId,
-                SiteId,
-                ForumName,
-                ForumType,
-                ForumMode,
-                ForumAuditType,
-                ForumInfo,
-                ForumAdContent,
-                ParentId,
-                LastForumTopicId,
-                LastForumTopicTitle,
-                LastUserName,
-                LastUserId,
-                LastPostTime,
-                LastPostInfo,
-                NewCount,
-                TopicCount,
-                PostCount,
-                State,
-                ForumNameFontColor,
-                ForumNameFontBold,
-                ForumNameFontSize
+                *
             FROM " . self::TableName_Forum . " WHERE State<".ForumData::STATE_REMOVED." AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
 
             $dataProperty = new DataProperty();
@@ -93,10 +72,10 @@ class ForumPublicData extends BasePublicData {
      * @return array
      */
     public function GetListByParentId($siteId, $parentId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE parentid=:parentid AND SiteID=:siteid ORDER BY sort DESC";
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND SiteId=:SiteId ORDER BY Sort DESC";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("parentid", $parentId);
-        $dataProperty->AddField("siteid", $siteId);
+        $dataProperty->AddField("ParentId", $parentId);
+        $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }

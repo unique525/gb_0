@@ -323,6 +323,37 @@ class NewspaperPagePublicData extends BasePublicData
         return $result;
     }
 
+
+    /**
+     * 取得版面序号
+     * @param int $newspaperPageId 电子报版面id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 版面序号
+     */
+    public function GetUploadFilePath($newspaperPageId, $withCache)
+    {
+        $result = "";
+        if ($newspaperPageId > 0) {
+
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_upload_file_path.cache_' . $newspaperPageId . '';
+            $sql = "SELECT uf.UploadFilePath
+
+                    FROM " . self::TableName_NewspaperPage . " np," . self::TableName_UploadFile . " uf
+
+                    WHERE np.NewspaperPageId=:NewspaperPageId
+
+                        AND np.PicUploadFileId=uf.UploadFileId
+
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
     /**
      * 取得所属电子报id
      * @param int $newspaperPageId 电子报版面id

@@ -1077,6 +1077,16 @@ class ManageUserAuthorityManageData extends BaseManageData
             $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=:ChannelId AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId);";
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
+
+        if ($result <= 0) {
+            //检查用户站点权限
+            $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=0 AND ManageUserId=:ManageUserId AND ManageUserGroupId=0;";
+            $dataProperty2 = new DataProperty();
+            $dataProperty2->AddField("SiteId", $siteId);
+            $dataProperty2->AddField("ManageUserId", $manageUserId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty2);
+        }
+
         if ($result <= 0) {
             //检查用户组站点权限
             $sql = "SELECT `" . $fieldName . "` FROM " . self::TableName_ManageUserAuthority . " WHERE SiteId=:SiteId AND ChannelId=0 AND ManageUserId=0 AND ManageUserGroupId IN (SELECT ManageUserGroupId FROM " . self::TableName_ManageUser . " WHERE ManageUserId=:ManageUserId);";

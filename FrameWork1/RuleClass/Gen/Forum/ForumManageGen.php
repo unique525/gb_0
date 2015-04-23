@@ -145,7 +145,8 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -236,6 +237,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             }
 
             $tempContent = str_ireplace("{ForumList}", $resultTemplate, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
             parent::ReplaceEnd($tempContent);

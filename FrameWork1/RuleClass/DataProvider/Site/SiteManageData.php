@@ -146,12 +146,16 @@ class SiteManageData extends BaseManageData {
                   SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
                     WHERE ManageUserGroupId IN
                         (SELECT ManageUserGroupId FROM ".self::TableName_ManageUser." WHERE ManageUserId=:ManageUserId2)
-                 )
+                  UNION
+                  SELECT SiteId FROM ".self::TableName_ManageUserAuthority."
+                    WHERE ManageUserId = :ManageUserId3 AND ManageUserGroupId=0
+                )
                  ORDER BY Sort DESC,convert(SiteName USING gbk);";
 
 
             $dataProperty->AddField("ManageUserId1", $manageUserId);
             $dataProperty->AddField("ManageUserId2", $manageUserId);
+            $dataProperty->AddField("ManageUserId3", $manageUserId);
 
         }
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

@@ -114,6 +114,7 @@ class NewspaperPublicGen extends BasePublicGen {
                 Template::ReplaceOne($templateContent,$arrOneNewspaper);
 
                 $templateContent = str_ireplace("{CurrentNewspaperId}", $currentNewspaperId, $templateContent);
+                $templateContent = str_ireplace("{CurrentPublishDate}", $arrOneNewspaper["PublishDate"], $templateContent);
 
 
                 if($newspaperPageId<=0){
@@ -135,25 +136,103 @@ class NewspaperPublicGen extends BasePublicGen {
 
                     Template::ReplaceOne($templateContent,$arrOneNewspaperPage);
 
-                    $nextNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
-                        $currentNewspaperId,
+
+                    //pc 当前第一个版面
+                    $templateContent = str_ireplace("{NewspaperFirstPageId}",
+                        $currentNewspaperPageId,
+                        $templateContent
+                    );
+
+                    $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
                         $currentNewspaperPageId,
                         true
                     );
 
-                    $templateContent = str_ireplace("{NextNewspaperPageId}",
-                        $nextNewspaperPageId,
+                    $templateContent = str_ireplace("{UploadFilePath_First}",
+                        $firstUploadFilePath,
                         $templateContent
                     );
 
-                    $previousNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
+
+
+                    //pc 当前第二个版面
+                    $secondNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
+                        $currentNewspaperId,
+                        $currentNewspaperPageId,
+                        true
+                    );
+                    $templateContent = str_ireplace("{NewspaperSecondPageId}",
+                        $secondNewspaperPageId,
+                        $templateContent
+                    );
+                    $secondUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
+                        $secondNewspaperPageId,
+                        true
+                    );
+
+                    //pc 当前第三个版面id
+                    $thirdNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
+                        $currentNewspaperId,
+                        $secondNewspaperPageId,
+                        true
+                    );
+                    $templateContent = str_ireplace("{ThirdNewspaperPageId}",
+                        $thirdNewspaperPageId,
+                        $templateContent
+                    );
+
+                    $templateContent = str_ireplace("{UploadFilePath_Second}",
+                        $secondUploadFilePath,
+                        $templateContent
+                    );
+
+                    $previousNewspaperPageId1 = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
                             $currentNewspaperId,
                             $currentNewspaperPageId,
                             true
                         );
+                    $previousNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
+                        $currentNewspaperId,
+                        $previousNewspaperPageId1,
+                        true
+                    );
+
+                    if($previousNewspaperPageId<=0 && $previousNewspaperPageId1>0){
+                        $previousNewspaperPageId = $previousNewspaperPageId1;
+                    }
 
                     $templateContent = str_ireplace("{PreviousNewspaperPageId}",
                         $previousNewspaperPageId,
+                        $templateContent
+                    );
+
+                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
+                    //生成第一个版面文章位置xy坐标数据
+                    $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($currentNewspaperPageId,100,0);
+                    $arrFirstPageArticlePointList = array();
+                    foreach($arrFirstPageArticleList as $value){
+                        $newsPaperArticleId = $value["NewspaperArticleId"];
+                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                        $picMapping = $value["PicMapping"];
+                        $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
+                    }
+                    $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                        $arr=Format::FixJsonEncode($arrFirstPageArticlePointList),
+                        $templateContent
+                    );
+
+                    //生成第二个版面文章位置xy坐标数据
+                    $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId,100,0);
+                    $arrSecondPageArticlePointList = array();
+                    foreach($arrSecondPageArticleList as $value){
+                        $newsPaperArticleId = $value["NewspaperArticleId"];
+                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                        $picMapping = $value["PicMapping"];
+                        $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
+                    }
+                    $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                        $arr=Format::FixJsonEncode($arrSecondPageArticlePointList),
                         $templateContent
                     );
 
@@ -166,6 +245,8 @@ class NewspaperPublicGen extends BasePublicGen {
                     }else{
                         Template::RemoveCustomTag($tempContent, $listName);
                     }
+
+                    $templateContent = parent::ReplaceTemplate($templateContent);
                 }
             }
         }
@@ -320,9 +401,11 @@ class NewspaperPublicGen extends BasePublicGen {
                     $newspaperFirstPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
                 }
 
-                $templateContent = str_ireplace("{NewspaperFirstPageId}", $newspaperFirstPageId, $templateContent);
+                ////$templateContent = str_ireplace("{NewspaperFirstPageId}", $newspaperFirstPageId, $templateContent);
 
                 if($newspaperFirstPageId>0){
+
+                    /**
                     $newspaperPageNo=$newspaperPagePublicData->GetNewspaperPageNo($newspaperFirstPageId, true);
                     //如果当前页数不是当前版面的第一页，则取前一页面数作为当前版面第一页
                     if(!self::IsFirstPageOnPaper($newspaperPageNo))
@@ -353,7 +436,7 @@ class NewspaperPublicGen extends BasePublicGen {
                         $newspaperSecondPageId,
                         $templateContent
                     );
-
+                    */
                     //上一页链接
                     $newspaperPreviousSecondPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
                         $currentNewspaperId,

@@ -111,11 +111,13 @@ function subForm() {
                                 divTips.html("登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码！");
                                 divTips.insertAfter("#btn_box");
                                 break;
+                            case -8:
+                                divTips.css("display", "block");
+                                divTips.html("登录失败，因为此帐号不允许外网使用，请联系管理人员！");
+                                divTips.insertAfter("#btn_box");
+                                break;
                             case 1:
                                 window.location.href = "default.php?secu=manage";
-                                //divTips.css("display", "block");
-                                //divTips.html("登录失败，口令牌认证失败，请联系管理人员或重新输入口令牌密码！");
-                                //divTips.insertAfter("#btn_box");
                                 break;
                         }
                     }

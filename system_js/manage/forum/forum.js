@@ -15,9 +15,10 @@ $(function() {
     btnCreate.css("cursor", "pointer");
     btnCreate.click(function(event) {
         event.preventDefault();
-        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&forum_rank=0&site_id=' + parent.G_NowSiteId;
-        parent.G_TabTitle = parent.G_NowSiteName + '-新增论坛版块分区';
-        parent.addTab();
+        //parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=create&forum_rank=0&site_id=' + parent.G_NowSiteId;
+        //parent.G_TabTitle = parent.G_NowSiteName + '-新增论坛版块分区';
+        //parent.addTab();
+        window.location.href = '/default.php?secu=manage&mod=forum&m=create&forum_rank=0&site_id=' + parent.G_NowSiteId;
     });
 
 
@@ -101,6 +102,7 @@ $(function() {
  * @return {string}
  */
 function FormatForumState(state) {
+    state = parseInt(state);
     switch (state) {
         case 0:
             return "正常";
