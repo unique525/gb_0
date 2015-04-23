@@ -223,7 +223,7 @@
                 <child>
                     <![CDATA[
                     <div class="am-panel-bd">
-                        <a href="/default.php?mod=newspaper_article&a=detail&newspaper_article_id={f_NewspaperArticleId}">
+                        <a href="/default.php?mod=newspaper_article&a=detail_for_pc&newspaper_article_id={f_NewspaperArticleId}">
                             {f_NewspaperArticleTitle}
                         </a>
                     </div>
