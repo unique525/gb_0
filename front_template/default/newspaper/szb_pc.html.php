@@ -262,7 +262,7 @@
                                 <icms id="newspaper_page_{NewspaperFirstPageId}" top="100" type="newspaper_article_list">
                                     <item>
                                         <![CDATA[
-                                        <div id="div_{f_NewsPaperArticleId}" idvalue="{f_NewspaperArticleTitle}" class="mask"><a href="www.163.com">333333333</a></div>
+                                        <div id="div_{f_NewsPaperArticleId}" idvalue="{f_NewspaperArticleTitle}" class="mask"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail_for_pc&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a></div>
                                         ]]>
                                     </item>
                                 </icms>
@@ -295,7 +295,7 @@
                                 <icms id="newspaper_page_{NewspaperSecondPageId}" top="100" type="newspaper_article_list">
                                     <item>
                                         <![CDATA[
-                                        <div id="div_{f_NewsPaperArticleId}" idvalue="{f_NewspaperArticleTitle}" class="mask"><a href="www.163.com">333333333</a></div>
+                                        <div id="div_{f_NewsPaperArticleId}" idvalue="{f_NewspaperArticleTitle}" class="mask"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail_for_pc&newspaper_article_id={f_NewspaperArticleId}">{f_NewspaperArticleTitle}</a></div>
                                         ]]>
                                     </item>
                                 </icms>
