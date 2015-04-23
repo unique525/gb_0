@@ -90,6 +90,7 @@ class CustomFormRecordManageData extends BaseManageData {
     public function GetListPagerOfContentSearch($customFormId, $pageBegin, $pageSize, &$allCount, $searchArray) {
         $result=-1;
         if($customFormId>0){
+            $pageSize=1000;//由于太耗资源。。 不分页了  调1000条
             $dataProperty = new DataProperty();
             $dataProperty->AddField("CustomFormId", $customFormId);
             $sqlSearch="";
@@ -155,16 +156,15 @@ class CustomFormRecordManageData extends BaseManageData {
                 }
 
             }
-            $sql="SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
-                  (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
-                    .$sqlSearch. ") ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+            $sql="SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId " .$sqlSearch. " ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-
+/*  由于太耗资源。。 不分页了  调1000条
             $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
                   (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
                     .$sqlSearch. ");";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+            */
         }
         return $result;
     }

@@ -177,15 +177,15 @@ private function AsyncCreate(){
 
 
             /**随机数字段操作  （抽奖结果，保留查询码等功能）**/
-            $randomFieldName=Control::GetRequest("random_field_name","");
+            $randomFieldName=Control::GetRequest("random_field_name","");  //获取对应custom form field的name
             if($randomFieldName!=""){
                 $arrayRandomField=$customFormFieldPublicData->GetListByName($customFormId,$randomFieldName);
                 if(count($arrayRandomField)<=0||$arrayRandomField==null){
-                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::CANNOT_FIND_FIELD_FOR_RANDOM;//随机字段找不到
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::CANNOT_FIND_FIELD_FOR_RANDOM;//字段找不到
                     return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
                 if(count($arrayRandomField)>1){
-                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::REPEAT_FIELD_NAME;//随机字段有重复
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::REPEAT_FIELD_NAME;//字段有重复
                     return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
                 if($arrayRandomField[0]["CustomFormFieldType"]!=0){
@@ -193,6 +193,7 @@ private function AsyncCreate(){
                     return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
                 $randomResult=self::GetRandomResult($customFormId,$arrayRandomField[0]["CustomFormFieldId"]);
+                $customFormContentPublicData->DeleteOneContent($newId,$arrayRandomField[0]["CustomFormFieldId"]);//删除旧数据（如果有）
                 $contentId=$customFormContentPublicData->Create($newId, $customFormId, $arrayRandomField[0]["CustomFormFieldId"], $userId, $randomResult, $arrayRandomField[0]["CustomFormFieldType"]);
 
                 $randomResult+=100;//以防跟下面的”成功=1“混淆
@@ -228,17 +229,17 @@ private function AsyncCreate(){
         $winType=array();
 
 
-        $winType["chance"]=98;//获奖对应概率  随机值小于该值且大于之前奖的值则获此奖  （一次roll点圆桌理论）
-        $winType["total"]=5;//设奖数，若纪录内已达到该值，则返回0：不获奖
+        $winType["chance"]=1;//获奖对应概率  随机值小于该值且大于之前奖的值则获此奖  （一次roll点圆桌理论）
+        $winType["total"]=50;//设奖数，若纪录内已达到该值，则返回0：不获奖
         $arrayWinType[]=$winType;//数组的index 即为获奖对应码，若得此奖则纪录该值+1  例：一等奖代表$arrayWinType[0]  获奖则纪录0+1=1
 
-        $winType["chance"]=99;
-        $winType["total"]=5;
+        $winType["chance"]=2;
+        $winType["total"]=50;
         $arrayWinType[]=$winType;
 
         $missResult=0;//不获奖，若没得奖则纪录该值
 
-        $random=rand(1,100);
+        $random=rand(1,1000);
 
         $result=0;
         for($i=0;$i<count($arrayWinType);$i++){

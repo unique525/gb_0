@@ -2,11 +2,11 @@
 <icms id="children_channel_list" type="list">
     <item>
         <![CDATA[
-        <div id="channel_{f_ChannelId}" class="grid_item parent_{f_ParentId}" idvalue="{f_Rank}">
+        <div id="channel_{f_ChannelId}" class="grid_item parent_{f_ParentId}" idvalue="{f_Rank}" style="overflow: hidden">
             <div class="child_title" align="right" width="auto" height="40">
-                <span id="channel_manage_{f_ChannelId}" onclick="SelectRow({f_ChannelId})" idvalue="channel_manage_{f_ChannelId}" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; border: solid 2px #cccccc; background: #efefef;">全选</span>
+                <span id="channel_manage_{f_ChannelId}" onclick="SelectRow({f_ChannelId})" idvalue="channel_manage_{f_ChannelId}" style="height:20px; cursor: pointer;margin-left: 10px;padding:2px; background: #efefef;">全选</span>
             </div>
-            <div class="checkbox_area checkbox_area_{f_ChannelId}">
+            <div class="checkbox_area checkbox_area_{f_ChannelId}" style="border-bottom: 1px dashed #D5D5D5;">
                 <div>
                     <ul class="channel_children" >
                         <li class="channel_name child_of_{f_ParentId}" idvalue="{f_ChildrenChannelId}" title="{f_ChannelName}" id="{f_ChannelId}">{f_ChannelName}</li>

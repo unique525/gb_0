@@ -165,7 +165,8 @@
     <style>
         div.one_child_line{}
         .child_title{float:left;line-height: 39px;height:40px}
-        div.checkbox_area{height:39px;line-height: 39px;border-bottom: 1px dashed #D5D5D5;}
+        .children_area{overflow: hidden;}
+        div.checkbox_area{height:39px;line-height: 39px;}
         .channel_children li{height:40px;line-height: 40px;text-align: left}
         #channel_list{margin-top:20px;width:99%}
         .check_box{float:left;margin-left:20px}

@@ -79,6 +79,25 @@ class CustomFormContentPublicData extends BaseManageData {
     }
 
     /**
+     * 按CustomFormRecordId，CustomFormFieId删除内容项
+     * @param int $customFormRecordId 表单记录的id
+     * @param int $customFormFieId 表单字段的id
+     * @return int 执行结果
+     */
+    public function DeleteOneContent($customFormRecordId,$customFormFieId) {
+        $result="-1";
+        if($customFormRecordId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
+            $dataProperty->AddField("CustomFormFieId", $customFormFieId);
+            $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId AND  CustomFormFieId=:CustomFormFieId ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
      * 按$customFormRecordId获取表单记录下所有记录内容的列表
      * @param int $customFormRecordId 表单记录id
      * @return array 表单记录数据
@@ -94,7 +113,7 @@ class CustomFormContentPublicData extends BaseManageData {
         return $result;
     }
 
-    /**
+ /**
  * 创建附件
  * @param int $customFormRecordId 被操作的表单记录的id
  * @param int $customFormId 被操作的表单的id
