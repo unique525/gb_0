@@ -239,7 +239,7 @@ private function AsyncCreate(){
 
         $missResult=0;//不获奖，若没得奖则纪录该值
 
-        $random=rand(1,1000);
+        $random=rand(1,100);
 
         $result=0;
         for($i=0;$i<count($arrayWinType);$i++){
