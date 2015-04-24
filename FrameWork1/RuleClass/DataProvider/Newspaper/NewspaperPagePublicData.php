@@ -325,10 +325,10 @@ class NewspaperPagePublicData extends BasePublicData
 
 
     /**
-     * 取得版面序号
+     * 取得版面图片文件
      * @param int $newspaperPageId 电子报版面id
      * @param bool $withCache 是否从缓冲中取
-     * @return string 版面序号
+     * @return string 版面图片文件
      */
     public function GetUploadFilePath($newspaperPageId, $withCache)
     {
@@ -345,6 +345,36 @@ class NewspaperPagePublicData extends BasePublicData
                     WHERE np.NewspaperPageId=:NewspaperPageId
 
                         AND np.PicUploadFileId=uf.UploadFileId
+
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得版面PDF文件
+     * @param int $newspaperPageId 电子报版面id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 版面PDF文件
+     */
+    public function GetPdfUploadFilePath($newspaperPageId, $withCache)
+    {
+        $result = "";
+        if ($newspaperPageId > 0) {
+
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_pdf_upload_file_path.cache_' . $newspaperPageId . '';
+            $sql = "SELECT uf.UploadFilePath
+
+                    FROM " . self::TableName_NewspaperPage . " np," . self::TableName_UploadFile . " uf
+
+                    WHERE np.NewspaperPageId=:NewspaperPageId
+
+                        AND np.PdfUploadFileId=uf.UploadFileId
 
                     ;";
             $dataProperty = new DataProperty();

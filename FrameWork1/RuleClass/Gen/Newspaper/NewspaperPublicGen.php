@@ -143,6 +143,8 @@ class NewspaperPublicGen extends BasePublicGen {
                         $templateContent
                     );
 
+
+
                     $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
                         $currentNewspaperPageId,
                         true
@@ -153,6 +155,14 @@ class NewspaperPublicGen extends BasePublicGen {
                         $templateContent
                     );
 
+                    $firstPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
+                        $currentNewspaperPageId,
+                        true
+                    );
+                    $templateContent = str_ireplace("{FirstPdfUploadFilePath}",
+                        $firstPdfUploadFilePath,
+                        $templateContent
+                    );
 
 
                     //pc 当前第二个版面
@@ -161,6 +171,16 @@ class NewspaperPublicGen extends BasePublicGen {
                         $currentNewspaperPageId,
                         true
                     );
+
+                    $secondNewspaperPageNo = $newspaperPagePublicData->GetNewspaperPageNo(
+                        $secondNewspaperPageId,
+                        true
+                    );
+                    $templateContent = str_ireplace("{SecondNewspaperPageNo}",
+                        $secondNewspaperPageNo,
+                        $templateContent
+                    );
+
                     $templateContent = str_ireplace("{NewspaperSecondPageId}",
                         $secondNewspaperPageId,
                         $templateContent
@@ -172,6 +192,15 @@ class NewspaperPublicGen extends BasePublicGen {
                     $secondUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
                         $secondNewspaperPageId,
                         true
+                    );
+
+                    $secondPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
+                        $secondNewspaperPageId,
+                        true
+                    );
+                    $templateContent = str_ireplace("{SecondPdfUploadFilePath}",
+                        $secondPdfUploadFilePath,
+                        $templateContent
                     );
 
                     //pc 当前第三个版面id
