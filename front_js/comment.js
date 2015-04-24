@@ -214,7 +214,10 @@ function CommentShow(p, table_id, table_type, default_avatar, is_callback) {
                 $("#comment_pagerbutton").html(pagerButton);
                 $("#count").html(comment_count);
             } else {
-                window.CommentShowCallBack(data);
+                if(data["result"] != undefined && data["result"] != ""){
+                    window.CommentShowCallBack(data);
+                }
+
             }
         }
     });
