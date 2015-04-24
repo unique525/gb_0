@@ -205,6 +205,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
 
             $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+            $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
 
             $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
             $tagId = "newspaper_page";
