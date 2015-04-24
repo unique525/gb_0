@@ -141,7 +141,9 @@ class Template
         $thirdParentIdName = "ParentId"
     )
     {
-        if (stripos($templateContent, $tagName) > 0) {
+        if (stripos($templateContent, $tagName) > 0
+            && stripos($templateContent, $tagId) > 0
+        ) {
             if ($arrList != null && count($arrList) > 0) {
                 $beginTagString = '<' . $tagName . ' id="' . $tagId . '"';
                 $endTagString = '</' . $tagName . '>';

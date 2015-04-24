@@ -207,17 +207,18 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
             $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
-            $listName = "newspaper_page";
+            $tagId = "newspaper_page";
 
             if(count($arrNewspaperPages)>0){
-                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
+                Template::ReplaceList($templateContent, $arrNewspaperPages, $tagId);
             }else{
-                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $tagId);
             }
 
             //$templateContent = parent::ReplaceTemplate($templateContent);
             //左边导航菜单选择文章列表
             //默认只显示已发状态的新闻
+
             if(count($arrNewspaperPages)>0){
                 $state = 0;
                 $newspaperPageIds="";
@@ -228,18 +229,32 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 if(strpos($newspaperPageIds,',') == 0){
                     $newspaperPageIds = substr($newspaperPageIds,1);
                 }
-                $newspaperArticlePublicData= new NewspaperArticlePublicData();
-                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
 
-                $listName = "newspaper_page_and_article";
-                $tagName = Template::DEFAULT_TAG_NAME;
-                $tableIdName = "NewspaperPageId";
-                $parentIdName = "NewspaperPageId";
-                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName,$arrNewspaperArticles,$tableIdName,$parentIdName);
+                $tagId = "newspaper_page_and_article";
+                if(stripos($templateContent, $tagId) > 0){
+                    $newspaperArticlePublicData= new NewspaperArticlePublicData();
+                    $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+
+
+                    $tagName = Template::DEFAULT_TAG_NAME;
+                    $tableIdName = "NewspaperPageId";
+                    $parentIdName = "NewspaperPageId";
+                    Template::ReplaceList(
+                        $templateContent,
+                        $arrNewspaperPages,
+                        $tagId,
+                        $tagName,
+                        $arrNewspaperArticles,
+                        $tableIdName,
+                        $parentIdName
+                    );
+                }
+
+
             }
             else{
-                $listName = "newspaper_page_and_article";
-                Template::RemoveCustomTag($tempContent, $listName);
+                $tagId = "newspaper_page_and_article";
+                Template::RemoveCustomTag($tempContent, $tagId);
             }
 
             parent::ReplaceEnd($templateContent);
