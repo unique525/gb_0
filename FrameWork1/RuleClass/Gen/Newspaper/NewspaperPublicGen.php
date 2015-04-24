@@ -165,6 +165,10 @@ class NewspaperPublicGen extends BasePublicGen {
                         $secondNewspaperPageId,
                         $templateContent
                     );
+                    $templateContent = str_ireplace("{NextNewspaperPageId}",
+                        $secondNewspaperPageId,
+                        $templateContent
+                    );
                     $secondUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
                         $secondNewspaperPageId,
                         true

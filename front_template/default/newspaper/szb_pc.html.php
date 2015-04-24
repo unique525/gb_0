@@ -183,7 +183,7 @@
     </ul>
 </div>
 <!--头部-->
-<div class="head_box">
+<div id="div_head_box" class="head_box">
     <div id="div_bm" class="menu1" style="display: none;">
         <ul>
             <icms id="newspaper_page" top="100">
