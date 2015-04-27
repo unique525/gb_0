@@ -1873,12 +1873,22 @@ class BaseGen
 
         $agent = self::GetUserAgent();
 
-        if($agent == "iPhone" || $agent == "iPad" || $agent == "android"){
+        if($agent == "iPhone" || $agent == "android"){
             return true;
         }else{
             return false;
         }
 
+    }
+
+    protected function IsPad(){
+        $agent = self::GetUserAgent();
+
+        if($agent == "iPad"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

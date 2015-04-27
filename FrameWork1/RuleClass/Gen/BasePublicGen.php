@@ -76,7 +76,18 @@ class BasePublicGen extends BaseGen {
                     $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
                 }
-            }else{
+            }
+            elseif(self::IsPad()){
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForPadForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+
+                //如果不存在pad模板，则加载默认电脑模板
+                if(strlen($result)<=0){
+                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                        $siteId, $channelTemplateType, $channelTemplateTag, false);
+                }
+            }
+            else{
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
             }
