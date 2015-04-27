@@ -241,10 +241,10 @@ private function AsyncCreate(){
 
         $random=rand(1,100);
 
-        $result=0;
-        for($i=0;$i<count($arrayWinType);$i++){
+        $result=0;  //0 表示没奖  X表示第X个奖
+        for($i=0;$i<count($arrayWinType);$i++){   //循环奖项  看中了哪个奖
             if($random<=$arrayWinType[$i]["chance"]){
-                $result=$i+1;
+                $result=$i+1;  //因为i从0开始
                 break;
             }else{
                 continue;
@@ -255,7 +255,7 @@ private function AsyncCreate(){
             //检查该奖项是否有剩余
             $customFormContentPublicData = new CustomFormContentPublicData();
             $count=$customFormContentPublicData->CheckRepeat($customFormId,$customFormFieldId,0,$result);//0='ContentOfInt'
-            if($count>=$arrayWinType[$result]["total"]){
+            if($count>=$arrayWinType[$result-1]["total"]){//$result-1取数组的正确位置
                 $result=100; //奖已发完
             }
         }
