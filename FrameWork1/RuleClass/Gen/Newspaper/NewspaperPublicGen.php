@@ -1,17 +1,20 @@
 <?php
+
 /**
  * 公开访问 电子报 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Newspaper
  * @author zhangchi
  */
-class NewspaperPublicGen extends BasePublicGen {
+class NewspaperPublicGen extends BasePublicGen
+{
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenPublic() {
+    public function GenPublic()
+    {
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -39,22 +42,23 @@ class NewspaperPublicGen extends BasePublicGen {
     }
 
 
-    private function Import(){
+    private function Import()
+    {
         $newspaperId = -10;
-        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", ""));
+        $authorityCode = str_ireplace("\r\n", "", Control::PostRequest("AuthorityCode", ""));
         $removeXSS = false;
-        $siteId = intval(str_ireplace("\r\n","",Control::PostRequest("SiteId",0,$removeXSS)));
-        $channelId = intval(str_ireplace("\r\n","",Control::PostRequest("ChannelId",0,$removeXSS)));
-        $newspaperTitle = str_ireplace("\r\n","",Control::PostRequest("NewspaperTitle","",$removeXSS));
-        $publishDate = str_ireplace("\r\n","",Control::PostRequest("PublishDate","",$removeXSS));
+        $siteId = intval(str_ireplace("\r\n", "", Control::PostRequest("SiteId", 0, $removeXSS)));
+        $channelId = intval(str_ireplace("\r\n", "", Control::PostRequest("ChannelId", 0, $removeXSS)));
+        $newspaperTitle = str_ireplace("\r\n", "", Control::PostRequest("NewspaperTitle", "", $removeXSS));
+        $publishDate = str_ireplace("\r\n", "", Control::PostRequest("PublishDate", "", $removeXSS));
 
-        if(
+        if (
             $authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
-            $siteId>0 &&
-            $channelId>0 &&
-            strlen($newspaperTitle)>0 &&
-            strlen($publishDate)>0
-        ){
+            $siteId > 0 &&
+            $channelId > 0 &&
+            strlen($newspaperTitle) > 0 &&
+            strlen($publishDate) > 0
+        ) {
             $newspaperPublicData = new NewspaperPublicData();
 
             $newspaperId = $newspaperPublicData->CreateForImport($siteId, $channelId, $newspaperTitle, $publishDate);
@@ -64,22 +68,22 @@ class NewspaperPublicGen extends BasePublicGen {
     }
 
 
-    private function GenOne(){
+    private function GenOne()
+    {
         $channelId = Control::GetRequest("channel_id", 0);
         $newspaperPagePublicData = new NewspaperPagePublicData();
         $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
 
         $newspaperPublicData = new NewspaperPublicData();
 
-        if($newspaperPageId>0 && $channelId<=0){
+        if ($newspaperPageId > 0 && $channelId <= 0) {
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
             $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
         }
 
 
-
         $templateContent = "";
-        if($channelId>0){
+        if ($channelId > 0) {
             $publishDate = Control::GetRequest("publish_date", "");
             //$templateFileUrl = "newspaper/newspaper_page_one.html";
             //$templateName = "default";
@@ -96,30 +100,30 @@ class NewspaperPublicGen extends BasePublicGen {
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
 
-            if(strlen($publishDate)>0){
+            if (strlen($publishDate) > 0) {
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
                 $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
-            }else{
+            } else {
                 $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
             }
 
             $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
 
-            if($currentNewspaperId>0){
+            if ($currentNewspaperId > 0) {
 
 
                 $arrOneNewspaper = $newspaperPublicData->GetOne($currentNewspaperId);
 
-                Template::ReplaceOne($templateContent,$arrOneNewspaper);
+                Template::ReplaceOne($templateContent, $arrOneNewspaper);
 
                 $templateContent = str_ireplace("{CurrentNewspaperId}", $currentNewspaperId, $templateContent);
                 $templateContent = str_ireplace("{CurrentPublishDate}", $arrOneNewspaper["PublishDate"], $templateContent);
 
 
-                if($newspaperPageId<=0){
+                if ($newspaperPageId <= 0) {
                     $currentNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
-                }else{
+                } else {
                     $currentNewspaperPageId = $newspaperPageId;
                 }
 
@@ -127,14 +131,12 @@ class NewspaperPublicGen extends BasePublicGen {
                 $templateContent = str_ireplace("{CurrentNewspaperPageId}", $currentNewspaperPageId, $templateContent);
 
 
-
-
-                if($currentNewspaperPageId>0){
+                if ($currentNewspaperPageId > 0) {
 
 
                     $arrOneNewspaperPage = $newspaperPagePublicData->GetOne($currentNewspaperPageId);
 
-                    Template::ReplaceOne($templateContent,$arrOneNewspaperPage);
+                    Template::ReplaceOne($templateContent, $arrOneNewspaperPage);
 
 
                     //pc 当前第一个版面
@@ -142,7 +144,6 @@ class NewspaperPublicGen extends BasePublicGen {
                         $currentNewspaperPageId,
                         $templateContent
                     );
-
 
 
                     $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
@@ -220,17 +221,17 @@ class NewspaperPublicGen extends BasePublicGen {
                     );
 
                     $previousNewspaperPageId1 = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
-                            $currentNewspaperId,
-                            $currentNewspaperPageId,
-                            true
-                        );
+                        $currentNewspaperId,
+                        $currentNewspaperPageId,
+                        true
+                    );
                     $previousNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
                         $currentNewspaperId,
                         $previousNewspaperPageId1,
                         true
                     );
 
-                    if($previousNewspaperPageId<=0 && $previousNewspaperPageId1>0){
+                    if ($previousNewspaperPageId <= 0 && $previousNewspaperPageId1 > 0) {
                         $previousNewspaperPageId = $previousNewspaperPageId1;
                     }
 
@@ -242,50 +243,64 @@ class NewspaperPublicGen extends BasePublicGen {
                     $newspaperArticlePublicData = new NewspaperArticlePublicData();
 
                     //生成第一个版面文章位置xy坐标数据
-                    $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($currentNewspaperPageId,100,0);
+                    $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($currentNewspaperPageId, 100, 0);
                     $arrFirstPageArticlePointList = array();
-                    foreach($arrFirstPageArticleList as $value){
-                        $newsPaperArticleId = $value["NewspaperArticleId"];
-                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-                        $picMapping = $value["PicMapping"];
-                        $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
-                    }
-                    $templateContent = str_ireplace("{FirstPageArticlePoint}",
-                        $arr=Format::FixJsonEncode($arrFirstPageArticlePointList),
-                        $templateContent
-                    );
-
-                    //生成第二个版面文章位置xy坐标数据
-                    $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId,100,0);
-                    $arrSecondPageArticlePointList = array();
-
-                    if(!empty($arrSecondPageArticleList)){
-                        foreach($arrSecondPageArticleList as $value){
+                    if (!empty($arrFirstPageArticleList)) {
+                        foreach ($arrFirstPageArticleList as $value) {
                             $newsPaperArticleId = $value["NewspaperArticleId"];
                             $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
                             $picMapping = $value["PicMapping"];
-                            $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
+                            $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
+                        }
+                        $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                            $arr = Format::FixJsonEncode($arrFirstPageArticlePointList),
+                            $templateContent
+                        );
+                    }else{
+                        $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                            "null",
+                            $templateContent
+                        );
+                    }
+                    //生成第二个版面文章位置xy坐标数据
+                    $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId, 100, 0);
+                    $arrSecondPageArticlePointList = array();
+
+                    if (!empty($arrSecondPageArticleList)) {
+                        foreach ($arrSecondPageArticleList as $value) {
+                            $newsPaperArticleId = $value["NewspaperArticleId"];
+                            $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                            $picMapping = $value["PicMapping"];
+                            $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
                         }
                         $templateContent = str_ireplace("{SecondPageArticlePoint}",
-                            $arr=Format::FixJsonEncode($arrSecondPageArticlePointList),
+                            $arr = Format::FixJsonEncode($arrSecondPageArticlePointList),
+                            $templateContent
+                        );
+                    }else{
+                        $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                            "null",
                             $templateContent
                         );
                     }
 
 
                     //版面选择
-                    $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
+                    $arrNewspaperPages = $newspaperPagePublicData->GetListForSelectPage($currentNewspaperId);
                     $listName = "newspaper_page";
 
-                    if(count($arrNewspaperPages)>0){
+                    if (count($arrNewspaperPages) > 0) {
                         Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
-                    }else{
+                    } else {
                         Template::RemoveCustomTag($tempContent, $listName);
                     }
 
                     $templateContent = parent::ReplaceTemplate($templateContent);
                 }
             }
+
+            Template::RemoveCustomTag($templateContent);
+
         }
         return $templateContent;
 
@@ -296,10 +311,11 @@ class NewspaperPublicGen extends BasePublicGen {
      * 版面选择
      */
 
-    private function GenSelect(){
+    private function GenSelect()
+    {
         $channelId = Control::GetRequest("channel_id", 0);
         $templateContent = "";
-        if($channelId>0){
+        if ($channelId > 0) {
             //$templateFileUrl = "newspaper/newspaper_select.html";
             //$templateName = "default";
             //$templatePath = "front_template";
@@ -322,11 +338,12 @@ class NewspaperPublicGen extends BasePublicGen {
      * 版面选择列表
      */
 
-    private function GenPageList(){
+    private function GenPageList()
+    {
         $channelId = Control::GetRequest("channel_id", 0);
         $newspaperId = Control::GetRequest("newspaper_id", 0);
         $templateContent = "";
-        if($channelId>0){
+        if ($channelId > 0) {
             //$templateFileUrl = "newspaper/newspaper_page_list.html";
             //$templateName = "default";
             //$templatePath = "front_template";
@@ -339,33 +356,33 @@ class NewspaperPublicGen extends BasePublicGen {
 
             parent::ReplaceSiteInfo($siteId, $templateContent);
             //版面列表数据集
-            $newspaperPagePublicData=new NewspaperPagePublicData();
-            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+            $arrNewspaperPages = $newspaperPagePublicData->GetListForSelectPage($newspaperId);
 
-            if(count($arrNewspaperPages)>0){
+            if (count($arrNewspaperPages) > 0) {
 
                 //默认只显示已发状态的新闻
                 $state = 0;
 
-                $newspaperPageIds="";
-                foreach($arrNewspaperPages as $page){
-                    $newspaperPageIds.=",".$page["NewspaperPageId"];
+                $newspaperPageIds = "";
+                foreach ($arrNewspaperPages as $page) {
+                    $newspaperPageIds .= "," . $page["NewspaperPageId"];
                 }
 
-                if(strpos($newspaperPageIds,',') == 0){
-                    $newspaperPageIds = substr($newspaperPageIds,1);
+                if (strpos($newspaperPageIds, ',') == 0) {
+                    $newspaperPageIds = substr($newspaperPageIds, 1);
                 }
 
                 //文章列表数据集
-                $newspaperArticlePublicData= new NewspaperArticlePublicData();
-                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+                $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                $arrNewspaperArticles = $newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds, $state);
 
                 $listName = "newspaper_page_and_article";
                 $tagName = Template::DEFAULT_TAG_NAME;
                 $tableIdName = "NewspaperPageId";
                 $parentIdName = "NewspaperPageId";
-                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName,$arrNewspaperArticles,$tableIdName,$parentIdName);
-            }else{
+                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName, $arrNewspaperArticles, $tableIdName, $parentIdName);
+            } else {
                 $listName = "newspaper_page_and_article";
                 Template::RemoveCustomTag($tempContent, $listName);
             }
@@ -375,17 +392,17 @@ class NewspaperPublicGen extends BasePublicGen {
     }
 
 
-    private function GetNewspaperIdForImport(){
+    private function GetNewspaperIdForImport()
+    {
         $result = -1;
         $removeXSS = false;
-        $authorityCode = str_ireplace("\r\n","",Control::PostRequest("AuthorityCode", "",$removeXSS));
-        $publishDate = str_ireplace("\r\n","",Control::PostRequest("PublishDate","",$removeXSS));
+        $authorityCode = str_ireplace("\r\n", "", Control::PostRequest("AuthorityCode", "", $removeXSS));
+        $publishDate = str_ireplace("\r\n", "", Control::PostRequest("PublishDate", "", $removeXSS));
 
-        if($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
+        if ($authorityCode == "C_S_W_B_E_P_A_P_E_R_I_M_P_O_R_T" &&
 
-            strlen($publishDate)>0
-        )
-        {
+            strlen($publishDate) > 0
+        ) {
             $newspaperPublicData = new NewspaperPublicData();
 
             $result = $newspaperPublicData->GetNewspaperIdByPublishDateForImport(
@@ -395,7 +412,8 @@ class NewspaperPublicGen extends BasePublicGen {
         return $result;
     }
 
-    private function GenOneForPc(){
+    private function GenOneForPc()
+    {
 //        $channelId = Control::GetRequest("channel_id", 0);
 //        $newspaperPagePublicData = new NewspaperPagePublicData();
 //        $newspaperFirstPageId = Control::GetRequest("newspaper_first_page_id", 0);
@@ -556,32 +574,29 @@ class NewspaperPublicGen extends BasePublicGen {
     //判断当前页数是否是报纸当前版面的第一页
     function IsFirstPageOnPaper($newspaperPageNo)
     {
-        $newspaperPageNo=preg_replace('/[^\d]/','',$newspaperPageNo);
-        $newspaperPageNo=intval($newspaperPageNo);
-        if($newspaperPageNo%2==0)
-        {
+        $newspaperPageNo = preg_replace('/[^\d]/', '', $newspaperPageNo);
+        $newspaperPageNo = intval($newspaperPageNo);
+        if ($newspaperPageNo % 2 == 0) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
     //生成报纸版面div定位数据点
-    function GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping)
+    function GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping)
     {
         $result = null;
-        $arr_x=array();
-        $arr_y=array();
-        self::GenXAndYSortArray($picMapping,$arr_x,$arr_y);
+        $arr_x = array();
+        $arr_y = array();
+        self::GenXAndYSortArray($picMapping, $arr_x, $arr_y);
         if (count($arr_x) > 0 && count($arr_y) > 0) {
             $min_x_point = $arr_x[0];
             $max_x_point = $arr_x[count($arr_x) - 1];
             $min_y_point = $arr_y[0];
             $max_y_point = $arr_y[count($arr_y) - 1];
             //$result = array(array($min_x_point, $min_y_point), array($max_x_point, $min_y_point), array($max_x_point, $max_y_point), array($min_x_point, $max_y_point));
-            $result =array($newsPaperArticleId,$newsPaperArticleTitle,$min_x_point,$min_y_point,$max_x_point-$min_x_point,$max_y_point-$min_y_point);
+            $result = array($newsPaperArticleId, $newsPaperArticleTitle, $min_x_point, $min_y_point, $max_x_point - $min_x_point, $max_y_point - $min_y_point);
         }
         return $result;
     }
