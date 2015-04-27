@@ -89,8 +89,8 @@ class CustomFormContentPublicData extends BaseManageData {
         if($customFormRecordId>0){
             $dataProperty = new DataProperty();
             $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
-            $dataProperty->AddField("CustomFormFieId", $customFormFieId);
-            $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId AND  CustomFormFieId=:CustomFormFieId ;";
+            $dataProperty->AddField("CustomFormFieldId", $customFormFieId);
+            $sql = "DELETE FROM ".self::TableName_CustomFormContent." WHERE CustomFormRecordId=:CustomFormRecordId AND  CustomFormFieldId=:CustomFormFieldId ;";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
