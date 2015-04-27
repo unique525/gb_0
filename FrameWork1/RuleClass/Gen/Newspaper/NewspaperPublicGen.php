@@ -258,16 +258,20 @@ class NewspaperPublicGen extends BasePublicGen {
                     //生成第二个版面文章位置xy坐标数据
                     $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId,100,0);
                     $arrSecondPageArticlePointList = array();
-                    foreach($arrSecondPageArticleList as $value){
-                        $newsPaperArticleId = $value["NewspaperArticleId"];
-                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-                        $picMapping = $value["PicMapping"];
-                        $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
+
+                    if(!empty($arrSecondPageArticleList)){
+                        foreach($arrSecondPageArticleList as $value){
+                            $newsPaperArticleId = $value["NewspaperArticleId"];
+                            $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                            $picMapping = $value["PicMapping"];
+                            $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
+                        }
+                        $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                            $arr=Format::FixJsonEncode($arrSecondPageArticlePointList),
+                            $templateContent
+                        );
                     }
-                    $templateContent = str_ireplace("{SecondPageArticlePoint}",
-                        $arr=Format::FixJsonEncode($arrSecondPageArticlePointList),
-                        $templateContent
-                    );
+
 
                     //版面选择
                     $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
