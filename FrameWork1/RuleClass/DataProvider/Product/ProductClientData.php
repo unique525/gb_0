@@ -19,11 +19,11 @@ class ProductClientData extends BaseClientData {
         if($productId>0){
             $sql = "
             SELECT p.*,
-            uf1.UploadFilePath AS TitlePic1UploadFilePath,
-            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
-            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
-            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
-            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+                        uf1.UploadFilePath AS TitlePic1UploadFilePath,
+                        uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+                        uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+                        uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+                        uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
                         uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
                         uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
                         uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,

@@ -51,9 +51,6 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             $resultJavaScript = "";
             parent::ReplaceFirst($tempContent);
 
-            $nowManageUserId = Control::GetManageUserId();
-
-
             $forumManageData = new ForumManageData();
             if ($forumRank > 0) {
 

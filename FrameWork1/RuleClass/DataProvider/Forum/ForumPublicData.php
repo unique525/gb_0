@@ -51,10 +51,20 @@ class ForumPublicData extends BasePublicData {
     public function GetListByForumRank($siteId, $forumRank) {
         $result = null;
         if($siteId>0 && $forumRank>=0){
-            $sql = "SELECT
-                *
-            FROM " . self::TableName_Forum . " WHERE State<".ForumData::STATE_REMOVED." AND ForumRank=:ForumRank AND SiteId=:SiteId ORDER BY Sort DESC;";
 
+
+            $sql = "
+            SELECT f.*,
+                        uf1.UploadFilePath AS ForumPic1UploadFilePath,
+
+                        uf2.UploadFilePath AS ForumPic2UploadFilePath
+
+            FROM
+            " . self::TableName_Forum . " f
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 ON (f.ForumPic1UploadFileId=uf1.UploadFileId)
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON (f.ForumPic2UploadFileId=uf2.UploadFileId)
+
+            WHERE f.State=".ForumData::STATE_REMOVED." AND f.ForumRank=:ForumRank AND f.SiteId=:SiteId ORDER BY f.Sort DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ForumRank", $forumRank);
             $dataProperty->AddField("SiteId", $siteId);

@@ -156,6 +156,7 @@
         <tr class="grid_title">
             <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
             <td style="width: 40px; text-align: center;">编辑</td>
+            <td style="width: 40px; text-align: center;">ID</td>
             <td>站点名称</td>
             <td style="width: 70px; text-align: center;">排序号</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
@@ -174,6 +175,7 @@
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_SiteId}"/></td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="{f_SiteName}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_SiteId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">{f_SiteId}</td>
                             <td class="spe_line2"><a target="_blank" href="{f_SiteUrl}">{f_SiteName}</a></td>
                             <td class="spe_line2" style="width:70px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>

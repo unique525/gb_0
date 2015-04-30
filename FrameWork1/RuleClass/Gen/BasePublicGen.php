@@ -29,9 +29,7 @@ class BasePublicGen extends BaseGen {
                 $arrSubDomain = explode(".", $host);
                 if (count($arrSubDomain) > 0) {
                     $subDomain = $arrSubDomain[0];
-
                     if (strlen($subDomain) > 0) {
-
                         $siteId = $sitePublicData->GetSiteId($subDomain, true);
                     }
                 }

@@ -21,7 +21,7 @@
                 <div class="div_forum_two_item" tabindex="{child_count}" idvalue="{c_child_no}">
                     <table>
                         <tr>
-                            <td class="td_pic"><img src="/front_template/1.gif" /></td>
+                            <td class="td_pic"><img src="{f_ForumPic1UploadFilePath}" /></td>
                             <td class="td_info">
                                 <div class="forum_name"><a style="color:{f_ForumNameFontColor};font-size:{f_ForumNameFontSize};font-weight:{f_ForumNameFontBold};" href="">{f_ForumName}</a></div>
                                 <div class="forum_intro" title="{f_ForumInfo}">{f_ForumInfo}</div>

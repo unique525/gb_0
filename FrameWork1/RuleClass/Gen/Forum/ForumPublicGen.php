@@ -29,11 +29,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 论坛首页HTML
      */
     private function GenDefault() {
-        $siteId = Control::GetRequest("siteid", 0);
-        if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdByDomain();
-        }
-
+        $siteId = parent::GetSiteIdByDomain();
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";

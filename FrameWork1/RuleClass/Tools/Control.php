@@ -623,7 +623,8 @@ class Control {
      * @return string 一级域名
      */
     public static function GetDomain($url){
-        preg_match('/[\w][\w-]*\.(?:com\.cn|com|cn|co|net|org|gov|cc|biz|info)(\/|$)/isU', $url, $domain);
+        //preg_match('/[\w][\w-]*\.(?:com\.cn|com|cn|co|net|org|gov|cc|biz|info)(\/|$)/isU', $url, $domain);
+        preg_match("/^(http:\/\/)?([^\/]+)/i", $url, $domain);
         return rtrim($domain[0], '/');
     }
 }

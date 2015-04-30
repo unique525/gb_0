@@ -119,7 +119,7 @@ class ForumManageData extends BaseManageData {
 
                     ;";
             $dataProperty->AddField("ForumPic1UploadFileId", $forumPic1UploadFileId);
-            $dataProperty->AddField("ForumPic1UploadFileId", $forumPic2UploadFileId);
+            $dataProperty->AddField("ForumPic2UploadFileId", $forumPic2UploadFileId);
             $dataProperty->AddField("ForumId", $forumId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }

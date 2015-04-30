@@ -24,4 +24,7 @@
     <module id="8">
         <content><![CDATA[管理员信息不正确！]]></content>
     </module>
+    <module id="9">
+        <content><![CDATA[没有找到站点数据，请先新增一个站点！]]></content>
+    </module>
 </root>
