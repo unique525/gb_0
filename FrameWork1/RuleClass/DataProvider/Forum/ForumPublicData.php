@@ -64,10 +64,11 @@ class ForumPublicData extends BasePublicData {
             LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 ON (f.ForumPic1UploadFileId=uf1.UploadFileId)
             LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON (f.ForumPic2UploadFileId=uf2.UploadFileId)
 
-            WHERE f.State=".ForumData::STATE_REMOVED." AND f.ForumRank=:ForumRank AND f.SiteId=:SiteId ORDER BY f.Sort DESC;";
+            WHERE f.State<".ForumData::STATE_REMOVED." AND f.ForumRank=:ForumRank AND f.SiteId=:SiteId ORDER BY f.Sort DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ForumRank", $forumRank);
             $dataProperty->AddField("SiteId", $siteId);
+
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
