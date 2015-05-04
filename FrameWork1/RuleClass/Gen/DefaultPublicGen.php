@@ -123,6 +123,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $visitPublicGen = new CustomFormRecordPublicGen();
                 $result = $visitPublicGen->GenPublic();
                 break;
+            case "search":
+                $searchPublicGen = new SearchPublicGen();
+                $result = $searchPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;
