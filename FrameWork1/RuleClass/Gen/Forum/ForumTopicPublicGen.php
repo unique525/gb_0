@@ -13,7 +13,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 返回执行结果
      */
     public function GenPublic() {
-        $result = "";
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -25,6 +24,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 break;
             case "modify":
                 $result = self::GenModify();
+                break;
+            default:
+                $result = self::GenList();
                 break;
         }
 
@@ -114,6 +116,14 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdByDomain();
         }
+
+        $userId = Control::GetUserId();
+        if($userId<=0){
+            $referUrl = urlencode("/default.php?mod=forum_topic&a=create&forum_id=$forumId");
+            Control::GoUrl("/default.php?mod=user&a=login&reurl=$referUrl");
+            return "";
+        }
+
 
         $templateFileUrl = "forum/forum_topic_deal.html";
         $templateName = "default";
