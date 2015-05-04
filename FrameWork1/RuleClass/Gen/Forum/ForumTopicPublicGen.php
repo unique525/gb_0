@@ -124,7 +124,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             return "";
         }
 
-
         $templateFileUrl = "forum/forum_topic_deal.html";
         $templateName = "default";
         $templatePath = "front_template";
