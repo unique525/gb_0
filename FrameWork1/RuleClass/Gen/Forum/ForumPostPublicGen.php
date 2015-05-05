@@ -51,7 +51,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $tagId = "forum_post_list";
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
-        $forumPostPublicDate = new ForumPostPublicDate();
+        $forumPostPublicDate = new ForumPostPublicData();
         $arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
 
         if (count($arrForumPost) > 0) {
@@ -84,7 +84,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
-        $forumPostPublicDate = new ForumPostPublicDate();
+        $forumPostPublicDate = new ForumPostPublicData();
         $arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
 
         if(!empty($_POST)){

@@ -110,12 +110,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
+                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
                                 <span>收藏</span> <span>分享</span> <span>举报</span> <span>主题管理</span>
                             </td>
                         </tr>
