@@ -70,7 +70,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $pageBegin,
             $pageSize,
             $allCount,
-            $state);
+            $state
+        );
         $tagId = "forum_topic_list_normal";
         //print_r($arrForumTopicList);
         if (count($arrForumTopicList) > 0) {
