@@ -26,6 +26,24 @@ class CustomFormPublicData extends BasePublicData {
         }
         return $result;
     }
+    /**
+     * 返回表单启用状态
+     * @param int $customFormId 表单id
+     * @param boolean $withCache 是否使用缓存
+     * @return int 表单状态
+     */
+    public function GetState($customFormId,$withCache) {
+        $result = -1;
+        if ($customFormId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'custom_form_data';
+            $cacheFile = 'custom_form_get_state.cache_' . $customFormId . '.php';
+            $sql = "SELECT State FROM " . self::TableName_CustomForm . " WHERE CustomFormId = :CustomFormId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
 
 }

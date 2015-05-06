@@ -130,6 +130,7 @@ class Pager {
             $outHtml = str_ireplace("{AllCount}", strval($allCount), $outHtml);
             $outHtml = str_ireplace("{PageSize}", strval($pageSize), $outHtml);
             $outHtml = str_ireplace("{PageList}", strval($sbIndex), $outHtml);
+            $outHtml = str_ireplace("{PagerList}", strval($sbIndex), $outHtml);
             $outHtml = str_ireplace("{JsFunctionName}", $jsFunctionName, $outHtml);
             $outHtml = str_ireplace("{ParamList}", $jsParamList, $outHtml);
 
@@ -163,7 +164,7 @@ class Pager {
      * @return string 返回默认的分页模板HTML
      */
     public static function GetPagerDefaultTempContent() {
-        return '<a class="webdings-red" href="{url}&p={firstindex}"><font face="webdings">9</font></a>
+        return '<a class="webdings-red" href="{url}&p={firstindex}"><font face="webdings">第一页</font></a>
                 <a {showpre} href="{url}&p={preindex}">上一页</a>
                 {pagerlist}
                 <a {shownext} title="点击查看下一页记录" href="{url}&p={nextindex}">下一页</a>

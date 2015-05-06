@@ -1101,6 +1101,22 @@ class DocumentNewsPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 取得节点内已发的条数（动态列表页pager_button用）
+     * @param int $channelId id
+     * @return int 条数
+     */
+    public function GetCountInChannel($channelId){
+        $result = -1;
+        if($channelId > 0){
+            $sql = "SELECT COUNT(*) FROM ".self::TableName_DocumentNews." WHERE ChannelId=:ChannelId AND State=30;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId",$channelId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     public function GetChannelId($documentNewsId,$withCache){
         $result = -1;
         if($documentNewsId > 0){
@@ -1127,6 +1143,24 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId",$documentNewsId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 获取点击
+     * @param int $documentNewsId id
+     * @return int 操作结果
+     */
+    public function GetHit($documentNewsId){
+        $result = null;
+        if($documentNewsId > 0){
+            $sql = "SELECT Hit,VirtualHit FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
         }
         return $result;
     }

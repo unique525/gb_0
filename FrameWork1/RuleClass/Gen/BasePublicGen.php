@@ -98,9 +98,10 @@ class BasePublicGen extends BaseGen {
     /**
      * 替换模板内容
      * @param string $templateContent 模板内容
+     * @param string $tagTopCountOfPage 默认显示条数（用于列表页分页）
      * @return mixed|string 内容模板
      */
-    public function ReplaceTemplate($templateContent)
+    public function ReplaceTemplate($templateContent,$tagTopCountOfPage="")
     {
         /** 1.处理预加载模板 */
 
@@ -125,6 +126,12 @@ class BasePublicGen extends BaseGen {
                 //显示条数
 
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
+                if($tagTopCountOfPage!=""){
+                    $tagTopCountOfPate = Format::CheckTopCount($tagTopCountOfPage);
+                    if ($tagTopCountOfPage != null) {
+                        $tagTopCount=$tagTopCountOfPage;
+                    }
+                }
 
                 $tagTopCount = Format::CheckTopCount($tagTopCount);
                 if ($tagTopCount == null) {

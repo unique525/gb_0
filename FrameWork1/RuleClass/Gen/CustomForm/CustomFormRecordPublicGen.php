@@ -89,12 +89,18 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
 private function AsyncCreate(){
     $userId = 0;//游客
 
+
         $customFormId=Control::GetRequest("f_customformid","0");
+        $customFromPublicData=new CustomFormPublicData();
         $customFormRecordPublicData = new CustomFormRecordPublicData();
         $customFormFieldPublicData = new CustomFormFieldPublicData();
         $customFormContentPublicData = new CustomFormContentPublicData();
 
         $newId=0;
+        $state=$customFromPublicData->GetState($customFormId,true);
+        if($state==100){ //100:停用
+            return Control::GetRequest("jsonpcallback","") . '('."-1".')';
+        }
 
         //检查是否有唯一字段重复
         if($customFormId>0){

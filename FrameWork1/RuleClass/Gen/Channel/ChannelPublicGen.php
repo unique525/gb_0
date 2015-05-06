@@ -43,7 +43,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
 
 
-        $tempContent =  parent::ReplaceTemplate($tempContent);
+        $tempContent =  parent::ReplaceTemplate($tempContent,"");
         //parent::ReplaceSiteConfig($siteId, $tempContent);
         parent::ReplaceSiteInfo($siteId, $tempContent);
         parent::ReplaceEnd($tempContent);
@@ -53,6 +53,13 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenList() {
         $siteId = parent::GetSiteIdByDomain();
         $channelId = Control::GetRequest("channel_id",0);
+        $pageIndex = Control::GetRequest("p",0);
+        $pageSize = Control::GetRequest("ps",0);
+        if($pageIndex>1&&$pageSize>0){
+            $tagTopCount = ($pageIndex-1)*$pageSize.",".$pageSize;
+        }else{
+            $tagTopCount="";
+        }
         $tempContent = parent::GetDynamicTemplateContent();
         $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
         parent::ReplaceFirst($tempContent);
@@ -62,10 +69,31 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
         $tempContent = str_ireplace("{ChannelName}", $currentChannelName, $tempContent);
 
-        $tempContent =  parent::ReplaceTemplate($tempContent);
+        $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
+
+
+
+        //分页
+        $documentNewsPublicData=new DocumentNewsPublicData();
+        $allCount=$documentNewsPublicData->GetCountInChannel($channelId);
+
+        if($pageSize<=0){
+            $pageSize=10;
+        }
+        if($pageIndex<=0){
+            $pageIndex=1;
+        }
+
+
+        $navUrl = "default.php?mod=channel&a=list&temp=channel_list&channel_id=$channelId&p={0}&ps=$pageSize";
+        $pagerButton = Pager::ShowPageButton("", $navUrl, $allCount, $pageSize, $pageIndex);
+
+        $tempContent = str_ireplace("{dynamic_pager_button}", $pagerButton, $tempContent);
+
 
         parent::ReplaceSiteInfo($siteId, $tempContent);
         parent::ReplaceEnd($tempContent);
+        $tempContent.="<!--".$pageSize."-->";
         return $tempContent;
     }
 }
