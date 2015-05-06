@@ -8,6 +8,24 @@
  */
 class SitePublicData extends BasePublicData {
 
+    /**
+     * 取得站点网址
+     * @param int $siteId 站点id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 站点网址
+     */
+    public function GetSiteName($siteId, $withCache) {
+        $result = "";
+        if ($siteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data';
+            $cacheFile = 'site_get_site_name.cache_' . $siteId . '';
+            $sql = "SELECT SiteName FROM " . self::TableName_Site . " WHERE SiteId=:SiteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
     /**
      * 取得站点网址

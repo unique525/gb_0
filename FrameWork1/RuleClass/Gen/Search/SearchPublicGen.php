@@ -42,6 +42,10 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         $searchKey = Control::GetRequest("search_key", "");
         $searchKey = urldecode($searchKey);
         $pageIndex = Control::GetRequest("p", 1);
+        $f= Control::GetRequest("f", "_all");
+        $m = Control::GetRequest("m", "no");
+        $syn = Control::GetRequest("syn", "no");
+        $s=Control::GetRequest("s", "s_create_date_DESC");
 
         if ($pageIndex > 0) {
             $tagId = "big_search";
@@ -49,7 +53,7 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
             $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
             $pageSize = Template::GetParamValue($tagContent, "top");
 
-            $arrList = self::GetSearchList($allCount,$searchKey,$pageIndex,$pageSize);
+            $arrList = self::GetSearchList($allCount,$searchKey,$pageIndex,$pageSize,$m,$syn,$f,$s);
             if (count($arrList) > 0) {
                 Template::ReplaceList($templateContent, $arrList, $tagId);
                 $styleNumber = 1;
@@ -58,7 +62,7 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
                 $templatePath = "front_template";
                 $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
                 $isJs = FALSE;
-                $navUrl = "/default.php?mod=search&site_id=$siteId&p={0}&ps=$pageSize&search_key=" . urlencode($searchKey);
+                $navUrl = "/default.php?mod=search&m=$m&syn=$syn&f=$f&s=$s&site_id=$siteId&p={0}&ps=$pageSize&search_key=" . urlencode($searchKey);
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
@@ -66,9 +70,10 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
                 $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("product", 101), $templateContent);
+                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("search", 1), $templateContent);
                 $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
             }
+            $templateContent = str_ireplace("{AllCount}", $allCount, $templateContent);
             $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
         }
         $templateContent = parent::ReplaceTemplate($templateContent);
@@ -83,13 +88,13 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
      * @param int $p 第几页
      * @param int $ps 每页显示条数
      * @param string $m 开启模糊搜索，其值为 yes/no
-     * @param string $syn 开启模糊搜索，其值为 yes/no
+     * @param string $syn 开启同义词搜索，其值为 yes/no
      * @param string $f 只搜索某个字段，其值为字段名称，要求该字段的索引方式为 self/both
      * @param string $s: 排序字段名称及方式，其值形式为：xxx_ASC 或 xxx_DESC
      * @param string  xml: 是否将搜索结果以 XML 格式输出，其值为 yes/no
      * @return array 搜素列表数据集
      */
-    private function GetSearchList(&$allCount,$q,$p,$ps,$m="no",$syn="no",$f="",$s="s_create_date_DESC",$xml="no")
+    private function GetSearchList(&$allCount,$q,$p,$ps,$m="no",$syn="no",$f="_all",$s="s_create_date_DESC",$xml="no")
     {
 
         // 加载 XS 入口文件
@@ -98,10 +103,6 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         // recheck request parameters
         $q = get_magic_quotes_gpc() ? stripslashes($q) : $q;
         $f = empty($f) ? '_all' : $f;
-        ${'m_check'} = ($m == 'yes' ? ' checked' : '');
-        ${'syn_check'} = ($syn == 'yes' ? ' checked' : '');
-        ${'f_' . $f} = ' checked';
-        ${'s_' . $s} = ' selected';
 
         // other variable maybe used in tpl
         $allCount = $total = $search_cost = 0;
@@ -110,6 +111,7 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         $total_begin = microtime(true);
 
         // perform the search
+        $search=null;
         try {
             $xs = new XS('cswb');
             $search = $xs->search;
@@ -160,16 +162,6 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
                     // get related query
                     $related = $search->getRelatedQuery();
                 }
-
-//                // gen pager
-//                if ($count > $ps) {
-//                    $pb = max($p - 5, 1);
-//                    $pe = min($pb + 10, ceil($count / $ps) + 1);
-//                    $pager = '';
-//                    do {
-//                        $pager .= ($pb == $p) ? '<strong>' . $p . '</strong>' : '<a href="' . $bu . '&p=' . $pb . '">[' . $pb . ']</a>';
-//                    } while (++$pb < $pe);
-//                }
             }
         } catch (XSException $e) {
             $error = strval($e);
@@ -177,32 +169,46 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
 
         // calculate total time cost
         $total_cost = microtime(true) - $total_begin;
-
-        $arrList=self::ConvertToArray($docs);
+        $arrList=self::ConvertToArray($search,$docs);
         return $arrList;
     }
 
 /**
  * 把XSDocument Object对象数组转化为标准php数组
+ * @param  全文搜索对象
  * @param  XObjects对象数组
  * @return array 标准php数组
  */
-private function ConvertToArray($XObjects)
+private function ConvertToArray($search,$XObjects)
 {
     $sitePublicData = new SitePublicData();
     $arrList = array();
     foreach($XObjects as $XObject)
     {
+        $title = $XObject->s_title;
+        $content = strip_tags($XObject->s_content);
+        $userName = $XObject->s_user_name;
+        $showDate = $XObject->s_show_date;
+        $showDate = date("Y-m-d",strtotime($showDate));
         $siteId=$XObject->s_site_id;
-        $siteUrl = $sitePublicData->GetSiteUrl($siteId,true);
+        $siteName = $sitePublicData->GetSiteName($siteId,true);
+        $siteUrl = $XObject->s_site_url;
         if ($XObject->DirectUrl==null){
             $directUrl=$siteUrl."/default.php?mod=newspaper_article&a=detail&newspaper_article_id=".$XObject->s_id;
         }else{
             $directUrl=$XObject->DirectUrl;
         }
-        $title = $XObject->s_title;
-        $content = $XObject->s_content;
-        array_push($arrList,array("DirectUrl"=>$directUrl,"Title"=>$title,"Content"=>$content));
+        array_push($arrList,
+            array(
+                "DirectUrl"=>$directUrl,
+                "Title"=>$search->highlight($title),
+                "Content"=>$search->highlight($content),
+                "UserName"=>$userName,
+                "ShowDate"=>$showDate,
+                "SiteId"=>$siteId,
+                "SiteName"=>$siteName,
+                "SiteUrl"=>$siteUrl
+            ));
     }
     return $arrList;
 
