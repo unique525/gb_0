@@ -138,6 +138,18 @@ class UserReceiveInfoPublicData extends BasePublicData
         }
         return $result;
     }
+
+    public function GetOne($userReceiveInfoId,$userId){
+        $result = null;
+        if($userReceiveInfoId > 0 && $userId > 0){
+            $sql = "SELECT * FROM ".self::TableName_UserReceiveInfo." WHERE UserReceiveInfoId = :UserReceiveInfoId AND UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserReceiveInfoId",$userReceiveInfoId);
+            $dataProperty->AddField("UserId",$userId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

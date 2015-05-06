@@ -13,21 +13,22 @@ class UserPublicData extends BasePublicData {
      * 混合登录
      * @param string $userAccount 会员登录帐号，可以是会员名，会员邮箱，会员手机号码
      * @param string $userPass 会员密码
+     * @param string $userPassWithMd5 会员密码MD5
      * @return int 返回userId
      */
-    public function Login($userAccount,$userPass){
+    public function Login($userAccount,$userPass,$userPassWithMd5=""){
         $result = -1;
 
-        if(!empty($userAccount) && !empty($userPass)){
+        if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                            AND UserPass = :UserPass
-                            ;";
+                            AND (UserPass = :UserPass OR UserPassWithMd5 = :UserPassWithMd5);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
             $dataProperty->AddField("UserEmail",$userAccount);
             $dataProperty->AddField("UserMobile",$userAccount);
             $dataProperty->AddField("UserPass",$userPass);
+            $dataProperty->AddField("UserPassWithMd5",$userPassWithMd5);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;

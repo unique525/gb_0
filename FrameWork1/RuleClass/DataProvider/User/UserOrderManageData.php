@@ -205,4 +205,12 @@ class UserOrderManageData extends BaseManageData{
 
         return $result;
     }
+
+    public function GetListForExportExcel($beginDate,$endDate,$siteId){
+        $result = null;
+        if($siteId > 0 && $beginDate < $endDate){
+
+        }
+        return $result;
+    }
 }

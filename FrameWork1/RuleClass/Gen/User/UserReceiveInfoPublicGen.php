@@ -19,6 +19,9 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
             case "async_modify":
                 $result = self::AsyncModify();
                 break;
+            case "async_get_one":
+                $result = self::AsyncGetOne();
+                break;
             case "list":
                 $result = self::GenList();
                 break;
@@ -85,7 +88,6 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
                     $mobile,
                     $city,
                     $district
-
                 );
 
                 if($result > 0){
@@ -105,10 +107,11 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         if($userId > 0){
             $siteId = parent::GetSiteIdByDomain();
-            $templateFileUrl = "user/user_receive_info_list.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+//            $templateFileUrl = "user/user_receive_info_list.html";
+//            $templateName = "default";
+//            $templatePath = "front_template";
+//            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+            $templateContent = parent::GetDynamicTemplateContent("user_receive_info_list");
             parent::ReplaceFirst($templateContent);
             parent::ReplaceSiteInfo($siteId, $templateContent);
 
@@ -125,7 +128,24 @@ class UserReceiveInfoPublicGen extends BasePublicGen implements IBasePublicGen{
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{
-            return "";
+            Control::GoUrl("/default.php?mod=user&a=login");
+            return null;
+        }
+    }
+
+    private function AsyncGetOne(){
+        $userReceiveInfoId = Control::GetRequest("user_receive_info_id",0);
+        $userId = Control::GetUserId();
+        if($userReceiveInfoId > 0 && $userId > 0){
+            $userReceiveInfoPublicData = new UserReceiveInfoPublicData();
+            $arrUserReceiveInfoOne = $userReceiveInfoPublicData->GetOne($userReceiveInfoId,$userId);
+            return Control::GetRequest("jsonpcallback","")."(".json_encode($arrUserReceiveInfoOne).")";
+        }else{
+            if($userId < 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":0})';
+            }else{
+                return "";
+            }
         }
     }
 }
