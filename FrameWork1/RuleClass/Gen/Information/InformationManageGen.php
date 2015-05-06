@@ -131,7 +131,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userEmail="";
             $manageUserData = new ManageUserManageData();
             if(!$userId||intval($userId)<=0){
-                $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId,false); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
             if (intval($userId) <= 0) {
                 $resultJavaScript .= Control::GetJqueryMessage(Language::Load('information', 3));//用户数据获取失败！继续操作可能会对信息记录造成影响！
@@ -275,7 +275,7 @@ class InformationManageGen extends BaseManageGen implements IBaseManageGen {
             $userEmail="";
             $manageUserData = new ManageUserManageData();
             if(!$userId||intval($userId)<=0){
-                $userId = $manageUserData->GetUserId($manageUserId); //如果找不到登陆user 则取后台管理员挂接的USERId号
+                $userId = $manageUserData->GetUserId($manageUserId,false); //如果找不到登陆user 则取后台管理员挂接的USERId号
             }
 
             if (intval($userId) <= 0) {
