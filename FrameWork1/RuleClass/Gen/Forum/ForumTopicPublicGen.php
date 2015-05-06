@@ -13,7 +13,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 返回执行结果
      */
     public function GenPublic() {
-        $result = "";
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -25,6 +24,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 break;
             case "modify":
                 $result = self::GenModify();
+                break;
+            default:
+                $result = self::GenList();
                 break;
         }
 
@@ -68,7 +70,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $pageBegin,
             $pageSize,
             $allCount,
-            $state);
+            $state
+        );
         $tagId = "forum_topic_list_normal";
         //print_r($arrForumTopicList);
         if (count($arrForumTopicList) > 0) {
@@ -115,6 +118,13 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $siteId = parent::GetSiteIdByDomain();
         }
 
+        $userId = Control::GetUserId();
+        if($userId<=0){
+            $referUrl = urlencode("/default.php?mod=forum_topic&a=create&forum_id=$forumId");
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=$referUrl");
+            return "";
+        }
+
         $templateFileUrl = "forum/forum_topic_deal.html";
         $templateName = "default";
         $templatePath = "front_template";
@@ -141,11 +151,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
 
         if(!empty($_POST)){
-
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
 
-            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
+            $forumPostContent = str_ireplace('\"','"',$forumPostContent);
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
@@ -200,8 +210,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $sort = 0;
                 $state = 0;
                 $uploadFiles = Control::PostRequest("file_upload_to_content", "");
-                $forumTopicPostCreate = new ForumPostPublicDate();
-                $forumPostId = $forumTopicPostCreate->Create(
+                $forumTopicPostData = new ForumPostPublicData();
+                $forumPostId = $forumTopicPostData->Create(
                     $siteId,
                     $forumId,
                     $forumTopicId,
@@ -289,7 +299,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         //print_r($arrOne["ForumTopicId"]);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
-        $forumPostPublicDate = new ForumPostPublicDate();
+        $forumPostPublicDate = new ForumPostPublicData();
         $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
@@ -349,7 +359,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $sort = 0;
                 $state = 0;
                 $uploadFiles = Control::PostRequest("file_upload_to_content", "");
-                $forumPostPublicDate = new ForumPostPublicDate();
+                $forumPostPublicDate = new ForumPostPublicData();
                 $result = $forumPostPublicDate->Modify(
                     $siteId,
                     $forumTopicId,

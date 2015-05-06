@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Forum
  * @author xiao
  */
-class ForumPostPublicDate extends BasePublicData {
+class ForumPostPublicData extends BasePublicData {
 
     public function Create(
         $siteId,
@@ -116,7 +116,7 @@ class ForumPostPublicDate extends BasePublicData {
             $dataProperty->AddField("UploadFiles", $uploadFiles);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
-            //print_r($dataProperty->ArrayField);
+
         }
 
         return $result;

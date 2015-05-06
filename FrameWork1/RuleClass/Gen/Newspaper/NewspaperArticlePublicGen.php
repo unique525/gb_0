@@ -201,10 +201,15 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
 
+            $newspaperPageUploadFilePath = $newspaperPagePublicData->GetUploadFilePath($newspaperPageId, true);
+
+
+
             $newspaperPublicData = new NewspaperPublicData();
             $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
 
             $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+            $templateContent = str_ireplace("{NewspaperPageUploadFilePath}", $newspaperPageUploadFilePath, $templateContent);
             $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
 
             $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
