@@ -26,6 +26,9 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             case "print":
                 $result = self::GenPrint();
                 break;
+            case "export_excel":
+                $result = self::GenExportExcel();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -267,6 +270,75 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             return $templateContent;
         }else{
             return null;
+        }
+    }
+
+
+    private function GenExportExcel(){
+        $beginDate = Control::GetRequest("begin_date", "");
+        $endDate = Control::GetRequest("end_date", "");
+        $siteId = Control::GetRequest("site_id",0);
+
+        if ($beginDate < $endDate) {
+            $userOrderManageData = new UserOrderManageData();
+            $arrUserOrderListForExcel = $userOrderManageData->GetListForExportExcel($beginDate,$endDate,$siteId);
+
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objActSheet = $objPHPExcel->getActiveSheet(0);
+
+
+            $key = ord("A");
+            $arrUserOrderListHeader = array(
+                "订单ID",
+                "订单创建时间",
+                "商品ID",
+                "商品标题",
+                "商品价格",
+                "购买总数量",
+                "小计",
+                "买家实际支付金额",
+                "订单状态",
+                "商家编码",
+                "买家会员名",
+                "收货人姓名",
+                "联系电话",
+                "收货人地区",
+                "收货地址",
+                "运送方式",
+                "订单付款时间 "
+            );
+            for ($i = 0; $i < count($arrUserOrderListForExcel); $i++) {
+                $column = chr($key);
+                $objActSheet->setCellValue($column . '1', $arrUserOrderListForExcel[$i]["CustomFormFieldName"]);
+                $objActSheet->getColumnDimension($column)->setAutoSize(true);
+
+                $column_content = 2;
+                for ($j = 0; $j < count($arrUserOrderListForExcel); $j++) {
+                    $value = "";
+                    if ($arrUserOrderListForExcel[$j]["CustomFormFieldID"] == $arrUserOrderListForExcel[$i]["CustomFormFieldID"]) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($column . strval($column_content), $value);
+
+                        $column_content++;
+                    }
+                }
+                $key ++;
+            }
+
+            $fileName = "test.xls";
+            $fileName = iconv("utf-8", "gb2312", $fileName);
+            //将输出重定向到一个客户端web浏览器(Excel2007)
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            header('Pragma:public');
+            header('Expires:0');
+            header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+            header('Content-Type:application/force-download');
+            header('Content-Type:application/vnd.ms-excel');
+            header('Content-Type:application/octet-stream');
+            header('Content-Type:application/download');
+            header('Content-Disposition:attachment;filename=' . $fileName);
+            header('Content-Transfer-Encoding:binary');
+            $objWriter->save('php://output');
         }
     }
 }

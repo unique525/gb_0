@@ -29,7 +29,7 @@
 
     </script>
 </head>
-<body>
+<body style="font-size: 16px">
 
 <div class="div_list" style="width:800px">
         <div style="text-align: center;"><h3 style="line-height: 110%;">“星滋味”电商平台销售出库单</h3>
