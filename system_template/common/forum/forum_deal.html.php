@@ -40,7 +40,7 @@
                     $("#CloseTab").val("0");
                 }
 
-                $("#mainForm").attr("action","/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&forum_rank={ForumRank}&parent_id={ParentId}&tab_index="+parent.G_TabIndex+"");
+                $("#mainForm").attr("action","/default.php?secu=manage&mod=forum&m={method}&site_id={SiteId}&forum_rank={ForumRank}&parent_id={ParentId}&forum_id={ForumId}&tab_index="+parent.G_TabIndex+"");
                 $('#mainForm').submit();
             }
         }

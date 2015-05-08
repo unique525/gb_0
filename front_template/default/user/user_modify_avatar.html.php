@@ -85,7 +85,7 @@
          * @param data
          * @constructor
          */
-        window.GetOneUploadFileCallBack = function(data){
+        window.GetOneUploadFileCallBack = function(fileElementId,uploadFileId, data){
             if(data["upload_file_path"] != ""){
                 var avatarSrc = data["upload_file_path"];
                 src = avatarSrc;

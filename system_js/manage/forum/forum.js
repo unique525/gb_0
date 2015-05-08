@@ -24,23 +24,6 @@ $(function() {
 
 
 
-
-
-    $(".edit_doc").css("cursor", "pointer");
-    $(".edit_doc").click(function(event) {
-        var docid = $(this).attr('idvalue');
-        event.preventDefault();
-        var pageIndex = parseInt(Request["p"]);
-        if (pageIndex <= 0) {
-            pageIndex = 1;
-        }
-        parent.G_TabUrl = '/default.php?secu=manage&mod=documentnews&a=modify&documentnewsid=' + docid + '&p=' + pageIndex + '&cid=' + parent.G_SelectedDocumentChannelId;
-        parent.G_TabTitle = parent.G_SelectedDocumentChannelName + '-编辑文档';
-        parent.addTab();
-    });
-
-
-
     //格式化站点状态
     $(".span_state").each(function(){
         $(this).text(FormatForumState($(this).text()));

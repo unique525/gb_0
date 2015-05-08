@@ -20,10 +20,35 @@
                 $( "#cfg_NewspaperArticlePicWatermarkUploadFileId" ).val(uploadFileId);
                 $( "#preview_NewspaperArticlePicWatermarkUploadFileId").attr("src",uploadFilePath);
             }
+            else if(fileElementId == "file_document_news_content_pic_watermark"){
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
+                $( "#cfg_DocumentNewsContentPicWatermarkUploadFileId" ).val(uploadFileId);
+                $( "#preview_DocumentNewsContentPicWatermarkUploadFileId").attr("src",uploadFilePath);
+            }
         }
+
+        window.GetOneUploadFileCallBack = function(fileElementId,uploadFileId, data){
+            if(data["upload_file_path"] != ""){
+                $("#"+fileElementId).attr("src",data["upload_file_path"]);
+            }
+        };
 
         $(function () {
             $('#tabs').tabs();
+
+            //加载已经上传的图片的预览图
+            //upload_file.js
+            var newspaperArticlePicWatermarkUploadFileId = parseInt("{cfg_NewspaperArticlePicWatermarkUploadFileId}");
+            if(newspaperArticlePicWatermarkUploadFileId>0){
+                GetOneUploadFile('preview_DocumentNewsContentPicWatermarkUploadFileId',newspaperArticlePicWatermarkUploadFileId);
+            }
+
+            var documentNewsContentPicWatermarkUploadFileId = parseInt("{cfg_DocumentNewsContentPicWatermarkUploadFileId}");
+            if(documentNewsContentPicWatermarkUploadFileId>0){
+                GetOneUploadFile('preview_DocumentNewsContentPicWatermarkUploadFileId',documentNewsContentPicWatermarkUploadFileId);
+            }
+
 
             //报纸文章附件上传的图片中的水印图
             var btnNewspaperArticlePicWatermarkUploadFileId = $("#btnNewspaperArticlePicWatermarkUploadFileId");
@@ -34,6 +59,36 @@
                 var editor = null;
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfNewspaperArticlePicWatermarkUploadFileId";
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+
+
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfSiteConfig,
+                    tableId,
+                    loadingImageId,
+                    $(this),
+                    editor,
+                    fUploadFile,
+                    attachWatermark,
+                    inputTextId,
+                    previewImageId,
+                    uploadFileId
+                );
+            });
+
+
+            //资讯内容上传的图片中的水印图
+            var btnDocumentNewsContentPicWatermarkUploadFileId = $("#btnDocumentNewsContentPicWatermarkUploadFileId");
+            btnDocumentNewsContentPicWatermarkUploadFileId.click(function () {
+
+                var fileElementId = 'file_document_news_content_pic_watermark';
+                var fUploadFile = null;
+                var editor = null;
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfDocumentNewsContentPicWatermarkUploadFileId";
                 var inputTextId = null;
                 var previewImageId = null;
                 var uploadFileId = 0;
@@ -102,14 +157,26 @@
                                         <td class="spe_line">
                                             <img id="preview_NewspaperArticlePicWatermarkUploadFileId" src="{cfg_NewspaperArticlePicWatermarkUploadFileId_upload_file_path}" /><br/>
                                             <input id="file_newspaper_article_pic_watermark" name="file_newspaper_article_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId" name="cfg_NewspaperArticlePicWatermarkUploadFileId" type="hidden" value="{cfg_NewspaperArticlePicWatermarkUploadFileId}"/>
+                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId" name="cfg_NewspaperArticlePicWatermarkUploadFileId" type="hidden"
+                                                   value="{cfg_NewspaperArticlePicWatermarkUploadFileId}"/>
                                             <img id="loadingOfNewspaperArticlePicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
                                             <input id="btnNewspaperArticlePicWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsContentPicWatermarkUploadFileId">资讯内容上传的图片中的水印图：</label></td>
+                                        <td class="spe_line">
+                                            <img id="preview_DocumentNewsContentPicWatermarkUploadFileId" src="{cfg_DocumentNewsContentPicWatermarkUploadFileId_upload_file_path}" /><br/>
+                                            <input id="file_document_news_content_pic_watermark" name="file_document_news_content_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_DocumentNewsContentPicWatermarkUploadFileId" name="cfg_DocumentNewsContentPicWatermarkUploadFileId" type="hidden" value="{cfg_DocumentNewsContentPicWatermarkUploadFileId}"/>
+                                            <img id="loadingOfDocumentNewsContentPicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnDocumentNewsContentPicWatermarkUploadFileId" type="button" value="上传"/>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
+
                         </div>
 
                         <div id="tabs-2">
