@@ -457,6 +457,8 @@
                         <option value="100">停用</option>
                     </select>
                     {s_State}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="f_SaleCount">销售数量：</label><input name="f_SaleCount" id="f_SaleCount" value="{SaleCount}" type="text" class="input_box" style="width:100px;"/>
                 </td>
                 <td class="spe_line" height="30" align="right"><label for="f_SaleState">上架情况：</label></td>
                 <td class="spe_line">
