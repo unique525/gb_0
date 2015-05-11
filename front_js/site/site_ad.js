@@ -12,7 +12,6 @@
 
 $().ready(function() {
 
-    $().ready(function() {
 
         //检查所有广告是否到期
         var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
@@ -139,7 +138,6 @@ $().ready(function() {
             }
         });
 
-    });
 });
 
 
