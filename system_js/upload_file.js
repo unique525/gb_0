@@ -601,14 +601,14 @@ function CutImg(cutImgForm,uploadFileId){
     });
 }
 
-function GetOneUploadFile(uploadFileId){
+function GetOneUploadFile(fileElementId,uploadFileId){
 
     $.ajax({
         url:"/default.php?mod=upload_file&a=async_get_one&upload_file_id="+uploadFileId,
         secureUri:false,
         dataType:"json",
         success:function(data){
-            window.GetOneUploadFileCallBack(data);
+            window.GetOneUploadFileCallBack(fileElementId,uploadFileId, data);
         },
         error: function (data, status, e)
         {

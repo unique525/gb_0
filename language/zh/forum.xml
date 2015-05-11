@@ -9,4 +9,10 @@
     <module id="3">
         <content><![CDATA[新增版块成功]]></content>
     </module>
+    <module id="4">
+        <content><![CDATA[编辑版块失败]]></content>
+    </module>
+    <module id="5">
+        <content><![CDATA[编辑版块成功]]></content>
+    </module>
 </root>

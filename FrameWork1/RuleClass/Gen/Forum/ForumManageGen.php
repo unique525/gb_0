@@ -168,6 +168,150 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
     }
 
 
+    private function GenModify(){
+        $tempContent = "";
+        $forumId = Control::GetRequest("forum_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
+
+        if ($siteId>0 && $forumId >= 0) {
+            $tempContent = Template::Load("forum/forum_deal.html", "common");
+            $resultJavaScript = "";
+            parent::ReplaceFirst($tempContent);
+
+
+            $forumManageData = new ForumManageData();
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $forumManageData->Modify($httpPostData, $forumId);
+
+                //加入操作日志
+                $operateContent = 'Modify Forum,POST FORM:' .
+                    implode('|', $_POST) . ';\r\nResult:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_data');
+
+
+                    if( !empty($_FILES)){
+                        //title pic1
+                        $fileElementName = "file_forum_pic_1";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1; //
+                        $tableId = $forumId;
+                        $uploadFile1 = new UploadFile();
+                        $uploadFileId1 = 0;
+                        $titlePic1Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile1,
+                            $uploadFileId1
+                        );
+
+                        if (intval($titlePic1Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId1 = $forumManageData->GetForumPic1UploadFileId(
+                                $forumId, false);
+                            parent::DeleteUploadFile($oldUploadFileId1);
+                            //修改题图
+                            $forumManageData->ModifyForumPic1UploadFileId(
+                                $forumId, $uploadFileId1);
+
+                        }
+
+                        //title pic2
+                        $fileElementName = "file_forum_pic_2";
+                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
+                        $uploadFileId2 = 0;
+                        $uploadFile2 = new UploadFile();
+                        $titlePic2Result = self::Upload(
+                            $fileElementName,
+                            $tableType,
+                            $tableId,
+                            $uploadFile2,
+                            $uploadFileId2
+                        );
+                        if (intval($titlePic2Result) <=0){
+                            //上传出错或没有选择文件上传
+                        }else{
+                            //删除原有题图
+                            $oldUploadFileId2 = $forumManageData->GetForumPic2UploadFileId(
+                                $forumId, false);
+                            parent::DeleteUploadFile($oldUploadFileId2);
+                            //修改题图
+                            $forumManageData->ModifyForumPic2UploadFileId(
+                                $forumId, $uploadFileId2);
+                        }
+
+                        $siteConfigData = new SiteConfigData($siteId);
+                        if($uploadFileId1>0){
+                            $forumPicMobileWidth = $siteConfigData->ForumPicMobileWidth;
+                            if($forumPicMobileWidth<=0){
+                                $forumPicMobileWidth  = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId1,$forumPicMobileWidth);
+
+                            $forumPicPadWidth = $siteConfigData->ForumPicPadWidth;
+                            if($forumPicPadWidth<=0){
+                                $forumPicPadWidth  = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId1,$forumPicPadWidth);
+                        }
+
+                    }
+
+
+
+                    //javascript 处理
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('forum', 4));
+                }
+            }
+
+
+
+            $arrOne = $forumManageData->GetOne($forumId);
+            Template::ReplaceOne($tempContent, $arrOne);
+            $parentId = intval($arrOne["ParentId"]);
+            if($parentId>0){
+                $parentName = $forumManageData->GetForumName($parentId, false);
+                $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
+            }else{
+                $tempContent = str_ireplace("{ParentName}", "无", $tempContent);
+            }
+
+
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+            parent::ReplaceEnd($tempContent);
+
+            $tempContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $tempContent);
+
+        }
+
+
+        return $tempContent;
+    }
+
     /**
      * 后台版块列表
      */
@@ -187,6 +331,20 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             $arrRankTwoList = $forumManageData->GetListByRank($siteId, $forumRank);
             $forumRank = 2;
             $arrRankThreeList = $forumManageData->GetListByRank($siteId, $forumRank);
+
+            $tagId = "forum_list";
+            Template::ReplaceList(
+                $tempContent,
+                $arrRankOneList,
+                $tagId,Template::DEFAULT_TAG_NAME,$arrRankTwoList,
+                "ForumId",
+                "ParentId",
+                $arrRankThreeList,
+                "ForumId",
+                "ParentId"
+            );
+
+            /**
             $resultTemplate = "";
             if (count($arrRankOneList) > 0) {
 
@@ -232,8 +390,8 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                     }
                 }
             }
-
-            $tempContent = str_ireplace("{ForumList}", $resultTemplate, $tempContent);
+            */
+            //$tempContent = str_ireplace("{ForumList}", $resultTemplate, $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 

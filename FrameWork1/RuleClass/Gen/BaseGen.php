@@ -817,8 +817,13 @@ class BaseGen
                 $newFileName = uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_AVATAR:
-                //会员头像
-                $uploadFilePath = $uploadPath . "user_avatar" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . strval($userId) .DIRECTORY_SEPARATOR;
+                //会员头像 $tableId就是$userId
+
+                if($tableId<=0){
+                    $tableId = $userId;
+                }
+
+                $uploadFilePath = $uploadPath . "user_avatar" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = uniqid() . '.' . $fileExtension;
 
                 break;

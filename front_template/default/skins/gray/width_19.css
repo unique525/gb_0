@@ -6,10 +6,11 @@
 #forum_rec_1 .content{width:1400px;}
 
 #forum_list .content{width:1400px;}
-#forum_list .forum_two_item2{width:673px;} /** 一排两个 **/
-#forum_list .forum_two_item3{width:436px;} /** 一排三个 **/
-#forum_list .forum_two_item4{width:320px;} /** 一排四个 **/
-#forum_list .forum_two_item5{width:250px;} /** 一排5个 **/
+#forum_list .forum_two_item2{width:673px;overflow:hidden;} /** 一排两个 **/
+#forum_list .forum_two_item3{width:436px;overflow:hidden;} /** 一排三个 **/
+#forum_list .forum_two_item4{width:320px;overflow:hidden;} /** 一排四个 **/
+#forum_list .forum_two_item5{width:250px;overflow:hidden;} /** 一排5个 **/
+#forum_list .forum_two_item5 img{width:247px;} /** 一排5个 **/
 
 #forum_list .ul_topic_list_2 li{width:663px;} /** 一排两个 主题宽度 **/
 #forum_list .ul_topic_list_3 li{width:426px;} /** 一排三个 主题宽度 **/

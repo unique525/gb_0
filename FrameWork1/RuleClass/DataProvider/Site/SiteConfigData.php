@@ -134,6 +134,8 @@
  *
  * @property string $NewspaperArticlePicWatermarkUploadFileId
  *
+ * @property string $DocumentNewsContentPicWatermarkUploadFileId
+ *
  *
  * @author zhangchi
  */
@@ -286,7 +288,8 @@ class SiteConfigData extends BaseData {
     private $ArrSiteConfigTypes_5 = array(
         "UserDefaultMaleAvatar",
         "UserDefaultFemaleAvatar",
-        "NewspaperArticlePicWatermarkUploadFileId"
+        "NewspaperArticlePicWatermarkUploadFileId",
+        "DocumentNewsContentPicWatermarkUploadFileId"
     );
 
     private $SiteId = 1;
@@ -453,6 +456,8 @@ class SiteConfigData extends BaseData {
 
     private $NewspaperArticlePicWatermarkUploadFileId = 0;//报纸文章附件上传的图片中的水印图
 
+    private $DocumentNewsContentPicWatermarkUploadFileId = 0;//资讯内容上传的图片中的水印图文件id
+
     /**
      * @param mixed $NewspaperArticlePicWatermarkUploadFileId
      */
@@ -467,6 +472,22 @@ class SiteConfigData extends BaseData {
     public function getNewspaperArticlePicWatermarkUploadFileId()
     {
         return $this->NewspaperArticlePicWatermarkUploadFileId;
+    }
+
+    /**
+     * @param mixed $DocumentNewsContentPicWatermarkUploadFileId
+     */
+    public function setDocumentNewsContentPicWatermarkUploadFileId($DocumentNewsContentPicWatermarkUploadFileId)
+    {
+        $this->DocumentNewsContentPicWatermarkUploadFileId = $DocumentNewsContentPicWatermarkUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsContentPicWatermarkUploadFileId()
+    {
+        return $this->DocumentNewsContentPicWatermarkUploadFileId;
     }
 
 

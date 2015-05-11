@@ -50,32 +50,12 @@ class ForumManageData extends BaseManageData {
      * 修改版块
      * @param array $httpPostData $_POST数组
      * @param int $forumId 版块id
-     * @param string $forumPic1 版块图标1
-     * @param string $forumPic2 版块图标2
-     * @param string $forumPicMobile 移动客户端版块图标
-     * @param string $forumPicPad 平板客户端版块图标
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $forumId, $forumPic1 = "", $forumPic2 = "", $forumPicMobile = "", $forumPicPad = "") {
+    public function Modify($httpPostData, $forumId) {
         $dataProperty = new DataProperty();
         $addFieldNames = array();
         $addFieldValues = array();
-        if (!empty($forumPic1)) {
-            $addFieldNames[] = "ForumPic1";
-            $addFieldValues[] = $forumPic1;
-        }
-        if (!empty($forumPic2)) {
-            $addFieldNames[] = "ForumPic2";
-            $addFieldValues[] = $forumPic2;
-        }
-        if (!empty($titlePicMobile)) {
-            $addFieldNames[] = "ForumPicMobile";
-            $addFieldValues[] = $forumPicMobile;
-        }
-        if (!empty($titlePicPad)) {
-            $addFieldNames[] = "ForumPicPad";
-            $addFieldValues[] = $forumPicPad;
-        }
         $sql = parent::GetUpdateSql($httpPostData, self::TableName_Forum, self::TableId_Forum, $forumId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
@@ -128,6 +108,52 @@ class ForumManageData extends BaseManageData {
     }
 
     /**
+     * 修改题图1的上传文件id
+     * @param int $forumId 版块id
+     * @param int $forumPic1UploadFileId 题图1上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyForumPic1UploadFileId($forumId, $forumPic1UploadFileId)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Forum . " SET
+                    ForumPic1UploadFileId = :ForumPic1UploadFileId
+                    WHERE ForumId = :ForumId
+                    ;";
+            $dataProperty->AddField("ForumPic1UploadFileId", $forumPic1UploadFileId);
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改题图2的上传文件id
+     * @param int $forumId 版块id
+     * @param int $forumPic2UploadFileId 题图2上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyForumPic2UploadFileId($forumId, $forumPic2UploadFileId)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Forum . " SET
+                    ForumPic2UploadFileId = :ForumPic2UploadFileId
+                    WHERE ForumId = :ForumId
+                    ;";
+            $dataProperty->AddField("ForumPic2UploadFileId", $forumPic2UploadFileId);
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得上级版块名称
      * @param int $forumId 论坛版块id
      * @param bool $withCache 是否从缓冲中取
@@ -145,7 +171,44 @@ class ForumManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
+    /**
+     * 返回一行数据
+     * @param int $forumId 论坛id
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($forumId)
+    {
+        $result = null;
+        if ($forumId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得所属站点id
+     * @param int $forumId 论坛id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 站点id
+     */
+    public function GetSiteId($forumId, $withCache)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_site_id.cache_' . $forumId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
     /**
      * 取得上级版块名称
      * @param int $forumId 论坛版块id
@@ -185,6 +248,45 @@ class ForumManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 取得题图1的上传文件id
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图1的上传文件id
+     */
+    public function GetForumPic1UploadFileId($forumId, $withCache)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_forum_pic_1_upload_file_id.cache_' . $forumId . '';
+            $sql = "SELECT ForumPic1UploadFileId FROM " . self::TableName_Forum . " WHERE ForumId = :ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得题图2的上传文件id
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图2的上传文件id
+     */
+    public function GetForumPic2UploadFileId($forumId, $withCache)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_forum_pic_2_upload_file_id.cache_' . $forumId . '';
+            $sql = "SELECT ForumPic2UploadFileId FROM " . self::TableName_Forum . " WHERE ForumId = :ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>
