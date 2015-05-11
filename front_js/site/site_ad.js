@@ -14,7 +14,8 @@ $().ready(function() {
 
 
         //检查所有广告是否到期
-        var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
+        //var arrOfAllAdContents=document.getElementsByClassName("icms_ad_item");//取所有广告
+        var arrOfAllAdContents=$(".icms_ad_item");//取所有广告
         for(var i=0;i<arrOfAllAdContents.length;i++){
             IsInTime(arrOfAllAdContents[i]);
         }
