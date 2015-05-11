@@ -22,6 +22,8 @@ str+='<div id="site_ad_{SiteAdId}" idvalue="{SiteAdId}" style="width:{SiteAdWidt
 str+='</div>';
 
 $(".site_ad_{SiteAdId}").html(str);
+$(".site_ad_{SiteAdId} img").css("width","{SiteAdWidth}");
+$(".site_ad_{SiteAdId} img").css("height","{SiteAdHeight}");
 
 
 var showOnce=getcookie('show_once_{SiteAdId}');
