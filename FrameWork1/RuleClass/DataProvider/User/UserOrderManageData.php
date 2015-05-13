@@ -209,7 +209,37 @@ class UserOrderManageData extends BaseManageData{
     public function GetListForExportExcel($beginDate,$endDate,$siteId){
         $result = null;
         if($siteId > 0 && $beginDate < $endDate){
-
+            $dataProperty = new DataProperty();
+            $sql = "SELECT
+                            uop1.UserOrderId,
+                            uo.CreateDate,
+                            p.ProductId,
+                            p.ProductName,
+                            uop1.ProductPrice,
+                            uop1.SaleCount,
+                            uop2.PayPrice,
+                            uo.State,
+                            p.ProductTag,
+                            u.UserName,
+                            uri.ReceivePersonName,
+                            uri.Mobile,
+                            uri.District,
+                            uri.Address,
+                            uop2.CreateDate
+                        FROM
+                            ".self::TableName_UserOrderProduct." uop1
+                            LEFT JOIN ".self::TableName_UserOrder." uo ON uo.UserOrderId = uop1.UserOrderId
+                            LEFT JOIN ".self::TableName_User." u ON uo.UserId = u.UserId
+                            LEFT JOIN ".self::TableName_UserReceiveInfo." uri ON uo.UserReceiveInfoId = uri.UserReceiveInfoId
+                            LEFT JOIN ".self::TableName_UserOrderPay." uop2 ON uo.UserOrderId = uop2.UserOrderId
+                            LEFT JOIN ".self::TableName_Product." p ON uop1.ProductId = p.ProductId
+                        WHERE
+                            uo.CreateDate > date(:BeginDate) AND uo.CreateDate < date(:EndDate)
+                        GROUP BY
+                            uop1.UserOrderProductId;";
+            $dataProperty->AddField("BeginDate",$beginDate);
+            $dataProperty->AddField("EndDate",$endDate);
+            $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
         }
         return $result;
     }

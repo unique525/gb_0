@@ -279,10 +279,11 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $endDate = Control::GetRequest("end_date", "");
         $siteId = Control::GetRequest("site_id",0);
 
-        if ($beginDate < $endDate) {
+        if (strtotime($beginDate) <= strtotime($endDate)) {
             $userOrderManageData = new UserOrderManageData();
             $arrUserOrderListForExcel = $userOrderManageData->GetListForExportExcel($beginDate,$endDate,$siteId);
 
+//            include RELATIVE_PATH . "FrameWork1/RuleClass/Plugins/PHPExcel.php";
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->setActiveSheetIndex(0);
             $objActSheet = $objPHPExcel->getActiveSheet(0);
@@ -305,22 +306,17 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 "联系电话",
                 "收货人地区",
                 "收货地址",
-                "运送方式",
                 "订单付款时间 "
             );
-            for ($i = 0; $i < count($arrUserOrderListForExcel); $i++) {
+            for ($i = 0; $i < count($arrUserOrderListHeader); $i++) {
                 $column = chr($key);
-                $objActSheet->setCellValue($column . '1', $arrUserOrderListForExcel[$i]["CustomFormFieldName"]);
+                $objActSheet->setCellValue($column . '1', $arrUserOrderListHeader[$i]);
                 $objActSheet->getColumnDimension($column)->setAutoSize(true);
 
                 $column_content = 2;
                 for ($j = 0; $j < count($arrUserOrderListForExcel); $j++) {
-                    $value = "";
-                    if ($arrUserOrderListForExcel[$j]["CustomFormFieldID"] == $arrUserOrderListForExcel[$i]["CustomFormFieldID"]) {
-                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($column . strval($column_content), $value);
-
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($column . strval($column_content), $arrUserOrderListForExcel[$j][$i]);
                         $column_content++;
-                    }
                 }
                 $key ++;
             }
@@ -340,5 +336,6 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             header('Content-Transfer-Encoding:binary');
             $objWriter->save('php://output');
         }
+        return "";
     }
 }
