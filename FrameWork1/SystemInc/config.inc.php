@@ -15,6 +15,7 @@ $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
 $incDatabaseInfo[] = 'GData1012';
+$incDatabaseInfo[] = '0'; //debug
 
 /*
 $incDatabaseInfo[] = 'localhost';

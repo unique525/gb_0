@@ -45,6 +45,13 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             return "";
         }
 
+
+        $pageSize = Control::GetRequest("ps", 30);
+        $pageIndex = Control::GetRequest("p", 1);
+        $pageBegin = ($pageIndex - 1) * $pageSize;
+        $allCount = 0;
+
+
         $templateFileUrl = "forum/forum_post_list.html";
         $templateName = "default";
         $templatePath = "front_template";
@@ -52,10 +59,28 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tagId = "forum_post_list";
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $forumPostPublicDate = new ForumPostPublicData();
-        $arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
+        $arrForumPost = $forumPostPublicDate->GetListPager(
+            $forumTopicId,
+            $pageBegin,
+            $pageSize,
+            $allCount
+        );
 
         if (count($arrForumPost) > 0) {
             Template::ReplaceList($tempContent, $arrForumPost, $tagId);
+
+            $styleNumber = 1;
+            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+            $isJs = FALSE;
+            $navUrl = "default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId&p={0}&ps=$pageSize";
+
+            $jsFunctionName = "";
+            $jsParamList = "";
+            $pagerButton = Pager::ShowPageButton(
+                $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+
+            $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+
         } else {
             Template::RemoveCustomTag($tempContent, $tagId);
         }

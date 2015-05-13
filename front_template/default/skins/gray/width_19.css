@@ -5,6 +5,8 @@
 
 #forum_rec_1 .content{width:1400px;}
 
+.img_avatar{max-width:40px;max-height:40px;width:40px;height:40px;}
+
 #forum_list .content{width:1400px;}
 #forum_list .forum_two_item2{width:673px;overflow:hidden;} /** 一排两个 **/
 #forum_list .forum_two_item3{width:436px;overflow:hidden;} /** 一排三个 **/
@@ -20,3 +22,7 @@
 #forum_topic .content{width:1400px;}
 #forum_topic .left{width:1100px;}
 #forum_topic .right{width:250px;}
+
+#forum_post .content{width:1400px;}
+#forum_post .left{width:1100px;}
+#forum_post .right{width:250px;}

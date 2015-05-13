@@ -78,17 +78,17 @@
         <div class="spe"></div>
     </div>
 </div>
-<div id="forum_topic" class="div_info">
+<div id="forum_post" class="div_info">
     <div class="content">
         <div class="left">
             <icms id="forum_post_list" type="list" where="parent">
                 <header>
                     <![CDATA[
-                    <table class="forum_post_content" cellpadding="0"
+                    <table class="forum_post_content_header" cellpadding="0"
                            cellspacing="0" width="100%">
                         <tr>
-                            <td class="forum_topic_item" width="50px" style="padding-right:10px;">
-                                <img class="img_avatar" src="{f_UserAvatar}"/>
+                            <td class="forum_topic_item td1" width="50px" style="padding-right:10px;">
+                                <img class="img_avatar" src="{f_AvatarUploadFilePath}"/>
                             </td>
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
@@ -100,7 +100,7 @@
                                     </tr>
                                     <tr>
                                         <td class="forum_topic_user_name" style="color: #32A5E7;font-weight: bold;">
-                                            {f_NickName}
+                                            {f_UserName}
                                         </td>
                                         <td class="forum_topic_post_time" style="color: #A09999" align="right">
                                             {f_PostTime}
@@ -110,7 +110,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
@@ -124,21 +124,21 @@
                 </header>
                 <item>
                     <![CDATA[
-                    <table cellpadding="0" cellspacing="0" width="100%">
+                    <table class="forum_post_content_item" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
-                            <td class="forum_topic_item" width="50px" style="padding-right:10px;">
-                                <img class="img_avatar" src="{f_UserAvatar}"/>
+                            <td class="forum_topic_item td1" width="50px" style="padding-right:10px;">
+                                <img class="img_avatar" src="{f_AvatarUploadFilePath}"/>
                             </td>
                             <td class="forum_topic_item" align="left" style="font-size: 16px;fpm">
                                 {f_ForumPostTitle}
                             </td>
-                            <td class="forum_topic_item">
-                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_NickName}</div>
+                            <td class="forum_topic_item" width="250px">
+                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_UserName}</div>
                                 <div class="forum_topic_post_time" style="color:#9999A0;">{f_PostTime}</div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;vertical-align:top;">
+                            <td class="forum_post_content" colspan="3" align="left" style="padding-left:10px;padding-top:10px;vertical-align:top;">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
@@ -162,7 +162,7 @@
                     <![CDATA[
                     <table cellpadding="0" cellspacing="0" width="100%">
                     <tr>
-                        <td style="width:150px;">{f_PostTime} {f_NickName}:</td>
+                        <td style="width:150px;">{f_PostTime} {f_UserName}:</td>
                         <td>{f_ForumPostContent}</td>
                     </tr>
                     </table>

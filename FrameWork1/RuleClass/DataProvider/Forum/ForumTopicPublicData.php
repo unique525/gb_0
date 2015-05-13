@@ -168,17 +168,34 @@ class ForumTopicPublicData extends BasePublicData {
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
+
+
+    /**
+     * @param $forumId
+     * @param $pageBegin
+     * @param $pageSize
+     * @param $allCount
+     * @return array
+     */
     public function GetListPager($forumId, $pageBegin, $pageSize, &$allCount) {
         $searchSql = "";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumId", $forumId);
         $sql = "
             SELECT
-            *
+                        ft.*,
+                        ui.AvatarUploadFileId,
+                        uf.UploadFilePath AS AvatarUploadFilePath,
+                        uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
+                        uf.UploadFilePadPath AS AvatarUploadFilePadPath
             FROM
-            " . self::TableName_ForumTopic . "
-            WHERE ForumId=:ForumId  " . $searchSql . "
-            ORDER BY Sort DESC,PostTime DESC
+            " . self::TableName_ForumTopic . " ft
+            INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=ft.UserId)
+
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+
+            WHERE ft.ForumId=:ForumId  " . $searchSql . "
+            ORDER BY ft.Sort DESC,ft.PostTime DESC
             LIMIT " .$pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $dataProperty->AddField("ForumId", $forumId);

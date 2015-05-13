@@ -182,8 +182,8 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 取得一条信息
-     * @param int $forumTopicId 管理员id
-     * @return array 管理员帐号信息数组
+     * @param int $forumTopicId 帖子id
+     * @return array 帖子信息数组
      */
 
     public function GetOne($forumTopicId)
@@ -196,16 +196,42 @@ class ForumPostPublicData extends BasePublicData {
     }
     /**
      * 取得列表信息
-     * @param int $forumTopicId 管理员id
-     * @return array 管理员帐号信息数组
+     * @param int $forumTopicId 帖子id
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @param int $allCount
+     * @return array 帖子信息数组
      */
 
-    public function GetList($forumTopicId)
+    public function GetListPager($forumTopicId, $pageBegin, $pageSize, &$allCount)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " ORDER BY IsTopic DESC;";
+        $sql = "SELECT fp.*,
+                        ui.AvatarUploadFileId,
+                        uf.UploadFilePath AS AvatarUploadFilePath,
+                        uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
+                        uf.UploadFilePadPath AS AvatarUploadFilePadPath
+                FROM " . self::TableName_ForumPost . " fp
+
+                INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=fp.UserId)
+
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+
+
+                WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " ORDER BY fp.IsTopic DESC, fp.PostTime
+
+                LIMIT " .$pageBegin . "," . $pageSize . ";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        //统计总数
+        $sql = "SELECT count(*)
+                FROM " . self::TableName_ForumPost  . "
+                WHERE ForumTopicId=:ForumTopicId;";
+
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+
+
         return $result;
     }
 } 

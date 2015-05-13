@@ -56,6 +56,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $pageIndex = Control::GetRequest("p", 1);
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
+
         $state = 0;
         $templateFileUrl = "forum/forum_topic_list.html";
         $templateName = "default";
@@ -81,7 +82,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $styleNumber = 1;
             $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
             $isJs = FALSE;
-            $navUrl = "default.php?mod=forum_topic&a=list&forum_id=$forumId&site_id=$siteId&p={0}&ps=$pageSize";
+            $navUrl = "default.php?mod=forum_topic&a=list&forum_id=$forumId&p={0}&ps=$pageSize";
             $jsFunctionName = "";
             $jsParamList = "";
             $pagerButton = Pager::ShowPageButton(

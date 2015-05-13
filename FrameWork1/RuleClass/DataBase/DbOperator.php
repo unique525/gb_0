@@ -55,6 +55,11 @@ class DbOperator {
      * @var int
      */
     private $version = 0;
+    /**
+     * 输出执行SQL和时间
+     * @var int
+     */
+    private $debugExecuteTime = 0;
 
     /**
      * 初始化数据库连接
@@ -67,6 +72,7 @@ class DbOperator {
             $this->dbName = $databaseInfo[2];
             $this->dbUser = $databaseInfo[3];
             $this->dbPass = $databaseInfo[4];
+            $this->debugExecuteTime = intval($databaseInfo[5]);
             $this->connect();
         }
         unset($databaseInfo);
@@ -136,13 +142,20 @@ class DbOperator {
      * @return string 返回第一列第一行的STRING型值
      */
     public function GetString($sql, DataProperty $dataProperty = null) {
+        $timeStart = Control::GetMicroTime();
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
         }
         $stmt->execute();
         $result = $stmt->fetchColumn();
+
         $stmt = null;
+        $timeEnd = Control::GetMicroTime();
+        if($this->debugExecuteTime>0){
+            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
+
         return $result;
     }
 
@@ -154,6 +167,10 @@ class DbOperator {
      * @return array 返回二维数组结果集
      */
     public function GetArrayList($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
+
+        $timeStart = Control::GetMicroTime();
+
+
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null && !empty($dataProperty->ArrayField)) {
             $this->BindStmt($stmt, $dataProperty);
@@ -161,6 +178,11 @@ class DbOperator {
         $stmt->execute();
         $result = $stmt->fetchAll($type);
         $stmt = null;
+
+        $timeEnd = Control::GetMicroTime();
+        if($this->debugExecuteTime>0){
+            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
         return $result;
     }
 
@@ -172,6 +194,7 @@ class DbOperator {
      * @return array 返回一维数组结果集
      */
     public function GetArray($sql, DataProperty $dataProperty = null, $type = PDO::FETCH_ASSOC) {
+        $timeStart = Control::GetMicroTime();
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -179,6 +202,10 @@ class DbOperator {
         $stmt->execute();
         $result = $stmt->fetch($type);
         $stmt = null;
+        $timeEnd = Control::GetMicroTime();
+        if($this->debugExecuteTime>0){
+            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
         return $result;
     }
 
@@ -189,6 +216,7 @@ class DbOperator {
      * @return object 返回lob对象
      */
     public function GetLob($sql, DataProperty $dataProperty = null) {
+        $timeStart = Control::GetMicroTime();
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -197,6 +225,12 @@ class DbOperator {
         $stmt->execute();
         $stmt->bindColumn(1, $lob, PDO::PARAM_LOB);
         $stmt->fetch(PDO::FETCH_BOUND);
+
+        $timeEnd = Control::GetMicroTime();
+        if($this->debugExecuteTime>0){
+            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
+
         return $lob;
     }
 
@@ -207,6 +241,7 @@ class DbOperator {
      * @return int 执行结果
      */
     public function Execute($sql, DataProperty $dataProperty = null) {
+        $timeStart = Control::GetMicroTime();
         $stmt = $this->pdo->prepare($sql);
         if ($dataProperty != null) {
             $this->BindStmt($stmt, $dataProperty);
@@ -215,6 +250,10 @@ class DbOperator {
         $result = $stmt->execute();
         $this->pdo->commit();
         $stmt = null;
+        $timeEnd = Control::GetMicroTime();
+        if($this->debugExecuteTime>0){
+            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
         return $result;
     }
 
@@ -225,6 +264,7 @@ class DbOperator {
      * @return int 批量执行结果
      */
     public function ExecuteBatch($sqlList, $arrDataProperty) {
+        $timeStart = Control::GetMicroTime();
         try {
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE,  PDO::ERRMODE_EXCEPTION);//开启异常处理
 
@@ -249,6 +289,12 @@ class DbOperator {
 
             $this->pdo->commit();
             $stmt = null;
+
+            $timeEnd = Control::GetMicroTime();
+            if($this->debugExecuteTime>0){
+                echo "TIME:".($timeEnd - $timeStart)." [".implode("|",$sqlList)."]<br />";
+            }
+
             return $result;
         } catch (PDOException $e) {
             $this->pdo->rollBack();

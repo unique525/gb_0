@@ -69,6 +69,7 @@ foreach ($arrFiles as $fileName) {
 }
 
 
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");

@@ -53,9 +53,12 @@
                     <item>
                         <![CDATA[
                         <tr>
-                            <td class="forum_topic_item" width="50px" style="padding-right:10px;"><img class="img_avatar" src="{f_UserAvatar}"/></td>
-                            <td class="forum_topic_item forum_topic_title" align="left" style="font-size: 16px;fpm"><a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">{f_ForumTopicTitle}</a></td>
-                            <td class="forum_topic_item" align="right">
+                            <td class="forum_topic_item" width="50px" style="padding-right:10px;"><img class="img_avatar" src="{f_AvatarUploadFilePath}"/></td>
+                            <td class="forum_topic_item forum_topic_title" align="left" style="font-size: 16px;">
+                                <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
+                                    {f_ForumTopicTitle}
+                                </a></td>
+                            <td class="forum_topic_item" width="300px" align="right">
                                 <div class="forum_topic_user_name" style="color:#9999A0;">{f_UserName}</div>
                                 <div class="forum_topic_post_time" style="color:#9999A0;">{f_PostTime}</div>
                             </td>
