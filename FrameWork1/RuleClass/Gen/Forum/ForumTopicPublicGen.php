@@ -165,18 +165,18 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $forumTopicAudit = Control::PostRequest("f_ForumTopicAudit", "");
             $forumTopicAccess = Control::PostRequest("f_ForumTopicAccess", "");
             $postTime = date("Y-m-d H:i:s");
-            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
-            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $userId = Control::GetUserId();
+            $userName = Control::GetUserName();
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
             $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
             $titleBold = Control::PostRequest("f_TitleBold", "");
             $titleColor = Control::PostRequest("f_TitleColor", "");
             $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
-            $forumTopicCreate = new ForumTopicPublicData();
+            $forumTopicPublicData = new ForumTopicPublicData();
 
 
 
-            $forumTopicId = $forumTopicCreate->Create(
+            $forumTopicId = $forumTopicPublicData->Create(
                 $siteId,
                 $forumId,
                 $forumTopicTitle,
@@ -240,6 +240,24 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 );
 
                 if($forumPostId > 0 ){
+                    $forumPublicData = new ForumPublicData();
+                    $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
+
+                    $lastPostInfo = ForumData::AddToLastPostInfo($forumTopicTitle, $lastPostInfo);
+
+                    //更新版块信息
+                    $forumPublicData = new ForumPublicData();
+                    $forumPublicData->UpdateForumInfoWhenCreateTopic(
+                        $forumId,
+                        $forumTopicId,
+                        $forumPostTitle,
+                        $userName,
+                        $userId,
+                        $postTime,
+                        $lastPostInfo
+                    );
+
+
 
                 }
             }

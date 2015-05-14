@@ -73,21 +73,21 @@ ul{list-style-type:none;}
 #forum_list .forum_two{}
 
 /** 一排两个下的左边 **/
-#forum_list .forum_two_item2_left{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
+#forum_list .forum_two_item2_left{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
 /** 一排两个下的右边 **/
-#forum_list .forum_two_item2_right{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
+#forum_list .forum_two_item2_right{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
 /** 一排3个下的左边 **/
-#forum_list .forum_two_item3_left{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:13px;margin-top:12px;}
+#forum_list .forum_two_item3_left{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:13px;margin-top:12px;}
 /** 一排3个下的右边 **/
-#forum_list .forum_two_item3_right{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
+#forum_list .forum_two_item3_right{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
 /** 一排4个下的左边 **/
-#forum_list .forum_two_item4_left{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
+#forum_list .forum_two_item4_left{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
 /** 一排4个下的右边 **/
-#forum_list .forum_two_item4_right{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
+#forum_list .forum_two_item4_right{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
 /** 一排5个下的左边 **/
-#forum_list .forum_two_item5_left{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
+#forum_list .forum_two_item5_left{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-right:10px;margin-top:12px;}
 /** 一排5个下的右边 **/
-#forum_list .forum_two_item5_right{float:left;height:280px;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
+#forum_list .forum_two_item5_right{float:left;padding:10px;border:1px solid #e1e1e1;background:#ffffff;margin-top:12px;}
 
 
 #forum_list .td_pic img{height:70px;}

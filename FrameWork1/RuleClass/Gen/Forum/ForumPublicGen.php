@@ -52,9 +52,12 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $forumRank = 0;
         $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
 
+
+
         $forumRank = 1;
         $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
-        //print_r($arrRankTwoList);
+
+
 
         $tagId = "forum_".$siteId;
         $tagName = Template::DEFAULT_TAG_NAME;

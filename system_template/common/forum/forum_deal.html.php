@@ -124,6 +124,16 @@
             {s_ForumMode}
         </td>
     </tr>
+    <tr class="rank_0">
+        <td class="spe_line" height="30" align="right"><label for="f_ShowLastPostInfo">显示最新的多条帖子：</label></td>
+        <td class="spe_line">
+            <select id="f_ShowLastPostInfo" name="f_ShowLastPostInfo">
+                <option value="10">显示</option>
+                <option value="0">不显示</option>
+            </select>
+            {s_ShowLastPostInfo}
+        </td>
+    </tr>
     <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumAuditType">发帖审核设置：</label></td>
         <td class="spe_line">

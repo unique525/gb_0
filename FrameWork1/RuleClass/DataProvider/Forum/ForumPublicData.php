@@ -21,7 +21,7 @@ class ForumPublicData extends BasePublicData {
      * @param string $lastPostInfo
      * @return int 执行结果
      */
-    public function UpdateForumInfo($forumId, $lastForumTopicId, $lastForumTopicTitle, $lastUserName, $lastUserId, $lastPostTime, $lastPostInfo) {
+    public function UpdateForumInfoWhenCreateTopic($forumId, $lastForumTopicId, $lastForumTopicTitle, $lastUserName, $lastUserId, $lastPostTime, $lastPostInfo) {
 
         $result = -1;
         if($forumId>0){
@@ -91,107 +91,24 @@ class ForumPublicData extends BasePublicData {
         return $result;
     }
 
-    public function GetListPager($pageBegin, $pageSize, &$allCount, $state = -1) {
-        $searchSql = "";
-        $dataProperty = new DataProperty();
-        if ($state >= 0) {
-            $searchSql .= " AND f.state=:state ";
-            $dataProperty->AddField("state", $state);
-        } else {
-            $searchSql .= " ";
-        }
-        $sql = "SELECT
-            f.forumid,f.state,f.forumname,f.forumaccess
-            FROM
-            " . self::TableName_Forum . " f
-            WHERE f.forumid>0  " . $searchSql . " ORDER BY f.sort DESC LIMIT " . $pageBegin . "," . $pageSize . "";
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        //统计总数
-        $sql = "";
-        $sql = "SELECT count(*) FROM " . self::tableName . " f WHERE f.forumid>0 " . $searchSql;
-        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
-        return $result;
-    }
-
     /**
-     * 根据ForumId取得SiteId
-     * @param int $forumId 版块id
-     * @return int SiteId
+     * 取得论坛最后回复信息
+     * @param int $forumId 论坛id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 论坛最后回复信息
      */
-    public function GetSiteId($forumId) {
+    public function GetLastPostInfo($forumId, $withCache)
+    {
+        $result = "";
         if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'channel_get_last_post_info.cache_' . $forumId . '';
+            $sql = "SELECT ChannelName FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
             $dataProperty = new DataProperty();
-            $sql = "SELECT SiteId FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId";
             $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
-            return $result;
-        }
-    }
-
-    /**
-     * 根据ForumId取得ForumRule
-     * @param int $forumId 版块id
-     * @return string ForumRule 
-     */
-    public function GetForumRule($forumId) {
-        if ($forumId > 0) {
-            $dataProperty = new DataProperty();
-            $sql = "SELECT ForumRule FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->GetString($sql, $dataProperty);
-            return $result;
-        }
-    }
-
-    /**
-     * 根据ForumId取得审核类型
-     * @param int $forumId 版块id
-     * @return int 审核类型
-     */
-    public function GetForumAuditType($forumId) {
-        if ($forumId > 0) {
-            $dataProperty = new DataProperty();
-            $sql = "SELECT ForumAuditType FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId";
-            $dataProperty->AddField("ForumId", $forumId);
-            $result = $this->dbOperator->GetInt($sql, $dataProperty);
-            return $result;
-        }
-    }
-
-    /**
-     * 取得版块每排显示数量
-     * @param int $forumId 版块id
-     * @return int 版块每排显示数量
-     */
-    public function GetShowColumnCount($forumId) {
-        $result = 0;
-        if ($forumId > 0) {
-            $cacheDir = 'data' . DIRECTORY_SEPARATOR . 'forumdata';
-            $cacheFile = 'forum_showcolumncount.cache_' . $forumId . '.php';
-            if (parent::IsDataCached($cacheDir, $cacheFile)) {
-                $dataProperty = new DataProperty();
-                $sql = "SELECT ShowColumnCount FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId";
-                $dataProperty->AddField("ForumId", $forumId);
-                $result = $this->dbOperator->GetInt($sql, $dataProperty);
-                DataCache::Set($cacheDir, $cacheFile, $result);
-            } else {
-                $result = intval(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile));
-            }
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
 
-        return $result;
-    }
-
-    /**
-     * 取得一条记录
-     * @param int $forumId 版块id
-     * @return array 一条记录
-     */
-    public function GetOne($forumId) {
-        $dataProperty = new DataProperty();
-        $sql = "SELECT forumid,parentid,forumrank,forumname,forumtype,forumaccess,forumguestaccess,forummode,forumaudittype,forumpic,foruminfo,forumrule,forumadcontent,sort,showonlineuser,autooptopic,autoaddtopictitlepre,usernamecolor,closeupload,state,siteid FROM  " . self::tableName . "  WHERE  " . self::tableIdName . "=:" . self::tableIdName;
-        $dataProperty->AddField(self::TableId_Forum, $forumId);
-        $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 

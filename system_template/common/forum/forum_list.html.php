@@ -40,7 +40,7 @@
                                                                                                value="{f_ForumId}"/>
                             </td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><a
-                                    href="/default.php?secu=manage&mod=forum&m=modify&forum_id={f_ForumId}&site_id={f_SiteId}"><img
+                                    href="/default.php?secu=manage&mod=forum&m=modify&forum_id={f_ForumId}&site_id={f_SiteId}&forum_rank={f_ForumRank}"><img
                                         class="edit_doc system_image"
                                         src="/system_template/{template_name}/images/manage/edit.gif"
                                         idvalue="{f_ForumId}" alt="编辑"/></a></td>
