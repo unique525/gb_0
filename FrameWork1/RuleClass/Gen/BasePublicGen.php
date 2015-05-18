@@ -6,94 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_Gen
  * @author zhangchi
  */
-class BasePublicGen extends BaseGen {
-
-    /**
-     * 通过子域名取得站点id
-     * @return int 站点id
-     */
-    protected function GetSiteIdByDomain() {
-        $host = strtolower($_SERVER['HTTP_HOST']);
-        $host = str_ireplace("http://", "", $host);
-        if ($host === "localhost" || $host === "127.0.0.1") {
-            $siteId = 1;
-        } else {
-
-            //先查绑定的一级域名
-            $domain = Control::GetDomain(strtolower($_SERVER['HTTP_HOST']));
-            $sitePublicData = new SitePublicData();
-            $siteId = $sitePublicData->GetSiteIdByBindDomain($domain, true);
-
-            if($siteId<=0){
-                //查子域名
-                $arrSubDomain = explode(".", $host);
-                if (count($arrSubDomain) > 0) {
-                    $subDomain = $arrSubDomain[0];
-                    if (strlen($subDomain) > 0) {
-                        $siteId = $sitePublicData->GetSiteId($subDomain, true);
-                    }
-                }
-            }
-
-        }
-        return $siteId;
-    }
-
-    /**
-     * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
-     * @param string $defaultTemp 默认模板
-     * @param int $siteId 默认从域名取，可以不传入
-     * @return string 模板内容
-     */
-    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
-    {
-
-        $result = "";
-        if ($siteId <= 0){
-            $siteId = self::GetSiteIdByDomain();
-        }
-
-        $channelTemplateTag = Control::PostOrGetRequest("temp","");
-
-        if(strlen($channelTemplateTag)<=0){
-            $channelTemplateTag = $defaultTemp;
-        }
-
-
-        if($siteId>0 && strlen($channelTemplateTag)>0){
-
-            $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
-            $channelTemplatePublicData = new ChannelTemplatePublicData();
-
-            if(self::IsMobile()){
-                $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
-                    $siteId, $channelTemplateType, $channelTemplateTag, false);
-
-                //如果不存在手机模板，则加载默认电脑模板
-                if(strlen($result)<=0){
-                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                        $siteId, $channelTemplateType, $channelTemplateTag, false);
-                }
-            }
-            elseif(self::IsPad()){
-                $result = $channelTemplatePublicData->GetChannelTemplateContentForPadForDynamic(
-                    $siteId, $channelTemplateType, $channelTemplateTag, false);
-
-                //如果不存在pad模板，则加载默认电脑模板
-                if(strlen($result)<=0){
-                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                        $siteId, $channelTemplateType, $channelTemplateTag, false);
-                }
-            }
-            else{
-                $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
-                    $siteId, $channelTemplateType, $channelTemplateTag, false);
-            }
-        }
-        return $result;
-    }
-
-
+class BasePublicGen extends BaseGen
+{
 
     /**
      * 替换模板内容
@@ -101,7 +15,7 @@ class BasePublicGen extends BaseGen {
      * @param string $tagTopCountOfPage 默认显示条数（用于列表页分页）
      * @return mixed|string 内容模板
      */
-    public function ReplaceTemplate($templateContent,$tagTopCountOfPage="")
+    public function ReplaceTemplate($templateContent, $tagTopCountOfPage = "")
     {
         /** 1.处理预加载模板 */
 
@@ -126,10 +40,10 @@ class BasePublicGen extends BaseGen {
                 //显示条数
 
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
-                if($tagTopCountOfPage!=""){
+                if ($tagTopCountOfPage != "") {
                     $tagTopCountOfPate = Format::CheckTopCount($tagTopCountOfPage);
                     if ($tagTopCountOfPage != null) {
-                        $tagTopCount=$tagTopCountOfPage;
+                        $tagTopCount = $tagTopCountOfPage;
                     }
                 }
 
@@ -144,15 +58,15 @@ class BasePublicGen extends BaseGen {
                     case Template::TAG_TYPE_CHANNEL_LIST :
 
 
-                            $templateContent = self::ReplaceTemplateOfChannelList(
-                                $templateContent,
-                                $tagId,
-                                $tagContent,
-                                $tagTopCount,
-                                $tagWhere,
-                                $tagWhereValue,
-                                $tagOrder
-                            );
+                        $templateContent = self::ReplaceTemplateOfChannelList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder
+                        );
 
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
@@ -205,7 +119,7 @@ class BasePublicGen extends BaseGen {
                         break;
                     case Template::TAG_TYPE_PRODUCT_PARAM_TYPE_LIST :
                         $productParamTypeClassId = intval(str_ireplace("product_param_type_", "", $tagId));
-                        $productId=$relationId;
+                        $productId = $relationId;
                         if ($productParamTypeClassId > 0) {
                             $templateContent = self::ReplaceTemplateOfProductParamTypeList($templateContent, $productParamTypeClassId, $productId, $tagId, $tagContent, $tagTopCount, $tagWhere, $tagOrder, $state);
                         }
@@ -278,7 +192,7 @@ class BasePublicGen extends BaseGen {
                         break;
                     case Template::TAG_TYPE_RECENT_USER_FAVORITE_LIST:
                         $userId = Control::GetUserId();
-                        if($userId>0){
+                        if ($userId > 0) {
                             $templateContent = self::ReplaceTemplateOfUserFavoriteList(
                                 $templateContent,
                                 $userId,
@@ -506,10 +420,10 @@ class BasePublicGen extends BaseGen {
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
                     break;
                 case "rec_level_child":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "",$orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 case "rec_level_grandson":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 default :
                     $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
@@ -519,177 +433,13 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 //替换为空
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
             }
         }
 
         return $channelTemplateContent;
-    }
-
-    /**
-     * 替换电子报文章列表的内容
-     * @param string $channelTemplateContent 要处理的模板内容
-     * @param int $newspaperPageId 电子报版面id
-     * @param string $tagId 标签id
-     * @param string $tagContent 标签内容
-     * @param int $tagTopCount 显示条数
-     * @param string $tagWhere 查询方式
-     * @param string $tagOrder 排序方式
-     * @param int $state 状态
-     * @return mixed|string 内容模板
-     */
-    private function ReplaceTemplateOfNewspaperArticleList(
-        $channelTemplateContent,
-        $newspaperPageId,
-        $tagId,
-        $tagContent,
-        $tagTopCount,
-        $tagWhere,
-        $tagOrder,
-        $state
-    )
-    {
-        if ($newspaperPageId > 0) {
-
-            //默认只显示已发状态的新闻
-            $state = 0;
-
-            $arrList = null;
-            $newspaperArticlePublicData = new NewspaperArticlePublicData();
-
-            //排序方式
-            switch ($tagOrder) {
-                case "new":
-                    $orderBy = 0;
-                    break;
-                default:
-                    $orderBy = 0;
-                    break;
-            }
-
-            switch ($tagWhere) {
-                default :
-                    $arrList = $newspaperArticlePublicData->GetList($newspaperPageId, $tagTopCount, $state, $orderBy);
-                    break;
-            }
-
-
-
-            if (!empty($arrList)) {
-                Template::ReplaceList($tagContent, $arrList, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
-                //替换为空
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
-            }
-        }
-
-        return $channelTemplateContent;
-    }
-
-
-    /**
-     * 替换电子报文章图片列表的内容
-     * @param string $channelTemplateContent 要处理的模板内容
-     * @param int $newspaperArticleId 电子报文章id
-     * @param string $tagId 标签id
-     * @param string $tagContent 标签内容
-     * @param int $tagTopCount 显示条数
-     * @param string $tagWhere 查询方式
-     * @param string $tagOrder 排序方式
-     * @param int $state 状态
-     * @return mixed|string 内容模板
-     */
-    private function ReplaceTemplateOfNewspaperArticlePicList(
-        $channelTemplateContent,
-        $newspaperArticleId,
-        $tagId,
-        $tagContent,
-        $tagTopCount,
-        $tagWhere,
-        $tagOrder,
-        $state
-    )
-    {
-        if ($newspaperArticleId > 0) {
-
-
-
-            $arrList = null;
-            $newspaperArticlePicPublicData = new NewspaperArticlePicPublicData();
-
-            switch ($tagWhere) {
-                default :
-                    $arrList = $newspaperArticlePicPublicData->GetList($newspaperArticleId);
-                    break;
-            }
-
-            if (!empty($arrList)) {
-
-                if(stripos($tagId,"newspaper_article_slider_") !== false){ //轮换图
-                    if(count($arrList)>1){ //只显示多图
-                        Template::ReplaceList($tagContent, $arrList, $tagId);
-                    }else{
-                        $tagContent = "";
-                    }
-                }elseif(stripos($tagId,"newspaper_article_") !== false){ //单图
-                    if(count($arrList)<2){ //只显示单图
-                        Template::ReplaceList($tagContent, $arrList, $tagId);
-                    }else{
-                        $tagContent = "";
-                    }
-                }
-
-                //Template::ReplaceList($tagContent, $arrList, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
-                //替换为空
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
-            }
-        }
-
-        return $channelTemplateContent;
-    }
-
-    private function ReplaceTemplateOfUserFavoriteList(
-        $channelTemplateContent,
-        $userId,
-        $tagId,
-        $tagContent,
-        $tagTopCount,
-        $tagWhere
-    ){
-        if ($userId > 0) {
-            $siteId = self::GetSiteIdByDomain();
-            $arrList = null;
-            $userFavoritePublicData = new UserFavoritePublicData();
-
-            switch ($tagWhere) {
-                default :
-                    $pageBegin = 1;
-                    $pageSize = $tagTopCount;
-                    $arrList = $userFavoritePublicData->GetListForRecentUserFavorite($userId,$siteId,$pageBegin,$pageSize,$allCount);
-                    break;
-            }
-            if (!empty($arrList)) {
-                Template::ReplaceList($tagContent, $arrList, $tagId);
-                //把对应ID的CMS标记替换成指定内容
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
-                //替换为空
-                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
-            }
-        }
-
-        return $channelTemplateContent;
-
-
-
-
     }
 
     /**
@@ -743,7 +493,7 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 //替换为空
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
             }
@@ -787,7 +537,7 @@ class BasePublicGen extends BaseGen {
             case "BelongChannel":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $belongChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
                     $arrProductList = $productPublicData->GetListByChannelId($belongChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
@@ -804,7 +554,7 @@ class BasePublicGen extends BaseGen {
             case "BelongChannelDiscount":
                 $channelId = intval(str_ireplace("product_", "", $tagId));
                 if ($channelId > 0) {
-                    $OwnChannelAndChildChannelId=self::GetOwnChannelIdAndChildChannelId($channelId);
+                    $OwnChannelAndChildChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
                     $arrProductList = $productPublicData->GetDiscountListByChannelId($OwnChannelAndChildChannelId, $tagOrder, $tagTopCount);
                 }
                 break;
@@ -819,14 +569,12 @@ class BasePublicGen extends BaseGen {
             Template::ReplaceList($tagContent, $arrProductList, $tagId);
             //把对应ID的CMS标记替换成指定内容
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-        }
-        else {
+        } else {
             //替换为空
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
         }
         return $templateContent;
     }
-
 
     /**
      * 替换产品参数类别列表的内容
@@ -867,10 +615,8 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrProductParamTypeClassList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
-        }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
+        } else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
@@ -905,11 +651,11 @@ class BasePublicGen extends BaseGen {
             $productParamTypePublicData = new ProductParamTypePublicData();
             switch ($tagWhere) {
                 case "new":
-                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId,$productId, $tagOrder, $tagTopCount);
+                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId, $productId, $tagOrder, $tagTopCount);
                     break;
                 default :
                     //new
-                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId,$productId, $tagOrder, $tagTopCount);
+                    $arrProductParamTypeList = $productParamTypePublicData->GetListWithValue($productParamTypeClassId, $productId, $tagOrder, $tagTopCount);
                     break;
             }
             if (!empty($arrProductParamTypeList)) {
@@ -917,10 +663,8 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrProductParamTypeList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
-        }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
+        } else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
@@ -930,9 +674,10 @@ class BasePublicGen extends BaseGen {
      * @param array $arrProductParamTypeList 产品参数原始数组
      * @return string 产品参数值
      */
-    public function MappingParamTypeValue(&$arrProductParamTypeList){
+    public function MappingParamTypeValue(&$arrProductParamTypeList)
+    {
         for ($i = 0; $i < count($arrProductParamTypeList); $i++) {
-            $paramValueType=$arrProductParamTypeList[$i]["ParamValueType"];
+            $paramValueType = $arrProductParamTypeList[$i]["ParamValueType"];
             switch ($paramValueType) {
                 case "0":
                     $paramTypeMappingValue = $arrProductParamTypeList[$i]["ShortStringValue"];
@@ -959,7 +704,7 @@ class BasePublicGen extends BaseGen {
                     $paramTypeMappingValue = "";
                     break;
             }
-            $arrProductParamTypeList[$i]["ParamTypeValue"]=$paramTypeMappingValue;
+            $arrProductParamTypeList[$i]["ParamTypeValue"] = $paramTypeMappingValue;
         }
     }
 
@@ -1002,26 +747,24 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrProductPriceList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
-        }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
+        } else Template::RemoveCustomTag($templateContent, $tagId);
 
         return $templateContent;
     }
 
     /**
- * 替换产品图片列表的内容
- * @param string $templateContent 要处理的模板内容
- * @param int $productId 产品id
- * @param string $tagId 标签id
- * @param string $tagContent 标签内容
- * @param int $tagTopCount 显示条数
- * @param string $tagWhere 查询方式
- * @param string $tagOrder 排序方式
- * @param int $state 状态
- * @return mixed|string 内容模板
- */
+     * 替换产品图片列表的内容
+     * @param string $templateContent 要处理的模板内容
+     * @param int $productId 产品id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
     private function ReplaceTemplateOfProductPicList(
         $templateContent,
         $productId,
@@ -1049,8 +792,7 @@ class BasePublicGen extends BaseGen {
                 Template::ReplaceList($tagContent, $arrProductPicList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($templateContent, $tagId);
+            } else Template::RemoveCustomTag($templateContent, $tagId);
         }
 
         return $templateContent;
@@ -1089,24 +831,23 @@ class BasePublicGen extends BaseGen {
                         break;
                 }
 
-                if (count($userExploreCollection->UserExplores)>0) {
+                if (count($userExploreCollection->UserExplores) > 0) {
 
                     //限制$tagTopCount
                     $arrList = array();
 
-                    if($tagTopCount > count($userExploreCollection->UserExplores)){
+                    if ($tagTopCount > count($userExploreCollection->UserExplores)) {
                         $tagTopCount = count($userExploreCollection->UserExplores);
                     }
 
 
-                    if($tagTopCount>0){
-                        for($x = 0; $x<$tagTopCount; $x++){
+                    if ($tagTopCount > 0) {
+                        for ($x = 0; $x < $tagTopCount; $x++) {
 
                             $arrList[] = $userExploreCollection->UserExplores[$x];
 
                         }
                     }
-
 
 
                     Template::ReplaceList($tagContent, $arrList, $tagId);
@@ -1118,14 +859,276 @@ class BasePublicGen extends BaseGen {
             } else {
                 Template::RemoveCustomTag($templateContent, $tagId);
             }
-        }
-        else {
-            $showMessage = Language::Load("user_explore",1);
-            $showMessage = str_ireplace("{ReturnUrl}", urlencode($_SERVER["REQUEST_URI"]),$showMessage);
+        } else {
+            $showMessage = Language::Load("user_explore", 1);
+            $showMessage = str_ireplace("{ReturnUrl}", urlencode($_SERVER["REQUEST_URI"]), $showMessage);
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $showMessage);
         }
 
         return $templateContent;
+    }
+
+    /**
+     * 根据会员Id从会员浏览记录COOKIE中取得用户浏览记录数组
+     * @param int $userId 会员Id
+     * @return UserExploreCollection 取得会员浏览记录对应数组
+     */
+    protected function GetUserExploreArrayFromCookieByUserId($userId)
+    {
+        $userExploreCollection = new UserExploreCollection();
+        if ($userId > 0) {
+            if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
+                //读取cookie
+                $cookieStr = Control::GetUserExploreCookie($userId);
+                //字符串转回原来的数组
+                $userExploreCollection->UserExplores = $cookieStr;
+            }
+        }
+        return $userExploreCollection;
+    }
+
+    /**
+     * 替换电子报文章列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $newspaperPageId 电子报版面id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfNewspaperArticleList(
+        $channelTemplateContent,
+        $newspaperPageId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($newspaperPageId > 0) {
+
+            //默认只显示已发状态的新闻
+            $state = 0;
+
+            $arrList = null;
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $newspaperArticlePublicData->GetList($newspaperPageId, $tagTopCount, $state, $orderBy);
+                    break;
+            }
+
+
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+    /**
+     * 替换电子报文章图片列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $newspaperArticleId 电子报文章id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfNewspaperArticlePicList(
+        $channelTemplateContent,
+        $newspaperArticleId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($newspaperArticleId > 0) {
+
+
+            $arrList = null;
+            $newspaperArticlePicPublicData = new NewspaperArticlePicPublicData();
+
+            switch ($tagWhere) {
+                default :
+                    $arrList = $newspaperArticlePicPublicData->GetList($newspaperArticleId);
+                    break;
+            }
+
+            if (!empty($arrList)) {
+
+                if (stripos($tagId, "newspaper_article_slider_") !== false) { //轮换图
+                    if (count($arrList) > 1) { //只显示多图
+                        Template::ReplaceList($tagContent, $arrList, $tagId);
+                    } else {
+                        $tagContent = "";
+                    }
+                } elseif (stripos($tagId, "newspaper_article_") !== false) { //单图
+                    if (count($arrList) < 2) { //只显示单图
+                        Template::ReplaceList($tagContent, $arrList, $tagId);
+                    } else {
+                        $tagContent = "";
+                    }
+                }
+
+                //Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+    private function ReplaceTemplateOfUserFavoriteList(
+        $channelTemplateContent,
+        $userId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere
+    )
+    {
+        if ($userId > 0) {
+            $siteId = self::GetSiteIdByDomain();
+            $arrList = null;
+            $userFavoritePublicData = new UserFavoritePublicData();
+
+            switch ($tagWhere) {
+                default :
+                    $pageBegin = 1;
+                    $pageSize = $tagTopCount;
+                    $arrList = $userFavoritePublicData->GetListForRecentUserFavorite($userId, $siteId, $pageBegin, $pageSize, $allCount);
+                    break;
+            }
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+
+
+    }
+
+    /**
+     * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
+     * @param string $defaultTemp 默认模板
+     * @param int $siteId 默认从域名取，可以不传入
+     * @return string 模板内容
+     */
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
+    {
+
+        $result = "";
+        if ($siteId <= 0) {
+            $siteId = self::GetSiteIdByDomain();
+        }
+
+        $channelTemplateTag = Control::PostOrGetRequest("temp", "");
+
+        if (strlen($channelTemplateTag) <= 0) {
+            $channelTemplateTag = $defaultTemp;
+        }
+
+
+        if ($siteId > 0 && strlen($channelTemplateTag) > 0) {
+
+            $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
+            $channelTemplatePublicData = new ChannelTemplatePublicData();
+
+            if (self::IsMobile()) {
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+
+                //如果不存在手机模板，则加载默认电脑模板
+                if (strlen($result) <= 0) {
+                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                        $siteId, $channelTemplateType, $channelTemplateTag, false);
+                }
+            } elseif (self::IsPad()) {
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForPadForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+
+                //如果不存在pad模板，则加载默认电脑模板
+                if (strlen($result) <= 0) {
+                    $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                        $siteId, $channelTemplateType, $channelTemplateTag, false);
+                }
+            } else {
+                $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
+                    $siteId, $channelTemplateType, $channelTemplateTag, false);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 通过子域名取得站点id
+     * @return int 站点id
+     */
+    protected function GetSiteIdByDomain()
+    {
+        $host = strtolower($_SERVER['HTTP_HOST']);
+        $host = str_ireplace("http://", "", $host);
+        if ($host === "localhost" || $host === "127.0.0.1") {
+            $siteId = 1;
+        } else {
+
+            //先查绑定的一级域名
+            $domain = Control::GetDomain(strtolower($_SERVER['HTTP_HOST']));
+            $sitePublicData = new SitePublicData();
+            $siteId = $sitePublicData->GetSiteIdByBindDomain($domain, true);
+
+            if ($siteId <= 0) {
+                //查子域名
+                $arrSubDomain = explode(".", $host);
+                if (count($arrSubDomain) > 0) {
+                    $subDomain = $arrSubDomain[0];
+                    if (strlen($subDomain) > 0) {
+                        $siteId = $sitePublicData->GetSiteId($subDomain, true);
+                    }
+                }
+            }
+
+        }
+        return $siteId;
     }
 
     /**
@@ -1138,14 +1141,14 @@ class BasePublicGen extends BaseGen {
      * @param string $titlePic 题图地址
      * @param string $price 价格
      */
-    protected function CreateUserExploreCookie($userId,$tableId,$tableType,$url,$title,$titlePic,$price)
+    protected function CreateUserExploreCookie($userId, $tableId, $tableType, $url, $title, $titlePic, $price)
     {
 
         if ($userId > 0) {
 
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
-            if (strlen(Control::GetUserExploreCookie($userId))>0) {
+            if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
                 //读取cookie
                 $cookieStr = Control::GetUserExploreCookie($userId);
                 $userExploreCollection->UserExplores = $cookieStr;
@@ -1171,25 +1174,6 @@ class BasePublicGen extends BaseGen {
     }
 
     /**
-     * 根据会员Id从会员浏览记录COOKIE中取得用户浏览记录数组
-     * @param int $userId 会员Id
-     * @return UserExploreCollection 取得会员浏览记录对应数组
-     */
-    protected function GetUserExploreArrayFromCookieByUserId($userId)
-    {
-        $userExploreCollection = new UserExploreCollection();
-        if ($userId > 0) {
-            if (strlen(Control::GetUserExploreCookie($userId))>0) {
-                //读取cookie
-                $cookieStr = Control::GetUserExploreCookie($userId);
-                //字符串转回原来的数组
-                $userExploreCollection->UserExplores = $cookieStr;
-            }
-        }
-        return $userExploreCollection;
-    }
-
-    /**
      * @param int $siteId
      * @param int $useArea
      * @param bool $stop
@@ -1197,11 +1181,16 @@ class BasePublicGen extends BaseGen {
      * @param array $multiContent
      * @return string
      */
-    protected function DoFilter($siteId, $useArea, &$stop, &$content, &$multiContent = null) {
+    protected function DoFilter($siteId, $useArea, &$stop, &$content, &$multiContent = null)
+    {
         $result = "";
         $stop = FALSE;
+
+
         $siteFilterManageData = new SiteFilterManageData();
         $arrSiteFilter = $siteFilterManageData->GetList($siteId);
+
+
 
         if (count($arrSiteFilter) > 0) {
 
@@ -1215,9 +1204,9 @@ class BasePublicGen extends BaseGen {
 
                 if ($siteFilterWordLength > 0 && $intervalCount >= 0) {
                     for ($j = 0; $j < $siteFilterWordLength; $j++) {
-                        if ($j < $siteFilterWordLength - 1) {//不是最后一个字符，就拼接正则表达式
+                        if ($j < $siteFilterWordLength - 1) { //不是最后一个字符，就拼接正则表达式
                             $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1) . "[\s|\S|\d|\D|，|。|？|：|；|‘|’|！|“|”|—]{0,$intervalCount}";
-                        } else {//否则只拼接字符
+                        } else { //否则只拼接字符
                             $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1);
                         }
                     }
@@ -1260,18 +1249,18 @@ class BasePublicGen extends BaseGen {
      * @param int $tableId 表id
      * @param string $tag 标签
      */
-    protected function ReplaceVisitCode(&$templateContent, $siteId, $channelId, $tableType, $tableId, $tag = ""){
+    protected function ReplaceVisitCode(&$templateContent, $siteId, $channelId, $tableType, $tableId, $tag = "")
+    {
 
         $sitePublicData = new SitePublicData();
         $siteUrl = $sitePublicData->GetSiteUrl($siteId, true);
 
 
-        $jsCode = '<script type="text/javascript">var visitConfig = encodeURIComponent("'.$siteUrl.'") +"||'.$siteId.'||'.$channelId.'||'.$tableType.'||'.$tableId.'||"+encodeURI("'.$tag.'");</script>';
+        $jsCode = '<script type="text/javascript">var visitConfig = encodeURIComponent("' . $siteUrl . '") +"||' . $siteId . '||' . $channelId . '||' . $tableType . '||' . $tableId . '||"+encodeURI("' . $tag . '");</script>';
         $scriptLoad = '<script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>';
-        $templateContent = str_ireplace("{VisitCode}", $jsCode.$scriptLoad, $templateContent);
+        $templateContent = str_ireplace("{VisitCode}", $jsCode . $scriptLoad, $templateContent);
 
     }
-
 
 
 }

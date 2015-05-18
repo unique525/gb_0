@@ -74,10 +74,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $state
         );
         $tagId = "forum_topic_list_normal";
-        //print_r($arrForumTopicList);
         if (count($arrForumTopicList) > 0) {
-            Template::ReplaceList($tempContent, $arrForumTopicList, $tagId);
 
+            Template::ReplaceList($tempContent, $arrForumTopicList, $tagId);
 
             $styleNumber = 1;
             $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
@@ -100,6 +99,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
+
 
         /*******************过滤字符 begin********************** */
         $multiFilterContent = array();
