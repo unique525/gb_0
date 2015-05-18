@@ -100,18 +100,18 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $forumId = Control::GetRequest("forum_id", 0);
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
-        echo $forumTopicId;
+
         if(!empty($_POST)){
 
-
+            echo "11";
             $forumPostTitle = "";
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
             $postTime = date("Y-m-d H:i:s");
             $isTopic = 0;
             $forumTopicAudit = 0;
             $forumTopicAccess = 0;
-            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
-            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $userId = 1;//Control::GetUserId();//Control::PostRequest("f_UserId", "");
+            $userName = "aaa";//Control::GetUserName();//Control::PostRequest("f_UserName", "");
             $accessLimitNumber = 0;
             $accessLimitContent = "";
             $showSign = 0;
@@ -152,7 +152,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $state,
                 $uploadFiles
             );
-
+            echo $forumPostId;
             if($forumPostId > 0 ){
 
             }
