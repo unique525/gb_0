@@ -50,17 +50,17 @@
             btnConfirm.click(function(){
                 if (forumTopicId == undefined || forumTopicId <=0){
                     $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("回复内容不能为空");
+                    $("#dialog_content").html("帖子ID不能为空");
                 }
                 else {
                     var forumPostContent = $("#f_ForumPostContent");
                     if (forumPostContent.val() == '') {
                         $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("请输入回复");
+                        $("#dialog_content").html("回复内容不能为空");
                     } else {
 
                         $("#mainForm").attr("action",
-                            "/default.php?mod=forum_post&a=list&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                            "/default.php?mod=forum_post&a=reply&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
                         $('#mainForm').submit();
                     }
                 }

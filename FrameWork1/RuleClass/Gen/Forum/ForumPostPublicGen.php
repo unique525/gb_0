@@ -89,25 +89,20 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
 
-        /*******************过滤字符 begin********************** */
-        $multiFilterContent = array();
-        $multiFilterContent[0] = $tempContent;
-        $useArea = 4; //过滤范围 4:评论
-        $stop = FALSE; //是否停止执行
-        $filterContent = null;
-        $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
-        $tempContent = $multiFilterContent[0];
-        /*******************过滤字符 end********************** */
-
-
         return $tempContent;
     }
 
     private function Reply(){
-        print_r($_POST);
+
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+        $forumId = Control::GetRequest("forum_id", 0);
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        echo $forumTopicId;
         if(!empty($_POST)){
-            echo "222";
-            $forumPostId = 0;
+
 
             $forumPostTitle = "";
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
