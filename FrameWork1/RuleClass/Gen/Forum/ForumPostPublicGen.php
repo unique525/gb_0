@@ -19,8 +19,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "list":
                 $result = self::GenList();
                 break;
-            case "reply":
+            case "create":
                 $result = self::GenCreate();
+                break;
+            case "reply":
+                $result = self::Reply();
                 break;
             default:
                 $result = self::GenDefault();
@@ -35,7 +38,6 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      */
     private function GenList() {
         $siteId = Control::GetRequest("site_id", 0);
-
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdByDomain();
         }
@@ -44,13 +46,10 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         if ($forumId <= 0 && $forumTopicId < 0) {
             return "";
         }
-
-
         $pageSize = Control::GetRequest("ps", 30);
         $pageIndex = Control::GetRequest("p", 1);
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
-
 
         $templateFileUrl = "forum/forum_post_list.html";
         $templateName = "default";
@@ -85,7 +84,27 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         } else {
             Template::RemoveCustomTag($tempContent, $tagId);
         }
-        print_r($_POST[0]);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+
+        /*******************过滤字符 begin********************** */
+        $multiFilterContent = array();
+        $multiFilterContent[0] = $tempContent;
+        $useArea = 4; //过滤范围 4:评论
+        $stop = FALSE; //是否停止执行
+        $filterContent = null;
+        $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
+        $tempContent = $multiFilterContent[0];
+        /*******************过滤字符 end********************** */
+
+
+        return $tempContent;
+    }
+
+    private function Reply(){
+        print_r($_POST);
         if(!empty($_POST)){
             echo "222";
             $forumPostId = 0;
@@ -111,8 +130,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $sort = 0;
             $state = 0;
             $uploadFiles = "";
-            $forumPostCreate = new ForumPostPublicData();
-            $forumPostId = $forumPostCreate->Create(
+            $forumPostPublicData = new ForumPostPublicData();
+            $forumPostId = $forumPostPublicData->Create(
                 $siteId,
                 $forumId,
                 $forumTopicId,
@@ -143,10 +162,6 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
             }
         }
-        parent::ReplaceFirstForForum($tempContent);
-        parent::ReplaceEndForForum($tempContent);
-        parent::ReplaceSiteConfig($siteId, $tempContent);
-        return $tempContent;
     }
 
     private function GenCreate() {

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 后台管理 论坛 生成类
  * @category iCMS
@@ -29,6 +28,9 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
+                break;
+            case "reset_last_info":
+                $result = self::ResetLastInfo();
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -417,6 +419,99 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
         return $result;
     }
 
+    /**
+     * 重置最后发布主题的信息
+     */
+    private function ResetLastInfo(){
+
+        $siteId = Control::GetRequest("site_id",0);
+
+        echo "begin<br>";
+
+        if($siteId>0){
+
+            $forumManageData = new ForumManageData();
+            $forumTopicManageData = new ForumTopicManageData();
+            $forumPostManageData = new ForumPostManageData();
+
+            $arr = $forumManageData->GetListForReset($siteId);
+
+            while(count($arr)>0){
+
+                $forumId = intval($arr[0]["ForumId"]);
+                $limit = 8;
+                $arrTopicList = $forumTopicManageData->GetList($forumId, $limit);
+
+
+                $lastPostInfo = "";
+
+                $lastForumTopicId = 0;
+                $lastForumTopicTitle = "";
+                $lastUserName = "";
+                $lastUserId = "";
+                $lastPostTime = "";
+
+                for($j = 0; $j<count($arrTopicList);$j++){
+
+                    $forumTopicId = intval($arrTopicList[$j]["ForumTopicId"]);
+                    $forumTopicTitle = $arrTopicList[$j]["ForumTopicTitle"];
+                    $userId = intval($arrTopicList[$j]["UserId"]);
+                    $userName = $arrTopicList[$j]["UserName"];
+                    $postTime = $arrTopicList[$j]["PostTime"];
+
+                    if($j == 0){
+                        $lastForumTopicId = $forumTopicId;
+                        $lastForumTopicTitle = $forumTopicTitle;
+                        $lastUserId = $userId;
+                        $lastUserName = $userName;
+                        $lastPostTime = $postTime;
+                    }
+
+
+                    $lastPostInfo = Format::AddToInfoString(
+                        $forumTopicId,
+                        $forumTopicTitle,
+                        $lastPostInfo);
+
+                }
+
+
+                $newCount = $forumPostManageData->GetNewCount($forumId);
+
+                $topicCount = $forumTopicManageData->GetTopicCount($forumId);
+                $postCount = $forumPostManageData->GetPostCount($forumId);
+
+                $forumManageData->UpdateForumInfo(
+                    $forumId,
+                    $newCount,
+                    $topicCount,
+                    $postCount,
+                    $lastForumTopicId,
+                    $lastForumTopicTitle,
+                    $lastUserName,
+                    $lastUserId,
+                    $lastPostTime,
+                    $lastPostInfo
+                );
+
+                $forumManageData->ModifyIsOperate($forumId, 1);
+
+                echo "$forumId is finished<br>";
+
+                $arr = $forumManageData->GetListForReset($siteId);
+
+            }
+
+            //$url = "/default.php?secu=manage&mod=forum&m=reset_last_info&site_id=$siteId";
+            //header('refresh:0 ' . $url);
+
+        }else{
+            echo "site id is error<br>";
+        }
+
+        return "finished";
+
+    }
 }
 
 ?>

@@ -100,6 +100,17 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
+
+        /*******************过滤字符 begin********************** */
+        $multiFilterContent = array();
+        $multiFilterContent[0] = $tempContent;
+        $useArea = 4; //过滤范围 4:评论
+        $stop = FALSE; //是否停止执行
+        $filterContent = null;
+        $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
+        $tempContent = $multiFilterContent[0];
+        /*******************过滤字符 end********************** */
+
         return $tempContent;
     }
 
@@ -243,7 +254,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
 
-                    $lastPostInfo = ForumData::AddToLastPostInfo($forumTopicTitle, $lastPostInfo);
+                    $lastPostInfo = Format::AddToInfoString(
+                        $forumTopicId,
+                        $forumTopicTitle,
+                        $lastPostInfo);
 
                     //更新版块信息
                     $forumPublicData = new ForumPublicData();
@@ -257,8 +271,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                         $lastPostInfo
                     );
 
+                    //转到列表页
+                    Control::GoUrl("/default.php?mod=forum_topic&forum_id=$forumId");
 
 
+                }else{
+                    echo -1;
                 }
             }
         }

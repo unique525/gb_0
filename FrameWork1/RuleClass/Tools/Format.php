@@ -557,6 +557,74 @@ class Format
         $arrayDate=getdate($objectDate);
         return $arrayDate["seconds"];
     }
+
+
+
+    /**
+     * 把数组转化成最后回复信息
+     * @param array $arr 要转化的数组
+     * @return string
+     */
+    public static function FormatInfoString($arr){
+
+        $string = Format::FixJsonEncode($arr);
+
+        $string = urlencode($string);
+
+        return $string;
+
+    }
+
+    /**
+     * 把最后回复信息转化成数组
+     * @param string $string 最后回复信息
+     * @return array|int|mixed|null 数组
+     */
+    public static function UnFormatInfoString($string){
+
+        if(strlen($string)<=0){
+            return null;
+        }
+
+        $string = urldecode($string);
+
+        $arr = Format::FixJsonDecode($string);
+
+        return $arr;
+    }
+
+
+    /**
+     * 增加一个新的标题到最后回复信息
+     * @param int $id
+     * @param string $title
+     * @param string $infoString
+     * @param int $limit 数组最大限制
+     * @return string
+     */
+    public static function AddToInfoString($id, $title,$infoString, $limit = 8){
+
+
+        $arr = Format::UnFormatInfoString($infoString);
+
+        $arrNew = array();
+        $arrNew["id"] = $id;
+        $arrNew["title"] = $title;
+
+
+        if(!empty($arr) && count($arr)>=$limit ){ //原来有数据
+            array_pop($arr);//将数组最后一个单元弹出（出栈）。
+
+            array_unshift($arr,$arrNew); //在数组开头插入一个或多个元素。
+
+        }else{ //原来没有数据
+
+            $arr[] = $arrNew;
+
+        }
+
+        return Format::FormatInfoString($arr);
+    }
 }
 
 ?>

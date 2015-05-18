@@ -39,19 +39,17 @@
                     </table>
                     <div class="topic_list show_topic_list_{f_ParentId}">
                         <ul class="ul_topic_list_{child_count}">
-                            <li class="li_topic_list"><a style="overflow:hidden;" href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【讨论】“铜”对鹦鹉有害吗？？比如鹦鹉啃咬铜脚环</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
-                            <li class="li_topic_list"><a href="">【亚历山大鹦鹉】不小心把妹子的小压力弄飞了咋办啊，8个月大不小心把妹子的小压力弄飞了咋办啊，8个月大</a></li>
+                            {child_info_string}
                         </ul>
                     </div>
                 </div>
                 ]]>
             </child>
+            <child_info_string>
+                <![CDATA[
+                <li class="li_topic_list"><a style="overflow:hidden;" href="/default.php?mod=forum_post&a=list&forum_topic_id={f_id}">{f_title}</a></li>
+                ]]>
+            </child_info_string>
         </icms>
     </div>    
 </div>

@@ -6,6 +6,11 @@
  * @package iCMS_FrameWork1
  * @author zhangchi
  */
+
+
+ini_set("display_errors", "On");
+error_reporting(E_ALL | E_STRICT);
+
 mb_internal_encoding('utf8');
 date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////

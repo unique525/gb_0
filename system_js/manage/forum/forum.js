@@ -21,6 +21,16 @@ $(function() {
         window.location.href = '/default.php?secu=manage&mod=forum&m=create&forum_rank=0&site_id=' + parent.G_NowSiteId;
     });
 
+    var btnResetLastInfo = $("#btn_reset_last_info");
+    btnResetLastInfo.css("cursor", "pointer");
+    btnResetLastInfo.click(function(event) {
+        event.preventDefault();
+        parent.G_TabUrl = '/default.php?secu=manage&mod=forum&m=reset_last_info&site_id=' + parent.G_NowSiteId;
+        parent.G_TabTitle = '重置版块最后回复数据';
+        parent.addTab();
+    });
+
+
 
 
 
