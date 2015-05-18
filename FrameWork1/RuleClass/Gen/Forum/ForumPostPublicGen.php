@@ -58,6 +58,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
         $tagId = "forum_post_list";
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+        $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
         $forumPostPublicDate = new ForumPostPublicData();
         $arrForumPost = $forumPostPublicDate->GetListPager(
             $forumTopicId,
@@ -84,6 +85,64 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         } else {
             Template::RemoveCustomTag($tempContent, $tagId);
         }
+        print_r($_POST[0]);
+        if(!empty($_POST)){
+            echo "222";
+            $forumPostId = 0;
+
+            $forumPostTitle = "";
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            $postTime = date("Y-m-d H:i:s");
+            $isTopic = 0;
+            $forumTopicAudit = 0;
+            $forumTopicAccess = 0;
+            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
+            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $accessLimitNumber = 0;
+            $accessLimitContent = "";
+            $showSign = 0;
+            $postIp = Control::GetIp();
+            $isOneSal = 0;
+            $addMoney = 0;
+            $addScore = 0;
+            $addCharm = 0;
+            $addExp = 0;
+            $showBoughtUser =0;
+            $sort = 0;
+            $state = 0;
+            $uploadFiles = "";
+            $forumPostCreate = new ForumPostPublicData();
+            $forumPostId = $forumPostCreate->Create(
+                $siteId,
+                $forumId,
+                $forumTopicId,
+                $isTopic,
+                $userId,
+                $userName,
+                $forumPostTitle,
+                $forumPostContent,
+                $postTime,
+                $forumTopicAudit,
+                $forumTopicAccess,
+                $accessLimitNumber,
+                $accessLimitContent,
+                $showSign,
+                $postIp,
+                $isOneSal,
+                $addMoney,
+                $addScore,
+                $addCharm,
+                $addExp,
+                $showBoughtUser,
+                $sort,
+                $state,
+                $uploadFiles
+            );
+
+            if($forumPostId > 0 ){
+
+            }
+        }
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
@@ -98,6 +157,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $forumId = Control::GetRequest("forum_id", 0);
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+
         if ($forumId <= 0 && $forumTopicId < 0) {
             return "";
         }
@@ -109,10 +169,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
-        $forumPostPublicDate = new ForumPostPublicData();
-        $arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
-
+        //$forumPostPublicDate = new ForumPostPublicData();
+        //$arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
+        echo $_POST[0];
         if(!empty($_POST)){
+            echo "111";
             $forumPostId = 0;
 
             $forumPostTitle = "";
@@ -163,10 +224,13 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $state,
                 $uploadFiles
             );
+
             if($forumPostId > 0 ){
 
             }
         }
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
