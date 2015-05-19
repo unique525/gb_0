@@ -57,9 +57,11 @@
                             <td class="forum_topic_item forum_topic_title" align="left" style="font-size: 16px;">
                                 <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
                                     {f_ForumTopicTitle}
-                                </a></td>
+                                </a><br />
+                                {f_UserName}
+                            </td>
                             <td class="forum_topic_item" width="300px" align="right">
-                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_UserName}</div>
+                                <div class="forum_topic_user_name" style="color:#9999A0;">阅读：{f_HitCount}/回复：{f_ReplyCount}</div>
                                 <div class="forum_topic_post_time" style="color:#9999A0;">{f_PostTime}</div>
                             </td>
                         </tr>
