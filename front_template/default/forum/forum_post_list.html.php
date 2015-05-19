@@ -30,14 +30,11 @@
 
         $(function(){
 
-            var editorHeight = $(window).height() - 320;
-            editorHeight = parseInt(editorHeight);
-
             var f_ForumPostContent = $('#f_ForumPostContent');
 
             editor = f_ForumPostContent.xheditor({
                 tools:'full',
-                height:editorHeight,
+                height:150,
                 upImgUrl:"",
                 upImgExt:"jpg,jpeg,gif,png",
                 localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,

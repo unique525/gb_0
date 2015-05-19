@@ -112,6 +112,10 @@ ul{list-style-type:none;}
 #forum_topic .forum_topic_access_select select{border:none;width:400px;font-size:16px;padding:1px;}
 #forum_topic .forum_topic_item{ padding-bottom:5px; padding-top: 5px; border-bottom:solid 1px #d5d5d5;}
 
+#forum_topic .forum_topic_title{font-size: 16px;}
+#forum_topic .forum_topic_user_name{color:#9999A0;}
+#forum_topic .forum_topic_post_time{color:#9999A0;}
+
 #forum_post{width:100%;clear:both;}
 #forum_post .content{background-color:#e6e6e6;padding:8px;}
 #forum_post .left{float:left;padding:8px;margin-right:14px;}
