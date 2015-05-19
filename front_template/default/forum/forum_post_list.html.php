@@ -30,12 +30,11 @@
 
         $(function(){
 
-
             var f_ForumPostContent = $('#f_ForumPostContent');
 
             editor = f_ForumPostContent.xheditor({
                 tools:'full',
-                height:150,
+                height:200,
                 upImgUrl:"",
                 upImgExt:"jpg,jpeg,gif,png",
                 localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
@@ -186,7 +185,7 @@
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td width="100%" style="padding-left: 12px;padding-top: 15px">
-                        <textarea id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></textarea>
+                        <textarea id="f_ForumPostContent" class="replyBox"></textarea>
                     </td>
                 </tr>
                 <tr>

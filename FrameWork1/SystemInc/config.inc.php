@@ -10,12 +10,11 @@ $incSystemName = 'iCMS';
  */
 $incDatabaseInfo = array();
 
-$incDatabaseInfo[] = 'localhost';
+$incDatabaseInfo[] = '130.1.0.134';
 $incDatabaseInfo[] = 3306;
-$incDatabaseInfo[] = 'dbicms2';
+$incDatabaseInfo[] = 'dbcscms2';
 $incDatabaseInfo[] = 'root';
-$incDatabaseInfo[] = 'GData1012';
-$incDatabaseInfo[] = '0'; //debug
+$incDatabaseInfo[] = 'csolbbs2010';
 
 /*
 $incDatabaseInfo[] = 'localhost';
