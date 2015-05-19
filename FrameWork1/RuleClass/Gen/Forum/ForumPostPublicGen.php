@@ -193,7 +193,6 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         //$arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
         echo $_POST[0];
         if(!empty($_POST)){
-            echo "111";
             $forumPostId = 0;
 
             $forumPostTitle = "";
@@ -246,7 +245,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             );
 
             if($forumPostId > 0 ){
-
+                Control::GoUrl("/default.php?mod=forum_post&a=reply&forum_id=$forumId&forum_topic_id=$forumTopicId");
             }
         }
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
