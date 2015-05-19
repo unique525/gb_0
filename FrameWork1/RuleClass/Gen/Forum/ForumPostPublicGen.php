@@ -164,9 +164,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $state,
                 $uploadFiles
             );
-            echo $forumPostId;
             if($forumPostId > 0 ){
-
+                Control::GoUrl("/default.php?mod=forum_post&a=list&forum_id=$forumId&forum_topic_id=$forumTopicId");
             }
         }
     }
