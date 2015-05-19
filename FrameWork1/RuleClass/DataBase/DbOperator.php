@@ -72,7 +72,9 @@ class DbOperator {
             $this->dbName = $databaseInfo[2];
             $this->dbUser = $databaseInfo[3];
             $this->dbPass = $databaseInfo[4];
-            $this->debugExecuteTime = intval($databaseInfo[5]);
+            if(isset($databaseInfo[5])){
+                $this->debugExecuteTime = intval($databaseInfo[5]);
+            }
             $this->connect();
         }
         unset($databaseInfo);

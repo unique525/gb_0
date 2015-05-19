@@ -223,11 +223,16 @@ class BaseManageData extends BaseData {
      * @param string $tableName 表名
      * @return array 表的字段名称数组
      */
-    public function GetFields($tableName)
+    public function GetFields($tableName = "")
     {
-        $tableName = Format::FormatSql($tableName);
-        $sql = 'SHOW FIELDS FROM '.$tableName;
-        $result = $this->dbOperator->GetArrayList($sql, null);
+        if(strlen($tableName)>0){
+            $tableName = Format::FormatSql($tableName);
+            $sql = 'SHOW FIELDS FROM '.$tableName;
+            $result = $this->dbOperator->GetArrayList($sql, null);
+        }else{
+            $result = "";
+        }
+
         return $result;
     }
 }

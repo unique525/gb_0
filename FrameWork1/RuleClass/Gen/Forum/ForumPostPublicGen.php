@@ -112,9 +112,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $forumId = Control::GetRequest("forum_id", 0);
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
-        echo $forumTopicId;
-        if(!empty($_POST)){
 
+        if(!empty($_POST)){
 
             $forumPostTitle = "";
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
@@ -122,8 +121,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $isTopic = 0;
             $forumTopicAudit = 0;
             $forumTopicAccess = 0;
-            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
-            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $userId = 1;//Control::GetUserId();//Control::PostRequest("f_UserId", "");
+            $userName = "aaa";//Control::GetUserName();//Control::PostRequest("f_UserName", "");
             $accessLimitNumber = 0;
             $accessLimitContent = "";
             $showSign = 0;
@@ -164,9 +163,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $state,
                 $uploadFiles
             );
-
             if($forumPostId > 0 ){
-
+                Control::GoUrl("/default.php?mod=forum_post&a=list&forum_id=$forumId&forum_topic_id=$forumTopicId");
             }
         }
     }
@@ -195,7 +193,6 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         //$arrForumPost = $forumPostPublicDate->GetList($forumTopicId);
         echo $_POST[0];
         if(!empty($_POST)){
-            echo "111";
             $forumPostId = 0;
 
             $forumPostTitle = "";
@@ -248,7 +245,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             );
 
             if($forumPostId > 0 ){
-
+                Control::GoUrl("/default.php?mod=forum_post&a=reply&forum_id=$forumId&forum_topic_id=$forumTopicId");
             }
         }
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
