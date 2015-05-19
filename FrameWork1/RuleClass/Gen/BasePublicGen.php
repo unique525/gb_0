@@ -376,7 +376,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
-     * @param string $tagWhereValue 查询条件的值
+     * @param string $tagWhereValue 查询条件值
      * @param string $tagOrder 排序方式
      * @param int $state 状态
      * @return mixed|string 内容模板

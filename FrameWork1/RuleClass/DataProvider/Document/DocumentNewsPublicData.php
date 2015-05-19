@@ -777,7 +777,7 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $recLevel 推荐级别
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
-     * @return array|null 返回最新的列表数据集
+     * @return array|null 返回最新列表数据集
      */
     public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0) {
 
