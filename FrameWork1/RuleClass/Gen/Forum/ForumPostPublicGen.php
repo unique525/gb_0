@@ -115,7 +115,6 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         if(!empty($_POST)){
 
-            echo "11";
             $forumPostTitle = "";
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
             $postTime = date("Y-m-d H:i:s");
