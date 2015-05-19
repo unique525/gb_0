@@ -1,31 +1,28 @@
 <?php
 
 /**
- * 后台管理 论坛主题 数据类
+ * 后台管理 论坛帖子 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Forum
  * @author zhangchi
  */
-class ForumTopicManageData extends BaseManageData {
+class ForumPostManageData extends BaseManageData {
 
     /**
-     *
+     * 当前发布的主题数量
      * @param int $forumId
-     * @param int $limit
-     * @return array
+     * @return int
      */
-    public function GetList($forumId, $limit) {
+    public function GetNewCount($forumId){
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumId", $forumId);
         $sql = "
-            SELECT *
+            SELECT count(*)
             FROM
-            " . self::TableName_ForumTopic . "
-
-            WHERE ForumId=:ForumId
-            ORDER BY PostTime DESC LIMIT $limit
+            " . self::TableName_ForumPost . "
+            WHERE ForumId=:ForumId AND PostTime>=current_date()
             ;";
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
 
         return $result;
     }
@@ -35,17 +32,18 @@ class ForumTopicManageData extends BaseManageData {
      * @param int $forumId
      * @return int
      */
-    public function GetTopicCount($forumId){
+    public function GetPostCount($forumId){
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumId", $forumId);
         $sql = "
             SELECT count(*)
-            FROM " . self::TableName_ForumTopic . "
+            FROM " . self::TableName_ForumPost . "
             WHERE ForumId=:ForumId
-                AND State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
+                AND State<".ForumPostData::FORUM_POST_STATE_REMOVED."
+                AND IsTopic = 0
             ;";
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
+
         return $result;
     }
-
 } 

@@ -16,8 +16,9 @@
     <link type="text/css" href="/front_template/default/skins/gray/width_19.css" rel="stylesheet"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
+    <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
     <style>
-        .replyBox { height: 250px;width: 600px; background:#F9F9F9;border:#E6E6E6 solid 1px;};
+        .replyBox { height: 250px;width: 1100px; background:#F9F9F9;border:#E6E6E6 solid 1px;};
     </style>
     <script type="text/javascript">
         <!--
@@ -29,25 +30,39 @@
 
         $(function(){
 
-            var forumTopicId = Request["forum_topic_id"];
+            var editorHeight = $(window).height() - 320;
+            editorHeight = parseInt(editorHeight);
+
+            var f_ForumPostContent = $('#f_ForumPostContent');
+
+            editor = f_ForumPostContent.xheditor({
+                tools:'full',
+                height:editorHeight,
+                upImgUrl:"",
+                upImgExt:"jpg,jpeg,gif,png",
+                localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                remoteImgSaveUrl:''
+            });
+
+            var forumTopicId = parseInt(Request["forum_topic_id"]);
             var btnConfirm = $("#btnConfirm");
 
             btnConfirm.click(function(){
                 if (forumTopicId == undefined || forumTopicId <=0){
-                    var forumTopicTitle = $("#f_ForumTopicTitle");
-                    if (forumTopicTitle.val() == '') {
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("帖子ID不能为空");
+                }
+                else {
+                    var forumPostContent = $("#f_ForumPostContent");
+                    if (forumPostContent.val() == '') {
                         $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("请输入回复");
+                        $("#dialog_content").html("回复内容不能为空");
                     } else {
 
                         $("#mainForm").attr("action",
                             "/default.php?mod=forum_post&a=reply&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
                         $('#mainForm').submit();
                     }
-                }
-                else {
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("论坛信息不能为空");
                 }
             });
 
@@ -172,11 +187,12 @@
             <form id="mainForm" enctype="multipart/form-data" method="post">
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td width="100%" colspan="2" style="padding:50px 50px 20px 50px;"><textarea id="f_ForumPostContent" class="replyBox"></textarea></td>
+                    <td width="100%" style="padding-left: 12px;padding-top: 15px">
+                        <textarea id="f_ForumPostContent" class="replyBox"></textarea>
+                    </td>
                 </tr>
                 <tr>
-                    <td width="51%"></td>
-                    <td align="left"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
+                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
                 </tr>
             </table>
             </form>

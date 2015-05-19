@@ -154,6 +154,88 @@ class ForumManageData extends BaseManageData {
     }
 
     /**
+     * 修改是否操作
+     * @param int $forumId 版块id
+     * @param int $isOperate 是否操作
+     * @return int 操作结果
+     */
+    public function ModifyIsOperate($forumId, $isOperate)
+    {
+        $result = -1;
+        if ($forumId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Forum . " SET
+                    IsOperate = :IsOperate
+                    WHERE ForumId = :ForumId
+                    ;";
+            $dataProperty->AddField("IsOperate", $isOperate);
+            $dataProperty->AddField("ForumId", $forumId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 更新版块的最后回复信息（发表主题时）
+     * @param int $forumId
+     * @param int $newCount
+     * @param int $topicCount
+     * @param int $postCount
+     * @param int $lastForumTopicId
+     * @param string $lastForumTopicTitle
+     * @param string $lastUserName
+     * @param int $lastUserId
+     * @param string $lastPostTime
+     * @param string $lastPostInfo
+     * @return int 执行结果
+     */
+    public function UpdateForumInfo(
+        $forumId,
+        $newCount,
+        $topicCount,
+        $postCount,
+        $lastForumTopicId,
+        $lastForumTopicTitle,
+        $lastUserName,
+        $lastUserId,
+        $lastPostTime,
+        $lastPostInfo
+    ) {
+
+        $result = -1;
+        if($forumId>0){
+            $sql = "UPDATE " . self::TableName_Forum . "
+                    SET
+                        NewCount=:NewCount,
+                        TopicCount=:TopicCount,
+                        PostCount=:PostCount,
+                        LastForumTopicId=:LastForumTopicId,
+                        LastForumTopicTitle=:LastForumTopicTitle,
+                        LastUserName=:LastUserName,
+                        LastUserId=:LastUserId,
+                        LastPostTime=:LastPostTime,
+                        LastPostInfo=:LastPostInfo
+                    WHERE ForumId=:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ForumId", $forumId);
+            $dataProperty->AddField("NewCount", $newCount);
+            $dataProperty->AddField("TopicCount", $topicCount);
+            $dataProperty->AddField("PostCount", $postCount);
+            $dataProperty->AddField("LastForumTopicId", $lastForumTopicId);
+            $dataProperty->AddField("LastForumTopicTitle", $lastForumTopicTitle);
+            $dataProperty->AddField("LastUserName", $lastUserName);
+            $dataProperty->AddField("LastUserId", $lastUserId);
+            $dataProperty->AddField("LastPostTime", $lastPostTime);
+            $dataProperty->AddField("LastPostInfo", $lastPostInfo);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * 取得上级版块名称
      * @param int $forumId 论坛版块id
      * @param bool $withCache 是否从缓冲中取
@@ -229,7 +311,25 @@ class ForumManageData extends BaseManageData {
         }
         return $result;
     }
-    
+
+    /**
+     * 根据版块等级取得版块列表
+     * @param int $siteId 站点id
+     * @return array 版块列表
+     */
+    public function GetListForReset($siteId) {
+        $result = null;
+        if($siteId>0){
+            $sql = "SELECT ForumId FROM " . self::TableName_Forum . " WHERE SiteId=:SiteId
+             AND IsOperate=0
+             LIMIT 1;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 根据版块等级取得版块列表
      * @param int $siteId 站点id

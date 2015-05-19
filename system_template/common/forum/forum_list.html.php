@@ -11,6 +11,7 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新建版块分区" title="新建版块分区，版块分区下需要建立二级版块才能正常使用" type="button"/>
+                <input id="btn_reset_last_info" class="btn2" value="重置版块最后回复数据"  type="button"/>
             </td>
         </tr>
     </table>

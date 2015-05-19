@@ -167,4 +167,13 @@ class ForumTopicData {
      * 主题审核（授权）方式 关闭
      */
     const FORUM_TOPIC_AUDIT_CLOSE = 1;
+
+    /**
+     * 主题状态 普通
+     */
+    const FORUM_TOPIC_STATE_NORMAL = 0;
+    /**
+     * 主题状态 已删除
+     */
+    const FORUM_TOPIC_STATE_REMOVED = 100;
 } 

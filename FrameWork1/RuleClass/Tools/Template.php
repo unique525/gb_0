@@ -127,6 +127,8 @@ class Template
      * @param array $arrThirdList 第三级子表数据（默认为空，不进行第三级子父表处理）
      * @param string $thirdTableIdName 第三级表主键名称
      * @param string $thirdParentIdName 第二级子键名称
+     * @param string $childArrayFieldName 第二级 可以转化为数组的字符串字段名称，用在下级数据缓存在本级字段的情况
+     * @param string $thirdArrayFieldName 第三级 可以转化为数组的字符串字段名称，用在下级数据缓存在本级字段的情况
      */
     public static function ReplaceList(
         &$templateContent,
@@ -138,7 +140,9 @@ class Template
         $parentIdName = "ParentId",
         $arrThirdList = null,
         $thirdTableIdName = null,
-        $thirdParentIdName = "ParentId"
+        $thirdParentIdName = "ParentId",
+        $childArrayFieldName = "",
+        $thirdArrayFieldName = ""
     )
     {
         if (stripos($templateContent, $tagName) > 0
@@ -242,6 +246,12 @@ class Template
                         }else{
                             $childTempContent = "";
                         }
+                        //读取二级数组字符串模板
+                        if( strlen($childArrayFieldName)>0 ){
+                            $childInfoStringTempContent = self::GetNodeValue($doc, "child_info_string", $tagName);
+                        }else{
+                            $childInfoStringTempContent = "";
+                        }
                         //读取三级模板
                         if( $arrThirdList != null ){
                             $thirdTempContent = self::GetNodeValue($doc, "third", $tagName);
@@ -340,6 +350,15 @@ class Template
                         }else{
                             $childTempContent = "";
                         }
+
+                        //读取二级数组字符串模板
+                        if( strlen($childArrayFieldName)>0 ){
+                            $childInfoStringTempContent = self::GetNodeValueForSax($arrayXml, "CHILD_INFO_STRING");
+                        }else{
+                            $childInfoStringTempContent = "";
+                        }
+
+
 
                         //读取三级模板
                         if( $arrThirdList != null ){
@@ -449,6 +468,35 @@ class Template
                                         $itemType
                                     );
 
+                                    //处理可转化的缓存子段数据
+                                    $sbChildInfoString = "";
+                                    if(strlen($childArrayFieldName)>0){
+                                        //这是一个已经编码的数组字符串，存储了一个数组 {id,title}
+                                        $infoString = $arrChildList[$j][$childArrayFieldName];
+                                        //把字符串反解成数组
+                                        $arrInfoString = Format::UnFormatInfoString($infoString);
+                                        for( $info_i = 0; $info_i < count($arrInfoString); $info_i++){
+
+                                            $listOfChildInfoString = $childInfoStringTempContent;
+                                            $columnsOfChildInfoString = $arrInfoString[$info_i];
+                                            $listOfChildInfoString = self::ReplaceListItem(
+                                                $info_i,
+                                                $type,
+                                                $itemRowTitleCount,
+                                                $itemRowIntroCount,
+                                                $headerRowTitleCount,
+                                                $footerRowTitleCount,
+                                                $thirdRowTitleCount,
+                                                $columnsOfChildInfoString,
+                                                $listOfChildInfoString,
+                                                $itemType
+                                            );
+
+                                            $sbChildInfoString = $sbChildInfoString . $listOfChildInfoString;
+                                        }
+
+                                    }
+
                                     //处理三级数据
                                     $sbThird = "";
                                     if(count($arrThirdList)>0){
@@ -488,6 +536,7 @@ class Template
                                     }
 
                                     $childNumber++;
+                                    $listOfChild = str_ireplace("{child_info_string}", $sbChildInfoString, $listOfChild);
                                     $listOfChild = str_ireplace("{third}", $sbThird, $listOfChild);
                                     $listOfChild = str_ireplace("{c_child_no}", $childNumber, $listOfChild);
 
