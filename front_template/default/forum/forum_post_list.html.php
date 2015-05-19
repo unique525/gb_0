@@ -105,18 +105,13 @@
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
                                     <tr>
-                                        <td class="forum_topic_title" colspan="2"
-                                            style="font-size: 26px;font-weight: bold;fpm">
-                                            {f_ForumPostTitle}
+                                        <td colspan="2">
+                                            <div class="forum_post_title">{f_ForumPostTitle}</div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="forum_topic_user_name" style="color: #32A5E7;font-weight: bold;">
-                                            {f_UserName}
-                                        </td>
-                                        <td class="forum_topic_post_time" style="color: #A09999" align="right">
-                                            {f_PostTime}
-                                        </td>
+                                        <td class="forum_post_user_name" style="">{f_UserName}</td>
+                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
                                     </tr>
                                 </table>
                             </td>
@@ -141,21 +136,27 @@
                             <td class="forum_topic_item td1" width="50px" style="padding-right:10px;">
                                 <img class="img_avatar" src="{f_AvatarUploadFilePath}"/>
                             </td>
-                            <td class="forum_topic_item" align="left" style="font-size: 16px;fpm">
-                                {f_ForumPostTitle}
-                            </td>
-                            <td class="forum_topic_item" width="250px">
-                                <div class="forum_topic_user_name" style="color:#9999A0;">{f_UserName}</div>
-                                <div class="forum_topic_post_time" style="color:#9999A0;">{f_PostTime}</div>
+                            <td class="forum_topic_item" align="left">
+                                <table width="100%">
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="forum_post_title">{f_ForumPostTitle}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="forum_post_user_name" style="">{f_UserName}</td>
+                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="forum_post_content" colspan="3" align="left" style="padding-left:10px;padding-top:10px;vertical-align:top;">
+                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
+                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
                                 <span>回复此楼</span> <span>举报</span> <span>帖子管理</span>
                             </td>
                         </tr>
