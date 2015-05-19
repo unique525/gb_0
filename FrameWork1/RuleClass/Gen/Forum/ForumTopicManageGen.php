@@ -17,16 +17,13 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
         $method = Control::GetRequest("a", "");
         switch ($method) {
             case "list":
-                $result = self::GenManageList();
-                break;
-            case "create":
-                $result = self::GenCreate();
+                $result = self::GenList();
                 break;
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "async_modify_state":
-                $result = self::AsyncModifyState();
+            case "remove_to_bin":
+                $result = self::GenRemoveToBin();
                 break;
         }
         $result = str_ireplace("{action}", $method, $result);
