@@ -407,6 +407,9 @@ class BasePublicGen extends BaseGen
                 case "new":
                     $orderBy = 0;
                     break;
+                case "hit":
+                    $orderBy = 1;
+                    break;
                 default:
                     $orderBy = 0;
                     break;
@@ -433,6 +436,13 @@ class BasePublicGen extends BaseGen
                     if ($channelId > 0&&$recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
                         $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
+                    break;
+                case "day_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
                     }
                     break;
                 default :
