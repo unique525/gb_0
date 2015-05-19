@@ -79,6 +79,7 @@ class BasePublicGen extends BaseGen
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
+                                $tagWhereValue,
                                 $tagOrder,
                                 $state
                             );
@@ -375,6 +376,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件的值
      * @param string $tagOrder 排序方式
      * @param int $state 状态
      * @return mixed|string 内容模板
@@ -386,6 +388,7 @@ class BasePublicGen extends BaseGen
         $tagContent,
         $tagTopCount,
         $tagWhere,
+        $tagWhereValue,
         $tagOrder,
         $state
     )
@@ -424,6 +427,13 @@ class BasePublicGen extends BaseGen
                     break;
                 case "rec_level_grandson":
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
+                    break;
+                case "rec_level_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
                     break;
                 default :
                     $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);

@@ -771,6 +771,123 @@ class DocumentNewsPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 根据频道id取当前频道下（包括所有级别子节点）指定推荐级别文档的列表数据集
+     * @param int $channelId 频道id
+     * @param int $recLevel 推荐级别
+     * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
+     * @param int $orderBy 排序
+     * @return array|null 返回最新的列表数据集
+     */
+    public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0) {
+
+        $result = null;
+
+        if($channelId>0&&!empty($topCount)){
+
+            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+            switch($orderBy){
+                case 0:
+                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    break;
+            }
+
+            $selectColumn = '
+            dn.DocumentNewsId,
+            dn.SiteId,
+            dn.ChannelId,
+            dn.DocumentNewsTitle,
+            dn.DocumentNewsSubTitle,
+            dn.DocumentNewsCiteTitle,
+            dn.DocumentNewsShortTitle,
+            dn.DocumentNewsIntro,
+            dn.CreateDate,
+            dn.ManageUserId,
+            dn.ManageUserName,
+            dn.UserId,
+            dn.UserName,
+            dn.Author,
+            dn.State,
+            dn.DocumentNewsType,
+            dn.DirectUrl,
+            dn.ShowDate,
+            dn.SourceName,
+            dn.DocumentNewsMainTag,
+            dn.DocumentNewsTag,
+            dn.Sort,
+            dn.TitlePic1UploadFileId,
+            dn.TitlePic2UploadFileId,
+            dn.TitlePic3UploadFileId,
+            dn.DocumentNewsTitleColor,
+            dn.DocumentNewsTitleBold,
+            dn.OpenComment,
+            dn.ShowHour,
+            dn.ShowMinute,
+            dn.ShowSecond,
+            dn.IsHot,
+            dn.RecLevel,
+            dn.ShowPicMethod,
+            dn.ClosePosition,
+            dn.Hit,
+            dn.PublishDate,
+            (dn.Hit+dn.VirtualHit) AS AllHit,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+
+            c.ChannelName
+
+            ';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_DocumentNews . "  dn
+                    LEFT OUTER JOIN " .self::TableName_Channel." c on dn.ChannelId = c.ChannelId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+
+                WHERE dn.ChannelId IN (".$channelId.")  AND dn.RecLevel=:RecLevel
+                $orderBySql LIMIT " . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("RecLevel", $recLevel);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
+
 
     /**
      * 取得分页显示的资讯列表
