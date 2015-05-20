@@ -425,6 +425,7 @@ class BaseManageGen extends BaseGen
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
+                                $tagWhereValue,
                                 $tagOrder,
                                 $state
                             );
@@ -604,6 +605,7 @@ class BaseManageGen extends BaseGen
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件值
      * @param string $tagOrder 排序方式
      * @param int $state 状态
      * @return mixed|string 内容模板
@@ -615,6 +617,7 @@ class BaseManageGen extends BaseGen
         $tagContent,
         $tagTopCount,
         $tagWhere,
+        $tagWhereValue,
         $tagOrder,
         $state
     )
@@ -650,6 +653,20 @@ class BaseManageGen extends BaseGen
                     break;
                 case "rec_level_grandson":
                     $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
+                    break;
+                case "rec_level_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
+                    break;
+                case "day_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
                     break;
                 default :
                     //new
