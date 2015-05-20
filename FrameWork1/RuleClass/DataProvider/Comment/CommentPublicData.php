@@ -130,7 +130,7 @@ class CommentPublicData extends BasePublicData {
     )
     {
         $result = -1;
-        //echo $siteId."|".$content."|".$channelId."|".$tableId."|".$tableType;
+
         if($siteId > 0  && !empty($content)  && $channelId > 0 && $tableId > 0 && $tableType > 0){
             $sql = "
                 INSERT INTO " . self::TableName_Comment . " (

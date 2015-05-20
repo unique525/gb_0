@@ -33,7 +33,6 @@ class ForumPostPublicData extends BasePublicData {
         $state,
         $uploadFiles
     ){
-        echo($siteId);
         $result = -1;
         if($siteId>0 && $forumId>0 && $userId>0 && strlen($userName)>0){
             $sql = "INSERT INTO " . self::TableName_ForumPost . "
@@ -90,7 +89,6 @@ class ForumPostPublicData extends BasePublicData {
                     :State,
                     :UploadFiles
                     );";
-            echo($sql);
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("ForumId", $forumId);

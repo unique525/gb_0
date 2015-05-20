@@ -97,6 +97,17 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         parent::ReplaceFirstForForum($tempContent);
+
+        /******************  右部推荐栏  ********************** */
+        $templateForumRecTopicFileUrl = "forum/forum_rec_1_v.html";
+        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
+        $tempContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $tempContent);
+
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+
+        parent::ReplaceTemplate($tempContent);
+
+
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
 

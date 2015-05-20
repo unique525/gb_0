@@ -15,7 +15,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagTopCountOfPage 默认显示条数（用于列表页分页）
      * @return mixed|string 内容模板
      */
-    public function ReplaceTemplate($templateContent, $tagTopCountOfPage = "")
+    public function ReplaceTemplate(&$templateContent, $tagTopCountOfPage = "")
     {
         /** 1.处理预加载模板 */
 
@@ -41,7 +41,7 @@ class BasePublicGen extends BaseGen
 
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
                 if ($tagTopCountOfPage != "") {
-                    $tagTopCountOfPate = Format::CheckTopCount($tagTopCountOfPage);
+                    $tagTopCountOfPage = Format::CheckTopCount($tagTopCountOfPage);
                     if ($tagTopCountOfPage != null) {
                         $tagTopCount = $tagTopCountOfPage;
                     }
@@ -56,8 +56,6 @@ class BasePublicGen extends BaseGen
 
                 switch ($tagType) {
                     case Template::TAG_TYPE_CHANNEL_LIST :
-
-
                         $templateContent = self::ReplaceTemplateOfChannelList(
                             $templateContent,
                             $tagId,
@@ -67,7 +65,6 @@ class BasePublicGen extends BaseGen
                             $tagWhereValue,
                             $tagOrder
                         );
-
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
                         $channelId = intval(str_ireplace("channel_", "", $tagId));
@@ -204,6 +201,24 @@ class BasePublicGen extends BaseGen
                             );
                         }
 
+                        break;
+                    case Template::TAG_TYPE_FORUM_TOPIC_LIST:
+
+
+                        $siteId = intval(str_ireplace("site_", "", $tagId));
+
+                        if ($siteId > 0) {
+                            $templateContent = self::ReplaceTemplateOfForumTopicList(
+                                $templateContent,
+                                $siteId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
                         break;
                 }
             }
@@ -1065,6 +1080,63 @@ class BasePublicGen extends BaseGen
         return $channelTemplateContent;
 
 
+    }
+
+
+    private function ReplaceTemplateOfForumTopicList(
+        $channelTemplateContent,
+        $siteId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    ){
+        if ($siteId > 0) {
+
+
+            $arrList = null;
+            $forumTopicPublicData = new ForumTopicPublicData();
+
+            switch ($tagWhere) {
+                case "new" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfNew(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+                case "hot" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfHot(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+                case "best" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfBest(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+            }
+
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
     }
 
     /**

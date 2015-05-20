@@ -57,7 +57,7 @@
                     } else {
 
                         $("#mainForm").attr("action",
-                            "/default.php?mod=forum_post&a=reply&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                            "/default.php?mod=forum_post&a=reply&forum_topic_id={ForumTopicId}");
                         $('#mainForm').submit();
                     }
                 }
@@ -111,18 +111,18 @@
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>
-                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
+                                        <td class="forum_post_post_time" style="" align="right">{f_PostTime}</td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td class="forum_post_content" colspan="2" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
+                            <td colspan="2" align="right" style="padding:10px;">
                                 <span>收藏</span> <span>分享</span> <span>举报</span> <span>主题管理</span>
                             </td>
                         </tr>
@@ -145,18 +145,19 @@
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>
-                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
+                                        <td class="forum_post_post_time" style="padding-right:10px;" align="right">{f_PostTime}</td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td class="forum_post_content" colspan="2" align="left"
+                                style="vertical-align:top;padding:10px;">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
+                            <td colspan="2" align="right" style="padding:10px;">
                                 <span>回复此楼</span> <span>举报</span> <span>帖子管理</span>
                             </td>
                         </tr>
@@ -183,14 +184,21 @@
                 </child>
             </icms>
             <form id="mainForm" enctype="multipart/form-data" method="post">
-            <table cellpadding="0" cellspacing="0" width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserIsLogin};">
                 <tr>
                     <td width="100%" style="padding-left: 12px;padding-top: 15px">
-                        <textarea id="f_ForumPostContent" class="replyBox"></textarea>
+                        <textarea id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" style="padding-top: 5px;"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
+                </tr>
+            </table>
+            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">
+                <tr>
+                    <td align="center" style="padding:25px;">
+                        快速回复：您还没有登录，请先<a href="{UserLoginUrl}">[登录]</a>或<a href="{UserRegisterUrl}">[注册]</a>
+                    </td>
                 </tr>
             </table>
             </form>

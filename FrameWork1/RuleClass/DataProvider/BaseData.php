@@ -791,6 +791,74 @@ class BaseData
         }
         return $result;
     }
+
+    /**
+     * 返回array list型的信息值（数据集）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return array 返回查询结果
+     */
+    protected function GetInfoOfArrayList(
+        $sql,
+        DataProperty $dataProperty,
+        $withCache,
+        $cacheDir,
+        $cacheFile
+    )
+    {
+        $result = null;
+        if (strlen($sql) > 0) {
+            if($withCache){
+                $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if ($cacheArray == null || empty($cacheArray)) {
+                    $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+                    DataCache::SetWithArray($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheArray;
+                }
+            }else{
+                $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 返回array型的信息值（数据集）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return array 返回查询结果
+     */
+    protected function GetInfoOfArray(
+        $sql,
+        DataProperty $dataProperty,
+        $withCache,
+        $cacheDir,
+        $cacheFile
+    )
+    {
+        $result = null;
+        if (strlen($sql) > 0) {
+            if($withCache){
+                $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if (strlen($cacheArray) <= 0) {
+                    $result = $this->dbOperator->GetArray($sql, $dataProperty);
+                    DataCache::SetWithArray($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheArray;
+                }
+            }else{
+                $result = $this->dbOperator->GetArray($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
 }
 
 ?>

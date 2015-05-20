@@ -78,6 +78,10 @@ class Template
      */
     const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER = "newspaper_article_pic_list_slider";
 
+    /**
+     * 论坛 主题列表
+     */
+    const TAG_TYPE_FORUM_TOPIC_LIST = "forum_topic_list";
 
     /**
      * 读取模板内容

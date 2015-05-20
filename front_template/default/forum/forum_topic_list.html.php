@@ -76,7 +76,7 @@
         </div>
         <div class="right">
 
-            右边导航
+            {forum_rec_1_v}
 
 
         </div>
