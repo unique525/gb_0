@@ -711,7 +711,7 @@ function submitForm(closeTab) {
     </div>
 </div>
 <div id="tabs-2">
-    <table width="99%" border="0" cellspacing="0" cellpadding="0">
+    <!--<table width="99%" border="0" cellspacing="0" cellpadding="0">
 
         <tr>
             <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图1：</td>
@@ -743,7 +743,7 @@ function submitForm(closeTab) {
                                                                                           style="cursor:pointer">[预览]</span>
             </td>
         </tr>
-    </table>
+    </table>-->
 </div>
 <div id="tabs-3">
     <div id="uploader">
