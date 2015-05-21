@@ -154,6 +154,27 @@ class ForumManageData extends BaseManageData {
     }
 
     /**
+     * 重置是否操作为否
+     * @param int $siteId 站点id
+     * @return int 操作结果
+     */
+    public function ResetIsOperate($siteId)
+    {
+        $result = -1;
+        if ($siteId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_Forum . " SET
+                    IsOperate = 0
+                    WHERE SiteId = :SiteId
+                    ;";
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 修改是否操作
      * @param int $forumId 版块id
      * @param int $isOperate 是否操作
