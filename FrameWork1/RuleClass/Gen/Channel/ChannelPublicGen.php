@@ -86,7 +86,8 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
         $navUrl = "default.php?mod=channel&a=list&temp=channel_list&channel_id=$channelId&p={0}&ps=$pageSize";
-        $pagerButton = Pager::ShowPageButton("", $navUrl, $allCount, $pageSize, $pageIndex);
+        $pagerTemplate = parent::GetDynamicTemplateContent("",$siteId,"pager");
+        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex);
 
         $tempContent = str_ireplace("{dynamic_pager_button}", $pagerButton, $tempContent);
 
