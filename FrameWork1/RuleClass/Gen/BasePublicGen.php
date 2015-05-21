@@ -1143,9 +1143,10 @@ class BasePublicGen extends BaseGen
      * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
+     * @param string $forceTemp 强制指定的模板名称
      * @return string 模板内容
      */
-    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "")
     {
 
         $result = "";
@@ -1153,11 +1154,16 @@ class BasePublicGen extends BaseGen
             $siteId = self::GetSiteIdByDomain();
         }
 
-        $channelTemplateTag = Control::PostOrGetRequest("temp", "");
+        if(strlen($forceTemp)>0){
+            $channelTemplateTag = $forceTemp;
+        }else{
+            $channelTemplateTag = Control::PostOrGetRequest("temp", "");
 
-        if (strlen($channelTemplateTag) <= 0) {
-            $channelTemplateTag = $defaultTemp;
+            if (strlen($channelTemplateTag) <= 0) {
+                $channelTemplateTag = $defaultTemp;
+            }
         }
+
 
 
         if ($siteId > 0 && strlen($channelTemplateTag) > 0) {

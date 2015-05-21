@@ -25,6 +25,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "modify":
                 $result = self::GenModify();
                 break;
+            case "operate":
+                $result = self::GenOperate();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -94,8 +97,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
         }
 
-
-
         parent::ReplaceFirstForForum($tempContent);
 
         /******************  右部推荐栏  ********************** */
@@ -106,16 +107,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
         $forumPublicData = new ForumPublicData();
         $forumName = $forumPublicData->GetForumName($forumId, true);
-
         $tempContent = str_ireplace("{ForumName}", $forumName, $tempContent);
 
-
         parent::ReplaceTemplate($tempContent);
-
-
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
-
 
         /*******************过滤字符 begin********************** */
         $multiFilterContent = array();
@@ -311,6 +307,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceSiteConfig($siteId, $tempContent);
         return $tempContent;
     }
+
     private function GenModify() {
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
@@ -353,15 +350,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $forumTopicPublicData = new ForumTopicPublicData();
         $arrOne = $forumTopicPublicData->GetOne($forumTopicId);
-        //print_r($arrOne["ForumTopicId"]);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
         $forumPostPublicDate = new ForumPostPublicData();
         $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
-        //print_r($arrOne["UserName"]);
-        //print_r($arrOne);
         if(!empty($_POST)){
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
@@ -447,15 +441,42 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
-        //$tempContent = str_ireplace("{ForumPostContent}", "", $tempContent);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
-       //echo $tempContent;
         return $tempContent;
     }
 
+    /**
+     * 操作主题
+     * @return string 返回模板页面
+     */
+    private function GenOperate(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        if ($forumTopicId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+
+        $templateFileUrl = "forum/forum_topic_operate.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+
+        $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+
+        return $tempContent;
+    }
 }
 
 ?>

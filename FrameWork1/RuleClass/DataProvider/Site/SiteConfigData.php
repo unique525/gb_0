@@ -1959,16 +1959,18 @@ class SiteConfigData extends BaseData {
     /**
      * 返回某一站点下所有配置项列表
      * @param int $siteId 站点id
+     * @param bool $withCache 是否缓存，默认true
      * @return array 配置列表
      */
-    public function GetList($siteId)
+    public function GetList($siteId, $withCache = true)
     {
         if ($siteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data';
+            $cacheFile = 'site_config_get_list.cache_' . $siteId;
             $sql = "SELECT * FROM " . self::TableName_SiteConfig . " WHERE SiteId=:SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("SiteId", $siteId);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            return $result;
+            return $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         } else {
             return null;
         }

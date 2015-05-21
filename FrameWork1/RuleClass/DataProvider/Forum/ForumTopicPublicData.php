@@ -160,6 +160,28 @@ class ForumTopicPublicData extends BasePublicData
     }
 
     /**
+     * 修改主题状态
+     * @param int $forumTopicId 主题id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($forumTopicId, $state){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    State = :State
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得一条信息
      * @param int $forumTopicId 管理员id
      * @return array 管理员帐号信息数组
