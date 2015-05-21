@@ -46,7 +46,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         if($forumTopicId < 0){
             return "topic id is error";
         }
-        $forumId = Control::GetRequest("forum_id", 0);
+        $forumId = -1;
 
         $forumTopicPublicData = new ForumTopicPublicData();
 
@@ -124,7 +124,18 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{UserRegisterUrl}", $userRegisterUrl, $tempContent);
 
 
+        $forumPublicData = new ForumPublicData();
+        $forumName = $forumPublicData->GetForumName($forumId, true);
 
+        $tempContent = str_ireplace("{ForumName}", $forumName, $tempContent);
+
+        /******************  右部推荐栏  ********************** */
+        $templateForumRecTopicFileUrl = "forum/forum_rec_1_v.html";
+        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
+        $tempContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $tempContent);
+
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        parent::ReplaceTemplate($tempContent);
 
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);

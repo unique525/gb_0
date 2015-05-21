@@ -104,6 +104,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $tempContent);
 
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        $forumPublicData = new ForumPublicData();
+        $forumName = $forumPublicData->GetForumName($forumId, true);
+
+        $tempContent = str_ireplace("{ForumName}", $forumName, $tempContent);
+
 
         parent::ReplaceTemplate($tempContent);
 
@@ -262,6 +267,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 );
 
                 if($forumPostId > 0 ){
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
 

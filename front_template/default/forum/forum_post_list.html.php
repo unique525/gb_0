@@ -85,9 +85,23 @@
         </div>
     </div>
     <div class="content">
-        <div class="left"><a href="/default.php?mod=forum">首页</a></div>
-        <div class="right"><a href="/default.php?mod=forum_topic&a=create&forum_id={ForumId}">发表主题</a></div>
-        <div class="spe"></div>
+        <div class="left">
+            <a class="link" href="/default.php?mod=forum">首页</a>
+            &nbsp;--&nbsp;
+            <a class="link" href="/default.php?mod=forum_topic&forum_id={ForumId}">
+                {ForumName}
+            </a>
+        </div>
+        <div class="right">
+            <div class="btn2" style="float:left;">
+                <a class="btn2_a" href="/default.php?mod=forum_topic&a=create&forum_id={ForumId}">发表主题</a>
+            </div>
+            <div class="btn3" style="float:left;margin-left:10px;">
+                <a class="btn3_a" href="/default.php?mod=forum_post&a=create&forum_topic_id={ForumTopicId}">回复主题</a>
+            </div>
+            <div class="spe"></div>
+        </div>
+        <div class="spe_all"></div>
     </div>
 </div>
 <div id="forum_post" class="div_info">
@@ -191,7 +205,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
+                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" class="btn2" type="button" value="发表回复"></td>
                 </tr>
             </table>
             <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">
@@ -205,7 +219,7 @@
         </div>
 
         <div class="right">
-            aaa
+            {forum_rec_1_v}
         </div>
         <div class="spe"></div>
     </div>

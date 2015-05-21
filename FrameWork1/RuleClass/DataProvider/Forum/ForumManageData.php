@@ -245,7 +245,7 @@ class ForumManageData extends BaseManageData {
         $result = -1;
         if ($forumId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
-            $cacheFile = 'forum_get_parent_name.cache_' . $forumId . '';
+            $cacheFile = 'forum_get_forum_name.cache_' . $forumId . '';
             $sql = "SELECT ForumName FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_Forum, $forumId);

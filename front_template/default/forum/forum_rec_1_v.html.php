@@ -6,7 +6,7 @@
                 <icms id="site_{SiteId}" type="forum_topic_list" where="new" top="8">
                     <item>
                         <![CDATA[
-                        <li><span>{c_no}</span><a href="/default.php?mod=forum_topic&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
+                        <li><span>{c_no}</span><a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
                         ]]>
                     </item>
                 </icms>
@@ -18,7 +18,7 @@
                 <icms id="site_{SiteId}" type="forum_topic_list" where="hot" top="8">
                     <item>
                         <![CDATA[
-                        <li><span>{c_no}</span><a href="/default.php?mod=forum_topic&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
+                        <li><span>{c_no}</span><a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
                         ]]>
                     </item>
                 </icms>
@@ -31,7 +31,7 @@
                 <icms id="site_{SiteId}" type="forum_topic_list" where="best" top="8">
                     <item>
                         <![CDATA[
-                        <li><span>{c_no}</span><a href="/default.php?mod=forum_topic&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
+                        <li><span>{c_no}</span><a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}" target="_blank">{f_ForumTopicTitle}</a></li>
                         ]]>
                     </item>
                 </icms>
