@@ -1,246 +1,215 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>会员中心</title>
+<link href="/images/common_css.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="/front_template/common/jquery.Jcrop.min.css" type="text/css"/>
+<style type="text/css">
+    .rightbar input {
+        border: 1px solid #CCC;
+    }
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
-    {common_head}
-    <style type="text/css">
-        .albumpic{width:155px;height:150px;margin:10px 10px 10px 20px;float:left;border:1px #CCC solid; display:block;vertical-align:middle;text-align:center;}
-        .albumpic img{max-width:149px;width:expression(this.width>149?149:true);max-height:151px;height:expression(this.height>151?151:true);}
+    .right {
+        cursor: pointer
+    }
+</style>
+<script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/front_js/common.js"></script>
+<script type="text/javascript" src="/front_js/jquery.Jcrop.min.js"></script>
+<script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="/front_js/user/user_car.js"></script>
+<script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
+<script type="text/javascript" src="/system_js/upload_file.js"></script>
 
-    </style>
-    <script type="text/javascript">
-        var width = 348;
-        var height = 377;
-        jQuery(function($){
+<script type="text/javascript">
 
-            var id = trim(Request['aid']);
-            getAlbumpicList(id);
-        });
-        function getAlbumpicList(id){
+    var bigWidth =400;
+    var bigHeight = 300;
+    var uploadFileId = 0;
+    var src = "";
+    var tableType = window.UPLOAD_TABLE_TYPE_USER_AVATAR;
+    var tableId = parseInt("{UserId}");
+
+    /**
+     *截图回调函数
+     * @param data
+     * @constructor
+     */
+    window.CutImgCallBack = function (data) {
+        if (data["new_image_path"] != undefined) {
             $.ajax({
-                url:"http://www.image1.cn/index.php",
-                data:{a:"user",f:"useralbum",m:"albumpiclist",albumid:id,btype:0},
-                dataType:"jsonp",
-                jsonp:"jsonpcallback",
-                success:function(data){
-                    var result = new Array();
-                    result = data["result"];
-                    var templatelist =  '';
-                    ReplaceList(templatelist ,result,"useralbumpiclist");
-                }
-            });
-        }
-        function getsize(a){
-            a.css("margin-top",(150-a.height())/2);
-        }
-        function selectpic(id){
-            $.ajax({
-                url:"http://www.image1.cn/index.php",
-                data:{a:"user",f:"useralbum",m:"createtemppic",picid:id,width:750,height:750},
-                dataType:"jsonp",
-                jsonp:"jsonpcallback",
-                success:function(data){
-
-
-                    var src= data["result"];
-                    $("#target").attr("src","http://www.image1.cn"+src);
-                    var jcrop_api, boundx, boundy;
-
-                    var allowResize = false;
-                    var minSize = [348,377];
-
-                    if($("#target").height()<370){
-                        allowResize = true;
-                        minSize = [348/2,377/2];
+                url: "/default.php?secu=manage&mod=upload_file&m=async_modify_upload_file_cut_path1&upload_file_id="
+                    + uploadFileId + "&upload_file_cut_path=" + data["new_image_path"],
+                secureUri: false,
+                dataType: "json",
+                success: function (data) {
+                    uploadFileId = parseInt(data["upload_file_id"]);
+                    if (uploadFileId != undefined && uploadFileId > 0) {
+                        alert("截图成功");
                     }
-
-
-
-                    $('#target').Jcrop({
-                        allowSelect:false,
-                        onChange: updatePreview,
-                        onSelect: updatePreview,
-                        aspectRatio: 12/13,
-                        bgFade:true,
-                        bgOpacity: .3,
-                        minSize :minSize,
-                        setSelect:[0,0,348,377],
-                        allowResize:allowResize
-                    },function(){
-                        // Use the API to get the real image size
-                        //this.setImage("http://www.image1.cn"+src,function(){});
-                        //setTimeout('boundx = $("#img2").width();boundy = $("#img2").height();',5000);
-                        //alert($("#img2").width());
-                        //alert($("#img2").height());
-                        //var img2_width = $("#img2").width();
-                        //var img2_height = $("#img2").height();
-                        //alert(img2_width);
-                        //alert(img2_height);
-                        var bounds = this.getBounds();
-                        boundx = bounds[0];
-                        boundy = bounds[1];
-                        // Store the API in the jcrop_api variable
-                        jcrop_api = this;
-                    });
-                    function updatePreview(c)
-                    {
-                        if (parseInt(c.w) > 0)
-                        {
-                            var rx = width / c.w;
-                            var ry = height / c.h;
-                            $('#preview').css({
-                                width: Math.round(rx * boundx) + 'px',
-                                height: Math.round(ry * boundy) + 'px',
-                                marginLeft: '-' + Math.round(rx * c.x) + 'px',
-                                marginTop: '-' + Math.round(ry * c.y) + 'px'
-                            });
-                            $('#x').val(c.x);
-                            $('#y').val(c.y);
-                            $('#w').val(c.w);
-                            $('#h').val(c.h);
-                        }
-                    };
-                    $('#height').val(height);
-                    $('#width').val(width);
-                    $('#source').val(src);
-                    $("#preview").attr("src","http://www.image1.cn"+src);
-                    $("#useralbumpiclist").css("display","none");
-                    $("#outer").css("display","block");
-                    $("#picid").val(id);
+                },
+                error: function (data, status, e) {
+                    alert(e);
                 }
             });
+        } else {
+            alert("截图失败");
+        }
+    };
+
+    /**
+     * 取得一个UploadFile的回调函数
+     * @param data
+     * @constructor
+     */
+    window.GetOneUploadFileCallBack = function (data) {
+        if (data["upload_file_path"] != "") {
+            var uploadFileSrc = data["upload_file_path"];
+            uploadFileId = data["upload_file_id"];
+            src = uploadFileSrc;
+            $("#upload_file").attr("src", uploadFileSrc);
+            $("#target").attr("src", src);
+            $("#preview_large").attr("src", src);
+        }
+    };
+
+    $(function () {
+        var upload_file_id = Request["upload_file_id"];
+        GetOneUploadFile(upload_file_id);
+
+        var jcrop_api, boundx, boundy;
+        $('#target').Jcrop({
+            onChange: updatePreview,
+            onSelect: updatePreview,
+            //aspectRatio: 1,
+            bgFade: true,
+            bgOpacity: .3,
+            minSize: [
+                400,
+                300
+            ]
+        }, function () {
+            // Use the API to get the real image size
+            var bounds = this.getBounds();
+            boundx = bounds[0];
+            boundy = bounds[1];
+            // Store the API in the jcrop_api variable
+            jcrop_api = this;
+        });
+
+        function updatePreview(c) {
+            if (parseInt(c.w) > 0) {
+                var rx = bigWidth / c.w;
+                var ry = bigHeight / c.h;
+                $('#preview_large').css({
+                    width: Math.round(rx * boundx) + 'px',
+                    height: Math.round(ry * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry * c.y) + 'px'
+                });
+                $('#x').val(c.x);
+                $('#y').val(c.y);
+                $('#w').val(c.w);
+                $('#h').val(c.h);
+            }
+            $('#height').val(bigHeight);
+            $('#width').val(bigWidth);
+            $('#upload_file_id').val(uploadFileId);
         }
 
-        function sub(){
-            $("#cutimg").submit();
-            //window.close();
-        }
-    </script>
+        $("#sub").click(function () {
+            $(this).attr("disabled", "disabled");
+            $("#loadingOfFinish").show();
+            var CutImgForm = $("#CutImgForm");
+            if (uploadFileId > 0) {
+                    var parameter = CutImgForm.serialize();
+                    $.ajax({
+                        url:"/default.php?secu=manage&mod=upload_file&m=async_cut_image&upload_file_id="+uploadFileId,
+                        data:parameter,
+                        secureUri:false,
+                        dataType:"json",
+                        success:function(data){
+                            window.CutImgCallBack(data);
+                        },
+                        error: function (data, status, e)
+                        {
+                            alert(e);
+                        }
+                    });
+            }
+        });
+    });
 
+    function GetOneUploadFile(uploadFileId){
+
+        $.ajax({
+            url:"/default.php?secu=manage&mod=upload_file&m=async_get_one&upload_file_id="+uploadFileId,
+            async:false,
+            secureUri:false,
+            dataType:"json",
+            success:function(data){
+                window.GetOneUploadFileCallBack(data);
+            },
+            error: function (data, status, e)
+            {
+                alert(e);
+            }
+        });
+    }
+
+</script>
 </head>
 
 <body>
-<div style=" background:#FFFFFF; margin:0px auto;height:100%; overflow:hidden; padding-top:20px; width:1080px;">
-    <div id="box1000">
-        <div class="mainBox">
-            <div class="mainBor overhidden minheight">
-                <pretemp id="447"></pretemp>
-                <div style="font-size:14px; margin:15px 0px 0px 20px;">请选择一张图片作为封面:</div>
-                <div id="useralbumpiclist">
+<div class="wrapper" style="width: 90%">
 
-                    <div class="albumpic" id="pic_1007153" style="cursor:pointer" onclick="selectpic(1007153)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g2njk1s2gh3pv177ccvqm3.JPG.temp.jpg.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007153" value="/upload/user/23594/album_239059/p19m4g2njk1s2gh3pv177ccvqm3.JPG"/>
-                    </div>
+                <div id="outer" style="padding:20px 50px;">
+                    <div style="background: #f6f6f6;">
+                        <div class="jcExample">
+                            <div class="article">
+                                <table cellspacing="25">
+                                    <tr>
+                                        <td valign="top">
+                                            <img src="" id="target" alt="Flowers"/>
+                                        </td>
+                                        <td valign="top">
+                                            <div style="width:400px;height:300px;overflow:hidden;">
+                                                <img src="" id="preview_large" alt="中图预览" class="jcrop-preview"/>
+                                            </div>
+                                        </td>
 
-                    <div class="albumpic" id="pic_1007154" style="cursor:pointer" onclick="selectpic(1007154)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g38qc1qmlt5o220m0t9034.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007154" value="/upload/user/23594/album_239059/p19m4g38qc1qmlt5o220m0t9034.JPG"/>
-                    </div>
+                                    </tr>
+                                </table>
+                                <form id="CutImgForm">
+                                    <input type="hidden" id="x" name="x"/>
+                                    <input type="hidden" id="y" name="y"/>
+                                    <input type="hidden" id="w" name="w"/>
+                                    <input type="hidden" id="h" name="h"/>
+                                    <input type="hidden" value="" id="height" name="height"/>
+                                    <input type="hidden" value="" id="width" name="width"/>
+                                    <input type="hidden" value="" id="source" name="source"/>
 
-                    <div class="albumpic" id="pic_1007155" style="cursor:pointer" onclick="selectpic(1007155)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g3mkd1trh1alfabdmjk1hk15.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007155" value="/upload/user/23594/album_239059/p19m4g3mkd1trh1alfabdmjk1hk15.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007156" style="cursor:pointer" onclick="selectpic(1007156)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g5a52dp9lsh13271mjmj1e6.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007156" value="/upload/user/23594/album_239059/p19m4g5a52dp9lsh13271mjmj1e6.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007157" style="cursor:pointer" onclick="selectpic(1007157)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g78j61pf311kcdto1js28hg7.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007157" value="/upload/user/23594/album_239059/p19m4g78j61pf311kcdto1js28hg7.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007158" style="cursor:pointer" onclick="selectpic(1007158)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g7kjh1hqu1nvr1l7t3971v0i8.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007158" value="/upload/user/23594/album_239059/p19m4g7kjh1hqu1nvr1l7t3971v0i8.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007159" style="cursor:pointer" onclick="selectpic(1007159)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g8l0v1dvgh31mjq18h81en09.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007159" value="/upload/user/23594/album_239059/p19m4g8l0v1dvgh31mjq18h81en09.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007160" style="cursor:pointer" onclick="selectpic(1007160)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g957oh5t1qji1im613m0vv7a.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007160" value="/upload/user/23594/album_239059/p19m4g957oh5t1qji1im613m0vv7a.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007161" style="cursor:pointer" onclick="selectpic(1007161)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4g9qp4jf7ofc1ssn22if8eb.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007161" value="/upload/user/23594/album_239059/p19m4g9qp4jf7ofc1ssn22if8eb.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007162" style="cursor:pointer" onclick="selectpic(1007162)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4ga79618sv1jfo1pdi1q4f16m7c.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007162" value="/upload/user/23594/album_239059/p19m4ga79618sv1jfo1pdi1q4f16m7c.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007163" style="cursor:pointer" onclick="selectpic(1007163)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4gajgvh491l4i1ctf17ju1gbrd.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007163" value="/upload/user/23594/album_239059/p19m4gajgvh491l4i1ctf17ju1gbrd.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007164" style="cursor:pointer" onclick="selectpic(1007164)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4gbauus8adct1gvj6j81i0ae.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007164" value="/upload/user/23594/album_239059/p19m4gbauus8adct1gvj6j81i0ae.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007165" style="cursor:pointer" onclick="selectpic(1007165)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4gbo8rlp29251vj012i010aqf.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007165" value="/upload/user/23594/album_239059/p19m4gbo8rlp29251vj012i010aqf.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007166" style="cursor:pointer" onclick="selectpic(1007166)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4gc23i19mt7c61g6b68i1ehlg.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007166" value="/upload/user/23594/album_239059/p19m4gc23i19mt7c61g6b68i1ehlg.JPG"/>
-                    </div>
-
-                    <div class="albumpic" id="pic_1007167" style="cursor:pointer" onclick="selectpic(1007167)">
-                        <img class="img" src="http://www.image1.cn/upload/user/23594/album_239059/p19m4gceml1u3c1s9isg21gk1q8fh.JPG.thumb.jpg" onload="getsize($(this));" />
-                        <input type="hidden" id="url_1007167" value="/upload/user/23594/album_239059/p19m4gceml1u3c1s9isg21gk1q8fh.JPG"/>
-                    </div>
-
-                </div>
-                <div style="clear:left"></div>
-                <div id="outer" style="display:none">
-                    <div class="jcExample">
-                        <div class="article">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <img src="" id="target" alt="Flowers"/>
-                                    </td>
-                                    <td>
-                                        <div style="width:348px;height:377px;overflow:hidden;">
-                                            <img src="" id="preview" alt="Preview" class="jcrop-preview" />
+                                    <div style="padding-left:25px; padding-bottom: 25px;">
+                                        <div id="sub"
+                                             style="background-color:#00a93c;width:90px;height:30px;line-height:30px;font-size:16px;text-align:center;color:#fff;cursor:pointer;">
+                                            确 定
                                         </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <form action="http://www.image1.cn/index.php?a=user&f=useralbum&m=createmainpic&returnmessage=1" id="cutimg" method="post" runat="server">
-                                <iframe name="abc"   width="0px"   height="0px"   frameborder="0"    style="display:none"> </iframe>
-                                <input type="hidden" id="x" name="x" />
-                                <input type="hidden" id="y" name="y" />
-                                <input type="hidden" id="w" name="w" />
-                                <input type="hidden" id="h" name="h" />
-                                <input type="hidden" value="" id="height" name="height"/>
-                                <input type="hidden" value="" id="width" name="width"/>
-                                <input type="hidden" value="" id="source" name="source"/>
-                                <input type="hidden" value="" id="picid" name="picid"/>
-                                <input type="button" class="btn" onclick="sub();" value="确定" />
-                            </form>
+                                    </div>
+                                    <div style="float:left"><img id="loadingOfFinish"
+                                                                 src="/system_template/common/images/loading1.gif"
+                                                                 style="display:none;"/></div>
+                                    <div style="clear:both"></div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="blank10px"></div></div>
+
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
-
