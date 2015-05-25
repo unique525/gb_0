@@ -17,6 +17,11 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
+
+    <link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
     <style>
         .replyBox { height: 250px;width: 1100px; background:#F9F9F9;border:#E6E6E6 solid 1px;};
     </style>
@@ -29,6 +34,8 @@
         var tableId = '{ForumId}';
 
         $(function(){
+
+            $('.fancybox').fancybox();
 
             var f_ForumPostContent = $('#f_ForumPostContent');
 
@@ -137,7 +144,8 @@
                         </tr>
                         <tr>
                             <td colspan="2" align="right" style="padding:10px;">
-                                <span>收藏</span> <span>分享</span> <span>举报</span> <span>主题管理</span>
+                                <span>收藏</span> <span>分享</span> <span>举报</span>
+                                <a class="fancybox fancybox.iframe" href="/default.php?mod=forum_topic&a=operate&forum_topic_id={f_ForumTopicId}">主题管理</a>
                             </td>
                         </tr>
                     </table>

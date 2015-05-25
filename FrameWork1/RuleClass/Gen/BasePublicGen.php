@@ -1361,6 +1361,39 @@ class BasePublicGen extends BaseGen
     }
 
 
+
+
+    protected function GetUserPopedom($userPopedomName){
+
+        $siteId = self::GetSiteIdByDomain();
+        $userId = Control::GetUserId();
+
+        if($siteId>0 && $userId>0){
+
+            $userPopedomPublicData = new UserPopedomPublicData();
+
+            $result = $userPopedomPublicData->GetValueBySiteIdAndUserId(
+                $siteId,
+                $userId,
+                $userPopedomName,
+                true
+            );
+
+            if($result<=0){
+                //没找到权限，从会员员组中找
+
+
+
+            }
+
+
+        }
+
+
+
+    }
+
+
 }
 
 ?>

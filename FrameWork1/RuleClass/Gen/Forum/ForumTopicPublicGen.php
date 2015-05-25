@@ -28,6 +28,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "operate":
                 $result = self::GenOperate();
                 break;
+            case "async_remove_to_bin":
+                $result = self::AsyncRemoveToBin();
+                break;
+            case "async_set_top":
+                $result = self::AsyncSetTop();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -476,6 +482,24 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceSiteConfig($siteId, $tempContent);
 
         return $tempContent;
+    }
+
+    private function AsyncRemoveToBin(){
+        $result = "";
+
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $userId = Control::GetUserId();
+
+        if ($forumTopicId > 0 && $userId >= 0) {
+
+        }
+
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+    private function AsyncSetTop(){
+
     }
 }
 

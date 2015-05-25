@@ -697,6 +697,29 @@ class UploadFileData extends BaseData
     }
 
     /**
+     * 修改上传文件路径（截图1使用）（文件夹+文件名）
+     * @param int $uploadFileId 上传文件id
+     * @param int $uploadFileCutPath1 上传文件路径（截图1使用）（文件夹+文件名）
+     * @return int 操作结果
+     */
+    public function ModifyUploadFileCutPath1($uploadFileId, $uploadFileCutPath1)
+    {
+        if ($uploadFileId > 0 && !empty($uploadFileCutPath1)) {
+            $sql = "UPDATE " . self::TableName_UploadFile . "
+                        SET UploadFileCutPath1=:UploadFileCutPath1
+                        WHERE UploadFileId=:UploadFileId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UploadFileCutPath1", $uploadFileCutPath1);
+            $dataProperty->AddField("UploadFileId", $uploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            return $result;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
      * 修改TableId
      * @param int $uploadFileId 上传文件id
      * @param int $tableId 对应表id

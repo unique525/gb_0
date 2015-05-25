@@ -290,6 +290,16 @@ class BaseData
     const TableId_User = "UserId";
 
     /**
+     * 会员权限 数据表名
+     */
+    const TableName_UserPopedom = "cst_user_popedom";
+    /**
+     * 会员权限 数据表自增字段名
+     */
+    const TableId_UserPopedom = "UserPopedomId";
+
+
+    /**
      * 会员订单发货 数据表名
      */
     const TableName_UserOrderSend = "cst_user_order_send";
