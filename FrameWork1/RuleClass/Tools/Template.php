@@ -1107,11 +1107,11 @@ class Template
                 if (strtolower($columnName) === strtolower("OpenComment")) {
                     $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", "selected=\"selected\"", $templateContent);
                     if (intval($columnValue) === 0) { //关闭评论
-                        $columnValue = "display:none;";
+                        $replaceColumnValue = "display:none;";
                     } else {
-                        $columnValue = "";
+                        $replaceColumnValue = "";
                     }
-                    $templateContent = str_ireplace("{" . $columnName . "}", $columnValue, $templateContent);
+                    $templateContent = str_ireplace("{" . $columnName . "}", $replaceColumnValue, $templateContent);
                 }
 
                 $templateContent = str_ireplace("{" . $preManage . $columnName . "}", $columnValue, $templateContent);
