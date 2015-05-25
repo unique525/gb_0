@@ -29,14 +29,29 @@ var templateName="{template_name}";
 
 //上传回调函数
 window.AjaxFileUploadCallBack = function(fileElementId,data){
+
+    if(data.upload_file_watermark_path1 != null
+        && data.upload_file_watermark_path1 != undefined
+        && data.upload_file_watermark_path1.length>0
+        && $("#cbAttachWatermark").is(":checked")
+        ){
+        //添加水印图到编辑控件中
+        if(editor != undefined && editor != null){
+            editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_watermark_path1));
+        }
+    }else{
+        //添加原图到编辑控件中
+        if(editor != undefined && editor != null){
+            editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+        }
+
+    }
+
     //是图片则加入图片管理栏
     SetNewUploadPic(data.upload_file_path,data.upload_file_id,0,templateName)//单张上传的图片默认不加入组图控件
 }
 
 $(function () {
-
-
-
 
     var editorHeight = $(window).height() - 220;
     editorHeight = parseInt(editorHeight);
@@ -140,9 +155,10 @@ $(function () {
         var fUploadFile = $("#f_UploadFiles");
 
         var attachWatermark = 0;
-        if ($("#cbAttachWatermark").attr("checked") == true) {
+        if ($("#cbAttachWatermark").is(":checked")) {
             attachWatermark = 1;
         }
+
         var loadingImageId = null;
         var inputTextId = null;
         var previewImageId = null;
@@ -153,7 +169,7 @@ $(function () {
             tableId,
             loadingImageId,
             btnUploadToContent,
-            editor,
+            null,//editor回调函数已经处理，这里置为null
             fUploadFile,
             attachWatermark,
             inputTextId,
@@ -167,7 +183,7 @@ $(function () {
     /**plupload**/
     //组图上传
 
-    if ($("#batchAttachWatermark").attr("checked") == true) {
+    if ($("#batchAttachWatermark").is(":checked")) {
         batchAttachWatermark = 1;
     }
     // Setup html5 version
@@ -211,7 +227,7 @@ $(function () {
                 var filePath=dataSet.upload_file_path;
                 //log('[FileUploaded] File:', file, "Info:", info);
 
-                    if(fUploadFile != undefined && fUploadFile != null){
+                if(fUploadFile != undefined && fUploadFile != null){
                     var uploadFiles = fUploadFile.val();
                     uploadFiles = uploadFiles + "," + dataSet.upload_file_id;
                     fUploadFile.val(uploadFiles);
@@ -272,16 +288,16 @@ $(function () {
 
     ///文本框获取焦点 开始监听
     $('.input_title').focus(function(){
-            var id=$(this).attr("id");
+        var id=$(this).attr("id");
         strLengthRefresh=1;
         setTimeout('StrLength("'+id+'")', 100);
-        });
+    });
 
 
     ///文本框失去焦点 停止监听
     $('.input_title').blur(function(){
         strLengthRefresh=0;
-        });
+    });
 
 });
 
@@ -412,231 +428,231 @@ function submitForm(closeTab) {
     <li><a href="#tabs-5">图片管理</a></li>
 </ul>
 <div id="tabs-1">
-    <div class="spe_line" style="line-height: 40px;text-align: left;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <!--标题-->
-                <td class="spe_line" style=" width: 60px;text-align: left;"><label for="f_DocumentNewsTitle">标题：</label></td>
-                <td class="spe_line" >
-                    <input type="text" class="iColorPicker input_box input_title" id="f_DocumentNewsTitle"
-                           name="f_DocumentNewsTitle" value="{DocumentNewsTitle}"
-                           style="width:90%;font-size:14px; background-color: #ffffff;" maxlength="200"/>
-                    <input type="hidden" id="f_DocumentNewsTitleColor" name="f_DocumentNewsTitleColor"
-                           value="{DocumentNewsTitleColor}"/>
-                    <input type="hidden" id="f_DocumentNewsTitleBold" name="f_DocumentNewsTitleBold"
-                           value="{DocumentNewsTitleBold}"/>
-                    <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}"/>
-                    <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}"/>
-                    <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}"/>
-                </td>
-                <td class="spe_line" style="width:140px">
-                    <input type="checkbox" id="cbTitleBold"/> <label for="cbTitleBold">加粗</label>
-                    <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
-                    <span id="length_f_DocumentNewsTitle"></span>
-                </td>
+<div class="spe_line" style="line-height: 40px;text-align: left;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <!--标题-->
+            <td class="spe_line" style=" width: 60px;text-align: left;"><label for="f_DocumentNewsTitle">标题：</label></td>
+            <td class="spe_line" >
+                <input type="text" class="iColorPicker input_box input_title" id="f_DocumentNewsTitle"
+                       name="f_DocumentNewsTitle" value="{DocumentNewsTitle}"
+                       style="width:90%;font-size:14px; background-color: #ffffff;" maxlength="200"/>
+                <input type="hidden" id="f_DocumentNewsTitleColor" name="f_DocumentNewsTitleColor"
+                       value="{DocumentNewsTitleColor}"/>
+                <input type="hidden" id="f_DocumentNewsTitleBold" name="f_DocumentNewsTitleBold"
+                       value="{DocumentNewsTitleBold}"/>
+                <input type="hidden" id="f_SiteId" name="f_SiteId" value="{SiteId}"/>
+                <input type="hidden" id="f_ChannelId" name="f_ChannelId" value="{ChannelId}"/>
+                <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}"/>
+            </td>
+            <td class="spe_line" style="width:140px">
+                <input type="checkbox" id="cbTitleBold"/> <label for="cbTitleBold">加粗</label>
+                <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+                <span id="length_f_DocumentNewsTitle"></span>
+            </td>
 
-                <!--短标题-->
-                <td class="spe_line" style="width: 60px;height:35px;text-align: right;"><label
-                        for="f_DocumentNewsShortTitle">短标题：</label></td>
-                <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
-                                                                     id="f_DocumentNewsShortTitle"
-                                                                     name="f_DocumentNewsShortTitle"
-                                                                     value="{DocumentNewsShortTitle}"
-                                                                     style=" width: 90%;font-size:14px;" maxlength="100"/>
-                </td>
-                <td class="spe_line" style="width:140px">
-                    <span id="length_f_DocumentNewsShortTitle"></span>
-                </td>
-            </tr>
-            <tr>
+            <!--短标题-->
+            <td class="spe_line" style="width: 60px;height:35px;text-align: right;"><label
+                    for="f_DocumentNewsShortTitle">短标题：</label></td>
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
+                                                                 id="f_DocumentNewsShortTitle"
+                                                                 name="f_DocumentNewsShortTitle"
+                                                                 value="{DocumentNewsShortTitle}"
+                                                                 style=" width: 90%;font-size:14px;" maxlength="100"/>
+            </td>
+            <td class="spe_line" style="width:140px">
+                <span id="length_f_DocumentNewsShortTitle"></span>
+            </td>
+        </tr>
+        <tr>
 
-                <!--副标题-->
-                <td class="spe_line" style="width:60px;height:35px;text-align: left;"><label for="f_DocumentNewsSubTitle">副标题：</label>
-                </td>
-                <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
-                                                                     id="f_DocumentNewsSubTitle"
-                                                                     name="f_DocumentNewsSubTitle"
-                                                                     value="{DocumentNewsSubTitle}"
-                                                                     style=" width: 90%;font-size:14px;" maxlength="100"/>
-                </td>
-                <td class="spe_line" style="width:140px">
-                    <span id="length_f_DocumentNewsSubTitle"></span>
-                </td>
-                <!--引题-->
-                <td class="spe_line" style="width:60px;height:35px;text-align: right;"><label
-                        for="f_DocumentNewsCiteTitle">引题：</label></td>
-                <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
-                                                                     id="f_DocumentNewsCiteTitle"
-                                                                     name="f_DocumentNewsCiteTitle"
-                                                                     value="{DocumentNewsCiteTitle}"
-                                                                     style=" width: 90%;font-size:14px;" maxlength="100"/>
-                </td>
-                <td class="spe_line" style="width:140px">
-                    <span id="length_f_DocumentNewsCiteTitle"></span>
-                </td>
-            </tr>
-</table>
+            <!--副标题-->
+            <td class="spe_line" style="width:60px;height:35px;text-align: left;"><label for="f_DocumentNewsSubTitle">副标题：</label>
+            </td>
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
+                                                                 id="f_DocumentNewsSubTitle"
+                                                                 name="f_DocumentNewsSubTitle"
+                                                                 value="{DocumentNewsSubTitle}"
+                                                                 style=" width: 90%;font-size:14px;" maxlength="100"/>
+            </td>
+            <td class="spe_line" style="width:140px">
+                <span id="length_f_DocumentNewsSubTitle"></span>
+            </td>
+            <!--引题-->
+            <td class="spe_line" style="width:60px;height:35px;text-align: right;"><label
+                    for="f_DocumentNewsCiteTitle">引题：</label></td>
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box input_title"
+                                                                 id="f_DocumentNewsCiteTitle"
+                                                                 name="f_DocumentNewsCiteTitle"
+                                                                 value="{DocumentNewsCiteTitle}"
+                                                                 style=" width: 90%;font-size:14px;" maxlength="100"/>
+            </td>
+            <td class="spe_line" style="width:140px">
+                <span id="length_f_DocumentNewsCiteTitle"></span>
+            </td>
+        </tr>
+    </table>
 
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="" style="width:60px;text-align: left;"><label
-                        for="f_DocumentNewsIntro">摘要：</label><br/>
-                    <input type="button" class="btn4" value="编 写"
-                           onclick='showModalDialog("/system_js/manage/document_news/edit_abstract.html", window, "dialogWidth:850px;dialogHeight:400px;help:no;scroll:no;status:no");'/>&nbsp;
-                </td>
-                <td class="" style="width:40%;text-align: left"><textarea class="input_box input_title" id="f_DocumentNewsIntro"
-                                                                        name="f_DocumentNewsIntro"
-                                                                        style="width: 90%; height: 80px;font-size:14px;margin-top:5px">{DocumentNewsIntro}</textarea>
-                    <div id="length_f_DocumentNewsIntro" style="line-height:20px"></div>
-                </td>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="" style="width:60px;text-align: left;"><label
+                    for="f_DocumentNewsIntro">摘要：</label><br/>
+                <input type="button" class="btn4" value="编 写"
+                       onclick='showModalDialog("/system_js/manage/document_news/edit_abstract.html", window, "dialogWidth:850px;dialogHeight:400px;help:no;scroll:no;status:no");'/>&nbsp;
+            </td>
+            <td class="" style="width:40%;text-align: left"><textarea class="input_box input_title" id="f_DocumentNewsIntro"
+                                                                      name="f_DocumentNewsIntro"
+                                                                      style="width: 90%; height: 80px;font-size:14px;margin-top:5px">{DocumentNewsIntro}</textarea>
+                <div id="length_f_DocumentNewsIntro" style="line-height:20px"></div>
+            </td>
 
-                <td>
+            <td>
 
-                    <table width="99%" border="0" cellspacing="0" cellpadding="0">
+                <table width="99%" border="0" cellspacing="0" cellpadding="0">
 
-                        <tr>
-                            <td class="" style="width:60px;height:35px;text-align: right;">题图1：</td>
-                            <td class="" style="text-align: left">
-                                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                                       style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                                      class="show_title_pic"
-                                                                                                      idvalue="{TitlePic1UploadFileId}"
-                                                                                                      style="cursor:pointer">[预览]</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="" style="width:60px;height:35px;text-align: right;">题图2：</td>
-                            <td class="" style="text-align: left">
-                                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
-                                       style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic2"
-                                                                                                          class="show_title_pic"
-                                                                                                          idvalue="{TitlePic2UploadFileId}"
-                                                                                                          style="cursor:pointer">[预览]</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="" style="width:60px;height:35px;text-align: right;">题图3：</td>
-                            <td class="" style="text-align: left">
-                                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
-                                       style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
-                                                                                                          class="show_title_pic"
-                                                                                                          idvalue="{TitlePic3UploadFileId}"
-                                                                                                          style="cursor:pointer">[预览]</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            </table>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="spe_line" style="width:120px;height:35px;text-align: left;"><label
-                        for="f_DirectUrl">直接转向网址：</label></td>
-                <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DirectUrl"
-                                                                     name="f_DirectUrl" value="{DirectUrl}"
-                                                                     style=" width: 70%;font-size:14px;" maxlength="200"/>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div style=" margin-top:3px;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
-                                                                                     id="f_DocumentNewsContent"
-                                                                                     name="f_DocumentNewsContent"
-                                                                                     style=" width: 100%;">{DocumentNewsContent}</textarea>
-                </td>
-                <td style="vertical-align:top;">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0"
-                           style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
-                        <tr>
-                            <td style="width:74px;height:35px;text-align: right;"><label for="f_SourceName">来源：</label>
-                            </td>
-                            <td style="text-align: left; line-height:180%;">
-                                <input type="text" class="input_box" id="f_SourceName" name="f_SourceName"
-                                       value="{SourceName}" style=" width:60%;font-size:14px; margin-top: 4px;"
-                                       maxlength="50"/>&nbsp;<span id="btn_select_source">[选择来源]</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spe_line" style="width:74px;height:35px;text-align: right;">常用来源：</td>
-                            <td class="spe_line" style="text-align: left; line-height:180%;">
-                                <icms id="source_common_list" type="list">
-                                    <item>
-                                        <![CDATA[<span class="btnSetSourceName">{f_SourceName}</span><br/>]]>
-                                    </item>
-                                </icms>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                                    for="f_Author">作者：</label></td>
-                            <td class="spe_line" style="text-align: left">
-                                <input type="text" class="input_box" id="f_Author" name="f_Author" value="{Author}"
-                                       style="width:95%;font-size:14px;" maxlength="50"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                                    for="f_DocumentNewsMainTag">主关键词：</label></td>
-                            <td class="spe_line" style="text-align: left">
-                                <input type="text" class="input_box" id="f_DocumentNewsMainTag"
-                                       name="f_DocumentNewsMainTag" value="{DocumentNewsMainTag}"
-                                       style="width:95%;font-size:14px;" maxlength="100"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                                    for="f_DocumentNewsTag">关键词：</label></td>
-                            <td class="spe_line" style="text-align: left">
-                                <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
-                                       value="{DocumentNewsTag}" style="width:95%;font-size:14px;" maxlength="200"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="spe_line" style="height:35px;text-align: right;">加前缀：</td>
-                            <td class="spe_line" align="left" style="line-height:20px;">
-                                <icms id="document_pre_content" type="list">
-                                    <item>
-                                        <![CDATA[
+                    <tr>
+                        <td class="" style="width:60px;height:35px;text-align: right;">题图1：</td>
+                        <td class="" style="text-align: left">
+                            <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
+                                   style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
+                                                                                                 class="show_title_pic"
+                                                                                                 idvalue="{TitlePic1UploadFileId}"
+                                                                                                 style="cursor:pointer">[预览]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="" style="width:60px;height:35px;text-align: right;">题图2：</td>
+                        <td class="" style="text-align: left">
+                            <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
+                                   style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic2"
+                                                                                                     class="show_title_pic"
+                                                                                                     idvalue="{TitlePic2UploadFileId}"
+                                                                                                     style="cursor:pointer">[预览]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="" style="width:60px;height:35px;text-align: right;">题图3：</td>
+                        <td class="" style="text-align: left">
+                            <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
+                                   style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
+                                                                                                     class="show_title_pic"
+                                                                                                     idvalue="{TitlePic3UploadFileId}"
+                                                                                                     style="cursor:pointer">[预览]</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="spe_line" style="width:120px;height:35px;text-align: left;"><label
+                    for="f_DirectUrl">直接转向网址：</label></td>
+            <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_DirectUrl"
+                                                                 name="f_DirectUrl" value="{DirectUrl}"
+                                                                 style=" width: 70%;font-size:14px;" maxlength="200"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div style=" margin-top:3px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
+                                                                                 id="f_DocumentNewsContent"
+                                                                                 name="f_DocumentNewsContent"
+                                                                                 style=" width: 100%;">{DocumentNewsContent}</textarea>
+            </td>
+            <td style="vertical-align:top;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                       style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
+                    <tr>
+                        <td style="width:74px;height:35px;text-align: right;"><label for="f_SourceName">来源：</label>
+                        </td>
+                        <td style="text-align: left; line-height:180%;">
+                            <input type="text" class="input_box" id="f_SourceName" name="f_SourceName"
+                                   value="{SourceName}" style=" width:60%;font-size:14px; margin-top: 4px;"
+                                   maxlength="50"/>&nbsp;<span id="btn_select_source">[选择来源]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;">常用来源：</td>
+                        <td class="spe_line" style="text-align: left; line-height:180%;">
+                            <icms id="source_common_list" type="list">
+                                <item>
+                                    <![CDATA[<span class="btnSetSourceName">{f_SourceName}</span><br/>]]>
+                                </item>
+                            </icms>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_Author">作者：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_Author" name="f_Author" value="{Author}"
+                                   style="width:95%;font-size:14px;" maxlength="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_DocumentNewsMainTag">主关键词：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_DocumentNewsMainTag"
+                                   name="f_DocumentNewsMainTag" value="{DocumentNewsMainTag}"
+                                   style="width:95%;font-size:14px;" maxlength="100"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_DocumentNewsTag">关键词：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
+                                   value="{DocumentNewsTag}" style="width:95%;font-size:14px;" maxlength="200"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="height:35px;text-align: right;">加前缀：</td>
+                        <td class="spe_line" align="left" style="line-height:20px;">
+                            <icms id="document_pre_content" type="list">
+                                <item>
+                                    <![CDATA[
                                         <span style="cursor: pointer;" class="btn_add_pre_content"
                                               title="{f_DocumentPreContent}">{f_DocumentPreContent}</span><br/>
-                                        ]]>
-                                    </item>
-                                </icms>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="height:35px;">文件上传：</td>
-                            <td align="left">
-                                <input id="file_upload_to_content" name="file_upload_to_content" type="file"
-                                       class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
-                                    id="loading" src="/system_template/common/images/loading1.gif"
-                                    style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
-                            <td align="left">
-                                <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark"/> (只支持jpg或jpeg图片)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
-                            <td align="left">
-                                <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/>
-                                (只支持jpg、jpeg、gif、png图片)
-                            </td>
-                        </tr>
-                    </table>
+                                    ]]>
+                                </item>
+                            </icms>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;">文件上传：</td>
+                        <td align="left">
+                            <input id="file_upload_to_content" name="file_upload_to_content" type="file"
+                                   class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
+                                id="loading" src="/system_template/common/images/loading1.gif"
+                                style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
+                        <td align="left">
+                            <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark"/> (只支持jpg或jpeg图片)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
+                        <td align="left">
+                            <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/>
+                            (只支持jpg、jpeg、gif、png图片)
+                        </td>
+                    </tr>
+                </table>
 
 
-                </td>
-            </tr>
-        </table>
+            </td>
+        </tr>
+    </table>
 
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
 
             <td class="spe_line" style="width:80px;height:35px;text-align: right;">推荐级别：</td>
@@ -690,8 +706,8 @@ function submitForm(closeTab) {
             <td class="spe_line" style="width:80px;height:35px;text-align: right;"><label for="f_Sort">排序数字：</label>
             </td>
             <td class="spe_line" style="width:240px;text-align: left"><input type="text" class="input_number" id="f_Sort"
-                                                                 name="f_Sort" value="{Sort}"
-                                                                 style=" width: 60px;font-size:14px;" maxlength="10"/>
+                                                                             name="f_Sort" value="{Sort}"
+                                                                             style=" width: 60px;font-size:14px;" maxlength="10"/>
                 (输入数字，越大越靠前)
             </td>
             <td class="spe_line" style="width:80px;height:35px;text-align: right;">是否热门：</td>
@@ -707,8 +723,8 @@ function submitForm(closeTab) {
                 {r_IsHot}
             </td>
         </tr>
-        </table>
-    </div>
+    </table>
+</div>
 </div>
 <div id="tabs-2">
     <!--<table width="99%" border="0" cellspacing="0" cellpadding="0">

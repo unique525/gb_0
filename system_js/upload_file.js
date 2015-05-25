@@ -378,9 +378,14 @@ function AjaxFileUpload(
         btnUpload.removeAttr("disabled");
     });
 
+    var url = '/default.php?mod=upload_file&a=async_upload&file_element_name='
+        +fileElementId
+        +'&table_type='+tableType
+        +'&table_id='+tableId
+        +'&attach_watermark='+attachWatermark+"&upload_file_id="+uploadFileId;
 
     $.ajaxFileUpload({
-        url:'/default.php?mod=upload_file&a=async_upload&file_element_name='+fileElementId+'&table_type='+tableType+'&table_id='+tableId+'&attach_watermark='+attachWatermark+"&upload_file_id="+uploadFileId,
+        url:url,
         secureUri:false,
         fileElementId:fileElementId,
         dataType: 'json',

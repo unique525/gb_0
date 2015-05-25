@@ -479,7 +479,12 @@ class BaseGen
             $result = $errorMessage;
         }
 
-        $uploadFile = new UploadFile($errorMessage, $resultMessage, $uploadFileId, $uploadFilePath);
+        $uploadFile = new UploadFile(
+            $errorMessage,
+            $resultMessage,
+            $uploadFileId,
+            $uploadFilePath
+        );
 
         return $result;
     }
@@ -1446,6 +1451,7 @@ class BaseGen
      * @param int $watermarkPosition   水印位置 1:顶部居左, 2:顶部居右, 3:居中, 4:底部居左, 5:底部居右
      * @param int $mode 模式 0 支持png本身透明度的方式 1 半透明格式水印
      * @param int $alpha 透明度 -- 0:完全透明, 100:完全不透明
+     * @param UploadFile $uploadFile 上传文件对象
      * @return int 操作结果
      */
     protected function GenUploadFileWatermark1(
@@ -1454,7 +1460,8 @@ class BaseGen
         $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC,
         $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT,
         $mode = ImageObject::WATERMARK_MODE_PNG,
-        $alpha = 70
+        $alpha = 70,
+        &$uploadFile = null
     )
     {
         $result = -1;
@@ -1487,7 +1494,7 @@ class BaseGen
             if (!empty($uploadFilePath)) {
                 $addFileName = "watermark1";
 
-                $newUploadFilePath = ImageObject::GenWatermark(
+                $uploadFileWatermarkPath1 = ImageObject::GenWatermark(
                     $uploadFilePath,
                     $watermarkFilePath,
                     $addFileName,
@@ -1496,12 +1503,24 @@ class BaseGen
                     $alpha
                 );
 
-                if (!empty($newUploadFilePath)) {
+                if (!empty($uploadFileWatermarkPath1)) {
+
+                    $uploadFileWatermarkPath1 = str_ireplace(
+                        '\\/','/',$uploadFileWatermarkPath1
+                    );
+
+                    $uploadFileWatermarkPath1 = str_ireplace(
+                        '\\','/',$uploadFileWatermarkPath1
+                    );
+
                     //3.修改数据表
                     $result = $uploadFileData->ModifyUploadFileWatermarkPath1(
                         $uploadFileId,
-                        $newUploadFilePath
+                        $uploadFileWatermarkPath1
                     );
+
+                    //修改对象
+                    $uploadFile->UploadFileWatermarkPath1 = $uploadFileWatermarkPath1;
                 }
             }
         }
