@@ -34,6 +34,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "async_set_top":
                 $result = self::AsyncSetTop();
                 break;
+            case "async_cancel_top":
+                $result = self::AsyncCancelTop();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -485,21 +488,147 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
     }
 
     private function AsyncRemoveToBin(){
-        $result = "";
+
 
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         $userId = Control::GetUserId();
 
         if ($forumTopicId > 0 && $userId >= 0) {
 
-        }
+            //读取权限
+            $forumDeleteSelfPost = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
 
+            if($forumDeleteSelfPost){
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifyState(
+                    $forumTopicId,
+                    ForumTopicData::FORUM_TOPIC_STATE_REMOVED
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
 
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 
+    /**
+     * 设置排序
+     * @return string
+     */
     private function AsyncSetTop(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
+        $userId = Control::GetUserId();
 
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetTop = false;
+            //读取权限
+            switch($mode){
+
+                case 0:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
+                    break;
+                case 1:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetRegionTop);
+                    break;
+                case 2:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetAllTop);
+                    break;
+            }
+
+            if($canSetTop){
+                $sort = 0;
+                switch($mode){
+
+                    case 0:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
+                        break;
+                    case 1:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
+                        break;
+                    case 2:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
+                        break;
+                }
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifySort(
+                    $forumTopicId,
+                    $sort
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+    /**
+     * 取消排序
+     * @return string
+     */
+    private function AsyncCancelTop(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
+        $userId = Control::GetUserId();
+
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetTop = false;
+            //读取权限
+            switch($mode){
+
+                case 0:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
+                    break;
+                case 1:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetRegionTop);
+                    break;
+                case 2:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetAllTop);
+                    break;
+            }
+
+            if($canSetTop){
+                $sort = 0;
+                switch($mode){
+
+                    case 0:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
+                        break;
+                    case 1:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
+                        break;
+                    case 2:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
+                        break;
+                }
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifySort(
+                    $forumTopicId,
+                    $sort
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 }
 

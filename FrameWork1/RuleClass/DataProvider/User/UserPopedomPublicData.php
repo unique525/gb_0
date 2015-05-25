@@ -387,7 +387,7 @@ class UserPopedomPublicData extends BasePublicData {
         $userPopedomName,
         $withCache = true
     ) {
-        $result = -1;
+        $result = "";
         if ($siteId > 0 && $userGroupId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_popedom_data' . DIRECTORY_SEPARATOR . 'user_group_' . $userGroupId;
             $cacheFile = 'user_popedom_get_value_by_site_id_and_user_group_id.cache_site_id'
@@ -403,7 +403,7 @@ class UserPopedomPublicData extends BasePublicData {
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("UserGroupId", $userGroupId);
             $dataProperty->AddField("UserPopedomName", $userPopedomName);
-            $result = $this->GetInfoOfIntValue(
+            $result = $this->GetInfoOfStringValue(
                 $sql,
                 $dataProperty,
                 $withCache,

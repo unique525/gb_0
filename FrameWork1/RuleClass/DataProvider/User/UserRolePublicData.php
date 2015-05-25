@@ -38,10 +38,11 @@ class UserRolePublicData extends BasePublicData
     }
 
     /**
-     *
+     * 取得会员组id
      * @param int $siteId
      * @param int $userId
      * @param bool $withCache
+     * @return int UserGroupId
      */
     public function GetUserGroupId(
         $siteId,

@@ -180,6 +180,27 @@ class ForumTopicPublicData extends BasePublicData
 
         return $result;
     }
+    /**
+     * 修改主题排序
+     * @param int $forumTopicId 主题id
+     * @param int $sort 排序
+     * @return int 操作结果
+     */
+    public function ModifySort($forumTopicId, $sort){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    Sort = :Sort
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("Sort", $sort);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 
     /**
      * 取得一条信息
@@ -365,6 +386,25 @@ class ForumTopicPublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
             $cacheFile = 'forum_topic_get_forum_id.cache_' . $forumTopicId . '';
             $sql = "SELECT ForumId FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序
+     */
+    public function GetSort($forumTopicId, $withCache) {
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_sort.cache_' . $forumTopicId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

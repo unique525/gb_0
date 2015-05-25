@@ -1360,10 +1360,57 @@ class BasePublicGen extends BaseGen
 
     }
 
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return int
+     */
+    protected function GetUserPopedomIntValue($userPopedomName){
 
+        $result = self::GetUserPopedomStringValue($userPopedomName);
 
+        return intval($result);
 
-    protected function GetUserPopedom($userPopedomName){
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return float
+     */
+    protected function GetUserPopedomFloatValue($userPopedomName){
+
+        $result = self::GetUserPopedomStringValue($userPopedomName);
+
+        return floatval($result);
+
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return bool
+     */
+    protected function GetUserPopedomBoolValue($userPopedomName){
+
+        $result = self::GetUserPopedomStringValue($userPopedomName);
+
+        if(intval($result)>0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return string
+     */
+    protected function GetUserPopedomStringValue($userPopedomName){
+
+        $result = "";
 
         $siteId = self::GetSiteIdByDomain();
         $userId = Control::GetUserId();
@@ -1382,15 +1429,23 @@ class BasePublicGen extends BaseGen
             if($result<=0){
                 //没找到权限，从会员员组中找
 
+                $userRolePublicData = new UserRolePublicData();
+                $userGroupId = $userRolePublicData->GetUserGroupId(
+                    $siteId,
+                    $userId,
+                    true
+                );
 
-
+                $result = $userPopedomPublicData->GetValueBySiteIdAndUserGroupId(
+                    $siteId,
+                    $userGroupId,
+                    $userPopedomName,
+                    true
+                );
             }
-
-
         }
 
-
-
+        return $result;
     }
 
 
