@@ -38,9 +38,9 @@ class BasePublicGen extends BaseGen
                 //标签特殊查询条件的值
                 $tagWhereValue = Template::GetParamValue($tagContent, "where_value");
                 //显示条数
-
+                $withPager = Template::GetParamValue($tagContent, "with_pager"); //是否是列表页列表(是否翻页)
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
-                if ($tagTopCountOfPage != "") {
+                if ($tagTopCountOfPage != ""&&$withPager=="1") {   //分页的标签取当前页的条数
                     $tagTopCountOfPage = Format::CheckTopCount($tagTopCountOfPage);
                     if ($tagTopCountOfPage != null) {
                         $tagTopCount = $tagTopCountOfPage;
@@ -262,10 +262,10 @@ class BasePublicGen extends BaseGen
 
         if ($siteId > 0 || $channelId > 0) {
             $arrChannelList = null;
-            $arrChannelChildList = null;
+            $arrChannelChildList = array();
             $arrChannelThirdList = null;
             $tableIdName = "ChannelId";
-            $parentIdName = "ParentId";
+            $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
             $thirdParentIdName = "ParentId";
 
@@ -353,6 +353,24 @@ class BasePublicGen extends BaseGen
 
                     break;
             }
+
+            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
+                //显示条数
+                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");
+                $documentNewsManageData=new DocumentNewsManageData();
+                $state=DocumentNewsData::STATE_PUBLISHED;
+                foreach($arrChannelList as $oneChannel){
+                    $oneChildList = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);
+                    if($oneChildList==null){
+                        $oneChildList=array();
+                    }
+                    if($arrChannelChildList==null){
+                        $arrChannelChildList=array();
+                    }
+                    $arrChannelChildList=array_merge($arrChannelChildList,$oneChildList);
+                }
+            }
+
 
             if (!empty($arrChannelList)) {
                 $tagName = Template::DEFAULT_TAG_NAME;
