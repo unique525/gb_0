@@ -274,15 +274,17 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
 
             if ($uploadFile != null && isset($uploadFile)) {
 
-                $sourceX = Control::PostOrGetRequest("x", 0);
-                $sourceY = Control::PostOrGetRequest("y", 0);
-                $targetWidth = Control::PostOrGetRequest("width", 0);
-                $targetHeight = Control::PostOrGetRequest("height", 0);
-                $sourceWidth = Control::PostOrGetRequest("w", 0);
-                $sourceHeight = Control::PostOrGetRequest("h", 0);
+                $sourceX = Control::PostOrGetRequest("x", 0, false);
+                $sourceY = Control::PostOrGetRequest("y", 0, false);
+                $targetWidth = Control::PostOrGetRequest("width", 0, false);
+                $targetHeight = Control::PostOrGetRequest("height", 0, false);
+                $sourceWidth = Control::PostOrGetRequest("w", 0, false);
+                $sourceHeight = Control::PostOrGetRequest("h", 0, false);
                 $newImagePath = ImageObject::CutImg($uploadFile->UploadFilePath, $sourceX, $sourceY, $sourceWidth, $sourceHeight, $targetWidth, $targetHeight);
                 if (!empty($newImagePath)) {
-                    $result = '{"new_image_path":"' . Format::FormatJson($newImagePath) . '"}';
+                    $result = '{"new_image_path":"'
+                        . Format::FormatJson($newImagePath)
+                        . '"}';
                 }
             }
         }
@@ -300,7 +302,7 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
 
     private function AsyncModifyUploadFileCutPath1(){
         $uploadFileId = Control::GetRequest("upload_file_id", 0);
-        $uploadFileCutPath = Control::PostOrGetRequest("upload_file_cut_path","");
+        $uploadFileCutPath = Control::PostOrGetRequest("upload_file_cut_path","", false);
 
         if($uploadFileId > 0 && !empty($uploadFileCutPath)){
             $uploadFilePublicData = new UploadFileData();

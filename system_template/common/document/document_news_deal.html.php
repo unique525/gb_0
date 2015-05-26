@@ -17,6 +17,8 @@
 <script type="text/javascript" src="/system_js/plupload-2.1.2/js/i18n/zh_CN.js"></script>
 <script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 <script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
+<link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 <script type="text/javascript">
 <!--
 var editor;
@@ -98,6 +100,7 @@ $(function () {
     });
 
     $('#tabs').tabs();
+    $('.fancybox').fancybox();
 
     var f_ShowDate = $("#f_ShowDate");
 
@@ -502,7 +505,7 @@ function submitForm(closeTab) {
             </td>
             <td class="" style="width:40%;text-align: left"><textarea class="input_box input_title" id="f_DocumentNewsIntro"
                                                                       name="f_DocumentNewsIntro"
-                                                                      style="width: 90%; height: 80px;font-size:14px;margin-top:5px">{DocumentNewsIntro}</textarea>
+                                                                      style="width: 90%; height: 90px;font-size:14px;">{DocumentNewsIntro}</textarea>
                 <div id="length_f_DocumentNewsIntro" style="line-height:20px"></div>
             </td>
 
@@ -511,33 +514,36 @@ function submitForm(closeTab) {
                 <table width="99%" border="0" cellspacing="0" cellpadding="0">
 
                     <tr>
-                        <td class="" style="width:60px;height:35px;text-align: right;">题图1：</td>
+                        <td class="" style="width:60px;height:30px;text-align: right;">题图1：</td>
                         <td class="" style="text-align: left">
                             <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
                                    style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
                                                                                                  class="show_title_pic"
                                                                                                  idvalue="{TitlePic1UploadFileId}"
                                                                                                  style="cursor:pointer">[预览]</span>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic1UploadFileId}">[制作截图]</a>
                         </td>
                     </tr>
                     <tr>
-                        <td class="" style="width:60px;height:35px;text-align: right;">题图2：</td>
+                        <td class="" style="width:60px;height:30px;text-align: right;">题图2：</td>
                         <td class="" style="text-align: left">
                             <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
                                    style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic2"
                                                                                                      class="show_title_pic"
                                                                                                      idvalue="{TitlePic2UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic2UploadFileId}">[制作截图]</a>
                         </td>
                     </tr>
                     <tr>
-                        <td class="" style="width:60px;height:35px;text-align: right;">题图3：</td>
+                        <td class="" style="width:60px;height:30px;text-align: right;">题图3：</td>
                         <td class="" style="text-align: left">
                             <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
                                    style="width:auto; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
                                                                                                      class="show_title_pic"
                                                                                                      idvalue="{TitlePic3UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic3UploadFileId}">[制作截图]</a>
                         </td>
                     </tr>
                 </table>
@@ -727,39 +733,7 @@ function submitForm(closeTab) {
 </div>
 </div>
 <div id="tabs-2">
-    <!--<table width="99%" border="0" cellspacing="0" cellpadding="0">
 
-        <tr>
-            <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图1：</td>
-            <td class="spe_line" style="text-align: left">
-                <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                       style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                      class="show_title_pic"
-                                                                                      idvalue="{TitlePic1UploadFileId}"
-                                                                                      style="cursor:pointer">[预览]</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图2：</td>
-            <td class="spe_line" style="text-align: left">
-                <input id="file_title_pic_2" name="file_title_pic_2" type="file" class="input_box"
-                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic2"
-                                                                                          class="show_title_pic"
-                                                                                          idvalue="{TitlePic2UploadFileId}"
-                                                                                          style="cursor:pointer">[预览]</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图3：</td>
-            <td class="spe_line" style="text-align: left">
-                <input id="file_title_pic_3" name="file_title_pic_3" type="file" class="input_box"
-                       style="width:400px; background: #ffffff; margin-top: 3px;"/> <span id="preview_title_pic3"
-                                                                                          class="show_title_pic"
-                                                                                          idvalue="{TitlePic3UploadFileId}"
-                                                                                          style="cursor:pointer">[预览]</span>
-            </td>
-        </tr>
-    </table>-->
 </div>
 <div id="tabs-3">
     <div id="uploader">
