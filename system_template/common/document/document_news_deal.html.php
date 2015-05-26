@@ -838,8 +838,8 @@ function submitForm(closeTab) {
                         var hit=$("#f_VirtualHit").attr("value");
                         var siteId={SiteId};
                         if((hit==""||hit=="0")&&siteId==2){
-                            var addHit=GetRandomNum(500,700);
-                            $("#f_VirtualHit").attr("value",addHit);
+                            //var addHit=GetRandomNum(500,700);
+                            //$("#f_VirtualHit").attr("value",addHit);
                         }
                     });
                     function GetRandomNum(Min,Max)
