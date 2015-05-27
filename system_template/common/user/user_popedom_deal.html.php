@@ -7,7 +7,7 @@
         $(function(){
             $('#tabs').tabs();
         });
-        function sub()
+        function submitForm(closeTab)
         {
             $('#main_form').submit();
         }
@@ -44,8 +44,8 @@
                 <td class="spe_line"><input name="u_UserAlbumMaxUploadPerOnce" id="u_UserAlbumMaxUploadPerOnce" value="{UserAlbumMaxUploadPerOnce}" maxlength="2" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制）</td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="u_ForumUserAllowHidden">允许隐身登录：</label></td>
-                <td class="spe_line"><input name="u_ForumUserAllowHidden" id="u_ForumUserAllowHidden" {c_ForumUserAllowHidden} type="checkbox" /></td>
+                <td class="spe_line" height="30" align="right"><label for="u_UserAllowHidden">允许隐身登录：</label></td>
+                <td class="spe_line"><input name="u_UserAllowHidden" id="u_UserAllowHidden" {c_UserAllowHidden} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_UserCanPostActivity">允许发布活动：</label></td>

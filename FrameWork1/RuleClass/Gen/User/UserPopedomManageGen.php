@@ -55,6 +55,11 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
         $userPopedomManageData = new UserPopedomManageData();
 
         if(!empty($_POST)){
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/user_popedom_data');
+
+
             if($userGroupId>0){
                 //对会员组授权
 
@@ -127,8 +132,6 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
 
             Control::GoUrl($selfUrl);
         }
-
-
 
         for ($i = 0; $i < count($arrList); $i++) {
             $userPopedomName = $arrList[$i]["UserPopedomName"];

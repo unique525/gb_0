@@ -290,6 +290,12 @@ class UserPopedomManageData extends BaseManageData {
 
 	    (UserPopedomName,UserPopedomValue,UserId,UserGroupId,SiteId,ChannelId,ForumId) VALUES
 
+        ('UserSignMaxContentCount','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
+        ('UserAlbumMaxUploadPerOnce','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
+        ('UserAllowHidden','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
+        ('UserCanPostActivity','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
+        ('UserSetRecCountLimit','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
+        ('UserSetRecCountDayMax','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
         ('ForumAllowPostTopic','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
         ('ForumAllowPostReply','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
         ('ForumAllowPostAdvancedTopicAccess','0',$userId,$userGroupId,$siteId,$channelId,$forumId),
@@ -345,6 +351,8 @@ class UserPopedomManageData extends BaseManageData {
         ('ForumUserSignMaxContentCount','0',$userId,$userGroupId,$siteId,$channelId,$forumId)
 
         ;";
+
+        echo $sql;
         $result = $this->dbOperator->Execute($sql, null);
         return $result;
     }
