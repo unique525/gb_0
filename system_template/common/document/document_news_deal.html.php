@@ -788,7 +788,7 @@ function submitForm(closeTab) {
             <td class="spe_line" style="width:200px;height:35px;text-align: right;"><label for="f_State">当前状态：</label>
             </td>
             <td class="spe_line" style="text-align: left">
-                <select id="f_State" name="f_state">
+                <select id="f_State" name="f_State">
                     <option value="0">新稿</option>
                     <option value="1">已编</option>
                     <option value="2">返工</option>
@@ -796,9 +796,12 @@ function submitForm(closeTab) {
                     <option value="12">二审</option>
                     <option value="13">三审</option>
                     <option value="14">终审</option>
+                    <option value="20">已否</option>
+                    <option value="30">已发</option>
+                    <option value="100">已删</option>
                     <option value="127"></option>
                 </select>
-                {s_state}
+                {s_State}
             </td>
         </tr>
         <tr>
