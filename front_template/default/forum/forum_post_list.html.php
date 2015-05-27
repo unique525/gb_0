@@ -126,9 +126,10 @@
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
                                         </td>
+                                        <td class="forum_post_post_time" style="padding-right:10px;" align="right">楼主</td>
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>
@@ -161,9 +162,10 @@
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
                                         </td>
+                                        <td class="forum_post_post_time"style="padding-right:10px;" align="right">{c_no}楼</td>
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>

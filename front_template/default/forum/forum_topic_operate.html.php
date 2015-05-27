@@ -21,23 +21,29 @@
 
 
         $(function(){
-            var btnConfirm = $("#btnConfirm");
-            btnConfirm.click(function(){
+            var forumTopicDelete = $("#forum_topic_delete");
+            forumTopicDelete.click(function(){
+                var forumTopicId = parseInt(Request["forum_topic_id"]);
                 if (forumTopicId == undefined || forumTopicId <=0){
                     $("#dialog_box").dialog({width: 300, height: 100});
                     $("#dialog_content").html("帖子ID不能为空");
                 }
                 else {
-                    var forumPostContent = $("#f_ForumPostContent");
-                    if (forumPostContent.val() == '') {
-                        $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("回复内容不能为空");
-                    } else {
+                    $.ajax({
+                        type: "get",
+                        url: "default.php?mod=forum_topic&a=async_remove_to_bin",
+                        data: {
+                            forum_topic_id: forumTopicId
+                        },
+                        dataType: "jsonp",
+                        jsonp: "jsonpcallback",
+                        success: function(result) {
 
-                        $("#mainForm").attr("action",
-                            "/default.php?mod=forum_post&a=reply&forum_topic_id={ForumTopicId}");
-                        $('#mainForm').submit();
-                    }
+                            alert(result);
+
+                        }
+                    });
+
                 }
             });
 
@@ -58,9 +64,9 @@
         <br />
 
         <input id="forum_topic_delete" type="button" class="btn2" value="删除" />
-        <input id="forum_topic_set_top_1" type="button" class="btn2" value="本版置顶" />
-        <input id="forum_topic_set_top_2" type="button" class="btn2" value="分区置顶" />
-        <input id="forum_topic_set_top_3" type="button" class="btn2" value="全站置顶" />
+        <input id="forum_topic_set_top_0" type="button" class="btn2" value="本版置顶" />
+        <input id="forum_topic_set_top_1" type="button" class="btn2" value="分区置顶" />
+        <input id="forum_topic_set_top_2" type="button" class="btn2" value="全站置顶" />
         <input id="forum_topic_cancel_top" type="button" class="btn2" value="取消置顶" />
     </div>
 </div>

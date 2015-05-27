@@ -5,7 +5,6 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_User
  * @author zhangchi
  */
-
 class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
     public function Gen(){
         $result = "";
@@ -188,10 +187,9 @@ class UserGroupManageGen extends BaseManageGen implements IBaseManageGen{
                 Template::RemoveCustomTag($templateContent, $tagId);
                 $templateContent = str_ireplace("{pagerButton}","", $templateContent);
             }
-            $arrReplace = array(
-                "{SiteId}" => $siteId
-            );
-            $templateContent = strtr($templateContent,$arrReplace);
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
             parent::ReplaceEnd($templateContent);
             return $templateContent;
         }else{

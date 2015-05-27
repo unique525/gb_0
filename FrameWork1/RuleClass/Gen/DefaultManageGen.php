@@ -92,6 +92,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userOrderSendManageGen = new UserOrderSendManageGen();
                     $result = $userOrderSendManageGen->Gen();
                     break;
+                case "user_popedom":
+                    $userPopedomManageGen = new UserPopedomManageGen();
+                    $result = $userPopedomManageGen->Gen();
+                    break;
                 case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
