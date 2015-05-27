@@ -1128,7 +1128,7 @@ class Template
                 $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $templateContent);
 
                 $checkedOption = '<script type="text/javascript">
-                    $("input[name=f_' . $columnName . ']:radio").attr("checked","' . $columnValue . '");
+                    $("input[name=f_' . $columnName . '][value='.$columnValue.']").attr("checked","checked");
                 </script>';
 
                 $templateContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $templateContent);

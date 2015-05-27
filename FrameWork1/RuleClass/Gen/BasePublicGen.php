@@ -1231,7 +1231,6 @@ class BasePublicGen extends BaseGen
             $domain = Control::GetDomain(strtolower($_SERVER['HTTP_HOST']));
             $sitePublicData = new SitePublicData();
             $siteId = $sitePublicData->GetSiteIdByBindDomain($domain, true);
-
             if ($siteId <= 0) {
                 //查子域名
                 $arrSubDomain = explode(".", $host);
@@ -1466,6 +1465,9 @@ class BasePublicGen extends BaseGen
         return $result;
     }
 
+    protected function ReplaceChannelInfo(){
+
+    }
 
 }
 
