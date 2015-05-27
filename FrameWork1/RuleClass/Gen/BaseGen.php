@@ -185,6 +185,21 @@ class BaseGen
     }
 
     /**
+     * 替换模板中的频道信息
+     * @param int $channelId 频道id
+     * @param string $templateContent 模板内容
+     */
+    protected function ReplaceChannelInfo($channelId, &$templateContent){
+        if($channelId>0){
+
+            $channelPublicData = new ChannelPublicData();
+            $arrChannelInfo = $channelPublicData->GetOne($channelId);
+
+            Template::ReplaceOne($templateContent,$arrChannelInfo);
+        }
+    }
+
+    /**
      * 替换模板中的配置标记
      * @param int $siteId 站点id
      * @param string $templateContent 模板内容
