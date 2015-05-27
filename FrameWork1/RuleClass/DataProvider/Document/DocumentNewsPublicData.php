@@ -785,10 +785,10 @@ class DocumentNewsPublicData extends BasePublicData {
 
         if($channelId>0&&!empty($topCount)){
 
-            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+            $orderBySql = 'ORDER BY dn.CreateDate DESC';
             switch($orderBy){
                 case 0:
-                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY dn.CreateDate DESC';
                     break;
             }
 
