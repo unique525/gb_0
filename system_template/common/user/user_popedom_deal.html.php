@@ -108,27 +108,27 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumAllowPostMediaTopic">允许发布多媒体<strong>主题</strong>(如视频、Flash、框架页面等)：</label></td>
-                <td class="spe_line"><input name="u_ForumAllowPostMediaTopic" id="u_ForumAllowPostMediaTopic" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumAllowPostMediaTopic" id="u_ForumAllowPostMediaTopic" {c_ForumAllowPostMediaTopic} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumAllowPostMediaReply">允许发布多媒体<strong>回复</strong>(如视频、Flash、框架页面等)：</label></td>
-                <td class="spe_line"><input name="u_ForumAllowPostMediaReply" id="u_ForumAllowPostMediaReply" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumAllowPostMediaReply" id="u_ForumAllowPostMediaReply" {c_ForumAllowPostMediaReply} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumEditSelfPost">编辑自己的帖子：</label></td>
-                <td class="spe_line"><input name="u_ForumEditSelfPost" id="u_ForumEditSelfPost" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumEditSelfPost" id="u_ForumEditSelfPost" {c_ForumEditSelfPost} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumEditOtherPost">编辑其他人的帖子：</label></td>
-                <td class="spe_line"><input name="u_ForumEditOtherPost" id="u_ForumEditOtherPost" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumEditOtherPost" id="u_ForumEditOtherPost" {c_ForumEditOtherPost} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumDeleteSelfPost">删除自己的帖子：</label></td>
-                <td class="spe_line"><input name="u_ForumDeleteSelfPost" id="u_ForumDeleteSelfPost" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumDeleteSelfPost" id="u_ForumDeleteSelfPost" {c_ForumDeleteSelfPost} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumDeleteOtherPost">删除其他人的帖子：</label></td>
-                <td class="spe_line"><input name="u_ForumDeleteOtherPost" id="u_ForumDeleteOtherPost" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumDeleteOtherPost" id="u_ForumDeleteOtherPost" {c_ForumDeleteOtherPost} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumForbidOtherEditMyTopic">禁止其他人编辑自己的主题(一般只有管理员有此权限)：</label></td>
@@ -144,79 +144,79 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumForbidOtherDeleteMyReply">禁止其他人删除自己的回复(一般只有管理员有此权限)：</label></td>
-                <td class="spe_line"><input name="u_ForumForbidOtherDeleteMyReply" id="u_ForumForbidOtherDeleteMyReply" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumForbidOtherDeleteMyReply" id="u_ForumForbidOtherDeleteMyReply" {c_ForumForbidOtherDeleteMyReply} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetSelfTopicLock">将自己的主题设为锁定状态：</label></td>
-                <td class="spe_line"><input name="u_ForumSetSelfTopicLock" id="u_ForumSetSelfTopicLock" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetSelfTopicLock" id="u_ForumSetSelfTopicLock" {c_ForumSetSelfTopicLock} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetSelfTopicBanReply">将自己的主题设为禁止回复状态：</label></td>
-                <td class="spe_line"><input name="u_ForumSetSelfTopicBanReply" id="u_ForumSetSelfTopicBanReply" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetSelfTopicBanReply" id="u_ForumSetSelfTopicBanReply" {c_ForumSetSelfTopicBanReply} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetOtherTopicLock">将其他人的主题设为锁定状态：</label></td>
-                <td class="spe_line"><input name="u_ForumSetOtherTopicLock" id="u_ForumSetOtherTopicLock" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetOtherTopicLock" id="u_ForumSetOtherTopicLock" {c_ForumSetOtherTopicLock} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetOtherTopicBanReply">将其他人的主题设为禁止回复状态：</label></td>
-                <td class="spe_line"><input name="u_ForumSetOtherTopicBanReply" id="u_ForumSetOtherTopicBanReply" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetOtherTopicBanReply" id="u_ForumSetOtherTopicBanReply" {c_ForumSetOtherTopicBanReply} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostAddMoney">在帖子中给帖主增加{ForumMoneyName}：</label></td>
-                <td class="spe_line"><input name="u_ForumPostAddMoney" id="u_ForumPostAddMoney" type="checkbox" />（是否允许给自己增加<label
-                        for="u_ForumPostAddMoneyForSelf"></label><input name="u_ForumPostAddMoneyForSelf" id="u_ForumPostAddMoneyForSelf" type="checkbox" />，每日限额：<label
+                <td class="spe_line"><input name="u_ForumPostAddMoney" id="u_ForumPostAddMoney" {c_ForumPostAddMoney} type="checkbox" />（是否允许给自己增加<label
+                        for="u_ForumPostAddMoneyForSelf"></label><input name="u_ForumPostAddMoneyForSelf" id="u_ForumPostAddMoneyForSelf" {c_ForumPostAddMoneyForSelf} type="checkbox" />，每日限额：<label
                         for="u_ForumPostAddMoneyLimit"></label><input name="u_ForumPostAddMoneyLimit" id="u_ForumPostAddMoneyLimit" value="{ForumPostAddMoneyLimit}" maxlength="10" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制））</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostAddCharm">在帖子中给帖主增加{ForumCharmName}：</label></td>
-                <td class="spe_line"><input name="u_ForumPostAddCharm" id="u_ForumPostAddCharm" type="checkbox" />（是否允许给自己增加<label
-                        for="u_ForumPostAddCharmForSelf"></label><input name="u_ForumPostAddCharmForSelf" id="u_ForumPostAddCharmForSelf" type="checkbox" />，每日限额：<label
+                <td class="spe_line"><input name="u_ForumPostAddCharm" id="u_ForumPostAddCharm" {c_ForumPostAddCharm} type="checkbox" />（是否允许给自己增加<label
+                        for="u_ForumPostAddCharmForSelf"></label><input name="u_ForumPostAddCharmForSelf" id="u_ForumPostAddCharmForSelf" {c_ForumPostAddCharmForSelf} type="checkbox" />，每日限额：<label
                         for="u_ForumPostAddCharmLimit"></label><input name="u_ForumPostAddCharmLimit" id="u_ForumPostAddCharmLimit" value="{ForumPostAddCharmLimit}" maxlength="10" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制））</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostAddScore">在帖子中给帖主增加{ForumScoreName}：</label></td>
-                <td class="spe_line"><input name="u_ForumPostAddScore" id="u_ForumPostAddScore" type="checkbox" />（是否允许给自己增加<label
-                        for="u_ForumPostAddScoreForSelf"></label><input name="u_ForumPostAddScoreForSelf" id="u_ForumPostAddScoreForSelf" type="checkbox" />，每日限额：<label
+                <td class="spe_line"><input name="u_ForumPostAddScore" id="u_ForumPostAddScore" {c_ForumPostAddScore} type="checkbox" />（是否允许给自己增加<label
+                        for="u_ForumPostAddScoreForSelf"></label><input name="u_ForumPostAddScoreForSelf" id="u_ForumPostAddScoreForSelf" {c_ForumPostAddScoreForSelf} type="checkbox" />，每日限额：<label
                         for="u_ForumPostAddScoreLimit"></label><input name="u_ForumPostAddScoreLimit" id="u_ForumPostAddScoreLimit" value="{ForumPostAddScoreLimit}" maxlength="10" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制））</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostAddExp">在帖子中给帖主增加{ForumExpName}：</label></td>
-                <td class="spe_line"><input name="u_ForumPostAddExp" id="u_ForumPostAddExp" type="checkbox" />（是否允许给自己增加<label
-                        for="u_ForumPostAddExpForSelf"></label><input name="u_ForumPostAddExpForSelf" id="u_ForumPostAddExpForSelf" type="checkbox" />，每日限额：<label
+                <td class="spe_line"><input name="u_ForumPostAddExp" id="u_ForumPostAddExp" {c_ForumPostAddExp} type="checkbox" />（是否允许给自己增加<label
+                        for="u_ForumPostAddExpForSelf"></label><input name="u_ForumPostAddExpForSelf" id="u_ForumPostAddExpForSelf" {c_ForumPostAddExpForSelf} type="checkbox" />，每日限额：<label
                         for="u_ForumPostAddExpLimit"></label><input name="u_ForumPostAddExpLimit" id="u_ForumPostAddExpLimit" value="{ForumPostAddExpLimit}" maxlength="10" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制））</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostSetBoardTop">将主题设为版块置顶：</label></td>
-                <td class="spe_line"><input name="u_ForumPostSetBoardTop" id="u_ForumPostSetBoardTop" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumPostSetBoardTop" id="u_ForumPostSetBoardTop" {c_ForumPostSetBoardTop} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostSetRegionTop">将主题设为分区版块置顶：</label></td>
-                <td class="spe_line"><input name="u_ForumPostSetRegionTop" id="u_ForumPostSetRegionTop" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumPostSetRegionTop" id="u_ForumPostSetRegionTop" {c_ForumPostSetRegionTop} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostSetAllTop">将主题设为全部版块置顶：</label></td>
-                <td class="spe_line"><input name="u_ForumPostSetAllTop" id="u_ForumPostSetAllTop" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumPostSetAllTop" id="u_ForumPostSetAllTop" {c_ForumPostSetAllTop} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumMoveTopic">移动主题(可以移动自己或他人的主题，一般只有版主以上身份有此权限)：</label></td>
-                <td class="spe_line"><input name="u_ForumMoveTopic" id="u_ForumMoveTopic" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumMoveTopic" id="u_ForumMoveTopic" {c_ForumMoveTopic} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumCopyTopic">复制主题(可以复制自己或他人的主题，一般只有版主以上身份有此权限)：</label></td>
-                <td class="spe_line"><input name="u_ForumCopyTopic" id="u_ForumCopyTopic" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumCopyTopic" id="u_ForumCopyTopic" {c_ForumCopyTopic} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetBestTopic">将主题设为精华主题：</label></td>
-                <td class="spe_line"><input name="u_ForumSetBestTopic" id="u_ForumSetBestTopic" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetBestTopic" id="u_ForumSetBestTopic" {c_ForumSetBestTopic} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumSetRecTopic">将主题设为推荐主题：</label></td>
-                <td class="spe_line"><input name="u_ForumSetRecTopic" id="u_ForumSetRecTopic" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumSetRecTopic" id="u_ForumSetRecTopic" {c_ForumSetRecTopic} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostAllowUpload">允许在帖子中上传文件：</label></td>
-                <td class="spe_line"><input name="u_ForumPostAllowUpload" id="u_ForumPostAllowUpload" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumPostAllowUpload" id="u_ForumPostAllowUpload" {c_ForumPostAllowUpload} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostMaxUploadType">帖子中允许上传的文件类型：</label></td>
@@ -236,19 +236,19 @@
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumAllowViewAttachment">允许查看帖子中上传的文件：</label></td>
-                <td class="spe_line"><input name="u_ForumAllowViewAttachment" id="u_ForumAllowViewAttachment" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumAllowViewAttachment" id="u_ForumAllowViewAttachment" {c_ForumAllowViewAttachment} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumShowEditInfo">编辑帖子时是否显示编辑信息：</label></td>
-                <td class="spe_line"><input name="u_ForumShowEditInfo" id="u_ForumShowEditInfo" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumShowEditInfo" id="u_ForumShowEditInfo" {c_ForumShowEditInfo} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumAllowSearch">允许使用论坛搜索功能：</label></td>
-                <td class="spe_line"><input name="u_ForumAllowSearch" id="u_ForumAllowSearch" type="checkbox" /></td>
+                <td class="spe_line"><input name="u_ForumAllowSearch" id="u_ForumAllowSearch" {c_ForumAllowSearch} type="checkbox" /></td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumIgnoreLimit">忽视帖子中的所有限制设定（一般只有管理员有此权限）：</label></td>
-                <td class="spe_line"><input name="u_ForumIgnoreLimit" id="u_ForumIgnoreLimit" type="checkbox" /> （开启此选项后，锁定帖、禁止回复帖、限制条件阅读帖等主题的限制对此会员将无效）</td>
+                <td class="spe_line"><input name="u_ForumIgnoreLimit" id="u_ForumIgnoreLimit" {c_ForumIgnoreLimit} type="checkbox" /> （开启此选项后，锁定帖、禁止回复帖、限制条件阅读帖等主题的限制对此会员将无效）</td>
             </tr>
         </table>
     </div>
