@@ -119,8 +119,10 @@ class UserPopedomData {
     private $ForumShowEditInfo; //编辑帖子时是否显示编辑信息
     private $ForumAllowSearch; //允许使用论坛搜索功能
     private $ForumIgnoreLimit; //忽视帖子中的所有限制设定（一般只有管理员有此权限）
-    private $ForumUserSignMaxContentCount; //会员签名的最大字符数
     private $ForumUserAllowHidden; //允许隐身登录
+
+
+    private $UserSignMaxContentCount; //会员签名的最大字符数
     private $UserAlbumMaxUploadPerOnce; //会员相册单次最大上传文件数
 
     private $UserCanPostActivity; //是否允许发布活动

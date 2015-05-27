@@ -36,8 +36,8 @@
     <div>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="u_ForumUserSignMaxContentCount">会员签名的最大字符数：</label></td>
-                <td class="spe_line"><input name="u_ForumUserSignMaxContentCount" id="u_ForumUserSignMaxContentCount" value="{ForumUserSignMaxContentCount}" maxlength="6" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制）</td>
+                <td class="spe_line" height="30" align="right"><label for="u_UserSignMaxContentCount">会员签名的最大字符数：</label></td>
+                <td class="spe_line"><input name="u_UserSignMaxContentCount" id="u_UserSignMaxContentCount" value="{UserSignMaxContentCount}" maxlength="6" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制）</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_UserAlbumMaxUploadPerOnce">会员相册单次最大上传文件数：</label></td>
@@ -219,8 +219,8 @@
                 <td class="spe_line"><input name="u_ForumPostAllowUpload" id="u_ForumPostAllowUpload" {c_ForumPostAllowUpload} type="checkbox" /></td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="u_ForumPostMaxUploadType">帖子中允许上传的文件类型：</label></td>
-                <td class="spe_line"><input name="u_ForumPostMaxUploadType" id="u_ForumPostMaxUploadType" value="{ForumPostMaxUploadType}" maxlength="50" type="text" class="inputbox" style=" width: 200px;" />（例如：jpg,gif,bmp,png 用英文逗号分隔(,) * 表示不限制）</td>
+                <td class="spe_line" height="30" align="right"><label for="u_ForumPostAllowUploadType">帖子中允许上传的文件类型：</label></td>
+                <td class="spe_line"><input name="u_ForumPostAllowUploadType" id="u_ForumPostAllowUploadType" value="{ForumPostAllowUploadType}" maxlength="50" type="text" class="inputbox" style=" width: 200px;" />（例如：jpg,gif,bmp,png 用英文逗号分隔(,) * 表示不限制）</td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="u_ForumPostMaxUploadSize">帖子中允许上传的文件大小（KB）：</label></td>

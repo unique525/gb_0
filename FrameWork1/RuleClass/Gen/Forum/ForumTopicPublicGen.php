@@ -471,6 +471,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $siteId = parent::GetSiteIdByDomain();
         }
 
+        $userId = Control::GetUserId();
+        if($userId<=0){
+
+            $returnUrl = urlencode("/default.php?mod=forum_topic&a=operate&forum_topic_id=$forumTopicId");
+
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=$returnUrl");
+            return "";
+        }
+
         $templateFileUrl = "forum/forum_topic_operate.html";
         $templateName = "default";
         $templatePath = "front_template";
