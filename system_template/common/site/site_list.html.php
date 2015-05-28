@@ -16,6 +16,16 @@
                 window.location.href = '/default.php?secu=manage&mod=site&m=create&tab_index='+ parent.G_TabIndex +'';
             });
 
+            $(".span_site_template_library").click(function (event) {
+                event.preventDefault();
+                var siteId=$(this).attr("idvalue");
+                parent.G_TabUrl = 'default.php?secu=manage&mod=template_library&m=manage&site_id='+siteId +'';
+                parent.G_TabTitle =  '模板库';
+                parent.addTab();
+            });
+
+
+
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
                 var siteId=$(this).attr("idvalue");
@@ -138,6 +148,7 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新建站点" title="新建站点" type="button"/>
+                <input idvalue="0" class="btn2 span_site_template_library" value="通用模板库" title="通用模板库" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
@@ -190,6 +201,8 @@
                                 <span class="span_ftp" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">ftp</span>
                                 <span class="span_site_config" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">配置</span>
                                 <span class="span_site_manage_comment" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">评论管理</span>
+                                <span class="span_site_template_library" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">模板库</span>
+
                             </td>
                         </tr>
                     </table>
