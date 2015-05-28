@@ -217,6 +217,7 @@ class UserOrderManageData extends BaseManageData{
                             p.ProductName,
                             uop1.ProductPrice,
                             uop1.SaleCount,
+                            uop1.SubTotal,
                             uop2.PayPrice,
                             uo.State,
                             p.ProductTag,
@@ -225,7 +226,7 @@ class UserOrderManageData extends BaseManageData{
                             uri.Mobile,
                             uri.District,
                             uri.Address,
-                            uop2.CreateDate
+                            uop2.CreateDate AS PayDate
                         FROM
                             ".self::TableName_UserOrderProduct." uop1
                             LEFT JOIN ".self::TableName_UserOrder." uo ON uo.UserOrderId = uop1.UserOrderId
