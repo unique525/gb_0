@@ -609,11 +609,23 @@ class NewspaperPublicGen extends BasePublicGen
         if (count($arr1) > 1) {
             unset($arr1[0]);
             for ($i = 0; $i < count($arr1); $i++) {
-                $arr_2 = explode(",", $arr1[$i]);
-                $x_point = str_ireplace("%", "", $arr_2[0]);
-                $y_point = str_ireplace("%", "", $arr_2[1]);
-                if ($x_point > 0) $arr_x[] = $x_point;
-                if ($y_point > 0) $arr_y[] = $y_point;
+                if(isset($arr1[$i])){
+                    if(strlen($arr1[$i])>1){
+                        $arr_2 = explode(",", $arr1[$i]);
+                        if(is_array($arr_2) && !empty($arr_2)){
+                            $x_point = str_ireplace("%", "", $arr_2[0]);
+                            $y_point = str_ireplace("%", "", $arr_2[1]);
+                            if ($x_point > 0) {
+                                $arr_x[] = $x_point;
+                            }
+                            if ($y_point > 0) {
+                                $arr_y[] = $y_point;
+                            }
+                        }
+
+                    }
+                }
+
             }
             sort($arr_x);
             sort($arr_y);

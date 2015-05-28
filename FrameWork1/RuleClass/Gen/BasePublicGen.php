@@ -1464,11 +1464,6 @@ class BasePublicGen extends BaseGen
 
         return $result;
     }
-
-    protected function ReplaceChannelInfo(){
-
-    }
-
 }
 
 ?>

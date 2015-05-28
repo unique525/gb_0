@@ -780,14 +780,22 @@ class Template
         $pos = stripos(strtolower($columnName), strtolower("CreateDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
+            if(!empty($date1)){
+                $date2 = explode('-', $date1[0]);
 
-            $templateContent = str_ireplace("{f_c_year}", $year, $templateContent);
-            $templateContent = str_ireplace("{f_c_month}", $month, $templateContent);
-            $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
+                if(count($date2)>=3){
+                    $year = $date2[0];
+                    $month = $date2[1];
+                    $day = $date2[2];
+
+                    $templateContent = str_ireplace("{f_c_year}", $year, $templateContent);
+                    $templateContent = str_ireplace("{f_c_month}", $month, $templateContent);
+                    $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
+                }
+
+            }
+
+
         }
         $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
 

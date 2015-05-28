@@ -857,7 +857,7 @@ class BaseData
         if (strlen($sql) > 0) {
             if($withCache){
                 $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-                if (strlen($cacheArray) <= 0) {
+                if ($cacheArray == null || empty($cacheArray)) {
                     $result = $this->dbOperator->GetArray($sql, $dataProperty);
                     DataCache::SetWithArray($cacheDir, $cacheFile, $result);
                 } else {

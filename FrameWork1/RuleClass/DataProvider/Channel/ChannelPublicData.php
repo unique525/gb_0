@@ -11,15 +11,21 @@ class ChannelPublicData extends BasePublicData {
     /**
      * 返回一行数据
      * @param int $channelId 频道id
+     * @param bool $withCache
      * @return array|null 取得对应数组
      */
-    public function GetOne($channelId){
+    public function GetOne($channelId, $withCache = true){
         $result = null;
         if($channelId>0){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_one.cache_' . $channelId;
+
             $sql = "SELECT * FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
-            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+            $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
         }
         return $result;
     }
