@@ -31,14 +31,15 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
     private function GenDefault() {
         $siteId = parent::GetSiteIdByDomain();
 
-
-
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         parent::ReplaceFirstForForum($tempContent);
+
+
+
 
 
         /******************  顶部推荐栏  ********************** */
@@ -88,6 +89,10 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         );
 
         $tempContent = str_ireplace("{forum_list}", $templateForumBoard, $tempContent);
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+
+        parent::ReplaceTemplate($tempContent);
+
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
 

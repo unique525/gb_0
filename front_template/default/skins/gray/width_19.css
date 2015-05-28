@@ -4,6 +4,15 @@
 #forum_bul .content{width:1398px;}
 
 #forum_rec_1 .content{width:1400px;}
+#forum_rec_1 .new_pic_topic{width:400px;}
+#forum_rec_1 .new_topic{width:300px;overflow:hidden;}
+#forum_rec_1 .hot_topic{width:300px;overflow:hidden;}
+#forum_rec_1 .best_topic{width:300px;overflow:hidden;}
+
+#forum_rec_1_v .content_v{width:270px;}
+#forum_rec_1_v .new_topic{overflow:hidden;}
+#forum_rec_1_v .hot_topic{overflow:hidden;}
+#forum_rec_1_v .best_topic{overflow:hidden;}
 
 .img_avatar{max-width:40px;max-height:40px;width:40px;height:40px;}
 
@@ -21,8 +30,8 @@
 
 #forum_topic .content{width:1400px;}
 #forum_topic .left{width:1100px;}
-#forum_topic .right{width:250px;}
+#forum_topic .right{width:280px;}
 
 #forum_post .content{width:1400px;}
 #forum_post .left{width:1100px;}
-#forum_post .right{width:250px;}
+#forum_post .right{width:280px;}

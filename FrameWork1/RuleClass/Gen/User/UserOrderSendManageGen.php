@@ -3,7 +3,7 @@
  * 后台管理 会员订单发货信息 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
- * @Author yin
+ * @author yin
  */
 class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
     /**
@@ -11,6 +11,10 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
      */
     const FAIL = 0;
 
+    /**
+     * 引导方法
+     * @return string 返回执行结果
+     */
     public function Gen(){
         $result = "";
         $method = Control::GetRequest("m","");

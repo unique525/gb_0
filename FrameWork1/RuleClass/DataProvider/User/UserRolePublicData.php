@@ -36,6 +36,47 @@ class UserRolePublicData extends BasePublicData
         }
         return $result;
     }
+
+    /**
+     * 取得会员组id
+     * @param int $siteId
+     * @param int $userId
+     * @param bool $withCache
+     * @return int UserGroupId
+     */
+    public function GetUserGroupId(
+        $siteId,
+        $userId,
+        $withCache = true
+        ){
+        $result = -1;
+        if ($siteId > 0 && $userId > 0) {
+            $cacheDir = CACHE_PATH
+                . DIRECTORY_SEPARATOR
+                . 'user_role_data'
+                . DIRECTORY_SEPARATOR
+                . 'user_'
+                . $userId;
+            $cacheFile = 'user_role_get_user_group_id.cache_site_id'
+                . $siteId;
+            $sql = "SELECT UserGroupId FROM " . self::TableName_UserRole . "
+                    WHERE SiteId=:SiteId
+                    AND UserId=:UserId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("UserId", $userId);
+
+            $result = $this->GetInfoOfIntValue(
+                $sql,
+                $dataProperty,
+                $withCache,
+                $cacheDir,
+                $cacheFile
+            );
+        }
+        return $result;
+    }
 }
 
 ?>

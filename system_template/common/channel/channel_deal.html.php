@@ -253,7 +253,7 @@
         <tr>
             <td class="spe_line" height="30" align="right"><label for="f_ChannelIntro">频道介绍：</label></td>
             <td class="spe_line">
-                <textarea cols="30" rows="30" id="f_ChannelIntro" name="f_ChannelIntro" style="width:70%;height:250px;">{ChannelIntro}</textarea>
+                <textarea cols="30" rows="30" id="f_ChannelIntro" name="f_ChannelIntro" style="width:90%;height:250px;">{ChannelIntro}</textarea>
             </td>
         </tr>
     </table>

@@ -92,6 +92,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userOrderSendManageGen = new UserOrderSendManageGen();
                     $result = $userOrderSendManageGen->Gen();
                     break;
+                case "user_popedom":
+                    $userPopedomManageGen = new UserPopedomManageGen();
+                    $result = $userPopedomManageGen->Gen();
+                    break;
                 case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();
@@ -249,6 +253,22 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     break;
                 case "visit":
                     $visitManageGen = new VisitManageGen();
+                    $result = $visitManageGen->Gen();
+                    break;
+                case "template_library":
+                    $visitManageGen = new TemplateLibraryGen();
+                    $result = $visitManageGen->Gen();
+                    break;
+                case "template_library_content":
+                    $visitManageGen = new TemplateLibraryContentGen();
+                    $result = $visitManageGen->Gen();
+                    break;
+                case "template_library_channel":
+                    $visitManageGen = new TemplateLibraryChannelGen();
+                    $result = $visitManageGen->Gen();
+                    break;
+                case "template_library_channel_content":
+                    $visitManageGen = new TemplateLibraryChannelContentGen();
                     $result = $visitManageGen->Gen();
                     break;
                 default :

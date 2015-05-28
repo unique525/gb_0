@@ -21,8 +21,19 @@ class DataCache {
     }
 
     /**
+     * 写入缓冲文件(数组数据)
+     * @param string $cacheDir 缓冲文件夹名
+     * @param string $cacheFile 缓冲文件名
+     * @param array $array 要写入的缓冲数组
+     */
+    public static function SetWithArray($cacheDir, $cacheFile, $array){
+        $content = base64_encode(Format::FixJsonEncode($array));
+        self::Set($cacheDir, $cacheFile, $content);
+    }
+
+    /**
      * 读取缓冲文件内容
-     * @param string $cacheFile
+     * @param string $cacheFile 缓冲文件名(文件夹+文件名)
      * @return string 返回缓冲内容 
      */
     public static function Get($cacheFile) {
@@ -31,6 +42,21 @@ class DataCache {
             return trim(file_get_contents($cacheFile));
         } else {
             return '';
+        }
+    }
+
+    /**
+     * 读取缓冲文件内容(数组数据)
+     * @param string $cacheFile 缓冲文件名(文件夹+文件名)
+     * @return array|null 返回缓冲数组
+     */
+    public static function GetWithArray($cacheFile) {
+        $cacheFile = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheFile;
+        if (file_exists($cacheFile)) {
+            $content = trim(file_get_contents($cacheFile));
+            return Format::FixJsonDecode(base64_decode($content));
+        } else {
+            return null;
         }
     }
 

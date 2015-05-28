@@ -25,6 +25,18 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             case "modify":
                 $result = self::GenModify();
                 break;
+            case "operate":
+                $result = self::GenOperate();
+                break;
+            case "async_remove_to_bin":
+                $result = self::AsyncRemoveToBin();
+                break;
+            case "async_set_top":
+                $result = self::AsyncSetTop();
+                break;
+            case "async_cancel_top":
+                $result = self::AsyncCancelTop();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -94,12 +106,21 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
         }
 
-
-
         parent::ReplaceFirstForForum($tempContent);
+
+        /******************  右部推荐栏  ********************** */
+        $templateForumRecTopicFileUrl = "forum/forum_rec_1_v.html";
+        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
+        $tempContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $tempContent);
+
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        $forumPublicData = new ForumPublicData();
+        $forumName = $forumPublicData->GetForumName($forumId, true);
+        $tempContent = str_ireplace("{ForumName}", $forumName, $tempContent);
+
+        parent::ReplaceTemplate($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
-
 
         /*******************过滤字符 begin********************** */
         $multiFilterContent = array();
@@ -251,6 +272,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 );
 
                 if($forumPostId > 0 ){
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
 
@@ -291,6 +316,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceSiteConfig($siteId, $tempContent);
         return $tempContent;
     }
+
     private function GenModify() {
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
@@ -333,15 +359,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $forumTopicPublicData = new ForumTopicPublicData();
         $arrOne = $forumTopicPublicData->GetOne($forumTopicId);
-        //print_r($arrOne["ForumTopicId"]);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
         $forumPostPublicDate = new ForumPostPublicData();
         $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
-        //print_r($arrOne["UserName"]);
-        //print_r($arrOne);
         if(!empty($_POST)){
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
@@ -427,15 +450,195 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
-        //$tempContent = str_ireplace("{ForumPostContent}", "", $tempContent);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceSiteConfig($siteId, $tempContent);
-       //echo $tempContent;
         return $tempContent;
     }
 
+    /**
+     * 操作主题
+     * @return string 返回模板页面
+     */
+    private function GenOperate(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        if ($forumTopicId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+
+        $userId = Control::GetUserId();
+        if($userId<=0){
+
+            $returnUrl = urlencode("/default.php?mod=forum_topic&a=operate&forum_topic_id=$forumTopicId");
+
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=$returnUrl");
+            return "";
+        }
+
+        $templateFileUrl = "forum/forum_topic_operate.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+
+        $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+
+        return $tempContent;
+    }
+
+    private function AsyncRemoveToBin(){
+
+
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $userId = Control::GetUserId();
+
+        if ($forumTopicId > 0 && $userId >= 0) {
+
+            //读取权限
+            $forumDeleteSelfPost = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
+
+            if($forumDeleteSelfPost){
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifyState(
+                    $forumTopicId,
+                    ForumTopicData::FORUM_TOPIC_STATE_REMOVED
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+    /**
+     * 设置排序
+     * @return string
+     */
+    private function AsyncSetTop(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
+        $userId = Control::GetUserId();
+
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetTop = false;
+            //读取权限
+            switch($mode){
+
+                case 0:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
+                    break;
+                case 1:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetRegionTop);
+                    break;
+                case 2:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetAllTop);
+                    break;
+            }
+
+            if($canSetTop){
+                $sort = 0;
+                switch($mode){
+
+                    case 0:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
+                        break;
+                    case 1:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
+                        break;
+                    case 2:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
+                        break;
+                }
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifySort(
+                    $forumTopicId,
+                    $sort
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+    /**
+     * 取消排序
+     * @return string
+     */
+    private function AsyncCancelTop(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
+        $userId = Control::GetUserId();
+
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetTop = false;
+            //读取权限
+            switch($mode){
+
+                case 0:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
+                    break;
+                case 1:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetRegionTop);
+                    break;
+                case 2:
+                    $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetAllTop);
+                    break;
+            }
+
+            if($canSetTop){
+                $sort = 0;
+                switch($mode){
+
+                    case 0:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
+                        break;
+                    case 1:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
+                        break;
+                    case 2:
+                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
+                        break;
+                }
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifySort(
+                    $forumTopicId,
+                    $sort
+                );
+
+            }else{
+                $result = -10; //没有权限
+            }
+
+        }else{
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
 }
 
 ?>

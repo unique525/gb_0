@@ -17,6 +17,11 @@
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
+
+    <link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
     <style>
         .replyBox { height: 250px;width: 1100px; background:#F9F9F9;border:#E6E6E6 solid 1px;};
     </style>
@@ -29,6 +34,8 @@
         var tableId = '{ForumId}';
 
         $(function(){
+
+            $('.fancybox').fancybox();
 
             var f_ForumPostContent = $('#f_ForumPostContent');
 
@@ -57,7 +64,7 @@
                     } else {
 
                         $("#mainForm").attr("action",
-                            "/default.php?mod=forum_post&a=reply&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                            "/default.php?mod=forum_post&a=reply&forum_topic_id={ForumTopicId}");
                         $('#mainForm').submit();
                     }
                 }
@@ -85,9 +92,23 @@
         </div>
     </div>
     <div class="content">
-        <div class="left"><a href="/default.php?mod=forum">首页</a></div>
-        <div class="right"><a href="/default.php?mod=forum_topic&a=create&forum_id={ForumId}">发表主题</a></div>
-        <div class="spe"></div>
+        <div class="left">
+            <a class="link" href="/default.php?mod=forum">首页</a>
+            &nbsp;--&nbsp;
+            <a class="link" href="/default.php?mod=forum_topic&forum_id={ForumId}">
+                {ForumName}
+            </a>
+        </div>
+        <div class="right">
+            <div class="btn2" style="float:left;">
+                <a class="btn2_a" href="/default.php?mod=forum_topic&a=create&forum_id={ForumId}">发表主题</a>
+            </div>
+            <div class="btn3" style="float:left;margin-left:10px;">
+                <a class="btn3_a" href="/default.php?mod=forum_post&a=create&forum_topic_id={ForumTopicId}">回复主题</a>
+            </div>
+            <div class="spe"></div>
+        </div>
+        <div class="spe_all"></div>
     </div>
 </div>
 <div id="forum_post" class="div_info">
@@ -105,25 +126,27 @@
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
                                         </td>
+                                        <td class="forum_post_post_time" style="padding-right:10px;" align="right">楼主</td>
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>
-                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
+                                        <td class="forum_post_post_time" style="" align="right">{f_PostTime}</td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td class="forum_post_content" colspan="2" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
-                                <span>收藏</span> <span>分享</span> <span>举报</span> <span>主题管理</span>
+                            <td colspan="2" align="right" style="padding:10px;">
+                                <span>收藏</span> <span>分享</span> <span>举报</span>
+                                <a class="fancybox fancybox.iframe" href="/default.php?mod=forum_topic&a=operate&forum_topic_id={f_ForumTopicId}">主题管理</a>
                             </td>
                         </tr>
                     </table>
@@ -139,24 +162,26 @@
                             <td class="forum_topic_item" align="left">
                                 <table width="100%">
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
                                         </td>
+                                        <td class="forum_post_post_time"style="padding-right:10px;" align="right">{c_no}楼</td>
                                     </tr>
                                     <tr>
                                         <td class="forum_post_user_name" style="">{f_UserName}</td>
-                                        <td class="forum_topic_post_time" style="" align="right">{f_PostTime}</td>
+                                        <td class="forum_post_post_time" style="padding-right:10px;" align="right">{f_PostTime}</td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="forum_post_content" colspan="2" height="350px" align="left" style="vertical-align:top;padding-left: 10px;padding-top: 20px">
+                            <td class="forum_post_content" colspan="2" align="left"
+                                style="vertical-align:top;padding:10px;">
                                 {f_ForumPostContent}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" align="left" style="padding-left:10px;padding-top:10px;">
+                            <td colspan="2" align="right" style="padding:10px;">
                                 <span>回复此楼</span> <span>举报</span> <span>帖子管理</span>
                             </td>
                         </tr>
@@ -183,21 +208,28 @@
                 </child>
             </icms>
             <form id="mainForm" enctype="multipart/form-data" method="post">
-            <table cellpadding="0" cellspacing="0" width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserIsLogin};">
                 <tr>
                     <td width="100%" style="padding-left: 12px;padding-top: 15px">
-                        <textarea id="f_ForumPostContent" class="replyBox"></textarea>
+                        <textarea id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" style="height: 40px;width: 90px; background-color: #32A5E7;border: 0;color: #ffffff;font-size: 14px;" type="button" value="发表回复"></td>
+                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" class="btn2" type="button" value="发表回复"></td>
+                </tr>
+            </table>
+            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">
+                <tr>
+                    <td align="center" style="padding:25px;">
+                        快速回复：您还没有登录，请先<a href="{UserLoginUrl}">[登录]</a>或<a href="{UserRegisterUrl}">[注册]</a>
+                    </td>
                 </tr>
             </table>
             </form>
         </div>
 
         <div class="right">
-            aaa
+            {forum_rec_1_v}
         </div>
         <div class="spe"></div>
     </div>

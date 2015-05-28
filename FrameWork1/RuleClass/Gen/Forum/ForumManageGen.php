@@ -434,6 +434,8 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             $forumTopicManageData = new ForumTopicManageData();
             $forumPostManageData = new ForumPostManageData();
 
+            $forumManageData->ResetIsOperate($siteId);
+
             $arr = $forumManageData->GetListForReset($siteId);
 
             while(count($arr)>0){

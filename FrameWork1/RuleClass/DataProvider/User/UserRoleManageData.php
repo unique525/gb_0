@@ -6,6 +6,8 @@
  * @author zhangchi
  */
 class UserRoleManageData extends BaseManageData {
+
+
     public function GetUserGroupId($userId,$siteId = 0,$channelId = 0){
         if ($siteId <= 0 && $channelId <= 0) {
             return null;

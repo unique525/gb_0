@@ -122,6 +122,7 @@ class BaseManageGen extends BaseGen
             /**************** 取得模板 ********************/
             $channelManageData = new ChannelManageData();
             $channelTemplateManageData = new ChannelTemplateManageData();
+            $templateLibraryChannelContentManageData=new TemplateLibraryChannelContentManageData();
             $rank = $channelManageData->GetRank($channelId, true);
             $siteId = $channelManageData->GetSiteId($channelId, true);
             $channelName = $channelManageData->GetChannelName($channelId, true);
@@ -136,6 +137,12 @@ class BaseManageGen extends BaseGen
 
                 $timeStart = Control::GetMicroTime();
                 $arrChannelTemplateList = $channelTemplateManageData->GetListForPublish($currentChannelId);
+
+                //处理模板库模板
+                $arrTemplateLibraryContentList = $templateLibraryChannelContentManageData->GetListForPublish($currentChannelId);
+                $arrChannelTemplateList=array_merge($arrChannelTemplateList,$arrTemplateLibraryContentList);
+
+
                 $timeEnd = Control::GetMicroTime();
 
                 $publishLogManageData->Create(
@@ -375,6 +382,7 @@ class BaseManageGen extends BaseGen
         $siteId = $channelManageData->GetSiteId($channelId, true);
         $channelTemplateContent = str_ireplace("{SiteId}", $siteId, $channelTemplateContent);
         parent::ReplaceSiteInfo($siteId, $channelTemplateContent);
+        parent::ReplaceChannelInfo($channelId, $channelTemplateContent);
 
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
@@ -425,6 +433,7 @@ class BaseManageGen extends BaseGen
                                 $tagContent,
                                 $tagTopCount,
                                 $tagWhere,
+                                $tagWhereValue,
                                 $tagOrder,
                                 $state
                             );
@@ -524,10 +533,10 @@ class BaseManageGen extends BaseGen
 
         if ($siteId > 0 || $channelId>0) {
             $arrChannelList = null;
-            $arrChannelChildList = null;
+            $arrChannelChildList = array();
             $arrChannelThirdList = null;
             $tableIdName = "ChannelId";
-            $parentIdName = "ParentId";
+            $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
             $thirdParentIdName = "ParentId";
 
@@ -567,6 +576,18 @@ class BaseManageGen extends BaseGen
                     break;
             }
 
+if((Template::GetAllCustomTag($tagContent, "child"))!=null){
+    //显示条数
+    $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");
+    $documentNewsManageData=new DocumentNewsManageData();
+    $oneChildList=array();
+    $state=DocumentNewsData::STATE_PUBLISHED;
+    foreach($arrChannelList as $oneChannel){
+        $oneChildList=null;
+        $oneChildList = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);
+        $arrChannelChildList=array_merge($arrChannelChildList,$oneChildList);
+    }
+}
             if (!empty($arrChannelList)) {
                 $tagName = Template::DEFAULT_TAG_NAME;
                 Template::ReplaceList(
@@ -604,6 +625,7 @@ class BaseManageGen extends BaseGen
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
      * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件值
      * @param string $tagOrder 排序方式
      * @param int $state 状态
      * @return mixed|string 内容模板
@@ -615,6 +637,7 @@ class BaseManageGen extends BaseGen
         $tagContent,
         $tagTopCount,
         $tagWhere,
+        $tagWhereValue,
         $tagOrder,
         $state
     )
@@ -650,6 +673,20 @@ class BaseManageGen extends BaseGen
                     break;
                 case "rec_level_grandson":
                     $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
+                    break;
+                case "rec_level_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
+                    break;
+                case "day_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
                     break;
                 default :
                     //new

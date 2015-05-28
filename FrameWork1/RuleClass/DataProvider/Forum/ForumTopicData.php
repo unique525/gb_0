@@ -176,4 +176,21 @@ class ForumTopicData {
      * 主题状态 已删除
      */
     const FORUM_TOPIC_STATE_REMOVED = 100;
+
+    /**
+     * 主题排序 普通
+     */
+    const FORUM_TOPIC_SORT_NORMAL = 0;
+    /**
+     * 主题排序 版块置顶
+     */
+    const FORUM_TOPIC_SORT_BOARD_TOP = 10;
+    /**
+     * 主题排序 分区置顶
+     */
+    const FORUM_TOPIC_SORT_REGION_TOP = 20;
+    /**
+     * 主题排序 全站置顶
+     */
+    const FORUM_TOPIC_SORT_ALL_TOP = 30;
 } 

@@ -6,7 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Forum
  * @author zhangchi
  */
-class ForumTopicPublicData extends BasePublicData {
+class ForumTopicPublicData extends BasePublicData
+{
 
     /**
      * 新增主题
@@ -48,13 +49,13 @@ class ForumTopicPublicData extends BasePublicData {
         $result = -1;
 
 
-        if(
-            $siteId>0
-            && $forumId>0
-            && strlen($forumTopicTitle)>0
-            && $userId>0
-            && strlen($userName)>0
-        ){
+        if (
+            $siteId > 0
+            && $forumId > 0
+            && strlen($forumTopicTitle) > 0
+            && $userId > 0
+            && strlen($userName) > 0
+        ) {
 
 
             $sql = "INSERT INTO " . self::TableName_ForumTopic . "
@@ -113,6 +114,7 @@ class ForumTopicPublicData extends BasePublicData {
         }
         return $result;
     }
+
     public function Modify(
         $forumTopicID,
         $forumTopicTitle,
@@ -128,13 +130,14 @@ class ForumTopicPublicData extends BasePublicData {
         $titleBold,
         $titleColor,
         $titleBgImage
-    ){
+    )
+    {
         $result = -1;
-        if(
-            strlen($forumTopicTitle)>0
-            && $userId>0
-            && strlen($userName)>0
-        ){
+        if (
+            strlen($forumTopicTitle) > 0
+            && $userId > 0
+            && strlen($userName) > 0
+        ) {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ForumTopicTitle", $forumTopicTitle);
             $dataProperty->AddField("ForumTopicTypeId", $forumTopicTypeId);
@@ -149,12 +152,56 @@ class ForumTopicPublicData extends BasePublicData {
             $dataProperty->AddField("TitleBold", $titleBold);
             $dataProperty->AddField("TitleColor", $titleColor);
             $dataProperty->AddField("TitleBgImage", $titleBgImage);
-            $fieldNames= "ForumTopicTitle=:ForumTopicTitle,ForumTopicTypeId=:ForumTopicTypeId,ForumTopicTypeName=:ForumTopicTypeName,ForumTopicAudit=:ForumTopicAudit,ForumTopicAccess=:ForumTopicAccess,PostTime=:PostTime,UserId=:UserId,UserName=:UserName,ForumTopicMood=:ForumTopicMood,ForumTopicAttach=:ForumTopicAttach,TitleBold=:TitleBold,TitleColor=:TitleColor,TitleBgImage=:TitleBgImage";
-            $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames ." WHERE forumTopicId =". $forumTopicID ."";
+            $fieldNames = "ForumTopicTitle=:ForumTopicTitle,ForumTopicTypeId=:ForumTopicTypeId,ForumTopicTypeName=:ForumTopicTypeName,ForumTopicAudit=:ForumTopicAudit,ForumTopicAccess=:ForumTopicAccess,PostTime=:PostTime,UserId=:UserId,UserName=:UserName,ForumTopicMood=:ForumTopicMood,ForumTopicAttach=:ForumTopicAttach,TitleBold=:TitleBold,TitleColor=:TitleColor,TitleBgImage=:TitleBgImage";
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames . " WHERE forumTopicId =" . $forumTopicID . "";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
+
+    /**
+     * 修改主题状态
+     * @param int $forumTopicId 主题id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($forumTopicId, $state){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    State = :State
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("State", $state);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+    /**
+     * 修改主题排序
+     * @param int $forumTopicId 主题id
+     * @param int $sort 排序
+     * @return int 操作结果
+     */
+    public function ModifySort($forumTopicId, $sort){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    Sort = :Sort
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("Sort", $sort);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
     /**
      * 取得一条信息
      * @param int $forumTopicId 管理员id
@@ -162,13 +209,132 @@ class ForumTopicPublicData extends BasePublicData {
      */
     public function GetOne($forumTopicId)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . ";";
+        $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic . "=:" . self::TableId_ForumTopic . ";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
 
+    /**
+     * 最新主题（可缓存）
+     * @param $siteId
+     * @param $topCount
+     * @param bool $withCache
+     * @return array|null
+     */
+    public function GetListOfNew(
+        $siteId,
+        $topCount,
+        $withCache = false
+    )
+    {
+        if ($siteId > 0) {
+            $topCount = intval($topCount);
+            if ($topCount <= 0) {
+                $topCount = 10;
+            }
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_get_list_of_new.cache_' . $siteId . '_' . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $sql = "
+            SELECT
+                ft.*
+            FROM
+            " . self::TableName_ForumTopic . " ft
+
+            WHERE ft.SiteId=:SiteId
+            ORDER BY ft.PostTime DESC
+            LIMIT $topCount;";
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 热门主题（可缓存）
+     * @param $siteId
+     * @param $topCount
+     * @param bool $withCache
+     * @return array|null
+     */
+    public function GetListOfHot(
+        $siteId,
+        $topCount,
+        $withCache = false
+    )
+    {
+        if ($siteId > 0) {
+            $topCount = intval($topCount);
+            if ($topCount <= 0) {
+                $topCount = 10;
+            }
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_get_list_of_hot.cache_' . $siteId . '_' . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $sql = "
+            SELECT
+                ft.*
+            FROM
+            " . self::TableName_ForumTopic . " ft
+
+            WHERE ft.SiteId=:SiteId
+            ORDER BY ft.HitCount DESC
+            LIMIT $topCount;";
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 最新精华（可缓存）
+     * @param $siteId
+     * @param $topCount
+     * @param bool $withCache
+     * @return array|null
+     */
+    public function GetListOfBest(
+        $siteId,
+        $topCount,
+        $withCache = false
+    )
+    {
+        if ($siteId > 0) {
+            $topCount = intval($topCount);
+            if ($topCount <= 0) {
+                $topCount = 10;
+            }
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_get_list_of_best.cache_' . $siteId . '_' . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $sql = "
+            SELECT
+                ft.*
+            FROM
+            " . self::TableName_ForumTopic . " ft
+
+            WHERE ft.SiteId=:SiteId AND ForumTopicClass=".ForumTopicData::FORUM_TOPIC_CLASS_BEST."
+            ORDER BY ft.PostTime DESC
+            LIMIT $topCount;";
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
 
     /**
      * @param $forumId
@@ -177,7 +343,8 @@ class ForumTopicPublicData extends BasePublicData {
      * @param $allCount
      * @return array
      */
-    public function GetListPager($forumId, $pageBegin, $pageSize, &$allCount) {
+    public function GetListPager($forumId, $pageBegin, $pageSize, &$allCount)
+    {
         $searchSql = "";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumId", $forumId);
@@ -190,20 +357,58 @@ class ForumTopicPublicData extends BasePublicData {
                         uf.UploadFilePadPath AS AvatarUploadFilePadPath
             FROM
             " . self::TableName_ForumTopic . " ft
-            INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=ft.UserId)
+            INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)
 
-            LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
 
             WHERE ft.ForumId=:ForumId  " . $searchSql . "
             ORDER BY ft.Sort DESC,ft.PostTime DESC
-            LIMIT " .$pageBegin . "," . $pageSize . ";";
+            LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $dataProperty->AddField("ForumId", $forumId);
         //统计总数
         $sql = "SELECT count(*)
-                FROM " . self::TableName_ForumTopic  . "
+                FROM " . self::TableName_ForumTopic . "
                 WHERE ForumId=:ForumId  " . $searchSql . ";";
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得论坛id
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 论坛id
+     */
+    public function GetForumId($forumTopicId, $withCache) {
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_forum_id.cache_' . $forumTopicId . '';
+            $sql = "SELECT ForumId FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得排序
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 排序
+     */
+    public function GetSort($forumTopicId, $withCache) {
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_sort.cache_' . $forumTopicId . '';
+            $sql = "SELECT Sort FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
         return $result;
     }
 } 

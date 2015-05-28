@@ -290,6 +290,16 @@ class BaseData
     const TableId_User = "UserId";
 
     /**
+     * 会员权限 数据表名
+     */
+    const TableName_UserPopedom = "cst_user_popedom";
+    /**
+     * 会员权限 数据表自增字段名
+     */
+    const TableId_UserPopedom = "UserPopedomId";
+
+
+    /**
      * 会员订单发货 数据表名
      */
     const TableName_UserOrderSend = "cst_user_order_send";
@@ -669,6 +679,40 @@ class BaseData
 
 
     /**
+     * 模板库 数据表名
+     */
+    const TableName_TemplateLibrary = "cst_template_library";
+    /**
+     * 模板库 数据表自增字段名
+     */
+    const TableId_TemplateLibrary = "TemplateLibraryId";
+    /**
+     * 模板库模板内容 数据表名
+     */
+    const TableName_TemplateLibraryContent = "cst_template_library_content";
+    /**
+     * 模板库模板内容 数据表自增字段名
+     */
+    const TableId_TemplateLibraryContent = "TemplateLibraryContentId";
+    /**
+     * 模板库频道内容 数据表名
+     */
+    const TableName_TemplateLibraryChannelContent = "cst_template_library_channel_content";
+    /**
+     * 模板库频道内容 数据表自增字段名
+     */
+    const TableId_TemplateLibraryChannelContent = "TemplateLibraryChannelContentId";
+    /**
+     * 模板库自带频道 数据表名
+     */
+    const TableName_TemplateLibraryChannel = "cst_template_library_channel";
+    /**
+     * 模板库自带频道 数据表自增字段名
+     */
+    const TableId_TemplateLibraryChannel = "TemplateLibraryChannelId";
+
+
+    /**
      * 调试 数据表名
      */
     const TableName_DebugLog = "cst_debug_log";
@@ -787,6 +831,74 @@ class BaseData
                 }
             }else{
                 $result = $this->dbOperator->GetString($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 返回array list型的信息值（数据集）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return array 返回查询结果
+     */
+    protected function GetInfoOfArrayList(
+        $sql,
+        DataProperty $dataProperty,
+        $withCache,
+        $cacheDir,
+        $cacheFile
+    )
+    {
+        $result = null;
+        if (strlen($sql) > 0) {
+            if($withCache){
+                $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if ($cacheArray == null || empty($cacheArray)) {
+                    $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+                    DataCache::SetWithArray($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheArray;
+                }
+            }else{
+                $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 返回array型的信息值（数据集）
+     * @param string $sql 要执行的SQL语句
+     * @param DataProperty $dataProperty 数据库字段集合对象
+     * @param boolean $withCache 是否从缓存中取
+     * @param string $cacheDir 缓存文件夹
+     * @param string $cacheFile 缓存文件名
+     * @return array 返回查询结果
+     */
+    protected function GetInfoOfArray(
+        $sql,
+        DataProperty $dataProperty,
+        $withCache,
+        $cacheDir,
+        $cacheFile
+    )
+    {
+        $result = null;
+        if (strlen($sql) > 0) {
+            if($withCache){
+                $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                if ($cacheArray == null || empty($cacheArray)) {
+                    $result = $this->dbOperator->GetArray($sql, $dataProperty);
+                    DataCache::SetWithArray($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheArray;
+                }
+            }else{
+                $result = $this->dbOperator->GetArray($sql, $dataProperty);
             }
         }
         return $result;

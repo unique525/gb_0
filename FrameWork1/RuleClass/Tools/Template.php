@@ -78,6 +78,10 @@ class Template
      */
     const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER = "newspaper_article_pic_list_slider";
 
+    /**
+     * 论坛 主题列表
+     */
+    const TAG_TYPE_FORUM_TOPIC_LIST = "forum_topic_list";
 
     /**
      * 读取模板内容
@@ -776,14 +780,22 @@ class Template
         $pos = stripos(strtolower($columnName), strtolower("CreateDate"));
         if ($pos !== false) {
             $date1 = explode(' ', $columnValue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
+            if(!empty($date1)){
+                $date2 = explode('-', $date1[0]);
 
-            $templateContent = str_ireplace("{f_c_year}", $year, $templateContent);
-            $templateContent = str_ireplace("{f_c_month}", $month, $templateContent);
-            $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
+                if(count($date2)>=3){
+                    $year = $date2[0];
+                    $month = $date2[1];
+                    $day = $date2[2];
+
+                    $templateContent = str_ireplace("{f_c_year}", $year, $templateContent);
+                    $templateContent = str_ireplace("{f_c_month}", $month, $templateContent);
+                    $templateContent = str_ireplace("{f_c_day}", $day, $templateContent);
+                }
+
+            }
+
+
         }
         $templateContent = str_ireplace("{f_" . $columnName . "}", $columnValue, $templateContent);
 
@@ -1103,11 +1115,11 @@ class Template
                 if (strtolower($columnName) === strtolower("OpenComment")) {
                     $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "_" . $columnValue . "}", "selected=\"selected\"", $templateContent);
                     if (intval($columnValue) === 0) { //关闭评论
-                        $columnValue = "display:none;";
+                        $replaceColumnValue = "display:none;";
                     } else {
-                        $columnValue = "";
+                        $replaceColumnValue = "";
                     }
-                    $templateContent = str_ireplace("{" . $columnName . "}", $columnValue, $templateContent);
+                    $templateContent = str_ireplace("{" . $columnName . "}", $replaceColumnValue, $templateContent);
                 }
 
                 $templateContent = str_ireplace("{" . $preManage . $columnName . "}", $columnValue, $templateContent);
@@ -1124,7 +1136,7 @@ class Template
                 $templateContent = str_ireplace("{" . $preManage . "s_" . $columnName . "}", $selectedOption, $templateContent);
 
                 $checkedOption = '<script type="text/javascript">
-                    $("#f_' . $columnName . '").find("option[value=\'' . $columnValue . '\']").attr("checked",true);
+                    $("input[name=f_' . $columnName . '][value='.$columnValue.']").attr("checked","checked");
                 </script>';
 
                 $templateContent = str_ireplace("{" . $preManage . "r_" . $columnName . "}", $checkedOption, $templateContent);

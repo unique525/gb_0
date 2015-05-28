@@ -135,6 +135,9 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
         $fileElementName = Control::PostOrGetRequest("file_element_name", "");
         $tableType = Control::PostOrGetRequest("table_type", 0);
         $tableId = Control::PostOrGetRequest("table_id", 0);
+
+        $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
+
         if (strlen($fileElementName)>0 && $tableType > 0) {
 
             $imgMaxWidth = 0;
@@ -158,7 +161,6 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
             }
 
-
             $uploadFile = new UploadFile();
             $uploadFileId = Control::GetRequest("upload_file_id",0);
 
@@ -174,7 +176,53 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
                 $imgMinHeight
             );
 
-            $result = $uploadFile->FormatToJson();
+            if($attachWatermark > 0){
+
+                $watermarkFilePath = "";
+
+                switch($tableType){
+
+                    case UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT:
+
+                        $siteId = parent::GetSiteIdByDomain();
+                        $siteConfigData = new SiteConfigData($siteId);
+
+                        $watermarkUploadFileId = $siteConfigData->DocumentNewsContentPicWatermarkUploadFileId;
+
+                        if($watermarkUploadFileId>0){
+
+                            $uploadFileData = new UploadFileData();
+
+                            $watermarkFilePath = $uploadFileData->GetUploadFilePath(
+                                $watermarkUploadFileId,
+                                true
+                            );
+
+                        }
+
+                        break;
+
+
+                }
+
+
+                $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
+                $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT;
+                $mode = ImageObject::WATERMARK_MODE_PNG;
+                $alpha = 70;
+
+                parent::GenUploadFileWatermark1(
+                    $uploadFileId,
+                    $watermarkFilePath,
+                    $sourceType,
+                    $watermarkPosition,
+                    $mode,
+                    $alpha,
+                    $uploadFile
+                );
+
+            }
+            $result = $uploadFile->GetJson();
 
         } else {
             $result = '{';
@@ -194,9 +242,6 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function AsyncUploadBatch()
     {
-        $debug=new DebugLogManageData();
-        //$debug->Create(json_encode($_FILES));
-        //$debug->Create(json_encode($_REQUEST));
         $fileElementName = Control::PostOrGetRequest("file_element_name", "");
         $tableType = Control::PostOrGetRequest("table_type", 0);
         $tableId = Control::PostOrGetRequest("table_id", 0);
@@ -301,7 +346,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function AsyncCutImage(){
-        $uploadFileId =Control::GetRequest("upload_file_id",0);
+        $uploadFileId = Control::GetRequest("upload_file_id",0);
 
         $result = "";
         if($uploadFileId > 0){

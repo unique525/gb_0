@@ -112,6 +112,25 @@ class ForumPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 取得上级版块名称
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 上级版块名称
+     */
+    public function GetForumName($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_forum_name.cache_' . $forumId . '';
+            $sql = "SELECT ForumName FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 }
 
 ?>

@@ -6,6 +6,7 @@
  * @author zhangchi
  */
 class UploadFilePublicData extends BasePublicData{
+
     /**
      * @param $uploadFileId
      * @param $uploadFilePath
@@ -25,7 +26,4 @@ class UploadFilePublicData extends BasePublicData{
         return $result;
     }
 
-    public function Create(){
-
-    }
 } 

@@ -12,9 +12,10 @@ $incDatabaseInfo = array();
 
 $incDatabaseInfo[] = '130.1.0.134';
 $incDatabaseInfo[] = 3306;
-$incDatabaseInfo[] = 'dbcscms2';
+$incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
 $incDatabaseInfo[] = 'csolbbs2010';
+$incDatabaseInfo[] = '0'; //debug
 
 /*
 $incDatabaseInfo[] = 'localhost';

@@ -15,7 +15,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagTopCountOfPage 默认显示条数（用于列表页分页）
      * @return mixed|string 内容模板
      */
-    public function ReplaceTemplate($templateContent, $tagTopCountOfPage = "")
+    public function ReplaceTemplate(&$templateContent, $tagTopCountOfPage = "")
     {
         /** 1.处理预加载模板 */
 
@@ -38,10 +38,10 @@ class BasePublicGen extends BaseGen
                 //标签特殊查询条件的值
                 $tagWhereValue = Template::GetParamValue($tagContent, "where_value");
                 //显示条数
-
+                $withPager = Template::GetParamValue($tagContent, "with_pager"); //是否是列表页列表(是否翻页)
                 $tagTopCount = Template::GetParamValue($tagContent, "top");
-                if ($tagTopCountOfPage != "") {
-                    $tagTopCountOfPate = Format::CheckTopCount($tagTopCountOfPage);
+                if ($tagTopCountOfPage != ""&&$withPager=="1") {   //分页的标签取当前页的条数
+                    $tagTopCountOfPage = Format::CheckTopCount($tagTopCountOfPage);
                     if ($tagTopCountOfPage != null) {
                         $tagTopCount = $tagTopCountOfPage;
                     }
@@ -56,8 +56,6 @@ class BasePublicGen extends BaseGen
 
                 switch ($tagType) {
                     case Template::TAG_TYPE_CHANNEL_LIST :
-
-
                         $templateContent = self::ReplaceTemplateOfChannelList(
                             $templateContent,
                             $tagId,
@@ -67,7 +65,6 @@ class BasePublicGen extends BaseGen
                             $tagWhereValue,
                             $tagOrder
                         );
-
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
                         $channelId = intval(str_ireplace("channel_", "", $tagId));
@@ -205,6 +202,24 @@ class BasePublicGen extends BaseGen
                         }
 
                         break;
+                    case Template::TAG_TYPE_FORUM_TOPIC_LIST:
+
+
+                        $siteId = intval(str_ireplace("site_", "", $tagId));
+
+                        if ($siteId > 0) {
+                            $templateContent = self::ReplaceTemplateOfForumTopicList(
+                                $templateContent,
+                                $siteId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
                 }
             }
         }
@@ -247,10 +262,10 @@ class BasePublicGen extends BaseGen
 
         if ($siteId > 0 || $channelId > 0) {
             $arrChannelList = null;
-            $arrChannelChildList = null;
+            $arrChannelChildList = array();
             $arrChannelThirdList = null;
             $tableIdName = "ChannelId";
-            $parentIdName = "ParentId";
+            $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
             $thirdParentIdName = "ParentId";
 
@@ -339,6 +354,24 @@ class BasePublicGen extends BaseGen
                     break;
             }
 
+            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
+                //显示条数
+                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");
+                $documentNewsManageData=new DocumentNewsManageData();
+                $state=DocumentNewsData::STATE_PUBLISHED;
+                foreach($arrChannelList as $oneChannel){
+                    $oneChildList = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);
+                    if($oneChildList==null){
+                        $oneChildList=array();
+                    }
+                    if($arrChannelChildList==null){
+                        $arrChannelChildList=array();
+                    }
+                    $arrChannelChildList=array_merge($arrChannelChildList,$oneChildList);
+                }
+            }
+
+
             if (!empty($arrChannelList)) {
                 $tagName = Template::DEFAULT_TAG_NAME;
                 Template::ReplaceList(
@@ -407,6 +440,9 @@ class BasePublicGen extends BaseGen
                 case "new":
                     $orderBy = 0;
                     break;
+                case "hit":
+                    $orderBy = 1;
+                    break;
                 default:
                     $orderBy = 0;
                     break;
@@ -433,6 +469,13 @@ class BasePublicGen extends BaseGen
                     if ($channelId > 0&&$recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
                         $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                    }
+                    break;
+                case "day_belong_channel":
+                    $recLevel = intval($tagWhereValue);
+                    if ($channelId > 0&&$recLevel > 0) {
+                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
                     }
                     break;
                 default :
@@ -1057,13 +1100,71 @@ class BasePublicGen extends BaseGen
 
     }
 
+
+    private function ReplaceTemplateOfForumTopicList(
+        $channelTemplateContent,
+        $siteId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagOrder,
+        $state
+    ){
+        if ($siteId > 0) {
+
+
+            $arrList = null;
+            $forumTopicPublicData = new ForumTopicPublicData();
+
+            switch ($tagWhere) {
+                case "new" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfNew(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+                case "hot" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfHot(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+                case "best" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfBest(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    break;
+            }
+
+            if (!empty($arrList)) {
+                Template::ReplaceList($tagContent, $arrList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
     /**
      * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
+     * @param string $forceTemp 强制指定的模板名称
      * @return string 模板内容
      */
-    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0)
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "")
     {
 
         $result = "";
@@ -1071,11 +1172,16 @@ class BasePublicGen extends BaseGen
             $siteId = self::GetSiteIdByDomain();
         }
 
-        $channelTemplateTag = Control::PostOrGetRequest("temp", "");
+        if(strlen($forceTemp)>0){
+            $channelTemplateTag = $forceTemp;
+        }else{
+            $channelTemplateTag = Control::PostOrGetRequest("temp", "");
 
-        if (strlen($channelTemplateTag) <= 0) {
-            $channelTemplateTag = $defaultTemp;
+            if (strlen($channelTemplateTag) <= 0) {
+                $channelTemplateTag = $defaultTemp;
+            }
         }
+
 
 
         if ($siteId > 0 && strlen($channelTemplateTag) > 0) {
@@ -1125,7 +1231,6 @@ class BasePublicGen extends BaseGen
             $domain = Control::GetDomain(strtolower($_SERVER['HTTP_HOST']));
             $sitePublicData = new SitePublicData();
             $siteId = $sitePublicData->GetSiteIdByBindDomain($domain, true);
-
             if ($siteId <= 0) {
                 //查子域名
                 $arrSubDomain = explode(".", $host);
@@ -1272,7 +1377,93 @@ class BasePublicGen extends BaseGen
 
     }
 
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return int
+     */
+    protected function GetUserPopedomIntValue($userPopedomName){
 
+        $result = self::GetUserPopedomStringValue($userPopedomName);
+
+        return intval($result);
+
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return float
+     */
+    protected function GetUserPopedomFloatValue($userPopedomName){
+
+        $result = self::GetUserPopedomStringValue($userPopedomName);
+
+        return floatval($result);
+
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return bool
+     */
+    protected function GetUserPopedomBoolValue($userPopedomName){
+
+        $result = self::GetUserPopedomStringValue($userPopedomName);
+
+        if(intval($result)>0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    /**
+     * 根据 site id 和 user id 查找会员权限
+     * @param string $userPopedomName 会员权限字段名称
+     * @return string
+     */
+    protected function GetUserPopedomStringValue($userPopedomName){
+
+        $result = "";
+
+        $siteId = self::GetSiteIdByDomain();
+        $userId = Control::GetUserId();
+
+        if($siteId>0 && $userId>0){
+
+            $userPopedomPublicData = new UserPopedomPublicData();
+
+            $result = $userPopedomPublicData->GetValueBySiteIdAndUserId(
+                $siteId,
+                $userId,
+                $userPopedomName,
+                true
+            );
+
+            if($result<=0){
+                //没找到权限，从会员员组中找
+
+                $userRolePublicData = new UserRolePublicData();
+                $userGroupId = $userRolePublicData->GetUserGroupId(
+                    $siteId,
+                    $userId,
+                    true
+                );
+
+                $result = $userPopedomPublicData->GetValueBySiteIdAndUserGroupId(
+                    $siteId,
+                    $userGroupId,
+                    $userPopedomName,
+                    true
+                );
+            }
+        }
+
+        return $result;
+    }
 }
 
 ?>

@@ -519,13 +519,20 @@ class UploadFile {
     public function GetJson(){
         $returnJson = '{';
         if($this->UploadFileId>0){
-            $returnJson .= '"upload_file_id":"' . $this->UploadFileId . '"';
+            $returnJson .= '"upload_file_id":"' .
+                Format::FormatJson($this->UploadFileId) . '"';
 
             if(!empty($this->UploadFilePath)){
-                $returnJson .= ',"upload_file_path":"'. $this->UploadFilePath . '"';
+                $returnJson .= ',"upload_file_path":"'.
+                    Format::FormatJson($this->UploadFilePath) . '"';
             }
             if(!empty($this->UploadFileThumbPath1)){
-                $returnJson .= ',"upload_file_thumb_path1":"'. $this->UploadFileThumbPath1 . '"';
+                $returnJson .= ',"upload_file_thumb_path1":"'.
+                    Format::FormatJson($this->UploadFileThumbPath1) . '"';
+            }
+            if(!empty($this->UploadFileWatermarkPath1)){
+                $returnJson .= ',"upload_file_watermark_path1":"'.
+                    Format::FormatJson($this->UploadFileWatermarkPath1) . '"';
             }
 
         }
