@@ -679,6 +679,40 @@ class BaseData
 
 
     /**
+     * 模板库 数据表名
+     */
+    const TableName_TemplateLibrary = "cst_template_library";
+    /**
+     * 模板库 数据表自增字段名
+     */
+    const TableId_TemplateLibrary = "TemplateLibraryId";
+    /**
+     * 模板库模板内容 数据表名
+     */
+    const TableName_TemplateLibraryContent = "cst_template_library_content";
+    /**
+     * 模板库模板内容 数据表自增字段名
+     */
+    const TableId_TemplateLibraryContent = "TemplateLibraryContentId";
+    /**
+     * 模板库频道内容 数据表名
+     */
+    const TableName_TemplateLibraryChannelContent = "cst_template_library_channel_content";
+    /**
+     * 模板库频道内容 数据表自增字段名
+     */
+    const TableId_TemplateLibraryChannelContent = "TemplateLibraryChannelContentId";
+    /**
+     * 模板库自带频道 数据表名
+     */
+    const TableName_TemplateLibraryChannel = "cst_template_library_channel";
+    /**
+     * 模板库自带频道 数据表自增字段名
+     */
+    const TableId_TemplateLibraryChannel = "TemplateLibraryChannelId";
+
+
+    /**
      * 调试 数据表名
      */
     const TableName_DebugLog = "cst_debug_log";
