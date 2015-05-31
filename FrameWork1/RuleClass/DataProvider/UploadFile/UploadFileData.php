@@ -181,9 +181,9 @@ class UploadFileData extends BaseData
     const UPLOAD_TABLE_TYPE_CUSTOM_FORM = 90;
 
     /**
-     * 投票选项图标
+     * 投票选项题图1
      */
-    const UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM = 110;
+    const UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1 = 110;
     /**
      * 考试试题内容图
      */

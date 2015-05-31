@@ -20,12 +20,11 @@ class VoteSelectItemManageData extends BaseManageData
     /**
      * 新建选项
      * @param array $httpPostData $_post数组
-     * @param string $titlePicPath 题图路径
      * @return int  返回选项Id
      */
-    public function Create($httpPostData,$titlePicPath = "") {
+    public function Create($httpPostData) {
         $dataProperty = new DataProperty();
-        $sql = parent::GetInsertSql($httpPostData, self::TableName_VoteSelectItem, $dataProperty,"titlePic", $titlePicPath);
+        $sql = parent::GetInsertSql($httpPostData, self::TableName_VoteSelectItem, $dataProperty);
         $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         return $result;
     }
@@ -36,7 +35,7 @@ class VoteSelectItemManageData extends BaseManageData
      * @return array  选项一维数组
      */
     public function GetOne($voteSelectItemId) {
-        $sql = "SELECT VoteSelectItemId,VoteItemId,Sort,State,VoteSelectItemTitle,RecordCount,AddCount,TitlePic,DirectUrl
+        $sql = "SELECT VoteSelectItemId,VoteItemId,Sort,State,VoteSelectItemTitle,RecordCount,AddCount,TitlePic1UploadFileId,DirectUrl
         FROM " . self::TableName_VoteSelectItem . "
         WHERE voteSelectItemId=:voteSelectItemId";
         $dataProperty = new DataProperty();
@@ -49,12 +48,11 @@ class VoteSelectItemManageData extends BaseManageData
      * 修改选项
      * @param array $httpPostData $_post数组
      * @param int $voteSelectItemId
-     * @param string $titlePicPath 题图路径
      * @return int  返回执行结果
      */
-    public function Modify($httpPostData,$voteSelectItemId,$titlePicPath = "") {
+    public function Modify($httpPostData,$voteSelectItemId) {
         $dataProperty = new DataProperty();
-        $sql = parent::GetUpdateSql($httpPostData, self::TableName_VoteSelectItem, self::TableId_VoteSelectItem, $voteSelectItemId, $dataProperty,"titlePic", $titlePicPath);
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_VoteSelectItem, self::TableId_VoteSelectItem, $voteSelectItemId, $dataProperty);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
@@ -78,23 +76,23 @@ class VoteSelectItemManageData extends BaseManageData
         return $result;
     }
 
-    /**
-     * 获取一道题的所有选项列表
-     * @param int $voteItemId  题目ID
-     * @param int $state   题目选项状态值
-     * @return array  返回数据集结果
-     */
-    public function GetSelect($voteItemId, $state) {
-        $sql = "SELECT VoteSelectItemId,VoteSelectItemTitle,RecordCount,AddCount,TitlePic,DirectUrl,TableType,TableId
-        FROM " . self::TableName_VoteSelectItem . "
-        WHERE State=:state AND VoteItemId=:VoteItemId
-        ORDER BY Sort DESC,VoteSelectItemId ASC";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("State", $state);
-        $dataProperty->AddField("VoteItemId", $voteItemId);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-        return $result;
-    }
+//    /**
+//     * 获取一道题的所有选项列表
+//     * @param int $voteItemId  题目ID
+//     * @param int $state   题目选项状态值
+//     * @return array  返回数据集结果
+//     */
+//    public function GetSelect($voteItemId, $state) {
+//        $sql = "SELECT VoteSelectItemId,VoteSelectItemTitle,RecordCount,AddCount,TitlePic,DirectUrl,TableType,TableId
+//        FROM " . self::TableName_VoteSelectItem . "
+//        WHERE State=:state AND VoteItemId=:VoteItemId
+//        ORDER BY Sort DESC,VoteSelectItemId ASC";
+//        $dataProperty = new DataProperty();
+//        $dataProperty->AddField("State", $state);
+//        $dataProperty->AddField("VoteItemId", $voteItemId);
+//        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+//        return $result;
+//    }
 
     /**
      * 获取一道题目下选项总票数
@@ -106,6 +104,42 @@ class VoteSelectItemManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $VoteItemId);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 根据题目ID获取题目下所有选项数据
+     * @param int $voteItemId   题目ID,，可以是 id,id,id 的形式
+     * @param int $state    题目选项状态
+     * @param string $order    排序
+     * @param int $topCount    题目选项条数
+     * @return array  返回查询题目选项数组
+     */
+    public function GetList($voteItemId,$state,$order = "",$topCount = null) {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        switch ($order) {
+            default:
+                $order = " ORDER BY Sort DESC,VoteSelectItemId ASC ";
+                break;
+        }
+        if($voteItemId>0)
+        {
+            $voteItemId = Format::FormatSql($voteItemId);
+            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,
+                    CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName
+                    FROM " . self::TableName_VoteItem . " t1
+                    LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " t2
+                    ON t1.VoteItemId=t2.VoteItemId
+                    WHERE t2.State=:State
+                    AND t2.VoteItemId IN ($voteItemId)"
+                    . $order
+                    . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
         return $result;
     }
 
@@ -156,6 +190,49 @@ class VoteSelectItemManageData extends BaseManageData
         $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
         $dataProperty->AddField("AddCount", $addCount);
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 取得题图的上传文件id
+     * @param int $voteSelectItemId 题目选项id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 题图1的上传文件id
+     */
+    public function GetTitlePic1UploadFileId($voteSelectItemId, $withCache)
+    {
+        $result = -1;
+        if ($voteSelectItemId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'vote_select_item_get_title_pic_1_upload_file_id.cache_' . $voteSelectItemId . '';
+            $sql = "SELECT TitlePic1UploadFileId FROM " . self::TableName_VoteSelectItem . " WHERE VoteSelectItemId = :VoteSelectItemId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改题图1的上传文件id
+     * @param int $voteSelectItemId 题目选项id
+     * @param int $titlePic1UploadFileId 题图1上传文件id
+     * @return int 操作结果
+     */
+    public function ModifyTitlePic1UploadFileId($voteSelectItemId, $titlePic1UploadFileId)
+    {
+        $result = -1;
+        if($voteSelectItemId>0){
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_VoteSelectItem . " SET
+                    TitlePic1UploadFileId = :TitlePic1UploadFileId
+                    WHERE VoteSelectItemId = :VoteSelectItemId
+                    ;";
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
         return $result;
     }
 }
