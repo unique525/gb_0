@@ -477,9 +477,15 @@ class DocumentNewsManageData extends BaseManageData
      * @param int $documentNewsId 文档id
      * @param int $publishDate 发布时间
      * @param int $manageUserId 操作管理员id
+     * @param string $manageUserName 操作管理员帐号
      * @return int 操作结果
      */
-    public function ModifyPublishDate($documentNewsId, $publishDate, $manageUserId)
+    public function ModifyPublishDate(
+        $documentNewsId,
+        $publishDate,
+        $manageUserId,
+        $manageUserName
+    )
     {
         $result = 0;
         if ($documentNewsId > 0) {
@@ -488,7 +494,8 @@ class DocumentNewsManageData extends BaseManageData
                 SET
 
                     PublishDate=:PublishDate,
-                    PublishManageUserId=:PublishManageUserId
+                    PublishManageUserId=:PublishManageUserId,
+                    PublishManageUserName=:PublishManageUserName
 
                 WHERE
                         DocumentNewsId=:DocumentNewsId
@@ -500,6 +507,7 @@ class DocumentNewsManageData extends BaseManageData
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("PublishDate", $publishDate);
             $dataProperty->AddField("PublishManageUserId", $manageUserId);
+            $dataProperty->AddField("PublishManageUserName", $manageUserName);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
