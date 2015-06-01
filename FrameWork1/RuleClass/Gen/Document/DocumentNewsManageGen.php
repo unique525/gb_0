@@ -958,7 +958,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                                         break;
                                     case "move":
-                                        $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfProductId, $manageUserId, $manageUserName);
+                                        $result = $documentNewsManageData->Move($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
                                         break;
                                     default:
                                         $result=-1;
