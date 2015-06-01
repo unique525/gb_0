@@ -1,4 +1,4 @@
-function FormatOrderState(state){
+function FormatUserState(state){
     var result;
     switch(state){
         case "0":
@@ -100,22 +100,7 @@ $(document).ready(function() {
 //    $('#ParentName').removeAttr("disabled");
 //
 //}
-function submitForm(continueCreate) {
-    if ($('#f_UserName').val() == '') {
-        $("#dialog_box").dialog({width: 300, height: 100});
-        $("#dialog_content").html("请输入会员账号");
-    } else if ($('#f_UserPass').val().length < 6) {
-        $("#dialog_box").dialog({width: 300, height: 100});
-        $("#dialog_content").html("会员账号密码不能少于6位");
-    } else {
-        if (continueCreate == 1) {
-            $("#CloseTab").val("0");
-        } else {
-            $("#CloseTab").val("1");
-        }
-        $('#mainForm').submit();
-    }
-}
+
 
 /***
  * 获取站点下会员管理项目
