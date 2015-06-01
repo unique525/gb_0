@@ -3,7 +3,7 @@
 /**
  * 投票调查前台生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Product
+ * @package iCMS_Rules_Gen_Vote
  * @author yanjiuyuan
  */
 class VotePublicGen extends BasePublicGen implements IBasePublicGen
@@ -51,7 +51,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $agent = Control::GetOS() . "与" . Control::GetBrowser();
             $VotePublicData = new VotePublicData();
             $voteItemData = new VoteItemPublicData();
-            $voteSelectItemData = new VoteSelectItemPublicData();
+            $voteSelectItemPublicData = new VoteSelectItemPublicData();
             $voteRecordData = new VoteRecordData();
             $nowDate = date("Y-m-d", time());
             $arrList = $VotePublicData->GetVoteRow($vote_id);
@@ -124,7 +124,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             }
             $result = $VotePublicData->UpdateCount($vote_id);                              //投票提交
             $result = $voteItemData->UpdateCountBatch($voteItemIdArr);              //题目提交
-            $result = $voteSelectItemData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交
+            $result = $voteSelectItemPublicData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交
             $result = $voteRecordData->CreatVoteRecord($vote_id, $ipAddress, $agent, $createDate); //投票记录提交
             $voteRecordId = $result; //得到投票记录主表id
             $result = $voteRecordData->CreatVoteRecordDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
@@ -155,7 +155,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $agent = Control::GetOS() . "与" . Control::GetBrowse();
             $VotePublicData = new VotePublicData();
             $voteItemData = new VoteItemPublicData();
-            $voteSelectItemData = new VoteSelectItemPublicData();
+            $voteSelectItemPublicData = new VoteSelectItemPublicData();
             $voteRecordData = new VoteRecordData();
             $nowDate = date("Y-m-d", time());
             $voteSelectItemIdArr[] = $voteSelectItemId;   //收集要提交的选项ID并组成数组
@@ -193,7 +193,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             }
             $result = $VotePublicData->UpdateCount($vote_id);                              //投票提交
             $result = $voteItemData->UpdateCountBatch($voteItemIdArr);              //题目提交
-            $result = $voteSelectItemData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交
+            $result = $voteSelectItemPublicData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交
             $result = $voteRecordData->CreatVoteRecord($vote_id, $ipAddress, $agent, $createDate); //投票记录提交
             $voteRecordId = $result; //得到投票记录主表id
             $result = $voteRecordData->CreatVoteRecordDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
@@ -217,7 +217,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
         $votePublicData = new VotePublicData();
         $allItem = $votePublicData->GetSelectItemList($vote_id);       //获取问卷题目
         //计算百分比
-        foreach ($allItem as $columnName => $columnValue) {
+        foreach ($allItem as $columnValue) {
             $itemAdd = $columnValue["cviaddcount"];             //题目的加票
             $selectItemAdd = $columnValue["cvsiaddcount"];      //选项的加票
             unset($columnValue["cviaddcount"]);                 //去除数组中多余元素便于最后数组的组合提交处理
