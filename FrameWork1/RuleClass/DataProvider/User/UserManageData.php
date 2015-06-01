@@ -40,8 +40,11 @@ class UserManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            if ($searchType == 0) { //会员名
+            if ($searchType == 1) { //会员名
                 $searchSql = " AND (u.UserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }elseif ($searchType == 2) { //IP
+                $searchSql = " AND (u.RegIp like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
         }
@@ -76,6 +79,33 @@ class UserManageData extends BaseManageData
                 $sql = parent::GetUpdateSql($httpPostData, self::TableName_User, self::TableId_User, $userId, $dataProperty);
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             }
+        }
+        return $result;
+    }
+
+    /**
+     * 修改会员密码（包括MD5加密字段）
+     * @param int $userId 会员id
+     * @param string $userPass 新的会员密码
+     * @return int 操作结果
+     */
+    public function ModifyUserPass($userId, $userPass)
+    {
+        $result = 0;
+        if ($userId > 0) {
+
+            $userPassWithMd5 = md5($userPass);
+
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_User . "
+                    SET
+                    `UserPass`=:UserPass,
+                    `UserPassWithMd5`=:UserPassWithMd5
+                    WHERE ".self::TableId_User."=:".self::TableId_User.";";
+            $dataProperty->AddField(self::TableId_User, $userId);
+            $dataProperty->AddField("UserPass", $userPass);
+            $dataProperty->AddField("UserPassWithMd5", $userPassWithMd5);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }

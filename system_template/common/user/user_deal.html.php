@@ -32,6 +32,23 @@
                 }
             });
         });
+
+        function submitForm(continueCreate) {
+            if ($('#f_UserName').val() == '') {
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("请输入会员账号");
+            } else if ($('#UserPass').val().length >0 && $('#UserPass').val().length < 6) {
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("会员密码不能少于6位");
+            } else {
+                if (continueCreate == 1) {
+                    $("#CloseTab").val("0");
+                } else {
+                    $("#CloseTab").val("1");
+                }
+                $('#mainForm').submit();
+            }
+        }
     </script>
     <style type="text/css">
         #UserList {
@@ -66,10 +83,10 @@
         </table>
 
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-            <tr style="display: none">
+            <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_UserId">会员Id：</label></td>
                 <td class="spe_line">
-                    <input name="f_UserId" id="f_UserId" value="{UserId}" type="text" style="width: 60px;"/>
+                    <input name="f_UserId" readonly id="f_UserId" value="{UserId}" type="text" class="input_box" style="width: 100px;"/>
                     <input id="OldUserName" name="OldUserName" type="hidden" value="{UserName}"/>
                     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
 
@@ -81,15 +98,21 @@
                     <input name="f_UserName" id="f_UserName" value="{UserName}" maxlength="100" type="text" class="input_box" style=" width: 300px;"/></td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="f_UserPass">会员密码：</label></td>
-                <td class="spe_line" title="{UserPass}">
-                    <input name="f_UserPass" id="f_UserPass" value="{UserPass}" type="text" class="input_box" style=" width: 300px;"/>(注:不能少于6位)
+                <td class="spe_line" height="30" align="right"><label for="UserPass">会员密码：</label></td>
+                <td class="spe_line">
+                    <input name="UserPass" id="UserPass" value="{UserPass}" type="text" class="input_box" style=" width: 300px;"/>(注:不能少于6位)
+                </td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="UserPassWithMd5">会员密码(md5)：</label></td>
+                <td class="spe_line">
+                    <input name="UserPassWithMd5" id="UserPassWithMd5" readonly value="{UserPassWithMd5}" type="text" class="input_box" style=" width: 300px;"/>
                 </td>
             </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_CreateDate">会员注册时间：</label></td>
                 <td class="spe_line">
-                    <input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:80px;"/>
+                    <input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="text" class="input_box" style="width:120px;"/>
                 </td>
             </tr>
             <tr>

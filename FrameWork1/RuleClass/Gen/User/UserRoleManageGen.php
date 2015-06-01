@@ -1,13 +1,11 @@
 <?php
-
 /**
- * 后台管理 会员 生成类
+ * 后台管理 会员角色 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_User
  * @author zhangchi
  */
-class UserManageGen extends BaseManageGen implements IBaseManageGen
-{
+class UserRoleManageGen extends BaseManageGen implements IBaseManageGen {
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -37,73 +35,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
         return $result;
     }
 
-    private function GenCreate()
-    {
-        $siteId = Control::GetRequest("site_id", 0);
-        $manageUserId = Control::GetManageUserId();
-        if (intval($siteId) > 0 && intval($manageUserId) > 0) {
-            $templateContent = Template::Load("user/user_deal.html", "common");
-
-            parent::ReplaceFirst($templateContent);
-            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
-            $resultJavaScript = "";
-
-            $userManageData = new UserManageData();
-            $userInfoManageData = new UserInfoManageData();
-
-            parent::ReplaceWhenCreate($templateContent, $userManageData->GetFields());
-            if (!empty($_POST)) {
-                $httpPostData = Format::FormatHtmlTagInPost($_POST);
-                $userName = Control::PostRequest("f_UserName", "");
-                $userPass = Control::PostRequest("f_UserPass", "");
-                if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
-                    $isExistSameUserName = $userManageData->CheckSameUserName($userName); //检查是否有重名的
-
-
-                    if ($isExistSameUserName != 0) { //如果有重名的
-                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 20));
-                    } else { //没有重名的
-                        $result = $userManageData->Create($httpPostData, $siteId);
-
-                        //加入操作日志
-                        $operateContent = 'Create User,POST FORM:'
-                            . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
-                        self::CreateManageUserLog($operateContent);
-
-                        if ($result > 0) {
-                            $resultCreateUserInfo = $userInfoManageData->Create($result);
-                            //加入操作日志
-                            $operateContent = 'Create UserInfo,POST FORM:'
-                                . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
-                            self::CreateManageUserLog($operateContent);
-
-                            if ($resultCreateUserInfo > 0) {
-                                $closeTab = Control::PostRequest("CloseTab", 0);
-                                if ($closeTab == 1) {
-                                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 30)) . Control::GetCloseTab();
-                                } else {
-                                    Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
-                                }
-                            } else {
-                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31));
-                            }
-                        } else {
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 31));
-                        }
-                    }
-                } else {
-                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
-                }
-            }
-            parent::ReplaceEnd($templateContent);
-            $templateContent = str_ireplace("{display_by_method}", 'style="display:none"', $templateContent);
-            $templateContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $templateContent);
-            return $templateContent;
-        } else {
-            return null;
-        }
-    }
-
     /**
      * 生成会员管理列表页面
      */
@@ -118,7 +49,7 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
         $channelId = 0;
-        $canExplore = $manageUserAuthorityManageData->CanUserExplore($siteId, $channelId, $manageUserId);
+        $canExplore = $manageUserAuthorityManageData->CanUserRoleExplore($siteId, $channelId, $manageUserId);
         if (!$canExplore) {
             return Language::Load('document', 26);
         }
@@ -254,8 +185,4 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
             return null;
         }
     }
-
-
-}
-
-?>
+} 
