@@ -1268,12 +1268,14 @@ if((Template::GetAllCustomTag($tagContent, "child"))!=null){
                                             $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
                                         }
 
+                                        $manageUserName = Control::GetManageUserName();
 
                                         //修改发布时间和发布人，只有发布时间为空时才进行操作
                                         $documentNewsManageData->ModifyPublishDate(
                                             $documentNewsId,
                                             date("Y-m-d H:i:s", time()),
-                                            $manageUserId
+                                            $manageUserId,
+                                            $manageUserName
                                         );
 
 
