@@ -7,6 +7,104 @@
  */
 class UserRoleManageData extends BaseManageData {
 
+    /**
+     * 会员角色列表
+     * @param int $siteId
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @param string $searchKey
+     * @return array
+     */
+    public function GetList($siteId, $pageBegin, $pageSize, $searchKey = "") {
+        $dataProperty = new DataProperty();
+
+        $fieldOfList = "".self::TableName_User.".UserId,
+                    ".self::TableName_User.".UserName,
+                    ".self::TableName_User.".CreateDate,
+                    ".self::TableName_User.".State,
+                    ".self::TableName_UserInfo.".NickName,
+                    ".self::TableName_UserInfo.".RealName,
+                    ".self::TableName_UserGroup.".UserGroupName,
+                    ".self::TableName_UserRole.".State as RoleState
+        ";
+
+        $sql = "SELECT
+
+                    $fieldOfList
+
+                    FROM ".self::TableName_User."
+                INNER JOIN ".self::TableName_UserInfo."
+                    ON (".self::TableName_User.".UserId = ".self::TableName_UserInfo.".UserId)
+                INNER JOIN ".self::TableName_UserRole."
+                    ON (".self::TableName_User.".UserId = ".self::TableName_UserRole.".UserId)
+                INNER JOIN ".self::TableName_UserGroup."
+                    ON (".self::TableName_UserRole.".UserGroupId = ".self::TableName_UserGroup.".UserGroupId)
+                    AND ".self::TableName_UserRole.".SiteId = :SiteId ";
+
+
+        $dataProperty->AddField("SiteId", $siteId);
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            $sql .= " AND (
+                        ".self::TableName_User.".UserId=:SearchKey1
+                        OR ".self::TableName_User.".UserName LIKE :SearchKey2
+                        OR ".self::TableName_UserInfo.".NickName LIKE :SearchKey3
+                        OR ".self::TableName_UserInfo.".RealName LIKE :SearchKey4
+                        )";
+
+            $dataProperty->AddField("SearchKey1", $searchKey);
+            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
+        }
+        $sql .=" ORDER BY ".self::TableName_UserRole.".State DESC
+                    ,".self::TableName_User.".CreateDate DESC LIMIT "
+            . $pageBegin . "," . $pageSize . "";
+
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        return $result;
+    }
+
+    public function GetCount($siteId, $searchKey = ""){
+
+        $dataProperty = new DataProperty();
+
+        $fieldOfList = " count(".self::TableName_User.".UserId)";
+
+        $sql = "SELECT
+
+                    $fieldOfList
+
+                    FROM ".self::TableName_User."
+                INNER JOIN ".self::TableName_UserInfo."
+                    ON (".self::TableName_User.".UserId = ".self::TableName_UserInfo.".UserId)
+                INNER JOIN ".self::TableName_UserRole."
+                    ON (".self::TableName_User.".UserId = ".self::TableName_UserRole.".UserId)
+                INNER JOIN ".self::TableName_UserGroup."
+                    ON (".self::TableName_UserRole.".UserGroupId = ".self::TableName_UserGroup.".UserGroupId)
+                    AND ".self::TableName_UserRole.".SiteId = :SiteId ";
+
+
+        $dataProperty->AddField("SiteId", $siteId);
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            $sql .= " AND (
+                        ".self::TableName_User.".UserId=:SearchKey1
+                        OR ".self::TableName_User.".UserName LIKE :SearchKey2
+                        OR ".self::TableName_UserInfo.".NickName LIKE :SearchKey3
+                        OR ".self::TableName_UserInfo.".RealName LIKE :SearchKey4
+                        )";
+
+            $dataProperty->AddField("SearchKey1", $searchKey);
+            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
+            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
+        }
+
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        return $result;
+    }
+
 
     public function GetUserGroupId($userId,$siteId = 0,$channelId = 0){
         if ($siteId <= 0 && $channelId <= 0) {
@@ -29,9 +127,9 @@ class UserRoleManageData extends BaseManageData {
     }
 
     /**
-     * 增加或修改会员到站点权限表中
+     * 增加或修改会员到角色表中
      * @param int $userId 会员ID
-     * @param int $userGroupId　数组ID
+     * @param int $userGroupId　会员组ID
      * @param int $siteId　站点ID
      * @return int 返回影响的行数
      */

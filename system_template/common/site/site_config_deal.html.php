@@ -30,7 +30,9 @@
 
         window.GetOneUploadFileCallBack = function(fileElementId,uploadFileId, data){
             if(data["upload_file_path"] != ""){
+
                 $("#"+fileElementId).attr("src",data["upload_file_path"]);
+
             }
         };
 
@@ -41,7 +43,7 @@
             //upload_file.js
             var newspaperArticlePicWatermarkUploadFileId = parseInt("{cfg_NewspaperArticlePicWatermarkUploadFileId}");
             if(newspaperArticlePicWatermarkUploadFileId>0){
-                GetOneUploadFile('preview_DocumentNewsContentPicWatermarkUploadFileId',newspaperArticlePicWatermarkUploadFileId);
+                GetOneUploadFile('preview_NewspaperArticlePicWatermarkUploadFileId',newspaperArticlePicWatermarkUploadFileId);
             }
 
             var documentNewsContentPicWatermarkUploadFileId = parseInt("{cfg_DocumentNewsContentPicWatermarkUploadFileId}");

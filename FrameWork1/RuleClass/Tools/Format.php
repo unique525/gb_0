@@ -201,7 +201,7 @@ class Format
      * 分隔字符串为数组
      * @param string $content 被分隔的字符串
      * @param string $char 分隔字符
-     * @return string 返回处理后的数组
+     * @return array 返回处理后的数组
      */
     public static function ToSplit($content, $char)
     {

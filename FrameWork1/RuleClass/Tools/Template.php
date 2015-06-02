@@ -77,7 +77,14 @@ class Template
      * 模板标签类型：电子报文章图片列表(轮换) type="newspaper_article_pic_list_slider"
      */
     const TAG_TYPE_NEWSPAPER_ARTICLE_PIC_LIST_SLIDER = "newspaper_article_pic_list_slider";
-
+    /**
+     * 模板标签类型：投票调查列表 type="vote_list"
+     */
+    const TAG_TYPE_VOTE_LIST = "vote_list";
+    /**
+     * 模板标签类型：投票调查题目列表 type="vote_item_list"
+     */
+    const TAG_TYPE_VOTE_ITEM_LIST = "vote_item_list";
     /**
      * 论坛 主题列表
      */

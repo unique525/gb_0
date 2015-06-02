@@ -19,6 +19,8 @@ class BasePublicGen extends BaseGen
     {
         /** 1.处理预加载模板 */
 
+        /** 替换投票调查标签为标准形式 */
+        $templateContent = self::ReplaceVoteTagToCmsTag($templateContent);
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($templateContent);
         if (count($arrCustomTags) > 0) {
@@ -220,6 +222,21 @@ class BasePublicGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_VOTE_ITEM_LIST:
+                        $voteId = intval(str_ireplace("vote_", "", $tagId));
+                        if ($voteId > 0) {
+                            $templateContent = self::ReplaceTemplateOfVoteItemList(
+                                $templateContent,
+                                $voteId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
                 }
             }
         }
@@ -263,6 +280,7 @@ class BasePublicGen extends BaseGen
         if ($siteId > 0 || $channelId > 0) {
             $arrChannelList = null;
             $arrChannelChildList = array();
+            $arrItemListForChildTag=array();
             $arrChannelThirdList = null;
             $tableIdName = "ChannelId";
             $parentIdName = "ChannelId";
@@ -303,6 +321,37 @@ class BasePublicGen extends BaseGen
                                 $sbChildChannelId,
                                 $tagOrder
                             );
+
+                            /*** 处理子循环 ***/
+                            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
+                                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");  // top_child="xx"  xx=显示条数
+                                switch($tagId){
+                                    case "document_news_list":
+                                        $documentNewsPublicData=new DocumentNewsPublicData();
+                                        $state=DocumentNewsData::STATE_PUBLISHED;
+                                        foreach($arrChannelList as $oneChannel){
+                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                                            if($itemListInOneChannel==null){
+                                                $itemListInOneChannel=array();
+                                            }
+                                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                                        }
+                                        break;
+                                    default:
+                                        $documentNewsPublicData=new DocumentNewsPublicData();
+                                        $state=DocumentNewsData::STATE_PUBLISHED;
+                                        foreach($arrChannelList as $oneChannel){
+                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                                            if($itemListInOneChannel==null){
+                                                $itemListInOneChannel=array();
+                                            }
+                                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                                        }
+                                        break;
+                                }
+                            }
+
+
 
                             if (count($arrChannelChildList) > 0) {
                                 for ($j = 0; $j < count($arrChannelChildList); $j++) {
@@ -354,22 +403,6 @@ class BasePublicGen extends BaseGen
                     break;
             }
 
-            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
-                //显示条数
-                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");
-                $documentNewsManageData=new DocumentNewsManageData();
-                $state=DocumentNewsData::STATE_PUBLISHED;
-                foreach($arrChannelList as $oneChannel){
-                    $oneChildList = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);
-                    if($oneChildList==null){
-                        $oneChildList=array();
-                    }
-                    if($arrChannelChildList==null){
-                        $arrChannelChildList=array();
-                    }
-                    $arrChannelChildList=array_merge($arrChannelChildList,$oneChildList);
-                }
-            }
 
 
             if (!empty($arrChannelList)) {
@@ -379,7 +412,7 @@ class BasePublicGen extends BaseGen
                     $arrChannelList,
                     $tagId,
                     $tagName,
-                    $arrChannelChildList,
+                    $arrItemListForChildTag,
                     $tableIdName,
                     $parentIdName,
                     $arrChannelThirdList,
@@ -1158,6 +1191,126 @@ class BasePublicGen extends BaseGen
     }
 
     /**
+     * 替换投票题目列表内容
+     * @param string $templateContent 要处理的模板内容
+     * @param string $voteId 投票调查id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagOrder 排序方式
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfVoteItemList(
+        $templateContent,
+        $voteId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagOrder
+    )
+    {
+        if ($voteId > 0) {
+            //投票模板加载类型 auto 则加载定义好的几种模板之一
+            $tempType = Template::GetParamValue($tagContent, "temp_type");
+            //如果配置为加载默认投票模板
+            if ($tempType == "auto") {
+                $tempName = Template::GetParamValue($tagContent, "temp_name");
+                $voteManageData = new VoteManageData();
+                //如果投票标记没有指定模板，则启用数据库配置的模板
+                if ($tempName == null) {
+                    $tempName = $voteManageData->GetTemplateName($voteId, false);
+                    if ($tempName == null || $tempName == '') //如果数据库没有配置模板，默认启用普通模板
+                        $tempName = "normal_1";
+                }
+                //加载对应类型模板
+                $templateFileUrl = "vote/vote_front_" . $tempName . ".html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $voteTemp = Template::Load($templateFileUrl, $templateName, $templatePath);
+                $voteTemp = str_ireplace("{VoteId}",$voteId, $voteTemp);
+                //根据是否启用验证码，决定是否显示验证码输入选项
+                $isCheckCode = $voteManageData->GetIsCheckCode($voteId, false);
+                //不启用验证码则隐藏验证码图片
+                if ($isCheckCode != 1) {
+                    $preg = '/\<div id=\"vote_check_code_class' . $voteId . '\">(.*)\<\/div>/imsU';
+                    $voteTemp = preg_replace($preg, '', $voteTemp);
+                }
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $voteTemp);
+                $tagContent = Template::GetCustomTagByTagId($tagId, $voteTemp);
+                $itemWidth = Template::GetParamValue($tagContent, "item_width"); //选项宽
+                $itemHeight = Template::GetParamValue($tagContent, "item_height"); //选项高
+                $itemMarginLeft = Template::GetParamValue($tagContent, "item_margin_left"); //左边距
+                if ($itemMarginLeft== null)
+                    $itemMarginLeft= "40px";
+                $itemTitleDisplay = Template::GetParamValue($tagContent, "item_title_display"); //是否显示题目标题
+                $btnDisplay = Template::GetParamValue($tagContent, "btn_display"); //是否显示投票按钮
+                $tagContent = str_ireplace("{ItemWidth}",$itemWidth, $tagContent);
+                $tagContent = str_ireplace("{ItemHeight}",$itemHeight, $tagContent);
+                $tagContent = str_ireplace("{ItemMarginLeft}",$itemMarginLeft, $tagContent);
+                $tagContent = str_ireplace("{ItemTitleDisplay}",$itemTitleDisplay, $tagContent);
+                $tagContent = str_ireplace("{BtnDisplay}",$btnDisplay, $tagContent);
+            }
+
+            $arrVoteItemList = null;
+            $arrVoteSelectItemList = array();
+            $tableIdName = "VoteItemId";
+            $parentIdName = "VoteItemId";
+            if ($tagTopCount <= 0) {
+                $tagTopCount = null;
+            }
+            $state=VoteData::STATE_NORMAL;
+            $voteItemManageData = new VoteItemManageData();
+            $arrVoteItemList = $voteItemManageData->GetList($voteId,$state,$tagOrder,$tagTopCount); //读取投票调查题目
+
+            $sbVoteItemId = '';
+            if (count($arrVoteItemList) > 0) {
+
+                for ($i = 0; $i < count($arrVoteItemList); $i++) {
+                    $sbVoteItemId .= ',' . $arrVoteItemList[$i]["VoteItemId"];
+                }
+                if (strpos($sbVoteItemId, ',') == 0) {
+                    $sbVoteItemId = substr($sbVoteItemId, 1);
+                }
+                if (strlen($sbVoteItemId) > 0) {
+                    //echo $sbVoteItemId;
+                    //二级
+                    $voteSelectItemManageData = new VoteSelectItemManageData();
+                    $arrVoteSelectItemList = $voteSelectItemManageData->GetList(
+                        $sbVoteItemId,
+                        $state,
+                        $tagOrder,
+                        $tagTopCount
+                    );
+                }
+            }
+
+            if (!empty($arrVoteItemList)) {
+                $tagName = Template::DEFAULT_TAG_NAME;
+                Template::ReplaceList(
+                    $tagContent,
+                    $arrVoteItemList,
+                    $tagId,
+                    $tagName,
+                    $arrVoteSelectItemList,
+                    $tableIdName,
+                    $parentIdName
+                );
+                //把对应ID的CMS标记替换成指定内容
+                //替换子循环里的<![CDATA[标记
+                $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
+                $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            } else {
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
+            }
+
+
+        }
+
+        return $templateContent;
+    }
+
+    /**
      * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
@@ -1462,6 +1615,33 @@ class BasePublicGen extends BaseGen
             }
         }
 
+        return $result;
+    }
+
+    /**
+     * 替换投票调查标签为标准的cms标签形式
+     * @param string $templateContent 要处理的模板内容
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceVoteTagToCmsTag($templateContent){
+        $pattern = "/{icms_vote(.*?)}/ims";
+        //调用VoteReplace回调方法处理
+        $templateContent = preg_replace_callback($pattern, array(&$this, 'VoteReplace'), $templateContent);
+        return $templateContent;
+    }
+
+    /**
+     * 替换模板中的投票调查标记为标准形式的回调方法
+     * @param string $source 被替换字符串
+     * @return mixed|string
+     */
+    private function VoteReplace($source)
+    {
+        $result = $source[1];
+        //替换掉编辑器中可能的&nbsp;为标准空格形式
+        $replace_arr = array("&nbsp;" => " ");
+        $result = strtr($result, $replace_arr);
+        $result = "<icms type=\"". Template::TAG_TYPE_VOTE_LIST ."\" temp_type=\"auto\" ". $result . "></icms>";
         return $result;
     }
 }

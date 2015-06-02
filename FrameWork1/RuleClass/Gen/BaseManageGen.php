@@ -535,6 +535,7 @@ class BaseManageGen extends BaseGen
             $arrChannelList = null;
             $arrChannelChildList = array();
             $arrChannelThirdList = null;
+            $arrItemListForChildTag=null;
             $tableIdName = "ChannelId";
             $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
@@ -576,18 +577,36 @@ class BaseManageGen extends BaseGen
                     break;
             }
 
-if((Template::GetAllCustomTag($tagContent, "child"))!=null){
-    //显示条数
-    $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");
-    $documentNewsManageData=new DocumentNewsManageData();
-    $oneChildList=array();
-    $state=DocumentNewsData::STATE_PUBLISHED;
-    foreach($arrChannelList as $oneChannel){
-        $oneChildList=null;
-        $oneChildList = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);
-        $arrChannelChildList=array_merge($arrChannelChildList,$oneChildList);
-    }
-}
+            /*** 处理子循环 ***/
+            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
+                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");  // top_child="xx"  xx=显示条数
+                switch($tagId){
+                    case "document_news_list":
+                        $documentNewsPublicData=new DocumentNewsPublicData();
+                        $state=DocumentNewsData::STATE_PUBLISHED;
+                        foreach($arrChannelList as $oneChannel){
+                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                            if($itemListInOneChannel==null){
+                                $itemListInOneChannel=array();
+                            }
+                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                        }
+                        break;
+                    default:
+                        $documentNewsPublicData=new DocumentNewsPublicData();
+                        $state=DocumentNewsData::STATE_PUBLISHED;
+                        foreach($arrChannelList as $oneChannel){
+                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                            if($itemListInOneChannel==null){
+                                $itemListInOneChannel=array();
+                            }
+                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                        }
+                        break;
+                }
+            }
+
+
             if (!empty($arrChannelList)) {
                 $tagName = Template::DEFAULT_TAG_NAME;
                 Template::ReplaceList(
@@ -1268,12 +1287,14 @@ if((Template::GetAllCustomTag($tagContent, "child"))!=null){
                                             $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
                                         }
 
+                                        $manageUserName = Control::GetManageUserName();
 
                                         //修改发布时间和发布人，只有发布时间为空时才进行操作
                                         $documentNewsManageData->ModifyPublishDate(
                                             $documentNewsId,
                                             date("Y-m-d H:i:s", time()),
-                                            $manageUserId
+                                            $manageUserId,
+                                            $manageUserName
                                         );
 
 

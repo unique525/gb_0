@@ -33,6 +33,18 @@
                     "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date;
             });
 
+            $("#btn_export").click(function(){
+                var site_id = parent.G_NowSiteId;
+                var begin_date = $("#begin_date").val();
+                var end_date = $("#end_date").val();
+                if(begin_date == "" && end_date == ""){
+                    alert("请选择日期");
+                }else{
+                    window.location.href="/default.php?secu=manage&mod=user_order&m=export_excel" +"&site_id="+site_id+
+                        "&begin_date="+begin_date+"&end_date="+end_date;
+                }
+            });
+
             $(".username_span").each(function(){
                 var username = $(this).html();
                 var idvalue = $(this).attr("idvalue");
@@ -78,6 +90,7 @@
             起始时间：<input  id="begin_date" value="" type="text" class="input_box" style="width:80px;"/>
             -结束时间：<input id="end_date" value="" type="text" class="input_box" style="width:80px;"/>
             <input id="btn_search" type="button" class="btn2" value="查询"/>
+            <input id="btn_export" type="button" class="btn2" value="导出"/>
         </div>
         <div class="advance_search" style="width:99%;height:150px;border:1px #CCC solid;display: none">
 

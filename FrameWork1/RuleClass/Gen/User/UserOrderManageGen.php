@@ -283,7 +283,6 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             $userOrderManageData = new UserOrderManageData();
             $arrUserOrderListForExcel = $userOrderManageData->GetListForExportExcel($beginDate,$endDate,$siteId);
 
-//            include RELATIVE_PATH . "FrameWork1/RuleClass/Plugins/PHPExcel.php";
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->setActiveSheetIndex(0);
             $objActSheet = $objPHPExcel->getActiveSheet(0);
@@ -306,22 +305,38 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
                 "联系电话",
                 "收货人地区",
                 "收货地址",
-                "订单付款时间 "
+                "订单付款时间"
             );
             for ($i = 0; $i < count($arrUserOrderListHeader); $i++) {
                 $column = chr($key);
                 $objActSheet->setCellValue($column . '1', $arrUserOrderListHeader[$i]);
                 $objActSheet->getColumnDimension($column)->setAutoSize(true);
-
-                $column_content = 2;
-                for ($j = 0; $j < count($arrUserOrderListForExcel); $j++) {
-                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($column . strval($column_content), $arrUserOrderListForExcel[$j][$i]);
-                        $column_content++;
-                }
                 $key ++;
             }
 
-            $fileName = "test.xls";
+            $column_content = 2;
+            for ($j = 0; $j < count($arrUserOrderListForExcel); $j++) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A" . strval($column_content), $arrUserOrderListForExcel[$j]["UserOrderId"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("B" . strval($column_content), $arrUserOrderListForExcel[$j]["CreateDate"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C" . strval($column_content), $arrUserOrderListForExcel[$j]["ProductId"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("D" . strval($column_content), $arrUserOrderListForExcel[$j]["ProductName"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("E" . strval($column_content), $arrUserOrderListForExcel[$j]["ProductPrice"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("F" . strval($column_content), $arrUserOrderListForExcel[$j]["SaleCount"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("G" . strval($column_content), $arrUserOrderListForExcel[$j]["SubTotal"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("H" . strval($column_content), $arrUserOrderListForExcel[$j]["PayPrice"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("I" . strval($column_content), $arrUserOrderListForExcel[$j]["State"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("J" . strval($column_content), $arrUserOrderListForExcel[$j]["ProductTag"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("K" . strval($column_content), $arrUserOrderListForExcel[$j]["UserName"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("L" . strval($column_content), $arrUserOrderListForExcel[$j]["ReceivePersonName"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("N" . strval($column_content), $arrUserOrderListForExcel[$j]["Mobile"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("M" . strval($column_content), $arrUserOrderListForExcel[$j]["District"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("O" . strval($column_content), $arrUserOrderListForExcel[$j]["Address"]);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue("P" . strval($column_content), $arrUserOrderListForExcel[$j]["PayDate"]);
+
+                $column_content++;
+            }
+
+            $fileName = $beginDate."--".$endDate."-".time()."test.xls";
             $fileName = iconv("utf-8", "gb2312", $fileName);
             //将输出重定向到一个客户端web浏览器(Excel2007)
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

@@ -141,21 +141,35 @@ class VoteItemManageData extends BaseManageData
     }
 
     /**
-     * 获取题目数组通用
-     * @param int $voteId   问卷ID
-     * @param int $state    问卷启用状态
+     * 根据投票调查ID获取题目列表数据
+     * @param int $voteId   投票调查ID
+     * @param int $state    投票调查状态
+     * @param string $order    排序
+     * @param int $topCount    题目条数
      * @return array  返回查询题目数组
      */
-    public function GetList($voteId, $state) {
+    public function GetList($voteId,$state,$order = "",$topCount = null) {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        switch ($order) {
+            default:
+                $order = " ORDER BY Sort DESC,VoteItemId ASC ";
+                break;
+        }
+        if($voteId>0)
+        {
         $sql = "SELECT VoteId,VoteItemId,VoteItemTitle,VoteItemType,RecordCount,VoteIntro,SelectNumMin,SelectNumMax,
         CASE VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName
         FROM " . self::TableName_VoteItem . "
-        WHERE State=:State AND VoteId=:VoteId
-        ORDER BY Sort DESC,VoteItemId ASC";
+        WHERE State=:State AND VoteId=:VoteId"
+        . $order
+        . $topCount;
         $dataProperty = new DataProperty();
         $dataProperty->AddField("State", $state);
         $dataProperty->AddField("VoteId", $voteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
         return $result;
     }
 

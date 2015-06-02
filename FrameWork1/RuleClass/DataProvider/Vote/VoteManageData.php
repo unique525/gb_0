@@ -143,6 +143,46 @@ class VoteManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 根据投票调查id取得投票模板名称
+     * @param int $voteId 投票调查id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 模板名称
+     */
+    public function GetTemplateName($voteId, $withCache)
+    {
+        $result = -1;
+        if ($voteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'vote_get_template_name.cache_' . $voteId . '';
+            $sql = "SELECT TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据投票调查id取得投票是否启用验证码标志位
+     * @param int $voteId 投票调查id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 模板名称
+     */
+    public function GetIsCheckCode($voteId, $withCache)
+    {
+        $result = -1;
+        if ($voteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheFile = 'vote_get_is_check_code.cache_' . $voteId . '';
+            $sql = "SELECT IsCheckCode FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 }
 
 ?>

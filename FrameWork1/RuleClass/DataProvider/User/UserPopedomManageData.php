@@ -352,7 +352,6 @@ class UserPopedomManageData extends BaseManageData {
 
         ;";
 
-        echo $sql;
         $result = $this->dbOperator->Execute($sql, null);
         return $result;
     }

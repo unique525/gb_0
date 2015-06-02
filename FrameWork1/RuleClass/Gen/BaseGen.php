@@ -897,9 +897,10 @@ class BaseGen
                     $newFileName = 'user_attachment_' . $userId . '_' . uniqid() . '.' . $fileExtension;
                 }
                 break;
-            case UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM: //投票选项图片
-                $uploadFilePath = $uploadPath . "vote_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
-                $newFileName = uniqid() . '.' . $fileExtension;
+            case UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1:
+                /** 投票 题目选项题图1  tableId 为 voteItemId **/
+                $uploadFilePath = $uploadPath . "vote_select_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
+                $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_USER_MOOD: //会员心情图标 tableId 为 siteId
                 $uploadFilePath = $uploadPath . "user_mood" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;

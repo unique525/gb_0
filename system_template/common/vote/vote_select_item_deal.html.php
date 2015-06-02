@@ -5,25 +5,6 @@
     <title></title>
     {common_head}
         <script type="text/javascript">
-            $(function(){
-                var img = $("#img_title_pic");
-                var previewImage = new Image();
-                previewImage.src = img.attr("src");
-                var tp = '{TitlePic}';
-                $("#preview_title_pic").click(function() {
-                    if(tp != ''){
-
-                        $("#dialog_title_pic").dialog({
-                            width : previewImage.width+30,
-                            height : previewImage.height+50
-                        });
-
-                    }
-                    else{
-                        alert('还没有上传题图');
-                    }
-                });                
-            });
             function sub()
             {
                 var voteSelectItemTitle = $('#f_VoteSelectItemTitle');
@@ -38,6 +19,7 @@
         </script>
     </head>
     <body>
+    {common_body_deal}
         <form id="mainForm" enctype="multipart/form-data"  action="/default.php?secu=manage&mod=vote_select_item&m={method}&vote_id={VoteId}&vote_item_id={VoteItemId}&vote_select_item_id={VoteSelectItemId}&p={PageIndex}" method="post">
             <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr style="display: none">
@@ -52,18 +34,10 @@
                      <td class="spe_line"><input name="f_VoteSelectItemTitle" id="f_VoteSelectItemTitle" value="{VoteSelectItemTitle}" type="text" class="input_box" style=" width: 300px;" /></td>
                 </tr>
                 <tr>
-                    <td class="spe_line" style="width:200px;height:35px;text-align: right;">题图：</td>
-                    <td class="spe_line" style="text-align: left">
-                        <input id="file_title_pic" name="file_title_pic" type="file" class="input_box" style="width:300px; background: #ffffff; margin-top: 3px;" /> <span id="preview_title_pic" style="cursor:pointer">[预览]</span>
-                        <div id="dialog_title_pic" title="题图预览（{TitlePic}）" style="display:none;">
-                            <div id="pub_table">
-                                <table>
-                                    <tr>
-                                        <td><img id="img_title_pic" src="{TitlePic}" alt="title_pic" /></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                    <td class="" style="width:60px;height:30px;text-align: right;">题图1：</td>
+                    <td class="" style="text-align: left">
+                        <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:auto;background:#ffffff;margin-top:3px;"/>
+                        <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
                     </td>
                 </tr>
                 <tr>

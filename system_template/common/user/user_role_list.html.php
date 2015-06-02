@@ -88,7 +88,7 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新增会员" title="新增会员" type="button"/>
-                </td>
+            </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
                     <label for="search_type_box"></label>
@@ -99,7 +99,7 @@
                     <label for="search_key"></label><input type="text" id="search_key" name="search_key" class="input_box"/>
                     <input id="btn_search" class="btn2" value="查 询" type="button"/>
                     <span id="search_type" style="display: none"></span>
-                    </div>
+                </div>
             </td>
         </tr>
     </table>
@@ -108,29 +108,29 @@
         <icms id="user_list">
             <item>
                 <![CDATA[
-                    <li class="li_list_width_img">
-                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td width="85">
-                                    <img class="img_avatar" width="80" height="80" src="" style="display:block;" alt="会员头像"/>
-                                </td>
-                                <td valign="top" align="left">
-                                    <div style="height:20px;line-height: 20px">{f_UserName}</div>
-                                    <div style="height:20px;line-height: 20px">{f_UserMobile}</div>
-                                    <div>{f_UserEMail}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div style="float:left;margin:2px 6px">状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
-                                    <div style="float:left;margin:2px 0">
-                                        <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
-                                        <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </li>
+                <li class="li_list_width_img">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td width="85">
+                                <img class="img_avatar" width="80" height="80" src="" style="display:block;" alt="会员头像"/>
+                            </td>
+                            <td valign="top" align="left">
+                                <div style="height:20px;line-height: 20px">{f_UserName}</div>
+                                <div style="height:20px;line-height: 20px">{f_UserMobile}</div>
+                                <div>{f_UserEMail}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div style="float:left;margin:2px 6px">状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
+                                <div style="float:left;margin:2px 0">
+                                    <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
+                                    <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
                 ]]>
             </item>
         </icms>
