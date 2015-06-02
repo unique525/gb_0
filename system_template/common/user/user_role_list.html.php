@@ -26,42 +26,21 @@
 
                 var searchType = $("#search_type_box").val();
 
-                window.location.href = "/default.php?secu=manage&mod=user&m=list&site_id="
+                window.location.href = "/default.php?secu=manage&mod=user_role&m=list&site_id="
                     + parent.G_NowSiteId + "&search_key=" + searchKey
                     + "&search_type=" + searchType;
             });
 
 
-            $(".modify_user").click(function(event){
+            $(".modify_user_role").click(function(event){
                 event.preventDefault();
                 var userId = $(this).attr("idvalue");
-                parent.G_TabUrl = "/default.php?secu=manage&mod=user&user_id="+userId+"&m=modify&site_id="+ parent.G_NowSiteId
+                parent.G_TabUrl = "/default.php?secu=manage&mod=user_role&user_id="+userId+"&m=modify&site_id="+ parent.G_NowSiteId
                     +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;
-                parent.G_TabTitle = '编辑会员信息';
+                parent.G_TabTitle = '编辑会员身份信息';
                 parent.addTab();
             });
 
-            $(".modify_user_info").click(function(event){
-                event.preventDefault();
-                var userId = $(this).attr("idvalue");
-                var state = $("#state_"+userId).attr("idvalue");
-                if(state < 100){
-                    var url='/default.php?secu=manage&mod=user_info&m=modify&user_id='+userId+'&site_id='+parent.G_NowSiteId
-                        +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;;
-                    $("#user_info_dialog_frame").attr("src",url);
-                    $("#dialog_user_info_box").dialog({
-                        hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
-                        autoOpen:true,
-                        height:650,
-                        width:1250,
-                        modal:true, //蒙层（弹出会影响页面大小）
-                        title:'会员详细信息',
-                        overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
-                    });
-                }else{
-                    alert("用户为停用状态，请修改为非停用状态再编辑用户详细信息");
-                }
-            });
 
             /***会员管理页面js***/
             $(".img_avatar").each(function(){
@@ -78,16 +57,11 @@
     </script>
 </head>
 <body>
-<div id="dialog_user_info_box" title="提示信息" style="display: none;">
-    <div id="user_info_table" style="font-size: 14px;">
-        <iframe id="user_info_dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="650"></iframe>
-    </div>
-</div>
 <div class="div_list">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn">
-                <input id="btn_create" class="btn2" value="新增会员" title="新增会员" type="button"/>
+                <input id="btn_create" style="display:none;" class="btn2" value="新增会员" title="新增会员" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
@@ -105,7 +79,7 @@
     </table>
 
     <ul id="sort_grid">
-        <icms id="user_list">
+        <icms id="user_role_list">
             <item>
                 <![CDATA[
                 <li class="li_list_width_img">
@@ -117,15 +91,15 @@
                             <td valign="top" align="left">
                                 <div style="height:20px;line-height: 20px">{f_UserName}</div>
                                 <div style="height:20px;line-height: 20px">{f_UserMobile}</div>
-                                <div>{f_UserEMail}</div>
+                                <div style="height:20px;line-height: 20px;overflow:hidden;">{f_UserEMail}</div>
+                                <div>{f_UserGroupName}</div>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
                                 <div style="float:left;margin:2px 6px">状态：<span class="span_state" id="state_{f_UserId}" idvalue="{f_State}"></span></div>
                                 <div style="float:left;margin:2px 0">
-                                    <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
-                                    <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
+                                    <span class="btn2 modify_user_role" idvalue="{f_UserId}">修改身份</span>
                                 </div>
                             </td>
                         </tr>
