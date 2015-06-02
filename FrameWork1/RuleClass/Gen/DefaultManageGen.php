@@ -143,6 +143,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $forumManageGen = new ForumManageGen();
                     $result = $forumManageGen->Gen();
                     break;
+                case "forum_topic":
+                    $forumTopicManageGen = new ForumTopicManageGen();
+                    $result = $forumTopicManageGen->Gen();
+                    break;
                 case "custom_form":
                     $customFormManageGen = new CustomFormManageGen();
                     $result = $customFormManageGen->Gen();

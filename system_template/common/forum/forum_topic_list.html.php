@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
-    <script type="text/javascript" src="/system_js/manage/site/site_ad.js"></script>
+    <script type="text/javascript" src="/system_js/manage/forum/forum.js"></script>
 
     <script type="text/javascript">
         $("document").ready(function () {
