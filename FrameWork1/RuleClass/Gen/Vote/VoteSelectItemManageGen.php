@@ -66,10 +66,10 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
                 $operateContent = 'Create VoteSelectItem,POST FORM:' . implode('|', $_POST) . ';\r\nResult:VoteSelectItemId:' . $voteSelectItemId;
                 self::CreateManageUserLog($operateContent);
 
-                $tableId = $voteSelectItemId;
+                $tableId = $voteItemId;
                 //处理题图1
                 $fileElementName = "file_title_pic_1";
-                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1; //channel
+                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1;
 
                 $uploadFile1 = new UploadFile();
                 $uploadFileId1 = 0;

@@ -898,7 +898,7 @@ class BaseGen
                 }
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1:
-                /** 投票 题目选项题图1 */
+                /** 投票 题目选项题图1  tableId 为 voteItemId **/
                 $uploadFilePath = $uploadPath . "vote_select_item" . DIRECTORY_SEPARATOR . strval($tableId) . DIRECTORY_SEPARATOR;
                 $newFileName = 'title_pic_1_' . uniqid() . '.' . $fileExtension;
                 break;
