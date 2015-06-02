@@ -471,6 +471,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $siteId = parent::GetSiteIdByDomain();
         }
 
+        $forumTopicPublicData = new ForumTopicPublicData();
+        $forumId = $forumTopicPublicData->GetForumId($forumTopicId, true);
+
         $userId = Control::GetUserId();
         if($userId<=0){
 
@@ -488,6 +491,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
 
         parent::ReplaceFirstForForum($tempContent);
         parent::ReplaceEndForForum($tempContent);

@@ -107,8 +107,10 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $userId = Control::GetUserId();
 
-        $userLoginUrl = "default.php?mod=user&a=login&re_url=".urlencode("default.php?mod=forum_post&a=list&forum_topic_id=$forumId");
-        $userRegisterUrl = "default.php?mod=user&a=register&re_url=".urlencode("default.php?mod=forum_post&a=list&forum_topic_id=$forumId");
+        $userLoginUrl = "default.php?mod=user&a=login&re_url="
+            .urlencode("default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+        $userRegisterUrl = "default.php?mod=user&a=register&re_url="
+            .urlencode("default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
 
         if($userId>0){
             $userIsLogin = "";

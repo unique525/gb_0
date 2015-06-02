@@ -1596,7 +1596,7 @@ class BasePublicGen extends BaseGen
                 true
             );
 
-            if($result<=0){
+            if(intval($result)<=0){
                 //没找到权限，从会员员组中找
 
                 $userRolePublicData = new UserRolePublicData();

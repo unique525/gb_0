@@ -16,4 +16,16 @@ class UserFavoriteData extends BaseData
      * 表类型 资讯 2
      */
     const TABLE_TYPE_DOCUMENT_NEWS = 2;
+    /**
+     * 表类型 活动 3
+     */
+    const TABLE_TYPE_ACTIVITY = 3;
+    /**
+     * 表类型 论坛主题 4
+     */
+    const TABLE_TYPE_FORUM_TOPIC = 4;
+    /**
+     * 表类型 论坛帖子 5
+     */
+    const TABLE_TYPE_FORUM_POST = 5;
 } 

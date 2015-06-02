@@ -74,6 +74,13 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
                                 $value = implode(",", $value);
                             }
                             $value = stripslashes($value);
+
+                            if($value=='on'){
+                                $value = 1;
+                            }else{
+                                $value = 0;
+                            }
+
                             $userPopedomManageData->SetValueBySiteIdAndUserGroupId(
                                 $siteId,
                                 $userGroupId,
