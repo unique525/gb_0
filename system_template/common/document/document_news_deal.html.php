@@ -262,15 +262,20 @@ $(function () {
 
     /****   plupload end   * **/
 
+    //电头
 
+    $(".btn_add_pre_content").each(function(){
+        var today=new Date();
+        var month=today.getMonth();
+        var day=today.getDate();
+        $(this).append((month+1)+"月"+day+"日讯");
+    });
     var btnAddPreContent = $(".btn_add_pre_content");
     btnAddPreContent.click(function () {
-
         var addContent = $(this).text();
         var editorContent = editor.getSource();
         editorContent = "　　" + addContent + editorContent;
         editor.setSource(editorContent);
-
     });
 
     var btnSelectSource = $("#btn_select_source");
