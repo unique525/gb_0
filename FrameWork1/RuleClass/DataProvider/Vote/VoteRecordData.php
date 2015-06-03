@@ -19,7 +19,7 @@ class VoteRecordData extends BasePublicData {
      * @return int  返回执行结果
      */
     public function Create($voteId, $userId, $ipAddress, $agent, $createDate) {
-        $sql = "INSERT INTO " . self::TableName_VoteRecord . " (VoteId,UserId,ipAddress,Agent,CreateDate) values (:VoteId,:UserId,:ipAddress,:Agent,:CreateDate) ";
+        $sql = "INSERT INTO " . self::TableName_VoteRecord . " (VoteId,UserId,ipAddress,Agent,CreateDate) values (:VoteId,:UserId,:IpAddress,:Agent,:CreateDate) ";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
         $dataProperty->AddField("UserId", $userId);
@@ -31,8 +31,8 @@ class VoteRecordData extends BasePublicData {
     }
 
     /**
-     * 新建投票记录
-     * @param array $voteRecordId    投票调查记录表Id
+     * 批量新建投票调查明细记录
+     * @param int $voteRecordId    投票调查记录表Id
      * @param array $voteRecordDetail  投票调查明细记录数组
      * @return int 返回执行结果
      */

@@ -135,7 +135,7 @@ class VoteManageData extends BaseManageData
         if ($voteId < 0) {
             return $result;
         }
-        $sql = "UPDATE " . self::TableName_Vote . " SET AddCount=:AddCount WHERE VoteId=:VoteId;";
+        $sql = "UPDATE " . self::TableName_Vote . " SET AddCount=:AddCount WHERE VoteId=:VoteId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("AddCount", $addCount);
         $dataProperty->AddField("VoteId", $voteId);
@@ -153,9 +153,9 @@ class VoteManageData extends BaseManageData
     {
         $result = -1;
         if ($voteId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
             $cacheFile = 'vote_get_template_name.cache_' . $voteId . '';
-            $sql = "SELECT TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
+            $sql = "SELECT TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("VoteId", $voteId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -173,9 +173,9 @@ class VoteManageData extends BaseManageData
     {
         $result = -1;
         if ($voteId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'product_data';
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
             $cacheFile = 'vote_get_is_check_code.cache_' . $voteId . '';
-            $sql = "SELECT IsCheckCode FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
+            $sql = "SELECT IsCheckCode FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("VoteId", $voteId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
