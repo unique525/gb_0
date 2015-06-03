@@ -113,7 +113,8 @@ class VoteManageData extends BaseManageData
 
         $sql = "
         SELECT VoteId,VoteTitle,State,CreateDate,BeginDate,EndDate,SiteId,ChannelId
-        FROM " . self::TableName_Vote . " " . $searchSql . "
+        FROM " . self::TableName_Vote . "
+        WHERE SiteId=:SiteId AND ChannelId=:ChannelId ". $searchSql . "
         ORDER BY Sort DESC,VoteId DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         $sql = "
