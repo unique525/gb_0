@@ -60,19 +60,22 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
      * @return string
      */
     private function AsyncCreate(){
-        $tableId = intval(Control::PostRequest("table_id",0));
-        $tableType = intval(Control::PostRequest("table_type",0));
+
+        $tableId = intval(Control::PostOrGetRequest("table_id",0));
+        $tableType = intval(Control::PostOrGetRequest("table_type",0));
         $siteId = parent::GetSiteIdByDomain();
         $userId = Control::GetUserId();
-        $userFavoriteTag = Control::PostRequest("user_favorite_tag","");
 
-        if($tableId > 0 && $tableType > 0 && !empty($userFavoriteTag) && $userId > 0 && $siteId > 0){
+        //收藏标签可以为空
+        $userFavoriteTag = urldecode(Control::PostOrGetRequest("user_favorite_tag",""));
+
+        if($tableId > 0 && $tableType > 0 && $userId > 0 && $siteId > 0){
             $userFavoritePublicData = new UserFavoritePublicData();
             $userFavoriteTitle = "";
             $uploadFileId = 0;
             $userFavoriteUrl = "";
             if($tableType == UserFavoriteData::TABLE_TYPE_PRODUCT){
-                $userFavoriteTitle = urldecode(Control::GetRequest("user_favorite_title",""));
+                $userFavoriteTitle = urldecode(Control::PostOrGetRequest("user_favorite_title",""));
                 $productPublicData = new ProductPublicData();
                 $arrProductOne =$productPublicData->GetOne($tableId);
                 if($userFavoriteTitle == ""){
@@ -82,28 +85,47 @@ class UserFavoritePublicGen extends BasePublicGen implements IBasePublicGen {
                 $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
                 $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
 
+            }elseif($tableType == UserFavoriteData::TABLE_TYPE_FORUM_TOPIC){
+
+                $userFavoriteTitle = urldecode(Control::PostOrGetRequest("user_favorite_title",""));
+                $userFavoriteUrl = urldecode(Control::PostOrGetRequest("user_favorite_url",""));
+
             }
             //判断是否重复
             $canAddFavorite = $userFavoritePublicData->CheckIsExist($tableId,$tableType);
             if($canAddFavorite > 0){
-                return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_IS_EXIST.'})';
-            }
-            if($userFavoriteTitle != "" && $userFavoriteUrl != "" && $uploadFileId > 0){
-                $userFavoritePublicData = new UserFavoritePublicData();
-                $result = $userFavoritePublicData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
-                if($result > 0){
-                    return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
-                }else{
-                    return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
-                }
+                $result = self::CREATE_IS_EXIST;
             }else{
-                return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
+                if($userFavoriteTitle != "" && $userFavoriteUrl != ""){
+
+                    $result = $userFavoritePublicData->Create(
+                        $userId,
+                        $tableId,
+                        $tableType,
+                        $siteId,
+                        $userFavoriteTitle,
+                        $userFavoriteUrl,
+                        $uploadFileId,
+                        $userFavoriteTag
+                    );
+                    if($result > 0){
+
+                    }else{
+                        $result = self::CREATE_FAIL;
+                    }
+                }else{
+                    $result = self::CREATE_FAIL;
+                }
             }
+
         }else if($userId <= 0){
-            return Control::GetRequest("jsonpcallback","").'({"result":'.self::IS_NOT_LOGIN.'})';
+            $result = self::IS_NOT_LOGIN;
         }else{
-            return Control::GetRequest("jsonpcallback","").'({"result":'.self::CREATE_FAIL.'})';
+            $result = self::CREATE_FAIL;
         }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+
     }
 
     /**

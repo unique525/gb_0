@@ -58,11 +58,11 @@ class ForumTopicManageData extends BaseManageData {
                 FROM
                 " . self::TableName_ForumTopic . "
                 WHERE SiteId=:SiteId " . $searchSql . " AND ForumId=:ForumId LIMIT " . $pageBegin . "," . $pageSize . " ;";
-
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
             $sqlCount = "SELECT count(*) FROM " . self::TableName_ForumTopic . " WHERE SiteId=:SiteId AND ForumId=:ForumId " . $searchSql . " ;";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
+        print_r($result);
         return $result;
     }
     /**

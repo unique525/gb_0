@@ -31,6 +31,7 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
     }
 
     private function GenList(){
+
         $siteId = Control::GetRequest("site_id", 0);
         $forumId = Control::GetRequest("forumId", 0);
         $siteName = Control::GetRequest("site_name", "");
@@ -44,7 +45,7 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             $searchKey = Control::GetRequest("search_key", "");
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $allCount = 0;
-            $listName = "site_ad";
+            $listName = "forum_topic_list";
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserId = Control::GetManageUserId();
@@ -58,7 +59,7 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=topic&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=forum_topic&a=list&site_id=$siteId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);

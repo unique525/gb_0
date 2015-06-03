@@ -12,14 +12,27 @@ class UserRoleManageData extends BaseManageData {
      * @param int $siteId
      * @param int $pageBegin
      * @param int $pageSize
-     * @param string $searchKey
+     * @param string $searchKey 查询字符
+     * @param int $searchType 查询下拉框的类别
      * @return array
      */
-    public function GetList($siteId, $pageBegin, $pageSize, $searchKey = "") {
+    public function GetList($siteId, $pageBegin, $pageSize, $searchKey = "", $searchType = 0) {
         $dataProperty = new DataProperty();
+        $searchSql = "";
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            if ($searchType == 1) { //会员名
+                $searchSql = " AND (".self::TableName_User.".UserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }elseif ($searchType == 2) { //IP
+                $searchSql = " AND (".self::TableName_User.".RegIp like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
+        }
 
         $fieldOfList = "".self::TableName_User.".UserId,
                     ".self::TableName_User.".UserName,
+                    ".self::TableName_User.".UserMobile,
+                    ".self::TableName_User.".UserEmail,
                     ".self::TableName_User.".CreateDate,
                     ".self::TableName_User.".State,
                     ".self::TableName_UserInfo.".NickName,
@@ -43,20 +56,8 @@ class UserRoleManageData extends BaseManageData {
 
 
         $dataProperty->AddField("SiteId", $siteId);
-        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $sql .= " AND (
-                        ".self::TableName_User.".UserId=:SearchKey1
-                        OR ".self::TableName_User.".UserName LIKE :SearchKey2
-                        OR ".self::TableName_UserInfo.".NickName LIKE :SearchKey3
-                        OR ".self::TableName_UserInfo.".RealName LIKE :SearchKey4
-                        )";
 
-            $dataProperty->AddField("SearchKey1", $searchKey);
-            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
-        }
-        $sql .=" ORDER BY ".self::TableName_UserRole.".State DESC
+        $sql .=" $searchSql ORDER BY ".self::TableName_UserRole.".State DESC
                     ,".self::TableName_User.".CreateDate DESC LIMIT "
             . $pageBegin . "," . $pageSize . "";
 
@@ -65,9 +66,20 @@ class UserRoleManageData extends BaseManageData {
         return $result;
     }
 
-    public function GetCount($siteId, $searchKey = ""){
+    public function GetCount($siteId, $searchKey = "", $searchType = 0){
 
         $dataProperty = new DataProperty();
+
+        $searchSql = "";
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            if ($searchType == 1) { //会员名
+                $searchSql = " AND (".self::TableName_User.".UserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }elseif ($searchType == 2) { //IP
+                $searchSql = " AND (".self::TableName_User.".RegIp like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
+        }
 
         $fieldOfList = " count(".self::TableName_User.".UserId)";
 
@@ -82,23 +94,12 @@ class UserRoleManageData extends BaseManageData {
                     ON (".self::TableName_User.".UserId = ".self::TableName_UserRole.".UserId)
                 INNER JOIN ".self::TableName_UserGroup."
                     ON (".self::TableName_UserRole.".UserGroupId = ".self::TableName_UserGroup.".UserGroupId)
-                    AND ".self::TableName_UserRole.".SiteId = :SiteId ";
+                    AND ".self::TableName_UserRole.".SiteId = :SiteId $searchSql";
 
 
         $dataProperty->AddField("SiteId", $siteId);
-        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            $sql .= " AND (
-                        ".self::TableName_User.".UserId=:SearchKey1
-                        OR ".self::TableName_User.".UserName LIKE :SearchKey2
-                        OR ".self::TableName_UserInfo.".NickName LIKE :SearchKey3
-                        OR ".self::TableName_UserInfo.".RealName LIKE :SearchKey4
-                        )";
 
-            $dataProperty->AddField("SearchKey1", $searchKey);
-            $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
-            $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
-        }
+
 
         $result = $this->dbOperator->GetInt($sql, $dataProperty);
 
