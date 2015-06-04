@@ -16,8 +16,7 @@ class VoteSelectItemPublicData extends BasePublicData {
         $sqlStr = "UPDATE " . self::TableName_VoteSelectItem . " SET RecordCount = RecordCount+1 WHERE VoteSelectItemId=:VoteSelectItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sqlStr, $dataProperty);
+        $result = $this->dbOperator->Execute($sqlStr, $dataProperty);
         return $result;
     }
 
@@ -35,8 +34,7 @@ class VoteSelectItemPublicData extends BasePublicData {
             $dataProperty->AddField("VoteSelectItemId", $value);
             $dataPropertyArr[] = $dataProperty;
         }
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ExecuteBatch($strSql, $dataPropertyArr);
+        $result = $this->dbOperator->ExecuteBatch($strSql, $dataPropertyArr);
         return $result;
     }
 }

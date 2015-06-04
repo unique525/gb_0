@@ -18,8 +18,7 @@ class VoteItemPublicData extends BasePublicData {
         where VoteItemId=:VoteItemId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteItemId", $tableIdValue);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sqlStr, $dataProperty);
+        $result = $this->dbOperator->Execute($sqlStr, $dataProperty);
         return $result;
     }
 
@@ -42,8 +41,8 @@ class VoteItemPublicData extends BasePublicData {
             $dataProperty->AddField("VoteItemAllCount", $voteItemAllCount);
             $dataPropertyArr[] = $dataProperty;
         }
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ExecuteBatch($strSql, $dataPropertyArr);
+
+        $result = $this->dbOperator->ExecuteBatch($strSql, $dataPropertyArr);
         return $result;
     }
 
@@ -68,8 +67,7 @@ class VoteItemPublicData extends BasePublicData {
             $dataProperty->AddField("state", $state);
         }
         $dataProperty->AddField("VoteId", $voteId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sqlStr, $dataProperty);
+        $result = $this->dbOperator->GetArray($sqlStr, $dataProperty);
         return $result;
     }
 

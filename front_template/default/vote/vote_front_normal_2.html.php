@@ -1,17 +1,17 @@
 <style type="text/css">
-.votelist.votelist{voteid} .voteitem {} 
-.votelist.votelist{voteid} .voteitem ul {width: 100%; clear:both;margin-left:0px;padding-left:0px} 
-.votelist.votelist{voteid} .voteitem li {width: 49.5%;line-height: {itemheight};list-style-type: none;text-align: left;float: left;} 
-.votelist.votelist{voteid} .voteitem li.voteitemtitle {line-height:60px;color:#81511c;font-size:14px;width:100%;font-weight:bold;float:none;}
-#vote_check_code_class{voteid} {float:left;}
-#vote_check_code_class{voteid} ul {text-align:center;margin-left:0px;padding-left:0px}
-#vote_check_code_class{voteid} li {list-style-type: none;text-align: left;float:left;}
-#votebtnclass{voteid} {display:{btndisplay};float:left;}
-#votebtnclass{voteid} ul {text-align:center;list-style:none;}
-#votebtnclass{voteid} li {list-style-type: none;text-align: left;float:left;}
+.votelist.votelist{VoteId} .voteitem {} 
+.votelist.votelist{VoteId} .voteitem ul {width: 100%; clear:both;margin-left:0px;padding-left:0px} 
+.votelist.votelist{VoteId} .voteitem li {width: 49.5%;line-height: {itemheight};list-style-type: none;text-align: left;float: left;} 
+.votelist.votelist{VoteId} .voteitem li.voteitemtitle {line-height:60px;color:#81511c;font-size:14px;width:100%;font-weight:bold;float:none;}
+#vote_check_code_class{VoteId} {float:left;}
+#vote_check_code_class{VoteId} ul {text-align:center;margin-left:0px;padding-left:0px}
+#vote_check_code_class{VoteId} li {list-style-type: none;text-align: left;float:left;}
+#votebtnclass{VoteId} {display:{btndisplay};float:left;}
+#votebtnclass{VoteId} ul {text-align:center;list-style:none;}
+#votebtnclass{VoteId} li {list-style-type: none;text-align: left;float:left;}
 </style>
-<div class="votelist votelist{voteid}">
-    <form id="voteform{voteid}" name="voteform{voteid}" method="get">
+<div class="votelist votelist{VoteId}">
+    <form id="voteform{VoteId}" name="voteform{VoteId}" method="get">
         <div class="voteitem">
             <icms id="vote_{VoteId}" type="vote_item_list">
                 <item>
@@ -24,27 +24,27 @@
                 </item>
                 <child>
                     <![CDATA[
-                    <li><input type="{f_voteitemtypename}" name="voteselectitem{f_voteitemid}[]"  value="{f_voteselectitemid}" /> {f_voteselectitemtitle} <span id="voteselectitemresult{f_voteselectitemid}">0票 0%</span></li>
+                    <li><input type="{f_voteitemtypename}" name="vote_select_item{f_voteitemid}[]"  value="{f_voteselectitemid}" /> {f_voteselectitemtitle} <span id="voteselectitemresult{f_voteselectitemid}">0票 0%</span></li>
                     </li>
                     ]]>
                 </child>
             </icms>
         </div>
         <div style="lint-height:0px;height:0px;clear:both;font-size:1px"></div>
-                <div id="vote_check_code_class{voteid}">
+                <div id="vote_check_code_class{VoteId}">
             <script>
-                function newimg{voteid}()
+                function newimg{VoteId}()
                 {
-                    return "<img id=\"checkimg{voteid}\"  style=\"cursor:pointer\" src=\"{funcdomain}/common/votecheckcode.php?sn=votecheckcode{voteid}&n="+Math.random()+"\" onclick=\"$(this).replaceWith(newimg{voteid}());\" title=\"换一个\" alt=\"换一个\" />"
+                    return "<img id=\"checkimg{VoteId}\"  style=\"cursor:pointer\" src=\"/default.php?mod=common&a=gen_gif_verify_code&sn=votecheckcode{VoteId}&n="+Math.random()+"\" onclick=\"$(this).replaceWith(newimg{VoteId}());\" title=\"换一个\" alt=\"换一个\" />";
                 }
             </script>
-            <ul><li>验证码：<input type="text" style="width:60px" maxlength="6" id="checkcode{voteid}" name="checkcode{voteid}" />&nbsp;&nbsp;</li>
-                <li style="width:60px"><img id="checkimg{voteid}" src="{funcdomain}/common/votecheckcode.php?sn=votecheckcode{voteid}" style="cursor:pointer" title="换一个" alt="换一个" onclick="$(this).replaceWith(newimg{voteid}());"/></li>
+            <ul><li>验证码：<input type="text" style="width:60px" maxlength="6" id="checkcode{VoteId}" name="checkcode{VoteId}" />&nbsp;&nbsp;</li>
+                <li style="width:60px"><img id="checkimg{VoteId}" src="/default.php?mod=common&a=gen_gif_verify_code&sn=votecheckcode{VoteId}" style="cursor:pointer" title="换一个" alt="换一个" onclick="$(this).replaceWith(newimg{VoteId}());"/></li>
             </ul>
         </div>
-        <div id="votebtnclass{voteid}">
+        <div id="votebtnclass{VoteId}">
             <ul>
-                <li><input type="button" name="votebtn{voteid}" id="votebtn{voteid}" value="提交" onclick="ajaxSubmit{voteid}()" /></li>
+                <li><input type="button" name="votebtn{VoteId}" id="votebtn{VoteId}" value="提交" onclick="ajaxSubmit{VoteId}()" /></li>
             </ul>
         </div>
         <div style="lint-height:0px;height:0px;clear:both;font-size:1px"></div>
@@ -55,13 +55,13 @@
 function isFunction( fn ) {
 return !!fn && !fn.nodeName && fn.constructor != String && fn.constructor != RegExp && fn.constructor != Array && /function/i.test( fn + "" ); 
 }
-function ajaxSubmit{voteid}()
+function ajaxSubmit{VoteId}()
     {
         //判断是否有附加验证函数		
-        if ($.isFunction(window.checkvalue{voteid}))
-        {if(!checkvalue{voteid}()) return;}
-        var param = $("#voteform{voteid}").serialize();
-        var url = "/index.php?a=vote&m=add&voteid={voteid}&sn=votecheckcode{voteid}";
+        if ($.isFunction(window.checkvalue{VoteId}))
+        {if(!checkvalue{VoteId}()) return;}
+        var param = $("#voteform{VoteId}").serialize();
+        var url = "/default.php?mod=vote&a=vote&vote_id={VoteId}&sn=votecheckcode{VoteId}";
         $.ajax({
             url:url,
             dataType: "jsonp",
@@ -69,22 +69,22 @@ function ajaxSubmit{voteid}()
             data: param,
             success: function (data) {
                                 //判断验证码图片是否存在，存在则刷新图片
-                                if ( $("#checkimg{voteid}").length > 0 )
-                                $("#checkimg{voteid}").trigger('onclick');//再次刷新图片
+                                if ( $("#checkimg{VoteId}").length > 0 )
+                                $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
                                 var result=data["result"];
 				var maxipnum = data["maxipnum"];
                                 var maxusernum = data["maxusernum"];
                                 var voterecordid = data["voterecordid"];
 				if(result==1) {
                                 //判断是否有附加验证函数		
-        			if ($.isFunction(window.hdSubmit{voteid}))
-        			{hdSubmit{voteid}(voterecordid)}
+        			if ($.isFunction(window.hdSubmit{VoteId}))
+        			{hdSubmit{VoteId}(voterecordid)}
                                 //显示票数
                                 var itemlist = new Array();
 				itemlist = data["itemlist"];
 				$.each(itemlist,function(i,v){
-                                    var targetid="voteselectitemresult"+v["VoteSelectItemId"];
-                                    $("#"+targetid).html(v["cvsirecordcount"]+"票 "+v["voteselectitemper"]+"%");
+                                    var targetId="voteselectitemresult"+v["VoteSelectItemId"];
+                                    $("#"+targetId).html(v["cvsirecordcount"]+"票 "+v["voteselectitemper"]+"%");
                                 });
                                 }
 				else if(result==-1) {alert("一个IP地址一天投票不能超过"+maxipnum+"票！");}
@@ -98,28 +98,28 @@ function ajaxSubmit{voteid}()
                 },
             error: function (data, status, e){
                 alert(data.readyState);
-                if ( $("#checkimg{voteid}").length > 0 )
-                                $("#checkimg{voteid}").trigger('onclick');//再次刷新图片
+                if ( $("#checkimg{VoteId}").length > 0 )
+                                $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
                 }
             });
     }
-    function getitemList{voteid}(voteid){
+    function getitemList{VoteId}(VoteId){
 		$.ajax({
-			url:"/index.php",
-			data:{a:"vote",m:"selectitemlist",voteid:voteid},
+			url:"/default.php",
+			data:{mod:"vote",a:"select_item_list",VoteId:VoteId},
 			dataType:"jsonp",
 			jsonp:"jsonpcallback",
 			success:function(data){
 				var result = new Array();
 				result = data["result"];
 				$.each(result,function(i,v){
-                                    var targetid="voteselectitemresult"+v["VoteSelectItemId"];
-                                    $("#"+targetid).html(v["cvsirecordcount"]+"票 "+v["voteselectitemper"]+"%");
+                                    var targetId="voteselectitemresult"+v["VoteSelectItemId"];
+                                    $("#"+targetId).html(v["VoteSelectItemAllCount"]+"票 "+v["VoteSelectItemPer"]+"%");
                                 });
 			}
 		});
 	}
         $().ready(function () {
-		getitemList{voteid}({voteid});
+		getitemList{VoteId}({VoteId});
         });
 </script>
