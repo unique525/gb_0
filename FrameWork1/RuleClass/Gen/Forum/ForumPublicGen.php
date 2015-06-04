@@ -31,33 +31,52 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
     private function GenDefault() {
         $siteId = parent::GetSiteIdByDomain();
 
-        $templateFileUrl = "forum/forum_default.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        /*******************页面级的缓存 begin********************** */
+
+        $templateMode = 0;
+        $defaultTemp = "forum_default";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+        //$templateFileUrl = "forum/forum_default.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
+        $cacheFile = 'forum_page_site_id_' . $siteId . '_mode_' . $templateMode;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getDefaultTemplateContent($siteId, $tempContent);
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getDefaultTemplateContent($siteId, $tempContent);
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+    }
+
+    private function getDefaultTemplateContent($siteId, $tempContent){
 
         parent::ReplaceFirstForForum($tempContent);
 
-
-
-
-
-        /******************  顶部推荐栏  ********************** */
-        $templateForumRecTopicFileUrl = "forum/forum_rec_1.html";
-        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
-        $tempContent = str_ireplace("{forum_rec_1}", $templateForumRecTopic, $tempContent);
-
-        /******************  版块栏  ***********************/
-        $templateForumBoardFileUrl = "forum/forum_default_list.html";
-        $templateForumBoard = Template::Load($templateForumBoardFileUrl, $templateName, $templatePath);
-        $templateForumBoard = str_ireplace("{SiteId}", $siteId, $templateForumBoard);
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
-        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
         $forumRank = 1;
-        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
 
 
@@ -74,7 +93,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $thirdArrayFieldName = "";
 
         Template::ReplaceList(
-            $templateForumBoard,
+            $tempContent,
             $arrRankOneList,
             $tagId,
             $tagName,
@@ -88,8 +107,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $thirdArrayFieldName
         );
 
-        $tempContent = str_ireplace("{forum_list}", $templateForumBoard, $tempContent);
-        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
         parent::ReplaceTemplate($tempContent);
 
@@ -97,6 +114,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceSiteConfig($siteId, $tempContent);
 
         /*******************过滤字符 begin********************** */
+
         $multiFilterContent = array();
         $multiFilterContent[0] = $tempContent;
         $useArea = 4; //过滤范围 4:评论
@@ -104,11 +122,11 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $filterContent = null;
         $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
         $tempContent = $multiFilterContent[0];
-        /*******************过滤字符 end********************** */
+
+        /*******************过滤字符 end  ********************** */
 
         return $tempContent;
     }
-
 }
 
 ?>

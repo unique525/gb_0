@@ -1315,9 +1315,10 @@ class BasePublicGen extends BaseGen
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
      * @param string $forceTemp 强制指定的模板名称
+     * @param int $templateMode 最后加载的模板类型 0:pc,1:mobile,2:pad,3:tv
      * @return string 模板内容
      */
-    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "")
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "", &$templateMode = 0)
     {
 
         $result = "";
@@ -1343,6 +1344,7 @@ class BasePublicGen extends BaseGen
             $channelTemplatePublicData = new ChannelTemplatePublicData();
 
             if (self::IsMobile()) {
+                $templateMode = 1;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
 
@@ -1352,6 +1354,7 @@ class BasePublicGen extends BaseGen
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
                 }
             } elseif (self::IsPad()) {
+                $templateMode = 2;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForPadForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
 
@@ -1361,6 +1364,7 @@ class BasePublicGen extends BaseGen
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
                 }
             } else {
+                $templateMode = 0;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
             }
@@ -1455,8 +1459,8 @@ class BasePublicGen extends BaseGen
         $stop = FALSE;
 
 
-        $siteFilterManageData = new SiteFilterManageData();
-        $arrSiteFilter = $siteFilterManageData->GetList($siteId);
+        $siteFilterData = new SiteFilterData();
+        $arrSiteFilter = $siteFilterData->GetList($siteId, true);
 
 
 

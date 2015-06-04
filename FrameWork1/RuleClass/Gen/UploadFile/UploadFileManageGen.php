@@ -294,6 +294,7 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
     private function CreateCutImage()
     {
         $templateContent = Template::Load("upload_file/upload_file_cut.html", "common");
+
         parent::ReplaceFirst($templateContent);
         parent::ReplaceEnd($templateContent);
 

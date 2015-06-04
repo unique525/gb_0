@@ -275,6 +275,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
 
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
@@ -285,7 +287,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                         $lastPostInfo);
 
                     //更新版块信息
-                    $forumPublicData = new ForumPublicData();
                     $forumPublicData->UpdateForumInfoWhenCreateTopic(
                         $forumId,
                         $forumTopicId,
@@ -519,6 +520,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     ForumTopicData::FORUM_TOPIC_STATE_REMOVED
                 );
 
+                if($result>0){
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+
+                }
+
             }else{
                 $result = -10; //没有权限
             }
@@ -576,6 +586,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $sort
                 );
 
+                if($result>0){
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+
+                }
+
             }else{
                 $result = -10; //没有权限
             }
@@ -632,6 +651,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $forumTopicId,
                     $sort
                 );
+
+                if($result>0){
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+
+                }
 
             }else{
                 $result = -10; //没有权限

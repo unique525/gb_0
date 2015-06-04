@@ -85,6 +85,24 @@
             var upload_file_id = parseInt(Request["upload_file_id"]);
             if(upload_file_id>0){
                 GetOneUploadFile(upload_file_id);
+
+                var jcrop_api, boundx, boundy;
+                var jcropObject = $('#target').Jcrop({
+                    onChange: updatePreview,
+                    onSelect: updatePreview,
+                    //aspectRatio: 1,
+                    bgFade: true,
+                    bgOpacity: .3,
+                    minSize: minSize
+                }, function () {
+                    // Use the API to get the real image size
+                    var bounds = this.getBounds();
+                    boundx = bounds[0];
+                    boundy = bounds[1];
+                    // Store the API in the jcrop_api variable
+                    jcrop_api = this;
+                });
+
             }else{
                 alert("没有上传图片");
             }
@@ -92,22 +110,7 @@
 
 
 
-            var jcrop_api, boundx, boundy;
-            var jcropObject = $('#target').Jcrop({
-                onChange: updatePreview,
-                onSelect: updatePreview,
-                //aspectRatio: 1,
-                bgFade: true,
-                bgOpacity: .3,
-                minSize: minSize
-            }, function () {
-                // Use the API to get the real image size
-                var bounds = this.getBounds();
-                boundx = bounds[0];
-                boundy = bounds[1];
-                // Store the API in the jcrop_api variable
-                jcrop_api = this;
-            });
+
 
             function updatePreview(c) {
                 if (parseInt(c.w) > 0) {

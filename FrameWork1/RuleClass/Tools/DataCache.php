@@ -34,14 +34,14 @@ class DataCache {
     /**
      * 读取缓冲文件内容
      * @param string $cacheFile 缓冲文件名(文件夹+文件名)
-     * @return string 返回缓冲内容 
+     * @return bool|string 返回缓冲内容,没有找到缓存内容时，返回false
      */
     public static function Get($cacheFile) {
         $cacheFile = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheFile;
         if (file_exists($cacheFile)) {
             return trim(file_get_contents($cacheFile));
         } else {
-            return '';
+            return false;
         }
     }
 
@@ -56,7 +56,7 @@ class DataCache {
             $content = trim(file_get_contents($cacheFile));
             return Format::FixJsonDecode(base64_decode($content));
         } else {
-            return null;
+            return false;
         }
     }
 
