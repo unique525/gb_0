@@ -31,16 +31,36 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
     private function GenDefault() {
         $siteId = parent::GetSiteIdByDomain();
 
+        /*******************页面级的缓存 begin********************** */
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
+        $cacheFile = 'forum_page_' . $siteId;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getDefaultTemplateContent($siteId);
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getDefaultTemplateContent($siteId);
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+    }
+
+    private function getDefaultTemplateContent($siteId){
         $templateFileUrl = "forum/forum_default.html";
         $templateName = "default";
         $templatePath = "front_template";
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         parent::ReplaceFirstForForum($tempContent);
-
-
-
-
 
         /******************  顶部推荐栏  ********************** */
         $templateForumRecTopicFileUrl = "forum/forum_rec_1.html";
@@ -54,10 +74,10 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $forumPublicData = new ForumPublicData();
         $forumRank = 0;
-        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
         $forumRank = 1;
-        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank);
+        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
 
 
@@ -97,6 +117,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceSiteConfig($siteId, $tempContent);
 
         /*******************过滤字符 begin********************** */
+
         $multiFilterContent = array();
         $multiFilterContent[0] = $tempContent;
         $useArea = 4; //过滤范围 4:评论
@@ -104,11 +125,11 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $filterContent = null;
         $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
         $tempContent = $multiFilterContent[0];
-        /*******************过滤字符 end********************** */
+
+        /*******************过滤字符 end  ********************** */
 
         return $tempContent;
     }
-
 }
 
 ?>

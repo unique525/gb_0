@@ -76,6 +76,19 @@
                 }
             });
 
+            var btnGoReply = $("#btnGoReply");
+            btnGoReply.click(function(){
+                if (forumTopicId == undefined || forumTopicId <=0){
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("帖子ID不能为空");
+                }
+                else {
+                    window.location.href =
+                        "/default.php?mod=forum_post&a=create&forum_topic_id={ForumTopicId}";
+
+                }
+            });
+
             $(".img_avatar").each(function(){
 
                 if($(this).attr("src").length<=0){
@@ -273,12 +286,17 @@
             <form id="mainForm" enctype="multipart/form-data" method="post">
             <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserIsLogin};">
                 <tr>
-                    <td>
+                    <td colspan="2">
                         <textarea id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="padding-top: 5px;"><input id="btnConfirm" class="btn2" type="button" value="发表回复"></td>
+                    <td align="left" style="padding-top: 5px;">
+                        <input id="btnConfirm" class="btn2" type="button" value="快速回复提交">
+                    </td>
+                    <td align="right" style="padding-top: 5px;">
+                        <input id="btnGoReply" class="btn3" type="button" value="转到高级回复">
+                    </td>
                 </tr>
             </table>
             <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">

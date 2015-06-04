@@ -1455,8 +1455,8 @@ class BasePublicGen extends BaseGen
         $stop = FALSE;
 
 
-        $siteFilterManageData = new SiteFilterManageData();
-        $arrSiteFilter = $siteFilterManageData->GetList($siteId);
+        $siteFilterData = new SiteFilterData();
+        $arrSiteFilter = $siteFilterData->GetList($siteId, true);
 
 
 

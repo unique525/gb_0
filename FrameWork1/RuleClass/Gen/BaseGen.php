@@ -208,7 +208,8 @@ class BaseGen
     {
         $siteConfigData = new SiteConfigData($siteId);
         $uploadFileData = new UploadFileData();
-        $arrSiteConfigOne = $siteConfigData->GetList($siteId);
+        $arrSiteConfigOne = $siteConfigData->GetList($siteId, true);
+
         if (count($arrSiteConfigOne) > 0) {
             for ($i = 0; $i < count($arrSiteConfigOne); $i++) {
                 $siteConfigName = $arrSiteConfigOne[$i]["SiteConfigName"];
@@ -250,6 +251,7 @@ class BaseGen
                          * {cfg_$siteConfigName_$siteConfigType_upload_file_mobile_path}
                          */
                         $withCache = TRUE;
+
                         $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId,$withCache);
                         $templateContent = str_ireplace("{cfg_" . $siteConfigName . "_" . $siteConfigType . "_upload_file_path}"
                             , $uploadFilePath

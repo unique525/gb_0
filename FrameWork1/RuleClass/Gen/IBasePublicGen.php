@@ -8,4 +8,5 @@
 interface IBasePublicGen {
     public function GenPublic();
 }
+
 ?>

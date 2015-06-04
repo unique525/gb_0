@@ -234,7 +234,7 @@
                                 <td style="padding:4px 0;">
 
                                     <label for="f_ForumTopicTitle"></label>
-                                    <input type="text" class="iColorPicker input_box_topic_title" id="f_ForumTopicTitle" name="f_ForumTopicTitle" value="{ForumTopicTitle}" style="width:70%;font-size:16px;padding:4px;background-color: #ffffff;" maxlength="300" />
+                                    <input type="text" class="iColorPicker input_box_topic_title" id="f_ForumTopicTitle" name="f_ForumTopicTitle" value="{ForumTopicTitle}" style="width:70%;" maxlength="300" />
                                     <input type="hidden" id="f_TitleColor" name="f_TitleColor" value="{TitleColor}"  />
                                     <input type="hidden" id="f_TitleBold" name="f_TitleBold" value="{TitleBold}"  />
                                     <input type="hidden" id="f_ForumId" name="f_ForumId" value="{ForumId}" />
