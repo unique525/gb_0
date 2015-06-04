@@ -45,7 +45,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
-        $cacheFile = 'forum_page_site_id_' . $siteId . '_mode_' . $templateMode;
+        $cacheFile = 'site_id_' . $siteId . '_mode_' . $templateMode;
         $withCache = true;
         if($withCache){
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);

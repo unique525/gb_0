@@ -1,0 +1,9 @@
+
+.img_avatar{max-width:40px;max-height:40px;width:40px;height:40px;}
+
+#forum_list .content{width:98%;}
+#forum_list .forum_two_item2{width:45%;overflow:hidden;} /** 一排两个 **/
+
+#forum_topic .content{width:98%;}
+
+#forum_post .content{width:98%;}

@@ -53,11 +53,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      */
     private function GenList() {
 
-        $siteId = Control::GetRequest("site_id", 0);
+        $siteId = parent::GetSiteIdByDomain();
 
-        if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdByDomain();
-        }
+
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
 
@@ -66,16 +64,72 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $pageSize = Control::GetRequest("ps", 30);
         $pageIndex = Control::GetRequest("p", 1);
+
+
+        /*******************页面级的缓存 begin********************** */
+        $templateMode = 0;
+        $defaultTemp = "forum_topic_list";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+        //$templateFileUrl = "forum/forum_default.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
+        $cacheFile = 'forum_topic_list_forum_id_'
+            . $forumId
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize
+        ;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getListOfTemplateContent(
+                    $siteId,
+                    $forumId,
+                    $tempContent,
+                    $pageIndex,
+                    $pageSize
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getListOfTemplateContent(
+                $siteId,
+                $forumId,
+                $tempContent,
+                $pageIndex,
+                $pageSize
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+    }
+
+    private function getListOfTemplateContent(
+        $siteId,
+        $forumId,
+        $templateContent,
+        $pageIndex,
+        $pageSize
+    ){
+
+        $templateContent = str_ireplace("{ForumId}",$forumId,$templateContent);
+        $templateContent = str_ireplace("{SiteId}",$siteId,$templateContent);
+
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
 
         $state = 0;
-        $templateFileUrl = "forum/forum_topic_list.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-        $tempContent = str_ireplace("{ForumId}",$forumId,$tempContent);
 
         $forumTopicPublicData = new ForumTopicPublicData();
         $arrForumTopicList = $forumTopicPublicData->GetListPager(
@@ -88,51 +142,48 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tagId = "forum_topic_list_normal";
         if (count($arrForumTopicList) > 0) {
 
-            Template::ReplaceList($tempContent, $arrForumTopicList, $tagId);
-
+            Template::ReplaceList($templateContent, $arrForumTopicList, $tagId);
             $styleNumber = 1;
-            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+            $pagerTemplate = parent::GetDynamicTemplateContent(
+                "pager_button");
+            //$tempContent = Template::Load("pager/pager_style$styleNumber.html", "common");
             $isJs = FALSE;
-            $navUrl = "default.php?mod=forum_topic&a=list&forum_id=$forumId&p={0}&ps=$pageSize";
+            $navUrl = "/default.php?mod=forum_topic&a=list&forum_id=$forumId&p={0}&ps=$pageSize";
             $jsFunctionName = "";
             $jsParamList = "";
             $pagerButton = Pager::ShowPageButton(
-            $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
 
-            $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+            $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
 
         } else {
-            Template::RemoveCustomTag($tempContent, $tagId);
-            $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
+            Template::RemoveCustomTag($templateContent, $tagId);
+            $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
         }
 
-        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceFirstForForum($templateContent);
 
-        /******************  右部推荐栏  ********************** */
-        $templateForumRecTopicFileUrl = "forum/forum_rec_1_v.html";
-        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
-        $tempContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $tempContent);
 
-        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         $forumPublicData = new ForumPublicData();
         $forumName = $forumPublicData->GetForumName($forumId, true);
-        $tempContent = str_ireplace("{ForumName}", $forumName, $tempContent);
+        $templateContent = str_ireplace("{ForumName}", $forumName, $templateContent);
 
-        parent::ReplaceTemplate($tempContent);
-        parent::ReplaceEndForForum($tempContent);
-        parent::ReplaceSiteConfig($siteId, $tempContent);
+        parent::ReplaceTemplate($templateContent);
+        parent::ReplaceEndForForum($templateContent);
+        parent::ReplaceSiteConfig($siteId, $templateContent);
 
         /*******************过滤字符 begin********************** */
         $multiFilterContent = array();
-        $multiFilterContent[0] = $tempContent;
+        $multiFilterContent[0] = $templateContent;
         $useArea = 4; //过滤范围 4:评论
         $stop = FALSE; //是否停止执行
         $filterContent = null;
         $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
-        $tempContent = $multiFilterContent[0];
+        $templateContent = $multiFilterContent[0];
         /*******************过滤字符 end********************** */
 
-        return $tempContent;
+        return $templateContent;
     }
 
     /**

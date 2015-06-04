@@ -41,15 +41,103 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
      */
     private function GenList()
     {
-        $siteId = Control::GetRequest("site_id", 0);
-        if ($siteId <= 0) {
-            $siteId = parent::GetSiteIdByDomain();
-        }
+        $siteId = parent::GetSiteIdByDomain();
 
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         if ($forumTopicId < 0) {
             return "topic id is error";
         }
+
+        $pageSize = Control::GetRequest("ps", 30);
+        $pageIndex = Control::GetRequest("p", 1);
+
+
+        /*******************页面级的缓存 begin********************** */
+        $templateMode = 0;
+        $defaultTemp = "forum_post_list";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+        //$templateFileUrl = "forum/forum_default.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
+        $cacheFile = 'forum_post_list_forum_topic_id_'
+            . $forumTopicId
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize
+        ;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getListOfTemplateContent(
+                    $siteId,
+                    $forumTopicId,
+                    $tempContent,
+                    $pageIndex,
+                    $pageSize
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getListOfTemplateContent(
+                $siteId,
+                $forumTopicId,
+                $tempContent,
+                $pageIndex,
+                $pageSize
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+
+        //处理会员登录相关
+
+        $userId = Control::GetUserId();
+
+        $userLoginUrl = "/default.php?mod=user&a=login&re_url="
+            . urlencode("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+        $userRegisterUrl = "/default.php?mod=user&a=register&re_url="
+            . urlencode("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+
+        if ($userId > 0) {
+            $userIsLogin = "";
+            $userUnLogin = "none";
+        } else {
+            $userIsLogin = "none";
+            $userUnLogin = "";
+        }
+
+        $result = str_ireplace("{UserIsLogin}", $userIsLogin, $result);
+        $result = str_ireplace("{UserUnLogin}", $userUnLogin, $result);
+        $result = str_ireplace("{UserLoginUrl}", $userLoginUrl, $result);
+        $result = str_ireplace("{UserRegisterUrl}", $userRegisterUrl, $result);
+
+
+
+        return $result;
+
+
+
+
+
+    }
+
+    private function getListOfTemplateContent(
+        $siteId,
+        $forumTopicId,
+        $templateContent,
+        $pageIndex,
+        $pageSize
+    ){
         $forumId = -1;
 
         $forumTopicPublicData = new ForumTopicPublicData();
@@ -58,15 +146,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $forumId = $forumTopicPublicData->GetForumId($forumTopicId, true);
         }
 
-        $pageSize = Control::GetRequest("ps", 30);
-        $pageIndex = Control::GetRequest("p", 1);
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
-
-        $templateFileUrl = "forum/forum_post_list.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         $templateContent = str_ireplace("{ForumId}", $forumId, $templateContent);
         $templateContent = str_ireplace("{ForumTopicId}", $forumTopicId, $templateContent);
@@ -90,7 +171,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $templateContent = str_ireplace("[/ATTACHMENT]", "", $templateContent);
 
             $styleNumber = 1;
-            $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+            $pagerTemplate = parent::GetDynamicTemplateContent(
+                "pager_button");
             $isJs = FALSE;
             $navUrl = "default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId&p={0}&ps=$pageSize";
 
@@ -107,38 +189,12 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         parent::ReplaceFirstForForum($templateContent);
 
-        //处理会员登录相关
-
-        $userId = Control::GetUserId();
-
-        $userLoginUrl = "/default.php?mod=user&a=login&re_url="
-            . urlencode("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
-        $userRegisterUrl = "/default.php?mod=user&a=register&re_url="
-            . urlencode("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
-
-        if ($userId > 0) {
-            $userIsLogin = "";
-            $userUnLogin = "none";
-        } else {
-            $userIsLogin = "none";
-            $userUnLogin = "";
-        }
-
-        $templateContent = str_ireplace("{UserIsLogin}", $userIsLogin, $templateContent);
-        $templateContent = str_ireplace("{UserUnLogin}", $userUnLogin, $templateContent);
-        $templateContent = str_ireplace("{UserLoginUrl}", $userLoginUrl, $templateContent);
-        $templateContent = str_ireplace("{UserRegisterUrl}", $userRegisterUrl, $templateContent);
 
 
         $forumPublicData = new ForumPublicData();
         $forumName = $forumPublicData->GetForumName($forumId, true);
 
         $templateContent = str_ireplace("{ForumName}", $forumName, $templateContent);
-
-        /******************  右部推荐栏  ********************** */
-        $templateForumRecTopicFileUrl = "forum/forum_rec_1_v.html";
-        $templateForumRecTopic = Template::Load($templateForumRecTopicFileUrl, $templateName, $templatePath);
-        $templateContent = str_ireplace("{forum_rec_1_v}", $templateForumRecTopic, $templateContent);
 
         $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         parent::ReplaceTemplate($templateContent);
@@ -158,7 +214,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         /*******************过滤字符 end********************** */
 
         return $templateContent;
+
+
     }
+
+
 
     /**
      * 论坛发回复帖
