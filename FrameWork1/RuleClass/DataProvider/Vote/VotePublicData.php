@@ -29,8 +29,9 @@ class VotePublicData extends BasePublicData {
     public function GetSelectItemList($voteId) {
         $dataProperty = new DataProperty();
         $sqlStr = "select t2.VoteItemId,t2.VoteSelectItemId,
-        t2.RecordCount as VoteSelectItemRecordCount,t.RecordCount as VoteRecordCount,
-        t1.RecordAllCount as VoteItemRecordCount,
+        t2.RecordCount as VoteSelectItemRecordCount,
+        t.RecordCount as VoteRecordCount,
+        t1.RecordAllCount as VoteItemRecordAllCount,
         t2.AddCount as VoteSelectItemAddCount,
         t1.AddCount as VoteItemAddCount
         from " . self::TableName_Vote . " t inner join " . self::TableName_VoteItem . " t1
@@ -70,6 +71,26 @@ class VotePublicData extends BasePublicData {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
             $cacheFile = 'vote_get_ip_max_count.cache_' . $voteId . '';
             $sql = "SELECT IpMaxCount FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据投票调查id取得投票模板名称
+     * @param int $voteId 投票调查id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 模板名称
+     */
+    public function GetTemplateName($voteId, $withCache)
+    {
+        $result = -1;
+        if ($voteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
+            $cacheFile = 'vote_get_template_name.cache_' . $voteId . '';
+            $sql = "SELECT TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("VoteId", $voteId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

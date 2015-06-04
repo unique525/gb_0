@@ -84,7 +84,7 @@ $(function() {
     });
 
     $(".span_state").each(function(){
-        $(this).text(FormatVoteSelectItemState($(this).text()));
+        $(this).html(FormatVoteSelectItemState($(this).text()));
     });
 
     $(".div_start").click(function(){

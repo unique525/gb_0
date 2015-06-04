@@ -1,7 +1,7 @@
 <style type="text/css">
-.votelist.votelist{VoteId} .voteitem {} 
-.votelist.votelist{VoteId} .voteitem ul {width: 100%; clear:both;margin-left:0px;padding-left:0px} 
-.votelist.votelist{VoteId} .voteitem li {width: 49.5%;line-height: {itemheight};list-style-type: none;text-align: left;float: left;} 
+.votelist.votelist{VoteId} .voteitem {}
+.votelist.votelist{VoteId} .voteitem ul {width: 100%; clear:both;margin-left:0px;padding-left:0px}
+.votelist.votelist{VoteId} .voteitem li {width: 49.5%;line-height: {itemheight};list-style-type: none;text-align: left;float: left;}
 .votelist.votelist{VoteId} .voteitem li.voteitemtitle {line-height:60px;color:#81511c;font-size:14px;width:100%;font-weight:bold;float:none;}
 #vote_check_code_class{VoteId} {float:left;}
 #vote_check_code_class{VoteId} ul {text-align:center;margin-left:0px;padding-left:0px}
@@ -24,7 +24,7 @@
                 </item>
                 <child>
                     <![CDATA[
-                    <li><input type="{f_voteitemtypename}" name="vote_select_item{f_voteitemid}[]"  value="{f_voteselectitemid}" /> {f_voteselectitemtitle} <span id="voteselectitemresult{f_voteselectitemid}">0票 0%</span></li>
+                    <li><input type="{f_voteitemtypename}" name="vote_select_item{f_voteitemid}[]"  value="{f_voteselectitemid}" /> {f_voteselectitemtitle} <span id="vote_select_item_result{f_voteselectitemid}">0票 0%</span></li>
                     </li>
                     ]]>
                 </child>
@@ -49,13 +49,13 @@
         </div>
         <div style="lint-height:0px;height:0px;clear:both;font-size:1px"></div>
     </form>
-</div>  
+</div>
 <script type="text/javascript">
 //判断函数是否存在
 function isFunction( fn ) {
-return !!fn && !fn.nodeName && fn.constructor != String && fn.constructor != RegExp && fn.constructor != Array && /function/i.test( fn + "" ); 
+return !!fn && !fn.nodeName && fn.constructor != String && fn.constructor != RegExp && fn.constructor != Array && /function/i.test( fn + "" );
 }
-function ajaxSubmit{VoteId}()
+function ajaxSubmit{voteId}()
     {
         //判断是否有附加验证函数		
         if ($.isFunction(window.checkvalue{VoteId}))
@@ -72,27 +72,27 @@ function ajaxSubmit{VoteId}()
                                 if ( $("#checkimg{VoteId}").length > 0 )
                                 $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
                                 var result=data["result"];
-				var maxipnum = data["maxipnum"];
-                                var maxusernum = data["maxusernum"];
-                                var voterecordid = data["voterecordid"];
+				var ipMaxCount = data["IpMaxCount"];
+                var userMaxCount = data["UserMaxCount"];
+                var voteRecordId = data["VoteRecordId"];
 				if(result==1) {
-                                //判断是否有附加验证函数		
+                    //判断是否有附加要提交的额外如表单类的信息
         			if ($.isFunction(window.hdSubmit{VoteId}))
-        			{hdSubmit{VoteId}(voterecordid)}
+        			{hdSubmit{VoteId}(voteRecordId)}
                                 //显示票数
                                 var itemlist = new Array();
 				itemlist = data["itemlist"];
 				$.each(itemlist,function(i,v){
-                                    var targetId="voteselectitemresult"+v["VoteSelectItemId"];
-                                    $("#"+targetId).html(v["cvsirecordcount"]+"票 "+v["voteselectitemper"]+"%");
+                                    var targetId="vote_select_item_result"+v["VoteSelectItemId"];
+                                    $("#"+targetId).html(v["VoteSelectItemRecordCount"]+"票 "+v["VoteSelectItemPer"]+"%");
                                 });
                                 }
-				else if(result==-1) {alert("一个IP地址一天投票不能超过"+maxipnum+"票！");}
+				else if(result==-10) {alert("一个IP地址一天投票不能超过"+ipMaxCount+"票！");}
                                 else if(result==-2) {alert("至少需要选择一项才能投票！");}
                                 else if(result==-3) {alert("投票已经停止！");}
                                 else if(result==-4) {alert("投票不在有效时间段内！");}
                                 else if(result==-5) {alert("验证码错误！");}
-                                else if(result==-8) {alert("一个用户一天投票不能超过"+maxusernum+"票！");}
+                                else if(result==-8) {alert("一个用户一天投票不能超过"+userMaxCount+"票！");}
                                 else if(result==-9) {alert("您还没有登陆，请先登陆再投票！");}
 				else {alert("投票失败！");}
                 },
@@ -103,23 +103,23 @@ function ajaxSubmit{VoteId}()
                 }
             });
     }
-    function getitemList{VoteId}(VoteId){
+    function getItemList{VoteId}(voteId){
 		$.ajax({
 			url:"/default.php",
-			data:{mod:"vote",a:"select_item_list",VoteId:VoteId},
+			data:{mod:"vote",a:"select_item_list",vote_id:voteId},
 			dataType:"jsonp",
 			jsonp:"jsonpcallback",
 			success:function(data){
 				var result = new Array();
 				result = data["result"];
 				$.each(result,function(i,v){
-                                    var targetId="voteselectitemresult"+v["VoteSelectItemId"];
-                                    $("#"+targetId).html(v["VoteSelectItemAllCount"]+"票 "+v["VoteSelectItemPer"]+"%");
+                                    var targetId="vote_select_item_result"+v["VoteSelectItemId"];
+                                    $("#"+targetId).html(v["VoteSelectItemRecordCount"]+"票 "+v["VoteSelectItemPer"]+"%");
                                 });
 			}
 		});
 	}
         $().ready(function () {
-		getitemList{VoteId}({VoteId});
+		getItemList{VoteId}({VoteId});
         });
 </script>

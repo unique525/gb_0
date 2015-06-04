@@ -128,10 +128,12 @@ class VoteSelectItemManageData extends BaseManageData
         {
             $voteItemId = Format::FormatSql($voteItemId);
             $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,
-                    CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName
+                    CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
+                    t3.*
                     FROM " . self::TableName_VoteItem . " t1
                     LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " t2
-                    ON t1.VoteItemId=t2.VoteItemId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." t3 on t2.TitlePic1UploadFileId=t3.UploadFileId
+                    ON t1.VoteItemId=t2.VoteItemId AND t2.TitlePic1UploadFileId=t3.UploadFileId
                     WHERE t2.State=:State
                     AND t2.VoteItemId IN ($voteItemId)"
                     . $order

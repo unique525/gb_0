@@ -124,10 +124,16 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
                 return Control::GetRequest("jsonpcallback","") . '({"result":"-6","UnMeetItemArr":' . $unMeetItemArr . '})';
             }
             //判断投票ip限制
-            $getIpCount = $voteRecordData->GetIpCount($voteId, $ipAddress, $nowDate);   //获取问卷相同IP的次数
-            $ipMaxNum = $votePublicData->GetIpMaxCount($voteId,false);   //获取问卷同IP准许提交次数上限
-            if ($getIpCount >= $ipMaxNum) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","IpMaxNum":"' . $ipMaxNum . '"})';   //限制问卷提交次数
+            $ipCount = $voteRecordData->GetIpCount($voteId, $ipAddress, $nowDate);   //获取问卷相同IP的次数
+            $ipMaxCount = $arrRow["IpMaxCount"];   //获取问卷同IP准许提交次数上限
+            if ($ipCount >= $ipMaxCount) {
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-10","IpMaxCount":"' . $ipMaxCount . '"})';   //限制问卷提交次数
+            }
+            //判断投票用户限制
+            $userCount = $voteRecordData->GetUserCount($voteId, $userId, $nowDate);   //获取用户提交次数
+            $userMaxCount = $arrRow["UserMaxCount"];   //获取问卷同用户准许提交次数上限
+            if ($userCount >= $userMaxCount) {
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-8","UserMaxCount":"' . $userMaxCount . '"})';   //限制问卷提交次数
             }
             $result = $votePublicData->UpdateCount($voteId); //投票提交
             $result = $voteItemPublicData->UpdateCountBatch($voteItemIdArr); //题目提交
@@ -137,9 +143,9 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $result = $voteRecordData->CreateDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
             //返回页面响应结果
             if ($result == 1) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"1","VoteRecordId":"' . $voteRecordId . '","IpMaxNum":"' . $ipMaxNum . '"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"1","VoteRecordId":"' . $voteRecordId . '","IpMaxCount":"' . $ipMaxCount . '"})';
             } else {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","VoteRecordId":"' . $voteRecordId . '","IpMaxNum":"' . $ipMaxNum . '"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","VoteRecordId":"' . $voteRecordId . '","IpMaxCount":"' . $ipMaxCount . '"})';
             }
         }
         else {
@@ -197,10 +203,10 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             if (!(strtotime($createDate) > strtotime($beginDate) && strtotime($createDate) < strtotime($endDate))) {
                 return Control::GetRequest("jsonpcallback","") . '({"result":"-4"})';
             }
-            $getIpCount = $voteRecordData->GetIpCount($voteId, $ipAddress, $nowDate);   //获取问卷相同IP的次数
-            $ipMaxNum = $votePublicData->GetIpMaxCount($voteId,false);   //获取问卷同IP准许提交次数上限
-            if ($getIpCount >= $ipMaxNum) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","IpMaxNum":"' . $ipMaxNum . '"})';
+            $ipCount = $voteRecordData->GetIpCount($voteId, $ipAddress, $nowDate);   //获取问卷相同IP的次数
+            $ipMaxCount = $votePublicData->GetIpMaxCount($voteId,false);   //获取问卷同IP准许提交次数上限
+            if ($ipCount >= $ipMaxCount) {
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-10","IpMaxCount":"' . $ipMaxCount . '"})';
             }
             $result = $votePublicData->UpdateCount($voteId); //投票提交
             $result = $voteItemData->UpdateCountBatch($voteItemIdArr); //题目提交
@@ -209,9 +215,9 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $voteRecordId = $result; //得到投票记录主表id
             $result = $voteRecordData->CreateDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
             if ($result == 1) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"1","VoteRecordId":"' . $voteRecordId . '","IpMaxNum":"' . $ipMaxNum . '"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"1","VoteRecordId":"' . $voteRecordId . '","IpMaxCount":"' . $ipMaxCount . '"})';
             } else {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","VoteRecordId":"' . $voteRecordId . '","IpMaxNum":"' . $ipMaxNum . '"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","VoteRecordId":"' . $voteRecordId . '","IpMaxCount":"' . $ipMaxCount . '"})';
             }
         }
         else {
@@ -234,13 +240,13 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $selectItemAdd = $columnValue["VoteSelectItemAddCount"];      //题目选项的加票数
             unset($columnValue["VoteItemAddCount"]);                 //隐藏掉加票数据
             unset($columnValue["VoteSelectItemAddCount"]);                //隐藏掉加票数据
-            $columnValue["VoteItemAllCount"]+=$voteItemAddCount;        //实际票数加上加票数得到题目总票数
-            $columnValue["VoteSelectItemAllCount"]+=$selectItemAdd;    //实际票数加上加票数得到题目选项的总票数
-            $voteItemAllCount = $columnValue["VoteItemAllCount"];
-            $voteSelectItemCount = $columnValue["VoteSelectItemAllCount"];
+            $columnValue["VoteItemRecordAllCount"]+=$voteItemAddCount;        //实际票数加上加票数得到题目总票数
+            $columnValue["VoteSelectItemRecordCount"]+=$selectItemAdd;    //实际票数加上加票数得到题目选项的总票数
+            $voteItemRecordAllCount = $columnValue["VoteItemRecordAllCount"];
+            $voteSelectItemCount = $columnValue["VoteSelectItemRecordCount"];
             $voteSelectItemPer = 0;
-            if ($voteItemAllCount != 0)
-                $voteSelectItemPer = round($voteSelectItemCount / $voteItemAllCount, 2) * 100;    //计算选项的百分比
+            if ($voteItemRecordAllCount != 0)
+                $voteSelectItemPer = round($voteSelectItemCount / $voteItemRecordAllCount, 2) * 100;    //计算选项的百分比
             $columnValue['VoteSelectItemPer'] = $voteSelectItemPer;
             $resultArrList[] = $columnValue;
         }
