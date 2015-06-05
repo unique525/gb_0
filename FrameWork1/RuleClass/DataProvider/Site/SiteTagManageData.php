@@ -160,7 +160,7 @@ class SiteTagManageData extends BaseManageData {
      * @param string $searchKey 搜索关键字
      * @return array 数据集
      */
-    public function GetListPager($siteId, $pageBegin, $pageSize, $searchKey) {
+    public function GetListPager($siteId, $pageBegin, $pageSize, $searchKey,&$allCount) {
         $result=-1;
         if($siteId>0){
             $searchSql = "";
@@ -180,6 +180,8 @@ class SiteTagManageData extends BaseManageData {
                 WHERE SiteId=:SiteId " . $searchSql . " LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_SiteTag . " WHERE SiteId=:SiteId " . $searchSql . " ;";
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
 
         return $result;
