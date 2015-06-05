@@ -46,12 +46,19 @@ class ForumPublicData extends BasePublicData {
      * 根据版块等级取得版块列表
      * @param int $siteId 站点id
      * @param int $forumRank 版块等级
+     * @param bool $withCache
      * @return array|null 版块列表
      */
-    public function GetListByForumRank($siteId, $forumRank) {
+    public function GetListByForumRank(
+        $siteId,
+        $forumRank,
+        $withCache = false
+    ) {
         $result = null;
         if($siteId>0 && $forumRank>=0){
 
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_list_by_forum_rank.cache_' . $siteId . '_' . $forumRank;
 
             $sql = "
             SELECT f.*,
@@ -69,7 +76,8 @@ class ForumPublicData extends BasePublicData {
             $dataProperty->AddField("ForumRank", $forumRank);
             $dataProperty->AddField("SiteId", $siteId);
 
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
         }
 
 

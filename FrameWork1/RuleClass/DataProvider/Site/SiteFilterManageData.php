@@ -1,12 +1,10 @@
 <?php
 /**
  * 后台管理 过滤字段 数据类
- *
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_site
  * @author 525
  */
-
 class SiteFilterManageData  extends BaseManageData{
 
     /**

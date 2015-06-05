@@ -827,7 +827,8 @@ class BaseData
         if (strlen($sql) > 0) {
             if($withCache){
                 $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-                if (strlen($cacheContent) <= 0) {
+
+                if ($cacheContent === false) { //没有找到缓存内容时，返回false
                     $result = $this->dbOperator->GetString($sql, $dataProperty);
                     DataCache::Set($cacheDir, $cacheFile, $result);
                 } else {
@@ -862,7 +863,7 @@ class BaseData
             if($withCache){
                 $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
-                if ($cacheArray == null || empty($cacheArray)) {
+                if ($cacheArray === false) {
                     $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
                     DataCache::SetWithArray($cacheDir, $cacheFile, $result);
                 } else {
@@ -896,7 +897,7 @@ class BaseData
         if (strlen($sql) > 0) {
             if($withCache){
                 $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-                if ($cacheArray == null || empty($cacheArray)) {
+                if ($cacheArray === false) {
                     $result = $this->dbOperator->GetArray($sql, $dataProperty);
                     DataCache::SetWithArray($cacheDir, $cacheFile, $result);
                 } else {

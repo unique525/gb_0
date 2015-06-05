@@ -71,7 +71,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         }
 
 
-        $navUrl = "default.php?mod=channel&a=default&temp=$templateTag&channel_id=$channelId&p={0}&ps=$pageSize";
+        $navUrl = "/default.php?mod=channel&a=default&temp=$templateTag&channel_id=$channelId&p={0}&ps=$pageSize";
         $pagerTemplate = parent::GetDynamicTemplateContent("",$siteId,"pager");
         $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex);
 
@@ -106,9 +106,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
 
-
-
-//分页
+        //分页
         $documentNewsPublicData=new DocumentNewsPublicData();
         $allCount=$documentNewsPublicData->GetCountInChannel($channelId);
 
@@ -120,7 +118,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         }
 
 
-        $navUrl = "default.php?mod=channel&a=list&temp=$templateTag&channel_id=$channelId&p={0}&ps=$pageSize";
+        $navUrl = "/default.php?mod=channel&a=list&temp=$templateTag&channel_id=$channelId&p={0}&ps=$pageSize";
         $pagerTemplate = parent::GetDynamicTemplateContent("",$siteId,"pager");
         $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex);
 

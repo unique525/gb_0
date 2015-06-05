@@ -490,6 +490,21 @@ class BaseManageGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_VOTE_ITEM_LIST:
+                        $voteId = intval(str_ireplace("vote_", "", $tagId));
+                        if ($voteId > 0) {
+                            $channelTemplateContent = self::ReplaceTemplateOfVoteItemList(
+                                $channelTemplateContent,
+                                $voteId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount,
+                                $tagWhere,
+                                $tagOrder,
+                                $state
+                            );
+                        }
+                        break;
                 }
             }
         }
@@ -984,6 +999,126 @@ class BaseManageGen extends BaseGen
         }
 
         return $channelTemplateContent;
+    }
+
+    /**
+     * 替换投票题目列表内容
+     * @param string $templateContent 要处理的模板内容
+     * @param string $voteId 投票调查id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagOrder 排序方式
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfVoteItemList(
+        $templateContent,
+        $voteId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagOrder
+    )
+    {
+        if ($voteId > 0) {
+            //投票模板加载类型 auto 则加载定义好的几种模板之一
+            $tempType = Template::GetParamValue($tagContent, "temp_type");
+            //如果配置为加载默认投票模板
+            if ($tempType == "auto") {
+                $tempName = Template::GetParamValue($tagContent, "temp_name");
+                $voteManageData = new VoteManageData();
+                //如果投票标记没有指定模板，则启用数据库配置的模板
+                if ($tempName == null) {
+                    $tempName = $voteManageData->GetTemplateName($voteId, false);
+                    if ($tempName == null || $tempName == '') //如果数据库没有配置模板，默认启用普通模板
+                        $tempName = "normal_1";
+                }
+                //加载对应类型模板
+                $templateFileUrl = "vote/vote_front_" . $tempName . ".html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $voteTemp = Template::Load($templateFileUrl, $templateName, $templatePath);
+                $voteTemp = str_ireplace("{VoteId}",$voteId, $voteTemp);
+                //根据是否启用验证码，决定是否显示验证码输入选项
+                $isCheckCode = $voteManageData->GetIsCheckCode($voteId, false);
+                //不启用验证码则隐藏验证码图片
+                if ($isCheckCode != 1) {
+                    $preg = '/\<div id=\"vote_check_code_class' . $voteId . '\">(.*)\<\/div>/imsU';
+                    $voteTemp = preg_replace($preg, '', $voteTemp);
+                }
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $voteTemp);
+                $tagContent = Template::GetCustomTagByTagId($tagId, $voteTemp);
+                $itemWidth = Template::GetParamValue($tagContent, "item_width"); //选项宽
+                $itemHeight = Template::GetParamValue($tagContent, "item_height"); //选项高
+                $itemMarginLeft = Template::GetParamValue($tagContent, "item_margin_left"); //左边距
+                if ($itemMarginLeft== null)
+                    $itemMarginLeft= "40px";
+                $itemTitleDisplay = Template::GetParamValue($tagContent, "item_title_display"); //是否显示题目标题
+                $btnDisplay = Template::GetParamValue($tagContent, "btn_display"); //是否显示投票按钮
+                $tagContent = str_ireplace("{ItemWidth}",$itemWidth, $tagContent);
+                $tagContent = str_ireplace("{ItemHeight}",$itemHeight, $tagContent);
+                $tagContent = str_ireplace("{ItemMarginLeft}",$itemMarginLeft, $tagContent);
+                $tagContent = str_ireplace("{ItemTitleDisplay}",$itemTitleDisplay, $tagContent);
+                $tagContent = str_ireplace("{BtnDisplay}",$btnDisplay, $tagContent);
+            }
+
+            $arrVoteItemList = null;
+            $arrVoteSelectItemList = array();
+            $tableIdName = "VoteItemId";
+            $parentIdName = "VoteItemId";
+            if ($tagTopCount <= 0) {
+                $tagTopCount = null;
+            }
+            $state=VoteData::STATE_NORMAL;
+            $voteItemManageData = new VoteItemManageData();
+            $arrVoteItemList = $voteItemManageData->GetList($voteId,$state,$tagOrder,$tagTopCount); //读取投票调查题目
+
+            $sbVoteItemId = '';
+            if (count($arrVoteItemList) > 0) {
+
+                for ($i = 0; $i < count($arrVoteItemList); $i++) {
+                    $sbVoteItemId .= ',' . $arrVoteItemList[$i]["VoteItemId"];
+                }
+                if (strpos($sbVoteItemId, ',') == 0) {
+                    $sbVoteItemId = substr($sbVoteItemId, 1);
+                }
+                if (strlen($sbVoteItemId) > 0) {
+                    //echo $sbVoteItemId;
+                    //二级
+                    $voteSelectItemManageData = new VoteSelectItemManageData();
+                    $arrVoteSelectItemList = $voteSelectItemManageData->GetList(
+                        $sbVoteItemId,
+                        $state,
+                        $tagOrder,
+                        $tagTopCount
+                    );
+                }
+            }
+
+            if (!empty($arrVoteItemList)) {
+                $tagName = Template::DEFAULT_TAG_NAME;
+                Template::ReplaceList(
+                    $tagContent,
+                    $arrVoteItemList,
+                    $tagId,
+                    $tagName,
+                    $arrVoteSelectItemList,
+                    $tableIdName,
+                    $parentIdName
+                );
+                //把对应ID的CMS标记替换成指定内容
+                //替换子循环里的<![CDATA[标记
+                $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
+                $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
+            } else {
+                $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
+            }
+
+
+        }
+
+        return $templateContent;
     }
 
 

@@ -96,6 +96,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $userPopedomManageGen = new UserPopedomManageGen();
                     $result = $userPopedomManageGen->Gen();
                     break;
+                case "user_role":
+                    $userRoleManageGen = new UserRoleManageGen();
+                    $result = $userRoleManageGen->Gen();
+                    break;
                 case "document_news":
                     $documentNewsManageGen = new DocumentNewsManageGen();
                     $result = $documentNewsManageGen->Gen();

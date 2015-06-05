@@ -1215,10 +1215,10 @@ class BasePublicGen extends BaseGen
             //如果配置为加载默认投票模板
             if ($tempType == "auto") {
                 $tempName = Template::GetParamValue($tagContent, "temp_name");
-                $voteManageData = new VoteManageData();
+                $votePublicData = new VotePublicData();
                 //如果投票标记没有指定模板，则启用数据库配置的模板
                 if ($tempName == null) {
-                    $tempName = $voteManageData->GetTemplateName($voteId, false);
+                    $tempName = $votePublicData->GetTemplateName($voteId, false);
                     if ($tempName == null || $tempName == '') //如果数据库没有配置模板，默认启用普通模板
                         $tempName = "normal_1";
                 }
@@ -1229,7 +1229,7 @@ class BasePublicGen extends BaseGen
                 $voteTemp = Template::Load($templateFileUrl, $templateName, $templatePath);
                 $voteTemp = str_ireplace("{VoteId}",$voteId, $voteTemp);
                 //根据是否启用验证码，决定是否显示验证码输入选项
-                $isCheckCode = $voteManageData->GetIsCheckCode($voteId, false);
+                $isCheckCode = $votePublicData->GetIsCheckCode($voteId, false);
                 //不启用验证码则隐藏验证码图片
                 if ($isCheckCode != 1) {
                     $preg = '/\<div id=\"vote_check_code_class' . $voteId . '\">(.*)\<\/div>/imsU';
@@ -1315,9 +1315,10 @@ class BasePublicGen extends BaseGen
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
      * @param string $forceTemp 强制指定的模板名称
+     * @param int $templateMode 最后加载的模板类型 0:pc,1:mobile,2:pad,3:tv
      * @return string 模板内容
      */
-    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "")
+    protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "", &$templateMode = 0)
     {
 
         $result = "";
@@ -1343,6 +1344,7 @@ class BasePublicGen extends BaseGen
             $channelTemplatePublicData = new ChannelTemplatePublicData();
 
             if (self::IsMobile()) {
+                $templateMode = 1;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForMobileForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
 
@@ -1352,6 +1354,7 @@ class BasePublicGen extends BaseGen
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
                 }
             } elseif (self::IsPad()) {
+                $templateMode = 2;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForPadForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
 
@@ -1361,6 +1364,7 @@ class BasePublicGen extends BaseGen
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
                 }
             } else {
+                $templateMode = 0;
                 $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                     $siteId, $channelTemplateType, $channelTemplateTag, false);
             }
@@ -1455,8 +1459,8 @@ class BasePublicGen extends BaseGen
         $stop = FALSE;
 
 
-        $siteFilterManageData = new SiteFilterManageData();
-        $arrSiteFilter = $siteFilterManageData->GetList($siteId);
+        $siteFilterData = new SiteFilterData();
+        $arrSiteFilter = $siteFilterData->GetList($siteId, true);
 
 
 
@@ -1596,7 +1600,7 @@ class BasePublicGen extends BaseGen
                 true
             );
 
-            if($result<=0){
+            if(intval($result)<=0){
                 //没找到权限，从会员员组中找
 
                 $userRolePublicData = new UserRolePublicData();

@@ -54,7 +54,7 @@ class UserRoleManageGen extends BaseManageGen implements IBaseManageGen {
             return Language::Load('document', 26);
         }
         //load template
-        $templateContent = Template::Load("user/user_list.html", "common");
+        $templateContent = Template::Load("user/user_role_list.html", "common");
 
         parent::ReplaceFirst($templateContent);
 
@@ -66,16 +66,18 @@ class UserRoleManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($pageIndex > 0 && $siteId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "user_list";
-            $allCount = 0;
-            $userManageData = new UserManageData();
-            $arrUserList = $userManageData->GetList($siteId, $pageBegin, $pageSize, $allCount, $searchKey, $searchType, $manageUserId);
+            $tagId = "user_role_list";
+            $userRoleManageData = new UserRoleManageData();
+            $arrUserList = $userRoleManageData->GetList($siteId, $pageBegin, $pageSize, $searchKey, $searchType, $searchType);
+
+            $allCount = $userRoleManageData->GetCount($siteId, $searchKey, $searchType);
+
             if (count($arrUserList) > 0) {
                 Template::ReplaceList($templateContent, $arrUserList, $tagId);
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=user&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $navUrl = "default.php?secu=manage&mod=user_role&m=list&site_id=$siteId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
@@ -99,82 +101,53 @@ class UserRoleManageGen extends BaseManageGen implements IBaseManageGen {
         $userId = Control::GetRequest("user_id", 0);
         $siteId = Control::GetRequest("site_id", 0);
 
-        $adminUserId = Control::GetManageUserId();
+        $manageUserId = Control::GetManageUserId();
 
         $resultJavaScript = "";
-        if (intval($userId) > 0 && intval($adminUserId) > 0) {
-            $templateContent = Template::Load("user/user_deal.html", "common");
+        if (intval($userId) > 0 && intval($manageUserId) > 0) {
+            $templateContent = Template::Load("user/user_role_deal.html", "common");
             parent::ReplaceFirst($templateContent);
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = 0;
-            $can = $manageUserAuthorityManageData->CanUserEdit($siteId, $channelId, $adminUserId);
+            $can = $manageUserAuthorityManageData->CanUserRoleEdit($siteId, $channelId, $manageUserId);
             ////////////////////////////////////////////////////
             if (!$can) {
                 $templateContent = Language::Load('user', 28);
             } else {
-                $userManageData = new UserManageData();
+                $userRoleManageData = new UserRoleManageData();
                 if (!empty($_POST)) { //提交
-                    $httpPostData = Format::FormatHtmlTagInPost($_POST);
-                    $userName = Control::PostRequest("f_UserName", "");
-                    $userPass = Control::PostRequest("UserPass", "");
-                    if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
-                        //老帐号名和新帐号名不同时，要检查是否已经存在
-                        $oldUserName = Control::PostRequest("OldUserName", "");
-                        $newUserName = Control::PostRequest("f_UserName", "");
-                        if ($oldUserName != $newUserName) {
-                            $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
-                            if ($hasCount > 0) { //同站点下不许存在相同的用户名
-                                Control::ShowMessage(Language::Load('user', 20));
-                                return $templateContent;
-                            }
-                        }
-
-                        $result = $userManageData->Modify($httpPostData, $userId);
-                        if ($result > 0) {
-                            //加入操作日志
-                            $operateContent = 'Modify User,POST FORM:' . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
-                            self::CreateManageUserLog($operateContent);
-                            if(strlen($userPass)>0){
-                                //修改md5加密的密码
-                                $userManageData->ModifyUserPass(
-                                    $userId,
-                                    $userPass
-                                );
-                            }
+                    $newUserGroupId = intval(Control::PostRequest("select_UserGroupId", ""));
 
 
+                    $result = $userRoleManageData->CreateOrModify(
+                        $userId,
+                        $newUserGroupId,
+                        $siteId
+                    );
 
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
-                            $closeTab = Control::PostRequest("CloseTab", 0);
-                            if ($closeTab == 1) {
-                                //Control::CloseTab();
-                                $resultJavaScript .= Control::GetCloseTab();
-                            } else {
-                                Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
-                            }
-                        } else {
-                            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
-                        }
-                    } else {
-                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
+                    if($result>0){
+
+                        Control::ShowMessage(Language::Load("user_role",1));
+
                     }
+
+
                 }
 
-                $arrOne = $userManageData->GetOne($userId);
-                $parentName = "";
-                if (count($arrOne) > 0) {
-                    $parentId = intval($arrOne["ParentId"]);
-                    if ($parentId > 0) {
-                        $parentName = $userManageData->GetUserName($parentId, false);
-                    }
-                }
+                $userGroupManageData = new UserGroupManageData();
+                $arrUserGroup = $userGroupManageData->GetList($siteId,0,1000,$allCount);
+
+                Template::ReplaceList($templateContent, $arrUserGroup, "user_group_list");
+
+
+                $oldUserGroupId = $userRoleManageData->GetUserGroupId($userId, $siteId);
 
                 $templateContent = str_ireplace("{UserId}", $userId, $templateContent);
-                $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
-                $isList = false;
-                $isManage = false;
-                Template::ReplaceOne($templateContent, $arrOne, $isList, $isManage);
+                $templateContent = str_ireplace("{OldUserGroupId}", $oldUserGroupId, $templateContent);
+                $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
+
 
             }
             parent::ReplaceEnd($templateContent);

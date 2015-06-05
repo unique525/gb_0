@@ -19,6 +19,29 @@
         var productPriceObject = null;
         var productPriceArray = new Array();
 
+        //上传回调函数
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
+
+            if(data.upload_file_watermark_path1 != null
+                && data.upload_file_watermark_path1 != undefined
+                && data.upload_file_watermark_path1.length>0
+                && $("#cbAttachWatermark").is(":checked")
+                ){
+                //添加水印图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_watermark_path1));
+                }
+            }else{
+                //添加原图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+
+            }
+        }
+
+
+
         $(function () {
 
             //产品品牌选择
@@ -99,7 +122,7 @@
                 var fUploadFile = $("#f_UploadFiles");
 
                 var attachWatermark = 0;
-                if ($("#cbAttachWatermark").attr("checked") == true) {
+                if ($("#cbAttachWatermark").is(":checked")) {
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
