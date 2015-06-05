@@ -50,29 +50,25 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             $manageUserId = Control::GetManageUserId();
             $manageUserAuthority = new ManageUserAuthorityManageData();
             $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
-            if ($can == 1) {
 
-                $siteTagArray=$siteTagManageData->GetListPager($siteId,$pageBegin,$pageSize,$searchKey);
+            if ($can == 1) {
+                $siteTagArray=$siteTagManageData->GetListPager($siteId,$pageBegin,$pageSize,$searchKey,$allCount);
                 if(count($siteTagArray)>0){
                     Template::ReplaceList($tempContent, $siteTagArray, $listName);
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=forum_topic&a=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=site_tag&m=list&site_id=$siteId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
+                    $tempContent = str_ireplace("{PagerButton}", $pagerButton, $tempContent);
 
-                    $replaceArr = array(
-                        "{PagerButton}" => $pagerButton
-                    );
-                    $tempContent = strtr($tempContent, $replaceArr);
                 }else{
                     Template::RemoveCustomTag($tempContent, $listName);
                     $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
                 }
             }   else{
-
                 Template::RemoveCustomTag($tempContent, $listName);
                 $tempContent = str_ireplace("{PagerButton}", Language::Load('document', 26), $tempContent);//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
             }

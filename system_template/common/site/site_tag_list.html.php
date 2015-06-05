@@ -107,7 +107,6 @@
             <td style="width: 40px; text-align: center;">编辑</td>
             <td style="width: 120px; text-align: center;">关键词</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
-            <td style="width: 150px;text-align:center;">创建人</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
         </tr>
@@ -119,17 +118,16 @@
                 <li id="sort_{f_SiteId}">
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr class="grid_item">
-                            <td class="spe_line2" style="width:40px;text-align:center;">{f_SiteId}</td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">{f_SiteTagId}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;">
-                                <img class="btn_modify" title="{f_SiteName}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_SiteId}" alt="编辑"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;">{f_SiteTagName}</td>
+                                <img class="btn_modify" title="{f_SiteTagId}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_SiteTagId}" alt="编辑"/></td>
+                            <td class="spe_line2" style="width:120px;text-align:center;">{f_SiteTagName}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:150px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_SiteId}" class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;">
-                                <img class="img_open_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
+                                <img class="img_open_site" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <img class="img_close_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
+                                <img class="img_close_site" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
                             </td>
 
                         </tr>
@@ -139,7 +137,7 @@
             </item>
         </icms>
     </ul>
-    <div>{pager_button}</div>
+    <div>{PagerButton}</div>
 </div>
 </body>
 </html>
