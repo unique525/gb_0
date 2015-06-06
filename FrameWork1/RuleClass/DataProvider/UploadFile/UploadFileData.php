@@ -1510,8 +1510,35 @@ class UploadFileData extends BaseData
             if (!empty($arr["UploadFilePath"])) {
                 $uploadFile->UploadFilePath = strval($arr["UploadFilePath"]);
             }
+            if (!empty($arr["UploadFileMobilePath"])) {
+                $uploadFile->UploadFileMobilePath = strval($arr["UploadFileMobilePath"]);
+            }
+            if (!empty($arr["UploadFilePadPath"])) {
+                $uploadFile->UploadFilePadPath = strval($arr["UploadFilePadPath"]);
+            }
             if (!empty($arr["UploadFileThumbPath1"])) {
                 $uploadFile->UploadFileThumbPath1 = strval($arr["UploadFileThumbPath1"]);
+            }
+            if (!empty($arr["UploadFileThumbPath2"])) {
+                $uploadFile->UploadFileThumbPath2 = strval($arr["UploadFileThumbPath2"]);
+            }
+            if (!empty($arr["UploadFileThumbPath3"])) {
+                $uploadFile->UploadFileThumbPath3 = strval($arr["UploadFileThumbPath3"]);
+            }
+            if (!empty($arr["UploadFileWatermarkPath1"])) {
+                $uploadFile->UploadFileWatermarkPath1 = strval($arr["UploadFileWatermarkPath1"]);
+            }
+            if (!empty($arr["UploadFileWatermarkPath2"])) {
+                $uploadFile->UploadFileWatermarkPath2 = strval($arr["UploadFileWatermarkPath2"]);
+            }
+            if (!empty($arr["UploadFileCompressPath1"])) {
+                $uploadFile->UploadFileCompressPath1 = strval($arr["UploadFileCompressPath1"]);
+            }
+            if (!empty($arr["UploadFileCompressPath2"])) {
+                $uploadFile->UploadFileCompressPath2 = strval($arr["UploadFileCompressPath2"]);
+            }
+            if (!empty($arr["UploadFileCutPath1"])) {
+                $uploadFile->UploadFileCutPath1 = strval($arr["UploadFileCutPath1"]);
             }
         }
     }
