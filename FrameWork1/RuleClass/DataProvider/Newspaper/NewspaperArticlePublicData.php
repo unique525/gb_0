@@ -164,7 +164,10 @@ class NewspaperArticlePublicData extends BasePublicData
 
             $sql = "SELECT NewspaperArticleId FROM " . self::TableName_NewspaperArticle . "
 
-                WHERE NewspaperArticleTitle=:NewspaperArticleTitle AND NewspaperPageId=:NewspaperPageId;";
+                WHERE NewspaperArticleTitle=:NewspaperArticleTitle
+                AND NewspaperPageId=:NewspaperPageId
+                AND State<100
+                ;";
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleTitle", $newspaperArticleTitle);

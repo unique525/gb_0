@@ -80,6 +80,25 @@ class NewspaperArticleManageData extends BaseManageData {
     }
 
     /**
+     * @param $newspaperPageId
+     * @return int
+     */
+    public function DeleteByNewspaperPageId($newspaperPageId){
+        $result = 0;
+        if ($newspaperPageId > 0) {
+
+            $dataProperty = new DataProperty();
+            $sql = "DELETE FROM " . self::TableName_NewspaperArticle . "
+
+                        WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 修改状态
      * @param int $newspaperArticleId id
      * @param int $state 状态
