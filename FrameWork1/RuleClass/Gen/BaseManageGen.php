@@ -122,7 +122,7 @@ class BaseManageGen extends BaseGen
             /**************** 取得模板 ********************/
             $channelManageData = new ChannelManageData();
             $channelTemplateManageData = new ChannelTemplateManageData();
-            $templateLibraryChannelContentManageData=new TemplateLibraryChannelContentManageData();
+            $templateLibraryChannelContentManageData = new TemplateLibraryChannelContentManageData();
             $rank = $channelManageData->GetRank($channelId, true);
             $siteId = $channelManageData->GetSiteId($channelId, true);
             $channelName = $channelManageData->GetChannelName($channelId, true);
@@ -140,7 +140,7 @@ class BaseManageGen extends BaseGen
 
                 //处理模板库模板
                 $arrTemplateLibraryContentList = $templateLibraryChannelContentManageData->GetListForPublish($currentChannelId);
-                $arrChannelTemplateList=array_merge($arrChannelTemplateList,$arrTemplateLibraryContentList);
+                $arrChannelTemplateList = array_merge($arrChannelTemplateList, $arrTemplateLibraryContentList);
 
 
                 $timeEnd = Control::GetMicroTime();
@@ -163,35 +163,34 @@ class BaseManageGen extends BaseGen
 
                 if (!empty($arrChannelTemplateList)) {
                     for ($i = 0; $i < count($arrChannelTemplateList); $i++) {
-                        $arrChannelTemplateForPlatforms=array();  //不同平台的模板 分别发布
+                        $arrChannelTemplateForPlatforms = array(); //不同平台的模板 分别发布
 
-                        $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"];//PC
+                        $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"]; //PC
                         $publishFileNameForPC = $arrChannelTemplateList[$i]["PublishFileName"];
-                        $arrChannelTemplateForPlatforms["PC"]=array("Content"=>$channelTemplateContentForPC,"FileName"=>$publishFileNameForPC);
+                        $arrChannelTemplateForPlatforms["PC"] = array("Content" => $channelTemplateContentForPC, "FileName" => $publishFileNameForPC);
 
-                        $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"];//Mobile: xx_m.html
-                        $publishFileNameForMobile = str_ireplace(".","_m.",$arrChannelTemplateList[$i]["PublishFileName"]);
-                        $arrChannelTemplateForPlatforms["Mobile"]=array("Content"=>$channelTemplateContentForMobile,"FileName"=>$publishFileNameForMobile);
+                        $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"]; //Mobile: xx_m.html
+                        $publishFileNameForMobile = str_ireplace(".", "_m.", $arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["Mobile"] = array("Content" => $channelTemplateContentForMobile, "FileName" => $publishFileNameForMobile);
 
-                        $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"];//Pad: xx_p.html
-                        $publishFileNameForPad = str_ireplace(".","_p.",$arrChannelTemplateList[$i]["PublishFileName"]);
-                        $arrChannelTemplateForPlatforms["Pad"]=array("Content"=>$channelTemplateContentForPad,"FileName"=>$publishFileNameForPad);
+                        $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"]; //Pad: xx_p.html
+                        $publishFileNameForPad = str_ireplace(".", "_p.", $arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["Pad"] = array("Content" => $channelTemplateContentForPad, "FileName" => $publishFileNameForPad);
 
-                        $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"];//TV: xx_t.html
-                        $publishFileNameForTV = str_ireplace(".","_t.",$arrChannelTemplateList[$i]["PublishFileName"]);
-                        $arrChannelTemplateForPlatforms["TV"]=array("Content"=>$channelTemplateContentForTV,"FileName"=>$publishFileNameForTV);
+                        $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"]; //TV: xx_t.html
+                        $publishFileNameForTV = str_ireplace(".", "_t.", $arrChannelTemplateList[$i]["PublishFileName"]);
+                        $arrChannelTemplateForPlatforms["TV"] = array("Content" => $channelTemplateContentForTV, "FileName" => $publishFileNameForTV);
 
 
-
-                        foreach($arrChannelTemplateForPlatforms as $onePlatformTemplate){
+                        foreach ($arrChannelTemplateForPlatforms as $onePlatformTemplate) {
                             //1.取得模板数据
                             //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
-                            $channelTemplateContent=$onePlatformTemplate["Content"];
+                            $channelTemplateContent = $onePlatformTemplate["Content"];
                             $publishType = $arrChannelTemplateList[$i]["PublishType"];
-                            $publishFileName=$onePlatformTemplate["FileName"];
+                            $publishFileName = $onePlatformTemplate["FileName"];
 
 
-                            if(strlen($channelTemplateContent)>0){
+                            if (strlen($channelTemplateContent) > 0) {
 
                                 //2.替换模板内容
                                 $timeStart = Control::GetMicroTime();
@@ -199,16 +198,14 @@ class BaseManageGen extends BaseGen
 
                                 $currentChannelName = $channelManageData->GetChannelName($currentChannelId, true);
 
-                                $channelTemplateContent = str_ireplace("{ChannelId}",$channelId, $channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{SiteId}",$siteId, $channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName, $channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelId}",$currentChannelId, $channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$currentChannelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{ChannelId}", $channelId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{SiteId}", $siteId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{ChannelName}", $channelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelId}", $currentChannelId, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $channelTemplateContent);
 
                                 $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
                                 self::ReplaceEnd($channelTemplateContent);
-
-
 
 
                                 $timeEnd = Control::GetMicroTime();
@@ -275,7 +272,7 @@ class BaseManageGen extends BaseGen
                                     case ChannelTemplateData::PUBLISH_TYPE_LINKAGE_ALL:
                                         //联动发布，发布在所有继承树关系的频道下
 
-                                        for($x = 0; $x < count($arrChannelIds);$x++){
+                                        for ($x = 0; $x < count($arrChannelIds); $x++) {
 
                                             $timeStart = Control::GetMicroTime();
                                             $result = self::AddToPublishQueueForChannelTemplate(
@@ -299,13 +296,12 @@ class BaseManageGen extends BaseGen
                                         }
 
 
-
                                         break;
                                     case ChannelTemplateData::PUBLISH_TYPE_ONLY_SELF:
                                         //非联动发布，只发布在本频道下
                                         //触发频道与当前频道一致时才处理
 
-                                        if($channelId == $currentChannelId){
+                                        if ($channelId == $currentChannelId) {
 
                                             $timeStart = Control::GetMicroTime();
                                             $result = self::AddToPublishQueueForChannelTemplate(
@@ -339,13 +335,12 @@ class BaseManageGen extends BaseGen
                 }
 
 
-
                 $currentChannelId = $channelManageData->GetParentChannelId($currentChannelId, false);
 
                 $rank--;
             }
 
-            if($executeTransfer){
+            if ($executeTransfer) {
                 $timeStart = Control::GetMicroTime();
                 self::TransferPublishQueue($publishQueueManageData, $siteId);
                 $timeEnd = Control::GetMicroTime();
@@ -412,15 +407,15 @@ class BaseManageGen extends BaseGen
                 switch ($tagType) {
                     case Template::TAG_TYPE_CHANNEL_LIST :
 
-                            $channelTemplateContent = self::ReplaceTemplateOfChannelList(
-                                $channelTemplateContent,
-                                $tagId,
-                                $tagContent,
-                                $tagTopCount,
-                                $tagWhere,
-                                $tagWhereValue,
-                                $tagOrder
-                            );
+                        $channelTemplateContent = self::ReplaceTemplateOfChannelList(
+                            $channelTemplateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder
+                        );
 
                         break;
                     case Template::TAG_TYPE_DOCUMENT_NEWS_LIST :
@@ -546,11 +541,11 @@ class BaseManageGen extends BaseGen
         }
 
 
-        if ($siteId > 0 || $channelId>0) {
+        if ($siteId > 0 || $channelId > 0) {
             $arrChannelList = null;
             $arrChannelChildList = array();
             $arrChannelThirdList = null;
-            $arrItemListForChildTag=null;
+            $arrItemListForChildTag = null;
             $tableIdName = "ChannelId";
             $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
@@ -559,7 +554,7 @@ class BaseManageGen extends BaseGen
             switch ($tagWhere) {
                 case "parent":
 
-                    if($tagTopCount<=0){
+                    if ($tagTopCount <= 0) {
                         $tagTopCount = 100;
                     }
                     $channelManageData = new ChannelManageData();
@@ -572,7 +567,7 @@ class BaseManageGen extends BaseGen
 
                     break;
                 case "rank":
-                    if($siteId>0){
+                    if ($siteId > 0) {
                         $rank = intval($tagWhereValue);
                         $channelManageData = new ChannelManageData();
                         $arrChannelList = $channelManageData->GetListByRank(
@@ -593,29 +588,29 @@ class BaseManageGen extends BaseGen
             }
 
             /*** 处理子循环 ***/
-            if((Template::GetAllCustomTag($tagContent, "child"))!=null){
-                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child");  // top_child="xx"  xx=显示条数
-                switch($tagId){
+            if ((Template::GetAllCustomTag($tagContent, "child")) != null) {
+                $tagTopCountChild = Template::GetParamValue($tagContent, "top_child"); // top_child="xx"  xx=显示条数
+                switch ($tagId) {
                     case "document_news_list":
-                        $documentNewsPublicData=new DocumentNewsPublicData();
-                        $state=DocumentNewsData::STATE_PUBLISHED;
-                        foreach($arrChannelList as $oneChannel){
-                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
-                            if($itemListInOneChannel==null){
-                                $itemListInOneChannel=array();
+                        $documentNewsPublicData = new DocumentNewsPublicData();
+                        $state = DocumentNewsData::STATE_PUBLISHED;
+                        foreach ($arrChannelList as $oneChannel) {
+                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
+                            if ($itemListInOneChannel == null) {
+                                $itemListInOneChannel = array();
                             }
-                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                            $arrItemListForChildTag = array_merge($arrItemListForChildTag, $itemListInOneChannel);
                         }
                         break;
                     default:
-                        $documentNewsPublicData=new DocumentNewsPublicData();
-                        $state=DocumentNewsData::STATE_PUBLISHED;
-                        foreach($arrChannelList as $oneChannel){
-                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
-                            if($itemListInOneChannel==null){
-                                $itemListInOneChannel=array();
+                        $documentNewsPublicData = new DocumentNewsPublicData();
+                        $state = DocumentNewsData::STATE_PUBLISHED;
+                        foreach ($arrChannelList as $oneChannel) {
+                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
+                            if ($itemListInOneChannel == null) {
+                                $itemListInOneChannel = array();
                             }
-                            $arrItemListForChildTag=array_merge($arrItemListForChildTag,$itemListInOneChannel);
+                            $arrItemListForChildTag = array_merge($arrItemListForChildTag, $itemListInOneChannel);
                         }
                         break;
                 }
@@ -641,7 +636,7 @@ class BaseManageGen extends BaseGen
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
                 $tagContent = str_ireplace("[/CDATA]", "]]>", $tagContent);
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, '');
             }
 
@@ -703,23 +698,23 @@ class BaseManageGen extends BaseGen
                     $arrDocumentNewsList = $documentNewsManageData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
                     break;
                 case "rec_level_child":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "",$orderBy);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 case "rec_level_grandson":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "",$orderBy);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 case "rec_level_belong_channel":
                     $recLevel = intval($tagWhereValue);
-                    if ($channelId > 0&&$recLevel > 0) {
+                    if ($channelId > 0 && $recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount, $orderBy);
                     }
                     break;
                 case "day_belong_channel":
                     $recLevel = intval($tagWhereValue);
-                    if ($channelId > 0&&$recLevel > 0) {
+                    if ($channelId > 0 && $recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount, $orderBy);
                     }
                     break;
                 default :
@@ -731,7 +726,7 @@ class BaseManageGen extends BaseGen
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 Template::RemoveCustomTag($channelTemplateContent, $tagId);
             }
         }
@@ -762,40 +757,40 @@ class BaseManageGen extends BaseGen
         $tagWhere,
         $tagOrder,
         $state,
-        $searchType="all"
+        $searchType = "all"
     )
     {
         if ($documentNewsId > 0) {
             $arrDocumentNewsList = null;
             $documentNewsManageData = new DocumentNewsManageData();
-            $channelManageData= new ChannelManageData();
-            $channelId=$documentNewsManageData->GetChannelId($documentNewsId,TRUE);
-            $siteId=$channelManageData->GetSiteId($channelId,TRUE);
+            $channelManageData = new ChannelManageData();
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, TRUE);
+            $siteId = $channelManageData->GetSiteId($channelId, TRUE);
 
             //替换打错的符号或全角符号
-            $replaceArray = array('：' => ',', '。' => ',','.' => ',', '、' => ',', '，' => ',', '、' => ',', '；' => ',', '〃' => '"','　' => ',',";"=>",");
+            $replaceArray = array('：' => ',', '。' => ',', '.' => ',', '、' => ',', '，' => ',', '、' => ',', '；' => ',', '〃' => '"', '　' => ',', ";" => ",");
 
 
-            $arrayTags=null;
-            $mainTag="";
-            switch($searchType){
+            $arrayTags = null;
+            $mainTag = "";
+            switch ($searchType) {
                 case"tag":
-                    $strTag=$documentNewsManageData->GetDocumentNewsTag($documentNewsId);
-                    if($strTag!=""){
-                        $strTag=strtr($strTag, $replaceArray);
-                        $arrayTags=preg_split("/[\s,]+/", $strTag);
+                    $strTag = $documentNewsManageData->GetDocumentNewsTag($documentNewsId);
+                    if ($strTag != "") {
+                        $strTag = strtr($strTag, $replaceArray);
+                        $arrayTags = preg_split("/[\s,]+/", $strTag);
                     }
                     break;
                 case"main_tag":
-                    $mainTag=$documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
+                    $mainTag = $documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
                     break;
                 case "all":
-                    $strTag=$documentNewsManageData->GetDocumentNewsTag($documentNewsId);
-                    if($strTag!=""){
-                        $strTag=strtr($strTag, $replaceArray);
-                        $arrayTags=preg_split("/[\s,]+/", $strTag);
+                    $strTag = $documentNewsManageData->GetDocumentNewsTag($documentNewsId);
+                    if ($strTag != "") {
+                        $strTag = strtr($strTag, $replaceArray);
+                        $arrayTags = preg_split("/[\s,]+/", $strTag);
                     }
-                    $mainTag=$documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
+                    $mainTag = $documentNewsManageData->GetDocumentNewsMainTag($documentNewsId);
                     break;
             }
 
@@ -815,13 +810,13 @@ class BaseManageGen extends BaseGen
             $state = DocumentNewsData::STATE_PUBLISHED;
 
 
-            $arrDocumentNewsList = $documentNewsManageData->GetListOfRelated($mainTag,$arrayTags,$channelId,$siteId,$tagWhere,$tagTopCount,$state,"",$orderBy);
+            $arrDocumentNewsList = $documentNewsManageData->GetListOfRelated($mainTag, $arrayTags, $channelId, $siteId, $tagWhere, $tagTopCount, $state, "", $orderBy);
 
             if (!empty($arrDocumentNewsList)) {
                 Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 Template::RemoveCustomTag($channelTemplateContent, $tagId);
             }
         }
@@ -846,11 +841,11 @@ class BaseManageGen extends BaseGen
         $channelTemplateContent,
         $documentNewsId,
         $tagId,
-        $tagContent="",
-        $tagTopCount=-1,
-        $tagWhere="",
-        $tagOrder="",
-        $style="0"
+        $tagContent = "",
+        $tagTopCount = -1,
+        $tagWhere = "",
+        $tagOrder = "",
+        $style = "0"
     )
     {
         if ($documentNewsId > 0) {
@@ -872,21 +867,20 @@ class BaseManageGen extends BaseGen
             switch ($tagWhere) {
                 default :
                     //new
-                    $arrDocumentNewsPicList = $documentNewsPicManageData->GetList($documentNewsId, $tagTopCount, $showInPicSlider);  //top count=-1时取所有
+                    $arrDocumentNewsPicList = $documentNewsPicManageData->GetList($documentNewsId, $tagTopCount, $showInPicSlider); //top count=-1时取所有
                     break;
             }
             if (!empty($arrDocumentNewsPicList)) {
-                if($style==""||!$style){
-                    $style="0"; //轮换图样式模板：默认document_news_pic_slider_type_0
+                if ($style == "" || !$style) {
+                    $style = "0"; //轮换图样式模板：默认document_news_pic_slider_type_0
                 }
-                $sliderTypeName="document_news_pic_slider_type_".$style;
-                $sliderTemplate="document/".$sliderTypeName.".html";
-                $tagContent=Template::Load($sliderTemplate,"default","front_template");
+                $sliderTypeName = "document_news_pic_slider_type_" . $style;
+                $sliderTemplate = "document/" . $sliderTypeName . ".html";
+                $tagContent = Template::Load($sliderTemplate, "default", "front_template");
                 Template::ReplaceList($tagContent, $arrDocumentNewsPicList, $sliderTypeName);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }
-            else Template::RemoveCustomTag($channelTemplateContent, $tagId);
+            } else Template::RemoveCustomTag($channelTemplateContent, $tagId);
         }
 
         return $channelTemplateContent;
@@ -936,8 +930,7 @@ class BaseManageGen extends BaseGen
             Template::ReplaceList($tagContent, $arrProductList, $tagId);
             //把对应ID的CMS标记替换成指定内容
             $templateContent = Template::ReplaceCustomTag($templateContent, $tagId, $tagContent);
-        }
-        else Template::RemoveCustomTag($templateContent, $tagId);
+        } else Template::RemoveCustomTag($templateContent, $tagId);
         return $templateContent;
     }
 
@@ -992,7 +985,7 @@ class BaseManageGen extends BaseGen
                 Template::ReplaceList($tagContent, $arrList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
-            }else{
+            } else {
                 //替换为空
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
             }
@@ -1038,7 +1031,7 @@ class BaseManageGen extends BaseGen
                 $templateName = "default";
                 $templatePath = "front_template";
                 $voteTemp = Template::Load($templateFileUrl, $templateName, $templatePath);
-                $voteTemp = str_ireplace("{VoteId}",$voteId, $voteTemp);
+                $voteTemp = str_ireplace("{VoteId}", $voteId, $voteTemp);
                 //根据是否启用验证码，决定是否显示验证码输入选项
                 $isCheckCode = $voteManageData->GetIsCheckCode($voteId, false);
                 //不启用验证码则隐藏验证码图片
@@ -1051,15 +1044,15 @@ class BaseManageGen extends BaseGen
                 $itemWidth = Template::GetParamValue($tagContent, "item_width"); //选项宽
                 $itemHeight = Template::GetParamValue($tagContent, "item_height"); //选项高
                 $itemMarginLeft = Template::GetParamValue($tagContent, "item_margin_left"); //左边距
-                if ($itemMarginLeft== null)
-                    $itemMarginLeft= "40px";
+                if ($itemMarginLeft == null)
+                    $itemMarginLeft = "40px";
                 $itemTitleDisplay = Template::GetParamValue($tagContent, "item_title_display"); //是否显示题目标题
                 $btnDisplay = Template::GetParamValue($tagContent, "btn_display"); //是否显示投票按钮
-                $tagContent = str_ireplace("{ItemWidth}",$itemWidth, $tagContent);
-                $tagContent = str_ireplace("{ItemHeight}",$itemHeight, $tagContent);
-                $tagContent = str_ireplace("{ItemMarginLeft}",$itemMarginLeft, $tagContent);
-                $tagContent = str_ireplace("{ItemTitleDisplay}",$itemTitleDisplay, $tagContent);
-                $tagContent = str_ireplace("{BtnDisplay}",$btnDisplay, $tagContent);
+                $tagContent = str_ireplace("{ItemWidth}", $itemWidth, $tagContent);
+                $tagContent = str_ireplace("{ItemHeight}", $itemHeight, $tagContent);
+                $tagContent = str_ireplace("{ItemMarginLeft}", $itemMarginLeft, $tagContent);
+                $tagContent = str_ireplace("{ItemTitleDisplay}", $itemTitleDisplay, $tagContent);
+                $tagContent = str_ireplace("{BtnDisplay}", $btnDisplay, $tagContent);
             }
 
             $arrVoteItemList = null;
@@ -1069,9 +1062,9 @@ class BaseManageGen extends BaseGen
             if ($tagTopCount <= 0) {
                 $tagTopCount = null;
             }
-            $state=VoteData::STATE_NORMAL;
+            $state = VoteData::STATE_NORMAL;
             $voteItemManageData = new VoteItemManageData();
-            $arrVoteItemList = $voteItemManageData->GetList($voteId,$state,$tagOrder,$tagTopCount); //读取投票调查题目
+            $arrVoteItemList = $voteItemManageData->GetList($voteId, $state, $tagOrder, $tagTopCount); //读取投票调查题目
 
             $sbVoteItemId = '';
             if (count($arrVoteItemList) > 0) {
@@ -1191,7 +1184,7 @@ class BaseManageGen extends BaseGen
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
             $openFtpLog = false;
             $ftpLogManageData = new FtpLogManageData();
-            FtpTools::UploadQueue($ftp,$publishQueueManageData, $openFtpLog, $ftpLogManageData);
+            FtpTools::UploadQueue($ftp, $publishQueueManageData, $openFtpLog, $ftpLogManageData);
 
         } else { //没有定义ftp配置信息，使用直接写文件方式传输
             if (!empty($publishQueueManageData->Queue)) {
@@ -1199,10 +1192,10 @@ class BaseManageGen extends BaseGen
                     $destinationPath = $publishQueueManageData->Queue[$i]["DestinationPath"];
                     $channelTemplateContent = $publishQueueManageData->Queue[$i]["Content"];
                     $result = FileObject::Write($destinationPath, $channelTemplateContent);
-                    if($result>0){ //成功返回成功码
+                    if ($result > 0) { //成功返回成功码
                         $publishQueueManageData->Queue[$i]["Result"] =
                             abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;
-                    }else{ //错误则返回FileObject::Write中的错误码
+                    } else { //错误则返回FileObject::Write中的错误码
                         $publishQueueManageData->Queue[$i]["Result"] = $result;
                     }
                 }
@@ -1220,7 +1213,7 @@ class BaseManageGen extends BaseGen
         $ftpManageData = new FtpManageData();
         $ftp = new Ftp();
         $arrFtpOne = $ftpManageData->GetOneBySiteId($siteId);
-        $ftpManageData->FillFtp($arrFtpOne,$ftp);
+        $ftpManageData->FillFtp($arrFtpOne, $ftp);
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
 
@@ -1237,10 +1230,10 @@ class BaseManageGen extends BaseGen
                     $destinationPath = $publishQueueManageData->Queue[$i]["DestinationPath"];
 
                     $result = FileObject::DeleteFile($destinationPath);
-                    if($result>0){ //成功返回成功码
+                    if ($result > 0) { //成功返回成功码
                         $publishQueueManageData->Queue[$i]["Result"] =
                             abs(DefineCode::PUBLISH) + self::PUBLISH_DELETE_RESULT_SUCCESS;
-                    }else{ //错误则返回FileObject::Write中的错误码
+                    } else { //错误则返回FileObject::Write中的错误码
                         $publishQueueManageData->Queue[$i]["Result"] =
                             DefineCode::PUBLISH + self::PUBLISH_DELETE_RESULT_FAILURE;
                     }
@@ -1291,11 +1284,11 @@ class BaseManageGen extends BaseGen
     )
     {
         $manageUserId = Control::GetManageUserId();
-        if($documentNewsId>0){
+        if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             //取得并判断状态
             $state = $documentNewsManageData->GetState($documentNewsId, false);
-            if($state === DocumentNewsData::STATE_FINAL_VERIFY || $state === DocumentNewsData::STATE_PUBLISHED){
+            if ($state === DocumentNewsData::STATE_FINAL_VERIFY || $state === DocumentNewsData::STATE_PUBLISHED) {
                 /******************** 发布方式说明 ************************
                  * 1.根据PublishType读取详细页模板
                  * 2.进行模板替换
@@ -1319,7 +1312,7 @@ class BaseManageGen extends BaseGen
 
                 $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
 
-                if($channelId>0){
+                if ($channelId > 0) {
                     $channelManageData = new ChannelManageData();
                     $channelTemplateManageData = new ChannelTemplateManageData();
                     $rank = $channelManageData->GetRank($channelId, true);
@@ -1348,44 +1341,41 @@ class BaseManageGen extends BaseGen
                         );
                         if (!empty($arrChannelTemplateList)) {
                             for ($i = 0; $i < Count($arrChannelTemplateList); $i++) {
-                                $arrChannelTemplateForPlatforms=array();  //不同平台的模板 分别发布
+                                $arrChannelTemplateForPlatforms = array(); //不同平台的模板 分别发布
 
-                                $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"];//PC
-                                $publishFileNameForPC = strval($documentNewsId).'.html';                          //发布文件名，资讯id构成
-                                $arrChannelTemplateForPlatforms["PC"]=array("Content"=>$channelTemplateContentForPC,"FileName"=>$publishFileNameForPC);
+                                $channelTemplateContentForPC = $arrChannelTemplateList[$i]["ChannelTemplateContent"]; //PC
+                                $publishFileNameForPC = strval($documentNewsId) . '.html'; //发布文件名，资讯id构成
+                                $arrChannelTemplateForPlatforms["PC"] = array("Content" => $channelTemplateContentForPC, "FileName" => $publishFileNameForPC);
 
-                                $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"];//Mobile: xx_m.html
-                                $publishFileNameForMobile = strval($documentNewsId).'_m.html';
-                                $arrChannelTemplateForPlatforms["Mobile"]=array("Content"=>$channelTemplateContentForMobile,"FileName"=>$publishFileNameForMobile);
+                                $channelTemplateContentForMobile = $arrChannelTemplateList[$i]["ChannelTemplateContentForMobile"]; //Mobile: xx_m.html
+                                $publishFileNameForMobile = strval($documentNewsId) . '_m.html';
+                                $arrChannelTemplateForPlatforms["Mobile"] = array("Content" => $channelTemplateContentForMobile, "FileName" => $publishFileNameForMobile);
 
-                                $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"];//Pad: xx_p.html
-                                $publishFileNameForPad = strval($documentNewsId).'_p.html';
-                                $arrChannelTemplateForPlatforms["Pad"]=array("Content"=>$channelTemplateContentForPad,"FileName"=>$publishFileNameForPad);
+                                $channelTemplateContentForPad = $arrChannelTemplateList[$i]["ChannelTemplateContentForPad"]; //Pad: xx_p.html
+                                $publishFileNameForPad = strval($documentNewsId) . '_p.html';
+                                $arrChannelTemplateForPlatforms["Pad"] = array("Content" => $channelTemplateContentForPad, "FileName" => $publishFileNameForPad);
 
-                                $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"];//TV: xx_t.html
-                                $publishFileNameForTV = strval($documentNewsId).'_t.html';
-                                $arrChannelTemplateForPlatforms["TV"]=array("Content"=>$channelTemplateContentForTV,"FileName"=>$publishFileNameForTV);
+                                $channelTemplateContentForTV = $arrChannelTemplateList[$i]["ChannelTemplateContentForTV"]; //TV: xx_t.html
+                                $publishFileNameForTV = strval($documentNewsId) . '_t.html';
+                                $arrChannelTemplateForPlatforms["TV"] = array("Content" => $channelTemplateContentForTV, "FileName" => $publishFileNameForTV);
 
 
-
-                                foreach($arrChannelTemplateForPlatforms as $onePlatformTemplate){
+                                foreach ($arrChannelTemplateForPlatforms as $onePlatformTemplate) {
                                     //1.取得模板数据
 
                                     //$channelTemplateId = $arrChannelTemplateList[$i]["ChannelTemplateId"];
-                                    $channelTemplateContent=$onePlatformTemplate["Content"];
+                                    $channelTemplateContent = $onePlatformTemplate["Content"];
                                     $publishType = $arrChannelTemplateList[$i]["PublishType"];
-                                    $publishFileName=$onePlatformTemplate["FileName"];
+                                    $publishFileName = $onePlatformTemplate["FileName"];
 
 
-                                    if(strlen($channelTemplateContent)>0){
-
-
+                                    if (strlen($channelTemplateContent) > 0) {
 
 
                                         //2.替换列表类的模板内容
                                         $timeStart = Control::GetMicroTime();
 
-                                        $channelTemplateContent = str_ireplace("{DocumentNewsId}",$documentNewsId, $channelTemplateContent);
+                                        $channelTemplateContent = str_ireplace("{DocumentNewsId}", $documentNewsId, $channelTemplateContent);
                                         $channelTemplateContent = self::ReplaceTemplate($channelId, $channelTemplateContent);
                                         $timeEnd = Control::GetMicroTime();
 
@@ -1401,25 +1391,182 @@ class BaseManageGen extends BaseGen
                                         );
 
 
+
+
                                         //3.替换资讯内容和其他一些内容
                                         $arrOne = $documentNewsManageData->GetOne($documentNewsId);
-                                        Template::ReplaceOne($channelTemplateContent, $arrOne);
 
-                                        $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-                                        $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
+                                        ///////////处理内容分页
+                                        $pagerLine = "|=================================== PAGE ====================================|";
 
-                                        //4.根据PublishType和PublishFileName生成目标文件
-                                        //触发频道id $channelId
-                                        $timeStart = Control::GetMicroTime();
+                                        if(count($arrOne)>0){
 
-                                        //发布路径，频道id+日期
+                                            $documentNewsContent = $arrOne["DocumentNewsContent"];
+                                            $arrDocumentNewsContent = explode(
+                                                $pagerLine,
+                                                $documentNewsContent);
 
-                                        $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
-                                        if(strlen($publishDate)>10){
-                                            //已经有发布日期了
-                                            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-                                        }else{
-                                            $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+
+
+
+                                            //发布路径，频道id+日期
+
+                                            $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, false);
+                                            if (strlen($publishDate) > 10) {
+                                                //已经有发布日期了
+                                                $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+                                            } else {
+                                                $publishPath = strval($channelId) . '/' . strval(date('Ymd', time()));
+                                            }
+
+
+
+                                            /*************************  有分页的内容 ****************************/
+
+                                            if (count($arrDocumentNewsContent)>1){ //有分页的内容
+
+                                                $countOfArrDocumentNewsContent = count($arrDocumentNewsContent);
+
+                                                $pagerChannelTemplateContent = $channelTemplateContent;
+
+                                                for ($cp = count($arrDocumentNewsContent); $cp >= 0; $cp--) {
+
+                                                    if($cp >= 0 && $cp < count($arrDocumentNewsContent)){
+
+                                                        if(stripos($publishFileName ,'_m')!== false){
+                                                            $publishFileName = str_ireplace("_m.html", "_" . ($cp + 1) . "_m.html", $publishFileName);
+                                                        }else{
+                                                            $publishFileName = str_ireplace(".html", "_" . ($cp + 1) . ".html", $publishFileName);
+                                                        }
+
+                                                        $arrOne["DocumentNewsContent"] = $arrDocumentNewsContent[$cp];
+                                                    }elseif($cp == count($arrDocumentNewsContent)){
+                                                        //生成一个含有全文的页
+                                                        if(stripos($publishFileName, '_m')!== false){
+                                                            $publishFileName = str_ireplace("_m.html", "_0_m.html", $publishFileName);
+                                                        }else{
+                                                            $publishFileName = str_ireplace(".html", "_0.html", $publishFileName);
+                                                        }
+                                                        $arrOne["DocumentNewsContent"] = $documentNewsContent;
+                                                    }
+
+
+                                                    Template::ReplaceOne($pagerChannelTemplateContent, $arrOne);
+                                                    $pageSize = 1;
+                                                    $pageIndex = $cp + 1;
+
+                                                    $styleNumber = 1;
+                                                    $pagerTemplate = Template::Load("pager/pager_style_detail$styleNumber.html", "common");
+                                                    $isJs = FALSE;
+                                                    $navUrl = str_ireplace(".html", "_{0}.html", $onePlatformTemplate["FileName"]);
+                                                    $navUrl = str_ireplace("_m", "", $navUrl); //_m在静态模板中会自动识别并加上
+                                                    $jsFunctionName = "";
+                                                    $jsParamList = "";
+                                                    $pagerButton = Pager::ShowPageButton(
+                                                        $pagerTemplate,
+                                                        $navUrl,
+                                                        $countOfArrDocumentNewsContent,
+                                                        $pageSize,
+                                                        $pageIndex,
+                                                        $styleNumber,
+                                                        $isJs,
+                                                        $jsFunctionName,
+                                                        $jsParamList
+                                                    );
+
+                                                    $pagerChannelTemplateContent = str_ireplace("{pager_button}", $pagerButton, $pagerChannelTemplateContent);
+                                                    $pagerChannelTemplateContent = str_ireplace($pagerLine, "", $pagerChannelTemplateContent);
+
+                                                    $pagerChannelTemplateContent = str_ireplace("{ChannelName}", $channelName, $pagerChannelTemplateContent);
+                                                    $pagerChannelTemplateContent = str_ireplace("{CurrentChannelName}", $channelName, $pagerChannelTemplateContent);
+
+                                                    //4.根据PublishType和PublishFileName生成目标文件
+                                                    //触发频道id $channelId
+                                                    $timeStart = Control::GetMicroTime();
+
+                                                    $result = self::AddToPublishQueueForChannelTemplate(
+                                                        $channelId,
+                                                        $rank,
+                                                        $pagerChannelTemplateContent,
+                                                        $publishType,
+                                                        $publishFileName,
+                                                        $publishQueueManageData,
+                                                        $publishPath
+                                                    );
+
+                                                    //
+                                                    if($cp == 0){ //第一页，生成一个不改变文件名的文件
+                                                        $result = self::AddToPublishQueueForChannelTemplate(
+                                                            $channelId,
+                                                            $rank,
+                                                            $pagerChannelTemplateContent,
+                                                            $publishType,
+                                                            $onePlatformTemplate["FileName"],
+                                                            $publishQueueManageData,
+                                                            $publishPath
+                                                        );
+                                                    }
+
+                                                    $timeEnd = Control::GetMicroTime();
+
+                                                    $publishLogManageData->Create(
+                                                        PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                                        PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                                        $documentNewsId,
+                                                        "",
+                                                        "",
+                                                        $timeEnd - $timeStart,
+                                                        "now document news id:$documentNewsId add to publish queue result:$result"
+                                                    );
+
+                                                    $pagerChannelTemplateContent = $channelTemplateContent;
+                                                    $publishFileName = $onePlatformTemplate["FileName"];
+                                                }
+
+
+                                            }else{  //没有分页时
+
+                                                Template::ReplaceOne($channelTemplateContent, $arrOne);
+
+                                                $channelTemplateContent = str_ireplace("{pager_button}", "", $channelTemplateContent);
+                                                $channelTemplateContent = str_ireplace("{ChannelName}", $channelName, $channelTemplateContent);
+                                                $channelTemplateContent = str_ireplace($pagerLine, "", $channelTemplateContent);
+                                                $channelTemplateContent = str_ireplace("{CurrentChannelName}", $channelName, $channelTemplateContent);
+
+                                                //4.根据PublishType和PublishFileName生成目标文件
+                                                //触发频道id $channelId
+                                                $timeStart = Control::GetMicroTime();
+
+                                                $result = self::AddToPublishQueueForChannelTemplate(
+                                                    $channelId,
+                                                    $rank,
+                                                    $channelTemplateContent,
+                                                    $publishType,
+                                                    $publishFileName,
+                                                    $publishQueueManageData,
+                                                    $publishPath
+                                                );
+
+                                                $timeEnd = Control::GetMicroTime();
+
+                                                $publishLogManageData->Create(
+                                                    PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
+                                                    PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
+                                                    $documentNewsId,
+                                                    "",
+                                                    "",
+                                                    $timeEnd - $timeStart,
+                                                    "now document news id:$documentNewsId add to publish queue result:$result"
+                                                );
+
+
+                                            }
+
+
+
+
+
+
                                         }
 
                                         $manageUserName = Control::GetManageUserName();
@@ -1433,26 +1580,6 @@ class BaseManageGen extends BaseGen
                                         );
 
 
-                                        $result = self::AddToPublishQueueForChannelTemplate(
-                                            $channelId,
-                                            $rank,
-                                            $channelTemplateContent,
-                                            $publishType,
-                                            $publishFileName,
-                                            $publishQueueManageData,
-                                            $publishPath
-                                        );
-
-                                        $timeEnd = Control::GetMicroTime();
-                                        $publishLogManageData->Create(
-                                            PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
-                                            PublishLogManageData::TABLE_TYPE_DOCUMENT_NEWS,
-                                            $documentNewsId,
-                                            "",
-                                            "",
-                                            $timeEnd - $timeStart,
-                                            "now document news id:$documentNewsId add to publish queue result:$result"
-                                        );
                                     }
                                 }
                             }
@@ -1463,7 +1590,7 @@ class BaseManageGen extends BaseGen
                         $rank--;
                     }
 
-                    if($executeTransfer){
+                    if ($executeTransfer) {
 
                         $timeStart = Control::GetMicroTime();
                         self::TransferPublishQueue($publishQueueManageData, $siteId);
@@ -1485,18 +1612,18 @@ class BaseManageGen extends BaseGen
                     $documentNewsManageData->ModifyState($documentNewsId, DocumentNewsData::STATE_PUBLISHED);
 
                     //同步发布频道
-                    if($publishChannel){
+                    if ($publishChannel) {
                         self::PublishChannel($channelId, $publishQueueManageData);
                     }
 
 
-                }else{
+                } else {
                     $result = DefineCode::PUBLISH + self::PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR;
                 }
-            }else{
+            } else {
                 $result = DefineCode::PUBLISH + self::PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR;
             }
-        }else{
+        } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_DOCUMENT_NEWS_RESULT_DOCUMENT_NEWS_ID_ERROR;
         }
 
@@ -1514,7 +1641,7 @@ class BaseManageGen extends BaseGen
     protected function CancelPublishDocumentNews(PublishQueueManageData $publishQueueManageData, $documentNewsId, $siteId)
     {
         $result = -1;
-        if($documentNewsId>0){
+        if ($documentNewsId > 0) {
             /**************** 传输日志 ********************/
             $publishLogManageData = new PublishLogManageData();
             $publishLogManageData->Create(
@@ -1530,10 +1657,10 @@ class BaseManageGen extends BaseGen
             $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, true);
             //发布文件名，资讯id构成
-            $publishFileName = strval($documentNewsId).'.html';
+            $publishFileName = strval($documentNewsId) . '.html';
             //发布路径，频道id+日期
-            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-            $destinationPath = $publishPath . '/' .$publishFileName;
+            $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+            $destinationPath = $publishPath . '/' . $publishFileName;
             $sourcePath = '';
             $publishContent = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
@@ -1541,7 +1668,6 @@ class BaseManageGen extends BaseGen
         }
         return $result;
     }
-
 
 
     /**
@@ -1578,13 +1704,13 @@ class BaseManageGen extends BaseGen
     )
     {
         $manageUserId = Control::GetManageUserId();
-        if($siteContentId>0){
+        if ($siteContentId > 0) {
             $siteContentManageData = new SiteContentManageData();
             //取得并判断状态
             $state = $siteContentManageData->GetState($siteContentId, true);
-            if($state === SiteContentData::STATE_ENABLE ||
+            if ($state === SiteContentData::STATE_ENABLE ||
                 $state === SiteContentData::STATE_PUBLISHED
-            ){
+            ) {
                 /******************** 发布方式说明 ************************
                  * 1.根据PublishType读取详细页模板
                  * 2.进行模板替换
@@ -1608,7 +1734,7 @@ class BaseManageGen extends BaseGen
 
                 $channelId = $siteContentManageData->GetChannelId($siteContentId, true);
 
-                if($channelId>0){
+                if ($channelId > 0) {
                     $channelManageData = new ChannelManageData();
                     $channelTemplateManageData = new ChannelTemplateManageData();
                     $rank = $channelManageData->GetRank($channelId, true);
@@ -1666,9 +1792,8 @@ class BaseManageGen extends BaseGen
                                 $arrOne = $siteContentManageData->GetOne($siteContentId);
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
-                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
-
+                                $channelTemplateContent = str_ireplace("{ChannelName}", $channelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}", $channelName, $channelTemplateContent);
 
 
                                 //4.根据PublishType和PublishFileName生成目标文件
@@ -1676,9 +1801,9 @@ class BaseManageGen extends BaseGen
                                 $timeStart = Control::GetMicroTime();
 
                                 //发布文件名，资讯id构成
-                                $publishFileName = strval($siteContentId).'.html';
+                                $publishFileName = strval($siteContentId) . '.html';
                                 //发布路径，频道id+日期
-                                $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                $publishPath = strval($channelId) . '/' . strval(date('Ymd', time()));
 
                                 //修改发布时间和发布人，只有发布时间为空时才进行操作
                                 $siteContentManageData->ModifyPublishDate(
@@ -1716,7 +1841,7 @@ class BaseManageGen extends BaseGen
                         $rank--;
                     }
 
-                    if($executeTransfer){
+                    if ($executeTransfer) {
 
                         $timeStart = Control::GetMicroTime();
                         self::TransferPublishQueue($publishQueueManageData, $siteId);
@@ -1738,18 +1863,18 @@ class BaseManageGen extends BaseGen
                     $siteContentManageData->ModifyState($siteContentId, SiteContentData::STATE_PUBLISHED);
 
                     //同步发布频道
-                    if($publishChannel){
+                    if ($publishChannel) {
                         self::PublishChannel($channelId, $publishQueueManageData);
                     }
 
 
-                }else{
+                } else {
                     $result = DefineCode::PUBLISH + self::PUBLISH_SITE_CONTENT_RESULT_CHANNEL_ID_ERROR;
                 }
-            }else{
+            } else {
                 $result = DefineCode::PUBLISH + self::PUBLISH_SITE_CONTENT_RESULT_STATE_ERROR;
             }
-        }else{
+        } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_SITE_CONTENT_RESULT_SITE_CONTENT_ID_ERROR;
         }
 
@@ -1767,7 +1892,7 @@ class BaseManageGen extends BaseGen
     protected function CancelPublishSiteContent(PublishQueueManageData $publishQueueManageData, $siteContentId, $siteId)
     {
         $result = -1;
-        if($siteContentId>0){
+        if ($siteContentId > 0) {
             /**************** 传输日志 ********************/
             $publishLogManageData = new PublishLogManageData();
             $publishLogManageData->Create(
@@ -1783,10 +1908,10 @@ class BaseManageGen extends BaseGen
             $channelId = $siteContentManageData->GetChannelId($siteContentId, true);
             $publishDate = $siteContentManageData->GetPublishDate($siteContentId, true);
             //发布文件名，资讯id构成
-            $publishFileName = strval($siteContentId).'.html';
+            $publishFileName = strval($siteContentId) . '.html';
             //发布路径，频道id+日期
-            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-            $destinationPath = $publishPath . '/' .$publishFileName;
+            $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+            $destinationPath = $publishPath . '/' . $publishFileName;
             $sourcePath = '';
             $publishContent = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
@@ -1823,42 +1948,43 @@ class BaseManageGen extends BaseGen
         $siteAdId,
         PublishQueueManageData $publishQueueManageData,
         &$warns
-    ){
-            $result="";
-            if ($siteAdId > 0) {
-                $siteAdManageData=new SiteAdManageData();
-                $siteId=$siteAdManageData->GetSiteId($siteAdId,FALSE);
-                if ($siteId > 0) {
+    )
+    {
+        $result = "";
+        if ($siteAdId > 0) {
+            $siteAdManageData = new SiteAdManageData();
+            $siteId = $siteAdManageData->GetSiteId($siteAdId, FALSE);
+            if ($siteId > 0) {
                 $siteAdManageData = new SiteAdManageData();
                 $arrayOfOneSiteAd = $siteAdManageData->GetOne($siteAdId);
                 if (count($arrayOfOneSiteAd) > 0) {
                     if (intval($arrayOfOneSiteAd["State"]) === 0) {
-                        $showOnce = $arrayOfOneSiteAd["ShowOnce"];//是否只显示一次
-                        $showNumber = $arrayOfOneSiteAd["ShowNumber"];//轮换类广告位是否显示轮换数字
+                        $showOnce = $arrayOfOneSiteAd["ShowOnce"]; //是否只显示一次
+                        $showNumber = $arrayOfOneSiteAd["ShowNumber"]; //轮换类广告位是否显示轮换数字
                         $siteAdWidth = $arrayOfOneSiteAd["SiteAdWidth"];
 
-                        if(stripos($siteAdWidth,"%") <= 0 && strtolower($siteAdWidth)!="auto"){
-                            $siteAdWidth.="px";
+                        if (stripos($siteAdWidth, "%") <= 0 && strtolower($siteAdWidth) != "auto") {
+                            $siteAdWidth .= "px";
                         }
 
                         $siteAdHeight = $arrayOfOneSiteAd["SiteAdHeight"];
-                        if(stripos($siteAdHeight,"%") <= 0 && strtolower($siteAdHeight)!="auto"){
-                            $siteAdHeight.="px";
+                        if (stripos($siteAdHeight, "%") <= 0 && strtolower($siteAdHeight) != "auto") {
+                            $siteAdHeight .= "px";
                         }
-                        $showType = $arrayOfOneSiteAd["ShowType"];     //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
+                        $showType = $arrayOfOneSiteAd["ShowType"]; //广告位类型 0:图片,1文字,2轮换 3随机,4落幕
                         $siteAdContentManageData = new SiteAdContentManageData();
                         if ($showType < 0) {
                             $showType = 0;
                         }
-                        $listOfSiteAdContentArray = $siteAdContentManageData->GetAllAdContent($siteAdId);//取广告位下所有可用状态广告（启用，未过期）
+                        $listOfSiteAdContentArray = $siteAdContentManageData->GetAllAdContent($siteAdId); //取广告位下所有可用状态广告（启用，未过期）
 
-                        if(count($listOfSiteAdContentArray)<=0){
-                            $listOfSiteAdContentArray = $siteAdContentManageData->GetLastAdContent($siteAdId);//没有可用广告 则尝试取最后一条过期广告以防页面空白
-                            $warns.=Language::Load('site_ad', 16); //所有广告均已过期！页面将保留最后过期的广告！
+                        if (count($listOfSiteAdContentArray) <= 0) {
+                            $listOfSiteAdContentArray = $siteAdContentManageData->GetLastAdContent($siteAdId); //没有可用广告 则尝试取最后一条过期广告以防页面空白
+                            $warns .= Language::Load('site_ad', 16); //所有广告均已过期！页面将保留最后过期的广告！
                         }
 
-                        if(count($listOfSiteAdContentArray)>0){
-                            $siteAdJsContent = Template::Load("site/site_ad_js_type_" . intval($showType) . ".html","common"); //ShowType 0为图片 1文字 2轮换 3随机 4落幕
+                        if (count($listOfSiteAdContentArray) > 0) {
+                            $siteAdJsContent = Template::Load("site/site_ad_js_type_" . intval($showType) . ".html", "common"); //ShowType 0为图片 1文字 2轮换 3随机 4落幕
                             $listName = "site_ad_content";
                             Template::ReplaceList($siteAdJsContent, $listOfSiteAdContentArray, $listName);
 
@@ -1874,17 +2000,17 @@ class BaseManageGen extends BaseGen
                             //解jquery与其他$的JS冲突问题
                             $siteAdJsContent = str_ireplace("$", 'jQuery', $siteAdJsContent);
 
-                        }else{
-                            $warns.=Language::Load('site_ad', 11); //该广告位没有可用的广告
-                            $warns.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
-                            $siteAdJsContent="";
+                        } else {
+                            $warns .= Language::Load('site_ad', 11); //该广告位没有可用的广告
+                            $warns .= Language::Load('site_ad', 13); //广告JS为空，广告将不会显示！
+                            $siteAdJsContent = "";
                         }
 
 
-                    }else{
-                        $warns.=Language::Load('site_ad', 9);//当前操作对象不是启用状态！
-                        $warns.=Language::Load('site_ad', 13);//广告JS为空，广告将不会显示！
-                        $siteAdJsContent="";
+                    } else {
+                        $warns .= Language::Load('site_ad', 9); //当前操作对象不是启用状态！
+                        $warns .= Language::Load('site_ad', 13); //广告JS为空，广告将不会显示！
+                        $siteAdJsContent = "";
                     }
 
 
@@ -1897,7 +2023,7 @@ class BaseManageGen extends BaseGen
 
 
                     $siteAdFileName = 'site_ad_' . $siteAdId . ".js";
-                    $publishResult=self::AddToPublishQueueForSiteAd(
+                    $publishResult = self::AddToPublishQueueForSiteAd(
                         $siteAdId,
                         $siteAdJsContent,
                         $siteAdFileName,
@@ -1906,41 +2032,37 @@ class BaseManageGen extends BaseGen
 
                     self::TransferPublishQueue($publishQueueManageData, $siteId);
 
-                    if($publishResult>0){
-                        $result .= Language::Load('site_ad', 10) ;  //广告JS更新成功!
-                        $strCopy='<div class="site_ad_'.$siteAdId.'"></div><script language="javascript" src="'. self::SITE_AD_PATH .'/'. $siteId . '/site_ad_' . $siteAdId . '.js" charset="utf-8"></script>';
+                    if ($publishResult > 0) {
+                        $result .= Language::Load('site_ad', 10); //广告JS更新成功!
+                        $strCopy = '<div class="site_ad_' . $siteAdId . '"></div><script language="javascript" src="' . self::SITE_AD_PATH . '/' . $siteId . '/site_ad_' . $siteAdId . '.js" charset="utf-8"></script>';
 
-                        $result .= "<br><br>" .htmlspecialchars($strCopy);
+                        $result .= "<br><br>" . htmlspecialchars($strCopy);
                         //$result .= "<br><br>" . self::SITE_AD_PATH .'/'. $siteId . '/site_ad_' . $siteAdId . ".js";
-                    }else{
-                        $result.=Language::Load('site_ad', 17);//广告JS文件发布失败！
-                        $result.="<br>error code:" . $publishResult;
+                    } else {
+                        $result .= Language::Load('site_ad', 17); //广告JS文件发布失败！
+                        $result .= "<br>error code:" . $publishResult;
                     }
 
 
                     //记入操作log
-                    $operateContent = "CreateJs site_ad：SiteAdId：" . $siteAdId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
+                    $operateContent = "CreateJs site_ad：SiteAdId：" . $siteAdId . ",POST FORM:" . implode("|", $_POST) . ";\r\nResult:" . $result;
                     self::CreateManageUserLog($operateContent);
 
-                }else{
-                    $result.=Language::Load('site_ad', 8);//获取该条记录数据失败！
+                } else {
+                    $result .= Language::Load('site_ad', 8); //获取该条记录数据失败！
                 }
 
 
-
-
-
-
-
-                }else{
-                $result .= Language::Load('site_ad', 5);//站点siteid错误！;
+            } else {
+                $result .= Language::Load('site_ad', 5); //站点siteid错误！;
             }
-            }else{
-            $result .= Language::Load('site_ad', 6);//广告位site_ad_id错误！;
+        } else {
+            $result .= Language::Load('site_ad', 6); //广告位site_ad_id错误！;
         }
         return $result;
 
     }
+
     /**
      * 加入到发布队列 广告
      * @param int $siteAdId 站点id
@@ -1958,14 +2080,14 @@ class BaseManageGen extends BaseGen
     {
         //$result = self::ADD_TO_PUBLISH_QUEUE_RESULT_NO_ACTION;
         if ($siteAdId > 0) {
-            $siteAdManageData=new SiteAdManageData();
-            $siteId=$siteAdManageData->GetSiteId($siteAdId,FALSE);
-            if($siteId > 0){
-                $destinationPath = self::SITE_AD_PATH . '/' .strval($siteId) . '/' . $publishFileName;
+            $siteAdManageData = new SiteAdManageData();
+            $siteId = $siteAdManageData->GetSiteId($siteAdId, FALSE);
+            if ($siteId > 0) {
+                $destinationPath = self::SITE_AD_PATH . '/' . strval($siteId) . '/' . $publishFileName;
                 $sourcePath = '';
                 $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
                 $result = abs(DefineCode::PUBLISH) + self::ADD_TO_PUBLISH_QUEUE_RESULT_FINISHED;
-            }else{
+            } else {
                 $result = DefineCode::PUBLISH + self::PUBLISH_SITE_AD_RESULT_SITE_ID_ERROR;
             }
         } else {
@@ -2010,11 +2132,11 @@ class BaseManageGen extends BaseGen
     )
     {
         $manageUserId = Control::GetManageUserId();
-        if($activityId>0){
+        if ($activityId > 0) {
             $activityManageData = new ActivityManageData();
             //取得并判断状态
             $state = $activityManageData->GetState($activityId, false);
-            if($state === 0 || $state === 30){  //0 活动已审状态 30 已发状态 100 停用状态
+            if ($state === 0 || $state === 30) { //0 活动已审状态 30 已发状态 100 停用状态
                 /******************** 发布方式说明 ************************
                  * 1.根据PublishType读取详细页模板
                  * 2.进行模板替换
@@ -2038,7 +2160,7 @@ class BaseManageGen extends BaseGen
 
                 $channelId = $activityManageData->GetChannelId($activityId, true);
 
-                if($channelId>0){
+                if ($channelId > 0) {
                     $channelManageData = new ChannelManageData();
                     $channelTemplateManageData = new ChannelTemplateManageData();
                     $rank = $channelManageData->GetRank($channelId, true);
@@ -2096,9 +2218,8 @@ class BaseManageGen extends BaseGen
                                 $arrOne = $activityManageData->GetOne($activityId);
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
-                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
-
+                                $channelTemplateContent = str_ireplace("{ChannelName}", $channelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}", $channelName, $channelTemplateContent);
 
 
                                 //4.根据PublishType和PublishFileName生成目标文件
@@ -2106,15 +2227,15 @@ class BaseManageGen extends BaseGen
                                 $timeStart = Control::GetMicroTime();
 
                                 //发布文件名，活动id前面加a构成
-                                $publishFileName = 'a'.strval($activityId).'.html';
+                                $publishFileName = 'a' . strval($activityId) . '.html';
                                 //发布路径，频道id+日期
 
                                 $publishDate = $activityManageData->GetPublishDate($activityId, false);
-                                if(strlen($publishDate)>10){
+                                if (strlen($publishDate) > 10) {
                                     //已经有发布日期了
-                                    $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-                                }else{
-                                    $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                    $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+                                } else {
+                                    $publishPath = strval($channelId) . '/' . strval(date('Ymd', time()));
                                 }
 
 
@@ -2152,7 +2273,7 @@ class BaseManageGen extends BaseGen
                         $rank--;
                     }
 
-                    if($executeTransfer){
+                    if ($executeTransfer) {
 
                         $timeStart = Control::GetMicroTime();
                         self::TransferPublishQueue($publishQueueManageData, $siteId);
@@ -2171,21 +2292,21 @@ class BaseManageGen extends BaseGen
                     $result = abs(DefineCode::PUBLISH) + self::PUBLISH_ACTIVITY_RESULT_FINISHED;
 
                     //修改状态
-                    $activityManageData->ModifyState($activityId, 30);  //30 已发
+                    $activityManageData->ModifyState($activityId, 30); //30 已发
 
                     //同步发布频道
-                    if($publishChannel){
+                    if ($publishChannel) {
                         self::PublishChannel($channelId, $publishQueueManageData);
                     }
 
 
-                }else{
+                } else {
                     $result = DefineCode::PUBLISH + self::PUBLISH_ACTIVITY_RESULT_CHANNEL_ID_ERROR;
                 }
-            }else{
+            } else {
                 $result = DefineCode::PUBLISH + self::PUBLISH_ACTIVITY_RESULT_STATE_ERROR;
             }
-        }else{
+        } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_ACTIVITY_RESULT_DOCUMENT_NEWS_ID_ERROR;
         }
 
@@ -2203,7 +2324,7 @@ class BaseManageGen extends BaseGen
     protected function CancelPublishActivity(PublishQueueManageData $publishQueueManageData, $activityId, $siteId)
     {
         $result = -1;
-        if($activityId>0){
+        if ($activityId > 0) {
             /**************** 传输日志 ********************/
             $publishLogManageData = new PublishLogManageData();
             $publishLogManageData->Create(
@@ -2219,10 +2340,10 @@ class BaseManageGen extends BaseGen
             $channelId = $activityManageData->GetChannelId($activityId, true);
             $publishDate = $activityManageData->GetPublishDate($activityId, true);
             //发布文件名，资讯id构成
-            $publishFileName = 'a'.strval($activityId).'.html';
+            $publishFileName = 'a' . strval($activityId) . '.html';
             //发布路径，频道id+日期
-            $publishPath = 'h/'.strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-            $destinationPath = $publishPath . '/' .$publishFileName;
+            $publishPath = 'h/' . strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+            $destinationPath = $publishPath . '/' . $publishFileName;
             $sourcePath = '';
             $publishContent = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
@@ -2267,11 +2388,11 @@ class BaseManageGen extends BaseGen
     )
     {
         $manageUserId = Control::GetManageUserId();
-        if($informationId>0){
+        if ($informationId > 0) {
             $informationManageData = new InformationManageData();
             //取得并判断状态
             $state = $informationManageData->GetState($informationId, false);
-            if($state === 0 || $state === 30){  //0 活动已审状态 30 已发状态 100 停用状态
+            if ($state === 0 || $state === 30) { //0 活动已审状态 30 已发状态 100 停用状态
                 /******************** 发布方式说明 ************************
                  * 1.根据PublishType读取详细页模板
                  * 2.进行模板替换
@@ -2295,7 +2416,7 @@ class BaseManageGen extends BaseGen
 
                 $channelId = $informationManageData->GetChannelId($informationId, true);
 
-                if($channelId>0){
+                if ($channelId > 0) {
                     $channelManageData = new ChannelManageData();
                     $channelTemplateManageData = new ChannelTemplateManageData();
                     $rank = $channelManageData->GetRank($channelId, true);
@@ -2353,9 +2474,8 @@ class BaseManageGen extends BaseGen
                                 $arrOne = $informationManageData->GetOne($informationId);
                                 Template::ReplaceOne($channelTemplateContent, $arrOne);
 
-                                $channelTemplateContent = str_ireplace("{ChannelName}",$channelName,$channelTemplateContent);
-                                $channelTemplateContent = str_ireplace("{CurrentChannelName}",$channelName,$channelTemplateContent);
-
+                                $channelTemplateContent = str_ireplace("{ChannelName}", $channelName, $channelTemplateContent);
+                                $channelTemplateContent = str_ireplace("{CurrentChannelName}", $channelName, $channelTemplateContent);
 
 
                                 //4.根据PublishType和PublishFileName生成目标文件
@@ -2363,15 +2483,15 @@ class BaseManageGen extends BaseGen
                                 $timeStart = Control::GetMicroTime();
 
                                 //发布文件名，分类信息id前面加i构成
-                                $publishFileName = 'i'.strval($informationId).'.html';
+                                $publishFileName = 'i' . strval($informationId) . '.html';
                                 //发布路径，频道id+日期
 
                                 $publishDate = $informationManageData->GetPublishDate($informationId, false);
-                                if(strlen($publishDate)>10){
+                                if (strlen($publishDate) > 10) {
                                     //已经有发布日期了
-                                    $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-                                }else{
-                                    $publishPath = strval($channelId).'/'.strval(date('Ymd', time()));
+                                    $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+                                } else {
+                                    $publishPath = strval($channelId) . '/' . strval(date('Ymd', time()));
                                 }
 
 
@@ -2409,7 +2529,7 @@ class BaseManageGen extends BaseGen
                         $rank--;
                     }
 
-                    if($executeTransfer){
+                    if ($executeTransfer) {
 
                         $timeStart = Control::GetMicroTime();
                         self::TransferPublishQueue($publishQueueManageData, $siteId);
@@ -2428,21 +2548,21 @@ class BaseManageGen extends BaseGen
                     $result = abs(DefineCode::PUBLISH) + self::PUBLISH_INFORMATION_RESULT_FINISHED;
 
                     //修改状态
-                    $informationManageData->ModifyState($informationId, 30);  //30为已发
+                    $informationManageData->ModifyState($informationId, 30); //30为已发
 
                     //同步发布频道
-                    if($publishChannel){
+                    if ($publishChannel) {
                         self::PublishChannel($channelId, $publishQueueManageData);
                     }
 
 
-                }else{
+                } else {
                     $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_CHANNEL_ID_ERROR;
                 }
-            }else{
+            } else {
                 $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_STATE_ERROR;
             }
-        }else{
+        } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_INFORMATION_RESULT_DOCUMENT_NEWS_ID_ERROR;
         }
 
@@ -2460,7 +2580,7 @@ class BaseManageGen extends BaseGen
     protected function CancelPublishInformation(PublishQueueManageData $publishQueueManageData, $informationId, $siteId)
     {
         $result = -1;
-        if($informationId>0){
+        if ($informationId > 0) {
             /**************** 传输日志 ********************/
             $publishLogManageData = new PublishLogManageData();
             $publishLogManageData->Create(
@@ -2476,10 +2596,10 @@ class BaseManageGen extends BaseGen
             $channelId = $activityManageData->GetChannelId($informationId, true);
             $publishDate = $activityManageData->GetPublishDate($informationId, true);
             //发布文件名，资讯id构成
-            $publishFileName = 'i'.strval($informationId).'.html';
+            $publishFileName = 'i' . strval($informationId) . '.html';
             //发布路径，频道id+日期
-            $publishPath = strval($channelId).'/'.Format::DateStringToSimple($publishDate);
-            $destinationPath = $publishPath . '/' .$publishFileName;
+            $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
+            $destinationPath = $publishPath . '/' . $publishFileName;
             $sourcePath = '';
             $publishContent = '';
             $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);

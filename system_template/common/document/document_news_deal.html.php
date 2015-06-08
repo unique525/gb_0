@@ -129,6 +129,19 @@ $(function () {
     cbTitleBold.click(function () {
         ChangeToBold();
     });
+
+    /** 插入分页符 **/
+    var btnInsertContentPager = $("#btnInsertContentPager");
+    btnInsertContentPager.click(function () {
+        if(editor){
+
+            editor.pasteHTML("|=================================== PAGE ====================================|");
+
+
+        }
+    });
+
+
     //
     //加载BOLD
     var bold = $("#f_DocumentNewsTitleBold").val();
@@ -654,6 +667,12 @@ function submitForm(closeTab) {
                         <td align="left">
                             <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/>
                             (只支持jpg、jpeg、gif、png图片)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbSaveRemoteImage">内容分页：</label></td>
+                        <td align="left">
+                            <input type="button" id="btnInsertContentPager" value="插入内容分页符" />
                         </td>
                     </tr>
                 </table>

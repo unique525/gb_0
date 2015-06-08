@@ -9,21 +9,22 @@ $incSystemName = 'iCMS';
  * 系统数据库配置
  */
 $incDatabaseInfo = array();
-
+/*
 $incDatabaseInfo[] = '130.1.0.134';
 $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
 $incDatabaseInfo[] = 'csolbbs2010';
 $incDatabaseInfo[] = '0'; //debug
+*/
 
-/*
 $incDatabaseInfo[] = 'localhost';
 $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
 $incDatabaseInfo[] = 'sasa';
-*/
+$incDatabaseInfo[] = '0'; //debug
+
 
 
 $incDatabaseInfo = implode('|',$incDatabaseInfo);
