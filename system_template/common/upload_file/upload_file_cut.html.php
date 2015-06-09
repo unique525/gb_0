@@ -32,6 +32,7 @@
                         uploadFileId = parseInt(data["upload_file_id"]);
                         if (uploadFileId != undefined && uploadFileId > 0) {
                             alert("截图成功");
+                            parent.$.fancybox.close();
                         }
                     },
                     error: function (data, status, e) {
@@ -81,16 +82,20 @@
             var minSizeHeight = parseInt($("#m_height").val());
             var minSize = [minSizeWidth,minSizeHeight];
 
+            bigWidth = minSizeWidth;
+            bigHeight = minSizeHeight;
+
 
             var upload_file_id = parseInt(Request["upload_file_id"]);
             if(upload_file_id>0){
                 GetOneUploadFile(upload_file_id);
 
+
                 var jcrop_api, boundx, boundy;
                 var jcropObject = $('#target').Jcrop({
                     onChange: updatePreview,
                     onSelect: updatePreview,
-                    //aspectRatio: 1,
+                    aspectRatio: minSizeWidth/minSizeHeight,
                     bgFade: true,
                     bgOpacity: .3,
                     minSize: minSize

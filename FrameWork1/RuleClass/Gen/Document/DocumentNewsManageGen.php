@@ -258,6 +258,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                         if ($closeTab == 1) {
                             //$resultJavaScript .= Control::GetCloseTab();
                             Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                        } elseif($closeTab == 2){
+                            Control::GoUrl("/default.php?secu=manage&mod=document_news&m=modify&document_news_id=$documentNewsId&tab_index=$tabIndex&p=$pageIndex");
+
                         } else {
                             Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                         }
@@ -587,6 +590,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                    } elseif($closeTab == 2){
+
+                        //确认并编辑
+                        Control::GoUrl("/default.php?secu=manage&mod=document_news&m=modify&document_news_id=$documentNewsId&tab_index=$tabIndex&p=$pageIndex");
+
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
