@@ -21,6 +21,7 @@
  * @property string UploadFileWatermarkPath2
  * @property string UploadFileCompressPath1
  * @property string UploadFileCompressPath2
+ * @property string UploadFileCutPath1
  * @property string UploadFileTitle
  * @property string UploadFileInfo
  * @property int TableType
@@ -50,6 +51,7 @@ class UploadFile {
     private $UploadFileWatermarkPath2 = "";
     private $UploadFileCompressPath1 = "";
     private $UploadFileCompressPath2 = "";
+    private $UploadFileCutPath1 = "";
     private $UploadFileTitle = "";
     private $UploadFileInfo = "";
     private $TableType = 0;
@@ -285,6 +287,23 @@ class UploadFile {
     {
         return $this->UploadFileCompressPath2;
     }
+
+    /**
+     * @param mixed $UploadFileCutPath1
+     */
+    public function setUploadFileCutPath1($UploadFileCutPath1)
+    {
+        $this->UploadFileCutPath1 = $UploadFileCutPath1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUploadFileCutPath1()
+    {
+        return $this->UploadFileCutPath1;
+    }
+
 
     /**
      * @param mixed $UploadFileExtentionName
@@ -526,13 +545,45 @@ class UploadFile {
                 $returnJson .= ',"upload_file_path":"'.
                     Format::FormatJson($this->UploadFilePath) . '"';
             }
+            if(!empty($this->UploadFileMobilePath)){
+                $returnJson .= ',"upload_file_mobile_path":"'.
+                    Format::FormatJson($this->UploadFileMobilePath) . '"';
+            }
+            if(!empty($this->UploadFilePadPath)){
+                $returnJson .= ',"upload_file_pad_path":"'.
+                    Format::FormatJson($this->UploadFilePadPath) . '"';
+            }
             if(!empty($this->UploadFileThumbPath1)){
                 $returnJson .= ',"upload_file_thumb_path1":"'.
                     Format::FormatJson($this->UploadFileThumbPath1) . '"';
             }
+            if(!empty($this->UploadFileThumbPath2)){
+                $returnJson .= ',"upload_file_thumb_path2":"'.
+                    Format::FormatJson($this->UploadFileThumbPath2) . '"';
+            }
+            if(!empty($this->UploadFileThumbPath3)){
+                $returnJson .= ',"upload_file_thumb_path3":"'.
+                    Format::FormatJson($this->UploadFileThumbPath3) . '"';
+            }
             if(!empty($this->UploadFileWatermarkPath1)){
                 $returnJson .= ',"upload_file_watermark_path1":"'.
                     Format::FormatJson($this->UploadFileWatermarkPath1) . '"';
+            }
+            if(!empty($this->UploadFileWatermarkPath2)){
+                $returnJson .= ',"upload_file_watermark_path2":"'.
+                    Format::FormatJson($this->UploadFileWatermarkPath2) . '"';
+            }
+            if(!empty($this->UploadFileCompressPath1)){
+                $returnJson .= ',"upload_file_compress_path1":"'.
+                    Format::FormatJson($this->UploadFileCompressPath1) . '"';
+            }
+            if(!empty($this->UploadFileCompressPath2)){
+                $returnJson .= ',"upload_file_compress_path2":"'.
+                    Format::FormatJson($this->UploadFileCompressPath2) . '"';
+            }
+            if(!empty($this->UploadFileCutPath1)){
+                $returnJson .= ',"upload_file_cut_path1":"'.
+                    Format::FormatJson($this->UploadFileCutPath1) . '"';
             }
 
         }
