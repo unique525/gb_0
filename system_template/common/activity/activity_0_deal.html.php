@@ -111,26 +111,22 @@
             btnUploadToContent.click(function(){
 
                 var fileElementId = 'file_upload_to_content';
-                var fUploadFile = $("#f_UploadFiles");
 
                 var attachWatermark = 0;
                 if($("#attachwatermark").attr("checked")==true){
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
-                var inputTextId = null;
-                var previewImageId = null;
+                var uploadFileId = 0;
+
                 AjaxFileUpload(
                     fileElementId,
                     tableType,
                     tableId,
                     loadingImageId,
-                    btnUploadToContent,
-                    editor,
-                    fUploadFile,
+                    $(this),
                     attachWatermark,
-                    inputTextId,
-                    previewImageId
+                    uploadFileId
                 );
             });
 

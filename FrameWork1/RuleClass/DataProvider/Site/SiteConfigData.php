@@ -23,8 +23,9 @@
  * @property string $ForumIeTitle
  * @property string $ForumIeKeywords
  * @property string $ForumIeDescription
- * @property string $ForumLogoImage
- * @property string $ForumBackground
+ * @property string $ForumLogoImageUploadFileId
+ * @property string $ForumBackgroundUploadFileId
+ * @property string $ForumPostContentWatermarkUploadFileId
  * @property int $OpenRegisterWindow
  * @property string $RegisterWindowContent
  * @property string $ForumTopInfo
@@ -288,11 +289,14 @@ class SiteConfigData extends BaseData {
     private $ArrSiteConfigTypes_5 = array(
         "UserDefaultMaleAvatar",
         "UserDefaultFemaleAvatar",
+        "ForumLogoImageUploadFileId",
+        "ForumBackgroundUploadFileId",
+        "ForumPostContentWatermarkUploadFileId",
         "NewspaperArticlePicWatermarkUploadFileId",
         "DocumentNewsContentPicWatermarkUploadFileId"
     );
 
-    private $SiteId = 1;
+    private $SiteId = 0;
 
     //公共配置
     private $OpenUrlReWrite = 0; //开启URL重写功能
@@ -322,8 +326,9 @@ class SiteConfigData extends BaseData {
     private $ForumIeTitle = ''; //论坛的IE标题
     private $ForumIeKeywords = ''; //论坛的IE keywords
     private $ForumIeDescription = ''; //论坛的IE Description
-    private $ForumLogoImage = ''; //论坛LOGO图片网址
-    private $ForumBackground = ''; //论坛背景图片网址
+    private $ForumLogoImageUploadFileId = 0; //论坛LOGO图片id
+    private $ForumBackgroundUploadFileId = 0; //论坛背景图片id
+    private $ForumPostContentWatermarkUploadFileId = 0; //论坛帖子内容水印图id
     private $OpenRegisterWindow = 0; //是否开启注册提示窗口
     private $RegisterWindowContent = ''; //注册提示窗口文字内容
     private $ForumTopInfo = ''; //论坛顶部信息
@@ -456,22 +461,198 @@ class SiteConfigData extends BaseData {
 
     private $NewspaperArticlePicWatermarkUploadFileId = 0;//报纸文章附件上传的图片中的水印图
 
-    private $DocumentNewsContentPicWatermarkUploadFileId = 0;//资讯内容上传的图片中的水印图文件id
+    private $DocumentNewsContentPicWatermarkUploadFileId = 0;
 
     /**
-     * @param mixed $NewspaperArticlePicWatermarkUploadFileId
+     * @param mixed $ActivityTitlePic1MobileWidth
      */
-    public function setNewspaperArticlePicWatermarkUploadFileId($NewspaperArticlePicWatermarkUploadFileId)
+    public function setActivityTitlePic1MobileWidth($ActivityTitlePic1MobileWidth)
     {
-        $this->NewspaperArticlePicWatermarkUploadFileId = $NewspaperArticlePicWatermarkUploadFileId;
+        $this->ActivityTitlePic1MobileWidth = $ActivityTitlePic1MobileWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getNewspaperArticlePicWatermarkUploadFileId()
+    public function getActivityTitlePic1MobileWidth()
     {
-        return $this->NewspaperArticlePicWatermarkUploadFileId;
+        return $this->ActivityTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic1PadWidth
+     */
+    public function setActivityTitlePic1PadWidth($ActivityTitlePic1PadWidth)
+    {
+        $this->ActivityTitlePic1PadWidth = $ActivityTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic1PadWidth()
+    {
+        return $this->ActivityTitlePic1PadWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic2MobileWidth
+     */
+    public function setActivityTitlePic2MobileWidth($ActivityTitlePic2MobileWidth)
+    {
+        $this->ActivityTitlePic2MobileWidth = $ActivityTitlePic2MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic2MobileWidth()
+    {
+        return $this->ActivityTitlePic2MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic2PadWidth
+     */
+    public function setActivityTitlePic2PadWidth($ActivityTitlePic2PadWidth)
+    {
+        $this->ActivityTitlePic2PadWidth = $ActivityTitlePic2PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic2PadWidth()
+    {
+        return $this->ActivityTitlePic2PadWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic3MobileWidth
+     */
+    public function setActivityTitlePic3MobileWidth($ActivityTitlePic3MobileWidth)
+    {
+        $this->ActivityTitlePic3MobileWidth = $ActivityTitlePic3MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic3MobileWidth()
+    {
+        return $this->ActivityTitlePic3MobileWidth;
+    }
+
+    /**
+     * @param mixed $ActivityTitlePic3PadWidth
+     */
+    public function setActivityTitlePic3PadWidth($ActivityTitlePic3PadWidth)
+    {
+        $this->ActivityTitlePic3PadWidth = $ActivityTitlePic3PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityTitlePic3PadWidth()
+    {
+        return $this->ActivityTitlePic3PadWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic1MobileWidth
+     */
+    public function setChannelTitlePic1MobileWidth($ChannelTitlePic1MobileWidth)
+    {
+        $this->ChannelTitlePic1MobileWidth = $ChannelTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic1MobileWidth()
+    {
+        return $this->ChannelTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic1PadWidth
+     */
+    public function setChannelTitlePic1PadWidth($ChannelTitlePic1PadWidth)
+    {
+        $this->ChannelTitlePic1PadWidth = $ChannelTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic1PadWidth()
+    {
+        return $this->ChannelTitlePic1PadWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic2MobileWidth
+     */
+    public function setChannelTitlePic2MobileWidth($ChannelTitlePic2MobileWidth)
+    {
+        $this->ChannelTitlePic2MobileWidth = $ChannelTitlePic2MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic2MobileWidth()
+    {
+        return $this->ChannelTitlePic2MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic2PadWidth
+     */
+    public function setChannelTitlePic2PadWidth($ChannelTitlePic2PadWidth)
+    {
+        $this->ChannelTitlePic2PadWidth = $ChannelTitlePic2PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic2PadWidth()
+    {
+        return $this->ChannelTitlePic2PadWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic3MobileWidth
+     */
+    public function setChannelTitlePic3MobileWidth($ChannelTitlePic3MobileWidth)
+    {
+        $this->ChannelTitlePic3MobileWidth = $ChannelTitlePic3MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic3MobileWidth()
+    {
+        return $this->ChannelTitlePic3MobileWidth;
+    }
+
+    /**
+     * @param mixed $ChannelTitlePic3PadWidth
+     */
+    public function setChannelTitlePic3PadWidth($ChannelTitlePic3PadWidth)
+    {
+        $this->ChannelTitlePic3PadWidth = $ChannelTitlePic3PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannelTitlePic3PadWidth()
+    {
+        return $this->ChannelTitlePic3PadWidth;
     }
 
     /**
@@ -490,92 +671,903 @@ class SiteConfigData extends BaseData {
         return $this->DocumentNewsContentPicWatermarkUploadFileId;
     }
 
-
-
-
     /**
-     * @param mixed $UserAvatarMaxHeight
+     * @param mixed $DocumentNewsTitlePicMobileWidth
      */
-    public function setUserAvatarMaxHeight($UserAvatarMaxHeight)
+    public function setDocumentNewsTitlePicMobileWidth($DocumentNewsTitlePicMobileWidth)
     {
-        $this->UserAvatarMaxHeight = $UserAvatarMaxHeight;
+        $this->DocumentNewsTitlePicMobileWidth = $DocumentNewsTitlePicMobileWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getUserAvatarMaxHeight()
+    public function getDocumentNewsTitlePicMobileWidth()
     {
-        return $this->UserAvatarMaxHeight;
+        return $this->DocumentNewsTitlePicMobileWidth;
     }
 
     /**
-     * @param mixed $UserAvatarMaxWidth
+     * @param mixed $DocumentNewsTitlePicPadWidth
      */
-    public function setUserAvatarMaxWidth($UserAvatarMaxWidth)
+    public function setDocumentNewsTitlePicPadWidth($DocumentNewsTitlePicPadWidth)
     {
-        $this->UserAvatarMaxWidth = $UserAvatarMaxWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarMaxWidth()
-    {
-        return $this->UserAvatarMaxWidth;
-    }
-
-    /**
-     * @param mixed $UserAvatarMinHeight
-     */
-    public function setUserAvatarMinHeight($UserAvatarMinHeight)
-    {
-        $this->UserAvatarMinHeight = $UserAvatarMinHeight;
+        $this->DocumentNewsTitlePicPadWidth = $DocumentNewsTitlePicPadWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getUserAvatarMinHeight()
+    public function getDocumentNewsTitlePicPadWidth()
     {
-        return $this->UserAvatarMinHeight;
+        return $this->DocumentNewsTitlePicPadWidth;
     }
 
     /**
-     * @param mixed $UserAvatarMinWidth
+     * @param mixed $ForumAdBotIndex
      */
-    public function setUserAvatarMinWidth($UserAvatarMinWidth)
+    public function setForumAdBotIndex($ForumAdBotIndex)
     {
-        $this->UserAvatarMinWidth = $UserAvatarMinWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarMinWidth()
-    {
-        return $this->UserAvatarMinWidth;
-    }
-
-    /**
-     * @param mixed $UserOrderFirstSubPrice
-     */
-    public function setUserOrderFirstSubPrice($UserOrderFirstSubPrice)
-    {
-        $this->UserOrderFirstSubPrice = $UserOrderFirstSubPrice;
+        $this->ForumAdBotIndex = $ForumAdBotIndex;
     }
 
     /**
      * @return mixed
      */
-    public function getUserOrderFirstSubPrice()
+    public function getForumAdBotIndex()
     {
-        return $this->UserOrderFirstSubPrice;
+        return $this->ForumAdBotIndex;
+    }
+
+    /**
+     * @param mixed $ForumAdBotTopicList
+     */
+    public function setForumAdBotTopicList($ForumAdBotTopicList)
+    {
+        $this->ForumAdBotTopicList = $ForumAdBotTopicList;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdBotTopicList()
+    {
+        return $this->ForumAdBotTopicList;
+    }
+
+    /**
+     * @param mixed $ForumAdTopIndex
+     */
+    public function setForumAdTopIndex($ForumAdTopIndex)
+    {
+        $this->ForumAdTopIndex = $ForumAdTopIndex;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopIndex()
+    {
+        return $this->ForumAdTopIndex;
+    }
+
+    /**
+     * @param mixed $ForumAdTopTopicContent
+     */
+    public function setForumAdTopTopicContent($ForumAdTopTopicContent)
+    {
+        $this->ForumAdTopTopicContent = $ForumAdTopTopicContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopTopicContent()
+    {
+        return $this->ForumAdTopTopicContent;
+    }
+
+    /**
+     * @param mixed $ForumAdBotTopicContent
+     */
+    public function setForumAdBotTopicContent($ForumAdBotTopicContent)
+    {
+        $this->ForumAdBotTopicContent = $ForumAdBotTopicContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdBotTopicContent()
+    {
+        return $this->ForumAdBotTopicContent;
+    }
+
+    /**
+     * @param mixed $ForumAdTopTopicList
+     */
+    public function setForumAdTopTopicList($ForumAdTopTopicList)
+    {
+        $this->ForumAdTopTopicList = $ForumAdTopTopicList;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumAdTopTopicList()
+    {
+        return $this->ForumAdTopTopicList;
+    }
+
+    /**
+     * @param mixed $ForumBackgroundUploadFileId
+     */
+    public function setForumBackgroundUploadFileId($ForumBackgroundUploadFileId)
+    {
+        $this->ForumBackgroundUploadFileId = $ForumBackgroundUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumBackgroundUploadFileId()
+    {
+        return $this->ForumBackgroundUploadFileId;
+    }
+
+    /**
+     * @param mixed $ForumPostContentWatermarkUploadFileId
+     */
+    public function setForumPostContentWatermarkUploadFileId($ForumPostContentWatermarkUploadFileId)
+    {
+        $this->ForumPostContentWatermarkUploadFileId = $ForumPostContentWatermarkUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostContentWatermarkUploadFileId()
+    {
+        return $this->ForumPostContentWatermarkUploadFileId;
     }
 
 
 
+    /**
+     * @param mixed $ForumBotInfo
+     */
+    public function setForumBotInfo($ForumBotInfo)
+    {
+        $this->ForumBotInfo = $ForumBotInfo;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getForumBotInfo()
+    {
+        return $this->ForumBotInfo;
+    }
+
+    /**
+     * @param mixed $ForumCharmName
+     */
+    public function setForumCharmName($ForumCharmName)
+    {
+        $this->ForumCharmName = $ForumCharmName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCharmName()
+    {
+        return $this->ForumCharmName;
+    }
+
+    /**
+     * @param mixed $ForumCssDefault
+     */
+    public function setForumCssDefault($ForumCssDefault)
+    {
+        $this->ForumCssDefault = $ForumCssDefault;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefault()
+    {
+        return $this->ForumCssDefault;
+    }
+
+    /**
+     * @param mixed $ForumCssDefaultFontSize
+     */
+    public function setForumCssDefaultFontSize($ForumCssDefaultFontSize)
+    {
+        $this->ForumCssDefaultFontSize = $ForumCssDefaultFontSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefaultFontSize()
+    {
+        return $this->ForumCssDefaultFontSize;
+    }
+
+    /**
+     * @param mixed $ForumCssDefaultWidth
+     */
+    public function setForumCssDefaultWidth($ForumCssDefaultWidth)
+    {
+        $this->ForumCssDefaultWidth = $ForumCssDefaultWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumCssDefaultWidth()
+    {
+        return $this->ForumCssDefaultWidth;
+    }
+
+    /**
+     * @param mixed $ForumExpName
+     */
+    public function setForumExpName($ForumExpName)
+    {
+        $this->ForumExpName = $ForumExpName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumExpName()
+    {
+        return $this->ForumExpName;
+    }
+
+    /**
+     * @param mixed $ForumIeDescription
+     */
+    public function setForumIeDescription($ForumIeDescription)
+    {
+        $this->ForumIeDescription = $ForumIeDescription;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeDescription()
+    {
+        return $this->ForumIeDescription;
+    }
+
+    /**
+     * @param mixed $ForumIeKeywords
+     */
+    public function setForumIeKeywords($ForumIeKeywords)
+    {
+        $this->ForumIeKeywords = $ForumIeKeywords;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeKeywords()
+    {
+        return $this->ForumIeKeywords;
+    }
+
+    /**
+     * @param mixed $ForumIeTitle
+     */
+    public function setForumIeTitle($ForumIeTitle)
+    {
+        $this->ForumIeTitle = $ForumIeTitle;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumIeTitle()
+    {
+        return $this->ForumIeTitle;
+    }
+
+    /**
+     * @param mixed $ForumLogoImageUploadFileId
+     */
+    public function setForumLogoImageUploadFileId($ForumLogoImageUploadFileId)
+    {
+        $this->ForumLogoImageUploadFileId = $ForumLogoImageUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumLogoImageUploadFileId()
+    {
+        return $this->ForumLogoImageUploadFileId;
+    }
+
+    /**
+     * @param mixed $ForumMoneyName
+     */
+    public function setForumMoneyName($ForumMoneyName)
+    {
+        $this->ForumMoneyName = $ForumMoneyName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumMoneyName()
+    {
+        return $this->ForumMoneyName;
+    }
+
+    /**
+     * @param mixed $ForumNewPostCount
+     */
+    public function setForumNewPostCount($ForumNewPostCount)
+    {
+        $this->ForumNewPostCount = $ForumNewPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumNewPostCount()
+    {
+        return $this->ForumNewPostCount;
+    }
+
+    /**
+     * @param mixed $ForumPicMobileWidth
+     */
+    public function setForumPicMobileWidth($ForumPicMobileWidth)
+    {
+        $this->ForumPicMobileWidth = $ForumPicMobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicMobileWidth()
+    {
+        return $this->ForumPicMobileWidth;
+    }
+
+    /**
+     * @param mixed $ForumPicPadWidth
+     */
+    public function setForumPicPadWidth($ForumPicPadWidth)
+    {
+        $this->ForumPicPadWidth = $ForumPicPadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicPadWidth()
+    {
+        return $this->ForumPicPadWidth;
+    }
+
+    /**
+     * @param mixed $ForumPicShowMode
+     */
+    public function setForumPicShowMode($ForumPicShowMode)
+    {
+        $this->ForumPicShowMode = $ForumPicShowMode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPicShowMode()
+    {
+        return $this->ForumPicShowMode;
+    }
+
+    /**
+     * @param mixed $ForumPointName
+     */
+    public function setForumPointName($ForumPointName)
+    {
+        $this->ForumPointName = $ForumPointName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPointName()
+    {
+        return $this->ForumPointName;
+    }
+
+    /**
+     * @param mixed $ForumPostCount
+     */
+    public function setForumPostCount($ForumPostCount)
+    {
+        $this->ForumPostCount = $ForumPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostCount()
+    {
+        return $this->ForumPostCount;
+    }
+
+    /**
+     * @param mixed $ForumPostCountName
+     */
+    public function setForumPostCountName($ForumPostCountName)
+    {
+        $this->ForumPostCountName = $ForumPostCountName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostCountName()
+    {
+        return $this->ForumPostCountName;
+    }
+
+    /**
+     * @param mixed $ForumPostPageSize
+     */
+    public function setForumPostPageSize($ForumPostPageSize)
+    {
+        $this->ForumPostPageSize = $ForumPostPageSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumPostPageSize()
+    {
+        return $this->ForumPostPageSize;
+    }
+
+    /**
+     * @param mixed $ForumReplyCount
+     */
+    public function setForumReplyCount($ForumReplyCount)
+    {
+        $this->ForumReplyCount = $ForumReplyCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumReplyCount()
+    {
+        return $this->ForumReplyCount;
+    }
+
+    /**
+     * @param mixed $ForumScoreName
+     */
+    public function setForumScoreName($ForumScoreName)
+    {
+        $this->ForumScoreName = $ForumScoreName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumScoreName()
+    {
+        return $this->ForumScoreName;
+    }
+
+    /**
+     * @param mixed $ForumTopInfo
+     */
+    public function setForumTopInfo($ForumTopInfo)
+    {
+        $this->ForumTopInfo = $ForumTopInfo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopInfo()
+    {
+        return $this->ForumTopInfo;
+    }
+
+    /**
+     * @param mixed $ForumTopPostCount
+     */
+    public function setForumTopPostCount($ForumTopPostCount)
+    {
+        $this->ForumTopPostCount = $ForumTopPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopPostCount()
+    {
+        return $this->ForumTopPostCount;
+    }
+
+    /**
+     * @param mixed $ForumTopicCount
+     */
+    public function setForumTopicCount($ForumTopicCount)
+    {
+        $this->ForumTopicCount = $ForumTopicCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopicCount()
+    {
+        return $this->ForumTopicCount;
+    }
+
+    /**
+     * @param mixed $ForumTopicPageSize
+     */
+    public function setForumTopicPageSize($ForumTopicPageSize)
+    {
+        $this->ForumTopicPageSize = $ForumTopicPageSize;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumTopicPageSize()
+    {
+        return $this->ForumTopicPageSize;
+    }
+
+    /**
+     * @param mixed $ForumYesterdayPostCount
+     */
+    public function setForumYesterdayPostCount($ForumYesterdayPostCount)
+    {
+        $this->ForumYesterdayPostCount = $ForumYesterdayPostCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumYesterdayPostCount()
+    {
+        return $this->ForumYesterdayPostCount;
+    }
+
+    /**
+     * @param mixed $InformationTitlePic1MobileWidth
+     */
+    public function setInformationTitlePic1MobileWidth($InformationTitlePic1MobileWidth)
+    {
+        $this->InformationTitlePic1MobileWidth = $InformationTitlePic1MobileWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInformationTitlePic1MobileWidth()
+    {
+        return $this->InformationTitlePic1MobileWidth;
+    }
+
+    /**
+     * @param mixed $InformationTitlePic1PadWidth
+     */
+    public function setInformationTitlePic1PadWidth($InformationTitlePic1PadWidth)
+    {
+        $this->InformationTitlePic1PadWidth = $InformationTitlePic1PadWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInformationTitlePic1PadWidth()
+    {
+        return $this->InformationTitlePic1PadWidth;
+    }
+
+    /**
+     * @param mixed $MailFrom
+     */
+    public function setMailFrom($MailFrom)
+    {
+        $this->MailFrom = $MailFrom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailFrom()
+    {
+        return $this->MailFrom;
+    }
+
+    /**
+     * @param mixed $MailReplyTo
+     */
+    public function setMailReplyTo($MailReplyTo)
+    {
+        $this->MailReplyTo = $MailReplyTo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailReplyTo()
+    {
+        return $this->MailReplyTo;
+    }
+
+    /**
+     * @param mixed $MailSmtpHost
+     */
+    public function setMailSmtpHost($MailSmtpHost)
+    {
+        $this->MailSmtpHost = $MailSmtpHost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpHost()
+    {
+        return $this->MailSmtpHost;
+    }
+
+    /**
+     * @param mixed $MailSmtpPassword
+     */
+    public function setMailSmtpPassword($MailSmtpPassword)
+    {
+        $this->MailSmtpPassword = $MailSmtpPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpPassword()
+    {
+        return $this->MailSmtpPassword;
+    }
+
+    /**
+     * @param mixed $MailSmtpPort
+     */
+    public function setMailSmtpPort($MailSmtpPort)
+    {
+        $this->MailSmtpPort = $MailSmtpPort;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpPort()
+    {
+        return $this->MailSmtpPort;
+    }
+
+    /**
+     * @param mixed $MailSmtpUserName
+     */
+    public function setMailSmtpUserName($MailSmtpUserName)
+    {
+        $this->MailSmtpUserName = $MailSmtpUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMailSmtpUserName()
+    {
+        return $this->MailSmtpUserName;
+    }
+
+    /**
+     * @param mixed $MetaApplicationName
+     */
+    public function setMetaApplicationName($MetaApplicationName)
+    {
+        $this->MetaApplicationName = $MetaApplicationName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaApplicationName()
+    {
+        return $this->MetaApplicationName;
+    }
+
+    /**
+     * @param mixed $MetaAuthor
+     */
+    public function setMetaAuthor($MetaAuthor)
+    {
+        $this->MetaAuthor = $MetaAuthor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaAuthor()
+    {
+        return $this->MetaAuthor;
+    }
+
+    /**
+     * @param mixed $MetaCopyright
+     */
+    public function setMetaCopyright($MetaCopyright)
+    {
+        $this->MetaCopyright = $MetaCopyright;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaCopyright()
+    {
+        return $this->MetaCopyright;
+    }
+
+    /**
+     * @param mixed $MetaGenerator
+     */
+    public function setMetaGenerator($MetaGenerator)
+    {
+        $this->MetaGenerator = $MetaGenerator;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaGenerator()
+    {
+        return $this->MetaGenerator;
+    }
+
+    /**
+     * @param mixed $MetaMsApplicationTooltip
+     */
+    public function setMetaMsApplicationTooltip($MetaMsApplicationTooltip)
+    {
+        $this->MetaMsApplicationTooltip = $MetaMsApplicationTooltip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaMsApplicationTooltip()
+    {
+        return $this->MetaMsApplicationTooltip;
+    }
+
+    /**
+     * @param mixed $NewRegisterUserId
+     */
+    public function setNewRegisterUserId($NewRegisterUserId)
+    {
+        $this->NewRegisterUserId = $NewRegisterUserId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewRegisterUserId()
+    {
+        return $this->NewRegisterUserId;
+    }
+
+    /**
+     * @param mixed $NewRegisterUserName
+     */
+    public function setNewRegisterUserName($NewRegisterUserName)
+    {
+        $this->NewRegisterUserName = $NewRegisterUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewRegisterUserName()
+    {
+        return $this->NewRegisterUserName;
+    }
+
+    /**
+     * @param mixed $NewUserMessageVoice
+     */
+    public function setNewUserMessageVoice($NewUserMessageVoice)
+    {
+        $this->NewUserMessageVoice = $NewUserMessageVoice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewUserMessageVoice()
+    {
+        return $this->NewUserMessageVoice;
+    }
+
+    /**
+     * @param mixed $NewspaperArticlePicWatermarkUploadFileId
+     */
+    public function setNewspaperArticlePicWatermarkUploadFileId($NewspaperArticlePicWatermarkUploadFileId)
+    {
+        $this->NewspaperArticlePicWatermarkUploadFileId = $NewspaperArticlePicWatermarkUploadFileId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewspaperArticlePicWatermarkUploadFileId()
+    {
+        return $this->NewspaperArticlePicWatermarkUploadFileId;
+    }
+
+    /**
+     * @param mixed $OpenFtpLog
+     */
+    public function setOpenFtpLog($OpenFtpLog)
+    {
+        $this->OpenFtpLog = $OpenFtpLog;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenFtpLog()
+    {
+        return $this->OpenFtpLog;
+    }
+
+    /**
+     * @param mixed $OpenHomePage
+     */
+    public function setOpenHomePage($OpenHomePage)
+    {
+        $this->OpenHomePage = $OpenHomePage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenHomePage()
+    {
+        return $this->OpenHomePage;
+    }
+
+    /**
+     * @param mixed $OpenRegisterWindow
+     */
+    public function setOpenRegisterWindow($OpenRegisterWindow)
+    {
+        $this->OpenRegisterWindow = $OpenRegisterWindow;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOpenRegisterWindow()
+    {
+        return $this->OpenRegisterWindow;
+    }
 
     /**
      * @param mixed $OpenUrlReWrite
@@ -594,534 +1586,11 @@ class SiteConfigData extends BaseData {
     }
 
     /**
-     * @param mixed $ProductTitlePic1Thumb1Width
+     * @param mixed $PayAlipayKey
      */
-    public function setProductTitlePic1Thumb1Width($ProductTitlePic1Thumb1Width)
+    public function setPayAlipayKey($PayAlipayKey)
     {
-        $this->ProductTitlePic1Thumb1Width = $ProductTitlePic1Thumb1Width;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1Thumb1Width()
-    {
-        return $this->ProductTitlePic1Thumb1Width;
-    }
-
-    /**
-     * @param mixed $ProductTitlePic1Thumb2Width
-     */
-    public function setProductTitlePic1Thumb2Width($ProductTitlePic1Thumb2Width)
-    {
-        $this->ProductTitlePic1Thumb2Width = $ProductTitlePic1Thumb2Width;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1Thumb2Width()
-    {
-        return $this->ProductTitlePic1Thumb2Width;
-    }
-
-    /**
-     * @param mixed $ProductTitlePic1Thumb3Width
-     */
-    public function setProductTitlePic1Thumb3Width($ProductTitlePic1Thumb3Width)
-    {
-        $this->ProductTitlePic1Thumb3Width = $ProductTitlePic1Thumb3Width;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1Thumb3Width()
-    {
-        return $this->ProductTitlePic1Thumb3Width;
-    }
-
-
-
-    /**
-     * @param mixed $ProductTitlePic1MobileWidth
-     */
-    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
-    {
-        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1MobileWidth()
-    {
-        return $this->ProductTitlePic1MobileWidth;
-    }
-
-    /**
-     * @param mixed $ProductTitlePic1PadWidth
-     */
-    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
-    {
-        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductTitlePic1PadWidth()
-    {
-        return $this->ProductTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePicMobileWidth()
-    {
-        return $this->DocumentNewsTitlePicMobileWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDocumentNewsTitlePicPadWidth()
-    {
-        return $this->DocumentNewsTitlePicPadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdBotIndex()
-    {
-        return $this->ForumAdBotIndex;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdBotTopicContent()
-    {
-        return $this->ForumAdBotTopicContent;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdBotTopicList()
-    {
-        return $this->ForumAdBotTopicList;
-    }
-
-
-    /**
-     * @param mixed $ProductSendPriceFreeLimit
-     */
-    public function setProductSendPriceFreeLimit($ProductSendPriceFreeLimit)
-    {
-        $this->ProductSendPriceFreeLimit = $ProductSendPriceFreeLimit;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductSendPriceFreeLimit()
-    {
-        return $this->ProductSendPriceFreeLimit;
-    }
-
-    /**
-     * @param mixed $ProductSendPriceMode
-     */
-    public function setProductSendPriceMode($ProductSendPriceMode)
-    {
-        $this->ProductSendPriceMode = $ProductSendPriceMode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductSendPriceMode()
-    {
-        return $this->ProductSendPriceMode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdTopIndex()
-    {
-        return $this->ForumAdTopIndex;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdTopTopicContent()
-    {
-        return $this->ForumAdTopTopicContent;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumAdTopTopicList()
-    {
-        return $this->ForumAdTopTopicList;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumBackground()
-    {
-        return $this->ForumBackground;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumBotInfo()
-    {
-        return $this->ForumBotInfo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumCharmName()
-    {
-        return $this->ForumCharmName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumCssDefault()
-    {
-        return $this->ForumCssDefault;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumCssDefaultFontSize()
-    {
-        return $this->ForumCssDefaultFontSize;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumCssDefaultWidth()
-    {
-        return $this->ForumCssDefaultWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumExpName()
-    {
-        return $this->ForumExpName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumIeDescription()
-    {
-        return $this->ForumIeDescription;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumIeKeywords()
-    {
-        return $this->ForumIeKeywords;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumIeTitle()
-    {
-        return $this->ForumIeTitle;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumLogoImage()
-    {
-        return $this->ForumLogoImage;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumMoneyName()
-    {
-        return $this->ForumMoneyName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumNewPostCount()
-    {
-        return $this->ForumNewPostCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPicShowMode()
-    {
-        return $this->ForumPicShowMode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPointName()
-    {
-        return $this->ForumPointName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPostCount()
-    {
-        return $this->ForumPostCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPostCountName()
-    {
-        return $this->ForumPostCountName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPostPageSize()
-    {
-        return $this->ForumPostPageSize;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumReplyCount()
-    {
-        return $this->ForumReplyCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumScoreName()
-    {
-        return $this->ForumScoreName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumTopInfo()
-    {
-        return $this->ForumTopInfo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumTopPostCount()
-    {
-        return $this->ForumTopPostCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumTopicCount()
-    {
-        return $this->ForumTopicCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumTopicPageSize()
-    {
-        return $this->ForumTopicPageSize;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumYesterdayPostCount()
-    {
-        return $this->ForumYesterdayPostCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPicMobileWidth()
-    {
-        return $this->ForumPicMobileWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getForumPicPadWidth()
-    {
-        return $this->ForumPicPadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailFrom()
-    {
-        return $this->MailFrom;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailReplyTo()
-    {
-        return $this->MailReplyTo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailSmtpHost()
-    {
-        return $this->MailSmtpHost;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailSmtpPassword()
-    {
-        return $this->MailSmtpPassword;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailSmtpPort()
-    {
-        return $this->MailSmtpPort;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMailSmtpUserName()
-    {
-        return $this->MailSmtpUserName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMetaApplicationName()
-    {
-        return $this->MetaApplicationName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMetaAuthor()
-    {
-        return $this->MetaAuthor;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMetaCopyright()
-    {
-        return $this->MetaCopyright;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMetaGenerator()
-    {
-        return $this->MetaGenerator;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMetaMsApplicationTooltip()
-    {
-        return $this->MetaMsApplicationTooltip;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNewRegisterUserId()
-    {
-        return $this->NewRegisterUserId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNewRegisterUserName()
-    {
-        return $this->NewRegisterUserName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNewUserMessageVoice()
-    {
-        return $this->NewUserMessageVoice;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOpenFtpLog()
-    {
-        return $this->OpenFtpLog;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOpenHomePage()
-    {
-        return $this->OpenHomePage;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOpenRegisterWindow()
-    {
-        return $this->OpenRegisterWindow;
+        $this->PayAlipayKey = $PayAlipayKey;
     }
 
     /**
@@ -1133,11 +1602,27 @@ class SiteConfigData extends BaseData {
     }
 
     /**
+     * @param mixed $PayAlipayPartnerId
+     */
+    public function setPayAlipayPartnerId($PayAlipayPartnerId)
+    {
+        $this->PayAlipayPartnerId = $PayAlipayPartnerId;
+    }
+
+    /**
      * @return mixed
      */
     public function getPayAlipayPartnerId()
     {
         return $this->PayAlipayPartnerId;
+    }
+
+    /**
+     * @param mixed $PayAlipaySellerEmail
+     */
+    public function setPayAlipaySellerEmail($PayAlipaySellerEmail)
+    {
+        $this->PayAlipaySellerEmail = $PayAlipaySellerEmail;
     }
 
     /**
@@ -1149,6 +1634,14 @@ class SiteConfigData extends BaseData {
     }
 
     /**
+     * @param mixed $PayQuickKey
+     */
+    public function setPayQuickKey($PayQuickKey)
+    {
+        $this->PayQuickKey = $PayQuickKey;
+    }
+
+    /**
      * @return mixed
      */
     public function getPayQuickKey()
@@ -1157,252 +1650,19 @@ class SiteConfigData extends BaseData {
     }
 
     /**
+     * @param mixed $PayQuickMerchantAcctId
+     */
+    public function setPayQuickMerchantAcctId($PayQuickMerchantAcctId)
+    {
+        $this->PayQuickMerchantAcctId = $PayQuickMerchantAcctId;
+    }
+
+    /**
      * @return mixed
      */
     public function getPayQuickMerchantAcctId()
     {
         return $this->PayQuickMerchantAcctId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRegisterWindowContent()
-    {
-        return $this->RegisterWindowContent;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSmsThirdPassword()
-    {
-        return $this->SmsThirdPassword;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSmsThirdType()
-    {
-        return $this->SmsThirdType;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSmsThirdUrl()
-    {
-        return $this->SmsThirdUrl;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSmsThirdUserName()
-    {
-        return $this->SmsThirdUserName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAlbumThumbWidth()
-    {
-        return $this->UserAlbumThumbWidth;
-    }
-
-
-
-    /**
-     * @param mixed $UserAlbumThumbHeight
-     */
-    public function setUserAlbumThumbHeight($UserAlbumThumbHeight)
-    {
-        $this->UserAlbumThumbHeight = $UserAlbumThumbHeight;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAlbumThumbHeight()
-    {
-        return $this->UserAlbumThumbHeight;
-    }
-    /**
-     * @return mixed
-     */
-    public function getUserAlbumToBestMustVoteCount()
-    {
-        return $this->UserAlbumToBestMustVoteCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserCommissionChild()
-    {
-        return $this->UserCommissionChild;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserCommissionGrandson()
-    {
-        return $this->UserCommissionGrandson;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserCommissionOwn()
-    {
-        return $this->UserCommissionOwn;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserCount()
-    {
-        return $this->UserCount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserDefaultState()
-    {
-        return $this->UserDefaultState;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserDefaultUserGroupIdForRole()
-    {
-        return $this->UserDefaultUserGroupIdForRole;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserNameLength()
-    {
-        return $this->UserNameLength;
-    }
-
-    /**
-     * @param mixed $UserDefaultMaleAvatar
-     */
-    public function setUserDefaultMaleAvatar($UserDefaultMaleAvatar)
-    {
-        $this->UserDefaultMaleAvatar = $UserDefaultMaleAvatar;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserDefaultMaleAvatar()
-    {
-        return $this->UserDefaultMaleAvatar;
-    }
-
-    /**
-     * @param mixed $UserDefaultFemaleAvatar
-     */
-    public function setUserDefaultFemaleAvatar($UserDefaultFemaleAvatar)
-    {
-        $this->UserDefaultFemaleAvatar = $UserDefaultFemaleAvatar;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserDefaultFemaleAvatar()
-    {
-        return $this->UserDefaultFemaleAvatar;
-    }
-
-    /**
-     * @param mixed $UserAvatarBigHeight
-     */
-    public function setUserAvatarBigHeight($UserAvatarBigHeight)
-    {
-        $this->UserAvatarBigHeight = $UserAvatarBigHeight;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarBigHeight()
-    {
-        return $this->UserAvatarBigHeight;
-    }
-
-    /**
-     * @param mixed $UserAvatarBigWidth
-     */
-    public function setUserAvatarBigWidth($UserAvatarBigWidth)
-    {
-        $this->UserAvatarBigWidth = $UserAvatarBigWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarBigWidth()
-    {
-        return $this->UserAvatarBigWidth;
-    }
-
-    /**
-     * @param mixed $UserAvatarSmallHeight
-     */
-    public function setUserAvatarSmallHeight($UserAvatarSmallHeight)
-    {
-        $this->UserAvatarSmallHeight = $UserAvatarSmallHeight;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarSmallHeight()
-    {
-        return $this->UserAvatarSmallHeight;
-    }
-
-    /**
-     * @param mixed $UserAvatarSmallWidth
-     */
-    public function setUserAvatarSmallWidth($UserAvatarSmallWidth)
-    {
-        $this->UserAvatarSmallWidth = $UserAvatarSmallWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserAvatarSmallWidth()
-    {
-        return $this->UserAvatarSmallWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserRecDefaultState()
-    {
-        return $this->UserRecDefaultState;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserSmsMessageContent()
-    {
-        return $this->UserSmsMessageContent;
     }
 
     /**
@@ -1550,226 +1810,566 @@ class SiteConfigData extends BaseData {
     }
 
     /**
-     * @param mixed $ChannelTitlePic1MobileWidth
+     * @param mixed $ProductSendPriceFreeLimit
      */
-    public function setChannelTitlePic1MobileWidth($ChannelTitlePic1MobileWidth)
+    public function setProductSendPriceFreeLimit($ProductSendPriceFreeLimit)
     {
-        $this->ChannelTitlePic1MobileWidth = $ChannelTitlePic1MobileWidth;
+        $this->ProductSendPriceFreeLimit = $ProductSendPriceFreeLimit;
     }
 
     /**
      * @return mixed
      */
-    public function getChannelTitlePic1MobileWidth()
+    public function getProductSendPriceFreeLimit()
     {
-        return $this->ChannelTitlePic1MobileWidth;
+        return $this->ProductSendPriceFreeLimit;
     }
 
     /**
-     * @param mixed $ChannelTitlePic1PadWidth
+     * @param mixed $ProductSendPriceMode
      */
-    public function setChannelTitlePic1PadWidth($ChannelTitlePic1PadWidth)
+    public function setProductSendPriceMode($ProductSendPriceMode)
     {
-        $this->ChannelTitlePic1PadWidth = $ChannelTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChannelTitlePic1PadWidth()
-    {
-        return $this->ChannelTitlePic1PadWidth;
-    }
-
-    /**
-     * @param mixed $ChannelTitlePic2MobileWidth
-     */
-    public function setChannelTitlePic2MobileWidth($ChannelTitlePic2MobileWidth)
-    {
-        $this->ChannelTitlePic2MobileWidth = $ChannelTitlePic2MobileWidth;
+        $this->ProductSendPriceMode = $ProductSendPriceMode;
     }
 
     /**
      * @return mixed
      */
-    public function getChannelTitlePic2MobileWidth()
+    public function getProductSendPriceMode()
     {
-        return $this->ChannelTitlePic2MobileWidth;
+        return $this->ProductSendPriceMode;
     }
 
     /**
-     * @param mixed $ChannelTitlePic2PadWidth
+     * @param mixed $ProductTitlePic1MobileWidth
      */
-    public function setChannelTitlePic2PadWidth($ChannelTitlePic2PadWidth)
+    public function setProductTitlePic1MobileWidth($ProductTitlePic1MobileWidth)
     {
-        $this->ChannelTitlePic2PadWidth = $ChannelTitlePic2PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChannelTitlePic2PadWidth()
-    {
-        return $this->ChannelTitlePic2PadWidth;
-    }
-
-    /**
-     * @param mixed $ChannelTitlePic3MobileWidth
-     */
-    public function setChannelTitlePic3MobileWidth($ChannelTitlePic3MobileWidth)
-    {
-        $this->ChannelTitlePic3MobileWidth = $ChannelTitlePic3MobileWidth;
+        $this->ProductTitlePic1MobileWidth = $ProductTitlePic1MobileWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getChannelTitlePic3MobileWidth()
+    public function getProductTitlePic1MobileWidth()
     {
-        return $this->ChannelTitlePic3MobileWidth;
+        return $this->ProductTitlePic1MobileWidth;
     }
 
     /**
-     * @param mixed $ChannelTitlePic3PadWidth
+     * @param mixed $ProductTitlePic1PadWidth
      */
-    public function setChannelTitlePic3PadWidth($ChannelTitlePic3PadWidth)
+    public function setProductTitlePic1PadWidth($ProductTitlePic1PadWidth)
     {
-        $this->ChannelTitlePic3PadWidth = $ChannelTitlePic3PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChannelTitlePic3PadWidth()
-    {
-        return $this->ChannelTitlePic3PadWidth;
-    }
-
-    /**
-     * @param mixed $InformationTitlePic1MobileWidth
-     */
-    public function setInformationTitlePic1MobileWidth($InformationTitlePic1MobileWidth)
-    {
-        $this->$InformationTitlePic1MobileWidth = $InformationTitlePic1MobileWidth;
+        $this->ProductTitlePic1PadWidth = $ProductTitlePic1PadWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getInformationTitlePic1MobileWidth()
+    public function getProductTitlePic1PadWidth()
     {
-        return $this->$InformationTitlePic1MobileWidth;
+        return $this->ProductTitlePic1PadWidth;
     }
 
     /**
-     * @param mixed $InformationTitlePic1PadWidth
+     * @param mixed $ProductTitlePic1Thumb1Width
      */
-    public function setInformationTitlePic1PadWidth($InformationTitlePic1PadWidth)
+    public function setProductTitlePic1Thumb1Width($ProductTitlePic1Thumb1Width)
     {
-        $this->$InformationTitlePic1PadWidth = $InformationTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInformationTitlePic1PadWidth()
-    {
-        return $this->$InformationTitlePic1PadWidth;
-    }
-
-    /**
-     * @param mixed $ActivityTitlePic1MobileWidth
-     */
-    public function setActivityTitlePic1MobileWidth($ActivityTitlePic1MobileWidth)
-    {
-        $this->$ActivityTitlePic1MobileWidth = $ActivityTitlePic1MobileWidth;
+        $this->ProductTitlePic1Thumb1Width = $ProductTitlePic1Thumb1Width;
     }
 
     /**
      * @return mixed
      */
-    public function getActivityTitlePic1MobileWidth()
+    public function getProductTitlePic1Thumb1Width()
     {
-        return $this->$ActivityTitlePic1MobileWidth;
+        return $this->ProductTitlePic1Thumb1Width;
     }
 
     /**
-     * @param mixed $ActivityTitlePic1PadWidth
+     * @param mixed $ProductTitlePic1Thumb2Width
      */
-    public function setActivityTitlePic1PadWidth($ActivityTitlePic1PadWidth)
+    public function setProductTitlePic1Thumb2Width($ProductTitlePic1Thumb2Width)
     {
-        $this->$ActivityTitlePic1PadWidth = $ActivityTitlePic1PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getActivityTitlePic1PadWidth()
-    {
-        return $this->$ActivityTitlePic1PadWidth;
-    }
-    /**
-     * @param mixed $ActivityTitlePic2MobileWidth
-     */
-    public function setActivityTitlePic2MobileWidth($ActivityTitlePic2MobileWidth)
-    {
-        $this->$ActivityTitlePic2MobileWidth = $ActivityTitlePic2MobileWidth;
+        $this->ProductTitlePic1Thumb2Width = $ProductTitlePic1Thumb2Width;
     }
 
     /**
      * @return mixed
      */
-    public function getActivityTitlePic2MobileWidth()
+    public function getProductTitlePic1Thumb2Width()
     {
-        return $this->$ActivityTitlePic2MobileWidth;
+        return $this->ProductTitlePic1Thumb2Width;
     }
 
     /**
-     * @param mixed $ActivityTitlePic2PadWidth
+     * @param mixed $ProductTitlePic1Thumb3Width
      */
-    public function setActivityTitlePic2PadWidth($ActivityTitlePic2PadWidth)
+    public function setProductTitlePic1Thumb3Width($ProductTitlePic1Thumb3Width)
     {
-        $this->$ActivityTitlePic2PadWidth = $ActivityTitlePic2PadWidth;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getActivityTitlePic2PadWidth()
-    {
-        return $this->$ActivityTitlePic2PadWidth;
-    }
-    /**
-     * @param mixed $ActivityTitlePic3MobileWidth
-     */
-    public function setActivityTitlePic3MobileWidth($ActivityTitlePic3MobileWidth)
-    {
-        $this->$ActivityTitlePic3MobileWidth = $ActivityTitlePic3MobileWidth;
+        $this->ProductTitlePic1Thumb3Width = $ProductTitlePic1Thumb3Width;
     }
 
     /**
      * @return mixed
      */
-    public function getActivityTitlePic3MobileWidth()
+    public function getProductTitlePic1Thumb3Width()
     {
-        return $this->$ActivityTitlePic3MobileWidth;
+        return $this->ProductTitlePic1Thumb3Width;
     }
 
     /**
-     * @param mixed $ActivityTitlePic3PadWidth
+     * @param mixed $RegisterWindowContent
      */
-    public function setActivityTitlePic3PadWidth($ActivityTitlePic3PadWidth)
+    public function setRegisterWindowContent($RegisterWindowContent)
     {
-        $this->$ActivityTitlePic3PadWidth = $ActivityTitlePic3PadWidth;
+        $this->RegisterWindowContent = $RegisterWindowContent;
     }
 
     /**
      * @return mixed
      */
-    public function getActivityTitlePic3PadWidth()
+    public function getRegisterWindowContent()
     {
-        return $this->$ActivityTitlePic3PadWidth;
+        return $this->RegisterWindowContent;
     }
+
+    /**
+     * @param mixed $SmsThirdPassword
+     */
+    public function setSmsThirdPassword($SmsThirdPassword)
+    {
+        $this->SmsThirdPassword = $SmsThirdPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdPassword()
+    {
+        return $this->SmsThirdPassword;
+    }
+
+    /**
+     * @param mixed $SmsThirdType
+     */
+    public function setSmsThirdType($SmsThirdType)
+    {
+        $this->SmsThirdType = $SmsThirdType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdType()
+    {
+        return $this->SmsThirdType;
+    }
+
+    /**
+     * @param mixed $SmsThirdUrl
+     */
+    public function setSmsThirdUrl($SmsThirdUrl)
+    {
+        $this->SmsThirdUrl = $SmsThirdUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdUrl()
+    {
+        return $this->SmsThirdUrl;
+    }
+
+    /**
+     * @param mixed $SmsThirdUserName
+     */
+    public function setSmsThirdUserName($SmsThirdUserName)
+    {
+        $this->SmsThirdUserName = $SmsThirdUserName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSmsThirdUserName()
+    {
+        return $this->SmsThirdUserName;
+    }
+
+    /**
+     * @param mixed $UserAlbumThumbHeight
+     */
+    public function setUserAlbumThumbHeight($UserAlbumThumbHeight)
+    {
+        $this->UserAlbumThumbHeight = $UserAlbumThumbHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumThumbHeight()
+    {
+        return $this->UserAlbumThumbHeight;
+    }
+
+    /**
+     * @param mixed $UserAlbumThumbWidth
+     */
+    public function setUserAlbumThumbWidth($UserAlbumThumbWidth)
+    {
+        $this->UserAlbumThumbWidth = $UserAlbumThumbWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumThumbWidth()
+    {
+        return $this->UserAlbumThumbWidth;
+    }
+
+    /**
+     * @param mixed $UserAlbumToBestMustVoteCount
+     */
+    public function setUserAlbumToBestMustVoteCount($UserAlbumToBestMustVoteCount)
+    {
+        $this->UserAlbumToBestMustVoteCount = $UserAlbumToBestMustVoteCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAlbumToBestMustVoteCount()
+    {
+        return $this->UserAlbumToBestMustVoteCount;
+    }
+
+    /**
+     * @param mixed $UserAvatarBigHeight
+     */
+    public function setUserAvatarBigHeight($UserAvatarBigHeight)
+    {
+        $this->UserAvatarBigHeight = $UserAvatarBigHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarBigHeight()
+    {
+        return $this->UserAvatarBigHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarBigWidth
+     */
+    public function setUserAvatarBigWidth($UserAvatarBigWidth)
+    {
+        $this->UserAvatarBigWidth = $UserAvatarBigWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarBigWidth()
+    {
+        return $this->UserAvatarBigWidth;
+    }
+
+    /**
+     * @param mixed $UserAvatarMaxHeight
+     */
+    public function setUserAvatarMaxHeight($UserAvatarMaxHeight)
+    {
+        $this->UserAvatarMaxHeight = $UserAvatarMaxHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMaxHeight()
+    {
+        return $this->UserAvatarMaxHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarMaxWidth
+     */
+    public function setUserAvatarMaxWidth($UserAvatarMaxWidth)
+    {
+        $this->UserAvatarMaxWidth = $UserAvatarMaxWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMaxWidth()
+    {
+        return $this->UserAvatarMaxWidth;
+    }
+
+    /**
+     * @param mixed $UserAvatarMinHeight
+     */
+    public function setUserAvatarMinHeight($UserAvatarMinHeight)
+    {
+        $this->UserAvatarMinHeight = $UserAvatarMinHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMinHeight()
+    {
+        return $this->UserAvatarMinHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarMinWidth
+     */
+    public function setUserAvatarMinWidth($UserAvatarMinWidth)
+    {
+        $this->UserAvatarMinWidth = $UserAvatarMinWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarMinWidth()
+    {
+        return $this->UserAvatarMinWidth;
+    }
+
+    /**
+     * @param mixed $UserAvatarSmallHeight
+     */
+    public function setUserAvatarSmallHeight($UserAvatarSmallHeight)
+    {
+        $this->UserAvatarSmallHeight = $UserAvatarSmallHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarSmallHeight()
+    {
+        return $this->UserAvatarSmallHeight;
+    }
+
+    /**
+     * @param mixed $UserAvatarSmallWidth
+     */
+    public function setUserAvatarSmallWidth($UserAvatarSmallWidth)
+    {
+        $this->UserAvatarSmallWidth = $UserAvatarSmallWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserAvatarSmallWidth()
+    {
+        return $this->UserAvatarSmallWidth;
+    }
+
+    /**
+     * @param mixed $UserCommissionChild
+     */
+    public function setUserCommissionChild($UserCommissionChild)
+    {
+        $this->UserCommissionChild = $UserCommissionChild;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionChild()
+    {
+        return $this->UserCommissionChild;
+    }
+
+    /**
+     * @param mixed $UserCommissionGrandson
+     */
+    public function setUserCommissionGrandson($UserCommissionGrandson)
+    {
+        $this->UserCommissionGrandson = $UserCommissionGrandson;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionGrandson()
+    {
+        return $this->UserCommissionGrandson;
+    }
+
+    /**
+     * @param mixed $UserCommissionOwn
+     */
+    public function setUserCommissionOwn($UserCommissionOwn)
+    {
+        $this->UserCommissionOwn = $UserCommissionOwn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCommissionOwn()
+    {
+        return $this->UserCommissionOwn;
+    }
+
+    /**
+     * @param mixed $UserCount
+     */
+    public function setUserCount($UserCount)
+    {
+        $this->UserCount = $UserCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserCount()
+    {
+        return $this->UserCount;
+    }
+
+    /**
+     * @param mixed $UserDefaultFemaleAvatar
+     */
+    public function setUserDefaultFemaleAvatar($UserDefaultFemaleAvatar)
+    {
+        $this->UserDefaultFemaleAvatar = $UserDefaultFemaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultFemaleAvatar()
+    {
+        return $this->UserDefaultFemaleAvatar;
+    }
+
+    /**
+     * @param mixed $UserDefaultMaleAvatar
+     */
+    public function setUserDefaultMaleAvatar($UserDefaultMaleAvatar)
+    {
+        $this->UserDefaultMaleAvatar = $UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultMaleAvatar()
+    {
+        return $this->UserDefaultMaleAvatar;
+    }
+
+    /**
+     * @param mixed $UserDefaultState
+     */
+    public function setUserDefaultState($UserDefaultState)
+    {
+        $this->UserDefaultState = $UserDefaultState;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultState()
+    {
+        return $this->UserDefaultState;
+    }
+
+    /**
+     * @param mixed $UserDefaultUserGroupIdForRole
+     */
+    public function setUserDefaultUserGroupIdForRole($UserDefaultUserGroupIdForRole)
+    {
+        $this->UserDefaultUserGroupIdForRole = $UserDefaultUserGroupIdForRole;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserDefaultUserGroupIdForRole()
+    {
+        return $this->UserDefaultUserGroupIdForRole;
+    }
+
+    /**
+     * @param mixed $UserNameLength
+     */
+    public function setUserNameLength($UserNameLength)
+    {
+        $this->UserNameLength = $UserNameLength;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserNameLength()
+    {
+        return $this->UserNameLength;
+    }
+
+    /**
+     * @param mixed $UserOrderFirstSubPrice
+     */
+    public function setUserOrderFirstSubPrice($UserOrderFirstSubPrice)
+    {
+        $this->UserOrderFirstSubPrice = $UserOrderFirstSubPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOrderFirstSubPrice()
+    {
+        return $this->UserOrderFirstSubPrice;
+    }
+
+    /**
+     * @param mixed $UserRecDefaultState
+     */
+    public function setUserRecDefaultState($UserRecDefaultState)
+    {
+        $this->UserRecDefaultState = $UserRecDefaultState;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserRecDefaultState()
+    {
+        return $this->UserRecDefaultState;
+    }
+
+    /**
+     * @param mixed $UserSmsMessageContent
+     */
+    public function setUserSmsMessageContent($UserSmsMessageContent)
+    {
+        $this->UserSmsMessageContent = $UserSmsMessageContent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserSmsMessageContent()
+    {
+        return $this->UserSmsMessageContent;
+    }//资讯内容上传的图片中的水印图文件id
+
+
 
 
     protected $dbOperator = null;

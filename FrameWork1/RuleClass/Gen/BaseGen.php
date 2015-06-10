@@ -375,8 +375,146 @@ class BaseGen
         $manageUserLogManageData->Create($manageUserId, $manageUserName, $ipAddress, $webAgent, $selfUrl, $refererUrl, $refererDomain, $userId, $userName, $operateContent);
     }
 
+    protected function UploadMultiple(
+        $fileElementName = "file_upload",
+        $tableType = 0,
+        $tableId = 0,
+        &$arrUploadFile = null, //UploadFile类型的数组
+        &$arrUploadFileId = null, //UploadFileId 数组
+        $imgMaxWidth = 0,
+        $imgMaxHeight = 0,
+        $imgMinWidth = 0,
+        $imgMinHeight = 0
+    ){
+        $files = $_FILES[$fileElementName];
+
+        for($i = 0; $i<count($files["name"]); $i++){
+
+            $file_name = $files["name"][$i];
+            $file_tmp_name = $files["tmp_name"][$i];
+            $file_error = $files["error"][$i];
+            $file_size = $files["size"][$i];
+
+            $errorMessage = self::UploadPreCheck(
+                $file_name,
+                $file_tmp_name,
+                $file_error,
+                $imgMaxWidth,
+                $imgMaxHeight,
+                $imgMinWidth,
+                $imgMinHeight
+            );
+            $resultMessage = "";
+            $uploadFilePath = "";
+            $uploadFileId = 0;
+
+            if ($errorMessage == (abs(DefineCode::UPLOAD) + self::UPLOAD_PRE_CHECK_SUCCESS)) { //没有错误
+                usleep(1000000 * 0.1); //0.1秒
+                $newFileName = "";
+                $fileExtension = strtolower(FileObject::GetExtension($file_name));
+                $manageUserId = Control::GetManageUserId();
+                $userId = Control::GetUserId();
+
+
+
+                $uploadPath = PHYSICAL_PATH . DIRECTORY_SEPARATOR . "upload" . DIRECTORY_SEPARATOR;
+
+                $dirPath = self::GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, $newFileName);
+                if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
+                    FileObject::CreateDir($dirPath);
+                    $moveResult = move_uploaded_file($file_tmp_name, $dirPath . $newFileName);
+
+                    if ($moveResult) {
+                        //数据库操作
+                        $uploadFileData = new UploadFileData();
+
+                        if (!empty($arrUploadFileId)) {
+                            //修改原有uploadFile数据
+
+                            $uploadFileId = intval($arrUploadFileId[$i]);
+
+                            //1.删除原有原图文件
+
+                            self::ClearUploadFile($uploadFileId);
+
+                            //2.清空数据表
+                            $uploadFileData->Clear($uploadFileId);
+
+                            //3.修改数据表
+                            $uploadFileData->Modify(
+                                $uploadFileId,
+                                $newFileName,
+                                $file_size, //文件大小，字节
+                                $fileExtension,
+                                $file_name, //原始文件名
+                                str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                                $tableType,
+                                $tableId,
+                                $manageUserId,
+                                $userId
+                            );
+                        }else{
+                            //创建新的uploadFile数据
+                            $uploadFileId = $uploadFileData->Create(
+                                $newFileName,
+                                $file_size, //文件大小，字节
+                                $fileExtension,
+                                $file_name, //原始文件名
+                                str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                                $tableType,
+                                $tableId,
+                                $manageUserId,
+                                $userId
+                            );
+                        }
+
+
+                        if ($uploadFileId > 0) {
+                            //返回值处理
+                            $returnDirPath = str_ireplace(PHYSICAL_PATH, "", $dirPath);
+
+                            $uploadFilePath = $returnDirPath . $newFileName;
+                            $uploadFilePath = str_ireplace("\\", "/", $uploadFilePath);
+
+                            $resultMessage = Format::FormatUploadFileToHtml(
+                                $uploadFilePath,
+                                $fileExtension,
+                                $uploadFileId,
+                                $file_name
+                            );
+
+                        }
+
+                        $result = abs(DefineCode::UPLOAD) + self::UPLOAD_RESULT_SUCCESS;
+                        $errorMessage = $result;
+                    } else { //移动上传文件时失败
+                        $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_MOVE_FILE_TO_DESTINATION;
+                        $errorMessage = $result;
+                    }
+                } else {
+                    $result = DefineCode::UPLOAD + self::UPLOAD_RESULT_PATH;
+                    $errorMessage = $result;
+                }
+            } else {
+                $result = $errorMessage;
+            }
+
+            $uploadFile = new UploadFile(
+                $errorMessage,
+                $resultMessage,
+                $uploadFileId,
+                $uploadFilePath
+            );
+
+            $arrUploadFileId[$i] = $uploadFileId;
+            $arrUploadFile[$i] = $uploadFile;
+
+        }
+
+    }
+
     /**
-     * 上传文件
+     * 上传文件（单个input file控件）
      * @param string $fileElementName 控件名称
      * @param int $tableType 上传文件对应的表类型
      * @param int $tableId 上传文件对应的表id
@@ -401,7 +539,9 @@ class BaseGen
     )
     {
         $errorMessage = self::UploadPreCheck(
-            $fileElementName,
+            $_FILES[$fileElementName]['name'],
+            $_FILES[$fileElementName]['tmp_name'],
+            $_FILES[$fileElementName]['error'],
             $imgMaxWidth,
             $imgMaxHeight,
             $imgMinWidth,
@@ -533,7 +673,9 @@ class BaseGen
     )
     {
         $errorMessage = self::UploadPreCheck(
-            $fileElementName,
+            $_FILES[$fileElementName]['name'],
+            $_FILES[$fileElementName]['tmp_name'],
+            $_FILES[$fileElementName]['error'],
             $imgMaxWidth,
             $imgMaxHeight,
             $imgMinWidth,
@@ -1132,7 +1274,9 @@ class BaseGen
 
     /**
      * 上传文件预检查
-     * @param string $fileElementName 上传控件名称
+     * @param string $name 上传文件名称 $_FILES[$fileElementName]['name']
+     * @param string $tmp_name 临时文件名称 $_FILES[$fileElementName]['tmp_name']
+     * @param string $error 错误消息 $_FILES[$fileElementName]['error']
      * @param int $imgMaxWidth 错误代码，默认返回1，没有错误
      * @param int $imgMaxHeight 错误代码，默认返回1，没有错误
      * @param int $imgMinWidth 错误代码，默认返回1，没有错误
@@ -1140,7 +1284,9 @@ class BaseGen
      * @return int 错误代码，默认返回1，没有错误
      */
     private function UploadPreCheck(
-        $fileElementName,
+        $name,
+        $tmp_name, //$_FILES[$fileElementName]['tmp_name']
+        $error,
         $imgMaxWidth = 0,
         $imgMaxHeight = 0,
         $imgMinWidth = 0,
@@ -1154,15 +1300,15 @@ class BaseGen
         }
 
         /////////////////////////检查temp文件夹///////////////////////////
-        if (empty($_FILES[$fileElementName]['tmp_name'])) {
+        if (empty($tmp_name)) {
             return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
-        if ($_FILES[$fileElementName]['tmp_name'] == 'none') {
+        if ($tmp_name == 'none') {
             return DefineCode::UPLOAD + self::UPLOAD_RESULT_TMP_IS_NULL;
         }
         /////////////////////////检查错误信息///////////////////////////
-        if (!empty($_FILES[$fileElementName]['error'])) {
-            switch ($_FILES[$fileElementName]['error']) {
+        if (!empty($error)) {
+            switch ($error) {
                 case '1':
                     $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_TOO_LARGE_FOR_SERVER;
                     break;
@@ -1193,7 +1339,7 @@ class BaseGen
             return $errorMessage;
         }
         /////////////////////////检查安全文件后缀///////////////////////////
-        $fileExtension = FileObject::GetExtension($_FILES[$fileElementName]['name']);
+        $fileExtension = FileObject::GetExtension($name);
         $fileExtension = strtolower($fileExtension);
 
         //判断文件类型
@@ -1223,7 +1369,7 @@ class BaseGen
                 //图片文件判断图片大小
 
                 list($width, $height, $type) = getimagesize(
-                    $_FILES[$fileElementName]['tmp_name']);
+                    $tmp_name);
 
                 if($imgMaxWidth>0){
                     if($width>$imgMaxWidth){
@@ -1250,12 +1396,6 @@ class BaseGen
                 }
 
             }
-
-
-
-
-
-
 
         } else {
             $errorMessage = DefineCode::UPLOAD + self::UPLOAD_RESULT_FILE_TYPE;

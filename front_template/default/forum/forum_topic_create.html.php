@@ -3,13 +3,33 @@
     <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         <title>{cfg_ForumIeTitle}</title>
-        {forum_common_head}
+        <meta name="keywords" content="{cfg_ForumIeKeywords}" />
+        <meta name="description" content="{cfg_ForumIeDescription}" />
+        <meta name="generator" content="{cfg_MetaGenerator}Sense CMS" />
+        <meta name="author" content="{cfg_MetaAuthor}" />
+        <meta name="copyright" content="{cfg_MetaCopyright}" />
+        <meta name="application-name" content="{cfg_MetaApplicationName}" />
+        <meta name="msapplication-tooltip" content="{cfg_MetaMsApplicationTooltip}" />
+
+        <link type="text/css" href="/front_template/default/skins/gray/jquery_ui/jquery-ui.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/system_js/common.js"></script>
+        <script type="text/javascript" src="/system_js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/system_js/manage/tabs.js"></script>
+
+        <link rel="archives" title="archives" href="/default.php?mod=forum&a=archiver" />
+        <link type="text/css" href="/front_template/common/common.css" rel="stylesheet" />
+        <link type="text/css" href="/front_template/default/skins/gray/common.css" rel="stylesheet" />
+        <link type="text/css" href="/front_template/default/skins/gray/width_19.css" rel="stylesheet" />
+
+
         <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
         <script type="text/javascript" src="/system_js/color_picker.js"></script>
         <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
         <script type="text/javascript" src="/system_js/upload_file.js"></script>
         <script type="text/javascript">
-        <!--
+
         var editor;
         var batchAttachWatermark = "0";
 
@@ -19,8 +39,12 @@
 
         //上传回调函数
         window.AjaxFileUploadCallBack = function(fileElementId,data){
-
-        }
+            if(fileElementId == "file_upload_to_content"){
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+            }
+        };
 
         $(function(){
 
@@ -124,15 +148,12 @@
             btnUploadToContent.click(function(){
 
                 var fileElementId = 'file_upload_to_content';
-                var fUploadFile = $("#f_UploadFiles");
 
                 var attachWatermark = 0;
                 if($("#attachwatermark").attr("checked")==true){
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
-                var inputTextId = null;
-                var previewImageId = null;
                 var uploadFileId = 0;
 
                 AjaxFileUpload(
@@ -140,12 +161,8 @@
                     tableType,
                     tableId,
                     loadingImageId,
-                    btnUploadToContent,
-                    editor,
-                    fUploadFile,
+                    $(this),
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
             });
@@ -189,7 +206,7 @@
 
         }
 
-        -->
+
         </script>
     </head>
     <body>

@@ -16,6 +16,21 @@
         //上传回调函数
         window.AjaxFileUploadCallBack = function(data){
 
+            //添加原图到编辑控件中
+            if(data.upload_file_path != undefined
+                && data.upload_file_path.length>0
+                && editor != undefined
+                && editor != null){
+                editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+            }
+
+            var fUploadFile = $("#f_UploadFiles");
+
+            if(fUploadFile != undefined && fUploadFile != null){
+                var uploadFiles = fUploadFile.val();
+                uploadFiles = uploadFiles + "," + data.upload_file_id;
+                fUploadFile.val(uploadFiles);
+            }
         }
 
 
@@ -75,26 +90,21 @@
             btnUploadToContent.click(function () {
 
                 var fileElementId = 'file_upload_to_content';
-                var fUploadFile = $("#f_UploadFiles");
 
                 var attachWatermark = 0;
                 if ($("#cbAttachWatermark").attr("checked") == true) {
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
-                var inputTextId = null;
-                var previewImageId = null;
+                var uploadFileId = 0;
                 AjaxFileUpload(
                     fileElementId,
                     tableType,
                     tableId,
                     loadingImageId,
-                    btnUploadToContent,
-                    editor,
-                    fUploadFile,
+                    $(this),
                     attachWatermark,
-                    inputTextId,
-                    previewImageId
+                    uploadFileId
                 );
             });
 

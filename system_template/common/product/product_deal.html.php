@@ -38,7 +38,15 @@
                 }
 
             }
-        }
+
+            var fUploadFile = $("#f_UploadFiles");
+
+            if(fUploadFile != undefined && fUploadFile != null){
+                var uploadFiles = fUploadFile.val();
+                uploadFiles = uploadFiles + "," + data.upload_file_id;
+                fUploadFile.val(uploadFiles);
+            }
+        };
 
 
 
@@ -119,15 +127,12 @@
             btnUploadToContent.click(function () {
 
                 var fileElementId = 'file_upload_to_content';
-                var fUploadFile = $("#f_UploadFiles");
 
                 var attachWatermark = 0;
                 if ($("#cbAttachWatermark").is(":checked")) {
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
-                var inputTextId = null;
-                var previewImageId = null;
                 var uploadFileId = 0;
 
                 AjaxFileUpload(
@@ -135,12 +140,8 @@
                     tableType,
                     tableId,
                     loadingImageId,
-                    btnUploadToContent,
-                    editor,
-                    fUploadFile,
+                    $(this),
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
 

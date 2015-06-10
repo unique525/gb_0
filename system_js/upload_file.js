@@ -168,7 +168,7 @@ window.UPLOAD_TABLE_TYPE_CUSTOM_FORM = 90;
 /**
  * 投票选项图标
  */
-window.UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM = 110;
+window.UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1 = 110;
 /**
  * 考试试题内容图
  */
@@ -345,11 +345,7 @@ function FormatResultMessage(resultMessage){
  * @param {int} tableId 表id
  * @param {string} loadingImageId loading图的id
  * @param {object} btnUpload 上传按钮控件对象
- * @param {object} editor 编辑控制对象
- * @param {object} fUploadFile 存储上传文件id列表的控件对象
  * @param {int} attachWatermark 是否加水印
- * @param {string} inputTextId 传入要设置结果值的input控件id
- * @param {string} previewImageId 传入预览图片控件id
  * @param {int} uploadFileId 修改时UploadFileId > 0
  */
 function AjaxFileUpload(
@@ -358,11 +354,7 @@ function AjaxFileUpload(
     tableId,
     loadingImageId,
     btnUpload,
-    editor,
-    fUploadFile,
     attachWatermark,
-    inputTextId,
-    previewImageId,
     uploadFileId
     )
 {
@@ -383,7 +375,6 @@ function AjaxFileUpload(
         +'&table_type='+tableType
         +'&table_id='+tableId
         +'&attach_watermark='+attachWatermark+"&upload_file_id="+uploadFileId;
-
     $.ajaxFileUpload({
         url:url,
         secureUri:false,
@@ -395,39 +386,15 @@ function AjaxFileUpload(
             {
                 if(parseInt(data.error)>0){ //ok
 
-                    if(fUploadFile != undefined && fUploadFile != null){
-                        var uploadFiles = fUploadFile.val();
-                        uploadFiles = uploadFiles + "," + data.upload_file_id;
-                        fUploadFile.val(uploadFiles);
-                    }
-
-                    var uploadFilePath = data.upload_file_path;
-
-                    if(editor != undefined && editor != null){
-
-                        editor.pasteHTML(""+UploadFileFormatHtml(uploadFilePath));
-
-                    }
-
-                    if(inputTextId != undefined && inputTextId != null){
-                        $( "#"+inputTextId ).val(uploadFilePath);
-                    }
-
-                    if(previewImageId != undefined && previewImageId != null){
-                        $( "#"+previewImageId ).attr("src",uploadFilePath);
-                    }
-
-
-
                 }else{
 
                     btnUpload.removeAttr("disabled");
                     alert(FormatResultMessage(parseInt(data.error)));
-
                 }
             }
+
             //执行回调函数
-            if(window.AjaxFileUploadCallBack != undefined){
+            if(window.AjaxFileUploadCallBack){
                 window.AjaxFileUploadCallBack(fileElementId, data);
             }
 
@@ -600,7 +567,7 @@ function CutImg(cutImgForm,uploadFileId){
         secureUri:false,
         dataType:"json",
         success:function(data){
-                window.CutImgCallBack(data);
+            window.CutImgCallBack(data);
         },
         error: function (data, status, e)
         {
