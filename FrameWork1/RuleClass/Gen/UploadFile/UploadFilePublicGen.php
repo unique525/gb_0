@@ -361,7 +361,15 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
                 $targetHeight = Control::PostOrGetRequest("height",0);
                 $sourceWidth = Control::PostOrGetRequest("w",0);
                 $sourceHeight = Control::PostOrGetRequest("h",0);
-                $newImagePath = ImageObject::CutImg($uploadFile->UploadFilePath,$sourceX,$sourceY,$sourceWidth,$sourceHeight,$targetWidth,$targetHeight);
+                $newImagePath = ImageObject::CutImg(
+                    $uploadFile->UploadFilePath,
+                    $sourceX,
+                    $sourceY,
+                    $sourceWidth,
+                    $sourceHeight,
+                    $targetWidth,
+                    $targetHeight
+                );
                 if(!empty($newImagePath)){
                     $result = '{"new_image_path":"'.Format::FormatJson($newImagePath).'"}';
                 }

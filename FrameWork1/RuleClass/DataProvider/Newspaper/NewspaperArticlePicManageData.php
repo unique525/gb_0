@@ -79,6 +79,17 @@ class NewspaperArticlePicManageData extends BaseManageData {
         return $result;
     }
 
+    public function DeleteOfNull(){
+        $sql = "DELETE FROM " . self::TableName_NewspaperArticlePic . "
+
+                WHERE NewspaperArticleId NOT IN (
+                    SELECT NewspaperArticleId FROM " . self::TableName_NewspaperArticle . "
+
+                );";
+        $result = $this->dbOperator->Execute($sql, null);
+        return $result;
+    }
+
     /**
      * 修改UploadFileId
      * @param int $newspaperArticlePicId id

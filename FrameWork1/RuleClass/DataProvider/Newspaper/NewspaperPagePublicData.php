@@ -181,7 +181,8 @@ class NewspaperPagePublicData extends BasePublicData
 
                         WHERE
                         NewspaperPageNo=:NewspaperPageNo
-                        AND NewspaperId=:NewspaperId;";
+                        AND NewspaperId=:NewspaperId
+                        AND State<100;";
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperPageNo", $newspaperPageNo);

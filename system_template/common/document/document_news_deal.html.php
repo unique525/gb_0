@@ -129,6 +129,19 @@ $(function () {
     cbTitleBold.click(function () {
         ChangeToBold();
     });
+
+    /** 插入分页符 **/
+    var btnInsertContentPager = $("#btnInsertContentPager");
+    btnInsertContentPager.click(function () {
+        if(editor){
+
+            editor.pasteHTML("|=================================== PAGE ====================================|");
+
+
+        }
+    });
+
+
     //
     //加载BOLD
     var bold = $("#f_DocumentNewsTitleBold").val();
@@ -354,7 +367,9 @@ function submitForm(closeTab) {
     } else {
         if (closeTab == 1) {
             $("#CloseTab").val("1");
-        } else {
+        }else if(closeTab == 2){
+            $("#CloseTab").val("2");
+        }else {
             $("#CloseTab").val("0");
         }
 
@@ -419,6 +434,7 @@ function submitForm(closeTab) {
     <tr>
         <td class="spe_line" height="40" align="right">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
             <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
@@ -522,11 +538,9 @@ function submitForm(closeTab) {
                         <td class="" style="width:60px;height:30px;text-align: right;">题图1：</td>
                         <td class="" style="text-align: left">
                             <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
-                                   style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1"
-                                                                                                 class="show_title_pic"
-                                                                                                 idvalue="{TitlePic1UploadFileId}"
-                                                                                                 style="cursor:pointer">[预览]</span>
+                                   style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
                             <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic1UploadFileId}">[制作截图]</a>
+                            <span id="preview_title_pic_cut1" class="show_title_pic_cut" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>
                     <tr>
@@ -538,6 +552,7 @@ function submitForm(closeTab) {
                                                                                                      idvalue="{TitlePic2UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
                             <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic2UploadFileId}">[制作截图]</a>
+                            <span id="preview_title_pic_cut2" class="show_title_pic_cut" idvalue="{TitlePic2UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>
                     <tr>
@@ -549,6 +564,7 @@ function submitForm(closeTab) {
                                                                                                      idvalue="{TitlePic3UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
                             <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic3UploadFileId}">[制作截图]</a>
+                            <span id="preview_title_pic_cut3" class="show_title_pic_cut" idvalue="{TitlePic3UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>
                 </table>
@@ -654,6 +670,12 @@ function submitForm(closeTab) {
                         <td align="left">
                             <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/>
                             (只支持jpg、jpeg、gif、png图片)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbSaveRemoteImage">内容分页：</label></td>
+                        <td align="left">
+                            <input type="button" id="btnInsertContentPager" value="插入内容分页符" />
                         </td>
                     </tr>
                 </table>
@@ -921,6 +943,7 @@ function submitForm(closeTab) {
     <tr>
         <td height="60" align="center">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
             <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>

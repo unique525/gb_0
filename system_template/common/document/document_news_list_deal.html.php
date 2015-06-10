@@ -11,12 +11,41 @@
             $('#main_form').submit();
         }
 
+        function CheckChannelType(){
+            var checkChannelId=parseInt($("#check_channel_id").val());
+            $("#pop_input").attr("disabled","disabled");
+            $.ajax({
+                url: "/default.php?secu=manage&mod=channel&m=check_channel_type",
+                data: { channel_type:{ChannelType}, checking_channel_id:checkChannelId },
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function(data) {
+                    if(data["result"]==="-1"){
+                        $("#check_channel_id").val("节点类型错误");
+                    }else if(data["result"]==="-2"){
+                        $("#check_channel_id").val("value","目标节点没有权限");
+                    }else{
+                        $("#pop_input").removeAttr("disabled");
+                        $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]);
+                        $("#id_btn").css("display","block");
+
+                    }
+                }
+            });
+        }
 
         $().ready(function() {
             SortTree(0);
 
             $(".btn_cancel").click(function(){
                 parent.$("#dialog_resultbox").dialog("close");
+            });
+
+
+            $("#check_channel_id").focus(function(){
+                if($(this).attr("value")=="直接输入频道id..."){
+                    $(this).attr("value","");
+                }
             });
         });
 
@@ -62,6 +91,14 @@
 </head>
 <body>
 <form id="main_form" action="/default.php?secu=manage&mod={mod}&m={method}&channel_id={ChannelId}&doc_id_string={DocIdString}" method="post">
+
+    <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="2" height="30" align="right">
+                <input class="btn" value="确 认" type="button" onclick="sub()" /> <input class="btn btn_cancel" value="取 消" type="button" />
+            </td>
+        </tr>
+    </table>
     <table id="tab_doc_list" style="" width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td style=" height: 40px; ">
@@ -87,6 +124,15 @@
         <tr>
             <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
                 请选择您要{MethodName}到的频道
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
+                <label for="pop_input"></label>
+                <input id="pop_input" name="pop_cid" value="14" type="radio" disabled="disabled"/>
+                <label for="check_channel_id"></label>
+                <input type="text" id="check_channel_id" name="check_channel_id" class="input_box" style="height:22px" value="直接输入频道id..."/>
+                <input class="btn" value="检测频道类型" type="button" onclick="CheckChannelType()" />
             </td>
         </tr>
         <tr>

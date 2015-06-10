@@ -62,7 +62,9 @@ class NewspaperPublicData extends BasePublicData
         $result = -1;
 
         if (strlen($publishDate) > 0) {
-            $sql = "SELECT NewspaperId FROM " . self::TableName_Newspaper . " WHERE PublishDate=:PublishDate;";
+            $sql = "SELECT NewspaperId FROM "
+                . self::TableName_Newspaper . "
+                 WHERE PublishDate=:PublishDate AND State<100;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("PublishDate", $publishDate);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
