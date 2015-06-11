@@ -49,6 +49,14 @@ window.AjaxFileUploadCallBack = function(fileElementId,data){
 
     }
 
+    var fUploadFile = $("#f_UploadFiles");
+
+    if(fUploadFile != undefined && fUploadFile != null){
+        var uploadFiles = fUploadFile.val();
+        uploadFiles = uploadFiles + "," + data.upload_file_id;
+        fUploadFile.val(uploadFiles);
+    }
+
     //是图片则加入图片管理栏
     SetNewUploadPic(data.upload_file_path,data.upload_file_id,0,templateName)//单张上传的图片默认不加入组图控件
 }
@@ -168,28 +176,19 @@ $(function () {
     btnUploadToContent.click(function () {
 
         var fileElementId = 'file_upload_to_content';
-        var fUploadFile = $("#f_UploadFiles");
-
         var attachWatermark = 0;
         if ($("#cbAttachWatermark").is(":checked")) {
             attachWatermark = 1;
         }
-
         var loadingImageId = null;
-        var inputTextId = null;
-        var previewImageId = null;
         var uploadFileId = 0;
         AjaxFileUpload(
             fileElementId,
             tableType,
             tableId,
             loadingImageId,
-            btnUploadToContent,
-            null,//editor回调函数已经处理，这里置为null
-            fUploadFile,
+            $(this),
             attachWatermark,
-            inputTextId,
-            previewImageId,
             uploadFileId
         );
     });

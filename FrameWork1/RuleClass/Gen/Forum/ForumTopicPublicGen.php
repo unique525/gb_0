@@ -6,13 +6,15 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Forum
  * @author zhangchi
  */
-class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
+class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
+{
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenPublic() {
+    public function GenPublic()
+    {
 
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -51,7 +53,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * 生成论坛主题列表页html
      * @return string 返回模板页面
      */
-    private function GenList() {
+    private function GenList()
+    {
 
         $siteId = parent::GetSiteIdByDomain();
 
@@ -82,10 +85,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             . $forumId
             . '_mode_' . $templateMode
             . '_p_' . $pageIndex
-            . '_ps_' . $pageSize
-        ;
+            . '_ps_' . $pageSize;
         $withCache = true;
-        if($withCache){
+        if ($withCache) {
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
             if ($pageCache === false) {
@@ -100,7 +102,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             } else {
                 $result = $pageCache;
             }
-        }else{
+        } else {
             $result = self::getListOfTemplateContent(
                 $siteId,
                 $forumId,
@@ -121,10 +123,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $templateContent,
         $pageIndex,
         $pageSize
-    ){
+    )
+    {
 
-        $templateContent = str_ireplace("{ForumId}",$forumId,$templateContent);
-        $templateContent = str_ireplace("{SiteId}",$siteId,$templateContent);
+        $templateContent = str_ireplace("{ForumId}", $forumId, $templateContent);
+        $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
 
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
@@ -190,11 +193,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * 论坛发主题帖
      * @return string 返回模板页面
      */
-    private function GenCreate() {
+    private function GenCreate()
+    {
 
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
-            die("");
+            die("forum id is null");
         }
 
         $siteId = Control::GetRequest("site_id", 0);
@@ -203,16 +207,22 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         }
 
         $userId = Control::GetUserId();
-        if($userId<=0){
+        if ($userId <= 0) {
             $referUrl = urlencode("/default.php?mod=forum_topic&a=create&forum_id=$forumId");
             Control::GoUrl("/default.php?mod=user&a=login&re_url=$referUrl");
-            return "";
+            die("user id is null");
         }
 
-        $templateFileUrl = "forum/forum_topic_deal.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateFileUrl = "forum/forum_topic_deal.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $templateMode = 0;
+        $defaultTemp = "forum_topic_create";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
 
         //forum topic type list
         $forumTopicTypePublicData = new ForumTopicTypePublicData();
@@ -234,12 +244,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             Template::RemoveCustomTag($tempContent, $tagId);
         }
 
-        if(!empty($_POST)){
+
+        if (!empty($_POST)) {
+
+
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
 
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
-            $forumPostContent = str_ireplace('\"','"',$forumPostContent);
+            $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
@@ -256,7 +269,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $titleColor = Control::PostRequest("f_TitleColor", "");
             $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
             $forumTopicPublicData = new ForumTopicPublicData();
-
 
 
             $forumTopicId = $forumTopicPublicData->Create(
@@ -276,7 +288,128 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $titleColor,
                 $titleBgImage
             );
-            if($forumTopicId>0){
+            if ($forumTopicId > 0) {
+
+                $uploadFiles = "";
+
+                //直接上传内容图的处理
+                if (!empty($_FILES)) {
+
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
+                    $tableId = $forumTopicId;
+                    $arrUploadFile = array();
+                    $arrUploadFileId = array();
+                    $imgMaxWidth = 0;
+                    $imgMaxHeight = 0;
+                    $imgMinWidth = 0;
+                    $imgMinHeight = 0;
+                    $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
+
+                    parent::UploadMultiple(
+                        "file_upload_to_content",
+                        $tableType,
+                        $tableId,
+                        $arrUploadFile, //UploadFile类型的数组
+                        $arrUploadFileId, //UploadFileId 数组
+                        $imgMaxWidth,
+                        $imgMaxHeight,
+                        $imgMinWidth,
+                        $imgMinHeight
+                    );
+
+                    $watermarkFilePath = "";
+
+                    if ($attachWatermark > 0) {
+
+
+                        switch ($tableType) {
+                            //帖子内容图
+                            case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+
+                                $siteId = parent::GetSiteIdByDomain();
+                                $siteConfigData = new SiteConfigData($siteId);
+
+                                $watermarkUploadFileId = $siteConfigData->ForumPostContentWatermarkUploadFileId;
+
+                                if ($watermarkUploadFileId > 0) {
+
+                                    $uploadFileData = new UploadFileData();
+
+                                    $watermarkFilePath = $uploadFileData->GetUploadFilePath(
+                                        $watermarkUploadFileId,
+                                        true
+                                    );
+
+                                }
+
+                                break;
+
+
+                        }
+
+
+
+                        for ($u = 0; $u < count($arrUploadFileId); $u++) {
+
+
+
+                        }
+
+                    }
+
+                    $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
+                    $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT;
+                    $mode = ImageObject::WATERMARK_MODE_PNG;
+                    $alpha = 70;
+
+                    for ($u = 0; $u < count($arrUploadFileId); $u++) {
+
+
+                        if($attachWatermark>0 && strlen($watermarkFilePath)>0){
+                            parent::GenUploadFileWatermark1(
+                                $arrUploadFileId[$u],
+                                $watermarkFilePath,
+                                $sourceType,
+                                $watermarkPosition,
+                                $mode,
+                                $alpha,
+                                $arrUploadFile[$u]
+                            );
+                        }
+
+
+                        $uploadFiles = $uploadFiles . "," . $arrUploadFileId[$u];
+
+                        //直接上传时，在内容中插入上传的图片
+
+                        if (strlen($arrUploadFile[$u]->UploadFileWatermarkPath1) > 0
+                        ) {
+                            //有水印图时，插入水印图
+
+                            $insertHtml = Format::FormatUploadFileToHtml(
+                                $arrUploadFile[$u]->UploadFileWatermarkPath1,
+                                FileObject::GetExtension($arrUploadFile[$u]->UploadFileWatermarkPath1),
+                                $arrUploadFileId[$u],
+                                ""
+                            );
+
+                        } else {
+                            //没有水印图时，插入原图
+                            $insertHtml = Format::FormatUploadFileToHtml(
+                                $arrUploadFile[$u]->UploadFilePath,
+                                FileObject::GetExtension($arrUploadFile[$u]->UploadFilePath),
+                                $arrUploadFileId[$u],
+                                ""
+                            );
+
+
+                        }
+                        $forumPostContent = $forumPostContent . "<br />" . $insertHtml;
+
+
+                    }
+
+                }
 
                 //新增到ForumPost表
                 $isTopic = 1;
@@ -293,7 +426,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $showBoughtUser = 0;
                 $sort = 0;
                 $state = 0;
-                $uploadFiles = Control::PostRequest("file_upload_to_content", "");
                 $forumTopicPostData = new ForumPostPublicData();
                 $forumPostId = $forumTopicPostData->Create(
                     $siteId,
@@ -322,7 +454,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $uploadFiles
                 );
 
-                if($forumPostId > 0 ){
+                if ($forumPostId > 0) {
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
@@ -352,7 +484,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     Control::GoUrl("/default.php?mod=forum_topic&forum_id=$forumId");
 
 
-                }else{
+                } else {
                     echo -1;
                 }
             }
@@ -369,7 +501,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         return $tempContent;
     }
 
-    private function GenModify() {
+    private function GenModify()
+    {
         $forumId = Control::GetRequest("forum_id", 0);
         if ($forumId <= 0) {
             die("");
@@ -417,7 +550,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
-        if(!empty($_POST)){
+        if (!empty($_POST)) {
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
 
@@ -430,8 +563,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             $forumTopicAudit = Control::PostRequest("f_ForumTopicAudit", "");
             $forumTopicAccess = Control::PostRequest("f_ForumTopicAccess", "");
             $postTime = date("Y-m-d H:i:s");
-            $userId = Control::GetUserId();//Control::PostRequest("f_UserId", "");
-            $userName = Control::GetUserName();//Control::PostRequest("f_UserName", "");
+            $userId = Control::GetUserId(); //Control::PostRequest("f_UserId", "");
+            $userName = Control::GetUserName(); //Control::PostRequest("f_UserName", "");
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
             $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
             $titleBold = Control::PostRequest("f_TitleBold", "");
@@ -454,7 +587,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 $titleColor,
                 $titleBgImage
             );
-            if($result > 0){
+            if ($result > 0) {
                 $siteId = Control::PostRequest("f_SiteId", "");
                 $isTopic = 1;
                 $forumPostTitle = $forumTopicTitle;
@@ -495,7 +628,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $state,
                     $uploadFiles
                 );
-                if($result > 0){
+                if ($result > 0) {
 
                 }
             }
@@ -513,7 +646,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * 操作主题
      * @return string 返回模板页面
      */
-    private function GenOperate(){
+    private function GenOperate()
+    {
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         if ($forumTopicId <= 0) {
             die("");
@@ -527,7 +661,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $forumId = $forumTopicPublicData->GetForumId($forumTopicId, true);
 
         $userId = Control::GetUserId();
-        if($userId<=0){
+        if ($userId <= 0) {
 
             $returnUrl = urlencode("/default.php?mod=forum_topic&a=operate&forum_topic_id=$forumTopicId");
 
@@ -541,7 +675,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
 
-
         $tempContent = str_ireplace("{ForumTopicId}", $forumTopicId, $tempContent);
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
 
@@ -552,7 +685,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         return $tempContent;
     }
 
-    private function AsyncRemoveToBin(){
+    private function AsyncRemoveToBin()
+    {
 
 
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
@@ -563,7 +697,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             //读取权限
             $forumDeleteSelfPost = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
 
-            if($forumDeleteSelfPost){
+            if ($forumDeleteSelfPost) {
 
                 $forumTopicPublicData = new ForumTopicPublicData();
                 $result = $forumTopicPublicData->ModifyState(
@@ -571,7 +705,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     ForumTopicData::FORUM_TOPIC_STATE_REMOVED
                 );
 
-                if($result>0){
+                if ($result > 0) {
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
@@ -580,22 +714,23 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
                 }
 
-            }else{
+            } else {
                 $result = -10; //没有权限
             }
 
-        }else{
+        } else {
             $result = -5; //参数不正确或者没有登录
         }
 
-        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
     }
 
     /**
      * 设置排序
      * @return string
      */
-    private function AsyncSetTop(){
+    private function AsyncSetTop()
+    {
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
         $userId = Control::GetUserId();
@@ -603,7 +738,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         if ($forumTopicId > 0 && $userId >= 0) {
             $canSetTop = false;
             //读取权限
-            switch($mode){
+            switch ($mode) {
 
                 case 0:
                     $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
@@ -616,9 +751,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     break;
             }
 
-            if($canSetTop){
+            if ($canSetTop) {
                 $sort = 0;
-                switch($mode){
+                switch ($mode) {
 
                     case 0:
                         $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
@@ -637,7 +772,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $sort
                 );
 
-                if($result>0){
+                if ($result > 0) {
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
@@ -646,22 +781,23 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
                 }
 
-            }else{
+            } else {
                 $result = -10; //没有权限
             }
 
-        }else{
+        } else {
             $result = -5; //参数不正确或者没有登录
         }
 
-        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
     }
 
     /**
      * 取消排序
      * @return string
      */
-    private function AsyncCancelTop(){
+    private function AsyncCancelTop()
+    {
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         $mode = intval(Control::GetRequest("mode", 0)); //0 版块，1分区，2全站
         $userId = Control::GetUserId();
@@ -669,7 +805,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         if ($forumTopicId > 0 && $userId >= 0) {
             $canSetTop = false;
             //读取权限
-            switch($mode){
+            switch ($mode) {
 
                 case 0:
                     $canSetTop = parent::GetUserPopedomBoolValue(UserPopedomData::ForumPostSetBoardTop);
@@ -682,9 +818,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     break;
             }
 
-            if($canSetTop){
+            if ($canSetTop) {
                 $sort = 0;
-                switch($mode){
+                switch ($mode) {
 
                     case 0:
                         $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
@@ -703,7 +839,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                     $sort
                 );
 
-                if($result>0){
+                if ($result > 0) {
 
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
@@ -712,15 +848,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
                 }
 
-            }else{
+            } else {
                 $result = -10; //没有权限
             }
 
-        }else{
+        } else {
             $result = -5; //参数不正确或者没有登录
         }
 
-        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
     }
 }
 

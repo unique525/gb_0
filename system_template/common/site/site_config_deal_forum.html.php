@@ -16,85 +16,167 @@
         var tableTypeOfForumBotInfo = window.UPLOAD_TABLE_TYPE_FORUM_BOT_INFO_CONTENT;
         var tableTypeOfForumLogo = window.UPLOAD_TABLE_TYPE_FORUM_LOGO;
         var tableTypeOfForumBackgroundPic = window.UPLOAD_TABLE_TYPE_FORUM_BACKGROUND_PIC;
+
+        var tableTypeOfSiteConfig = window.UPLOAD_TABLE_TYPE_SITE_CONFIG_PIC;
+
         var tableId = parseInt("{SiteId}");
+
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
+            //顶部信息图片
+            if(fileElementId == "file_upload_to_forum_top_info"){
+                if(editorOfForumTopInfo != undefined && editorOfForumTopInfo != null){
+                    editorOfForumTopInfo.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+            }
+            else if(fileElementId == "file_upload_to_forum_bot_info"){
+                if(editorOfForumBotInfo != undefined && editorOfForumBotInfo != null){
+                    editorOfForumBotInfo.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+            }
+            else if(fileElementId == "file_forum_logo_image"){
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
+                $( "#cfg_ForumLogoImageUploadFileId" ).val(uploadFileId);
+                $( "#preview_ForumLogoImageUploadFileId").attr("src",uploadFilePath);
+            }
+            else if(fileElementId == "file_forum_background"){
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
+                $( "#cfg_ForumBackgroundUploadFileId" ).val(uploadFileId);
+                $( "#preview_ForumBackgroundUploadFileId").attr("src",uploadFilePath);
+            }
+            else if(fileElementId == "file_forum_post_content_watermark"){
+                var uploadFileId =  data.upload_file_id;
+                var uploadFilePath = data.upload_file_path;
+                $( "#cfg_ForumPostContentWatermarkUploadFileId" ).val(uploadFileId);
+                $( "#preview_ForumPostContentWatermarkUploadFileId").attr("src",uploadFilePath);
+            }
+        };
+
+        window.GetOneUploadFileCallBack = function(fileElementId,uploadFileId, data){
+            if(data["upload_file_path"] != ""){
+
+                $("#"+fileElementId).attr("src",data["upload_file_path"]);
+
+            }
+        };
+
+
+
+
         $(function () {
-            editorOfForumTopInfo = $('#cfg_ForumTopInfo_2').xheditor();
-            editorOfForumBotInfo = $('#cfg_ForumBotInfo_2').xheditor();
+            editorOfForumTopInfo = $('#cfg_ForumTopInfo').xheditor();
+            editorOfForumBotInfo = $('#cfg_ForumBotInfo').xheditor();
             $('#tabs').tabs();
 
+            //加载已经上传的图片的预览图
+            //upload_file.js
+            var forumLogoImageUploadFileId = parseInt("{cfg_ForumLogoImageUploadFileId}");
+            if(forumLogoImageUploadFileId>0){
+                GetOneUploadFile('preview_ForumLogoImageUploadFileId',forumLogoImageUploadFileId);
+            }
 
+            var forumBackgroundUploadFileId = parseInt("{cfg_ForumBackgroundUploadFileId}");
+            if(forumBackgroundUploadFileId>0){
+                GetOneUploadFile('preview_ForumBackgroundUploadFileId',forumBackgroundUploadFileId);
+            }
+
+            var forumPostContentWatermarkUploadFileId = parseInt("{cfg_ForumPostContentWatermarkUploadFileId}");
+            if(forumPostContentWatermarkUploadFileId>0){
+                GetOneUploadFile('preview_ForumPostContentWatermarkUploadFileId',forumPostContentWatermarkUploadFileId);
+            }
 
             var btnUploadToForumTopInfo = $("#btnUploadToForumTopInfo");
             btnUploadToForumTopInfo.click(function () {
-
                 var fileElementId = 'file_upload_to_forum_top_info';
-                var fUploadFile = null;
-
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumTopInfo";
-                var inputTextId = null;
-                var previewImageId = null;
+                var uploadFileId = 0;
 
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfForumTopInfo,
                     tableId,
-                    editorOfForumTopInfo,
-                    fUploadFile,
-                    attachWatermark,
                     loadingImageId,
-                    inputTextId,
-                    previewImageId,
-                    $(this)
+                    $(this),
+                    attachWatermark,
+                    uploadFileId
                 );
+
             });
 
             var btnUploadToForumBotInfo = $("#btnUploadToForumBotInfo");
             btnUploadToForumBotInfo.click(function () {
 
                 var fileElementId = 'file_upload_to_forum_bot_info';
-                var fUploadFile = null;
-
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfForumBotInfo";
-                var inputTextId = null;
-                var previewImageId = null;
+                var uploadFileId = 0;
+
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfForumBotInfo,
                     tableId,
-                    editorOfForumBotInfo,
-                    fUploadFile,
-                    attachWatermark,
                     loadingImageId,
-                    inputTextId,
-                    previewImageId,
-                    $(this)
+                    $(this),
+                    attachWatermark,
+                    uploadFileId
                 );
             });
 
             //论坛logo上传
-            var btnUploadToForumLogo = $("#btnUploadToForumLogo");
-            btnUploadToForumLogo.click(function () {
+            var btnForumLogoImageUploadFileId = $("#btnForumLogoImageUploadFileId");
+            btnForumLogoImageUploadFileId.click(function () {
 
-                var fileElementId = 'forum_logo_image_upload';
-                var fUploadFile = null;
-
+                var fileElementId = 'file_forum_logo_image';
                 var attachWatermark = 0;
-                var loadingImageId = "loadingOfForumLogo";
-                var inputTextId = "cfg_ForumLogoImage_0";
-                var previewImageId = "preview_ForumLogoImage";
+                var loadingImageId = "loadingOfForumLogoImageUploadFileId";
+                var uploadFileId = 0;
                 AjaxFileUpload(
                     fileElementId,
                     tableTypeOfForumLogo,
                     tableId,
-                    null,
-                    fUploadFile,
-                    attachWatermark,
                     loadingImageId,
-                    inputTextId,
-                    previewImageId,
-                    $(this)
+                    $(this),
+                    attachWatermark,
+                    uploadFileId
+                );
+            });
+
+            //论坛背景图上传
+            var btnForumBackgroundUploadFileId = $("#btnForumBackgroundUploadFileId");
+            btnForumBackgroundUploadFileId.click(function () {
+
+                var fileElementId = 'file_forum_background';
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfForumBackgroundUploadFileId";
+                var uploadFileId = 0;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfForumBackgroundPic,
+                    tableId,
+                    loadingImageId,
+                    $(this),
+                    attachWatermark,
+                    uploadFileId
+                );
+            });
+
+            var btnForumPostContentWatermarkUploadFileId = $("#btnForumPostContentWatermarkUploadFileId");
+            btnForumPostContentWatermarkUploadFileId.click(function () {
+
+                var fileElementId = 'file_forum_post_content_watermark';
+                var attachWatermark = 0;
+                var loadingImageId = "loadingOfForumPostContentWatermarkUploadFileId";
+                var uploadFileId = 0;
+                AjaxFileUpload(
+                    fileElementId,
+                    tableTypeOfSiteConfig,
+                    tableId,
+                    loadingImageId,
+                    $(this),
+                    attachWatermark,
+                    uploadFileId
                 );
             });
 
@@ -163,25 +245,24 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumLogoImage">论坛LOGO图片：</label></td>
+                                            <label for="cfg_ForumLogoImageUploadFileId">论坛LOGO图片：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_ForumLogoImage" src="{cfg_ForumLogoImage_upload_file_path}" /><br/>
-                                            <input id="cfg_ForumLogoImage" name="cfg_ForumLogoImage" value="{cfg_ForumLogoImage}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
-                                            <br/>
-                                            <input id="forum_logo_image_upload" name="forum_logo_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <img id="loadingOfForumLogo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
-                                            <input id="btnUploadToForumLogo" type="button" value="上传"/>
+                                            <img id="preview_ForumLogoImageUploadFileId" src="" /><br/>
+                                            <input id="file_forum_logo_image" name="file_forum_logo_image" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_ForumLogoImageUploadFileId" name="cfg_ForumLogoImageUploadFileId" type="hidden" value="{cfg_ForumLogoImageUploadFileId}"/>
+                                            <img id="loadingOfForumLogoImageUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnForumLogoImageUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ForumBackground">论坛背景图片：</label></td>
+                                            <label for="cfg_ForumBackgroundUploadFileId">论坛背景图片：</label></td>
                                         <td class="spe_line">
-                                            <input id="cfg_ForumBackground" name="cfg_ForumBackground" value="{cfg_ForumBackground}" maxlength="200" type="text" class="input_box" style=" width: 500px;"/>
-                                            [<a id="preview_ForumBackground" href="" target="_blank">预览</a>]<br/>
-                                            <input id="forum_background_image_upload" name="forum_background_image_upload" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <img id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif" style="display:none;"/>
-                                            <input id="btnUploadToForumBackground" type="button" value="上传"/>
+                                            <img id="preview_ForumBackgroundUploadFileId" src="" /><br/>
+                                            <input id="file_forum_background" name="file_forum_background" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_ForumBackgroundUploadFileId" name="cfg_ForumBackgroundUploadFileId" type="hidden" value="{cfg_ForumBackgroundUploadFileId}"/>
+                                            <img id="loadingOfForumBackgroundUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnForumBackgroundUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -240,7 +321,8 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line">
-                                            <label for="cfg_ForumTopInfo"></label><textarea id="cfg_ForumTopInfo" name="cfg_ForumTopInfo" style="width:90%;height:380px;">{cfg_ForumTopInfo}</textarea><br/>
+                                            <label for="cfg_ForumTopInfo"></label>
+                                            <textarea id="cfg_ForumTopInfo" name="cfg_ForumTopInfo" style="width:100%;height:380px;">{cfg_ForumTopInfo}</textarea><br/>
                                             <input id="file_upload_to_forum_top_info" name="file_upload_to_forum_top_info" type="file"
                                                    class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
                                                 id="loadingOfForumTopInfo" src="/system_template/common/images/loading1.gif"
@@ -256,7 +338,8 @@
                                 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="spe_line">
-                                            <label for="cfg_ForumBotInfo"></label><textarea id="cfg_ForumBotInfo" name="cfg_ForumBotInfo" style="width:90%;height:380px;">{cfg_ForumBotInfo}</textarea><br/>
+                                            <label for="cfg_ForumBotInfo"></label>
+                                            <textarea id="cfg_ForumBotInfo" name="cfg_ForumBotInfo" style="width:100%;height:380px;">{cfg_ForumBotInfo}</textarea><br/>
                                             <input id="file_upload_to_forum_bot_info" name="file_upload_to_forum_bot_info" type="file"
                                                    class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
                                                 id="loadingOfForumBotInfo" src="/system_template/common/images/loading1.gif"
@@ -282,6 +365,18 @@
                                             <label for="cfg_ForumPostPageSize">帖子列表每页记录数：</label></td>
                                         <td class="spe_line">
                                             <input name="cfg_ForumPostPageSize" id="cfg_ForumPostPageSize" value="{cfg_ForumPostPageSize}" maxlength="3" type="text" class="input_number" style=" width: 50px;"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_ForumPostContentWatermarkUploadFileId">帖子内容中上传图片的水印：</label></td>
+                                        <td class="spe_line">
+                                            <img id="preview_ForumPostContentWatermarkUploadFileId" src="" /><br/>
+                                            <input id="file_forum_post_content_watermark" name="file_forum_post_content_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_ForumPostContentWatermarkUploadFileId" name="cfg_ForumPostContentWatermarkUploadFileId" type="hidden" value="{cfg_ForumPostContentWatermarkUploadFileId}"/>
+                                            <img id="loadingOfForumPostContentWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnForumPostContentWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                 </table>

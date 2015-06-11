@@ -34,14 +34,9 @@
             btnUploadToMaleAvatar.click(function () {
 
                 var fileElementId = 'user_default_male_avatar';
-                var fUploadFile = null;
-                var editor = null;
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfUserDefaultMaleAvatar";
-                var inputTextId = null;
-                var previewImageId = null;
                 var uploadFileId = 0;
-
 
                 AjaxFileUpload(
                     fileElementId,
@@ -49,11 +44,7 @@
                     tableId,
                     loadingImageId,
                     $(this),
-                    editor,
-                    fUploadFile,
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
             });

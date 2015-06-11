@@ -240,8 +240,8 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 //if (isset($_GET['jsonpcallback'])) {
                 //    echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
                 //}
-                $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
-                $result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
+                //$arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
+                //$result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
             }
         }
         return $result;

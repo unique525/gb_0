@@ -23,6 +23,8 @@ ul{list-style-type:none;}
 .pager_button{margin:5px auto;clear:both;}
 .select_device{margin-top:10px;clear:both;line-height:160px;text-align:center;}
 
+.input_box_m{border:solid 1px #A1A1A1;height:24px;line-height:24px;padding:3px;-moz-box-shadow: 3px 3px 3px 3px #efefef;box-shadow: 3px 3px 3px 3px #efefef;}
+
 /* pager css */
 #pager_btn{font-size:14px;clear:both;margin:20px auto;}
 #pager_btn a{font-size:14px;}
