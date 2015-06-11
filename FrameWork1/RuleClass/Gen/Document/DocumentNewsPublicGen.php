@@ -227,7 +227,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
     /**
-     * 记录广告点击
+     * 记录点击
      * @return string
      */
     private function GenAsyncAddHit() {
@@ -240,8 +240,8 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 //if (isset($_GET['jsonpcallback'])) {
                 //    echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
                 //}
-                $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
-                $result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
+                //$arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
+                //$result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
             }
         }
         return $result;

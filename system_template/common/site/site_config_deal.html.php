@@ -26,7 +26,7 @@
                 $( "#cfg_DocumentNewsContentPicWatermarkUploadFileId" ).val(uploadFileId);
                 $( "#preview_DocumentNewsContentPicWatermarkUploadFileId").attr("src",uploadFilePath);
             }
-        }
+        };
 
         window.GetOneUploadFileCallBack = function(fileElementId,uploadFileId, data){
             if(data["upload_file_path"] != ""){
@@ -57,12 +57,8 @@
             btnNewspaperArticlePicWatermarkUploadFileId.click(function () {
 
                 var fileElementId = 'file_newspaper_article_pic_watermark';
-                var fUploadFile = null;
-                var editor = null;
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfNewspaperArticlePicWatermarkUploadFileId";
-                var inputTextId = null;
-                var previewImageId = null;
                 var uploadFileId = 0;
 
 
@@ -72,11 +68,7 @@
                     tableId,
                     loadingImageId,
                     $(this),
-                    editor,
-                    fUploadFile,
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
             });
@@ -87,12 +79,8 @@
             btnDocumentNewsContentPicWatermarkUploadFileId.click(function () {
 
                 var fileElementId = 'file_document_news_content_pic_watermark';
-                var fUploadFile = null;
-                var editor = null;
                 var attachWatermark = 0;
                 var loadingImageId = "loadingOfDocumentNewsContentPicWatermarkUploadFileId";
-                var inputTextId = null;
-                var previewImageId = null;
                 var uploadFileId = 0;
 
 
@@ -102,11 +90,7 @@
                     tableId,
                     loadingImageId,
                     $(this),
-                    editor,
-                    fUploadFile,
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
             });

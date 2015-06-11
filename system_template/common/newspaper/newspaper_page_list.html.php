@@ -24,6 +24,29 @@
                 parent.addTab();
             });
 
+            $(".btn_delete").click(function (event) {
+                event.preventDefault();
+                var newspaperPageId= parseInt($(this).attr("idvalue"));
+
+                if(newspaperPageId>0 && confirm("确认删除吗？删除后不可以恢复！")){
+                    $.ajax({
+                        type: "get",
+                        url: "/default.php?secu=manage&mod=newspaper_page&m=async_delete",
+                        data: {
+                            newspaper_page_id: newspaperPageId
+                        },
+                        dataType: "jsonp",
+                        jsonp: "jsonpcallback",
+                        success: function(data) {
+                            window.location.href = window.location.href;
+                        }
+                    });
+                }
+
+            });
+
+
+
             $("#btn_manage_all_newspaper_article").click(function (event) {
                 event.preventDefault();
                 var newspaperId=$(this).attr("idvalue");
@@ -90,11 +113,12 @@
          * @return {string}
          */
         function formatState(state){
+            state = parseInt(state);
             switch (state){
-                case "0":
+                case 0:
                     return "启用";
                     break;
-                case "100":
+                case 100:
                     return "<"+"span style='color:#990000'>停用<"+"/span>";
                     break;
                 default :
@@ -130,6 +154,7 @@
             <td style="width: 40px; text-align: center;">编辑</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
+            <td style="width: 40px; text-align: center;">删除</td>
             <td style="width:80px;text-align:left;padding:0 10px 0 10px">相关管理</td>
             <td style="width: 100px;text-align:center;">版面号</td>
             <td>名称</td>
@@ -150,7 +175,7 @@
                             <td class="spe_line2" style="width:80px;text-align:center;">
                                 <img class="img_open" idvalue="{f_NewspaperPageId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <img class="img_close" idvalue="{f_NewspaperPageId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
-
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_delete" title="{f_NewspaperPageName}删除" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/delete.jpg" idvalue="{f_NewspaperPageId}" alt="删除"/></td>
                             <td class="spe_line2" style="width:80px;text-align:left;padding:0 10px 0 10px">
                                 <a href="/default.php?secu=manage&mod=newspaper_article&&m=list&newspaper_page_id={f_NewspaperPageId}">文章管理</a>
                             </td>

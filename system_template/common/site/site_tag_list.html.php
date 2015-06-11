@@ -27,40 +27,44 @@
                 window.location.href = '/default.php?secu=manage&mod=site&m=modify&tab_index='+ parent.G_TabIndex +'&site_id=' + siteId + '';
             });
 
-            //格式化站点状态
+            //格式化状态
             $(".span_state").each(function(){
-                $(this).html(formatSiteState($(this).text()));
+                $(this).html(formatSiteTagState($(this).text()));
             });
 
-            //开启站点
-            $(".img_open_site").click(function(){
-                var siteId = parseInt($(this).attr("idvalue"));
+            //开启
+            $(".img_open_siteTag").click(function(){
+                var siteTagId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
-                modifySiteState(siteId, state);
+                modifySiteState(siteTagId, state);
             });
-            //停用站点
-            $(".img_close_site").click(function(){
-                var siteId = parseInt($(this).attr("idvalue"));
-                var state = 100; //开启状态
-                modifySiteState(siteId, state);
+            //停用
+            $(".img_close_siteTag").click(function(){
+
+                var siteTagId = parseInt($(this).attr("idvalue"));
+                var state = 100; //停用状态
+
+                modifySiteState(siteTagId, state);
             });
         });
 
 
 
-        function modifySiteState(siteId,state){
-            if(siteId>0){
+        function modifySiteState(siteTagId,state){
+            var siteId = Request["site_id"];
+            if(siteTagId>0){
                 $.ajax({
                     type: "get",
-                    url: "/default.php?secu=manage&mod=site&m=async_modify_state",
+                    url: "/default.php?secu=manage&mod=site_tag&m=modify_state",
                     data: {
-                        site_id: siteId,
+                        site_id:siteId,
+                        site_tag_id:siteTagId,
                         state:state
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        $("#span_state_"+siteId).html(formatSiteState(state));
+                        $("#span_state_"+siteTagId).html(formatSiteTagState(state));
                     }
                 });
             }
@@ -70,7 +74,7 @@
          * 格式化状态值
          * @return {string}
          */
-        function formatSiteState(state){
+        function formatSiteTagState(state){
             state = state.toString();
             switch (state){
                 case "0":
@@ -123,11 +127,11 @@
                                 <img class="btn_modify" title="{f_SiteTagId}" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_SiteTagId}" alt="编辑"/></td>
                             <td class="spe_line2" style="width:120px;text-align:center;">{f_SiteTagName}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_SiteId}" class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_SiteTagId}" class="span_state" idvalue="{f_SiteTagId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;">
-                                <img class="img_open_site" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
+                                <img class="img_open_siteTag" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <img class="img_close_site" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
+                                <img class="img_close_siteTag" idvalue="{f_SiteTagId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
                             </td>
 
                         </tr>

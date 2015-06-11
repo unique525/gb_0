@@ -39,7 +39,7 @@ class BaseManageData extends BaseData {
                     }
                     $fieldNames = $fieldNames . ",`" . $keyName . "`";
                     $fieldValues = $fieldValues . ",:" . $keyName;
-                    $dataProperty->AddField($keyName, stripslashes($value));
+                    $dataProperty->AddField($keyName, $value);
                 } else if (strpos($key, "c" . $preNumber . "_") === 0) { //radio checkbox类字段
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`";
@@ -55,7 +55,7 @@ class BaseManageData extends BaseData {
             if (strlen($addFieldName) > 0 && strlen($addFieldValue) > 0) {
                 $fieldNames = $fieldNames . ",`" . $addFieldName . "`";
                 $fieldValues = $fieldValues . ",:" . $addFieldName;
-                $dataProperty->AddField($addFieldName, stripslashes($addFieldValue));
+                $dataProperty->AddField($addFieldName, $addFieldValue);
             }
 
             //附加字段数组插入SQL
@@ -64,7 +64,7 @@ class BaseManageData extends BaseData {
                     for ($fi = 0; $fi < count($addFieldNames); $fi++) {
                         $fieldNames = $fieldNames . ",`" . $addFieldNames[$fi] ."`";
                         $fieldValues = $fieldValues . ",:" . $addFieldNames[$fi];
-                        $dataProperty->AddField($addFieldNames[$fi], stripslashes($addFieldValues[$fi]));
+                        $dataProperty->AddField($addFieldNames[$fi], $addFieldValues[$fi]);
                     }
                 }
             }
@@ -114,7 +114,7 @@ class BaseManageData extends BaseData {
                     
                     $fieldNames = $fieldNames . ",`" . $keyName . "`";
                     $fieldValues = $fieldValues . ",:" . $keyName;
-                    $dataProperty->AddField($keyName, stripslashes($value));
+                    $dataProperty->AddField($keyName, $value);
                 } else if (strpos($key, "c" . $preNumber . "_") === 0) { //radio checkbox类字段
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`";
@@ -130,7 +130,7 @@ class BaseManageData extends BaseData {
             if (strlen($addFieldName) > 0 && strlen($addFieldValue) > 0) {
                 $fieldNames = $fieldNames . "," . $addFieldName;
                 $fieldValues = $fieldValues . ",:" . $addFieldName;
-                $dataProperty->AddField($addFieldName, stripslashes($addFieldValue));
+                $dataProperty->AddField($addFieldName, $addFieldValue);
             }
 
             //附加字段数组插入SQL
@@ -139,7 +139,7 @@ class BaseManageData extends BaseData {
                     for ($fi = 0; $fi < count($addFieldNames); $fi++) {
                         $fieldNames = $fieldNames . "," . $addFieldNames[$fi];
                         $fieldValues = $fieldValues . ",:" . $addFieldNames[$fi];
-                        $dataProperty->AddField($addFieldNames[$fi], stripslashes($addFieldValues[$fi]));
+                        $dataProperty->AddField($addFieldNames[$fi], $addFieldValues[$fi]);
                     }
                 }
             }
@@ -179,7 +179,7 @@ class BaseManageData extends BaseData {
                 if (strpos($key, "f" . $preNumber . "_") === 0) {
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`=:" . $keyName;
-                    $dataProperty->AddField($keyName, stripslashes($value));
+                    $dataProperty->AddField($keyName, $value);
                 } else if (strpos($key, "c" . $preNumber . "_") === 0) { //radio checkbox类字段
                     $keyName = substr($key, 2);
                     $fieldNames = $fieldNames . ",`" . $keyName . "`=:" . $keyName;
@@ -194,7 +194,7 @@ class BaseManageData extends BaseData {
             //附加字段插入SQL
             if (strlen($addFieldName) > 0 && strlen($addFieldValue) > 0) {
                 $fieldNames = $fieldNames . ",`" . $addFieldName . "`=:" . $addFieldName;
-                $dataProperty->AddField($addFieldName, stripslashes($addFieldValue));
+                $dataProperty->AddField($addFieldName, $addFieldValue);
             }
 
             //附加字段数组插入SQL
@@ -202,7 +202,7 @@ class BaseManageData extends BaseData {
                 if (count($addFieldNames) > 0 && count($addFieldValues) > 0 && count($addFieldNames) === count($addFieldValues)) {
                     for ($fi = 0; $fi < count($addFieldNames); $fi++) {
                         $fieldNames = $fieldNames . ",`" . $addFieldNames[$fi] . "`=:" . $addFieldNames[$fi];
-                        $dataProperty->AddField($addFieldNames[$fi], stripslashes($addFieldValues[$fi]));
+                        $dataProperty->AddField($addFieldNames[$fi], $addFieldValues[$fi]);
                     }
                 }
             }

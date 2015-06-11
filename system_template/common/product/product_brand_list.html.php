@@ -58,9 +58,18 @@ $(function(){
     btnUploadToContent.click(function(){
 
         var fileElementId = 'file_upload_to_content';
-        var fUploadFile = $("#f_UploadFiles");
         var attachWatermark = 0;
-        AjaxFileUpload(fileElementId,tableType,tableId,editor,fUploadFile,attachWatermark);
+        var loadingImageId = null;
+        var uploadFileId = 0;
+        AjaxFileUpload(
+            fileElementId,
+            tableType,
+            tableId,
+            loadingImageId,
+            $(this),
+            attachWatermark,
+            uploadFileId
+        );
     });
 
 });

@@ -71,7 +71,10 @@ class NewspaperArticlePicPublicData extends BasePublicData
         $result = -1;
         if (strlen($fileName) > 0 && $newspaperArticleId > 0) {
             $sql = "SELECT NewspaperArticlePicId FROM " . self::TableName_NewspaperArticlePic . "
-                        WHERE FileName=:FileName AND NewspaperArticleId=:NewspaperArticleId;";
+                        WHERE FileName=:FileName
+                        AND NewspaperArticleId=:NewspaperArticleId
+                        AND State<100
+                        ;";
 
             $dataProperty = new DataProperty();
             $dataProperty->AddField("FileName", $fileName);

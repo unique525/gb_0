@@ -123,6 +123,7 @@ class Pager {
             }
             $outHtml = str_ireplace("{NextIndex}", str_ireplace("{0}", strval($pageIndex + 1), $navUrl), $outHtml);
             $outHtml = str_ireplace("{EndIndex}", str_ireplace("{0}", strval($allBtnCount), $navUrl), $outHtml);
+            $outHtml = str_ireplace("{all_content_url}", str_ireplace("{0}", "0", $navUrl), $outHtml);
             $outHtml = str_ireplace("{NextIndexC}", $pageIndex + 1, $outHtml);
             $outHtml = str_ireplace("{EndIndexC}", $allBtnCount, $outHtml);
             $outHtml = str_ireplace("{NowIndex}", strval($pageIndex), $outHtml);

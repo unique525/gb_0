@@ -124,29 +124,18 @@
             $("#btn_upload").click(function () {
 
                 var fileElementId = 'file_upload_to_user_avatar';
-
                 var loadingImageId = "loadingOfUserAvatar";
-
-                var fUploadFile = $("#f_UploadFiles");
-
                 var attachWatermark = 0;
                 if ($("#cbAttachWatermark").attr("checked") == true) {
                     attachWatermark = 1;
                 }
-                var inputTextId = null;
-                var previewImageId = null;
-                var editor = null;
                 AjaxFileUpload(
                     fileElementId,
                     tableType,
                     tableId,
                     loadingImageId,
                     $(this),
-                    editor,
-                    fUploadFile,
                     attachWatermark,
-                    inputTextId,
-                    previewImageId,
                     uploadFileId
                 );
 

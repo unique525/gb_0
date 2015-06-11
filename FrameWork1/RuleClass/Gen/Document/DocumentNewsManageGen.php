@@ -258,6 +258,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                         if ($closeTab == 1) {
                             //$resultJavaScript .= Control::GetCloseTab();
                             Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                        } elseif($closeTab == 2){
+                            Control::GoUrl("/default.php?secu=manage&mod=document_news&m=modify&document_news_id=$documentNewsId&tab_index=$tabIndex&p=$pageIndex");
+
                         } else {
                             Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                         }
@@ -587,6 +590,12 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=document_news&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                    } elseif($closeTab == 2){
+
+                        //确认并编辑
+                        Control::GoUrl("/default.php?secu=manage&mod=document_news&m=modify&document_news_id=$documentNewsId&tab_index=$tabIndex&p=$pageIndex");
+
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -912,6 +921,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             $channelManageData = new ChannelManageData();
             $documentNewsManageData = new DocumentNewsManageData();
             $arrayOfDocumentNewsList = $documentNewsManageData->GetListByIDString($docIdString);
+            $channelType = $channelManageData->GetChannelType($channelId,true);
             if (!empty($_POST)) { //提交
                 $targetCid = Control::PostRequest("pop_cid", 0); //目标频道ID
                 $targetSiteId = $channelManageData->GetSiteId($targetCid,true);
@@ -930,10 +940,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
 
 
-                        $channelType = $channelManageData->GetChannelType($targetCid,true);
+                        $targetChannelType = $channelManageData->GetChannelType($targetCid,true);
 
                         if (strlen($docIdString) > 0) {
-                            if ($channelType === 1) {   //新闻资讯类
+                            if ($targetChannelType === 1) {   //新闻资讯类
                                 switch($method){
                                     case "copy":
                                         $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
@@ -977,7 +987,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     Control::ShowMessage(Language::Load('document', 17));
                                 }
                             }
-                            else if ($channelType === 4) {   //产品类
+                            else if ($targetChannelType === 4) {   //产品类
                                 $productManageData=new ProductManageData();
                                 switch($method){
                                     case "move":
@@ -1028,6 +1038,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 "{SiteId}" => $siteId,
                 "{ChannelId}" => $channelId,
                 "{ChannelName}" => "",
+                "{ChannelType}" => $channelType,
                 "{Method}" => $methodName,
                 "{MethodName}" => $methodName,
                 "{DealType}" => $methodName,

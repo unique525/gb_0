@@ -25,7 +25,9 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
-
+            case "modify_state":
+                $result = self::ModifyState();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -81,5 +83,43 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         $result = $tempContent;
         return $result;
+    }
+
+    private function GenCreate(){
+
+    }
+
+    /**
+     * 修改广告位状态
+     * @return string 修改结果
+     */
+    private function ModifyState()
+    {
+        $result = -1;
+        $siteId = Control::GetRequest("site_id", 0);
+        $siteTagId = Control::GetRequest("site_tag_id", 0);
+        $state = Control::GetRequest("state", -1);
+        $manageUserId = Control::GetManageUserId();
+
+        if ($siteId > 0 && $siteTagId >= 0 && $state >= 0 && $manageUserId > 0) {
+            /**********************************************************************
+             ******************************判断是否有操作权限**********************
+             **********************************************************************/
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $channelId = 0;
+            $can = $manageUserAuthorityManageData->CanManageSite($siteId, $channelId, $manageUserId);
+            if (!$can) {
+                $result = -10;
+            } else {
+                $siteTagManageData = new SiteTagManageData();
+                $result = $siteTagManageData->ModifyState($siteTagId, $state);
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/site_data');
+                //加入操作日志
+                $operateContent = 'Modify State SiteTag,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
+                self::CreateManageUserLog($operateContent);
+            }
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
     }
 }

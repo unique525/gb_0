@@ -37,6 +37,9 @@ class NewspaperPageManageGen extends BaseManageGen {
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
+            case "async_delete":
+                $result = self::AsyncDelete();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -95,6 +98,33 @@ class NewspaperPageManageGen extends BaseManageGen {
         return $tempContent;
     }
 
+    private function AsyncDelete(){
+        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+
+            $newspaperPageManageData = new NewspaperPageManageData();
+            $result = $newspaperPageManageData->Delete($newspaperPageId);
+
+            if($result>0){
+
+                $newspaperArticleManageData = new
+                    NewspaperArticleManageData();
+                $newspaperArticleManageData->DeleteByNewspaperPageId(
+                    $newspaperPageId
+                );
+
+                $newspaperArticlePicManageData = new
+                NewspaperArticlePicManageData();
+
+                $newspaperArticlePicManageData->DeleteOfNull();
+
+            }
+
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+    }
 
     /**
      * 修改排序号

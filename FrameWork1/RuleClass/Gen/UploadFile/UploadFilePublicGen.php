@@ -199,12 +199,8 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
                             );
 
                         }
-
                         break;
-
-
                 }
-
 
                 $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
                 $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT;
