@@ -227,7 +227,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
     /**
-     * 记录广告点击
+     * 记录点击
      * @return string
      */
     private function GenAsyncAddHit() {
