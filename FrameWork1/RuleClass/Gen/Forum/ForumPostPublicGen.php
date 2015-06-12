@@ -246,10 +246,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $forumTopicPublicData = new ForumTopicPublicData();
         $forumId = $forumTopicPublicData->GetForumId($forumTopicId, true);
 
-        $templateFileUrl = "forum/forum_post_deal.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateMode = 0;
+        $defaultTemp = "forum_post_create";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
 
         if (!empty($_POST)) {
             $forumPostTitle = Control::PostRequest("f_ForumPostTitle", "");
@@ -263,6 +264,111 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $postTime = date("Y-m-d H:i:s");
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
+
+            $uploadFiles = "";
+
+            //直接上传内容图的处理
+            if (!empty($_FILES)) {
+
+                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
+                $tableId = $forumTopicId;
+                $arrUploadFile = array();
+                $arrUploadFileId = array();
+                $imgMaxWidth = 0;
+                $imgMaxHeight = 0;
+                $imgMinWidth = 0;
+                $imgMinHeight = 0;
+                $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
+
+                parent::UploadMultiple(
+                    "file_upload_to_content",
+                    $tableType,
+                    $tableId,
+                    $arrUploadFile, //UploadFile类型的数组
+                    $arrUploadFileId, //UploadFileId 数组
+                    $imgMaxWidth,
+                    $imgMaxHeight,
+                    $imgMinWidth,
+                    $imgMinHeight
+                );
+
+                $watermarkFilePath = "";
+
+                if ($attachWatermark > 0) {
+
+
+                    switch ($tableType) {
+                        //帖子内容图
+                        case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+                            $siteId = parent::GetSiteIdByDomain();
+                            $siteConfigData = new SiteConfigData($siteId);
+                            $watermarkUploadFileId = $siteConfigData->ForumPostContentWatermarkUploadFileId;
+                            if ($watermarkUploadFileId > 0) {
+
+                                $uploadFileData = new UploadFileData();
+
+                                $watermarkFilePath = $uploadFileData->GetUploadFilePath(
+                                    $watermarkUploadFileId,
+                                    true
+                                );
+                            }
+                            break;
+
+                    }
+
+
+                }
+
+                $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
+                $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT;
+                $mode = ImageObject::WATERMARK_MODE_PNG;
+                $alpha = 70;
+
+                for ($u = 0; $u < count($arrUploadFileId); $u++) {
+
+
+                    if($attachWatermark>0 && strlen($watermarkFilePath)>0){
+                        parent::GenUploadFileWatermark1(
+                            $arrUploadFileId[$u],
+                            $watermarkFilePath,
+                            $sourceType,
+                            $watermarkPosition,
+                            $mode,
+                            $alpha,
+                            $arrUploadFile[$u]
+                        );
+                    }
+
+                    $uploadFiles = $uploadFiles . "," . $arrUploadFileId[$u];
+
+                    //直接上传时，在内容中插入上传的图片
+
+                    if (strlen($arrUploadFile[$u]->UploadFileWatermarkPath1) > 0
+                    ) {
+                        //有水印图时，插入水印图
+
+                        $insertHtml = Format::FormatUploadFileToHtml(
+                            $arrUploadFile[$u]->UploadFileWatermarkPath1,
+                            FileObject::GetExtension($arrUploadFile[$u]->UploadFileWatermarkPath1),
+                            $arrUploadFileId[$u],
+                            ""
+                        );
+
+                    } else {
+                        //没有水印图时，插入原图
+                        $insertHtml = Format::FormatUploadFileToHtml(
+                            $arrUploadFile[$u]->UploadFilePath,
+                            FileObject::GetExtension($arrUploadFile[$u]->UploadFilePath),
+                            $arrUploadFileId[$u],
+                            ""
+                        );
+                    }
+                    $forumPostContent = $forumPostContent . "<br />" . $insertHtml;
+
+
+                }
+
+            }
 
             //新增到ForumPost表
             $isTopic = 0;
@@ -311,6 +417,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
 
             if ($forumPostId > 0) {
+
+
+
+
+
 
                 //删除缓冲
                 DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');

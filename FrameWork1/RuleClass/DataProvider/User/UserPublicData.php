@@ -18,11 +18,15 @@ class UserPublicData extends BasePublicData {
      */
     public function Login($userAccount,$userPass,$userPassWithMd5=""){
         $result = -1;
+        $userPassWithMd5 = md5($userPassWithMd5);
+        if(strlen($userPassWithMd5)>20){
+            $userPassWithMd5 = substr($userPassWithMd5,0,20);
+        }
 
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                            AND (UserPass = :UserPass OR UserPassWithMd5 = :UserPassWithMd5);";
+                            AND (UserPass = :UserPass OR left(UserPassWithMd5,20) = :UserPassWithMd5);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
             $dataProperty->AddField("UserEmail",$userAccount);

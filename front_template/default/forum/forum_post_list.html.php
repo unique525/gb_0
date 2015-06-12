@@ -50,98 +50,98 @@
                 height:200,
                 upImgUrl:"",
                 upImgExt:"jpg,jpeg,gif,png",
-                localUrlTest:/^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
+                localUrlTest:/^https?://[^/]*?(localhost)//i,
                 remoteImgSaveUrl:''
-            });
+        });
 
-            var forumTopicId = parseInt(Request["forum_topic_id"]);
-            var btnConfirm = $("#btnConfirm");
+        var forumTopicId = parseInt(Request["forum_topic_id"]);
+        var btnConfirm = $("#btnConfirm");
 
-            btnConfirm.click(function(){
-                if (forumTopicId == undefined || forumTopicId <=0){
+        btnConfirm.click(function(){
+            if (forumTopicId == undefined || forumTopicId <=0){
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("帖子ID不能为空");
+            }
+            else {
+                var forumPostContent = $("#f_ForumPostContent");
+                if (forumPostContent.val() == '') {
                     $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("帖子ID不能为空");
+                    $("#dialog_content").html("回复内容不能为空");
+                } else {
+
+                    $("#mainForm").attr("action",
+                        "/default.php?mod=forum_post&a=reply&forum_topic_id={ForumTopicId}");
+                    $('#mainForm').submit();
                 }
-                else {
-                    var forumPostContent = $("#f_ForumPostContent");
-                    if (forumPostContent.val() == '') {
-                        $("#dialog_box").dialog({width: 300, height: 100});
-                        $("#dialog_content").html("回复内容不能为空");
-                    } else {
+            }
+        });
 
-                        $("#mainForm").attr("action",
-                            "/default.php?mod=forum_post&a=reply&forum_topic_id={ForumTopicId}");
-                        $('#mainForm').submit();
-                    }
-                }
-            });
+        var btnGoReply = $("#btnGoReply");
+        btnGoReply.click(function(){
+            if (forumTopicId == undefined || forumTopicId <=0){
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("帖子ID不能为空");
+            }
+            else {
+                window.location.href =
+                    "/default.php?mod=forum_post&a=create&forum_topic_id={ForumTopicId}";
 
-            var btnGoReply = $("#btnGoReply");
-            btnGoReply.click(function(){
-                if (forumTopicId == undefined || forumTopicId <=0){
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("帖子ID不能为空");
-                }
-                else {
-                    window.location.href =
-                        "/default.php?mod=forum_post&a=create&forum_topic_id={ForumTopicId}";
+            }
+        });
 
-                }
-            });
+        $(".img_avatar").each(function(){
 
-            $(".img_avatar").each(function(){
+            if($(this).attr("src").length<=0){
 
-                if($(this).attr("src").length<=0){
+                $(this).attr("src","/front_template/default/skins/gray/no_avatar_small.gif");
 
-                    $(this).attr("src","/front_template/default/skins/gray/no_avatar_small.gif");
+            }
+        });
 
-                }
-            });
-
-            //收藏
-            var addToUserFavorite = $("#add_to_user_favorite");
-            addToUserFavorite.click(function(){
-                var forumTopicId = parseInt("{ForumTopicId}");
-                if (forumTopicId == undefined || forumTopicId <=0){
-                    $("#dialog_box").dialog({width: 300, height: 100});
-                    $("#dialog_content").html("帖子ID不能为空");
-                }
-                else {
-                    var userFavoriteTableType = 4;//论坛主题 4
+        //收藏
+        var addToUserFavorite = $("#add_to_user_favorite");
+        addToUserFavorite.click(function(){
+            var forumTopicId = parseInt("{ForumTopicId}");
+            if (forumTopicId == undefined || forumTopicId <=0){
+                $("#dialog_box").dialog({width: 300, height: 100});
+                $("#dialog_content").html("帖子ID不能为空");
+            }
+            else {
+                var userFavoriteTableType = 4;//论坛主题 4
 
 
-                    var userFavoriteTitle = UrlEncode($(this).attr("title"));
-                    var userFavoriteUrl = UrlEncode(window.location.href);
+                var userFavoriteTitle = UrlEncode($(this).attr("title"));
+                var userFavoriteUrl = UrlEncode(window.location.href);
 
-                    $.ajax({
-                        type: "get",
-                        url: "/default.php?mod=user_favorite&a=async_add",
-                        data: {
-                            table_type: userFavoriteTableType,
-                            table_id:forumTopicId,
-                            user_favorite_title:userFavoriteTitle,
-                            user_favorite_url:userFavoriteUrl
-                        },
-                        dataType: "jsonp",
-                        jsonp: "jsonpcallback",
-                        success: function(result) {
+                $.ajax({
+                    type: "get",
+                    url: "/default.php?mod=user_favorite&a=async_add",
+                    data: {
+                        table_type: userFavoriteTableType,
+                        table_id:forumTopicId,
+                        user_favorite_title:userFavoriteTitle,
+                        user_favorite_url:userFavoriteUrl
+                    },
+                    dataType: "jsonp",
+                    jsonp: "jsonpcallback",
+                    success: function(result) {
 
-                            var resultCode = parseInt(result["result"]);
-                            if(resultCode > 0){
-                                alert("收藏成功");
-                            }else if(resultCode == -1){
-                                alert("收藏失败");
-                            }else if(resultCode == -2){
-                                alert("您已经收藏过此主题了");
-                            }else if(resultCode == -3){
-                                alert("没有登录，请登录后收藏");
-                            }
-
+                        var resultCode = parseInt(result["result"]);
+                        if(resultCode > 0){
+                            alert("收藏成功");
+                        }else if(resultCode == -1){
+                            alert("收藏失败");
+                        }else if(resultCode == -2){
+                            alert("您已经收藏过此主题了");
+                        }else if(resultCode == -3){
+                            alert("没有登录，请登录后收藏");
                         }
-                    });
 
-                }
-            });
+                    }
+                });
+
+            }
+        });
 
         });
 
@@ -158,7 +158,7 @@
     <div class="content">
         <div class="left">
             <a class="link" href="/default.php?mod=forum">首页</a>
-            &nbsp;--&nbsp;
+            --
             <a class="link" href="/default.php?mod=forum_topic&forum_id={ForumId}">
                 {ForumName}
             </a>
@@ -264,7 +264,7 @@
                         <tr>
                             <td colspan="3" align="left" style="padding-left:10px;padding-top:10px;">
 
-                                    {child}
+                                {child}
 
                             </td>
                         </tr>
@@ -275,37 +275,40 @@
                 <child>
                     <![CDATA[
                     <table cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                        <td style="width:150px;">{f_PostTime} {f_UserName}:</td>
-                        <td>{f_ForumPostContent}</td>
-                    </tr>
+                        <tr>
+                            <td style="width:150px;">{f_PostTime} {f_UserName}:</td>
+                            <td>{f_ForumPostContent}</td>
+                        </tr>
                     </table>
                     ]]>
                 </child>
             </icms>
+            <div class="pager_button">
+                {pager_button}
+            </div>
             <form id="mainForm" enctype="multipart/form-data" method="post">
-            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserIsLogin};">
-                <tr>
-                    <td colspan="2">
-                        <textarea id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style="padding-top: 5px;">
-                        <input id="btnConfirm" class="btn2" type="button" value="快速回复提交">
-                    </td>
-                    <td align="right" style="padding-top: 5px;">
-                        <input id="btnGoReply" class="btn3" type="button" value="转到高级回复">
-                    </td>
-                </tr>
-            </table>
-            <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">
-                <tr>
-                    <td align="center" style="padding:25px;">
-                        快速回复：您还没有登录，请先<a href="{UserLoginUrl}">[登录]</a>或<a href="{UserRegisterUrl}">[注册]</a>
-                    </td>
-                </tr>
-            </table>
+                <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserIsLogin};">
+                    <tr>
+                        <td colspan="2">
+                            <text_area id="f_ForumPostContent" name="f_ForumPostContent" class="replyBox"></text_area>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding-top: 5px;">
+                            <input id="btnConfirm" class="btn2" type="button" value="快速回复提交">
+                        </td>
+                        <td align="right" style="padding-top: 5px;">
+                            <input id="btnGoReply" class="btn3" type="button" value="转到高级回复">
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding="0" cellspacing="0" width="100%" style="display:{UserUnLogin};">
+                    <tr>
+                        <td align="center" style="padding:25px;">
+                            快速回复：您还没有登录，请先<a href="{UserLoginUrl}">[登录]</a>或<a href="{UserRegisterUrl}">[注册]</a>
+                        </td>
+                    </tr>
+                </table>
             </form>
         </div>
 

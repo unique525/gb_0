@@ -526,6 +526,7 @@ class UploadFile {
         $returnJson .= '"error":"' . Format::FormatJson($this->ErrorMessage) . '",';
         $returnJson .= '"upload_file_id":"' . Format::FormatJson($this->UploadFileId) . '",';
         $returnJson .= '"upload_file_path":"' .Format::FormatJson($uploadFilePath). '"';
+        $returnJson .= '"upload_file_watermark_path1":"' .Format::FormatJson($this->UploadFileWatermarkPath1). '"';
         $returnJson .= '}';
 
         return $returnJson;

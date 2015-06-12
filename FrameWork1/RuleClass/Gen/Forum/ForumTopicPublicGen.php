@@ -347,14 +347,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
                         }
 
-
-
-                        for ($u = 0; $u < count($arrUploadFileId); $u++) {
-
-
-
-                        }
-
                     }
 
                     $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;

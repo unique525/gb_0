@@ -271,6 +271,7 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
             $result .= '"result_html":"file_element_name:'.$fileElementName.';table_type:'.$tableType.'",';
             $result .= '"upload_file_id":"",';
             $result .= '"upload_file_path":""';
+            $result .= '"upload_file_watermark_path1":""';
             $result .= '}';
         }
 
