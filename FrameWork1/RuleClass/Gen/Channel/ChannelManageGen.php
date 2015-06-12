@@ -37,6 +37,11 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             case "property":
                 $result = self::GenProperty();
                 break;
+            case "check_channel_type":
+                $result = self::AsyncCheckChannelType();
+                break;
+
+
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -516,6 +521,33 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         }
     }
 
+    private function AsyncCheckChannelType(){
+
+        $checkResult = -1;
+        $channelName="";
+        $channelType = Control::GetRequest("channel_type", 0);
+        $checkingChannelId=Control::GetRequest("checking_channel_id", 0);
+
+
+
+        ///////////////判断是否有操作权限///////////////////
+        $channelManageData=new ChannelManageData();
+        $siteId=$channelManageData->GetSiteId($checkingChannelId,TRUE);
+        $manageUserId = Control::GetManageUserId();
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanChannelManageTemplate($siteId, $checkingChannelId, $manageUserId);
+        if ($can != 1) {
+            $checkResult=-2;
+              }else{
+            $checkingChannelType=$channelManageData->GetChannelType($checkingChannelId,true);
+            if($checkingChannelType==$channelType){
+                $channelName=$channelManageData->GetChannelName($checkingChannelId,true);
+                $checkResult=1;
+            }
+        }
+        $result='{"result":"'.$checkResult.'","channel_name":"'.$channelName.'"}';
+        return Control::GetRequest("jsonpcallback","").'({"result":"'.$checkResult.'","channel_name":"'.$channelName.'"})';
+    }
 
 }
 

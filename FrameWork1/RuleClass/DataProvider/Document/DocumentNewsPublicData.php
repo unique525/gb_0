@@ -90,6 +90,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -102,6 +103,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -114,6 +116,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
             ';
@@ -213,6 +216,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -225,6 +229,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -237,6 +242,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -335,6 +341,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -347,6 +354,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -359,6 +367,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
             ';
@@ -458,6 +467,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -470,6 +480,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -482,6 +493,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -592,6 +604,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -604,6 +617,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -616,6 +630,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -712,6 +727,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -724,6 +740,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -736,6 +753,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -842,6 +860,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -854,6 +873,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -866,6 +886,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -962,6 +983,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -974,6 +996,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -986,6 +1009,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
 
@@ -1114,6 +1138,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -1126,6 +1151,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -1138,6 +1164,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName
             ';
@@ -1271,6 +1298,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
             uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
             uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
 
             uf2.UploadFilePath AS TitlePic2UploadFilePath,
@@ -1283,6 +1311,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
             uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
             uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
 
             uf3.UploadFilePath AS TitlePic3UploadFilePath,
@@ -1295,6 +1324,7 @@ class DocumentNewsPublicData extends BasePublicData {
             uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
             uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
             uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
 
             c.ChannelName,
             s.SiteUrl
