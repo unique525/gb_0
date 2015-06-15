@@ -206,6 +206,20 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                 $documentNewsTitlePicPadWidth = 1024; //默认1024宽
                             }
                             self::GenUploadFilePad($uploadFileId1, $documentNewsTitlePicPadWidth);
+
+                            //资讯题图1压缩图宽度值
+                            $documentNewsTitlePic1CompressWidth = $siteConfigData->DocumentNewsTitlePic1CompressWidth;
+                            //资讯题图1压缩图高度值
+                            $documentNewsTitlePic1CompressHeight = $siteConfigData->DocumentNewsTitlePic1CompressHeight;
+
+                            if($documentNewsTitlePic1CompressWidth>0 || $documentNewsTitlePic1CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId1,
+                                    $documentNewsTitlePic1CompressWidth,
+                                    $documentNewsTitlePic1CompressHeight
+                                );
+                            }
+
                         }
 
 
@@ -519,6 +533,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                 $documentNewsTitlePicPadWidth = 1024; //默认1024宽
                             }
                             self::GenUploadFilePad($uploadFileId1, $documentNewsTitlePicPadWidth);
+
+                            //资讯题图1压缩图宽度值
+                            $documentNewsTitlePic1CompressWidth = $siteConfigData->DocumentNewsTitlePic1CompressWidth;
+                            //资讯题图1压缩图高度值
+                            $documentNewsTitlePic1CompressHeight = $siteConfigData->DocumentNewsTitlePic1CompressHeight;
+
+                            if($documentNewsTitlePic1CompressWidth>0 || $documentNewsTitlePic1CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId1,
+                                    $documentNewsTitlePic1CompressWidth,
+                                    $documentNewsTitlePic1CompressHeight
+                                );
+                            }
                         }
                     }
 

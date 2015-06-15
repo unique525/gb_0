@@ -538,7 +538,7 @@ function submitForm(closeTab) {
                         <td class="" style="text-align: left">
                             <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box"
                                    style="width:auto;background:#ffffff;margin-top:3px;"/> <span id="preview_title_pic1" class="show_title_pic" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览]</span>
-                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic1UploadFileId}">[制作截图]</a>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic1UploadFileId}&source_type=1">[制作截图]</a>
                             <span id="preview_title_pic_cut1" class="show_title_pic_cut" idvalue="{TitlePic1UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>
@@ -550,7 +550,7 @@ function submitForm(closeTab) {
                                                                                                      class="show_title_pic"
                                                                                                      idvalue="{TitlePic2UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
-                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic2UploadFileId}">[制作截图]</a>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic2UploadFileId}&source_type=1">[制作截图]</a>
                             <span id="preview_title_pic_cut2" class="show_title_pic_cut" idvalue="{TitlePic2UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>
@@ -562,7 +562,7 @@ function submitForm(closeTab) {
                                                                                                      class="show_title_pic"
                                                                                                      idvalue="{TitlePic3UploadFileId}"
                                                                                                      style="cursor:pointer">[预览]</span>
-                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic3UploadFileId}">[制作截图]</a>
+                            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={TitlePic3UploadFileId}&source_type=1">[制作截图]</a>
                             <span id="preview_title_pic_cut3" class="show_title_pic_cut" idvalue="{TitlePic3UploadFileId}" style="cursor:pointer">[预览截图]</span>
                         </td>
                     </tr>

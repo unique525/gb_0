@@ -15,6 +15,7 @@
         var bigHeight = 300;
         var uploadFileId = 0;
         var src = "";
+        var sourceType = 0; //0从原图截,1从压缩图1截
 
         /**
          *截图回调函数
@@ -50,13 +51,31 @@
          * @constructor
          */
         window.GetOneUploadFileCallBack = function (data) {
-            if (data["upload_file_path"] != "") {
-                var uploadFileSrc = data["upload_file_path"];
+
+
+            if(Request["source_type"] != undefined){
+                sourceType = parseInt(Request["source_type"]);
+            }
+            var filePath = "";
+            switch (sourceType){
+                case 0:
+                    filePath = data["upload_file_path"];
+                    break;
+                case 1:
+                    filePath = data["upload_file_compress_path1"];
+                    break;
+
+
+            }
+
+            if (filePath != "") {
+                var uploadFileSrc = filePath;
                 uploadFileId = data["upload_file_id"];
                 src = uploadFileSrc;
                 $("#upload_file").attr("src", uploadFileSrc);
                 $("#target").attr("src", src);
                 $("#preview_large").attr("src", src);
+                $("#source_type").val(sourceType);
             }
         };
 
@@ -90,7 +109,6 @@
             if(upload_file_id>0){
                 GetOneUploadFile(upload_file_id);
 
-
                 var jcrop_api, boundx, boundy;
                 var jcropObject = $('#target').Jcrop({
                     onChange: updatePreview,
@@ -111,11 +129,6 @@
             }else{
                 alert("没有上传图片");
             }
-
-
-
-
-
 
             function updatePreview(c) {
                 if (parseInt(c.w) > 0) {
@@ -179,7 +192,7 @@
 </head>
 
 <body>
-<div class="wrapper" style="width:100%">
+<div>
 
     <div id="outer" style="padding:1px;">
         <div style="background: #f6f6f6;">
@@ -187,10 +200,10 @@
                 <div class="article">
                     <table cellspacing="5">
                         <tr>
-                            <td valign="top">
-                                <img src="" style="max-height:400px; max-width:700px; " id="target" alt=""/>
+                            <td>
+                                <img src="" style="" id="target" alt=""/>
                             </td>
-                            <td valign="top">
+                            <td>
                                 <div style="width:400px;height:300px;overflow:hidden;display:none;">
                                     <img src="" id="preview_large" alt="中图预览" class="jcrop-preview"/>
                                 </div>
@@ -206,6 +219,7 @@
                         <input type="hidden" value="" id="height" name="height"/>
                         <input type="hidden" value="" id="width" name="width"/>
                         <input type="hidden" value="" id="source" name="source"/>
+                        <input type="hidden" value="" id="source_type" name="source_type"/>
 
                         <div style="padding-left:5px; padding-bottom: 5px;">
 

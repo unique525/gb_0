@@ -130,8 +130,8 @@
                         <ul>
                             <li><a href="#tabs-1">基本设置</a></li>
                             <li><a href="#tabs-2">产品设置</a></li>
-                            <li><a href="#tabs-3">tabs-3</a></li>
-                            <li><a href="#tabs-4">tabs-4</a></li>
+                            <li><a href="#tabs-3">资讯设置</a></li>
+                            <li><a href="#tabs-4">电子报设置</a></li>
                         </ul>
                         <div id="tabs-1">
                             <div style="">
@@ -139,25 +139,8 @@
 
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_NewspaperArticlePicWatermarkUploadFileId">报纸文章附件上传的图片中的水印图：</label></td>
-                                        <td class="spe_line">
-                                            <img id="preview_NewspaperArticlePicWatermarkUploadFileId" src="{cfg_NewspaperArticlePicWatermarkUploadFileId_upload_file_path}" /><br/>
-                                            <input id="file_newspaper_article_pic_watermark" name="file_newspaper_article_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId" name="cfg_NewspaperArticlePicWatermarkUploadFileId" type="hidden"
-                                                   value="{cfg_NewspaperArticlePicWatermarkUploadFileId}"/>
-                                            <img id="loadingOfNewspaperArticlePicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
-                                            <input id="btnNewspaperArticlePicWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_DocumentNewsContentPicWatermarkUploadFileId">资讯内容上传的图片中的水印图：</label></td>
                                         <td class="spe_line">
-                                            <img id="preview_DocumentNewsContentPicWatermarkUploadFileId" src="{cfg_DocumentNewsContentPicWatermarkUploadFileId_upload_file_path}" /><br/>
-                                            <input id="file_document_news_content_pic_watermark" name="file_document_news_content_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
-                                            <input id="cfg_DocumentNewsContentPicWatermarkUploadFileId" name="cfg_DocumentNewsContentPicWatermarkUploadFileId" type="hidden" value="{cfg_DocumentNewsContentPicWatermarkUploadFileId}"/>
-                                            <img id="loadingOfDocumentNewsContentPicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
-                                            <input id="btnDocumentNewsContentPicWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -202,7 +185,7 @@
                                     </tr>
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
-                                            <label for="cfg_ProductTitlePic1MobileWidth">产品图片的缩略图1宽度值：</label>
+                                            <label for="cfg_ProductPicThumb1Width">产品图片的缩略图1宽度值：</label>
                                         </td>
                                         <td class="spe_line">
                                             <input id="cfg_ProductPicThumb1Width" type="text" class="input_number" name="cfg_ProductPicThumb1Width" value="{cfg_ProductPicThumb1Width}"/>
@@ -292,13 +275,55 @@
 
                         <div id="tabs-3">
                             <div>
+                                <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsContentPicWatermarkUploadFileId">资讯内容上传的图片中的水印图：</label></td>
+                                        <td class="spe_line">
+                                            <img id="preview_DocumentNewsContentPicWatermarkUploadFileId" src="{cfg_DocumentNewsContentPicWatermarkUploadFileId_upload_file_path}" /><br/>
+                                            <input id="file_document_news_content_pic_watermark" name="file_document_news_content_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_DocumentNewsContentPicWatermarkUploadFileId" name="cfg_DocumentNewsContentPicWatermarkUploadFileId" type="hidden" value="{cfg_DocumentNewsContentPicWatermarkUploadFileId}"/>
+                                            <img id="loadingOfDocumentNewsContentPicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnDocumentNewsContentPicWatermarkUploadFileId" type="button" value="上传"/>
+                                        </td>
+                                    </tr>
 
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic1CompressWidth">资讯题图1压缩图宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic1CompressWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic1CompressWidth" value="{cfg_DocumentNewsTitlePic1CompressWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic1CompressHeight">资讯题图1压缩图高度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic1CompressHeight" type="text" class="input_number" name="cfg_DocumentNewsTitlePic1CompressHeight" value="{cfg_DocumentNewsTitlePic1CompressHeight}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 
                         <div id="tabs-4">
                             <div>
-
+                                <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_NewspaperArticlePicWatermarkUploadFileId">报纸文章附件上传的图片中的水印图：</label></td>
+                                        <td class="spe_line">
+                                            <img id="preview_NewspaperArticlePicWatermarkUploadFileId" src="{cfg_NewspaperArticlePicWatermarkUploadFileId_upload_file_path}" /><br/>
+                                            <input id="file_newspaper_article_pic_watermark" name="file_newspaper_article_pic_watermark" type="file" class="input_box" style="width:200px; background: #ffffff;"/>
+                                            <input id="cfg_NewspaperArticlePicWatermarkUploadFileId" name="cfg_NewspaperArticlePicWatermarkUploadFileId" type="hidden"
+                                                   value="{cfg_NewspaperArticlePicWatermarkUploadFileId}"/>
+                                            <img id="loadingOfNewspaperArticlePicWatermarkUploadFileId" src="/system_template/common/images/loading1.gif" style="display:none;"/>
+                                            <input id="btnNewspaperArticlePicWatermarkUploadFileId" type="button" value="上传"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>

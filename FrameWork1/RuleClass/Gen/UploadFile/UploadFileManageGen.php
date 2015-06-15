@@ -280,7 +280,14 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
                 $targetHeight = Control::PostOrGetRequest("height", 0, false);
                 $sourceWidth = Control::PostOrGetRequest("w", 0, false);
                 $sourceHeight = Control::PostOrGetRequest("h", 0, false);
-                $newImagePath = ImageObject::CutImg($uploadFile->UploadFilePath, $sourceX, $sourceY, $sourceWidth, $sourceHeight, $targetWidth, $targetHeight);
+                $sourceType = intval(Control::PostOrGetRequest("source_type", 0, false));
+
+                $filePath = $uploadFile->UploadFilePath;
+                if($sourceType == 1){
+                    $filePath = $uploadFile->UploadFileCompressPath1;
+                }
+
+                $newImagePath = ImageObject::CutImg($filePath, $sourceX, $sourceY, $sourceWidth, $sourceHeight, $targetWidth, $targetHeight);
                 if (!empty($newImagePath)) {
                     $result = '{"new_image_path":"'
                         . Format::FormatJson($newImagePath)

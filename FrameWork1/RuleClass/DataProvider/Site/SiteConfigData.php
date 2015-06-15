@@ -136,7 +136,8 @@
  * @property string $NewspaperArticlePicWatermarkUploadFileId
  *
  * @property string $DocumentNewsContentPicWatermarkUploadFileId
- *
+ * @property int $DocumentNewsTitlePic1CompressWidth
+ * @property int $DocumentNewsTitlePic1CompressHeight
  *
  * @author zhangchi
  */
@@ -269,7 +270,10 @@ class SiteConfigData extends BaseData {
         "ActivityTitlePic2MobileWidth",
         "ActivityTitlePic2PadWidth",
         "ActivityTitlePic3MobileWidth",
-        "ActivityTitlePic3PadWidth"
+        "ActivityTitlePic3PadWidth",
+
+        "DocumentNewsTitlePic1CompressWidth",
+        "DocumentNewsTitlePic1CompressHeight"
 
 );
 
@@ -462,6 +466,43 @@ class SiteConfigData extends BaseData {
     private $NewspaperArticlePicWatermarkUploadFileId = 0;//报纸文章附件上传的图片中的水印图
 
     private $DocumentNewsContentPicWatermarkUploadFileId = 0;
+
+    private $DocumentNewsTitlePic1CompressWidth = 0; //资讯题图1压缩图宽度值
+    private $DocumentNewsTitlePic1CompressHeight = 0; //资讯题图1压缩图高度值
+
+    /**
+     * @param mixed $DocumentNewsTitlePic1CompressHeight
+     */
+    public function setDocumentNewsTitlePic1CompressHeight($DocumentNewsTitlePic1CompressHeight)
+    {
+        $this->DocumentNewsTitlePic1CompressHeight = $DocumentNewsTitlePic1CompressHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic1CompressHeight()
+    {
+        return $this->DocumentNewsTitlePic1CompressHeight;
+    }
+
+    /**
+     * @param mixed $DocumentNewsTitlePic1CompressWidth
+     */
+    public function setDocumentNewsTitlePic1CompressWidth($DocumentNewsTitlePic1CompressWidth)
+    {
+        $this->DocumentNewsTitlePic1CompressWidth = $DocumentNewsTitlePic1CompressWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic1CompressWidth()
+    {
+        return $this->DocumentNewsTitlePic1CompressWidth;
+    }
+
+
 
     /**
      * @param mixed $ActivityTitlePic1MobileWidth
