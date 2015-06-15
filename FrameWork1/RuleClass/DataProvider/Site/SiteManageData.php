@@ -31,7 +31,11 @@ class SiteManageData extends BaseManageData {
         $addFieldValue = "";
         $preNumber = "";
         $addFieldNames = array();
+        $addFieldNames[] = "ManageUserId";
+        $addFieldNames[] = "CreateDate";
         $addFieldValues = array();
+        $addFieldValues[] = Control::GetManageUserId();
+        $addFieldValues[] = date("Y-m-d H:i:s", time());
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,
