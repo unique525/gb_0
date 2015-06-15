@@ -132,8 +132,8 @@
                     $('#w').val(c.w);
                     $('#h').val(c.h);
                 }
-                $('#height').val(bigHeight);
-                $('#width').val(bigWidth);
+                $('#height').val(c.h);
+                $('#width').val(c.w);
                 $('#upload_file_id').val(uploadFileId);
             }
 
