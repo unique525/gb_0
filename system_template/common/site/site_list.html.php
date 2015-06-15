@@ -171,10 +171,10 @@
             <td>站点名称</td>
             <td style="width: 70px; text-align: center;">排序号</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
-            <td style="width: 150px;text-align:center;">创建人</td>
+            <td style="width: 120px;text-align:center;">创建人</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
-            <td style="width: 400px;text-align:center;">相关管理</td>
+            <td style="width: 450px;text-align:center;">相关管理</td>
         </tr>
     </table>
     <ul id="sort_grid">
@@ -190,11 +190,11 @@
                             <td class="spe_line2"><a target="_blank" href="{f_SiteUrl}">{f_SiteName}</a></td>
                             <td class="spe_line2" style="width:70px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="站点创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:150px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
+                            <td class="spe_line2" style="width:120px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_SiteId}" class="span_state" idvalue="{f_SiteId}">{f_State}</span></td>
                             <td class="spe_line2" style="width:80px;text-align:center;"><img class="img_open_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;<img class="img_close_site" idvalue="{f_SiteId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
 
-                            <td class="spe_line2" style="width:380px;text-align:left;padding:0 10px 0 10px">
+                            <td class="spe_line2" style="width:430px;text-align:left;padding:0 10px 0 10px">
                                 <a href="/default.php?secu=manage&mod=product_brand&&m=list_for_manage_tree&site_id={f_SiteId}">产品品牌管理</a>
                                 <span class="span_filter" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">过滤</span>
                                 <span class="span_ad" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_SiteId}" title="{f_SiteName}">广告</span>
