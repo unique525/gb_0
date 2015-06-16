@@ -163,6 +163,7 @@
 </head>
 <body>
 {common_body_deal}
+<div class="div_deal">
 <form id="main_form" enctype="multipart/form-data"
       action="/default.php?secu=manage&mod=activity&m={method}&channel_id={ChannelId}&activity_id={ActivityId}&activity_type={ActivityType}&tab_index={TabIndex}"
       method="post">
@@ -174,7 +175,7 @@
 <input type="hidden" id="f_UserId" name="f_UserId" value="{UserId}" />
 <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
 <input type="hidden" id="f_UploadFiles" name="UploadFiles" value="" />
-<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
@@ -183,7 +184,10 @@
         </td>
     </tr>
 </table>
-<div id="tabs">
+<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td>
+<div id="tabs" style="margin-left:4px;">
 <ul>
     <li><a href="#tabs-1">活动内容</a></li>
     <li><a href="#tabs-2">属性</a></li>
@@ -401,21 +405,20 @@
 </div>-->
 
 </div>
-<div id="bot_button">
-    <div style="padding-top:3px;">
-        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td colspan="2" height="30" align="center">
-                    <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
-                    <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
-                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+</td>
+</tr>
+</table>
+<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td colspan="2" height="30" align="center">
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
+            <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+        </td>
+    </tr>
+</table>
 </form>
-
+</div>
 </body>
 
 </html>
