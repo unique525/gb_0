@@ -228,7 +228,7 @@
             <td style="width: 40px; text-align: center;">附件</td>
             <td style="width: 100px; text-align: center;">发布模式</td>
             <td style="width: 80px; text-align: center;">模板类型</td>
-            <td style="width: 200px; text-align: center;">模板标签</td>
+            <td style="width: 200px; text-align: center;">预览</td>
             <td style="width: 40px; text-align: center;">状态</td>
             <td style="width: 120px;text-align:center;">启用&nbsp;&nbsp;停用&nbsp;&nbsp;删除</td>
         </tr>
@@ -263,8 +263,8 @@
                             <td class="spe_line2" style="width:80px;text-align:center;" title="模板类型">
                                 <span class="span_channel_template_type">{f_TemplateType}</span>
                             </td>
-                            <td class="spe_line2" style="width:200px;text-align:center;" title="模板标签">
-                                <span class="span_channel_template_tag">{f_TemplateTag}</span>
+                            <td class="spe_line2" style="width:200px;text-align:center;" title="预览">
+                                <span class="span_channel_template_tag"><a href="/template_library_images/images{f_TemplateLibraryContentId}/{f_PublishFileName}" target="_blank">点击预览</a></span>
                             </td>
                             <!--<td class="spe_line2" style="width:120px;text-align:center;" title="创建人：{f_ManageUserName}">{f_ManageUserName}</td>-->
                             <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_TemplateLibraryContentId}" class="span_state" idvalue="{f_TemplateLibraryContentId}">{f_State}</span></td>
