@@ -15,6 +15,15 @@
                 window.location.href = '/default.php?secu=manage&mod=channel_template&m=create&tab_index='+ parent.G_TabIndex +'&channel_id={ChannelId}';
             });
 
+            $("#btn_template_library").click(function (event) {
+                event.preventDefault();
+                parent.G_TabUrl = '/default.php?secu=manage&mod=template_library_channel_content&m=list&channel_id={ChannelId}';
+                parent.G_TabTitle =  '模板库模板';
+                parent.addTab();
+
+                 });
+
+
 
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
@@ -202,6 +211,7 @@
         <tr>
             <td id="td_main_btn">
                 <input id="btn_create" class="btn2" value="新建模板" title="新建模板" type="button"/>
+                <input id="btn_template_library" class="btn2" value="模板库模板" title="模板库模板" type="button"/>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
