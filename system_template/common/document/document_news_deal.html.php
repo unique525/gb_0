@@ -22,13 +22,14 @@
 <script type="text/javascript">
 <!--
 var editor;
-var batchAttachWatermark = "0";
+var plUpload=$('#uploader').pluploadQueue();
 
 var tableType = window.UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_CONTENT;
 var tableId = parseInt('{ChannelId}');
 
 var templateName="{template_name}";
 
+var batchAttachWatermark = 0;
 //上传回调函数
 window.AjaxFileUploadCallBack = function(fileElementId,data){
 
@@ -76,6 +77,40 @@ $(function () {
         localUrlTest: /^https?:\/\/[^\/]*?({manage_domain_rex})\//i,
         remoteImgSaveUrl: ''
     });
+
+
+    /**cookie**/
+
+    if(getcookie("attach_water_mark")==1){ //水印
+        $("#cbAttachWatermark").attr("checked","checked");
+    }else{
+        $("#cbAttachWatermark").removeAttr("checked");
+    }
+
+    if(getcookie("batch_attach_water_mark")==1){ //批量水印
+        $("#BatchAttachWatermark").attr("checked","checked");
+    }else{
+        $("#BatchAttachWatermark").removeAttr("checked");
+    }
+
+    if(getcookie("save_remote_image")==1){ //远程抓图
+        $("#cbSaveRemoteImage").attr("checked","checked");
+    }else{
+        $("#cbSaveRemoteImage").removeAttr("checked");
+    }
+
+    $("#cbAttachWatermark").click(function(){
+        setCookieOfCheckBox("cbAttachWatermark");
+    });
+    $("#BatchAttachWatermark").click(function(){
+        setCookieOfCheckBox("BatchAttachWatermark");
+    });
+    $("#cbSaveRemoteImage").click(function(){
+        setCookieOfCheckBox("cbSaveRemoteImage");
+    });
+
+
+
     /******************    远程抓图    ********************/
     var cbSaveRemoteImage = $("#cbSaveRemoteImage");
     cbSaveRemoteImage.change(function () {
@@ -198,83 +233,16 @@ $(function () {
     /**plupload**/
     //组图上传
 
-    if ($("#batchAttachWatermark").is(":checked")) {
-        batchAttachWatermark = 1;
-    }
-    // Setup html5 version
-    $("#uploader").pluploadQueue({
-        // General settings
-        runtimes : 'html5,flash,silverlight,html4',
-
-        // Fake server response here
-        // url : '../upload.php',
-        url: '/default.php?mod=upload_file&a=async_upload_batch&file_element_name=file&table_type='+tableType+'&table_id='+tableId+'&batch_attach_watermark='+batchAttachWatermark,
-
-        max_file_size : '25mb',
-        chunks : {
-            size: '1mb',
-            send_chunk_number: false // set this to true, to send chunk and total chunk numbers instead of offset and total bytes
-        },
-        rename : true,
-        dragdrop: true,
-        filters : [
-            {title : "Image files", extensions : "jpg,gif,png"},
-            {title : "Zip files", extensions : "zip"}
-        ],
-
-        // Resize images on clientside if we can
-        //resize : {width : 320, height : 240, quality : 90},
-
-        flash_swf_url : '/system_js/plupload-2.1.2/js/Moxie.swf',
-        silverlight_xap_url : '/system_js/plupload-2.1.2/js/Moxie.xap',
-
-        init : {
-            FileUploaded: function(up, file, info) {
-                // Called when file has finished uploading
-
-                var dataSet = $.parseJSON(info.response);
-                var fUploadFile = $("#f_UploadFiles");
-                var loadingImageId = null;
-                var inputTextId = null;
-                var previewImageId = null;
-                var uploadFileId = 0;
-
-                var filePath=dataSet.upload_file_path;
-                //log('[FileUploaded] File:', file, "Info:", info);
-
-                if(fUploadFile != undefined && fUploadFile != null){
-                    var uploadFiles = fUploadFile.val();
-                    uploadFiles = uploadFiles + "," + dataSet.upload_file_id;
-                    fUploadFile.val(uploadFiles);
-                }
-
-                var showInSliderPic=$("#f_ShowPicMethod").val();
-                //加入图片管理栏
-                SetNewUploadPic(filePath,dataSet.upload_file_id,showInSliderPic,templateName);
-
-                if(showInSliderPic==0){
-                    if(editor != undefined && editor != null){
-                        editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
-                    }
-                }
-
-
-                if(inputTextId != undefined && inputTextId != null){
-                    $( "#"+inputTextId ).val(filePath);
-                }
-
-                if(previewImageId != undefined && previewImageId != null){
-                    $( "#"+previewImageId ).attr("src",filePath);
-                }
-            }
-        }
-
-
+    initPlUpload();
+    $("#batchAttachWatermark").click(function(){
+        initPlUpload();
     });
+
+
 
     /****   plupload end   * **/
 
-    //电头
+        //电头
 
     $(".btn_add_pre_content").each(function(){
         var today=new Date();
@@ -319,6 +287,9 @@ $(function () {
         strLengthRefresh=0;
     });
 
+
+
+
 });
 
 var strLengthRefresh=0;  //全局变量 是否监听input框字符长度
@@ -337,6 +308,117 @@ function StrLength(id) {
     }
 }
 
+/**
+ * 组图上传初始化
+ */
+function initPlUpload(){
+
+    // Setup html5 version
+    plUpload = $("#uploader").pluploadQueue({
+        // General settings
+        runtimes : 'html5,flash,silverlight,html4',
+
+        // Fake server response here
+        // url : '../upload.php',
+        url: '/default.php?mod=upload_file&a=async_upload_batch&file_element_name=file&table_type='+tableType+'&table_id='+tableId+'&batch_attach_watermark='+IsBatchWatermark(),
+
+        max_file_size : '25mb',
+        chunks : {
+            size: '1mb',
+            send_chunk_number: false // set this to true, to send chunk and total chunk numbers instead of offset and total bytes
+        },
+        rename : true,
+        dragdrop: true,
+        filters : [
+            {title : "Image files", extensions : "jpg,gif,png"},
+            {title : "Zip files", extensions : "zip"}
+        ],
+
+        // Resize images on clientside if we can
+        //resize : {width : 320, height : 240, quality : 90},
+
+        flash_swf_url : '/system_js/plupload-2.1.2/js/Moxie.swf',
+        silverlight_xap_url : '/system_js/plupload-2.1.2/js/Moxie.xap',
+
+        init : {
+            FileUploaded: function(up, file, info) {
+                // Called when file has finished uploading
+
+                var dataSet = $.parseJSON(info.response);
+                var fUploadFile = $("#f_UploadFiles");
+                var loadingImageId = null;
+                var inputTextId = null;
+                var previewImageId = null;
+                var uploadFileId = 0;
+
+                var filePath=dataSet.upload_file_path;
+                //log('[FileUploaded] File:', file, "Info:", info);
+
+                if(fUploadFile != undefined && fUploadFile != null){
+                    var uploadFiles = fUploadFile.val();
+                    uploadFiles = uploadFiles + "," + dataSet.upload_file_id;
+                    fUploadFile.val(uploadFiles);
+                }
+
+                var showInSliderPic=$("#f_ShowPicMethod").val();
+                //加入图片管理栏
+                SetNewUploadPic(filePath,dataSet.upload_file_id,showInSliderPic,templateName);
+
+                if(showInSliderPic==0){
+
+                    if(dataSet.upload_file_watermark_path1 != null
+                        && dataSet.upload_file_watermark_path1 != undefined
+                        && dataSet.upload_file_watermark_path1.length>0
+                        && $("#batchAttachWatermark").is(":checked")
+                        ){
+                        //添加水印图到编辑控件中
+                        if(editor != undefined && editor != null){
+                        editor.appendHTML(""+UploadFileFormatHtml(dataSet.upload_file_watermark_path1));
+                        }
+                    }else{
+                        //添加原图到编辑控件中
+                        if(editor != undefined && editor != null){
+                        editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
+                        }
+
+                    }
+                }
+
+
+                if(inputTextId != undefined && inputTextId != null){
+                    $( "#"+inputTextId ).val(filePath);
+                }
+
+                if(previewImageId != undefined && previewImageId != null){
+                    $( "#"+previewImageId ).attr("src",filePath);
+                }
+            }
+        }
+
+
+    });
+
+}
+
+
+function setCookieOfCheckBox(checkBoxId){
+        var title=$("#"+checkBoxId).attr("title");
+        if($("#"+checkBoxId).is(":checked")){
+            setcookie(title,1);
+        }else{
+            setcookie(title,0);
+        }
+}
+
+function IsBatchWatermark(){
+    if ($("#batchAttachWatermark").is(":checked")) {
+        //alert("1");
+        return "1";
+    }else{
+        //alert("0");
+        return "0";
+    }
+}
 function ChangeToBold() {
 
     if ($("#cbTitleBold").attr('checked')) {
@@ -633,7 +715,8 @@ function submitForm(closeTab) {
                                 for="f_DocumentNewsTag">关键词：</label></td>
                         <td class="spe_line" style="text-align: left">
                             <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
-                                   value="{DocumentNewsTag}" style="width:95%;font-size:14px;" maxlength="200"/>
+                                   value="{DocumentNewsTag}" style="width:75%;font-size:14px;" maxlength="200"/>
+                            <input id="btn_extract" value="抽取" type="button">
                         </td>
                     </tr>
                     <tr>
@@ -661,13 +744,13 @@ function submitForm(closeTab) {
                     <tr>
                         <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
                         <td align="left">
-                            <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark"/> (只支持jpg或jpeg图片)
+                            <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" title="attach_water_mark"/> (只支持jpg或jpeg图片)
                         </td>
                     </tr>
                     <tr>
                         <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
                         <td align="left">
-                            <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage"/>
+                            <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" title="save_remote_image"/>
                             (只支持jpg、jpeg、gif、png图片)
                         </td>
                     </tr>
@@ -772,8 +855,7 @@ function submitForm(closeTab) {
         </select>
         {s_ShowPicMethod}
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <label for="batchAttachWatermark">附加水印：</label><input type="checkbox" id="batchAttachWatermark"
-                                                              name="batchAttachWatermark"/> (只支持jpg或jpeg图片)
+        <label for="batchAttachWatermark">附加水印：</label><input type="checkbox" id="batchAttachWatermark" name="batchAttachWatermark" title="batch_attach_water_mark"/> (只支持jpg或jpeg图片)
     </div>
 </div>
 <div id="tabs-4">
