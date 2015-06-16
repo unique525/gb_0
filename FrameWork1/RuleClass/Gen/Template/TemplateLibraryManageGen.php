@@ -39,15 +39,6 @@ class TemplateLibraryGen extends BaseManageGen implements IBaseManageGen {
                 $templateLibraryContentGen = new TemplateLibraryContentGen();
                 $result = $templateLibraryContentGen->Gen();
                 break;
-            case "add_template_channel":
-                $result = self::GenAddTemplateChannel();
-                break;
-            case "edit_template_channel":
-                $result = self::GenEditTemplateChannel();
-                break;
-            case "delete_template_channel":
-                $result = self::GenDeleteTemplateChannel();
-                break;
             case "create":
                 $result = self::GenCreate();
                 break;

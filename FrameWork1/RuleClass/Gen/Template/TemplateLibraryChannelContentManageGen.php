@@ -8,8 +8,7 @@
 class TemplateLibraryChannelContentGen extends BaseManageGen implements IBaseManageGen {
 
     /**
-     * 牵引生成方法(继承接口)
-     * @return <type>
+     * @return mixed|string|
      */
     function Gen() {
         $result = "";
@@ -21,14 +20,17 @@ class TemplateLibraryChannelContentGen extends BaseManageGen implements IBaseMan
             case "list":
                 $result = self::GenList();
                 break;
-            case "start":
-                $result = self::GenStart();
+            case "async_modify_state":
+                $result = self::AsyncModifyState();
                 break;
-            case "stop":
-                $result = self::GenStop();
+            case "async_delete":
+                $result = self::AsyncDelete();
                 break;
-            case "delete":
-                $result = self::GenDelete();
+            case "remove_to_bin":
+                $result = self::GenRemoveToBin();
+                break;
+            case "async_delete_attachment":
+                $result = self::AsyncDeleteAttachment();
                 break;
             default:
                 $result = self::GenList();
@@ -152,47 +154,84 @@ class TemplateLibraryChannelContentGen extends BaseManageGen implements IBaseMan
 
 
     /**
-     * 
-     * @return type
+     * 异步删除
      */
-    
-    
-    public function GenStart() {
-        $templateLibraryChannelContentId = Control::GetRequest("tccontentid", 0);
+    private function AsyncDelete(){
+        $manageUserId=Control::GetManageUserId();
+        $templateLibraryChannelContentId=Control::GetRequest("template_library_channel_content_id",0);
+        $templateLibraryChannelContentManageData=new TemplateLibraryChannelContentManageData();
 
-        $state = 0;
-        $templateLibraryChannelContentData = new TemplateLibraryChannelContentData();
-        $result = $templateLibraryChannelContentData->ModifyState($templateLibraryChannelContentId, $state);
+        /**********************************************************************
+         ******************************判断是否有操作权限**********************
+         **********************************************************************/
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $channelId = $templateLibraryChannelContentManageData->GetChannelId($templateLibraryChannelContentId);
+        $siteId = $templateLibraryChannelContentManageData->GetSiteId($templateLibraryChannelContentId);
 
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . '})';
+        $can = $manageUserAuthorityManageData->CanManageTemplateLibrary($siteId,$channelId,$manageUserId);
+        if(!$can){
+            $result = -10;
+        }else{
+            $result = $templateLibraryChannelContentManageData->Delete($templateLibraryChannelContentId);
+            //加入操作日志
+            $operateContent = 'delete Template Library Channel Content,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
+            self::CreateManageUserLog($operateContent);
+        }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
+
     }
+
+
     /**
-     * 
-     * @return type
+     * 修改状态 (启用 / 停用)
+     * @return string 返回Jsonp修改结果
      */
+    private function AsyncModifyState() {
+        $result = -1;
+        $templateLibraryChannelContentId = Control::GetRequest("template_library_channel_content_id", 0);
+        $state = Control::GetRequest("state", -1);
+        $manageUserId = Control::GetManageUserId();
 
-    public function GenStop() {
-        $templateLibraryChannelContentId = Control::GetRequest("tccontentid", 0);
+        if($templateLibraryChannelContentId>0 && $state>=0 && $manageUserId>0){
+            $templateLibraryChannelContentManageData = new TemplateLibraryChannelContentManageData();
+            //判断权限
+            /**********************************************************************
+             ******************************判断是否有操作权限**********************
+             **********************************************************************/
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $channelId = $templateLibraryChannelContentManageData->GetChannelId($templateLibraryChannelContentId);
+            $siteId = $templateLibraryChannelContentManageData->GetSiteId($templateLibraryChannelContentId);
 
-        $state = 100;
-        $templateLibraryChannelContentData = new TemplateLibraryChannelContentData();
-        $result = $templateLibraryChannelContentData->ModifyState($templateLibraryChannelContentId, $state);
+            $can = $manageUserAuthorityManageData->CanManageSite($siteId,$channelId,$manageUserId);
+            if(!$can){
+                $result = -10;
+            }else{
 
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . '})';
+                $result = $templateLibraryChannelContentManageData->ModifyState($templateLibraryChannelContentId,$state);
+                //加入操作日志
+                $operateContent = 'Modify State Template Library Channel Content,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
+                self::CreateManageUserLog($operateContent);
+            }
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
+
+
     /**
-     * 
-     * @return type
+     * 删除模板附件
+     * @return int 返回
      */
-
-    public function GenDelete() {
-        $templateLibraryChannelContentId = Control::GetRequest("tccontentid", 0);
-
-        $templateLibraryChannelContentData = new TemplateLibraryChannelContentData();
-        $result = $templateLibraryChannelContentData->Delete($templateLibraryChannelContentId);
-
-        return Control::GetRequest("jsonpcallback","") . '({"result":' . $result . '})';
+    private function AsyncDeleteAttachment(){
+        $result = -1;
+        $templateLibraryChannelContentId = Control::GetRequest("template_library_channel_content_id", 0);
+        if($templateLibraryChannelContentId>0){
+            $channelTemplateManageData = new TemplateLibraryChannelContentManageData();
+            $result = $channelTemplateManageData->DeleteAttachment($templateLibraryChannelContentId);
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
+
 }
 
 ?>
