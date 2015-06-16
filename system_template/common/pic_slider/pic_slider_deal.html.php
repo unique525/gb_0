@@ -5,10 +5,13 @@
     <title></title>
     {common_head}
     <script type="text/javascript" src="/system_js/upload_file.js"></script>
+    <link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
     <script type="text/javascript">
         <!--
         $(function () {
 
+            $('.fancybox').fancybox();
         });
 
         function submitForm(closeTab) {
@@ -66,6 +69,9 @@
         <td class="spe_line">
             <input id="file_upload_file" name="file_upload_file" type="file" class="input_box"
                    style="width:400px;background:#ffffff;margin-top:3px;"/> <span id="preview_upload_file_id" class="show_title_pic" idvalue="{UploadFileId}" style="cursor:pointer">[预览]</span>
+
+            <a class="fancybox fancybox.iframe" href="/default.php?secu=manage&mod=upload_file&m=create_cut_image&upload_file_id={UploadFileId}">[制作截图]</a>
+            <span id="preview_title_pic_cut1" class="show_title_pic_cut" idvalue="{UploadFileId}" style="cursor:pointer">[预览截图]</span>
 
         </td>
     </tr>
