@@ -338,7 +338,9 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             Template::ReplaceList(
                 $tempContent,
                 $arrRankOneList,
-                $tagId,Template::DEFAULT_TAG_NAME,$arrRankTwoList,
+                $tagId,
+                Template::DEFAULT_TAG_NAME,
+                $arrRankTwoList,
                 "ForumId",
                 "ParentId",
                 $arrRankThreeList,
@@ -346,54 +348,6 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 "ParentId"
             );
 
-            /**
-            $resultTemplate = "";
-            if (count($arrRankOneList) > 0) {
-
-                $forumManageListOneTemplate = Template::Load("forum/forum_list_one.html", "common");
-                $forumManageListTwoTemplate = Template::Load("forum/forum_list_two.html", "common");
-
-
-                for ($i = 0; $i < count($arrRankOneList); $i++) {
-                    $rankOneForumId = intval($arrRankOneList[$i]["ForumId"]);
-                    $rankOneForumName = $arrRankOneList[$i]["ForumName"];
-                    $rankOneForumType = intval($arrRankOneList[$i]["ForumType"]);
-                    $rankOneState = intval($arrRankOneList[$i]["State"]);
-                    $rankOneSort = intval($arrRankOneList[$i]["Sort"]);
-                    $rankOneForumMode = intval($arrRankOneList[$i]["ForumMode"]);
-                    $rankOneForumAccess = intval($arrRankOneList[$i]["ForumAccess"]);
-
-                    $forumOneTemplate = $forumManageListOneTemplate;
-                    $forumOneTemplate = str_ireplace("{f_ForumId}", $rankOneForumId, $forumOneTemplate);
-                    $forumOneTemplate = str_ireplace("{f_ForumName}", $rankOneForumName, $forumOneTemplate);
-                    $forumOneTemplate = str_ireplace("{f_State}", $rankOneState, $forumOneTemplate);
-                    $forumOneTemplate = str_ireplace("{f_Sort}", $rankOneSort, $forumOneTemplate);
-
-                    $resultTemplate = $resultTemplate . $forumOneTemplate;
-
-                    for ($j = 0; $j < count($arrRankTwoList); $j++) {
-                        $rankTwoForumId = intval($arrRankTwoList[$j]["ForumId"]);
-                        $rankTwoParentId = intval($arrRankTwoList[$j]["ParentId"]);
-                        $rankTwoForumName = $arrRankTwoList[$j]["ForumName"];
-                        $rankTwoForumType = intval($arrRankTwoList[$j]["ForumType"]);
-                        $rankTwoState = intval($arrRankTwoList[$j]["State"]);
-                        $rankTwoSort = intval($arrRankTwoList[$j]["Sort"]);
-                        $rankTwoForumMode = intval($arrRankTwoList[$j]["ForumMode"]);
-                        $rankTwoForumAccess = intval($arrRankTwoList[$j]["ForumAccess"]);
-
-                        if ($rankOneForumId === $rankTwoParentId) {
-                            $forumTwoTemplate = $forumManageListTwoTemplate;
-                            $forumTwoTemplate = str_ireplace("{f_ForumId}", $rankTwoForumId, $forumTwoTemplate);
-                            $forumTwoTemplate = str_ireplace("{f_ForumName}", $rankTwoForumName, $forumTwoTemplate);
-                            $forumTwoTemplate = str_ireplace("{f_State}", $rankTwoState, $forumTwoTemplate);
-                            $forumTwoTemplate = str_ireplace("{f_Sort}", $rankTwoSort, $forumTwoTemplate);
-                            $resultTemplate = $resultTemplate . $forumTwoTemplate;
-                        }
-                    }
-                }
-            }
-            */
-            //$tempContent = str_ireplace("{ForumList}", $resultTemplate, $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 

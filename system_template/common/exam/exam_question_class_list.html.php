@@ -3,7 +3,78 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     {common_head}
-    <script type="text/javascript" src="/system_js/manage/forum/forum.js"></script>
+    <script type="text/javascript">
+
+        $(function() {
+            //$(document).tooltip();
+
+            $("#btn_select_all").click(function(event) {
+                event.preventDefault();
+                var docInput = $("[name='doc_input']");
+                if (docInput.prop("checked")) {
+                    docInput.prop("checked", false);//取消全选
+                } else {
+                    docInput.prop("checked", true);//全选
+                }
+            });
+
+            var btnCreate = $("#btn_create");
+            btnCreate.css("cursor", "pointer");
+            btnCreate.click(function(event) {
+                event.preventDefault();
+                window.location.href = '/default.php?secu=manage&mod=exam_question_class&m=create&rank=0&site_id=' + parent.G_NowSiteId;
+            });
+
+            var btnAllExamQuestion = $("#btn_all_exam_question");
+            btnAllExamQuestion.css("cursor", "pointer");
+            btnAllExamQuestion.click(function(event) {
+                event.preventDefault();
+                parent.G_TabUrl = '/default.php?secu=manage&mod=exam_question&m=list&site_id=' + parent.G_NowSiteId;
+                parent.G_TabTitle = '全部试题';
+                parent.addTab();
+            });
+
+
+
+
+
+            //格式化站点状态
+            $(".span_state").each(function(){
+                $(this).text(FormatExamQuestionClassState($(this).text()));
+            });
+
+
+            //选中时的样式变化
+            $('.grid_item').click(function() {
+                if ($(this).hasClass('grid_item_selected')) {
+                    $(this).removeClass('grid_item_selected');
+                } else {
+                    $(this).addClass('grid_item_selected');
+                }
+            });
+        });
+
+        /**
+         * 格式化状态值
+         * @return {string}
+         */
+        function FormatExamQuestionClassState(state) {
+            state = parseInt(state);
+            switch (state) {
+                case 0:
+                    return "正常";
+                    break;
+                case 100:
+                    return "停用";
+                    break;
+                default:
+                    return "未知状态";
+                    break;
+            }
+        }
+
+
+    </script>
 </head>
 <body>
 <div class="div_list">
@@ -124,6 +195,7 @@
             </third>
         </icms>
     </ul>
+    <div>{pager_button}</div>
 </div>
 </body>
 </html>

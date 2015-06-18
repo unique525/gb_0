@@ -45,32 +45,34 @@ class ExamQuestionClassManageData extends BaseManageData {
     }
 
     /**
-     * 修改版块
+     * 修改
      * @param array $httpPostData $_POST数组
-     * @param int $forumId 版块id
+     * @param int $examQuestionClassId 分类id
      * @return int 返回影响的行数
      */
-    public function Modify($httpPostData, $forumId) {
+    public function Modify($httpPostData, $examQuestionClassId) {
         $dataProperty = new DataProperty();
         $addFieldNames = array();
         $addFieldValues = array();
-        $sql = parent::GetUpdateSql($httpPostData, self::TableName_ExamQuestionClass, self::TableId_ExamQuestionClass, $forumId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
+        $sql = parent::GetUpdateSql($httpPostData, self::TableName_ExamQuestionClass, self::TableId_ExamQuestionClass, $examQuestionClassId, $dataProperty, "", "", "", $addFieldNames, $addFieldValues);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
     /**
-     * 修改版块状态
-     * @param int $forumId 论坛版块id
+     * 修改状态
+     * @param int $examQuestionClassId 分类id
      * @param int $state 状态
      * @return int 操作结果
      */
-    public function ModifyState($forumId, $state) {
+    public function ModifyState($examQuestionClassId, $state) {
         $result = 0;
-        if ($forumId > 0) {
+        if ($examQuestionClassId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_ExamQuestionClass . " SET `State`=:State WHERE ExamQuestionClassId=:ExamQuestionClassId;";
-            $dataProperty->AddField("ExamQuestionClassId", $forumId);
+            $sql = "UPDATE " . self::TableName_ExamQuestionClass . "
+                    SET `State`=:State
+                    WHERE ExamQuestionClassId=:ExamQuestionClassId;";
+            $dataProperty->AddField("ExamQuestionClassId", $examQuestionClassId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
@@ -79,17 +81,39 @@ class ExamQuestionClassManageData extends BaseManageData {
 
     /**
      * 返回一行数据
-     * @param int $forumId 论坛id
+     * @param int $examQuestionClassId 分类id
      * @return array|null 取得对应数组
      */
-    public function GetOne($forumId)
+    public function GetOne($examQuestionClassId)
     {
         $result = null;
-        if ($forumId > 0) {
-            $sql = "SELECT * FROM " . self::TableName_ExamQuestionClass . " WHERE ExamQuestionClassId=:ExamQuestionClassId;";
+        if ($examQuestionClassId > 0) {
+            $sql = "SELECT *
+                    FROM " . self::TableName_ExamQuestionClass . "
+                    WHERE ExamQuestionClassId=:ExamQuestionClassId;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("ExamQuestionClassId", $forumId);
+            $dataProperty->AddField("ExamQuestionClassId", $examQuestionClassId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得分类名称
+     * @param int $examQuestionClassId 分类id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 分类名称
+     */
+    public function GetExamQuestionClassName($examQuestionClassId, $withCache)
+    {
+        $result = "";
+        if ($examQuestionClassId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_question_class_data';
+            $cacheFile = 'exam_question_class_get_exam_question_class_name.cache_' . $examQuestionClassId . '';
+            $sql = "SELECT ExamQuestionClassName FROM " . self::TableName_ExamQuestionClass . " WHERE ExamQuestionClassId=:ExamQuestionClassId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamQuestionClassId", $examQuestionClassId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }
@@ -136,10 +160,10 @@ class ExamQuestionClassManageData extends BaseManageData {
 
 
     /**
-     * 根据版块等级取得版块列表
+     * 根据等级取得列表
      * @param int $siteId 站点id
-     * @param int $rank 版块等级
-     * @return array 版块列表
+     * @param int $rank 等级
+     * @return array 列表
      */
     public function GetListByRank($siteId, $rank) {
         $result = null;

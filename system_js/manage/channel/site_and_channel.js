@@ -388,6 +388,10 @@ function _ChannelClick() {
             addTab();
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_EXAM) { //试题类
 
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=exam_question_class&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
+
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_INFORMATION) { //分类信息
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=information&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
