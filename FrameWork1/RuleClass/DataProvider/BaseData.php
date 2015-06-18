@@ -717,6 +717,44 @@ class BaseData
 
 
     /**
+     * 试题 数据表名
+     */
+    const TableName_ExamQuestion = "cst_exam_question";
+    /**
+     * 试题 数据表自增字段名
+     */
+    const TableId_ExamQuestion = "ExamQuestionId";
+
+
+    /**
+     * 试题分类 数据表名
+     */
+    const TableName_ExamQuestionClass = "cst_exam_question_class";
+    /**
+     * 试题分类 数据表自增字段名
+     */
+    const TableId_ExamQuestionClass = "ExamQuestionClassId";
+
+    /**
+     * 试卷 数据表名
+     */
+    const TableName_ExamUserPaper = "cst_exam_user_paper";
+    /**
+     * 试卷 数据表自增字段名
+     */
+    const TableId_ExamUserPaper = "ExamUserPaperId";
+
+    /**
+     * 试卷答案 数据表名
+     */
+    const TableName_ExamUserAnswer = "cst_exam_user_answer";
+    /**
+     * 试卷答案 数据表自增字段名
+     */
+    const TableId_ExamUserAnswer = "ExamUserAnswerId";
+
+
+    /**
      * 调试 数据表名
      */
     const TableName_DebugLog = "cst_debug_log";
