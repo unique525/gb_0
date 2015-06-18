@@ -147,6 +147,7 @@
                         </tr>
                     </table>
                 </li>
+                {third}
                 ]]>
             </child>
             <third>
@@ -185,7 +186,7 @@
                         </tr>
                     </table>
                 </li>
-                {third}
+
                 ]]>
             </third>
         </icms>

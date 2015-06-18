@@ -135,6 +135,22 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $activityPublicGen = new ActivityPublicGen();
                 $result = $activityPublicGen->GenPublic();
                 break;
+            case "exam_question_class":
+                $examQuestionClassPublicGen = new ExamQuestionClassPublicGen();
+                $result = $examQuestionClassPublicGen->GenPublic();
+                break;
+            case "exam_question":
+                $examQuestionPublicGen = new ExamQuestionPublicGen();
+                $result = $examQuestionPublicGen->GenPublic();
+                break;
+            case "exam_user_paper":
+                $examUserPaperPublicGen = new ExamUserPaperPublicGen();
+                $result = $examUserPaperPublicGen->GenPublic();
+                break;
+            case "exam_user_answer":
+                $examUserAnswerPublicGen = new ExamUserAnswerPublicGen();
+                $result = $examUserAnswerPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;
