@@ -27,9 +27,9 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
     private function AsyncRunLottery(){
         $result="";
 
-        $userName="name";
-        $userMobile=13333333333;
-        $lotteryId=1;
+        $userName=Control::PostOrGetRequest("user_name","游客");
+        $userMobile=Control::PostOrGetRequest("phone_number",0);
+        $lotteryId=Control::PostOrGetRequest("lottery_id",0);
 
         $nowDateTime=date("Y-m-d H:i:s", time());
 
@@ -46,6 +46,11 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         /**获取该次抽奖内 所有设置的奖项**/
         $lotterySetPublicData=new LotterySetPublicData();
         $arrayLotterySet=$lotterySetPublicData->GetList($lotteryId);
+
+
+$debug=new DebugLogManageData();
+$debugLog="";
+
 
         /**开始处理抽奖**/
         if(count($arrayLotterySet)>0&&$arrayLotterySet!=null){
@@ -66,27 +71,54 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                 }
             }
 
+echo "点数:".$randomResult.",所属奖项:".$awardLotterySet["LotterySetName"]."<br>";
+$debugLog.="点数:".$randomResult.",所属奖项:".$awardLotterySet["LotterySetName"]."\r\n";
 
             if($awardLotterySetId>0&&$awardLotterySet!=null){
                 $lotteryAwardUserPublicData=new LotteryAwardUserPublicData();
                 $countAward=$lotteryAwardUserPublicData->GetCountOfOneLotterySet($awardLotterySetId);  //取得目前为止的获得该奖的人数
 
-                echo "目前为止的获得该奖的人数:".$countAward;
+
+
+
+
 
                 /**检查总获奖限额**/
                 $totalLimit=$awardLotterySet["TotalLimit"]; //总获奖限额
                 if($countAward>=$totalLimit){
+
+
+$debugLog.="这个奖已经被抽完了";
+$debug->Create($debugLog);
+
+
                     $result="这个奖已经被抽完了";
                     return $result;
                 }
 
                 /**检查日期获奖限额 （当前持续天数*每日获奖限额）**/
-                $dayCount=1+($nowDateTime-$awardLotterySet["BeginTime"])/86400;  //现在是开始抽奖的第几天
+                $dayCount=1+(int)((strtotime($nowDateTime)-strtotime($awardLotterySet["BeginTime"]))/86400);  //现在是开始抽奖的第几天
                 $nowDateLimit=$dayCount*$awardLotterySet["DayLimit"];  //到目前的天数允许的最大获奖人数
-                echo "开始抽奖的天数:".$dayCount."<br>";
-                echo "目前的天数允许的最大获奖人数:".$nowDateLimit." < ". $nowDateLimit."<br>";
-                echo "目前为止的获得该奖的人数:".$countAward." --- ". $nowDateLimit.":目前的天数允许的最大获奖人数<br>";
+
+
+
+echo "开始抽奖的天数:1+".$nowDateTime." 到 ".$awardLotterySet["BeginTime"]."=".$dayCount."<br>";
+echo "目前的天数允许的最大获奖人数:".$nowDateLimit."<br>";
+echo "目前为止的获得该奖的人数:".$countAward."<br>";
+$debugLog.="开始抽奖的天数:1+".$nowDateTime." 到 ".$awardLotterySet["BeginTime"]."=".$dayCount."\r\n"
+."目前的天数允许的最大获奖人数:".$nowDateLimit."\r\n"
+."目前为止的获得该奖的人数:".$countAward."\r\n";
+
+
+
                 if($countAward>=$nowDateLimit){
+
+
+
+$debugLog.="今天这个奖已经抽完了，明天再试";
+$debug->Create($debugLog);
+
+
                     $result="今天这个奖已经抽完了，明天再试";
                     return $result;
                 }
@@ -96,8 +128,19 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                 $lotterySetGroup=$awardLotterySet["LotterySetGroup"]; //奖项组 (例:1、2、3等奖只能拿一个,纪念奖可以拿多次，则1、2、3等奖是一个组,纪念奖是一个组)
                 $wonTimes=$lotteryAwardUserPublicData->GetCountOfOneUser($lotteryId,$lotterySetGroup,$lotteryUserId);
                 $oneUserLimit=$awardLotterySet["OneUserLimit"]; //同一人获奖限额
-                echo "这个人获得该类奖的次数:".$wonTimes." < ". $oneUserLimit.":同一人获得同类奖的限额<br>";
+
+
+echo "这个人获得该类奖的次数:".$wonTimes." < ". $oneUserLimit.":同一人获得同类奖的限额<br>";
+$debugLog.="这个人获得该类奖的次数:".$wonTimes." < ". $oneUserLimit.":同一人获得同类奖的限额\r\n";
+
+
                 if($wonTimes>=$oneUserLimit&&$oneUserLimit!=-1){ //若同一人限额为-1 即表示不做限制
+
+
+$debugLog.="你已经中了奖，不能重复中奖";
+$debug->Create($debugLog);
+
+
                     $result="你已经中了奖，不能重复中奖";
                     return $result;
                 }
@@ -135,6 +178,10 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
 
+
+
+$debugLog=$result."\r\n".$debugLog;
+$debug->Create($debugLog);
 
 
         return $result;
