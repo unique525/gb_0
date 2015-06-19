@@ -79,6 +79,18 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $clientAppClientGen = new ClientAppClientGen();
                 $result = $clientAppClientGen->GenClient();
                 break;
+            case "forum":
+                $forumClientGen = new ForumClientGen();
+                $result = $forumClientGen->GenClient();
+                break;
+            case "forum_topic":
+                $forumTopicClientGen = new ForumTopicClientGen();
+                $result = $forumTopicClientGen->GenClient();
+                break;
+            case "forum_post":
+                $forumPostClientGen = new ForumPostClientGen();
+                $result = $forumPostClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;

@@ -15,19 +15,45 @@ class ForumClientGen extends BaseClientGen implements IBaseClientGen {
     public function GenClient()
     {
         $result = "";
-        $method = Control::GetRequest("m", "");
-        switch ($method) {
-            case "list":
-                $result = self::GenList();
+        $function = Control::GetRequest("f", "");
+        switch ($function) {
+
+            case "list_by_rank":
+                $result = self::GenListByRank();
                 break;
-            case "create":
-                $result = self::GenCreate();
-                break;
-            case "modify":
-                $result = self::GenModify();
-                break;
+
         }
-        $result = str_ireplace("{method}", $method, $result);
+        $result = str_ireplace("{function}", $function, $result);
         return $result;
+    }
+
+    private function GenListByRank(){
+
+        $result = "[{}]";
+
+        $siteId = intval(Control::GetRequest("site_id", 0));
+        $rank = intval(Control::GetRequest("rank", 0));
+
+        if($siteId>0){
+
+            $forumClientData = new ForumClientData();
+            $arrList = $forumClientData->GetListByForumRank(
+                $siteId,
+                $rank
+            );
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","forum":{"forum_list":' . $result . '}}';
+
     }
 } 
