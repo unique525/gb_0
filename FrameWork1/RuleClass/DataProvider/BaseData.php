@@ -714,6 +714,76 @@ class BaseData
      * 模板库自带频道 数据表自增字段名
      */
     const TableId_TemplateLibraryChannel = "TemplateLibraryChannelId";
+    /**
+     * 抽奖活动 数据表名
+     */
+    const TableName_Lottery = "cst_lottery";
+    /**
+     * 抽奖活动 数据表自增字段名
+     */
+    const TableId_Lottery = "LotteryId";
+    /**
+     * 抽奖活动奖项 数据表名
+     */
+    const TableName_LotterySet = "cst_lottery_set";
+    /**
+     * 抽奖活动奖项 数据表自增字段名
+     */
+    const TableId_LotterySet = "LotterySetId";
+    /**
+     * 抽奖活动用户 数据表名
+     */
+    const TableName_LotteryUser = "cst_lottery_user";
+    /**
+     * 抽奖活动用户 数据表自增字段名
+     */
+    const TableId_LotteryUser = "LotteryUserId";
+    /**
+     * 抽奖活动获奖用户 数据表名
+     */
+    const TableName_LotteryAwardUser = "cst_lottery_award_user";
+    /**
+     * 抽奖活动获奖用户 数据表自增字段名
+     */
+    const TableId_LotteryAwardUser = "LotteryAwardUserId";
+
+
+    /**
+     * 试题 数据表名
+     */
+    const TableName_ExamQuestion = "cst_exam_question";
+    /**
+     * 试题 数据表自增字段名
+     */
+    const TableId_ExamQuestion = "ExamQuestionId";
+
+
+    /**
+     * 试题分类 数据表名
+     */
+    const TableName_ExamQuestionClass = "cst_exam_question_class";
+    /**
+     * 试题分类 数据表自增字段名
+     */
+    const TableId_ExamQuestionClass = "ExamQuestionClassId";
+
+    /**
+     * 试卷 数据表名
+     */
+    const TableName_ExamUserPaper = "cst_exam_user_paper";
+    /**
+     * 试卷 数据表自增字段名
+     */
+    const TableId_ExamUserPaper = "ExamUserPaperId";
+
+    /**
+     * 试卷答案 数据表名
+     */
+    const TableName_ExamUserAnswer = "cst_exam_user_answer";
+    /**
+     * 试卷答案 数据表自增字段名
+     */
+    const TableId_ExamUserAnswer = "ExamUserAnswerId";
 
 
     /**

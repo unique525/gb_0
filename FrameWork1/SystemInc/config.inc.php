@@ -22,7 +22,7 @@ $incDatabaseInfo[] = 'localhost';
 $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
-$incDatabaseInfo[] = 'sasa';
+$incDatabaseInfo[] = 'ZAQ1xsw2';
 $incDatabaseInfo[] = '0'; //debug
 
 

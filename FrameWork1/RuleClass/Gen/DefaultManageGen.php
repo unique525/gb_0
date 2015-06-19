@@ -268,20 +268,36 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $visitManageGen->Gen();
                     break;
                 case "template_library":
-                    $visitManageGen = new TemplateLibraryGen();
-                    $result = $visitManageGen->Gen();
+                    $templateLibraryGen = new TemplateLibraryGen();
+                    $result = $templateLibraryGen->Gen();
                     break;
                 case "template_library_content":
-                    $visitManageGen = new TemplateLibraryContentGen();
-                    $result = $visitManageGen->Gen();
+                    $templateLibraryContentGen = new TemplateLibraryContentGen();
+                    $result = $templateLibraryContentGen->Gen();
                     break;
                 case "template_library_channel":
-                    $visitManageGen = new TemplateLibraryChannelGen();
-                    $result = $visitManageGen->Gen();
+                    $templateLibraryChannelGen = new TemplateLibraryChannelGen();
+                    $result = $templateLibraryChannelGen->Gen();
                     break;
                 case "template_library_channel_content":
-                    $visitManageGen = new TemplateLibraryChannelContentGen();
-                    $result = $visitManageGen->Gen();
+                    $templateLibraryChannelContentGen = new TemplateLibraryChannelContentGen();
+                    $result = $templateLibraryChannelContentGen->Gen();
+                    break;
+                case "exam_question_class":
+                    $examQuestionClassManageGen = new ExamQuestionClassManageGen();
+                    $result = $examQuestionClassManageGen->Gen();
+                    break;
+                case "exam_question":
+                    $examQuestionManageGen = new ExamQuestionManageGen();
+                    $result = $examQuestionManageGen->Gen();
+                    break;
+                case "exam_user_paper":
+                    $examUserPaperManageGen = new ExamUserPaperManageGen();
+                    $result = $examUserPaperManageGen->Gen();
+                    break;
+                case "exam_user_answer":
+                    $examUserAnswerManageGen = new ExamUserAnswerManageGen();
+                    $result = $examUserAnswerManageGen->Gen();
                     break;
                 default :
                     $result = self::GenDefault();
