@@ -22,14 +22,16 @@
             btnCreate.css("cursor", "pointer");
             btnCreate.click(function(event) {
                 event.preventDefault();
-                window.location.href = '/default.php?secu=manage&mod=exam_question_class&m=create&rank=0&site_id=' + parent.G_NowSiteId;
+                window.location.href = '/default.php?secu=manage&mod=exam_question_class&m=create&rank=0&site_id=' + parent.G_NowSiteId +
+                    '&channel_id=' + parent.G_SelectedChannelId;
             });
 
             var btnAllExamQuestion = $("#btn_all_exam_question");
             btnAllExamQuestion.css("cursor", "pointer");
             btnAllExamQuestion.click(function(event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=exam_question&m=list&site_id=' + parent.G_NowSiteId;
+                parent.G_TabUrl = '/default.php?secu=manage&mod=exam_question&m=list&site_id=' + parent.G_NowSiteId +
+                    '&channel_id=' + parent.G_SelectedChannelId;;
                 parent.G_TabTitle = '全部试题';
                 parent.addTab();
             });
@@ -112,7 +114,7 @@
                                                                                                value="{f_ExamQuestionClassId}"/>
                             </td>
                             <td class="spe_line2" style="width:40px;text-align:center;"><a
-                                    href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}&rank={f_Rank}"><img
+                                    href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}&rank={f_Rank}&channel_id={ChannelId}"><img
                                         class="edit_doc system_image"
                                         src="/system_template/{template_name}/images/manage/edit.gif"
                                         idvalue="{f_ExamQuestionClassId}" alt="编辑"/></a></td>
@@ -123,7 +125,7 @@
                             </td>
                             <td class="spe_line2">
                                 <span>{f_ExamQuestionClassName}</span>
-                                <a href="/default.php?secu=manage&mod=exam_question_class&m=create&parent_id={f_ExamQuestionClassId}&rank=1&site_id={SiteId}">[新增子分类]</a>
+                                <a href="/default.php?secu=manage&mod=exam_question_class&m=create&parent_id={f_ExamQuestionClassId}&rank=1&site_id={SiteId}&channel_id={ChannelId}">[新增子分类]</a>
                             </td>
                             <td class="spe_line2" style="width:36px;">
 
@@ -146,14 +148,16 @@
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="doc_input" type="checkbox" name="docinput" value="{f_ExamQuestionClassId}" /></td>
                             <td class="spe_line2" style="width:40px;text-align:center;">
-                                <a href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}">
+                                <a href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}&channel_id={ChannelId}">
                                     <img class="edit_doc system_image" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ExamQuestionClassId}" alt="编辑" />
                                 </a></td>
                             <td class="spe_line2" style="width:90px;text-align:center;"><span id="span_state_{f_ExamQuestionClassId}" class="span_state">{f_State}</span></td>
                             <td class="spe_line2" style="width:40px;text-align:left;">
 
                             </td>
-                            <td class="spe_line2"><span>{f_ExamQuestionClassName}</span></td>
+                            <td class="spe_line2"><span>{f_ExamQuestionClassName}</span>
+                                <a href="/default.php?secu=manage&mod=exam_question_class&m=create&parent_id={f_ExamQuestionClassId}&rank=2&site_id={SiteId}&channel_id={ChannelId}">[新增三级分类]</a>
+                            </td>
                             <td class="spe_line2" style="width:36px;">
                             </td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
@@ -173,7 +177,7 @@
                         <tr class="grid_item">
                             <td class="spe_line2" style="width:30px;text-align:center;"><input class="doc_input" type="checkbox" name="docinput" value="{f_ExamQuestionClassId}" /></td>
                             <td class="spe_line2" style="width:40px;text-align:center;">
-                                <a href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}">
+                                <a href="/default.php?secu=manage&mod=exam_question_class&m=modify&exam_question_class_id={f_ExamQuestionClassId}&site_id={f_SiteId}&channel_id={ChannelId}">
                                     <img class="edit_doc system_image" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_ExamQuestionClassId}" alt="编辑" />
                                 </a></td>
                             <td class="spe_line2" style="width:90px;text-align:center;"><span id="span_state_{f_ExamQuestionClassId}" class="span_state">{f_State}</span></td>

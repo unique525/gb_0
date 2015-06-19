@@ -161,18 +161,18 @@ class ExamQuestionClassManageData extends BaseManageData {
 
     /**
      * 根据等级取得列表
-     * @param int $siteId 站点id
+     * @param int $channelId 频道id
      * @param int $rank 等级
      * @return array 列表
      */
-    public function GetListByRank($siteId, $rank) {
+    public function GetListByRank($channelId, $rank) {
         $result = null;
-        if($siteId>0 && $rank>=0){
+        if($channelId>0 && $rank>=0){
             $sql = "SELECT * FROM " . self::TableName_ExamQuestionClass . "
-                    WHERE Rank=:Rank AND SiteId=:SiteId ORDER BY Sort DESC;";
+                    WHERE Rank=:Rank AND ChannelId=:ChannelId ORDER BY Sort DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("Rank", $rank);
-            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
