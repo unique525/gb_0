@@ -62,7 +62,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                         break;
                     }
                 }else{  //按比率抽
-
+                    //(暂空缺)
                 }
             }
 
