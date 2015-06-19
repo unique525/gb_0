@@ -41,109 +41,56 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenCreate()
     {
+
         $templateContent = "";
         $siteId = Control::GetRequest("site_id", 0);
-        $rank = Control::GetRequest("rank", -1);
+        $channelId = Control::GetRequest("channel_id", 0);
+        $rank = Control::GetRequest("rank", 0);
         $parentId = Control::GetRequest("parent_id", 0);
 
-        if ($siteId > 0 && $rank >= 0) {
+        if ($siteId > 0 && $channelId>0 && $rank >= 0) {
             $templateContent = Template::Load("exam/exam_question_class_deal.html", "common");
             $resultJavaScript = "";
             parent::ReplaceFirst($templateContent);
-
+            $parentName = "无";
             $examQuestionClassManageData = new ExamQuestionClassManageData();
             if ($rank > 0) {
 
                 if ($parentId > 0) {
                     $parentName = $examQuestionClassManageData->GetExamQuestionClassName($parentId, false);
-                    $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
+
                 } else {
                     $parentId = 0;
                 }
 
             }
 
-
+            $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
             $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
-            $templateContent = str_ireplace("{ForumRank}", $rank, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+            $templateContent = str_ireplace("{Rank}", $rank, $templateContent);
             $templateContent = str_ireplace("{ParentId}", $parentId, $templateContent);
             $templateContent = str_ireplace("{Sort}", "0", $templateContent);
 
             if (!empty($_POST)) {
                 $httpPostData = $_POST;
 
-                $forumId = $forumManageData->Create($httpPostData);
+                $examQuestionClassId = $examQuestionClassManageData->Create($httpPostData);
 
                 //加入操作日志
-                $operateContent = 'Create Forum,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $forumId;
+                $operateContent = 'Create ExamQuestionClass,POST FORM:'
+                    . implode('|', $_POST) . ';\r\nResult:' . $examQuestionClassId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($forumId > 0) {
-
-                    //title pic1
-                    $fileElementName = "file_forum_pic_1";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1; //
-                    $tableId = $forumId;
-                    $uploadFile1 = new UploadFile();
-                    $uploadFileId1 = 0;
-                    $titlePic1Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadFile1,
-                        $uploadFileId1
-                    );
-
-                    if (intval($titlePic1Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-                    //title pic2
-                    $fileElementName = "file_forum_pic_2";
-                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
-                    $uploadFileId2 = 0;
-                    $uploadFile2 = new UploadFile();
-                    $titlePic2Result = self::Upload(
-                        $fileElementName,
-                        $tableType,
-                        $tableId,
-                        $uploadFile2,
-                        $uploadFileId2
-                    );
-                    if (intval($titlePic2Result) <=0){
-                        //上传出错或没有选择文件上传
-                    }else{
-
-                    }
-
-                    if($uploadFileId1>0 || $uploadFileId2>0){
-                        $forumManageData->ModifyForumPic($forumId, $uploadFileId1, $uploadFileId2);
-                    }
-
-                    $siteConfigData = new SiteConfigData($siteId);
-                    if($uploadFileId1>0){
-                        $forumPicMobileWidth = $siteConfigData->ForumPicMobileWidth;
-                        if($forumPicMobileWidth<=0){
-                            $forumPicMobileWidth  = 320; //默认320宽
-                        }
-                        self::GenUploadFileMobile($uploadFileId1,$forumPicMobileWidth);
-
-                        $forumPicPadWidth = $siteConfigData->ForumPicPadWidth;
-                        if($forumPicPadWidth<=0){
-                            $forumPicPadWidth  = 1024; //默认1024宽
-                        }
-                        self::GenUploadFilePad($uploadFileId1,$forumPicPadWidth);
-                    }
-
+                if ($examQuestionClassId > 0) {
 
                     //javascript 处理
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId");
+                        Control::GoUrl("/default.php?secu=manage&mod=exam_question_class&m=list&site_id=$siteId&channel_id=$channelId");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -152,8 +99,82 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
                 }
             }
 
-            $fields = $forumManageData->GetFields();
+            $fields = $examQuestionClassManageData->GetFields();
             parent::ReplaceWhenCreate($templateContent, $fields);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $templateContent = preg_replace($patterns, "", $templateContent);
+            parent::ReplaceEnd($templateContent);
+
+            $templateContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $templateContent);
+        }
+
+
+        return $templateContent;
+    }
+
+
+    private function GenModify(){
+        $templateContent = "";
+        $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
+
+        if ($siteId>0 && $channelId>0 && $examQuestionClassId >= 0) {
+            $templateContent = Template::Load("exam/exam_question_class_deal.html", "common");
+            $resultJavaScript = "";
+            parent::ReplaceFirst($templateContent);
+
+
+            $examQuestionClassManageData = new ExamQuestionClassManageData();
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $examQuestionClassManageData->Modify($httpPostData, $examQuestionClassId);
+
+                //加入操作日志
+                $operateContent = 'Modify ExamQuestionClass,POST FORM:' .
+                    implode('|', $_POST) . ';\r\nResult:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/exam_question_class_data');
+
+                    //javascript 处理
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId&channel_id=$channelId");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('forum', 4));
+                }
+            }
+
+
+
+            $arrOne = $examQuestionClassManageData->GetOne($examQuestionClassId);
+            Template::ReplaceOne($templateContent, $arrOne);
+            $parentId = intval($arrOne["ParentId"]);
+            if($parentId>0){
+                $parentName = $examQuestionClassManageData->GetExamQuestionClassName($parentId, false);
+                $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
+            }else{
+                $templateContent = str_ireplace("{ParentName}", "无", $templateContent);
+            }
+
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $templateContent = str_ireplace("{ExamQuestionClassId}", $examQuestionClassId, $templateContent);
+            $templateContent = str_ireplace("{Sort}", "0", $templateContent);
 
             $patterns = '/\{s_(.*?)\}/';
             $templateContent = preg_replace($patterns, "", $templateContent);
@@ -165,151 +186,6 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
 
 
         return $templateContent;
-    }
-
-
-    private function GenModify(){
-        $tempContent = "";
-        $forumId = Control::GetRequest("forum_id", 0);
-        $siteId = Control::GetRequest("site_id", 0);
-
-        if ($siteId>0 && $forumId >= 0) {
-            $tempContent = Template::Load("forum/forum_deal.html", "common");
-            $resultJavaScript = "";
-            parent::ReplaceFirst($tempContent);
-
-
-            $forumManageData = new ForumManageData();
-
-
-            if (!empty($_POST)) {
-                $httpPostData = $_POST;
-
-                $result = $forumManageData->Modify($httpPostData, $forumId);
-
-                //加入操作日志
-                $operateContent = 'Modify Forum,POST FORM:' .
-                    implode('|', $_POST) . ';\r\nResult:' . $result;
-                self::CreateManageUserLog($operateContent);
-
-                if ($result > 0) {
-
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_data');
-
-
-                    if( !empty($_FILES)){
-                        //title pic1
-                        $fileElementName = "file_forum_pic_1";
-                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_1; //
-                        $tableId = $forumId;
-                        $uploadFile1 = new UploadFile();
-                        $uploadFileId1 = 0;
-                        $titlePic1Result = self::Upload(
-                            $fileElementName,
-                            $tableType,
-                            $tableId,
-                            $uploadFile1,
-                            $uploadFileId1
-                        );
-
-                        if (intval($titlePic1Result) <=0){
-                            //上传出错或没有选择文件上传
-                        }else{
-                            //删除原有题图
-                            $oldUploadFileId1 = $forumManageData->GetForumPic1UploadFileId(
-                                $forumId, false);
-                            parent::DeleteUploadFile($oldUploadFileId1);
-                            //修改题图
-                            $forumManageData->ModifyForumPic1UploadFileId(
-                                $forumId, $uploadFileId1);
-
-                        }
-
-                        //title pic2
-                        $fileElementName = "file_forum_pic_2";
-                        $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_PIC_2;
-                        $uploadFileId2 = 0;
-                        $uploadFile2 = new UploadFile();
-                        $titlePic2Result = self::Upload(
-                            $fileElementName,
-                            $tableType,
-                            $tableId,
-                            $uploadFile2,
-                            $uploadFileId2
-                        );
-                        if (intval($titlePic2Result) <=0){
-                            //上传出错或没有选择文件上传
-                        }else{
-                            //删除原有题图
-                            $oldUploadFileId2 = $forumManageData->GetForumPic2UploadFileId(
-                                $forumId, false);
-                            parent::DeleteUploadFile($oldUploadFileId2);
-                            //修改题图
-                            $forumManageData->ModifyForumPic2UploadFileId(
-                                $forumId, $uploadFileId2);
-                        }
-
-                        $siteConfigData = new SiteConfigData($siteId);
-                        if($uploadFileId1>0){
-                            $forumPicMobileWidth = $siteConfigData->ForumPicMobileWidth;
-                            if($forumPicMobileWidth<=0){
-                                $forumPicMobileWidth  = 320; //默认320宽
-                            }
-                            self::GenUploadFileMobile($uploadFileId1,$forumPicMobileWidth);
-
-                            $forumPicPadWidth = $siteConfigData->ForumPicPadWidth;
-                            if($forumPicPadWidth<=0){
-                                $forumPicPadWidth  = 1024; //默认1024宽
-                            }
-                            self::GenUploadFilePad($uploadFileId1,$forumPicPadWidth);
-                        }
-
-                    }
-
-
-
-                    //javascript 处理
-
-                    $closeTab = Control::PostRequest("CloseTab", 0);
-                    if ($closeTab == 1) {
-                        //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId");
-                    } else {
-                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
-                    }
-                } else {
-                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('forum', 4));
-                }
-            }
-
-
-
-            $arrOne = $forumManageData->GetOne($forumId);
-            Template::ReplaceOne($tempContent, $arrOne);
-            $parentId = intval($arrOne["ParentId"]);
-            if($parentId>0){
-                $parentName = $forumManageData->GetForumName($parentId, false);
-                $tempContent = str_ireplace("{ParentName}", $parentName, $tempContent);
-            }else{
-                $tempContent = str_ireplace("{ParentName}", "无", $tempContent);
-            }
-
-
-            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
-            $tempContent = str_ireplace("{Sort}", "0", $tempContent);
-
-            $patterns = '/\{s_(.*?)\}/';
-            $tempContent = preg_replace($patterns, "", $tempContent);
-            parent::ReplaceEnd($tempContent);
-
-            $tempContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $tempContent);
-
-        }
-
-
-        return $tempContent;
     }
 
 
@@ -349,16 +225,17 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
 
             $examQuestionClassManageData = new ExamQuestionClassManageData();
             $rank = 0;
-            $arrRankOneList = $examQuestionClassManageData->GetListByRank($siteId, $rank);
+            $arrRankOneList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
             $rank = 1;
-            $arrRankTwoList = $examQuestionClassManageData->GetListByRank($siteId, $rank);
+            $arrRankTwoList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
             $rank = 2;
-            $arrRankThreeList = $examQuestionClassManageData->GetListByRank($siteId, $rank);
+            $arrRankThreeList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
             $tagId = "exam_question_class_list";
+
             if(count($arrRankOneList)>0){
 
                 Template::ReplaceList(
-                    $tempContent,
+                    $templateContent,
                     $arrRankOneList,
                     $tagId,
                     Template::DEFAULT_TAG_NAME,
@@ -369,12 +246,15 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
                     "ExamQuestionClassId",
                     "ParentId"
                 );
+                $templateContent = str_ireplace("{pager_button}", "", $templateContent);
             }else{
                 Template::RemoveCustomTag($templateContent, $tagId);
                 $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
 
             }
 
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
 
             parent::ReplaceEnd($templateContent);
