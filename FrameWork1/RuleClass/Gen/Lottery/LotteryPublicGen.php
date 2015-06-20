@@ -93,7 +93,7 @@ $debug->Create($debugLog);
 
 
                     $result="这个奖已经被抽完了";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
                 /**检查日期获奖限额 （当前持续天数*每日获奖限额）**/
@@ -120,7 +120,7 @@ $debug->Create($debugLog);
 
 
                     $result="今天这个奖已经抽完了，明天再试";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
 
@@ -142,7 +142,7 @@ $debug->Create($debugLog);
 
 
                     $result="你已经中了奖，不能重复中奖";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
 
@@ -184,6 +184,6 @@ $debugLog=$result."\r\n".$debugLog;
 $debug->Create($debugLog);
 
 
-        return $result;
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 } 
