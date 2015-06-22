@@ -57,6 +57,20 @@ class BasePublicGen extends BaseGen
                 $state = Template::GetParamValue($tagContent, "state");
 
                 switch ($tagType) {
+                    case Template::TAG_TYPE_ACTIVITY_LIST :
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        $templateContent = self::ReplaceTemplateOfActivityList(
+                            $templateContent,
+                            $channelId,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
+                        break;
                     case Template::TAG_TYPE_CHANNEL_LIST :
                         $templateContent = self::ReplaceTemplateOfChannelList(
                             $templateContent,
@@ -242,6 +256,74 @@ class BasePublicGen extends BaseGen
         }
         return $templateContent;
     }
+    /**
+     * 替换活动列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param string $tagWhere 查询方式
+     * @param string $tagWhereValue 查询条件值
+     * @param string $tagOrder 排序方式
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfActivityList(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagWhereValue,
+        $tagOrder,
+        $state
+    )
+    {
+        if ($channelId > 0) {
+
+            //资讯默认只显示已发状态的新闻
+            $state = DocumentNewsData::STATE_PUBLISHED;
+
+
+            $arrDocumentNewsList = null;
+            $activityPublicData = new ActivityPublicData();
+
+            //排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                case "hit":
+                    $orderBy = 1;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $activityPublicData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                default :
+                    $arrDocumentNewsList = $activityPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+            }
+            if (!empty($arrDocumentNewsList)) {
+                Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
 
     /**
      * 替换频道列表的内容
