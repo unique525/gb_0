@@ -334,6 +334,10 @@ window.CHANNEL_TYPE_INFORMATION = 14;
  */
 window.CHANNEL_TYPE_NEWSPAPER = 15;
 /**
+ * 频道类型 抽奖 16
+ */
+window.CHANNEL_TYPE_LOTTERY = 16;
+/**
  * 频道类型 外部接口类 50
  */
 window.CHANNEL_TYPE_INTERFACE = 50;
@@ -399,6 +403,10 @@ function _ChannelClick() {
         } else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_NEWSPAPER) { //电子报
             window.G_TabTitle = "";
             window.G_TabUrl = '/default.php?secu=manage&mod=newspaper&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
+            addTab();
+        }else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_LOTTERY) { //抽奖
+            window.G_TabTitle = "";
+            window.G_TabUrl = '/default.php?secu=manage&mod=lottery&m=list&site_id='+ window.G_NowSiteId +'&channel_name='+ parent.G_SelectedChannelName +'&channel_id=' + window.G_SelectedChannelId;
             addTab();
         }else if (window.G_SelectedChannelType === window.CHANNEL_TYPE_HOME) { //站点首页
 
