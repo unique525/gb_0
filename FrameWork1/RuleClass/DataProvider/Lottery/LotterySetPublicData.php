@@ -11,14 +11,16 @@ class LotterySetPublicData extends BasePublicData {
     /**
      * 获取抽奖的所有奖项设置
      * @param $lotteryId
+     * @param $state
      * @return array|int
      */
-    public function GetList($lotteryId){
+    public function GetList($lotteryId,$state){
         $result=null;
         if($lotteryId>0){
-            $sql="SELECT * FROM ".self::TableName_LotterySet." WHERE LotteryId=:LotteryId ;";
+            $sql="SELECT * FROM ".self::TableName_LotterySet." WHERE LotteryId=:LotteryId AND State=:State;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId", $lotteryId);
+            $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;

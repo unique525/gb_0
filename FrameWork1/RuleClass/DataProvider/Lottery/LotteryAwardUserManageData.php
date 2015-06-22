@@ -1,0 +1,34 @@
+<?php
+/**
+ * 后台管理 获奖用户 数据类
+ *
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Lottery
+ * @author 525
+ */
+class LotteryAwardUserManageData extends BaseManageData{
+    /**
+     * 获取抽奖活动分页列表
+     * @param int $lotterySetId 奖项id
+     * @return array 活动数据集
+     */
+    public function GetList($lotterySetId) {
+        $result=null;
+        if($lotterySetId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LotterySetId", $lotterySetId);
+            $sql = "
+                SELECT
+                au.*,
+                u.UserName,
+                u.UserMobile
+                FROM
+                " . self::TableName_LotteryAwardUser . " au
+                LEFT OUTER JOIN " .self::TableName_LotteryUser." u on au.LotteryUserId = u.LotteryUserId
+                WHERE LotterySetId=:LotterySetId ORDER BY CreateDate DESC;";
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+} 
