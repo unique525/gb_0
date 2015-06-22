@@ -366,7 +366,11 @@ class BaseGen
         $manageUserName = Control::GetManageUserName();
         $ipAddress = Control::GetIp();
         $webAgent = Control::GetOs() . " and " . Control::GetBrowser();
-        $refererUrl = $_SERVER["HTTP_REFERER"];
+        $refererUrl = '';
+        if(isset($_SERVER["HTTP_REFERER"])){
+            $refererUrl = $_SERVER["HTTP_REFERER"];
+        }
+
         $refererDomain = strtolower(preg_replace('/https?:\/\/([^\:\/]+).*/i', "\\1", $refererUrl));
         $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
         $userId = Control::GetUserId();
