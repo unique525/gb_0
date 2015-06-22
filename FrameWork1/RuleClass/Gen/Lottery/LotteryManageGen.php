@@ -86,6 +86,9 @@ class LotteryManageGen extends BaseManageGen implements IBaseManageGen {
 
         Template::ReplaceList($tempContent, $arrList, $listName);
 
+        //删除缓冲(没做modify暂时放这里)
+        DataCache::RemoveDir(CACHE_PATH . '/lottery_data');
+
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;

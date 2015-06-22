@@ -38,6 +38,39 @@ $debugLog="";
 
         if($lotteryId>0){
 
+            $lotteryPublicData=new LotteryPublicData();
+            //
+            $tableType = $lotteryPublicData->GetTableType($lotteryId, true);
+
+            $canLottery=0;
+            switch($tableType){
+
+                case LotteryData::TABLE_TYPE_EXAM:
+
+                    $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
+                    $examUserPaperId=1;
+                    if($examUserPaperId<=0){
+                        return $result;
+                    }
+
+                    /**get score**/
+                    $score=100;
+
+                    $limitContent=intval($lotteryPublicData->GetLimitContent($lotteryId, true));
+                    if($score>=$limitContent){
+                        $canLottery=1;
+                    }
+
+                    break;
+
+
+            }
+
+            if($canLottery<=0){
+                $result="分数不够";
+                return $result; //没有抽奖资格
+            }
+
         /**添加进等待抽奖表**/
         $lotteryUserPublicData=new LotteryUserPublicData();
         $isAdded=$lotteryUserPublicData->CheckRepeat($lotteryId,$userMobile);
