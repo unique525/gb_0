@@ -28,6 +28,9 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             case "modify_state":
                 $result = self::ModifyState();
                 break;
+            case "async_get_list_for_pull":
+                $result = self::AsyncGetListForPull();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -121,5 +124,23 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             }
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+    }
+
+
+    /**
+     * 提取关键字以抽取
+     * @return string 修改结果
+     */
+    private function AsyncGetListForPull(){
+        $result = "";
+        $siteId = Control::GetRequest("site_id", 0);
+
+        if(intval($siteId)>0){
+
+            $siteTagManageData = new SiteTagManageData();
+            $siteTagArray=$siteTagManageData->GetList($siteId);
+            $result = Format::FixJsonEncode($siteTagArray);
+        }
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 }
