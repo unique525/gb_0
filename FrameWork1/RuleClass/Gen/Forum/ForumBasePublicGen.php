@@ -13,16 +13,16 @@ class ForumBasePublicGen extends BasePublicGen {
      * @param string $tempContent 模板内容
      */
     protected function ReplaceFirstForForum(&$tempContent) {
-        $templateFileUrl = "forum/forum_top_nav.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $forumTopNavTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateFileUrl = "forum/forum_top_nav.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$forumTopNavTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
 
-        $templateFileUrl = "forum/forum_common_head.html";
-        $forumCommonHeadTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateFileUrl = "forum/forum_common_head.html";
+        //$forumCommonHeadTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
 
-
-
+        $forumTopNavTemplate = "";
+        $forumCommonHeadTemplate = "";
 
         $tempContent = str_ireplace("{forum_top_nav}", $forumTopNavTemplate, $tempContent);
         $tempContent = str_ireplace("{forum_common_head}", $forumCommonHeadTemplate, $tempContent);
