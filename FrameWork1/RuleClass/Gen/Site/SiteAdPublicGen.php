@@ -8,8 +8,6 @@
 
 class SiteAdPublicGen extends BasePublicGen implements IBasePublicGen {
 
-
-
     /**
      * 引导方法
      * @return string 返回执行结果

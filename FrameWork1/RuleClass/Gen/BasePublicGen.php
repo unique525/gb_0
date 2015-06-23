@@ -1397,7 +1397,7 @@ class BasePublicGen extends BaseGen
      * @param string $defaultTemp 默认模板
      * @param int $siteId 默认从域名取，可以不传入
      * @param string $forceTemp 强制指定的模板名称
-     * @param int $templateMode 最后加载的模板类型 0:pc,1:mobile,2:pad,3:tv
+     * @param int $templateMode 传出参数，最后加载的模板类型 0:pc,1:mobile,2:pad,3:tv
      * @return string 模板内容
      */
     protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "", &$templateMode = 0)
@@ -1417,8 +1417,6 @@ class BasePublicGen extends BaseGen
                 $channelTemplateTag = $defaultTemp;
             }
         }
-
-
 
         if ($siteId > 0 && strlen($channelTemplateTag) > 0) {
 
