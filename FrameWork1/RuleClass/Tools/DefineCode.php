@@ -189,6 +189,14 @@ class DefineCode {
      * 广告点击记录 前台 返回值前缀
      */
     const SITE_AD_LOG_PUBLIC = - 325000;
+    /**
+     * 抽奖 后台 返回值前缀
+     */
+    const LOTTERY_MANAGE = - 335000;
+    /**
+     * 抽奖 前台 返回值前缀
+     */
+    const LOTTERY_PUBLIC = - 340000;
 
 
 }
