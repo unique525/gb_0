@@ -133,6 +133,10 @@ class LotterySetManageGen extends BaseManageGen implements IBaseManageGen {
 
                 if ($modifySuccess > 0) {
 
+                    /** 处理lottery group **/
+                    $lotterySetGroup=Control::PostOrGetRequest("f_LotterySetGroup",-1);
+                    $oneUserLimit=Control::PostOrGetRequest("f_OneUserLimit",0);
+                    $lotterySetManageData->ModifyOneUserLimitOfGroup($lotteryId,$lotterySetGroup,$oneUserLimit);
 
                     Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -143,10 +147,6 @@ class LotterySetManageGen extends BaseManageGen implements IBaseManageGen {
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
 
-                    /** 处理lottery group **/
-                    $lotteryGroup=Control::PostOrGetRequest("f_LotteryGroup",-1);
-                    $oneUserLimit=Control::PostOrGetRequest("f_OneUserLimit",0);
-                    $lotterySetManageData->ModifyOneUserLimitOfGroup($lotteryId,$lotteryGroup,$oneUserLimit);
 
 
                 }else{

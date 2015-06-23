@@ -41,14 +41,24 @@ class LotteryAwardUserManageGen extends BaseManageGen implements IBaseManageGen 
     public function GenList() {
 
         $lotterySetId = Control::GetRequest("lottery_set_id", 0);
-        /*//////////////判断是否有操作权限///////////////////
+
+
+        //////////////判断是否有操作权限///////////////////
+        $lotteryManageData=new LotteryManageData();
+        $channelManageData=new ChannelManageData();
+        $lotterySetManageData=new LotterySetManageData();
+
+        $lotteryId=$lotterySetManageData->GetLotteryId($lotterySetId);
+        $channelId = $lotteryManageData->GetChannelId($lotteryId);
+        $siteId=$channelManageData->GetSiteId($channelId,TRUE);
         $manageUserId = Control::GetManageUserId();
         $manageUserAuthority = new ManageUserAuthorityManageData();
-        $can = $manageUserAuthority->CanManageSite($lotteryId, 0, $manageUserId);
+        $can = $manageUserAuthority->CanManageAd($siteId, $channelId, $manageUserId);
         if ($can != 1) {
-            Control::ShowMessage(Language::Load('template_library', 10));//没有操作权限！
+            Control::ShowMessage(Language::Load('custom_form', 3));
             return "";
-        }*/
+        }
+
 
         $tempContent = Template::Load("lottery/lottery_award_user_list.html","common");
 

@@ -165,7 +165,7 @@
                                                                           class="btn_edit"
                                                                           src="/system_template/default/images/manage/edit.gif"
                                                                           alt="编辑" title="{f_LotterySetId}"
-                                                                          idvalue="{f_LotteryId}"/></td>
+                                                                          idvalue="{f_LotterySetId}"/></td>
                     <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_LotterySetId}" class="span_state" idvalue="{f_LotterySetId}">{f_State}</span></td>
                     <td class="spe_line2" style="width:80px;text-align:center;">
                         <img class="img_open" idvalue="{f_LotterySetId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>

@@ -81,7 +81,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
             "code" => -1,
             "result" => ""
         );
-        $userId=1;//Control::GetUserId();
+        $userId=Control::GetUserId();
         $lotteryId=Control::PostOrGetRequest("lottery_id",0);
 
         $nowDateTime=date("Y-m-d H:i:s", time());
