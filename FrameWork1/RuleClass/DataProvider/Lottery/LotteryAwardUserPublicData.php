@@ -14,21 +14,21 @@ class LotteryAwardUserPublicData extends BasePublicData {
      * @param int $lotteryId
      * @param int $lotterySetId
      * @param int $lotterySetGroup
-     * @param int $lotteryUserId
+     * @param int $userId
      * @param string $createDate
      * @return int
      */
-    public function Create($lotteryId,$lotterySetId,$lotterySetGroup,$lotteryUserId,$createDate){
+    public function Create($lotteryId,$lotterySetId,$lotterySetGroup,$userId,$createDate){
         $result=-1;
         if ($lotteryId>0) {
             $sql="INSERT INTO ".self::TableName_LotteryAwardUser."
-                (LotteryId,LotterySetId,LotterySetGroup,LotteryUserId,CreateDate)
-                VALUES(:LotteryId,:LotterySetId,:LotterySetGroup,:LotteryUserId,:CreateDate);";
+                (LotteryId,LotterySetId,LotterySetGroup,UserId,CreateDate)
+                VALUES(:LotteryId,:LotterySetId,:LotterySetGroup,:UserId,:CreateDate);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId",$lotteryId);
             $dataProperty->AddField("LotterySetId",$lotterySetId);
             $dataProperty->AddField("LotterySetGroup",$lotterySetGroup);
-            $dataProperty->AddField("LotteryUserId",$lotteryUserId);
+            $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("CreateDate",$createDate);
             $result=$this->dbOperator->LastInsertId($sql,$dataProperty);
         }
@@ -58,18 +58,18 @@ class LotteryAwardUserPublicData extends BasePublicData {
      * 获取同一用户获得某一奖的次数（避免重复中大奖）
      * @param $lotteryId
      * @param $lotterySetGroup
-     * @param $lotteryUserId
+     * @param $userId
      * @return int
      */
-    public function GetCountOfOneUser($lotteryId,$lotterySetGroup,$lotteryUserId){
-        $result=0;
-        if($lotteryId>0&&$lotteryUserId>0){
+    public function GetCountOfOneUser($lotteryId,$lotterySetGroup,$userId){
+        $result=-1;
+        if($lotteryId>0&&$userId>=0){
             $sql="SELECT COUNT(*) FROM ".self::TableName_LotteryAwardUser."
-             WHERE LotteryId=:LotteryId AND LotterySetGroup=:LotterySetGroup AND LotteryUserId=:LotteryUserId ;";
+             WHERE LotteryId=:LotteryId AND LotterySetGroup=:LotterySetGroup AND UserId=:UserId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId",$lotteryId);
             $dataProperty->AddField("LotterySetGroup",$lotterySetGroup);
-            $dataProperty->AddField("LotteryUserId",$lotteryUserId);
+            $dataProperty->AddField("UserId",$userId);
             $result=$this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
