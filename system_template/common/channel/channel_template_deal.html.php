@@ -12,10 +12,10 @@
             id: "tabs-1_edit_area"	// id of the textarea to transform
             ,start_highlight: true	// if start with highlight
             ,allow_resize: "both"
-            ,allow_toggle: false
+            ,allow_toggle: true
             ,word_wrap: false
             ,language: "zh"
-            ,syntax: "html"
+            ,syntax: "php"
             ,font_size: "12"
             ,font_family: "宋体,Courier New,verdana"
 
@@ -35,10 +35,10 @@
                             id: newId+"_edit_area"	// id of the textarea to transform
                             ,start_highlight: true	// if start with highlight
                             ,allow_resize: "both"
-                            ,allow_toggle: false
+                            ,allow_toggle: true
                             ,word_wrap: false
                             ,language: "zh"
-                            ,syntax: "html"
+                            ,syntax: "php"
                             ,font_size: "12"
                             ,font_family: "宋体,Courier New,verdana"
 
@@ -63,10 +63,10 @@
                     id: "edit_area2"	// id of the textarea to transform
                     ,start_highlight: true	// if start with highlight
                     ,allow_resize: "both"
-                    ,allow_toggle: false
+                    ,allow_toggle: true
                     ,word_wrap: false
                     ,language: "zh"
-                    ,syntax: "html"
+                    ,syntax: "php"
                     ,font_size: "12"
                     ,font_family: "宋体,Courier New,verdana"
 
