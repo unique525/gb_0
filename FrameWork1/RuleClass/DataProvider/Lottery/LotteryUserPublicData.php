@@ -11,19 +11,17 @@ class LotteryUserPublicData extends BasePublicData {
     /**
      * 新增
      * @param $lotteryId
-     * @param $userName
-     * @param $userMobile
+     * @param $userId
      * @param $createDate
      * @return int
      */
-    public function Create($lotteryId,$userName,$userMobile,$createDate){
+    public function Create($lotteryId,$userId,$createDate){
         $result=-1;
         if ($lotteryId>0) {
-            $sql="INSERT INTO ".self::TableName_LotteryUser." (LotteryId,UserName,UserMobile,CreateDate) VALUES(:LotteryId,:UserName,:UserMobile,:CreateDate);";
+            $sql="INSERT INTO ".self::TableName_LotteryUser." (LotteryId,UserId,CreateDate) VALUES(:LotteryId,:UserId,:CreateDate);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId",$lotteryId);
-            $dataProperty->AddField("UserName",$userName);
-            $dataProperty->AddField("UserMobile",$userMobile);
+            $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("CreateDate",$createDate);
             $result=$this->dbOperator->LastInsertId($sql,$dataProperty);
         }
