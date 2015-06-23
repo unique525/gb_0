@@ -158,6 +158,7 @@ class SiteTagManageData extends BaseManageData {
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页大小
      * @param string $searchKey 搜索关键字
+     * @param string $allCount
      * @return array 数据集
      */
     public function GetListPager($siteId, $pageBegin, $pageSize, $searchKey,&$allCount) {
@@ -206,6 +207,29 @@ class SiteTagManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 获取站点关键词
+     * @param int $siteId 站点id
+     * @return array 数据集
+     */
+    public function GetList($siteId) {
+        $result=-1;
+        if($siteId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+
+            $sql = "
+                SELECT
+                *
+                FROM
+                " . self::TableName_SiteTag . "
+                WHERE SiteId=:SiteId ;";
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 }
 
 ?>

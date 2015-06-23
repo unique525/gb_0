@@ -89,6 +89,10 @@ class Template
      * 论坛 主题列表
      */
     const TAG_TYPE_FORUM_TOPIC_LIST = "forum_topic_list";
+    /**
+     * 模板标签类型： 活动列表
+     */
+    const TAG_TYPE_ACTIVITY_LIST = "activity_list";
 
     /**
      * 读取模板内容

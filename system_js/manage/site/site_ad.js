@@ -132,7 +132,7 @@ function CheckEndDate(endDate){
     var arr=endDate.split(" ");
     arr=arr[0].split("-");
     var site_year = arr[0];
-    var site_month = arr[1];
+    var site_month = arr[1]-1;
     var site_day = arr[2];
 
     var end=new Date(site_year,site_month,site_day)

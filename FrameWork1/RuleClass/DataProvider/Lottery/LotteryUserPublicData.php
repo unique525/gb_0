@@ -49,4 +49,19 @@ class LotteryUserPublicData extends BasePublicData {
 
     }
 
+    /**
+     * 参与次数加一
+     * @param $lotteryUserId
+     * @return int
+     */
+    public function TimesAdd($lotteryUserId){
+        $result=-1;
+        if($lotteryUserId>0){
+            $sql="UPDATE ".self::TableName_LotteryUser." SET Times=Times+1 WHERE LotteryUserId=:LotteryUserId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LotteryUserId",$lotteryUserId);
+            $result=$this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 } 

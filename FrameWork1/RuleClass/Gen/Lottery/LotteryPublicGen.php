@@ -33,6 +33,44 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $nowDateTime=date("Y-m-d H:i:s", time());
 
+$debug=new DebugLogManageData();
+$debugLog="";
+
+        if($lotteryId>0){
+
+            $lotteryPublicData=new LotteryPublicData();
+            //
+            $tableType = $lotteryPublicData->GetTableType($lotteryId, true);
+
+            $canLottery=0;
+            switch($tableType){
+
+                case LotteryData::TABLE_TYPE_EXAM:
+
+                    $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
+                    $examUserPaperId=1;
+                    if($examUserPaperId<=0){
+                        return $result;
+                    }
+
+                    /**get score**/
+                    $score=100;
+
+                    $limitContent=intval($lotteryPublicData->GetLimitContent($lotteryId, true));
+                    if($score>=$limitContent){
+                        $canLottery=1;
+                    }
+
+                    break;
+
+
+            }
+
+            if($canLottery<=0){
+                $result="分数不够";
+                return $result; //没有抽奖资格
+            }
+
         /**添加进等待抽奖表**/
         $lotteryUserPublicData=new LotteryUserPublicData();
         $isAdded=$lotteryUserPublicData->CheckRepeat($lotteryId,$userMobile);
@@ -41,27 +79,25 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         }else{
             $lotteryUserId=$lotteryUserPublicData->Create($lotteryId,$userName,$userMobile,$nowDateTime); //新增
         }
-
+        $timesAdd=$lotteryUserPublicData->TimesAdd($lotteryUserId); //参与次数+1
 
         /**获取该次抽奖内 所有设置的奖项**/
         $lotterySetPublicData=new LotterySetPublicData();
-        $arrayLotterySet=$lotterySetPublicData->GetList($lotteryId);
+        $state=0; //启用
+        $arrayLotterySet=$lotterySetPublicData->GetList($lotteryId,$state);
 
-
-$debug=new DebugLogManageData();
-$debugLog="";
 
 
         /**开始处理抽奖**/
         if(count($arrayLotterySet)>0&&$arrayLotterySet!=null){
             $randomResult=rand(1,100); //roll 100
-            $awardBelow=0; //几率值，roll得点数小于该值则中奖
+            $awardIfBelow=0; //几率值，roll得点数小于该值则中奖
             $awardLotterySetId=0; //若中奖，奖项的id
             $awardLotterySet=null; //若中奖，奖项设置的array
             for($i=0;$i<count($arrayLotterySet);$i++){  //循环所有设置的奖项  判断是否中了哪个奖
                 if($arrayLotterySet[$i]["OddsType"]==0){  //按几率抽  (OddsType抽奖类型，0:纯按几率，1:按当前参与人数的比率)
-                    $awardBelow+=$arrayLotterySet[$i]["Odds"];  //Odds:中奖几率 / 比率
-                    if($randomResult<=$awardBelow){  //中奖
+                    $awardIfBelow+=$arrayLotterySet[$i]["Odds"];  //Odds:中奖几率
+                    if($randomResult<=$awardIfBelow){  //中奖
                         $awardLotterySetId=$arrayLotterySet[$i]["LotterySetId"];
                         $awardLotterySet=$arrayLotterySet[$i];
                         break;
@@ -93,7 +129,7 @@ $debug->Create($debugLog);
 
 
                     $result="这个奖已经被抽完了";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
                 /**检查日期获奖限额 （当前持续天数*每日获奖限额）**/
@@ -120,7 +156,7 @@ $debug->Create($debugLog);
 
 
                     $result="今天这个奖已经抽完了，明天再试";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
 
@@ -142,7 +178,7 @@ $debug->Create($debugLog);
 
 
                     $result="你已经中了奖，不能重复中奖";
-                    return $result;
+                    return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
 
 
@@ -175,6 +211,10 @@ $debug->Create($debugLog);
             //未找到奖项设置
         }
 
+        }else{
+            $result="抽奖id错误";
+            //未找到奖项设置
+        }
 
 
 
@@ -184,6 +224,6 @@ $debugLog=$result."\r\n".$debugLog;
 $debug->Create($debugLog);
 
 
-        return $result;
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 } 
