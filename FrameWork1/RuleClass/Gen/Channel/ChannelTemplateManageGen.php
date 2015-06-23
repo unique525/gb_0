@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 后台管理 频道模板 生成类
  * @category iCMS
