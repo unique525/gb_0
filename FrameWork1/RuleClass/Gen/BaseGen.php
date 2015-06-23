@@ -390,6 +390,9 @@ class BaseGen
         $imgMinWidth = 0,
         $imgMinHeight = 0
     ){
+        if (!isset($_FILES[$fileElementName])){
+            return;
+        }
         $files = $_FILES[$fileElementName];
 
         for($i = 0; $i<count($files["name"]); $i++){

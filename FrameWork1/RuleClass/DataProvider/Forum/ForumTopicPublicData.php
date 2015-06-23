@@ -116,7 +116,7 @@ class ForumTopicPublicData extends BasePublicData
     }
 
     public function Modify(
-        $forumTopicID,
+        $forumTopicId,
         $forumTopicTitle,
         $forumTopicTypeId,
         $forumTopicTypeName,
@@ -153,7 +153,7 @@ class ForumTopicPublicData extends BasePublicData
             $dataProperty->AddField("TitleColor", $titleColor);
             $dataProperty->AddField("TitleBgImage", $titleBgImage);
             $fieldNames = "ForumTopicTitle=:ForumTopicTitle,ForumTopicTypeId=:ForumTopicTypeId,ForumTopicTypeName=:ForumTopicTypeName,ForumTopicAudit=:ForumTopicAudit,ForumTopicAccess=:ForumTopicAccess,PostTime=:PostTime,UserId=:UserId,UserName=:UserName,ForumTopicMood=:ForumTopicMood,ForumTopicAttach=:ForumTopicAttach,TitleBold=:TitleBold,TitleColor=:TitleColor,TitleBgImage=:TitleBgImage";
-            $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames . " WHERE forumTopicId =" . $forumTopicID . "";
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames . " WHERE forumTopicId =" . $forumTopicId . "";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
@@ -195,6 +195,72 @@ class ForumTopicPublicData extends BasePublicData
                     WHERE ForumTopicId = :ForumTopicId
                     ;";
             $dataProperty->AddField("Sort", $sort);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改内容中上传文件1
+     * @param int $forumTopicId 主题id
+     * @param int $contentUploadFileId1 内容中上传文件1
+     * @return int 操作结果
+     */
+    public function ModifyContentUploadFileId1($forumTopicId, $contentUploadFileId1){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    ContentUploadFileId1 = :ContentUploadFileId1
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("ContentUploadFileId1", $contentUploadFileId1);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改内容中上传文件1
+     * @param int $forumTopicId 主题id
+     * @param int $contentUploadFileId2 内容中上传文件2
+     * @return int 操作结果
+     */
+    public function ModifyContentUploadFileId2($forumTopicId, $contentUploadFileId2){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    ContentUploadFileId2 = :ContentUploadFileId2
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("ContentUploadFileId2", $contentUploadFileId2);
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改内容中上传文件1
+     * @param int $forumTopicId 主题id
+     * @param int $contentUploadFileId3 内容中上传文件3
+     * @return int 操作结果
+     */
+    public function ModifyContentUploadFileId3($forumTopicId, $contentUploadFileId3){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET
+                    ContentUploadFileId3 = :ContentUploadFileId3
+                    WHERE ForumTopicId = :ForumTopicId
+                    ;";
+            $dataProperty->AddField("ContentUploadFileId3", $contentUploadFileId3);
             $dataProperty->AddField("ForumTopicId", $forumTopicId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
@@ -337,10 +403,11 @@ class ForumTopicPublicData extends BasePublicData
     }
 
     /**
-     * @param $forumId
-     * @param $pageBegin
-     * @param $pageSize
-     * @param $allCount
+     * 分页列表数据集
+     * @param int $forumId
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @param int $allCount
      * @return array
      */
     public function GetListPager($forumId, $pageBegin, $pageSize, &$allCount)

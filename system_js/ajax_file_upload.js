@@ -201,8 +201,17 @@ jQuery.extend({
         if ( type == "script" )
             jQuery.globalEval( data );
         // Get the JavaScript object, if JSON is used.
-        if ( type == "json" )
+        if ( type == "json" ){
+
+            //fuck xunlei
+            var xunLeiCode = '<div id="xunlei_com_thunder_helper_plugin_d462f475-c18e-46be-bd10-327458d045bd"></div>';
+            data = data.replace(xunLeiCode,'');
+
             eval( "data = " + data );
+
+
+        }
+
         // evaluate scripts within html
         if ( type == "html" )
             jQuery("<div>").html(data).evalScripts();

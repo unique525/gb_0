@@ -260,7 +260,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $forumTopicTypeName = Control::PostRequest("f_ForumTopicTypeName", "");
             $forumTopicAudit = Control::PostRequest("f_ForumTopicAudit", "");
             $forumTopicAccess = Control::PostRequest("f_ForumTopicAccess", "");
-            $postTime = date("Y-m-d H:i:s");
+            $postTime = date("Y-m-d H:i:s", time());
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
@@ -290,9 +290,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             );
             if ($forumTopicId > 0) {
 
-                $uploadFiles = "";
+                $uploadFiles = Control::PostRequest("f_UploadFiles", "");
 
-                //直接上传内容图的处理
+                //直接上传内容图的处理（WAP、H5页面）
                 if (!empty($_FILES)) {
 
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
@@ -306,7 +306,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
 
                     parent::UploadMultiple(
-                        "file_upload_to_content",
+                        "file_upload_to_content_of_wap",
                         $tableType,
                         $tableId,
                         $arrUploadFile, //UploadFile类型的数组
@@ -402,6 +402,31 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     }
 
                 }
+
+                //修改上传文件的tableId;
+                $uploadFiles = Control::PostRequest("f_UploadFiles", "");
+
+                $arrUploadFilesOfPost = explode(",", $uploadFiles);
+
+                $uploadFileData = new UploadFileData();
+                for ($i = 0; $i < count($arrUploadFilesOfPost); $i++) {
+                    if (intval($arrUploadFilesOfPost[$i]) > 0) {
+                        $uploadFileData->ModifyTableId(intval($arrUploadFilesOfPost[$i]), $forumTopicId);
+                    }
+                }
+
+                if(count($arrUploadFilesOfPost)>0){
+                    $forumTopicPublicData->ModifyContentUploadFileId1($forumTopicId, intval($arrUploadFilesOfPost[0]));
+                }
+
+                if(count($arrUploadFilesOfPost)>1){
+                    $forumTopicPublicData->ModifyContentUploadFileId2($forumTopicId, intval($arrUploadFilesOfPost[1]));
+                }
+
+                if(count($arrUploadFilesOfPost)>2){
+                    $forumTopicPublicData->ModifyContentUploadFileId3($forumTopicId, intval($arrUploadFilesOfPost[2]));
+                }
+
 
                 //新增到ForumPost表
                 $isTopic = 1;
