@@ -158,6 +158,7 @@ class SiteTagManageData extends BaseManageData {
      * @param int $pageBegin 起始页码
      * @param int $pageSize 每页大小
      * @param string $searchKey 搜索关键字
+     * @param string &$allCount 总数
      * @return array 数据集
      */
     public function GetListPager($siteId, $pageBegin, $pageSize, $searchKey,&$allCount) {
