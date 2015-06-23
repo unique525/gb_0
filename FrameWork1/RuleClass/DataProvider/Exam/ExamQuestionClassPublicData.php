@@ -46,4 +46,18 @@ class ExamQuestionClassPublicData extends BasePublicData{
         }
         return $result;
     }
+
+    public function GetTypeScore1($examQuestionClassId, $withCache)
+    {
+        $result = -1;
+        if ($examQuestionClassId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_question_class_data';
+            $cacheFile = 'exam_question_class_get_type_score_1_count.cache_' . $examQuestionClassId . '';
+            $sql = "SELECT TypeScore1 FROM " . self::TableName_ExamQuestionClass . " WHERE ExamQuestionClassId=:ExamQuestionClassId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamQuestionClassId", $examQuestionClassId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }

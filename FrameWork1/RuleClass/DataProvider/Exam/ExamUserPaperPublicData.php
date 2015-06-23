@@ -37,13 +37,12 @@ class ExamUserPaperPublicData extends BasePublicData{
         return $result;
     }
 
-    public function ModifyScore($examUserPaperId, $thisScore) {
+    public function ModifyScore($examUserPaperId, $getScore) {
         $sql = "update " . self::TableName_ExamUserPaper . " set GetScore= :GetScore where " . self::TableId_ExamUserPaper . "=:ExamUserPaperId";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("GetScore", $thisScore);
+        $dataProperty->AddField("GetScore", $getScore);
         $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 
@@ -51,8 +50,7 @@ class ExamUserPaperPublicData extends BasePublicData{
         $sql = "UPDATE ".self::TableName_ExamUserPaper." SET EndTime = now() WHERE ExamUserPaperId = :ExamUserPaperId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql,$dataProperty);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 

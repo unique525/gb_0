@@ -61,28 +61,37 @@ class ExamUserAnswerPublicData extends BasePublicData{
 
     public function  ModifyAnswer($examUserAnswerId,$answer){
         $dataProperty = new DataProperty();
-        $sql = "UPDATE ".self::TableName_ExamUserAnswer." SET Answer=:Answer WHERE ExamUserAnswerId=:ExamUserAnswerId";
+        $sql = "UPDATE ".self::TableName_ExamUserAnswer." SET Answer=:Answer
+            WHERE ExamUserAnswerId=:ExamUserAnswerId;";
         $dataProperty->AddField("ExamUserAnswerId", $examUserAnswerId);
         $dataProperty->AddField("Answer", $answer);
         $this->dbOperator->Execute($sql, $dataProperty);
     }
 
-    public function ModifyScore($examUserAnswerID, $thisScore) {
-        $sql = "update " . self::TableName_ExamUserAnswer . " set GetScore= :Score where " . self::TableId_ExamUserPaper . "=:ExamUserAnswerID";
+    public function ModifyScore($examUserAnswerId, $getScore) {
+        $sql = "update " . self::TableName_ExamUserAnswer . " set GetScore=:GetScore
+
+                where ExamUserAnswerId=:ExamUserAnswerId;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("Score", $thisScore);
-        $dataProperty->AddField("ExamUserAnswerID", $examUserAnswerID);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->Execute($sql, $dataProperty);
-        return $result;
+        $dataProperty->AddField("GetScore", $getScore);
+        $dataProperty->AddField("ExamUserAnswerId", $examUserAnswerId);
+        return $this->dbOperator->Execute($sql, $dataProperty);
+
     }
 
     public function GetUserAnswerList($examUserPaperId){
-        $sql = "SELECT q.Answer,q.ExamQuestionType,q.Score,a.ExamUserAnswerId,a.Answer as UserAnswer FROM ".self::TableName_ExamQuestion." q,".self::TableName_ExamUserAnswer." a WHERE a.ExamQuestionId = q.ExamQuestionId AND a.ExamUserPaperId = :ExamUserPaperId";
+        $sql = "SELECT
+        q.ExamQuestionId,
+        q.ExamQuestionClassId,
+        q.Answer,
+        q.ExamQuestionType,
+        q.Score,
+        a.ExamUserAnswerId,
+        a.Answer as UserAnswer
+        FROM ".self::TableName_ExamQuestion." q,".self::TableName_ExamUserAnswer." a WHERE a.ExamQuestionId = q.ExamQuestionId AND a.ExamUserPaperId = :ExamUserPaperId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
-        $dbOperator = DBOperator::getInstance();
-        $result = $dbOperator->ReturnArray($sql,$dataProperty);
+        $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
         return $result;
     }
 }

@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/system_js/common.js"></script>
     <script type="text/javascript">
         $().ready(function() {
 
@@ -20,9 +21,25 @@
                 $.ajax({
                     url: "default.php",
                     data: {mod: "exam_user_answer",a: "sub_answer",exam_user_answer_id:examUserAnswerId,answer_value: answerValue},
-                    dataType: "jsonp"
+                    dataType: "jsonp",
+                    jsonp:"JsonpCallBack",
+                    success:function(data){
+
+                    }
                 });
             });
+
+            $("#subPaper").click(function(){
+
+            });
+
+            $("#subPaper").click(function(){
+                var examUserPaperId = Request["exam_user_paper_id"];
+                window.location.href = "/default.php?mod=exam_user_paper&a=paper_score&exam_user_paper_id="+examUserPaperId;
+            })
+
+        });
+
 
         /**
          * 格式化状态值
@@ -41,13 +58,6 @@
 
             return result;
         }
-
-        $("#subPaper").click(function(){
-            var examUserPaperId = Request["exam_user_paper_id"];
-            window.location.href = "/default.php?mod=exam_user_paper&a=paper_score&exam_user_paper_id="+examUserPaperId;
-        }
-
-        });
     </script>
 </head>
 <body>
@@ -58,6 +68,7 @@
         </tr>
     </table>
     <ul>
+
         <icms id="exam_user_answer_list" type="list">
             <item>
                 <![CDATA[
@@ -74,6 +85,8 @@
                 ]]>
             </item>
         </icms>
+
+
     </ul>
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>

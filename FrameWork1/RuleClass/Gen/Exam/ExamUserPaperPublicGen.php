@@ -20,10 +20,14 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         switch ($action) {
 
             case "gen":
-                self::GenExamUserPaper();
+                $result = self::GenExamUserPaper();
                 break;
-            case "paper_score":
-                self::GenPaperScore();
+            case "finished":
+                $result = self::GenFinished();
+                break;
+            case "async_count_score":
+                $result = self::AsyncCountScore();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -31,7 +35,18 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
     }
 
     private function GenExamUserPaper(){
-        $userId = 1;
+        $userId = Control::GetUserId();
+        $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
+
+        if($examQuestionClassId<=0){
+            return "exam question class is null";
+        }
+
+
+        if($userId<=0){
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
+            return "";
+        }
 
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
 
@@ -43,12 +58,12 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $mustSelect = 1;
         $withCache = false;
         $mustCount = $examQuestionClassPublicData->GetMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrMustQuestionList = $examQuestionPublicData->GetQuestionList($mustSelect, $mustCount);
+        $arrMustQuestionList = $examQuestionPublicData->GetList($mustSelect, $mustCount);
 
 
         $mustSelect = 0;
         $nonCount = $examQuestionClassPublicData->GetNonMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrNonMustQuestionList = $examQuestionPublicData->GetQuestionList($mustSelect, $nonCount);
+        $arrNonMustQuestionList = $examQuestionPublicData->GetList($mustSelect, $nonCount);
 
         $beginTime = date("Y-m-d H:i:s", time());
         $endTime = "";
@@ -75,11 +90,22 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         }
     }
 
-    private function GenPaperScore(){
-        $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
+    private function GenFinished(){
+        $siteId = parent::GetSiteIdByDomain();
+        $templateMode = 0;
+        $defaultTemp = "exam_user_paper_score_gen";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+        return $tempContent;
+    }
 
-        $userId = Control::GetUserID();
-        $examUserPaperData = new ExamUserPaperData();
+
+    private function AsyncCountScore(){
+
+        $result = "";
+        $withCache = false;
+        $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
+        $userId = Control::GetUserId();
         if ($examUserPaperId > 0) {
             $scoreAll = 0;
             $score0 = 0;
@@ -95,13 +121,17 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $score10 = 0;
             $examUserAnswerPublicData = new ExamUserAnswerPublicData();
             $examUserPaperPublicData = new ExamUserPaperPublicData();
+            $examQuestionClassPublicData = new ExamQuestionClassPublicData();
             $examUserAnswerList = $examUserAnswerPublicData->GetUserAnswerList($examUserPaperId);
             for ($i = 0; $i < count($examUserAnswerList); $i++) {
                 $examUserAnswerId = intval($examUserAnswerList[$i]["ExamUserAnswerId"]);
                 //题型
                 $examQuestionType = intval($examUserAnswerList[$i]["ExamQuestionType"]);
+
+                $examQuestionClassId = intval($examUserAnswerList[$i]["ExamQuestionClassId"]);
                 //本题分数
-                $score = intval($examUserAnswerList[$i]["Score"]);
+                $score = $examQuestionClassPublicData->GetTypeScore1($examQuestionClassId,$withCache);
+
                 //正确答案
                 $answer = $examUserAnswerList[$i]["Answer"];
                 //会员答案
@@ -112,15 +142,15 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 }
                 //单选题
                 else if ($examQuestionType == 1) {
+                    if (strtolower($answer) == strtolower($userAnswer)) {
 
-                    if (strtolower($answer) === strtolower($userAnswer)) {
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
                         $score1 = $score1 + $score;
                     }
                 }
                 //多选
                 else if ($examQuestionType == 2) {
-                    if (strtolower($answer) === strtolower($userAnswer)) {
+                    if (strtolower($answer) == strtolower($userAnswer)) {
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
                         $score2 = $score2 + $score;
                     }
@@ -139,7 +169,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 } else if ($examQuestionType == 7) {
 
                 } else if ($examQuestionType == 8) {
-                    if ($answer === $userAnswer) {
+                    if ($answer == $userAnswer) {
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
                         $score8 = $score8 + $score;
                     }
@@ -166,7 +196,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                         }
                     }
                 } else if ($examQuestionType == 10) {
-                    if ($answer === $userAnswer) {
+                    if ($answer == $userAnswer) {
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
                         $score10 = $score10 + $score;
                     }
@@ -176,14 +206,10 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $scoreResult = $examUserPaperPublicData->ModifyScore($examUserPaperId, $scoreAll);
             $endTimeResult = $examUserPaperPublicData->ModifyEndTime($examUserPaperId);
             if ($scoreResult > 0 && $endTimeResult > 0) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"1","score_all":"' . $scoreAll . '","score0":"' . $score0
-                . '","score1":"' . $score1 . '","score2":"' . $score2 . '","score3":"' . $score3
-                . '","score4":"' . $score4 . '","score5":"' . $score5 . '","score6":"' . $score6
-                . '","score7":"' . $score7 . '","score8":"' . $score8 . '","score9":"' . $score9
-                . '","score10":"' . $score10 . '"})';
+                return Control::GetRequest("jsonpcallback", "") . '({"result":"'.$scoreAll.'"})';
             }
         } else {
-            return Control::GetRequest("jsonpcallback","") . '({"result":"0"})';
+            return Control::GetRequest("jsonpcallback", "") . '({"result":""})';
         }
     }
 

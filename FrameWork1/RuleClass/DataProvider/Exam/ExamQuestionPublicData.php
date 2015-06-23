@@ -7,7 +7,7 @@
  */
 class ExamQuestionPublicData extends BasePublicData{
 
-    public function GetQuestionList($mustSelect,$count)
+    public function GetList($mustSelect,$count)
     {
         $result = null;
         if($count > 0){
