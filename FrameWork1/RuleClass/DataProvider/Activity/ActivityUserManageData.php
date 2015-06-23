@@ -69,6 +69,48 @@ class ActivityUserManageData extends BaseManageData{
         }
         return $result;
     }
+    /**
+     * 获取活动成员分页列表
+     * @param int $activityId 活动id
+     * @param int $pageBegin 起始页码
+     * @param int $pageSize 每页大小
+     * @param int $searchKey 每页大小
+     * @param int $allCount 总大小
+     * @return array 活动成员数据集
+     */
+    public function GetUserListPager($activityId, $pageBegin, $pageSize, $searchKey, &$allCount) {
+        $result=-1;
+        if($activityId>0){
+            $searchSql = "";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                $searchSql.=" AND ActivityTitle LIKE :SearchKey ";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
+
+            $sql = "
+            SELECT
+                        au.*,
+                        u.UserName,
+                        a.ActivityTitle
+            FROM
+            CST_ACTIVITY_USER au
+            INNER JOIN " . self::TableName_User . " u ON (u.UserId=au.UserId)
+
+            LEFT OUTER JOIN CST_ACTIVITY a ON (a.ActivityId=au.ActivityId)
+
+            WHERE au.ActivityId=:ActivityId  " . $searchSql . "
+            ORDER BY au.ActivityUserId DESC
+            LIMIT " . $pageBegin . "," . $pageSize . ";";
+            echo $sql;
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $sqlCount = "SELECT count(*) FROM " . self::TableName_ActivityUser . " WHERE ActivityId=:ActivityId " . $searchSql . " ;";
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+        }
+        return $result;
+    }
 
     /**
      * 取得字段数据集

@@ -6,27 +6,18 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Site
  * @author zhangchi
  */
-class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
+class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
 {
     public function Gen()
     {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
-            case "create":
-                $result = self::GenCreate();
-                break;
-            case "modify":
-                $result = self::GenModify();
-                break;
             case "list":
                 $result = self::GenList();
                 break;
             case "modify_state":
                 $result = self::ModifyState();
-                break;
-            case "async_get_list_for_pull":
-                $result = self::AsyncGetListForPull();
                 break;
         }
 
@@ -36,17 +27,18 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList(){
 
         $siteId = Control::GetRequest("site_id", 0);
+        $activityId = Control::GetRequest("activity_Id", 0);
         $resultJavaScript="";
-        $tempContent = Template::Load("site/site_tag_list.html","common");
-        $siteTagManageData = new SiteTagManageData();
+        $tempContent = Template::Load("activity/activity_user_list.html","common");
+        $activityUserManageData = new ActivityUserManageData();
 
-        if(intval($siteId)>0){
+        if(intval($activityId)>0){
             $pageSize = Control::GetRequest("ps", 20);
             $pageIndex = Control::GetRequest("p", 1);
             $searchKey = Control::GetRequest("search_key", "");
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $allCount = 0;
-            $listName = "site_tag_list";
+            $listName = "activity_user_list";
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserId = Control::GetManageUserId();
@@ -54,13 +46,13 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
 
             if ($can == 1) {
-                $siteTagArray=$siteTagManageData->GetListPager($siteId,$pageBegin,$pageSize,$searchKey,$allCount);
+                $siteTagArray=$activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);
                 if(count($siteTagArray)>0){
                     Template::ReplaceList($tempContent, $siteTagArray, $listName);
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=site_tag&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=activity_user&m=list&site_id=$siteId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
@@ -125,23 +117,5 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             }
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
-    }
-
-
-    /**
-     * 提取关键字以抽取
-     * @return string 修改结果
-     */
-    private function AsyncGetListForPull(){
-        $result = "";
-        $siteId = Control::GetRequest("site_id", 0);
-
-        if(intval($siteId)>0){
-
-            $siteTagManageData = new SiteTagManageData();
-            $siteTagArray=$siteTagManageData->GetList($siteId);
-            $result = Format::FixJsonEncode($siteTagArray);
-        }
-        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 }

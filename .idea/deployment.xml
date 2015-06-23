@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="52cpb">
+  <component name="PublishConfigData" serverName="icms2">
     <serverData>
-      <paths name="52cpb">
+      <paths name="icms2">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />

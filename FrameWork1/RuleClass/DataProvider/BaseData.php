@@ -282,8 +282,6 @@ class BaseData
      * 论坛主题类型 数据表自增字段名
      */
     const TableId_ForumTopicType  = "ForumTopicTypeId";
-
-
     /**
      * 会员 数据表名
      */
