@@ -261,7 +261,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
-            $postTime = date("Y-m-d H:i:s");
+            $postTime = date("Y-m-d H:i:s", time());
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
 
@@ -485,7 +485,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
-            $postTime = date("Y-m-d H:i:s");
+            $postTime = date("Y-m-d H:i:s", time());
             $isTopic = 0;
             $forumTopicAudit = 0;
             $forumTopicAccess = 0;

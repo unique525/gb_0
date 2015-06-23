@@ -27,23 +27,8 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
-            case "async_publish":
-                $result = self::AsyncPublish();
-                break;
-            case "async_modify_sort":
-                $result = self::AsyncModifySort();
-                break;
-            case "async_modify_sort_by_drag":
-                $result = self::AsyncModifySortByDrag();
-                break;
             case "async_modify_state":
                 $result = self::AsyncModifyState();
-                break;
-            case "copy":
-                $result = self::GenDeal($method);
-                break;
-            case "move":
-                $result = self::GenDeal($method);
                 break;
         }
         $result = str_ireplace("{method}", $method, $result);
@@ -51,7 +36,161 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 生成资讯管理列表页面
+     * 新增
+     * @return string 模板内容页面
+     */
+    private function GenCreate()
+    {
+
+        $templateContent = "";
+        $siteId = Control::GetRequest("site_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
+        $rank = Control::GetRequest("rank", 0);
+        $parentId = Control::GetRequest("parent_id", 0);
+
+        if ($siteId > 0 && $channelId>0 && $rank >= 0) {
+            $templateContent = Template::Load("exam/exam_question_class_deal.html", "common");
+            $resultJavaScript = "";
+            parent::ReplaceFirst($templateContent);
+            $parentName = "无";
+            $examQuestionClassManageData = new ExamQuestionClassManageData();
+            if ($rank > 0) {
+
+                if ($parentId > 0) {
+                    $parentName = $examQuestionClassManageData->GetExamQuestionClassName($parentId, false);
+
+                } else {
+                    $parentId = 0;
+                }
+
+            }
+
+            $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+            $templateContent = str_ireplace("{Rank}", $rank, $templateContent);
+            $templateContent = str_ireplace("{ParentId}", $parentId, $templateContent);
+            $templateContent = str_ireplace("{Sort}", "0", $templateContent);
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $examQuestionClassId = $examQuestionClassManageData->Create($httpPostData);
+
+                //加入操作日志
+                $operateContent = 'Create ExamQuestionClass,POST FORM:'
+                    . implode('|', $_POST) . ';\r\nResult:' . $examQuestionClassId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($examQuestionClassId > 0) {
+
+                    //javascript 处理
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=exam_question_class&m=list&site_id=$siteId&channel_id=$channelId");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('forum', 2));
+                }
+            }
+
+            $fields = $examQuestionClassManageData->GetFields();
+            parent::ReplaceWhenCreate($templateContent, $fields);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $templateContent = preg_replace($patterns, "", $templateContent);
+            parent::ReplaceEnd($templateContent);
+
+            $templateContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $templateContent);
+        }
+
+
+        return $templateContent;
+    }
+
+
+    private function GenModify(){
+        $templateContent = "";
+        $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
+        $channelId = Control::GetRequest("channel_id", 0);
+
+        if ($siteId>0 && $channelId>0 && $examQuestionClassId >= 0) {
+            $templateContent = Template::Load("exam/exam_question_class_deal.html", "common");
+            $resultJavaScript = "";
+            parent::ReplaceFirst($templateContent);
+
+
+            $examQuestionClassManageData = new ExamQuestionClassManageData();
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $examQuestionClassManageData->Modify($httpPostData, $examQuestionClassId);
+
+                //加入操作日志
+                $operateContent = 'Modify ExamQuestionClass,POST FORM:' .
+                    implode('|', $_POST) . ';\r\nResult:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/exam_question_class_data');
+
+                    //javascript 处理
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=forum&m=list&site_id=$siteId&channel_id=$channelId");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('forum', 4));
+                }
+            }
+
+
+
+            $arrOne = $examQuestionClassManageData->GetOne($examQuestionClassId);
+            Template::ReplaceOne($templateContent, $arrOne);
+            $parentId = intval($arrOne["ParentId"]);
+            if($parentId>0){
+                $parentName = $examQuestionClassManageData->GetExamQuestionClassName($parentId, false);
+                $templateContent = str_ireplace("{ParentName}", $parentName, $templateContent);
+            }else{
+                $templateContent = str_ireplace("{ParentName}", "无", $templateContent);
+            }
+
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $templateContent = str_ireplace("{ExamQuestionClassId}", $examQuestionClassId, $templateContent);
+            $templateContent = str_ireplace("{Sort}", "0", $templateContent);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $templateContent = preg_replace($patterns, "", $templateContent);
+            parent::ReplaceEnd($templateContent);
+
+            $templateContent = str_ireplace("{ResultJavaScript}", $resultJavaScript, $templateContent);
+
+        }
+
+
+        return $templateContent;
+    }
+
+
+    /**
+     * 生成列表页面
      */
     private function GenList()
     {
@@ -73,66 +212,57 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
             die(Language::Load('channel', 4));
         }
 
-        //load template
-        $templateContent = Template::Load(
-            "exam/exam_question_list.html",
-            "common");
+        $templateContent = "";
 
-        parent::ReplaceFirst($templateContent);
+        if($channelId>0){
 
-        $pageSize = Control::GetRequest("ps", 20);
-        $pageIndex = Control::GetRequest("p", 1);
-        $searchKey = Control::GetRequest("search_key", "");
-        $searchType = Control::GetRequest("search_type", -1);
-        $searchKey = urldecode($searchKey);
+            //load template
+            $templateContent = Template::Load(
+                "exam/exam_question_class_list.html",
+                "common");
 
-        if (isset($searchKey) && strlen($searchKey) > 0) {
-            $canSearch = $manageUserAuthorityManageData->CanChannelSearch($siteId, $channelId, $manageUserId);
-            if (!$canSearch) {
-                die(Language::Load('channel', 4));
-            }
-        }
+            parent::ReplaceFirst($templateContent);
 
-        if ($pageIndex > 0 && $channelId > 0) {
+            $examQuestionClassManageData = new ExamQuestionClassManageData();
+            $rank = 0;
+            $arrRankOneList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
+            $rank = 1;
+            $arrRankTwoList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
+            $rank = 2;
+            $arrRankThreeList = $examQuestionClassManageData->GetListByRank($channelId, $rank);
+            $tagId = "exam_question_class_list";
 
-            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            if(count($arrRankOneList)>0){
 
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "exam_question_list";
-            $allCount = 0;
-            $isSelf = Control::GetRequest("is_self", 0);
-            $examQuestionManageData = new ExamQuestionManageData();
-            $arrList = $examQuestionManageData->GetList(
-                $channelId,
-                $pageBegin,
-                $pageSize,
-                $allCount,
-                $searchKey,
-                $searchType,
-                $isSelf,
-                $manageUserId
-            );
-            if (count($arrList) > 0) {
-                Template::ReplaceList($templateContent, $arrList, $tagId);
-
-                $styleNumber = 1;
-                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
-                $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=exam_question&m=list&channel_id=$channelId&p={0}&ps=$pageSize&isself=$isSelf";
-                $jsFunctionName = "";
-                $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-
-                $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
-
-            } else {
+                Template::ReplaceList(
+                    $templateContent,
+                    $arrRankOneList,
+                    $tagId,
+                    Template::DEFAULT_TAG_NAME,
+                    $arrRankTwoList,
+                    "ExamQuestionClassId",
+                    "ParentId",
+                    $arrRankThreeList,
+                    "ExamQuestionClassId",
+                    "ParentId"
+                );
+                $templateContent = str_ireplace("{pager_button}", "", $templateContent);
+            }else{
                 Template::RemoveCustomTag($templateContent, $tagId);
                 $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
+
             }
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+
+            parent::ReplaceEnd($templateContent);
+
+
+
         }
 
-        parent::ReplaceEnd($templateContent);
         return $templateContent;
     }
 

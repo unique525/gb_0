@@ -107,6 +107,7 @@
                 <option value="13">在线测试</option>
                 <option value="14">分类信息</option>
                 <option value="15">电子报</option>
+                <option value="16">抽奖</option>
                 <option value="0">站点首页</option>
                 <option value="50">外部接口</option>
             </select>

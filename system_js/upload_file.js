@@ -402,7 +402,8 @@ function AjaxFileUpload(
         error: function (data, status, e)
         {
             btnUpload.removeAttr("disabled");
-            alert(e);
+            alert('status:'+status);
+            alert('e:'+e);
         }
     });
 }

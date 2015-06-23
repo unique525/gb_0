@@ -303,6 +303,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $examUserAnswerManageGen = new ExamUserAnswerManageGen();
                     $result = $examUserAnswerManageGen->Gen();
                     break;
+                case "lottery":
+                    $lotteryManageGen = new LotteryManageGen();
+                    $result = $lotteryManageGen->Gen();
+                    break;
+                case "lottery_set":
+                    $lotterySetManageGen = new LotterySetManageGen();
+                    $result = $lotterySetManageGen->Gen();
+                    break;
+                case "lottery_award_user":
+                    $lotteryAwardUserManageGen = new LotteryAwardUserManageGen();
+                    $result = $lotteryAwardUserManageGen->Gen();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;

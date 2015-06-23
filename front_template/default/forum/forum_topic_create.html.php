@@ -26,8 +26,8 @@
 
 <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
 <script type="text/javascript" src="/system_js/color_picker.js"></script>
-<script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
-<script type="text/javascript" src="/system_js/upload_file.js"></script>
+<script type="text/javascript" src="/system_js/ajax_file_upload.js" charset="utf-8"></script>
+<script type="text/javascript" src="/system_js/upload_file.js" charset="utf-8"></script>
 <script type="text/javascript">
 
     var editor;
@@ -42,6 +42,14 @@
         if(fileElementId == "file_upload_to_content"){
             if(editor != undefined && editor != null){
                 editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+            }
+
+            var fUploadFile = $("#f_UploadFiles");
+
+            if(fUploadFile != undefined && fUploadFile != null){
+                var uploadFiles = fUploadFile.val();
+                uploadFiles = uploadFiles + "," + data.upload_file_id;
+                fUploadFile.val(uploadFiles);
             }
         }
     };
@@ -150,7 +158,7 @@
             var fileElementId = 'file_upload_to_content';
 
             var attachWatermark = 0;
-            if($("#attachwatermark").attr("checked")==true){
+            if($("#cbAttachWatermark").is(":checked")){
                 attachWatermark = 1;
             }
             var loadingImageId = null;
@@ -161,7 +169,7 @@
                 tableType,
                 tableId,
                 loadingImageId,
-                btnUploadToContent,
+                $(this),
                 attachWatermark,
                 uploadFileId
             );
@@ -251,11 +259,11 @@
                             <td style="padding:4px 0;">
 
                                 <label for="f_ForumTopicTitle"></label>
-                                <input type="text" class="iColorPicker input_box_topic_title" id="f_ForumTopicTitle" name="f_ForumTopicTitle" value="{ForumTopicTitle}" style="width:70%;" maxlength="300" />
-                                <input type="hidden" id="f_TitleColor" name="f_TitleColor" value="{TitleColor}"  />
-                                <input type="hidden" id="f_TitleBold" name="f_TitleBold" value="{TitleBold}"  />
+                                <input type="text" class="iColorPicker input_box_topic_title" id="f_ForumTopicTitle" name="f_ForumTopicTitle" style="width:70%;" maxlength="300" />
+                                <input type="hidden" id="f_TitleColor" name="f_TitleColor"  />
+                                <input type="hidden" id="f_TitleBold" name="f_TitleBold"  />
                                 <input type="hidden" id="f_ForumId" name="f_ForumId" value="{ForumId}" />
-                                <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="{UploadFiles}" />
+                                <input type="hidden" id="f_UploadFiles" name="f_UploadFiles" value="" />
                                 <input type="checkbox" id="cbTitleBold" /> <label for="cbTitleBold">加粗</label>
                             </td>
                         </tr>

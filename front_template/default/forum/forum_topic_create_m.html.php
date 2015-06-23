@@ -60,7 +60,7 @@
                 var p = document.getElementById('Preview');
 
                 p.innerText = "";// 重新选择时，清空
-                
+
                 var ul = document.getElementById('Errors');
                 for (var i = 0, f; f = files[i]; i++) {
                     if (!f.type.match('image.*')) continue;
@@ -124,7 +124,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="file" id="file_upload_to_content" name="file_upload_to_content[]"
+                        <input type="file" id="file_upload_to_content_of_wap" name="file_upload_to_content_of_wap[]"
                                onchange="fileSelect()" multiple/>
 
                         <div id="Preview"></div>

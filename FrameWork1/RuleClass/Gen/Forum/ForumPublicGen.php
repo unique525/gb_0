@@ -13,7 +13,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      * @return string 返回执行结果
      */
     public function GenPublic() {
-
         $action = Control::GetRequest("a", "");
         switch ($action) {
             default:

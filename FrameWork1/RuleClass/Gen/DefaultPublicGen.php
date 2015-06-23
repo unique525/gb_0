@@ -151,6 +151,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $examUserAnswerPublicGen = new ExamUserAnswerPublicGen();
                 $result = $examUserAnswerPublicGen->GenPublic();
                 break;
+            case "lottery":
+                $examUserAnswerPublicGen = new LotteryPublicGen();
+                $result = $examUserAnswerPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;
