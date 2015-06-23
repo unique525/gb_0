@@ -54,4 +54,28 @@ class ExamUserPaperPublicData extends BasePublicData{
         return $result;
     }
 
+
+    /**
+     * 取得分数
+     * @param int $userId 用户id
+     * @param int $examUserPaperId 试题分类id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 单选的非必选题抽取数量
+     */
+    public function GetScore($userId, $examUserPaperId, $withCache)
+    {
+        $result = -1;
+        if ($examUserPaperId > 0 && $userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_user_paper_data';
+            $cacheFile = 'exam_user_paper_get_score.cache_' . $examUserPaperId . '';
+            $sql = "SELECT GetScore FROM " . self::TableName_ExamUserPaper . " WHERE ExamUserPaperId=:ExamUserPaperId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+
 }

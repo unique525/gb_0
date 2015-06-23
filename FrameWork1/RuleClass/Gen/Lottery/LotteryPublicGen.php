@@ -33,6 +33,14 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
      * table id相关数据未找到
      */
     const LOTTERY_ERROR_ON_TABLE_ID = -6;
+    /**
+     * table type相关数据未找到
+     */
+    const LOTTERY_ERROR_ON_TABLE_TYPE = -7;
+    /**
+     * table type参与次数超过限制
+     */
+    const LOTTERY_TABLE_ID_LIMIT_REACHED = -8;
 
 
 
@@ -68,6 +76,9 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
+            case "default":
+                $result= self::GenDefault();
+                break;
             case "async_run_lottery":
                 $result = self::AsyncRunLottery();
                 break;
@@ -76,6 +87,70 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         return $result;
     }
 
+    /**
+     * 动态模板页
+     * @return mixed|string
+     */
+    private function GenDefault() {
+
+        $siteId = parent::GetSiteIdByDomain();
+        $tempContent = parent::GetDynamicTemplateContent();
+        parent::ReplaceFirst($tempContent);
+
+        $channelId = Control::GetRequest("channel_id",0);
+        $templateTag=Control::GetRequest("temp","");
+        $pageIndex = Control::GetRequest("p",0);
+        $pageSize = Control::GetRequest("ps",0);
+        if($pageIndex>1&&$pageSize>0){
+            $tagTopCount = ($pageIndex-1)*$pageSize.",".$pageSize;
+        }else{
+            $tagTopCount="";
+        }
+
+        $channelPublicData = new ChannelPublicData();
+        $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+        $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
+
+
+        $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
+
+
+
+
+//parent::ReplaceSiteConfig($siteId, $tempContent);
+
+
+//分页
+        $documentNewsPublicData=new DocumentNewsPublicData();
+        $allCount=$documentNewsPublicData->GetCountInChannel($channelId);
+
+        if($pageSize<=0){
+            $pageSize=10;
+        }
+        if($pageIndex<=0){
+            $pageIndex=1;
+        }
+
+
+        $navUrl = "/default.php?mod=lottery&a=default&temp=$templateTag&channel_id=$channelId&p={0}&ps=$pageSize";
+        $pagerTemplate = parent::GetDynamicTemplateContent("",$siteId,"pager");
+        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex);
+
+        $tempContent = str_ireplace("{dynamic_pager_button}", $pagerButton, $tempContent);
+
+
+        parent::ReplaceSiteInfo($siteId, $tempContent);
+        parent::ReplaceChannelInfo($channelId, $tempContent);
+        parent::ReplaceEnd($tempContent);
+        return $tempContent;
+    }
+
+
+
+    /**
+     * 抽奖
+     * @return string
+     */
     private function AsyncRunLottery(){
         $result_array=array(
             "code" => -1,
@@ -95,36 +170,56 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         if($lotteryId>0){
 
             $lotteryPublicData=new LotteryPublicData();
+            $lotteryUserPublicData=new LotteryUserPublicData();
             //
             $tableType = $lotteryPublicData->GetTableType($lotteryId, true);
-
+            $tableId=0;
             $canLottery=0;
+
             switch($tableType){
 
                 case LotteryData::TABLE_TYPE_EXAM:
 
                     $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
-                    $examUserPaperId=1;
+
                     if($examUserPaperId<=0){
-                        $resultCode=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_ON_TABLE_ID; //table id相关数据错误
-                        return Control::GetRequest("jsonpcallback","") . '('.$resultCode.')';
+                        $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_ON_TABLE_ID; //table id相关数据错误
+                        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
                     }
 
                     /**get score**/
-                    $score=100;
+                    $examUserPaperPublicData = new ExamUserPaperPublicData();
+                    $score=$examUserPaperPublicData->GetScore($userId, $examUserPaperId,false);
 
                     $limitContent=intval($lotteryPublicData->GetLimitContent($lotteryId, true));
                     if($score>=$limitContent){
-                        $canLottery=1;
+                        /** 查看table id是否已抽过奖 **/
+                        $lotteryTimesCount=$lotteryUserPublicData->GetLotteryTimeCount($userId,$tableType,$examUserPaperId,false);
+                        if($lotteryTimesCount==0){
+                            $canLottery=1;
+                            $tableId=$examUserPaperId;
+                        }else{
+                            $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_TABLE_ID_LIMIT_REACHED;//table id参与次数超过限制
+                            return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+                        }
+                    }else{
+                        $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_SCORE_NOE_ENOUGH;//未达到table id检测值
+                        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
                     }
 
                     break;
+
+                default :
+                        $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_ON_TABLE_TYPE;//table type错误
+                        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+                    break;
+
 
 
             }
 
             if($canLottery<=0){
-                $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_SCORE_NOE_ENOUGH;//未达到table id检测值
+                $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_ON_TABLE_TYPE;//table type错误
                 return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
             }
 
@@ -146,6 +241,15 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                 $lotteryOddsType=$lotteryPublicData->GetOddsType($lotteryId,true);
                 switch($lotteryOddsType){//(OddsType抽奖类型，0:纯按几率，1:按当前参与人数的比率)
                     case 0:  //按几率抽
+
+                        /**添加进已参与抽奖表**/
+                        $isAdded=$lotteryUserPublicData->CheckRepeat($lotteryId,$userId);
+                        if(count($isAdded)>0&&$isAdded!=null){
+                            $lotteryUserId=$isAdded["LotteryUserId"];  //已存在手机号码
+                        }else{
+                            $lotteryUserId=$lotteryUserPublicData->Create($lotteryId,$userId,$tableType,$tableId,$nowDateTime); //新增
+                        }
+
                         /** roll **/
                         $randomResult=rand(1,100); //roll 100
                         $awardIfBelow=0; //几率值，roll得点数小于该值则中奖
@@ -160,16 +264,15 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                         break;
 
                     case 1: //按比率抽
-                        /**添加进等待抽奖表**/
-                        $lotteryUserPublicData=new LotteryUserPublicData();
-                        $isAdded=$lotteryUserPublicData->CheckRepeat($lotteryId,$userId);
-                        if(count($isAdded)>0&&$isAdded!=null){
-                            $lotteryUserId=$isAdded["LotteryUserId"];  //已存在手机号码
-                        }else{
-                            $lotteryUserId=$lotteryUserPublicData->Create($lotteryId,$userId,$nowDateTime); //新增
-                        }
-                        $timesAdd=$lotteryUserPublicData->TimesAdd($lotteryUserId); //参与次数+1
 
+                        ///**添加进已参与抽奖表**/
+                        //$lotteryUserPublicData=new LotteryUserPublicData();
+                        //$isAdded=$lotteryUserPublicData->CheckRepeat($lotteryId,$userId);
+                        //if(count($isAdded)>0&&$isAdded!=null){
+                        //    $lotteryUserId=$isAdded["LotteryUserId"];  //已存在手机号码
+                        //}else{
+                        //    $lotteryUserId=$lotteryUserPublicData->Create($lotteryId,$userId,$nowDateTime); //新增
+                        //}
                         //比率抽奖 （暂空缺）
 
 

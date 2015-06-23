@@ -12,16 +12,20 @@ class LotteryUserPublicData extends BasePublicData {
      * 新增
      * @param $lotteryId
      * @param $userId
+     * @param $tableType
+     * @param $tableId
      * @param $createDate
      * @return int
      */
-    public function Create($lotteryId,$userId,$createDate){
+    public function Create($lotteryId,$userId,$tableType,$tableId,$createDate){
         $result=-1;
         if ($lotteryId>0) {
-            $sql="INSERT INTO ".self::TableName_LotteryUser." (LotteryId,UserId,CreateDate) VALUES(:LotteryId,:UserId,:CreateDate);";
+            $sql="INSERT INTO ".self::TableName_LotteryUser." (LotteryId,UserId,TableType,TableId,CreateDate) VALUES(:LotteryId,:UserId,:TableType,:TableId,:CreateDate);";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId",$lotteryId);
             $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("TableType",$tableType);
+            $dataProperty->AddField("TableId",$tableId);
             $dataProperty->AddField("CreateDate",$createDate);
             $result=$this->dbOperator->LastInsertId($sql,$dataProperty);
         }
@@ -59,6 +63,31 @@ class LotteryUserPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryUserId",$lotteryUserId);
             $result=$this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得参与次数
+     * @param int $userId 用户id
+     * @param int $tableType 试题分类id
+     * @param int $tableId 试题id
+     * @param int $withCache
+     * @return int 单选的非必选题抽取数量
+     */
+    public function GetLotteryTimeCount($userId, $tableType, $tableId,$withCache)
+    {
+        $result = 1;
+        if ($tableId > 0 && $userId > 0) {
+            //$cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_user_paper_data';
+            //$cacheFile = 'exam_user_paper_get_score.cache_' . $examUserPaperId . '';
+            $sql = "SELECT COUNT(*) FROM ".self::TableName_LotteryUser." WHERE UserId=:UserId AND TableType=:TableType AND TableId=:TableId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("TableType", $tableType);
+            $dataProperty->AddField("TableId", $tableId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty,false,"","");
         }
         return $result;
     }
