@@ -92,10 +92,9 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
 
     private function GenFinished(){
         $siteId = parent::GetSiteIdByDomain();
-        $templateMode = 0;
         $defaultTemp = "exam_user_paper_score_gen";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, $siteId);
         return $tempContent;
     }
 
@@ -206,11 +205,13 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $scoreResult = $examUserPaperPublicData->ModifyScore($examUserPaperId, $scoreAll);
             $endTimeResult = $examUserPaperPublicData->ModifyEndTime($examUserPaperId);
             if ($scoreResult > 0 && $endTimeResult > 0) {
-                return Control::GetRequest("jsonpcallback", "") . '({"result":"'.$scoreAll.'"})';
+                $result = $scoreAll;
             }
         } else {
-            return Control::GetRequest("jsonpcallback", "") . '({"result":""})';
+            $result = -1;
         }
+
+        return Control::GetRequest("jsonpcallback", "") . '({"result":"'.$result.'"})';
     }
 
 }
