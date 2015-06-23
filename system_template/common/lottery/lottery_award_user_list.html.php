@@ -77,9 +77,10 @@
     </table>-->
     <table width="100%" class="grid" cellpadding="0" cellspacing="0" id="left_tree">
         <tr class="grid_title">
-            <td class="spe_line" style="width:40px;text-align:center">ID</td>
+            <td class="spe_line" style="width:40px;text-align:center"><!--ID--></td>
             <td class="spe_line" style="width:180px;text-align:center;">名字</td>
             <td class="spe_line" style="width:180px;text-align:center;">手机号码</td>
+            <td class="spe_line" style="width:180px;text-align:center;">邮箱</td>
             <td class="spe_line" style="width:180px;text-align:center;">获奖时间</td>
             <td class="spe_line"></td>
             <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
@@ -88,8 +89,9 @@
         <icms id="lottery_award_user_list" type="list">
             <item><![CDATA[
                 <tr class="grid_item" id="{f_LotteryAwardUserId}" style="height:29px">
-                    <td class="spe_line" style="text-align:center">{f_LotteryAwardUserId}</td>
+                    <td class="spe_line" style="text-align:center"></td>
                     <td class="spe_line" style="text-align:center">{f_UserName}</td>
+                    <td class="spe_line" style="text-align:center">{f_UserEmail}</td>
                     <td class="spe_line" style="text-align:center">{f_UserMobile}</td>
                     <td class="spe_line" style="text-align:center">{f_CreateDate}</td>
                     <td class="spe_line"></td>

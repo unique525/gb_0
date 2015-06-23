@@ -128,19 +128,19 @@ class LotterySetManageData extends BaseManageData{
     /**
      * 修改同奖项组的同一人中奖限制
      * @param $lotteryId
-     * @param $lotteryGroup
+     * @param $lotterySetGroup
      * @param $oneUserLimit
      * @return int
      */
-    public function ModifyOneUserLimitOfGroup($lotteryId,$lotteryGroup,$oneUserLimit) {
+    public function ModifyOneUserLimitOfGroup($lotteryId,$lotterySetGroup,$oneUserLimit) {
 
         $result = -1;
         if($lotteryId>0){
-            $sql="UPDATE " . self::TableName_LotterySet . " OneUserLimit=:OneUserLimit WHERE LotteryId=:LotteryId AND LotteryGroup=:LotteryGroup ;";
+            $sql="UPDATE " . self::TableName_LotterySet . " SET OneUserLimit=:OneUserLimit WHERE LotteryId=:LotteryId AND LotterySetGroup=:LotterySetGroup ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LotteryId", $lotteryId);
             $dataProperty->AddField("OneUserLimit", $oneUserLimit);
-            $dataProperty->AddField("LotteryGroup", $lotteryGroup);
+            $dataProperty->AddField("LotterySetGroup", $lotterySetGroup);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
