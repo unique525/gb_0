@@ -17,7 +17,7 @@
                     if(parseInt(data["result"]) == 100){
                         window.location.href = "/default.php?mod=lottery&a=default&temp=lottery_1&exam_user_paper_id="+examUserPaperId;
                     }else{
-                        window.location.href = "/error1.html";
+                        window.location.href = "/default.php?mod=exam_user_paper&a=error_list&exam_user_paper_id="+examUserPaperId;
                     }
                 }
             });
