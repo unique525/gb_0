@@ -935,7 +935,7 @@ class Template
      */
     private static function FormatActivityColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
     {
-        $pos = stripos(strtolower($columnName), "activity_content");
+        $pos = stripos(strtolower($columnName), "ActivityContent");
         if ($pos !== false) {
             if (intval($itemRowIntroCount) > 0) {
                 //截断字符
@@ -945,7 +945,7 @@ class Template
             }
         }
 
-        $pos = stripos(strtolower($columnName), "apply_begin_date");
+        $pos = stripos(strtolower($columnName), "PublishDate");
         if ($pos !== false) {
 
             $date1 = explode(' ', $columnValue);
@@ -954,12 +954,12 @@ class Template
             $month = $date2[1];
             $day = $date2[2];
 
-            $templateContent = str_ireplace("{f_apply_begin_year}", $year, $templateContent);
-            $templateContent = str_ireplace("{f_apply_begin_month}", $month, $templateContent);
-            $templateContent = str_ireplace("{f_apply_begin_day}", $day, $templateContent);
+            $templateContent = str_ireplace("{f_publish_year}", $year, $templateContent);
+            $templateContent = str_ireplace("{f_publish_month}", $month, $templateContent);
+            $templateContent = str_ireplace("{f_publish_day}", $day, $templateContent);
         }
 
-        $pos = stripos(strtolower($columnName), "apply_end_date");
+        $pos = stripos(strtolower($columnName), "ApplyEndDate");
         if ($pos !== false) {
 
             $date1 = explode(' ', $columnValue);
@@ -973,7 +973,7 @@ class Template
             $templateContent = str_ireplace("{f_apply_end_day}", $day, $templateContent);
         }
 
-        $pos = stripos(strtolower($columnName), "begin_date");
+        $pos = stripos(strtolower($columnName), "BeginDate");
         if ($pos !== false) {
 
             $date1 = explode(' ', $columnValue);
@@ -987,7 +987,7 @@ class Template
             $templateContent = str_ireplace("{f_begin_day}", $day, $templateContent);
         }
 
-        $pos = stripos(strtolower($columnName), "end_date");
+        $pos = stripos(strtolower($columnName), "EndDate");
         if ($pos !== false) {
 
             $date1 = explode(' ', $columnValue);
@@ -1016,7 +1016,7 @@ class Template
      */
     private static function FormatProductColumnValue($columnName, $columnValue, &$templateContent, $itemRowTitleCount, $itemRowIntroCount, $headerRowTitleCount, $footerRowTitleCount, $itemType = "item")
     {
-        $pos = stripos(strtolower($columnName), "sale_price");
+        $pos = stripos(strtolower($columnName), "SalePrice");
         if ($pos !== false) {
             if (is_numeric($columnValue) && $columnValue > 0)
                 $templateContent = str_ireplace("{f_sale_price_show}", number_format($columnValue / 10000, 2, '.', ''), $templateContent);
@@ -1024,7 +1024,7 @@ class Template
                 $templateContent = str_ireplace("{f_sale_price_show}", "", $templateContent);
         }
 
-        if (strtolower($columnName) === "product_content") {
+        if (strtolower($columnName) === "ProductContent") {
             $columnValue = str_ireplace("../upload/product", "/upload/product", $columnValue);
         }
 
