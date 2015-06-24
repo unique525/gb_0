@@ -14,14 +14,23 @@
         var tableId = parseInt('{ChannelId}');
 
         //上传回调函数
-        window.AjaxFileUploadCallBack = function(data){
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
 
-            //添加原图到编辑控件中
-            if(data.upload_file_path != undefined
-                && data.upload_file_path.length>0
-                && editor != undefined
-                && editor != null){
-                editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+            if(data.upload_file_watermark_path1 != null
+                && data.upload_file_watermark_path1 != undefined
+                && data.upload_file_watermark_path1.length>0
+                && $("#cbAttachWatermark").is(":checked")
+                ){
+                //添加水印图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_watermark_path1));
+                }
+            }else{
+                //添加原图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+
             }
 
             var fUploadFile = $("#f_UploadFiles");
@@ -90,9 +99,8 @@
             btnUploadToContent.click(function () {
 
                 var fileElementId = 'file_upload_to_content';
-
                 var attachWatermark = 0;
-                if ($("#cbAttachWatermark").attr("checked") == true) {
+                if ($("#cbAttachWatermark").is(":checked")) {
                     attachWatermark = 1;
                 }
                 var loadingImageId = null;
@@ -106,6 +114,7 @@
                     attachWatermark,
                     uploadFileId
                 );
+
             });
 
         });
@@ -136,6 +145,7 @@
     <tr>
         <td class="spe_line" height="40" align="right">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
             <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
@@ -192,9 +202,9 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td height="60" align="center">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续"
-                                                                                            type="button"
-                                                                                            onclick="submitForm(0)"/>
+            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
+            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>

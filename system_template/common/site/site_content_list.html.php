@@ -28,21 +28,17 @@
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage' +
+                window.location.href = '/default.php?secu=manage' +
                     '&mod=site_content' +
                     '&m=create' +
                     '&channel_id='+parent.G_SelectedChannelId+'';
-                parent.G_TabTitle =  '新增自定义页面';
-                parent.addTab();
             });
 
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
                 var siteContentId=$(this).attr("idvalue");
                 var siteContentTitle=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_content&m=modify' + '&site_content_id=' + siteContentId + '';
-                parent.G_TabTitle = siteContentTitle;
-                parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=site_content&m=modify' + '&site_content_id=' + siteContentId + '';
             });
 
 
@@ -66,19 +62,17 @@
                     resultbox: $(this).html()
                 }, function(result) {
                     dialogContent.html('<img src="/system_template/common/images/spinner2.gif" /> 正在发布...');
-                    if (parseInt(result) == window.PUBLISH_SITE_CONTENT_RESULT_FINISHED) {
-                        dialogContent.html('发布完成');
-                        var spanState = $("#span_state_" + siteContentId);
-                        spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
-                        window.location.href = window.location.href;
-                    }else if (parseInt(result) == window.PUBLISH_SITE_CONTENT_RESULT_SITE_CONTENT_ID_ERROR) {
+                    if (parseInt(result) == window.PUBLISH_SITE_CONTENT_RESULT_SITE_CONTENT_ID_ERROR) {
                         dialogContent.html('发布错误：id小于0');
                     }else if (parseInt(result) == window.PUBLISH_SITE_CONTENT_RESULT_CHANNEL_ID_ERROR) {
                         dialogContent.html('发布错误：频道id小于0');
                     }else if (parseInt(result) == window.PUBLISH_SITE_CONTENT_RESULT_STATE_ERROR) {
                         dialogContent.html('发布错误：状态不正确，必须为[已审]或[已发]状态的文档才能发布!');
                     }else{
-                        dialogContent.html('发布错误：未知结果');
+                        dialogContent.html("发布完成<br />"+result);
+                        var spanState = $("#span_state_" + siteContentId);
+                        spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
+                        //window.location.href = window.location.href;
                     }
                 });
             });

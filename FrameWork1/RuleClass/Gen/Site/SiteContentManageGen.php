@@ -49,6 +49,9 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
         $manageUserId = Control::GetManageUserId();
         $channelId = Control::GetRequest("channel_id", 0);
 
+        $pageIndex = Control::GetRequest("p", 1);
+        $tabIndex = Control::GetRequest("tab_index", 0);
+
         $resultJavaScript = "";
 
         if ($manageUserId > 0 && $channelId>0) {
@@ -77,8 +80,10 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        //Control::CloseTab();
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=site_content&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                    } elseif($closeTab == 2){
+                        Control::GoUrl("/default.php?secu=manage&mod=site_content&m=modify&site_content_id=$siteContentId&tab_index=$tabIndex&p=$pageIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -118,6 +123,11 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
     {
         $templateContent = Template::Load("site/site_content_deal.html", "common");
         $siteContentId = Control::GetRequest("site_content_id", 0);
+
+
+        $pageIndex = Control::GetRequest("p", 1);
+        $tabIndex = Control::GetRequest("tab_index", 0);
+
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
@@ -130,6 +140,11 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
             //加载原有数据
             $arrOne = $siteContentManageData->GetOne($siteContentId);
             Template::ReplaceOne($templateContent, $arrOne);
+
+            $channelId = 0;
+            if (count($arrOne)>0){
+                $channelId = intval($arrOne["ChannelId"]);
+            }
 
 
             if (!empty($_POST)) {
@@ -147,7 +162,10 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
                     DataCache::RemoveDir(CACHE_PATH . '/site_content_data');
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=site_content&m=list&channel_id=$channelId&tab_index=$tabIndex&p=$pageIndex");
+                    } elseif($closeTab == 2){
+                        Control::GoUrl("/default.php?secu=manage&mod=site_content&m=modify&site_content_id=$siteContentId&tab_index=$tabIndex&p=$pageIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -295,7 +313,7 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 发布资讯详细页面
-     * @return int 返回发布结果
+     * @return string 返回发布结果
      */
     private function AsyncPublish()
     {
@@ -306,9 +324,27 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
             $executeTransfer = true;
             $publishChannel = true;
             $result = parent::PublishSiteContent($siteContentId, $publishQueueManageData, $executeTransfer, $publishChannel);
-            if ($result == BaseManageGen::PUBLISH_SITE_CONTENT_RESULT_FINISHED) {
-                for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
-                    $publishQueueManageData->Queue[$i]["Content"] = "";
+
+            if ($result == abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_SITE_CONTENT_RESULT_FINISHED) {
+                //for ($i = 0; $i < count($publishQueueManageData->Queue); $i++) {
+                //    $publishQueueManageData->Queue[$i]["Content"] = "";
+                //}
+
+                $result = '';
+                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                    $publishResult = "";
+
+                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                    ){
+                        $publishResult = "Ok";
+                    }
+
+
+                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                        .'<br />'
+                    ;
                 }
                 //print_r($publishQueueManageData->Queue);
             }
