@@ -94,4 +94,15 @@ class ExamUserAnswerPublicData extends BasePublicData{
         $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
         return $result;
     }
+    public function GetUserAnswerErrorList($examUserPaperId){
+        $sql = "SELECT
+        q.ExamQuestionTitle,
+        q.Answer,
+        a.Answer as UserAnswer
+        FROM ".self::TableName_ExamQuestion." q,".self::TableName_ExamUserAnswer." a WHERE a.ExamQuestionId = q.ExamQuestionId AND a.ExamUserPaperId = :ExamUserPaperId AND a.GetScore=0";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
+        $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        return $result;
+    }
 }

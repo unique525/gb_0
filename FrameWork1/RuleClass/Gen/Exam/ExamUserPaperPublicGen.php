@@ -14,7 +14,6 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
      */
     public function GenPublic()
     {
-
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
@@ -27,6 +26,9 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 break;
             case "async_count_score":
                 $result = self::AsyncCountScore();
+                break;
+            case "error_list":
+                $result = self::GenErrorAnswerList();
                 break;
         }
 
@@ -95,6 +97,19 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $defaultTemp = "exam_user_paper_score_gen";
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
+        return $tempContent;
+    }
+
+    private function GenErrorAnswerList(){
+        $siteId = parent::GetSiteIdByDomain();
+        $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
+        $defaultTemp = "exam_user_answer_error_list";
+        $tagId = "answer_error_list";
+        $examUserAnswerPublicData = new ExamUserAnswerPublicData();
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId);
+        $arrExamUserAnswerErrorList = $examUserAnswerPublicData->GetUserAnswerErrorList($examUserPaperId);
+        Template::ReplaceList($tempContent, $arrExamUserAnswerErrorList, $tagId);
         return $tempContent;
     }
 
