@@ -49,8 +49,8 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
         $activityId=Control::PostOrGetRequest("activity_id",-1);
         if($userId<0){
             $result=DefineCode::ACTIVITY_PUBLIC+self::ACTIVITY_FALSE_USER_ID; //用户id错误、未登录
-            //return Control::GetRequest("jsonpcallback","") . '('.$result.')';
-            $userId=1;
+            return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+            //$userId=1;
         }
 
         if($activityId>0){

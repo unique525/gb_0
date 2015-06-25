@@ -347,7 +347,7 @@
         <tr>
             <td class="spe_line" style="height:35px;text-align: right;width:160px;"><label for="f_UserCountLimit">人数限制：</label></td>
             <td class="spe_line" style="text-align: left;width:250px;"><input type="text" class="input_number" id="f_UserCountLimit" name="f_UserCountLimit" value="{UserCountLimit}" style=" width: 150px;font-size:14px;" maxlength="10" /></td>
-            <td class="spe_line" style="height:35px;text-align: right;width:100px;"><label for="f_ActivityFee">均价：</label></td>
+            <td class="spe_line" style="height:35px;text-align: right;width:100px;"><label for="f_ActivityFee">活动费用：</label></td>
             <td class="spe_line" style="text-align: left"><input type="text" class="input_box" id="f_ActivityFee" name="f_ActivityFee" value="{ActivityFee}" style=" width: 150px;font-size:14px;" maxlength="10" /></td>
         </tr>
         <tr>
