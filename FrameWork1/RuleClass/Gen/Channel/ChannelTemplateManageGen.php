@@ -95,6 +95,10 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=list&channel_id=$channelId&tab_index=$tabIndex");
 
+                    } elseif ($closeTab == 2) {
+                        Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=modify
+                        &channel_template_id=$channelTemplateId&tab_index=$tabIndex");
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -199,6 +203,10 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=list&channel_id=$channelId&tab_index=$tabIndex");
+                    } elseif ($closeTab == 2) {
+                        Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=modify
+                        &channel_template_id=$channelTemplateId&tab_index=$tabIndex");
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
