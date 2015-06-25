@@ -106,6 +106,21 @@ class UserPublicData extends BasePublicData {
         }
         return $result;
     }
+
+
+
+    public function ModifyUserMobile($userId,$userMobile){
+        $result = -1;
+        if($userId > 0){
+            $sql = "UPDATE ".self::TableName_User." SET UserMobile = :UserMobile
+            WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("UserMobile",$userMobile);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

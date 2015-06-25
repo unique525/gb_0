@@ -196,7 +196,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", "", false));
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", "", false));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", "", false));
-        $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
+        $userPass = "111111";//Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
         $regIp = Control::GetIp();
         $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {

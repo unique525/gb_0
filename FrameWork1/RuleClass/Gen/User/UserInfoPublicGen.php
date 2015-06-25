@@ -59,6 +59,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         if ($userId > 0 && $siteId > 0) {
             $templateContent = parent::GetDynamicTemplateContent("user_info_modify");
 
+
             parent::ReplaceFirst($templateContent);
 
             $userInfoPublicData = new UserInfoPublicData();
@@ -105,6 +106,8 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             $sign = Control::PostOrGetRequest("Sign", "");
             $gender = Control::PostOrGetRequest("Gender", "");
 
+
+
             $userInfoPublicData = new UserInfoPublicData();
             $result = $userInfoPublicData->Modify(
                 $userId,
@@ -124,6 +127,20 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
                 $sign,
                 $gender
             );
+
+            $userPublicData = new UserPublicData();
+            $isSameMobile = $userPublicData->CheckRepeatUserMobile($mobile);
+            if ($isSameMobile > 0) {
+                //存在此手机号，前台转到登录
+                return Control::GetRequest("jsonpcallback","").'({"result":"-10"})';
+            } else {
+                //return false;
+                //不存在此手机号
+                $userPublicData->ModifyUserMobile($userId, $mobile);
+            }
+
+
+
 
 
             //加入操作日志
