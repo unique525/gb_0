@@ -67,7 +67,7 @@ class ActivityUserPublicData extends BasePublicData{
             }
             $sql = "SELECT t1.*,t2.UserName
                     FROM ".self::TableName_ActivityUser." t1 left outer join ".self::TableName_User." t2
-                    ON t1.ActivityUserId=t2.UserId
+                    ON t1.UserId=t2.UserId
                     WHERE t1.ActivityId=:ActivityId "
                 .$order
                 .$topCount;

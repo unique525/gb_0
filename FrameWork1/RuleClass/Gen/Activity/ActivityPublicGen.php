@@ -33,6 +33,9 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_user_sign_up":
                 $result = self::AsyncUserSignUp();
                 break;
+            case "async_get_list":
+                $result = self::AsyncGetList();
+                break;
             case "detail":
                 $result = self::GenDetail();
                 break;
@@ -78,8 +81,8 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
     }
 
     /**
-     * 生成产品详细页面
-     * @return string 产品详细页面HTML
+     * 生成活动详细页面
+     * @return string 活动详细页面HTML
      */
     private function GenDetail()
     {
@@ -116,6 +119,8 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
                 }else{
                     Template::RemoveCustomTag($tempContent, $listName);
                 }
+                $signUpCount=count($arrActivityUser);
+                $templateContent = str_ireplace("{SignUpCount}", $signUpCount, $templateContent);
                 $patterns = '/\{s_(.*?)\}/';
                 $templateContent = preg_replace($patterns, "", $templateContent);
                 parent::ReplaceSiteConfig($siteId,$templateContent);
@@ -124,5 +129,86 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
             }
         }
         return $templateContent;
+    }
+
+    /**
+     * 生成活动列表页面
+     * @return string 活动列表页面HTML
+     */
+    private function AsyncGetList(){
+        $result = "";
+
+        $channelId = Control::GetRequest("channel_id", 0);
+        $pageSize = Control::GetRequest("ps", 20);
+        $pageIndex = Control::GetRequest("p", 1);
+        $pagerTempType = Control::GetRequest("ptt",1);
+        $parentId=0;
+
+        if ($pageIndex === 0) {
+            $pageIndex = 1;
+        }
+        $searchKey = urldecode(Control::GetRequest("search_key", ""));
+        $searchKey = Format::RemoveXSS($searchKey);
+
+        if ($pageIndex > 0 && $channelId >= 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $state = DocumentNewsData::STATE_PUBLISHED;
+            $allCount = 0;
+            $activityPublicData = new ActivityPublicData();
+            $arrList = $activityPublicData->GetListForPager(
+                $channelId,
+                $pageBegin,
+                $pageSize,
+                $allCount,
+                $state,
+                $searchKey,
+                $parentId
+            );
+            if (count($arrList) > 0) {
+
+                $templateFileUrl = "pager/pager_style".$pagerTempType."_js.html";
+                $templateName = "default";
+                $templatePath = "front_template";
+                $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+                $isJs = true;
+                $navUrl = "";
+                $jsFunctionName = "getDocumentNewsList";
+                $jsParamList = ",$channelId,'". urlencode($searchKey) ."',$parentId,'". WEBAPP_DOMAIN ."'";
+                $pageIndexName = "p";
+                $pageSizeName = "pz";
+                $showGoTo = TRUE;
+                $isFront = TRUE;
+
+                $templateFileUrl = "pager/pager_content_style".$pagerTempType."_js.html";
+                $pagerContentTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+                $pagerButton = Pager::ShowPageButton(
+                    $pagerTemplate,
+                    $navUrl,
+                    $allCount,
+                    $pageSize,
+                    $pageIndex,
+                    $pagerTempType,
+                    $isJs,
+                    $jsFunctionName,
+                    $jsParamList,
+                    $pageIndexName,
+                    $pageSizeName,
+                    $showGoTo,
+                    $isFront,
+                    $pagerContentTemplate
+                );
+
+                $arrResult["result_list"] = $arrList ;
+                $arrResult["pager_button"] = $pagerButton;
+                $result = Format::FixJsonEncode($arrResult);
+
+            }
+        }
+
+
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 } 
