@@ -93,6 +93,12 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
      */
     private function GenDefault() {
 
+        $userId = Control::GetUserId();
+
+        if($userId<0){
+            //Control::GoUrl("")
+        }
+
         $siteId = parent::GetSiteIdByDomain();
         $tempContent = parent::GetDynamicTemplateContent();
         parent::ReplaceFirst($tempContent);

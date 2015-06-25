@@ -40,14 +40,30 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
 
+        $siteId = parent::GetSiteIdByDomain();
+
         if($examQuestionClassId<=0){
             return "exam question class is null";
         }
 
 
         if($userId<=0){
-            Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
-            return "";
+            //没有登录则自动注册一个帐号
+
+            $userName = uniqid();
+            $userPass = "111111";
+            $regIp = Control::GetIp();
+            $userPublicData = new UserPublicData();
+            $userId = $userPublicData->Create(
+                $siteId,
+                $userPass,
+                $regIp,
+                $userName
+            );
+            Control::SetUserCookie($userId,$userName, 0.1);
+
+            //Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
+            //return "";
         }
 
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
