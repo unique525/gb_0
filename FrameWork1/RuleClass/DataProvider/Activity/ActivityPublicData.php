@@ -193,6 +193,110 @@ class ActivityPublicData extends BasePublicData {
     }
 
     /**
+     * 取得分页显示的活动列表
+     * @param int $channelId 频道id
+     * @param int $pageBegin 记录开始位置
+     * @param int $pageSize 显示数量
+     * @param int $allCount 总数量
+     * @param int $state 状态
+     * @param string $searchKey 查询关键字
+     * @param int $parentId 父频道id
+     * @return array 分页显示的资讯列表
+     */
+    public function GetListForPager(
+        $channelId,
+        $pageBegin,
+        $pageSize,
+        &$allCount,
+        $state,
+        $searchKey = "",
+        $parentId = 0
+    ) {
+        $searchSql = "";
+        $dataProperty = new DataProperty();
+        if ($parentId > 0) {
+            $searchSql .= " AND dn.ChannelId IN (SELECT ChannelId
+                                                FROM ".self::TableName_Channel." WHERE ParentId=:ParentId) ";
+            $dataProperty->AddField("ParentId", $parentId);
+        } else {
+            if ($channelId > 0) {
+                $searchSql .= " AND dn.ChannelId=:ChannelId ";
+                $dataProperty->AddField("ChannelId", $channelId);
+            }
+        }
+        if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+            $searchSql .= " AND (
+                    ActivityTitle LIKE :SearchKey1
+            )";
+            $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+        }
+
+        $selectColumn = '
+            dn.*,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1,
+
+            c.ChannelName
+
+            ';
+
+        $sql = "SELECT $selectColumn FROM " . self::TableName_Activity . "  dn
+                    LEFT OUTER JOIN " .self::TableName_Channel." c on dn.ChannelId = c.ChannelId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+
+                WHERE dn.ChannelId=:ChannelId AND dn.State=:State" . $searchSql. "
+                ORDER BY dn.Sort DESC, dn.ActivityId DESC
+                LIMIT " . $pageBegin . "," . $pageSize . "";
+
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+
+        $sql = "SELECT count(*) FROM " . self::TableName_Activity . " WHERE State=:State " . $searchSql;
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        return $result;
+    }
+
+    /**
      * 通过ID获取一条记录
      * @param int $activityId 活动id
      * @return array 活动数据
@@ -210,4 +314,6 @@ class ActivityPublicData extends BasePublicData {
         }
         return $result;
     }
+
+
 } 
