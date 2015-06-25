@@ -37,6 +37,8 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId, "", $templateMode);
 
+        $forumId = Control::GetRequest("forum_id", 0);
+
         //$templateFileUrl = "forum/forum_default.html";
         //$templateName = "default";
         //$templatePath = "front_template";
@@ -44,19 +46,19 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
-        $cacheFile = 'site_id_' . $siteId . '_mode_' . $templateMode;
+        $cacheFile = 'site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
         $withCache = true;
         if($withCache){
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
             if ($pageCache === false) {
-                $result = self::getDefaultTemplateContent($siteId, $tempContent);
+                $result = self::getDefaultTemplateContent($siteId, $forumId, $tempContent);
                 DataCache::Set($cacheDir, $cacheFile, $result);
             } else {
                 $result = $pageCache;
             }
         }else{
-            $result = self::getDefaultTemplateContent($siteId, $tempContent);
+            $result = self::getDefaultTemplateContent($siteId, $forumId, $tempContent);
         }
 
         /*******************页面级的缓存 end  ********************** */
@@ -64,18 +66,26 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         return $result;
     }
 
-    private function getDefaultTemplateContent($siteId, $tempContent){
+    private function getDefaultTemplateContent($siteId, $forumId, $tempContent){
 
         parent::ReplaceFirstForForum($tempContent);
 
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
         $forumPublicData = new ForumPublicData();
-        $forumRank = 0;
-        $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
-        $forumRank = 1;
-        $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
+        if($forumId>0){
+            $arrRankOneList = $forumPublicData->GetListByForumId($forumId);
+
+            $arrRankTwoList = $forumPublicData->GetListByParentId($siteId, $forumId);
+        }else{
+            $forumRank = 0;
+            $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
+
+            $forumRank = 1;
+            $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
+        }
+
 
 
 

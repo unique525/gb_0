@@ -85,6 +85,19 @@ class ForumPublicData extends BasePublicData {
     }
 
     /**
+     * 返回 array list 形式的单条数据
+     * @param int $forumId
+     * @return array
+     */
+    public function GetListByForumId($forumId) {
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("ForumId", $forumId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
      * 
      * @param int $siteId
      * @param int $parentId

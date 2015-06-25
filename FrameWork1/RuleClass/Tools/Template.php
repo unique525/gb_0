@@ -947,12 +947,19 @@ class Template
 
         $pos = stripos(strtolower($columnName), "PublishDate");
         if ($pos !== false) {
-
+            $year = '';
+            $month = '';
+            $day = '';
             $date1 = explode(' ', $columnValue);
-            $date2 = explode('-', $date1[0]);
-            $year = $date2[0];
-            $month = $date2[1];
-            $day = $date2[2];
+            if(count($date1)>0){
+                $date2 = explode('-', $date1[0]);
+                if(count($date2)>2){
+                    $year = $date2[0];
+                    $month = $date2[1];
+                    $day = $date2[2];
+                }
+            }
+
 
             $templateContent = str_ireplace("{f_publish_year}", $year, $templateContent);
             $templateContent = str_ireplace("{f_publish_month}", $month, $templateContent);

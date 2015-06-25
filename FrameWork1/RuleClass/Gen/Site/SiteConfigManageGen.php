@@ -49,6 +49,8 @@ class SiteConfigManageGen extends BaseManageGen implements IBaseManageGen {
                 //删除缓冲
                 DataCache::RemoveDir(CACHE_PATH . '/site_config_data');
 
+                //删除缓冲,修改设置的时候，所有缓存清空
+                DataCache::RemoveDir(CACHE_PATH);
 
                 //读取表单
                 foreach ($_POST as $key => $value) {
