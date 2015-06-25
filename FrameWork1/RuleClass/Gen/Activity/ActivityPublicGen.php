@@ -33,6 +33,9 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_user_sign_up":
                 $result = self::AsyncUserSignUp();
                 break;
+            case "detail":
+                $result = self::GenDetail();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -72,5 +75,54 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
             $result=DefineCode::ACTIVITY_PUBLIC+self::ACTIVITY_FALSE_ACTIVITY_ID; //活动id错误
             return Control::GetRequest("jsonpcallback","") . '('.$result.')';
         }
+    }
+
+    /**
+     * 生成产品详细页面
+     * @return string 产品详细页面HTML
+     */
+    private function GenDetail()
+    {
+        $temp = Control::GetRequest("temp", "");
+        $activityId = Control::GetRequest("activity_id", 0);
+        $templateContent = "";
+        $siteId = parent::GetSiteIdByDomain();
+
+        if ($activityId > 0) {
+            //$templateContent = self::loadDetailTemp();
+            $templateContent = parent::GetDynamicTemplateContent("activity_detail");
+            parent::ReplaceFirst($templateContent);
+
+            if($siteId>0){
+                parent::ReplaceSiteInfo($siteId, $templateContent);
+            }
+
+            //加载活动数据
+            $activityPublicData = new ActivityPublicData();
+            $arrOne = $activityPublicData->GetOne($activityId);
+            Template::ReplaceOne($templateContent, $arrOne);
+            if (count($arrOne) > 0) {
+                $channelId = $arrOne["ChannelId"];
+                $channelPublicData= new ChannelPublicData();
+                $channelName=$channelPublicData->GetChannelName($channelId,true);
+                $templateContent = str_ireplace("{ChannelName}", $channelName, $templateContent);
+
+                //加载活动报名人员名单
+                $activityUserPublicData=new ActivityUserPublicData();
+                $arrActivityUser=$activityUserPublicData->GetListByActivityId($activityId);
+                $listName = "activity_user_list";
+                if(count($arrActivityUser)>0){
+                    Template::ReplaceList($templateContent, $arrActivityUser, $listName);
+                }else{
+                    Template::RemoveCustomTag($tempContent, $listName);
+                }
+                $patterns = '/\{s_(.*?)\}/';
+                $templateContent = preg_replace($patterns, "", $templateContent);
+                parent::ReplaceSiteConfig($siteId,$templateContent);
+                parent::ReplaceVisitCode($templateContent,$siteId,$channelId,VisitData::VISIT_TABLE_TYPE_ACTIVITY,$activityId);
+                parent::ReplaceEnd($templateContent);
+            }
+        }
+        return $templateContent;
     }
 } 

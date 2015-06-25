@@ -191,4 +191,23 @@ class ActivityPublicData extends BasePublicData {
 
         return $result;
     }
+
+    /**
+     * 通过ID获取一条记录
+     * @param int $activityId 活动id
+     * @return array 活动数据
+     */
+    public function GetOne($activityId) {
+        $result=-1;
+        if($activityId>0){
+            $sql = "SELECT t.*,t1.ActivityClassName
+            FROM " . self::TableName_Activity . " t left outer join " . self::TableName_ActivityClass ." t1
+            ON t.ActivityClassId=t1.ActivityClassId
+            WHERE ActivityId = :ActivityId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 

@@ -83,7 +83,10 @@ class ActivityManageData extends BaseManageData{
     public function GetOne($activityId) {
         $result=-1;
         if($activityId>0){
-            $sql = "SELECT * FROM " . self::TableName_Activity . " WHERE ActivityId = :ActivityId ;";
+            $sql = "SELECT t.*,t1.ActivityClassName
+            FROM " . self::TableName_Activity . " t left outer join " . self::TableName_ActivityClass ." t1
+            ON t.ActivityClassId=t1.ActivityClassId
+            WHERE ActivityId = :ActivityId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ActivityId", $activityId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
