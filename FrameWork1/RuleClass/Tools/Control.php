@@ -228,11 +228,19 @@ class Control {
      * @param int $userId 会员id
      * @param string $content cookie内容
      * @param int $hour 保存时间（单位小时），默认24小时
+     * @param int $second 保存时间（单位秒），默认0
      */
-    public static function SetUserExploreCookie($userId, $content, $hour = 24) {
+    public static function SetUserExploreCookie($userId, $content, $hour = 24, $second = 0) {
         $cookieStr = base64_encode(Format::FixJsonEncode($content));
         //保存到cookie当中
-        setcookie('UserExploreHistory'.'_'.$userId, $cookieStr, time() + $hour * 3600);
+
+        if($second>0){
+            $saveTime = time() + $second;
+        }else{
+            $saveTime = time() + $hour * 3600;
+        }
+
+        setcookie('UserExploreHistory'.'_'.$userId, $cookieStr, $saveTime);
     }
 
     /**

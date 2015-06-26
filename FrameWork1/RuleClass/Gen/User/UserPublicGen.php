@@ -59,6 +59,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_one":
                 $result = self::AsyncGetOne();
                 break;
+            case "async_get_user_mobile":
+                $result = self::AsyncGetUserMobile();
+                break;
             case "async_is_login":
                 $result = self::AsyncIsLogin();
                 break;
@@ -314,6 +317,21 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":"-1"})';
         }
+    }
+
+    private function AsyncGetUserMobile(){
+        $userId = intval(Control::GetUserId());
+        if($userId > 0){
+
+            $userPublicData = new UserPublicData();
+            $userMobile = $userPublicData->GetUserMobile($userId, false);
+            return Control::GetRequest("jsonpcallback","").
+            '({"result":"' . Format::FormatJson($userMobile) . '"})';
+
+        }
+
+        return Control::GetRequest("jsonpcallback","").
+        '({"result":""})';
     }
 
     /**

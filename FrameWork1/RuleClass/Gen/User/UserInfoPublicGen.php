@@ -49,7 +49,7 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
 
-        if( $userId<=0){
+        if($userId<=0){
 
             Control::GoUrl("/default.php?mod=user&a=login&re_url="
                 .urlencode("/default.php?mod=user_info&a=modify"));

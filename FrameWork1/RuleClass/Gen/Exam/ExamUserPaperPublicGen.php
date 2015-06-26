@@ -60,7 +60,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 $regIp,
                 $userName
             );
-            Control::SetUserCookie($userId,$userName, 0.1);
+            Control::SetUserCookie($userId,$userName, 1, 0);
 
             //Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
             //return "";
