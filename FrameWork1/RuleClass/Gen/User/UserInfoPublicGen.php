@@ -109,6 +109,11 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
 
 
             $userInfoPublicData = new UserInfoPublicData();
+
+            //没有记录的时候初始化
+            $userInfoPublicData->Init($userId);
+
+
             $result = $userInfoPublicData->Modify(
                 $userId,
                 $nickName,
