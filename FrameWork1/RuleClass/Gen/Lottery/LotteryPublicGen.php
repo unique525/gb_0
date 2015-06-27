@@ -295,18 +295,9 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                     $lotteryAwardUserPublicData=new LotteryAwardUserPublicData();
                     $countAward=$lotteryAwardUserPublicData->GetCountOfOneLotterySet($awardLotterySetId);  //取得目前为止的获得该奖的人数
 
-
-
-
-
-
                     /**检查总获奖限额**/
                     $totalLimit=$awardLotterySet["TotalLimit"]; //总获奖限额
                     if($countAward>=$totalLimit){
-
-
-
-
                         $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_TOTAL_LIMIT_REACHED; //已达到奖项设置的总限制
                         return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
                     }
@@ -324,11 +315,6 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
                     if($countAward>=$nowDateLimit){
-
-
-
-
-
                         $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_DAY_LIMIT_REACHED; //已达到奖项设置的日限制
                         return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
                     }
@@ -344,20 +330,25 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
                     if($wonTimes>=0&&$wonTimes>=$oneUserLimit&&$oneUserLimit!=-1){ //若同一人限额为-1 即表示不做限制
-
-
-
-
                         $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_ONE_USER_LIMIT_REACHED; //已达到同一用户允许获奖的限制
                         return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
                     }
 
 
                     /**添加进获奖表**/
-                    $newAwardId=$lotteryAwardUserPublicData->Create($lotteryId,$awardLotterySetId,$lotterySetGroup,$userId,$nowDateTime);
+                    $newAwardId=$lotteryAwardUserPublicData->Create(
+                        $lotteryId,
+                        $awardLotterySetId,
+                        $lotterySetGroup,
+                        $userId,
+                        $nowDateTime
+                    );
+
+                    $lotterySetName = $lotterySetPublicData->GetLotterySetName($awardLotterySetId, true);
+
                     if($newAwardId>0){
                         $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_AWARD;//中奖
-                        $result_array["result"]=$awardLotterySet["LotterySetName"];//获奖结果
+                        $result_array["result"]=$lotterySetName;//获奖结果
                     }else{
                         $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_WHEN_ADD_TO_AWARD_USER_TABLE; //加入中奖表错误 中奖失败
                         //未知错误 中奖失败
