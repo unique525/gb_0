@@ -353,10 +353,6 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                         $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_WHEN_ADD_TO_AWARD_USER_TABLE; //加入中奖表错误 中奖失败
                         //未知错误 中奖失败
                     }
-
-
-
-
                 }else{
                     $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_MISSED;//没中任何奖
                 }
