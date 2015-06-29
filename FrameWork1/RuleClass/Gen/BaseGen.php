@@ -379,6 +379,18 @@ class BaseGen
         $manageUserLogManageData->Create($manageUserId, $manageUserName, $ipAddress, $webAgent, $selfUrl, $refererUrl, $refererDomain, $userId, $userName, $operateContent);
     }
 
+    /**
+     * 面向H5的多文件上传
+     * @param string $fileElementName
+     * @param int $tableType
+     * @param int $tableId
+     * @param array $arrUploadFile
+     * @param array $arrUploadFileId
+     * @param int $imgMaxWidth
+     * @param int $imgMaxHeight
+     * @param int $imgMinWidth
+     * @param int $imgMinHeight
+     */
     protected function UploadMultiple(
         $fileElementName = "file_upload",
         $tableType = 0,
