@@ -82,24 +82,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
             $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum");
-            //$templateFileUrl = "user/user_login_for_forum.html";
         }
         else{
             $templateContent = parent::GetDynamicTemplateContent("user_login");
-            //$templateFileUrl = "user/user_login.html";
         }
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-
-
 
         parent::ReplaceFirst($templateContent);
-        $reUrl = urlencode(Control::GetRequest("re_url", ""));
+        $reUrl = Control::GetRequest("re_url", "");//这个re_url在前台已经encode过了
         $templateContent = str_ireplace("{ReUrl}", $reUrl, $templateContent);
-
-
 
         parent::ReplaceEnd($templateContent);
 
