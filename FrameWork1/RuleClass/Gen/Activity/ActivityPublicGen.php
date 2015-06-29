@@ -117,7 +117,7 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
                 if(count($arrActivityUser)>0){
                     Template::ReplaceList($templateContent, $arrActivityUser, $listName);
                 }else{
-                    Template::RemoveCustomTag($tempContent, $listName);
+                    Template::RemoveCustomTag($templateContent, $listName);
                 }
                 $signUpCount=count($arrActivityUser);
                 $templateContent = str_ireplace("{SignUpCount}", $signUpCount, $templateContent);
