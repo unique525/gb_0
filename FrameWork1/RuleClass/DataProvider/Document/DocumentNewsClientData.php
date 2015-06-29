@@ -7,8 +7,6 @@
  */
 class DocumentNewsClientData extends BaseClientData {
 
-
-
     /**
      * 取得资讯列表数据集
      * @param int $channelId 频道id
