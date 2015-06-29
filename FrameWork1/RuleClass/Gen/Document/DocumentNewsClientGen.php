@@ -79,7 +79,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         $result = "[{}]";
         $resultCode = 0;
 
-        $channelIds = Control::PostOrGetRequest("channel_id", "");
+        $channelIds = Control::PostOrGetRequest("channel_id", "", false);
 
         if(strlen($channelIds)>0){
             $pageSize = intval(Control::GetRequest("ps", 20));
