@@ -74,10 +74,25 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $forumPublicData = new ForumPublicData();
 
-        if($forumId>0){
-            $arrRankOneList = $forumPublicData->GetListByForumId($forumId);
+        if(strlen($forumId)>0){
 
-            $arrRankTwoList = $forumPublicData->GetListByParentId($siteId, $forumId);
+            if(!stripos("_",$forumId)){
+
+                //多个一级版块
+                $forumId = str_ireplace("_",",",$forumId);
+
+                $arrRankOneList = $forumPublicData->GetListInForumId($forumId);
+                $arrRankTwoList = $forumPublicData->GetListInParentId($siteId, $forumId);
+
+
+            }else{
+                $arrRankOneList = $forumPublicData->GetListByForumId($forumId);
+                $arrRankTwoList = $forumPublicData->GetListByParentId($siteId, $forumId);
+            }
+
+
+
+
         }else{
             $forumRank = 0;
             $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);

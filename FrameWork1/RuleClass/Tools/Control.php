@@ -349,6 +349,7 @@ class Control {
         global $_SERVER;
         $ip = getenv("REMOTE_ADDR");
         //被注释的代码有ip仿造漏洞和sql注入漏洞
+        /**
         if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
             $ip = getenv("HTTP_CLIENT_IP");
         } else
@@ -363,6 +364,7 @@ class Control {
         } else {
             $ip = "unknown";
         }
+        */
         return ($ip);
     }
 
