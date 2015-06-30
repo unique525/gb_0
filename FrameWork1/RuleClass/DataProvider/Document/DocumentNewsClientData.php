@@ -238,6 +238,7 @@ class DocumentNewsClientData extends BaseClientData {
                 uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
                 uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
                 uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+                uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
 
                 uf2.UploadFilePath AS TitlePic2UploadFilePath,
                 uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
@@ -249,6 +250,7 @@ class DocumentNewsClientData extends BaseClientData {
                 uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
                 uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
                 uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+                uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
 
                 uf3.UploadFilePath AS TitlePic3UploadFilePath,
                 uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
@@ -259,7 +261,8 @@ class DocumentNewsClientData extends BaseClientData {
                 uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
                 uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
                 uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
-                uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2
+                uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+                uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1
             FROM
             " . self::TableName_DocumentNews . " dn
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
