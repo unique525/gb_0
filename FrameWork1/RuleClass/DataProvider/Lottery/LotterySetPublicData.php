@@ -25,4 +25,25 @@ class LotterySetPublicData extends BasePublicData {
         }
         return $result;
     }
+
+    /**
+     * 取得奖项名称
+     * @param int $lotterySetId 奖项设置id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 频道名称
+     */
+    public function GetLotterySetName($lotterySetId, $withCache)
+    {
+        $result = "";
+        if ($lotterySetId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'lottery_set_data';
+            $cacheFile = 'lottery_set_get_lottery_set_name.cache_' . $lotterySetId . '';
+            $sql = "SELECT LotterySetName FROM " . self::TableName_LotterySet . " WHERE LotterySetId=:LotterySetId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LotterySetId", $lotterySetId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
 } 

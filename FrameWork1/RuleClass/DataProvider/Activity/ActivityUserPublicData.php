@@ -46,4 +46,35 @@ class ActivityUserPublicData extends BasePublicData{
         }
         return $result;
     }
+
+    /**
+     * 根据活动id获取列表数据集
+     * @param int $activityId 活动id
+     * @param int $topCount 显示的条数
+     * @param string $order 排序方式
+     * @return array|null 列表数据集
+     */
+    public function GetListByActivityId($activityId, $order = "", $topCount = null){
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        else $topCount = "";
+        if($activityId >0){
+            switch($order){
+                default:
+                    $order = "ORDER BY ".self::TableId_ActivityUser." DESC,Createdate DESC";
+                    break;
+            }
+            $sql = "SELECT t1.*,t2.UserName
+                    FROM ".self::TableName_ActivityUser." t1 left outer join ".self::TableName_User." t2
+                    ON t1.UserId=t2.UserId
+                    WHERE t1.ActivityId=:ActivityId "
+                .$order
+                .$topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ActivityId", $activityId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 

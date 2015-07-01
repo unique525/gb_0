@@ -59,6 +59,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_one":
                 $result = self::AsyncGetOne();
                 break;
+            case "async_get_user_mobile":
+                $result = self::AsyncGetUserMobile();
+                break;
             case "async_is_login":
                 $result = self::AsyncIsLogin();
                 break;
@@ -79,24 +82,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
             $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum");
-            //$templateFileUrl = "user/user_login_for_forum.html";
         }
         else{
             $templateContent = parent::GetDynamicTemplateContent("user_login");
-            //$templateFileUrl = "user/user_login.html";
         }
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-
-
 
         parent::ReplaceFirst($templateContent);
-        $reUrl = urlencode(Control::GetRequest("re_url", ""));
+        $reUrl = Control::GetRequest("re_url", "");//这个re_url在前台已经encode过了
         $templateContent = str_ireplace("{ReUrl}", $reUrl, $templateContent);
-
-
 
         parent::ReplaceEnd($templateContent);
 
@@ -196,7 +189,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", "", false));
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", "", false));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", "", false));
-        $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
+        $userPass = "111111";//Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
         $regIp = Control::GetIp();
         $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
@@ -287,8 +280,17 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
                 $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
                 $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
+                $scrollName = Format::FormatHtmlTag(Control::PostOrGetRequest("scroll_name",0));
 
-                $userInfoPublicData->Create($newUserId, $realName, $nickName,$avatarUploadFileId, $userScore, $userMoney, $userCharm, $userExp, $userPoint, $question, $answer, $sign, $lastVisitIP, $lastVisitTime, $email, $qq, $country, $comeFrom, $honor, $birthday, $gender, $fansCount, $idCard, $postCode, $address, $tel, $mobile, $province, $occupational, $city, $relationship, $hit, $messageCount, $userPostCount, $userPostBestCount, $userActivityCount, $userAlbumCount, $userBestAlbumCount, $userRecAlbumCount, $userAlbumCommentCount, $userCommissionOwn, $userCommissionChild, $userCommissionGrandson);
+                $userInfoPublicData->Create($newUserId, $realName, $nickName,$avatarUploadFileId, $userScore, $userMoney,
+                    $userCharm, $userExp, $userPoint, $question, $answer, $sign,
+                    $lastVisitIP, $lastVisitTime, $email, $qq, $country, $comeFrom,
+                    $honor, $birthday, $gender, $fansCount, $idCard, $postCode,
+                    $address, $tel, $mobile, $province, $occupational, $city,
+                    $relationship, $hit, $messageCount, $userPostCount, $userPostBestCount,
+                    $userActivityCount, $userAlbumCount, $userBestAlbumCount, $userRecAlbumCount,
+                    $userAlbumCommentCount, $userCommissionOwn, $userCommissionChild,
+                    $userCommissionGrandson,$scrollName);
 
                 //插入会员角色表
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
@@ -314,6 +316,21 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }else{
             return Control::GetRequest("jsonpcallback","").'({"result":"-1"})';
         }
+    }
+
+    private function AsyncGetUserMobile(){
+        $userId = intval(Control::GetUserId());
+        if($userId > 0){
+
+            $userPublicData = new UserPublicData();
+            $userMobile = $userPublicData->GetUserMobile($userId, false);
+            return Control::GetRequest("jsonpcallback","").
+            '({"result":"' . Format::FormatJson($userMobile) . '"})';
+
+        }
+
+        return Control::GetRequest("jsonpcallback","").
+        '({"result":""})';
     }
 
     /**

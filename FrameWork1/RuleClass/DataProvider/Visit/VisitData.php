@@ -32,6 +32,10 @@ class VisitData {
      * 产品
      */
     const VISIT_TABLE_TYPE_PRODUCT = 6;
+    /**
+     * 活动
+     */
+    const VISIT_TABLE_TYPE_ACTIVITY = 7;
 
     /**
      * 统计类型 年

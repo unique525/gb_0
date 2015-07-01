@@ -95,6 +95,10 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=list&channel_id=$channelId&tab_index=$tabIndex");
 
+                    } elseif ($closeTab == 2) {
+                        Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=modify
+                        &channel_template_id=$channelTemplateId&tab_index=$tabIndex");
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -193,12 +197,16 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                         }
                     }
 
-                    //删除缓冲,修改模板的时候，所以缓存清空
+                    //删除缓冲,修改模板的时候，所有缓存清空
                     DataCache::RemoveDir(CACHE_PATH);
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
                         Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=list&channel_id=$channelId&tab_index=$tabIndex");
+                    } elseif ($closeTab == 2) {
+                        Control::GoUrl("/default.php?secu=manage&mod=channel_template&m=modify
+                        &channel_template_id=$channelTemplateId&tab_index=$tabIndex");
+
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }

@@ -645,7 +645,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
     /**
      * 发布资讯详细页面
-     * @return int 返回发布结果
+     * @return string 返回发布结果
      */
     private function AsyncPublish()
     {
@@ -675,7 +675,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                         .'<br />'
                     ;
                 }
-                //print_r($publishQueueManageData->Queue);
             }
         }
         return $result;

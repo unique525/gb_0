@@ -228,11 +228,19 @@ class Control {
      * @param int $userId 会员id
      * @param string $content cookie内容
      * @param int $hour 保存时间（单位小时），默认24小时
+     * @param int $second 保存时间（单位秒），默认0
      */
-    public static function SetUserExploreCookie($userId, $content, $hour = 24) {
+    public static function SetUserExploreCookie($userId, $content, $hour = 24, $second = 0) {
         $cookieStr = base64_encode(Format::FixJsonEncode($content));
         //保存到cookie当中
-        setcookie('UserExploreHistory'.'_'.$userId, $cookieStr, time() + $hour * 3600);
+
+        if($second>0){
+            $saveTime = time() + $second;
+        }else{
+            $saveTime = time() + $hour * 3600;
+        }
+
+        setcookie('UserExploreHistory'.'_'.$userId, $cookieStr, $saveTime);
     }
 
     /**
@@ -341,20 +349,22 @@ class Control {
         global $_SERVER;
         $ip = getenv("REMOTE_ADDR");
         //被注释的代码有ip仿造漏洞和sql注入漏洞
-//        if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
-//            $ip = getenv("HTTP_CLIENT_IP");
-//        } else
-//        if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")) {
-//            $ip = getenv("HTTP_X_FORWARDED_FOR");
-//        } else
-//        if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown")) {
-//            $ip = getenv("REMOTE_ADDR");
-//        } else
-//        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown")) {
-//            $ip = $_SERVER['REMOTE_ADDR'];
-//        } else {
-//            $ip = "unknown";
-//        }
+        /**
+        if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
+            $ip = getenv("HTTP_CLIENT_IP");
+        } else
+        if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")) {
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        } else
+        if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown")) {
+            $ip = getenv("REMOTE_ADDR");
+        } else
+        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown")) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = "unknown";
+        }
+        */
         return ($ip);
     }
 

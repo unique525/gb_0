@@ -106,6 +106,44 @@ class UserPublicData extends BasePublicData {
         }
         return $result;
     }
+
+
+
+    public function ModifyUserMobile($userId,$userMobile){
+        $result = -1;
+        if($userId > 0){
+            $sql = "UPDATE ".self::TableName_User." SET UserMobile = :UserMobile
+            WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("UserMobile",$userMobile);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 取得会员手机帐号
+     * @param int $userId 会员id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 会员手机帐号
+     */
+    public function GetUserMobile($userId, $withCache)
+    {
+        $result = "";
+        if ($userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userId;
+            $cacheFile = 'user_get_user_mobile.cache_' . $userId . '';
+            $sql = "SELECT UserMobile FROM " . self::TableName_User . " WHERE UserId=:UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>

@@ -33,6 +33,9 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_avatar_upload_file_id":
                 $result = self::AsyncGetAvatarUploadFileId();
                 break;
+            case "async_modify":
+                $result = self::AsyncModify();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -42,14 +45,21 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function GenModify()
     {
+        $templateContent = "";
         $userId = Control::GetUserId();
         $siteId = parent::GetSiteIdByDomain();
+
+        if($userId<=0){
+
+            Control::GoUrl("/default.php?mod=user&a=login&re_url="
+                .urlencode("/default.php?mod=user_info&a=modify"));
+            return "";
+
+        }
         if ($userId > 0 && $siteId > 0) {
-            //$templateFileUrl = "user/user_info_modify.html";
-            //$templateName = "default";
-            //$templatePath = "front_template";
-            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
             $templateContent = parent::GetDynamicTemplateContent("user_info_modify");
+
+
             parent::ReplaceFirst($templateContent);
 
             $userInfoPublicData = new UserInfoPublicData();
@@ -63,55 +73,87 @@ class UserInfoPublicGen extends BasePublicGen implements IBasePublicGen
             if (!empty($arrUserInfoOne) > 0) {
                 Template::ReplaceOne($templateContent, $arrUserInfoOne);
             } else {
-                $templateContent = Language::Load('user_info', 7);
+                //$templateContent = Language::Load('user_info', 7);
             }
 
-            if (!empty($_POST)) {
-                $nickName = Control::PostRequest("NickName", "");
-                $realName = Control::PostRequest("RealName", "");
-                $email = Control::PostRequest("Email", "");
-                $qq = Control::PostRequest("QQ", "");
-                $comeFrom = Control::PostRequest("ComeFrom", "");
-                $birthday = Control::PostRequest("Birthday", "0000-00-00");
-                $idCard = Control::PostRequest("IdCard", "");
-                $address = Control::PostRequest("Address", "");
-                $postCode = Control::PostRequest("PostCode", "");
-                $mobile = Control::PostRequest("Mobile", "");
-                $tel = Control::PostRequest("Tel", "");
-                $province = Control::PostRequest("Province", "");
-                $city = Control::PostRequest("City", "");
-                $sign = Control::PostRequest("Sign", "");
-                $gender = Control::PostRequest("Gender", "");
-//                $bankName = Control::PostRequest("bank_name","");
-//                $bankOpenAddress = Control::PostRequest("bank_open_address","");
-//                $bankUserName = Control::PostRequest("bank_user_name","");
-//                $bankAccount = Control::PostRequest("bank_account","");
-
-
-                $result = $userInfoPublicData->Modify($userId, $nickName, $realName, $email, $qq,
-                    $comeFrom, $birthday, $idCard, $address, $postCode,
-                    $mobile, $tel, $province, $city, $sign, $gender
-                );
-
-
-                //加入操作日志
-                $operateContent = 'Modify User,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $result;
-                self::CreateManageUserLog($operateContent);
-
-                if ($result > 0) {
-                    $jsCode = 'alert("修改成功");parent.location.href=parent.location.href';
-                    Control::RunJavascript($jsCode);
-                } else {
-                    $jsCode = 'alert("修改失败");';
-                    Control::RunJavascript($jsCode);
-                }
-            }
             parent::ReplaceEnd($templateContent);
-            return $templateContent;
-        } else {
-            Control::GoUrl("");
-            return null;
+
         }
+
+        return $templateContent;
+    }
+
+    private function AsyncModify(){
+
+        $result = "";
+
+        $userId = Control::GetUserId();
+
+        if($userId>0){
+            $nickName = Control::PostOrGetRequest("NickName", "");
+            $realName = Control::PostOrGetRequest("RealName", "");
+            $email = Control::PostOrGetRequest("Email", "");
+            $qq = Control::PostOrGetRequest("QQ", "");
+            $comeFrom = Control::PostOrGetRequest("ComeFrom", "");
+            $birthday = Control::PostOrGetRequest("Birthday", "0000-00-00");
+            $idCard = Control::PostOrGetRequest("IdCard", "");
+            $address = Control::PostOrGetRequest("Address", "");
+            $postCode = Control::PostOrGetRequest("PostCode", "");
+            $mobile = Control::PostOrGetRequest("Mobile", "");
+            $tel = Control::PostOrGetRequest("Tel", "");
+            $province = Control::PostOrGetRequest("Province", "");
+            $city = Control::PostOrGetRequest("City", "");
+            $sign = Control::PostOrGetRequest("Sign", "");
+            $gender = Control::PostOrGetRequest("Gender", "");
+
+
+
+            $userInfoPublicData = new UserInfoPublicData();
+
+            //没有记录的时候初始化
+            $userInfoPublicData->Init($userId);
+
+
+            $result = $userInfoPublicData->Modify(
+                $userId,
+                $nickName,
+                $realName,
+                $email,
+                $qq,
+                $comeFrom,
+                $birthday,
+                $idCard,
+                $address,
+                $postCode,
+                $mobile,
+                $tel,
+                $province,
+                $city,
+                $sign,
+                $gender
+            );
+
+            $userPublicData = new UserPublicData();
+            $isSameMobile = $userPublicData->CheckRepeatUserMobile($mobile);
+            if ($isSameMobile > 0) {
+                //存在此手机号，前台转到登录
+                return Control::GetRequest("jsonpcallback","").'({"result":"-10"})';
+            } else {
+                //return false;
+                //不存在此手机号
+                $userPublicData->ModifyUserMobile($userId, $mobile);
+            }
+
+
+
+
+
+            //加入操作日志
+            $operateContent = 'Modify User Info,POST FORM:' . implode('|', $_POST) . ';\r\nResult:' . $result;
+            self::CreateManageUserLog($operateContent);
+        }
+
+        return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 
     /**

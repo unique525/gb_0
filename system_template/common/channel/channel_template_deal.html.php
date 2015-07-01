@@ -158,6 +158,7 @@
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="spe_line" height="40" align="right">
+                    <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
                     <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
@@ -287,6 +288,7 @@
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td height="60" align="center">
+                    <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
                     <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
                     <input class="btn" value="取 消" type="button" onclick="closeTab()"/>

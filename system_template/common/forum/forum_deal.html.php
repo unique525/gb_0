@@ -51,7 +51,7 @@
 {common_body_deal}
 <form id="mainForm" enctype="multipart/form-data" method="post">
 <div>
-<table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+<table width="99%" style="" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/> <input class="btn" value="确认并继续新增" type="button" onclick="submitForm(0)"/> <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
