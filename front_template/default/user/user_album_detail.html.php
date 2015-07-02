@@ -22,28 +22,13 @@
 
 
         $(function () {
-            var forumTopicTitle = $("#f_ForumTopicTitle");
-            forumTopicTitle.focus(function () {
-                if (forumTopicTitle.val() == '标题（必填）') {
-                    forumTopicTitle.val("");
-                }
-            });
 
             var btnConfirm = $("#btnConfirm");
             btnConfirm.click(function () {
 
-                var forumTopicTitle = $("#f_ForumTopicTitle");
-                if (forumTopicTitle.val() == ''
-                    || forumTopicTitle.val() == '{ForumTopicTitle}'
-                    || forumTopicTitle.val() == '标题'
-                    ) {
-                    alert("请输入标题");
-                } else {
-
                     $("#mainForm").attr("action",
-                        "/default.php?mod=forum_topic&a={action}&forum_id={ForumId}&forum_topic_id={ForumTopicId}");
+                        "/default.php?mod=user_album&a=create");
                     $('#mainForm').submit();
-                }
 
             });
 
@@ -98,37 +83,11 @@
     </div>
     <div id="forum_topic">
         <div class="content">
-
-
             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td style="height:36px;text-align:center;">
-                        <input type="text" class="input_box_m" id="f_SchoolName" name="f_SchoolName"
-                               value="学校（必填）" style="width:95%;" maxlength="300"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:36px;text-align:center;">
-                        <input type="text" class="input_box_m" id="f_ClassName" name="f_ClassName"
-                               value="班级（必填）" style="width:95%;" maxlength="300"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:36px;text-align:center;">
-                        <input type="text" class="input_box_m" id="f_RealName" name="f_RealName"
-                               value="姓名（必填）" style="width:95%;" maxlength="300"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:36px;text-align:center;">
-                        <input type="text" class="input_box_m" id="f_Mobile" name="f_Mobile"
-                               value="联系方式（必填）" style="width:95%;" maxlength="300"/>
-                    </td>
-                </tr>
                 <tr>
                     <td>
                         <input type="file" id="file_upload_to_content_of_wap" name="file_upload_to_content_of_wap[]"
-                               onchange="fileSelect()" multiple/>
+                               onchange="fileSelect()"/>
 
                         <div id="Preview"></div>
                     </td>

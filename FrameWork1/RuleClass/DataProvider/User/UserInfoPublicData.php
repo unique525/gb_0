@@ -254,6 +254,19 @@ class UserInfoPublicData extends BasePublicData
         return $result;
     }
 
+    public function ModifySchoolAndClassName($schoolName,$className,$userId){
+        $result = -1;
+        if($userId > 0){
+            $sql = "UPDATE ".self::TableName_UserInfo." SET SchoolName=:SchoolName,ClassName=:ClassName WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SchoolName", $schoolName);
+            $dataProperty->AddField("ClassName", $className);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     public function GetOne($userId,$siteId){
         $result = null;
         if($userId > 0){

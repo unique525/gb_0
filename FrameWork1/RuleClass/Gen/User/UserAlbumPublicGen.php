@@ -11,10 +11,6 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $result = "";
         $action = Control::GetRequest("a", "");
         switch ($action) {
-
-            case "gen":
-                $result = self::GenUserAlbum();
-                break;
             case "create":
                 $result = self::GenCreate();
                 break;
@@ -22,23 +18,6 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
 
         $result = str_ireplace("{action}", $action, $result);
         return $result;
-    }
-
-    private function GenUserAlbum(){
-
-        $siteId = parent::GetSiteIdByDomain();
-
-        $userId = Control::GetUserId();
-        if ($userId <= 0) {
-            $referUrl = urlencode("/default.php?mod=user_album&a=gen");
-            Control::GoUrl("/default.php?mod=user&a=login&re_url=$referUrl");
-            die("user id is null");
-        }
-
-        $defaultTemp = "user_album_detail";
-        $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId);
-        return $tempContent;
     }
 
     private function GenCreate(){
@@ -52,136 +31,61 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             die("user id is null");
         }
 
-        $schoolName = Control::PostRequest("f_SchoolName", "");
-        $schoolName = Format::FormatHtmlTag($schoolName);
+        $defaultTemp = "user_album_detail";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId);
 
-        $className = Control::PostRequest("f_ClassName", "");
-        $className = Format::FormatHtmlTag($className);
-
-        $realName = Control::PostRequest("f_RealName", "");
-        $realName = Format::FormatHtmlTag($realName);
-
-        $mobile = Control::PostRequest("f_Mobile", "");
-        $mobile = Format::FormatHtmlTag($mobile);
-
-        $userAlbumPicContent = Control::PostRequest("f_UserAlbumPicContent", "", false);
-        $userAlbumPicContent = str_ireplace('\"', '"', $userAlbumPicContent);
-        $userAlbumPicContent = Format::RemoveScript($userAlbumPicContent);
-
-        $uploadFiles = Control::PostRequest("f_UploadFiles", "");
+        if (!empty($_POST)){
+            $userAlbumIntro = Control::PostRequest("f_UserAlbumIntro", "", false);
+            $userAlbumIntro = str_ireplace('\"', '"', $userAlbumIntro);
+            $userAlbumIntro = Format::RemoveScript($userAlbumIntro);
 
 
-
-        $userAlbumPicId = 0;
-        if (!empty($_FILES)) {
-
-            $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
-            $tableId = $userAlbumPicId;
-            $arrUploadFile = array();
-            $arrUploadFileId = array();
-            $imgMaxWidth = 0;
-            $imgMaxHeight = 0;
-            $imgMinWidth = 0;
-            $imgMinHeight = 0;
-            $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
-
-            parent::UploadMultiple(
-                "file_upload_to_content_of_wap",
-                $tableType,
-                $tableId,
-                $arrUploadFile, //UploadFile类型的数组
-                $arrUploadFileId, //UploadFileId 数组
-                $imgMaxWidth,
-                $imgMaxHeight,
-                $imgMinWidth,
-                $imgMinHeight
-            );
-
-            $watermarkFilePath = "";
-
-            if ($attachWatermark > 0) {
+            $userAlbumPublicData = new UserAlbumPublicData();
+            $userAlbumPicPublicData = new UserAlbumPicPublicData();
 
 
-                switch ($tableType) {
-                    //帖子内容图
-                    case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+            $userAlbumTypeId = Control::PostRequest("f_UserAlbumTypeId", 1, false);;
+            $createDate = date("Y-m-d H:i:s", time());
 
-                        $siteId = parent::GetSiteIdByDomain();
-                        $siteConfigData = new SiteConfigData($siteId);
+            $userAlbumId = $userAlbumPublicData->Create($userAlbumTypeId,$userId,$siteId,$createDate,$userAlbumIntro);
 
-                        $watermarkUploadFileId = $siteConfigData->ForumPostContentWatermarkUploadFileId;
+            if($userAlbumId > 0){
 
-                        if ($watermarkUploadFileId > 0) {
+                $userAlbumPicId = $userAlbumPicPublicData->Create($userAlbumId,$createDate);
+                echo $userAlbumPicId;
+                if (!empty($_FILES)) {
 
-                            $uploadFileData = new UploadFileData();
+                    $tableType = UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_PIC;
+                    $tableId = $userAlbumPicId;
+                    $arrUploadFile = array();
+                    $arrUploadFileId = array();
+                    $imgMaxWidth = 0;
+                    $imgMaxHeight = 0;
+                    $imgMinWidth = 0;
+                    $imgMinHeight = 0;
 
-                            $watermarkFilePath = $uploadFileData->GetUploadFilePath(
-                                $watermarkUploadFileId,
-                                true
-                            );
+                    parent::UploadMultiple(
+                        "file_upload_to_content_of_wap",
+                        $tableType,
+                        $tableId,
+                        $arrUploadFile, //UploadFile类型的数组
+                        $arrUploadFileId, //UploadFileId 数组
+                        $imgMaxWidth,
+                        $imgMaxHeight,
+                        $imgMinWidth,
+                        $imgMinHeight
+                    );
 
-                        }
+                    print_r($arrUploadFile);
 
-                        break;
-
-
+                    for ($u = 0; $u < count($arrUploadFileId); $u++) {
+                        $userAlbumPicPublicData->ModifyUploadFileId($userAlbumPicId, intval($arrUploadFileId[$u]));
+                    }
                 }
-
             }
-
-            $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
-            $watermarkPosition = ImageObject::WATERMARK_POSITION_BOTTOM_RIGHT;
-            $mode = ImageObject::WATERMARK_MODE_PNG;
-            $alpha = 70;
-
-            for ($u = 0; $u < count($arrUploadFileId); $u++) {
-
-
-                if($attachWatermark>0 && strlen($watermarkFilePath)>0){
-                    parent::GenUploadFileWatermark1(
-                        $arrUploadFileId[$u],
-                        $watermarkFilePath,
-                        $sourceType,
-                        $watermarkPosition,
-                        $mode,
-                        $alpha,
-                        $arrUploadFile[$u]
-                    );
-                }
-
-
-                $uploadFiles = $uploadFiles . "," . $arrUploadFileId[$u];
-
-                //直接上传时，在内容中插入上传的图片
-
-                if (strlen($arrUploadFile[$u]->UploadFileWatermarkPath1) > 0
-                ) {
-                    //有水印图时，插入水印图
-
-                    $insertHtml = Format::FormatUploadFileToHtml(
-                        $arrUploadFile[$u]->UploadFileWatermarkPath1,
-                        FileObject::GetExtension($arrUploadFile[$u]->UploadFileWatermarkPath1),
-                        $arrUploadFileId[$u],
-                        ""
-                    );
-
-                } else {
-                    //没有水印图时，插入原图
-                    $insertHtml = Format::FormatUploadFileToHtml(
-                        $arrUploadFile[$u]->UploadFilePath,
-                        FileObject::GetExtension($arrUploadFile[$u]->UploadFilePath),
-                        $arrUploadFileId[$u],
-                        ""
-                    );
-
-
-                }
-                $forumPostContent = $forumPostContent . "<br />" . $insertHtml;
-
-
-            }
-
         }
 
+        return $tempContent;
     }
 } 
