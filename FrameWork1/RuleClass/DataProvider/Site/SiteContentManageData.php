@@ -214,10 +214,9 @@ class SiteContentManageData extends BaseManageData
         $sqlCount = "
                     SELECT Count(*)
 
-                    FROM " . self::TableName_SiteContent . "s," . self::TableName_ManageUser . " mu
+                    FROM " . self::TableName_SiteContent . " s," . self::TableName_ManageUser . " mu
 
-                    WHERE s.ManageUserId=mu.ManageUserId AND SiteId=:SiteId $searchSql;";
-
+                    WHERE s.State<100 AND s.ManageUserId=mu.ManageUserId AND SiteId=:SiteId $searchSql;";
 
         $dataProperty->AddField("SiteId", $siteId);
 
