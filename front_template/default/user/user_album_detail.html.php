@@ -96,13 +96,6 @@
         <div id="dialog_content">
         </div>
     </div>
-    <div id="forum_nav">
-        <div class="content">
-            <div class="left"><a href="/default.php?mod=forum">首页</a> - 发布主题</div>
-            <div class="right"></div>
-            <div class="spe"></div>
-        </div>
-    </div>
     <div id="forum_topic">
         <div class="content">
 
@@ -110,16 +103,26 @@
             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td style="height:36px;text-align:center;">
-                        <input type="text" class="input_box_m" id="f_ForumTopicTitle" name="f_ForumTopicTitle"
-                               value="标题（必填）" style="width:95%;" maxlength="300"/>
-                        <input type="hidden" id="f_ForumId" name="f_ForumId" value="{ForumId}"/>
-                        <input type="hidden" id="attach_watermark" name="attach_watermark" value="1"/>
+                        <input type="text" class="input_box_m" id="f_SchoolName" name="f_SchoolName"
+                               value="学校（必填）" style="width:95%;" maxlength="300"/>
                     </td>
                 </tr>
                 <tr>
                     <td style="height:36px;text-align:center;">
-                        <text_area id="f_ForumPostContent" class="input_box_m" name="f_ForumPostContent"
-                                   style=" width: 95%;height:150px;"></text_area>
+                        <input type="text" class="input_box_m" id="f_ClassName" name="f_ClassName"
+                               value="班级（必填）" style="width:95%;" maxlength="300"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:36px;text-align:center;">
+                        <input type="text" class="input_box_m" id="f_RealName" name="f_RealName"
+                               value="姓名（必填）" style="width:95%;" maxlength="300"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:36px;text-align:center;">
+                        <input type="text" class="input_box_m" id="f_Mobile" name="f_Mobile"
+                               value="联系方式（必填）" style="width:95%;" maxlength="300"/>
                     </td>
                 </tr>
                 <tr>
@@ -130,8 +133,13 @@
                         <div id="Preview"></div>
                     </td>
                 </tr>
+                <tr>
+                    <td style="height:36px;text-align:center;">
+                        <text_area id="f_UserAlbumPicContent" class="input_box_m" name="f_UserAlbumPicContent"
+                                   style=" width: 95%;height:150px;">感言</text_area>
+                    </td>
+                </tr>
             </table>
-
             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td height="60" align="center">
