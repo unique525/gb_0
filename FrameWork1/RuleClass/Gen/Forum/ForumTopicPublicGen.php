@@ -392,14 +392,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                                 $arrUploadFileId[$u],
                                 ""
                             );
-
-
                         }
                         $forumPostContent = $forumPostContent . "<br />" . $insertHtml;
-
-
                     }
-
                 }
 
                 //修改上传文件的tableId;
