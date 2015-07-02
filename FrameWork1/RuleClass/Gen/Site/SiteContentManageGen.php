@@ -277,7 +277,7 @@ class SiteContentManageGen extends BaseManageGen implements IBaseManageGen {
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=site_content&m=list&p={0}&ps=$pageSize";
+                $navUrl = "default.php?secu=manage&mod=site_content&m=list&channel_id=$channelId&p={0}&ps=$pageSize";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton(

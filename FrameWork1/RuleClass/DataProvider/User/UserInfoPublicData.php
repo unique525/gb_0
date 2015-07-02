@@ -77,7 +77,8 @@ class UserInfoPublicData extends BasePublicData
      * @param int $userCommissionOwn
      * @param int $userCommissionChild
      * @param int $userCommissionGrandson
-     * @param string $scrollName
+     * @param string $schoolName
+     * @param string $className
      * @return int
      */
     public function Create($userId, $realName = '', $nickName = '',
@@ -94,7 +95,7 @@ class UserInfoPublicData extends BasePublicData
                            $userBestAlbumCount = 0, $userRecAlbumCount = 0,
                            $userAlbumCommentCount = 0, $userCommissionOwn = 0,
                            $userCommissionChild = 0, $userCommissionGrandson = 0
-    ,$scrollName)
+    ,$schoolName,$className)
     {
         $result = -1;
         if ($userId > 0) {
@@ -146,7 +147,8 @@ class UserInfoPublicData extends BasePublicData
             $dataProperty->AddField("UserCommissionOwn", $userCommissionOwn);
             $dataProperty->AddField("UserCommissionChild", $userCommissionChild);
             $dataProperty->AddField("UserCommissionGrandson", $userCommissionGrandson);
-            $dataProperty->AddField("ScrollName", $scrollName);
+            $dataProperty->AddField("SchoolName", $schoolName);
+            $dataProperty->AddField("ClassName", $className);
 
 
             if ($result <= 0) { //没有找到记录，初始化一条
@@ -161,7 +163,7 @@ class UserInfoPublicData extends BasePublicData
                      UserPostCount, UserPostBestCount, UserActivityCount, UserAlbumCount,
                      UserBestAlbumCount, UserRecAlbumCount, UserAlbumCommentCount,
                      UserCommissionOwn, UserCommissionChild, UserCommissionGrandson,
-                     ScrollName
+                     SchoolName,ClassName
                     ) VALUES (
                     :UserId,:RealName,:NickName,:AvatarUploadFileId,
                     :UserScore,:UserMoney,:UserCharm,:UserExp,:UserPoint,
@@ -172,7 +174,7 @@ class UserInfoPublicData extends BasePublicData
                     :UserPostCount,:UserPostBestCount,:UserActivityCount,:UserAlbumCount,
                     :UserBestAlbumCount,:UserRecAlbumCount,:UserAlbumCommentCount,
                     :UserCommissionOwn,:UserCommissionChild,:UserCommissionGrandson,
-                    :ScrollName
+                    :SchoolName,:ClassName
                     );";
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             } else { //修改
@@ -184,7 +186,8 @@ class UserInfoPublicData extends BasePublicData
              UserCommissionOwn=:UserCommissionOwn,
              UserCommissionChild=:UserCommissionChild,
              UserCommissionGrandson=:UserCommissionGrandson,
-             ScrollName = :ScrollName
+             SchoolName = :SchoolName,
+             ClassName = :ClassName
              WHERE UserId=:UserId;";
 
 
