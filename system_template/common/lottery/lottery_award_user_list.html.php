@@ -12,6 +12,19 @@
                 $(this).html(formatState($(this).text()));
             });
 
+            //隐藏列
+            $("#btn_hide_show").on("click",".btn_hide",function(){
+                var type=$(this).attr("idvalue");
+                $(".hide_show[idvalue='"+type+"']").hide();
+                $(this).attr("class","spe_line btn_show");
+            });
+            //显示列
+            $("#btn_hide_show").on("click",".btn_show",function(){
+                var type=$(this).attr("idvalue");
+                $(".hide_show[idvalue='"+type+"']").show();
+                $(this).attr("class","spe_line btn_hide");
+            });
+
         });
 
 
@@ -76,13 +89,14 @@
         </tr>
     </table>-->
     <table width="100%" class="grid" cellpadding="0" cellspacing="0" id="left_tree">
-        <tr class="grid_title">
-            <td class="spe_line" style="width:40px;text-align:center"><!--ID--></td>
-            <td class="spe_line" style="width:180px;text-align:center;">用户ID</td>
-            <td class="spe_line" style="width:180px;text-align:center;">名字</td>
-            <td class="spe_line" style="width:180px;text-align:center;">邮箱</td>
-            <td class="spe_line" style="width:180px;text-align:center;">手机号码</td>
-            <td class="spe_line" style="width:180px;text-align:center;">获奖时间</td>
+        <tr class="grid_title" id="btn_hide_show">
+            <td class="spe_line btn_hide" idvalue="lottery_award_user_id" style="width:40px;text-align:center"><!--ID--></td>
+            <td class="spe_line btn_hide" idvalue="user_id" style="width:180px;text-align:center;">用户ID</td>
+            <td class="spe_line btn_hide" idvalue="real_name" style="width:180px;text-align:center;">真实姓名</td>
+            <td class="spe_line btn_hide" idvalue="user_email" style="width:180px;text-align:center;">邮箱</td>
+            <td class="spe_line btn_hide" idvalue="user_mobile" style="width:180px;text-align:center;">手机号码</td>
+            <td class="spe_line btn_hide" idvalue="id_card" style="width:180px;text-align:center;">证件号码</td>
+            <td class="spe_line btn_hide" idvalue="create_date" style="width:180px;text-align:center;">获奖时间</td>
             <td class="spe_line"></td>
             <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
             <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
@@ -90,12 +104,13 @@
         <icms id="lottery_award_user_list" type="list">
             <item><![CDATA[
                 <tr class="grid_item" id="{f_LotteryAwardUserId}" style="height:29px">
-                    <td class="spe_line" style="text-align:center"></td>
-                    <td class="spe_line" style="width:180px;text-align:center;">{f_UserId}</td>
-                    <td class="spe_line" style="text-align:center">{f_UserName}</td>
-                    <td class="spe_line" style="text-align:center">{f_UserEmail}</td>
-                    <td class="spe_line" style="text-align:center">{f_UserMobile}</td>
-                    <td class="spe_line" style="text-align:center">{f_CreateDate}</td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="lottery_award_user_id"></span></td>
+                    <td class="spe_line" style="width:180px;text-align:center;"><span class="hide_show" idvalue="user_id">{f_UserId}</span></td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="real_name">{f_RealName}</span></td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="user_email">{f_UserEmail}</span></td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="user_mobile">{f_UserMobile}</span></td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="id_card">{f_IdCard}</span></td>
+                    <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="create_date">{f_CreateDate}</span></td>
                     <td class="spe_line"></td>
                     <!--<td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_LotteryAwardUserId}" class="span_state" idvalue="{f_LotteryAwardUserId}">{f_State}</span></td>
                     <td class="spe_line2" style="width:80px;text-align:center;">

@@ -22,10 +22,13 @@ class LotteryAwardUserManageData extends BaseManageData{
                 au.*,
                 u.UserName,
                 u.UserEmail,
-                u.UserMobile
+                u.UserMobile,
+                ui.RealName,
+                ui.IdCard
                 FROM
                 " . self::TableName_LotteryAwardUser . " au
                 LEFT OUTER JOIN " .self::TableName_User." u on au.UserId = u.UserId
+                LEFT OUTER JOIN " .self::TableName_UserInfo." ui on au.UserId = ui.UserId
                 WHERE LotterySetId=:LotterySetId ORDER BY CreateDate DESC;";
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
