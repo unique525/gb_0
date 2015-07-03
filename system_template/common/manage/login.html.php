@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>{system_name}</title>
 <link href="/system_template/{template_name}/images/common.css" rel="stylesheet" type="text/css" />
 <link href="/system_template/{template_name}/images/manage/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
