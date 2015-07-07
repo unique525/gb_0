@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="xzw">
+  <component name="PublishConfigData" serverName="96333">
     <serverData>
       <paths name="52cpb">
         <serverdata>
@@ -9,14 +9,14 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="gonghui">
+      <paths name="96333">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="xzw">
+      <paths name="gonghui">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />

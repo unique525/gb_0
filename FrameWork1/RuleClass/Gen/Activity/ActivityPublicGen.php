@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 活动业务类（前台）
+ * 公共 活动 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Activity
  * @author 525
