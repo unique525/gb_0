@@ -161,6 +161,16 @@
             </td>
         </tr>
         <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_ShowInClientMenu">在客户端频道菜单上调用：</label></td>
+            <td class="spe_line">
+                <select id="f_ShowInClientMenu" name="f_ShowInClientMenu">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+                {s_ShowInClientMenu}
+            </td>
+        </tr>
+        <tr>
             <td class="spe_line" height="30" align="right"><label for="f_AccessLimitType">访问方式：</label></td>
             <td class="spe_line">
                 <select id="f_AccessLimitType" name="f_AccessLimitType">
