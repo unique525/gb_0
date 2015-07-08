@@ -1657,13 +1657,31 @@ class BaseManageGen extends BaseGen
             $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $publishDate = $documentNewsManageData->GetPublishDate($documentNewsId, true);
             //发布文件名，资讯id构成
-            $publishFileName = strval($documentNewsId) . '.html';
+            $publishFileName1 = strval($documentNewsId) . '.html'; //PC模板
+            $publishFileName2 = strval($documentNewsId) . '_m.html'; //手机模板
+            $publishFileName3 = strval($documentNewsId) . '_p.html'; //平板模板
+            $publishFileName4 = strval($documentNewsId) . '_t.html'; //电视机模板
             //发布路径，频道id+日期
             $publishPath = strval($channelId) . '/' . Format::DateStringToSimple($publishDate);
-            $destinationPath = $publishPath . '/' . $publishFileName;
+            $destinationPath1 = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName1;
+            $destinationPath2 = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName2;
+            $destinationPath3 = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName3;
+            $destinationPath4 = self::PUBLISH_PATH . '/' . $publishPath . '/' . $publishFileName4;
             $sourcePath = '';
             $publishContent = '';
-            $publishQueueManageData->Add($destinationPath, $sourcePath, $publishContent);
+            if(file_exists($destinationPath1)){
+                $publishQueueManageData->Add($destinationPath1, $sourcePath, $publishContent);
+            }
+            if(file_exists($destinationPath2)){
+                $publishQueueManageData->Add($destinationPath2, $sourcePath, $publishContent);
+            }
+            if(file_exists($destinationPath3)){
+                $publishQueueManageData->Add($destinationPath3, $sourcePath, $publishContent);
+            }
+            if(file_exists($destinationPath4)){
+                $publishQueueManageData->Add($destinationPath4, $sourcePath, $publishContent);
+            }
+
             self::DeleteByPublishQueue($publishQueueManageData, $siteId);
         }
         return $result;

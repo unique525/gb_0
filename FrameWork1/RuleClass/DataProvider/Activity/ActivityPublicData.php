@@ -13,15 +13,13 @@ class ActivityPublicData extends BasePublicData {
     //////////////////////////////Get List////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////
 
-
-
     /**
      * 取得列表
      * @param int $channelId 频道id
      * @param string $topCount 显示条数  1或 1,10
      * @param int $state 状态
      * @param int $orderBy 排序方式
-     * @return array|null 返回资讯列表
+     * @return array|null 返回列表
      */
     public function GetList($channelId, $topCount, $state, $orderBy = 0) {
 

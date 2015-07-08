@@ -31,8 +31,32 @@
         var tableId = parseInt('{ChannelId}');
 
         //上传回调函数
-        window.AjaxFileUploadCallBack = function(data){
+        window.AjaxFileUploadCallBack = function(fileElementId,data){
 
+            if(data.upload_file_watermark_path1 != null
+                && data.upload_file_watermark_path1 != undefined
+                && data.upload_file_watermark_path1.length>0
+                && $("#cbAttachWatermark").is(":checked")
+                ){
+                //添加水印图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_watermark_path1));
+                }
+            }else{
+                //添加原图到编辑控件中
+                if(editor != undefined && editor != null){
+                    editor.pasteHTML(""+UploadFileFormatHtml(data.upload_file_path));
+                }
+
+            }
+
+            var fUploadFile = $("#f_UploadFiles");
+
+            if(fUploadFile != undefined && fUploadFile != null){
+                var uploadFiles = fUploadFile.val();
+                uploadFiles = uploadFiles + "," + data.upload_file_id;
+                fUploadFile.val(uploadFiles);
+            }
         }
 
 

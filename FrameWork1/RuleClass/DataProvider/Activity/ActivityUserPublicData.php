@@ -1,7 +1,6 @@
 <?php
 /**
  * 前台 活动成员 数据类
- *
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Activity
  * @author 525
