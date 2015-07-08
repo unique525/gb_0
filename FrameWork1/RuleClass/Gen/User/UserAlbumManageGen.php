@@ -76,79 +76,37 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = Template::Load("user/user_album_list.html","common");
         $pageIndex = Control::GetRequest("p",1);
         $siteId = Control::GetRequest("site_id",0);
-        $type = Control::GetRequest("type","");//列表的类型，（全部/搜索）
         $state = Control::GetRequest("state",0);
-        $pageSize = 15;
+        $pageSize = 12;
         $pageBegin = ($pageIndex - 1)*$pageSize;
         $allCount = 0;
 
-        $userAlbumManageData = new UserAlbumManageData();
-        if($siteId > 0 && strlen($tempContent) > 0){
-            if($type == "search"){
-                if(!empty($_POST)){
-                    $userName = $_POST["username"];
-                    $userAlbumName = $_POST["user_album_name"];
-                    $indexTop = $_POST["index_top"];
-                    $isBest = $_POST["is_best"];
-                    $equipment = $_POST["equipment"];
-                    $userAlbumType = 0;
-                    $beginDate = $_POST["begin_date"];
-                    $endDate = $_POST["end_date"];
-                    $recLevel = $_POST["rec_level"];
-                    $country = $_POST["country"];
-                    $result = $userAlbumManageData->GetListForSearch($pageBegin,$pageSize,$allCount,$siteId,$userName,
-                    $userAlbumName,$indexTop,$isBest,$equipment,$userAlbumType,$beginDate,$endDate,$recLevel,$state,$country);
-                    $param = "{";
-                    foreach($_POST as $key => $value){
-                        if ($param == "{") {
-                            if (is_array($value)) {
-                                $arrValue = "";
-                                for ($i = 0; $i < count($value); $i++) {
-                                    if ($i < count($value) - 1) {
-                                        $arrValue = $arrValue . "'" . $value[$i] . "',";
-                                    } else {
-                                        $arrValue = $arrValue . "'" . $value[$i] . "'";
-                                    }
-                                }
-                                $arrValue = "Array(" . $arrValue . ")";
-                                $param = $param . $key . ":" . $arrValue;
-                            } else {
-                                $param = $param . $key . ":'" . $value . "'";
-                            }
-                        } else {
-                            if (is_array($value)) {
-                                $arrValue = "";
-                                for ($i = 0; $i < count($value); $i++) {
-                                    if ($i < count($value) - 1) {
-                                        $arrValue = $arrValue . "'" . $value[$i] . "',";
-                                    } else {
-                                        $arrValue = $arrValue . "'" . $value[$i] . "'";
-                                    }
-                                }
-                                $arrValue = "Array(" . $arrValue . ")";
-                                $param = $param . "," . $key . ":" . $arrValue . "";
-                            } else {
-                                $param = $param . "," . $key . ":'" . $value . "'";
-                            }
-                        }
-                    }
-                    $param = $param . "}";
-                    $jsParamList = ",'../user/index.php?a=album&m=list&type=search'," . $param . " ,'" . $state . "'";
-                }else{
-                    $jsParamList = "";
-                    $result = "";
-                }
-            }else{
-                $result = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount, $state);
-                $jsParamList = ",'',undefined,'" . $state . "'";
-            }
-
-            for ($i = 0; $i < count($result); $i++) {
-                if ($result[$i]["NickName"] == "" || strlen($result[$i]["NickName"]) == 0) {
-                    $result[$i]["NickName"] = $result[$i]["RealName"];
-                }
+        $siteId = 2;
+        if ($pageIndex > 0 && $siteId > 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $tagId = "user_album_list";
+            $allCount = 0;
+            $userAlbumManageData = new UserAlbumManageData();
+            $arrUserAlbumList = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state);
+            //print_r($arrUserAlbumList);
+            if (count($arrUserAlbumList) > 0) {
+                Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
+                $styleNumber = 1;
+                $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
+                $isJs = FALSE;
+                $navUrl = "default.php?secu=manage&mod=user_album&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+            } else {
+                Template::RemoveCustomTag($tempContent, $tagId);
+                $tempContent = str_ireplace("{pager_button}", Language::Load("document", 7), $tempContent);
             }
         }
+
+
+
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }

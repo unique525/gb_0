@@ -280,7 +280,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
                 $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
                 $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
-                $schoolName = Format::FormatHtmlTag(Control::PostOrGetRequest("school_Name",0));
+                $schoolName = Format::FormatHtmlTag(Control::PostOrGetRequest("school_name",0));
                 $className = Format::FormatHtmlTag(Control::PostOrGetRequest("class_name",0));
 
                 $userInfoPublicData->Create(

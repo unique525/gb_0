@@ -147,35 +147,19 @@ class UserAlbumManageData extends BaseManageData {
      * @return array 相册列表的数组
      */
     public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state) {
-        if ($state == 100) {
+        $result = -1;
+        if ($siteId > 0) {
             //CountPic 用于统计相册有多少图片
-            $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ua.UserAlbumId,ua.UserAlbumName,ua.State,ua.SupportCount,ua.HitCount,
-                (SELECT count(*) FROM " . self::TableName_UserAlbumPic . " uap WHERE uap.UserAlbumId = ua.UserAlbumId) AS CountPic,
-                ua.UserAlbumTag,ua.CreateDate,ua.IsBest,ua.RecLevel,ua.IndexTop,uap.UserAlbumPicThumbnailUrl 
-                FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPic . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1
-                WHERE ua.State <= 100 AND ua.UserId = ui.UserId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
+            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,uf.UploadFilePath,u.UserMobile
+                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
+                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId."
+                    ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
             $result = $this->dbOperator->GetArrayList($sql, null);
 
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua WHERE ua.UserId = ui.UserId AND ua.State <= 100";
+            $sqlCount = "SELECT count(*) FROM
+                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
+                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId";
             $allCount = $this->dbOperator->GetInt($sqlCount, null);
-        } else {
-            if ($siteId > 0) {
-                //CountPic 用于统计相册有多少图片
-                $sql = "SELECT ui.NickName,ui.RealName,ui.UserId,ua.UserAlbumId,ua.UserAlbumName,ua.State,ua.SupportCount,ua.HitCount,
-                    (SELECT count(*) FROM " . self::TableName_UserAlbumPic . " uap WHERE uap.UserAlbumID = ua.UserAlbumID) AS CountPic,
-                    ua.UserAlbumTag,ua.CreateDate,ua.IsBest,ua.RecLevel,ua.IndexTop,uap.UserAlbumPicThumbnailUrl 
-                    FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua LEFT JOIN " . self::TableName_UserAlbumPic . " uap ON ua.UserAlbumId = uap.UserAlbumId AND uap.IsCover = 1
-                    WHERE ua.State = :State AND ua.UserId = ui.UserId AND ua.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
-                $dataProperty = new DataProperty();
-                $dataProperty->AddField("State", $state);
-                $dataProperty->AddField("SiteId", $siteId);
-                $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-
-                $sqlCount = "SELECT count(*) FROM " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua where ua.UserId = ui.UserId AND ua.SiteId = :siteid AND ua.state = :state";
-                $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
-            } else {
-                return null;
-            }
         }
         return $result;
     }

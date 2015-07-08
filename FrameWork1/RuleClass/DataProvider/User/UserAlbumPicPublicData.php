@@ -7,10 +7,17 @@
  */
 class UserAlbumPicPublicData extends BasePublicData {
 
-    public function Create($userAlbumId,$createDate,$userAlbumPicTitle="",
-                           $userAlbumPicIntro="",$userAlbumPicContent="",
-                           $userAlbumPicUploadFileId=0,$state=0,
-                           $waitCreateThumb="",$isCover=0,$sort=0){
+    public function Create($userAlbumId,
+                           $createDate,
+                           $userAlbumPicTitle="",
+                           $userAlbumPicIntro="",
+                           $userAlbumPicContent="",
+                           $userAlbumPicUploadFileId=0,
+                           $state=0,
+                           $waitCreateThumb="",
+                           $isCover=0,
+                           $sort=0
+    ){
 
         $result = -1;
         if ($userAlbumId > 0) {
@@ -41,11 +48,15 @@ class UserAlbumPicPublicData extends BasePublicData {
     }
 
     public function ModifyUploadFileId($userAlbumPicId,$userAlbumPicUploadFileId){
+        $result = -1;
+        if ($userAlbumPicId>0 && $userAlbumPicUploadFileId>0){
+            $sql = "UPDATE ".self::TableName_UserAlbumPic." SET UserAlbumPicUploadFileId=:UserAlbumPicUploadFileId WHERE UserAlbumPicId = :UserAlbumPicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
+            $dataProperty->AddField("UserAlbumPicUploadFileId", $userAlbumPicUploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
 
-        $sql = "UPDATE ".self::TableName_UserAlbumPic." SET UserAlbumPicUploadFileId=:UserAlbumPicUploadFileId WHERE UserAlbumPicId = :UserAlbumPicId;";
-        $dataProperty = new DataProperty();
-        $dataProperty->AddField("UserAlbumPicId", $userAlbumPicId);
-        $dataProperty->AddField("UserAlbumPicUploadFileId", $userAlbumPicUploadFileId);
-        $result = $this->dbOperator->Execute($sql, $dataProperty);
     }
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <title>{cfg_ForumIeTitle}</title>
+    <title>胜利花 图片上传</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="keywords" content=""/>
     <meta name="description" content="{cfg_ForumIeDescription}"/>
@@ -22,13 +22,26 @@
 
 
         $(function () {
-
+            var userAlbumIntro = $("#f_UserAlbumIntro");
+            userAlbumIntro.focus(function () {
+                if (userAlbumIntro.val() == '感言（必填）') {
+                    userAlbumIntro.val("");
+                }
+            });
             var btnConfirm = $("#btnConfirm");
             btnConfirm.click(function () {
+                if ($("#f_UserAlbumIntro").val() == "") {
+                    alert("请输入感言");
+                    return;
+                }
+                if ($("#file_upload_to_content_of_wap").val() == "") {
+                    alert("请选择上传图片");
+                    return;
+                }
 
-                    $("#mainForm").attr("action",
-                        "/default.php?mod=user_album&a=create");
-                    $('#mainForm').submit();
+                $("#mainForm").attr("action",
+                    "/default.php?mod=user_album&a=create");
+                $('#mainForm').submit();
 
             });
 
@@ -87,15 +100,16 @@
                 <tr>
                     <td>
                         <input type="file" id="file_upload_to_content_of_wap" name="file_upload_to_content_of_wap[]"
-                               onchange="fileSelect()"/>
+                               onchange="fileSelect()" multiple/>
 
                         <div id="Preview"></div>
                     </td>
                 </tr>
                 <tr>
                     <td style="height:36px;text-align:center;">
-                        <text_area id="f_UserAlbumPicContent" class="input_box_m" name="f_UserAlbumPicContent"
-                                   style=" width: 95%;height:150px;">感言</text_area>
+                        <text_area id="f_UserAlbumIntro" class="input_box_m" name="f_UserAlbumIntro"
+                                   style=" width: 95%;height:150px;">感言（必填）</text_area>
+                        <input type="hidden" value="/h/100013/end.html" id="goUrl" name="goUrl" />
                     </td>
                 </tr>
             </table>

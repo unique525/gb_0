@@ -8,15 +8,29 @@
  */
 class UserAlbumPublicData extends BasePublicData {
 
-    public function Create($userAlbumTypeId,$userId,$siteId,
-                           $createDate,$userAlbumIntro,
-                           $userAlbumName="",$state=0,
-                           $userAlbumMainTag="",$userAlbumTag="",
-                           $equipment="",$agreeCount=0,
-                           $disagreeCount=0,$hitCount=0,$isBest=false,
-                           $recLevel=0,$sort=0,$indexTop=0,
-                           $region="",$lastCommentDate="0000-00-00 00:00:00",$pushOut=0,
-                           $coverPicUrl=""){
+    public function Create($userAlbumTypeId,
+                           $userId,
+                           $siteId,
+                           $createDate,
+                           $userAlbumIntro,
+                           $userAlbumName="",
+                           $state=0,
+                           $userAlbumMainTag="",
+                           $userAlbumTag="",
+                           $equipment="",
+                           $agreeCount=0,
+                           $disagreeCount=0,
+                           $hitCount=0,
+                           $isBest=false,
+                           $recLevel=0,
+                           $sort=0,
+                           $indexTop=0,
+                           $region="",
+                           $lastCommentDate="0000-00-00 00:00:00",
+                           $pushOut=0,
+                           $coverPicUrl="",
+                           $coverPicUploadFileId=0
+){
 
         $result = -1;
         if ($userId > 0) {
@@ -26,13 +40,13 @@ class UserAlbumPublicData extends BasePublicData {
                      CreateDate, State, UserAlbumMainTag, UserAlbumTag,
                      UserAlbumIntro, Equipment, AgreeCount, DisagreeCount,
                      HitCount, IsBest, RecLevel, Sort, IndexTop, Region,
-                     LastCommentDate, PushOut, CoverPicUrl
+                     LastCommentDate, PushOut , CoverPicUploadFileId
                     ) VALUES (
                     :UserAlbumTypeId,:UserId,:SiteId,:UserAlbumName,
                     :CreateDate,:State,:UserAlbumMainTag,:UserAlbumTag,
                     :UserAlbumIntro,:Equipment,:AgreeCount,:DisagreeCount,
                     :HitCount,:IsBest,:RecLevel,:Sort,:IndexTop,:Region,
-                    :LastCommentDate,:PushOut,:CoverPicUrl
+                    :LastCommentDate,:PushOut,:CoverPicUploadFileId
                     );";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserAlbumTypeId", $userAlbumTypeId);
@@ -55,10 +69,26 @@ class UserAlbumPublicData extends BasePublicData {
             $dataProperty->AddField("Region", $region);
             $dataProperty->AddField("LastCommentDate", $lastCommentDate);
             $dataProperty->AddField("PushOut", $pushOut);
-            $dataProperty->AddField("CoverPicUrl", $coverPicUrl);
-
+            $dataProperty->AddField("CoverPicUploadFileId", $coverPicUploadFileId);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
         return $result;
+    }
+
+    public function ModifyCoverPicUploadFileId($userAlbumId,$coverPicUploadFileId){
+        $result = -1;
+        if ($userAlbumId>0 && $coverPicUploadFileId>0){
+            $sql = "UPDATE ".self::TableName_UserAlbum."
+
+                    SET CoverPicUploadFileId=:CoverPicUploadFileId
+
+                    WHERE UserAlbumId = :UserAlbumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserAlbumId", $userAlbumId);
+            $dataProperty->AddField("CoverPicUploadFileId", $coverPicUploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+
     }
 } 

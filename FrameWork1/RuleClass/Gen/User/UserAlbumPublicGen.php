@@ -27,11 +27,11 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         if ($userId <= 0) {
             $referUrl = urlencode("/default.php?mod=user_album&a=create");
-            Control::GoUrl("/default.php?mod=user&a=login&re_url=$referUrl");
+            Control::GoUrl("/default.php?mod=user&a=register&temp=user_album_register&re_url=$referUrl");
             die("user id is null");
         }
 
-        $defaultTemp = "user_album_detail";
+        $defaultTemp = "user_album_create";
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
 
@@ -44,16 +44,16 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             $userAlbumPublicData = new UserAlbumPublicData();
             $userAlbumPicPublicData = new UserAlbumPicPublicData();
 
+            $goUrl = Control::PostRequest("goUrl", "", false);
+
 
             $userAlbumTypeId = Control::PostRequest("f_UserAlbumTypeId", 1, false);;
             $createDate = date("Y-m-d H:i:s", time());
 
             $userAlbumId = $userAlbumPublicData->Create($userAlbumTypeId,$userId,$siteId,$createDate,$userAlbumIntro);
-
             if($userAlbumId > 0){
 
                 $userAlbumPicId = $userAlbumPicPublicData->Create($userAlbumId,$createDate);
-                echo $userAlbumPicId;
                 if (!empty($_FILES)) {
 
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_PIC;
@@ -77,10 +77,20 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                         $imgMinHeight
                     );
 
-                    print_r($arrUploadFile);
-
                     for ($u = 0; $u < count($arrUploadFileId); $u++) {
+
+                        //
+                        if ($u == 0 ){
+                            $userAlbumPublicData->ModifyCoverPicUploadFileId($userAlbumId,intval($arrUploadFileId[$u]));
+                        }
+
+
                         $userAlbumPicPublicData->ModifyUploadFileId($userAlbumPicId, intval($arrUploadFileId[$u]));
+                    }
+
+                    if(count($arrUploadFile) > 0){
+
+                        Control::GoUrl($goUrl);
                     }
                 }
             }
