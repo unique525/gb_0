@@ -120,9 +120,10 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
                         if ($userId>0){
 
-                            $userPublicData = new UserPublicData();
+                            $userRolePublicData = new UserRolePublicData();
 
-                            $userGroupId = $userPublicData->GetUserGroupId($userId, true);
+                            $userGroupId = $userRolePublicData->GetUserGroupId($siteId,$userId, true);
+
                             if($userGroupId>0){
 
 

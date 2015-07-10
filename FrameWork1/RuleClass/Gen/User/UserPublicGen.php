@@ -128,6 +128,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncLogin(){
         $userAccount = Control::GetRequest("user_account", "");
         $userPass = Control::GetRequest("user_pass", "");
+        $hour = Control::GetRequest("hour", 1);
         $userPassWithMd5 = Control::GetRequest("user_pass_with_md5", "");
         $siteId = parent::GetSiteIdByDomain();
 
@@ -138,7 +139,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {
-                Control::SetUserCookie($userId,$userAccount);
+                $hour = 9999999;
+                Control::SetUserCookie($userId,$userAccount, $hour);
                 return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
             }
         }else{
