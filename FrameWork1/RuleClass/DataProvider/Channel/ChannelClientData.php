@@ -241,7 +241,7 @@ class ChannelClientData extends BaseClientData {
 
 
     /**
-     * 取得站点下的频道数据集，只调用ShowInClient字段为1的频道
+     * 取得站点下的频道数据集，只调用ShowInClientMenu字段为1的频道
      * @param string $siteId 站点id
      * @param string $order 排序方式
      * @param int $topCount 显示的条数
@@ -325,7 +325,7 @@ class ChannelClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on c.TitlePic3UploadFileId=uf3.UploadFileId
 
                     WHERE
-                        c.ShowInClient = 1
+                        c.ShowInClientMenu = 1
                         AND c.State < ".ChannelData::STATE_REMOVED."
                         AND c.SiteId=:SiteId
                         $order
