@@ -95,11 +95,98 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         }else{
             $tagTopCount="";
         }
+
+        if ($channelId<=0){
+            return "param error";
+        }
+        $channelPublicData = new ChannelPublicData();
+        ////////////////////权限判断///////////////////
+        $accessLimitType = $channelPublicData->GetAccessLimitType($channelId,true);
+
+        if ($accessLimitType > 0){
+
+            $accessLimitContent = $channelPublicData->GetAccessLimitContent($channelId,true);
+
+            if (strlen($accessLimitContent)>0){
+
+                switch($accessLimitType){
+
+                    case ChannelData::CHANNEL_ACCESS_LIMIT_TYPE_USER_GROUP:
+                        //按会员组加密
+
+                        $userId = Control::GetUserId();
+
+                        $canExplore = false;
+
+                        if ($userId>0){
+
+                            $userPublicData = new UserPublicData();
+
+                            $userGroupId = $userPublicData->GetUserGroupId($userId, true);
+                            if($userGroupId>0){
+
+
+                                $arrAccessLimitContent = explode(',',$accessLimitContent);
+
+                                if(is_array($arrAccessLimitContent)
+                                    && !empty($arrAccessLimitContent)){
+
+                                    if (in_array($userGroupId, $arrAccessLimitContent)){
+                                        $canExplore = true;
+                                    }
+
+                                }else{
+
+                                    if($userGroupId == $accessLimitContent){
+                                        $canExplore = true;
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+
+
+                        if(!$canExplore){
+
+
+                            $message = '<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1" />'.Language::Load('channel', 8);
+                            $message = str_ireplace(
+                                "{0}",
+                                urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']),
+                                $message
+                            );
+
+                            return $message;
+
+                        }
+
+
+                        break;
+
+
+
+                }
+
+            }
+        }
+
+
+
+        /////////////////////////////////////////////
+
+
+
+
+
         $tempContent = parent::GetDynamicTemplateContent();
         $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
         parent::ReplaceFirst($tempContent);
 
-        $channelPublicData = new ChannelPublicData();
+
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
         $tempContent = str_ireplace("{ChannelName}", $currentChannelName, $tempContent);

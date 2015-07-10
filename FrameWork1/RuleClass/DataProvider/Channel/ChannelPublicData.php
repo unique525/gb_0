@@ -51,6 +51,48 @@ class ChannelPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 取得访问方式
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 访问方式
+     */
+    public function GetAccessLimitType($channelId, $withCache)
+    {
+        $result = 0;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_access_limit_type.cache_' . $channelId . '';
+            $sql = "SELECT AccessLimitType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 取得访问限制的内容
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 访问限制的内容
+     */
+    public function GetAccessLimitContent($channelId, $withCache)
+    {
+        $result = "";
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_access_limit_content.cache_' . $channelId . '';
+            $sql = "SELECT AccessLimitContent FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
 
     /**
      * 取得子节点id字符串

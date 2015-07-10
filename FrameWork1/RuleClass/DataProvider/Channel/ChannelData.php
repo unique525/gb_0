@@ -86,4 +86,20 @@ class ChannelData {
      * 频道类型 外部接口类 50
      */
     const CHANNEL_TYPE_INTERFACE = 50;
+
+
+    /**
+     * 访问方式 公开访问
+     */
+    const CHANNEL_ACCESS_LIMIT_TYPE_NORMAL = 0;
+    /**
+     * 访问方式 按会员组加密
+     */
+    const CHANNEL_ACCESS_LIMIT_TYPE_USER_GROUP = 1;
+    /**
+     * 访问方式 按会员加密
+     */
+    const CHANNEL_ACCESS_LIMIT_TYPE_USER = 2;
+
+
 } 
