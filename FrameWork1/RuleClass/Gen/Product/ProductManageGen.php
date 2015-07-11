@@ -249,6 +249,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/product_data');
 
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
                     //javascript 处理
 
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -495,6 +498,9 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/product_data');
 
+                        //删除缓冲
+                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
                         //javascript 处理
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
@@ -523,6 +529,8 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenRemoveToBin(){
         $result = "";
+        //删除缓冲
+        DataCache::RemoveDir(CACHE_PATH . '/default_page');
         return $result;
     }
 
@@ -792,6 +800,8 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $productId = Control::GetRequest("product_id", 0);
         $sort = Control::GetRequest("sort", 0);
         if($productId>0){
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
             $productManageData = new ProductManageData();
             $result = $productManageData->ModifySort($sort, $productId);
         }
@@ -806,6 +816,8 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
     private function AsyncModifySortByDrag() {
         $arrProductId = Control::GetRequest("sort", null);
         if(!empty($arrProductId)){
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
             $productManageData = new ProductManageData();
             $result = $productManageData->ModifySortForDrag($arrProductId);
             return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
