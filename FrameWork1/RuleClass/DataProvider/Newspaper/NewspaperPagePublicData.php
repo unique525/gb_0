@@ -232,6 +232,7 @@ class NewspaperPagePublicData extends BasePublicData
      */
     public function GetNewspaperPageIdOfNext($newspaperId, $newspaperPageId, $withCache = false)
     {
+
         $result = -1;
         if ($newspaperId > 0 && $newspaperPageId >0) {
 
