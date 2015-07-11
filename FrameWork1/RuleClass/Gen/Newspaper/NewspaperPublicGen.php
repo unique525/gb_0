@@ -108,6 +108,7 @@ class NewspaperPublicGen extends BasePublicGen
             '_channel_id_'.$channelId.
             '_temp_'.$defaultTemp.
             '_pub_'.$publishDate.
+            '_pid_'.$newspaperPageId.
             '_mode_' . $templateMode;
         $withCache = true;
         if($withCache){
