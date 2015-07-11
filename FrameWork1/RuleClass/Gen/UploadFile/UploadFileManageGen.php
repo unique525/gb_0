@@ -34,6 +34,9 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
             case "create_cut_image":
                 $result = self::CreateCutImage();
                 break;
+            case "async_rotate_image":
+                $result = self::AsyncRotateImage();
+                break;
             case "async_modify_upload_file_cut_path1":
                 $result = self::AsyncModifyUploadFileCutPath1();
                 break;
@@ -308,13 +311,36 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
         return $templateContent;
     }
 
+    private function AsyncRotateImage(){
+        $uploadFileId = Control::GetRequest("upload_file_id", 0);
+        $angle = Control::GetRequest("angle", 90);
+        if($uploadFileId > 0){
+
+            $uploadFileData = new UploadFileData();
+            $uploadFilePath = $uploadFileData->GetUploadFilePath($uploadFileId, false);
+
+            if(strlen($uploadFilePath)>0){
+
+                $result = ImageObject::Rotate($uploadFilePath, $angle);
+
+            }else{
+                $result = -10; //没有原文件路径
+            }
+
+        }else{
+            $result = -5; //参数错误
+        }
+
+        return $result;
+    }
+
     private function AsyncModifyUploadFileCutPath1(){
         $uploadFileId = Control::GetRequest("upload_file_id", 0);
         $uploadFileCutPath = Control::PostOrGetRequest("upload_file_cut_path","", false);
 
         if($uploadFileId > 0 && !empty($uploadFileCutPath)){
-            $uploadFilePublicData = new UploadFileData();
-            $result = $uploadFilePublicData->ModifyUploadFileCutPath1($uploadFileId,$uploadFileCutPath);
+            $uploadFileData = new UploadFileData();
+            $result = $uploadFileData->ModifyUploadFileCutPath1($uploadFileId,$uploadFileCutPath);
             if ($result > 0) {
                 $uploadFileData = new UploadFileData();
                 $uploadFile = $uploadFileData->Fill($uploadFileId);

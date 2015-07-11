@@ -344,7 +344,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
                                 break;
 
-
                         }
 
                     }
@@ -357,7 +356,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     for ($u = 0; $u < count($arrUploadFileId); $u++) {
 
 
-                        if($attachWatermark>0 && strlen($watermarkFilePath)>0){
+                        if ($attachWatermark > 0 && strlen($watermarkFilePath) > 0) {
                             parent::GenUploadFileWatermark1(
                                 $arrUploadFileId[$u],
                                 $watermarkFilePath,
@@ -393,14 +392,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                                 $arrUploadFileId[$u],
                                 ""
                             );
-
-
                         }
                         $forumPostContent = $forumPostContent . "<br />" . $insertHtml;
-
-
                     }
-
                 }
 
                 //修改上传文件的tableId;
@@ -415,15 +409,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     }
                 }
 
-                if(count($arrUploadFilesOfPost)>0){
+                if (count($arrUploadFilesOfPost) > 0) {
                     $forumTopicPublicData->ModifyContentUploadFileId1($forumTopicId, intval($arrUploadFilesOfPost[0]));
                 }
 
-                if(count($arrUploadFilesOfPost)>1){
+                if (count($arrUploadFilesOfPost) > 1) {
                     $forumTopicPublicData->ModifyContentUploadFileId2($forumTopicId, intval($arrUploadFilesOfPost[1]));
                 }
 
-                if(count($arrUploadFilesOfPost)>2){
+                if (count($arrUploadFilesOfPost) > 2) {
                     $forumTopicPublicData->ModifyContentUploadFileId3($forumTopicId, intval($arrUploadFilesOfPost[2]));
                 }
 

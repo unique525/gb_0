@@ -379,6 +379,18 @@ class BaseGen
         $manageUserLogManageData->Create($manageUserId, $manageUserName, $ipAddress, $webAgent, $selfUrl, $refererUrl, $refererDomain, $userId, $userName, $operateContent);
     }
 
+    /**
+     * 面向H5的多文件上传
+     * @param string $fileElementName
+     * @param int $tableType
+     * @param int $tableId
+     * @param array $arrUploadFile
+     * @param array $arrUploadFileId
+     * @param int $imgMaxWidth
+     * @param int $imgMaxHeight
+     * @param int $imgMinWidth
+     * @param int $imgMinHeight
+     */
     protected function UploadMultiple(
         $fileElementName = "file_upload",
         $tableType = 0,
@@ -437,29 +449,31 @@ class BaseGen
 
                         if (!empty($arrUploadFileId)) {
                             //修改原有uploadFile数据
+                            if(isset($arrUploadFileId[$i])){
+                                $uploadFileId = intval($arrUploadFileId[$i]);
 
-                            $uploadFileId = intval($arrUploadFileId[$i]);
+                                //1.删除原有原图文件
 
-                            //1.删除原有原图文件
+                                self::ClearUploadFile($uploadFileId);
 
-                            self::ClearUploadFile($uploadFileId);
+                                //2.清空数据表
+                                $uploadFileData->Clear($uploadFileId);
 
-                            //2.清空数据表
-                            $uploadFileData->Clear($uploadFileId);
+                                //3.修改数据表
+                                $uploadFileData->Modify(
+                                    $uploadFileId,
+                                    $newFileName,
+                                    $file_size, //文件大小，字节
+                                    $fileExtension,
+                                    $file_name, //原始文件名
+                                    str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                                    $tableType,
+                                    $tableId,
+                                    $manageUserId,
+                                    $userId
+                                );
+                            }
 
-                            //3.修改数据表
-                            $uploadFileData->Modify(
-                                $uploadFileId,
-                                $newFileName,
-                                $file_size, //文件大小，字节
-                                $fileExtension,
-                                $file_name, //原始文件名
-                                str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
-                                $tableType,
-                                $tableId,
-                                $manageUserId,
-                                $userId
-                            );
                         }else{
                             //创建新的uploadFile数据
                             $uploadFileId = $uploadFileData->Create(
@@ -1047,6 +1061,16 @@ class BaseGen
                     $uploadFilePath = $uploadPath . "user_attachment" . DIRECTORY_SEPARATOR . strval($userId) . DIRECTORY_SEPARATOR;
                     $newFileName = 'user_attachment_' . $userId . '_' . uniqid() . '.' . $fileExtension;
                 }
+                break;
+            case UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_PIC:
+                /** 会员相册 */
+                if ($userId > 0) {
+                    $uploadFilePath = $uploadPath . "user_album_pic"
+                        . DIRECTORY_SEPARATOR
+                        . strval($userId) . DIRECTORY_SEPARATOR;
+                    $newFileName = 'user_album_pic_' . $userId . '_' . uniqid() . '.' . $fileExtension;
+                }
+
                 break;
             case UploadFileData::UPLOAD_TABLE_TYPE_VOTE_SELECT_ITEM_TITLE_PIC_1:
                 /** 投票 题目选项题图1  tableId 为 voteItemId **/

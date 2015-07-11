@@ -222,7 +222,7 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
     /**
-     * 取得第一条记录
+     * 取得下一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
      * @param bool $withCache 是否从缓冲中取
@@ -255,7 +255,7 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
     /**
-     * 取得第一条记录
+     * 取得上一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
      * @param bool $withCache 是否从缓冲中取

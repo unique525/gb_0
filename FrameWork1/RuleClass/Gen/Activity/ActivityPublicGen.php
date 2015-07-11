@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 活动业务类（前台）
+ * 公共 活动 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Activity
  * @author 525
@@ -117,7 +117,7 @@ class ActivityPublicGen extends BasePublicGen implements IBasePublicGen {
                 if(count($arrActivityUser)>0){
                     Template::ReplaceList($templateContent, $arrActivityUser, $listName);
                 }else{
-                    Template::RemoveCustomTag($tempContent, $listName);
+                    Template::RemoveCustomTag($templateContent, $listName);
                 }
                 $signUpCount=count($arrActivityUser);
                 $templateContent = str_ireplace("{SignUpCount}", $signUpCount, $templateContent);

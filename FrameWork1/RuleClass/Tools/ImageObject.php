@@ -493,4 +493,33 @@ class ImageObject {
         return $result;
         //}
     }
+
+    /**
+     * 旋转图片
+     * @param string $sourceImgPath 来源文件路径
+     * @param int $angle 旋转角度 90,180
+     * @param int $bgdColor 旋转后没有覆盖到的部分的颜色
+     * @return bool|int 是否成功
+     */
+    public static function Rotate($sourceImgPath, $angle , $bgdColor = 0){
+
+        $src = PHYSICAL_PATH . str_ireplace("/", DIRECTORY_SEPARATOR, $sourceImgPath);
+
+        $imgResource = imagecreatefromjpeg($src);
+
+        if($imgResource == false){
+            return -3;//读取文件失败
+        }
+
+        $rotateImage = imagerotate($imgResource, $angle, $bgdColor);
+
+        if (imagejpeg($rotateImage, $src)){
+            imagedestroy($imgResource);
+            return 1;
+        }else{
+            imagedestroy($imgResource);
+            return -2;//失败
+        }
+
+    }
 } 

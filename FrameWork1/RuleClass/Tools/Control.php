@@ -277,11 +277,13 @@ class Control {
     public static function SetManageUserCookie($manageUserId, $manageUserName, $hour = 1, $domain = "") {
         if (!empty($domain)) {
             setcookie('ICMS_MANAGE_USER_ID', Des::Encrypt($manageUserId,"mu141022"), time() + $hour * 3600, "/", $domain);
-            $manageUserName = Des::Encrypt($manageUserName,"mu141022");
+            //$manageUserName = Des::Encrypt($manageUserName,"mu141022");
+            $manageUserName = urlencode($manageUserName);
             setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/", $domain);
         } else {
             setcookie('ICMS_MANAGE_USER_ID', Des::Encrypt($manageUserId,"mu141022"), time() + $hour * 3600, "/");
-            $manageUserName = Des::Encrypt($manageUserName,"mu141022");
+            //$manageUserName = Des::Encrypt($manageUserName,"mu141022");
+            $manageUserName = urlencode($manageUserName);
             setcookie('ICMS_MANAGE_USER_NAME', $manageUserName, time() + $hour * 3600, "/");
         }
     }
@@ -304,7 +306,8 @@ class Control {
      */
     public static function GetManageUserName() {
         if (isset($_COOKIE["ICMS_MANAGE_USER_NAME"])) {
-            return Des::Decrypt($_COOKIE["ICMS_MANAGE_USER_NAME"],"mu141022");
+            //return Des::Decrypt($_COOKIE["ICMS_MANAGE_USER_NAME"],"mu141022");
+            return urldecode($_COOKIE["ICMS_MANAGE_USER_NAME"]);
         } else {
             return "";
         }
@@ -347,8 +350,9 @@ class Control {
      */
     public static function GetIp() {
         global $_SERVER;
-        $ip = getenv("REMOTE_ADDR");
+        //$ip = getenv("REMOTE_ADDR");
         //被注释的代码有ip仿造漏洞和sql注入漏洞
+
         if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
             $ip = getenv("HTTP_CLIENT_IP");
         } else
@@ -363,6 +367,7 @@ class Control {
         } else {
             $ip = "unknown";
         }
+
         return ($ip);
     }
 

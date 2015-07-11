@@ -82,24 +82,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
             $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum");
-            //$templateFileUrl = "user/user_login_for_forum.html";
         }
         else{
             $templateContent = parent::GetDynamicTemplateContent("user_login");
-            //$templateFileUrl = "user/user_login.html";
         }
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-
-
 
         parent::ReplaceFirst($templateContent);
-        $reUrl = urlencode(Control::GetRequest("re_url", ""));
+        $reUrl = Control::GetRequest("re_url", "");//这个re_url在前台已经encode过了
         $templateContent = str_ireplace("{ReUrl}", $reUrl, $templateContent);
-
-
 
         parent::ReplaceEnd($templateContent);
 
@@ -138,6 +128,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     private function AsyncLogin(){
         $userAccount = Control::GetRequest("user_account", "");
         $userPass = Control::GetRequest("user_pass", "");
+        $hour = Control::GetRequest("hour", 1);
         $userPassWithMd5 = Control::GetRequest("user_pass_with_md5", "");
         $siteId = parent::GetSiteIdByDomain();
 
@@ -148,7 +139,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {
-                Control::SetUserCookie($userId,$userAccount);
+                $hour = 9999999;
+                Control::SetUserCookie($userId,$userAccount, $hour);
                 return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
             }
         }else{
@@ -290,8 +282,56 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
                 $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
                 $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
+                $schoolName = Format::FormatHtmlTag(Control::PostOrGetRequest("school_Name",0));
+                $className = Format::FormatHtmlTag(Control::PostOrGetRequest("class_name",0));
 
-                $userInfoPublicData->Create($newUserId, $realName, $nickName,$avatarUploadFileId, $userScore, $userMoney, $userCharm, $userExp, $userPoint, $question, $answer, $sign, $lastVisitIP, $lastVisitTime, $email, $qq, $country, $comeFrom, $honor, $birthday, $gender, $fansCount, $idCard, $postCode, $address, $tel, $mobile, $province, $occupational, $city, $relationship, $hit, $messageCount, $userPostCount, $userPostBestCount, $userActivityCount, $userAlbumCount, $userBestAlbumCount, $userRecAlbumCount, $userAlbumCommentCount, $userCommissionOwn, $userCommissionChild, $userCommissionGrandson);
+                $userInfoPublicData->Create(
+                    $newUserId,
+                    $realName,
+                    $nickName,
+                    $avatarUploadFileId,
+                    $userScore,
+                    $userMoney,
+                    $userCharm,
+                    $userExp,
+                    $userPoint,
+                    $question,
+                    $answer,
+                    $sign,
+                    $lastVisitIP,
+                    $lastVisitTime,
+                    $email,
+                    $qq,
+                    $country,
+                    $comeFrom,
+                    $honor,
+                    $birthday,
+                    $gender,
+                    $fansCount,
+                    $idCard,
+                    $postCode,
+                    $address,
+                    $tel,
+                    $mobile,
+                    $province,
+                    $occupational,
+                    $city,
+                    $relationship,
+                    $hit,
+                    $messageCount,
+                    $userPostCount,
+                    $userPostBestCount,
+                    $userActivityCount,
+                    $userAlbumCount,
+                    $userBestAlbumCount,
+                    $userRecAlbumCount,
+                    $userAlbumCommentCount,
+                    $userCommissionOwn,
+                    $userCommissionChild,
+                    $userCommissionGrandson,
+                    $schoolName,
+                    $className
+                );
 
                 //插入会员角色表
                 $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;

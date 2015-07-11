@@ -90,9 +90,37 @@ class ForumPublicData extends BasePublicData {
      * @return array
      */
     public function GetListByForumId($forumId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId AND State<".ForumData::STATE_REMOVED.";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ForumId", $forumId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     * 返回 array list 形式的单条数据
+     * @param int $forumId
+     * @return array
+     */
+    public function GetListInForumId($forumId) {
+        $forumId = Format::FormatSql($forumId);
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId IN ($forumId) AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC;";
+        $dataProperty = null;
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
+
+    /**
+     *
+     * @param int $siteId
+     * @param int $parentId
+     * @return array
+     */
+    public function GetListInParentId($siteId, $parentId) {
+        $parentId = Format::FormatSql($parentId);
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId IN ($parentId) AND SiteId=:SiteId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }
@@ -104,7 +132,7 @@ class ForumPublicData extends BasePublicData {
      * @return array
      */
     public function GetListByParentId($siteId, $parentId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND SiteId=:SiteId ORDER BY Sort DESC";
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND SiteId=:SiteId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ParentId", $parentId);
         $dataProperty->AddField("SiteId", $siteId);

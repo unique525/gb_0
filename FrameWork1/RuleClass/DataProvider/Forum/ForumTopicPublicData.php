@@ -270,8 +270,8 @@ class ForumTopicPublicData extends BasePublicData
 
     /**
      * 取得一条信息
-     * @param int $forumTopicId 管理员id
-     * @return array 管理员帐号信息数组
+     * @param int $forumTopicId 论坛主题id
+     * @return array 论坛主题信息数组
      */
     public function GetOne($forumTopicId)
     {

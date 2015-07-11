@@ -151,6 +151,43 @@
             </td>
         </tr>
         <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_ShowInClient">在客户端调用：</label></td>
+            <td class="spe_line">
+                <select id="f_ShowInClient" name="f_ShowInClient">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+                {s_ShowInClient}
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_ShowInClientMenu">在客户端频道菜单上调用：</label></td>
+            <td class="spe_line">
+                <select id="f_ShowInClientMenu" name="f_ShowInClientMenu">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+                {s_ShowInClientMenu}
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_AccessLimitType">访问方式：</label></td>
+            <td class="spe_line">
+                <select id="f_AccessLimitType" name="f_AccessLimitType">
+                    <option value="0">公开访问</option>
+                    <option value="1">按会员组加密</option>
+                    <option value="2">按会员加密</option>
+                </select>
+                {s_AccessLimitType}
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_AccessLimitContent">访问方式授权值(会员组id或会员id,逗号分隔)：</label></td>
+            <td class="spe_line">
+                <textarea cols="30" rows="30" id="f_AccessLimitContent" name="f_AccessLimitContent" style="width:90%;height:50px;">{AccessLimitContent}</textarea>
+            </td>
+        </tr>
+        <tr>
             <td class="spe_line" height="30" align="right"><label for="f_ShowChildList">是否显示子频道数据：</label></td>
             <td class="spe_line">
                 <select id="f_ShowChildList" name="f_ShowChildList">

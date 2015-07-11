@@ -51,8 +51,6 @@
          * @constructor
          */
         window.GetOneUploadFileCallBack = function (data) {
-
-
             if(Request["source_type"] != undefined){
                 sourceType = parseInt(Request["source_type"]);
             }
@@ -63,18 +61,24 @@
                     break;
                 case 1:
                     filePath = data["upload_file_compress_path1"];
+
+                    if(filePath == undefined || filePath == ""){
+
+                        alert("压缩图1未设置，请先在站点配置中资讯压缩图的参数")
+
+                    }
+
                     break;
-
-
             }
 
-            if (filePath != "") {
-                var uploadFileSrc = filePath;
+            if (filePath != undefined && filePath != "") {
+                //var uploadFileSrc = filePath;
                 uploadFileId = data["upload_file_id"];
-                src = uploadFileSrc;
-                $("#upload_file").attr("src", uploadFileSrc);
-                $("#target").attr("src", src);
-                $("#preview_large").attr("src", src);
+                //src = uploadFileSrc;
+
+                $("#upload_file").attr("src", filePath);
+                $("#target").attr("src", filePath);
+                $("#preview_large").attr("src", filePath);
                 $("#source_type").val(sourceType);
             }
         };

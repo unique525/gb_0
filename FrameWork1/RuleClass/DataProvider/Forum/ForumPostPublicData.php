@@ -23,7 +23,7 @@ class ForumPostPublicData extends BasePublicData {
         $accessLimitContent,
         $showSign,
         $postIp,
-        $isOneSal,
+        $isOneSale,
         $addMoney,
         $addScore,
         $addCharm,
@@ -105,7 +105,7 @@ class ForumPostPublicData extends BasePublicData {
             $dataProperty->AddField("AccessLimitContent", $accessLimitContent);
             $dataProperty->AddField("ShowSign", $showSign);
             $dataProperty->AddField("PostIp", $postIp);
-            $dataProperty->AddField("IsOneSale", $isOneSal);
+            $dataProperty->AddField("IsOneSale", $isOneSale);
             $dataProperty->AddField("AddMoney", $addMoney);
             $dataProperty->AddField("AddScore", $addScore);
             $dataProperty->AddField("AddCharm", $addCharm);
@@ -182,15 +182,14 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 取得一条信息
-     * @param int $forumTopicId 帖子id
+     * @param int $forumPostId 帖子id
      * @return array 帖子信息数组
      */
-
-    public function GetOne($forumTopicId)
+    public function GetOne($forumPostId)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . ";";
+        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumPost. "=:" . self::TableId_ForumPost . ";";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+        $dataProperty->AddField(self::TableId_ForumPost, $forumPostId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }

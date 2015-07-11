@@ -77,9 +77,25 @@ class UserInfoPublicData extends BasePublicData
      * @param int $userCommissionOwn
      * @param int $userCommissionChild
      * @param int $userCommissionGrandson
+     * @param string $schoolName
+     * @param string $className
      * @return int
      */
-    public function Create($userId, $realName = '', $nickName = '',$avatarUploadFileId=0, $userScore = 0, $userMoney = 0, $userCharm = 0, $userExp = 0, $userPoint = 0, $question = '', $answer = '', $sign = '', $lastVisitIP = '', $lastVisitTime = '', $email = '', $qq = '', $country = '', $comeFrom = '', $honor = '', $birthday = '', $gender = 0, $fansCount = 0, $idCard = '', $postCode = '', $address = '', $tel = '', $mobile = '', $province = '', $occupational = '', $city = '', $relationship = 0, $hit = 0, $messageCount = 0, $userPostCount = 0, $userPostBestCount = 0, $userActivityCount = 0, $userAlbumCount = 0, $userBestAlbumCount = 0, $userRecAlbumCount = 0, $userAlbumCommentCount = 0, $userCommissionOwn = 0, $userCommissionChild = 0, $userCommissionGrandson = 0)
+    public function Create($userId, $realName = '', $nickName = '',
+                           $avatarUploadFileId=0, $userScore = 0, $userMoney = 0,
+                           $userCharm = 0, $userExp = 0, $userPoint = 0,
+                           $question = '', $answer = '', $sign = '', $lastVisitIP = '',
+                           $lastVisitTime = '', $email = '', $qq = '', $country = '',
+                           $comeFrom = '', $honor = '', $birthday = '', $gender = 0,
+                           $fansCount = 0, $idCard = '', $postCode = '', $address = '',
+                           $tel = '', $mobile = '', $province = '', $occupational = '',
+                           $city = '', $relationship = 0, $hit = 0, $messageCount = 0,
+                           $userPostCount = 0, $userPostBestCount = 0,
+                           $userActivityCount = 0, $userAlbumCount = 0,
+                           $userBestAlbumCount = 0, $userRecAlbumCount = 0,
+                           $userAlbumCommentCount = 0, $userCommissionOwn = 0,
+                           $userCommissionChild = 0, $userCommissionGrandson = 0
+    ,$schoolName,$className)
     {
         $result = -1;
         if ($userId > 0) {
@@ -131,6 +147,10 @@ class UserInfoPublicData extends BasePublicData
             $dataProperty->AddField("UserCommissionOwn", $userCommissionOwn);
             $dataProperty->AddField("UserCommissionChild", $userCommissionChild);
             $dataProperty->AddField("UserCommissionGrandson", $userCommissionGrandson);
+            $dataProperty->AddField("SchoolName", $schoolName);
+            $dataProperty->AddField("ClassName", $className);
+
+
             if ($result <= 0) { //没有找到记录，初始化一条
                 $sql = "INSERT INTO "
                     . self::TableName_UserInfo. " (
@@ -142,7 +162,8 @@ class UserInfoPublicData extends BasePublicData
                      Province, Occupational, City, Relationship, Hit, MessageCount,
                      UserPostCount, UserPostBestCount, UserActivityCount, UserAlbumCount,
                      UserBestAlbumCount, UserRecAlbumCount, UserAlbumCommentCount,
-                     UserCommissionOwn, UserCommissionChild, UserCommissionGrandson
+                     UserCommissionOwn, UserCommissionChild, UserCommissionGrandson,
+                     SchoolName,ClassName
                     ) VALUES (
                     :UserId,:RealName,:NickName,:AvatarUploadFileId,
                     :UserScore,:UserMoney,:UserCharm,:UserExp,:UserPoint,
@@ -152,13 +173,22 @@ class UserInfoPublicData extends BasePublicData
                     :Province,:Occupational,:City,:Relationship,:Hit,:MessageCount,
                     :UserPostCount,:UserPostBestCount,:UserActivityCount,:UserAlbumCount,
                     :UserBestAlbumCount,:UserRecAlbumCount,:UserAlbumCommentCount,
-                    :UserCommissionOwn,:UserCommissionChild,:UserCommissionGrandson
+                    :UserCommissionOwn,:UserCommissionChild,:UserCommissionGrandson,
+                    :SchoolName,:ClassName
                     );";
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
             } else { //修改
                 $sql = "UPDATE " . self::TableName_UserInfo. " SET RealName=:RealName, NickName=:NickName, AvatarUploadFileId=:AvatarUploadFileId, UserScore=:UserScore, UserMoney=:UserMoney, UserCharm=:UserCharm, UserExp=:UserExp, UserPoint=:UserPoint, Question=:Question, Answer=:Answer,
-            Sign=:Sign, LastVisitIP=:LastVisitIP, LastVisitTime=:LastVisitTime, Email=:Email, QQ=:QQ,Country=:Country, ComeFrom=:ComeFrom, Honor=:Honor, Birthday=:Birthday, Gender=:Gender, FansCount=:FansCount, IDCard=:IDCard,PostCode=:PostCode, Address=:Address, Tel=:Tel, Mobile=:Mobile, Province=:Province,
-            Occupational=:Occupational, City=:City, Relationship=:Relationship, Hit=:Hit, MessageCount=:MessageCount, UserPostCount=:UserPostCount, UserPostBestCount=:UserPostBestCount, UserActivityCount=:UserActivityCount, UserAlbumCount=:UserAlbumCount, UserBestAlbumCount=:UserBestAlbumCount, UserRecAlbumCount=:UserRecAlbumCount, UserAlbumCommentCount=:UserAlbumCommentCount,UserCommissionOwn=:UserCommissionOwn,UserCommissionChild=:UserCommissionChild,UserCommissionGrandson=:UserCommissionGrandson WHERE UserId=:UserId;";
+
+             Sign=:Sign, LastVisitIP=:LastVisitIP, LastVisitTime=:LastVisitTime, Email=:Email, QQ=:QQ,Country=:Country, ComeFrom=:ComeFrom, Honor=:Honor, Birthday=:Birthday, Gender=:Gender, FansCount=:FansCount, IDCard=:IDCard,PostCode=:PostCode, Address=:Address, Tel=:Tel, Mobile=:Mobile, Province=:Province,
+             Occupational=:Occupational, City=:City, Relationship=:Relationship, Hit=:Hit, MessageCount=:MessageCount, UserPostCount=:UserPostCount, UserPostBestCount=:UserPostBestCount, UserActivityCount=:UserActivityCount, UserAlbumCount=:UserAlbumCount, UserBestAlbumCount=:UserBestAlbumCount, UserRecAlbumCount=:UserRecAlbumCount,
+             UserAlbumCommentCount=:UserAlbumCommentCount,
+             UserCommissionOwn=:UserCommissionOwn,
+             UserCommissionChild=:UserCommissionChild,
+             UserCommissionGrandson=:UserCommissionGrandson,
+             SchoolName = :SchoolName,
+             ClassName = :ClassName
+             WHERE UserId=:UserId;";
 
 
                 $result = $this->dbOperator->Execute($sql, $dataProperty);
@@ -218,6 +248,19 @@ class UserInfoPublicData extends BasePublicData
             $dataProperty->AddField("BankUserName", $bankUserName);
             $dataProperty->AddField("BankAccount", $bankAccount);
             $dataProperty->AddField("Sign", $sign);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    public function ModifySchoolAndClassName($schoolName,$className,$userId){
+        $result = -1;
+        if($userId > 0){
+            $sql = "UPDATE ".self::TableName_UserInfo." SET SchoolName=:SchoolName,ClassName=:ClassName WHERE UserId = :UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SchoolName", $schoolName);
+            $dataProperty->AddField("ClassName", $className);
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
