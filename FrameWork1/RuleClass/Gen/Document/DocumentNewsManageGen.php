@@ -653,6 +653,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $documentNewsId = Control::GetRequest("document_news_id", -1);
         if ($documentNewsId > 0) {
             DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
 
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;

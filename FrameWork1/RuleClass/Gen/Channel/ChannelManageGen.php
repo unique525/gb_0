@@ -185,6 +185,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
 
+                        //删除缓冲
+                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
                         //javascript 处理
                         //重新加载左边导航树
                         $javascriptLoadChannel = "parent._LoadChannelListForManage(parent.G_NowSiteId);";
@@ -374,6 +377,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         //删除缓冲
                         DataCache::RemoveDir(CACHE_PATH . '/channel_data');
 
+                        //删除缓冲
+                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
                         //javascript 处理
                         //重新加载左边导航树
                         $javascriptLoadChannel = "parent._LoadChannelListForManage(parent.G_NowSiteId);";
@@ -410,6 +416,10 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $channelId = Control::GetRequest("channel_id", 0);
 
         if($channelId > 0){
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
             $channelManageData = new ChannelManageData();
             $channelManageData->UpdateParentChildrenChannelId($channelId);
             $channelManageData->ModifyState($channelId, ChannelData::STATE_REMOVED);
@@ -434,6 +444,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
     private function GenDelete(){
         $tempContent = "";
 
+        //删除缓冲
+        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
         return $tempContent;
     }
 
@@ -445,6 +458,10 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $result = '';
         $channelId = Control::GetRequest("channel_id", -1);
         if($channelId>0){
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
             $publishQueueManageData = new PublishQueueManageData();
             $result = parent::PublishChannel($channelId, $publishQueueManageData);
             if($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED)){
