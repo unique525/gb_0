@@ -96,6 +96,10 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 $wordCount,
                 $picMapping
             );
+
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
         }
 
         return $newspaperArticleId;
