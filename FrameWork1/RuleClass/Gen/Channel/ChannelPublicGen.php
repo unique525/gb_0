@@ -33,8 +33,6 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenDefault() {
 
         $siteId = parent::GetSiteIdByDomain();
-        $tempContent = parent::GetDynamicTemplateContent();
-        parent::ReplaceFirst($tempContent);
 
         $channelId = Control::GetRequest("channel_id",0);
         $templateTag=Control::GetRequest("temp","");
@@ -46,15 +44,76 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
             $tagTopCount="";
         }
 
+        $defaultTemp = "default";
+
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+
+        /*******************页面级的缓存 begin********************** */
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'channel_default_'
+            . $channelId
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getDefaultTemplateContent(
+                    $siteId,
+                    $channelId,
+                    $templateTag,
+                    $pageIndex,
+                    $pageSize,
+                    $tagTopCount,
+                    $tempContent
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getDefaultTemplateContent(
+                $siteId,
+                $channelId,
+                $templateTag,
+                $pageIndex,
+                $pageSize,
+                $tagTopCount,
+                $tempContent
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+
+    }
+
+
+    private function getDefaultTemplateContent(
+        $siteId,
+        $channelId,
+        $templateTag,
+        $pageIndex,
+        $pageSize,
+        $tagTopCount,
+        $tempContent
+    ){
+        parent::ReplaceFirst($tempContent);
+
+
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
 
 
         $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
-
-
-
 
 //parent::ReplaceSiteConfig($siteId, $tempContent);
 
@@ -83,6 +142,8 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
+
+
 
     private function GenList() {
         $siteId = parent::GetSiteIdByDomain();
@@ -179,15 +240,72 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         /////////////////////////////////////////////
 
+        $defaultTemp = "default";
+
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
 
 
+        /*******************页面级的缓存 begin********************** */
 
 
-        $tempContent = parent::GetDynamicTemplateContent();
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'channel_list_'
+            . $channelId
+            . '_temp_' . $templateTag
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getListTemplateContent(
+                    $siteId,
+                    $channelId,
+                    $templateTag,
+                    $pageIndex,
+                    $pageSize,
+                    $tagTopCount,
+                    $tempContent
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getListTemplateContent(
+                $siteId,
+                $channelId,
+                $templateTag,
+                $pageIndex,
+                $pageSize,
+                $tagTopCount,
+                $tempContent
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+
+    }
+
+
+    private function getListTemplateContent(
+        $siteId,
+        $channelId,
+        $templateTag,
+        $pageIndex,
+        $pageSize,
+        $tagTopCount,
+        $tempContent
+    ){
         $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
         parent::ReplaceFirst($tempContent);
 
-
+        $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
         $tempContent = str_ireplace("{ChannelName}", $currentChannelName, $tempContent);
