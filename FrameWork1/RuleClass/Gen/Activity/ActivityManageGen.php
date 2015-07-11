@@ -356,6 +356,10 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                     if($newActivityId>0){
 
 
+                        //删除缓冲
+                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                        DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+
                         Control::ShowMessage(Language::Load('activity', 18));
                         $closeTab = Control::PostRequest("CloseTab",0);
                         if($closeTab == 1){
@@ -573,6 +577,11 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             $operateContent = 'ModifyState Activity,Get FORM:' . implode('|', $_GET) . ';\r\nResult:ActivityId:' . $activityId;
             self::CreateManageUserLog($operateContent);
 
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+
             if($state==100){   //停用，删除活动
                 //$publishQueueManageData = new PublishQueueManageData();
                 //$channelId=$activityManageData->GetChannelId($activityId);
@@ -597,6 +606,11 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         $result = '';
         $activityId = Control::GetRequest("activity_id", -1);
         if ($activityId > 0) {
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;
             $publishChannel = true;
