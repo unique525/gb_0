@@ -168,13 +168,13 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
 
     private function GenDefaultPublic(){
         $siteId = parent::GetSiteIdByDomain();
-        $templateContent = parent::GetDynamicTemplateContent("default", $siteId);
+        $templateContent = parent::GetDynamicTemplateContent("default", $siteId, "", $templateMode);
 
         /*******************页面级的缓存 begin********************** */
 
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
-        $cacheFile = 'site_id_' . $siteId . '';
+        $cacheFile = 'site_id_' . $siteId . '_mode_' . $templateMode;
         $withCache = true;
         if($withCache){
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
