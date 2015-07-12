@@ -220,6 +220,10 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                 );
                             }
 
+
+
+                        }
+                        if ($uploadFileId2>0){
                             //资讯题图2压缩图宽度值
                             $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
                             //资讯题图2压缩图高度值
@@ -232,7 +236,6 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $documentNewsTitlePic2CompressHeight
                                 );
                             }
-
                         }
 
 
@@ -356,6 +359,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $withCache = FALSE;
             $siteId = $channelManageData->GetSiteId($channelId, $withCache);
+
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -559,15 +563,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $documentNewsTitlePic1CompressHeight
                                 );
                             }
+
+                        }
+
+                        if ($uploadFileId2 > 0){
                             //资讯题图2压缩图宽度值
-                            $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
+                            $documentNewsTitlePic2CompressWidth = intval($siteConfigData->DocumentNewsTitlePic2CompressWidth);
                             //资讯题图2压缩图高度值
-                            $documentNewsTitlePic2CompressHeight = $siteConfigData->DocumentNewsTitlePic2CompressHeight;
-
-                            echo $uploadFileId2.'<br>';
-                            echo $documentNewsTitlePic2CompressWidth.'<br>';
-                            echo $documentNewsTitlePic2CompressHeight.'<br>';
-
+                            $documentNewsTitlePic2CompressHeight = intval($siteConfigData->DocumentNewsTitlePic2CompressHeight);
 
                             if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
                                 self::GenUploadFileCompress1(
