@@ -220,6 +220,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                 );
                             }
 
+                            //资讯题图2压缩图宽度值
+                            $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
+                            //资讯题图2压缩图高度值
+                            $documentNewsTitlePic2CompressHeight = $siteConfigData->DocumentNewsTitlePic2CompressHeight;
+
+                            if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId2,
+                                    $documentNewsTitlePic2CompressWidth,
+                                    $documentNewsTitlePic2CompressHeight
+                                );
+                            }
+
                         }
 
 
@@ -544,6 +557,18 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $uploadFileId1,
                                     $documentNewsTitlePic1CompressWidth,
                                     $documentNewsTitlePic1CompressHeight
+                                );
+                            }
+                            //资讯题图2压缩图宽度值
+                            $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
+                            //资讯题图2压缩图高度值
+                            $documentNewsTitlePic2CompressHeight = $siteConfigData->DocumentNewsTitlePic2CompressHeight;
+
+                            if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId2,
+                                    $documentNewsTitlePic2CompressWidth,
+                                    $documentNewsTitlePic2CompressHeight
                                 );
                             }
                         }
