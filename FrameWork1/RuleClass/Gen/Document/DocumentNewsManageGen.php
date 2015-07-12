@@ -564,6 +564,11 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                             //资讯题图2压缩图高度值
                             $documentNewsTitlePic2CompressHeight = $siteConfigData->DocumentNewsTitlePic2CompressHeight;
 
+                            echo $uploadFileId2.'<br>';
+                            echo $documentNewsTitlePic2CompressWidth.'<br>';
+                            echo $documentNewsTitlePic2CompressHeight.'<br>';
+
+
                             if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
                                 self::GenUploadFileCompress1(
                                     $uploadFileId2,
