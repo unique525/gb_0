@@ -33,9 +33,6 @@ class NewspaperPublicGen extends BasePublicGen
             case "get_newspaper_id_for_import":
                 $result = self::GetNewspaperIdForImport();
                 break;
-            case "gen_one_for_pc":
-                $result = self::GenOneForPc();
-                break;
 
         }
         return $result;
@@ -471,9 +468,6 @@ class NewspaperPublicGen extends BasePublicGen
         return $result;
     }
 
-    private function GenOneForPc()
-    {
-    }
 
     //判断当前页数是否是报纸当前版面的第一页
     function IsFirstPageOnPaper($newspaperPageNo)

@@ -72,15 +72,8 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
                 if ($result > 0) {
                     //删除缓冲
                     DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_pic_data');
-
-
-
-
-
-
-
-
-
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
