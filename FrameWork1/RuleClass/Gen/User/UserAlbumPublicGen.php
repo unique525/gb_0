@@ -4,7 +4,7 @@
 class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
     /**
      * 引导方法
-     * @return string 返回执行结果11
+     * @return string 返回执行结果
      */
     public function GenPublic()
     {
@@ -14,8 +14,8 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             case "create":
                 $result = self::GenCreate();
                 break;
-            case "list":
-                $result = self::GenList();
+            case "detail":
+                $result = self::GenDetail();
                 break;
         }
 
@@ -30,11 +30,11 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         if ($userId <= 0) {
             $referUrl = urlencode("/default.php?mod=user_album&a=create");
-            Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login&re_url=$referUrl");
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=$referUrl");
             die("user id is null");
         }
 
-        $defaultTemp = "user_album_create";
+        $defaultTemp = "user_album_detail";
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
 
@@ -47,16 +47,16 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             $userAlbumPublicData = new UserAlbumPublicData();
             $userAlbumPicPublicData = new UserAlbumPicPublicData();
 
-            $goUrl = Control::PostRequest("goUrl", "", false);
-
 
             $userAlbumTypeId = Control::PostRequest("f_UserAlbumTypeId", 1, false);;
             $createDate = date("Y-m-d H:i:s", time());
 
             $userAlbumId = $userAlbumPublicData->Create($userAlbumTypeId,$userId,$siteId,$createDate,$userAlbumIntro);
+
             if($userAlbumId > 0){
 
                 $userAlbumPicId = $userAlbumPicPublicData->Create($userAlbumId,$createDate);
+                echo $userAlbumPicId;
                 if (!empty($_FILES)) {
 
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_USER_ALBUM_PIC;
@@ -80,20 +80,10 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                         $imgMinHeight
                     );
 
+                    print_r($arrUploadFile);
+
                     for ($u = 0; $u < count($arrUploadFileId); $u++) {
-
-                        //
-                        if ($u == 0 ){
-                            $userAlbumPublicData->ModifyCoverPicUploadFileId($userAlbumId,intval($arrUploadFileId[$u]));
-                        }
-
-
                         $userAlbumPicPublicData->ModifyUploadFileId($userAlbumPicId, intval($arrUploadFileId[$u]));
-                    }
-
-                    if(count($arrUploadFile) > 0){
-
-                        Control::GoUrl($goUrl);
                     }
                 }
             }
@@ -101,44 +91,129 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
 
         return $tempContent;
     }
-    private function GenList(){
-        $siteId = parent::GetSiteIdByDomain();
-        $searchKey = Control::GetRequest("search_key", "");
-        $defaultTemp = "user_album_list";
-        $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId);
-        $state = 10;
-        $pageIndex = Control::GetRequest("p",1);
-        $pageSize = 6;
-        $pageBegin = ($pageIndex - 1)*$pageSize;
-        $allCount = 0;
 
-        $siteId = 2;
-        if ($pageIndex > 0 && $siteId > 0) {
-            $pageBegin = ($pageIndex - 1) * $pageSize;
-            $tagId = "user_album_list";
-            $allCount = 0;
-            $userAlbumPublicData = new UserAlbumPublicData();
-            $arrUserAlbumList = $userAlbumPublicData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey);
-            //print_r($arrUserAlbumList);
-            if (count($arrUserAlbumList) > 0) {
-                Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
-                $styleNumber = 1;
-                $pagerTemp = "pager";
-                $pagerTemplate = parent::GetDynamicTemplateContent(
-                    $pagerTemp, $siteId);
-                $isJs = FALSE;
-                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize";
-                $jsFunctionName = "";
-                $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
-            } else {
-                Template::RemoveCustomTag($tempContent, $tagId);
-                $tempContent = str_ireplace("{pager_button}", "未搜索到相关数据&nbsp;&nbsp;<a href='default.php?mod=user_album&a=list'>点击返回</a>", $tempContent);
-            }
+    private function GenDetail(){
+        $result = "";
+        $userAlbumId = Control::GetRequest("user_album_id", 0);
+
+
+        if($userAlbumId>0){
+            $siteId = parent::GetSiteIdByDomain();
+
+            $defaultTemp = "user_album_detail";
+            $templateContent = parent::GetDynamicTemplateContent(
+                $defaultTemp,
+                $siteId,
+                "",
+                $templateMode);
+            $result = self::getDetailTemplateContent(
+                    $siteId,$userAlbumId,$templateContent);
+
         }
-        parent::ReplaceEnd($tempContent);
-        return $tempContent;
+        return $result;
+    }
+
+    private function getDetailTemplateContent(
+        $siteId,$userAlbumId,$templateContent
+    ){
+
+        $templateContent = str_ireplace("{UserAlbumId}",
+            $userAlbumId, $templateContent);
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceSiteInfo($siteId, $templateContent);
+
+        $newspaperArticlePublicData = new NewspaperArticlePublicData();
+        $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
+        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+        $templateContent = parent::ReplaceTemplate($templateContent);
+
+
+
+        $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
+
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
+
+
+        Template::ReplaceOne($templateContent, $arrOne);
+
+        //版面选择
+        $newspaperPagePublicData = new NewspaperPagePublicData();
+        $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
+        $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+
+        $newspaperPageUploadFilePath = $newspaperPagePublicData->GetUploadFilePath($newspaperPageId, true);
+
+
+
+        $newspaperPublicData = new NewspaperPublicData();
+        $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+
+        $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+        $templateContent = str_ireplace("{NewspaperPageUploadFilePath}", $newspaperPageUploadFilePath, $templateContent);
+        $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
+
+        $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+        $tagId = "newspaper_page";
+
+        if(count($arrNewspaperPages)>0){
+            Template::ReplaceList($templateContent, $arrNewspaperPages, $tagId);
+        }else{
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        //$templateContent = parent::ReplaceTemplate($templateContent);
+        //左边导航菜单选择文章列表
+        //默认只显示已发状态的新闻
+
+        if(count($arrNewspaperPages)>0){
+            $state = 0;
+            $newspaperPageIds="";
+            foreach($arrNewspaperPages as $page){
+                $newspaperPageIds.=",".$page["NewspaperPageId"];
+            }
+
+            if(strpos($newspaperPageIds,',') == 0){
+                $newspaperPageIds = substr($newspaperPageIds,1);
+            }
+
+            $tagId = "newspaper_page_and_article";
+            if(stripos($templateContent, $tagId) > 0){
+                $newspaperArticlePublicData= new NewspaperArticlePublicData();
+                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+
+
+                $tagName = Template::DEFAULT_TAG_NAME;
+                $tableIdName = "NewspaperPageId";
+                $parentIdName = "NewspaperPageId";
+                Template::ReplaceList(
+                    $templateContent,
+                    $arrNewspaperPages,
+                    $tagId,
+                    $tagName,
+                    $arrNewspaperArticles,
+                    $tableIdName,
+                    $parentIdName
+                );
+            }
+
+
+        }
+        else{
+            $tagId = "newspaper_page_and_article";
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        parent::ReplaceEnd($templateContent);
+
+        return $templateContent;
+
     }
 } 

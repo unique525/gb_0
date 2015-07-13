@@ -313,6 +313,8 @@ class UserInfoPublicData extends BasePublicData
                             ui.BankOpenAddress,
                             ui.BankUserName,
                             ui.BankAccount,
+                            ui.SchoolName,
+                            ui.ClassName,
                             ul.UserLevelName,
                             ul.UserLevelPic,
                             ul.UserLevel,
