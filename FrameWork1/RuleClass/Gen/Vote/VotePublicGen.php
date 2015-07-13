@@ -31,6 +31,9 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             case "select_item_list":
                 $result = self::GenSelectItemList();
                 break;
+            case "async_get_ranking_list":
+                $result = self::AsyncGetRankingList();
+                break;
             default:
                 break;
         }
@@ -290,6 +293,17 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
         $templateContent = preg_replace($patterns, "", $templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;
+    }
+
+
+    private function AsyncGetRankingList(){
+        $result=null;
+        $voteItemId = Control::GetRequest("vote_item_id",0);
+        if($voteItemId>0){
+            $voteSelectItemPublicData=new VoteSelectItemPublicData();
+            $result=$voteSelectItemPublicData->GetTopList($voteItemId);
+        }
+        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';;
     }
 }
 

@@ -8,7 +8,7 @@
             <item>
                 <![CDATA[
                 <li>
-                    <img src="{f_UploadFilePath}">
+                    <img class="document_news_pic_slider_item" src="{f_UploadFileWatermarkPath1}" idvalue="{f_UploadFilePath}">
                     <div class="am-slider-desc">{f_UploadFileTitle}</div>
                 </li>
                 ]]>
@@ -16,3 +16,14 @@
         </icms>
     </ul>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".document_news_pic_slider_item").each(function(){
+           if($(this).attr("src")==""){
+               $(this).attr("src",$(this).attr("idvalue"));
+           }
+            $(this).attr("idvalue","");
+        });
+    }
+</script>

@@ -147,9 +147,10 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $state 状态
      * @param int $orderBy 排序
+     * @param int $showIndex 是否推送首页
      * @return array|null 返回最新的列表数据集
      */
-    public function GetNewList($channelId, $topCount, $state, $orderBy = 0) {
+    public function GetNewList($channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
 
         $result = null;
 
@@ -159,9 +160,14 @@ class DocumentNewsPublicData extends BasePublicData {
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
+            }
+
+            $searchShowIndex="";
+            if($showIndex>0){
+                $searchShowIndex=' AND ShowIndex=1 ';
             }
 
             $selectColumn = '
@@ -252,7 +258,7 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId=:ChannelId AND dn.State=:State
+                WHERE dn.ChannelId=:ChannelId AND dn.State=:State $searchShowIndex
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
@@ -264,15 +270,17 @@ class DocumentNewsPublicData extends BasePublicData {
         return $result;
     }
 
+
     /**
      * 取得子节点资讯列表
      * @param int $channelId 频道id
      * @param string $topCount 显示条数  1或 1,10
      * @param int $state 状态
      * @param int $orderBy 排序方式
+     * @param int $showIndex 是否推送首页
      * @return array|null 返回资讯列表
      */
-    public function GetListOfChild($channelId, $topCount, $state, $orderBy = 0) {
+    public function GetListOfChild($channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
 
         $result = null;
 
@@ -288,6 +296,10 @@ class DocumentNewsPublicData extends BasePublicData {
 
             }
 
+            $searchShowIndex="";
+            if($showIndex>0){
+                $searchShowIndex=' AND ShowIndex=1 ';
+            }
 
             $selectColumn = '
             dn.DocumentNewsId,
@@ -379,6 +391,7 @@ class DocumentNewsPublicData extends BasePublicData {
                         dn.ChannelId IN (SELECT ChannelId FROM ".self::TableName_Channel." WHERE ParentId=:ParentId)
 
                         AND dn.State=:State
+                        $searchShowIndex
                     $orderBySql LIMIT " . $topCount . ";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
@@ -396,9 +409,10 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $state 状态
      * @param int $orderBy 排序方式
+     * @param int $showIndex 是否推荐首页
      * @return array|null 返回子和孙节点的列表数据集
      */
-    public function GetListOfGrandson($channelId, $topCount, $state, $orderBy) {
+    public function GetListOfGrandson($channelId, $topCount, $state, $orderBy,$showIndex=0) {
 
         $result = null;
 
@@ -414,6 +428,10 @@ class DocumentNewsPublicData extends BasePublicData {
 
             }
 
+            $searchShowIndex="";
+            if($showIndex>0){
+                $searchShowIndex=' AND ShowIndex=1 ';
+            }
 
             $selectColumn = '
             dn.DocumentNewsId,
@@ -511,7 +529,7 @@ class DocumentNewsPublicData extends BasePublicData {
                      dn.ChannelId IN (SELECT ChannelId FROM ".self::TableName_Channel." WHERE ParentId IN (SELECT ChannelId FROM ".self::TableName_Channel." WHERE ParentId=:ParentId))
                     )
                     AND dn.State=:State
-
+                    $searchShowIndex
                     $orderBySql LIMIT " . $topCount;
 
             $dataProperty = new DataProperty();

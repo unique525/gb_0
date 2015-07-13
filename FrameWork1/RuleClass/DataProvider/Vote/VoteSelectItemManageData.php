@@ -121,13 +121,13 @@ class VoteSelectItemManageData extends BaseManageData
             $topCount = " limit " . $topCount;
         switch ($order) {
             default:
-                $order = " ORDER BY Sort DESC,VoteSelectItemId ASC ";
+                $order = " ORDER BY Sort,VoteSelectItemId ASC ";
                 break;
         }
         if($voteItemId>0)
         {
             $voteItemId = Format::FormatSql($voteItemId);
-            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,
+            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,t2.DirectUrl,
                     CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
                     t3.*
                     FROM " . self::TableName_VoteItem . " t1

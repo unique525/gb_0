@@ -826,7 +826,7 @@ function submitForm(closeTab) {
                 (输入数字，越大越靠前)
             </td>
             <td class="spe_line" style="width:80px;height:35px;text-align: right;">是否热门：</td>
-            <td class="spe_line" style="text-align: left">
+            <td class="spe_line" style="width:80px;text-align: left">
                 <label>
                     <input type="radio" name="f_IsHot" value="0"/>
                     否
@@ -836,6 +836,18 @@ function submitForm(closeTab) {
                     是
                 </label>
                 {r_IsHot}
+            </td>
+            <td class="spe_line" style="width:120px;height:35px;text-align: right;">是否推送页首：</td>
+            <td class="spe_line" style="text-align: left">
+                <label>
+                    <input type="radio" name="f_ShowIndex" value="0"/>
+                    否
+                </label>
+                <label>
+                    <input type="radio" name="f_ShowIndex" value="1"/>
+                    是
+                </label>
+                {r_ShowIndex}
             </td>
         </tr>
     </table>
