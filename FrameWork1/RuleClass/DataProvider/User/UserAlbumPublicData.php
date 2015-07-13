@@ -28,7 +28,6 @@ class UserAlbumPublicData extends BasePublicData {
                            $region="",
                            $lastCommentDate="0000-00-00 00:00:00",
                            $pushOut=0,
-                           $coverPicUrl="",
                            $coverPicUploadFileId=0
 ){
 
@@ -91,4 +90,39 @@ class UserAlbumPublicData extends BasePublicData {
         return $result;
 
     }
+
+    /**
+     * 获取站点内的所有相册
+     * @param int $siteId 站点ID
+     * @param int $pageBegin 从pageBegin开始查询
+     * @param int $pageSize 取pageSize条数据
+     * @param int $allCount 总行数
+     * @param int $state 取状态为state的相册
+     * @param string $searchKey 搜索关键词
+     * @return array 相册列表的数组
+     */
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state, $searchKey) {
+        $result = -1;
+        $searchSql = "";
+        $dataProperty = new DataProperty();
+        if ($siteId > 0) {
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                $searchSql.=" AND ui.RealName LIKE :SearchKey ";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }
+            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
+                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
+                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId." and ua.State=".$state." " . $searchSql . "
+                    ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+            $sqlCount = "SELECT count(*) FROM
+                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
+                        WHERE ui.UserId=ua.UserId and ua.state=" . $state . " and uf.UploadFileId=ua.CoverPicUploadFileId". $searchKey;
+            //CountPic 用于统计相册有多少图片
+
+            $allCount = $this->dbOperator->GetInt($sqlCount, null);
+        }
+        return $result;
+    }
+
 } 

@@ -150,7 +150,7 @@ class UserAlbumManageData extends BaseManageData {
         $result = -1;
         if ($siteId > 0) {
             //CountPic 用于统计相册有多少图片
-            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,uf.UploadFilePath,u.UserMobile
+            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
                     FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
                     WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId."
                     ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;

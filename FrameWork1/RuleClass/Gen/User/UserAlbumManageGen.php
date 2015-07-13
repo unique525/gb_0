@@ -13,6 +13,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
      * @return string 返回执行结果
      */
     public function Gen() {
+
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
@@ -28,9 +29,9 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
             case "create_main_pic":
                 $result = self::GenCreateMainPic();
                 break;
-//            可能需要改模板路径  比如这里要加个 这样更加符合框架
-//            case "useralbumpic":
-//                break;
+            case "async_modify_state":
+                $result = self::AsyncModifyState();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -109,6 +110,44 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+    /**
+     * 修改文档状态 状态值定义在Data类中
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifyState()
+    {
+        $result = -1;
+        $userAlbumId = Control::GetRequest("user_album_id", 0);
+        $state = Control::GetRequest("state", -1);
+        $siteId = Control::GetRequest("site_id", 0);
+        $manageUserId = Control::GetManageUserId();
+
+
+        if ($userAlbumId > 0 && $state >= 0 && $manageUserId > 0) {
+            //判断权限
+            /**********************************************************************
+             ******************************判断是否有操作权限**********************
+             **********************************************************************/
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $channelId = 0;
+            $can = $manageUserAuthorityManageData->CanManageSite($siteId, $channelId, $manageUserId);
+            if (!$can) {
+                $result = -10;
+            } else {
+                $userAlbumManageData = new UserAlbumManageData();
+                $result = $userAlbumManageData->ModifyState($userAlbumId, $state);
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/user_album_data');
+                //加入操作日志
+                $operateContent = 'Modify State Album,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
+                self::CreateManageUserLog($operateContent);
+            }
+        }else{
+            $result = -5;
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
     }
 
     private function GenRemoveBin() {

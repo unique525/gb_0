@@ -14,6 +14,9 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "list":
+                $result = self::GenList();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -27,7 +30,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $userId = Control::GetUserId();
         if ($userId <= 0) {
             $referUrl = urlencode("/default.php?mod=user_album&a=create");
-            Control::GoUrl("/default.php?mod=user&a=register&temp=user_album_register&re_url=$referUrl");
+            Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login&re_url=$referUrl");
             die("user id is null");
         }
 
@@ -96,6 +99,46 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             }
         }
 
+        return $tempContent;
+    }
+    private function GenList(){
+        $siteId = parent::GetSiteIdByDomain();
+        $searchKey = Control::GetRequest("search_key", "");
+        $defaultTemp = "user_album_list";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId);
+        $state = 10;
+        $pageIndex = Control::GetRequest("p",1);
+        $pageSize = 6;
+        $pageBegin = ($pageIndex - 1)*$pageSize;
+        $allCount = 0;
+
+        $siteId = 2;
+        if ($pageIndex > 0 && $siteId > 0) {
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $tagId = "user_album_list";
+            $allCount = 0;
+            $userAlbumPublicData = new UserAlbumPublicData();
+            $arrUserAlbumList = $userAlbumPublicData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey);
+            //print_r($arrUserAlbumList);
+            if (count($arrUserAlbumList) > 0) {
+                Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
+                $styleNumber = 1;
+                $pagerTemp = "pager";
+                $pagerTemplate = parent::GetDynamicTemplateContent(
+                    $pagerTemp, $siteId);
+                $isJs = FALSE;
+                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $jsFunctionName = "";
+                $jsParamList = "";
+                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+            } else {
+                Template::RemoveCustomTag($tempContent, $tagId);
+                $tempContent = str_ireplace("{pager_button}", "未搜索到相关数据&nbsp;&nbsp;<a href='default.php?mod=user_album&a=list'>点击返回</a>", $tempContent);
+            }
+        }
+        parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
 } 

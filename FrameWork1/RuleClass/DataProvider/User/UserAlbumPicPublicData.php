@@ -59,4 +59,6 @@ class UserAlbumPicPublicData extends BasePublicData {
         return $result;
 
     }
+
+
 }
