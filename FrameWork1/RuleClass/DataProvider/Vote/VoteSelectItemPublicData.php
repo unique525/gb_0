@@ -37,6 +37,24 @@ class VoteSelectItemPublicData extends BasePublicData {
         $result = $this->dbOperator->ExecuteBatch($strSql, $dataPropertyArr);
         return $result;
     }
+
+
+    /**
+     * 根据投票调查题目id取得 该题目下票数前X条的数据
+     * @param int $voteItemId 投票调查题目id
+     * @return array 返回列表数组
+     */
+    public function GetTopList($voteItemId)
+    {
+        $result = null;
+        if ($voteItemId > 0) {
+            $sql = "SELECT * FROM " . self::TableName_VoteSelectItem . " WHERE VoteItemId=:VoteItemId ORDER BY RecordCount DESC";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteItemId", $voteItemId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 
 ?>

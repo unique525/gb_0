@@ -21,6 +21,9 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_get_list_for_push":
                 $result = self::AsyncGetListForPush();
                 break;
+            case "async_get_rss":
+                $result = self::AsyncGetListForXmlPush();
+                break;
             case "async_add_hit":
                 $result = self::GenAsyncAddHit();
                 break;
@@ -261,6 +264,66 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 }
             }
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+
+    private function AsyncGetListForXmlPush() {
+        $result="";
+        $channelId = Control::GetRequest("channel_id", 0);
+        $topCount = Control::GetRequest("top", 0);
+        $showIndex = Control::GetRequest("show_index", 0);
+        $childType=Control::GetRequest("child_type", "self");
+        $state=30;
+        $order=0;
+
+        if ($channelId > 0) {
+
+            $channelPublicData=new ChannelPublicData();
+            $channelName=$channelPublicData->GetChannelName($channelId,true);
+            $documentNewsPublicData = new DocumentNewsPublicData();
+            switch($childType){
+                case "self":
+                    $arrList = $documentNewsPublicData->GetNewList($channelId,$topCount,$state,$order,$showIndex);
+                    break;
+                case "child":
+                    $arrList = $documentNewsPublicData->GetListOfChild($channelId,$topCount,$state,$order,$showIndex);
+                    break;
+                case "grandson":
+                    $arrList = $documentNewsPublicData->GetListOfGrandson($channelId,$topCount,$state,$order,$showIndex);
+                    break;
+                default:
+                    $arrList = $documentNewsPublicData->GetNewList($channelId,$topCount,$state,$order,$showIndex);
+                    break;
+            }
+            if (count($arrList) > 0) {
+
+                $resultArrList=array();
+                //格式化 url
+                foreach ($arrList as $columnValue) {
+
+                    $directUrl = $columnValue['DirectUrl'];
+                    $publishDate = Format::DateStringToSimple($columnValue['PublishDate']);
+
+                    if(strlen($directUrl)>0){
+                        $columnValue['DocumentNewsUrl'] = $directUrl;
+                    }else{
+                        $columnValue['DocumentNewsUrl'] =
+                            '/h/'.$columnValue['ChannelId'].
+                            '/'.$publishDate.
+                            '/'.$columnValue['DocumentNewsId'].'.html';
+                    }
+
+                    $resultArrList[] = $columnValue;
+                }
+
+                $channelTitle = $channelName;
+                $channelDescription = "";
+                $channelLink = "";
+                $language = "";
+                $result = XMLGenerator::GenForDocumentNews($channelTitle, $channelDescription, $channelLink, $language, $resultArrList);
+            }
+        }
+        return $result;
     }
 
 } 
