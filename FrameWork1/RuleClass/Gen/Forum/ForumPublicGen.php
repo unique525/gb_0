@@ -39,12 +39,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $forumId = Control::GetRequest("forum_id", 0);
 
-        //$templateFileUrl = "forum/forum_default.html";
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
         $cacheFile = 'site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
         $withCache = true;

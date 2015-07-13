@@ -168,7 +168,33 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
 
     private function GenDefaultPublic(){
         $siteId = parent::GetSiteIdByDomain();
-        $templateContent = parent::GetDynamicTemplateContent("default", $siteId);
+        $templateContent = parent::GetDynamicTemplateContent("default", $siteId, "", $templateMode);
+
+        /*******************页面级的缓存 begin********************** */
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'site_id_' . $siteId . '_mode_' . $templateMode;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getDefaultTemplateContent($siteId, $templateContent);
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getDefaultTemplateContent($siteId, $templateContent);
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+    }
+
+    private function getDefaultTemplateContent($siteId, $templateContent){
 
         parent::ReplaceFirst($templateContent);
         parent::ReplaceSiteInfo($siteId, $templateContent);
@@ -179,6 +205,7 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
         $templateContent = preg_replace($patterns, "", $templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;
+
     }
 
 

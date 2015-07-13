@@ -210,6 +210,8 @@ class NewspaperPagePublicData extends BasePublicData
 
                 WHERE NewspaperId = :NewspaperId
 
+                AND State<100
+
                 ORDER BY Sort,NewspaperPageId LIMIT 1;
 
                 ";
@@ -222,7 +224,7 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
     /**
-     * 取得第一条记录
+     * 取得下一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
      * @param bool $withCache 是否从缓冲中取
@@ -230,6 +232,7 @@ class NewspaperPagePublicData extends BasePublicData
      */
     public function GetNewspaperPageIdOfNext($newspaperId, $newspaperPageId, $withCache = false)
     {
+
         $result = -1;
         if ($newspaperId > 0 && $newspaperPageId >0) {
 
@@ -241,6 +244,8 @@ class NewspaperPagePublicData extends BasePublicData
 
                 WHERE NewspaperId = :NewspaperId
                     AND Sort>:Sort
+
+                    AND State<100
 
                 ORDER BY Sort LIMIT 1;
 
@@ -255,7 +260,7 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
     /**
-     * 取得第一条记录
+     * 取得上一条记录
      * @param int $newspaperId
      * @param int $newspaperPageId
      * @param bool $withCache 是否从缓冲中取
@@ -273,6 +278,7 @@ class NewspaperPagePublicData extends BasePublicData
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
                         WHERE NewspaperId = :NewspaperId
                             AND Sort<:Sort
+                            AND State<100
                         ORDER BY Sort DESC LIMIT 1;
                     ";
             $dataProperty = new DataProperty();
@@ -466,7 +472,11 @@ class NewspaperPagePublicData extends BasePublicData
 
                 FROM " . self::TableName_NewspaperPage . "
 
-                WHERE NewspaperId =:NewspaperId ORDER BY Sort,NewspaperPageId ;";
+                WHERE NewspaperId =:NewspaperId
+
+                AND State<100
+
+                ORDER BY Sort,NewspaperPageId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperId", $newspaperId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}

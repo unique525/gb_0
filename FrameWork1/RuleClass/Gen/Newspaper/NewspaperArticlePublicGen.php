@@ -30,9 +30,6 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             case "add_hit_count":
                 $result = self::AddHitCount();
                 break;
-            case "detail_for_pc":
-                $result = self::GenDetailForPc();
-                break;
         }
         return $result;
     }
@@ -96,6 +93,10 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 $wordCount,
                 $picMapping
             );
+
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
         }
 
         return $newspaperArticleId;
@@ -161,112 +162,155 @@ class NewspaperArticlePublicGen extends BasePublicGen {
     }
 
     private function GenDetail(){
+        $result = "";
         $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
-        $templateContent = "";
+
 
         if($newspaperArticleId>0){
-            //$templateFileUrl = "newspaper/newspaper_article_detail.html";
-            //$templateName = "default";
-            //$templatePath = "front_template";
-            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = parent::GetDynamicTemplateContent("newspaper_article_detail");
-            $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
-
-            parent::ReplaceFirst($templateContent);
             $siteId = parent::GetSiteIdByDomain();
-            parent::ReplaceSiteInfo($siteId, $templateContent);
 
-            $newspaperArticlePublicData = new NewspaperArticlePublicData();
-            $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
-            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+            $defaultTemp = "newspaper_article_detail";
+            $templateContent = parent::GetDynamicTemplateContent(
+                $defaultTemp,
+                $siteId,
+                "",
+                $templateMode);
 
-            $templateContent = parent::ReplaceTemplate($templateContent);
-
-
-
-            $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
-
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
+            /*******************页面级的缓存 begin********************** */
 
 
-            Template::ReplaceOne($templateContent, $arrOne);
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+            $cacheFile = 'newspaper_article_detail_site_id_' . $siteId .
+                '_aid_'.$newspaperArticleId.
+                '_temp_'.$defaultTemp.
+                '_mode_' . $templateMode;
+            $withCache = true;
+            if($withCache){
+                $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
-            //版面选择
-            $newspaperPagePublicData = new NewspaperPagePublicData();
-            $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
-            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
-
-            $newspaperPageUploadFilePath = $newspaperPagePublicData->GetUploadFilePath($newspaperPageId, true);
-
-
-
-            $newspaperPublicData = new NewspaperPublicData();
-            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
-
-            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
-            $templateContent = str_ireplace("{NewspaperPageUploadFilePath}", $newspaperPageUploadFilePath, $templateContent);
-            $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
-
-            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
-            $tagId = "newspaper_page";
-
-            if(count($arrNewspaperPages)>0){
-                Template::ReplaceList($templateContent, $arrNewspaperPages, $tagId);
+                if ($pageCache === false) {
+                    $result = self::getDetailTemplateContent(
+                        $siteId,$newspaperArticleId,$templateContent);
+                    DataCache::Set($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $pageCache;
+                }
             }else{
-                Template::RemoveCustomTag($tempContent, $tagId);
+                $result = self::getDetailTemplateContent(
+                    $siteId,$newspaperArticleId,$templateContent);
             }
 
-            //$templateContent = parent::ReplaceTemplate($templateContent);
-            //左边导航菜单选择文章列表
-            //默认只显示已发状态的新闻
+            /*******************页面级的缓存 end  ********************** */
 
-            if(count($arrNewspaperPages)>0){
-                $state = 0;
-                $newspaperPageIds="";
-                foreach($arrNewspaperPages as $page){
-                    $newspaperPageIds.=",".$page["NewspaperPageId"];
-                }
-
-                if(strpos($newspaperPageIds,',') == 0){
-                    $newspaperPageIds = substr($newspaperPageIds,1);
-                }
-
-                $tagId = "newspaper_page_and_article";
-                if(stripos($templateContent, $tagId) > 0){
-                    $newspaperArticlePublicData= new NewspaperArticlePublicData();
-                    $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
-
-
-                    $tagName = Template::DEFAULT_TAG_NAME;
-                    $tableIdName = "NewspaperPageId";
-                    $parentIdName = "NewspaperPageId";
-                    Template::ReplaceList(
-                        $templateContent,
-                        $arrNewspaperPages,
-                        $tagId,
-                        $tagName,
-                        $arrNewspaperArticles,
-                        $tableIdName,
-                        $parentIdName
-                    );
-                }
-
-
-            }
-            else{
-                $tagId = "newspaper_page_and_article";
-                Template::RemoveCustomTag($tempContent, $tagId);
-            }
-
-            parent::ReplaceEnd($templateContent);
         }
-        return $templateContent;
+        return $result;
     }
+
+    private function getDetailTemplateContent(
+        $siteId,$newspaperArticleId,$templateContent
+    ){
+
+        $templateContent = str_ireplace("{NewspaperArticleId}",
+                    $newspaperArticleId, $templateContent);
+
+        parent::ReplaceFirst($templateContent);
+
+        parent::ReplaceSiteInfo($siteId, $templateContent);
+
+        $newspaperArticlePublicData = new NewspaperArticlePublicData();
+        $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
+        $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+        $templateContent = parent::ReplaceTemplate($templateContent);
+
+
+
+        $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
+
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
+        $arrOne["NewspaperArticleContent"] =
+            str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
+
+
+        Template::ReplaceOne($templateContent, $arrOne);
+
+        //版面选择
+        $newspaperPagePublicData = new NewspaperPagePublicData();
+        $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
+        $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+
+        $newspaperPageUploadFilePath = $newspaperPagePublicData->GetUploadFilePath($newspaperPageId, true);
+
+
+
+        $newspaperPublicData = new NewspaperPublicData();
+        $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+
+        $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
+        $templateContent = str_ireplace("{NewspaperPageUploadFilePath}", $newspaperPageUploadFilePath, $templateContent);
+        $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
+
+        $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+        $tagId = "newspaper_page";
+
+        if(count($arrNewspaperPages)>0){
+            Template::ReplaceList($templateContent, $arrNewspaperPages, $tagId);
+        }else{
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        //$templateContent = parent::ReplaceTemplate($templateContent);
+        //左边导航菜单选择文章列表
+        //默认只显示已发状态的新闻
+
+        if(count($arrNewspaperPages)>0){
+            $state = 0;
+            $newspaperPageIds="";
+            foreach($arrNewspaperPages as $page){
+                $newspaperPageIds.=",".$page["NewspaperPageId"];
+            }
+
+            if(strpos($newspaperPageIds,',') == 0){
+                $newspaperPageIds = substr($newspaperPageIds,1);
+            }
+
+            $tagId = "newspaper_page_and_article";
+            if(stripos($templateContent, $tagId) > 0){
+                $newspaperArticlePublicData= new NewspaperArticlePublicData();
+                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+
+
+                $tagName = Template::DEFAULT_TAG_NAME;
+                $tableIdName = "NewspaperPageId";
+                $parentIdName = "NewspaperPageId";
+                Template::ReplaceList(
+                    $templateContent,
+                    $arrNewspaperPages,
+                    $tagId,
+                    $tagName,
+                    $arrNewspaperArticles,
+                    $tableIdName,
+                    $parentIdName
+                );
+            }
+
+
+        }
+        else{
+            $tagId = "newspaper_page_and_article";
+            Template::RemoveCustomTag($tempContent, $tagId);
+        }
+
+        parent::ReplaceEnd($templateContent);
+
+        return $templateContent;
+
+    }
+
+
 
     private function GetNewspaperArticleIdForImport(){
         $result = -1;
@@ -308,91 +352,4 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
     }
 
-    private function GenDetailForPc(){
-        $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
-        $templateContent = "";
-
-        if($newspaperArticleId>0){
-            $templateFileUrl = "newspaper/szb_detail_pc.html";
-            $templateName = "default";
-            $templatePath = "front_template";
-            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            //$templateContent = parent::GetDynamicTemplateContent("newspaper_article_detail");
-            $templateContent = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $templateContent);
-
-            parent::ReplaceFirst($templateContent);
-            $siteId = parent::GetSiteIdByDomain();
-            parent::ReplaceSiteInfo($siteId, $templateContent);
-
-            $newspaperArticlePublicData = new NewspaperArticlePublicData();
-            $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
-            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-
-            $templateContent = parent::ReplaceTemplate($templateContent);
-
-
-
-            $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
-
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
-            $arrOne["NewspaperArticleContent"] =
-                str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
-
-
-            Template::ReplaceOne($templateContent, $arrOne);
-
-            //版面选择
-            $newspaperPagePublicData = new NewspaperPagePublicData();
-            $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
-            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
-
-            $newspaperPublicData = new NewspaperPublicData();
-            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
-
-            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
-
-            $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
-            $listName = "newspaper_page";
-
-            if(count($arrNewspaperPages)>0){
-                Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
-            }else{
-                Template::RemoveCustomTag($tempContent, $listName);
-            }
-
-            //左边导航菜单选择文章列表
-            //默认只显示已发状态的新闻
-            if(count($arrNewspaperPages)>0){
-            $state = 0;
-            $newspaperPageIds="";
-            foreach($arrNewspaperPages as $page){
-                $newspaperPageIds.=",".$page["NewspaperPageId"];
-            }
-
-            if(strpos($newspaperPageIds,',') == 0){
-                $newspaperPageIds = substr($newspaperPageIds,1);
-            }
-            $newspaperArticlePublicData= new NewspaperArticlePublicData();
-            $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
-
-            $listName = "newspaper_page_and_article";
-            $tagName = Template::DEFAULT_TAG_NAME;
-            $tableIdName = "NewspaperPageId";
-            $parentIdName = "NewspaperPageId";
-            Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName,$arrNewspaperArticles,$tableIdName,$parentIdName);
-            }
-            else{
-                $listName = "newspaper_page_and_article";
-                Template::RemoveCustomTag($tempContent, $listName);
-            }
-            //$templateContent = parent::ReplaceTemplate($templateContent);
-
-
-            parent::ReplaceEnd($templateContent);
-        }
-        return $templateContent;
-    }
 } 

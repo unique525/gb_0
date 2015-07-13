@@ -220,6 +220,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                 );
                             }
 
+
+
+                        }
+                        if ($uploadFileId2>0){
+                            //资讯题图2压缩图宽度值
+                            $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
+                            //资讯题图2压缩图高度值
+                            $documentNewsTitlePic2CompressHeight = $siteConfigData->DocumentNewsTitlePic2CompressHeight;
+
+                            if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId2,
+                                    $documentNewsTitlePic2CompressWidth,
+                                    $documentNewsTitlePic2CompressHeight
+                                );
+                            }
                         }
 
 
@@ -343,6 +359,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
             $withCache = FALSE;
             $siteId = $channelManageData->GetSiteId($channelId, $withCache);
+
 
             ///////////////判断是否有操作权限///////////////////
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -546,6 +563,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $documentNewsTitlePic1CompressHeight
                                 );
                             }
+
+                        }
+
+                        if ($uploadFileId2 > 0){
+                            //资讯题图2压缩图宽度值
+                            $documentNewsTitlePic2CompressWidth = intval($siteConfigData->DocumentNewsTitlePic2CompressWidth);
+                            //资讯题图2压缩图高度值
+                            $documentNewsTitlePic2CompressHeight = intval($siteConfigData->DocumentNewsTitlePic2CompressHeight);
+
+                            if($documentNewsTitlePic2CompressWidth>0 || $documentNewsTitlePic2CompressHeight>0){
+                                self::GenUploadFileCompress1(
+                                    $uploadFileId2,
+                                    $documentNewsTitlePic2CompressWidth,
+                                    $documentNewsTitlePic2CompressHeight
+                                );
+                            }
                         }
                     }
 
@@ -653,6 +686,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $documentNewsId = Control::GetRequest("document_news_id", -1);
         if ($documentNewsId > 0) {
             DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
 
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;

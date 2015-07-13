@@ -33,8 +33,6 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenDefault() {
 
         $siteId = parent::GetSiteIdByDomain();
-        $tempContent = parent::GetDynamicTemplateContent();
-        parent::ReplaceFirst($tempContent);
 
         $channelId = Control::GetRequest("channel_id",0);
         $templateTag=Control::GetRequest("temp","");
@@ -46,15 +44,76 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
             $tagTopCount="";
         }
 
+        $defaultTemp = "default";
+
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+
+        /*******************页面级的缓存 begin********************** */
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'channel_default_'
+            . $channelId
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getDefaultTemplateContent(
+                    $siteId,
+                    $channelId,
+                    $templateTag,
+                    $pageIndex,
+                    $pageSize,
+                    $tagTopCount,
+                    $tempContent
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getDefaultTemplateContent(
+                $siteId,
+                $channelId,
+                $templateTag,
+                $pageIndex,
+                $pageSize,
+                $tagTopCount,
+                $tempContent
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+
+    }
+
+
+    private function getDefaultTemplateContent(
+        $siteId,
+        $channelId,
+        $templateTag,
+        $pageIndex,
+        $pageSize,
+        $tagTopCount,
+        $tempContent
+    ){
+        parent::ReplaceFirst($tempContent);
+
+
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
 
 
         $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
-
-
-
 
 //parent::ReplaceSiteConfig($siteId, $tempContent);
 
@@ -84,6 +143,8 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         return $tempContent;
     }
 
+
+
     private function GenList() {
         $siteId = parent::GetSiteIdByDomain();
         $channelId = Control::GetRequest("channel_id",0);
@@ -95,7 +156,152 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
         }else{
             $tagTopCount="";
         }
-        $tempContent = parent::GetDynamicTemplateContent();
+
+        if ($channelId<=0){
+            return "param error";
+        }
+        $channelPublicData = new ChannelPublicData();
+        ////////////////////权限判断///////////////////
+        $accessLimitType = $channelPublicData->GetAccessLimitType($channelId,true);
+
+        if ($accessLimitType > 0){
+
+            $accessLimitContent = $channelPublicData->GetAccessLimitContent($channelId,true);
+
+            if (strlen($accessLimitContent)>0){
+
+                switch($accessLimitType){
+
+                    case ChannelData::CHANNEL_ACCESS_LIMIT_TYPE_USER_GROUP:
+                        //按会员组加密
+
+                        $userId = Control::GetUserId();
+
+                        $canExplore = false;
+
+                        if ($userId>0){
+
+                            $userRolePublicData = new UserRolePublicData();
+
+                            $userGroupId = $userRolePublicData->GetUserGroupId($siteId,$userId, true);
+
+                            if($userGroupId>0){
+
+
+                                $arrAccessLimitContent = explode(',',$accessLimitContent);
+
+                                if(is_array($arrAccessLimitContent)
+                                    && !empty($arrAccessLimitContent)){
+
+                                    if (in_array($userGroupId, $arrAccessLimitContent)){
+                                        $canExplore = true;
+                                    }
+
+                                }else{
+
+                                    if($userGroupId == $accessLimitContent){
+                                        $canExplore = true;
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+
+
+                        if(!$canExplore){
+
+
+                            $message = '<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1" />'.Language::Load('channel', 8);
+                            $message = str_ireplace(
+                                "{0}",
+                                urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']),
+                                $message
+                            );
+
+                            return $message;
+
+                        }
+
+
+                        break;
+
+
+
+                }
+
+            }
+        }
+
+
+
+        /////////////////////////////////////////////
+
+        $defaultTemp = "default";
+
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, $siteId, "", $templateMode);
+
+
+        /*******************页面级的缓存 begin********************** */
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'channel_list_'
+            . $channelId
+            . '_temp_' . $templateTag
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getListTemplateContent(
+                    $siteId,
+                    $channelId,
+                    $templateTag,
+                    $pageIndex,
+                    $pageSize,
+                    $tagTopCount,
+                    $tempContent
+                );
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getListTemplateContent(
+                $siteId,
+                $channelId,
+                $templateTag,
+                $pageIndex,
+                $pageSize,
+                $tagTopCount,
+                $tempContent
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+
+    }
+
+
+    private function getListTemplateContent(
+        $siteId,
+        $channelId,
+        $templateTag,
+        $pageIndex,
+        $pageSize,
+        $tagTopCount,
+        $tempContent
+    ){
         $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
         parent::ReplaceFirst($tempContent);
 

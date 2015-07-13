@@ -40,6 +40,7 @@ class UploadFile {
     private $UploadFilePath = "";
 
     private $UploadFileMobilePath = "";
+    private $UploadFilePadPath = "";
     private $UploadFileExtentionName = "";
     private $UploadFileSize = 0;
     private $UploadFileType = 0;
@@ -122,6 +123,8 @@ class UploadFile {
     {
         return $this->UploadFileId;
     }
+
+
 
     /**
      * @param string $UploadFileMobilePath

@@ -69,6 +69,9 @@ class NewspaperPagePublicGen extends BasePublicGen {
                 $issueDepartment,
                 $issuer
             );
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
         }
 
         return $newspaperPageId;

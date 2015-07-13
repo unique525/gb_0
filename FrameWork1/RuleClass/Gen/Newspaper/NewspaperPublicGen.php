@@ -33,9 +33,6 @@ class NewspaperPublicGen extends BasePublicGen
             case "get_newspaper_id_for_import":
                 $result = self::GetNewspaperIdForImport();
                 break;
-            case "gen_one_for_pc":
-                $result = self::GenOneForPc();
-                break;
 
         }
         return $result;
@@ -62,7 +59,14 @@ class NewspaperPublicGen extends BasePublicGen
             $newspaperPublicData = new NewspaperPublicData();
 
             $newspaperId = $newspaperPublicData->CreateForImport($siteId, $channelId, $newspaperTitle, $publishDate);
+
+
+            //删除缓冲
+            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
         }
+
+
 
         return $newspaperId;
     }
@@ -71,9 +75,11 @@ class NewspaperPublicGen extends BasePublicGen
     private function GenOne()
     {
         $channelId = Control::GetRequest("channel_id", 0);
-        $newspaperPagePublicData = new NewspaperPagePublicData();
-        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
 
+        $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
+        $publishDate = Control::GetRequest("publish_date", "");
+
+        $newspaperPagePublicData = new NewspaperPagePublicData();
         $newspaperPublicData = new NewspaperPublicData();
 
         if ($newspaperPageId > 0 && $channelId <= 0) {
@@ -82,17 +88,69 @@ class NewspaperPublicGen extends BasePublicGen
         }
 
 
-        $templateContent = "";
+        $channelPublicData = new ChannelPublicData();
+        $siteId = $channelPublicData->GetSiteId($channelId, true);
+        $defaultTemp = "newspaper_page_one";
+        $templateContent = parent::GetDynamicTemplateContent(
+            $defaultTemp,
+            $siteId,
+            "",
+            $templateMode);
+
+        /*******************页面级的缓存 begin********************** */
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+        $cacheFile = 'newspaper_default_site_id_' . $siteId .
+            '_channel_id_'.$channelId.
+            '_temp_'.$defaultTemp.
+            '_pub_'.$publishDate.
+            '_pid_'.$newspaperPageId.
+            '_mode_' . $templateMode;
+        $withCache = true;
+        if($withCache){
+            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+
+            if ($pageCache === false) {
+                $result = self::getOneTemplateContent(
+                    $siteId,
+                    $channelId,
+                    $publishDate,
+                    $newspaperPageId,
+                    $templateContent);
+                DataCache::Set($cacheDir, $cacheFile, $result);
+            } else {
+                $result = $pageCache;
+            }
+        }else{
+            $result = self::getOneTemplateContent(
+                $siteId,
+                $channelId,
+                $publishDate,
+                $newspaperPageId,
+                $templateContent);
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+
+        return $result;
+
+
+    }
+
+
+
+    private function getOneTemplateContent(
+        $siteId,
+        $channelId,
+        $publishDate,
+        $newspaperPageId,
+        $templateContent){
         if ($channelId > 0) {
-            $publishDate = Control::GetRequest("publish_date", "");
-            //$templateFileUrl = "newspaper/newspaper_page_one.html";
-            //$templateName = "default";
-            //$templatePath = "front_template";
-            //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = parent::GetDynamicTemplateContent("newspaper_page_one");
+            $newspaperPublicData = new NewspaperPublicData();
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+
             parent::ReplaceFirst($templateContent);
-            $channelPublicData = new ChannelPublicData();
-            $siteId = $channelPublicData->GetSiteId($channelId, true);
 
             parent::ReplaceSiteInfo($siteId, $templateContent);
 
@@ -303,9 +361,7 @@ class NewspaperPublicGen extends BasePublicGen
 
         }
         return $templateContent;
-
     }
-
 
     /**
      * 版面选择
@@ -412,164 +468,6 @@ class NewspaperPublicGen extends BasePublicGen
         return $result;
     }
 
-    private function GenOneForPc()
-    {
-//        $channelId = Control::GetRequest("channel_id", 0);
-//        $newspaperPagePublicData = new NewspaperPagePublicData();
-//        $newspaperFirstPageId = Control::GetRequest("newspaper_first_page_id", 0);
-//
-//        $newspaperPublicData = new NewspaperPublicData();
-//        if($newspaperFirstPageId>0 && $channelId<=0){
-//            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperFirstPageId, true);
-//            $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
-//        }
-//        $templateContent = "";
-//        if($channelId>0){
-//            $publishDate = Control::GetRequest("publish_date", "");
-//            $templateFileUrl = "newspaper/szb_pc.html";
-//            $templateName = "default";
-//            $templatePath = "front_template";
-//            $templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-//            //$templateContent = parent::GetDynamicTemplateContent("newspaper_page_one");
-//            parent::ReplaceFirst($templateContent);
-//
-//            $channelPublicData = new ChannelPublicData();
-//            $siteId = $channelPublicData->GetSiteId($channelId, true);
-//            parent::ReplaceSiteInfo($siteId, $templateContent);
-//
-//            $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
-//
-//            if(strlen($publishDate)>0){
-//                $currentNewspaperId = $newspaperPublicData->GetNewspaperIdByPublishDate($channelId, $publishDate);
-//
-//            }else{
-//                $currentNewspaperId = $newspaperPublicData->GetNewspaperIdOfNew($channelId);
-//            }
-//            $templateContent = str_ireplace("{PublishDate}", $publishDate, $templateContent);
-//
-//            if($currentNewspaperId>0){
-//                $arrOneNewspaper = $newspaperPublicData->GetOne($currentNewspaperId);
-//                //Template::ReplaceOne($templateContent,$arrOneNewspaper);
-//                $templateContent = str_ireplace("{CurrentNewspaperId}", $currentNewspaperId, $templateContent);
-//                $templateContent = str_ireplace("{CurrentPublishDate}", $arrOneNewspaper["PublishDate"], $templateContent);
-//                if($newspaperFirstPageId<=0){
-//                    $newspaperFirstPageId = $newspaperPagePublicData->GetNewspaperPageIdOfFirst($currentNewspaperId);
-//                }
-//
-//                ////$templateContent = str_ireplace("{NewspaperFirstPageId}", $newspaperFirstPageId, $templateContent);
-//
-//                if($newspaperFirstPageId>0){
-//
-//                    /**
-//                    $newspaperPageNo=$newspaperPagePublicData->GetNewspaperPageNo($newspaperFirstPageId, true);
-//                    //如果当前页数不是当前版面的第一页，则取前一页面数作为当前版面第一页
-//                    if(!self::IsFirstPageOnPaper($newspaperPageNo))
-//                    {
-//                        $newspaperFirstPageId=$newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
-//                            $currentNewspaperId,
-//                            $newspaperFirstPageId,
-//                            true
-//                        );
-//                    }
-//                    $arrOneNewspaperFirstPage = $newspaperPagePublicData->GetOne($newspaperFirstPageId);
-//                    $templateContent = str_ireplace("{UploadFilePath_First}",
-//                        $arrOneNewspaperFirstPage["UploadFilePath"],
-//                        $templateContent
-//                    );
-//
-//                    $newspaperSecondPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
-//                        $currentNewspaperId,
-//                        $newspaperFirstPageId,
-//                        true
-//                    );
-//                    $arrOneNewspaperSecondPage = $newspaperPagePublicData->GetOne($newspaperSecondPageId);
-//                    $templateContent = str_ireplace("{UploadFilePath_Second}",
-//                        $arrOneNewspaperSecondPage["UploadFilePath"],
-//                        $templateContent
-//                    );
-//                    $templateContent = str_ireplace("{NewspaperSecondPageId}",
-//                        $newspaperSecondPageId,
-//                        $templateContent
-//                    );
-//                    */
-//                    //上一页链接
-//                    $newspaperPreviousSecondPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
-//                        $currentNewspaperId,
-//                        $newspaperFirstPageId,
-//                        true
-//                    );
-//                    $newspaperPreviousFirstPageId = $newspaperPagePublicData->GetNewspaperPageIdOfPrevious(
-//                        $currentNewspaperId,
-//                        $newspaperPreviousSecondPageId,
-//                        true
-//                    );
-//
-//                    $templateContent = str_ireplace("{NewspaperPreviousFirstPageId}",
-//                        $newspaperPreviousFirstPageId,
-//                        $templateContent
-//                    );
-//
-//                    //下一页链接
-//                    $newspaperNextFirstPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
-//                        $currentNewspaperId,
-//                        $newspaperSecondPageId,
-//                        true
-//                    );
-//
-//                    $templateContent = str_ireplace("{NewspaperNextFirstPageId}",
-//                        $newspaperNextFirstPageId,
-//                        $templateContent
-//                    );
-//
-//                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
-//
-//                    //生成第一个版面文章位置xy坐标数据
-//                    $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($newspaperFirstPageId,100,0);
-//                    $arrFirstPageArticlePointList = array();
-//                    foreach($arrFirstPageArticleList as $value){
-//                        $newsPaperArticleId = $value["NewspaperArticleId"];
-//                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-//                        $picMapping = $value["PicMapping"];
-//                        $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
-//                    }
-//                    $templateContent = str_ireplace("{FirstPageArticlePoint}",
-//                        $arr=Format::FixJsonEncode($arrFirstPageArticlePointList),
-//                        $templateContent
-//                    );
-//
-//                    //生成第二个版面文章位置xy坐标数据
-//                    $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($newspaperSecondPageId,100,0);
-//                    $arrSecondPageArticlePointList = array();
-//                    foreach($arrSecondPageArticleList as $value){
-//                        $newsPaperArticleId = $value["NewspaperArticleId"];
-//                        $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-//                        $picMapping = $value["PicMapping"];
-//                        $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId,$newsPaperArticleTitle,$picMapping);
-//                    }
-//                    $templateContent = str_ireplace("{SecondPageArticlePoint}",
-//                        $arr=Format::FixJsonEncode($arrSecondPageArticlePointList),
-//                        $templateContent
-//                    );
-//
-//
-//                    //版面选择
-//                    $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($currentNewspaperId);
-//                    $listName = "newspaper_page";
-//
-//                    if(count($arrNewspaperPages)>0){
-//                        Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
-//                    }else{
-//                        Template::RemoveCustomTag($tempContent, $listName);
-//                    }
-//                }
-//            }
-//            $templateContent = parent::ReplaceTemplate($templateContent);
-//            parent::ReplaceVisitCode($templateContent,$siteId,$channelId,VisitData::VISIT_TABLE_TYPE_PRODUCT,0);
-//            parent::ReplaceEnd($templateContent);
-//            Template::RemoveCustomTag($templateContent);
-//        }
-//        return $templateContent;
-    }
 
     //判断当前页数是否是报纸当前版面的第一页
     function IsFirstPageOnPaper($newspaperPageNo)

@@ -897,9 +897,11 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
                 WHERE dn.ChannelId IN (".$channelId.")  AND dn.RecLevel=:RecLevel
+                AND dn.State=:State
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("RecLevel", $recLevel);
+            $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
@@ -1021,9 +1023,11 @@ class DocumentNewsPublicData extends BasePublicData {
 
                 WHERE dn.ChannelId IN (".$channelId.")
                 AND DATEDIFF(NOW(),ShowDate)<:DayCount AND DATEDIFF(NOW(),ShowDate)>0
+                AND dn.State=:State
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DayCount", $dayCount);
+            $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }

@@ -304,6 +304,23 @@
                                             <input id="cfg_DocumentNewsTitlePic1CompressHeight" type="text" class="input_number" name="cfg_DocumentNewsTitlePic1CompressHeight" value="{cfg_DocumentNewsTitlePic1CompressHeight}"/> （0为不处理）
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic2CompressWidth">资讯题图2压缩图宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic2CompressWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic2CompressWidth" value="{cfg_DocumentNewsTitlePic2CompressWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic2CompressHeight">资讯题图2压缩图高度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic2CompressHeight" type="text" class="input_number" name="cfg_DocumentNewsTitlePic2CompressHeight" value="{cfg_DocumentNewsTitlePic2CompressHeight}"/> （0为不处理）
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

@@ -138,6 +138,8 @@
  * @property string $DocumentNewsContentPicWatermarkUploadFileId
  * @property int $DocumentNewsTitlePic1CompressWidth
  * @property int $DocumentNewsTitlePic1CompressHeight
+ * @property int $DocumentNewsTitlePic2CompressWidth
+ * @property int $DocumentNewsTitlePic2CompressHeight
  *
  * @author zhangchi
  */
@@ -273,7 +275,9 @@ class SiteConfigData extends BaseData {
         "ActivityTitlePic3PadWidth",
 
         "DocumentNewsTitlePic1CompressWidth",
-        "DocumentNewsTitlePic1CompressHeight"
+        "DocumentNewsTitlePic1CompressHeight",
+        "DocumentNewsTitlePic2CompressWidth",
+        "DocumentNewsTitlePic2CompressHeight"
 
 );
 
@@ -470,6 +474,9 @@ class SiteConfigData extends BaseData {
     private $DocumentNewsTitlePic1CompressWidth = 0; //资讯题图1压缩图宽度值
     private $DocumentNewsTitlePic1CompressHeight = 0; //资讯题图1压缩图高度值
 
+    private $DocumentNewsTitlePic2CompressWidth = 0; //资讯题图2压缩图宽度值
+    private $DocumentNewsTitlePic2CompressHeight = 0; //资讯题图2压缩图高度值
+
     /**
      * @param mixed $DocumentNewsTitlePic1CompressHeight
      */
@@ -500,6 +507,39 @@ class SiteConfigData extends BaseData {
     public function getDocumentNewsTitlePic1CompressWidth()
     {
         return $this->DocumentNewsTitlePic1CompressWidth;
+    }
+
+
+    /**
+     * @param mixed $DocumentNewsTitlePic2CompressHeight
+     */
+    public function setDocumentNewsTitlePic2CompressHeight($DocumentNewsTitlePic2CompressHeight)
+    {
+        $this->DocumentNewsTitlePic2CompressHeight = $DocumentNewsTitlePic2CompressHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic2CompressHeight()
+    {
+        return $this->DocumentNewsTitlePic2CompressHeight;
+    }
+
+    /**
+     * @param mixed $DocumentNewsTitlePic2CompressWidth
+     */
+    public function setDocumentNewsTitlePic2CompressWidth($DocumentNewsTitlePic2CompressWidth)
+    {
+        $this->DocumentNewsTitlePic2CompressWidth = $DocumentNewsTitlePic2CompressWidth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDocumentNewsTitlePic2CompressWidth()
+    {
+        return $this->DocumentNewsTitlePic2CompressWidth;
     }
 
 
