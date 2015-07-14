@@ -100,7 +100,7 @@ $().ready(function() {
                 success:function(data){
                     $.each(data,function(i,v){
                         if (v["ReCommon"] < 0){
-                            console.warn(v["ReCommon"]+" 广告id:"+id);
+                            //console.warn(v["ReCommon"]+" 广告id:"+id);
                         }
                     });
                 }
@@ -125,7 +125,7 @@ $().ready(function() {
                     success:function(data){
                         $.each(data,function(i,v){
                             if (v["ReCommon"] < 0){
-                                console.warn(v["ReCommon"]+" 广告id:"+adContentId);
+                                //console.warn(v["ReCommon"]+" 广告id:"+adContentId);
                                 var siteAdFrame = document.createElement("iframe");
                                 siteAdFrame.src = adUrl;
                                 siteAdFrame.style.width = "0px";
@@ -191,7 +191,7 @@ function IsInTime(adContent){
         var endDate=new Date(endDateArr[0],endDateArr[1]-1,endDateArr[2]);
         if(endDate<today){  //过期
             adContent.setAttribute("idvalue","-1");   //idvalue存储广告显示时间，若过期则置-1
-            console.warn("有广告已到期！title:"+adContent.getAttribute("title")+" 广告id:"+times[2]);
+            //console.warn("有广告已到期！title:"+adContent.getAttribute("title")+" 广告id:"+times[2]);
         }
     }else
         adContent.setAttribute("idvalue","-1");  //未开始
