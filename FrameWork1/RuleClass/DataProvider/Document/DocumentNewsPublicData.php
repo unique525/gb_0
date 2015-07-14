@@ -143,6 +143,7 @@ class DocumentNewsPublicData extends BasePublicData {
 
     /**
      * 最新的列表数据集
+     * @param int $siteId 站点id
      * @param int $channelId 频道id
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $state 状态
@@ -150,24 +151,31 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $showIndex 是否推送首页
      * @return array|null 返回最新的列表数据集
      */
-    public function GetNewList($channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
+    public function GetNewList($siteId, $channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
 
         $result = null;
 
         if(!empty($topCount)){
-            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+            $dataProperty = new DataProperty();
+
+            $orderBySql = 'ORDER BY dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
 
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY dn.ShowIndex DESC,  dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
             }
 
             $searchShowIndex="";
             if($showIndex>0){
-                $searchShowIndex=' AND ShowIndex=1 ';
+                $searchShowIndex=' AND ShowIndex>=1 ';
+            }
+
+            if($channelId>0){
+                $searchShowIndex .= " AND dn.ChannelId=:ChannelId ";
+                $dataProperty->AddField("ChannelId", $channelId);
             }
 
             $selectColumn = '
@@ -258,10 +266,10 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId=:ChannelId AND dn.State=:State $searchShowIndex
+                WHERE c.SiteId = :SiteId AND dn.State=:State $searchShowIndex
                 $orderBySql LIMIT " . $topCount;
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("ChannelId", $channelId);
+
+            $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
@@ -286,19 +294,19 @@ class DocumentNewsPublicData extends BasePublicData {
 
         if($channelId>0 && !empty($topCount)){
 
-            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+            $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
 
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
             }
 
             $searchShowIndex="";
             if($showIndex>0){
-                $searchShowIndex=' AND ShowIndex=1 ';
+                $searchShowIndex=' AND ShowIndex>=1 ';
             }
 
             $selectColumn = '
@@ -418,19 +426,19 @@ class DocumentNewsPublicData extends BasePublicData {
 
         if(!empty($topCount)){
 
-            $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
+            $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
 
             switch($orderBy){
 
                 case 0:
-                    $orderBySql = 'ORDER BY dn.Sort DESC,dn.CreateDate DESC';
+                    $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC,dn.CreateDate DESC';
                     break;
 
             }
 
             $searchShowIndex="";
             if($showIndex>0){
-                $searchShowIndex=' AND ShowIndex=1 ';
+                $searchShowIndex=' AND ShowIndex>=1 ';
             }
 
             $selectColumn = '

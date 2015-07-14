@@ -171,6 +171,7 @@
                 排序<img id="btn_sort_down" src="/system_template/{template_name}/images/manage/arrow1.gif" alt="down" /><img id="btn_sort_up" style="display:none;" src="/system_template/{template_name}/images/manage/arrow2.gif" alt="up" />
             </td>
             <td style="width: 50px; text-align: center;">推荐</td>
+            <td style="width: 50px; text-align: center;">首页</td>
             <td id="btn_sort_by_hit" class="grid_can_sort" title="按点击排序" style="width: 50px; text-align: center;">
                 点击<img id="btn_sort_by_hit_down" src="/system_template/{template_name}/images/manage/arrow1.gif" alt="down" /><img id="btn_sort_by_hit_up" style="display:none;" src="/system_template/{template_name}/images/manage/arrow2.gif" alt="up" />
             </td>
@@ -215,6 +216,7 @@
                             <td class="spe_line2" style="width:36px;text-align:center;"><img class="btn_up" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_DocumentNewsId}" title="向上移动" alt="向上"/><img style="cursor:pointer;" class="btn_down" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_DocumentNewsId}" title="向下移动" alt="向下"/></td>
                             <td class="spe_line2" style="width:60px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的推荐级别，用在特定的模板中">{f_RecLevel}</td>
+                            <td class="spe_line2" style="width:50px;text-align:center;" title="文档的是否上首页，用在特定的模板中">{f_ShowIndex}</td>
                             <td class="spe_line2" style="width:50px;text-align:center;">{f_Hit}</td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="文档创建时间">{f_CreateDate}</td>
                             <td class="spe_line2" style="width:100px;text-align:center;" title="发稿人：{f_ManageUserName}">{f_ManageUserName}</td>

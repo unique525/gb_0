@@ -269,6 +269,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
 
     private function AsyncGetListForXmlPush() {
         $result="";
+        $siteId = Control::GetRequest("site_id", 0);
         $channelId = Control::GetRequest("channel_id", 0);
         $topCount = Control::GetRequest("top", 0);
         $showIndex = Control::GetRequest("show_index", 0);
@@ -276,14 +277,14 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
         $state=30;
         $order=0;
 
-        if ($channelId > 0) {
+        if ($siteId > 0) {
 
             $channelPublicData=new ChannelPublicData();
             $channelName=$channelPublicData->GetChannelName($channelId,true);
             $documentNewsPublicData = new DocumentNewsPublicData();
             switch($childType){
                 case "self":
-                    $arrList = $documentNewsPublicData->GetNewList($channelId,$topCount,$state,$order,$showIndex);
+                    $arrList = $documentNewsPublicData->GetNewList($siteId, $channelId,$topCount,$state,$order,$showIndex);
                     break;
                 case "child":
                     $arrList = $documentNewsPublicData->GetListOfChild($channelId,$topCount,$state,$order,$showIndex);

@@ -355,7 +355,7 @@ class DocumentNewsManageData extends BaseManageData
             SELECT
             DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
             CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,
-            RecLevel,Hit
+            RecLevel,Hit,ShowIndex
             FROM
             " . self::TableName_DocumentNews . "
             WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
