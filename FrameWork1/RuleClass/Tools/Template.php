@@ -669,18 +669,7 @@ class Template
 
 
         foreach ($columns as $columnName => $columnValue) {
-            //公用替换
-            self::FormatColumnValue(
-                    $columnName,
-                    $columnValue,
-                    $listTemplate,
-                    $itemRowTitleCount,
-                    $itemRowIntroCount,
-                    $headerRowTitleCount,
-                    $footerRowTitleCount,
-                    $childRowTitleCount,
-                    $itemType
-            );
+
 
             if (strtolower($tagType) === 'document_news_list')
             {
@@ -721,6 +710,19 @@ class Template
                     $itemType
                 );
             }
+
+            //公用替换
+            self::FormatColumnValue(
+                $columnName,
+                $columnValue,
+                $listTemplate,
+                $itemRowTitleCount,
+                $itemRowIntroCount,
+                $headerRowTitleCount,
+                $footerRowTitleCount,
+                $childRowTitleCount,
+                $itemType
+            );
         }
         return $listTemplate;
     }

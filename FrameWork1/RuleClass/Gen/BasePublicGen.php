@@ -356,6 +356,8 @@ class BasePublicGen extends BaseGen
         $pos = stripos(strtolower($tagId), "site_");
         if ($pos !== false) {
             $siteId = intval(str_ireplace("site_", "", $tagId));
+        }else{
+            $siteId = self::GetSiteIdByDomain();
         }
 
 
@@ -412,7 +414,7 @@ class BasePublicGen extends BaseGen
                                         $documentNewsPublicData=new DocumentNewsPublicData();
                                         $state=DocumentNewsData::STATE_PUBLISHED;
                                         foreach($arrChannelList as $oneChannel){
-                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($siteId, $oneChannel["ChannelId"], $tagTopCountChild,$state);  //
                                             if($itemListInOneChannel==null){
                                                 $itemListInOneChannel=array();
                                             }
@@ -423,7 +425,7 @@ class BasePublicGen extends BaseGen
                                         $documentNewsPublicData=new DocumentNewsPublicData();
                                         $state=DocumentNewsData::STATE_PUBLISHED;
                                         foreach($arrChannelList as $oneChannel){
-                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild,$state);  //
+                                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($siteId, $oneChannel["ChannelId"], $tagTopCountChild,$state);  //
                                             if($itemListInOneChannel==null){
                                                 $itemListInOneChannel=array();
                                             }
@@ -545,7 +547,7 @@ class BasePublicGen extends BaseGen
 
             //资讯默认只显示已发状态的新闻
             $state = DocumentNewsData::STATE_PUBLISHED;
-
+            $siteId = self::GetSiteIdByDomain();
 
             $arrDocumentNewsList = null;
             $documentNewsPublicData = new DocumentNewsPublicData();
@@ -565,7 +567,7 @@ class BasePublicGen extends BaseGen
 
             switch ($tagWhere) {
                 case "new":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($channelId, $tagTopCount, $state);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($siteId, $channelId, $tagTopCount, $state);
                     break;
                 case "child":
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);

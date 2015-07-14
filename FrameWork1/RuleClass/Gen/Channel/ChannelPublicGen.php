@@ -55,6 +55,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
         $cacheFile = 'channel_default_'
+            . '_site_id' . $siteId
             . $channelId
             . '_mode_' . $templateMode
             . '_p_' . $pageIndex
@@ -251,6 +252,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
         $cacheFile = 'channel_list_'
+            . '_site_id' . $siteId
             . $channelId
             . '_temp_' . $templateTag
             . '_mode_' . $templateMode

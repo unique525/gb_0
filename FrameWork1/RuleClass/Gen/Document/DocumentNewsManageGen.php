@@ -685,32 +685,56 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $result = '';
         $documentNewsId = Control::GetRequest("document_news_id", -1);
         if ($documentNewsId > 0) {
-            DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
-            //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            $documentNewsManageData = new DocumentNewsManageData();
+            $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);
 
-            $publishQueueManageData = new PublishQueueManageData();
-            $executeTransfer = true;
-            $publishChannel = true;
-            $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
-            if ($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED)) {
-                $result = '';
-                for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+            $channelManageData = new ChannelManageData();
+            $siteId = $channelManageData->GetSiteId($channelId, true);
 
-                    $publishResult = "";
+            $nowManageUserId = Control::GetManageUserId();
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            //1 发布本频道文档权限
+            $can = $manageUserAuthorityManageData->CanChannelPublish($siteId, $channelId, $nowManageUserId);
 
-                    if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
-                        abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
-                    ){
-                        $publishResult = "Ok";
+            if (!$can) {
+                $result = $result = DefineCode::PUBLISH + self::PUBLISH_DOCUMENT_NEWS_RESULT_NO_RIGHT;
+            }else{
+                DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+                //删除缓冲
+                DataCache::RemoveDir(CACHE_PATH . '/default_page');
+
+                $publishQueueManageData = new PublishQueueManageData();
+                $executeTransfer = true;
+                $publishChannel = true;
+                $result = parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
+                if ($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED)) {
+                    $result = '';
+                    for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                        $publishResult = "";
+
+                        if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                            abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                        ){
+                            $publishResult = "Ok";
+                        }
+
+
+                        $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                            .'<br />'
+                        ;
                     }
-
-
-                    $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
-                        .'<br />'
-                    ;
                 }
             }
+
+
+
+
+
+
+
+
         }
         return $result;
     }

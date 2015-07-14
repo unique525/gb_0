@@ -592,10 +592,10 @@ class BaseManageGen extends BaseGen
                 $tagTopCountChild = Template::GetParamValue($tagContent, "top_child"); // top_child="xx"  xx=显示条数
                 switch ($tagId) {
                     case "document_news_list":
-                        $documentNewsPublicData = new DocumentNewsPublicData();
+                        $documentNewsManageData = new DocumentNewsManageData();
                         $state = DocumentNewsData::STATE_PUBLISHED;
                         foreach ($arrChannelList as $oneChannel) {
-                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
+                            $itemListInOneChannel = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
                             if ($itemListInOneChannel == null) {
                                 $itemListInOneChannel = array();
                             }
@@ -603,10 +603,10 @@ class BaseManageGen extends BaseGen
                         }
                         break;
                     default:
-                        $documentNewsPublicData = new DocumentNewsPublicData();
+                        $documentNewsManageData = new DocumentNewsManageData();
                         $state = DocumentNewsData::STATE_PUBLISHED;
                         foreach ($arrChannelList as $oneChannel) {
-                            $itemListInOneChannel = $documentNewsPublicData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
+                            $itemListInOneChannel = $documentNewsManageData->GetNewList($oneChannel["ChannelId"], $tagTopCountChild, $state); //
                             if ($itemListInOneChannel == null) {
                                 $itemListInOneChannel = array();
                             }
@@ -1261,6 +1261,10 @@ class BaseManageGen extends BaseGen
      * 发布资讯详细页 返回值 状态不正确，必须为终审或已发状态的文档才能发布
      */
     const PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR = -203;
+    /**
+     * 发布资讯详细页 返回值 没有权限
+     */
+    const PUBLISH_DOCUMENT_NEWS_RESULT_NO_RIGHT = -204;
 
     /**
      * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中

@@ -17,6 +17,10 @@ window.PUBLISH_DOCUMENT_NEWS_RESULT_CHANNEL_ID_ERROR = -130202;
  */
 window.PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR = -130203;
 /**
+ * 发布资讯详细页 返回值 没有发布此文档的权限
+ */
+window.PUBLISH_DOCUMENT_NEWS_RESULT_NO_RIGHT = -130204;
+/**
  * 发布资讯详细页 返回值 操作完成，结果存储于结果数组中
  */
 window.PUBLISH_DOCUMENT_NEWS_RESULT_FINISHED = 130201;
@@ -154,7 +158,9 @@ $(function() {
                 dialogContent.html('频道id小于0');
             }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_STATE_ERROR) {
                 dialogContent.html('状态不正确，必须为[终审]或[已发]状态的文档才能发布!');
-            }else {
+            }else if (parseInt(result) == window.PUBLISH_DOCUMENT_NEWS_RESULT_NO_RIGHT) {
+                dialogContent.html('没有发布此文档的权限!');
+            }else{
                 dialogContent.html("发布完成<br />"+result);
                 var spanState = $("#span_state_" + documentNewsId);
                 spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
