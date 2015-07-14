@@ -499,7 +499,7 @@ class DocumentNewsManageData extends BaseManageData
 
                 WHERE
                         DocumentNewsId=:DocumentNewsId
-                    AND PublishDate is NULL
+                    AND (PublishDate is NULL OR PublishDate<'1999-01-01')
 
                     ;";
 
