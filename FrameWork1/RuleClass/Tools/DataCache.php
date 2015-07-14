@@ -17,7 +17,10 @@ class DataCache {
     public static function Set($cacheDir, $cacheFile, $content) {
         $cacheDir = RELATIVE_PATH . DIRECTORY_SEPARATOR . $cacheDir;
         FileObject::CreateDir($cacheDir);
-        file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $cacheFile, $content);
+        if (file_exists($cacheDir)){
+            file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $cacheFile, $content);
+        }
+
     }
 
     /**
