@@ -16,8 +16,8 @@ class NewspaperPageClientGen extends BaseClientGen implements IBaseClientGen {
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "list_of_channel":
-                $result = self::GenListOfChannel();
+            case "list_of_newspaper":
+                $result = self::GenListOfNewspaper();
                 break;
 
         }
@@ -29,14 +29,13 @@ class NewspaperPageClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenListOfChannel(){
+    public function GenListOfNewspaper(){
 
         $result = "[{}]";
-        $resultCode = 0;
 
-        $channelId = intval(Control::GetRequest("channel_id", 0));
+        $newspaperId = intval(Control::GetRequest("newspaper_id", 0));
 
-        if($channelId>0){
+        if($newspaperId>0){
             $pageSize = intval(Control::GetRequest("ps", 20));
             $pageIndex = intval(Control::GetRequest("p", 1));
             $searchKey = Control::GetRequest("search_key", "");
@@ -46,7 +45,7 @@ class NewspaperPageClientGen extends BaseClientGen implements IBaseClientGen {
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $newspaperPageClientData = new NewspaperPageClientData();
             $arrList = $newspaperPageClientData->GetList(
-                $channelId,
+                $newspaperId,
                 $pageBegin,
                 $pageSize,
                 $searchKey,

@@ -91,6 +91,22 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $forumPostClientGen = new ForumPostClientGen();
                 $result = $forumPostClientGen->GenClient();
                 break;
+            case "newspaper":
+                $newspaperClientGen = new NewspaperClientGen();
+                $result = $newspaperClientGen->GenClient();
+                break;
+            case "newspaper_page":
+                $newspaperPageClientGen = new NewspaperPageClientGen();
+                $result = $newspaperPageClientGen->GenClient();
+                break;
+            case "newspaper_article":
+                $newspaperArticleClientGen = new NewspaperArticleClientGen();
+                $result = $newspaperArticleClientGen->GenClient();
+                break;
+            case "newspaper_article_pic":
+                $newspaperArticlePicClientGen = new NewspaperArticlePicClientGen();
+                $result = $newspaperArticlePicClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;
