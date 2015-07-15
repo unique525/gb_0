@@ -16,13 +16,44 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "new":
-                $result = self::GenNew();
+            case "list":
+                $result = self::GenList();
                 break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
+    }
+
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenList(){
+
+        $result = "[{}]";
+
+        $newspaperPageId = intval(Control::GetRequest("newspaper_page_id", 0));
+
+        if($newspaperPageId>0){
+
+            $newspaperArticleClientData = new NewspaperArticleClientData();
+            $arrList = $newspaperArticleClientData->GetList(
+                $newspaperPageId
+            );
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","newspaper_article":{"newspaper_article_list":' . $result . '}}';
     }
 
 } 
