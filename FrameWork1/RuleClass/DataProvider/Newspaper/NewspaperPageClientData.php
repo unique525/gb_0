@@ -21,7 +21,9 @@ class NewspaperPageClientData extends BaseClientData {
             $cacheDir = "";//CACHE_PATH . DIRECTORY_SEPARATOR . '_data';
             $cacheFile = "";
             $sql = "SELECT
-                    np.*,uf.UploadFilePath AS PicUploadFilePath
+                    np.*,
+                    uf.UploadFilePath AS PicUploadFilePath,
+                    uf.UploadFileCompressPath1 AS PicUploadFileCompressPath1
 
                 FROM " . self::TableName_NewspaperPage . " np," . self::TableName_UploadFile . " uf
 
