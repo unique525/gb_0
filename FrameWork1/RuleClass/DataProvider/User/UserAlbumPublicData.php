@@ -114,7 +114,7 @@ class UserAlbumPublicData extends BasePublicData
                 $searchSql .= " AND ui.RealName LIKE :SearchKey ";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
-            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
+            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,ua.HitCount,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
                     FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
                     WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=" . $siteId . " and ua.State=" . $state . " " . $searchSql . "
                     ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
@@ -181,6 +181,19 @@ ua.CoverPicUploadFileId=uf2.UploadFileId
         } else {
             return null;
         }
+    }
+
+    /**
+     * 增加点击数
+     * @param int $userAlbumId  相册Id
+     * @return int  执行结果
+     */
+    public function AddHitCount($userAlbumId) {
+        $sql = "UPDATE  " . self::TableName_UserAlbum . " SET HitCount=HitCount+1 WHERE UserAlbumId=:UserAlbumId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserAlbumId", $userAlbumId);
+        $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
     }
 }
 
