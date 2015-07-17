@@ -117,6 +117,26 @@ $(function() {
             + parent.G_SelectedChannelId;
     });
 
+    var btnSearch = $("#btn_search");
+    btnSearch.css("cursor", "pointer");
+    btnSearch.click(function(event) {
+        event.preventDefault();
+        var pageIndex = parseInt(Request["p"]);
+        var channelId = parseInt($(this).attr('idvalue'));
+        if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
+            pageIndex = 1;
+        }
+        var searchKey = encodeURIComponent($("#search_key").val());
+        if(searchKey.length<=0){
+            alert("请输入查询关键字");
+        }else{
+            window.location.href = '/default.php?secu=manage' +
+                '&mod=document_news&m=list&search_key='+searchKey+'&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex + '&channel_id=' + channelId;
+        }
+
+
+    });
+
     //改变状态按钮事件捕获
     var btnChangeState = $(".btn_change_state");
     btnChangeState.css("cursor", "pointer");

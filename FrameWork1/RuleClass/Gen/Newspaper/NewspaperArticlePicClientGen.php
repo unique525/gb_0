@@ -16,13 +16,44 @@ class NewspaperArticlePicClientGen extends BaseClientGen implements IBaseClientG
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "new":
-                $result = self::GenNew();
+            case "list":
+                $result = self::GenList();
                 break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
+    }
+
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenList(){
+
+        $result = "[{}]";
+
+        $newspaperArticleId = intval(Control::GetRequest("newspaper_article_id", 0));
+
+        if($newspaperArticleId>0){
+
+            $newspaperArticlePicClientData = new NewspaperArticlePicClientData();
+            $arrList = $newspaperArticlePicClientData->GetList(
+                $newspaperArticleId
+            );
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","newspaper_article_pic":{"newspaper_article_pic_list":' . $result . '}}';
     }
 
 } 

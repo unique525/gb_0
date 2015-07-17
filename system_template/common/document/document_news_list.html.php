@@ -149,7 +149,7 @@
                         <option value="source">来源搜索</option>
                     </select>
                     <label for="search_key"></label><input type="text" id="search_key" name="search_key" class="input_box"/>
-                    <input id="btn_search" class="btn2" value="查 询" type="button"/>
+                    <input id="btn_search" class="btn2" idvalue="{ChannelId}" value="查 询" type="button"/>
                     <span id="search_type" style="display: none"></span>
                     <input id="btn_view_self" class="btn2" value="只看本人" title="只查看当前登录的管理员的文档" type="button"/>
                     <input id="btn_view_all" class="btn2" value="查看全部" title="查看全部的文档" type="button"/>
