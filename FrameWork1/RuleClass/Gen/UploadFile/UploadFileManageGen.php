@@ -331,7 +331,7 @@ class UploadFileManageGen extends BaseManageGen implements IBaseManageGen
             $result = -5; //参数错误
         }
 
-        return $result;
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
     }
 
     private function AsyncModifyUploadFileCutPath1(){

@@ -67,14 +67,15 @@
             if(UploadFileId>0){
                 $.ajax({
                     type: "get",
-                    url: "/default.php?secu=manage&mod=upload_file&m=async_rotate_image",
+                    url: "/default.php?secu=manage&mod=upload_file&m=async_rotate_image&angle=90",
                     data: {
                         upload_file_id: UploadFileId
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        alert(data['result']);
+                        window.location.href = window.location.href;
+                        //alert(data['result']);
                     }
                 });
             }
@@ -145,7 +146,7 @@
                         </tr>
                         <tr>
                             <td align="center">
-                                <span class="rotate_image" style="cursor:pointer;display: none;" idvalue="{f_UploadFileId}">旋转图片</span>
+                                <span class="rotate_image" style="cursor:pointer;" idvalue="{f_UploadFileId}">旋转图片</span>
                                 <div  ></div>
                             </td>
                         </tr>
