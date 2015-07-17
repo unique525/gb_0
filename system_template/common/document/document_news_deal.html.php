@@ -462,7 +462,26 @@ function submitForm(closeTab) {
     }
 }
 
-
+function DocumentNewsTagPulling(){
+    var siteId=2;//parent.G_NowSiteId;
+    $.ajax({
+        url: "/default.php?secu=manage&mod=site_tag&m=async_get_list_for_pull",
+        data: { site_id:siteId },
+        dataType: "jsonp",
+        jsonp: "jsonpcallback",
+        success: function(data) {
+            //alert(data[1]["SiteTagName"]);
+            var content=editor.getSource();
+            var stringOfTag="";
+            for(var i=0;i<data.length;i++){
+                if(content.search(data[i]["SiteTagName"])>0){
+                    stringOfTag+=";"+data[i]["SiteTagName"];
+                }
+            }
+            $("#f_DocumentNewsTag").val(stringOfTag.substr(1));
+        }
+    });
+}
 -->
 </script>
 <style>
@@ -716,7 +735,7 @@ function submitForm(closeTab) {
                         <td class="spe_line" style="text-align: left">
                             <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
                                    value="{DocumentNewsTag}" style="width:75%;font-size:14px;" maxlength="200"/>
-                            <input id="btn_extract" value="抽取" type="button">
+                            <input id="btn_extract" value="抽取" type="button" onclick="DocumentNewsTagPulling()">
                         </td>
                     </tr>
                     <tr>
@@ -975,7 +994,7 @@ function submitForm(closeTab) {
                     $(function () {
                         var hit=$("#f_VirtualHit").attr("value");
                         var siteId={SiteId};
-                        if((hit==""||hit=="0")&&siteId==2){
+                        if((hit==""||hit=="0")){
                             //var addHit=GetRandomNum(500,700);
                             //$("#f_VirtualHit").attr("value",addHit);
                         }

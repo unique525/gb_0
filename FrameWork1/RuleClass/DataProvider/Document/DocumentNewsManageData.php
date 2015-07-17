@@ -2161,18 +2161,20 @@ class DocumentNewsManageData extends BaseManageData
      * 获取剩余批量发布的前N条
      * @param int $siteId 站点id,为0时为所有站点
      * @param int $topCount 取前多少条
+     * @param int $state 发布状态
      * @return array 资讯数据集
      */
-    public function GetWaitPublishListOfSiteId($siteId,$topCount){
+    public function GetWaitPublishListOfSiteId($siteId,$topCount,$state){
         $result=null;
-        if($siteId>=0){
+        if($siteId>=0&&$state>=0){
             $dataProperty = new DataProperty();
             $selectSite="";
             if($siteId>0){
                 $selectSite=" AND SiteId=:SiteId ";
                 $dataProperty->AddField("SiteId", $siteId);
             }
-            $sql = "SELECT * FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 ".$selectSite." LIMIT $topCount";
+            $sql = "SELECT * FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 AND State=:State ".$selectSite." LIMIT $topCount";
+            $dataProperty->AddField("State", $state);
             $dbOperator = DBOperator::getInstance();
             $result = $dbOperator->GetArrayList($sql, $dataProperty);
         }

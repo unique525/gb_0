@@ -144,22 +144,42 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $pageSize 取pageSize条数据
      * @param int $allCount 总行数
      * @param int $state 取状态为state的相册
+     * @param string $searchKey 搜索关键词
+     * @param int $searchType 检索字段
      * @return array 相册列表的数组
      */
-    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state) {
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state,$searchKey = "",$searchType = 0) {
+
         $result = -1;
         if ($siteId > 0) {
+            $dataProperty = new DataProperty();
+            $searchSql="";
+            if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+                if ($searchType == 0) { //真实姓名
+                    $searchSql = " AND (ui.RealName like :SearchKey) ";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else if ($searchType == 1) { //手机号码
+                    $searchSql = " AND (u.UserMobile like :SearchKey) ";
+                    $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                } else { //模糊
+                    $searchSql = " AND (ui.RealName LIKE :SearchKey1
+                                    OR u.UserMobile LIKE :SearchKey2) ";
+                    $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+                    $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+                }
+            }
+
             //CountPic 用于统计相册有多少图片
             $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
                     FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
-                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId."
+                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId." $searchSql
                     ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
-            $result = $this->dbOperator->GetArrayList($sql, null);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sqlCount = "SELECT count(*) FROM
                         " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
-                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId";
-            $allCount = $this->dbOperator->GetInt($sqlCount, null);
+                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId $searchSql ";
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }

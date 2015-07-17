@@ -28,6 +28,7 @@
                         $("#pop_input").removeAttr("disabled");
                         $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]);
                         $("#id_btn").css("display","block");
+                        $("#pop_input").val(checkChannelId);
 
                     }
                 }
@@ -129,7 +130,7 @@
         <tr>
             <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
                 <label for="pop_input"></label>
-                <input id="pop_input" name="pop_cid" value="14" type="radio" disabled="disabled"/>
+                <input id="pop_input" name="pop_cid" value="" type="radio" disabled="disabled"/>
                 <label for="check_channel_id"></label>
                 <input type="text" id="check_channel_id" name="check_channel_id" class="input_box" style="height:22px" value="直接输入频道id..."/>
                 <input class="btn" value="检测频道类型" type="button" onclick="CheckChannelType()" />

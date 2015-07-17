@@ -71,6 +71,34 @@ class SiteTagManageData extends BaseManageData {
         return $result;
     }
 
+
+
+    /**
+     * 获取站点关键词
+     * @param int $siteId 站点id
+     * @param bool $withCache 是否缓存
+     * @return array  数据集
+     */
+    public function GetListForPulling($siteId,$withCache=false) {
+        $result=-1;
+        if($siteId>0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data';
+            $cacheFile = 'site_get_site_tag.cache_' . $siteId . '';
+            $sql = "
+                SELECT
+                SiteTagName
+                FROM
+                " . self::TableName_SiteTag . "
+                WHERE SiteId=:SiteId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->GetInfoOfArrayList($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+
+        return $result;
+    }
+
+
     /**
      * 修改状态
      * @param int $siteTagId 站点siteTagId

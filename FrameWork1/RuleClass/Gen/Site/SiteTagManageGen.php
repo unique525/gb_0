@@ -139,7 +139,7 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
         if(intval($siteId)>0){
 
             $siteTagManageData = new SiteTagManageData();
-            $siteTagArray=$siteTagManageData->GetList($siteId);
+            $siteTagArray=$siteTagManageData->GetListForPulling($siteId);
             $result = Format::FixJsonEncode($siteTagArray);
         }
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';

@@ -90,12 +90,17 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             }elseif($publishType == 2){ //发布站点下所有资讯文档
+
+
+                $state = Control::GetRequest("state", -1); //默认不发
+                if($state>=0){
+
                 $publishQueueManageData = new PublishQueueManageData();
 
                 $documentNewsManageData = new DocumentNewsManageData();
 
                 $eachTimeCount=10;//每10条发一下
-                $arrDocumentNewsList=$documentNewsManageData->GetWaitPublishListOfSiteId($siteId,$eachTimeCount);
+                $arrDocumentNewsList=$documentNewsManageData->GetWaitPublishListOfSiteId($siteId,$eachTimeCount,$state);
                 $strDocumentNewsId="";
                 for($i=0;$i<count($arrDocumentNewsList);$i++){
                     $strDocumentNewsId.=",".$arrDocumentNewsList[$i]["DocumentNewsId"];
@@ -144,6 +149,8 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
                         header('refresh:0 ' . $url);
                 }
 
+                }
+                $result.="文档状态错误";
             }
         }
 
@@ -163,7 +170,7 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
     public function AsyncSetWaitPublish(){
         $manageUserId = Control::GetManageUserId();
         $siteId = Control::GetRequest("site_id", 0);
-        $state = Control::PostRequest("State",30);//默认标记已发
+        $state = Control::PostRequest("State",-1);//默认标记所有
 
         //检查操作权限
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();

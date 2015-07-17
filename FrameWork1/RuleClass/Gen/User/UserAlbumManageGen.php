@@ -78,6 +78,8 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         $pageIndex = Control::GetRequest("p",1);
         $siteId = Control::GetRequest("site_id",0);
         $state = Control::GetRequest("state",0);
+        $searchKey = Control::GetRequest("search_key","");
+        $searchType = Control::GetRequest("search_type",0);
         $pageSize = 12;
         $pageBegin = ($pageIndex - 1)*$pageSize;
         $allCount = 0;
@@ -88,7 +90,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "user_album_list";
             $allCount = 0;
             $userAlbumManageData = new UserAlbumManageData();
-            $arrUserAlbumList = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state);
+            $arrUserAlbumList = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$searchType);
             //print_r($arrUserAlbumList);
             if (count($arrUserAlbumList) > 0) {
                 Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);

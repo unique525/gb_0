@@ -280,6 +280,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                                     if (!$can) {
                                         //无权限 跳过
+                                        break;
                                     }else{
                                     //修改文档状态为终审
                                     $state = DocumentNewsData::STATE_FINAL_VERIFY;
@@ -644,14 +645,26 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     if ($publishType > 0) {
                         switch ($publishType) {
                             case ChannelManageData::PUBLISH_TYPE_AUTO: //自动发布新稿
-                                //修改文档状态为终审
-                                $state = DocumentNewsData::STATE_FINAL_VERIFY;
-                                $documentNewsManageData->ModifyState($documentNewsId, $state);
-                                $executeTransfer = true; //是否执行发布
-                                $publishChannel = true; //是否同时发布频道
-                                $publishQueueManageData = new PublishQueueManageData();
-                                self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
-                                break;
+
+                                ///////////////判断是否有操作权限///////////////////
+                                $nowManageUserId=Control::GetManageUserId();
+                                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                                //1 发布本频道文档权限
+                                $can = $manageUserAuthorityManageData->CanChannelPublish($siteId, $channelId, $nowManageUserId);
+
+                                if (!$can) {
+                                    //无权限 跳过
+                                    break;
+                                }else{
+                                    //修改文档状态为终审
+                                    $state = DocumentNewsData::STATE_FINAL_VERIFY;
+                                    $documentNewsManageData->ModifyState($documentNewsId, $state);
+                                    $executeTransfer = true; //是否执行发布
+                                    $publishChannel = true; //是否同时发布频道
+                                    $publishQueueManageData = new PublishQueueManageData();
+                                    self::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer, $publishChannel);
+                                    break;
+                                }
                         }
                     }
 
