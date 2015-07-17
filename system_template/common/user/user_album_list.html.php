@@ -27,7 +27,12 @@
 
             $(".rotate_image").click(function(){
                 var UploadFileId = parseInt($(this).attr("idvalue"));
-                rotateImage(UploadFileId);
+                rotateImage(UploadFileId,90);
+            });
+
+            $(".rotate_image2").click(function(){
+                var UploadFileId = parseInt($(this).attr("idvalue"));
+                rotateImage(UploadFileId,270);
             });
 
             var boxWidth = 240;//($(document).width() - 96) / 3;
@@ -63,18 +68,23 @@
             }
         }
 
-        function rotateImage(UploadFileId){
+        function rotateImage(UploadFileId,angle){
             if(UploadFileId>0){
                 $.ajax({
                     type: "get",
-                    url: "/default.php?secu=manage&mod=upload_file&m=async_rotate_image&angle=90",
+                    url: "/default.php?secu=manage&mod=upload_file&m=async_rotate_image&angle="+angle,
                     data: {
                         upload_file_id: UploadFileId
                     },
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        window.location.href = window.location.href;
+
+                        var d = new Date();
+                        var src = $("#img" + UploadFileId).attr("src");
+                        $("#img" + UploadFileId).attr("src", src+'?'+d.getTime());
+
+                        //window.location.href = window.location.href;
                         //alert(data['result']);
                     }
                 });
@@ -141,12 +151,13 @@
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                             <td width="240">
-                                <img class="img_avatar" title="{f_UserAlbumIntro}" width="244" height="240" src="{f_UploadFilePath}" style="display:block;" alt="会员头像"/>
+                                <img id="img{f_UploadFileId}" class="img_avatar" title="{f_UserAlbumIntro}" width="244" height="240" src="{f_UploadFilePath}" style="display:block;" alt="会员头像"/>
                             </td>
                         </tr>
                         <tr>
                             <td align="center">
-                                <span class="rotate_image" style="cursor:pointer;" idvalue="{f_UploadFileId}">旋转图片</span>
+                                <span class="rotate_image" style="cursor:pointer;" idvalue="{f_UploadFileId}">[旋转(90度)]</span>&nbsp;&nbsp;
+                                <span class="rotate_image2" style="cursor:pointer;" idvalue="{f_UploadFileId}">[旋转(270度)]</span>
                                 <div  ></div>
                             </td>
                         </tr>
