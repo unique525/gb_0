@@ -22,6 +22,9 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
             case "list_of_channels":
                 $result = self::GenListOfChannels();
                 break;
+            case "get_one":
+                $result = self::GetOne();
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -110,5 +113,31 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         }
 
         return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
+    }
+
+    private function GetOne(){
+
+        $result = "[{}]";
+
+        $documentNewsId = intval(Control::PostOrGetRequest("document_news_id",0));
+
+
+        if(
+            $documentNewsId > 0
+        ){
+            $documentNewsClientData = new DocumentNewsClientData();
+            $arrOne = $documentNewsClientData->GetOne($documentNewsId, TRUE);
+
+            $result = Format::FixJsonEncode($arrOne);
+            $resultCode = 1; //
+
+        }else{
+            $resultCode = -6; //参数错误;
+        }
+
+
+        return '{"result_code":"' . $resultCode . '","document_news":' . $result . '}';
+
+
     }
 } 

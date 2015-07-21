@@ -210,14 +210,14 @@ class ProductClientGen extends BaseClientGen implements IBaseClientGen {
                 $arrOne = $productClientData->GetOne($productId, TRUE);
 
                 $result = Format::FixJsonEncode($arrOne);
-                $resultCode = 1; //加入购物车成功
+                $resultCode = 1; //
 
             }else{
                 $resultCode = -6; //参数错误;
             }
 
 
-        return '{"result_code":"' . $resultCode . '","user_favorite_create":' . $result . '}';
+        return '{"result_code":"' . $resultCode . '","product":' . $result . '}';
 
 
     }

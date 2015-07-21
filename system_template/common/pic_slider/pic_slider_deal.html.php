@@ -85,9 +85,10 @@
         <td class="spe_line" height="30" align="right"><label for="f_TableType">表类型：</label></td>
         <td class="spe_line">
             <select id="f_TableType" name="f_TableType">
-                <option value="0">默认</option>
-                <option value="101">咨讯</option>
+                <option value="0">默认(网址)</option>
+                <option value="101">资讯</option>
                 <option value="102">产品</option>
+                <option value="103">活动</option>
             </select>
             {s_TableType}
         </td>
