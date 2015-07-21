@@ -73,6 +73,7 @@
         <td class="spe_line" width="20%" height="30" align="right"><label for="f_ForumName">版块名称：</label></td>
         <td class="spe_line"><input name="f_ForumName" id="f_ForumName" value="{ForumName}" type="text" class="input_box" style="width:300px;"/></td>
     </tr>
+
     <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumType">版块类型：</label></td>
         <td class="spe_line">
@@ -210,6 +211,19 @@
             </select>
             {s_CloseUpload}
         </td>
+    </tr>
+
+    <tr>
+        <td class="spe_line" width="20%" height="30" align="right"><label for="f_TopImageUrl">顶图网址：</label></td>
+        <td class="spe_line"><input name="f_TopImageUrl" id="f_TopImageUrl" value="{TopImageUrl}" type="text" class="input_box" style="width:500px;"/></td>
+    </tr>
+    <tr>
+        <td class="spe_line" width="20%" height="30" align="right"><label for="f_BackgroundUrl">背景图网址：</label></td>
+        <td class="spe_line"><input name="f_BackgroundUrl" id="f_BackgroundUrl" value="{BackgroundUrl}" type="text" class="input_box" style="width:500px;"/></td>
+    </tr>
+    <tr>
+        <td class="spe_line" width="20%" height="30" align="right"><label for="f_BackgroundColor">背景色：</label></td>
+        <td class="spe_line"><input name="f_BackgroundColor" id="f_BackgroundColor" value="{BackgroundColor}" type="text" class="input_box" maxlength="10" style="width:80px;"/></td>
     </tr>
 </table>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">

@@ -180,6 +180,63 @@ class ForumPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 取得顶图网址
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 顶图网址
+     */
+    public function GetTopImageUrl($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_top_image_url.cache_' . $forumId . '';
+            $sql = "SELECT TopImageUrl FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得背景图网址
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 背景图网址
+     */
+    public function GetBackgroundUrl($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_background_url.cache_' . $forumId . '';
+            $sql = "SELECT BackgroundUrl FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得背景图颜色
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 背景图颜色
+     */
+    public function GetBackgroundColor($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_background_color.cache_' . $forumId . '';
+            $sql = "SELECT BackgroundColor FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 }
 
 ?>

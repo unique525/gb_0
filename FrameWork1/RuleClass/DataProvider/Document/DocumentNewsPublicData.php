@@ -1462,6 +1462,41 @@ class DocumentNewsPublicData extends BasePublicData {
     }
 
 
+
+
+    /**
+     * 增加一个AgreeCount
+     * @param int $documentNewsId
+     * @return int 操作结果
+     */
+    public function AddAgreeCount($documentNewsId){
+        $result = -1;
+        if($documentNewsId > 0){
+            $sql = "UPDATE ".self::TableName_DocumentNews." SET AgreeCount = AgreeCount+1 WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取AgreeCount
+     * @param int $documentNewsId
+     * @return int 操作结果
+     */
+    public function GetAgreeCount($documentNewsId){
+        $result = null;
+        if($documentNewsId > 0){
+            $sql = "SELECT AgreeCount FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
     /**
      * 增加一个评论数
      * @param int $documentNewsId id

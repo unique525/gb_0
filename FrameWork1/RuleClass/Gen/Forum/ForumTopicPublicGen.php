@@ -172,6 +172,16 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $forumName = $forumPublicData->GetForumName($forumId, true);
         $templateContent = str_ireplace("{ForumName}", $forumName, $templateContent);
 
+        $backgroundUrl = $forumPublicData->GetBackgroundUrl($forumId, true);
+        $templateContent = str_ireplace("{BackgroundUrl}", $backgroundUrl, $templateContent);
+
+        $backgroundColor = $forumPublicData->GetBackgroundColor($forumId, true);
+        $templateContent = str_ireplace("{BackgroundColor}", $backgroundColor, $templateContent);
+
+        $topImageUrl = $forumPublicData->GetTopImageUrl($forumId, true);
+        $templateContent = str_ireplace("{TopImageUrl}", $topImageUrl, $templateContent);
+
+
         parent::ReplaceTemplate($templateContent);
         parent::ReplaceEndForForum($templateContent);
         parent::ReplaceSiteConfig($siteId, $templateContent);

@@ -30,6 +30,15 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
             case "async_get_hit":
                 $result = self::GenAsyncGetHit();
                 break;
+            case "async_add_and_get_hit":
+                $result = self::GenAsyncAddAndGetHit();
+                break;
+            case "async_add_and_get_agree_count":
+                $result = self::GenAsyncAddAndGetAgreeCount();
+                break;
+            case "async_get_agree_count":
+                $result = self::GenAsyncGetAgreeCount();
+                break;
 
         }
         return $result;
@@ -235,7 +244,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
      */
     private function GenAsyncAddHit() {
         $result="";
-        $documentNewsId = intval(Control::GetRequest("id", "0"));
+        $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
         if ($documentNewsId > 0) {
             $documentNewsPublicData=new DocumentNewsPublicData();
             $result = $documentNewsPublicData->AddHit($documentNewsId);
@@ -255,7 +264,7 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
      */
     private function GenAsyncGetHit() {
         $result=0;
-            $documentNewsId = intval(Control::GetRequest("id", "0"));
+            $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
             if ($documentNewsId > 0) {
                 $documentNewsPublicData=new DocumentNewsPublicData();
                 $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
@@ -264,6 +273,20 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 }
             }
         return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
+
+    private function GenAsyncAddAndGetHit(){
+        $result=0;
+        $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+        if ($documentNewsId > 0) {
+            $documentNewsPublicData=new DocumentNewsPublicData();
+            $documentNewsPublicData->AddHit($documentNewsId);
+            $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
+            if($arrayOne!=null){
+                $result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
+            }
+        }
+        return $result;
     }
 
 
@@ -323,6 +346,40 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                 $language = "";
                 $result = XMLGenerator::GenForDocumentNews($channelTitle, $channelDescription, $channelLink, $language, $resultArrList);
             }
+        }
+        return $result;
+    }
+
+
+    /**
+     * 增加并返回赞同数
+     * @return string
+     */
+    private function GenAsyncAddAndGetAgreeCount() {
+        $result="";
+        $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+        if ($documentNewsId > 0) {
+            $documentNewsPublicData=new DocumentNewsPublicData();
+
+            $documentNewsPublicData->AddAgreeCount($documentNewsId);
+
+            $result = $documentNewsPublicData->GetAgreeCount($documentNewsId);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 增加并返回赞同数
+     * @return string
+     */
+    private function GenAsyncGetAgreeCount() {
+        $result="";
+        $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+        if ($documentNewsId > 0) {
+            $documentNewsPublicData=new DocumentNewsPublicData();
+
+            $result = $documentNewsPublicData->GetAgreeCount($documentNewsId);
         }
         return $result;
     }

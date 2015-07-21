@@ -41,7 +41,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
         $cacheFile = 'site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
-        $withCache = true;
+        $withCache = false;
         if($withCache){
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
@@ -67,10 +67,8 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
         $forumPublicData = new ForumPublicData();
-
         if(strlen($forumId)>0){
-
-            if(!stripos("_",$forumId)){
+            if(stripos("_",$forumId)){ //能找到 _
 
                 //多个一级版块
                 $forumId = str_ireplace("_",",",$forumId);
@@ -80,8 +78,19 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
             }else{
+
                 $arrRankOneList = $forumPublicData->GetListByForumId($forumId);
                 $arrRankTwoList = $forumPublicData->GetListByParentId($siteId, $forumId);
+
+                $backgroundUrl = $forumPublicData->GetBackgroundUrl($forumId, true);
+                $tempContent = str_ireplace("{BackgroundUrl}", $backgroundUrl, $tempContent);
+
+                $backgroundColor = $forumPublicData->GetBackgroundColor($forumId, true);
+                $tempContent = str_ireplace("{BackgroundColor}", $backgroundColor, $tempContent);
+
+                $topImageUrl = $forumPublicData->GetTopImageUrl($forumId, true);
+                $tempContent = str_ireplace("{TopImageUrl}", $topImageUrl, $tempContent);
+
             }
 
 
@@ -129,6 +138,10 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceTemplate($tempContent);
 
         parent::ReplaceEndForForum($tempContent);
+
+
+
+
         parent::ReplaceSiteConfig($siteId, $tempContent);
 
         /*******************过滤字符 begin********************** */

@@ -152,6 +152,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $templateContent = str_ireplace("{ForumId}", $forumId, $templateContent);
         $templateContent = str_ireplace("{ForumTopicId}", $forumTopicId, $templateContent);
 
+
         $tagId = "forum_post_list";
 
         $forumPostPublicDate = new ForumPostPublicData();
@@ -195,6 +196,15 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $forumName = $forumPublicData->GetForumName($forumId, true);
 
         $templateContent = str_ireplace("{ForumName}", $forumName, $templateContent);
+
+        $backgroundUrl = $forumPublicData->GetBackgroundUrl($forumId, true);
+        $templateContent = str_ireplace("{BackgroundUrl}", $backgroundUrl, $templateContent);
+
+        $backgroundColor = $forumPublicData->GetBackgroundColor($forumId, true);
+        $templateContent = str_ireplace("{BackgroundColor}", $backgroundColor, $templateContent);
+
+        $topImageUrl = $forumPublicData->GetTopImageUrl($forumId, true);
+        $templateContent = str_ireplace("{TopImageUrl}", $topImageUrl, $templateContent);
 
         $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         parent::ReplaceTemplate($templateContent);
