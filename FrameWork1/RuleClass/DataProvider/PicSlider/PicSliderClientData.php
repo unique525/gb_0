@@ -34,9 +34,15 @@ class PicSliderClientData extends BaseClientData {
 
             $selectColumn = '
                 ps.PicSliderId,
+                ps.SiteId,
                 ps.ChannelId,
                 ps.PicSliderTitle,
                 ps.DirectUrl,
+                ps.UploadFileId,
+                ps.State,
+                ps.Sort,
+                ps.CreateDate,
+                ps.ManageUserId,
                 ps.TableType,
                 ps.TableId,
                 uf.UploadFilePath,
