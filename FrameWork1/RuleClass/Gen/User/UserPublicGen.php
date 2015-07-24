@@ -85,13 +85,12 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
         $redirect_uri = urlencode("http://www.cetzgh.org.cn/default.php?mod=user&a=get_wx_open_id");
 
-        $url = "https://open.weixin.qq.com/connect/oauth2/authorize
-                    ?appid=wxb04ef693330fe3cd
-                    &redirect_uri=$redirect_uri
-                    &response_type=code
-                    &scope=snsapi_base
-                    &state=123
-                    #wechat_redirect";
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb04ef693330fe3cd&redirect_uri=$redirect_uri&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+
+        echo $url;
+
+
+        echo "<br/>code:".Control::GetRequest("code","");
 
         return $result;
     }
