@@ -71,12 +71,29 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify_user_pass": //生成修改密码界面
                 $result = self::GenModifyPassword();
                 break;
+            case "get_wx_open_id":
+                $result = self::GetWxOpenId();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
         return $result;
     }
 
+    private function GetWxOpenId(){
+        $result = "";
+
+        $redirect_uri = urlencode("http://www.cetzgh.org.cn/default.php?mod=user&a=get_wx_open_id");
+
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb04ef693330fe3cd&redirect_uri=$redirect_uri&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+
+        echo $url;
+
+
+        echo "<br/>code:".Control::GetRequest("code","");
+
+        return $result;
+    }
 
     private function GenLogin(){
         $temp = Control::GetRequest("temp","");
