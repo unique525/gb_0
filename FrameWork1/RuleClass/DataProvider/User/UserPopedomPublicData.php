@@ -352,6 +352,8 @@ class UserPopedomPublicData extends BasePublicData {
             $cacheFile = 'user_popedom_get_value_by_site_id_and_user_id.cache_site_id'
                 . $siteId
                 . '_'
+                . $userId
+                . '_'
                 . strtolower($userPopedomName);
             $sql = "SELECT UserPopedomValue FROM " . self::TableName_UserPopedom . "
                     WHERE SiteId=:SiteId
@@ -362,7 +364,7 @@ class UserPopedomPublicData extends BasePublicData {
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("UserId", $userId);
             $dataProperty->AddField("UserPopedomName", $userPopedomName);
-            $result = $this->GetInfoOfIntValue(
+            $result = $this->GetInfoOfStringValue(
                 $sql,
                 $dataProperty,
                 $withCache,
@@ -393,6 +395,7 @@ class UserPopedomPublicData extends BasePublicData {
             $cacheFile = 'user_popedom_get_value_by_site_id_and_user_group_id.cache_site_id'
                 . $siteId
                 . '_'
+                . $userGroupId
                 . strtolower($userPopedomName);
             $sql = "SELECT UserPopedomValue FROM " . self::TableName_UserPopedom . "
                     WHERE SiteId=:SiteId

@@ -178,10 +178,9 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
             $lotteryPublicData=new LotteryPublicData();
             $lotteryUserPublicData=new LotteryUserPublicData();
             //
-            $tableType = $lotteryPublicData->GetTableType($lotteryId, true);
+            $tableType = 2;//$lotteryPublicData->GetTableType($lotteryId, true);
             $tableId=0;
             $canLottery=0;
-
             switch($tableType){
 
                 case LotteryData::TABLE_TYPE_EXAM:
@@ -214,6 +213,13 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                     }
 
                     break;
+
+
+                case LotteryData::TABLE_TYPE_NONE :
+                    $canLottery=1;
+
+                    break;
+
 
                 default :
                         $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_ON_TABLE_TYPE;//table type错误

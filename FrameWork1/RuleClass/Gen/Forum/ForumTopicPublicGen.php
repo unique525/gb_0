@@ -254,7 +254,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             Template::RemoveCustomTag($tempContent, $tagId);
         }
 
-
         if (!empty($_POST)) {
 
 
@@ -273,6 +272,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $postTime = date("Y-m-d H:i:s", time());
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
+
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
             $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
             $titleBold = Control::PostRequest("f_TitleBold", "");
@@ -714,11 +714,20 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
 
         if ($forumTopicId > 0 && $userId >= 0) {
+            $forumTopicPublicData = new ForumTopicPublicData();
+            $forumUserId = $forumTopicPublicData->GetUserId($forumTopicId, true);
+            $can = false;
+            if ($forumUserId == $userId){ //自己的帖子
+                //读取权限
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
 
-            //读取权限
-            $forumDeleteSelfPost = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
+            }else{
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteOtherPost);
 
-            if ($forumDeleteSelfPost) {
+
+            }
+
+            if ($can) {
 
                 $forumTopicPublicData = new ForumTopicPublicData();
                 $result = $forumTopicPublicData->ModifyState(

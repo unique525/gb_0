@@ -107,6 +107,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenList(){
         $siteId = parent::GetSiteIdByDomain();
         $searchKey = Control::GetRequest("search_key", "");
+        $order = Control::GetRequest("order", 0);
         $defaultTemp = "user_album_list";
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
@@ -116,13 +117,13 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $pageBegin = ($pageIndex - 1)*$pageSize;
         $allCount = 0;
 
-        $siteId = 2;
         if ($pageIndex > 0 && $siteId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $tagId = "user_album_list";
             $allCount = 0;
             $userAlbumPublicData = new UserAlbumPublicData();
-            $arrUserAlbumList = $userAlbumPublicData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey);
+            $arrUserAlbumList = $userAlbumPublicData->GetList(
+                $siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$order);
             //print_r($arrUserAlbumList);
             if (count($arrUserAlbumList) > 0) {
                 Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
@@ -131,7 +132,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                 $pagerTemplate = parent::GetDynamicTemplateContent(
                     $pagerTemp, $siteId);
                 $isJs = FALSE;
-                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize&order=$order";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

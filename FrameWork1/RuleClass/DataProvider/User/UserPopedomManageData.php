@@ -351,7 +351,6 @@ class UserPopedomManageData extends BaseManageData {
         ('ForumUserSignMaxContentCount','0',$userId,$userGroupId,$siteId,$channelId,$forumId)
 
         ;";
-
         $result = $this->dbOperator->Execute($sql, null);
         return $result;
     }
