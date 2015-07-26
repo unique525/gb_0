@@ -275,7 +275,7 @@ class ForumTopicPublicData extends BasePublicData
      */
     public function GetOne($forumTopicId)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic . "=:" . self::TableId_ForumTopic . ";";
+        $sql = "SELECT * FROM " . self::TableName_ForumTopic . " WHERE " . self::TableId_ForumTopic . "=:" . self::TableId_ForumTopic . " AND State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED.";";
         $dataProperty = new DataProperty();
         $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -311,6 +311,7 @@ class ForumTopicPublicData extends BasePublicData
             " . self::TableName_ForumTopic . " ft
 
             WHERE ft.SiteId=:SiteId
+                AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
             ORDER BY ft.PostTime DESC
             LIMIT $topCount;";
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -351,6 +352,7 @@ class ForumTopicPublicData extends BasePublicData
             " . self::TableName_ForumTopic . " ft
 
             WHERE ft.SiteId=:SiteId
+                AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
             ORDER BY ft.HitCount DESC
             LIMIT $topCount;";
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -390,7 +392,9 @@ class ForumTopicPublicData extends BasePublicData
             FROM
             " . self::TableName_ForumTopic . " ft
 
-            WHERE ft.SiteId=:SiteId AND ForumTopicClass=".ForumTopicData::FORUM_TOPIC_CLASS_BEST."
+            WHERE ft.SiteId=:SiteId
+                AND ft.ForumTopicClass=".ForumTopicData::FORUM_TOPIC_CLASS_BEST."
+                AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
             ORDER BY ft.PostTime DESC
             LIMIT $topCount;";
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -428,7 +432,7 @@ class ForumTopicPublicData extends BasePublicData
 
             LEFT OUTER JOIN " . self::TableName_UploadFile . " uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
 
-            WHERE ft.ForumId=:ForumId  " . $searchSql . "
+            WHERE ft.ForumId=:ForumId  " . $searchSql . " AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
             ORDER BY ft.Sort DESC,ft.PostTime DESC
             LIMIT " . $pageBegin . "," . $pageSize . ";";
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -453,6 +457,25 @@ class ForumTopicPublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
             $cacheFile = 'forum_topic_get_forum_id.cache_' . $forumTopicId . '';
             $sql = "SELECT ForumId FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得会员id
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 论坛id
+     */
+    public function GetUserId($forumTopicId, $withCache) {
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_user_id.cache_' . $forumTopicId . '';
+            $sql = "SELECT UserId FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

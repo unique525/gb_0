@@ -16,8 +16,8 @@ class ActivityClientGen extends BaseClientGen implements IBaseClientGen {
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
-            case "list":
-                $result = self::GenList();
+            case "list_of_channel":
+                $result = self::GenListOfChannel();
                 break;
 
         }
@@ -29,7 +29,7 @@ class ActivityClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenList(){
+    public function GenListOfChannel(){
 
         $result = "[{}]";
 

@@ -102,9 +102,10 @@ class UserAlbumPublicData extends BasePublicData
      * @param int $allCount 总行数
      * @param int $state 取状态为state的相册
      * @param string $searchKey 搜索关键词
+     * @param int $order 排序方式
      * @return array 相册列表的数组
      */
-    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state, $searchKey)
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state, $searchKey, $order = 0)
     {
         $result = -1;
         $searchSql = "";
@@ -114,10 +115,15 @@ class UserAlbumPublicData extends BasePublicData
                 $searchSql .= " AND ui.RealName LIKE :SearchKey ";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
+            $orderBy = ' ua.CreateDate DESC ';
+            if ($order == 1){
+                $orderBy = ' ua.HitCount DESC ';
+            }
+
             $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,ua.HitCount,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
                     FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
                     WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=" . $siteId . " and ua.State=" . $state . " " . $searchSql . "
-                    ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
+                    ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
             $sqlCount = "SELECT count(*) FROM
                         " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
