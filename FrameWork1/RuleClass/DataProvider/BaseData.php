@@ -290,7 +290,14 @@ class BaseData
      * 会员 数据表自增字段名
      */
     const TableId_User = "UserId";
-
+    /**
+     * 会员第三方接口 数据表名
+     */
+    const TableName_UserPlugins = "cst_user_plugins";
+    /**
+     * 会员第三方接口 数据表自增字段名
+     */
+    const TableId_UserPlugins = "UserPluginsId";
     /**
      * 会员权限 数据表名
      */

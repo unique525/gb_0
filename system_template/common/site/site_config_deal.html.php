@@ -132,6 +132,7 @@
                             <li><a href="#tabs-2">产品设置</a></li>
                             <li><a href="#tabs-3">资讯设置</a></li>
                             <li><a href="#tabs-4">电子报设置</a></li>
+                            <li><a href="#tabs-5">第三方接口设置</a></li>
                         </ul>
                         <div id="tabs-1">
                             <div style="">
@@ -340,6 +341,65 @@
                                             <input id="btnNewspaperArticlePicWatermarkUploadFileId" type="button" value="上传"/>
                                         </td>
                                     </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="tabs-5">
+                            <div>
+                                <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinAppId">微信 AppId ：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinAppId" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinAppId" value="{cfg_WeiXinAppId}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinAppSecret">微信 AppSecret：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinAppSecret" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinAppSecret" value="{cfg_WeiXinAppSecret}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinAccessToken">微信 AccessToken：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinAccessToken" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinAccessToken" value="{cfg_WeiXinAccessToken}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinAccessTokenGetTime">微信 AccessTokenGetTime：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinAccessTokenGetTime" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinAccessTokenGetTime" value="{cfg_WeiXinAccessTokenGetTime}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinRefreshToken">微信 RefreshToken：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinRefreshToken" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinRefreshToken" value="{cfg_WeiXinRefreshToken}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_WeiXinRefreshTokenGetTime">微信 RefreshTokenGetTime：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_WeiXinRefreshTokenGetTime" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinRefreshTokenGetTime" value="{cfg_WeiXinRefreshTokenGetTime}"/>
+                                        </td>
+                                    </tr>
+
+
                                 </table>
                             </div>
                         </div>

@@ -69,6 +69,48 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $pageIndex = Control::GetRequest("p", 1);
 
 
+        $forumPublicData = new ForumPublicData();
+
+        $forumAccess = $forumPublicData->GetForumAccess($forumId, true);
+
+        if($forumAccess == ForumData::FORUM_ACCESS_USER_GROUP){
+            //按身份加密
+            $userId = Control::GetUserId();
+
+
+            $message = Language::Load("forum",6);
+            $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+            $selfUrl = urlencode($selfUrl);
+            $message = str_ireplace("{re_url}", $selfUrl, $message);
+
+            if($userId<=0){
+                return $message;
+            }
+
+            $userRolePublicData = new UserPublicData();
+            $userGroupId = $userRolePublicData->GetUserGroupId($userId, true);
+
+            if($userGroupId<=0){
+                return $message;
+            }
+
+            $forumAccessLimit = $forumPublicData->GetForumAccessLimit($forumId, true);
+            if($userGroupId != $forumAccessLimit){
+
+                return $message;
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
         /*******************页面级的缓存 begin********************** */
         $templateMode = 0;
         $defaultTemp = "forum_topic_list";
@@ -254,7 +296,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             Template::RemoveCustomTag($tempContent, $tagId);
         }
 
-
         if (!empty($_POST)) {
 
 
@@ -273,6 +314,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $postTime = date("Y-m-d H:i:s", time());
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
+
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
             $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
             $titleBold = Control::PostRequest("f_TitleBold", "");
@@ -714,11 +756,20 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $userId = Control::GetUserId();
 
         if ($forumTopicId > 0 && $userId >= 0) {
+            $forumTopicPublicData = new ForumTopicPublicData();
+            $forumUserId = $forumTopicPublicData->GetUserId($forumTopicId, true);
+            $can = false;
+            if ($forumUserId == $userId){ //自己的帖子
+                //读取权限
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
 
-            //读取权限
-            $forumDeleteSelfPost = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
+            }else{
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteOtherPost);
 
-            if ($forumDeleteSelfPost) {
+
+            }
+
+            if ($can) {
 
                 $forumTopicPublicData = new ForumTopicPublicData();
                 $result = $forumTopicPublicData->ModifyState(

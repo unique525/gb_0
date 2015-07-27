@@ -104,25 +104,25 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
             $arrList = $userPopedomManageData->GetListByForumIdAndUserId(
                 $forumId,
                 $userId,
-                true
+                false
             );
         } else if ($userGroupId > 0 && $forumId > 0) {
             $arrList = $userPopedomManageData->GetListByForumIdAndUserGroupId(
                 $forumId,
                 $userGroupId,
-                true
+                false
             );
         } else if ($userId > 0 && $siteId > 0) {
             $arrList = $userPopedomManageData->GetListBySiteIdAndUserId(
                 $siteId,
                 $userId,
-                true
+                false
             );
         } else if ($userGroupId > 0 && $siteId > 0) {
             $arrList = $userPopedomManageData->GetListBySiteIdAndUserGroupId(
                 $siteId,
                 $userGroupId,
-                true
+                false
             );
         }
 

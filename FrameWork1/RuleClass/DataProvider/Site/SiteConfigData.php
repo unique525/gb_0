@@ -141,6 +141,21 @@
  * @property int $DocumentNewsTitlePic2CompressWidth
  * @property int $DocumentNewsTitlePic2CompressHeight
  *
+ * @property string WeiXinAppId
+ * @property string WeiXinAppSecret
+ *
+ * @property string WeiXinAccessToken
+ * @property string WeiXinAccessTokenGetTime
+ * @property string WeiXinRefreshToken
+ * @property string WeiXinRefreshTokenGetTime
+ *
+ * @property string WeiXinAccessTokenOauth2
+ * @property string WeiXinAccessTokenGetTimeOauth2
+ * @property string WeiXinRefreshTokenOauth2
+ * @property string WeiXinRefreshTokenGetTimeOauth2
+ *
+ * Oauth2
+ *
  * @author zhangchi
  */
 class SiteConfigData extends BaseData {
@@ -186,7 +201,11 @@ class SiteConfigData extends BaseData {
         "SchoolFeature",
         "SchoolCapable",
         "SchoolService",
-        "SchoolLeaderIntro"
+        "SchoolLeaderIntro",
+        "WeiXinAccessToken",
+        "WeiXinRefreshToken",
+        "WeiXinAccessTokenOauth2",
+        "WeiXinRefreshTokenOauth2"
     );
     /**
      * @var array text
@@ -321,6 +340,60 @@ class SiteConfigData extends BaseData {
     private $MetaCopyright = "2013 Sense Inc.";
     private $MetaApplicationName = "SenseCMS";
     private $MetaMsApplicationTooltip = "SenseCMS";
+
+    /**
+     * 微信APP ID
+     * @var string
+     */
+    private $WeiXinAppId = "";
+    /**
+     * 微信AppSecret
+     * @var string
+     */
+    private $WeiXinAppSecret = "";
+
+    /**
+     * 微信AccessToken
+     * @var string
+     */
+    private $WeiXinAccessToken = "";
+    /**
+     * 微信AccessToken获取时间
+     * @var string
+     */
+    private $WeiXinAccessTokenGetTime = "";
+    /**
+     * 微信RefreshToken
+     * @var string
+     */
+    private $WeiXinRefreshToken = "";
+    /**
+     * 微信RefreshToken获取时间
+     * @var string
+     */
+    private $WeiXinRefreshTokenGetTime = "";
+
+
+    /**
+     * 微信AccessTokenOauth2
+     * @var string
+     */
+    private $WeiXinAccessTokenOauth2 = "";
+    /**
+     * 微信AccessToken获取时间Oauth2
+     * @var string
+     */
+    private $WeiXinAccessTokenGetTimeOauth2 = "";
+    /**
+     * 微信RefreshTokenOauth2
+     * @var string
+     */
+    private $WeiXinRefreshTokenOauth2 = "";
+    /**
+     * 微信RefreshToken获取时间Oauth2
+     * @var string
+     */
+    private $WeiXinRefreshTokenGetTimeOauth2 = "";
 
     /////////////////////////////////////////////////////////////////
     ////////////////////////会员相册相关/////////////////////////////////
@@ -475,7 +548,172 @@ class SiteConfigData extends BaseData {
     private $DocumentNewsTitlePic1CompressHeight = 0; //资讯题图1压缩图高度值
 
     private $DocumentNewsTitlePic2CompressWidth = 0; //资讯题图2压缩图宽度值
-    private $DocumentNewsTitlePic2CompressHeight = 0; //资讯题图2压缩图高度值
+    private $DocumentNewsTitlePic2CompressHeight = 0;//资讯题图2压缩图高度值
+
+    /**
+     * @param mixed $WeiXinAppId
+     */
+    public function setWeiXinAppId($WeiXinAppId)
+    {
+        $this->WeiXinAppId = $WeiXinAppId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAppId()
+    {
+        return $this->WeiXinAppId;
+    }
+
+    /**
+     * @param mixed $WeiXinAppSecret
+     */
+    public function setWeiXinAppSecret($WeiXinAppSecret)
+    {
+        $this->WeiXinAppSecret = $WeiXinAppSecret;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAppSecret()
+    {
+        return $this->WeiXinAppSecret;
+    }
+
+    /**
+     * @param mixed $WeiXinAccessToken
+     */
+    public function setWeiXinAccessToken($WeiXinAccessToken)
+    {
+        $this->WeiXinAccessToken = $WeiXinAccessToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAccessToken()
+    {
+        return $this->WeiXinAccessToken;
+    }
+
+    /**
+     * @param mixed $WeiXinAccessTokenGetTime
+     */
+    public function setWeiXinAccessTokenGetTime($WeiXinAccessTokenGetTime)
+    {
+        $this->WeiXinAccessTokenGetTime = $WeiXinAccessTokenGetTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAccessTokenGetTime()
+    {
+        return $this->WeiXinAccessTokenGetTime;
+    }
+
+    /**
+     * @param mixed $WeiXinRefreshToken
+     */
+    public function setWeiXinRefreshToken($WeiXinRefreshToken)
+    {
+        $this->WeiXinRefreshToken = $WeiXinRefreshToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinRefreshToken()
+    {
+        return $this->WeiXinRefreshToken;
+    }
+
+    /**
+     * @param mixed $WeiXinRefreshTokenGetTime
+     */
+    public function setWeiXinRefreshTokenGetTime($WeiXinRefreshTokenGetTime)
+    {
+        $this->WeiXinRefreshTokenGetTime = $WeiXinRefreshTokenGetTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinRefreshTokenGetTime()
+    {
+        return $this->WeiXinRefreshTokenGetTime;
+    }
+
+    /**
+     * @param mixed $WeiXinAccessTokenGetTimeOauth2
+     */
+    public function setWeiXinAccessTokenGetTimeOauth2($WeiXinAccessTokenGetTimeOauth2)
+    {
+        $this->WeiXinAccessTokenGetTimeOauth2 = $WeiXinAccessTokenGetTimeOauth2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAccessTokenGetTimeOauth2()
+    {
+        return $this->WeiXinAccessTokenGetTimeOauth2;
+    }
+
+    /**
+     * @param mixed $WeiXinAccessTokenOauth2
+     */
+    public function setWeiXinAccessTokenOauth2($WeiXinAccessTokenOauth2)
+    {
+        $this->WeiXinAccessTokenOauth2 = $WeiXinAccessTokenOauth2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinAccessTokenOauth2()
+    {
+        return $this->WeiXinAccessTokenOauth2;
+    }
+
+    /**
+     * @param mixed $WeiXinRefreshTokenGetTimeOauth2
+     */
+    public function setWeiXinRefreshTokenGetTimeOauth2($WeiXinRefreshTokenGetTimeOauth2)
+    {
+        $this->WeiXinRefreshTokenGetTimeOauth2 = $WeiXinRefreshTokenGetTimeOauth2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinRefreshTokenGetTimeOauth2()
+    {
+        return $this->WeiXinRefreshTokenGetTimeOauth2;
+    }
+
+    /**
+     * @param mixed $WeiXinRefreshTokenOauth2
+     */
+    public function setWeiXinRefreshTokenOauth2($WeiXinRefreshTokenOauth2)
+    {
+        $this->WeiXinRefreshTokenOauth2 = $WeiXinRefreshTokenOauth2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinRefreshTokenOauth2()
+    {
+        return $this->WeiXinRefreshTokenOauth2;
+    }
+
+
+
+
+
 
     /**
      * @param mixed $DocumentNewsTitlePic1CompressHeight

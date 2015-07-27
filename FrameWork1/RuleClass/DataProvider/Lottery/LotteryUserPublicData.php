@@ -71,6 +71,25 @@ class LotteryUserPublicData extends BasePublicData {
     /**
      * 取得参与次数
      * @param int $userId 用户id
+     * @param int $lotteryId id
+     * @return int
+     */
+    public function GetCount($userId, $lotteryId)
+    {
+        $result = 1;
+        if ( $userId > 0) {
+            $sql = "SELECT COUNT(*) FROM ".self::TableName_LotteryUser." WHERE UserId=:UserId AND LotteryId=:LotteryId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("LotteryId", $lotteryId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty,false,"","");
+        }
+        return $result;
+    }
+
+    /**
+     * 取得参与次数
+     * @param int $userId 用户id
      * @param int $tableType 试题分类id
      * @param int $tableId 试题id
      * @param int $withCache

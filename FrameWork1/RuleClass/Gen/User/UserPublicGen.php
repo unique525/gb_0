@@ -71,12 +71,456 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify_user_pass": //生成修改密码界面
                 $result = self::GenModifyPassword();
                 break;
+            case "get_wx_access_token_oauth2":
+                self::GetWxAccessTokenOauth2();
+                break;
+            case "bind_wx_open_id":
+                self::BindWxOpenId();
+                break;
+
+
+            case "get_wx_user_info":
+                $result = self::GetWxUserInfo();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
         return $result;
     }
 
+
+    private function GetWxAccessToken(){
+
+        $result = "";
+
+        $siteId = parent::GetSiteIdByDomain();
+        if($siteId>0){
+
+            $siteConfigData = new SiteConfigData($siteId);
+
+            $weiXinAppId = $siteConfigData->WeiXinAppId;
+            $weiXinAppSecret = $siteConfigData->WeiXinAppSecret;
+
+            if(strlen($weiXinAppId)<=0 || strlen($weiXinAppSecret)<=0){
+                die("wx app id or wx app secret is null");
+            }
+
+
+            $weiXinAccessToken = $siteConfigData->WeiXinAccessToken;
+
+            $weiXinAccessTokenGetTime = $siteConfigData->WeiXinAccessTokenGetTime;
+
+            //微信的access token保存时间是7200秒，所以判断当保存时间大约已经过了7000秒时，则重新请求token
+
+            if(  strlen($weiXinAccessToken)<=0 || (time() - $weiXinAccessTokenGetTime)>7000){
+
+
+                $urlGetAccessToken = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$weiXinAppId&secret=$weiXinAppSecret";
+
+                    //执行 http 请求，返回 json
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $urlGetAccessToken);
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
+
+                    /**
+                     * 正确时返回的JSON数据包如下：
+
+                     * {"access_token":"ACCESS_TOKEN","expires_in":7200}
+                     *
+                     */
+
+                    $curl_result = curl_exec($ch); //json
+
+                    $arrResult = Format::FixJsonDecode($curl_result);
+
+
+
+                    curl_close($ch);
+                    //错误判断
+                    if(isset($arrResult["errcode"])){
+                        die($arrResult["errmsg"]);
+                    }elseif(isset($arrResult["access_token"])){
+
+                        //拿到了token,保存，并更新保存unix时间
+                        $result = $arrResult["access_token"];
+                        $siteConfigData->WeiXinAccessToken = $arrResult["access_token"];
+                        $siteConfigData->WeiXinAccessTokenGetTime = time();
+
+                    }
+
+
+            }else{
+                //已经有token了
+                $result = $siteConfigData->WeiXinAccessToken;
+            }
+
+
+
+
+        }
+
+        return $result;
+
+
+    }
+
+    /**
+     * 微信网页的token
+     */
+    private function GetWxAccessTokenOauth2(){
+
+        $siteId = parent::GetSiteIdByDomain();
+        if($siteId>0){
+
+            $sitePublicData = new SitePublicData();
+
+            $siteUrl = $sitePublicData->GetSiteUrl($siteId, true);
+
+            $siteConfigData = new SiteConfigData($siteId);
+
+            $weiXinAppId = $siteConfigData->WeiXinAppId;
+            $weiXinAppSecret = $siteConfigData->WeiXinAppSecret;
+
+            if(strlen($weiXinAppId)<=0 || strlen($weiXinAppSecret)<=0){
+                die("wx app id or wx app secret is null");
+            }
+
+
+            $weiXinAccessTokenOauth2 = $siteConfigData->WeiXinAccessTokenOauth2;
+
+            $weiXinAccessTokenGetTimeOauth2 = $siteConfigData->WeiXinAccessTokenGetTimeOauth2;
+
+            $weiXinRefreshTokenOauth2 = $siteConfigData->WeiXinRefreshTokenOauth2;
+            $weiXinRefreshTokenGetTimeOauth2 = $siteConfigData->WeiXinRefreshTokenGetTimeOauth2;
+
+            //微信的access token保存时间是7200秒，所以判断当保存时间大约已经过了7000秒时，则重新请求token
+
+            //if(  strlen($weiXinAccessTokenOauth2)<=0 || (time() - $weiXinAccessTokenGetTimeOauth2)>7000){
+
+                echo "get access token...";
+
+                $code = Control::GetRequest("code", "");
+
+                if(strlen($code)>0){
+                    //已经通过snsapi_userinfo拿到了code
+                    //获取code后，请求以下链接获取access_token：
+                    $urlGetAccessToken = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=$weiXinAppId&secret=$weiXinAppSecret&code=$code&grant_type=authorization_code";
+
+                    //执行 http 请求，返回 json
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $urlGetAccessToken);
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
+
+                    /**
+                     * 正确时返回的JSON数据包如下：
+
+                     * {
+                     * "access_token":"ACCESS_TOKEN",
+                     * "expires_in":7200,
+                     * "refresh_token":"REFRESH_TOKEN",
+                     * "openid":"OPENID",
+                     * "scope":"SCOPE",
+                     * "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+                     * }
+                     */
+
+                    $curl_result = curl_exec($ch); //json
+
+                    $arrResult = Format::FixJsonDecode($curl_result);
+                    curl_close($ch);
+                    //错误判断
+                    if(isset($arrResult["errcode"])){
+                        die($arrResult["errmsg"]);
+                    }elseif(isset($arrResult["access_token"])){
+
+                        //拿到了token,保存，并更新保存unix时间
+
+                        $siteConfigData->WeiXinAccessTokenOauth2 = $arrResult["access_token"];
+                        $siteConfigData->WeiXinAccessTokenGetTimeOauth2 = time();
+
+                        $siteConfigData->WeiXinRefreshTokenOauth2 = $arrResult["refresh_token"];
+                        $siteConfigData->WeiXinRefreshTokenGetTimeOauth2 = time();
+
+                        //完成后，转到获取微信会员信息的接口
+
+                        $openId = $arrResult["openid"];
+
+                        $redirectUri = "/default.php?mod=user&a=bind_wx_open_id&wx_open_id=$openId&auto_create=1";
+                        header("Location: $redirectUri");
+                    }
+
+
+
+                }else{
+                    if(strlen($siteUrl)>0){
+                        $redirectUri = urlencode("$siteUrl/default.php?mod=user&a=get_wx_access_token_oauth2");
+
+                        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$weiXinAppId&redirect_uri=$redirectUri&response_type=code&scope=snsapi_userinfo&state=$siteId#wechat_redirect";
+
+                        header("Location: $url");
+
+                    }
+                }
+/**
+            }else{
+                //已经有token了，通过refresh token 取得 openid
+
+                $url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=$weiXinAppId&grant_type=refresh_token&refresh_token=$weiXinRefreshTokenOauth2";
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
+                $curl_result = curl_exec($ch); //json
+                $arrResult = Format::FixJsonDecode($curl_result);
+
+                curl_close($ch);
+                //错误判断
+                if(isset($arrResult["errcode"])){
+                    die($arrResult["errmsg"]);
+                }elseif(isset($arrResult["access_token"])){
+
+                    //完成后，转到获取微信会员信息的接口
+
+                    $openId = $arrResult["openid"];
+
+                    die($openId);
+
+                    $redirectUri = "/default.php?mod=user&a=bind_wx_open_id&wx_open_id=$openId&auto_create=1";
+                    header("Location: $redirectUri");
+                }
+
+            }
+*/
+
+
+
+        }
+
+
+    }
+
+    /**
+     * 把微信openid和当前登录的会员绑定
+     */
+    private function BindWxOpenId(){
+
+        $siteId = parent::GetSiteIdByDomain();
+
+        $wxOpenId = Control::GetRequest("wx_open_id","");
+
+        $autoCreate = Control::GetRequest("auto_create",0); //没有登录时，是否自动创建会员
+
+        if(strlen($wxOpenId)>0){
+            $userPublicData = new UserPublicData();
+            //是否已经绑定
+            $userPluginsPublicData = new UserPluginsPublicData();
+            $userId = $userPluginsPublicData->GetUserId($wxOpenId, false);
+
+            if($userId<=0){ //没有绑定
+
+                $userId = Control::GetUserId();
+
+                if($userId<=0){ //没有登录，转到登录页面
+
+                    if($autoCreate <=0){ //不自动创建会员
+                        $reUrl = urlencode("/default.php?mod=user&a=bind_wx_open_id&wx_open_id=$wxOpenId");
+
+                        $redirectUri = "/default.php?mod=user&a=login&re_url=$reUrl";
+                        header("Location: $redirectUri");
+                    }else{
+                        //自动创建会员
+
+
+                        $userPass = "111111";
+                        $regIp = Control::GetIp();
+                        $userName = uniqid();
+                        $userId = $userPublicData->Create($siteId, $userPass, $regIp, $userName);
+
+                        if($userId>0){
+                            $userPluginsPublicData->Create($userId, $wxOpenId, $siteId);
+                            $siteConfigData = new SiteConfigData($siteId);
+                            self::CreateUserEx($siteId, $userId, $userName, $siteConfigData);
+                        }else{
+                            die("auto create user failure;");
+                        }
+
+                    }
+
+
+
+
+                }else{
+
+                    //已经登录，直接绑定
+                    $result = $userPluginsPublicData->Create($userId, $wxOpenId, $siteId);
+
+
+                }
+
+
+
+            }else{
+
+                //已经绑定
+                //重写cookie
+                $userName = $userPublicData->GetUserName($userId, false);
+                Control::SetUserCookie($userId, $userName);
+
+            }
+
+
+
+        }else{
+
+            die("wx open id is null");
+
+        }
+
+
+        Control::GoUrl("/default.php?mod=user&a=get_wx_user_info");
+
+    }
+
+
+
+    private function GetWxUserInfo(){
+        $result = "";
+
+        $siteId = parent::GetSiteIdByDomain();
+
+        $accessToken = self::GetWxAccessToken();
+
+        $userId = Control::GetUserId();
+
+        if($siteId>0 && $userId>0 && strlen($accessToken)>0){
+
+            $userPluginsPublicData = new UserPluginsPublicData();
+            $wxOpenId = $userPluginsPublicData->GetWxOpenId($userId, false);
+
+            if(strlen($wxOpenId)>0){
+
+
+            }else{
+
+                die("wx open id is null");
+
+            }
+
+
+            if(strlen($accessToken)>0 && strlen($wxOpenId)>0){
+
+                $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$accessToken&openid=$wxOpenId&lang=zh_CN";
+
+                //执行 http 请求，返回 json
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
+
+                /**
+                 * 正确时返回的JSON数据包如下：
+
+                 * {
+                "subscribe": 1,
+                "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
+                "nickname": "Band",
+                "sex": 1,
+                "language": "zh_CN",
+                "city": "广州",
+                "province": "广东",
+                "country": "中国",
+                "headimgurl":    "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
+                "subscribe_time": 1382694957,
+                "unionid": " o6_bmasdasdsad6_2sgVt7hMZOPfL"
+                "remark": "",
+                "groupid": 0
+                }
+                 *
+                 */
+
+                $curl_result = curl_exec($ch); //json
+
+                $arrResult = Format::FixJsonDecode($curl_result);
+
+
+                //错误判断
+                if(isset($arrResult["errcode"])){
+                    die($arrResult["errcode"].',errmsg:'.$arrResult["errmsg"]);
+                }elseif(isset($arrResult["openid"])){
+                    //正确返回
+
+                    $wxNickName = isset($arrResult["nickname"])?$arrResult["nickname"]:"";//
+                    $wxSex = isset($arrResult["sex"])?$arrResult["sex"]:"";//
+                    $wxProvince = isset($arrResult["province"])?$arrResult["province"]:"";//
+                    $wxCity = isset($arrResult["city"])?$arrResult["city"]:"";//
+                    $wxCountry = isset($arrResult["country"])?$arrResult["country"]:"";//
+                    $wxHeadImgUrl = isset($arrResult["headimgurl"])?$arrResult["headimgurl"]:"";//
+                    $wxUnionId = isset($arrResult["unionid"])?$arrResult["unionid"]:"";//
+                    $wxSubscribe = isset($arrResult["subscribe"])?$arrResult["subscribe"]:"";//
+                    $wxSubscribeTime = isset($arrResult["subscribe_time"])?$arrResult["subscribe_time"]:"";//
+                    $wxRemark = isset($arrResult["remark"])?$arrResult["remark"]:"";//
+                    $wxGroupId = isset($arrResult["groupid"])?$arrResult["groupid"]:"";//
+
+
+                    if(strlen($wxNickName)>0){
+                        $userPluginsPublicData->Modify(
+                            $userId,
+                            $wxNickName,
+                            $wxSex,
+                            $wxProvince,
+                            $wxCity,
+                            $wxCountry,
+                            $wxHeadImgUrl,
+                            $wxUnionId,
+                            $wxSubscribe,
+                            $wxSubscribeTime,
+                            $wxRemark,
+                            $wxGroupId
+                        );
+                    }
+
+
+
+                    if(intval($wxSubscribe) == 1){
+                        Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                    }else{
+                        Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_gz");
+                    }
+
+
+                }
+
+                curl_close($ch);
+
+
+
+            }else{
+
+                die("参数错误");
+
+            }
+
+
+
+
+
+        }else{
+
+
+            Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_gz");
+
+
+
+        }
+
+        return $result;
+    }
 
     private function GenLogin(){
         $temp = Control::GetRequest("temp","");
@@ -191,7 +635,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userName = Format::FormatHtmlTag(Control::PostRequest("UserName", "", false));
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", "", false));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", "", false));
-        $userPass = "111111";//Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
+        $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
         $regIp = Control::GetIp();
         $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
@@ -231,113 +675,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }
             //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
             $userPublicData = new UserPublicData();
-            $userInfoPublicData = new UserInfoPublicData();
-            $userRolePublicData = new UserRolePublicData();
             $siteConfigData = new SiteConfigData($siteId);
 
 
             $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
             if ($newUserId > 0) {
 
-                //插入会员信息表
-                $realName = Format::FormatHtmlTag(Control::PostOrGetRequest("real_name","", false));
-                $nickName = Format::FormatHtmlTag(Control::PostOrGetRequest("nick_name","", false));
-                $avatarUploadFileId = Format::FormatHtmlTag(Control::PostOrGetRequest("avatar_upload_fileId",0));
-                $userScore = Format::FormatHtmlTag(Control::PostOrGetRequest("user_score",0));
-                $userMoney = Format::FormatHtmlTag(Control::PostOrGetRequest("user_money",0));
-                $userCharm = Format::FormatHtmlTag(Control::PostOrGetRequest("user_charm",0));
-                $userExp = Format::FormatHtmlTag(Control::PostOrGetRequest("user_exp",0));
-                $userPoint = Format::FormatHtmlTag(Control::PostOrGetRequest("user_point",0));
-                $question = Format::FormatHtmlTag(Control::PostOrGetRequest("question","", false));
-                $answer = Format::FormatHtmlTag(Control::PostOrGetRequest("answer","", false));
-                $sign = Control::PostOrGetRequest("sign","", false);
-                $lastVisitIP = $regIp;
-                $lastVisitTime = $createDate;
-                $email = Format::FormatHtmlTag(Control::PostOrGetRequest("email","", false));
-                $qq = Format::FormatHtmlTag(Control::PostOrGetRequest("qq","", false));
-                $country = Format::FormatHtmlTag(Control::PostOrGetRequest("country","", false));
-                $comeFrom = Format::FormatHtmlTag(Control::PostOrGetRequest("come_from","", false));
-                $honor = Format::FormatHtmlTag(Control::PostOrGetRequest("honor","", false));
-                $birthday = Format::FormatHtmlTag(Control::PostOrGetRequest("birthday","", false));
-                $gender = Format::FormatHtmlTag(Control::PostOrGetRequest("gender",0));
-                $fansCount = Format::FormatHtmlTag(Control::PostOrGetRequest("fans_count",0));
-                $idCard = Format::FormatHtmlTag(Control::PostOrGetRequest("id_card","", false));
-                $postCode = Format::FormatHtmlTag(Control::PostOrGetRequest("post_code","", false));
-                $address = Format::FormatHtmlTag(Control::PostOrGetRequest("address","", false));
-                $tel = Format::FormatHtmlTag(Control::PostOrGetRequest("tel",""));
-                $mobile = Format::FormatHtmlTag(Control::PostOrGetRequest("mobile",""));
-                $province = Format::FormatHtmlTag(Control::PostOrGetRequest("province",""));
-                $occupational = Format::FormatHtmlTag(Control::PostOrGetRequest("occupational",""));
-                $city = Format::FormatHtmlTag(Control::PostOrGetRequest("city",""));
-                $relationship = Format::FormatHtmlTag(Control::PostOrGetRequest("relationship",0));
-                $hit = Format::FormatHtmlTag(Control::PostOrGetRequest("hit",0));
-                $messageCount = Format::FormatHtmlTag(Control::PostOrGetRequest("message_count",0));
-                $userPostCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_count",0));
-                $userPostBestCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_best_count",0));
-                $userActivityCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_activity_count",0));
-                $userAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_count",0));
-                $userBestAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_best_album_count",0));
-                $userRecAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_rec_album_count",0));
-                $userAlbumCommentCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_comment_count",0));
-                $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
-                $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
-                $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
-                $schoolName = Format::FormatHtmlTag(Control::PostOrGetRequest("school_name",0));
-                $className = Format::FormatHtmlTag(Control::PostOrGetRequest("class_name",0));
+                self::CreateUserEx($siteId, $newUserId, $userName, $siteConfigData);
 
-                $userInfoPublicData->Create(
-                    $newUserId,
-                    $realName,
-                    $nickName,
-                    $avatarUploadFileId,
-                    $userScore,
-                    $userMoney,
-                    $userCharm,
-                    $userExp,
-                    $userPoint,
-                    $question,
-                    $answer,
-                    $sign,
-                    $lastVisitIP,
-                    $lastVisitTime,
-                    $email,
-                    $qq,
-                    $country,
-                    $comeFrom,
-                    $honor,
-                    $birthday,
-                    $gender,
-                    $fansCount,
-                    $idCard,
-                    $postCode,
-                    $address,
-                    $tel,
-                    $mobile,
-                    $province,
-                    $occupational,
-                    $city,
-                    $relationship,
-                    $hit,
-                    $messageCount,
-                    $userPostCount,
-                    $userPostBestCount,
-                    $userActivityCount,
-                    $userAlbumCount,
-                    $userBestAlbumCount,
-                    $userRecAlbumCount,
-                    $userAlbumCommentCount,
-                    $userCommissionOwn,
-                    $userCommissionChild,
-                    $userCommissionGrandson,
-                    $schoolName,
-                    $className
-                );
-
-                //插入会员角色表
-                $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-                $userRolePublicData->Init($newUserId, $siteId, $newMemberGroupId);
-
-                Control::SetUserCookie($newUserId, $userName);
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
             } else {
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';
@@ -345,6 +690,114 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         } else {
             return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_PARAMETER.'})';
         }
+    }
+
+
+    private function CreateUserEx($siteId, $userId, $userName, $siteConfigData){
+
+        $userInfoPublicData = new UserInfoPublicData();
+        $userRolePublicData = new UserRolePublicData();
+
+        //插入会员信息表
+        $realName = Format::FormatHtmlTag(Control::PostOrGetRequest("real_name","", false));
+        $nickName = Format::FormatHtmlTag(Control::PostOrGetRequest("nick_name","", false));
+        $avatarUploadFileId = Format::FormatHtmlTag(Control::PostOrGetRequest("avatar_upload_fileId",0));
+        $userScore = Format::FormatHtmlTag(Control::PostOrGetRequest("user_score",0));
+        $userMoney = Format::FormatHtmlTag(Control::PostOrGetRequest("user_money",0));
+        $userCharm = Format::FormatHtmlTag(Control::PostOrGetRequest("user_charm",0));
+        $userExp = Format::FormatHtmlTag(Control::PostOrGetRequest("user_exp",0));
+        $userPoint = Format::FormatHtmlTag(Control::PostOrGetRequest("user_point",0));
+        $question = Format::FormatHtmlTag(Control::PostOrGetRequest("question","", false));
+        $answer = Format::FormatHtmlTag(Control::PostOrGetRequest("answer","", false));
+        $sign = Control::PostOrGetRequest("sign","", false);
+        $lastVisitIP = Control::GetIp();
+        $lastVisitTime = strval(date('Y-m-d H:i:s', time()));
+        $email = Format::FormatHtmlTag(Control::PostOrGetRequest("email","", false));
+        $qq = Format::FormatHtmlTag(Control::PostOrGetRequest("qq","", false));
+        $country = Format::FormatHtmlTag(Control::PostOrGetRequest("country","", false));
+        $comeFrom = Format::FormatHtmlTag(Control::PostOrGetRequest("come_from","", false));
+        $honor = Format::FormatHtmlTag(Control::PostOrGetRequest("honor","", false));
+        $birthday = Format::FormatHtmlTag(Control::PostOrGetRequest("birthday","", false));
+        $gender = Format::FormatHtmlTag(Control::PostOrGetRequest("gender",0));
+        $fansCount = Format::FormatHtmlTag(Control::PostOrGetRequest("fans_count",0));
+        $idCard = Format::FormatHtmlTag(Control::PostOrGetRequest("id_card","", false));
+        $postCode = Format::FormatHtmlTag(Control::PostOrGetRequest("post_code","", false));
+        $address = Format::FormatHtmlTag(Control::PostOrGetRequest("address","", false));
+        $tel = Format::FormatHtmlTag(Control::PostOrGetRequest("tel",""));
+        $mobile = Format::FormatHtmlTag(Control::PostOrGetRequest("mobile",""));
+        $province = Format::FormatHtmlTag(Control::PostOrGetRequest("province",""));
+        $occupational = Format::FormatHtmlTag(Control::PostOrGetRequest("occupational",""));
+        $city = Format::FormatHtmlTag(Control::PostOrGetRequest("city",""));
+        $relationship = Format::FormatHtmlTag(Control::PostOrGetRequest("relationship",0));
+        $hit = Format::FormatHtmlTag(Control::PostOrGetRequest("hit",0));
+        $messageCount = Format::FormatHtmlTag(Control::PostOrGetRequest("message_count",0));
+        $userPostCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_count",0));
+        $userPostBestCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_post_best_count",0));
+        $userActivityCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_activity_count",0));
+        $userAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_count",0));
+        $userBestAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_best_album_count",0));
+        $userRecAlbumCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_rec_album_count",0));
+        $userAlbumCommentCount = Format::FormatHtmlTag(Control::PostOrGetRequest("user_album_comment_count",0));
+        $userCommissionOwn = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_own",0));
+        $userCommissionChild = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_child",0));
+        $userCommissionGrandson = Format::FormatHtmlTag(Control::PostOrGetRequest("user_commission_grandson",0));
+        $schoolName = Format::FormatHtmlTag(Control::PostOrGetRequest("school_name",0));
+        $className = Format::FormatHtmlTag(Control::PostOrGetRequest("class_name",0));
+
+        $userInfoPublicData->Create(
+            $userId,
+            $realName,
+            $nickName,
+            $avatarUploadFileId,
+            $userScore,
+            $userMoney,
+            $userCharm,
+            $userExp,
+            $userPoint,
+            $question,
+            $answer,
+            $sign,
+            $lastVisitIP,
+            $lastVisitTime,
+            $email,
+            $qq,
+            $country,
+            $comeFrom,
+            $honor,
+            $birthday,
+            $gender,
+            $fansCount,
+            $idCard,
+            $postCode,
+            $address,
+            $tel,
+            $mobile,
+            $province,
+            $occupational,
+            $city,
+            $relationship,
+            $hit,
+            $messageCount,
+            $userPostCount,
+            $userPostBestCount,
+            $userActivityCount,
+            $userAlbumCount,
+            $userBestAlbumCount,
+            $userRecAlbumCount,
+            $userAlbumCommentCount,
+            $userCommissionOwn,
+            $userCommissionChild,
+            $userCommissionGrandson,
+            $schoolName,
+            $className
+        );
+
+        //插入会员角色表
+        $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
+        $userRolePublicData->Init($userId, $siteId, $newMemberGroupId);
+
+        Control::SetUserCookie($userId, $userName);
+
     }
 
     private function AsyncGetOne(){

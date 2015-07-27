@@ -11,4 +11,9 @@ class LotteryData {
      * 在线测试
      */
     const TABLE_TYPE_EXAM = 1;
+
+    /**
+     * 无
+     */
+    const TABLE_TYPE_NONE = 2;
 } 
