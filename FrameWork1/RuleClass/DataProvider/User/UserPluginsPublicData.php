@@ -134,6 +134,21 @@ class UserPluginsPublicData extends BasePublicData {
         return $result;
     }
 
+    public function GetWxSubscribe($userId, $withCache)
+    {
+        $result = 0;
+        if ($userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_plugins_data'
+                . DIRECTORY_SEPARATOR .$userId;
+            $cacheFile = 'user_plugins_get_user_wx_subscribe.cache_' . $userId . '';
+            $sql = "SELECT WxSubscribe FROM " . self::TableName_UserPlugins . " WHERE UserId=:UserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 
 
 

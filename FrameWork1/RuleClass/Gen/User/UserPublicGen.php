@@ -166,13 +166,63 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     }
 
+    private function RefreshWxAccessToken(SiteConfigData $siteConfigData,$weiXinAppId, $weiXinRefreshTokenOauth2){
+
+        $url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=$weiXinAppId&grant_type=refresh_token&refresh_token=$weiXinRefreshTokenOauth2";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//不直接输出，返回到变量
+        $curl_result = curl_exec($ch); //json
+        $arrResult = Format::FixJsonDecode($curl_result);
+
+        curl_close($ch);
+        //错误判断
+        if(isset($arrResult["errcode"])){
+            die($arrResult["errmsg"]);
+        }elseif(isset($arrResult["access_token"])){
+
+            //完成后，转到获取微信会员信息的接口
+
+            $siteConfigData->WeiXinAccessTokenOauth2 = $arrResult["access_token"];
+            $siteConfigData->WeiXinAccessTokenGetTimeOauth2 = time();
+
+            $siteConfigData->WeiXinRefreshTokenOauth2 = $arrResult["refresh_token"];
+            $siteConfigData->WeiXinRefreshTokenGetTimeOauth2 = time();
+
+        }
+
+    }
+
+
     /**
      * 微信网页的token
      */
     private function GetWxAccessTokenOauth2(){
 
         $siteId = parent::GetSiteIdByDomain();
+
+
         if($siteId>0){
+
+            $userId = Control::GetUserId();
+            $userPluginsPublicData = new UserPluginsPublicData();
+            $wxOpenId = $userPluginsPublicData->GetWxOpenId($userId, false);
+
+            $wxSubscribe = $userPluginsPublicData->GetWxSubscribe($userId, false);
+
+            //die($wxOpenId.'|'.$wxSubscribe);
+
+            if(strlen($wxOpenId)>0 && $wxSubscribe>0){//已经授权过并且已经关注了，直接转向
+
+                Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                return;
+
+            }
+
+
+
 
             $sitePublicData = new SitePublicData();
 
