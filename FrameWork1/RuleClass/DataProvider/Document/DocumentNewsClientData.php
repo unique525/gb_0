@@ -59,6 +59,8 @@ class DocumentNewsClientData extends BaseClientData {
         $sql = "
             SELECT
                 dn.DocumentNewsId,
+                dn.SiteId,
+                dn.ChannelId,
                 dn.DocumentNewsType,
                 dn.DocumentNewsTitle,
                 dn.DocumentNewsShortTitle,
@@ -196,6 +198,8 @@ class DocumentNewsClientData extends BaseClientData {
         $sql = "
             SELECT
                 dn.DocumentNewsId,
+                dn.SiteId,
+                dn.ChannelId,
                 dn.DocumentNewsType,
                 dn.DocumentNewsTitle,
                 dn.DocumentNewsShortTitle,
