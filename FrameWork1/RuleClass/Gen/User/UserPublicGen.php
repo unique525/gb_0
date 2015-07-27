@@ -197,7 +197,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             //微信的access token保存时间是7200秒，所以判断当保存时间大约已经过了7000秒时，则重新请求token
 
-            if(  strlen($weiXinAccessTokenOauth2)<=0 || (time() - $weiXinAccessTokenGetTimeOauth2)>7000){
+            //if(  strlen($weiXinAccessTokenOauth2)<=0 || (time() - $weiXinAccessTokenGetTimeOauth2)>7000){
 
                 echo "get access token...";
 
@@ -265,7 +265,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
                     }
                 }
-
+/**
             }else{
                 //已经有token了，通过refresh token 取得 openid
 
@@ -288,12 +288,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
                     $openId = $arrResult["openid"];
 
+                    die($openId);
+
                     $redirectUri = "/default.php?mod=user&a=bind_wx_open_id&wx_open_id=$openId&auto_create=1";
                     header("Location: $redirectUri");
                 }
 
             }
-
+*/
 
 
 
@@ -314,7 +316,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $autoCreate = Control::GetRequest("auto_create",0); //没有登录时，是否自动创建会员
 
         if(strlen($wxOpenId)>0){
-
+            $userPublicData = new UserPublicData();
             //是否已经绑定
             $userPluginsPublicData = new UserPluginsPublicData();
             $userId = $userPluginsPublicData->GetUserId($wxOpenId, false);
@@ -333,7 +335,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                     }else{
                         //自动创建会员
 
-                        $userPublicData = new UserPublicData();
+
                         $userPass = "111111";
                         $regIp = Control::GetIp();
                         $userName = uniqid();
@@ -365,7 +367,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }else{
 
                 //已经绑定
-
+                //重写cookie
+                $userName = $userPublicData->GetUserName($userId, false);
+                Control::SetUserCookie($userId, $userName);
 
             }
 
@@ -451,34 +455,43 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 }elseif(isset($arrResult["openid"])){
                     //正确返回
 
-                    $wxNickName = $arrResult["nickname"];//
-                    $wxSex = $arrResult["sex"];//
-                    $wxProvince = $arrResult["province"];//
-                    $wxCity = $arrResult["city"];//
-                    $wxCountry = $arrResult["country"];//
-                    $wxHeadImgUrl = $arrResult["headimgurl"];//
+                    $wxNickName = isset($arrResult["nickname"])?$arrResult["nickname"]:"";//
+                    $wxSex = isset($arrResult["sex"])?$arrResult["sex"]:"";//
+                    $wxProvince = isset($arrResult["province"])?$arrResult["province"]:"";//
+                    $wxCity = isset($arrResult["city"])?$arrResult["city"]:"";//
+                    $wxCountry = isset($arrResult["country"])?$arrResult["country"]:"";//
+                    $wxHeadImgUrl = isset($arrResult["headimgurl"])?$arrResult["headimgurl"]:"";//
                     $wxUnionId = isset($arrResult["unionid"])?$arrResult["unionid"]:"";//
-                    $wxSubscribe = $arrResult["subscribe"];//
-                    $wxSubscribeTime = $arrResult["subscribe_time"];//
-                    $wxRemark = $arrResult["remark"];//
-                    $wxGroupId = $arrResult["groupid"];//
-
-                    $userPluginsPublicData->Modify(
-                        $userId,
-                        $wxNickName,
-                        $wxSex,
-                        $wxProvince,
-                        $wxCity,
-                        $wxCountry,
-                        $wxHeadImgUrl,
-                        $wxUnionId,
-                        $wxSubscribe,
-                        $wxSubscribeTime,
-                        $wxRemark,
-                        $wxGroupId
-                    );
+                    $wxSubscribe = isset($arrResult["subscribe"])?$arrResult["subscribe"]:"";//
+                    $wxSubscribeTime = isset($arrResult["subscribe_time"])?$arrResult["subscribe_time"]:"";//
+                    $wxRemark = isset($arrResult["remark"])?$arrResult["remark"]:"";//
+                    $wxGroupId = isset($arrResult["groupid"])?$arrResult["groupid"]:"";//
 
 
+                    if(strlen($wxNickName)>0){
+                        $userPluginsPublicData->Modify(
+                            $userId,
+                            $wxNickName,
+                            $wxSex,
+                            $wxProvince,
+                            $wxCity,
+                            $wxCountry,
+                            $wxHeadImgUrl,
+                            $wxUnionId,
+                            $wxSubscribe,
+                            $wxSubscribeTime,
+                            $wxRemark,
+                            $wxGroupId
+                        );
+                    }
+
+
+
+                    if(intval($wxSubscribe) == 1){
+                        Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                    }else{
+                        Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_gz");
+                    }
 
 
                 }
@@ -494,6 +507,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
 
+
+
+
+        }else{
+
+
+            Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_gz");
 
 
 

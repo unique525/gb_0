@@ -71,6 +71,10 @@
                 <td class="spe_line"><input type="number" id="f_OneUserLimit" name="f_OneUserLimit" value="{OneUserLimit}"/> 次</td>
             </tr>
             <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_OneUserDoLimit">每人抽奖限制次数：</label></td>
+                <td class="spe_line"><input type="number" id="f_OneUserDoLimit" name="f_OneUserDoLimit" value="{OneUserDoLimit}"/> 次</td>
+            </tr>
+            <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_BeginTime">开始时间：</label></td>
                 <td class="spe_line"><input class="GetDate" type="text" id="f_BeginTime" name="f_BeginTime" value="{BeginTime}"/></td>
             </tr>

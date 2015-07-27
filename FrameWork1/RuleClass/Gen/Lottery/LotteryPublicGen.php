@@ -41,7 +41,18 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
      * table type参与次数超过限制
      */
     const LOTTERY_TABLE_ID_LIMIT_REACHED = -8;
-
+    /**
+     * 活动参与次数超过限制
+     */
+    const LOTTERY_LIMIT_REACHED = -9;
+    /**
+     * 还没开始
+     */
+    const LOTTERY_NOT_BEGIN = -11;
+    /**
+     * 已经结束
+     */
+    const LOTTERY_IS_END = -12;
 
 
 
@@ -121,6 +132,64 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         $tempContent =  parent::ReplaceTemplate($tempContent,$tagTopCount);
 
 
+        $lotteryId=Control::PostOrGetRequest("lottery_id",1);
+
+        if($lotteryId>0){
+            $lotteryPublicData=new LotteryPublicData();
+            $lotteryUserPublicData=new LotteryUserPublicData();
+            //////////////同一会员的参与次数限制//////////////
+
+            //判断活动开始时间
+            $nowDate=date('y-m-d H:i:s');
+            $beginDate = $lotteryPublicData->GetBeginDate($lotteryId, false);
+
+            $tempContent = str_ireplace("{begin_date}", $beginDate, $tempContent);
+
+            if(strtotime($nowDate)<strtotime($beginDate)){
+                //活动还没有开始
+                $tempContent = str_ireplace("{not_begin}", "1", $tempContent);
+
+            }else{
+                $tempContent = str_ireplace("{not_begin}", "0", $tempContent);
+            }
+            $endDate = $lotteryPublicData->GetEndDate($lotteryId, false);
+
+            $tempContent = str_ireplace("{end_date}", $endDate, $tempContent);
+
+
+
+            if(strtotime($nowDate)>strtotime($endDate)){
+                //活动已经结束
+                $tempContent = str_ireplace("{is_end}", "1", $tempContent);
+
+            }else{
+                $tempContent = str_ireplace("{is_end}", "0", $tempContent);
+            }
+
+
+
+
+
+            $oneUserDoLimit = $lotteryPublicData->GetOneUserDoLimit($lotteryId, false);
+            if($oneUserDoLimit>0){ //为0表示不限制
+
+                $hasDoCount = $lotteryUserPublicData->GetCount($userId, $lotteryId);
+
+                if($hasDoCount>=$oneUserDoLimit){
+
+                    //超过限制
+
+
+                }else{
+                    $tempContent = str_ireplace("{can_count}", $oneUserDoLimit - $hasDoCount, $tempContent);
+
+                }
+
+
+
+            }
+        }
+
 
 
 //parent::ReplaceSiteConfig($siteId, $tempContent);
@@ -177,8 +246,63 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
             $lotteryPublicData=new LotteryPublicData();
             $lotteryUserPublicData=new LotteryUserPublicData();
+
+
+            //判断活动开始时间
+            $nowDate=date('y-m-d H:i:s');
+            $beginDate = $lotteryPublicData->GetBeginDate($lotteryId, false);
+
+            if(strtotime($nowDate)<strtotime($beginDate)){
+                //活动还没有开始
+                $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_NOT_BEGIN; //
+                return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+            }
+            $endDate = $lotteryPublicData->GetEndDate($lotteryId, false);
+
+            if(strtotime($nowDate)>strtotime($endDate)){
+                //活动已经结束
+                $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_IS_END; //
+                return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+
+            }
+
+
+
+
+
+
+            //////////////同一会员的参与次数限制//////////////
+
+
+
+
+
+
+
+
+            $oneUserDoLimit = $lotteryPublicData->GetOneUserDoLimit($lotteryId, false);
+            if($oneUserDoLimit>0){ //为0表示不限制
+
+                $hasDoCount = $lotteryUserPublicData->GetCount($userId, $lotteryId);
+
+                if($hasDoCount>=$oneUserDoLimit){
+
+                    //超过限制
+                    $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_LIMIT_REACHED; //
+                    return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+
+
+                }
+
+            }
+
+
+
+
+
+
             //
-            $tableType = 2;//$lotteryPublicData->GetTableType($lotteryId, true);
+            $tableType = $lotteryPublicData->GetTableType($lotteryId, true);
             $tableId=0;
             $canLottery=0;
             switch($tableType){
@@ -355,6 +479,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                     if($newAwardId>0){
                         $result_array["code"]=abs(DefineCode::LOTTERY_PUBLIC)+self::LOTTERY_AWARD;//中奖
                         $result_array["result"]=$lotterySetName;//获奖结果
+
                     }else{
                         $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_ERROR_WHEN_ADD_TO_AWARD_USER_TABLE; //加入中奖表错误 中奖失败
                         //未知错误 中奖失败

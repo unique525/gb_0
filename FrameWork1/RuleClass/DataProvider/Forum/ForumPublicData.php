@@ -237,6 +237,45 @@ class ForumPublicData extends BasePublicData {
         return $result;
     }
 
+
+    /**
+     * 取得访问限制方式
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 访问限制方式
+     */
+    public function GetForumAccess($forumId, $withCache) {
+        $result = -1;
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_forum_access.cache_' . $forumId . '';
+            $sql = "SELECT ForumAccess FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得访问限制的设置内容
+     * @param int $forumId 论坛版块id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 访问限制的设置内容
+     */
+    public function GetForumAccessLimit($forumId, $withCache) {
+        $result = "";
+        if ($forumId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
+            $cacheFile = 'forum_get_forum_access_limit.cache_' . $forumId . '';
+            $sql = "SELECT ForumAccessLimit FROM " . self::TableName_Forum . " WHERE ForumId =:ForumId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_Forum, $forumId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
 }
 
 ?>

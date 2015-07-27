@@ -18,5 +18,9 @@ class ForumData {
     const STATE_REMOVED = 100;
 
 
+    /**
+     * 允许特定身份的会员访问
+     */
+    const FORUM_ACCESS_USER_GROUP = 21;
 
 } 
