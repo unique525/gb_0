@@ -23,8 +23,9 @@
                     $("#CloseTab").val("0");
                 }
                 $("#mainForm").attr("action", "/default.php?secu=manage" +
-                    "&mod=site&m={method}" +
+                    "&mod=site_tag&m={method}" +
                     "&site_id={SiteId}" +
+                    "&site_tag_id={SiteTagId}" +
                     "&tab_index=" + parent.G_TabIndex + "");
 
                 $('#mainForm').submit();
@@ -41,9 +42,9 @@
     <div>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="f_SiteTagName">站点名称：</label></td>
+                <td class="spe_line" height="30" align="right"><label for="f_SiteTagName">关键字名称：</label></td>
                 <td class="spe_line">
-                    <input name="f_SiteTagName" id="f_SiteTagName" value="{f_SiteTagName}" type="text"
+                    <input name="f_SiteTagName" id="f_SiteTagName" value="{SiteTagName}" type="text"
                            maxlength="100" class="input_box" style="width:300px;"/>
                 </td>
             </tr>

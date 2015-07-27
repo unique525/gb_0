@@ -34,7 +34,6 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
         return $result;
     }
     private function GenList(){
-
         $siteId = Control::GetRequest("site_id", 0);
         $resultJavaScript="";
         $tempContent = Template::Load("site/site_tag_list.html","common");
@@ -51,7 +50,7 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
             ///////////////判断是否有操作权限///////////////////
             $manageUserId = Control::GetManageUserId();
             $manageUserAuthority = new ManageUserAuthorityManageData();
-            $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
+            $can = $manageUserAuthority->CanChannelModify($siteId, 0, $manageUserId);
 
             if ($can == 1) {
                 $siteTagArray=$siteTagManageData->GetListPager($siteId,$pageBegin,$pageSize,$searchKey,$allCount);
@@ -80,6 +79,7 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
 
 
         parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         $result = $tempContent;
         return $result;
@@ -88,9 +88,144 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
     private function GenCreate(){
 
 
+        $manageUserId = Control::GetManageUserId();
+        $siteId=Control::GetRequest("site_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
+        $resultJavaScript = "";
+
+
+        if ($manageUserId > 0) {
+            $tempContent = Template::Load("site/site_tag_deal.html", "common");
+            ///////////////判断是否有操作权限///////////////////
+            $manageUserAuthority = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthority->CanChannelModify($siteId, 0, $manageUserId);
+            if ($can != 1) {
+                $tempContent = Language::Load("site", 7);//没权限
+                return $tempContent;
+            }
+
+            if($siteId>0){
+            $siteTagManageData = new SiteTagManageData();
+            parent::ReplaceFirst($tempContent);
+
+            if (!empty($_POST)) {
+
+                $nowDateTime=date("Y-m-d H:i:s", time());
+                $httpPostData = $_POST;
+                $httpPostData["f_SiteId"]=$siteId;
+                $httpPostData["f_CreateDate"]=$nowDateTime;
+                $siteTagId = $siteTagManageData->Create($httpPostData);
+                //加入操作日志
+                $operateContent = 'Create Site Tag,POST FORM:' . implode('|', $_POST) . ';\r\nResult:siteTagId:' . $siteTagId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($siteTagId > 0) {
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/site_tag_data');
+
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //Control::CloseTab();
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=site_tag&m=list&tab_index=$tabIndex");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site', 3)); //新增失败！
+
+                }
+
+            }
+                $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+
+                $fields = $siteTagManageData->GetFields();
+                parent::ReplaceWhenCreate($tempContent, $fields);
+
+                $patterns = '/\{s_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
+
+                parent::ReplaceEnd($tempContent);
+
+
+                $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+            }else{
+
+                $tempContent = Language::Load("site", 9); //id错误
+            }
+        } else {
+            $tempContent = Language::Load("site", 8); //管理员id错误
+        }
+        return $tempContent;
 
     }
 
+    private function GenModify(){
+
+        $tempContent = Template::Load("site/site_tag_deal.html", "common");
+        $siteTagId = Control::GetRequest("site_tag_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
+        $resultJavaScript = "";
+        $manageUserId = Control::GetManageUserId();
+
+        if ($manageUserId > 0) {
+
+            ///////////////判断是否有操作权限///////////////////
+            $siteTagManageData = new SiteTagManageData();
+            $siteId=$siteTagManageData->GetSiteId($siteTagId,true);
+            $manageUserAuthority = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthority->CanChannelModify($siteId, 0, $manageUserId);
+            if ($can != 1) {
+                $tempContent = Language::Load("site", 7);//没权限
+                return $tempContent;
+            }
+
+            if($siteTagId > 0){
+
+            parent::ReplaceFirst($tempContent);
+
+
+            //加载原有数据
+            $arrOne = $siteTagManageData->GetOne($siteTagId);
+            Template::ReplaceOne($tempContent, $arrOne);
+
+
+            if (!empty($_POST)) {
+                $httpPostData = $_POST;
+
+                $result = $siteTagManageData->Modify($httpPostData, $siteTagId);
+                //加入操作日志
+                $operateContent = 'Modify Site Tag,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                self::CreateManageUserLog($operateContent);
+
+                if ($result > 0) {
+
+                    //删除缓冲
+                    DataCache::RemoveDir(CACHE_PATH . '/site_tag_data');
+                    $closeTab = Control::PostRequest("CloseTab", 0);
+                    if ($closeTab == 1) {
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=site_tag&m=list&tab_index=$tabIndex");
+                    } else {
+                        Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                    }
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('site', 4)); //编辑失败！
+                }
+            }
+
+                $tempContent = str_ireplace("{SiteTagId}", $siteTagId, $tempContent);
+                $patterns = '/\{s_(.*?)\}/';
+                $tempContent = preg_replace($patterns, "", $tempContent);
+            }else{
+                $tempContent = Language::Load("site", 9);//id错误
+                return $tempContent;
+            }
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
 
 
     /**
