@@ -15,4 +15,7 @@
     <module id="5">
         <content><![CDATA[编辑版块成功]]></content>
     </module>
+    <module id="6">
+        <content><![CDATA[<meta name="viewport" content="width=device-width, initial-scale=1" /><br />此页面只允许特定身份的会员访问，请先<a href="/default.php?mod=user&a=login&re_url={re_url}">登录</a>]]></content>
+    </module>
 </root>

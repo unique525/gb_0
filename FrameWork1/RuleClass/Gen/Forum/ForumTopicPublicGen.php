@@ -69,6 +69,48 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $pageIndex = Control::GetRequest("p", 1);
 
 
+        $forumPublicData = new ForumPublicData();
+
+        $forumAccess = $forumPublicData->GetForumAccess($forumId, true);
+
+        if($forumAccess == ForumData::FORUM_ACCESS_USER_GROUP){
+            //按身份加密
+            $userId = Control::GetUserId();
+
+
+            $message = Language::Load("forum",6);
+            $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+            $selfUrl = urlencode($selfUrl);
+            $message = str_ireplace("{re_url}", $selfUrl, $message);
+
+            if($userId<=0){
+                return $message;
+            }
+
+            $userRolePublicData = new UserPublicData();
+            $userGroupId = $userRolePublicData->GetUserGroupId($userId, true);
+
+            if($userGroupId<=0){
+                return $message;
+            }
+
+            $forumAccessLimit = $forumPublicData->GetForumAccessLimit($forumId, true);
+            if($userGroupId != $forumAccessLimit){
+
+                return $message;
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
         /*******************页面级的缓存 begin********************** */
         $templateMode = 0;
         $defaultTemp = "forum_topic_list";

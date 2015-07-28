@@ -59,6 +59,8 @@ class DocumentNewsClientData extends BaseClientData {
         $sql = "
             SELECT
                 dn.DocumentNewsId,
+                dn.SiteId,
+                dn.ChannelId,
                 dn.DocumentNewsType,
                 dn.DocumentNewsTitle,
                 dn.DocumentNewsShortTitle,
@@ -134,7 +136,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
-            WHERE dn.ChannelId=:ChannelId AND dn.State<100 " . $searchSql . "
+            WHERE dn.ChannelId=:ChannelId AND dn.State=30 " . $searchSql . "
             ORDER BY dn.Sort DESC, dn.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
 
@@ -196,6 +198,8 @@ class DocumentNewsClientData extends BaseClientData {
         $sql = "
             SELECT
                 dn.DocumentNewsId,
+                dn.SiteId,
+                dn.ChannelId,
                 dn.DocumentNewsType,
                 dn.DocumentNewsTitle,
                 dn.DocumentNewsShortTitle,
@@ -271,7 +275,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
-            WHERE dn.ChannelId IN ($channelIds) AND dn.State<100 " . $searchSql . "
+            WHERE dn.ChannelId IN ($channelIds) AND dn.State=30 " . $searchSql . "
             ORDER BY dn.Sort DESC, dn.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
