@@ -19,6 +19,9 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
             case "list":
                 $result = self::GenList();
                 break;
+            case "get_one":
+                $result = self::GetOne();
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -54,6 +57,32 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
         }
 
         return '{"result_code":"'.$resultCode.'","newspaper_article":{"newspaper_article_list":' . $result . '}}';
+    }
+
+    private function GetOne(){
+
+        $result = "[{}]";
+
+        $newspaperArticleId = intval(Control::PostOrGetRequest("newspaper_article_id",0));
+
+
+        if(
+            $newspaperArticleId > 0
+        ){
+            $newspaperArticleClientData = new NewspaperArticleClientData();
+            $arrOne = $newspaperArticleClientData->GetOne($newspaperArticleId, TRUE);
+
+            $result = Format::FixJsonEncode($arrOne);
+            $resultCode = 1; //
+
+        }else{
+            $resultCode = -6; //参数错误;
+        }
+
+
+        return '{"result_code":"' . $resultCode . '","newspaper_article":' . $result . '}';
+
+
     }
 
 } 

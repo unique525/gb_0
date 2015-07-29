@@ -76,8 +76,33 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                             $uploadFileId = $arrProductOne["TitlePic1UploadFileId"];
                             $userFavoriteUrl = "/default.php?&mod=product&a=detail&channel_id=".$channelId."&product_id=".$tableId;
                         }
+                    }elseif($tableType == UserFavoriteData::TABLE_TYPE_DOCUMENT_NEWS){
+                        $userFavoriteTitle = Control::PostOrGetRequest("UserFavoriteTitle","");
+                        $documentNewsClientData = new DocumentNewsClientData();
+                        $arrOne =$documentNewsClientData->GetOne($tableId);
+                        if (count($arrOne)>0){
+                            if($userFavoriteTitle == ""){
+                                $userFavoriteTitle = $arrOne["DocumentNewsTitle"];
+                            }
+                            $channelId = $arrOne["ChannelId"];
+                            $uploadFileId = $arrOne["TitlePic1UploadFileId"];
+                            $userFavoriteUrl = "/default.php?&mod=document_news&a=detail&channel_id=".$channelId."&document_news_id=".$tableId;
+                        }
+                    }elseif($tableType == UserFavoriteData::TABLE_TYPE_NEWSPAPER_ARTICLE){
+                        $userFavoriteTitle = Control::PostOrGetRequest("UserFavoriteTitle","");
+                        $newspaperArticleClientData = new NewspaperArticleClientData();
+                        $arrOne =$newspaperArticleClientData->GetOne($tableId);
+                        if (count($arrOne)>0){
+                            if($userFavoriteTitle == ""){
+                                $userFavoriteTitle = $arrOne["NewspaperArticleTitle"];
+                            }
+
+                            $uploadFileId = 0;//$arrOne["TitlePic1UploadFileId"];
+                            $userFavoriteUrl = "/default.php?&mod=newspaper_article&a=detail&newspaper_article_id=".$tableId;
+                        }
                     }
-                    if($userFavoriteTitle != "" && $uploadFileId > 0){
+
+                    if($userFavoriteTitle != ""){
                         $userFavoriteClientData = new UserFavoriteClientData();
                         $newUserFavoriteId = $userFavoriteClientData->Create($userId,$tableId,$tableType,$siteId,$userFavoriteTitle,$userFavoriteUrl,$uploadFileId,$userFavoriteTag);
                         if($newUserFavoriteId > 0){
