@@ -1730,6 +1730,32 @@ class BasePublicGen extends BaseGen
         $result = "<icms type=\"". Template::TAG_TYPE_VOTE_LIST ."\" temp_type=\"auto\" ". $result . "></icms>";
         return $result;
     }
+
+    /**
+     * 替换微信js api相关的参数
+     * @param $templateContent
+     */
+    protected function ReplaceWeiXinJsApi(&$templateContent){
+
+        $siteId = self::GetSiteIdByDomain();
+        if($siteId>0){
+
+
+            $siteConfigData = new SiteConfigData($siteId);
+
+            $wxJsSDK = new WxJsSDK();
+
+            $arrWxJs = $wxJsSDK->getSignPackage($siteConfigData);
+
+            foreach ($arrWxJs as $key => $value) {
+
+                $templateContent = str_ireplace('{'.$key.'}',$value,$templateContent);
+
+            }
+
+        }
+
+    }
 }
 
 ?>

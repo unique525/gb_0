@@ -84,7 +84,7 @@
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_Odds">中奖几率：</label></td>
-                <td class="spe_line"><input type="number" id="f_Odds" name="f_Odds" value="{Odds}"/> %</td>
+                <td class="spe_line"><input type="number" id="f_Odds" name="f_Odds" value="{Odds}"/> ‱</td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_State">状态：</label></td>

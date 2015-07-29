@@ -154,7 +154,9 @@
  * @property string WeiXinRefreshTokenOauth2
  * @property string WeiXinRefreshTokenGetTimeOauth2
  *
- * Oauth2
+ * @property string WeiXinJsApiTicket
+ * @property string WeiXinJsApiTicketGetTime
+ *
  *
  * @author zhangchi
  */
@@ -394,6 +396,18 @@ class SiteConfigData extends BaseData {
      * @var string
      */
     private $WeiXinRefreshTokenGetTimeOauth2 = "";
+
+    /**
+     * 微信WeiXinJsApiTicket
+     * @var string
+     */
+    private $WeiXinJsApiTicket = "";
+
+    /**
+     * 微信WeiXinJsApiTicket获取时间
+     * @var string
+     */
+    private $WeiXinJsApiTicketGetTime = "";
 
     /////////////////////////////////////////////////////////////////
     ////////////////////////会员相册相关/////////////////////////////////
@@ -708,6 +722,38 @@ class SiteConfigData extends BaseData {
     public function getWeiXinRefreshTokenOauth2()
     {
         return $this->WeiXinRefreshTokenOauth2;
+    }
+
+    /**
+     * @param mixed $WeiXinJsApiTicket
+     */
+    public function setWeiXinJsApiTicket($WeiXinJsApiTicket)
+    {
+        $this->WeiXinJsApiTicket = $WeiXinJsApiTicket;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinJsApiTicket()
+    {
+        return $this->WeiXinJsApiTicket;
+    }
+
+    /**
+     * @param mixed $WeiXinJsApiTicketGetTime
+     */
+    public function setWeiXinJsApiTicketGetTime($WeiXinJsApiTicketGetTime)
+    {
+        $this->WeiXinJsApiTicketGetTime = $WeiXinJsApiTicketGetTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeiXinJsApiTicketGetTime()
+    {
+        return $this->WeiXinJsApiTicketGetTime;
     }
 
 

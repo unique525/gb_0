@@ -135,6 +135,14 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
         $lotteryId=Control::PostOrGetRequest("lottery_id",1);
 
         if($lotteryId>0){
+
+
+
+
+
+
+
+
             $lotteryPublicData=new LotteryPublicData();
             $lotteryUserPublicData=new LotteryUserPublicData();
             //////////////同一会员的参与次数限制//////////////
@@ -188,14 +196,17 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
 
             }
+
+            parent::ReplaceWeiXinJsApi($tempContent);
+
         }
 
 
 
-//parent::ReplaceSiteConfig($siteId, $tempContent);
+        //parent::ReplaceSiteConfig($siteId, $tempContent);
 
 
-//分页
+        //分页
         $documentNewsPublicData=new DocumentNewsPublicData();
         $allCount=$documentNewsPublicData->GetCountInChannel($channelId);
 
@@ -239,7 +250,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
 
         if($userId<=0){
             $result_array["code"]=DefineCode::LOTTERY_PUBLIC+self::LOTTERY_FALSE_USER_ID; //用户id错误
-            return Control::GetRequest("jsonpcallback","") . '('.json_encode($result_array).')';
+            return Control::GetRequest("jsonpcallback","") . '('.Format::FixJsonEncode($result_array).')';
         }
 
         if($lotteryId>0){
@@ -387,7 +398,8 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen {
                         }
 
                         /** roll **/
-                        $randomResult=rand(1,100); //roll 100
+                        //中奖几率 以万分之几处理
+                        $randomResult=rand(1,10000); //roll 10000
                         $awardIfBelow=0; //几率值，roll得点数小于该值则中奖
                         for($i=0;$i<count($arrayLotterySet);$i++){  //循环所有设置的奖项  判断是否中了哪个奖
                             $awardIfBelow+=$arrayLotterySet[$i]["Odds"];  //Odds:中奖几率
