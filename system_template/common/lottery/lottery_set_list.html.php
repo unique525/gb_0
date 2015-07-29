@@ -175,7 +175,7 @@
                     <td class="spe_line">{f_LotterySetName}</td>
                     <td class="spe_line" style="width:160px;text-align:center;">{f_BeginTime}</td>
                     <td class="spe_line" style="width:160px;text-align:center;"><script type="text/javascript">CheckEndDate("{f_EndTime}")</script></td>
-                    <td class="spe_line" style="width:80px;text-align:center;">{f_Odds}%</td>
+                    <td class="spe_line" style="width:80px;text-align:center;">{f_Odds}‱</td>
                     <td class="spe_line" style="width:80px;text-align:center;">{f_DayLimit}个</td>
                     <td class="spe_line" style="width:80px;text-align:center;">{f_TotalLimit}个</td>
                     <td class="spe_line" style="width:80px;text-align:center;">{f_AwardCount}次</td>
