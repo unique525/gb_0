@@ -47,6 +47,21 @@ class CustomFormRecordPublicData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 获取表单记录的计数
+     * @param $customFormId
+     * @return int
+     */
+    public function GetCount($customFormId){
+        $result=0;
+        if($customFormId>0){
+            $dataProperty=new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $sql = "SELECT COUNT(*) FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId ;";
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 
 }

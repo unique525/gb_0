@@ -9,15 +9,16 @@
 class LotteryManageData extends BaseManageData{
 
     /**
-     * 新增分类信息
+     * 新增
      * @param array $httpPostData $_post数组
+     * @param int $channelId 节点id
      * @return int 新增活动id
      */
-    public function Create($httpPostData) {
+    public function Create($httpPostData,$channelId) {
         $result=-1;
         $dataProperty = new DataProperty();
-        $addFieldName = "";
-        $addFieldValue = "";
+        $addFieldName = "ChannelId";
+        $addFieldValue = $channelId;
         $preNumber = "";
         $addFieldNames = array();
         $addFieldValues = array();
@@ -106,7 +107,7 @@ class LotteryManageData extends BaseManageData{
      * @return array 字段数据集
      */
     public function GetFields($tableName = self::TableName_Lottery){
-        return parent::GetFields(self::TableName_LotterySet);
+        return parent::GetFields(self::TableName_Lottery);
     }
 
     /**
@@ -121,6 +122,26 @@ class LotteryManageData extends BaseManageData{
             $dataProperty->AddField("LotteryId", $lotteryId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
         }
+        return $result;
+    }
+
+
+    /**
+     * 修改状态
+     * @param string $lotteryId Id
+     * @param string $state 状态
+     * @return int 执行结果
+     */
+    public function ModifyState($lotteryId,$state) {
+        $result = -1;
+        if ($lotteryId < 0) {
+            return $result;
+        }
+        $sql = "UPDATE " . self::TableName_Lottery . " SET State=:State WHERE LotteryId=:LotteryId";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("LotteryId", $lotteryId);
+        $dataProperty->AddField("State", $state);
+        $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }
 } 

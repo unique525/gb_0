@@ -11,13 +11,14 @@ class LotterySetManageData extends BaseManageData{
     /**
      * 新增分类信息
      * @param array $httpPostData $_post数组
+     * @param int $lotteryId
      * @return int 新增活动id
      */
-    public function Create($httpPostData) {
+    public function Create($httpPostData,$lotteryId) {
         $result=-1;
         $dataProperty = new DataProperty();
-        $addFieldName = "";
-        $addFieldValue = "";
+        $addFieldName = "LotteryId";
+        $addFieldValue = $lotteryId;
         $preNumber = "";
         $addFieldNames = array();
         $addFieldValues = array();

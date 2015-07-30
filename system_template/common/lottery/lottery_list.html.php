@@ -7,15 +7,26 @@
     <script type="text/javascript">
 
         $(function(){
+            //新增
+            $("#btn_create").click(function (event) {
+                event.preventDefault();
+                window.location.href = '/default.php?secu=manage&mod=lottery&m=create&tab_index='+ parent.G_TabIndex +'&channel_id={ChannelId}';
+            });
+            //编辑
+            $(".btn_edit").click(function (event) {
+                event.preventDefault();
+                var lotteryId = parseInt($(this).attr("idvalue"));
+                window.location.href = '/default.php?secu=manage&mod=lottery&m=modify&tab_index='+ parent.G_TabIndex +'&lottery_id='+lotteryId;
+            });
             //管理奖项设置
             $(".span_lottery_set").click(function (event) {
                 event.preventDefault();
                 var lotteryId = parseInt($(this).attr("idvalue"));
-                window.location.href = '/default.php?secu=manage&mod=lottery_set&m=list&tab_index='+ parent.G_TabIndex +'&lottery_id='+lotteryId;
+                //window.location.href = '/default.php?secu=manage&mod=lottery_set&m=list&tab_index='+ parent.G_TabIndex +'&lottery_id='+lotteryId;
 
-                //parent.G_TabUrl = '/default.php?secu=manage&mod=lottery_set&m=list&lottery_id='+lotteryId;
-                //parent.G_TabTitle = '奖项设置';
-                //parent.addTab();
+                parent.G_TabUrl = '/default.php?secu=manage&mod=lottery_set&m=list&lottery_id='+lotteryId;
+                parent.G_TabTitle = '奖项设置';
+                parent.addTab();
 
             });
 
@@ -53,7 +64,7 @@
             state = state.toString();
             switch (state){
                 case "0":
-                    return "启用";
+                    return "<"+"span style='color:#009900'>启用<"+"/span>";
                     break;
                 case "100":
                     return "<"+"span style='color:#990000'>停用<"+"/span>";
@@ -91,10 +102,10 @@
         <tr class="grid_title">
             <td class="spe_line" style="width:40px;text-align:center">ID</td>
             <td class="spe_line" style="width:40px;text-align:center;">编辑</td>
+            <td class="spe_line" style="width:40px;text-align:center;">状态</td>
+            <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
             <td class="spe_line">抽奖名称</td>
             <td class="spe_line" style="width:180px;text-align:center;">管理奖项</td>
-            <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
-            <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
         </tr>
         <icms id="lottery_list" type="list">
             <item><![CDATA[
@@ -105,15 +116,16 @@
                                                                           src="/system_template/default/images/manage/edit.gif"
                                                                           alt="编辑" title="{f_LotteryId}"
                                                                           idvalue="{f_LotteryId}"
-                                                                          onclick="Modify('{f_LotteryId}')"/></td>
+                                                                          onclick="Modify('{f_LotteryId}')"/></td>                    <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_LotteryId}" class="span_state" idvalue="{f_LotteryId}">{f_State}</span></td>
+                    <td class="spe_line2" style="width:60px;text-align:center;">
+                        <img class="img_open" idvalue="{f_LotteryId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" onclick="modifyState({f_LotteryId},0)"/>
+                        &nbsp;
+                        <img class="img_close" idvalue="{f_LotteryId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" onclick="modifyState({f_LotteryId},100)"/>
+                    </td>
                     <td class="spe_line">{f_LotteryName}</td>
+
                     <td class="spe_line span_lottery_set" idvalue="{f_LotteryId}" style="width:180px;text-align:center;cursor: pointer">管理奖项</td>
-                    <!--<td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_LotteryId}" class="span_state" idvalue="{f_LotteryId}">{f_State}</span></td>
-                    <td class="spe_line2" style="width:80px;text-align:center;">
-                        <img class="img_open" idvalue="{f_LotteryId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <img class="img_close" idvalue="{f_LotteryId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
-                       </td>-->
+
                 </tr>
                 ]]>
             </item>

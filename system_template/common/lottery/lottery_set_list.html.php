@@ -7,6 +7,11 @@
     <script type="text/javascript">
 
         $(function(){
+            //新增
+            $("#btn_create").click(function (event) {
+                event.preventDefault();
+                window.location.href = '/default.php?secu=manage&mod=lottery_set&m=create&tab_index='+ parent.G_TabIndex +'&lottery_id={LotteryId}';
+            });
             //编辑
             $(".btn_edit").click(function (event) {
                 event.preventDefault();
@@ -123,7 +128,7 @@
 
 
 <div class="div_list">
-    <!--<table width="100%" cellpadding="0" cellspacing="0">
+    <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td id="td_main_btn" width="83">
                 <input id="btn_create" class="btn2" value="新增奖项" title="" type="button"/>
@@ -139,7 +144,7 @@
                 </div>
             </td>
         </tr>
-    </table>-->
+    </table>
     <table width="100%" class="grid" cellpadding="0" cellspacing="0" id="left_tree">
         <tr class="grid_title">
             <td class="spe_line" style="width:40px;text-align:center">ID</td>

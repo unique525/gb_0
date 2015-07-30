@@ -66,6 +66,9 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
             case "async_create":
                 $result = self::AsyncCreate();
                 break;
+            case "async_get_count":
+                $result = self::AsyncGetCount();
+                break;
             case "edit":
                 $result = self::GenModify();
                 break;
@@ -81,6 +84,18 @@ class CustomFormRecordPublicGen extends BasePublicGen implements IBasePublicGen 
         return $result;
     }
 
+    /**
+     * 取得表单计数
+     */
+    private function AsyncGetCount(){
+        $result=0;
+        $customFormId=Control::PostOrGetRequest("f_custom_form_id","0");
+        if($customFormId>0){
+            $customFormRecordPublicData = new CustomFormRecordPublicData();
+            $result=$customFormRecordPublicData->GetCount($customFormId);
+        }
+        return Control::GetRequest("jsonpcallback","") . '('.$result.')';
+    }
 
     /**
      * 前新增一条活动表单记录
@@ -90,7 +105,7 @@ private function AsyncCreate(){
     $userId = 0;//游客
 
 
-        $customFormId=Control::GetRequest("f_customformid","0");
+        $customFormId=Control::PostOrGetRequest("f_custom_form_id","0");
         $customFromPublicData=new CustomFormPublicData();
         $customFormRecordPublicData = new CustomFormRecordPublicData();
         $customFormFieldPublicData = new CustomFormFieldPublicData();
@@ -102,8 +117,8 @@ private function AsyncCreate(){
             return Control::GetRequest("jsonpcallback","") . '('."-1".')';
         }
 
-        //检查是否有唯一字段重复
         if($customFormId>0){
+            //先检查字段中是否有设置唯一的字段， 该字段是否有重复
             $arrayUnique=$customFormFieldPublicData->GetUniqueField($customFormId);
             $isRepeat=0;
             foreach($arrayUnique as $uniqueField){
@@ -184,10 +199,10 @@ private function AsyncCreate(){
 
             /**随机数字段操作  （抽奖结果，保留查询码等功能）**/
             $randomFieldName=Control::GetRequest("random_field_name","");  //获取对应custom form field的name
-            if($randomFieldName!=""){
+            if($randomFieldName!=""){ //如果request内请求了随机字段
                 $arrayRandomField=$customFormFieldPublicData->GetListByName($customFormId,$randomFieldName);
                 if(count($arrayRandomField)<=0||$arrayRandomField==null){
-                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::CANNOT_FIND_FIELD_FOR_RANDOM;//字段找不到
+                    $result= DefineCode::CUSTOM_FORM_RECORD_PUBLIC+self::CANNOT_FIND_FIELD_FOR_RANDOM;//后台没有设置随机字段，字段找不到
                     return Control::GetRequest("jsonpcallback","") . '('.$result.')';
                 }
                 if(count($arrayRandomField)>1){
@@ -228,6 +243,8 @@ private function AsyncCreate(){
      * 取得随机数，用于抽奖、查询码等功能
      * 具体随机规则暂写在该函数内
      * 由于具体规则是一个二维数组，今后可考虑用json，xml或其他文本存储在某个地方做调用
+     *
+     * （抽奖功能已有独立gen   此方法作废，或可改为获取唯一随机码方法）
      */
     private function GetRandomResult($customFormId,$customFormFieldId){
         $result=0;
