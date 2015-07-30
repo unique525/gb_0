@@ -18,7 +18,7 @@
         });
         function submitForm(continueCreate) {
             var submit=1;
-            if ($('#TemplateLibraryName').val() == '') {
+            if ($('#f_LotterySetName').val() == '') {
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("请输入名称");
                 submit=0;
@@ -36,7 +36,7 @@
 </head>
 <body>
 {common_body_deal}
-<form id="main_form" action="/default.php?secu=manage&mod=lottery_set&m={method}&lottery_set_id={LotterySetId}&tab_index={TabIndex}" method="post">
+<form id="main_form" action="/default.php?secu=manage&mod=lottery_set&m={method}&lottery_id={LotteryId}&lottery_set_id={LotterySetId}&tab_index={TabIndex}" method="post">
 
     <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
     <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">

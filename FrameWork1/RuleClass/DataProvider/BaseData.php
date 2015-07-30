@@ -37,13 +37,17 @@ class BaseData
      */
     const TableName_SiteAd = "cst_site_ad";
     /**
+     * 站点广告位 数据表自增字段名
+     */
+    const TableId_SiteAd = "SiteAdId";
+    /**
      * 站点关键词 数据表名
      */
     const TableName_SiteTag = "cst_site_tag";
     /**
-     * 站点广告位 数据表自增字段名
+     * 站点关键词 数据表自增字段名
      */
-    const TableId_SiteAd = "SiteAdId";
+    const TableId_SiteTag = "SiteTagId";
     /**
      * 站点广告 数据表名
      */

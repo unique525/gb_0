@@ -48,7 +48,7 @@ class NewspaperClientGen extends BaseClientGen implements IBaseClientGen {
             $resultCode = -5;
         }
 
-        return '{"result_code":"' . $resultCode . '","user":' . $result . '}';
+        return '{"result_code":"' . $resultCode . '","newspaper":' . $result . '}';
     }
 
 } 

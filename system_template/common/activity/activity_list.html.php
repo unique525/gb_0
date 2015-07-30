@@ -121,6 +121,15 @@
         $(".span_state").each(function () {
             $(this).html(FormatState($(this).attr("title")));
         });
+
+
+        $(".link_view").each(function(){
+            var activityId = $(this).attr("idvalue");
+            var publishDate = $(this).attr("pub_date");
+            if(publishDate.length>0){
+                $(this).attr("href","/h/"+channelId+"/"+publishDate+"/a"+activityId+".html");
+            }
+        });
     });
 
 
@@ -198,7 +207,7 @@
                     </td>
                     <td class="spe_line2"
                         style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
-                        title="{f_ActivityTitle}">{f_ActivityTitle}
+                        title="{f_ActivityTitle}"><a target="_blank" class="link_view" idvalue="{f_ActivityId}" pub_date="{f_year}{f_month}{f_day}">{f_ActivityTitle}</a>
                     </td>
                     <td class="spe_line2"
                         style="width:160px; overflow: hidden;white-space:nowrap; margin-left: 5px; margin-right: 4px;"

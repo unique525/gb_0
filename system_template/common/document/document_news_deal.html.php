@@ -463,7 +463,7 @@ function submitForm(closeTab) {
 }
 
 function DocumentNewsTagPulling(){
-    var siteId=2;//parent.G_NowSiteId;
+    var siteId=parent.G_NowSiteId;
     $.ajax({
         url: "/default.php?secu=manage&mod=site_tag&m=async_get_list_for_pull",
         data: { site_id:siteId },

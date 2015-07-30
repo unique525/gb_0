@@ -87,10 +87,102 @@ class LotterySetManageGen extends BaseManageGen implements IBaseManageGen {
         }
 
 
-        $tempContent = str_ireplace("{SiteId}", $lotteryId, $tempContent);
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+        $tempContent = str_ireplace("{LotteryId}", $lotteryId, $tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
     }
+
+
+    /**
+     * 新增
+     * @return string 执行结果
+     */
+    private function GenCreate(){
+        $tempContent = Template::Load("lottery/lottery_set_deal.html","common");
+        $resultJavaScript="";
+        $lotteryId=Control::GetRequest("lottery_id",-1);
+        $tabIndex=Control::GetRequest("tab_index",0);
+
+
+        $lotterySetManageData=new LotterySetManageData();
+        //////////////判断是否有操作权限///////////////////
+        $lotteryManageData=new LotteryManageData();
+        $channelManageData=new ChannelManageData();
+
+        $channelId = $lotteryManageData->GetChannelId($lotteryId);
+        $siteId=$channelManageData->GetSiteId($channelId,TRUE);
+        $manageUserId = Control::GetManageUserId();
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanManageAd($siteId, $channelId, $manageUserId);
+        if ($can != 1) {
+            Control::ShowMessage(Language::Load('custom_form', 3));
+            return "";
+        }
+
+        parent::ReplaceFirst($tempContent);
+
+        if (intval($lotteryId) > 0) {
+            if (!empty($_POST)) {
+                $newId = $lotterySetManageData->Create($_POST, $lotteryId);
+
+                //记入操作log
+                $operateContent = "Create lottery_set：LotteryId：" . $lotteryId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newId;
+                self::CreateManageUserLog($operateContent);
+
+                if ($newId > 0) {
+
+                    /** 处理lottery group **/
+                    $lotterySetGroup=Control::PostOrGetRequest("f_LotterySetGroup",-1);
+                    $oneUserLimit=Control::PostOrGetRequest("f_OneUserLimit",0);
+                    $lotterySetManageData->ModifyOneUserLimitOfGroup($lotteryId,$lotterySetGroup,$oneUserLimit);
+
+                    Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
+                    $closeTab = Control::PostRequest("CloseTab",0);
+                    if($closeTab == 1){
+                        //$resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=lottery_set&m=list&lottery_id=$lotteryId&tab_index=$tabIndex");
+                    }else{
+                        Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+                    }
+
+
+
+                }else{
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 2));//提交失败!插入或修改数据库错误！
+                }
+
+
+            }
+
+
+
+            $tempContent = str_ireplace("{LotteryId}", $lotteryId, $tempContent);
+
+
+
+            $replaceArr = array(
+                "{TabIndex}" => $tabIndex,
+                "{display}" => "inline"
+            );
+            $tempContent = strtr($tempContent, $replaceArr);
+
+
+            $field=$lotterySetManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent,$field);
+
+            //替换掉{s XXX}的内容
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        } else {
+            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 5));//id错误！;
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
 
 
 

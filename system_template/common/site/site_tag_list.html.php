@@ -10,21 +10,14 @@
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                //parent.G_TabUrl = '/default.php?secu=manage&mod=site&m=create';
-                //parent.G_TabTitle =  '新增站点';
-                //parent.addTab();
-                window.location.href = '/default.php?secu=manage&mod=site&m=create&tab_index='+ parent.G_TabIndex +'';
+                window.location.href = '/default.php?secu=manage&mod=site_tag&m=create&tab_index='+ parent.G_TabIndex +'&site_id={SiteId}';
             });
 
 
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
-                var siteId=$(this).attr("idvalue");
-                var siteName=$(this).attr("title");
-                //parent.G_TabUrl = '/default.php?secu=manage&mod=site&m=modify' + '&site_id=' + siteId + '';
-                //parent.G_TabTitle = siteName + '-编辑';
-                //parent.addTab();
-                window.location.href = '/default.php?secu=manage&mod=site&m=modify&tab_index='+ parent.G_TabIndex +'&site_id=' + siteId + '';
+                var siteTagId=$(this).attr("idvalue");
+                window.location.href = '/default.php?secu=manage&mod=site_tag&m=modify&tab_index='+ parent.G_TabIndex +'&site_tag_id=' + siteTagId + '';
             });
 
             //格式化状态
