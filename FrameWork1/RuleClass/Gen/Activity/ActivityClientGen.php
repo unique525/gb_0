@@ -19,6 +19,9 @@ class ActivityClientGen extends BaseClientGen implements IBaseClientGen {
             case "list_of_channel":
                 $result = self::GenListOfChannel();
                 break;
+            case "get_one":
+                $result = self::GetOne();
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -59,5 +62,32 @@ class ActivityClientGen extends BaseClientGen implements IBaseClientGen {
         }
 
         return '{"result_code":"'.$resultCode.'","activity":{"activity_list":' . $result . '}}';
+    }
+
+
+    private function GetOne(){
+
+        $result = "[{}]";
+
+        $activityId = intval(Control::PostOrGetRequest("activity_id",0));
+
+
+        if(
+            $activityId > 0
+        ){
+            $activityClientData = new ActivityClientData();
+            $arrOne = $activityClientData->GetOne($activityId, TRUE);
+
+            $result = Format::FixJsonEncode($arrOne);
+            $resultCode = 1; //
+
+        }else{
+            $resultCode = -6; //参数错误;
+        }
+
+
+        return '{"result_code":"' . $resultCode . '","activity":' . $result . '}';
+
+
     }
 } 

@@ -28,4 +28,8 @@ class UserFavoriteData extends BaseData
      * 表类型 论坛帖子 5
      */
     const TABLE_TYPE_FORUM_POST = 5;
+    /**
+     * 表类型 电子报文章 6
+     */
+    const TABLE_TYPE_NEWSPAPER_ARTICLE = 6;
 } 

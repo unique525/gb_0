@@ -47,4 +47,29 @@ class NewspaperArticleClientData extends BaseClientData {
 
         return $result;
     }
+
+    /**
+     * 返回一行数据
+     * @param int $newspaperArticleId 电子报文章id
+     * @param bool $withCache 是否使用缓存
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($newspaperArticleId, $withCache = FALSE){
+        $result = null;
+        if($newspaperArticleId>0){
+            $sql = "
+            SELECT dn.*
+
+
+            FROM
+            " . self::TableName_NewspaperArticle . " dn
+
+            WHERE dn.NewspaperArticleId=:NewspaperArticleId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+
+        }
+        return $result;
+    }
 }
