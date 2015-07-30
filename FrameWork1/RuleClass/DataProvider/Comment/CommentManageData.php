@@ -1,11 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: yin
- * Date: 14-12-5
- * Time: 上午11:15
+ * 后台管理 频道 数据类
+ * @category iCMS
+ * @package iCMS_FrameWork1_RuleClass_DataProvider_Comment
+ * @author zhangchi
  */
-
 class CommentManageData extends BaseManageData{
 
     public function GetList($tableId,$tableType,$siteId,$pageBegin,$pageSize,&$allCount){

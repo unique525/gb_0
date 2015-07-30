@@ -72,4 +72,28 @@ class NewspaperArticleClientData extends BaseClientData {
         }
         return $result;
     }
+
+
+    /**
+     * 增加评论数
+     * @param int $newspaperArticleId 文章id
+     * @return int
+     */
+    public function AddCommentCount($newspaperArticleId){
+        $result = -1;
+
+        if($newspaperArticleId>0){
+
+            $sql = "UPDATE ".self::TableName_NewspaperArticle."
+                    SET CommentCount=CommentCount+1
+                    WHERE NewspaperArticleId=:NewspaperArticleId;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+
+        return $result;
+    }
 }

@@ -2132,6 +2132,72 @@ class BaseGen
         }
     }
 
+    /**
+     * @param int $siteId
+     * @param int $useArea
+     * @param bool $stop
+     * @param string $content
+     * @param array $multiContent
+     * @return string
+     */
+    protected function DoFilter($siteId, $useArea, &$stop, &$content, &$multiContent = null)
+    {
+        $result = "";
+        $stop = FALSE;
+
+
+        $siteFilterData = new SiteFilterData();
+        $arrSiteFilter = $siteFilterData->GetList($siteId, true);
+
+
+
+        if (count($arrSiteFilter) > 0) {
+
+            for ($i = 0; $i < count($arrSiteFilter); $i++) {
+                $siteFilterWord = trim($arrSiteFilter[$i]["SiteFilterWord"]); //过滤字符
+                $intervalCount = intval($arrSiteFilter[$i]["IntervalCount"]); //过滤字符中的间隔数字
+                $siteFilterType = intval($arrSiteFilter[$i]["SiteFilterType"]); //过滤类型 0:替换 1:阻止
+                $siteFilterArea = intval($arrSiteFilter[$i]["SiteFilterArea"]); //过滤范围 0:全局 1:资讯 2:活动 3:会员 4:评论
+                $pregMatch = "";
+                $siteFilterWordLength = mb_strlen($siteFilterWord, 'utf8');
+
+                if ($siteFilterWordLength > 0 && $intervalCount >= 0) {
+                    for ($j = 0; $j < $siteFilterWordLength; $j++) {
+                        if ($j < $siteFilterWordLength - 1) { //不是最后一个字符，就拼接正则表达式
+                            $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1) . "[\s|\S|\d|\D|，|。|？|：|；|‘|’|！|“|”|—]{0,$intervalCount}";
+                        } else { //否则只拼接字符
+                            $pregMatch = $pregMatch . mb_substr($siteFilterWord, $j, 1);
+                        }
+                    }
+                }
+                if (mb_strlen($pregMatch) > 0) { //match字符不为空时才处理
+                    $pregMatch = '/' . $pregMatch . '/iu';
+
+                    if ($useArea == $siteFilterArea || $siteFilterArea == 0) { //只处理符合对应使用区域和全局的
+                        if (!empty($multiContent)) { //多内容数组
+                            for ($imc = 0; $imc < count($multiContent); $imc++) {
+                                if (!empty($multiContent[$imc])) {
+                                    $multiContent[$imc] = preg_replace($pregMatch, "***", $multiContent[$imc]);
+                                }
+                            }
+                        } else { //单字符串
+                            if ($siteFilterType == 1) { //同时阻止执行
+                                $matches = null;
+                                if (preg_match($pregMatch, $content, $matches)) {
+                                    $stop = TRUE;
+                                    //$i = count($arrSiteFilter);
+                                    $result = $matches[0];
+                                }
+                            }
+                            $content = preg_replace($pregMatch, "***", $content); //替换过滤字符为 *
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
 }
 
 ?>

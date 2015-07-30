@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 前台 频道 数据类
+ * 客户端 频道 数据类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Comment
  * @author zhangchi
  */
-class CommentPublicData extends BasePublicData {
+class CommentClientData extends BaseClientData {
 
     public function Create(
         $siteId,
@@ -76,9 +76,9 @@ class CommentPublicData extends BasePublicData {
         return $result;
     }
 
-    public function GetList($tableId,$tableType,$siteId,$commentType,&$allCount,$pageBegin,$pageSize){
+    public function GetList($tableId,$tableType,$commentType,$pageBegin,$pageSize){
         $result = null;
-        if($tableId > 0 && $tableType > 0 && $siteId > 0){
+        if($tableId > 0 && $tableType > 0){
             $sql = "SELECT
                             c.CommentId,
                             c.UserId,
@@ -94,21 +94,20 @@ class CommentPublicData extends BasePublicData {
                             ui.NickName,
                             uf.UploadFileThumbPath2 AS Avatar
                           FROM "
-                            . self::TableName_Comment . " c
+                . self::TableName_Comment . " c
                             LEFT JOIN ".self::TableName_UserInfo." ui on c.UserId = ui.UserId
                             LEFT JOIN ".self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
                           WHERE (c.state=".CommentData::COMMENT_STATE_CHECKED." OR c.state=".CommentData::COMMENT_STATE_UN_CHECK.") AND c.TableType=:TableType AND c.TableId=:TableId AND c.CommentType=:CommentType ORDER BY c.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_Comment . " c LEFT JOIN ".self::TableName_UserInfo." ui ON c.UserId = ui.UserId "
-                . " WHERE (c.State=".CommentData::COMMENT_STATE_CHECKED." OR c.state=".CommentData::COMMENT_STATE_UN_CHECK.") AND c.TableType=:TableType AND c.TableId=:TableId AND c.CommentType=:CommentType ORDER BY c.CreateDate DESC;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("TableId", $tableId);
             $dataProperty->AddField("TableType", $tableType);
             $dataProperty->AddField("CommentType", $commentType);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
+
+
     public function Reply(
         $parentId,
         $rank,
@@ -196,5 +195,3 @@ class CommentPublicData extends BasePublicData {
     }
 
 }
-
-?>
