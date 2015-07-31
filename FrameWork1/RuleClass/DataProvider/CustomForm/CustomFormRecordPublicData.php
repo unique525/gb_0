@@ -10,14 +10,19 @@
 class CustomFormRecordPublicData extends BaseManageData {
     /**
      * 新增一条记录
-     * @param array $httpPostData $_post数组
-     * @return int 新增表单记录id
+     * @param $customFormId
+     * @param $userId
+     * @param $createDate
+     * @return int
      */
-    public function Create($httpPostData) {
+    public function Create($customFormId,$userId,$createDate) {
         $result=-1;
-        if(!empty($httpPostData)){
+        if($customFormId>0){
             $dataProperty = new DataProperty();
-            $sql = parent::GetInsertSql($httpPostData,self::TableName_CustomFormRecord, $dataProperty);
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("CreateDate", $createDate);
+            $sql = "INSERT INTO ".self::TableName_CustomFormRecord." (CustomFormId,UserId,CreateDate) VALUES(:CustomFormId,:UserId,:CreateDate)";
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
         }
         return $result;
