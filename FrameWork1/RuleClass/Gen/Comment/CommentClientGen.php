@@ -31,136 +31,149 @@ class CommentClientGen extends BaseClientGen{
 
     private function GenCreate()
     {
-        $tableId = intval(Control::PostORGetRequest("table_id", 0));
-        $tableType = intval(Control::PostORGetRequest("table_type", 0));
-        $subject = Format::FormatHtmlTag(Control::PostORGetRequest("subject", ""));
-        $content = Format::FormatHtmlTag(Control::PostORGetRequest("content", ""));
-        $siteId = intval(Control::PostORGetRequest("site_id", ""));
-        $channelId = intval(Control::PostORGetRequest("channel_id", 0));
-        $guestName = Format::FormatHtmlTag(Control::PostORGetRequest("guest_name", ""));
-        $guestEmail = Format::FormatHtmlTag(Control::PostORGetRequest("guest_email", ""));
-        $reUrl = urldecode(Control::PostORGetRequest("url", ""));
-        $commentType = intval(Control::PostORGetRequest("comment_type", CommentData::COMMENT_TYPE_SHORT_TEXT));
+        $result = "[{}]";
 
-        $commentClientData = new CommentClientData();
+        $userId = parent::GetUserId();
 
-        /*******************过滤字符 begin********************** */
-        $multiFilterContent = array();
-        $multiFilterContent[0] = $subject;
-        $multiFilterContent[1] = $content;
-        $multiFilterContent[2] = $guestName;
-        $multiFilterContent[3] = $guestEmail;
-        $useArea = 4; //过滤范围 4:评论
-        $stop = FALSE; //是否停止执行
-        $filterContent = null;
-        $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
-        $subject = $multiFilterContent[0];
-        $content = $multiFilterContent[1];
-        $guestName = $multiFilterContent[2];
-        $guestEmail = $multiFilterContent[3];
-        /*******************过滤字符 end********************** */
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
 
-        $userId = Control::GetUserId();
-        $userName = Control::GetUserName();
-        $openState = 0;
+            $tableId = intval(Control::PostORGetRequest("table_id", 0));
+            $tableType = intval(Control::PostORGetRequest("table_type", 0));
+            $subject = Format::FormatHtmlTag(Control::PostORGetRequest("subject", ""));
+            $content = Format::FormatHtmlTag(Control::PostORGetRequest("content", ""));
+            $siteId = intval(Control::PostORGetRequest("site_id", ""));
+            $channelId = intval(Control::PostORGetRequest("channel_id", 0));
+            $guestName = Format::FormatHtmlTag(Control::PostORGetRequest("guest_name", ""));
+            $guestEmail = Format::FormatHtmlTag(Control::PostORGetRequest("guest_email", ""));
+            $reUrl = urldecode(Control::PostORGetRequest("url", ""));
+            $commentType = intval(Control::PostORGetRequest("comment_type", CommentData::COMMENT_TYPE_SHORT_TEXT));
 
-        //开放评论状态 0:不允许 10:先审后发 20:先发后审 30:自由评论 40:根据频道设置而定
-        switch ($tableType) {
-            case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
-                $openState = 10;
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
-//                    $activityData = new ActivityData();
-//                    $openState = $activityData->GetOpenComment($tableId);
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
-                $openState = 10;
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
-                $channelPublicData = new ChannelPublicData();
-                $openState = $channelPublicData->GetOpenComment($tableId, TRUE);
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
-                $documentNewsPublicData = new DocumentNewsPublicData();
-                $openState = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
-                if ($openState == 40) { //根据频道设置而定
-                    $channelId = $documentNewsPublicData->GetChannelId($tableId, FALSE);
-                    $channelPublicData = new ChannelPublicData();
-                    $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
-                }
-                break;
-            case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
-                $newspaperArticlePublicData = new NewspaperArticlePublicData();
-                $channelId = $newspaperArticlePublicData->GetChannelId($tableId, TRUE);
-                $channelPublicData = new ChannelPublicData();
-                $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
-                break;
-        }
+            $commentClientData = new CommentClientData();
 
-        //评论状态 0:未审 10:先审后发 20:先发后审 30:已审 100:已否
-        $state = 0;
-        switch ($openState) {
-            case 10:
-                $state = CommentData::COMMENT_STATE_FIRST_CHECK_THEN_PUBLISH;
-                break;
-            case 20:
-                $state = CommentData::COMMENT_STATE_FIRST_PUBLISH_THEN_CHECK;
-                break;
-            case 30:
-                $state = CommentData::COMMENT_STATE_UN_CHECK;
-                break;
-        }
+            /*******************过滤字符 begin********************** */
+            $multiFilterContent = array();
+            $multiFilterContent[0] = $subject;
+            $multiFilterContent[1] = $content;
+            $multiFilterContent[2] = $guestName;
+            $multiFilterContent[3] = $guestEmail;
+            $useArea = 4; //过滤范围 4:评论
+            $stop = FALSE; //是否停止执行
+            $filterContent = null;
+            $stopWord = parent::DoFilter($siteId, $useArea, $stop, $filterContent, $multiFilterContent);
+            $subject = $multiFilterContent[0];
+            $content = $multiFilterContent[1];
+            $guestName = $multiFilterContent[2];
+            $guestEmail = $multiFilterContent[3];
+            /*******************过滤字符 end********************** */
 
-        $result = $commentClientData->Create(
-            $siteId,
-            $subject,
-            $content,
-            $channelId,
-            $tableId,
-            $tableType,
-            $userId,
-            $userName,
-            $guestName,
-            $guestEmail,
-            $state,
-            $commentType,
-            $reUrl
-        );
+            $userClientData = new UserClientData();
 
-        if ($result > 0) {
+            $userName = $userClientData->GetUserName($userId, true);
+            $openState = 0;
+
+            //开放评论状态 0:不允许 10:先审后发 20:先发后审 30:自由评论 40:根据频道设置而定
             switch ($tableType) {
                 case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
-
+                    $openState = 10;
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
+//                    $activityData = new ActivityData();
+//                    $openState = $activityData->GetOpenComment($tableId);
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
+                    $openState = 10;
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
+                    $channelPublicData = new ChannelPublicData();
+                    $openState = $channelPublicData->GetOpenComment($tableId, TRUE);
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
-                    $documentNewsClientData = new DocumentNewsClientData();
-                    $documentNewsClientData->AddCommentCount($tableId);
+                    $documentNewsPublicData = new DocumentNewsPublicData();
+                    $openState = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
+                    if ($openState == 40) { //根据频道设置而定
+                        $channelId = $documentNewsPublicData->GetChannelId($tableId, FALSE);
+                        $channelPublicData = new ChannelPublicData();
+                        $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
+                    }
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
-                    $newspaperArticleClientData = new NewspaperArticleClientData();
-                    $newspaperArticleClientData->AddCommentCount($tableId);
+                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                    $channelId = $newspaperArticlePublicData->GetChannelId($tableId, TRUE);
+                    $channelPublicData = new ChannelPublicData();
+                    $openState = $channelPublicData->GetOpenComment($channelId, TRUE);
                     break;
             }
 
-        } else {
+            //评论状态 0:未审 10:先审后发 20:先发后审 30:已审 100:已否
+            $state = 0;
+            switch ($openState) {
+                case 10:
+                    $state = CommentData::COMMENT_STATE_FIRST_CHECK_THEN_PUBLISH;
+                    break;
+                case 20:
+                    $state = CommentData::COMMENT_STATE_FIRST_PUBLISH_THEN_CHECK;
+                    break;
+                case 30:
+                    $state = CommentData::COMMENT_STATE_UN_CHECK;
+                    break;
+            }
+
+            $result = $commentClientData->Create(
+                $siteId,
+                $subject,
+                $content,
+                $channelId,
+                $tableId,
+                $tableType,
+                $userId,
+                $userName,
+                $guestName,
+                $guestEmail,
+                $state,
+                $commentType,
+                $reUrl
+            );
+
+            if ($result > 0) {
+                switch ($tableType) {
+                    case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
+
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM_PIC: //相片
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_ACTIVE: //活动
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_PRODUCT: //产品
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_SITE_CONTENT: //站点内容
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_CHANNEL: //频道评论
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
+                        $documentNewsClientData = new DocumentNewsClientData();
+                        $documentNewsClientData->AddCommentCount($tableId);
+                        break;
+                    case CommentData::COMMENT_TABLE_TYPE_OF_NEWSPAPER: //电子报
+                        $newspaperArticleClientData = new NewspaperArticleClientData();
+                        $newspaperArticleClientData->AddCommentCount($tableId);
+                        break;
+                }
+
+            } else {
+
+            }
+
 
         }
 
-        return $result;
+
+        return '{"result_code":"' . $resultCode . '","comment_create":' . $result . '}';
     }
 
     private function GenList()
