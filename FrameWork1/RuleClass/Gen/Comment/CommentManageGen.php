@@ -1,9 +1,9 @@
 <?php
 /**
- * 通用评论 后台 生成类
+ * 后台管理 评论 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Comment
- * @author yin
+ * @package iCMS_FrameWork1_RuleClass_Gen_Comment
+ * @author zhangchi
  */
 class CommentManageGen extends BaseManageGen implements IBaseManageGen
 {

@@ -19,6 +19,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $activityClientGen = new ActivityClientGen();
                 $result = $activityClientGen->GenClient();
                 break;
+            case "comment":
+                $commentClientGen = new CommentClientGen();
+                $result = $commentClientGen->GenClient();
+                break;
             case "pic_slider":
                 $picSliderClientGen = new PicSliderClientGen();
                 $result = $picSliderClientGen->GenClient();

@@ -1,10 +1,9 @@
 <?php
-
 /**
- * 通用评论 前台 生成类
+ * 前台 评论 生成类
  * @category iCMS
- * @package iCMS_Rules_Gen_Comment
- * @author yin
+ * @package iCMS_FrameWork1_RuleClass_Gen_Comment
+ * @author zhangchi
  */
 class CommentPublicGen extends BasePublicGen implements IBasePublicGen
 {
