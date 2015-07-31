@@ -198,7 +198,6 @@ class CommentClientGen extends BaseClientGen{
                 $arrList = $commentClientData->GetList(
                     $tableId,
                     $tableType,
-                    $siteId,
                     $commentType,
                     $pageBegin,
                     $pageSize);

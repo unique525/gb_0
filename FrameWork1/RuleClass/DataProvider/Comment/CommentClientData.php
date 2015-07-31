@@ -99,6 +99,7 @@ class CommentClientData extends BaseClientData {
                             LEFT JOIN ".self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
                           WHERE (c.state=".CommentData::COMMENT_STATE_CHECKED." OR c.state=".CommentData::COMMENT_STATE_UN_CHECK.") AND c.TableType=:TableType AND c.TableId=:TableId AND c.CommentType=:CommentType ORDER BY c.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
             $dataProperty = new DataProperty();
+
             $dataProperty->AddField("TableId", $tableId);
             $dataProperty->AddField("TableType", $tableType);
             $dataProperty->AddField("CommentType", $commentType);
