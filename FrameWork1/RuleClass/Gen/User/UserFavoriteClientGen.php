@@ -139,7 +139,7 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
             }
 
         }
-        return '{"result_code":"' . $resultCode . '","user_favorite_create":' . $result . '}';
+        return '{"result_code":"' . $resultCode . '","user_favorite":' . $result . '}';
     }
 
     private function GenDelete()
