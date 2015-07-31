@@ -393,7 +393,7 @@ private function AsyncCreate(){
      * 具体随机规则暂写在该函数内
      * 由于具体规则是一个二维数组，今后可考虑用json，xml或其他文本存储在某个地方做调用
      *
-     * （抽奖功能已有独立gen   此方法作废，或可改为获取唯一随机码方法）
+     * （抽奖功能已有独立gen   此方法作废，或可改为获取随机码的方法）
      */
     private function GetRandomResult($customFormId,$customFormFieldId){
         $result=0;
