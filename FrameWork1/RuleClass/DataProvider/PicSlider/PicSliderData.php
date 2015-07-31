@@ -21,11 +21,15 @@ class PicSliderData {
     const STATE_REMOVED = 100;
 
     /**
-     * 咨讯
+     * 资讯
      */
-    const PIC_SLIDER_TABLE_TYPE_NEWS = 101;
+    const PIC_SLIDER_TABLE_TYPE_DOCUMENT_NEWS = 101;
     /**
      * 产品
      */
     const PIC_SLIDER_TABLE_TYPE_PRODUCT = 102;
+    /**
+     * 活动
+     */
+    const PIC_SLIDER_TABLE_TYPE_ACTIVITY = 103;
 } 
