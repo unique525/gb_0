@@ -46,4 +46,20 @@ class LotterySetPublicData extends BasePublicData {
 
         return $result;
     }
+
+    /**
+     * 获取抽奖的所有奖项设置
+     * @param $lotterySetId
+     * @return array|int
+     */
+    public function GetOne($lotterySetId){
+        $result=null;
+        if($lotterySetId>0){
+            $sql="SELECT * FROM ".self::TableName_LotterySet." WHERE LotterySetId=:LotterySetId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LotterySetId", $lotterySetId);
+            $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
 } 
