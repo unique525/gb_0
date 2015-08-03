@@ -160,6 +160,7 @@
             <td style="width:30px;text-align:center; cursor: pointer;" id="btn_select_all"><label
                     for="doc_input">全</label></td>
             <td style="width:40px;text-align:center;">编辑</td>
+            <td style="width:80px;text-align:center;">ID</td>
             <td style="width:40px;text-align:center;">状态</td>
             <td style="width:40px;text-align:center;">启用</td>
             <td style="width:40px;text-align:center;">停用</td>
@@ -186,6 +187,8 @@
                                                                                      alt="编辑" title="{f_ActivityTitle}"
                                                                                      idvalue="{f_ActivityId}"
                                                                                      type_value="{f_ActivityType}"/>
+                    </td>
+                    <td class="spe_line2" style="width:40px;text-align:center;">{f_ActivityId}
                     </td>
                     <td class="spe_line2" style="width:40px;text-align:center;" title="点击按状态进行汇总"><span
                             class="span_state" title="{f_State}" id="state_{f_ActivityId}"></span></td>

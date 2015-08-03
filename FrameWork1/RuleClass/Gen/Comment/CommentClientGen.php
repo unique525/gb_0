@@ -32,7 +32,6 @@ class CommentClientGen extends BaseClientGen{
     private function GenCreate()
     {
         $result = "[{}]";
-
         $userId = parent::GetUserId();
 
         if ($userId <= 0) {
@@ -141,6 +140,14 @@ class CommentClientGen extends BaseClientGen{
             );
 
             if ($result > 0) {
+
+                $resultCode = 1;
+
+                $arrOne = $commentClientData->GetOne($result);
+
+                $result = Format::FixJsonEncode($arrOne);
+
+                
                 switch ($tableType) {
                     case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
 
@@ -166,7 +173,7 @@ class CommentClientGen extends BaseClientGen{
                 }
 
             } else {
-
+                $resultCode = -6;
             }
 
 

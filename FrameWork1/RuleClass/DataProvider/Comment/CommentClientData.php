@@ -24,7 +24,8 @@ class CommentClientData extends BaseClientData {
         $sourceUrl
     ){
         $result = -1;
-        if($siteId > 0  && !empty($content)  && $channelId > 0 && $tableId > 0 && $tableType > 0){
+
+        if($siteId > 0  && strlen($content)>0  && $tableId > 0 && $tableType > 0){
             $sql = "
                 INSERT INTO " . self::TableName_Comment . " (
                     TableId,
@@ -72,6 +73,7 @@ class CommentClientData extends BaseClientData {
             $dataProperty->AddField("CommentType", $commentType);
             $dataProperty->AddField("SourceUrl", $sourceUrl);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+
         }
         return $result;
     }
@@ -191,6 +193,24 @@ class CommentClientData extends BaseClientData {
             $dataProperty->AddField("CommentType", $commentType);
             $dataProperty->AddField("SourceUrl", $sourceUrl);
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 获取一个信息
+     * @param int $commentId 订单Id
+     * @return array|null 数组
+     */
+    public function GetOne($commentId){
+        $result = null;
+        if($commentId > 0){
+            $sql = "SELECT * FROM "
+                .self::TableName_Comment."
+                 WHERE CommentId = :CommentId; ";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CommentId",$commentId);
+            $result = $this->dbOperator->GetArray($sql,$dataProperty);
         }
         return $result;
     }
