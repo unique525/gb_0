@@ -57,7 +57,7 @@
                 uploadFiles = uploadFiles + "," + data.upload_file_id;
                 fUploadFile.val(uploadFiles);
             }
-        }
+        };
 
 
 
