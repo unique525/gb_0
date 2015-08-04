@@ -1660,9 +1660,10 @@ class BasePublicGen extends BaseGen
     {
         $result = $source[1];
         //替换掉编辑器中可能的&nbsp;为标准空格形式
-        $replace_arr = array("&nbsp;" => " ");
-        $result = strtr($result, $replace_arr);
-        $result = "<icms type=\"". Template::TAG_TYPE_VOTE_LIST ."\" temp_type=\"auto\" ". $result . "></icms>";
+        $result = str_ireplace("&nbsp;"," ", $result);
+        //替换编辑器中&quot;为标准引号形式
+        $result = str_ireplace("&quot;","\"", $result);
+        $result = "<icms". $result . " type=\"". Template::TAG_TYPE_VOTE_ITEM_LIST ."\" temp_type=\"auto\"></icms>";
         return $result;
     }
 
