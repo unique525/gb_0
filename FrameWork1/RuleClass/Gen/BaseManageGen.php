@@ -379,6 +379,8 @@ class BaseManageGen extends BaseGen
         parent::ReplaceSiteInfo($siteId, $channelTemplateContent);
         parent::ReplaceChannelInfo($channelId, $channelTemplateContent);
 
+        /** 替换投票调查标签为标准形式 */
+        $channelTemplateContent = self::ReplaceVoteTagToCmsTag($channelTemplateContent);
         /** 2.替换模板内容 */
         $arrCustomTags = Template::GetAllCustomTag($channelTemplateContent);
         if (count($arrCustomTags) > 0) {
@@ -995,6 +997,34 @@ class BaseManageGen extends BaseGen
     }
 
     /**
+     * 替换投票调查标签为标准的cms标签形式
+     * @param string $templateContent 要处理的模板内容
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceVoteTagToCmsTag($templateContent){
+        $pattern = "/{icms_vote(.*?)}/ims";
+        //调用VoteReplace回调方法处理
+        $templateContent = preg_replace_callback($pattern, array(&$this, 'VoteReplace'), $templateContent);
+        return $templateContent;
+    }
+
+    /**
+     * 替换模板中的投票调查标记为标准形式的回调方法
+     * @param string $source 被替换字符串
+     * @return mixed|string
+     */
+    private function VoteReplace($source)
+    {
+        $result = $source[1];
+        //替换掉编辑器中可能的&nbsp;为标准空格形式
+        $result = str_ireplace("&nbsp;"," ", $result);
+        //替换编辑器中&quot;为标准引号形式
+        $result = str_ireplace("&quot;","\"", $result);
+        $result = "<icms". $result . " type=\"". Template::TAG_TYPE_VOTE_ITEM_LIST ."\" temp_type=\"auto\"></icms>";
+        return $result;
+    }
+
+    /**
      * 替换投票题目列表内容
      * @param string $templateContent 要处理的模板内容
      * @param string $voteId 投票调查id
@@ -1403,7 +1433,8 @@ class BaseManageGen extends BaseGen
                                         $pagerLine = "|=================================== PAGE ====================================|";
 
                                         if(count($arrOne)>0){
-
+                                            //对文档内容可能包含的如投票等标记内容进行替换处理
+                                            $arrOne["DocumentNewsContent"] = self::ReplaceTemplate($channelId, $arrOne["DocumentNewsContent"]);
                                             $documentNewsContent = $arrOne["DocumentNewsContent"];
                                             $arrDocumentNewsContent = explode(
                                                 $pagerLine,
