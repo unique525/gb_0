@@ -1023,6 +1023,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         parent::ReplaceFirst($tempContent);
         $mod=Control::GetRequest("mod","");
         $channelId = Control::GetRequest("channel_id", 0);
+        $toSiteId = Control::GetRequest("to_site_id", 0); //跨站点，站点id
         $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
         $manageUserId = Control::GetManageUserID();
         $manageUserName = Control::GetManageUserName();
@@ -1133,8 +1134,20 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                 $documentList = $documentList . $columnValue["DocumentNewsTitle"] . '<br>';
             }
             //}
+
+            //显示有权限的站点树
+            $siteManageData=new SiteManageData();
+            $siteList=$siteManageData->GetListForSelect($manageUserId);
+            $listName="site_list";
+            Template::ReplaceList($tempContent,$siteList,$listName);
+
+
             //显示当前站点的节点树
-            $siteId = $channelManageData->GetSiteID($channelId,true);
+            if($toSiteId>0){
+                $siteId=$toSiteId;
+            }else{
+                $siteId = $channelManageData->GetSiteID($channelId,true);
+            }
             $order="";
             $arrayChannelTree=$channelManageData->GetListForManageLeft($siteId,$manageUserId,$order);
             $listName="channel_tree";

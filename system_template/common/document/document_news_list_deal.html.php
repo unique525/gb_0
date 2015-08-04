@@ -48,6 +48,15 @@
                     $(this).attr("value","");
                 }
             });
+
+
+            //切换站点（跨站点操作）
+            $(".site_selection").click(function(){
+                var toSiteId=$(this).attr("idvalue");
+                var docIdString=Request["doc_id_string"];
+                var channelId=Request["channel_id"];
+                window.location.href='/default.php?secu=manage&mod=document_news&m={method}&channel_id='+channelId+'&to_site_id='+toSiteId+'&doc_id_string='+docIdString;
+            });
         });
 
 
@@ -121,6 +130,23 @@
                     <option value="pad">平板</option>
                 </select>
             </td>
+        </tr>
+        <tr>
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;">
+                <label for="sel_site">跨站点请选择： </label>
+                <select id="sel_site" name="SiteId">
+                    <icms id="site_list" type="list">
+                        <item>
+                            <![CDATA[
+                            <option class="site_selection" value="{f_SiteId}" idvalue="{f_SiteId}">{f_SiteName}</option>
+                            ]]>
+                        </item>
+                    </icms>
+                </select><!--，为<span style="color:red;"> {ManageUserGroupName} </span>授权-->
+            </td>
+            <script type="text/javascript">
+                $("#sel_site").find("option[value='{SiteId}']").attr("selected",true);
+            </script>
         </tr>
         <tr>
             <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
