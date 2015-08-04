@@ -35,7 +35,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $templateMode = 0;
         $defaultTemp = "forum_default";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, 0, "", $templateMode);//(site id 为0时，全系统搜索模板)
 
         $forumId = Control::GetRequest("forum_id", 0);
 
@@ -57,7 +57,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
                 return $message;
             }
 
-            $userRolePublicData = new UserPublicData();
+            $userRolePublicData = new UserRolePublicData();
             $userGroupId = $userRolePublicData->GetUserGroupId($userId, true);
 
             if($userGroupId<=0){
@@ -65,7 +65,25 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             }
 
             $forumAccessLimit = $forumPublicData->GetForumAccessLimit($forumId, true);
-            if($userGroupId != $forumAccessLimit){
+            $arrAccessLimitContent = explode(',',$forumAccessLimit);
+            $canExplore = false;
+            if(is_array($arrAccessLimitContent)
+                && !empty($arrAccessLimitContent)){
+
+                if (in_array($userGroupId, $arrAccessLimitContent)){
+                    $canExplore = true;
+                }
+
+            }else{
+
+                if($userGroupId == $forumAccessLimit){
+                    $canExplore = true;
+                }
+
+            }
+
+
+            if(!$canExplore){
 
                 return $message;
 

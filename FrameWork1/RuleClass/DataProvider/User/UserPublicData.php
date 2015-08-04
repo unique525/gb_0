@@ -163,27 +163,6 @@ class UserPublicData extends BasePublicData {
         }
         return $result;
     }
-
-    /**
-     * 取得会员组id
-     * @param int $userId 会员id
-     * @param bool $withCache 是否从缓冲中取
-     * @return string 会员组id
-     */
-    public function GetUserGroupId($userId, $withCache)
-    {
-        $result = "";
-        if ($userId > 0) {
-            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
-                . DIRECTORY_SEPARATOR .$userId;
-            $cacheFile = 'user_get_user_group_id.cache_' . $userId . '';
-            $sql = "SELECT UserGroupId FROM " . self::TableName_User . " WHERE UserId=:UserId;";
-            $dataProperty = new DataProperty();
-            $dataProperty->AddField("UserId", $userId);
-            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
-        }
-        return $result;
-    }
 }
 
 ?>
