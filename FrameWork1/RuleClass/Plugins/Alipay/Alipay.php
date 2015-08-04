@@ -344,24 +344,35 @@ class Alipay
         $userId = Control::GetUserId();
 
         if($userOrderId>0 && $allPrice>0){
-            //已付款
-            $orderState = UserOrderData::STATE_PAYMENT;
-            //改变订单状态
-            $userOrderPublicData->ModifyStateWithoutUserId($userOrderId,$orderState);
-            $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
-            $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
 
-            $date = strval(date('Y-m-d H:i:s', time()));
-            $userOrderPublicData->ModifyPayDate($userOrderId,$date);
+            $alipayTradeStatus = $userOrderPublicData->GetAlipayTradeStatus($userOrderId, false);
+            if($alipayTradeStatus == 'TRADE_FINISHED'){
+
+                //如果有做过处理，不执行商户的业务程序
+
+            }else{
+                //已付款
+                $orderState = UserOrderData::STATE_PAYMENT;
+                //改变订单状态
+                $userOrderPublicData->ModifyStateWithoutUserId($userOrderId,$orderState);
+                $userOrderPublicData->ModifyAlipayTradeNo($userOrderId, $trade_no);
+                $userOrderPublicData->ModifyAlipayTradeStatus($userOrderId, $trade_status);
+
+                $date = strval(date('Y-m-d H:i:s', time()));
+                $userOrderPublicData->ModifyPayDate($userOrderId,$date);
 
 
-            //增加订单付款记录
-            $userOrderPayPublicData = new UserOrderPayPublicData();
-            $userOrderPayPublicData->Create(
-                $userOrderId,
-                $allPrice,
-                "支付宝"
-            );
+                //增加订单付款记录
+                $userOrderPayPublicData = new UserOrderPayPublicData();
+                $userOrderPayPublicData->Create(
+                    $userOrderId,
+                    $allPrice,
+                    "支付宝"
+                );
+            }
+
+
+
         }
     }
 
