@@ -68,8 +68,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "homepage":
                 $result = self::GenHomePage();
                 break;
+            case "center":
+
+                $result = self::GenCenter();
+
+                break;
             case "modify_user_pass": //生成修改密码界面
-                $result = self::GenModifyPassword();
+                $result = self::GenModifyUserPass();
                 break;
             case "get_wx_access_token_oauth2":
                 self::GetWxAccessTokenOauth2();
@@ -594,7 +599,17 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         Control::DelUserCookie();
         session_start();
         session_destroy();
-        Control::GoUrl("/");
+        $reUrl = Control::GetRequest("re_url", "");
+
+        if(strlen($reUrl)>0){
+
+            $reUrl = str_ireplace("&amp;","&",$reUrl);
+
+            Control::GoUrl(urldecode($reUrl));
+        }else{
+            Control::GoUrl("/");
+        }
+
     }
 
     private function GenRegister(){
@@ -948,6 +963,41 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }
     }
 
+
+    private function GenCenter(){
+        $userId =Control::GetUserId();
+        $siteId = parent::GetSiteIdByDomain();
+
+        if($userId > 0 && $siteId > 0){
+
+            $templateContent = parent::GetDynamicTemplateContent("user_center");
+            parent::ReplaceFirst($templateContent);
+
+
+            $userInfoPublicData = new UserInfoPublicData();
+
+            //--------替换会员信息--------begin
+            $arrUserOne = $userInfoPublicData->GetOne($userId,$siteId);
+            Template::ReplaceOne($templateContent,$arrUserOne);
+            //------------------------------end
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
+            $templateContent = str_ireplace("{CurrentUrl}",urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']), $templateContent);
+
+            $templateContent = parent::ReplaceTemplate($templateContent);
+            parent::ReplaceSiteConfig($siteId,$templateContent);
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=".urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']));
+            return null;
+        }
+
+
+    }
+
+
     /**
      * 检查是否重名
      * @param string $userName 被检查的用户名
@@ -999,7 +1049,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     /**
      * @return mixed|string
      */
-    private function GenModifyPassword(){
+    private function GenModifyUserPass(){
         $userId = Control::GetUserId();
         if($userId > 0){
             $siteId = parent::GetSiteIdByDomain();
