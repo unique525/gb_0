@@ -21,6 +21,15 @@
         });
 
 
+        var btMyDocument = $("#btn_statistic_my_document");
+        btMyDocument.css("cursor","pointer");
+        btMyDocument.click(function () {
+            //打开站点管理页面
+            window.G_TabTitle = "我的文档";
+            window.G_TabUrl = '/default.php?secu=manage&mod=task&m=statistic_document_of_manage_user';
+            addTab();
+        });
+
         var btnGroupDocument = $("#btn_statistic_manage_user_group_document");
         btnGroupDocument.css("cursor","pointer");
         btnGroupDocument.click(function () {
