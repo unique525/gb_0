@@ -221,7 +221,16 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
             if(strlen($wxOpenId)>0 && $wxSubscribe>0){//已经授权过并且已经关注了，直接转向
 
-                Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                //Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+
+                if($siteId == 1){
+                    Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                }else{
+                    //echo '<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1" /><br /><br />
+                    //        <center><h2>绑定成功，<a href="/default.php?mod=user&a=center">【返回】</a></h2></center>';
+                    Control::GoUrl("/default.php?mod=user&a=center");
+                }
+
                 return;
 
             }
@@ -543,7 +552,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
 
                     if(intval($wxSubscribe) == 1){
-                        Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                        if($siteId == 1){
+                            Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_1");
+                        }else{
+                            //echo '<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1" /><br /><br />
+                            //<center><h2>绑定成功，<a href="/default.php?mod=user&a=center">【返回】</a></h2></center>';
+                            Control::GoUrl("/default.php?mod=user&a=center");
+                        }
+
                     }else{
                         Control::GoUrl("/default.php?mod=lottery&a=default&temp=lottery_gz");
                     }
