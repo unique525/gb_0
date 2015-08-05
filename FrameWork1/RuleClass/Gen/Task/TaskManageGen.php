@@ -45,10 +45,20 @@ class TaskManageGen extends BaseManageGen {
             $tempContent=Template::Load("task/statistic_document.html","common");
             parent::ReplaceFirst($tempContent);
 
+            $manageUserManageData=new ManageUserManageData();
+            $propertyOfManageUser=$manageUserManageData->GetOne($manageUserId);
+
             $siteManageData=New SiteManageData();
             $arraySite=$siteManageData->GetListForSelect($manageUserId);
             $listNameOfSite="site_list";
             Template::ReplaceList($tempContent,$arraySite,$listNameOfSite);
+
+
+            $manageUserGroupManageData=New ManageUserGroupManageData();
+            $arrayGroup=$manageUserGroupManageData->GetOne($propertyOfManageUser["ManageUserGroupId"]);
+            $arrayGroupList[0]=$arrayGroup;  //转为只有一个元素的用户组数组  兼容用户组的template
+            $listNameOfGroup="manage_user_group_list";
+            Template::ReplaceList($tempContent,$arrayGroupList,$listNameOfGroup);
 
 
             if($siteId>=0){
@@ -58,9 +68,8 @@ class TaskManageGen extends BaseManageGen {
                         $strSiteIds.=",".$site["SiteId"];
                     }
                     $strSiteIds=substr($strSiteIds,1);
-                    $manageUserManageData=new ManageUserManageData();
 
-                    $arrayOfResult=$manageUserManageData->GetOne($manageUserId);
+                    $arrayOfResult=$propertyOfManageUser;
 
                     $documentNewsManageData=new DocumentNewsManageData();
                         $arrDocumentNews=$documentNewsManageData->GetListOfManageUser($siteId,$strSiteIds,$manageUserId,$beginDate,$endDate);
@@ -79,7 +88,7 @@ class TaskManageGen extends BaseManageGen {
                     $arrayOfResult["HitCount"]=$hitCount;
                     $arrayOfResult["DocumentNewsList"]=$documentNewsList;
 
-                    $arrayList[0]=$arrayOfResult;  //转为只有一个元素的用户组数组  已兼容用户组的template
+                    $arrayList[0]=$arrayOfResult;  //转为只有一个元素的用户组数组  兼容用户组的template
                     $listNameOfStatistician="statistician_result_list";
                     Template::ReplaceList($tempContent,$arrayList,$listNameOfStatistician);
                     $tempContent = str_ireplace("{display}", "inline", $tempContent);
@@ -98,6 +107,7 @@ class TaskManageGen extends BaseManageGen {
             $listNameOfStatistician="statistician_result_list";
             Template::RemoveCustomTag($tempContent, $listNameOfStatistician);
             $tempContent = str_ireplace("{TabIndex}", $tabIndex, $tempContent);
+            $tempContent = str_ireplace("{ManageUserGroupId}", $propertyOfManageUser["ManageUserGroupId"], $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
             $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
             $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
