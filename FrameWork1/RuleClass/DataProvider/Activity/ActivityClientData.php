@@ -9,15 +9,24 @@ class ActivityClientData extends BaseClientData {
     /**
      * 取得分页显示的活动列表
      * @param int $channelId 频道id
+     * @param string $timeState 活动所处时间状态类型，all全部，inTime进行中，end已结束
      * @param int $pageBegin 记录开始位置
      * @param int $pageSize 显示数量
      * @return array 分页显示的列表
      */
     public function GetList(
         $channelId,
+        $timeState,
         $pageBegin,
         $pageSize
     ) {
+        if ($timeState == "end") { //已结束活动
+            $timeConditionSql = " AND EndDate>NOW() ";
+        }
+        else if($timeState == "inTime"){//正进行中的活动
+            $timeConditionSql = " AND EndDate<NOW() ";
+        }
+        else $timeConditionSql="";//所有活动
         $selectColumn = '
             dn.*,
 
@@ -69,7 +78,7 @@ class ActivityClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 ON dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId=:ChannelId AND dn.State<100
+                WHERE dn.ChannelId=:ChannelId AND dn.State<100" . $timeConditionSql . "
                 ORDER BY dn.Sort DESC, dn.ActivityId DESC
                 LIMIT " . $pageBegin . "," . $pageSize . "";
 

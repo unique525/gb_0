@@ -41,11 +41,14 @@ class ActivityClientGen extends BaseClientGen implements IBaseClientGen {
         if($channelId>0){
             $pageSize = intval(Control::GetRequest("ps", 20));
             $pageIndex = intval(Control::GetRequest("p", 1));
+            //活动所处时间状态类型，all全部，inTime进行中，end已结束
+            $timeState = Control::GetRequest("time_state", "all");
             $pageBegin = ($pageIndex - 1) * $pageSize;
 
             $activityClientData = new ActivityClientData();
             $arrList = $activityClientData->GetList(
                 $channelId,
+                $timeState,
                 $pageBegin,
                 $pageSize
             );
