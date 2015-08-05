@@ -15,6 +15,9 @@ class TaskManageGen extends BaseManageGen {
         $result = "";
         $method = Control::GetRequest("m", "");
         switch ($method) {
+            case "statistic_document_of_manage_user":
+                $result = self::GenStatisticDocumentOfManageUser();
+                break;
             case "statistic_document_of_manage_user_group":
                 $result = self::GenStatisticDocumentOfManageUserGroup();
                 break;
@@ -28,6 +31,90 @@ class TaskManageGen extends BaseManageGen {
 
     /**
      * 统计管理员文档与点击数
+     */
+    public function GenStatisticDocumentOfManageUser(){
+        $result="";
+        $resultJavaScript="";
+        $manageUserId=Control::GetManageUserId();
+        $tabIndex=Control::GetRequest("tab_index",0);
+
+        if($manageUserId>0){
+            $siteId=Control::PostRequest("SiteId",-1);//0为所有
+            $beginDate=Control::PostRequest("BeginDate","");
+            $endDate=Control::PostRequest("EndDate","");
+            $tempContent=Template::Load("task/statistic_document.html","common");
+            parent::ReplaceFirst($tempContent);
+
+            $siteManageData=New SiteManageData();
+            $arraySite=$siteManageData->GetListForSelect($manageUserId);
+            $listNameOfSite="site_list";
+            Template::ReplaceList($tempContent,$arraySite,$listNameOfSite);
+
+
+            if($siteId>=0){
+                if($beginDate!=""&&$endDate!=""){
+                    $strSiteIds="";
+                    foreach($arraySite as $site){
+                        $strSiteIds.=",".$site["SiteId"];
+                    }
+                    $strSiteIds=substr($strSiteIds,1);
+                    $manageUserManageData=new ManageUserManageData();
+
+                    $arrayOfResult=$manageUserManageData->GetOne($manageUserId);
+
+                    $documentNewsManageData=new DocumentNewsManageData();
+                        $arrDocumentNews=$documentNewsManageData->GetListOfManageUser($siteId,$strSiteIds,$manageUserId,$beginDate,$endDate);
+                        $hitCount=0;
+                        $publishCount=0;
+                        $documentNewsList="";
+                        foreach($arrDocumentNews as $documentNews){
+                            $hitCount+=$documentNews["Hit"];
+                            if($documentNews["State"]==30){
+                                $publishCount++;
+                                $documentNewsList.="<li>点击：".$documentNews["Hit"]."，标题：".$documentNews["DocumentNewsTitle"]."</li>";
+                            }
+                        }
+                    $arrayOfResult["DocumentNewsCount"]=count($arrDocumentNews);
+                    $arrayOfResult["PublishCount"]=$publishCount;
+                    $arrayOfResult["HitCount"]=$hitCount;
+                    $arrayOfResult["DocumentNewsList"]=$documentNewsList;
+
+                    $arrayList[0]=$arrayOfResult;  //转为只有一个元素的用户组数组  已兼容用户组的template
+                    $listNameOfStatistician="statistician_result_list";
+                    Template::ReplaceList($tempContent,$arrayList,$listNameOfStatistician);
+                    $tempContent = str_ireplace("{display}", "inline", $tempContent);
+
+                }else{
+                    //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('task', 3));//日期错误
+                }
+            }else{
+                //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('task', 4)); //站点或组参数错误
+            }
+
+
+
+
+
+            $listNameOfStatistician="statistician_result_list";
+            Template::RemoveCustomTag($tempContent, $listNameOfStatistician);
+            $tempContent = str_ireplace("{TabIndex}", $tabIndex, $tempContent);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
+            $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
+            $tempContent = str_ireplace("{display}", "none", $tempContent);
+            parent::ReplaceEnd($tempContent);
+            $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+            $result=$tempContent;
+        }
+
+
+        return $result;
+    }
+
+
+
+    /**
+     * 统计组内所有管理员文档与点击数
      */
     public function GenStatisticDocumentOfManageUserGroup(){
         $result="";
@@ -80,6 +167,14 @@ class TaskManageGen extends BaseManageGen {
                     $arrayManageUser=$manageUserManageData->GetList($pageBegin,$pageSize,$allCount,$searchKey="",$searchType=0,$statisticGroupId);
 
                     $documentNewsManageData=new DocumentNewsManageData();
+
+                    //组内总量
+                    $arrayAll["ManageUserName"]="合计";
+                    $arrayAll["DocumentNewsCount"]=0;
+                    $arrayAll["PublishCount"]=0;
+                    $arrayAll["HitCount"]=0;
+                    $arrayAll["DocumentNewsList"]="";
+
                     for($i=0;$i<count($arrayManageUser);$i++){
                         $arrDocumentNews=$documentNewsManageData->GetListOfManageUser($siteId,$strSiteIds,$arrayManageUser[$i]["ManageUserId"],$beginDate,$endDate);
                         $hitCount=0;
@@ -96,9 +191,16 @@ class TaskManageGen extends BaseManageGen {
                         $arrayManageUser[$i]["PublishCount"]=$publishCount;
                         $arrayManageUser[$i]["HitCount"]=$hitCount;
                         $arrayManageUser[$i]["DocumentNewsList"]=$documentNewsList;
+
+                        //处理组内总量
+                        $arrayAll["DocumentNewsCount"]+=count($arrDocumentNews);
+                        $arrayAll["PublishCount"]+=$publishCount;
+                        $arrayAll["HitCount"]+=$hitCount;
                     }
+                    $arrayManageUser[]=$arrayAll;
                     $listNameOfStatistician="statistician_result_list";
                     Template::ReplaceList($tempContent,$arrayManageUser,$listNameOfStatistician);
+                    $tempContent = str_ireplace("{display}", "inline", $tempContent);
 
                 }else{
                     //$resultJavaScript .= Control::GetJqueryMessage(Language::Load('task', 3));//日期错误
@@ -118,6 +220,7 @@ class TaskManageGen extends BaseManageGen {
             $tempContent = str_ireplace("{ManageUserGroupId}", $statisticGroupId, $tempContent);
             $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
             $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
+            $tempContent = str_ireplace("{display}", "none", $tempContent);
             parent::ReplaceEnd($tempContent);
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
             $result=$tempContent;

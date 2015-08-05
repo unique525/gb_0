@@ -79,7 +79,7 @@
 
     </script>
     <style>
-        .statistician_list {width:88%;margin:0 auto;padding:0 30px;box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.2)}
+        .statistician_list {width:88%;margin:0 auto;padding:30px;box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.2)}
     </style>
 </head>
 <body>
@@ -156,18 +156,8 @@
 <tr>
 <td>
 <div class="statistician_list">
-
+<div style="display:{display};padding:5px 0 5px 0">(点击每条可展开)</div>
     <icms id="statistician_result_list" type="list">
-        <header>
-            <![CDATA[
-            <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:30px 0 5px 0">
-                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇，总点击{f_HitCount}次。(点击每条可展开)
-            </div>
-            <div class="grid_item" id="DocumentNewsList_{c_no}" style="display:none;margin-left: 30px;color:#999">
-                <ul>{f_DocumentNewsList}</ul>
-            </div>
-            ]]>
-        </header>
         <item>
             <![CDATA[
             <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:5px 0 5px 0">
@@ -178,16 +168,6 @@
             </div>
             ]]>
         </item>
-        <footer>
-            <![CDATA[
-            <div id="{f_ManageUserId}" idvalue="{c_no}" class="grid_item ManageUser" style="padding:5px 0 30px">
-                {f_ManageUserName}： 发稿量{f_DocumentNewsCount}篇，已发{f_PublishCount}篇，总点击{f_HitCount}次。
-            </div>
-            <div class="grid_item" id="DocumentNewsList_{c_no}" style="display:none;margin-left: 30px;color:#999">
-                <ul>{f_DocumentNewsList}</ul>
-            </div>
-            ]]>
-        </footer>
     </icms>
 
 
