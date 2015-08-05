@@ -56,7 +56,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $templateMode = 0;
         $defaultTemp = "forum_post_list";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, 0, "", $templateMode);
 
         //$templateFileUrl = "forum/forum_default.html";
         //$templateName = "default";
@@ -259,7 +259,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $templateMode = 0;
         $defaultTemp = "forum_post_create";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, 0, "", $templateMode);
 
 
         if (!empty($_POST)) {

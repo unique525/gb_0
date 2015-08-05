@@ -400,6 +400,27 @@ class UserOrderPublicData extends BasePublicData
     }
 
     /**
+     * 取得订单编号
+     * @param int $userOrderId 订单id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 订单编号
+     */
+    public function GetAlipayTradeStatus($userOrderId, $withCache)
+    {
+        $result = "";
+        if ($userOrderId > 0) {
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_get_alipay_trade_status.cache_' . $userOrderId . '';
+            $sql = "SELECT AlipayTradeStatus FROM " . self::TableName_UserOrder . " WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+    }
+
+    /**
      * 取得订单会员id
      * @param int $userOrderId 订单id
      * @param bool $withCache 是否从缓冲中取

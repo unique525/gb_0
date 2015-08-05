@@ -87,15 +87,34 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 return $message;
             }
 
-            $userRolePublicData = new UserPublicData();
-            $userGroupId = $userRolePublicData->GetUserGroupId($userId, true);
+            $userRolePublicData = new UserRolePublicData();
+            $userGroupId = $userRolePublicData->GetUserGroupId($siteId, $userId, true);
 
             if($userGroupId<=0){
                 return $message;
             }
 
             $forumAccessLimit = $forumPublicData->GetForumAccessLimit($forumId, true);
-            if($userGroupId != $forumAccessLimit){
+
+            $arrAccessLimitContent = explode(',',$forumAccessLimit);
+            $canExplore = false;
+            if(is_array($arrAccessLimitContent)
+                && !empty($arrAccessLimitContent)){
+
+                if (in_array($userGroupId, $arrAccessLimitContent)){
+                    $canExplore = true;
+                }
+
+            }else{
+
+                if($userGroupId == $forumAccessLimit){
+                    $canExplore = true;
+                }
+
+            }
+
+
+            if(!$canExplore){
 
                 return $message;
 
@@ -105,22 +124,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         }
 
 
-
-
-
-
-
-
         /*******************页面级的缓存 begin********************** */
         $templateMode = 0;
         $defaultTemp = "forum_topic_list";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
 
-        //$templateFileUrl = "forum/forum_default.html";
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
         $cacheFile = 'forum_topic_list_forum_id_'
@@ -273,7 +282,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $templateMode = 0;
         $defaultTemp = "forum_topic_create";
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId, "", $templateMode);
+            $defaultTemp, 0, "", $templateMode);
 
 
         //forum topic type list
