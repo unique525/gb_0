@@ -1397,7 +1397,7 @@ class BasePublicGen extends BaseGen
     /**
      * 根据temp参数（可以是GET也可以是POST）取得动态模板的内容
      * @param string $defaultTemp 默认模板
-     * @param int $siteId 默认从域名取，可以不传入
+     * @param int $siteId 默认从域名取，可以不传入，site id可以为0，为0时，不加入siteid的条件查询
      * @param string $forceTemp 强制指定的模板名称
      * @param int $templateMode 传出参数，最后加载的模板类型 0:pc,1:mobile,2:pad,3:tv
      * @return string 模板内容
@@ -1406,7 +1406,7 @@ class BasePublicGen extends BaseGen
     {
 
         $result = "";
-        if ($siteId <= 0) {
+        if ($siteId < 0) {
             $siteId = self::GetSiteIdByDomain();
         }
 
@@ -1420,7 +1420,7 @@ class BasePublicGen extends BaseGen
             }
         }
 
-        if ($siteId > 0 && strlen($channelTemplateTag) > 0) {
+        if (strlen($channelTemplateTag) > 0) {
 
             $channelTemplateType = ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC;
             $channelTemplatePublicData = new ChannelTemplatePublicData();

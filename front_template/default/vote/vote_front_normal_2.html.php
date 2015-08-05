@@ -25,7 +25,6 @@
                 <child>
                     <![CDATA[
                     <li><input type="{f_voteitemtypename}" name="vote_select_item{f_voteitemid}[]"  value="{f_voteselectitemid}" /> {f_voteselectitemtitle} <span id="vote_select_item_result{f_voteselectitemid}">0票 0%</span></li>
-                    </li>
                     ]]>
                 </child>
             </icms>
@@ -61,7 +60,7 @@ function ajaxSubmit{voteId}()
         if ($.isFunction(window.checkvalue{VoteId}))
         {if(!checkvalue{VoteId}()) return;}
         var param = $("#voteform{VoteId}").serialize();
-        var url = "/default.php?mod=vote&a=vote&vote_id={VoteId}&sn=votecheckcode{VoteId}";
+        var url = "/default.php?mod=vote&a=vote&vote_id={VoteId}&sn=check_code{VoteId}";
         $.ajax({
             url:url,
             dataType: "jsonp",
@@ -79,13 +78,7 @@ function ajaxSubmit{voteId}()
                     //判断是否有附加要提交的额外如表单类的信息
         			if ($.isFunction(window.hdSubmit{VoteId}))
         			{hdSubmit{VoteId}(voteRecordId)}
-                                //显示票数
-                                var itemlist = new Array();
-				itemlist = data["itemlist"];
-				$.each(itemlist,function(i,v){
-                                    var targetId="vote_select_item_result"+v["VoteSelectItemId"];
-                                    $("#"+targetId).html(v["VoteSelectItemRecordCount"]+"票 "+v["VoteSelectItemPer"]+"%");
-                                });
+                    alert("投票成功！");
                                 }
 				else if(result==-10) {alert("一个IP地址一天投票不能超过"+ipMaxCount+"票！");}
                                 else if(result==-2) {alert("至少需要选择一项才能投票！");}
