@@ -69,12 +69,13 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 $result = self::GenHomePage();
                 break;
             case "center":
-
                 $result = self::GenCenter();
-
                 break;
             case "modify_user_pass": //生成修改密码界面
-                $result = self::GenModifyUserPass();
+                 $result = self::GenModifyUserPass();
+                break;
+            case "async_modify_user_pass": //密码修改操作
+                $result = self::AsyncModifyUserPass();
                 break;
             case "get_wx_access_token_oauth2":
                 self::GetWxAccessTokenOauth2();
@@ -1084,6 +1085,32 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }else{
             return "";
         }
+    }
+
+    /**
+     * 会员前台密码修改
+     * @return string
+     */
+    private function AsyncModifyUserPass() {
+        $result = -1;
+        $oldPassWord = Control::GetRequest("old_password", "");
+        $newPassWord = Control::GetRequest("new_password", "");
+        $userId = Control::GetUserID();
+        if ($userId > 0) {
+            if (strlen($newPassWord) > 1) {
+                $userData = new UserPublicData();
+                $checkPassWord = $userData->CheckPassWord($userId, $oldPassWord);
+                if ($checkPassWord > 0) {
+                    $result = $userData->ModifyPassword($userId, $newPassWord);
+                }
+                else {
+                    $result=-3;
+                }
+            }
+        } else {
+            $result=-2;//未登录
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
     }
 
 }

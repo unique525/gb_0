@@ -163,6 +163,46 @@ class UserPublicData extends BasePublicData {
         }
         return $result;
     }
+
+    /**
+     * 检测用户密码
+     * @param int $userId
+     * @param string $userPass
+     * @return int 返回检测结果
+     */
+    public function CheckPassWord($userId, $userPass)
+    {
+        $result = -1;
+        if ($userId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "SELECT Count(*) FROM " . self::TableName_User . " WHERE userPass=:userPass AND userId=:userId";
+            $dataProperty->AddField("userId", $userId);
+            $dataProperty->AddField("userPass", $userPass);
+            $result = $this->GetInfoOfIntValue($sql,$dataProperty,false,"","");
+        }
+        return $result;
+    }
+
+    /**
+     * 修改用户密码
+     * @param int $userId
+     * @param string $userPass
+     * @return int 返回修改结果
+     */
+    public function ModifyPassword($userId, $userPass)
+    {
+        $result = -1;
+        $sql = "update " . self::TableName_User . " set userPass = :userPass where userId = :userId";
+        if($userId > 0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("userPass", $userPass);
+            $dataProperty->AddField("userId", $userId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
 }
 
 ?>
