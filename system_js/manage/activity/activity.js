@@ -11,6 +11,23 @@ $().ready(function(){
             $(this).addClass('grid_item_selected');
         }
     });
+
+
+
+    //拖动排序变化
+    var sortGrid = $("#sort_grid");
+    sortGrid.sortable();
+    sortGrid.bind("sortstop", function(event, ui) {
+        var sortList = $("#sort_grid").sortable("serialize");
+        $.post("/default.php?secu=manage&mod=activity&m=async_modify_sort_by_drag&" + sortList, {
+            resultbox: $(this).html()
+        }, function() {
+            //操作完成后触发的命令
+        });
+    });
+    sortGrid.disableSelection();
+
+
 });
 
 
@@ -90,5 +107,8 @@ function ModifyState(method, idvalue, state) {
         }
     });
 }
+
+
+
 
 

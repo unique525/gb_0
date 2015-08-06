@@ -50,6 +50,9 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify_state":
                 $result = self::ModifyState();
                 break;
+            case "async_modify_sort_by_drag":
+                $result = self::AsyncModifySortByDrag();
+                break;
         }
         $replace_arr = array(
             "{method}" => $method
@@ -449,6 +452,13 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
                                     }
                                     self::GenUploadFilePad($uploadFileId1,$activityTitlePic1PadWidth);
                             }
+
+
+
+                            //新增文档时修改排序号到当前频道的最大排序
+                            $activityManageData->ModifySortWhenCreate($channelId, $newActivityId);
+
+
                         }
                     }else{
                         return DefineCode::ACTIVITY_MANAGE + self::ACTIVITY_INSERT_OR_UPDATE_FAILED;
@@ -637,6 +647,26 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         }
         return $result;
     }
+
+
+
+    /**
+     * 批量修改排序号
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifySortByDrag()
+    {
+        $arrActivityId = Control::GetRequest("sort", null);
+        if (!empty($arrActivityId)) {
+            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+            $activityManageData = new ActivityManageData();
+            $result = $activityManageData->ModifySortForDrag($arrActivityId);
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+        } else {
+            return "";
+        }
+    }
+
 }
 
 ?>

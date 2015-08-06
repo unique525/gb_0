@@ -361,5 +361,60 @@ class ActivityManageData extends BaseManageData{
         }
         return $result;
     }
+
+
+
+    /**
+     * 拖动排序
+     * @param array $arrActivityId 待处理的文档编号数组
+     * @return int 操作结果
+     */
+    public function ModifySortForDrag($arrActivityId)
+    {
+        if (count($arrActivityId) > 1) { //大于1条时排序才有意义
+            $strActivityId = join(',', $arrActivityId);
+            $strActivityId = Format::FormatSql($strActivityId);
+            $sql = "SELECT max(Sort) FROM " . self::TableName_Activity . " WHERE ActivityId IN ($strActivityId);";
+            $maxSort = $this->dbOperator->GetInt($sql, null);
+            $arrSql = array();
+            for ($i = 0; $i < count($arrActivityId); $i++) {
+                $newSort = $maxSort - $i;
+                if ($newSort < 0) {
+                    $newSort = 0;
+                }
+                $newSort = intval($newSort);
+                $activityId = intval($arrActivityId[$i]);
+                $sql = "UPDATE " . self::TableName_Activity . " SET Sort=$newSort WHERE ActivityId=$activityId;";
+                $arrSql[] = $sql;
+            }
+            return $this->dbOperator->ExecuteBatch($arrSql, null);
+        }else{
+            return -1;
+        }
+    }
+
+
+    /**
+     * 新增时修改排序号到当前频道的最大排序
+     * @param int $channelId
+     * @param int $activityId
+     * @return int 影响的记录行数
+     */
+    public function ModifySortWhenCreate($channelId, $activityId) {
+        $result = -1;
+        if($channelId >0 && $activityId>0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT max(Sort) FROM " . self::TableName_Activity . " WHERE ChannelId=:ChannelId;";
+            $dataProperty->AddField("ChannelId", $channelId);
+            $maxSort = $this->dbOperator->GetInt($sql, $dataProperty);
+            $newSort = $maxSort + 1;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Sort", $newSort);
+            $dataProperty->AddField("ActivityId", $activityId);
+            $sql = "UPDATE " . self::TableName_Activity . " SET Sort=:Sort WHERE ActivityId=:ActivityId;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
 }
 ?>

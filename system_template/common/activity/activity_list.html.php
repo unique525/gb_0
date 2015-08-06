@@ -160,7 +160,7 @@
             <td style="width:30px;text-align:center; cursor: pointer;" id="btn_select_all"><label
                     for="doc_input">全</label></td>
             <td style="width:40px;text-align:center;">编辑</td>
-            <td style="width:80px;text-align:center;">ID</td>
+            <td style="width:40px;text-align:center;">ID</td>
             <td style="width:40px;text-align:center;">状态</td>
             <td style="width:40px;text-align:center;">启用</td>
             <td style="width:40px;text-align:center;">停用</td>
@@ -174,75 +174,83 @@
             <td style="width:30px;text-align:center;">排序</td>
             <td style="width:80px;text-align:center;"></td>
         </tr>
+    </table>
+
+    <ul id="sort_grid">
         <icms id="activity" type="list" subjectlen="60">
             <item>
                 <![CDATA[
-                <tr class="grid_item">
-                    <td class="spe_line2" style="width:30px;text-align:center;"><input id="doc_input" class="doc_input"
-                                                                                       type="checkbox" name="doc_input"
-                                                                                       value="{f_ActivityId}"/></td>
-                    <td class="spe_line2" style="width:40px;text-align:center;"><img style="cursor: pointer"
-                                                                                     class="btn_edit"
-                                                                                     src="/system_template/default/images/manage/edit.gif"
-                                                                                     alt="编辑" title="{f_ActivityTitle}"
-                                                                                     idvalue="{f_ActivityId}"
-                                                                                     type_value="{f_ActivityType}"/>
-                    </td>
-                    <td class="spe_line2" style="width:40px;text-align:center;">{f_ActivityId}
-                    </td>
-                    <td class="spe_line2" style="width:40px;text-align:center;" title="点击按状态进行汇总"><span
-                            class="span_state" title="{f_State}" id="state_{f_ActivityId}"></span></td>
-                    <td class="spe_line2" style="width:40px;text-align:center;"><span class="open_activity_id_list"
-                                                                                      title="{f_ActivityId}"><img
-                                style=" cursor: pointer" alt="点击启用或审核该信息"
-                                src="/system_template/default/images/manage/start.jpg"
-                                onclick="ModifyState('activity', '{f_ActivityId}', '0')"/></span></td>
-                    <td class="spe_line2" style="width:40px;text-align:center;"><span class="stop_activity_id_list"
-                                                                                      title="{f_ActivityId}"><img
-                                style=" cursor: pointer" alt="停用或删除"
-                                src="/system_template/default/images/manage/stop.jpg"
-                                onclick="ModifyState('activity', '{f_ActivityId}', '100')"/></span></td>
+                <li id="sort_{f_ActivityId}">
 
-                    <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_publish"
-                                                                                     style="cursor: pointer"
-                                                                                     src="/system_template/default/images/manage/publish.gif"
-                                                                                     title="{f_ActivityId}" idvalue="{f_ActivityId}" alt="发布"/>
-                    </td>
-                    <td class="spe_line2"
-                        style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
-                        title="{f_ActivityTitle}"><a target="_blank" class="link_view" idvalue="{f_ActivityId}" pub_date="{f_year}{f_month}{f_day}">{f_ActivityTitle}</a>
-                    </td>
-                    <td class="spe_line2"
-                        style="width:160px; overflow: hidden;white-space:nowrap; margin-left: 5px; margin-right: 4px;"
-                        title="{f_BeginDate} -- {f_EndDate}">{f_BeginDate}
-                    </td>
-                    <td class="spe_line2"
-                        style="width:100px; text-align:center;overflow: hidden;white-space:nowrap; margin-left: 4px;"
-                        title="{f_UserId}__{f_UserName}">{f_UserName}
-                    </td>
-                    <td class="spe_line2" style="width:80px;text-align:center;" title="点击按分类进行汇总"><span
-                            class="ActivityClassIdList" title="{f_ActivityClassId}">{f_ActivityClassName}</span></td>
-                    <td class="spe_line2" style="width:60px;text-align:center;"><span class="new_activity_user"
-                                                                                      style=" cursor: pointer"
-                                                                                      title="{f_ActivityId}">{f_ApplyUserCount}</span>
-                    </td>
-                    <td class="spe_line2" style="width:60px;text-align:center;"><span class="activity_user_list"
-                                                                                      style=" cursor: pointer"
-                                                                                      title="{f_ActivityId}"
-                                                                                      id="{f_ChannelId}">{f_JoinUserCount}</span>
-                    </td>
-                    <td class="spe_line2" style="width:30px;text-align:center;">{f_sort}</td>
-                    <td class="spe_line2" style="width:80px;text-align:center;"><img class="pic_manage"
-                                                                                     style="cursor: pointer"
-                                                                                     src="/system_template/default/images/manage/pic.gif"
-                                                                                     alt="图片管理" title="图片管理"/> <img
-                            class="comment_manage" style="cursor: pointer"
-                            src="/system_template/default/images/manage/comment.gif" alt="评论管理" title="评论管理"/></td>
-                </tr>
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr class="grid_item sort_grid">
+                            <td class="spe_line2" style="width:30px;text-align:center;"><input id="doc_input" class="doc_input"
+                                                                                               type="checkbox" name="doc_input"
+                                                                                               value="{f_ActivityId}"/></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img style="cursor: pointer"
+                                                                                             class="btn_edit"
+                                                                                             src="/system_template/default/images/manage/edit.gif"
+                                                                                             alt="编辑" title="{f_ActivityTitle}"
+                                                                                             idvalue="{f_ActivityId}"
+                                                                                             type_value="{f_ActivityType}"/>
+                            </td>
+                            <td class="spe_line2" style="width:40px;text-align:center;">{f_ActivityId}
+                            </td>
+                            <td class="spe_line2" style="width:40px;text-align:center;" title="点击按状态进行汇总"><span
+                                    class="span_state" title="{f_State}" id="state_{f_ActivityId}"></span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="open_activity_id_list"
+                                                                                              title="{f_ActivityId}"><img
+                                        style=" cursor: pointer" alt="点击启用或审核该信息"
+                                        src="/system_template/default/images/manage/start.jpg"
+                                        onclick="ModifyState('activity', '{f_ActivityId}', '0')"/></span></td>
+                            <td class="spe_line2" style="width:40px;text-align:center;"><span class="stop_activity_id_list"
+                                                                                              title="{f_ActivityId}"><img
+                                        style=" cursor: pointer" alt="停用或删除"
+                                        src="/system_template/default/images/manage/stop.jpg"
+                                        onclick="ModifyState('activity', '{f_ActivityId}', '100')"/></span></td>
+
+                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_publish"
+                                                                                             style="cursor: pointer"
+                                                                                             src="/system_template/default/images/manage/publish.gif"
+                                                                                             title="{f_ActivityId}" idvalue="{f_ActivityId}" alt="发布"/>
+                            </td>
+                            <td class="spe_line2"
+                                style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
+                                title="{f_ActivityTitle}"><a target="_blank" class="link_view" idvalue="{f_ActivityId}" pub_date="{f_year}{f_month}{f_day}">{f_ActivityTitle}</a>
+                            </td>
+                            <td class="spe_line2"
+                                style="width:160px; overflow: hidden;white-space:nowrap; margin-left: 5px; margin-right: 4px;"
+                                title="{f_BeginDate} -- {f_EndDate}">{f_BeginDate}
+                            </td>
+                            <td class="spe_line2"
+                                style="width:100px; text-align:center;overflow: hidden;white-space:nowrap; margin-left: 4px;"
+                                title="{f_UserId}__{f_UserName}">{f_UserName}
+                            </td>
+                            <td class="spe_line2" style="width:80px;text-align:center;" title="点击按分类进行汇总"><span
+                                    class="ActivityClassIdList" title="{f_ActivityClassId}">{f_ActivityClassName}</span></td>
+                            <td class="spe_line2" style="width:60px;text-align:center;"><span class="new_activity_user"
+                                                                                              style=" cursor: pointer"
+                                                                                              title="{f_ActivityId}">{f_ApplyUserCount}</span>
+                            </td>
+                            <td class="spe_line2" style="width:60px;text-align:center;"><span class="activity_user_list"
+                                                                                              style=" cursor: pointer"
+                                                                                              title="{f_ActivityId}"
+                                                                                              id="{f_ChannelId}">{f_JoinUserCount}</span>
+                            </td>
+                            <td class="spe_line2" style="width:30px;text-align:center;">{f_sort}</td>
+                            <td class="spe_line2" style="width:80px;text-align:center;"><img class="pic_manage"
+                                                                                             style="cursor: pointer"
+                                                                                             src="/system_template/default/images/manage/pic.gif"
+                                                                                             alt="图片管理" title="图片管理"/> <img
+                                    class="comment_manage" style="cursor: pointer"
+                                    src="/system_template/default/images/manage/comment.gif" alt="评论管理" title="评论管理"/></td>
+                        </tr>
+                    </table>
+                </li>
                 ]]>
             </item>
         </icms>
-    </table>
+    </ul>
 </div>
 <div id="PagerBtn">
     {PagerButton}
