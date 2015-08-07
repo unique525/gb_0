@@ -99,7 +99,7 @@
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
 
 <tr>
-    <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold; width:250px">
+    <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold; width:250px;display:{DisplayManageUserGroup}">
         <label for="sel_group">选择一个组： </label>
         <select id="sel_group" name="ManageUserGroupId">
             <option value="-1">请选择一个组</option>

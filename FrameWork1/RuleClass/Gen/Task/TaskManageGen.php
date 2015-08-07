@@ -35,8 +35,38 @@ class TaskManageGen extends BaseManageGen {
     public function GenStatisticDocumentOfManageUser(){
         $result="";
         $resultJavaScript="";
-        $manageUserId=Control::GetManageUserId();
+        $manageUserId=Control::GetRequest("manage_user_id",0);
+        $currentManageUserId=Control::GetManageUserId();
         $tabIndex=Control::GetRequest("tab_index",0);
+
+        $manageUserManageData=new ManageUserManageData();
+        if($manageUserId<=0){
+            $manageUserId=$currentManageUserId;
+        }
+
+        if($manageUserId!=$currentManageUserId){
+            //判断权限
+            /**********************************************************************
+             ******************************判断是否有操作权限**********************
+             **********************************************************************/
+            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+            $siteId = 0;
+            $channelId = 0;
+
+            //是否有查看所有用户的权限
+            $can = $manageUserAuthorityManageData->CanManageUserTaskViewAll($siteId, $channelId, $manageUserId);
+            if (!$can) {
+                //是否有查看同一个组的权限
+                if($manageUserManageData->GetManageUserGroupId($currentManageUserId,true)==
+                    $manageUserManageData->GetManageUserGroupId($manageUserId,true)){
+                    $can = $manageUserAuthorityManageData->CanManageUserTaskViewSameGroup($siteId, $channelId, $manageUserId);
+                    if (!$can) {
+                        $result = -10;
+                    }
+                }
+            }
+
+        }
 
         if($manageUserId>0){
             $siteId=Control::PostRequest("SiteId",-1);//0为所有
@@ -45,7 +75,6 @@ class TaskManageGen extends BaseManageGen {
             $tempContent=Template::Load("task/statistic_document.html","common");
             parent::ReplaceFirst($tempContent);
 
-            $manageUserManageData=new ManageUserManageData();
             $propertyOfManageUser=$manageUserManageData->GetOne($manageUserId);
 
             $siteManageData=New SiteManageData();
@@ -112,6 +141,7 @@ class TaskManageGen extends BaseManageGen {
             $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
             $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
             $tempContent = str_ireplace("{display}", "none", $tempContent);
+            $tempContent = str_ireplace("{DisplayManageUserGroup}", "none", $tempContent);
             parent::ReplaceEnd($tempContent);
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
             $result=$tempContent;
@@ -231,6 +261,7 @@ class TaskManageGen extends BaseManageGen {
             $tempContent = str_ireplace("{BeginDate}", $beginDate, $tempContent);
             $tempContent = str_ireplace("{EndDate}", $endDate, $tempContent);
             $tempContent = str_ireplace("{display}", "none", $tempContent);
+            $tempContent = str_ireplace("{DisplayManageUserGroup}", "inline", $tempContent);
             parent::ReplaceEnd($tempContent);
             $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
             $result=$tempContent;
