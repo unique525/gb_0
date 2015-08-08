@@ -126,16 +126,14 @@ class ForumPublicData extends BasePublicData {
     }
 
     /**
-     * 
-     * @param int $siteId
+     *
      * @param int $parentId
      * @return array
      */
-    public function GetListByParentId($siteId, $parentId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND SiteId=:SiteId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
+    public function GetListByParentId($parentId) {
+        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ParentId", $parentId);
-        $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
     }

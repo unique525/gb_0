@@ -35,6 +35,6 @@
 <module id="33"><content><![CDATA[发布失败，请联系管理人员！]]></content></module>
 <module id="34"><content><![CDATA[没找到上级分类，请先添加上级分类！]]></content></module>
 <module id="35"><content><![CDATA[加载发布队列成功！]]></content></module>
-<module id="36"><content><![CDATA[当前文档正在被<strong>{adminusername}</strong>编辑，请稍后访问！]]></content></module>
+<module id="36"><content><![CDATA[当前文档正在被<strong>{manage_user_name}</strong>编辑，请稍后访问！]]></content></module>
 <module id="37"><content><![CDATA[此文档没有内容图片]]></content></module>
 </root>
