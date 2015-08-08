@@ -58,7 +58,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
             }
 
             $userRolePublicData = new UserRolePublicData();
-            $userGroupId = $userRolePublicData->GetUserGroupId($userId, true);
+            $userGroupId = $userRolePublicData->GetUserGroupId($siteId, $userId, true);
 
             if($userGroupId<=0){
                 return $message;
@@ -94,7 +94,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
-        $cacheFile = 'forum_site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
+        $cacheFile = 'forum_default_site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
         $withCache = false;
         if($withCache){
             $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);

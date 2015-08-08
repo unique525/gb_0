@@ -134,12 +134,12 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $mustSelect = 1;
         $withCache = false;
         $mustCount = $examQuestionClassPublicData->GetMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrMustQuestionList = $examQuestionPublicData->GetList($mustSelect, $mustCount);
+        $arrMustQuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $mustCount);
 
 
         $mustSelect = 0;
         $nonCount = $examQuestionClassPublicData->GetNonMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrNonMustQuestionList = $examQuestionPublicData->GetList($mustSelect, $nonCount);
+        $arrNonMustQuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount);
 
         $beginTime = date("Y-m-d H:i:s", time());
         $endTime = "";
