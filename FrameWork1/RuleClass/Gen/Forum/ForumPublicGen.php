@@ -133,6 +133,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
             }else{
 
+
                 $arrRankOneList = $forumPublicData->GetListByForumId($forumId);
                 $arrRankTwoList = $forumPublicData->GetListByParentId($forumId);
 
