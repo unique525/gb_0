@@ -27,6 +27,24 @@ class ActivityUserClientData extends BaseClientData {
     }
 
     /**
+     * 删除
+     * @param int $activityUserId 活动会员Id
+     * @param int $userId 会员Id
+     * @return int 影响行数
+     */
+    public function Delete($activityUserId,$userId){
+        $result = -1;
+        if($activityUserId > 0 && $userId > 0){
+            $sql = "DELETE FROM ".self::TableName_ActivityUser." WHERE UserId = :UserId AND ActivityUserId = :ActivityUserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("ActivityUserId",$activityUserId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**
      * 检查是否有重复项
      * @param int $userId
      * @param int $activityId

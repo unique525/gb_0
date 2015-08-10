@@ -20,9 +20,11 @@ class ActivityUserClientGen extends BaseClientGen implements IBaseClientGen  {
             case "list":
                 $result = self::GenList();
                 break;
-
             case "create":
                 $result = self::GenCreate();
+                break;
+            case "delete":
+                $result = self::GenDelete();
                 break;
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -65,6 +67,31 @@ class ActivityUserClientGen extends BaseClientGen implements IBaseClientGen  {
 
         }
         return '{"result_code":"' . $resultCode . '","activity_user_create":' . $result . '}';
+    }
+
+    private function GenDelete()
+    {
+        $result = "[{}]";
+        $userId = parent::GetUserId();
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $activityUserId = Control::PostOrGetRequest("ActivityId", 0);
+            if ($activityUserId > 0) {
+                $activityUserClientData = new ActivityUserClientData();
+                $result = $activityUserClientData->Delete($activityUserId, $userId);
+                if ($result > 0) {
+                    $resultCode = 1; //删除成功
+                } else {
+                    $resultCode = -5; //删除失败,数据库原因
+                }
+
+            } else {
+                $resultCode = -6; //删除失败,参数错误;
+            }
+
+        }
+        return '{"result_code":"' . $resultCode . '","activity_user_delete":' . $result . '}';
     }
 
     private function GenList()
