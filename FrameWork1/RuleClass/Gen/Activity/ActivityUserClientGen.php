@@ -41,20 +41,19 @@ class ActivityUserClientGen extends BaseClientGen implements IBaseClientGen  {
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
 
-            $siteId = Control::PostOrGetRequest("site_id", 0);
             $activityId = Control::PostOrGetRequest("activity_id", 0);
-            if ($activityId > 0 && $siteId > 0) {
+            if ($activityId > 0) {
 
                 //检查是否已经参加
                 $activityUserClientData = new ActivityUserClientData();
-                $hasCount = $activityUserClientData->IsRepeat($userId, $siteId);
+                $hasCount = $activityUserClientData->IsRepeat($userId, $activityId);
                 if ($hasCount > 0) {
                     $resultCode = -12; //已经参加
                 } else {
 
-                    $result = $activityUserClientData->Create($userId, $activityId);
+                    $newActivityUserId = $activityUserClientData->Create($userId, $activityId);
 
-                    if ($result > 0) {
+                    if ($newActivityUserId > 0) {
 
                         $resultCode = 1; //加入成功
                     } else {
