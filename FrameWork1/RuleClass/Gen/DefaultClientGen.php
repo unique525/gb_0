@@ -24,6 +24,7 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $activityUserClientGen = new ActivityUserClientGen();
                 $result = $activityUserClientGen->GenClient();
                 break;
+
             case "comment":
                 $commentClientGen = new CommentClientGen();
                 $result = $commentClientGen->GenClient();
