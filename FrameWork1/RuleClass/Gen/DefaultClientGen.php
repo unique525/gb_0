@@ -14,11 +14,17 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
         $module = Control::GetRequest("mod", "");
 
         $authKey = Control::GetRequest("auth_key","");
+        
         switch ($module) {
             case "activity":
                 $activityClientGen = new ActivityClientGen();
                 $result = $activityClientGen->GenClient();
                 break;
+            case "activity_user":
+                $activityUserClientGen = new ActivityUserClientGen();
+                $result = $activityUserClientGen->GenClient();
+                break;
+
             case "comment":
                 $commentClientGen = new CommentClientGen();
                 $result = $commentClientGen->GenClient();
