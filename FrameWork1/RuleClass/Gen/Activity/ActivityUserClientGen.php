@@ -47,7 +47,7 @@ class ActivityUserClientGen extends BaseClientGen implements IBaseClientGen  {
                 $activityUserClientData = new ActivityUserClientData();
                 $hasCount = $activityUserClientData->IsRepeat($userId, $siteId);
                 if ($hasCount > 0) {
-                    $resultCode = -10; //已经参加
+                    $resultCode = -9; //已经参加
                 } else {
 
                     $result = $activityUserClientData->Create($userId, $activityId);
