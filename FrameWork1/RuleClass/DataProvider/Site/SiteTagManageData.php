@@ -105,13 +105,13 @@ class SiteTagManageData extends BaseManageData {
      * @param int $state 状态
      * @return int 操作结果
      */
-    public function ModifyState($activityUserId, $state)
+    public function ModifyState($siteTagId, $state)
     {
         $result = -1;
-        if ($activityUserId > 0) {
+        if ($siteTagId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_ActivityUser . " SET `State`=:State WHERE activityUserId=:activityUserId;";
-            $dataProperty->AddField("activityUserId", $activityUserId);
+            $sql = "UPDATE " . self::TableName_ActivityUser . " SET `State`=:State WHERE SiteTagId=:SiteTagId;";
+            $dataProperty->AddField("SiteTagId", $siteTagId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
