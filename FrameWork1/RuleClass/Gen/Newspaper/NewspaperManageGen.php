@@ -69,9 +69,7 @@ class NewspaperManageGen extends BaseManageGen {
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/newspaper_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                    parent::DelAllCache();
 
 
                     $closeTab = Control::PostRequest("CloseTab", 0);

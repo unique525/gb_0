@@ -117,7 +117,7 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
                 $siteTagManageData = new SiteTagManageData();
                 $result = $siteTagManageData->ModifyState($activityUserId, $state);
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/site_data');
+                parent::DelAllCache();
                 //加入操作日志
                 $operateContent = 'Modify State SiteTag,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);

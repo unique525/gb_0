@@ -116,7 +116,7 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
                     }
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/pic_slider_data');
+                    parent::DelAllCache();
 
                     //javascript 处理
 
@@ -209,7 +209,7 @@ class PicSliderManageGen extends BaseManageGen implements IBaseManageGen
                     }
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/pic_slider_data');
+                    parent::DelAllCache();
 
                     //javascript 处理
 

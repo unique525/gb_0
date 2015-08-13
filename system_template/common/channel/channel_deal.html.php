@@ -317,6 +317,13 @@
                 {s_PublishApiType}
             </td>
         </tr>
+        <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_DirectUrl">直接转向网址：</label></td>
+            <td class="spe_line"><input type="text" class="input_box" id="f_DirectUrl"
+                                                                 name="f_DirectUrl" value="{DirectUrl}"
+                                                                 style=" width: 70%;font-size:14px;" maxlength="200"/>
+            </td>
+        </tr>
     </table>
 </div>
 <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">

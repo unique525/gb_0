@@ -62,7 +62,7 @@ class NewspaperPublicGen extends BasePublicGen
 
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            parent::DelAllCache();
 
         }
 
@@ -109,7 +109,7 @@ class NewspaperPublicGen extends BasePublicGen
             '_mode_' . $templateMode;
         $withCache = true;
         if($withCache){
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getOneTemplateContent(
@@ -118,7 +118,7 @@ class NewspaperPublicGen extends BasePublicGen
                     $publishDate,
                     $newspaperPageId,
                     $templateContent);
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }
@@ -132,10 +132,7 @@ class NewspaperPublicGen extends BasePublicGen
         }
 
         /*******************页面级的缓存 end  ********************** */
-
         return $result;
-
-
     }
 
 

@@ -64,7 +64,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($siteId > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/site_data');
+                    parent::DelAllCache();
 
                     if (!empty($_FILES)) {
                         //title pic1
@@ -187,7 +187,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                     }
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/site_data');
+                    parent::DelAllCache();
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
@@ -234,7 +234,7 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
                 $siteManageData = new SiteManageData();
                 $result = $siteManageData->ModifyState($siteId, $state);
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/site_data');
+                parent::DelAllCache();
                 //加入操作日志
                 $operateContent = 'Modify State Site,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);

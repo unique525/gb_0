@@ -72,7 +72,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         ;
         $withCache = true;
         if($withCache){
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getListOfTemplateContent(
@@ -82,7 +82,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $pageIndex,
                     $pageSize
                 );
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }
@@ -434,10 +434,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
 
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/forum_page');
-
+                parent::DelAllCache();
                 //转到列表页
                 Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
 
@@ -545,10 +542,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             if ($forumPostId > 0) {
 
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/forum_page');
-
+                parent::DelAllCache();
                 Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
             } else {
                 Control::ShowMessage("false");

@@ -71,7 +71,7 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
 
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            parent::DelAllCache();
 
         }
 

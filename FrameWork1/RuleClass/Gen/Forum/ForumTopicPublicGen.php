@@ -139,7 +139,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             . '_ps_' . $pageSize;
         $withCache = true;
         if ($withCache) {
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getListOfTemplateContent(
@@ -149,7 +149,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $pageIndex,
                     $pageSize
                 );
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }
@@ -529,10 +529,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 if ($forumPostId > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
-
+                    parent::DelAllCache();
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
 
@@ -789,9 +786,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+                    parent::DelAllCache();
 
                 }
 
@@ -856,9 +851,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+                    parent::DelAllCache();
 
                 }
 
@@ -923,9 +916,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_topic_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_page');
+                    parent::DelAllCache();
 
                 }
 

@@ -57,7 +57,7 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
         if(!empty($_POST)){
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/user_popedom_data');
+            parent::DelAllCache();
 
 
             if($userGroupId>0){

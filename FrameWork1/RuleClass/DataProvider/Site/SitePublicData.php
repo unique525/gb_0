@@ -111,17 +111,18 @@ class SitePublicData extends BasePublicData {
     /**
      * 返回一行数据
      * @param int $siteId 站点id
+     * @param bool $withCache 是否缓存
      * @return array|null 取得对应数组
      */
-    public function GetOne($siteId){
+    public function GetOne($siteId, $withCache = true){
         $result = null;
         if($siteId>0){
+
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_data';
             $cacheFile = 'arr_site_get_one.cache_' .
                 str_ireplace(",","_",$siteId);
-            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
-            if (strlen($cacheContent) <= 0) {
-                $sql = "SELECT
+
+            $sql = "SELECT
                 SiteId,
                 SiteName,
                 SiteUrl,
@@ -133,18 +134,9 @@ class SitePublicData extends BasePublicData {
 
             WHERE SiteId=:SiteId;";
 
-                $dataProperty = new DataProperty();
-                $dataProperty->AddField("SiteId", $siteId);
-                $result = $this->dbOperator->GetArray($sql, $dataProperty);
-
-                DataCache::Set($cacheDir, $cacheFile, Format::FixJsonEncode($result));
-            }else{
-                $result = Format::FixJsonDecode($cacheContent);
-            }
-
-
-
-
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
 
         }
         return $result;

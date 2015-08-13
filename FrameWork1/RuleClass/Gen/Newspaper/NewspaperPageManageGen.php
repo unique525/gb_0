@@ -78,9 +78,7 @@ class NewspaperPageManageGen extends BaseManageGen {
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                    parent::DelAllCache();
 
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
@@ -106,7 +104,7 @@ class NewspaperPageManageGen extends BaseManageGen {
         $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
         $result = -1;
         if ($newspaperPageId > 0) {
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            parent::DelAllCache();
 
             $newspaperPageManageData = new NewspaperPageManageData();
             $result = $newspaperPageManageData->Delete($newspaperPageId);
@@ -140,7 +138,7 @@ class NewspaperPageManageGen extends BaseManageGen {
         $newspaperPageId = Control::GetRequest("newspaper_page_id", 0);
         $sort = Control::GetRequest("sort", 0);
         if ($newspaperPageId > 0) {
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            parent::DelAllCache();
             $newspaperPageManageData = new NewspaperPageManageData();
             $result = $newspaperPageManageData->ModifySort($sort, $newspaperPageId);
         }
@@ -156,7 +154,7 @@ class NewspaperPageManageGen extends BaseManageGen {
     {
         $arrNewspaperPageId = Control::GetRequest("sort", null, false);
         if (!empty($arrNewspaperPageId)) {
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            parent::DelAllCache();
             $newspaperPageManageData = new NewspaperPageManageData();
             $result = $newspaperPageManageData->ModifySortForDrag($arrNewspaperPageId);
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
@@ -193,7 +191,7 @@ class NewspaperPageManageGen extends BaseManageGen {
                 $result = -10;
             } else {
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+                parent::DelAllCache();
 
                 $result = $newspaperPageManageData->ModifyState($newspaperPageId, $state);
                 //加入操作日志

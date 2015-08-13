@@ -142,7 +142,8 @@ class ExamQuestionClassManageGen extends BaseManageGen implements IBaseManageGen
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/exam_question_class_data');
+
+                    parent::DelAllCache();
 
                     //javascript 处理
 

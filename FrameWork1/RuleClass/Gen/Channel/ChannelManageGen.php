@@ -182,11 +182,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                             $manageUserAuthorityManageData->CreateForChannel($siteId, $channelId, $manageUserId);
                         }
 
-                        //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/channel_data');
-
-                        //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                        parent::DelAllCache();
 
                         //javascript 处理
                         //重新加载左边导航树
@@ -375,10 +371,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                         }
 
                         //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/channel_data');
-
-                        //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                        parent::DelAllCache();
 
                         //javascript 处理
                         //重新加载左边导航树
@@ -418,8 +411,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         if($channelId > 0){
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
-
+            parent::DelAllCache();
             $channelManageData = new ChannelManageData();
             $channelManageData->UpdateParentChildrenChannelId($channelId);
             $channelManageData->ModifyState($channelId, ChannelData::STATE_REMOVED);
@@ -456,8 +448,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = "";
 
         //删除缓冲
-        DataCache::RemoveDir(CACHE_PATH . '/default_page');
-
+        parent::DelAllCache();
         return $tempContent;
     }
 
@@ -471,8 +462,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         if($channelId>0){
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
-
+            parent::DelAllCache();
             $publishQueueManageData = new PublishQueueManageData();
             $result = parent::PublishChannel($channelId, $publishQueueManageData);
             if($result == (abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_CHANNEL_RESULT_FINISHED)){
@@ -508,7 +498,7 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
         if ($siteId > 0 && $manageUserId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
             $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $manageUserId . '';
-            if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
+            if (strlen(parent::GetCache($cacheDir, $cacheFile)) <= 0) {
                 $channelManageData = new ChannelManageData();
                 $arrList = $channelManageData->GetListForManageLeft($siteId, $manageUserId);
                 $sb = '[';
@@ -539,9 +529,9 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
                 $sb = $sb . ']';
                 $result = '' . $sb . '';
 
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 3600 * 48);
             } else {
-                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                $result = parent::GetCache($cacheDir, $cacheFile);
             }
             return $result;
         }else{

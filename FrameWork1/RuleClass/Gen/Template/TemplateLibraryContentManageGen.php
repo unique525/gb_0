@@ -378,7 +378,7 @@ class TemplateLibraryContentGen extends BaseManageGen implements IBaseManageGen 
             $result = $templateLibraryContentManageData->DeleteAttachment($templateLibraryContentId);
         }
         //删除缓冲
-        DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
+        parent::DelAllCache();
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 

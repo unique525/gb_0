@@ -78,7 +78,7 @@ class ActivityClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 ON dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId=:ChannelId AND dn.State<100" . $timeConditionSql . "
+                WHERE dn.ChannelId=:ChannelId AND dn.State<100 AND dn.ShowInClient=1 " . $timeConditionSql . "
                 ORDER BY dn.Sort DESC, dn.ActivityId DESC
                 LIMIT " . $pageBegin . "," . $pageSize . "";
 

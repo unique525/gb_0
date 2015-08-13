@@ -141,7 +141,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
                 $userAlbumManageData = new UserAlbumManageData();
                 $result = $userAlbumManageData->ModifyState($userAlbumId, $state);
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/user_album_data');
+                parent::DelAllCache();
                 //加入操作日志
                 $operateContent = 'Modify State Album,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);

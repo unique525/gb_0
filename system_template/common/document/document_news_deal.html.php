@@ -552,7 +552,7 @@ function DocumentNewsTagPulling(){
     <li><a href="#tabs-5">图片管理</a></li>
 </ul>
 <div id="tabs-1">
-<div class="spe_line" style="line-height: 40px;text-align: left;">
+<div style="text-align: left;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <!--标题-->
@@ -770,13 +770,52 @@ function DocumentNewsTagPulling(){
                         <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
                         <td align="left">
                             <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" title="save_remote_image"/>
-                            (只支持jpg、jpeg、gif、png图片)
+                            (只支持jpg,jpeg,gif,png图片)
                         </td>
                     </tr>
                     <tr>
                         <td style="height:35px;"><label for="cbSaveRemoteImage">内容分页：</label></td>
                         <td align="left">
                             <input type="button" id="btnInsertContentPager" value="插入内容分页符" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;text-align: right;"><label for="f_ShowIndex">推送首页：</label></td>
+                        <td style="text-align: left">
+                            <select id="f_ShowIndex" name="f_ShowIndex">
+                                <option value="0">不上首页</option>
+                                <option value="1">上首页 排序1</option>
+                                <option value="2">上首页 排序2</option>
+                                <option value="3">上首页 排序3</option>
+                                <option value="4">上首页 排序4</option>
+                                <option value="5">上首页 排序5</option>
+                                <option value="6">上首页 排序6</option>
+                                <option value="7">上首页 排序7</option>
+                                <option value="8">上首页 排序8</option>
+                                <option value="9">上首页 排序9</option>
+                                <option value="10">上首页 排序10</option>
+                                <option value="11">上首页 排序11</option>
+                                <option value="12">上首页 排序12</option>
+                                <option value="13">上首页 排序13</option>
+                                <option value="14">上首页 排序14</option>
+                                <option value="15">上首页 排序15</option>
+                                <option value="16">上首页 排序16</option>
+                                <option value="17">上首页 排序17</option>
+                                <option value="18">上首页 排序18</option>
+                                <option value="19">上首页 排序19</option>
+                                <option value="20">上首页 排序20</option>
+                            </select>
+                            {s_ShowIndex}(越大越靠前)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;text-align: right;"><label for="f_ShowInClient">客户端：</label></td>
+                        <td style="text-align: left">
+                            <select id="f_ShowInClient" name="f_ShowInClient">
+                                <option value="1">推送</option>
+                                <option value="0">不推送</option>
+                            </select>
+                            {s_ShowInClient}
                         </td>
                     </tr>
                 </table>
@@ -842,7 +881,7 @@ function DocumentNewsTagPulling(){
             <td class="spe_line" style="width:240px;text-align: left"><input type="text" class="input_number" id="f_Sort"
                                                                              name="f_Sort" value="{Sort}"
                                                                              style=" width: 60px;font-size:14px;" maxlength="10"/>
-                (输入数字，越大越靠前)
+                (越大越靠前)
             </td>
             <td class="spe_line" style="width:80px;height:35px;text-align: right;">是否热门：</td>
             <td class="spe_line" style="width:80px;text-align: left">
@@ -856,33 +895,7 @@ function DocumentNewsTagPulling(){
                 </label>
                 {r_IsHot}
             </td>
-            <td class="spe_line" style="width:120px;height:35px;text-align: right;">是否推送页首：</td>
-            <td class="spe_line" style="text-align: left">
-                <select id="f_ShowIndex" name="f_ShowIndex">
-                    <option value="0">不上首页</option>
-                    <option value="1">上首页 排序1</option>
-                    <option value="2">上首页 排序2</option>
-                    <option value="3">上首页 排序3</option>
-                    <option value="4">上首页 排序4</option>
-                    <option value="5">上首页 排序5</option>
-                    <option value="6">上首页 排序6</option>
-                    <option value="7">上首页 排序7</option>
-                    <option value="8">上首页 排序8</option>
-                    <option value="9">上首页 排序9</option>
-                    <option value="10">上首页 排序10</option>
-                    <option value="11">上首页 排序11</option>
-                    <option value="12">上首页 排序12</option>
-                    <option value="13">上首页 排序13</option>
-                    <option value="14">上首页 排序14</option>
-                    <option value="15">上首页 排序15</option>
-                    <option value="16">上首页 排序16</option>
-                    <option value="17">上首页 排序17</option>
-                    <option value="18">上首页 排序18</option>
-                    <option value="19">上首页 排序19</option>
-                    <option value="20">上首页 排序20</option>
-                </select>
-                {s_ShowIndex} （数字越大越靠前）
-            </td>
+
         </tr>
     </table>
 </div>

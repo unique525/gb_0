@@ -74,9 +74,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_data');
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                    parent::DelAllCache();
 
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
@@ -243,7 +241,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
     {
         $arrNewspaperArticleId = Control::GetRequest("sort", null, false);
         if (!empty($arrNewspaperArticleId)) {
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_article_data');
+            parent::DelAllCache();
             $newspaperArticleManageData = new NewspaperArticleManageData();
             $result = $newspaperArticleManageData->ModifySortForDrag($arrNewspaperArticleId);
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';

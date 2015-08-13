@@ -2841,7 +2841,7 @@ class SiteConfigData extends BaseData {
             }
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
-            DataCache::Set($cacheDir, $cacheFile, $fieldValue);
+            parent::AddCache($cacheDir, $cacheFile, $fieldValue, 3600);
         }
     }
 
@@ -2874,7 +2874,7 @@ class SiteConfigData extends BaseData {
             $siteConfigType = self::GetSiteConfigType($siteConfigName);
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_config_data' . DIRECTORY_SEPARATOR . $siteId;
             $cacheFile = 'site_config.cache_' . strtolower($siteConfigName);
-            if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
+            if (strlen(parent::GetCache($cacheDir, $cacheFile)) <= 0) {
                 switch ($siteConfigType) {
                     case self::SITE_CONFIG_TYPE_STRING_200: //varchar 200
                         $fieldName = "StringNorValue";
@@ -2909,10 +2909,10 @@ class SiteConfigData extends BaseData {
                     self::SetValue($siteId, $siteConfigName, $defaultValue, $siteConfigType);
                     $result = $defaultValue;
                 } else {
-                    DataCache::Set($cacheDir, $cacheFile, $result);
+                    parent::AddCache($cacheDir, $cacheFile, $result, 60);
                 }
             } else {
-                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+                $result = parent::GetCache($cacheDir, $cacheFile);
             }
             return $result;
         } else {

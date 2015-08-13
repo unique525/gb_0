@@ -138,7 +138,7 @@ class UserOrderSendManageGen extends BaseManageGen implements IBaseManageGen{
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/user_order_send_data');
+                    parent::DelAllCache();
 
                     $userOrderId = $userOrderSendManageData->GetUserOrderId($userOrderSendId, true);
                     $userOrderManageData = new UserOrderManageData();

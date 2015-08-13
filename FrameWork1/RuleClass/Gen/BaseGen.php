@@ -2198,6 +2198,40 @@ class BaseGen
 
         return $result;
     }
+
+    protected function AddCache($cacheDir, $cacheKey, $cacheValue, $expiration){
+        $baseData = new BaseData();
+        $baseData -> AddCache($cacheDir, $cacheKey, $cacheValue, $expiration);
+    }
+
+    protected function GetCache($cacheDir, $cacheKey){
+        $baseData = new BaseData();
+        return $baseData -> GetCache($cacheDir, $cacheKey);
+    }
+
+    public function GetCacheWithArray($cacheDir, $cacheKey){
+        $baseData = new BaseData();
+        return $baseData -> GetCacheWithArray($cacheDir, $cacheKey);
+    }
+
+    protected function DelCache($cacheDir, $cacheKey){
+        $baseData = new BaseData();
+        $baseData -> DelCache($cacheDir, $cacheKey);
+    }
+
+    protected function DelAllCache(){
+
+        $baseData = new BaseData();
+        $baseData -> DelAllCache();
+
+
+
+    }
+
+    protected function CheckCacheExist($cacheDir, $cacheKey){
+        $baseData = new BaseData();
+        return $baseData -> CheckCacheExist($cacheDir, $cacheKey);
+    }
 }
 
 ?>

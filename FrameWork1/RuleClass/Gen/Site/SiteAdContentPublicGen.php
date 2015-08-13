@@ -122,7 +122,7 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                     $clickInCache=0;
                     $filePath=self::VIRTUAL_CLICK_CACHE_FILE_PATH;
                     $fileName="site_ad_content_".$siteAdContentId."_";
-                    $cacheContent=DataCache::Get($filePath.$fileName);   //取缓冲中虚拟点击状态   小时_点击数
+                    $cacheContent=parent::GetCache($filePath,$fileName);   //取缓冲中虚拟点击状态   小时_点击数
                     if($cacheContent&&$cacheContent!=""){
                         $arrayOfVClickState=mb_split("_",$cacheContent);
                         if($arrayOfVClickState){
@@ -140,7 +140,7 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                         $clickInCache=1;
                     }
                     $newCacheContent=$hourSection."_".strval($clickInCache);
-                    DataCache::Set($filePath,$fileName,$newCacheContent);
+                    parent::AddCache($filePath,$fileName,$newCacheContent,3600);
 
 
 

@@ -270,6 +270,13 @@
 <div id="tabs-2">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
         <tr>
+            <td class="spe_line" height="30" align="right"><label for="f_DirectUrl">直接转向网址：</label></td>
+            <td colspan="3" class="spe_line"><input type="text" class="input_box" id="f_DirectUrl"
+                                        name="f_DirectUrl" value="{DirectUrl}"
+                                        style=" width: 70%;font-size:14px;" maxlength="200"/>
+            </td>
+        </tr>
+        <tr>
             <td class="spe_line" style="width:160px;height:40px;text-align: right;">题图1：</td>
             <td colspan="3" class="spe_line" style="text-align: left">
                 <input id="file_title_pic_1" name="file_title_pic_1" type="file" class="input_box" style="width:400px; background: #ffffff;" />

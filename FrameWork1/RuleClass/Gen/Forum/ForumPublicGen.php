@@ -97,11 +97,11 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $cacheFile = 'forum_default_site_id_' . $siteId . '_forum_id_'.$forumId.'_mode_' . $templateMode;
         $withCache = false;
         if($withCache){
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getDefaultTemplateContent($siteId, $forumId, $tempContent);
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }

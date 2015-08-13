@@ -360,8 +360,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
 
                         //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
-                        DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+                        parent::DelAllCache();
 
                         Control::ShowMessage(Language::Load('activity', 18));
                         $closeTab = Control::PostRequest("CloseTab",0);
@@ -589,8 +588,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
-            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+            parent::DelAllCache();
 
             if($state==100){   //停用，删除活动
                 //$publishQueueManageData = new PublishQueueManageData();
@@ -618,8 +616,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         if ($activityId > 0) {
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
-            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+            parent::DelAllCache();
 
             $publishQueueManageData = new PublishQueueManageData();
             $executeTransfer = true;
@@ -658,7 +655,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
     {
         $arrActivityId = Control::GetRequest("sort", null);
         if (!empty($arrActivityId)) {
-            DataCache::RemoveDir(CACHE_PATH . '/activity_data');
+            parent::DelAllCache();
             $activityManageData = new ActivityManageData();
             $result = $activityManageData->ModifySortForDrag($arrActivityId);
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';

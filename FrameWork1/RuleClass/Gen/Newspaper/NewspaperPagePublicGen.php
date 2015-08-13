@@ -33,7 +33,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
     }
 
     private function Import(){
-        DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+        parent::DelAllCache();
 
         $removeXSS = false;
         $newspaperPageId = -1;
@@ -71,7 +71,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
             );
 
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            parent::DelAllCache();
         }
 
         return $newspaperPageId;
@@ -90,7 +90,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
         )
         {
 
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            parent::DelAllCache();
 
             $newspaperPagePublicData = new NewspaperPagePublicData();
 
@@ -115,7 +115,7 @@ class NewspaperPagePublicGen extends BasePublicGen {
         )
         {
 
-            DataCache::RemoveDir(CACHE_PATH . '/newspaper_page_data');
+            parent::DelAllCache();
 
             $newspaperPagePublicData = new NewspaperPagePublicData();
 

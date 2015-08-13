@@ -197,8 +197,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/forum_data');
-
+                    parent::DelAllCache();
 
                     if( !empty($_FILES)){
                         //title pic1

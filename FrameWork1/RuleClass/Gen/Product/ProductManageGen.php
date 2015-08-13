@@ -247,10 +247,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                     }
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/product_data');
-
-                    //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                    parent::DelAllCache();
 
                     //javascript 处理
 
@@ -496,10 +493,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
                         }
 
                         //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/product_data');
-
-                        //删除缓冲
-                        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                        parent::DelAllCache();
 
                         //javascript 处理
                         $closeTab = Control::PostRequest("CloseTab",0);
@@ -530,7 +524,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
     private function GenRemoveToBin(){
         $result = "";
         //删除缓冲
-        DataCache::RemoveDir(CACHE_PATH . '/default_page');
+        parent::DelAllCache();
         return $result;
     }
 
@@ -801,7 +795,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $sort = Control::GetRequest("sort", 0);
         if($productId>0){
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            parent::DelAllCache();
             $productManageData = new ProductManageData();
             $result = $productManageData->ModifySort($sort, $productId);
         }
@@ -817,7 +811,7 @@ class ProductManageGen extends BaseManageGen implements IBaseManageGen
         $arrProductId = Control::GetRequest("sort", null);
         if(!empty($arrProductId)){
             //删除缓冲
-            DataCache::RemoveDir(CACHE_PATH . '/default_page');
+            parent::DelAllCache();
             $productManageData = new ProductManageData();
             $result = $productManageData->ModifySortForDrag($arrProductId);
             return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';

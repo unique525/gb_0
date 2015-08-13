@@ -123,7 +123,7 @@ class UserOrderPayManageGen extends BaseManageGen implements IBaseManageGen{
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/user_order_pay_data');
+                    parent::DelAllCache();
 
                     $userOrderId = $userOrderPayManageData->GetUserOrderId($userOrderPayId, true);
                     $userOrderManageData = new UserOrderManageData();

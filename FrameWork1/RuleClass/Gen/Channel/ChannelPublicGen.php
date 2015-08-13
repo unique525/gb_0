@@ -62,7 +62,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
             . '_ps_' . $pageSize;
         $withCache = true;
         if($withCache){
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getDefaultTemplateContent(
@@ -74,7 +74,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
                     $tagTopCount,
                     $tempContent
                 );
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }
@@ -259,7 +259,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
             . '_ps_' . $pageSize;
         $withCache = true;
         if($withCache){
-            $pageCache = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
                 $result = self::getListTemplateContent(
@@ -271,7 +271,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
                     $tagTopCount,
                     $tempContent
                 );
-                DataCache::Set($cacheDir, $cacheFile, $result);
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
             }

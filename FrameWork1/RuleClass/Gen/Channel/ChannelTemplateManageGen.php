@@ -198,7 +198,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                     }
 
                     //删除缓冲,修改模板的时候，所有缓存清空
-                    DataCache::RemoveDir(CACHE_PATH);
+                    parent::DelAllCache();
+
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //$resultJavaScript .= Control::GetCloseTab();
@@ -282,7 +283,7 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
                 $operateContent = 'Modify State Channel Template,GET PARAM:'.implode('|',$_GET).';\r\nResult:'.$result;
                 self::CreateManageUserLog($operateContent);
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
+                parent::DelAllCache();
             }
         }
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
@@ -375,7 +376,8 @@ class ChannelTemplateManageGen extends BaseManageGen implements IBaseManageGen {
             $result = $channelTemplateManageData->DeleteAttachment($channelTemplateId);
         }
         //删除缓冲
-        DataCache::RemoveDir(CACHE_PATH . '/channel_template_data');
+        parent::DelAllCache();
+
         return Control::GetRequest("jsonpcallback","").'({"result":'.$result.'})';
     }
 

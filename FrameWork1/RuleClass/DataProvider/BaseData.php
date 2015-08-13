@@ -848,11 +848,16 @@ class BaseData
      */
     protected function IsDataCached($cacheDir, $cacheFile)
     {
+        /**
         if (strlen(DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile)) <= 0) {
             return FALSE;
         } else {
             return TRUE;
         }
+         * */
+
+        return self::CheckCacheExist($cacheDir, $cacheFile);
+
     }
 
     /**
@@ -905,6 +910,7 @@ class BaseData
         $result = "";
         if (strlen($sql) > 0) {
             if($withCache){
+/*
                 $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
                 if ($cacheContent === false) { //没有找到缓存内容时，返回false
@@ -913,6 +919,17 @@ class BaseData
                 } else {
                     $result = $cacheContent;
                 }
+
+*/
+                $cacheContent = self::GetCache($cacheDir, $cacheFile);
+                if ($cacheContent === false) { //没有找到缓存内容时，返回false
+                    $result = $this->dbOperator->GetString($sql, $dataProperty);
+                    self::AddCache($cacheDir,$cacheFile,$result,3600);
+                    //DataCache::Set($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheContent;
+                }
+
             }else{
                 $result = $this->dbOperator->GetString($sql, $dataProperty);
             }
@@ -940,11 +957,20 @@ class BaseData
         $result = null;
         if (strlen($sql) > 0) {
             if($withCache){
+                /*
                 $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
 
                 if ($cacheArray === false) {
                     $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
                     DataCache::SetWithArray($cacheDir, $cacheFile, $result);
+                } else {
+                    $result = $cacheArray;
+                }
+                */
+                $cacheArray = self::GetCacheWithArray($cacheDir, $cacheFile);
+                if ($cacheArray === false) {
+                    $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+                    self::AddCache($cacheDir, $cacheFile, $result, 3600);
                 } else {
                     $result = $cacheArray;
                 }
@@ -975,6 +1001,8 @@ class BaseData
         $result = null;
         if (strlen($sql) > 0) {
             if($withCache){
+
+                /*
                 $cacheArray = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
                 if ($cacheArray === false) {
                     $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -982,11 +1010,177 @@ class BaseData
                 } else {
                     $result = $cacheArray;
                 }
+                */
+                $cacheArray = self::GetCacheWithArray($cacheDir, $cacheFile);
+                if ($cacheArray === false) {
+                    $result = $this->dbOperator->GetArray($sql, $dataProperty);
+                    self::AddCache($cacheDir, $cacheFile, $result, 3600);
+                } else {
+                    $result = $cacheArray;
+                }
+
             }else{
                 $result = $this->dbOperator->GetArray($sql, $dataProperty);
             }
         }
         return $result;
+    }
+
+
+    public function AddCache($cacheDir, $cacheKey, $cacheValue, $expiration){
+
+        if (class_exists("Memcached")){ //没有装扩展
+            $mem = MemoryCache::getInstance();
+
+            if (self::checkCacheServerStats($mem->getStats())){
+                $result = $mem->add($cacheKey,$cacheValue,$expiration);
+                //$resultCode = $mem->getResultCode();
+                //echo 'add '.$resultCode;
+                if ($result == false){
+                    //替换
+                    $mem -> replace($cacheKey, $cacheValue);
+                    //$resultCode = $mem->getResultCode();
+                    //echo 'replace '.$resultCode;
+                }
+            }
+            else{
+                //使用文件缓存
+                if(is_array($cacheValue)){
+                    DataCache::SetWithArray($cacheDir, $cacheKey, $cacheValue);
+                }else{
+                    DataCache::Set($cacheDir, $cacheKey, $cacheValue);
+                }
+            }
+
+        }else{
+            //错误,使用文件缓存
+            if(is_array($cacheValue)){
+                DataCache::SetWithArray($cacheDir, $cacheKey, $cacheValue);
+            }else{
+                DataCache::Set($cacheDir, $cacheKey, $cacheValue);
+            }
+        }
+    }
+
+    public function GetCache($cacheDir, $cacheKey){
+
+        //先检查memcached
+        if(class_exists("Memcached")){
+
+            $mem = MemoryCache::getInstance();
+
+            if (self::checkCacheServerStats($mem->getStats())){
+                $mem->get($cacheKey);
+                if ($mem->getResultCode() == Memcached::RES_NOTFOUND){
+                    $result = false;
+                }else{
+                    $result = $mem->get($cacheKey);
+                }
+            }else{
+                $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+            }
+        }else{
+            $result = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+        }
+        return $result;
+    }
+
+    public function GetCacheWithArray($cacheDir, $cacheKey){
+
+        //先检查memcached
+        if(class_exists("Memcached")){
+            $mem = MemoryCache::getInstance();
+            if (self::checkCacheServerStats($mem->getStats())){
+                $mem->get($cacheKey);
+                if ($mem->getResultCode() == Memcached::RES_NOTFOUND){
+                    $result = false;
+                }else{
+                    $result = $mem->get($cacheKey);
+                }
+            }else{
+                $result = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+
+            }
+
+        }else{
+
+            $result = DataCache::GetWithArray($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+
+        }
+
+        return $result;
+
+    }
+
+    public function DelCache($cacheDir, $cacheKey){
+        //先检查memcached
+        if(class_exists("Memcached")){
+            $mem = MemoryCache::getInstance();
+            if (self::checkCacheServerStats($mem->getStats())){
+                $mem->delete($cacheKey);
+            }else{
+                DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+            }
+        }else{
+            DataCache::Remove($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+        }
+    }
+
+    public function DelAllCache(){
+
+        if(class_exists("Memcached")){
+            $mem = MemoryCache::getInstance();
+            if (self::checkCacheServerStats($mem->getStats())){
+                $arrKeys = $mem->getAllKeys();
+                foreach($arrKeys as $key){
+                    $mem->delete($key);
+                }
+            }
+        }else{
+
+        }
+
+        DataCache::RemoveDir(CACHE_PATH);
+
+    }
+
+    public function CheckCacheExist($cacheDir, $cacheKey){
+        //先检查memcached
+        if(class_exists("Memcached")){
+            $mem = MemoryCache::getInstance();
+            if (self::checkCacheServerStats($mem->getStats())){
+                $mem->get($cacheKey);
+                if ($mem->getResultCode() == Memcached::RES_NOTFOUND){
+                    $result = false;
+                }else{
+                    $result = true;
+                }
+            }else{
+                $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+                if ($cacheContent === false) { //没有找到缓存内容时，返回false
+                    $result = false;
+                }else{
+                    $result = true;
+                }
+            }
+        }else{
+            $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheKey);
+            if ($cacheContent === false) { //没有找到缓存内容时，返回false
+                $result = false;
+            }else{
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+
+    private function checkCacheServerStats($arrStats){
+        if (empty($arrStats)){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
 

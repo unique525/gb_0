@@ -403,7 +403,7 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                         if ($manageUserAuthorityIdOfNew > 0) {
 
                             //删除缓冲
-                            DataCache::RemoveDir(CACHE_PATH . '/channel_data');
+                            parent::DelAllCache();
 
 
                             $closeTab = Control::PostRequest("CloseTab", 0);
@@ -852,7 +852,7 @@ class ManageUserAuthorityManageGen extends BaseManageGen implements IBaseManageG
                         if ($manageUserSiteAuthorityIdOfNew > 0) {
 
                             //删除缓冲
-                            DataCache::RemoveDir(CACHE_PATH . '/channel_data');
+                            parent::DelAllCache();
 
 
                             $closeTab = Control::PostRequest("CloseTab", 0);

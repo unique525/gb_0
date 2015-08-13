@@ -131,7 +131,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                     self::CreateManageUserLog($operateContent);
 
                     if ($documentNewsId > 0) {
-                        DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
+                        parent::DelAllCache();
                         //title pic1
                         $fileElementName = "file_title_pic_1";
                         $tableType = UploadFileData::UPLOAD_TABLE_TYPE_DOCUMENT_NEWS_TITLE_PIC_1; //
@@ -462,7 +463,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                 if ($result > 0) {
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
+                    parent::DelAllCache();
                     //编辑完成后，解锁
                     $lockEdit = 0;
                     $documentNewsManageData->ModifyLockEdit($documentNewsId, $lockEdit, $nowManageUserId);
@@ -724,9 +726,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             if (!$can) {
                 $result = $result = DefineCode::PUBLISH + self::PUBLISH_DOCUMENT_NEWS_RESULT_NO_RIGHT;
             }else{
-                DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/default_page');
+                parent::DelAllCache();
 
                 $publishQueueManageData = new PublishQueueManageData();
                 $executeTransfer = true;
@@ -887,7 +889,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $documentNewsId = Control::GetRequest("document_news_id", 0);
         $sort = Control::GetRequest("sort", 0);
         if ($documentNewsId > 0) {
-            DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
+            parent::DelAllCache();
+
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifySort($sort, $documentNewsId);
         }
@@ -903,7 +907,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
     {
         $arrDocumentNewsId = Control::GetRequest("sort", null);
         if (!empty($arrDocumentNewsId)) {
-            DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
+            parent::DelAllCache();
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifySortForDrag($arrDocumentNewsId);
             return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
@@ -922,7 +927,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         $documentNewsId = Control::GetRequest("document_news_id", 0);
         $state = Control::GetRequest("state", -1);
         if ($documentNewsId > 0 && $state >= 0) {
-            DataCache::RemoveDir(CACHE_PATH . '/document_news_data');
+
+            parent::DelAllCache();
             $documentNewsManageData = new DocumentNewsManageData();
             $manageUserManageData = new ManageUserManageData();
             $channelId = $documentNewsManageData->GetChannelId($documentNewsId, true);

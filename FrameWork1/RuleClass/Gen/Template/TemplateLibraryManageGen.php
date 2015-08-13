@@ -140,7 +140,7 @@ class TemplateLibraryGen extends BaseManageGen implements IBaseManageGen {
                 $nowRank = $channelManageData->GetRank($channelId,true);
                 $channelCreateResult=self::CreateChannelForImport($siteId,$templateLibraryId,$channelId,$nowRank,$arrayCreatedChannelId,$createDate);
                 //删除缓冲
-                DataCache::RemoveDir(CACHE_PATH . '/channel_data');
+                parent::DelAllCache();
 
 
 

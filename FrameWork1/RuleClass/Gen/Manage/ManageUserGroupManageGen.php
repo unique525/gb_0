@@ -146,7 +146,7 @@ class ManageUserGroupManageGen extends BaseManageGen implements IBaseManageGen {
                 if ($result > 0) {
 
                     //删除缓冲
-                    DataCache::RemoveDir(CACHE_PATH . '/manage_user_group_data');
+                    parent::DelAllCache();
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         $resultJavaScript .= Control::GetCloseTab();
