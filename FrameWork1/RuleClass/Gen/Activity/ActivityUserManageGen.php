@@ -26,24 +26,28 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
     }
     private function GenList(){
 
-        $siteId = Control::GetRequest("site_id", 0);
+
         $activityId = Control::GetRequest("activity_Id", 0);
         $resultJavaScript="";
         $tempContent = Template::Load("activity/activity_user_list.html","common");
         $activityUserManageData = new ActivityUserManageData();
 
         if(intval($activityId)>0){
-            $pageSize = Control::GetRequest("ps", 20);
+            $pageSize  = Control::GetRequest("ps", 20);
             $pageIndex = Control::GetRequest("p", 1);
             $searchKey = Control::GetRequest("search_key", "");
             $pageBegin = ($pageIndex - 1) * $pageSize;
-            $allCount = 0;
-            $listName = "activity_user_list";
+            $allCount  = 0;
+            $listName  = "activity_user_list";
 
             ///////////////判断是否有操作权限///////////////////
-            $manageUserId = Control::GetManageUserId();
+            $activityManageData  = new ActivityManageData();
+            $channelId           = $activityManageData->GetChannelId($activityId);
+            $channelManageData   = new ChannelManageData();
+            $siteId              = $channelManageData->GetSiteId($channelId,true);
+            $manageUserId        = Control::GetManageUserId();
             $manageUserAuthority = new ManageUserAuthorityManageData();
-            $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
+            $can                 = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
 
             if ($can == 1) {
                 $siteTagArray=$activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);

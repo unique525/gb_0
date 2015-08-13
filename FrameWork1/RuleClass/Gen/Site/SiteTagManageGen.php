@@ -235,23 +235,29 @@ class SiteTagManageGen extends BaseManageGen implements IBaseManageGen
     private function ModifyState()
     {
         $result = -1;
-        $siteId = Control::GetRequest("site_id", 0);
-        $siteTagId = Control::GetRequest("site_tag_id", 0);
-        $state = Control::GetRequest("state", -1);
-        $manageUserId = Control::GetManageUserId();
 
-        if ($siteId > 0 && $siteTagId >= 0 && $state >= 0 && $manageUserId > 0) {
+        $activityId     = Control::GetRequest("activity_id", 0);
+        $activityUserId = Control::GetRequest("activity_user_id", 0);
+        $state          = Control::GetRequest("state", '');
+        $manageUserId   = Control::GetManageUserId();
+
+        $activityManageDate = new ActivityManageData();
+        $channelId          = $activityManageDate->GetChannelId($activityId);
+        $channelManageDate  = new ChannelManageData();
+        $siteId             = $channelManageDate->GetSiteId($channelId,true);
+
+        if ($siteId > 0 && $activityUserId >= 0 && $state >= 0 && $manageUserId > 0) {
             /**********************************************************************
              ******************************判断是否有操作权限**********************
              **********************************************************************/
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-            $channelId = 0;
             $can = $manageUserAuthorityManageData->CanManageSite($siteId, $channelId, $manageUserId);
+
             if (!$can) {
                 $result = -10;
             } else {
                 $siteTagManageData = new SiteTagManageData();
-                $result = $siteTagManageData->ModifyState($siteTagId, $state);
+                $result = $siteTagManageData->ModifyState($activityUserId, $state);
                 //删除缓冲
                 DataCache::RemoveDir(CACHE_PATH . '/site_data');
                 //加入操作日志
