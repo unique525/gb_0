@@ -113,6 +113,18 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                             $uploadFileId = $arrOne["TitlePic1UploadFileId"];
                             $userFavoriteUrl = "/default.php?&mod=activity&a=detail&channel_id=".$channelId."&activity_id=".$tableId;
                         }
+                    }elseif($tableType == UserFavoriteData::TABLE_TYPE_FORUM_TOPIC){
+                        $userFavoriteTitle = Control::PostOrGetRequest("UserFavoriteTitle","");
+                        $forumTopicClientData = new ForumTopicClientData();
+                        $forumTopicTitle =$forumTopicClientData->GetForumTopicTitle($tableId, true);
+                        if (strlen($forumTopicTitle)>0){
+                            if($userFavoriteTitle == ""){
+                                $userFavoriteTitle = $forumTopicTitle;
+                            }
+
+                            $uploadFileId = 0;//$arrOne["TitlePic1UploadFileId"];
+                            $userFavoriteUrl = "/default.php?mod=forum_post&a=list&forum_topic_id=".$tableId;
+                        }
                     }
 
                     if($userFavoriteTitle != ""){

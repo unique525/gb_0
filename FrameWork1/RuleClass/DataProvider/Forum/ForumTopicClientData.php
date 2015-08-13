@@ -170,4 +170,42 @@ class ForumTopicClientData extends BaseClientData {
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
+
+    /**
+     * 取得论坛id
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 论坛id
+     */
+    public function GetForumId($forumTopicId, $withCache) {
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_forum_id.cache_' . $forumTopicId . '';
+            $sql = "SELECT ForumId FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 取得论坛id
+     * @param int $forumTopicId 主题id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 论坛id
+     */
+    public function GetForumTopicTitle($forumTopicId, $withCache) {
+        $result = "";
+        if ($forumTopicId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_topic_get_forum_topic_title.cache_' . $forumTopicId . '';
+            $sql = "SELECT ForumTopicTitle FROM " . self::TableName_ForumTopic . " WHERE ForumTopicId =:ForumTopicId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 } 
