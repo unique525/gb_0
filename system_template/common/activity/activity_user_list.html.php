@@ -87,7 +87,6 @@
 					dataType: "jsonp",
 					jsonp: "jsonpcallback",
 					success: function(data) {
-						console.log(data);
 						$("#span_state_" + activityUserId).text(userState.toString());
 						reloadUserState();
 
