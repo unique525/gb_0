@@ -110,7 +110,7 @@ class SiteTagManageData extends BaseManageData {
         $result = -1;
         if ($siteTagId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_ActivityUser . " SET `State`=:State WHERE SiteTagId=:SiteTagId;";
+            $sql = "UPDATE " . self::TableName_SiteTag . " SET `State`=:State WHERE SiteTagId=:SiteTagId;";
             $dataProperty->AddField("SiteTagId", $siteTagId);
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
