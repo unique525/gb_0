@@ -96,15 +96,14 @@ class ActivityUserManageData extends BaseManageData{
                         u.UserName,
                         a.ActivityTitle
             FROM
-            CST_ACTIVITY_USER au
+            ".self::TableName_ActivityUser." au
             INNER JOIN " . self::TableName_User . " u ON (u.UserId=au.UserId)
 
-            LEFT OUTER JOIN CST_ACTIVITY a ON (a.ActivityId=au.ActivityId)
+            LEFT OUTER JOIN " . self::TableName_Activity . " a ON (a.ActivityId=au.ActivityId)
 
             WHERE au.ActivityId=:ActivityId  " . $searchSql . "
             ORDER BY au.ActivityUserId DESC
             LIMIT " . $pageBegin . "," . $pageSize . ";";
-            echo $sql;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
             $sqlCount = "SELECT count(*) FROM " . self::TableName_ActivityUser . " WHERE ActivityId=:ActivityId " . $searchSql . " ;";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);

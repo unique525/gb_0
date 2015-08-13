@@ -67,9 +67,19 @@
         $("#btn_create").click(function (event) {
             event.preventDefault();
             parent.G_TabUrl = '/default.php?secu=manage&mod=activity&m=create' + '&channel_id=' + channelId;
+            parent.G_TabTitle = channelName + '-用户审核';
+            parent.addTab();
+        });
+
+
+        $(".new_activity_user").click(function(event){
+            event.preventDefault();
+            var activityId=$(this).attr("idvalue");
+            parent.G_TabUrl = '/default.php?secu=manage&mod=activity_user&m=list' + '&activity_id=' + activityId;
             parent.G_TabTitle = channelName + '-新建活动';
             parent.addTab();
         });
+
 
         var btnEdit = $(".btn_edit");
         btnEdit.css("cursor", "pointer");
@@ -230,12 +240,13 @@
                                     class="ActivityClassIdList" title="{f_ActivityClassId}">{f_ActivityClassName}</span></td>
                             <td class="spe_line2" style="width:60px;text-align:center;"><span class="new_activity_user"
                                                                                               style=" cursor: pointer"
-                                                                                              title="{f_ActivityId}">{f_ApplyUserCount}</span>
+                                                                                              title="{f_ActivityId}"
+                                                                                              id="{f_ChannelId}"
+                                                                                              idvalue="{f_ActivityId}">{f_JoinUserCount}</span>
                             </td>
                             <td class="spe_line2" style="width:60px;text-align:center;"><span class="activity_user_list"
                                                                                               style=" cursor: pointer"
-                                                                                              title="{f_ActivityId}"
-                                                                                              id="{f_ChannelId}">{f_JoinUserCount}</span>
+                                                                                              title="{f_ActivityId}">{f_ApplyUserCount}</span>
                             </td>
                             <td class="spe_line2" style="width:30px;text-align:center;">{f_sort}</td>
                             <td class="spe_line2" style="width:80px;text-align:center;"><img class="pic_manage"

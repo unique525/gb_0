@@ -67,7 +67,7 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
                 $tempContent = str_ireplace("{PagerButton}", Language::Load('document', 26), $tempContent);//您尚未开通操作此功能的权限，如需开通此权限，请联系管理人员！
             }
         }else{
-            $resultJavaScript.=Control::GetJqueryMessage(Language::Load('site_id', 3));//站点id错误！
+            $resultJavaScript.=Control::GetJqueryMessage(Language::Load('activity', 23));//活动ID错误！
         }
 
 
@@ -92,23 +92,26 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
     private function ModifyState()
     {
         $result = -1;
-        $siteId = Control::GetRequest("site_id", 0);
-        $siteTagId = Control::GetRequest("site_tag_id", 0);
-        $state = Control::GetRequest("state", -1);
+        $siteId = Control::GetRequest("site_id",0);
+        $activityId = Control::GetRequest("activity_id", 0);
+        $activityUserId = Control::GetRequest("userId", 0);
+        $state = Control::GetRequest("state", '');
         $manageUserId = Control::GetManageUserId();
 
-        if ($siteId > 0 && $siteTagId >= 0 && $state >= 0 && $manageUserId > 0) {
+
+        if ($siteId > 0 && $activityUserId >= 0 && $state >= 0 && $manageUserId > 0) {
             /**********************************************************************
              ******************************判断是否有操作权限**********************
              **********************************************************************/
             $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
             $channelId = 0;
             $can = $manageUserAuthorityManageData->CanManageSite($siteId, $channelId, $manageUserId);
+
             if (!$can) {
                 $result = -10;
             } else {
                 $siteTagManageData = new SiteTagManageData();
-                $result = $siteTagManageData->ModifyState($siteTagId, $state);
+                $result = $siteTagManageData->ModifyState($activityUserId, $state);
                 //删除缓冲
                 DataCache::RemoveDir(CACHE_PATH . '/site_data');
                 //加入操作日志

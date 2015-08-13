@@ -22,5 +22,7 @@
 <module id="20"><content><![CDATA[用户同步登录未成功]]></content></module>
 <module id="21"><content><![CDATA[您还未报名参与活动,请先报名！]]></content></module>
 <module id="22"><content><![CDATA[获取对应用户名失败！用户名为空！]]></content></module>
+<module id="23"><content><![CDATA[活动ID错误！]]></content></module>
+
 <module id="100"><content><![CDATA[数据插入出错]]></content></module>
 </root>

@@ -69,17 +69,22 @@ foreach ($arrFiles as $fileName) {
 }
 
 
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
+//include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
-$arrFiles = getFileNames($dir);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
+
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
+
+//$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
+//$arrFiles = getFileNames($dir);
+//foreach ($arrFiles as $fileName) {
+//    include_once($fileName);
+//}
 
 /**
  * 输入文件夹地址，迭代循环返回此文件夹下所有文件名的列表数组
