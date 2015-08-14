@@ -245,6 +245,9 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenAsyncAddHit() {
         $result="";
         $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+        if($documentNewsId<=0){
+            $documentNewsId = intval(Control::GetRequest("id", "0"));
+        }
         if ($documentNewsId > 0) {
             $documentNewsPublicData=new DocumentNewsPublicData();
             $result = $documentNewsPublicData->AddHit($documentNewsId);
@@ -265,6 +268,10 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenAsyncGetHit() {
         $result=0;
             $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+            if($documentNewsId<=0){
+                $documentNewsId = intval(Control::GetRequest("id", "0"));
+            }
+
             if ($documentNewsId > 0) {
                 $documentNewsPublicData=new DocumentNewsPublicData();
                 $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
@@ -278,6 +285,10 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenAsyncAddAndGetHit(){
         $result=0;
         $documentNewsId = intval(Control::GetRequest("document_news_id", "0"));
+        if($documentNewsId<=0){
+            $documentNewsId = intval(Control::GetRequest("id", "0"));
+        }
+
         if ($documentNewsId > 0) {
             $documentNewsPublicData=new DocumentNewsPublicData();
             $documentNewsPublicData->AddHit($documentNewsId);
