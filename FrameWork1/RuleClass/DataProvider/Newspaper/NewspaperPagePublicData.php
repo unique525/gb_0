@@ -460,13 +460,12 @@ class NewspaperPagePublicData extends BasePublicData
      * @param bool $withCache 是否从缓冲中取
      * @return array 电子报版面信息数据集
      */
-    public function GetListForSelectPage($newspaperId, $withCache=FALSE)
+    public function GetListForSelectPage($newspaperId, $withCache = FALSE)
     {
-        $result=-1;
+        $result = null;
         if($newspaperId>0){
-            $withCache=FALSE;
-            $cacheDir = "";//CACHE_PATH . DIRECTORY_SEPARATOR . '_data';
-            $cacheFile = "";
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = "newspaper_article_get_all_list_". $newspaperId;
             $sql = "SELECT NewspaperPageId,NewspaperPageName,NewspaperPageNo
 
 
@@ -479,7 +478,12 @@ class NewspaperPagePublicData extends BasePublicData
                 ORDER BY Sort,NewspaperPageId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperId", $newspaperId);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}
         return $result;
     }
 }

@@ -346,7 +346,9 @@ class Alipay
         if($userOrderId>0 && $allPrice>0){
 
             $alipayTradeStatus = $userOrderPublicData->GetAlipayTradeStatus($userOrderId, false);
-            if($alipayTradeStatus == 'TRADE_FINISHED'){
+            if($alipayTradeStatus == 'TRADE_FINISHED'
+                || $alipayTradeStatus == 'TRADE_SUCCESS'
+            ){
 
                 //如果有做过处理，不执行商户的业务程序
 
