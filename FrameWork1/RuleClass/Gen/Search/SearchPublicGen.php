@@ -25,10 +25,10 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function GenSearch()
     {
-
+echo 1;
         $temp = Control::GetRequest("temp", "");
-        $siteId = Control::GetRequest("site_id", "");
-        $templateContent = parent::GetDynamicTemplateContent("big_search", $siteId);
+        $siteId = Control::GetRequest("site_id", 0);
+        $templateContent = parent::GetDynamicTemplateContent("big_search", 0);
 
         parent::ReplaceFirst($templateContent);
 
@@ -71,25 +71,22 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
                         $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
                         $templateContent = str_ireplace("{" . $tagId . "_pager_button}", $pagerButton, $templateContent);
                         $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
-                    } else {
-                        Template::RemoveCustomTag($templateContent, $tagId);
-                        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("search", 1), $templateContent);
-                        $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
                     }
+
                     $templateContent = str_ireplace("{AllCount}", $allCount, $templateContent);
                     $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
 
                 }
 
             }
-        }else{
-
-            Template::RemoveCustomTag($templateContent, $tagId);
-            $templateContent = str_ireplace("{AllCount}", 0, $templateContent);
-            $templateContent = str_ireplace("{" . $tagId . "_pager_button}", "", $templateContent);
-            $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
-
         }
+
+
+        Template::RemoveCustomTag($templateContent, $tagId);
+        $templateContent = str_ireplace("{AllCount}", 0, $templateContent);
+        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", "", $templateContent);
+        $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
+
 
 
         $templateContent = parent::ReplaceTemplate($templateContent);
