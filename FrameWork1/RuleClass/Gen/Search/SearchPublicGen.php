@@ -25,7 +25,6 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function GenSearch()
     {
-echo 1;
         $temp = Control::GetRequest("temp", "");
         $siteId = Control::GetRequest("site_id", 0);
         $templateContent = parent::GetDynamicTemplateContent("big_search", 0);
