@@ -219,9 +219,9 @@ class NewspaperArticlePublicData extends BasePublicData
             $cacheFile = 'newspaper_article_get_channel_id.cache_' . $newspaperArticleId . '';
             $sql = "SELECT ChannelId FROM " . self::TableName_Newspaper . "
 
-                    WHERE NewspaperId IN
+                    WHERE NewspaperId =
                     (
-                    SELECT NewspaperId FROM ".self::TableName_NewspaperPage." WHERE NewspaperPageId IN
+                    SELECT NewspaperId FROM ".self::TableName_NewspaperPage." WHERE NewspaperPageId =
                     (SELECT NewspaperPageId FROM ".self::TableName_NewspaperArticle." WHERE NewspaperArticleId=:NewspaperArticleId)
 
 

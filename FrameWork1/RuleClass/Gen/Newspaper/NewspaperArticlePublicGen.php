@@ -253,7 +253,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         $templateContent = str_ireplace("{NewspaperPageUploadFilePath}", $newspaperPageUploadFilePath, $templateContent);
         $templateContent = str_ireplace("{CurrentPublishDate}", $publishDate, $templateContent);
 
-        $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId);
+        $arrNewspaperPages = $newspaperPagePublicData -> GetListForSelectPage($newspaperId, true);
         $tagId = "newspaper_page";
 
         if(count($arrNewspaperPages)>0){
