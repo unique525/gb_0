@@ -46,36 +46,52 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         $m = Control::GetRequest("m", "no");
         $syn = Control::GetRequest("syn", "no");
         $s=Control::GetRequest("s", "s_create_date_DESC");
+        $tagId = "big_search";
+        if(strlen($searchKey)>0){
+            if ($pageIndex > 0) {
 
-        if ($pageIndex > 0) {
-            $tagId = "big_search";
-            $allCount = 0;
-            $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
-            $pageSize = Template::GetParamValue($tagContent, "top");
+                $allCount = 0;
+                $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
 
-            $arrList = self::GetSearchList($allCount,$searchKey,$pageIndex,$pageSize,$m,$syn,$f,$s);
-            if (count($arrList) > 0) {
-                Template::ReplaceList($templateContent, $arrList, $tagId);
-                $styleNumber = 1;
-                $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
-                $templateName = "default";
-                $templatePath = "front_template";
-                $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
-                $isJs = FALSE;
-                $navUrl = "/default.php?mod=search&m=$m&syn=$syn&f=$f&s=$s&site_id=$siteId&p={0}&ps=$pageSize&search_key=" . urlencode($searchKey);
-                $jsFunctionName = "";
-                $jsParamList = "";
-                $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", $pagerButton, $templateContent);
-                $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
-            } else {
-                Template::RemoveCustomTag($templateContent, $tagId);
-                $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("search", 1), $templateContent);
-                $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
+                if(strlen($tagContent)>0){
+                    $pageSize = Template::GetParamValue($tagContent, "top");
+
+                    $arrList = self::GetSearchList($allCount,$searchKey,$pageIndex,$pageSize,$m,$syn,$f,$s);
+                    if (count($arrList) > 0) {
+                        Template::ReplaceList($templateContent, $arrList, $tagId);
+                        $styleNumber = 1;
+                        $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
+                        $templateName = "default";
+                        $templatePath = "front_template";
+                        $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
+                        $isJs = FALSE;
+                        $navUrl = "/default.php?mod=search&m=$m&syn=$syn&f=$f&s=$s&temp=$temp&p={0}&ps=$pageSize&search_key=" . urlencode($searchKey);
+                        $jsFunctionName = "";
+                        $jsParamList = "";
+                        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+                        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", $pagerButton, $templateContent);
+                        $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
+                    } else {
+                        Template::RemoveCustomTag($templateContent, $tagId);
+                        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", Language::Load("search", 1), $templateContent);
+                        $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
+                    }
+                    $templateContent = str_ireplace("{AllCount}", $allCount, $templateContent);
+                    $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
+
+                }
+
             }
-            $templateContent = str_ireplace("{AllCount}", $allCount, $templateContent);
-            $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
+        }else{
+
+            Template::RemoveCustomTag($templateContent, $tagId);
+            $templateContent = str_ireplace("{AllCount}", 0, $templateContent);
+            $templateContent = str_ireplace("{" . $tagId . "_pager_button}", "", $templateContent);
+            $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
+
         }
+
+
         $templateContent = parent::ReplaceTemplate($templateContent);
         parent::ReplaceEnd($templateContent);
         return $templateContent;

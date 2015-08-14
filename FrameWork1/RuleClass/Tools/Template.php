@@ -1293,7 +1293,9 @@ class Template
         $preg = "/\<$tagName id=\"$tagId\"(.*)\<\/$tagName>/imsU";
         preg_match_all($preg, $templateContent, $matches);
         if(count($matches)>0){
-            $result = $matches[0][0];
+            if(count($matches[0])>0){
+                $result = $matches[0][0];
+            }
         }
         return $result;
     }
