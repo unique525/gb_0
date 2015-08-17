@@ -75,7 +75,7 @@ class SearchClientGen extends BaseClientGen implements IBaseClientGen
         }
 
 
-        return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
+        return '{"result_code":"'.$resultCode.'","search_result":{"search_result_list":' . $result . '}}';
     }
 
     /**
