@@ -164,8 +164,25 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                 $siteId,
                 "",
                 $templateMode);
-            $result = self::getDetailTemplateContent(
-                $siteId, $userAlbumId, $templateContent);
+
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_page';
+            $cacheFile = 'user_album_id_' . $userAlbumId . '_mode_' . $templateMode;
+            $withCache = true;
+            if($withCache){
+                $pageCache = parent::GetCache($cacheDir, $cacheFile);
+
+                if ($pageCache === false) {
+                    $result = self::getDetailTemplateContent(
+                        $siteId, $userAlbumId, $templateContent);
+                    parent::AddCache($cacheDir, $cacheFile, $result, 60);
+                } else {
+                    $result = $pageCache;
+                }
+            }else{
+                $result = self::getDetailTemplateContent(
+                    $siteId, $userAlbumId, $templateContent);
+            }
 
         }
         return $result;

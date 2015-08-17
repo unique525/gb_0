@@ -1,21 +1,30 @@
 <?php
-
 /**
- * 前台搜索生成类
- * @category iCMS
- * @package iCMS_Rules_Gen_Search
- * @author yanjiuyuan
+ * Created by PhpStorm.
+ * User: zhangchi
+ * Date: 15-8-14
+ * Time: 下午6:12
  */
-class SearchPublicGen extends BasePublicGen implements IBasePublicGen
+
+class SearchClientGen extends BaseClientGen implements IBaseClientGen
 {
 
     /**
      * 引导方法
      * @return string 返回执行结果
      */
-    public function GenPublic()
+    public function GenClient()
     {
-        $result = self::GenSearch();
+        $function = Control::GetRequest("f", "");
+
+        switch ($function) {
+
+            default :
+                $result = self::GenSearch();
+                break;
+
+        }
+        $result = str_ireplace("{function}", $function, $result);
         return $result;
     }
 
@@ -25,71 +34,48 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function GenSearch()
     {
-        $temp = Control::GetRequest("temp", "");
-        $siteId = Control::GetRequest("site_id", 0);
-        $templateContent = parent::GetDynamicTemplateContent("big_search", 0);
+        $result = "[{}]";
 
         parent::ReplaceFirst($templateContent);
 
-        //加载站点信息
-        if ($siteId > 0) {
-            $sitePublicData = new SitePublicData();
-            $arrOne = $sitePublicData->GetOne($siteId);
-            Template::ReplaceOne($templateContent, $arrOne);
-        }
-
-        $searchKey = Control::GetRequest("search_key", "");
-        $searchKey = urldecode($searchKey);
-        $pageIndex = Control::GetRequest("p", 1);
+        $searchKey = Control::PostOrGetRequest("search_key", "");
+        $pageSize = intval(Control::GetRequest("ps", 20));
+        $pageIndex = intval(Control::GetRequest("p", 1));
         $f = Control::GetRequest("f", "_all");
         $m = Control::GetRequest("m", "no");
         $syn = Control::GetRequest("syn", "no");
         $s = Control::GetRequest("s", "s_create_date_DESC");
-        $tagId = "big_search";
+
         if (strlen($searchKey) > 0) {
             if ($pageIndex > 0) {
 
                 $allCount = 0;
-                $tagContent = Template::GetCustomTagByTagId($tagId, $templateContent);
-
-                if (strlen($tagContent) > 0) {
-                    $pageSize = Template::GetParamValue($tagContent, "top");
 
                     $arrList = self::GetSearchList($allCount, $searchKey, $pageIndex, $pageSize, $m, $syn, $f, $s);
                     if (count($arrList) > 0) {
-                        Template::ReplaceList($templateContent, $arrList, $tagId);
-                        $styleNumber = 1;
-                        $templateFileUrl = "pager/pager_style" . $styleNumber . ".html";
-                        $templateName = "default";
-                        $templatePath = "front_template";
-                        $pagerTemplate = Template::Load($templateFileUrl, $templateName, $templatePath);
-                        $isJs = FALSE;
-                        $navUrl = "/default.php?mod=search&m=$m&syn=$syn&f=$f&s=$s&temp=$temp&p={0}&ps=$pageSize&search_key=" . urlencode($searchKey);
-                        $jsFunctionName = "";
-                        $jsParamList = "";
-                        $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
-                        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", $pagerButton, $templateContent);
-                        $templateContent = str_ireplace("{" . $tagId . "_item_count}", $allCount, $templateContent);
+                        $resultCode = 1;
+                        $result = Format::FixJsonEncode($arrList);
+                    }else{
+
+                        $resultCode = -3;
+
                     }
 
-                    $templateContent = str_ireplace("{AllCount}", $allCount, $templateContent);
-                    $templateContent = str_ireplace("{SearchKey}", urlencode($searchKey), $templateContent);
 
-                }
+
+            }else{
+
+                $resultCode = -2;
 
             }
+        }else{
+
+            $resultCode = -5;
+
         }
 
 
-        Template::RemoveCustomTag($templateContent, $tagId);
-        $templateContent = str_ireplace("{AllCount}", 0, $templateContent);
-        $templateContent = str_ireplace("{" . $tagId . "_pager_button}", "", $templateContent);
-        $templateContent = str_ireplace("{" . $tagId . "_item_count}", 0, $templateContent);
-
-
-        $templateContent = parent::ReplaceTemplate($templateContent);
-        parent::ReplaceEnd($templateContent);
-        return $templateContent;
+        return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
     }
 
     /**
@@ -223,6 +209,5 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         return $arrList;
 
     }
-}
 
-?>
+} 

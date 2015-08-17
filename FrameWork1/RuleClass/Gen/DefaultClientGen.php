@@ -121,6 +121,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $newspaperArticlePicClientGen = new NewspaperArticlePicClientGen();
                 $result = $newspaperArticlePicClientGen->GenClient();
                 break;
+            case "search":
+                $searchClientGen = new SearchClientGen();
+                $result = $searchClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;
