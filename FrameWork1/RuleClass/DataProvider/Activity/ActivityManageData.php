@@ -219,17 +219,43 @@ class ActivityManageData extends BaseManageData{
      * @param string $state 状态
      * @return int 执行结果
      */
-    public function ModifyState($activityId,$state) {
+    public function ModifyState($activityUserId,$state) {
         $result = -1;
-        if ($activityId < 0) {
+        if ($activityUserId < 0) {
             return $result;
         }
-        $sql = "UPDATE " . self::TableName_Activity . " SET State=:State WHERE ActivityId=:ActivityId";
+        $sql = "UPDATE " . self::TableName_ActivityUser . " SET State=:State WHERE ActivityUserId=:ActivityUserId";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ActivityId", $activityId);
+        $dataProperty->AddField("ActivityUserId", $activityUserId);
         $dataProperty->AddField("State", $state);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
-        return $result;
+        return  $result;
+    }
+
+    /**
+     * 同步cst_activity_user表中已通过的人员数到cst_activity表的ApplyUserCount字段
+     * @param $activityId int    活动id
+     * @return int        int    执行结果
+     */
+    public function SyncModifyState($activityId)
+    {
+        $result = -1;
+        $dataProperty  = new DataProperty();
+        $dataProperty->AddField("ActivityId",$activityId);
+
+        $sql = 'SELECT count(State)' .
+            ' FROM '  . self::TableName_ActivityUser .
+            ' WHERE ActivityId=:ActivityId AND State=1;';
+        $applyUserCount = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        if ($applyUserCount >= 0){
+            $dataProperty->AddField('ApplyUserCount', $applyUserCount);
+             $sql = 'UPDATE ' . self::TableName_Activity .
+                    ' SET ApplyUserCount=:ApplyUserCount'.
+                    ' WHERE ActivityId=:ActivityId';
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+    return $result;
     }
 
     /**

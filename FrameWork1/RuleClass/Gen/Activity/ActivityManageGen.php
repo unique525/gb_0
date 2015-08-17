@@ -70,9 +70,9 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
         $result = -1;
         $activityType = Control::GetRequest("activity_type", 0);
         switch ($activityType) {
-            //case 0:
-            //    $result = self::GenNew_ActivityType_1($activityType);
-            //    break;
+//            case 0:
+//                $result = self::GenNew_ActivityType_1($activityType);
+//                break;
             default:
                 $result = self::CreateForActivityType0(0);
                 break;
@@ -92,7 +92,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             //    $result = self::GenNew_ActivityType_1($activityType);
             //    break;
             default:
-                $result = self::ModifyForActivityType0(0);
+                $result = self::ModifyForActivityType0();
                 break;
 
         }
@@ -290,23 +290,22 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
      * 活动分页列表
      * @return string 列表页面html
      */
-    private function GenList(){
-        $resultJavaScript="";
-        $tempContent = Template::Load("activity/activity_list.html","common");
-        $channelId = Control::GetRequest("channel_id", 0);
-        $activityClass = Control::GetRequest("activity_class", 0);
-        $state = Control::GetRequest("state", -1);
-        $pageSize = Control::GetRequest("ps", 20);
-        $pageIndex = Control::GetRequest("p", 1);
-        $searchKey = Control::GetRequest("search_key", "");
-        $searchKey = urldecode($searchKey);
+    private function GenList()
+    {
+        $resultJavaScript = "";
+        $tempContent      = Template::Load("activity/activity_list.html","common");
+        $channelId        = Control::GetRequest("channel_id", 0);
+        $pageSize         = Control::GetRequest("ps", 20);
+        $pageIndex        = Control::GetRequest("p", 1);
+        $searchKey        = Control::GetRequest("search_key", "");
+        $searchKey        = urldecode($searchKey);
 
         if ($pageIndex > 0 && $channelId > 0) {
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $listName = "activity";
             $allCount = 0;
             $activityData = new ActivityManageData();
-            $arrList = $activityData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey, $activityClass, $state);
+            $arrList = $activityData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey);
             if ($arrList != null && count($arrList) > 0) {
 
                 $activityClassManageData=new ActivityClassManageData();//取得ActivityClassName 并加入数组
