@@ -421,7 +421,7 @@ function IsBatchWatermark(){
 }
 function ChangeToBold() {
 
-    if ($("#cbTitleBold").attr('checked')) {
+    if ($("#cbTitleBold").is(":checked")) {
         $("#f_DocumentNewsTitleBold").val("bold");
         $("#f_DocumentNewsTitle").css("font-weight", "bold");
     } else {

@@ -184,6 +184,7 @@ $(function() {
                 dialogContent.html("发布完成<br />"+result);
                 var spanState = $("#span_state_" + documentNewsId);
                 spanState.html("<"+"span style='color:#006600'>已发<"+"/span>");
+                window.location.href = window.location.href;
             }
         });
     });
