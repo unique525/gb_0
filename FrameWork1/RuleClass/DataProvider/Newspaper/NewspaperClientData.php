@@ -30,6 +30,31 @@ class NewspaperClientData extends BaseClientData {
         return $result;
     }
 
+
+    /**
+     * 取得最新的一条记录id
+     * @param int $channelId
+     * @param string $publishDate
+     * @return int
+     */
+    public function GetNewspaperIdByPublishDate($channelId, $publishDate)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $sql = "SELECT NewspaperId FROM " . self::TableName_Newspaper . "
+                WHERE ChannelId = :ChannelId
+                AND PublishDate>=:PublishDate
+                ORDER BY PublishDate,NewspaperId LIMIT 1;
+                ";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("PublishDate", $publishDate);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 取得一条信息
      * @param int $newspaperId 电子报版面id
