@@ -105,6 +105,20 @@ class FileObject
         return $result;
     }
 
+    public static function Append($filePath, $fileContent){
+        $fullFilePath = PHYSICAL_PATH . '/' . $filePath; //加上系统路径
+        $fullFilePath = str_ireplace('/',DIRECTORY_SEPARATOR,$fullFilePath); //适应windows平台和unix平台
+
+        $oldContent = '';
+        if (file_exists($fullFilePath)) {
+            $oldContent = file_get_contents($fullFilePath);
+        }
+        $newContent = $oldContent.$fileContent;
+
+        self::Write($filePath,$newContent);
+
+    }
+
     /**
      * 根据数组数据写入文件
      * @param array $arrFileContent 写入数据信息数组 {DestinationPath,SourcePath,Content}
