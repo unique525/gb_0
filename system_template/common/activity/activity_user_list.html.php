@@ -78,7 +78,7 @@
 			if(activityUserId > 0) {
 				$.ajax({
 					type: "get",
-					url: "/default.php?secu=manage&mod=site_tag&m=modify_state",
+					url: "/default.php?secu=manage&mod=activity_user&m=modify_state",
 					data: {
 						activity_id: activityId,
 						activity_user_id: activityUserId,
@@ -87,7 +87,11 @@
 					dataType: "jsonp",
 					jsonp: "jsonpcallback",
 					success: function(data) {
-						$("#span_state_" + activityUserId).text(userState.toString());
+						if (data["result"] == 1){
+							$("#span_state_" + activityUserId).text(userState.toString());
+						}else{
+							$("#span_state_" + activityUserId).text("-1");
+						}
 						reloadUserState();
 
 					}

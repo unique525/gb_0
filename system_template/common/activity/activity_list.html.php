@@ -76,7 +76,7 @@
             event.preventDefault();
             var activityId=$(this).attr("idvalue");
             parent.G_TabUrl = '/default.php?secu=manage&mod=activity_user&m=list' + '&activity_id=' + activityId;
-            parent.G_TabTitle = channelName + '-新建活动';
+            parent.G_TabTitle = channelName + '-用户审核';
             parent.addTab();
         });
 
@@ -263,9 +263,6 @@
         </icms>
     </ul>
 </div>
-<div id="PagerBtn">
-    {PagerButton}
-</div>
-
+<div id="PagerBtn">{PagerButton}</div>
 </body>
 </html>

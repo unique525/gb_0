@@ -482,7 +482,25 @@ function DocumentNewsTagPulling(){
         }
     });
 }
--->
+
+//切换到Tiny_mce编辑器
+function changeEditor(){
+	setcookie("editor", "TINY");
+
+	var document_news_id = Request["document_news_id"];
+	var tab_index        = Request["tab_index"];
+	var p                = Request["p"];
+
+	window.location.href = "/default.php"
+			             +"?secu=manage"
+			             + "&mod=document_news"
+			             + "&m=modify"
+			             + "&editor=tiny"
+			             + "&document_news_id=" + document_news_id
+			             + "&tab_index=" + tab_index
+			             + "&p=" + p ;
+}
+
 </script>
 <style>
     .plupload_scroll {
@@ -533,9 +551,11 @@ function DocumentNewsTagPulling(){
 <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
-            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
-            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
+	        <input class="btn" value="切换到手机编辑器" type="button" onclick="" />
+	        <input class="btn" value="切换到Tiny编辑器" type="button" onclick="changeEditor()" />
+            <input class="btn" value="确认并关闭"      type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑"      type="button" onclick="submitForm(2)"/>
+            <input class="btn" value="确认并继续"      type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
