@@ -27,9 +27,9 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList(){
 
 
-        $activityId = Control::GetRequest("activity_Id", 0);
-        $resultJavaScript="";
-        $tempContent = Template::Load("activity/activity_user_list.html","common");
+        $activityId             = Control::GetRequest("activity_Id", 0);
+        $resultJavaScript       = "";
+        $tempContent            = Template::Load("activity/activity_user_list.html","common");
         $activityUserManageData = new ActivityUserManageData();
 
         if(intval($activityId)>0){
@@ -50,13 +50,13 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
             $can                 = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
 
             if ($can == 1) {
-                $siteTagArray=$activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);
+                $siteTagArray = $activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);
                 if(count($siteTagArray)>0){
                     Template::ReplaceList($tempContent, $siteTagArray, $listName);
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=activity_user&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=activity_user&m=list&activity_id=$activityId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
@@ -79,13 +79,6 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
         $result = $tempContent;
         return $result;
     }
-
-    private function GenCreate(){
-
-
-
-    }
-
 
 
     /**
