@@ -231,7 +231,7 @@ $(function () {
 
 
     /**plupload**/
-        //组图上传
+    //组图上传
 
     initPlUpload();
     $("#batchAttachWatermark").click(function(){
@@ -373,12 +373,12 @@ function initPlUpload(){
                         ){
                         //添加水印图到编辑控件中
                         if(editor != undefined && editor != null){
-                            editor.appendHTML(""+UploadFileFormatHtml(dataSet.upload_file_watermark_path1));
+                        editor.appendHTML(""+UploadFileFormatHtml(dataSet.upload_file_watermark_path1));
                         }
                     }else{
                         //添加原图到编辑控件中
                         if(editor != undefined && editor != null){
-                            editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
+                        editor.appendHTML(""+UploadFileFormatHtml(filePath));//不在组图控件中显示  则直接加在content里
                         }
 
                     }
@@ -402,12 +402,12 @@ function initPlUpload(){
 
 
 function setCookieOfCheckBox(checkBoxId){
-    var title=$("#"+checkBoxId).attr("title");
-    if($("#"+checkBoxId).is(":checked")){
-        setcookie(title,1);
-    }else{
-        setcookie(title,0);
-    }
+        var title=$("#"+checkBoxId).attr("title");
+        if($("#"+checkBoxId).is(":checked")){
+            setcookie(title,1);
+        }else{
+            setcookie(title,0);
+        }
 }
 
 function IsBatchWatermark(){
@@ -482,7 +482,25 @@ function DocumentNewsTagPulling(){
         }
     });
 }
--->
+
+//切换到Tiny_mce编辑器
+function changeEditor(){
+	setcookie("editor", "TINY");
+
+	var document_news_id = Request["document_news_id"];
+	var tab_index        = Request["tab_index"];
+	var p                = Request["p"];
+
+	window.location.href = "/default.php"
+			             +"?secu=manage"
+			             + "&mod=document_news"
+			             + "&m=modify"
+			             + "&editor=tiny"
+			             + "&document_news_id=" + document_news_id
+			             + "&tab_index=" + tab_index
+			             + "&p=" + p ;
+}
+
 </script>
 <style>
     .plupload_scroll {
@@ -533,9 +551,11 @@ function DocumentNewsTagPulling(){
 <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="spe_line" height="40" align="right">
-            <input class="btn" value="确认并关闭" type="button" onclick="submitForm(1)"/>
-            <input class="btn" value="确认并编辑" type="button" onclick="submitForm(2)"/>
-            <input class="btn" value="确认并继续" type="button" onclick="submitForm(0)"/>
+	        <input class="btn" value="切换到手机编辑器" type="button" onclick="" />
+	        <input class="btn" value="切换到Tiny编辑器" type="button" onclick="changeEditor()" />
+            <input class="btn" value="确认并关闭"      type="button" onclick="submitForm(1)"/>
+            <input class="btn" value="确认并编辑"      type="button" onclick="submitForm(2)"/>
+            <input class="btn" value="确认并继续"      type="button" onclick="submitForm(0)"/>
             <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
         </td>
     </tr>
@@ -683,221 +703,221 @@ function DocumentNewsTagPulling(){
     </table>
 </div>
 <div style=" margin-top:3px;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
-                                                                             id="f_DocumentNewsContent"
-                                                                             name="f_DocumentNewsContent"
-                                                                             style=" width: 100%;">{DocumentNewsContent}</textarea>
-        </td>
-        <td style="vertical-align:top;">
-            <table width="100%" border="0" cellspacing="0" cellpadding="0"
-                   style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
-                <tr>
-                    <td style="width:74px;height:35px;text-align: right;"><label for="f_SourceName">来源：</label>
-                    </td>
-                    <td style="text-align: left; line-height:180%;">
-                        <input type="text" class="input_box" id="f_SourceName" name="f_SourceName"
-                               value="{SourceName}" style=" width:60%;font-size:14px; margin-top: 4px;"
-                               maxlength="50"/>&nbsp;<span id="btn_select_source">[选择来源]</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="spe_line" style="width:74px;height:35px;text-align: right;">常用来源：</td>
-                    <td class="spe_line" style="text-align: left; line-height:180%;">
-                        <icms id="source_common_list" type="list">
-                            <item>
-                                <![CDATA[<span class="btnSetSourceName">{f_SourceName}</span><br/>]]>
-                            </item>
-                        </icms>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                            for="f_Author">作者：</label></td>
-                    <td class="spe_line" style="text-align: left">
-                        <input type="text" class="input_box" id="f_Author" name="f_Author" value="{Author}"
-                               style="width:95%;font-size:14px;" maxlength="50"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                            for="f_DocumentNewsMainTag">主关键词：</label></td>
-                    <td class="spe_line" style="text-align: left">
-                        <input type="text" class="input_box" id="f_DocumentNewsMainTag"
-                               name="f_DocumentNewsMainTag" value="{DocumentNewsMainTag}"
-                               style="width:95%;font-size:14px;" maxlength="100"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
-                            for="f_DocumentNewsTag">关键词：</label></td>
-                    <td class="spe_line" style="text-align: left">
-                        <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
-                               value="{DocumentNewsTag}" style="width:75%;font-size:14px;" maxlength="200"/>
-                        <input id="btn_extract" value="抽取" type="button" onclick="DocumentNewsTagPulling()">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="spe_line" style="height:35px;text-align: right;">加前缀：</td>
-                    <td class="spe_line" align="left" style="line-height:20px;">
-                        <icms id="document_pre_content" type="list">
-                            <item>
-                                <![CDATA[
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
+                                                                                 id="f_DocumentNewsContent"
+                                                                                 name="f_DocumentNewsContent"
+                                                                                 style=" width: 100%;">{DocumentNewsContent}</textarea>
+            </td>
+            <td style="vertical-align:top;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                       style=" border: solid 1px #cccccc; margin-left: 3px; padding: 2px;">
+                    <tr>
+                        <td style="width:74px;height:35px;text-align: right;"><label for="f_SourceName">来源：</label>
+                        </td>
+                        <td style="text-align: left; line-height:180%;">
+                            <input type="text" class="input_box" id="f_SourceName" name="f_SourceName"
+                                   value="{SourceName}" style=" width:60%;font-size:14px; margin-top: 4px;"
+                                   maxlength="50"/>&nbsp;<span id="btn_select_source">[选择来源]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;">常用来源：</td>
+                        <td class="spe_line" style="text-align: left; line-height:180%;">
+                            <icms id="source_common_list" type="list">
+                                <item>
+                                    <![CDATA[<span class="btnSetSourceName">{f_SourceName}</span><br/>]]>
+                                </item>
+                            </icms>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_Author">作者：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_Author" name="f_Author" value="{Author}"
+                                   style="width:95%;font-size:14px;" maxlength="50"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_DocumentNewsMainTag">主关键词：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_DocumentNewsMainTag"
+                                   name="f_DocumentNewsMainTag" value="{DocumentNewsMainTag}"
+                                   style="width:95%;font-size:14px;" maxlength="100"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="width:74px;height:35px;text-align: right;"><label
+                                for="f_DocumentNewsTag">关键词：</label></td>
+                        <td class="spe_line" style="text-align: left">
+                            <input type="text" class="input_box" id="f_DocumentNewsTag" name="f_DocumentNewsTag"
+                                   value="{DocumentNewsTag}" style="width:75%;font-size:14px;" maxlength="200"/>
+                            <input id="btn_extract" value="抽取" type="button" onclick="DocumentNewsTagPulling()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="spe_line" style="height:35px;text-align: right;">加前缀：</td>
+                        <td class="spe_line" align="left" style="line-height:20px;">
+                            <icms id="document_pre_content" type="list">
+                                <item>
+                                    <![CDATA[
                                         <span style="cursor: pointer;" class="btn_add_pre_content"
                                               title="{f_DocumentPreContent}">{f_DocumentPreContent}</span><br/>
-                                ]]>
-                            </item>
-                        </icms>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;">文件上传：</td>
-                    <td align="left">
-                        <input id="file_upload_to_content" name="file_upload_to_content" type="file"
-                               class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
-                            id="loading" src="/system_template/common/images/loading1.gif"
-                            style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
-                    <td align="left">
-                        <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" title="attach_water_mark"/> (只支持jpg或jpeg图片)
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
-                    <td align="left">
-                        <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" title="save_remote_image"/>
-                        (只支持jpg,jpeg,gif,png图片)
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;"><label for="cbSaveRemoteImage">内容分页：</label></td>
-                    <td align="left">
-                        <input type="button" id="btnInsertContentPager" value="插入内容分页符" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;text-align: right;"><label for="f_ShowIndex">推送首页：</label></td>
-                    <td style="text-align: left">
-                        <select id="f_ShowIndex" name="f_ShowIndex">
-                            <option value="0">不上首页</option>
-                            <option value="1">上首页 排序1</option>
-                            <option value="2">上首页 排序2</option>
-                            <option value="3">上首页 排序3</option>
-                            <option value="4">上首页 排序4</option>
-                            <option value="5">上首页 排序5</option>
-                            <option value="6">上首页 排序6</option>
-                            <option value="7">上首页 排序7</option>
-                            <option value="8">上首页 排序8</option>
-                            <option value="9">上首页 排序9</option>
-                            <option value="10">上首页 排序10</option>
-                            <option value="11">上首页 排序11</option>
-                            <option value="12">上首页 排序12</option>
-                            <option value="13">上首页 排序13</option>
-                            <option value="14">上首页 排序14</option>
-                            <option value="15">上首页 排序15</option>
-                            <option value="16">上首页 排序16</option>
-                            <option value="17">上首页 排序17</option>
-                            <option value="18">上首页 排序18</option>
-                            <option value="19">上首页 排序19</option>
-                            <option value="20">上首页 排序20</option>
-                        </select>
-                        {s_ShowIndex}(越大越靠前)
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height:35px;text-align: right;"><label for="f_ShowInClient">客户端：</label></td>
-                    <td style="text-align: left">
-                        <select id="f_ShowInClient" name="f_ShowInClient">
-                            <option value="1">推送</option>
-                            <option value="0">不推送</option>
-                        </select>
-                        {s_ShowInClient}
-                    </td>
-                </tr>
-            </table>
+                                    ]]>
+                                </item>
+                            </icms>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;">文件上传：</td>
+                        <td align="left">
+                            <input id="file_upload_to_content" name="file_upload_to_content" type="file"
+                                   class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
+                                id="loading" src="/system_template/common/images/loading1.gif"
+                                style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbAttachWatermark">附加水印：</label></td>
+                        <td align="left">
+                            <input type="checkbox" id="cbAttachWatermark" name="cbAttachWatermark" title="attach_water_mark"/> (只支持jpg或jpeg图片)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbSaveRemoteImage">远程抓图：</label></td>
+                        <td align="left">
+                            <input type="checkbox" id="cbSaveRemoteImage" name="cbSaveRemoteImage" title="save_remote_image"/>
+                            (只支持jpg,jpeg,gif,png图片)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;"><label for="cbSaveRemoteImage">内容分页：</label></td>
+                        <td align="left">
+                            <input type="button" id="btnInsertContentPager" value="插入内容分页符" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;text-align: right;"><label for="f_ShowIndex">推送首页：</label></td>
+                        <td style="text-align: left">
+                            <select id="f_ShowIndex" name="f_ShowIndex">
+                                <option value="0">不上首页</option>
+                                <option value="1">上首页 排序1</option>
+                                <option value="2">上首页 排序2</option>
+                                <option value="3">上首页 排序3</option>
+                                <option value="4">上首页 排序4</option>
+                                <option value="5">上首页 排序5</option>
+                                <option value="6">上首页 排序6</option>
+                                <option value="7">上首页 排序7</option>
+                                <option value="8">上首页 排序8</option>
+                                <option value="9">上首页 排序9</option>
+                                <option value="10">上首页 排序10</option>
+                                <option value="11">上首页 排序11</option>
+                                <option value="12">上首页 排序12</option>
+                                <option value="13">上首页 排序13</option>
+                                <option value="14">上首页 排序14</option>
+                                <option value="15">上首页 排序15</option>
+                                <option value="16">上首页 排序16</option>
+                                <option value="17">上首页 排序17</option>
+                                <option value="18">上首页 排序18</option>
+                                <option value="19">上首页 排序19</option>
+                                <option value="20">上首页 排序20</option>
+                            </select>
+                            {s_ShowIndex}(越大越靠前)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:35px;text-align: right;"><label for="f_ShowInClient">客户端：</label></td>
+                        <td style="text-align: left">
+                            <select id="f_ShowInClient" name="f_ShowInClient">
+                                <option value="1">推送</option>
+                                <option value="0">不推送</option>
+                            </select>
+                            {s_ShowInClient}
+                        </td>
+                    </tr>
+                </table>
 
 
-        </td>
-    </tr>
-</table>
+            </td>
+        </tr>
+    </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
 
-        <td class="spe_line" style="width:80px;height:35px;text-align: right;">推荐级别：</td>
-        <td class="spe_line" style="width:350px;text-align: left">
-            <label>
-                <input type="radio" name="f_RecLevel" value="0"/>
-                0
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="1"/>
-                1
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="2"/>
-                2
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="3"/>
-                3
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="4"/>
-                4
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="5"/>
-                5
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="6"/>
-                6
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="7"/>
-                7
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="8"/>
-                8
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="9"/>
-                9
-            </label>
-            <label>
-                <input type="radio" name="f_RecLevel" value="10"/>
-                10
-            </label>
-            {r_RecLevel}
-        </td>
-        <td class="spe_line" style="width:80px;height:35px;text-align: right;"><label for="f_Sort">排序数字：</label>
-        </td>
-        <td class="spe_line" style="width:240px;text-align: left"><input type="text" class="input_number" id="f_Sort"
-                                                                         name="f_Sort" value="{Sort}"
-                                                                         style=" width: 60px;font-size:14px;" maxlength="10"/>
-            (越大越靠前)
-        </td>
-        <td class="spe_line" style="width:80px;height:35px;text-align: right;">是否热门：</td>
-        <td class="spe_line" style="width:80px;text-align: left">
-            <label>
-                <input type="radio" name="f_IsHot" value="0"/>
-                否
-            </label>
-            <label>
-                <input type="radio" name="f_IsHot" value="1"/>
-                是
-            </label>
-            {r_IsHot}
-        </td>
+            <td class="spe_line" style="width:80px;height:35px;text-align: right;">推荐级别：</td>
+            <td class="spe_line" style="width:350px;text-align: left">
+                <label>
+                    <input type="radio" name="f_RecLevel" value="0"/>
+                    0
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="1"/>
+                    1
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="2"/>
+                    2
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="3"/>
+                    3
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="4"/>
+                    4
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="5"/>
+                    5
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="6"/>
+                    6
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="7"/>
+                    7
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="8"/>
+                    8
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="9"/>
+                    9
+                </label>
+                <label>
+                    <input type="radio" name="f_RecLevel" value="10"/>
+                    10
+                </label>
+                {r_RecLevel}
+            </td>
+            <td class="spe_line" style="width:80px;height:35px;text-align: right;"><label for="f_Sort">排序数字：</label>
+            </td>
+            <td class="spe_line" style="width:240px;text-align: left"><input type="text" class="input_number" id="f_Sort"
+                                                                             name="f_Sort" value="{Sort}"
+                                                                             style=" width: 60px;font-size:14px;" maxlength="10"/>
+                (越大越靠前)
+            </td>
+            <td class="spe_line" style="width:80px;height:35px;text-align: right;">是否热门：</td>
+            <td class="spe_line" style="width:80px;text-align: left">
+                <label>
+                    <input type="radio" name="f_IsHot" value="0"/>
+                    否
+                </label>
+                <label>
+                    <input type="radio" name="f_IsHot" value="1"/>
+                    是
+                </label>
+                {r_IsHot}
+            </td>
 
-    </tr>
-</table>
+        </tr>
+    </table>
 </div>
 </div>
 <div id="tabs-2">

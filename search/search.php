@@ -8,7 +8,7 @@
  * 默认编码：UTF-8
  */
 // 加载 XS 入口文件
-require_once '/data/xunsearch/sdk/php/lib/XS.php';
+require_once 'lib/XS.php';
 error_reporting(E_ALL ^ E_NOTICE);
 
 //

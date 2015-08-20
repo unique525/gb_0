@@ -59,7 +59,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenCreate()
     {
-        $templateContent = Template::Load("document/document_news_deal.html", "common");
+        $editorSet    = 'tiny';
+        $editorCookie = '';
+        if(isset($_COOKIE["editor"])){
+            $editorCookie = $_COOKIE["editor"];
+        }
+
+        if ($editorCookie == "XH"){
+            $editorSet = "xh";
+        }
+
+        if ($editorSet == "xh"){
+            $templateContent = Template::Load("document/document_news_deal_editor_xh.html", "common");
+        }
+        else{
+            $templateContent = Template::Load("document/document_news_deal_editor_tiny.html", "common");
+        }
         $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
@@ -335,7 +350,25 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
-        $templateContent = Template::Load("document/document_news_deal.html", "common");
+        $editorSet    = 'tiny';                                   //默认使用tinyMce编辑器
+        $editorCookie = '';
+
+        if (isset($_COOKIE["editor"])){
+            $editorCookie = $_COOKIE["editor"];
+        }
+
+        $editorGet    = Control::GetRequest("editor",'');
+
+        if ($editorGet == "xh" || $editorCookie == "XH"){
+            $editorSet = "xh";
+        }
+
+        if ($editorSet == "xh"){
+            $templateContent = Template::Load("document/document_news_deal_editor_xh.html", "common");
+        }
+        else{
+            $templateContent = Template::Load("document/document_news_deal_editor_tiny.html", "common");
+        }
         $documentNewsId = Control::GetRequest("document_news_id", 0);
 
         $nowManageUserId = Control::GetManageUserId();

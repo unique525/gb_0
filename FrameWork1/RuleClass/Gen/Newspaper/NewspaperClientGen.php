@@ -30,14 +30,20 @@ class NewspaperClientGen extends BaseClientGen implements IBaseClientGen {
         $result = "[{}]";
 
         $channelId = Control::PostOrGetRequest("channel_id", 0);
+        $publishDate = Control::PostOrGetRequest("publish_date", "");
 
         if($channelId>0){
 
             $newspaperClientData = new NewspaperClientData();
 
-            $newspaperId = $newspaperClientData->GetNewspaperIdOfNew($channelId);
+            if (strlen($publishDate) > 0) {
+                $currentNewspaperId = $newspaperClientData->GetNewspaperIdByPublishDate($channelId, $publishDate);
 
-            $arrOne = $newspaperClientData->GetOne($newspaperId);
+            } else {
+                $currentNewspaperId = $newspaperClientData->GetNewspaperIdOfNew($channelId);
+            }
+
+            $arrOne = $newspaperClientData->GetOne($currentNewspaperId);
 
             $result = Format::FixJsonEncode($arrOne);
 
