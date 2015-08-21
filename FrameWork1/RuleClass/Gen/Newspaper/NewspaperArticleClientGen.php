@@ -19,6 +19,9 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
             case "list":
                 $result = self::GenList();
                 break;
+            case "list_by_newspaper":
+                $result = self::GenListByNewspaper();
+                break;
             case "get_one":
                 $result = self::GetOne();
                 break;
@@ -29,9 +32,9 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
     }
 
     /**
-     * 返回列表数据集
-     * @return string
-     */
+ * 返回列表数据集
+ * @return string
+ */
     public function GenList(){
 
         $result = "[{}]";
@@ -43,6 +46,38 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
             $newspaperArticleClientData = new NewspaperArticleClientData();
             $arrList = $newspaperArticleClientData->GetList(
                 $newspaperPageId
+            );
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","newspaper_article":{"newspaper_article_list":' . $result . '}}';
+    }
+
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenListByNewspaper(){
+
+        $result = "[{}]";
+
+        $newspaperId = intval(Control::GetRequest("newspaper_id", 0));
+
+        if($newspaperId>0){
+
+            $newspaperArticleClientData = new NewspaperArticleClientData();
+            $arrList = $newspaperArticleClientData->GetListByNewspaperId(
+                $newspaperId,
+                true
             );
             if (count($arrList) > 0) {
                 $resultCode = 1;

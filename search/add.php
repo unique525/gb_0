@@ -1,5 +1,5 @@
 ﻿<?php
-require_once '/data/xunsearch/sdk/php/lib/XS.php';
+require_once 'lib/XS.php';
 
 $xs = new XS('cswb');
 $index = $xs->index;

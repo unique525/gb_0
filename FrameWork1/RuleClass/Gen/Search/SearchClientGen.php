@@ -95,7 +95,7 @@ class SearchClientGen extends BaseClientGen implements IBaseClientGen
     {
 
         // 加载 XS 入口文件
-        require_once '/data/xunsearch/sdk/php/lib/XS.php';
+        require_once 'search/lib/XS.php';
 
         // recheck request parameters
         $q = get_magic_quotes_gpc() ? stripslashes($q) : $q;

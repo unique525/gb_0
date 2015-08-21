@@ -82,17 +82,7 @@ class CommentClientData extends BaseClientData {
         $result = null;
         if($tableId > 0 && $tableType > 0){
             $sql = "SELECT
-                            c.CommentId,
-                            c.UserId,
-                            c.UserName,
-                            c.AgreeCount,
-                            c.DisagreeCount,
-                            c.CreateDate,
-                            c.Content,
-                            c.GuestName,
-                            c.GuestEmail,
-                            c.SiteId,
-                            c.ChannelId,
+                            c.*,
                             ui.NickName,
                             uf.UploadFileThumbPath2 AS Avatar
                           FROM "

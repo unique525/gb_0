@@ -62,6 +62,9 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             case "list":
                 $result = self::GenList();
                 break;
+            case "random_list":
+                $result = self::GenRandomList();
+                break;
             case "search":
                 $result = self::GenSearch();
                 break;
@@ -413,6 +416,79 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
 
 
 
+
+    /**
+     * 随机获取表单记录列表
+     * @return string 表单列表页面html
+     */
+    private function GenRandomList() {
+        $manageUserId = Control::GetManageUserId();
+        $customFormId = Control::GetRequest("custom_form_id", 0);
+        $resultJavaScript="";
+        $customFormManageData = new CustomFormManageData();
+        $channelId = $customFormManageData->GetChannelId($customFormId, FALSE);
+        $channelManageData = new ChannelManageData();
+        $siteId = $channelManageData->GetSiteId($channelId,1);
+        $numberOfSearchKey = Control::GetRequest("number_of_search_key", 0);
+        ///////////////判断是否有操作权限///////////////////
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanChannelExplore($siteId, $channelId, $manageUserId);
+        if ($can != 1) {
+            Control::ShowMessage(Language::Load('custom_form', 3));
+            return "";
+        }
+        ////////////////////////////////////////////////////
+
+
+        $tempContent = Template::Load("custom_form/custom_form_record_list.html", "common");
+
+
+        if ($customFormId > 0) {
+
+            $customFormFieldManageData = new CustomFormFieldManageData();
+            $listOfFieldArray = $customFormFieldManageData->GetListForContent($customFormId);
+            $customFormRecordManageData = new CustomFormRecordManageData();
+
+
+            $pageSize = Control::GetRequest("ps", 20);
+            $allCount = 0;
+
+            $listOfRecordArray = $customFormRecordManageData->GetRandomList($customFormId, $pageSize);
+
+            $listTable="";
+            $fieldSelectionForSearch="";
+            if (count($listOfRecordArray) > 0) {
+                $listTable = self::GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray);
+
+                //批量更改查询结果的状态
+                $state=1;
+                $strCustomFormRecordId="";
+                for($i=0;$i<count($listOfRecordArray);$i++){
+                    $strCustomFormRecordId.=",".$listOfRecordArray[$i]["CustomFormRecordId"];
+                }
+                $strCustomFormRecordId=substr($strCustomFormRecordId,1);
+                $customFormRecordManageData->BatchModifyState($strCustomFormRecordId,$state);
+            }else{
+                $tempContent = str_ireplace("{PagerButton}", Language::Load("custom_form", 4), $tempContent);
+            }
+            $replace_arr = array(
+                "{CustomFormId}" => $customFormId,
+                "{ListTable}" => $listTable,
+                "{PagerButton}" => "",
+                "{CustomFormFieldCount}"=> count($listOfFieldArray),
+                "{FieldSelection}"=>$fieldSelectionForSearch
+            );
+            $tempContent = strtr($tempContent, $replace_arr);
+        }else{
+            return DefineCode::CUSTOM_FORM_RECORD_MANAGE+self::FALSE_CUSTOM_FORM_ID;
+        }
+
+
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        //Template::RemoveCMS($tempContent);
+        return $tempContent;
+    }
 
 
 

@@ -59,6 +59,20 @@ class SiteAdContentPublicData extends BaseData {
         }
         return $result;
     }
+
+
+    public function GetVirtualClickInfo($siteAdContentId,$withCache){
+        $result=null;
+        if($siteAdContentId>0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'site_ad_content_data';
+            $cacheFile = 'site_ad_content_get_virtual_click_info.cache_' . $siteAdContentId . '';
+            $sql = "SELECT OpenVirtualClick,VirtualClickLimit FROM ".self::TableName_SiteAdContent." WHERE SiteAdContentId=:SiteAdContentId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteAdContentId", $siteAdContentId);
+            $result = $this->GetInfoOfArray($sql, $dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>
