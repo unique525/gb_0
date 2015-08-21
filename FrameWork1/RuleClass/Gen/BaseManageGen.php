@@ -1427,7 +1427,11 @@ class BaseManageGen extends BaseGen
 
 
                                         //3.替换资讯内容和其他一些内容
+                                        $manageUserName = Control::GetManageUserName();
                                         $arrOne = $documentNewsManageData->GetOne($documentNewsId);
+                                        if($arrOne["PublishManageUserName"]==""){
+                                            $arrOne["PublishManageUserName"]=$manageUserName;
+                                        }
 
                                         ///////////处理内容分页
                                         $pagerLine = "|=================================== PAGE ====================================|";
@@ -1452,7 +1456,6 @@ class BaseManageGen extends BaseGen
                                             } else {
                                                 $publishPath = strval($channelId) . '/' . strval(date('Ymd', time()));
 
-                                                $manageUserName = Control::GetManageUserName();
 
                                                 //修改发布时间和发布人，只有发布时间为空时才进行操作
                                                 $documentNewsManageData->ModifyPublishDate(
