@@ -19,6 +19,25 @@
 <script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+	<script type="text/javascript">
+		//切换到tiny编辑器
+		function changeEditor() {
+			setcookie("editor", "TINY");
+
+			var document_news_id = Request["document_news_id"];
+			var tab_index = Request["tab_index"];
+			var p = Request["p"];
+
+			window.location.href = "/default.php"
+					+ "?secu=manage"
+					+ "&mod=document_news"
+					+ "&m=modify"
+					+ "&editor=tiny"
+					+ "&document_news_id=" + document_news_id
+					+ "&tab_index=" + tab_index
+					+ "&p=" + p;
+		}
+	</script>
 <script type="text/javascript">
 <!--
 var editor;
@@ -482,25 +501,6 @@ function DocumentNewsTagPulling(){
         }
     });
 }
-
-//切换到Tiny_mce编辑器
-function changeEditor(){
-	setcookie("editor", "TINY");
-
-	var document_news_id = Request["document_news_id"];
-	var tab_index        = Request["tab_index"];
-	var p                = Request["p"];
-
-	window.location.href = "/default.php"
-			             +"?secu=manage"
-			             + "&mod=document_news"
-			             + "&m=modify"
-			             + "&editor=tiny"
-			             + "&document_news_id=" + document_news_id
-			             + "&tab_index=" + tab_index
-			             + "&p=" + p ;
-}
-
 </script>
 <style>
     .plupload_scroll {
