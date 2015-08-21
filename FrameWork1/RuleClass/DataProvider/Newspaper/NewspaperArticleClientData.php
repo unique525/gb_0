@@ -49,6 +49,52 @@ class NewspaperArticleClientData extends BaseClientData {
     }
 
     /**
+     * 取得整期电子报文章列表
+     * @param int $newspaperId 电子报id
+     * @param bool $withCache
+     * @return array|null 返回资讯列表
+     */
+    public function GetListByNewspaperId($newspaperId,$withCache = false)
+    {
+
+        $result = null;
+
+        if ($newspaperId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = "newspaper_article_get_all_list_client_". $newspaperId;
+
+
+
+            $orderBySql = 'Sort , CreateDate DESC';
+
+
+            $selectColumn = '
+            *,
+            (SELECT uf.UploadFilePath FROM
+                ' . self::TableName_NewspaperArticlePic . ' nap,
+                ' . self::TableName_UploadFile . ' uf
+                WHERE uf.UploadFileId=nap.UploadFileId
+                AND nap.NewspaperArticleId=' . self::TableName_NewspaperArticle . '.NewspaperArticleId
+                LIMIT 1
+                ) AS UploadFilePath
+            ';
+
+            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . "
+                WHERE
+                    NewspaperPageId IN (SELECT NewspaperPageId FROM ".self::TableName_NewspaperPage." WHERE NewspaperId=:NewspaperId)
+                    AND State<100
+                ORDER BY $orderBySql";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperId", $newspaperId);
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+
+
+        return $result;
+    }
+
+    /**
      * 返回一行数据
      * @param int $newspaperArticleId 电子报文章id
      * @param bool $withCache 是否使用缓存
