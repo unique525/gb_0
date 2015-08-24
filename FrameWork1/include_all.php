@@ -32,6 +32,15 @@ foreach ($arrFiles as $fileName) {
 
 }
 
+/****************  TOOLS   ******************/
+$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
+$arrFileNames = array();
+$arrFiles = getFileNames($dir, $arrFileNames);
+foreach ($arrFiles as $fileName) {
+    include_once($fileName);
+
+}
+
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataBase/MemoryCache.php");
 
 $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'system_data';
