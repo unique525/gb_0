@@ -47,7 +47,7 @@ class VisitPublicGen extends BasePublicGen implements IBasePublicGen
             $ipAddress = Control::GetIP();
             $agent = Control::GetOS();
             $agent = $agent . "与" . Control::GetBrowser();
-            if (strlen($refUrl) < 5) {
+            if (strlen($refUrl) < 5 && isset($_SERVER['HTTP_REFERER'])) {
                 $refUrl = $_SERVER['HTTP_REFERER']; //来路url
             }
             $refDomain = strtolower(preg_replace('/https?:\/\/([^\:\/]+).*/i', "\\1", $refUrl)); //来路域名
