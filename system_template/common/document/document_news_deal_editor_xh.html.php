@@ -718,7 +718,7 @@ function DocumentNewsTagPulling(){
                         </td>
                         <td style="text-align: left; line-height:180%;">
                             <input type="text" class="input_box" id="f_SourceName" name="f_SourceName"
-                                   value="{SourceName}" style=" width:60%;font-size:14px; margin-top: 4px;"
+                                   value="{SourceName}" style=" width:60%;font-size:14px;margin:0 ;margin-top: 4px;box-sizing:border-box"
                                    maxlength="50"/>&nbsp;<span id="btn_select_source">[选择来源]</span>
                         </td>
                     </tr>

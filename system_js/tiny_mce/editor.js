@@ -80,7 +80,7 @@ tinyMCE.init({
 
     //plugins: "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave",
 
-    plugins: "pagebreak,table,advhr,advimage,advlink,inlinepopups,insertdatetime,media,searchreplace,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,wordcount,advlist,autosave",
+    plugins: "pagebreak,table,advhr,advimage,advlink,inlinepopups,insertdatetime,media,searchreplace,contextmenu,paste,fullscreen,noneditable,visualchars,nonbreaking,wordcount,advlist,autosave,clearstyle,textindent",
 
 
 
@@ -94,7 +94,7 @@ tinyMCE.init({
 
     //theme_advanced_buttons2: "",
 
-    theme_advanced_buttons3: "tablecontrols,|,",
+    theme_advanced_buttons3: "tablecontrols,|,clearstyle,|,textindent",
 
     theme_advanced_buttons4: "",
 
@@ -110,7 +110,8 @@ tinyMCE.init({
 
     translate_mode: true,
 
-    language: "zh-cn"
+    language : "zh-cn"
+
 
 });
 
