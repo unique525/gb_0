@@ -137,14 +137,7 @@ $(function() {
 
     });
 
-    //改变状态按钮事件捕获
-    var btnChangeState = $(".btn_change_state");
-    btnChangeState.css("cursor", "pointer");
-    btnChangeState.click(function(event) {
-        var documentNewsId = $(this).attr('idvalue');
-        event.preventDefault();
-        ShowBox('div_state_box_' + documentNewsId);
-    });
+
     $(".btn_close_box").click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
@@ -320,6 +313,21 @@ $(function() {
         var documentNewsId = $(this).attr('idvalue');
         var state = $(this).attr('statevalue');
         new documentNewsChangeState(documentNewsId, state);
+    });
+
+    $(".btn_modify_manage_remark").click(function(event){
+        var documentNewsId = $(this).attr('idvalue');
+        var manageRemark = $("#manage_remark").val();
+        if(manageRemark == ''){
+            $("#dialog_box").dialog({width: 300, height: 100});
+            $("#dialog_content").html("请正确填写信息");
+        }else{
+            $.post("/default.php?secu=manage&mod=document_news&m=async_modify_manage_remark&document_news_id="+documentNewsId + "&manage_remark="+manageRemark+"", {
+                resultbox: $(this).html()
+            }, function(xml) {
+                window.location.href = window.location.href;
+            });
+        }
     });
 });
 

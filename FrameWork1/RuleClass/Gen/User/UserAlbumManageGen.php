@@ -80,6 +80,7 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
         $state = Control::GetRequest("state",0);
         $searchKey = Control::GetRequest("search_key","");
         $searchType = Control::GetRequest("search_type",0);
+        $userGroupId = Control::GetRequest("user_group_id", 2);
         $pageSize = 12;
         $pageBegin = ($pageIndex - 1)*$pageSize;
         $allCount = 0;
@@ -90,14 +91,13 @@ class UserAlbumManageGen extends BaseManageGen implements IBaseManageGen {
             $tagId = "user_album_list";
             $allCount = 0;
             $userAlbumManageData = new UserAlbumManageData();
-            $arrUserAlbumList = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$searchType);
-            //print_r($arrUserAlbumList);
+            $arrUserAlbumList = $userAlbumManageData->GetList($siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$searchType,$userGroupId);
             if (count($arrUserAlbumList) > 0) {
                 Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
                 $styleNumber = 1;
                 $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                 $isJs = FALSE;
-                $navUrl = "default.php?secu=manage&mod=user_album&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                $navUrl = "default.php?secu=manage&mod=user_album&m=list&site_id=$siteId&p={0}&ps=$pageSize&user_group_id=$userGroupId";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

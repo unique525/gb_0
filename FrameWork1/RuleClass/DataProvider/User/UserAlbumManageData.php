@@ -148,7 +148,7 @@ class UserAlbumManageData extends BaseManageData {
      * @param int $searchType 检索字段
      * @return array 相册列表的数组
      */
-    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state,$searchKey = "",$searchType = 0) {
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state,$searchKey = "",$searchType = 0,$userGroupId) {
 
         $result = -1;
         if ($siteId > 0) {
@@ -171,14 +171,14 @@ class UserAlbumManageData extends BaseManageData {
 
             //CountPic 用于统计相册有多少图片
             $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
-                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
-                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=".$siteId." $searchSql
+                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u,cst_user_role ur
+                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.UserId=ur.UserId and ur.UserGroupId=".$userGroupId." and ua.SiteId=".$siteId." $searchSql
                     ORDER BY ua.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
             $sqlCount = "SELECT count(*) FROM
-                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
-                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId $searchSql ";
+                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf, " . self::TableName_UserRole . " ur
+                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.UserId=ur.UserId and ur.UserGroupId=".$userGroupId." $searchSql ";
             $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;

@@ -31,10 +31,18 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $siteId = parent::GetSiteIdByDomain();
 
         $userId = Control::GetUserId();
+        $userGroupId = Control::GetRequest("user_group_id", 0);
         if ($userId <= 0) {
-            $referUrl = urlencode("/default.php?mod=user_album&a=create");
-            Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login&re_url=$referUrl");
-            die("user id is null");
+            if($userGroupId==2){
+                $referUrl = urlencode("/default.php?mod=user_album&a=create&user_group_id=2");
+                Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login_student&re_url=$referUrl");
+                //die("user id is null");
+            }else{
+                $referUrl = urlencode("/default.php?mod=user_album&a=create&user_group_id=3");
+                Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login_citizen&re_url=$referUrl");
+                //die("user id is null");
+            }
+
         }
 
         $defaultTemp = "user_album_create";
@@ -108,7 +116,14 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
         $siteId = parent::GetSiteIdByDomain();
         $searchKey = Control::GetRequest("search_key", "");
         $order = Control::GetRequest("order", 0);
-        $defaultTemp = "user_album_list";
+
+        $userGroupId = Control::GetRequest("user_group_id", 0);
+        if($userGroupId == 2){
+            $defaultTemp = "user_album_student_list";
+        }else{
+            $defaultTemp = "user_album_citizen_list";
+        }
+
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
         $state = 10;
@@ -122,8 +137,9 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
             $tagId = "user_album_list";
             $allCount = 0;
             $userAlbumPublicData = new UserAlbumPublicData();
+
             $arrUserAlbumList = $userAlbumPublicData->GetList(
-                $siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$order);
+                $siteId, $pageBegin, $pageSize, $allCount,$state,$searchKey,$order,$userGroupId);
             //print_r($arrUserAlbumList);
             if (count($arrUserAlbumList) > 0) {
                 Template::ReplaceList($tempContent, $arrUserAlbumList, $tagId);
@@ -132,7 +148,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                 $pagerTemplate = parent::GetDynamicTemplateContent(
                     $pagerTemp, $siteId);
                 $isJs = FALSE;
-                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize&order=$order";
+                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize&order=$order&user_group_id=$userGroupId";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
@@ -150,15 +166,20 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
     {
         $result = "";
         $userAlbumId = Control::GetRequest("user_album_id", 0);
-
+        $userGroupId = Control::GetRequest("user_group_id", 0);
         if ($userAlbumId > 0) {
 
             //增加点击数
             $userAlbumPublicData = new UserAlbumPublicData();
             $userAlbumPublicData->AddHitCount($userAlbumId);
             $siteId = parent::GetSiteIdByDomain();
+            if ($userGroupId == 2) {
+                $defaultTemp = "user_album_student_detail";
+            }else{
+                $defaultTemp = "user_album_citizen_detail";
+            }
 
-            $defaultTemp = "user_album_detail";
+
             $templateContent = parent::GetDynamicTemplateContent(
                 $defaultTemp,
                 $siteId,

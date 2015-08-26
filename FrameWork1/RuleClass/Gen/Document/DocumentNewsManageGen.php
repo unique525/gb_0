@@ -42,6 +42,9 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
+            case "async_modify_Manage_Remark":
+                $result = self::AsyncModifyManageRemark();
+                break;
             case "copy":
                 $result = self::GenDeal($method);
                 break;
@@ -915,6 +918,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
         } else {
             return "";
         }
+    }
+
+    /**
+     * 修改ManageRemark
+     * @return int 修改结果
+     */
+    private function AsyncModifyManageRemark()
+    {
+        $result = -1;
+        $documentNewsId = Control::PostRequest("document_news_id", 0);
+        $manageRemark = Control::PostRequest("manage_remark", "");
+        if ($documentNewsId > 0) {
+            $documentNewsManageData = new DocumentNewsManageData();
+            $result = $documentNewsManageData->ModifyManageRemark($documentNewsId,$manageRemark);
+        }
+        return $result;
     }
 
     /**

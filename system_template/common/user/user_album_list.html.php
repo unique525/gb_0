@@ -46,6 +46,14 @@
                 var searchType=$("#search_type_box").val();
                 window.location.href="/default.php?secu=manage&mod=user_album&m=list&site_id=1&tab_index=2&ps=23&search_key="+searchKey+"&search_type="+searchType;
             });
+            //搜索
+            $("#btn_student_list").click(function(){
+                window.location.href="/default.php?secu=manage&mod=user_album&m=list&user_group_id=2&site_id=1&tab_index=2";
+            });
+            //搜索
+            $("#btn_citizen_list").click(function(){
+                window.location.href="/default.php?secu=manage&mod=user_album&m=list&user_group_id=3&site_id=1&tab_index=2";
+            });
 
         });
 
@@ -139,6 +147,8 @@
                     <label for="search_key"></label><input type="text" id="search_key" name="search_key" class="input_box"/>
                     <input id="btn_search" class="btn2" value="查 询" type="button"/>
                     <span id="search_type" style="display: none"></span>
+                    <input id="btn_student_list" class="btn2" value="学生列表" type="button"/>
+                    <input id="btn_citizen_list" class="btn2" value="市民列表" type="button"/>
                 </div>
             </td>
         </tr>

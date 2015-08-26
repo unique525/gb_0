@@ -118,7 +118,22 @@
                 }
             });
 
-
+            //改变状态按钮事件捕获
+            var btnChangeState = $(".btn_change_state");
+            btnChangeState.css("cursor", "pointer");
+            btnChangeState.click(function(event) {
+                var documentNewsId = $(this).attr('idvalue');
+                event.preventDefault();
+                var dialogBox = $("#dialog_box");
+                dialogBox.attr("title","改变文档状态");
+                dialogBox.dialog({
+                    height: 120,
+                    modal: true
+                });
+                var dialogContent = $("#dialog_content");
+                dialogContent.html('');
+                //ShowBox('div_state_box_' + documentNewsId);
+            });
 
         });
     </script>
@@ -207,6 +222,13 @@
                                         <div style="{CanAudit4}" class="document_news_set_state" statevalue="14" idvalue="{f_DocumentNewsId}">终审</div>
                                         <div style="{CanRefused}" class="document_news_set_state" statevalue="20" idvalue="{f_DocumentNewsId}">已否</div>
                                         <div class="spe"></div>
+                                        <div>
+                                            <input id="manage_remark" name="manage_remark" type="text" width="200" height="100" value="" />
+                                            <span class="btn_modify_manage_remark" idvalue="{f_DocumentNewsId}">修改</span>
+                                        </div>
+                                        <div>
+                                            {f_ManageRemark}
+                                        </div>
                                     </div>
                                 </div>
                             </td>

@@ -103,9 +103,10 @@ class UserAlbumPublicData extends BasePublicData
      * @param int $state 取状态为state的相册
      * @param string $searchKey 搜索关键词
      * @param int $order 排序方式
+     * @param int $userGroupId 分组ID
      * @return array 相册列表的数组
      */
-    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state, $searchKey, $order = 0)
+    public function GetList($siteId, $pageBegin, $pageSize, &$allCount, $state, $searchKey, $order = 0,$userGroupId)
     {
         $result = -1;
         $searchSql = "";
@@ -121,13 +122,15 @@ class UserAlbumPublicData extends BasePublicData
             }
 
             $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,ua.HitCount,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
-                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u
-                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=" . $siteId . " and ua.State=" . $state . " " . $searchSql . "
+                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u,cst_user_role ur
+                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=" . $siteId . "
+                    and ua.UserId=ur.UserId and ua.State=" . $state . " and ur.UserGroupId=".$userGroupId." " . $searchSql . "
                     ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
             $sqlCount = "SELECT count(*) FROM
-                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf
-                        WHERE ui.UserId=ua.UserId and ua.state=" . $state . " and uf.UploadFileId=ua.CoverPicUploadFileId" . $searchKey;
+                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf, " . self::TableName_UserRole . " ur
+                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.UserId=ur.UserId and ur.UserGroupId=".$userGroupId." $searchSql ";
             //CountPic 用于统计相册有多少图片
 
             $allCount = $this->dbOperator->GetInt($sqlCount, null);

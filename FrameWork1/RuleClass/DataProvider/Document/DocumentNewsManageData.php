@@ -355,7 +355,7 @@ class DocumentNewsManageData extends BaseManageData
             SELECT
             DocumentNewsId,DocumentNewsType,DocumentNewsTitle,State,Sort,ChannelId,PublishDate,
             CreateDate,ManageUserId,ManageUserName,UserName,DocumentNewsTitleColor,DocumentNewsTitleBold,
-            RecLevel,Hit,ShowIndex
+            RecLevel,Hit,ShowIndex,ManageRemark
             FROM
             " . self::TableName_DocumentNews . "
             WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
@@ -553,6 +553,25 @@ class DocumentNewsManageData extends BaseManageData
             $sql = "UPDATE " . self::TableName_DocumentNews . " SET State=:State WHERE DocumentNewsId=:DocumentNewsId;";
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改ManageRemark
+     * @param int $documentNewsId 文档id
+     * @param string $manageRemark
+     * @return int 操作结果
+     */
+    public function ModifyManageRemark($documentNewsId, $manageRemark)
+    {
+        $result = 0;
+        if ($documentNewsId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_DocumentNews . " SET ManageRemark=:ManageRemark WHERE DocumentNewsId=:DocumentNewsId;";
+            $dataProperty->AddField("DocumentNewsId", $documentNewsId);
+            $dataProperty->AddField("ManageRemark", $manageRemark);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;

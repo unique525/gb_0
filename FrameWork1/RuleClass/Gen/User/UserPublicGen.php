@@ -718,6 +718,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         $userEmail = Format::FormatHtmlTag(Control::PostRequest("UserEmail", "", false));
         $userMobile = Format::FormatHtmlTag(Control::PostRequest("UserMobile", "", false));
         $userPass = Format::FormatHtmlTag(Control::PostRequest("UserPass", "", false));
+        $userGroupId = Format::FormatHtmlTag(Control::PostRequest("user_group_id", 0, false));
         $regIp = Control::GetIp();
         $createDate = strval(date('Y-m-d H:i:s', time()));
         if ($siteId > 0 && (!empty($userName) || !empty($userEmail) || !empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
@@ -763,7 +764,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, $userEmail, $userMobile);
             if ($newUserId > 0) {
 
-                self::CreateUserEx($siteId, $newUserId, $userName, $siteConfigData);
+                self::CreateUserEx($siteId, $newUserId, $userName, $siteConfigData,$userGroupId);
 
                 return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
             } else {
@@ -775,7 +776,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
 
-    private function CreateUserEx($siteId, $userId, $userName, $siteConfigData){
+    private function CreateUserEx($siteId, $userId, $userName, $siteConfigData,$userGroupId){
 
         $userInfoPublicData = new UserInfoPublicData();
         $userRolePublicData = new UserRolePublicData();
@@ -873,10 +874,14 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $schoolName,
             $className
         );
+        if($userGroupId > 0){
+            $userRolePublicData->Init($userId, $siteId, $userGroupId);
+        }else{
+            //插入会员角色表
+            $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
+            $userRolePublicData->Init($userId, $siteId, $newMemberGroupId);
+        }
 
-        //插入会员角色表
-        $newMemberGroupId = $siteConfigData->UserDefaultUserGroupIdForRole;
-        $userRolePublicData->Init($userId, $siteId, $newMemberGroupId);
 
         Control::SetUserCookie($userId, $userName);
 
