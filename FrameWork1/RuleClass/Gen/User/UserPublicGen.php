@@ -874,6 +874,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $schoolName,
             $className
         );
+
         if($userGroupId > 0){
             $userRolePublicData->Init($userId, $siteId, $userGroupId);
         }else{
