@@ -73,6 +73,19 @@
                 }
             });
 
+            //随机抽取
+            $("#new_window_for_random").click(function(){
+                var randomCount=$("#random_count").val();
+                if(randomCount>0){
+                    var url="/default.php?secu=manage&mod=custom_form_record&m=random_list&custom_form_id={CustomFormId}&new_window=1&ps="+randomCount;
+                    window.open(url);
+                }else{
+                    alert("随机数输入错误！");
+                }
+            });
+
+
+
             //删除附件
             var deleteAttachment = $(".btn_delete_attachment");
             deleteAttachment.click(function () {
@@ -123,6 +136,12 @@
                 <input id="btn_run_search" class="btn2" value="提交搜索" title="提交搜索" type="button" style="display:none" />
             </td>
             <td id="td_main_btn" align="right" style="padding: 3px 0;">
+                <div id="search_box">
+                    <label for="random_count"></label><input id="random_count" name="random_count" class="input_number" value="随机数" type="text">
+                    <input id="new_window_for_random" class="btn2" value="随机抽取" type="button">
+                </div>
+            </td>
+            <td id="td_main_btn" align="right" style="width:240px;padding: 3px 0;">
                 <div id="search_box">
                     <label for="end_page"></label><input id="end_page" name="end_page" class="input_number" value="显示页数" type="text">
                     <input id="new_window" class="btn2" value="新窗口显示" type="button">

@@ -62,7 +62,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenCreate()
     {
-        $templateContent = Template::Load("document/document_news_deal.html", "common");
+        $editorSet    = 'tiny';
+        $editorCookie = '';
+        if(isset($_COOKIE["editor"])){
+            $editorCookie = $_COOKIE["editor"];
+        }
+
+        if ($editorCookie == "XH"){
+            $editorSet = "xh";
+        }
+
+        if ($editorSet == "xh"){
+            $templateContent = Template::Load("document/document_news_deal_editor_xh.html", "common");
+        }
+        else{
+            $templateContent = Template::Load("document/document_news_deal_editor_tiny.html", "common");
+        }
         $channelId = Control::GetRequest("channel_id", 0);
         $manageUserId = Control::GetManageUserId();
         $manageUserName = Control::GetManageUserName();
@@ -338,7 +353,25 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
      */
     private function GenModify()
     {
-        $templateContent = Template::Load("document/document_news_deal.html", "common");
+        $editorSet    = 'tiny';                                   //默认使用tinyMce编辑器
+        $editorCookie = '';
+
+        if (isset($_COOKIE["editor"])){
+            $editorCookie = $_COOKIE["editor"];
+        }
+
+        $editorGet    = Control::GetRequest("editor",'');
+
+        if ($editorGet == "xh" || $editorCookie == "XH"){
+            $editorSet = "xh";
+        }
+
+        if ($editorSet == "xh"){
+            $templateContent = Template::Load("document/document_news_deal_editor_xh.html", "common");
+        }
+        else{
+            $templateContent = Template::Load("document/document_news_deal_editor_tiny.html", "common");
+        }
         $documentNewsId = Control::GetRequest("document_news_id", 0);
 
         $nowManageUserId = Control::GetManageUserId();
@@ -1081,7 +1114,14 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                             if ($targetChannelType === 1) {   //新闻资讯类
                                 switch($method){
                                     case "copy":
-                                        $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                        $date = date("Y-m-d H:i:s", time());
+                                        $date1 = explode(' ', $date);
+                                        $date2 = explode(':', $date1[1]);
+                                        $hour = $date2[0];
+                                        $minute = $date2[1];
+                                        $second = $date2[2];
+                                        $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName, $date,$hour,$minute,$second);
+
                                         if(strlen($strResultId)>0){
                                             $result=1;
                                             /** 处理DocumentNewsPic */
@@ -1116,7 +1156,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
 
                                 if ($result > 0) {
-                                    $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                                    $jsCode = 'parent.location.reload();';//parent.$("#dialog_resultbox").dialog("close");';
                                     Control::RunJavascript($jsCode);
                                 } else {
                                     Control::ShowMessage(Language::Load('document', 17));
@@ -1139,7 +1179,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
 
                                 if ($result > 0) {
-                                    $jsCode = 'parent.$("#dialog_resultbox").dialog("close");';
+                                    $jsCode = 'parent.location.reload();';//parent.$("#dialog_resultbox").dialog("close");';
                                     Control::RunJavascript($jsCode);
                                 } else {
                                     Control::ShowMessage(Language::Load('document', 17));

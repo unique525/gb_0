@@ -27,9 +27,9 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
     private function GenList(){
 
 
-        $activityId = Control::GetRequest("activity_Id", 0);
-        $resultJavaScript="";
-        $tempContent = Template::Load("activity/activity_user_list.html","common");
+        $activityId             = Control::GetRequest("activity_Id", 0);
+        $resultJavaScript       = "";
+        $tempContent            = Template::Load("activity/activity_user_list.html","common");
         $activityUserManageData = new ActivityUserManageData();
 
         if(intval($activityId)>0){
@@ -50,18 +50,17 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
             $can                 = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
 
             if ($can == 1) {
-                $siteTagArray=$activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);
+                $siteTagArray = $activityUserManageData->GetUserListPager($activityId,$pageBegin,$pageSize,$searchKey,$allCount);
                 if(count($siteTagArray)>0){
                     Template::ReplaceList($tempContent, $siteTagArray, $listName);
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=activity_user&m=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=activity_user&m=list&activity_id=$activityId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
                     $tempContent = str_ireplace("{PagerButton}", $pagerButton, $tempContent);
-
                 }else{
                     Template::RemoveCustomTag($tempContent, $listName);
                     $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
@@ -81,26 +80,25 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
         return $result;
     }
 
-    private function GenCreate(){
-
-
-
-    }
-
-
 
     /**
-     * 修改关键词状态
+     * 修改活动参加人员的通过状态
      * @return string 修改结果
      */
     private function ModifyState()
     {
+
         $result = -1;
-        $siteId = Control::GetRequest("site_id",0);
-        $activityId = Control::GetRequest("activity_id", 0);
-        $activityUserId = Control::GetRequest("userId", 0);
-        $state = Control::GetRequest("state", '');
-        $manageUserId = Control::GetManageUserId();
+
+        $activityId     = Control::GetRequest("activity_id", 0);
+        $activityUserId = Control::GetRequest("activity_user_id", 0);
+        $state          = Control::GetRequest("state", '0');
+        $manageUserId   = Control::GetManageUserId();
+
+        $activityManageDate = new ActivityManageData();
+        $channelId          = $activityManageDate->GetChannelId($activityId);
+        $channelManageDate  = new ChannelManageData();
+        $siteId             = $channelManageDate->GetSiteId($channelId,true);
 
 
         if ($siteId > 0 && $activityUserId >= 0 && $state >= 0 && $manageUserId > 0) {
@@ -114,8 +112,13 @@ class ActivityUserManageGen extends BaseManageGen implements IBaseManageGen
             if (!$can) {
                 $result = -10;
             } else {
-                $siteTagManageData = new SiteTagManageData();
-                $result = $siteTagManageData->ModifyState($activityUserId, $state);
+                $activityManageDate = new ActivityManageData();
+                $result = $activityManageDate->ModifyState($activityUserId, $state);
+
+                if ($result == 1){
+                    $result = $activityManageDate->SyncModifyState($activityId);
+                }
+
                 //删除缓冲
                 parent::DelAllCache();
                 //加入操作日志

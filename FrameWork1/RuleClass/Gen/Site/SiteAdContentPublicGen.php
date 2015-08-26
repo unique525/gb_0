@@ -32,8 +32,10 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
      * 广告点击统计未开启
      */
     const OPEN_COUNT_IS_OFF = -3;
-
-
+    /**
+     * 广告点击统计未开启
+     */
+    const GET_INFO_OF_VIRTUAL_CLICK_FAILURE = -4;
 
 
     /**
@@ -110,18 +112,19 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                 $referenceUrl = $_SERVER['HTTP_REFERER'];                                                                 //来路url
                 $referenceDomain = strtolower(preg_replace("/https?:\/\/([^\:\/]+).*/i", "\\1", $referenceUrl));                //来路域名
                 $siteAdContentPublicData = new SiteAdContentPublicData();
-                $openVClick = $siteAdContentPublicData->GetOpenVirtualClick($siteAdContentId);
+                $vClickInfo=$siteAdContentPublicData->GetVirtualClickInfo($siteAdContentId,true);
+                if(count($vClickInfo)>0&&$vClickInfo!=null){
+                    $openVClick=$vClickInfo["OpenVirtualClick"];
+
                 if (intval($openVClick) === 1) {
                     $addVCount=0;  //是否新增虚拟点击纪录  初始为0  取缓冲符合条件后改为1
 
                     $hourSection = date("H", time());
-                    $VClickLimit = $siteAdContentPublicData->GetVirtualClickLimit($siteAdContentId);
-
-
+                    $VClickLimit = $vClickInfo["VirtualClickLimit"];
                     $hourInCache=$hourSection;  //如果没有缓冲或者缓冲为空  设置默认值:当前小时, 0点击
                     $clickInCache=0;
                     $filePath=self::VIRTUAL_CLICK_CACHE_FILE_PATH;
-                    $fileName="site_ad_content_".$siteAdContentId."_";
+                    $fileName="site_ad_content_virtual_click_log_of_hour_".$siteAdContentId."_";
                     $cacheContent=parent::GetCache($filePath,$fileName);   //取缓冲中虚拟点击状态   小时_点击数
                     if($cacheContent&&$cacheContent!=""){
                         $arrayOfVClickState=mb_split("_",$cacheContent);
@@ -159,12 +162,14 @@ class SiteAdContentPublicGen extends BasePublicGen implements IBasePublicGen {
                         }
                     }
                 }
+                }else{
+                    $result.=DefineCode::SITE_AD_LOG_PUBLIC+self::GET_INFO_OF_VIRTUAL_CLICK_FAILURE;//获取虚拟点击信息：失败
+                }
             }else{
                 $result.=DefineCode::SITE_AD_LOG_PUBLIC+self::FALSE_SITE_AD_CONTENT_ID;//广告 site_content_id 错误
             }
             if (isset($_GET['jsonpcallback'])) {
-                echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
-                return "";
+                return Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
             }
         }
     }

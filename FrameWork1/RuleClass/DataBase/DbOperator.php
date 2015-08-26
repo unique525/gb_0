@@ -61,6 +61,9 @@ class DbOperator {
      */
     private $debugExecuteTime = 0;
 
+
+    private $openLog = true;
+
     /**
      * 初始化数据库连接
      */
@@ -76,6 +79,9 @@ class DbOperator {
                 $this->debugExecuteTime = intval($databaseInfo[5]);
             }
             $this->connect();
+
+            $this->openLog = true;
+
         }
         unset($databaseInfo);
     }
@@ -158,6 +164,9 @@ class DbOperator {
             echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
         }
 
+        if($this->openLog){
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+        }
         return $result;
     }
 
@@ -185,6 +194,10 @@ class DbOperator {
         if($this->debugExecuteTime>0){
             echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
         }
+
+        if($this->openLog){
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+        }
         return $result;
     }
 
@@ -208,6 +221,10 @@ class DbOperator {
         if($this->debugExecuteTime>0){
             echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
         }
+        if($this->openLog){
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+        }
+
         return $result;
     }
 
@@ -232,7 +249,9 @@ class DbOperator {
         if($this->debugExecuteTime>0){
             echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
         }
-
+        if($this->openLog){
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+        }
         return $lob;
     }
 
@@ -255,6 +274,9 @@ class DbOperator {
         $timeEnd = Control::GetMicroTime();
         if($this->debugExecuteTime>0){
             echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+        }
+        if($this->openLog){
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
         }
         return $result;
     }
@@ -296,7 +318,9 @@ class DbOperator {
             if($this->debugExecuteTime>0){
                 echo "TIME:".($timeEnd - $timeStart)." [".implode("|",$sqlList)."]<br />";
             }
-
+            if($this->openLog){
+                FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sqlList."]\n");
+            }
             return $result;
         } catch (PDOException $e) {
             $this->pdo->rollBack();

@@ -1647,9 +1647,13 @@ class DocumentNewsManageData extends BaseManageData
      * @param array $arrayOfDocumentNewsList DocumentNews数据数组
      * @param int $manageUserId 操作人id
      * @param string $manageUserName 操作人用户名
+     * @param string $createDate
+     * @param string $hour
+     * @param string $minute
+     * @param string $second
      * @return string 新增的所有id
      */
-    public function Copy($targetSiteId,$targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName){
+    public function Copy($targetSiteId,$targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName, $createDate="", $hour="", $minute="", $second=""){
         $result="";
         if(count($arrayOfDocumentNewsList)>0&&$targetCid>0){
             $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
@@ -1676,8 +1680,6 @@ class DocumentNewsManageData extends BaseManageData
                     `DocumentNewsType`,
                     `DirectUrl`,
                     `DocumentNewsContent`,
-                    `PublishDate`,
-                    `PublishManageUserId`,
                     `ShowDate`,
                     `SourceName`,
                     `DocumentNewsMainTag`,
@@ -1700,7 +1702,6 @@ class DocumentNewsManageData extends BaseManageData
                     `IsCopy`,
                     `IsAddToFullText`,
                     `ClosePosition`,
-                    `Hit`,
                     `LockEdit`,
                     `LockEditDate`,
                     `LockEditManageUserId`,
@@ -1724,8 +1725,6 @@ class DocumentNewsManageData extends BaseManageData
                     :DocumentNewsType,
                     :DirectUrl,
                     :DocumentNewsContent,
-                    :PublishDate,
-                    :PublishManageUserId,
                     :ShowDate,
                     :SourceName,
                     :DocumentNewsMainTag,
@@ -1748,7 +1747,6 @@ class DocumentNewsManageData extends BaseManageData
                     :IsCopy,
                     :IsAddToFullText,
                     :ClosePosition,
-                    :Hit,
                     :LockEdit,
                     :LockEditDate,
                     :LockEditManageUserId,
@@ -1772,9 +1770,7 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("DocumentNewsType", $documentNews["DocumentNewsType"]);
                 $dataProperty->AddField("DirectUrl", $documentNews["DirectUrl"]);
                 $dataProperty->AddField("DocumentNewsContent", $documentNews["DocumentNewsContent"]);
-                $dataProperty->AddField("PublishDate", $documentNews["PublishDate"]);
-                $dataProperty->AddField("PublishManageUserId", $documentNews["PublishManageUserId"]);
-                $dataProperty->AddField("ShowDate", $documentNews["ShowDate"]);
+                $dataProperty->AddField("ShowDate", $createDate);
                 $dataProperty->AddField("SourceName", $documentNews["SourceName"]);
                 $dataProperty->AddField("DocumentNewsMainTag", $documentNews["DocumentNewsMainTag"]);
                 $dataProperty->AddField("DocumentNewsTag", $documentNews["DocumentNewsTag"]);
@@ -1785,18 +1781,17 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("DocumentNewsTitleColor", $documentNews["DocumentNewsTitleColor"]);
                 $dataProperty->AddField("DocumentNewsTitleBold", $documentNews["DocumentNewsTitleBold"]);
                 $dataProperty->AddField("OpenComment", $documentNews["OpenComment"]);
-                $dataProperty->AddField("ShowHour", $documentNews["ShowHour"]);
-                $dataProperty->AddField("ShowMinute", $documentNews["ShowMinute"]);
-                $dataProperty->AddField("ShowSecond", $documentNews["ShowSecond"]);
+                $dataProperty->AddField("ShowHour", $hour);
+                $dataProperty->AddField("ShowMinute", $minute);
+                $dataProperty->AddField("ShowSecond", $second);
                 $dataProperty->AddField("UploadFiles", $documentNews["UploadFiles"]);
                 $dataProperty->AddField("IsHot", $documentNews["IsHot"]);
                 $dataProperty->AddField("RecLevel", $documentNews["RecLevel"]);
                 $dataProperty->AddField("WaitPublish", $documentNews["WaitPublish"]);
                 $dataProperty->AddField("ShowPicMethod", $documentNews["ShowPicMethod"]);
-                $dataProperty->AddField("IsCopy", $documentNews["IsCopy"]);
+                $dataProperty->AddField("IsCopy", 1);
                 $dataProperty->AddField("IsAddToFullText", $documentNews["IsAddToFullText"]);
                 $dataProperty->AddField("ClosePosition", $documentNews["ClosePosition"]);
-                $dataProperty->AddField("Hit", $documentNews["Hit"]);
                 $dataProperty->AddField("LockEdit", $documentNews["LockEdit"]);
                 $dataProperty->AddField("LockEditDate", $documentNews["LockEditDate"]);
                 $dataProperty->AddField("LockEditManageUserId", $documentNews["LockEditManageUserId"]);
@@ -1813,71 +1808,6 @@ class DocumentNewsManageData extends BaseManageData
                 $newId = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
                 $result.=",".$newId;
-                /*if ($newId > 0) {
-                    //操作上传的附件
-                    $sqlUploadFiles = "select UploadFiles from " . self::TableName_DocumentNews . " where DocumentNewsId=" . $newId . "";
-                    $stringOfUploadFileId = $this->dbOperator->GetString($sqlUploadFiles, NULL);
-
-                    if (!empty($stringOfUploadFileId)) {
-                        $arrOfFileId = Format::ToSplit($stringOfUploadFileId, ',');
-                        $newStringOfUploadFiles = "";
-                        for ($j = 0; $j < count($arrOfFileId); $j++) {
-                            if (!empty($arrOfFileId[$j])) {
-                                //复制upload_file
-                                $sqlCopyFile = "
-                                    INSERT INTO " . self::TableName_UploadFile . "
-                                    (
-                                    	UploadFileName,
-                                    	UploadFileSize,
-                                    	UploadFileType,
-                                    	UploadFileOrgName,
-                                    	UploadFilePath,
-                                    	UploadFileTitle,
-                                    	UploadFileInfo,
-                                    	TableType,
-                                    	TableId,
-                                    	UploadYear,
-                                    	UploadMonth,
-                                    	UploadDay,
-                                    	AdminUserId,
-                                    	UserId,
-                                    	CreateDate,
-                                    	IsBatchUpload
-                                    )
-
-                                    SELECT
-
-                                    UploadFileName,
-                                    	UploadFileSize,
-                                    	UploadFileType,
-                                    	UploadFileOrgName,
-                                    	UploadFilePath,
-                                    	UploadFileTitle,
-                                    	UploadFileInfo,
-                                    	TableType,
-                                    	" . $newId . ",
-                                    	UploadYear,
-                                    	UploadMonth,
-                                    	UploadDay,
-                                    	AdminUserId,
-                                    	UserId,
-                                    	CreateDate,
-                                    	IsBatchUpload
-
-                                    FROM " . self::TableName_UploadFile . " WHERE UploadFileId=" . $arrOfFileId[$j] . ";
-
-                                    ";
-                                $newFileId = $this->dbOperator->Execute($sqlCopyFile, NULL);
-
-                                $newStringOfUploadFiles = $newStringOfUploadFiles . "," . $newFileId;
-                            }
-                        }
-
-                        //修改news表的UploadFiles
-                        $sqlModifyUploadFile = "UPDATE " . self::TableName_DocumentNews . " SET UploadFiles='" . $newStringOfUploadFiles . "' WHERE DocumentNewsId=" . $newId . "";
-                        $this->dbOperator->Execute($sqlModifyUploadFile, NULL);
-                    }
-                }*/
             }
         }
         $result=substr($result,1);
@@ -1906,7 +1836,13 @@ class DocumentNewsManageData extends BaseManageData
             foreach($arrayOfDocumentNewsList as $documentNews){
                 $sort++;
                 $sql = "UPDATE " . self::TableName_DocumentNews . "
-                 SET `SiteId`=:SiteId,`ChannelId`=:ChannelId,`ManageUserId`=:ManageUserId,`ManageUserName`=:ManageUserName,Sort=" . $sort . "
+                 SET
+                 `SiteId`=:SiteId,
+                 `ChannelId`=:ChannelId,
+                 `ManageUserId`=:ManageUserId,
+                 `ManageUserName`=:ManageUserName,
+                 Sort=" . $sort . "
+
                  WHERE DocumentNewsId =:DocumentNewsId ;";
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("SiteId", $targetSiteId);

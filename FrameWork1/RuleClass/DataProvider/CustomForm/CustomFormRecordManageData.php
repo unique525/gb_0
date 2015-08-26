@@ -61,6 +61,23 @@ class CustomFormRecordManageData extends BaseManageData {
         return $result;
     }
 
+    /**
+     * 获取随机表单记录列表
+     * @param int $customFormId 表单id
+     * @param int $pageSize 每页大小
+     * @return array 表单记录数据集
+     */
+    public function GetRandomList($customFormId, $pageSize) {
+        $result=-1;
+        if($customFormId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("CustomFormId", $customFormId);
+            $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND State=0 ORDER BY Rand() LIMIT $pageSize ;";
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 
     /**
      * 通过ID获取一条记录
@@ -70,10 +87,47 @@ class CustomFormRecordManageData extends BaseManageData {
     public function GetOne($customFormRecordId) {
         $result=-1;
         if($customFormRecordId>0){
-            $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormRecordID = :CustomFormRecordID ;";
+            $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormRecordId = :CustomFormRecordId ;";
             $dataProperty = new DataProperty();
-            $dataProperty->AddField("CustomFormRecordID", $customFormRecordId);
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改状态
+     * @param int $customFormRecordId id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function ModifyState($customFormRecordId, $state)
+    {
+        $result = 0;
+        if ($customFormRecordId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_CustomFormRecord . " SET `State`=:State WHERE CustomFormRecordId=:CustomFormRecordId;";
+            $dataProperty->AddField("CustomFormRecordId", $customFormRecordId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 批量修改状态
+     * @param string $strCustomFormRecordId id
+     * @param int $state 状态
+     * @return int 操作结果
+     */
+    public function BatchModifyState($strCustomFormRecordId, $state)
+    {
+        $result = 0;
+        if (strlen($strCustomFormRecordId) > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_CustomFormRecord . " SET `State`=:State WHERE CustomFormRecordId IN ($strCustomFormRecordId);";
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }

@@ -124,7 +124,7 @@ $().ready(function() {
                     jsonp:"jsonpcallback",
                     success:function(data){
                         $.each(data,function(i,v){
-                            if (v["ReCommon"] < 0){
+                            if (v["ReCommon"] > 0){
                                 //console.warn(v["ReCommon"]+" 广告id:"+adContentId);
                                 var siteAdFrame = document.createElement("iframe");
                                 siteAdFrame.src = adUrl;

@@ -2178,7 +2178,7 @@ class XSServer extends XSComponent
 		$conn = $this->_conn;
 		if (is_int($conn) || is_numeric($conn))
 		{
-			$host = 'localhost';
+			$host = '130.1.0.71';
 			$port = intval($conn);
 		}
 		else if (!strncmp($conn, 'file://', 7))
