@@ -60,6 +60,17 @@ class UserOrderData extends BaseData {
 
     const USER_ORDER_DES_KEY = "SUDK2014";
 
+
+    /**
+     * 会员订单的业务类型 产品
+     */
+    const USER_ORDER_TABLE_TYPE_PRODUCT = 0;
+    /**
+     * 会员订单的业务类型 电子报
+     */
+    const USER_ORDER_TABLE_TYPE_NEWSPAPER = 1;
+
+
     /**
      * 生成订单号
      */

@@ -398,6 +398,32 @@
                                             <input id="cfg_WeiXinRefreshTokenGetTime" type="text" class="input_box" style="width:300px;" name="cfg_WeiXinRefreshTokenGetTime" value="{cfg_WeiXinRefreshTokenGetTime}"/>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_PayAlipaySellerEmail">支付宝 合作者帐号：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_PayAlipaySellerEmail" type="text" class="input_box" style="width:300px;" name="cfg_PayAlipaySellerEmail" value="{cfg_PayAlipaySellerEmail}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_PayAlipayPartnerID">支付宝 合作者ID(PartnerID)：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_PayAlipayPartnerID" type="text" class="input_box" style="width:300px;" name="cfg_PayAlipayPartnerID" value="{cfg_PayAlipayPartnerID}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_PayAlipayKey">支付宝 合作者Key：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_PayAlipayKey" type="text" class="input_box" style="width:300px;" name="cfg_PayAlipayKey" value="{cfg_PayAlipayKey}"/>
+                                        </td>
+                                    </tr>
+
+
 
 
                                 </table>

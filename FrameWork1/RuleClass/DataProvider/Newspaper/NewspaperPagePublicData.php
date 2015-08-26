@@ -432,6 +432,27 @@ class NewspaperPagePublicData extends BasePublicData
     }
 
     /**
+     * 取得是否必须付费阅读
+     * @param int $newspaperPageId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 是否必须付费阅读
+     */
+    public function GetMustPay($newspaperPageId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_must_pay.cache_' . $newspaperPageId . '';
+            $sql = "SELECT MustPay FROM " . self::TableName_NewspaperPage . "
+                    WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 取得一条信息
      * @param int $newspaperPageId 电子报版面id
      * @return array 电子报版面信息数组

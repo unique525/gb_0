@@ -380,6 +380,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
         $autoCreate = Control::GetRequest("auto_create",0); //没有登录时，是否自动创建会员
 
+        $userGroupId = Control::PostOrGetRequest("user_group_id","");
+
         if(strlen($wxOpenId)>0){
             $userPublicData = new UserPublicData();
             //是否已经绑定
@@ -409,7 +411,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                         if($userId>0){
                             $userPluginsPublicData->Create($userId, $wxOpenId, $siteId);
                             $siteConfigData = new SiteConfigData($siteId);
-                            self::CreateUserEx($siteId, $userId, $userName, $siteConfigData);
+                            self::CreateUserEx($siteId, $userId, $userName, $siteConfigData, $userGroupId);
                         }else{
                             die("auto create user failure;");
                         }
@@ -595,12 +597,15 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenLogin(){
+
+        $siteId = parent::GetSiteIdByDomain();
+
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
-            $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum");
+            $templateContent = parent::GetDynamicTemplateContent("user_login_for_forum", $siteId);
         }
         else{
-            $templateContent = parent::GetDynamicTemplateContent("user_login");
+            $templateContent = parent::GetDynamicTemplateContent("user_login", $siteId);
         }
 
         parent::ReplaceFirst($templateContent);
@@ -630,14 +635,17 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
     private function GenRegister(){
+
+        $siteId = parent::GetSiteIdByDomain();
+
         $temp = Control::GetRequest("temp","");
         if($temp == "forum"){
-            $templateContent = parent::GetDynamicTemplateContent("user_register_for_forum");
+            $templateContent = parent::GetDynamicTemplateContent("user_register_for_forum", $siteId);
            // $templateFileUrl = "user/user_register_for_forum.html";
         }
         else{
             //$templateFileUrl = "user/user_register.html";
-            $templateContent = parent::GetDynamicTemplateContent("user_register");
+            $templateContent = parent::GetDynamicTemplateContent("user_register", $siteId);
         }
         //$templateName = "default";
         //$templatePath = "front_template";

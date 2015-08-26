@@ -1047,12 +1047,15 @@ class BasePublicGen extends BaseGen
     {
         $userExploreCollection = new UserExploreCollection();
         if ($userId > 0) {
-            if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
-                //读取cookie
-                $cookieStr = Control::GetUserExploreCookie($userId);
-                //字符串转回原来的数组
-                $userExploreCollection->UserExplores = $cookieStr;
+            if (is_string(Control::GetUserExploreCookie($userId))){
+                if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
+                    //读取cookie
+                    $cookieStr = Control::GetUserExploreCookie($userId);
+                    //字符串转回原来的数组
+                    $userExploreCollection->UserExplores = $cookieStr;
+                }
             }
+
         }
         return $userExploreCollection;
     }
@@ -1502,13 +1505,16 @@ class BasePublicGen extends BaseGen
 
             $userExplore = new UserExplore();
             $userExploreCollection = new UserExploreCollection();
-            if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
-                //读取cookie
-                $cookieStr = Control::GetUserExploreCookie($userId);
-                $userExploreCollection->UserExplores = $cookieStr;
-            } else {
+            if (is_string(Control::GetUserExploreCookie($userId))){
+                if (strlen(Control::GetUserExploreCookie($userId)) > 0) {
+                    //读取cookie
+                    $cookieStr = Control::GetUserExploreCookie($userId);
+                    $userExploreCollection->UserExplores = $cookieStr;
+                } else {
 
+                }
             }
+
 
             //将当前访问信息保存到数组中
             $userExplore->TableId = $tableId;

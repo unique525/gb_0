@@ -27,6 +27,7 @@ class UserOrderPublicData extends BasePublicData
      * @param $createDate
      * @param $createDateDes
      * @param $sellerRemark
+     * @param $userOrderTableType
      * @return int
      */
     public function Create(
@@ -45,7 +46,8 @@ class UserOrderPublicData extends BasePublicData
         $siteId,
         $createDate,
         $createDateDes,
-        $sellerRemark = ""
+        $sellerRemark = "",
+        $userOrderTableType = UserOrderData::USER_ORDER_TABLE_TYPE_PRODUCT
     )
     {
         $result = -1;
@@ -73,7 +75,8 @@ class UserOrderPublicData extends BasePublicData
                     CreateDate,
                     CreateDateDes,
                     State,
-                    SellerRemark
+                    SellerRemark,
+                    UserOrderTableType
                     )
                     VALUES
                     (
@@ -93,7 +96,8 @@ class UserOrderPublicData extends BasePublicData
                     :CreateDate,
                     :CreateDateDes,
                     :State,
-                    :SellerRemark
+                    :SellerRemark,
+                    :UserOrderTableType
                     );
             ";
 
@@ -115,7 +119,7 @@ class UserOrderPublicData extends BasePublicData
             $dataProperty->AddField("CreateDateDes",$createDateDes);
             $dataProperty->AddField("State",UserOrderData::STATE_NON_PAYMENT);
             $dataProperty->AddField("SellerRemark",$sellerRemark);
-
+            $dataProperty->AddField("UserOrderTableType",$userOrderTableType);
 
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
@@ -277,6 +281,29 @@ class UserOrderPublicData extends BasePublicData
             $cacheDir = UserOrderData::GetCachePath($userOrderNumber);
             $cacheFile = 'user_order_get_user_order_id_by_user_order_number.cache_' . $userOrderNumber . '';
             $sql = "SELECT UserOrderId FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderNumber", $userOrderNumber);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * 根据订单编号取得订单id
+     * @param string $userOrderNumber 订单编号
+     * @param bool $withCache 是否从缓冲中取
+     * @return float 订单总价
+     */
+    public function GetUserOrderTableType($userOrderNumber, $withCache){
+        $result =-1;
+        if(strlen($userOrderNumber)>0){
+
+            $cacheDir = UserOrderData::GetCachePath($userOrderNumber);
+            $cacheFile = 'user_order_get_user_order_table_type.cache_' . $userOrderNumber . '';
+            $sql = "SELECT UserOrderTableType FROM " . self::TableName_UserOrder . " WHERE UserOrderNumber=:UserOrderNumber;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderNumber", $userOrderNumber);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

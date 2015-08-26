@@ -370,6 +370,14 @@ class BaseData
      */
     const TableId_UserOrderProduct = "UserOrderProductId";
     /**
+     * 会员订单电子报信息 数据表名
+     */
+    const TableName_UserOrderNewspaper = "cst_user_order_newspaper";
+    /**
+     * 会员订单电子报信息 数据表自增字段名
+     */
+    const TableId_UserOrderNewspaper = "UserOrderNewspaperId";
+    /**
      * 会员订单产品信息 数据表名
      */
     const TableName_UserOrderPay= "cst_user_order_pay";

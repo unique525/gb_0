@@ -1,5 +1,10 @@
 <?php
 
+
+//require_once("lib/apipay_notify.class.php");
+//require_once("lib/apipay_notify_wap.class.php");
+//require_once("lib/apipay_submit.class.php");
+
 /**
  * 支付宝
  * @category iCMS
@@ -372,6 +377,28 @@ class Alipay
                     "支付宝"
                 );
             }
+
+            $userOrderTableType = $userOrderPublicData->GetUserOrderTableType($out_trade_no, true);
+
+            if ($userOrderTableType == UserOrderData::USER_ORDER_TABLE_TYPE_NEWSPAPER){
+
+                $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
+                $newspaperId = $userOrderNewspaperPublicData->GetNewspaperId($userOrderId, true);
+
+                if ($newspaperId>0){
+
+
+                    $newspaperPublicData = new NewspaperPublicData();
+
+                    $publicDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+                    $channelId = $newspaperPublicData->GetChannelId($newspaperId, true);
+
+                    Control::GoUrl("/default.php?mod=newspaper&a=gen_one&channel_id=$channelId&publish_date=$publicDate");
+
+                }
+
+            }
+
 
 
 

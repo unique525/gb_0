@@ -107,7 +107,7 @@ class NewspaperPublicGen extends BasePublicGen
             '_pub_'.$publishDate.
             '_pid_'.$newspaperPageId.
             '_mode_' . $templateMode;
-        $withCache = true;
+        $withCache = false;
         if($withCache){
             $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
@@ -153,6 +153,8 @@ class NewspaperPublicGen extends BasePublicGen
 
 
             $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
+
+            $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
 
 
             if (strlen($publishDate) > 0) {
@@ -201,6 +203,8 @@ class NewspaperPublicGen extends BasePublicGen
                     );
 
 
+
+
                     $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
                         $currentNewspaperPageId,
                         true
@@ -232,6 +236,11 @@ class NewspaperPublicGen extends BasePublicGen
                         $secondNewspaperPageId,
                         true
                     );
+
+
+
+
+
                     $templateContent = str_ireplace("{SecondNewspaperPageNo}",
                         $secondNewspaperPageNo,
                         $templateContent
@@ -256,6 +265,42 @@ class NewspaperPublicGen extends BasePublicGen
                     );
                     $templateContent = str_ireplace("{SecondPdfUploadFilePath}",
                         $secondPdfUploadFilePath,
+                        $templateContent
+                    );
+
+                    //////////////////////付费阅读///////////////////////////
+                    $firstNewspaperPageMustPay = $newspaperPagePublicData->GetMustPay(
+                        $currentNewspaperPageId,
+                        true
+                    );
+                    $secondNewspaperPageMustPay = $newspaperPagePublicData->GetMustPay(
+                        $secondNewspaperPageId,
+                        true
+                    );
+
+                    if ($firstNewspaperPageMustPay>0 || $secondNewspaperPageMustPay>0){
+
+                        $userId = Control::GetUserId();
+                        if ($userId > 0){
+
+                            $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
+
+                            $isBuy = $userOrderNewspaperPublicData->CheckIsBought($userId, $currentNewspaperId);
+
+                            if ($isBuy>0){
+                                $firstNewspaperPageMustPay = 0;//已经买了
+                                $secondNewspaperPageMustPay = 0;
+                            }
+                        }
+
+                    }
+
+                    $templateContent = str_ireplace("{FirstNewspaperPageMustPay}",
+                        $firstNewspaperPageMustPay,
+                        $templateContent
+                    );
+                    $templateContent = str_ireplace("{SecondNewspaperPageMustPay}",
+                        $secondNewspaperPageMustPay,
                         $templateContent
                     );
 

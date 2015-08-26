@@ -187,19 +187,35 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenConfirm()
     {
         $userId = Control::GetUserId();
+
+        if ($userId <= 0){
+            $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=".urlencode($selfUrl));
+            return "";
+
+        }
+
+
         $siteId = parent::GetSiteIdByDomain();
         $strUserCarIds = Control::GetRequest("arr_user_car_id", "");
         $productId = intval(Control::GetRequest("product_id", 0));
         $productPriceId = intval(Control::GetRequest("product_price_id", 0));
         $buyCount = intval(Control::GetRequest("buy_count", 0));
+
+        //电子报id
+        $newspaperId = intval(Control::GetRequest("newspaper_id", 0));
+
         //$templateFileUrl = "user/user_order_confirm.html";
         //$templateName = "default";
         //$templatePath = "front_template";
         //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-        $templateContent = parent::GetDynamicTemplateContent("user_order_confirm");
+        $templateContent = parent::GetDynamicTemplateContent("user_order_confirm", $siteId);
+        $userOrderPublicData = new UserOrderPublicData();
 
         parent::ReplaceFirst($templateContent);
-        if (($strUserCarIds != "" || ($productId > 0 && $productPriceId > 0 && $buyCount > 0)) && $userId > 0 && $siteId > 0) {
+        if (($strUserCarIds != "" || ($productId > 0 && $productPriceId > 0 && $buyCount > 0))
+            && $userId > 0 && $siteId > 0) {
             if ($productId > 0 && $productPriceId > 0 && $buyCount > 0) {
                 $templateContent = str_ireplace("{ArrUserCarId}", "", $templateContent);
 
@@ -230,8 +246,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
                 $productPriceValue = floatval($arrProductPriceOne["ProductPriceValue"]);
                 $productName = $arrProductOne["ProductName"];
                 $buyPrice = floatval($productPriceValue*$buyCount);
-                $productUnit = $arrProductOne["ProductUnit"];
-                $productPriceIntro = $arrProductOne["ProductPriceIntro"];
+                $productUnit = $arrProductPriceOne["ProductUnit"];
+                $productPriceIntro = $arrProductPriceOne["ProductPriceIntro"];
                 $activityProductId = 0;//暂时定义为0
                 $arrProductOrderList = array(
                     array(
@@ -370,7 +386,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
                 $userOrderFirstSubPrice = $siteConfigData->UserOrderFirstSubPrice;
 
 
-                $userOrderPublicData = new UserOrderPublicData();
+
                 $hasBuy = $userOrderPublicData->CountByFinished($userId);
                 if ($hasBuy <= 0 && $userOrderFirstSubPrice > 0) {
                     $totalPrice = $totalPrice - $userOrderFirstSubPrice;
@@ -387,12 +403,20 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
 
                 $templateContent = strtr($templateContent, $replace_arr);
 
-                parent::ReplaceEnd($templateContent);
-                return $templateContent;
-        } else {
-            Control::GoUrl("/default.php?mod=user&a=login");
-            return null;
         }
+        elseif($newspaperId > 0 && $userId > 0 && $siteId > 0){
+            //电子报的创建订单
+
+            $salePrice = 0.1; //TODO 电子报每份售价，暂时写死
+
+            $templateContent = str_ireplace("{SalePrice}",sprintf("%1\$.3f", $salePrice), $templateContent);
+
+            $templateContent = str_ireplace("{NewspaperId}",$newspaperId, $templateContent);
+        }
+
+
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
     /**
@@ -400,7 +424,6 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
      */
     private function GenSubmit()
     {
-
 
         //验证数据
         $userOrderProductArray = Control::PostRequest("s_UserOrderProductArray", "", false);
@@ -417,13 +440,17 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
         $createDate = strval(date('Y-m-d H:i:s', time()));
         $createDateDes = Des::Encrypt($createDate, UserOrderData::USER_ORDER_DES_KEY);
         $arrUserCarId = Control::PostRequest("s_ArrUserCarId", "");
+        $newspaperId = intval(Control::PostRequest("s_NewspaperId", ""));
+
+
 
         if (
             $userReceiveInfoId > 0 &&
             strlen($userOrderProductArray) > 0
             && $siteId > 0
             && $userId > 0
-        ) {
+        ) {  //产品购买
+
 
 
             $userOrderPublicData = new UserOrderPublicData();
@@ -556,7 +583,57 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
             } else {
                 //编号出错
             }
-        } else {
+        }
+
+        elseif($siteId > 0 && $userId > 0 && $allPrice > 0 && $newspaperId > 0){
+
+            //电子报购买
+
+            $userOrderPublicData = new UserOrderPublicData();
+            $userOrderName = "";
+            $userOrderNumber = UserOrderData::GenUserOrderNumber();
+            $userOrderNumberDes = Des::Encrypt($userOrderNumber, UserOrderData::USER_ORDER_DES_KEY);
+
+            $userOrderId = $userOrderPublicData->Create(
+                $userOrderName,
+                $userOrderNumber,
+                $userOrderNumberDes,
+                $userId,
+                $userIdDes,
+                $cookieId,
+                $allPrice,
+                $allPriceDes,
+                $sendPrice,
+                $userReceiveInfoId,
+                $sendTime,
+                $autoSendMessage,
+                $siteId,
+                $createDate,
+                $createDateDes,
+                "",
+                UserOrderData::USER_ORDER_TABLE_TYPE_NEWSPAPER
+            );
+
+            if ($userOrderId > 0){
+
+                $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
+
+                $userOrderNewspaperPublicData->Create(
+                    $userOrderId,$siteId,$userId, $newspaperId,$allPrice
+                );
+
+                //支付选择页面
+                Control::GoUrl("/default.php?mod=user_order&a=pay&user_order_id=$userOrderId");
+
+
+            }
+
+
+
+        }
+
+
+        else {
             //出错，返回
         }
     }
@@ -579,7 +656,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
             //$templateName = "default";
             //$templatePath = "front_template";
             //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = parent::GetDynamicTemplateContent("user_order_pay");
+            $templateContent = parent::GetDynamicTemplateContent("user_order_pay", $siteId);
 
             /////权限验证//////////////////////
             /////会员id和订单所属会员id要一致
@@ -620,7 +697,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
             //$templateName = "default";
             //$templatePath = "front_template";
             //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = parent::GetDynamicTemplateContent("user_order_submit_pay");
+            $templateContent = parent::GetDynamicTemplateContent("user_order_submit_pay", $siteId);
             parent::ReplaceFirst($templateContent);
 
             /////权限验证//////////////////////
