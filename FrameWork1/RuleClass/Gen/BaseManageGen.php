@@ -2118,7 +2118,7 @@ class BaseManageGen extends BaseGen
 
                     if ($publishResult > 0) {
                         $result .= Language::Load('site_ad', 10); //广告JS更新成功!
-                        $strCopy = '<div class="site_ad_' . $siteAdId . '"></div><script language="javascript" src="' . self::SITE_AD_PATH . '/' . $siteId . '/site_ad_' . $siteAdId . '.js" charset="utf-8"></script>';
+                        $strCopy = '<div class="site_ad_' . $siteAdId . '"></div><script language="javascript" src="/' . self::SITE_AD_PATH . '/' . $siteId . '/site_ad_' . $siteAdId . '.js" charset="utf-8"></script>';
 
                         $result .= "<br><br>" . htmlspecialchars($strCopy);
                         //$result .= "<br><br>" . self::SITE_AD_PATH .'/'. $siteId . '/site_ad_' . $siteAdId . ".js";
