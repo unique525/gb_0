@@ -121,23 +121,62 @@ class UserAlbumPublicData extends BasePublicData
                 $orderBy = ' ua.HitCount DESC ';
             }
 
-            $sql = "SELECT ui.RealName,ui.UserId,ui.SchoolName,ui.ClassName,ua.UserAlbumId,ua.UserAlbumIntro,ua.State,ua.SiteId,ua.HitCount,uf.UploadFilePath,uf.UploadFileId,u.UserMobile
-                    FROM cst_user_album ua,cst_user_info ui,cst_upload_file uf,cst_user u,cst_user_role ur
-                    WHERE ui.UserId=ua.UserId and u.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.SiteId=" . $siteId . "
-                    and ua.UserId=ur.UserId and ua.State=" . $state . " and ur.UserGroupId=".$userGroupId." " . $searchSql . "
+            $sql = "SELECT
+                    ui.RealName,
+                    ui.UserId,
+                    ui.SchoolName,
+                    ui.ClassName,
+                    ua.UserAlbumId,
+                    ua.UserAlbumIntro,
+                    ua.State,
+                    ua.SiteId,
+                    ua.HitCount,
+                    uf.UploadFilePath,
+                    uf.UploadFileId,
+                    u.UserMobile
+                    FROM
+                    " . self::TableName_UserInfo . " ui,
+                    " . self::TableName_UserAlbum . " ua,
+                    " . self::TableName_UploadFile . " uf,
+                    " . self::TableName_UserRole . " ur,
+                    " . self::TableName_User . " u
+                    WHERE
+                    ui.UserId=ua.UserId
+                    and u.UserId=ua.UserId
+                    and uf.UploadFileId=ua.CoverPicUploadFileId
+                    and ua.SiteId=:SiteId
+                    and ua.UserId=ur.UserId
+                    and ua.State=:State
+                    and ur.UserGroupId=:UserGroupId " . $searchSql . "
                     ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize;
+
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("State",$state);
+            $dataProperty->AddField("UserGroupId",$userGroupId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-            $sqlCount = "SELECT count(*) FROM
-                        " . self::TableName_UserInfo . " ui," . self::TableName_UserAlbum . " ua," . self::TableName_UploadFile . " uf, " . self::TableName_UserRole . " ur
-                        WHERE ui.UserId=ua.UserId and uf.UploadFileId=ua.CoverPicUploadFileId and ua.UserId=ur.UserId and ur.UserGroupId=".$userGroupId." $searchSql ";
-            //CountPic 用于统计相册有多少图片
 
-            $allCount = $this->dbOperator->GetInt($sqlCount, null);
+            $sqlCount = "SELECT
+                    count(*)
+                    FROM
+                    " . self::TableName_UserInfo . " ui,
+                    " . self::TableName_UserAlbum . " ua,
+                    " . self::TableName_UploadFile . " uf,
+                    " . self::TableName_UserRole . " ur,
+                    " . self::TableName_User . " u
+                    WHERE
+                    ui.UserId=ua.UserId
+                    and u.UserId=ua.UserId
+                    and uf.UploadFileId=ua.CoverPicUploadFileId
+                    and ua.SiteId=:SiteId
+                    and ua.UserId=ur.UserId
+                    and ua.State=:State
+                    and ur.UserGroupId=:UserGroupId " . $searchSql;
+
+            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         }
         return $result;
     }
-
 
     /**
      * 获取一个相册的信息(checked)
