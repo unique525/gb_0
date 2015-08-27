@@ -1088,6 +1088,12 @@ class Template
                     $columnValue = str_ireplace("upload/document_news", "/upload/document_news", $columnValue);
                 }
 
+                if (strtolower($columnName) === strtolower("DocumentNewsContent")) {
+                    $columnValue = str_ireplace("upload/newspaper_article", "/upload/newspaper_article", $columnValue);
+                }
+
+
+
                 if (strtolower($columnName) === strtolower("DocumentNewsTitle")) {
                     $columnValue = str_ireplace('"', "&quot;", $columnValue);
                 }
