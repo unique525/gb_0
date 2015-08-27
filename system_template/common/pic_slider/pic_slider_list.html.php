@@ -148,8 +148,8 @@
                 <![CDATA[
                 <li class="li_list_width_img" id="sort_{f_PicSliderId}">
 
-                    <div><img class="pic_slider_img" src="{f_UploadFilePath}" alt=""/></div>
-                    <div style="padding:3px 5px; height:40px;">{f_PicSliderTitle}</div>
+                    <div><img class="pic_slider_img" src="{f_UploadFilePath}" style="max-height:167px;" alt=""/></div>
+                    <div style="padding:3px 5px; height:20px;">{f_PicSliderTitle}</div>
 
                     <div style="padding:3px 5px;">
                         <img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif"
