@@ -77,6 +77,33 @@ class UserRolePublicData extends BasePublicData
         }
         return $result;
     }
+
+    /**
+     * 修改会员分组
+     * @param int $userId 会员id
+     * @param int $userGroupId 会员组id
+     * @param int $siteId 站点id
+     * @return int 结果
+     */
+    public function ModifyUserGroup($userId,$userGroupId,$siteId){
+        $result = -1;
+        if($userId > 0 && $userGroupId > 0 && $siteId >0){
+
+            $sql = "UPDATE " . self::TableName_UserRole . "
+
+                    SET UserGroupId=:UserGroupId
+
+                    WHERE UserId = :UserId AND SiteId=:SiteId;";
+
+                $dataProperty = new DataProperty();
+                $dataProperty->AddField("UserId",$userId);
+                $dataProperty->AddField("SiteId",$siteId);
+                $dataProperty->AddField("UserGroupId",$userGroupId);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+        return $result;
+    }
 }
 
 ?>

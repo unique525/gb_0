@@ -32,6 +32,11 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
 
         $userId = Control::GetUserId();
         $userGroupId = Control::GetRequest("user_group_id", 0);
+        $userRolePublicData = new UserRolePublicData();
+        if($userId > 0 && $userGroupId > 0 && $siteId >0){
+            $userRolePublicData->ModifyUserGroup($userId,$userGroupId,$siteId);
+        }
+
         if ($userId <= 0) {
             if($userGroupId==2){
                 $referUrl = urlencode("/default.php?mod=user_album&a=create&user_group_id=2");

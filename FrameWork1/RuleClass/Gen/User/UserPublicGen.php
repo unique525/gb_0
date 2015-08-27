@@ -674,6 +674,10 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {
                 $hour = 9999999;
+
+                //
+
+
                 Control::SetUserCookie($userId,$userAccount, $hour);
                 return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
             }
