@@ -176,7 +176,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
 
             //增加点击数
             $userAlbumPublicData = new UserAlbumPublicData();
-            $userAlbumPublicData->AddHitCount($userAlbumId);
+            //$userAlbumPublicData->AddHitCount($userAlbumId);
             $siteId = parent::GetSiteIdByDomain();
             if ($userGroupId == 2) {
                 $defaultTemp = "user_album_student_detail";
