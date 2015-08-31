@@ -138,7 +138,7 @@
         <input type="text" class="GetDate" id="BeginDate" name="BeginDate" value="{BeginDate}"  style=" width: 85px;font-size:14px;" maxlength="20"  />
     </td>
     <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold; ">
-        <label for="EndDate">结束时间：(当日23:59)</label>
+        <label for="EndDate">结束时间：(当日00:00)</label>
         <input type="text" class="GetDate" id="EndDate" name="EndDate" value="{EndDate}"  style=" width: 85px;font-size:14px;" maxlength="20"  />
     </td>
 </tr>
