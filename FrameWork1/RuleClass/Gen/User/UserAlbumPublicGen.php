@@ -47,7 +47,6 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                 Control::GoUrl("/default.php?mod=user&a=login&temp=user_album_login_citizen&re_url=$referUrl");
                 //die("user id is null");
             }
-
         }
 
         $defaultTemp = "user_album_create";
