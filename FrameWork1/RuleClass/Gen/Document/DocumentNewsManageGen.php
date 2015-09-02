@@ -42,7 +42,7 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
-            case "async_modify_Manage_Remark":
+            case "async_modify_manage_remark":
                 $result = self::AsyncModifyManageRemark();
                 break;
             case "copy":
@@ -960,8 +960,8 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
     private function AsyncModifyManageRemark()
     {
         $result = -1;
-        $documentNewsId = Control::PostRequest("document_news_id", 0);
-        $manageRemark = Control::PostRequest("manage_remark", "");
+        $documentNewsId = Control::getRequest("document_news_id", 0);
+        $manageRemark = Control::getRequest("manage_remark", "");
         if ($documentNewsId > 0) {
             $documentNewsManageData = new DocumentNewsManageData();
             $result = $documentNewsManageData->ModifyManageRemark($documentNewsId,$manageRemark);

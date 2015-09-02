@@ -138,6 +138,7 @@ $(function() {
     });
 
 
+
     $(".btn_close_box").click(function(event) {
         var documentNewsId = $(this).attr('idvalue');
         event.preventDefault();
@@ -317,15 +318,23 @@ $(function() {
 
     $(".btn_modify_manage_remark").click(function(event){
         var documentNewsId = $(this).attr('idvalue');
-        var manageRemark = $("#manage_remark").val();
-        if(manageRemark == ''){
+        var manageRemark = $("#manage_remark_"+ documentNewsId);
+
+        if(manageRemark.val() == ""){
             $("#dialog_box").dialog({width: 300, height: 100});
             $("#dialog_content").html("请正确填写信息");
         }else{
-            $.post("/default.php?secu=manage&mod=document_news&m=async_modify_manage_remark&document_news_id="+documentNewsId + "&manage_remark="+manageRemark+"", {
+            $.post("/default.php?secu=manage&mod=document_news&m=async_modify_manage_remark&document_news_id="+documentNewsId + "&manage_remark="+manageRemark.val()+"", {
                 resultbox: $(this).html()
             }, function(xml) {
-                window.location.href = window.location.href;
+                if (parseInt(xml) > 0) {
+                    alert("修改成功");
+                    $("#remark_"+ documentNewsId).html(manageRemark.val());
+                    $("#manage_remark_"+ documentNewsId).html("");
+                }
+                else{
+                    alert("修改失败");
+                }
             });
         }
     });
@@ -424,7 +433,7 @@ function documentNewsChangeState(documentNewsId, state) {
             alert("设置失败");
         }
     });
-    document.getElementById('div_state_box_' + documentNewsId).style.display = "none";
+    //document.getElementById('div_state_box_' + documentNewsId).style.display = "none";
 }
 
 
