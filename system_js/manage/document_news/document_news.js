@@ -112,7 +112,7 @@ $(function() {
         //    + parent.G_SelectedChannelId;
         //parent.G_TabTitle = parent.G_SelectedChannelName + '-编辑文档';
         //parent.addTab();
-        window.location.href = '/default.php?secu=manage&mod=document_news&m=modify&editor=xh&document_news_id='
+        window.location.href = '/default.php?secu=manage&mod=document_news&m=modify&document_news_id='
             + documentNewsId + '&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex + '&channel_id='
             + parent.G_SelectedChannelId;
     });
