@@ -60,7 +60,7 @@ class DocumentNewsClientData extends BaseClientData {
 
         if ($showInClientIndex>-1){
 
-            $searchSql = " AND ShowInClientIndex=:ShowInClientIndex ";
+            $searchSql = " AND ShowInClientIndex>=:ShowInClientIndex ";
             $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
 
         }
@@ -208,7 +208,7 @@ class DocumentNewsClientData extends BaseClientData {
 
         if ($showInClientIndex>-1){
 
-            $searchSql = " AND ShowInClientIndex=:ShowInClientIndex ";
+            $searchSql = " AND ShowInClientIndex>=:ShowInClientIndex ";
             $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
 
         }
