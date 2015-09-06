@@ -14,6 +14,7 @@ class DocumentNewsClientData extends BaseClientData {
      * @param int $pageSize 页大小
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
+     * @param int $showInClientIndex 推送到app首页 -1不处理 0不推送 1推送
      * @return array 资讯列表数据集
      */
     public function GetList(
@@ -21,7 +22,8 @@ class DocumentNewsClientData extends BaseClientData {
         $pageBegin,
         $pageSize,
         $searchKey = "",
-        $searchType = 0
+        $searchType = 0,
+        $showInClientIndex = -1
     )
     {
         $searchKey = Format::FormatSql($searchKey);
@@ -54,6 +56,13 @@ class DocumentNewsClientData extends BaseClientData {
                 $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
             }
+        }
+
+        if ($showInClientIndex>-1){
+
+            $searchSql = " AND ShowInClientIndex=:ShowInClientIndex ";
+            $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
+
         }
 
         $sql = "
@@ -153,6 +162,7 @@ class DocumentNewsClientData extends BaseClientData {
      * @param int $pageSize 页大小
      * @param string $searchKey 查询字符
      * @param int $searchType 查询下拉框的类别
+     * @param int $showInClientIndex 推送到app首页 -1不处理 0不推送 1推送
      * @return array 资讯列表数据集
      */
     public function GetListInChannelId(
@@ -160,7 +170,8 @@ class DocumentNewsClientData extends BaseClientData {
         $pageBegin,
         $pageSize,
         $searchKey = "",
-        $searchType = 0
+        $searchType = 0,
+        $showInClientIndex = -1
     )
     {
         $channelIds = Format::FormatSql($channelIds);
@@ -193,6 +204,13 @@ class DocumentNewsClientData extends BaseClientData {
                 $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
                 $dataProperty->AddField("SearchKey4", "%" . $searchKey . "%");
             }
+        }
+
+        if ($showInClientIndex>-1){
+
+            $searchSql = " AND ShowInClientIndex=:ShowInClientIndex ";
+            $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
+
         }
 
         $sql = "

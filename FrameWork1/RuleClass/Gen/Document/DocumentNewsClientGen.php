@@ -47,6 +47,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
             $pageIndex = intval(Control::GetRequest("p", 1));
             $searchKey = Control::GetRequest("search_key", "");
             $searchType = intval(Control::GetRequest("search_type", -1));
+            $showInClientIndex = intval(Control::GetRequest("show_in_client_index", -1));
             $searchKey = urldecode($searchKey);
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
@@ -56,7 +57,8 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
                 $pageBegin,
                 $pageSize,
                 $searchKey,
-                $searchType
+                $searchType,
+                $showInClientIndex
             );
             if (count($arrDocumentNewsList) > 0) {
                 $resultCode = 1;
@@ -90,6 +92,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
             $searchKey = Control::GetRequest("search_key", "");
             $searchType = intval(Control::GetRequest("search_type", -1));
             $searchKey = urldecode($searchKey);
+            $showInClientIndex = intval(Control::GetRequest("show_in_client_index", -1));
 
             $pageBegin = ($pageIndex - 1) * $pageSize;
             $documentNewsClientData = new DocumentNewsClientData();
@@ -98,7 +101,8 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
                 $pageBegin,
                 $pageSize,
                 $searchKey,
-                $searchType
+                $searchType,
+                $showInClientIndex
             );
             if (count($arrDocumentNewsList) > 0) {
                 $resultCode = 1;
