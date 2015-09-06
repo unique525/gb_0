@@ -140,7 +140,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="spe_line2"><a target="_blank" href="/default.php?mod=forum&a=list&forum_id={f_ForumId}"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
+                            <td class="spe_line2"><a target="_blank" href="/default.php?mod=forum_topic&a=list&forum_id={f_ForumId}"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
                             <td class="spe_line2" style="width:36px;"><img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" /></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:120px;text-align:left;" title="">{f_Moderator}</td>
