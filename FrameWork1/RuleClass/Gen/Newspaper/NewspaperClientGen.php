@@ -45,9 +45,13 @@ class NewspaperClientGen extends BaseClientGen implements IBaseClientGen {
 
             $arrOne = $newspaperClientData->GetOne($currentNewspaperId);
 
+            if($arrOne!=null){
             $result = Format::FixJsonEncode($arrOne);
-
             $resultCode = 1;
+            }
+            else {
+                $resultCode = -1;
+            }
 
 
         }else{
