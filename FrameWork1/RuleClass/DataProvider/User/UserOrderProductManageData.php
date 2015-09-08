@@ -131,7 +131,7 @@ class UserOrderProductManageData extends BaseManageData
                 AND uop.SiteId = :SiteId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId", $userOrderId);
-            $dataProperty->AddField("State", UserOrderDATA::STATE_REMOVED);
+            $dataProperty->AddField("State", UserOrderData::STATE_REMOVED);
             $dataProperty->AddField("SiteId", $siteId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
