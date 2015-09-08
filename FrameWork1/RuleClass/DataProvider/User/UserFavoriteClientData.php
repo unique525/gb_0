@@ -53,12 +53,21 @@ class UserFavoriteClientData extends BaseClientData {
         if($userId > 0){
             $sql = "SELECT
                         uf.*,
-                        uf2.UploadFilePath AS UserFavoriteUploadFilePath,
-                        uf2.UploadFileMobilePath AS UserFavoriteUploadFileMobilePath
+                        up.UploadFilePath,
+                        up.UploadFileMobilePath,
+                        up.UploadFilePadPath,
+                        up.UploadFileThumbPath1,
+                        up.UploadFileThumbPath2,
+                        up.UploadFileThumbPath3,
+                        up.UploadFileWatermarkPath1,
+                        up.UploadFileWatermarkPath2,
+                        up.UploadFileCompressPath1,
+                        up.UploadFileCompressPath2,
+                        up.UploadFileTitle,
+                        up.UploadFileInfo
                     FROM ".self::TableName_UserFavorite." uf
-
                     LEFT JOIN ".self::TableName_UploadFile.
-                " uf2 ON uf.UserFavoriteUploadFileId = uf2.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
+                " up ON uf.UserFavoriteUploadFileId = up.UploadFileId WHERE uf.UserId = :UserId AND uf.SiteId = :SiteId ORDER BY CreateDate DESC LIMIT ".$pageBegin.",".$pageSize.";";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("SiteId",$siteId);

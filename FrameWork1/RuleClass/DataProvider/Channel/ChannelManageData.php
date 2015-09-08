@@ -799,9 +799,8 @@ class ChannelManageData extends BaseManageData
                         FROM " . self::TableName_Channel .  " channel
                         LEFT JOIN " . self::TableName_ManageUserAuthority . " auth
                         ON channel.ChannelId=auth.ChannelId AND auth.ManageUserId=:ManageUserId AND auth.ManageUserGroupId=0
-                        WHERE channel.ParentId=:ChannelId
-                        $order
-                        LIMIT $topCount";
+                        WHERE channel.ParentId=:ChannelId AND State<100
+                        $order ";//LIMIT $topCount";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("ManageUserId", $manageUserId);
@@ -853,9 +852,8 @@ class ChannelManageData extends BaseManageData
                         FROM " . self::TableName_Channel .  " channel
                         LEFT JOIN " . self::TableName_ManageUserAuthority . " auth
                         ON channel.ChannelId=auth.ChannelId AND auth.ManageUserGroupId=:ManageUserGroupId AND auth.ManageUserId=0
-                        WHERE channel.ParentId=:ChannelId
-                        $order
-                        LIMIT $topCount";
+                        WHERE channel.ParentId=:ChannelId AND State<100
+                        $order ";//LIMIT $topCount";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("ManageUserGroupId", $manageUserGroupId);
