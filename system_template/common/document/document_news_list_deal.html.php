@@ -21,9 +21,14 @@
                 jsonp: "jsonpcallback",
                 success: function(data) {
                     if(data["result"]==="-1"){
-                        $("#check_channel_id").val("节点类型错误");
+                        $("#check_channel_id").val("节点类型获取失败");
                     }else if(data["result"]==="-2"){
                         $("#check_channel_id").val("value","目标节点没有权限");
+                    }else if(data["result"]==="0"){
+                        $("#pop_input").removeAttr("disabled");
+                        $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]+" #节点类型不匹配，请谨慎操作#");
+                        $("#id_btn").css("display","block");
+                        $("#pop_input").val(checkChannelId);
                     }else{
                         $("#pop_input").removeAttr("disabled");
                         $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]);
@@ -158,7 +163,7 @@
                 <label for="pop_input"></label>
                 <input id="pop_input" name="pop_cid" value="" type="radio" disabled="disabled"/>
                 <label for="check_channel_id"></label>
-                <input type="text" id="check_channel_id" name="check_channel_id" class="input_box" style="height:22px" value="直接输入频道id..."/>
+                <input type="text" id="check_channel_id" name="check_channel_id" class="input_box" style="height:22px;width:200px" value="直接输入频道id..."/>
                 <input class="btn" value="检测频道类型" type="button" onclick="CheckChannelType()" />
             </td>
         </tr>

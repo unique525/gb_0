@@ -365,6 +365,9 @@ class NewspaperArticleManageGen extends BaseManageGen {
             $listName="site_list";
             Template::ReplaceList($tempContent,$siteList,$listName);
 
+            //替换channel type供手动输入目的节点id判断
+            $channelType = $channelManageData->GetChannelType($channelId,true);
+            $tempContent = str_ireplace("{ChannelType}", $channelType, $tempContent);
 
             //显示当前站点的节点树
             if($toSiteId>0){

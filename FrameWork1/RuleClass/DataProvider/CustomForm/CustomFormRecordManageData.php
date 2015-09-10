@@ -153,6 +153,7 @@ class CustomFormRecordManageData extends BaseManageData {
                     if($value["content"]==""){
                         continue;
                     }
+                    echo $value["type"];
                     switch ($value["type"]) {
                         case 0://int
                             $arr = Format::ToSplit($value["content"], '_');
@@ -204,13 +205,21 @@ class CustomFormRecordManageData extends BaseManageData {
                             break;
                         case 5://blob
                             break;
+                        case -1://state状态
+                            echo "in";
+                            $dataProperty->AddField("State", $value['content']);
+                            $sqlSearch.=' AND State=:State ';
+                            break;
+
                     }
+
 
 
                 }
 
             }
             $sql="SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId " .$sqlSearch. " ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
+            echo $sql;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
 /*  由于太耗资源。。 不分页了  调1000条

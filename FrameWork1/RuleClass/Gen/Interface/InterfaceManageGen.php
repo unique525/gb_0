@@ -113,6 +113,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
         parent::ReplaceFirst($tempContent);
         $mod = Control::GetRequest("mod", "");
         $channelId = Control::GetRequest("channel_id", 0);
+        $toSiteId = Control::GetRequest("to_site_id", 0); //跨站点，站点id
         $jsonType = Control::PostOrGetRequest("json_type", "default"); //默认icms2
         $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
         $manageUserId = Control::GetManageUserID();
@@ -147,9 +148,18 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                             if ($channelType == $targetChannelType) {
                                 if ($channelType == 1) { //新闻资讯类
                                     $handUploadFileError = self::HandUploadFiles($arrayOfDocumentNewsList, $targetCid, $channelType);
+
+                                    //逆向排序使导入后排序号正确
+                                    $arrayForCopy=array();
+                                    if(count($arrayOfDocumentNewsList)>0){
+                                        for($i=count($arrayOfDocumentNewsList)-1;$i>=0;$i--){
+                                            $arrayForCopy[]=$arrayOfDocumentNewsList[$i];
+                                        }
+                                    }
+
                                     switch ($method) {
                                         case "copy":
-                                            $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayOfDocumentNewsList, $manageUserId, $manageUserName);
+                                            $strResultId = $documentNewsManageData->Copy($targetSiteId, $targetCid, $arrayForCopy, $manageUserId, $manageUserName);
                                             if (strlen($strResultId) > 0) {
                                                 $result = 1;
                                                 /** 处理DocumentNewsPic */
@@ -208,8 +218,26 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                 $documentList = $documentList . $columnValue["DocumentNewsTitle"] . '<br>';
             }
             //}
+
+
+            //显示有权限的站点树
+            $siteManageData=new SiteManageData();
+            $siteList=$siteManageData->GetListForSelect($manageUserId);
+            $listName="site_list";
+            Template::ReplaceList($tempContent,$siteList,$listName);
+
+            //替换channel type供手动输入目的节点id判断
+            $channelType = $channelManageData->GetChannelType($channelId,true);
+            $tempContent = str_ireplace("{ChannelType}", $channelType, $tempContent);
+
+
             //显示当前站点的节点树
-            $siteId = $channelManageData->GetSiteID($channelId, true);
+            //显示当前站点的节点树
+            if($toSiteId>0){
+                $siteId=$toSiteId;
+            }else{
+                $siteId = $channelManageData->GetSiteID($channelId,true);
+            }
             $order = "";
             $arrayChannelTree = $channelManageData->GetListForManageLeft($siteId, $manageUserId, $order);
             $listName = "channel_tree";
@@ -265,7 +293,9 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                         $jsonContent = substr($jsonContent, 3);
                     }
                     $arrayOfAllDocumentNewsList = json_decode($jsonContent, TRUE);
-                    $arrayOfAllDocumentNewsList = $arrayOfAllDocumentNewsList["result_list"];
+                    if(count($arrayOfAllDocumentNewsList)>0){
+                        $arrayOfAllDocumentNewsList = $arrayOfAllDocumentNewsList["result_list"];
+                    }
                 }
 
                 break;
@@ -291,6 +321,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                     $jsonContent = str_ireplace('"publishdate"', '"CreateDate"', $jsonContent);
                     $jsonContent = str_ireplace('"titlepic"', '"TitlePic1UploadFilePath"', $jsonContent);
                     $jsonContent = str_ireplace('"titlepic2"', '"TitlePic2UploadFilePath"', $jsonContent);
+                    $jsonContent = str_ireplace('"titlepic3"', '"TitlePic3UploadFilePath"', $jsonContent);
                     $jsonContent = str_ireplace('"showdate"', '"ShowDate"', $jsonContent);
                     $jsonContent = str_ireplace('"documentnewssubtitle"', '"DocumentNewsSubTitle"', $jsonContent);
                     $jsonContent = str_ireplace('"documentnewscitetitle"', '"DocumentNewsCiteTitle"', $jsonContent);
@@ -303,7 +334,9 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                     $jsonContent = str_ireplace('"directurl"', '"DirectUrl"', $jsonContent);
                     $jsonContent = str_ireplace('"siteurl"', '"SiteUrl"', $jsonContent);
                     $arrayOfAllDocumentNewsList = json_decode($jsonContent, TRUE);
-                    $arrayOfAllDocumentNewsList = $arrayOfAllDocumentNewsList["icms1"];
+                    if(count($arrayOfAllDocumentNewsList)>0){
+                        $arrayOfAllDocumentNewsList = $arrayOfAllDocumentNewsList["icms1"];
+                    }
                 }
                 break;
         }

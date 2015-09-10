@@ -558,9 +558,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
             $checkResult=-2;
               }else{
             $checkingChannelType=$channelManageData->GetChannelType($checkingChannelId,true);
-            if($checkingChannelType==$channelType){
-                $channelName=$channelManageData->GetChannelName($checkingChannelId,true);
-                $checkResult=1;
+            $channelName=$channelManageData->GetChannelName($checkingChannelId,false);
+            if($checkingChannelType>=0){
+                $checkResult=0;//可以操作 但节点类型不匹配
+                if($checkingChannelType==$channelType){
+                    $checkResult=1;//节点类型匹配
+                }
             }
         }
         $result='{"result":"'.$checkResult.'","channel_name":"'.$channelName.'"}';

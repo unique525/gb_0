@@ -701,7 +701,7 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $customFormRecordId = intval($listOfRecordArray[$i]["CustomFormRecordId"]);
 
             $listTable .= '<tr class="grid_item">';
-            $listTable .= '<td class="spe_line" style="padding-left:2px;"><img idvalue="'. $customFormRecordId.'" class="btn_edit_custom_form_record" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="编辑" /></td>';
+            $listTable .= '<td class="spe_line" style="padding-left:2px;"><img idvalue="'. $customFormRecordId.'" class="btn_edit_custom_form_record" src="/system_template/default/images/manage/edit.gif" alt="编辑" title="'.$customFormRecordId.'" /></td>';
 
             $customFormContentManageData=new CustomFormContentManageData();
             $listOfContentArray = $customFormContentManageData->GetList($customFormRecordId);

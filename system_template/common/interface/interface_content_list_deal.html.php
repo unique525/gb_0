@@ -18,7 +18,54 @@
             $(".btn_cancel").click(function(){
                 parent.$("#dialog_resultbox").dialog("close");
             });
+
+
+            $("#check_channel_id").focus(function(){
+                if($(this).attr("value")=="直接输入频道id..."){
+                    $(this).attr("value","");
+                }
+            });
+
+
+            //切换站点（跨站点操作）
+            $(".site_selection").click(function(){
+                var toSiteId=$(this).attr("idvalue");
+                var docIdString=Request["doc_id_string"];
+                var channelId=Request["channel_id"];
+                var jsonType=Request["json_type"];
+                window.location.href='/default.php?secu=manage&mod=interface&m={method}&channel_id='+channelId+'&to_site_id='+toSiteId+'&doc_id_string='+docIdString+'&json_type='+jsonType;
+            });
         });
+
+
+        function CheckChannelType(){
+            var checkChannelId=parseInt($("#check_channel_id").val());
+            $("#pop_input").attr("disabled","disabled");
+            $.ajax({
+                url: "/default.php?secu=manage&mod=channel&m=check_channel_type",
+                data: { channel_type:{ChannelType}, checking_channel_id:checkChannelId },
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function(data) {
+                    if(data["result"]==="-1"){
+                        $("#check_channel_id").val("节点类型获取失败");
+                    }else if(data["result"]==="-2"){
+                        $("#check_channel_id").val("value","目标节点没有权限");
+                    }else if(data["result"]==="0"){
+                        $("#pop_input").removeAttr("disabled");
+                        $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]+" #节点类型不匹配，请谨慎操作#");
+                        $("#id_btn").css("display","block");
+                        $("#pop_input").val(checkChannelId);
+                    }else{
+                        $("#pop_input").removeAttr("disabled");
+                        $("#check_channel_id").val(checkChannelId+"："+data["channel_name"]);
+                        $("#id_btn").css("display","block");
+                        $("#pop_input").val(checkChannelId);
+
+                    }
+                }
+            });
+        }
 
 
         /**
@@ -86,8 +133,34 @@
             </td>
         </tr>
         <tr>
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;">
+                <label for="sel_site">跨站点请选择： </label>
+                <select id="sel_site" name="SiteId">
+                    <icms id="site_list" type="list">
+                        <item>
+                            <![CDATA[
+                            <option class="site_selection" value="{f_SiteId}" idvalue="{f_SiteId}">{f_SiteName}</option>
+                            ]]>
+                        </item>
+                    </icms>
+                </select><!--，为<span style="color:red;"> {ManageUserGroupName} </span>授权-->
+            </td>
+            <script type="text/javascript">
+                $("#sel_site").find("option[value='{SiteId}']").attr("selected",true);
+            </script>
+        </tr>
+        <tr>
             <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
                 请选择您要{MethodName}到的频道
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
+                <label for="pop_input"></label>
+                <input id="pop_input" name="pop_cid" value="" type="radio" disabled="disabled"/>
+                <label for="check_channel_id"></label>
+                <input type="text" id="check_channel_id" name="check_channel_id" class="input_box" style="height:22px;width:200px" value="直接输入频道id..."/>
+                <input class="btn" value="检测频道类型" type="button" onclick="CheckChannelType()" />
             </td>
         </tr>
         <tr>
