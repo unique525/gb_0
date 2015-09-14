@@ -54,7 +54,10 @@ class ChannelClientData extends BaseClientData {
             $cacheContent = DataCache::Get($cacheDir . DIRECTORY_SEPARATOR . $cacheFile);
             if (strlen($cacheContent) <= 2) {
 
-                switch($order){
+                switch ($order) {
+                    case "time_desc":
+                        $order = " ORDER BY c.Createdate DESC";
+                        break;
                     default:
                         $order = " ORDER BY c.Sort DESC ";
                         break;

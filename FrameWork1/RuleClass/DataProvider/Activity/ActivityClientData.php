@@ -21,10 +21,10 @@ class ActivityClientData extends BaseClientData {
         $pageSize
     ) {
         if ($timeState == "end") { //已结束活动
-            $timeConditionSql = " AND EndDate>NOW() ";
+            $timeConditionSql = " AND EndDate<NOW() ";
         }
         else if($timeState == "inTime"){//正进行中的活动
-            $timeConditionSql = " AND EndDate<NOW() ";
+            $timeConditionSql = " AND EndDate>=NOW() ";
         }
         else $timeConditionSql="";//所有活动
         $selectColumn = '
