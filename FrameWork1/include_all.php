@@ -23,20 +23,6 @@ if(file_exists($dir)){
     die("config file not found.");
 }
 
-
-/****************  PLUGINS ******************/
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
-
-require_once RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/Alipay.php";
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
-
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
-require_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/GifEncoder.php");
-
 /****************  TOOLS   ******************/
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Tools";
 $arrFileNames = array();
@@ -145,6 +131,17 @@ foreach ($arrFiles as $fileName) {
 */
 
 
+/****************  PLUGINS ******************/
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/GifEncoder.php");
 
 //$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
 //$arrFiles = getFileNames($dir, $arrFileNames);
