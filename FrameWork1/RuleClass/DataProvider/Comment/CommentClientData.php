@@ -100,6 +100,28 @@ class CommentClientData extends BaseClientData {
         return $result;
     }
 
+    public function GetListOfUser($userId,$pageBegin,$pageSize){
+        $result = null;
+        if($userId > 0){
+            $sql = "SELECT
+                            c.*,
+                            ui.NickName,
+                            uf.UploadFileThumbPath2 AS Avatar
+                          FROM "
+                . self::TableName_Comment . " c
+                            LEFT JOIN ".self::TableName_UserInfo." ui on c.UserId = ui.UserId
+                            LEFT JOIN ".self::TableName_UploadFile." uf ON ui.AvatarUploadFileId = uf.UploadFileId
+                          WHERE (c.State=".CommentData::COMMENT_STATE_CHECKED."
+                            OR c.State=".CommentData::COMMENT_STATE_UN_CHECK.") AND c.UserId=:UserId
+                                ORDER BY c.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            $dataProperty = new DataProperty();
+
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 
     public function Reply(
         $parentId,

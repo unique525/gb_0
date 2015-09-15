@@ -24,6 +24,10 @@ class CommentClientGen extends BaseClientGen{
                 $result = self::GenList();
                 break;
 
+            case "list_of_user":
+                $result = self::GenListOfUser();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -216,6 +220,42 @@ class CommentClientGen extends BaseClientGen{
                 } else {
                     $resultCode = -1;
                 }
+
+        } else {
+            $resultCode = -6; //参数错误
+        }
+
+        return '{"result_code":"' . $resultCode . '","comment":{"comment_list":' . $result . '}}';
+    }
+
+    private function GenListOfUser()
+    {
+        $result = "[{}]";
+        $userId = intval(Control::PostOrGetRequest("user_id", 0));
+
+        if ($userId > 0) {
+            $pageSize = Control::PostOrGetRequest("ps", 5);
+            $pageIndex = Control::PostOrGetRequest("p", 1);
+            if ($pageIndex === 0) {
+                $pageIndex = 1;
+            }
+
+            $commentClientData = new CommentClientData();
+
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+
+            $arrList = $commentClientData->GetListOfUser(
+                $userId,
+                $pageBegin,
+                $pageSize);
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
+
+
+            } else {
+                $resultCode = -1;
+            }
 
         } else {
             $resultCode = -6; //参数错误
