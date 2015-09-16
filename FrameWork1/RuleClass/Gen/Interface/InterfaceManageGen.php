@@ -115,6 +115,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
         $channelId = Control::GetRequest("channel_id", 0);
         $toSiteId = Control::GetRequest("to_site_id", 0); //跨站点，站点id
         $jsonType = Control::PostOrGetRequest("json_type", "default"); //默认icms2
+        $useOriUrl = Control::PostOrGetRequest("use_ori_url", 0); //是否使用源地址作为直接转向
         $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
         $manageUserId = Control::GetManageUserID();
         $manageUserName = Control::GetManageUserName();
@@ -124,7 +125,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
             $publishApiUrl = $channelManageData->GetPublishApiUrl($channelId, TRUE);
 
             /** 筛选出已选中的文档 **/
-            $arrayOfDocumentNewsList = self::GetArrayOfDocumentFromJson($publishApiUrl, $jsonType, $docIdString); //取得外部接口数据转为数组
+            $arrayOfDocumentNewsList = self::GetArrayOfDocumentFromJson($publishApiUrl, $jsonType, $docIdString, $useOriUrl); //取得外部接口数据转为数组
 
             if (!empty($_POST)) { //提交
                 $targetCid = Control::PostRequest("pop_cid", 0); //目标频道ID
@@ -273,9 +274,10 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
      * @param string $publishApiUrl 外部接口url
      * @param string $jsonType 外部接口json类: icms1,icms2,others
      * @param string $docIdString 筛选其中几条的字符串
+     * @param int $useOriUrl 是否使用源地址作为直接转向
      * @return array 数组结果
      */
-    private function GetArrayOfDocumentFromJson($publishApiUrl, $jsonType, $docIdString = "")
+    private function GetArrayOfDocumentFromJson($publishApiUrl, $jsonType, $docIdString = "", $useOriUrl=0)
     {
         $result = null;
         $arrayOfAllDocumentNewsList = null;
@@ -294,6 +296,18 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                     }
                     $arrayOfAllDocumentNewsList = json_decode($jsonContent, TRUE);
                     if(count($arrayOfAllDocumentNewsList)>0){
+                            foreach($arrayOfAllDocumentNewsList as $documentNews){
+                                $publishDate=Format::DateStringToSimple($documentNews['PublishDate']);
+                                $documentNews['OriUrl'] =
+                                    '/h/'.$documentNews['ChannelId'].
+                                    '/'.$publishDate.
+                                    '/'.$documentNews['DocumentNewsId'].'.html';
+
+                                if($useOriUrl>0){
+                                    $documentNews['DirectUrl']=$documentNews['OriUrl'];
+                                }
+                            }
+
                         $arrayOfAllDocumentNewsList = $arrayOfAllDocumentNewsList["result_list"];
                     }
                 }
@@ -331,7 +345,13 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                     $jsonContent = str_ireplace('"showhour"', '"ShowHour"', $jsonContent);
                     $jsonContent = str_ireplace('"showminute"', '"ShowMinute"', $jsonContent);
                     $jsonContent = str_ireplace('"documentnewscontent"', '"DocumentNewsContent"', $jsonContent);
-                    $jsonContent = str_ireplace('"directurl"', '"DirectUrl"', $jsonContent);
+                    if($useOriUrl>0){
+                        $jsonContent = str_ireplace('"directurl"', '"cancel"', $jsonContent);
+                        $jsonContent = str_ireplace('"oriurl"', '"DirectUrl"', $jsonContent);
+                    }else{
+                        $jsonContent = str_ireplace('"directurl"', '"DirectUrl"', $jsonContent);
+                        $jsonContent = str_ireplace('"oriurl"', '"OriUrl"', $jsonContent);
+                    }
                     $jsonContent = str_ireplace('"siteurl"', '"SiteUrl"', $jsonContent);
                     $arrayOfAllDocumentNewsList = json_decode($jsonContent, TRUE);
                     if(count($arrayOfAllDocumentNewsList)>0){

@@ -132,6 +132,7 @@
         <tr class="grid_title">
             <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
             <td>标题</td>
+            <td style="width: 90px;text-align:center;">源地址</td>
             <td style="width: 90px;text-align:center;">是否直接转向</td>
             <td style="width: 180px;text-align:center;">创建时间</td>
         </tr>
@@ -149,6 +150,7 @@
                                 </label>
                             </td>
                             <td class="spe_line2" style="padding-left:10px;"><a target="_blank" class="link_view" idvalue="{f_DocumentNewsId}" pub_date="{f_year}{f_month}{f_day}"><span style="color:{f_DocumentNewsTitleColor};font-weight:{f_DocumentNewsTitleBold};">{f_DocumentNewsTitle}</span></a></td>
+                            <td class="spe_line2 ori_url" style="width:90px;text-align:center;" title="源地址" idvalue="{f_OriUrl}"><a href="{f_OriUrl}" target="_blank">查看原网页</a></td>
                             <td class="spe_line2 if_direct_url" style="width:90px;text-align:center;" title="跳转地址" idvalue="{f_DirectUrl}"></td>
                             <td class="spe_line2" style="width:180px;text-align:center;" title="文档创建时间">{f_CreateDate}</td>
                         </tr>
