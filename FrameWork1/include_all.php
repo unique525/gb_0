@@ -32,6 +32,21 @@ foreach ($arrFiles as $fileName) {
 
 }
 
+
+/****************  PLUGINS ******************/
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/Alipay.php");
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
+
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
+include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/GifEncoder.php");
+
 /****************  TOOLS   ******************/
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
 $arrFileNames = array();
@@ -67,7 +82,7 @@ function  __autoload($className) {
     global $arrPhpFiles;
 
 
-    if (array_key_exists($className, $arrPhpFiles)){
+    if ($arrPhpFiles != null && array_key_exists($className, $arrPhpFiles)){
 
 
         $filePath = $arrPhpFiles[$className];
@@ -131,17 +146,6 @@ foreach ($arrFiles as $fileName) {
 */
 
 
-/****************  PLUGINS ******************/
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/PHPExcel.php");
-
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_core.function.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_md5.function.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_notify.class.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/Alipay/lib/alipay_submit.class.php");
-
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/GifEncoder.php");
 
 //$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
 //$arrFiles = getFileNames($dir, $arrFileNames);
