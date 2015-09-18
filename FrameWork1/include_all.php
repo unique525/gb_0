@@ -99,59 +99,67 @@ function  __autoload($className) {
 }
 //include once rule class
 
+function include_all(){
+
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Tools";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataBase";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseClientData.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.php");
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+/*
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseClientGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseClientGen.php");
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/Forum/ForumBasePublicGen.php");
+//include once rule class
+    $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
+    $arrFiles = getFileNames($dir, $arrFileNames);
+    foreach ($arrFiles as $fileName) {
+        include_once($fileName);
+    }
+*/
+
+}
 
 /**
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataBase";
-$arrFiles = getFileNames($dir, $arrFileNames);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
 
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseData.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BasePublicData.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseClientData.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/BaseManageData.php");
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider";
-$arrFiles = getFileNames($dir, $arrFileNames);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
-
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
-$arrFiles = getFileNames($dir, $arrFileNames);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
-
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseClientGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBasePublicGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseClientGen.php");
-include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/Forum/ForumBasePublicGen.php");
-//include once rule class
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
-$arrFiles = getFileNames($dir, $arrFileNames);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
-
-$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Tools";
-$arrFiles = getFileNames($dir, $arrFileNames);
-foreach ($arrFiles as $fileName) {
-    include_once($fileName);
-}
 */
 
 
 
-//$dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins";
-//$arrFiles = getFileNames($dir, $arrFileNames);
-//foreach ($arrFiles as $fileName) {
-    //include_once($fileName);
-//}
+
 
 /**
  * 输入文件夹地址，迭代循环返回此文件夹下所有文件名的列表数组

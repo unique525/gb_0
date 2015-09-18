@@ -346,10 +346,8 @@ class Alipay
         $userOrderPublicData = new UserOrderPublicData();
         $userOrderId = $userOrderPublicData->GetUserOrderIdByUserOrderNumber($out_trade_no, true);
         $allPrice = $userOrderPublicData->GetAllPrice($userOrderId);
-        $userId = Control::GetUserId();
 
         if($userOrderId>0 && $allPrice>0){
-
             $alipayTradeStatus = $userOrderPublicData->GetAlipayTradeStatus($userOrderId, false);
             if($alipayTradeStatus == 'TRADE_FINISHED'
                 || $alipayTradeStatus == 'TRADE_SUCCESS'

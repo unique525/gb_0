@@ -6,7 +6,8 @@ mb_internal_encoding('utf8');
 date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////
 require RELATIVE_PATH . "/FrameWork1/include_all.php";
-//include_once RELATIVE_PATH . "/FrameWork1/RuleClass/DataProvider/User/UserOrderPayPublicData.php";
+
+include_all();
 
 $result = "";
 $alipay = new Alipay();

@@ -55,9 +55,9 @@ class AlipayNotify {
 			else {
 				$isSignStr = 'false';
 			}
-			$log_text = "responseTxt=".$responseTxt."\n notify_url_log:isSign=".$isSignStr.",";
-			$log_text = $log_text.createLinkString($_POST);
-			logResult($log_text);
+			//$log_text = "responseTxt=".$responseTxt."\n notify_url_log:isSign=".$isSignStr.",";
+			//$log_text = $log_text.createLinkString($_POST);
+			//logResult($log_text);
 
             //$debug = new DebugLogManageData();
             //$debug->Create($log_text);

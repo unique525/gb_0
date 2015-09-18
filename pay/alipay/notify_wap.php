@@ -7,6 +7,8 @@ date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////
 require RELATIVE_PATH . "/FrameWork1/include_all.php";
 
+include_all();
+
 $alipay = new Alipay();
 $siteId = GetSiteIdByDomain();
 if($siteId>0){
