@@ -151,6 +151,12 @@
         </tr>
         <tr>
             <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
+                <label for="use_ori_url">是否使用源地址作为直接转向</label>
+                <input id="use_ori_url" name="use_ori_url" value="1" type="radio"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="spe_line" style=" height: 40px; font-size: 14px; font-weight: bold;" colspan="2">
                 请选择您要{MethodName}到的频道
             </td>
         </tr>
