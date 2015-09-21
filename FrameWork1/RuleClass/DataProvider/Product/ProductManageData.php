@@ -597,7 +597,7 @@ class ProductManageData extends BaseManageData
             SaleState,GetScore,SendPrice,SendPriceAdd,DirectUrl,MarketPrice,SaleCount,PublishDate
             FROM
             " . self::TableName_Product . "
-            WHERE ChannelId=:ChannelId AND State<100 " . $searchSql . " " . $conditionManageUserId . "
+            WHERE ChannelId=:ChannelId " . $searchSql . " " . $conditionManageUserId . "
             ORDER BY $saleCountSortMethod Sort $sortMethod, CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -631,7 +631,7 @@ class ProductManageData extends BaseManageData
             $sql = "SELECT t.*,t1.*"
                 . " FROM " . self::TableName_Product ." t"
                 . " LEFT OUTER JOIN " .self::TableName_UploadFile." t1 on t.TitlePic1UploadFileId=t1.UploadFileId"
-                . " WHERE t.ChannelId IN (".$channelId.") AND t.State<100"
+                . " WHERE t.ChannelId IN (".$channelId.") "
                 . $order
                 . $topCount;
             $dataProperty = new DataProperty();

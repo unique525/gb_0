@@ -43,7 +43,7 @@ $(function () {
 
     //格式化状态
     $(".span_state").each(function(){
-        $(this).text(FormatProductState($(this).text()));
+        $(this).html(FormatProductState($(this).html()));
     });
 
 
