@@ -48,6 +48,27 @@ class LotteryPublicData extends BasePublicData {
     }
 
     /**
+     * 获取可以参加的会员组
+     * @param $lotteryId
+     * @param $withCache
+     * @return int
+     */
+    public function GetLimitUserGroup($lotteryId,$withCache){
+        $result="-1";
+        if($lotteryId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'lottery_data';
+            $cacheFile = 'lottery_get_limit_user_group.cache_' . $lotteryId . '';
+            $sql = "SELECT LimitUserGroup FROM ".self::TableName_Lottery." WHERE LotteryId=:LotteryId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LotteryId", $lotteryId);
+            $result = $this->GetInfoOfStringValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+        return $result;
+    }
+
+
+
+    /**
      * 获取开始时间
      * @param $lotteryId
      * @param $withCache

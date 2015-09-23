@@ -107,8 +107,10 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
 
         $userId = Control::GetUserId();
 
+        $loginUrl = "/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=lottery&a=default&lottery_id=1&temp=lottery_1");
+
         if ($userId < 0) {
-            //Control::GoUrl("")
+            Control::GoUrl($loginUrl);
         }
 
         $siteId = parent::GetSiteIdByDomain();
@@ -128,6 +130,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId, true);
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
+        $tempContent = str_ireplace("{login_url}", $loginUrl, $tempContent);
 
 
         $tempContent = parent::ReplaceTemplate($tempContent, $tagTopCount);
@@ -140,6 +143,49 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
 
             $lotteryPublicData = new LotteryPublicData();
             $lotteryUserPublicData = new LotteryUserPublicData();
+
+            //////////////限制参加的会员组
+            $limitUserGroup = $lotteryPublicData->GetLimitUserGroup($lotteryId, true);
+            $canUse = false;
+            if(strlen($limitUserGroup)>0){
+
+                $userRolePublicData = new UserRolePublicData();
+                $userGroupId = $userRolePublicData->GetUserGroupId($siteId, $userId, true);
+                $canUse = false;
+                if($userGroupId<=0){
+                    $canUse = false;
+                }else{
+                    $arrLimitUserGroup = explode(',',$limitUserGroup);
+
+                    if(is_array($arrLimitUserGroup)
+                        && !empty($arrLimitUserGroup)){
+
+                        if (in_array($userGroupId, $arrLimitUserGroup)){
+                            $canUse = true;
+                        }
+
+                    }else{
+
+                        if($userGroupId == $limitUserGroup){
+                            $canUse = true;
+                        }
+
+                    }
+                }
+
+            }else{
+                $canUse = true;
+            }
+
+
+            if ($canUse){
+                $tempContent = str_ireplace("{is_limit_user_group}", 1, $tempContent);
+            }else{
+                $tempContent = str_ireplace("{is_limit_user_group}", 0, $tempContent);
+            }
+
+
+
             //////////////同一会员的参与次数限制//////////////
 
             //判断活动开始时间
