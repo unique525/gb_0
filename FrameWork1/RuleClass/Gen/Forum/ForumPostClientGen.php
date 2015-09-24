@@ -22,7 +22,6 @@ class ForumPostClientGen extends BaseClientGen implements IBaseClientGen
             case "list_of_forum_topic":
                 $result = self::GenListOfForumTopic();
                 break;
-
             case "list_of_user":
                 $result = self::GenListOfUser();
                 break;
