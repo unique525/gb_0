@@ -23,6 +23,10 @@ class ForumTopicClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenListOfForum();
                 break;
 
+            case "list_of_user":
+                $result = self::GenListOfUser();
+                break;
+
             case "create":
                 $result = self::GenCreate();
                 break;
@@ -67,6 +71,47 @@ class ForumTopicClientGen extends BaseClientGen implements IBaseClientGen
         return '{"result_code":"' . $resultCode . '","forum_topic":{"forum_topic_list":' . $result . '}}';
     }
 
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenListOfUser()
+    {
+
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+
+            if ($userId > 0) {
+                $pageSize = intval(Control::GetRequest("ps", 20));
+                $pageIndex = intval(Control::GetRequest("p", 1));
+
+                $pageBegin = ($pageIndex - 1) * $pageSize;
+                $forumTopicClientData = new ForumTopicClientData();
+                $arrList = $forumTopicClientData->GetListOfUser(
+                    $userId,
+                    $pageBegin,
+                    $pageSize
+                );
+                if (count($arrList) > 0) {
+                    $resultCode = 1;
+                    $result = Format::FixJsonEncode($arrList);
+                } else {
+                    $resultCode = -2;
+                }
+            } else {
+                $resultCode = -1;
+            }
+
+
+        }
+
+        return '{"result_code":"' . $resultCode . '","forum_topic":{"forum_topic_list":' . $result . '}}';
+    }
 
     private function GenCreate()
     {

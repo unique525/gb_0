@@ -91,33 +91,27 @@
     <table width="100%" class="grid" cellpadding="0" cellspacing="0" id="left_tree">
         <tr class="grid_title" id="btn_hide_show">
             <td class="spe_line btn_hide" idvalue="lottery_award_user_id" style="width:40px;text-align:center"><!--ID--></td>
-            <td class="spe_line btn_hide" idvalue="user_id" style="width:180px;text-align:center;">用户ID</td>
+            <td class="spe_line btn_hide" idvalue="user_id" style="width:180px;text-align:center;">ID</td>
+            <td class="spe_line btn_hide" idvalue="user_name" style="width:180px;text-align:center;">帐号</td>
             <td class="spe_line btn_hide" idvalue="real_name" style="width:180px;text-align:center;">真实姓名</td>
             <td class="spe_line btn_hide" idvalue="user_email" style="width:180px;text-align:center;">邮箱</td>
             <td class="spe_line btn_hide" idvalue="user_mobile" style="width:180px;text-align:center;">手机号码</td>
-            <td class="spe_line btn_hide" idvalue="id_card" style="width:180px;text-align:center;">证件号码</td>
+            <td class="spe_line btn_hide" idvalue="id_card" style="text-align:center;">证件号码</td>
             <td class="spe_line btn_hide" idvalue="create_date" style="width:180px;text-align:center;">获奖时间</td>
             <td class="spe_line"></td>
-            <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
-            <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
         </tr>
         <icms id="lottery_award_user_list" type="list">
             <item><![CDATA[
                 <tr class="grid_item" id="{f_LotteryAwardUserId}" style="height:29px">
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="lottery_award_user_id"></span></td>
                     <td class="spe_line" style="width:180px;text-align:center;"><span class="hide_show" idvalue="user_id">{f_UserId}</span></td>
+                    <td class="spe_line" style="width:180px;text-align:center;"><span class="hide_show" idvalue="user_name">{f_UserName}</span></td>
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="real_name">{f_RealName}</span></td>
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="user_email">{f_UserEmail}</span></td>
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="user_mobile">{f_UserMobile}</span></td>
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="id_card">{f_IdCard}</span></td>
                     <td class="spe_line" style="text-align:center"><span class="hide_show" idvalue="create_date">{f_CreateDate}</span></td>
                     <td class="spe_line"></td>
-                    <!--<td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_LotteryAwardUserId}" class="span_state" idvalue="{f_LotteryAwardUserId}">{f_State}</span></td>
-                    <td class="spe_line2" style="width:80px;text-align:center;">
-                        <img class="img_open" idvalue="{f_LotteryAwardUserId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <img class="img_close" idvalue="{f_LotteryAwardUserId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/>
-                       </td>-->
                 </tr>
                 ]]>
             </item>

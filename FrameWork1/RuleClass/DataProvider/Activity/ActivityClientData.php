@@ -93,13 +93,13 @@ class ActivityClientData extends BaseClientData {
 
     /**
      * 取得分页显示的会员参加的活动列表
-     * @param int $channelId 频道id
+     * @param int $userId 会员id
      * @param int $pageBegin 记录开始位置
      * @param int $pageSize 显示数量
      * @return array 分页显示的列表
      */
     public function GetListOfUser(
-        $channelId,
+        $userId,
         $pageBegin,
         $pageSize
     ) {
@@ -154,13 +154,13 @@ class ActivityClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON a.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 ON a.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId=:ChannelId AND dn.State<100
-                    AND dn.ShowInClient=1 " . $timeConditionSql . "
-                ORDER BY dn.Sort DESC, dn.ActivityId DESC
+                WHERE au.UserId=:UserId AND a.State<100
+                    AND a.ShowInClient=1
+                ORDER BY a.Sort DESC, a.ActivityId DESC
                 LIMIT " . $pageBegin . "," . $pageSize . "";
 
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ChannelId", $channelId);
+        $dataProperty->AddField("UserId", $userId);
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 

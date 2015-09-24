@@ -1,11 +1,13 @@
 <?php
+
 /**
  * 客户端 评论 生成类
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Comment
  * @author zhangchi
  */
-class CommentClientGen extends BaseClientGen{
+class CommentClientGen extends BaseClientGen
+{
     /**
      * 引导方法
      * @return string 返回执行结果
@@ -151,7 +153,7 @@ class CommentClientGen extends BaseClientGen{
 
                 $result = Format::FixJsonEncode($arrOne);
 
-                
+
                 switch ($tableType) {
                     case CommentData::COMMENT_TABLE_TYPE_OF_USER_ALBUM: //相册
 
@@ -204,22 +206,22 @@ class CommentClientGen extends BaseClientGen{
 
             $commentClientData = new CommentClientData();
 
-                $pageBegin = ($pageIndex - 1) * $pageSize;
+            $pageBegin = ($pageIndex - 1) * $pageSize;
 
-                $arrList = $commentClientData->GetList(
-                    $tableId,
-                    $tableType,
-                    $commentType,
-                    $pageBegin,
-                    $pageSize);
-                if (count($arrList) > 0) {
-                    $resultCode = 1;
-                    $result = Format::FixJsonEncode($arrList);
+            $arrList = $commentClientData->GetList(
+                $tableId,
+                $tableType,
+                $commentType,
+                $pageBegin,
+                $pageSize);
+            if (count($arrList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrList);
 
 
-                } else {
-                    $resultCode = -1;
-                }
+            } else {
+                $resultCode = -1;
+            }
 
         } else {
             $resultCode = -6; //参数错误
@@ -231,9 +233,12 @@ class CommentClientGen extends BaseClientGen{
     private function GenListOfUser()
     {
         $result = "[{}]";
-        $userId = intval(Control::PostOrGetRequest("user_id", 0));
+        $userId = parent::GetUserId();
 
-        if ($userId > 0) {
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+
             $pageSize = Control::PostOrGetRequest("ps", 5);
             $pageIndex = Control::PostOrGetRequest("p", 1);
             if ($pageIndex === 0) {
@@ -257,9 +262,9 @@ class CommentClientGen extends BaseClientGen{
                 $resultCode = -1;
             }
 
-        } else {
-            $resultCode = -6; //参数错误
+
         }
+
 
         return '{"result_code":"' . $resultCode . '","comment":{"comment_list":' . $result . '}}';
     }
