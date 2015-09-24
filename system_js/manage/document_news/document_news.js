@@ -321,8 +321,9 @@ $(function() {
         var manageRemark = $("#manage_remark_"+ documentNewsId);
 
         if(manageRemark.val() == ""){
-            $("#dialog_box").dialog({width: 300, height: 100});
-            $("#dialog_content").html("请正确填写信息");
+            alert("请填写备注信息");
+            //$("#dialog_box").dialog({width: 300, height: 100});
+            //$("#dialog_content").html("请正确填写信息");
         }else{
             $.post("/default.php?secu=manage&mod=document_news&m=async_modify_manage_remark&document_news_id="+documentNewsId + "&manage_remark="+manageRemark.val()+"", {
                 resultbox: $(this).html()

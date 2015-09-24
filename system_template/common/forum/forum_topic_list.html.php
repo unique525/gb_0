@@ -8,15 +8,16 @@
     <script type="text/javascript">
         $("document").ready(function () {
             var siteId = Request["site_id"];
+            var forumId = Request["forum_id"];
 
             var btnEdit = $(".btn_edit");
             btnEdit.css("cursor", "pointer");
             btnEdit.click(function (event) {
-                var siteAdId = $(this).attr('idvalue');
+                var forumTopicId =  $(this).attr('idvalue');
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=modify&site_ad_id=' + siteAdId + '&site_id=' + siteId + '&site_name=' + siteName;
-                parent.G_TabTitle = siteName + '-编辑帖子';
-                parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=forum_topic&m=modify&forum_id='+forumId+'&site_id='+siteId+'&forum_topic_id='+forumTopicId;
+                //parent.G_TabTitle = '-编辑帖子';
+                //parent.addTab();
             });
 
         });

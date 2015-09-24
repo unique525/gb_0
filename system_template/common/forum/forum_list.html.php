@@ -20,8 +20,10 @@
             <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
             <td style="width: 40px; text-align: center;">编辑</td>
             <td style="width: 90px; text-align: center;">状态</td>
-            <td style="width: 40px;"></td>
+            <td style="width: 30px;"></td>
             <td>名称</td>
+            <td style="width: 70px; text-align: center;">帖子管理</td>
+            <td style="width: 45px; text-align: center;"></td>
             <td style="width: 50px; text-align: center;">排序</td>
             <td style="width: 120px;">版主</td>
         </tr>
@@ -47,6 +49,7 @@
                                         idvalue="{f_ForumId}" alt="编辑"/></a></td>
                             <td class="spe_line2" style="width:90px;text-align:center;"><span
                                     id="span_state_{f_ForumId}" class="span_state">{f_State}</span></td>
+
                             <td class="spe_line2" style="width:40px;text-align:left;">
                                 <img class="img_modify_state system_image" style="cursor: pointer"
                                      src="/system_template/{template_name}/images/manage/change_state.gif"
@@ -93,6 +96,7 @@
                                         style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a>
                                 <a href="/default.php?secu=manage&mod=forum&m=create&parent_id={f_ForumId}&forum_rank=1&site_id={SiteId}">[新增子版块]</a>
                             </td>
+
                             <td class="spe_line2" style="width:36px;">
                                 <img class="img_up system_image" style="cursor: pointer"
                                      src="/system_template/{template_name}/images/manage/arr_up.gif"
@@ -141,6 +145,9 @@
                                 </div>
                             </td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=forum_topic&a=list&forum_id={f_ForumId}"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
+                            <td class="spe_line2" style="width:90px;text-align:center;"><span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
+                                <a href="/default.php?secu=manage&mod=forum_topic&a=list&forum_id={f_ForumId}&site_id={SiteId}">查看</a>
+                            </span></td>
                             <td class="spe_line2" style="width:36px;"><img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" /></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:120px;text-align:left;" title="">{f_Moderator}</td>
@@ -180,6 +187,9 @@
                                 </div>
                             </td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=forum&a=list&forum_id={f_ForumId}"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
+                            <td class="spe_line2" style="width:90px;text-align:center;"><span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
+                                <a href="/default.php?secu=manage&mod=forum_topic&m=list&forum_id={f_ForumId}&site_id={SiteId}">查看</a>
+                            </span></td>
                             <td class="spe_line2" style="width:36px;"><img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" /></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
                             <td class="spe_line2" style="width:120px;text-align:left;" title="">{f_Moderator}</td>

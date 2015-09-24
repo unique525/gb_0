@@ -152,7 +152,7 @@ class UserAlbumPublicGen extends BasePublicGen implements IBasePublicGen{
                 $pagerTemplate = parent::GetDynamicTemplateContent(
                     $pagerTemp, $siteId);
                 $isJs = FALSE;
-                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize&order=$order&user_group_id=$userGroupId";
+                $navUrl = "default.php?mod=user_album&a=list&site_id=$siteId&p={0}&ps=$pageSize&order=$order&user_group_id=$userGroupId&search_key=$searchKey";
                 $jsFunctionName = "";
                 $jsParamList = "";
                 $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);

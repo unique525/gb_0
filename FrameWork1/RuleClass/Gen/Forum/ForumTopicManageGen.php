@@ -14,7 +14,7 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
      */
     public function Gen() {
         $result = "";
-        $method = Control::GetRequest("a", "");
+        $method = Control::GetRequest("m", "");
         switch ($method) {
             case "list":
                 $result = self::GenList();
@@ -33,12 +33,11 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
     private function GenList(){
 
         $siteId = Control::GetRequest("site_id", 0);
-        $forumId = Control::GetRequest("forumId", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
         $siteName = Control::GetRequest("site_name", "");
         $resultJavaScript="";
         $tempContent = Template::Load("forum/forum_topic_list.html","common");
         $forumTopicManageData = new ForumTopicManageData();
-
         if(intval($siteId)>0){
             $pageSize = Control::GetRequest("ps", 20);
             $pageIndex = Control::GetRequest("p", 1);
@@ -90,6 +89,45 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
     }
     private function GenModify(){
         $result = -1;
+        $forumId = Control::GetRequest("forum_id", 0);
+        if ($forumId <= 0) {
+            die("");
+        }
+
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        if ($forumTopicId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+
+        $tempContent = Template::Load("forum/forum_topic_deal.html","common");
+        //echo $tempContent;
+        $forumTopicManageData = new ForumTopicManageData();
+        $arrOne = $forumTopicManageData->GetOne($forumTopicId);
+
+        Template::ReplaceOne($tempContent, $arrOne, false, false);
+
+        $tempContent = str_ireplace("{f_ForumTopicTitle}", $arrOne["ForumTopicTitle"], $tempContent);
+        $tempContent = str_ireplace("{f_ForumPostContent}", $arrOne["ForumPostContent"], $tempContent);
+        if (!empty($_POST)) {
+            $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
+            $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
+
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            //内容中不允许脚本等
+            $forumPostContent = Format::RemoveScript($forumPostContent);
+            $result = $forumTopicManageData->Modify($forumTopicId,$forumTopicTitle);
+            if($result > 0){
+                $forumPostManageData = new ForumPostManageData();
+                $result = $forumPostManageData->Modify($forumTopicId,$forumPostContent);
+                if($result > 0 && $isTopic=1){
+                    Control::GoUrl("/default.php?secu=manage&mod=forum_topic&a=list&forum_id=".$forumId."&site_id=".$siteId);
+                }
+            }
+        }
+
+        parent::ReplaceEnd($tempContent);
+        $result = $tempContent;
         return $result;
     }
 

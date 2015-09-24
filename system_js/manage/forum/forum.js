@@ -88,6 +88,12 @@ $(function() {
             $(this).addClass('grid_item_selected');
         }
     });
+
+    //查看帖子列表
+    $('.btn_topic_list').click(function() {
+        var siteId = parent.G_NowSiteId;
+
+    });
 });
 
 /**
