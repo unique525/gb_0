@@ -169,6 +169,18 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         if($newspaperArticleId>0){
             $siteId = parent::GetSiteIdByDomain();
 
+
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+            $state = $newspaperArticlePublicData->GetState($newspaperArticleId, false);
+            if($state == 100){
+
+                header("HTTP/1.1 404 Not Found");
+                header("Status: 404 Not Found");
+                exit;
+
+            }
+
+
             $defaultTemp = "newspaper_article_detail";
             $templateContent = parent::GetDynamicTemplateContent(
                 $defaultTemp,
