@@ -206,6 +206,32 @@ class NewspaperArticlePublicData extends BasePublicData
     }
 
     /**
+     * 取得state
+     * @param int $newspaperArticleId 文章id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string state
+     */
+    public function GetState($newspaperArticleId, $withCache){
+
+        $result = "";
+        if ($newspaperArticleId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_state.cache_' . $newspaperArticleId . '';
+            $sql = "SELECT State FROM " . self::TableName_NewspaperArticle . "
+
+                    WHERE NewspaperArticleId=:NewspaperArticleId
+                     ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+
+
+    }
+
+    /**
      * 取得文章的频道id
      * @param int $newspaperArticleId 文章id
      * @param bool $withCache 是否从缓冲中取
@@ -235,6 +261,7 @@ class NewspaperArticlePublicData extends BasePublicData
 
 
     }
+
 
     /**
      * 取得电子报文章列表
