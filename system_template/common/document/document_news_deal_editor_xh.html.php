@@ -460,11 +460,17 @@ function setSourceName(sourceName) {
 
 function submitForm(closeTab) {
     SetDocumentNewsPic();
-
+    var showDate=$("#f_ShowDate").val();
+    var showHour=$("#f_ShowHour").val();
+    var showMinute=$("#f_ShowMinute").val();
+    var showSecond=$("#f_ShowSecond").val();
     if ($('#f_DocumentNewsTitle').val() == '') {
         $("#dialog_box").dialog({width: 300, height: 100});
         $("#dialog_content").html("请输入文档标题");
-    } else {
+    }else if(showDate==''||showHour==''||showMinute==''||showSecond==''){
+        $("#dialog_box").dialog({width: 300, height: 100});
+        $("#dialog_content").html("在其他属性选项卡中的显示时间的日期及时分秒任意一个值不能为空，可以填为0");
+    }else {
         if (closeTab == 1) {
             $("#CloseTab").val("1");
         }else if(closeTab == 2){
@@ -472,6 +478,8 @@ function submitForm(closeTab) {
         }else {
             $("#CloseTab").val("0");
         }
+        var fullDate=showDate+" "+showHour+":"+showMinute+":"+showSecond;
+        $("#f_ShowFullDate").val(fullDate);
 
         $("#mainForm").attr("action", "/default.php?secu=manage" +
             "&mod=document_news&m={method}" +
@@ -986,6 +994,7 @@ function DocumentNewsTagPulling(){
                 <input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ShowSecond"
                        name="f_ShowSecond" value="{ShowSecond}" maxlength="2"/><label for="f_ShowSecond">
                     (在文档中显示出来的时间，可任意设置)</label>
+                <input type="hidden" class="input_number" style="display:none" id="f_ShowFullDate" name="f_ShowFullDate" />
             </td>
         </tr>
         <tr>

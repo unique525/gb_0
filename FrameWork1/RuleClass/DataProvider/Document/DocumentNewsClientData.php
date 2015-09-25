@@ -146,7 +146,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.ChannelId=:ChannelId AND dn.State=30 AND dn.ShowInClient=1 " . $searchSql . "
-            ORDER BY dn.ShowInClientIndex DESC, dn.ShowDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY dn.ShowInClientIndex DESC, dn.ShowFullDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -294,7 +294,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.ChannelId IN ($channelIds) AND dn.State=30 AND dn.ShowInClient=1 " . $searchSql . "
-            ORDER BY dn.ShowInClientIndex DESC, dn.ShowDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY dn.ShowInClientIndex DESC, dn.ShowFullDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
