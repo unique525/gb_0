@@ -42,8 +42,8 @@ class VisitPublicData extends BasePublicData {
         $dataProperty->AddField("RefDomain", $refDomain);
         $dataProperty->AddField("RefUrl", $refUrl);
         $dataProperty->AddField("FlagCookie", $flagCookie);
-        $insertId = $this->dbOperator->LastInsertId($sql, $dataProperty);
-        return $insertId;
+        //$insertId = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        return 1;//$insertId;
     }
 
 }

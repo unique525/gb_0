@@ -1044,6 +1044,12 @@ class BaseManageGen extends BaseGen
     )
     {
         if ($voteId > 0) {
+            //投票选项链接的table type
+            $sbVoteItemTableType = Template::GetParamValue($tagContent, "table_type");
+
+            //投票选项的top count
+            $topCountOfSelectItem = Template::GetParamValue($tagContent, "child_top_count");
+
             //投票模板加载类型 auto 则加载定义好的几种模板之一
             $tempType = Template::GetParamValue($tagContent, "temp_type");
             //如果配置为加载默认投票模板
@@ -1107,13 +1113,27 @@ class BaseManageGen extends BaseGen
                     //echo $sbVoteItemId;
                     //二级
                     $voteSelectItemManageData = new VoteSelectItemManageData();
-                    $tagTopCountOfSelectItem=null;
-                    $arrVoteSelectItemList = $voteSelectItemManageData->GetList(
-                        $sbVoteItemId,
-                        $state,
-                        $tagOrder,
-                        $tagTopCountOfSelectItem
-                    );
+                    $tagTopCountOfSelectItem=$topCountOfSelectItem;
+
+                    //链接table id的字段
+                    switch($sbVoteItemTableType){
+                        case 1: //document news
+                            $arrVoteSelectItemList = $voteSelectItemManageData->GetListWithDocumentNews(
+                                $sbVoteItemId,
+                                $state,
+                                $tagOrder,
+                                $tagTopCountOfSelectItem
+                            );
+                            break;
+                        default; //默认无链接
+                            $arrVoteSelectItemList = $voteSelectItemManageData->GetList(
+                                $sbVoteItemId,
+                                $state,
+                                $tagOrder,
+                                $tagTopCountOfSelectItem
+                            );
+                            break;
+                    }
                 }
             }
 
@@ -1128,6 +1148,17 @@ class BaseManageGen extends BaseGen
                     $tableIdName,
                     $parentIdName
                 );
+                //生成投票专用js
+                $debug=new DebugLogManageData();
+                $debug->Create($templateContent);
+                $isAddJs=strpos($templateContent,'{VotePretempJs'.$voteId.'}');
+                if($isAddJs){
+                    $pretempJsContent = Template::Load('vote/vote_front_js_pretemp.html', 'default', 'front_template');
+                    $pretempJsContent = str_ireplace('{VoteId}', $voteId, $pretempJsContent);
+                    $templateContent = str_ireplace('{VotePretempJs'.$voteId.'}', $pretempJsContent, $templateContent);
+                }
+
+
                 //把对应ID的CMS标记替换成指定内容
                 //替换子循环里的<![CDATA[标记
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);
@@ -1621,8 +1652,8 @@ class BaseManageGen extends BaseGen
                                     }
                                 }
                             }
+                            break;  //详细页不循环发布
                         }
-
 
                         $nowChannelId = $channelManageData->GetParentChannelId($nowChannelId, false);
                         $rank--;

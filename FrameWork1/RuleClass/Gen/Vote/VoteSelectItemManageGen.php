@@ -33,6 +33,12 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
             case "add_count_ratio":
                 $result = self::GenAddCountWithRatio();
                 break;
+            case "pre_check_creating_from_channel":
+                $result = self::PreCheckCreatingFromChannel();
+                break;
+            case "create_from_channel":
+                $result = self::GenCreateFromChannel();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -54,7 +60,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
             parent::ReplaceFirst($tempContent);
             $tempContent = str_ireplace("{voteItemId}", strval($voteItemId), $tempContent);
             $tempContent = str_ireplace("{pageIndex}", strval($pageIndex), $tempContent);
-            $voteSelectItemManageData = new VoteselectItemManageData();
+            $voteSelectItemManageData = new VoteSelectItemManageData();
             parent::ReplaceWhenCreate($tempContent, $voteSelectItemManageData->GetFields());
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -262,7 +268,7 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
         $voteItemId = Control::GetRequest("vote_item_id", 0);
         $tagId = "vote_select_item_list";
         $voteSelectItemManageData = new VoteSelectItemManageData();
-        $arrList = $voteSelectItemManageData->GetSelect($voteItemId, 0);
+        $arrList = $voteSelectItemManageData->GetListForAddCount($voteItemId, 0);
         if (!empty($_POST)) {
             //逐个update
             for ($i = 1; $i <= count($arrList); $i++) {
@@ -302,6 +308,93 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = str_ireplace("{VoteId}", strval($voteId), $tempContent);
         $tempContent = str_ireplace("{VoteItemId}", strval($voteItemId), $tempContent);
         parent::ReplaceEnd($tempContent);
+        return $tempContent;
+    }
+
+
+    public function PreCheckCreatingFromChannel(){
+        $result=array();
+        $channelId=Control::GetRequest("channel_id",0);
+        $itemCount=Control::GetRequest("item_count",0);
+        $state=Control::GetRequest("state",30);
+        if($channelId>0&&$itemCount>0){
+            $channelManageData=new ChannelManageData();
+            $siteManageData=new SiteManageData();
+            $siteId=$channelManageData->GetSiteId($channelId,true);
+            $siteUrl=$siteManageData->GetSiteUrl($siteId,true);
+            $channelType=$channelManageData->GetChannelType($channelId,true);
+            $result["ChannelType"]=$channelType;
+            switch($channelType){
+                case 1:
+                    $documentNewsManageData=new DocumentNewsManageData();
+                    $arrDocumentNews=$documentNewsManageData->GetListForVoteSelectItem($channelId,$itemCount,$state);
+                    for($i=0;$i<count($arrDocumentNews);++$i){
+                        $strPublishDate=str_ireplace('-','',substr($arrDocumentNews[$i]["PublishDate"],0,10));
+                        $arrDocumentNews[$i]["DocumentNewsUrl"]=$siteUrl.'/h/'.$channelId.'/'.$strPublishDate.'/'.$arrDocumentNews[$i]["DocumentNewsId"].'.html';
+                    }
+                    if(count($arrDocumentNews)>0){
+                        $result["list"]=$arrDocumentNews;
+                    }
+                    break;
+                default:
+                    $result["ChannelType"]=-100;//节点类型错误
+                    break;
+            }
+        }
+
+        return Control::GetRequest("jsonpcallback", "") . '(' . json_encode($result) . ')';
+    }
+
+
+    public function GenCreateFromChannel(){
+        $result=-1;
+        $resultJavaScript="";
+        $tempContent = Template::Load("vote/vote_select_item_create_from_channel.html", "common");
+        $voteItemId=Control::GetRequest("vote_item_id",0);
+        if($voteItemId>0){
+
+            if(!empty($_POST)){
+                $channelId=Control::PostRequest("ChannelId",0);
+                //$itemCount=Control::PostRequest("ItemCount",0);
+                $channelType=Control::PostRequest("ChannelType",0);
+                $error="";
+                if($channelId>0&&$channelType>0){
+                    $json=$_POST["JSONArray"];
+                    $json=str_ireplace('\\','',$json);
+                    $jsonArray=json_decode($json);
+                    if(count($jsonArray)>0){
+                        $voteSelectItemManageData=new VoteSelectItemManageData;
+                        foreach($jsonArray as $itemOne){
+
+                            $new=$voteSelectItemManageData->Create($itemOne);
+                            if($new<0){
+                                $error.=$itemOne->f_VoteSelectItemTitle."<br />";
+                            }
+                            if($error==""){
+                                $result=1;
+                            }else{
+                                $result=-1;
+                                $error='以下内容导入失败:<br />'.$error;
+                            }
+                        }
+                    }
+                }
+                if ($result > 0) {
+                    //javascript 处理
+                    $resultJavaScript = Control::GetJqueryMessage(Language::Load('vote', 1));
+                    $jsCode = 'parent.location.href=parent.location.href';
+                    Control::RunJavascript($jsCode);
+                    $tempContent="";
+                } else {
+                    Control::ShowMessage(Language::Load('vote', 2));
+                }
+            }
+            $tempContent = str_ireplace("{VoteItemId}", strval($voteItemId), $tempContent);
+        }else{
+            $tempContent="投票主题错误";
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
 

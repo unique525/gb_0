@@ -62,7 +62,7 @@ class DbOperator {
     private $debugExecuteTime = 0;
 
 
-    private $openLog = true;
+    private $openLog = false;
 
     /**
      * 初始化数据库连接
@@ -165,7 +165,16 @@ class DbOperator {
         }
 
         if($this->openLog){
-            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+            $logSql = str_ireplace("\n",'',$sql);
+            $logSql = str_ireplace("\r",'',$logSql);
+
+            $param = '';
+            //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                //$param = implode(',',$dataProperty->ArrayField);
+            //}
+
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
         }
         return $result;
     }
@@ -192,12 +201,20 @@ class DbOperator {
 
         $timeEnd = Control::GetMicroTime();
         if($this->debugExecuteTime>0){
-            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+            echo "TIME:".($timeEnd - $timeStart)." [".str_ireplace("\n",'',$sql)."]<br />";
         }
 
         if($this->openLog){
-            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
-        }
+            $logSql = str_ireplace("\n",'',$sql);
+            $logSql = str_ireplace("\r",'',$logSql);
+
+            $param = '';
+            //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                //$param = implode(',',$dataProperty->ArrayField);
+            //}
+
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");}
         return $result;
     }
 
@@ -219,10 +236,18 @@ class DbOperator {
         $stmt = null;
         $timeEnd = Control::GetMicroTime();
         if($this->debugExecuteTime>0){
-            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+            echo "TIME:".($timeEnd - $timeStart)." [".str_ireplace("\n",'',$sql)."]<br />";
         }
         if($this->openLog){
-            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+            $logSql = str_ireplace("\n",'',$sql);
+            $logSql = str_ireplace("\r",'',$logSql);
+            $param = '';
+            //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                //$param = implode(',',$dataProperty->ArrayField);
+            //}
+
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
         }
 
         return $result;
@@ -247,10 +272,19 @@ class DbOperator {
 
         $timeEnd = Control::GetMicroTime();
         if($this->debugExecuteTime>0){
-            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+            echo "TIME:".($timeEnd - $timeStart)." [".str_ireplace("\n",'',$sql)."]<br />";
         }
         if($this->openLog){
-            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+            $logSql = str_ireplace("\n",'',$sql);
+            $logSql = str_ireplace("\r",'',$logSql);
+
+            $param = '';
+            //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                //$param = implode(',',$dataProperty->ArrayField);
+            //}
+
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
         }
         return $lob;
     }
@@ -273,10 +307,19 @@ class DbOperator {
         $stmt = null;
         $timeEnd = Control::GetMicroTime();
         if($this->debugExecuteTime>0){
-            echo "TIME:".($timeEnd - $timeStart)." [".$sql."]<br />";
+            echo "TIME:".($timeEnd - $timeStart)." [".str_ireplace("\n",'',$sql)."]<br />";
         }
         if($this->openLog){
-            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sql."]\n");
+            $logSql = str_ireplace("\n",'',$sql);
+            $logSql = str_ireplace("\r",'',$logSql);
+
+            $param = '';
+            //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                //$param = implode(',',$dataProperty->ArrayField);
+            //}
+
+            FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
         }
         return $result;
     }
@@ -288,7 +331,7 @@ class DbOperator {
      * @return int 批量执行结果
      */
     public function ExecuteBatch($sqlList, $arrDataProperty) {
-        $timeStart = Control::GetMicroTime();
+
         try {
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE,  PDO::ERRMODE_EXCEPTION);//开启异常处理
 
@@ -299,6 +342,7 @@ class DbOperator {
                 $sql = $sqlList[$i];
 
                 if (strlen($sql) > 0) {
+                    $timeStart = Control::GetMicroTime();
                     $stmt = $this->pdo->prepare($sql);
                     $dataProperty = $arrDataProperty[$i];
                     if ($dataProperty != null) {
@@ -308,19 +352,31 @@ class DbOperator {
                     if(intval($result)<=0){
                         throw new PDOException("affected_rows<=0");//抛出异常
                     }
+
+                    $timeEnd = Control::GetMicroTime();
+                    if($this->debugExecuteTime>0){
+                        echo "TIME:".($timeEnd - $timeStart)." [".implode("|",str_ireplace("\n",'',$sqlList))."]<br />";
+                    }
+                    if($this->openLog){
+                        $logSql = str_ireplace("\n",'',$sqlList);
+                        $logSql = str_ireplace("\r",'',$logSql);
+
+                        $param = '';
+                        //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                            //$param = implode(',',$dataProperty->ArrayField);
+                        //}
+
+                        FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                            " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
+                    }
                 }
             }
 
             $this->pdo->commit();
             $stmt = null;
 
-            $timeEnd = Control::GetMicroTime();
-            if($this->debugExecuteTime>0){
-                echo "TIME:".($timeEnd - $timeStart)." [".implode("|",$sqlList)."]<br />";
-            }
-            if($this->openLog){
-                FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart)." [".$sqlList."]\n");
-            }
+
+
             return $result;
         } catch (PDOException $e) {
             $this->pdo->rollBack();

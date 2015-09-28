@@ -72,16 +72,15 @@
 
             //格式化站点状态
             $(".span_state").each(function(){
-                $(this).html(formatState($(this).text()));
+                $(this).html(formatState(parseInt($(this).text())));
             });
-
-            //开启站点
+            //开启
             $(".img_open").click(function(){
                 var newspaperArticleId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
                 modifyState(newspaperArticleId, state);
             });
-            //停用站点
+            //停用
             $(".img_close").click(function(){
                 var newspaperArticleId = parseInt($(this).attr("idvalue"));
                 var state = 100; //开启状态
@@ -127,11 +126,12 @@
          * @return {string}
          */
         function formatState(state){
+
             switch (state){
-                case "0":
+                case 0:
                     return "启用";
                     break;
-                case "100":
+                case 100:
                     return "<"+"span style='color:#990000'>停用<"+"/span>";
                     break;
                 default :

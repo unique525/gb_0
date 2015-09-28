@@ -51,17 +51,17 @@ $(function() {
 
 
     //维持比例加票数
-    var btnAddCountRatio = $(".btn_add_count_ratio");
+    var btnAddCountRatio = $("#btn_add_count_ratio");
     btnAddCountRatio.css("cursor", "pointer");
     btnAddCountRatio.click(function(event) {
         event.preventDefault();
-        var voteItemId = $(this).attr('idvalue');
+        var voteItemId = Request["vote_item_id"];
         var pageIndex = Request["p"]==null?1:Request["p"];
         pageIndex =  parseInt(pageIndex);
         if (pageIndex <= 0) {
             pageIndex = 1;
         }
-        var url='/default.php?secu=manage&mod=vote_item&m=add_count_ratio&vote_item_id=' + voteItemId + '&p=' + pageIndex;
+        var url='/default.php?secu=manage&mod=vote_select_item&m=add_count_ratio&vote_item_id=' + voteItemId + '&p=' + pageIndex;
         $("#dialog_frame").attr("src",url);
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -70,6 +70,27 @@ $(function() {
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'维持比例加票数',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+    });
+
+
+    //从节点导入选项
+
+    var btnGetFromDocumentNews = $("#btn_create_from_channel");
+    btnGetFromDocumentNews.css("cursor", "pointer");
+    btnGetFromDocumentNews.click(function(event) {
+        event.preventDefault();
+        var voteItemId = Request["vote_item_id"];
+        var url='/default.php?secu=manage&mod=vote_select_item&m=create_from_channel&vote_item_id=' + voteItemId;
+        $("#dialog_frame").attr("src",url);
+        $("#dialog_resultbox").dialog({
+            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:360,
+            width:800,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'从节点导入选项',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });

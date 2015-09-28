@@ -17,6 +17,7 @@
         <td id="td_main_btn">
             <input id="btn_create" class="btn2" value="新增题目选项" title="新增题目选项" type="button"/>
             <input id="btn_add_count_ratio" class="btn2" value="维持比例加票" title="维持比例加票" type="button"/>
+            <input id="btn_create_from_channel" class="btn2" value="从节点导入" title="从节点导入" type="button"/>
         </td>
     </tr>
 </table>

@@ -126,7 +126,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
             if (!$can) {
                 $result = -10;
             } else {
-                $result = $newspaperPageManageData->ModifyState($newspaperArticleId, $state);
+                $result = $newspaperArticleManageData->ModifyState($newspaperArticleId, $state);
                 //加入操作日志
                 $operateContent = 'Modify State Newspaper Article,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);
@@ -262,6 +262,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
         $channelId = Control::GetRequest("channel_id", 0);
         $toSiteId = Control::GetRequest("to_site_id", 0); //跨站点，站点id
         $docIdString = $_GET["doc_id_string"]; //GetRequest中的过滤会消去逗号
+        $showInClient = Control::GetRequest("show_in_client", 1);
         $manageUserId = Control::GetManageUserID();
         $manageUserName = Control::GetManageUserName();
         $tableType=350; //NewspaperArticle
@@ -286,7 +287,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                     $toTableType=15; //DocumentNews
                                     foreach($arrayOfNewspaperList as $oneNewspaperForCopy){
                                         $newId = $documentNewsManageData->CopyFromNewsPaperArticle(
-                                            $targetSiteId,$targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName);
+                                            $targetSiteId,$targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName, $showInClient);
 
                                         //加入操作日志
                                         $operateContent = 'copy Newspaper Article,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $newId;

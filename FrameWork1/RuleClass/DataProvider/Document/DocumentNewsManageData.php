@@ -1630,9 +1630,11 @@ class DocumentNewsManageData extends BaseManageData
                  " . $selectTag . $selectRange . $recLevelSelection . "
 
 
-
                 ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
+
+            $debug = new DebugLogManageData();
+            $debug->Create($sql);
 
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

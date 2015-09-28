@@ -196,7 +196,8 @@ class NewspaperArticleManageData extends BaseManageData {
             }
         }
         if($type == 0){
-            $sql = "SELECT na.*,np.* FROM " . self::TableName_NewspaperArticle . " na,
+            $sql = "SELECT na.*,np.NewspaperPageNo,np.NewspaperPageName,np.NewspaperPageId
+                        FROM " . self::TableName_NewspaperArticle . " na,
                                   " . self::TableName_NewspaperPage." np
                         WHERE
                             na.NewspaperPageId = np.NewspaperPageId AND
@@ -212,7 +213,8 @@ class NewspaperArticleManageData extends BaseManageData {
 
             $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
         }else{
-            $sql = "SELECT na.*,np.* FROM " . self::TableName_NewspaperArticle . " na,
+            $sql = "SELECT na.*,np.NewspaperPageNo,np.NewspaperPageName,np.NewspaperPageId
+                        FROM " . self::TableName_NewspaperArticle . " na,
                                     " . self::TableName_NewspaperPage." np
                         WHERE
                             na.NewspaperPageId = np.NewspaperPageId AND
