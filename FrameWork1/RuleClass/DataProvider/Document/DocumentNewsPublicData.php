@@ -159,13 +159,23 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param int $orderBy 排序
      * @param int $showIndex 是否推送首页
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回最新的列表数据集
      */
-    public function GetNewList($siteId, $channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
+    public function GetNewList($siteId, $channelId, $topCount, $state, $orderBy = 0, $showIndex=0, $withCache = FALSE) {
 
         $result = null;
 
         if(!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_new_list_". $channelId
+                . "_top".$topCount
+                . "_state".$state
+                . "_show_index".$showIndex
+                . "_order".$orderBy;
+
+
             $dataProperty = new DataProperty();
 
             $orderBySql = 'ORDER BY dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
@@ -281,7 +291,12 @@ class DocumentNewsPublicData extends BasePublicData {
 
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
 
@@ -296,13 +311,23 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param int $orderBy 排序方式
      * @param int $showIndex 是否推送首页
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回资讯列表
      */
-    public function GetListOfChild($channelId, $topCount, $state, $orderBy = 0, $showIndex=0) {
+    public function GetListOfChild($channelId, $topCount, $state, $orderBy = 0, $showIndex=0, $withCache = FALSE) {
 
         $result = null;
 
         if($channelId>0 && !empty($topCount)){
+
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_child_". $channelId
+                . "_top".$topCount
+                . "_state".$state
+                . "_show_index".$showIndex
+                . "_order".$orderBy;
+
 
             $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
 
@@ -414,7 +439,11 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
 
@@ -428,13 +457,21 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param int $orderBy 排序方式
      * @param int $showIndex 是否推荐首页
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回子和孙节点的列表数据集
      */
-    public function GetListOfGrandson($channelId, $topCount, $state, $orderBy,$showIndex=0) {
+    public function GetListOfGrandson($channelId, $topCount, $state, $orderBy, $showIndex=0, $withCache = FALSE) {
 
         $result = null;
 
         if(!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_grandson_". $channelId
+                . "_top".$topCount
+                . "_state".$state
+                . "_show_index".$showIndex
+                . "_order".$orderBy;
 
             $orderBySql = 'ORDER BY  dn.ShowIndex DESC, dn.Sort DESC, dn.CreateDate DESC';
 
@@ -553,7 +590,12 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
         return $result;
@@ -566,13 +608,21 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param string $recLevel 推荐级别
      * @param int $orderBy 排序方式
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回子节点的列表数据集
      */
-    public function GetListOfRecLevelChild($channelId, $topCount, $state, $recLevel="", $orderBy) {
+    public function GetListOfRecLevelChild($channelId, $topCount, $state, $recLevel="", $orderBy, $withCache = FALSE) {
 
         $result = null;
 
         if(!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_rec_level_child_". $channelId
+                . "_top".$topCount
+                . "_state".$state
+                . "_rec_level".$recLevel
+                . "_order".$orderBy;
 
             $orderBySql = 'ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.Sort DESC, dn.CreateDate DESC';
 
@@ -687,7 +737,10 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
         return $result;
@@ -700,13 +753,23 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param string $recLevel 推荐级别
      * @param int $orderBy 排序方式
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回子和孙节点的列表数据集
      */
-    public function GetListOfRecLevelGrandson($channelId, $topCount, $state, $recLevel="" ,$orderBy) {
+    public function GetListOfRecLevelGrandson($channelId, $topCount, $state, $recLevel="" ,$orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
         if(!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_rec_level_grandson_". $channelId
+                . "_top".$topCount
+                . "_state".$state
+                . "_rec_level".$recLevel
+                . "_order".$orderBy;
+
+
             $recLevelSelection=" AND RecLevel Between 1 AND 10 ";
             if($recLevel!=""){
                 $recLevelSelection=" AND RecLevel Between ".$recLevel." ";
@@ -817,7 +880,11 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ParentId", $channelId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
 
         return $result;
@@ -829,13 +896,20 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $recLevel 推荐级别
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0) {
+    public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
         if($channelId>0&&!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_rec_level_belong_channel_". $channelId
+                . "_top".$topCount
+                . "_rec_level".$recLevel
+                . "_order".$orderBy;
 
             $orderBySql = 'ORDER BY dn.CreateDate DESC';
             switch($orderBy){
@@ -938,7 +1012,11 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("RecLevel", $recLevel);
             $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
 
@@ -951,13 +1029,20 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $dayCount 天数
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfDayBelongChannel($channelId, $dayCount ,$topCount, $orderBy = 0) {
+    public function GetListOfDayBelongChannel($channelId, $dayCount ,$topCount, $orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
         if($channelId>0&&!empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_of_day_belong_channel_". $channelId
+                . "_top".$topCount
+                . "_day_count".$dayCount
+                . "_order".$orderBy;
 
             $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
             switch($orderBy){
@@ -1057,14 +1142,20 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId IN (".$channelId.")
+                WHERE
+                dn.SiteId=4
                 AND DATEDIFF(NOW(),ShowDate)<:DayCount AND DATEDIFF(NOW(),ShowDate)>0
                 AND dn.State=:State
                 $orderBySql LIMIT " . $topCount;
+
+            //dn.ChannelId IN (".$channelId.")
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DayCount", $dayCount);
             $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
 
@@ -1081,6 +1172,7 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param string $searchKey 查询关键字
      * @param int $parentId 父频道id
+     * @param bool $withCache 是否使用缓存
      * @return array 分页显示的资讯列表
      */
     public function GetListForPager(
@@ -1090,10 +1182,20 @@ class DocumentNewsPublicData extends BasePublicData {
         &$allCount,
         $state,
         $searchKey = "",
-        $parentId = 0
+        $parentId = 0,
+        $withCache = FALSE
     ) {
         $searchSql = "";
         $dataProperty = new DataProperty();
+
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+        $cacheFile = "document_news_get_list_of_day_belong_channel_". $channelId
+            . "_p".$pageBegin
+            . "_ps".$pageSize
+            . "_state".$state
+            . "_parentId".$parentId;
+
         if ($parentId > 0) {
             $searchSql .= " AND dn.ChannelId IN (SELECT ChannelId
                                                 FROM ".self::TableName_Channel." WHERE ParentId=:ParentId) ";
@@ -1105,6 +1207,9 @@ class DocumentNewsPublicData extends BasePublicData {
             }
         }
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
+
+            $withCache = FALSE;
+
             $searchSql .= " AND (
                     DocumentNewsTitle LIKE :SearchKey1
                 OR ManageUserName LIKE :SearchKey2
@@ -1223,7 +1328,11 @@ class DocumentNewsPublicData extends BasePublicData {
 
 
         $dataProperty->AddField("State", $state);
-        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+
+        //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
 
         $sql = "SELECT count(*) FROM " . self::TableName_DocumentNews . " WHERE State=:State " . $searchSql;
@@ -1241,6 +1350,7 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param int $state 状态
      * @param string $searchKey 查询关键字
      * @param int $parentId 父频道id
+     * @param bool $withCache 是否使用缓存
      * @return array 分页显示的资讯列表
      */
     public function GetListForInterface(
@@ -1250,7 +1360,8 @@ class DocumentNewsPublicData extends BasePublicData {
         &$allCount,
         $state,
         $searchKey = "",
-        $parentId = 0
+        $parentId = 0,
+        $withCache = FALSE
     ) {
         $searchSql = "";
         $dataProperty = new DataProperty();

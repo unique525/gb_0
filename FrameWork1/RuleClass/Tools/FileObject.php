@@ -81,9 +81,10 @@ class FileObject
      * 写入文件
      * @param string $filePath 文件路径
      * @param mixed $fileContent 要写入文件的数据。可以是字符串、数组或数据流。
+     * @param int $mode 模式 FILE_APPEND等
      * @return int 写入结果
      */
-    public static function Write($filePath, $fileContent)
+    public static function Write($filePath, $fileContent, $mode = null)
     {
         $filePath = PHYSICAL_PATH . '/' . $filePath; //加上系统路径
         $filePath = str_ireplace('/',DIRECTORY_SEPARATOR,$filePath); //适应windows平台和unix平台
@@ -96,7 +97,12 @@ class FileObject
             if (!is_writable($filePath)) {
                 $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
             }else{
-                $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
+                if($mode!=null){
+                    $result = file_put_contents($filePath, $fileContent, FILE_APPEND); //该函数将返回写入到文件内数据的字节数
+                }else{
+                    $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
+                }
+
             }
             fclose($fp);
         } else {
@@ -106,17 +112,17 @@ class FileObject
     }
 
     public static function Append($filePath, $fileContent){
-        $fullFilePath = PHYSICAL_PATH . '/' . $filePath; //加上系统路径
-        $fullFilePath = str_ireplace('/',DIRECTORY_SEPARATOR,$fullFilePath); //适应windows平台和unix平台
+        //$fullFilePath = PHYSICAL_PATH . '/' . $filePath; //加上系统路径
+        //$fullFilePath = str_ireplace('/',DIRECTORY_SEPARATOR,$fullFilePath); //适应windows平台和unix平台
 
-        $oldContent = '';
-        if (file_exists($fullFilePath)) {
-            $oldContent = file_get_contents($fullFilePath);
-        }
-        $newContent = $oldContent.$fileContent;
+        //$oldContent = '';
+        //if (file_exists($fullFilePath)) {
+        //    $oldContent = file_get_contents($fullFilePath);
+        //}
+        //$newContent = $oldContent.$fileContent;
 
-        self::Write($filePath,$newContent);
-
+        self::Write($filePath,$fileContent,FILE_APPEND);
+        //file_put_contents($filePath, $fileContent, FILE_APPEND);
     }
 
     /**

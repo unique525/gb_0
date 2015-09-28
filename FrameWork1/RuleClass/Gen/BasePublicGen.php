@@ -567,36 +567,36 @@ class BasePublicGen extends BaseGen
 
             switch ($tagWhere) {
                 case "new":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($siteId, $channelId, $tagTopCount, $state);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetNewList($siteId, $channelId, $tagTopCount, $state, true);
                     break;
                 case "child":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy, true);
                     break;
                 case "grandson":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy, true);
                     break;
                 case "rec_level_child":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy, true);
                     break;
                 case "rec_level_grandson":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy, true);
                     break;
                 case "rec_level_belong_channel":
                     $recLevel = intval($tagWhereValue);
                     if ($channelId > 0&&$recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy, true);
                     }
                     break;
                 case "day_belong_channel":
                     $recLevel = intval($tagWhereValue);
                     if ($channelId > 0&&$recLevel > 0) {
                         $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy);
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy, true);
                     }
                     break;
                 default :
-                    $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetList($channelId, $tagTopCount, $state, $orderBy, true);
                     break;
             }
             if (!empty($arrDocumentNewsList)) {

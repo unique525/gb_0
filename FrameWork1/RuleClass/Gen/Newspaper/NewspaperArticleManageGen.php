@@ -126,7 +126,7 @@ class NewspaperArticleManageGen extends BaseManageGen {
             if (!$can) {
                 $result = -10;
             } else {
-                $result = $newspaperPageManageData->ModifyState($newspaperArticleId, $state);
+                $result = $newspaperArticleManageData->ModifyState($newspaperArticleId, $state);
                 //加入操作日志
                 $operateContent = 'Modify State Newspaper Article,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);
