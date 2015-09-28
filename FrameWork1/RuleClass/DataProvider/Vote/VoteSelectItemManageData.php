@@ -76,23 +76,23 @@ class VoteSelectItemManageData extends BaseManageData
         return $result;
     }
 
-//    /**
-//     * 获取一道题的所有选项列表
-//     * @param int $voteItemId  题目ID
-//     * @param int $state   题目选项状态值
-//     * @return array  返回数据集结果
-//     */
-//    public function GetSelect($voteItemId, $state) {
-//        $sql = "SELECT VoteSelectItemId,VoteSelectItemTitle,RecordCount,AddCount,TitlePic,DirectUrl,TableType,TableId
-//        FROM " . self::TableName_VoteSelectItem . "
-//        WHERE State=:state AND VoteItemId=:VoteItemId
-//        ORDER BY Sort DESC,VoteSelectItemId ASC";
-//        $dataProperty = new DataProperty();
-//        $dataProperty->AddField("State", $state);
-//        $dataProperty->AddField("VoteItemId", $voteItemId);
-//        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-//        return $result;
-//    }
+    /**
+     * 获取一道题的所有选项列表（按比例加票）
+     * @param int $voteItemId  题目ID
+     * @param int $state   题目选项状态值
+     * @return array  返回数据集结果
+     */
+    public function GetListForAddCount($voteItemId, $state) {
+        $sql = "SELECT VoteSelectItemId,VoteSelectItemTitle,RecordCount,AddCount
+        FROM " . self::TableName_VoteSelectItem . "
+        WHERE State=:State AND VoteItemId=:VoteItemId
+        ORDER BY Sort DESC,VoteSelectItemId ASC";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("State", $state);
+        $dataProperty->AddField("VoteItemId", $voteItemId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        return $result;
+    }
 
     /**
      * 获取一道题目下选项总票数
@@ -143,6 +143,58 @@ class VoteSelectItemManageData extends BaseManageData
         }
         return $result;
     }
+
+    /**
+     * 根据题目ID获取题目下所有选项数据与关联资讯文档的相关内容
+     * @param int $voteItemId   题目ID,，可以是 id,id,id 的形式
+     * @param int $state    题目选项状态
+     * @param string $order    排序
+     * @param int $topCount    题目选项条数
+     * @return array  返回查询题目选项数组
+     */
+    public function GetListWithDocumentNews($voteItemId,$state,$order = "",$topCount = null) {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        switch ($order) {
+            default:
+                $order = " ORDER BY Sort,VoteSelectItemId ASC ";
+                break;
+        }
+        if($voteItemId>0)
+        {
+            $voteItemId = Format::FormatSql($voteItemId);
+            $sql = "SELECT
+            t2.VoteItemId,
+            t2.VoteSelectItemId,
+            t2.VoteSelectItemTitle,
+            t2.Sort,
+            t2.State,
+            t2.AddCount,
+            t2.RecordCount,
+            t2.DirectUrl,
+            CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
+            t3.*,
+            doc.DocumentNewsSubTitle,
+            doc.DocumentNewsCiteTitle,
+            doc.DocumentNewsShortTitle,
+            doc.DocumentNewsIntro
+                    FROM " . self::TableName_VoteItem . " t1
+                    LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " t2 ON t1.VoteItemId=t2.VoteItemId
+                    LEFT OUTER JOIN " .self::TableName_DocumentNews." doc on t2.TableId=doc.DocumentNewsId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." t3 on doc.TitlePic1UploadFileId=t3.UploadFileId
+                    WHERE t2.State=:State
+                    AND t2.VoteItemId IN ($voteItemId)"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
 
     /**
      * 获取选项分页列表
@@ -236,6 +288,9 @@ class VoteSelectItemManageData extends BaseManageData
 
         return $result;
     }
+
+
+
 }
 
 ?>

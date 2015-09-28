@@ -439,6 +439,7 @@ class InterfaceManageGen extends BaseManageGen implements IBaseManageGen
                         preg_match_all($preg, $arrayOfItems[$i]["DocumentNewsContent"], $arrayImages, PREG_PATTERN_ORDER);
 
                         foreach ($arrayImages[0] as $oneImg) {
+                            $oneImg=str_ireplace("&","",$oneImg);//处理’&middot;‘等转义字符中的‘&’被xml报错的问题
                             $oneImgUrl = Template::GetParamValue($oneImg, "src", "img"); //取得所有src
                             /** 远程图片上传 */
                             if ((stripos($oneImgUrl, "http") != 0 || stripos($oneImgUrl, "http") === false) && strlen($oneImgUrl) > 0) { //不是绝对地址且不为空  则加上域名

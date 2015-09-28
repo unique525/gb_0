@@ -11,6 +11,7 @@
         var itemCount=parseInt($(".grid_item").size());
         var recordCount=0;
         var addCount=0;
+        var allCount=0;
         if(id>0){
             for(var i=0;i <= itemCount;i++){
                 if(i!=id){
@@ -25,6 +26,7 @@
             recordCount+=parseInt($("#RecordCount_"+i).html());
             addCount+=parseInt($("#AddCount_"+i).val());
         }
+        allCount=recordCount+addCount;
         for(var i=1;i<=itemCount;i++){
             $("#per_"+i).html(((parseInt($("#RecordCount_"+i).html())+parseInt($("#AddCount_"+i).val()))/allCount*100).toFixed(1))
         }

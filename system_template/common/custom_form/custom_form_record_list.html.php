@@ -40,7 +40,7 @@
                 btnRunSearch.show();
                 numberOfSearchKey++;
                 if(numberOfSearchKey<={CustomFormFieldCount}){
-                    searchTable.html(searchTable.html()+'<div style="margin:5px">字段名：<select id="field_'+numberOfSearchKey+'" ><option value="0_1" >全文本字段</option>{FieldSelection}</select>字段内容：<input type="text" id="content_'+numberOfSearchKey+'" />(若搜索数值区间，表示方法：小数_大数。例：10_20表示大于10且小于20)</div>')
+                    searchTable.html(searchTable.html()+'<div style="margin:5px">字段名：<select id="field_'+numberOfSearchKey+'" ><option value="0_1" >全文本字段</option>{FieldSelection}<option value="0_-1" >状态</option></select>字段内容：<input type="text" id="content_'+numberOfSearchKey+'" />(若搜索数值区间，表示方法：小数_大数。例：10_20表示大于10且小于20)</div>')
                 }else{
                     $("#dialog_box").dialog({width: 300, height: 100});
                     $("#dialog_content").html("已达到此表单最大字段数");
