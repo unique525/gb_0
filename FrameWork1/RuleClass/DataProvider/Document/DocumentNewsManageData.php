@@ -1864,9 +1864,10 @@ class DocumentNewsManageData extends BaseManageData
      * @param array $oneNewspaperForCopy newspaper数据数组
      * @param int $manageUserId 操作人id
      * @param string $manageUserName 操作人用户名
+     * @param int $showInClient 是否在客户端中显示
      * @return int 执行结果
      */
-    public function CopyFromNewsPaperArticle($targetSiteId, $targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName){
+    public function CopyFromNewsPaperArticle($targetSiteId, $targetCid, $oneNewspaperForCopy, $manageUserId, $manageUserName, $showInClient){
         $result=-1;
         if($oneNewspaperForCopy&&$targetCid>0){
             $sort=self::GetMaxSortOfChannel($targetCid);  //排序号处理
@@ -1890,7 +1891,8 @@ class DocumentNewsManageData extends BaseManageData
                     ManageUserName,
                     ChannelId,
                     SiteId,
-                    Sort
+                    Sort,
+                    ShowInClient
                 )
                 VALUES
                 (
@@ -1911,7 +1913,8 @@ class DocumentNewsManageData extends BaseManageData
                     :ManageUserName,
                     :ChannelId,
                     :SiteId,
-                    :Sort
+                    :Sort,
+                    :ShowInClient
                 ) ;";
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("DocumentNewsTitle", $oneNewspaperForCopy["NewspaperArticleTitle"]);
@@ -1938,6 +1941,8 @@ class DocumentNewsManageData extends BaseManageData
                 $dataProperty->AddField("ChannelId", $targetCid);
                 $dataProperty->AddField("SiteId", $targetSiteId);
                 $dataProperty->AddField("Sort", $sort);
+                $dataProperty->AddField("ShowInClient", $showInClient);
+
 
             $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
 
@@ -2188,6 +2193,26 @@ class DocumentNewsManageData extends BaseManageData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId", $documentNewsId);
             $result = $dbOperator->GetString($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /***
+     * 获取列表（导入投票选项）
+     * @param int $channelId 节点id
+     * @param int $itemCount 获取条数
+     * @param int $state 状态
+     * @return array
+     */
+    public function GetListForVoteSelectItem($channelId,$itemCount=0,$state=30){
+        $result=null;
+        if($channelId>0){
+            $sql = "SELECT DocumentNewsTitle,DocumentNewsId,SiteId,PublishDate,DirectUrl FROM ".self::TableName_DocumentNews." WHERE ChannelId=:ChannelId AND State=:State ORDER BY Sort LIMIT $itemCount;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }
