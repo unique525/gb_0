@@ -19,13 +19,19 @@ class DocumentNewsPublicData extends BasePublicData {
      * @param string $topCount 显示条数  1或 1,10
      * @param int $state 状态
      * @param int $orderBy 排序方式
+     * @param bool $withCache 是否使用缓存
      * @return array|null 返回资讯列表
      */
-    public function GetList($channelId, $topCount, $state, $orderBy = 0) {
+    public function GetList($channelId, $topCount, $state, $orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
         if($channelId>0 && !empty($topCount)){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = "document_news_get_list_". $channelId. "_top".$topCount."_state".$state."_order".$orderBy;
+
+
 
             $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
 
@@ -131,7 +137,11 @@ class DocumentNewsPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $dataProperty->AddField("State", $state);
-            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+            //$result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         }
 
