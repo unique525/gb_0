@@ -956,6 +956,7 @@
 										<input type="text" class="input_number" style=" width:20px;font-size:14px;" id="f_ShowSecond"
 										       name="f_ShowSecond" value="{ShowSecond}" maxlength="2"/><label for="f_ShowSecond">
 											(在文档中显示出来的时间，可任意设置)</label>
+                                        <input type="hidden" class="input_number" style="display:none" id="f_ShowFullDate" name="f_ShowFullDate" />
 									</td>
 								</tr>
 								<tr>
