@@ -1519,9 +1519,9 @@ class DocumentNewsManageData extends BaseManageData
         $result = null;
 
 
-        if(!empty($topCount)){
+        if(!empty($arrayTags)||$mainTag!=""){
             $dataProperty = new DataProperty();
-            $recLevelSelection=" AND RecLevel Between 0 AND 10 ";
+            $recLevelSelection="";
             if($recLevel!=""){
                 $recLevelSelection=" AND RecLevel Between ".$recLevel." ";
             }
