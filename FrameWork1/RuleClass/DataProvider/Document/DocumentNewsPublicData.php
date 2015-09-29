@@ -892,21 +892,21 @@ class DocumentNewsPublicData extends BasePublicData {
 
     /**
      * 根据频道id取当前频道下（包括所有级别子节点）指定推荐级别文档的列表数据集
-     * @param int $channelId 频道id
+     * @param int $siteId 站点id
      * @param int $recLevel 推荐级别
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
      * @param bool $withCache 是否使用缓存
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0, $withCache = FALSE) {
+    public function GetListOfRecLevelBelongSite($siteId, $recLevel ,$topCount, $orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
-        if($channelId>0&&!empty($topCount)){
+        if($siteId>0&&!empty($topCount)){
 
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
-            $cacheFile = "document_news_get_list_of_rec_level_belong_channel_". $channelId
+            $cacheFile = "document_news_get_list_of_rec_level_belong_site_". $siteId
                 . "_top".$topCount
                 . "_rec_level".$recLevel
                 . "_order".$orderBy;
@@ -1006,10 +1006,11 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId IN (".$channelId.")  AND dn.RecLevel=:RecLevel
+                WHERE dn.SiteId=:SiteId AND dn.RecLevel=:RecLevel
                 AND dn.State=:State
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("RecLevel", $recLevel);
             $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
 
@@ -1024,22 +1025,22 @@ class DocumentNewsPublicData extends BasePublicData {
     }
 
     /**
-     * 根据频道id取当前频道下（包括所有级别子节点）从显示日期向前指定天数文档的列表数据集
-     * @param int $channelId 频道id
+     * 根据频道id取当前站点下从显示日期向前指定天数文档的列表数据集
+     * @param int $siteId 站点id
      * @param int $dayCount 天数
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
      * @param bool $withCache 是否使用缓存
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfDayBelongChannel($channelId, $dayCount ,$topCount, $orderBy = 0, $withCache = FALSE) {
+    public function GetListOfDayBelongSite($siteId, $dayCount ,$topCount, $orderBy = 0, $withCache = FALSE) {
 
         $result = null;
 
-        if($channelId>0&&!empty($topCount)){
+        if($siteId>0&&!empty($topCount)){
 
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
-            $cacheFile = "document_news_get_list_of_day_belong_channel_". $channelId
+            $cacheFile = "document_news_get_list_of_day_belong_site_". $siteId
                 . "_top".$topCount
                 . "_day_count".$dayCount
                 . "_order".$orderBy;
@@ -1143,13 +1144,14 @@ class DocumentNewsPublicData extends BasePublicData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
                 WHERE
-                dn.SiteId=4
+                dn.SiteId=:SiteId
                 AND DATEDIFF(NOW(),ShowDate)<:DayCount AND DATEDIFF(NOW(),ShowDate)>0
                 AND dn.State=:State
                 $orderBySql LIMIT " . $topCount;
 
             //dn.ChannelId IN (".$channelId.")
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("DayCount", $dayCount);
             $dataProperty->AddField("State", DocumentNewsData::STATE_PUBLISHED);
 

@@ -705,18 +705,18 @@ class BaseManageGen extends BaseGen
                 case "rec_level_grandson":
                     $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
                     break;
-                case "rec_level_belong_channel":
+                case "rec_level_belong_site":
                     $recLevel = intval($tagWhereValue);
                     if ($channelId > 0 && $recLevel > 0) {
-                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount, $orderBy);
+                        $belongSiteId = $channelId;//此类方法只根据站点id取数据，站点id实际是借道channelId参数传入的
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelBelongSite($belongSiteId, $recLevel, $tagTopCount, $orderBy);
                     }
                     break;
-                case "day_belong_channel":
-                    $recLevel = intval($tagWhereValue);
-                    if ($channelId > 0 && $recLevel > 0) {
-                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount, $orderBy);
+                case "day_belong_site":
+                    $dayCount = intval($tagWhereValue);
+                    if ($channelId > 0 && $dayCount > 0) {
+                        $belongSiteId = $channelId;//此类方法只根据站点id取数据，站点id实际是借道channelId参数传入的
+                        $arrDocumentNewsList = $documentNewsManageData->GetListOfDayBelongSite($belongSiteId, $dayCount, $tagTopCount, $orderBy);
                     }
                     break;
                 default :

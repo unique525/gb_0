@@ -1254,18 +1254,18 @@ class DocumentNewsManageData extends BaseManageData
     }
 
     /**
-     * 根据频道id取当前频道下（包括所有级别子节点）指定推荐级别文档的列表数据集
-     * @param int $channelId 频道id
+     * 根据频道id取当前站点下指定推荐级别文档的列表数据集
+     * @param int $siteId 站点id
      * @param int $recLevel 推荐级别
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfRecLevelBelongChannel($channelId, $recLevel ,$topCount, $orderBy = 0) {
+    public function GetListOfRecLevelBelongSite($siteId, $recLevel ,$topCount, $orderBy = 0) {
 
         $result = null;
 
-        if($channelId>0&&!empty($topCount)){
+        if($siteId>0&&!empty($topCount)){
 
             $orderBySql = 'ORDER BY dn.CreateDate DESC';
             switch($orderBy){
@@ -1362,9 +1362,10 @@ class DocumentNewsManageData extends BaseManageData
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId IN (".$channelId.")  AND dn.RecLevel=:RecLevel
+                WHERE dn.ChannelId =:SiteId AND dn.RecLevel=:RecLevel
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("RecLevel", $recLevel);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
@@ -1374,18 +1375,18 @@ class DocumentNewsManageData extends BaseManageData
     }
 
     /**
-     * 根据频道id取当前频道下（包括所有级别子节点）从显示日期向前指定天数文档的列表数据集
-     * @param int $channelId 频道id
+     * 根据频道id取当前站点下从显示日期向前指定天数文档的列表数据集
+     * @param int $siteId 站点id
      * @param int $dayCount 天数
      * @param string $topCount 分页参数，如 9 或 3,9(第4至10条)
      * @param int $orderBy 排序
      * @return array|null 返回最新列表数据集
      */
-    public function GetListOfDayBelongChannel($channelId, $dayCount ,$topCount, $orderBy = 0) {
+    public function GetListOfDayBelongSite($siteId, $dayCount ,$topCount, $orderBy = 0) {
 
         $result = null;
 
-        if($channelId>0&&!empty($topCount)){
+        if($siteId>0&&!empty($topCount)){
 
             $orderBySql = 'ORDER BY dn.Sort DESC, dn.CreateDate DESC';
             switch($orderBy){
@@ -1485,10 +1486,11 @@ class DocumentNewsManageData extends BaseManageData
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
 
-                WHERE dn.ChannelId IN (".$channelId.")
+                WHERE dn.SiteId=:SiteId
                 AND DATEDIFF(NOW(),ShowDate)<:DayCount AND DATEDIFF(NOW(),ShowDate)>0
                 $orderBySql LIMIT " . $topCount;
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("DayCount", $dayCount);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
@@ -1632,9 +1634,6 @@ class DocumentNewsManageData extends BaseManageData
 
                 ORDER BY dn.ShowDate DESC, dn.RecLevel DESC, dn.CreateDate DESC
                 LIMIT " . $topCount;
-
-            $debug = new DebugLogManageData();
-            $debug->Create($sql);
 
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

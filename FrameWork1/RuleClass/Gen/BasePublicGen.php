@@ -581,18 +581,18 @@ class BasePublicGen extends BaseGen
                 case "rec_level_grandson":
                     $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy, true);
                     break;
-                case "rec_level_belong_channel":
+                case "rec_level_belong_site":
                     $recLevel = intval($tagWhereValue);
                     if ($channelId > 0&&$recLevel > 0) {
-                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy, true);
+                        $belongSiteId = $channelId;//此类方法只根据站点id取数据，站点id实际是借道channelId参数传入的
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelBelongSite($belongSiteId, $recLevel, $tagTopCount ,$orderBy, true);
                     }
                     break;
-                case "day_belong_channel":
+                case "day_belong_site":
                     $recLevel = intval($tagWhereValue);
                     if ($channelId > 0&&$recLevel > 0) {
-                        $belongChannelId = self::GetOwnChannelIdAndChildChannelId($channelId);
-                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongChannel($belongChannelId, $recLevel, $tagTopCount ,$orderBy, true);
+                        $belongSiteId = $channelId;//此类方法只根据站点id取数据，站点id实际是借道channelId参数传入的
+                        $arrDocumentNewsList = $documentNewsPublicData->GetListOfDayBelongSite($belongSiteId, $recLevel, $tagTopCount ,$orderBy, true);
                     }
                     break;
                 default :
