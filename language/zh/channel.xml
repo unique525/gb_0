@@ -7,5 +7,5 @@
     <module id="5"><content><![CDATA[<div style="padding:5px;">此频道目前还没有文档或数据，或者没有查询到相关文档或数据</div>]]></content></module>
     <module id="6"><content><![CDATA[编辑失败]]></content></module>
     <module id="7"><content><![CDATA[同一站点内已经有重复的发布文件夹了，请修改发布文件夹！]]></content></module>
-    <module id="8"><content><![CDATA[<h2>此栏目已被加密，您无权访问，请先<a href="/default.php?mod=user&a=login&re_url={0}">[登录]</a>！</h2>]]></content></module>
+    <module id="8"><content><![CDATA[<h2>此栏目已被加密，您无权访问，请先<a href="/default.php?mod=user&a=login&bind_wx=1">[登录]</a>！</h2>]]></content></module>
 </root>

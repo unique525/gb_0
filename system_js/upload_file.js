@@ -429,10 +429,21 @@ function UploadFileFormatHtml(fileName){
             break;
         case "swf":
             url = '';
-            //return '<embed src="'+ filename + '" id="' + filename + '_SWF" width="200" height="100" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>';
-            url += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="400" height="400">';
-            url += '<param name="movie" value="' + fileName + '">';
-            url += '</object>';
+            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<div id="mediaspace"></div>';
+            url += '<scr'+'ipt type="text/javascript">';
+            url += 'jwplayer("mediaspace").setup({';
+            url += '"flashplayer": "/front_js/jwplayer.swf",';
+            url += 'type:"http",';
+            url += '"file": "'+fileName+'",';
+            url += '"image": "",';
+            url += '"streamer": "start",';
+            url += '"autostart": "true",';
+            url += '"controlbar": "bottom",';
+            url += '"width": "500",';
+            url += '"height": "430"';
+            url += '});';
+            url += '</scr'+'ipt>';
             break;
         case "flv":
             url = '';
@@ -440,7 +451,7 @@ function UploadFileFormatHtml(fileName){
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
-            url += '"flashplayer": "/public_js/jwplayer.swf",';
+            url += '"flashplayer": "/front_js/jwplayer.swf",';
             url += 'type:"http",';
             url += '"file": "'+fileName+'",';
             url += '"image": "",';
@@ -458,7 +469,7 @@ function UploadFileFormatHtml(fileName){
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
-            url += '"flashplayer": "/public_js/jwplayer.swf",';
+            url += '"flashplayer": "/front_js/jwplayer.swf",';
             url += 'type:"http",';
             url += '"file": "'+fileName+'",';
             url += '"image": "",';
