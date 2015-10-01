@@ -291,13 +291,13 @@ class NewspaperArticlePublicData extends BasePublicData
 
             $selectColumn = '
             *,
-            (SELECT uf.UploadFilePath FROM
+            (SELECT uf.UploadFileWatermarkPath1 FROM
                 ' . self::TableName_NewspaperArticlePic . ' nap,
                 ' . self::TableName_UploadFile . ' uf
                 WHERE uf.UploadFileId=nap.UploadFileId
                 AND nap.NewspaperArticleId=' . self::TableName_NewspaperArticle . '.NewspaperArticleId
                 LIMIT 1
-                ) AS UploadFilePath
+                ) AS UploadFileWatermarkPath1
             ';
 
             $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . "
