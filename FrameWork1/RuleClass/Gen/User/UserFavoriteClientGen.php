@@ -97,7 +97,8 @@ class UserFavoriteClientGen extends BaseClientGen implements IBaseClientGen
                                 $userFavoriteTitle = $arrOne["NewspaperArticleTitle"];
                             }
 
-                            $uploadFileId = 0;//$arrOne["TitlePic1UploadFileId"];
+                            $uploadFileId = intval(Control::PostOrGetRequest("UserFavoriteUploadFileId",0));
+                            //$uploadFileId = 0;//$arrOne["TitlePic1UploadFileId"];
                             $userFavoriteUrl = "/default.php?&mod=newspaper_article&a=detail&newspaper_article_id=".$tableId;
                         }
                     }elseif($tableType == UserFavoriteData::TABLE_TYPE_ACTIVITY){
