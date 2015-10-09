@@ -104,13 +104,19 @@ class NewspaperArticleClientData extends BaseClientData {
         $result = null;
         if($newspaperArticleId>0){
             $sql = "
-            SELECT dn.*
-
+            SELECT *,
+            (SELECT uf.UploadFilePath FROM
+                " . self::TableName_NewspaperArticlePic . " nap,
+                " . self::TableName_UploadFile . " uf
+                WHERE uf.UploadFileId=nap.UploadFileId
+                AND nap.NewspaperArticleId=" . self::TableName_NewspaperArticle . ".NewspaperArticleId
+                LIMIT 1
+                ) AS UploadFilePath
 
             FROM
-            " . self::TableName_NewspaperArticle . " dn
+            " . self::TableName_NewspaperArticle . "
 
-            WHERE dn.NewspaperArticleId=:NewspaperArticleId;";
+            WHERE NewspaperArticleId=:NewspaperArticleId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
