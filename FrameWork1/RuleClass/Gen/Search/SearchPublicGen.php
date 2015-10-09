@@ -203,8 +203,21 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
             $siteId = $XObject->s_site_id;
             $siteName = $sitePublicData->GetSiteName($siteId, true);
             $siteUrl = $XObject->s_site_url;
+            $channelType=$XObject->s_channel_type;
             if ($XObject->DirectUrl == null) {
-                $directUrl = $siteUrl . "/default.php?mod=newspaper_article&a=detail&newspaper_article_id=" . $XObject->s_id;
+                switch($channelType){
+                    case 1:
+                        $publishDate=substr(str_ireplace("-","",$XObject->s_publish_date),0,8);
+                        $directUrl = $siteUrl . "/h/$XObject->s_channel_id/$publishDate/$XObject->s_id.html";
+                        break;
+                    case 15:
+                        $directUrl = $siteUrl . "/default.php?mod=newspaper_article&a=detail&newspaper_article_id=" . $XObject->s_id;
+                        break;
+                    default:
+                        $publishDate=substr(str_ireplace("-","",$XObject->s_publish_date),0,8);
+                        $directUrl = $siteUrl . "/h/$XObject->s_channel_id/$publishDate/$XObject->s_id.html";
+                        break;
+                }
             } else {
                 $directUrl = $XObject->DirectUrl;
             }
