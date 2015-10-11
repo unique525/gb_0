@@ -176,38 +176,85 @@ class SearchClientGen extends BaseClientGen implements IBaseClientGen
      * @param  XObjects对象数组
      * @return array 标准php数组
      */
-    private function ConvertToArray($search, $XObjects)
+    private function ConvertToArray($search, $xObjects)
     {
-        $sitePublicData = new SitePublicData();
+
         $arrList = array();
-        foreach ($XObjects as $XObject) {
-            $title = $XObject->s_title;
-            $content = strip_tags($XObject->s_content);
-            $userName = $XObject->s_user_name;
-            $showDate = $XObject->s_show_date;
+        foreach ($xObjects as $xObject) {
+
+            $id = $xObject->s_id;
+
+            $siteId = $xObject->s_site_id;
+            $channelId = $xObject->s_channel_id;
+            $channelType = $xObject->s_channel_type;
+            $parentId = $xObject->s_parent_id;
+            $columnId = $xObject->s_column_id;
+
+
+            $title = $xObject->s_title;
+            $mainTag = $xObject->s_main_tag;
+            $tag = $xObject->s_tag;
+            $subTitle = $xObject->s_sub_title;
+            $citeTitle = $xObject->s_cite_title;
+            $shortTitle = $xObject->s_short_title;
+            $intro = $xObject->s_intro;
+
+
+            $createDate = $xObject->s_create_date;
+            $showDate = $xObject->s_show_date;
             $showDate = date("Y-m-d", strtotime($showDate));
-            $siteId = $XObject->s_site_id;
-            $siteName = $sitePublicData->GetSiteName($siteId, true);
-            $siteUrl = $XObject->s_site_url;
-            if ($XObject->DirectUrl == null) {
-                $directUrl = $siteUrl . "/default.php?mod=newspaper_article&a=detail&newspaper_article_id=" . $XObject->s_id;
-            } else {
-                $directUrl = $XObject->DirectUrl;
-            }
+            $publishDate = $xObject->s_publish_date;
+
+            $userName = $xObject->s_user_name;
+            $author = $xObject->s_author;
+
+            $state = $xObject->s_state;
+            $sort = $xObject->s_sort;
+
+            $directUrl = $xObject->s_direct_url;
+            $content = Format::FormatJson(strip_tags($xObjects->s_content));
+            $siteUrl = $xObject->s_site_url;
+            $source = $xObject->s_source;
+
+
             array_push($arrList,
                 array(
-                    "DirectUrl" => $directUrl,
-                    "Title" => $search->highlight($title),
-                    "Content" => $search->highlight($content),
-                    "UserName" => $userName,
-                    "ShowDate" => $showDate,
+                    "Id" => $id,
                     "SiteId" => $siteId,
-                    "SiteName" => $siteName,
-                    "SiteUrl" => $siteUrl
+                    "ChannelId" => $channelId,
+                    "ChannelType" => $channelType,
+                    "ParentId" => $parentId,
+                    "ColumnId" => $columnId,
+
+
+                    "Title" => $title,
+                    "MainTag" => $mainTag,
+                    "Tag" => $tag,
+                    "SubTitle" => $subTitle,
+                    "CiteTitle" => $citeTitle,
+                    "ShortTitle" => $shortTitle,
+                    "Intro" => $intro,
+
+
+                    "CreateDate" => $createDate,
+                    "ShowDate" => $showDate,
+                    "PublishDate" => $publishDate,
+
+                    "UserName" => $userName,
+                    "Author" => $author,
+
+                    "State" => $state,
+                    "Sort" => $sort,
+
+                    "DirectUrl" => $directUrl,
+                    "Content" => $content,
+                    "SiteUrl" => $siteUrl,
+                    "Source" => $source
+
                 ));
         }
         return $arrList;
 
     }
 
-} 
+}
