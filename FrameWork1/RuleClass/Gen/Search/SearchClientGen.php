@@ -215,7 +215,7 @@ class SearchClientGen extends BaseClientGen implements IBaseClientGen
             $sort = $xObject->s_sort;
 
             $directUrl = $xObject->s_direct_url;
-            $content = Format::FormatJson(strip_tags($xObject->s_content));
+            //$content = Format::FormatJson(strip_tags($xObject->s_content));
             $siteUrl = $xObject->s_site_url;
             $source = $xObject->s_source;
 
@@ -244,13 +244,13 @@ class SearchClientGen extends BaseClientGen implements IBaseClientGen
                     "PublishDate" => $publishDate,
 
                     "UserName" => $userName,
-                    //"Author" => $author,
+                    "Author" => "",//$author,
 
                     "State" => $state,
                     "Sort" => $sort,
 
                     "DirectUrl" => $directUrl,
-                    "Content" => $content,
+                    "Content" => "",//$content,
                     "SiteUrl" => $siteUrl,
                     "Source" => $source
 
