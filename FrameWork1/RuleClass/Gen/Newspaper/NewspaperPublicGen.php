@@ -286,8 +286,10 @@ class NewspaperPublicGen extends BasePublicGen
                             $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
 
                             $isBuy = $userOrderNewspaperPublicData->CheckIsBought($userId, $currentNewspaperId);
+                            //可以直接看付费报纸
+                            $canExplore = parent::GetUserPopedomBoolValue(UserPopedomData::UserCanExploreMustPayNewspaper);
 
-                            if ($isBuy>0){
+                            if ($isBuy>0 || $canExplore){
                                 $firstNewspaperPageMustPay = 0;//已经买了
                                 $secondNewspaperPageMustPay = 0;
                             }

@@ -130,4 +130,10 @@ class UserPopedomData {
     private $UserSetRecCountLimit;  //给会员相册打推荐分的最大值
     private $UserSetRecCountDayMax; //给会员相册打推荐分的每日上限值
 
+
+    /**
+     * 可以浏览付费报纸
+     */
+    const UserCanExploreMustPayNewspaper = "UserCanExploreMustPayNewspaper";
+
 } 
