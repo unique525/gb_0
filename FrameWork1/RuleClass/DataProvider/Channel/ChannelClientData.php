@@ -59,7 +59,7 @@ class ChannelClientData extends BaseClientData {
                         $order = " ORDER BY c.Createdate DESC";
                         break;
                     default:
-                        $order = " ORDER BY c.Sort DESC ";
+                        $order = " ORDER BY c.Sort DESC,c.Createdate DESC ";
                         break;
                 }
                 $selectColumn = "
