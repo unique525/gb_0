@@ -1,4 +1,20 @@
 ﻿<?php
+
+
+/*****
+ *
+ *
+ * 清空命令
+ * /usr/local/php-5.2.17/bin/php /data/xunsearch/sdk/php/util/Indexer.php --clean cswb
+ *
+ * 加入新文档命令
+ * /usr/local/php-5.2.17/bin/php /data/cswb/96333.changsha.cn/so/add.php
+ *
+ *
+ *
+ */
+
+
 require_once 'lib/XS.php';
 
 $xs = new XS('cswb');
