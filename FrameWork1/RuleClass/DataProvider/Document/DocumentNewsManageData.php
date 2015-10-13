@@ -2080,11 +2080,12 @@ class DocumentNewsManageData extends BaseManageData
  * 修改站点下资讯文档的批量发布队列状态
  * @param int $waitPublish 状态
  * @param int $siteId 站点id,为0时为所有站点
+ * @param int $channelId 节点id
  * @param int $state 文档状态 -1时为所有状态
  * @param string $strDocumentNewsId 文章id的字符串，空时为所有
  * @return int 操作结果
  */
-    public function UpdateWaitPublishForSite($waitPublish,$siteId=0,$state=-1,$strDocumentNewsId=""){
+    public function UpdateWaitPublish($waitPublish,$siteId=0,$channelId=0,$state=-1,$strDocumentNewsId=""){
         $result=-1;
         if($siteId>=0&&$waitPublish>=0){
             $dataProperty = new DataProperty();
@@ -2093,6 +2094,14 @@ class DocumentNewsManageData extends BaseManageData
             if($siteId>0){
                 $strSelect.=" WHERE SiteId=:SiteId ";
                 $dataProperty->AddField("SiteId", $siteId);
+            }
+            if($channelId>0){
+                if($strSelect==""){
+                    $strSelect.=" WHERE ChannelId=:ChannelId ";
+                }else{
+                    $strSelect.=" AND ChannelId=:ChannelId ";
+                }
+                $dataProperty->AddField("ChannelId", $channelId);
             }
             if($state>=0){
                 if($strSelect==""){
@@ -2119,7 +2128,7 @@ class DocumentNewsManageData extends BaseManageData
 
 
     /**
-     * 获取剩余批量发布的前N条
+     * 获取剩余批量发布的前N条(站点发布)
      * @param int $siteId 站点id,为0时为所有站点
      * @param int $topCount 取前多少条
      * @param int $state 发布状态
@@ -2134,6 +2143,57 @@ class DocumentNewsManageData extends BaseManageData
                 $selectSite=" AND SiteId=:SiteId ";
                 $dataProperty->AddField("SiteId", $siteId);
             }
+            $sql = "SELECT DocumentNewsId FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 AND State=:State ".$selectSite." LIMIT $topCount";
+            $dataProperty->AddField("State", $state);
+            $dbOperator = DBOperator::getInstance();
+            $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 获取剩余批量发布的前N条(节点)
+     * @param int $channelId 节点id
+     * @param int $topCount 取前多少条
+     * @param int $state 发布状态
+     * @return array 资讯数据集
+     */
+    public function GetWaitPublishListOfChannelId($channelId,$topCount,$state){
+        $result=null;
+        if($channelId>0&&$state>=0){
+            $dataProperty = new DataProperty();
+            $selectSite="";
+            if($channelId>0){
+                $selectSite=" AND ChannelId=:ChannelId ";
+                $dataProperty->AddField("ChannelId", $channelId);
+            }
+            $sql = "SELECT DocumentNewsId FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 AND State=:State ".$selectSite." LIMIT $topCount";
+            $dataProperty->AddField("State", $state);
+            $dbOperator = DBOperator::getInstance();
+            $result = $dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 获取剩余批量发布的前N条(id字符串)
+     * @param string $strDocumentNewsId id字符串
+     * @param int $topCount 取前多少条
+     * @param int $state 发布状态
+     * @return array 资讯数据集
+     */
+    public function GetWaitPublishListOfIdString($strDocumentNewsId,$topCount,$state){
+        $result=null;
+        if($strDocumentNewsId!=""&&$state>=0){
+            $dataProperty = new DataProperty();
+            $selectSite="";
+            if($strDocumentNewsId>0){
+                $selectSite=" AND DocumentNewsId In ($strDocumentNewsId) ";
+            }
             $sql = "SELECT * FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 AND State=:State ".$selectSite." LIMIT $topCount";
             $dataProperty->AddField("State", $state);
             $dbOperator = DBOperator::getInstance();
@@ -2142,21 +2202,48 @@ class DocumentNewsManageData extends BaseManageData
         return $result;
     }
 
-/***
- * 获取剩余批量发布文章数
- * @param $siteId
- * @return int
+
+    /***
+     * 获取剩余批量发布文章数
+     * @param $siteId
+     * @param $channelId
+     * @param $strDocumentNewsId
+     * @param $state
+     * @return int
  */
-    public function GetCountOfWaitPublishList($siteId){
+    public function GetCountOfWaitPublishList($siteId,$channelId=0,$strDocumentNewsId="",$state=-1){
         $result=-1;
         if($siteId>=0){
             $dataProperty = new DataProperty();
-            $selectSite="";
+            $strSelect="";
             if($siteId>0){
-                $selectSite=" AND SiteId=:SiteId ";
+                $strSelect=" AND SiteId=:SiteId ";
                 $dataProperty->AddField("SiteId", $siteId);
             }
-            $sql = "SELECT count(*) FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 ".$selectSite.";";
+            if($channelId>0){
+                if($strSelect==""){
+                    $strSelect.=" WHERE ChannelId=:ChannelId ";
+                }else{
+                    $strSelect.=" AND ChannelId=:ChannelId ";
+                }
+                $dataProperty->AddField("ChannelId", $channelId);
+            }
+            if($strDocumentNewsId!=""){
+                if($strSelect==""){
+                    $strSelect.=" WHERE DocumentNewsId IN ($strDocumentNewsId) ";
+                }else{
+                    $strSelect.=" AND DocumentNewsId IN ($strDocumentNewsId) ";
+                }
+            }
+            if($state>=0){
+                if($strSelect==""){
+                    $strSelect.=" WHERE State=:State ";
+                }else{
+                    $strSelect.=" AND State=:State ";
+                }
+                $dataProperty->AddField("State", $state);
+            }
+            $sql = "SELECT count(*) FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 ".$strSelect.";";
             $dbOperator = DBOperator::getInstance();
             $result = $dbOperator->GetInt($sql, $dataProperty);
         }

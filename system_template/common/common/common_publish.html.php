@@ -12,6 +12,7 @@
             $("#pub_site_channel").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
                 +parent.parent.G_NowSiteId+"&publish_type=1&do=1&");
 
+
         });
 
         function SetWaitPublish(state){
@@ -64,6 +65,12 @@
             $("#pub_site_document_news").css("color","#52596B");
             $("#pub_site_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
                 +parent.parent.G_NowSiteId+"&publish_type=2&do=1&state="+state);
+
+
+            $("#pub_channel_document_news").css("cursor","pointer");
+            $("#pub_channel_document_news").css("color","#52596B");
+            $("#pub_channel_document_news").attr("href","/default.php?secu=manage&mod=common&m=batch_publish&site_id="
+                +parent.parent.G_NowSiteId+"&channel_id="+parent.parent.G_SelectedChannelId+"&publish_type=3&do=1&state="+state);
         }
     </script>
 </head>
@@ -97,7 +104,8 @@
                 <script type="text/javascript">
                     $("#f_State").find("option[value='-1']").attr("selected",true);
                 </script>
-                <a id="pub_site_document_news" title="请先标记" class="btn2" style="margin-right: 5px;padding: 5px 10px;color:#bbb;cursor: pointer">批量发布</a>
+                <a id="pub_site_document_news" title="请先标记" class="btn2" style="margin-right: 5px;padding: 5px 10px;color:#bbb;cursor: pointer">批量发布站点</a>
+                <a id="pub_channel_document_news" title="请先标记" class="btn2" style="margin-right: 5px;padding: 5px 10px;color:#bbb;cursor: pointer">批量发布本节点</a><br />
                 <a onclick="SetWaitPublish()" class="btn2" style="padding: 5px 10px;">重置所有标记为待发布</a><br />
                 <a onclick="CancelWaitPublish()" class="btn2" style="padding: 5px 10px;">重置所有标记为不发布</a><br />
 

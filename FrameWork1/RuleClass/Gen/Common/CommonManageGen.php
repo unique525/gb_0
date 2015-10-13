@@ -42,16 +42,19 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
 
         if ($manageUserId > 0 && $siteId>0 && $do>0){
 
-            //检查操作权限
-            $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-            $can=$manageUserAuthorityManageData->CanChannelPublish($siteId,0,$manageUserId); //channelId=0:站点发布权限
-            if(!$can){
-                return -2;
-            }
 
             $publishType = Control::GetRequest("publish_type", 0);
 
             if($publishType == 1){ //发布站点下所有频道
+
+
+                /**检查操作权限**/
+                //发布频道需要站点权限
+                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                $can=$manageUserAuthorityManageData->CanChannelPublish($siteId,0,$manageUserId); //channelId=0:站点发布权限
+                if(!$can){
+                    return -2;
+                }
 
                 $publishQueueManageData = new PublishQueueManageData();
 
@@ -92,6 +95,15 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
             }elseif($publishType == 2){ //发布站点下所有资讯文档
 
 
+                /**检查操作权限**/
+                //发布站点所有文档需要站点权限
+                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                $can=$manageUserAuthorityManageData->CanChannelPublish($siteId,0,$manageUserId); //channelId=0:站点发布权限
+                if(!$can){
+                    return -2;
+                }
+
+
                 $state = Control::GetRequest("state", -1); //默认不发
                 if($state>=0){
 
@@ -109,6 +121,7 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
                         $executeTransfer = false; //不分别执行传送
                         parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer);
                     }
+                    sleep(0.1);
                 }
 
                 //执行传输
@@ -136,7 +149,7 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
                 $strDocumentNewsId=substr($strDocumentNewsId,1);
                 $waitPublish=0; //还原状态
                 $state=-1;  //所有状态
-                $documentNewsManageData->UpdateWaitPublishForSite($waitPublish,$siteId,$state,$strDocumentNewsId);
+                $documentNewsManageData->UpdateWaitPublish($waitPublish,$siteId,0,$state,$strDocumentNewsId);
                 $restCount=$documentNewsManageData->GetCountOfWaitPublishList($siteId);
                 $result="还剩下".$restCount."条<br>".$result;
                 $url = $_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING'];
@@ -148,6 +161,79 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
                     if($restCount>0)
                         header('refresh:0 ' . $url);
                 }
+
+                }
+                $result.="文档状态错误";
+            }elseif($publishType == 3){ //发布节点下所有资讯文档
+
+                $channelId = Control::GetRequest("channel_id", 0);
+
+                /**检查操作权限**/
+                //发布节点所有文档需要节点权限
+                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                $can=$manageUserAuthorityManageData->CanChannelPublish($siteId,$channelId,$manageUserId);
+                if(!$can){
+                    return -2;
+                }
+
+
+
+                $state = Control::GetRequest("state", -1); //默认不发
+                if($state>=0&&$channelId>0){
+
+                    $publishQueueManageData = new PublishQueueManageData();
+
+                    $documentNewsManageData = new DocumentNewsManageData();
+
+                    $eachTimeCount=10;//每10条发一下
+                    $arrDocumentNewsList=$documentNewsManageData->GetWaitPublishListOfChannelId($channelId,$eachTimeCount,$state);
+                    $strDocumentNewsId="";
+                    for($i=0;$i<count($arrDocumentNewsList);$i++){
+                        $strDocumentNewsId.=",".$arrDocumentNewsList[$i]["DocumentNewsId"];
+                        $documentNewsId = intval($arrDocumentNewsList[$i]["DocumentNewsId"]);
+                        if($documentNewsId>0){
+                            $executeTransfer = false; //不分别执行传送
+                            parent::PublishDocumentNews($documentNewsId, $publishQueueManageData, $executeTransfer);
+                        }
+                        sleep(0.1);
+                    }
+
+                    //执行传输
+                    parent::TransferPublishQueue($publishQueueManageData, $siteId);
+                    $result = '';
+                    $error='';
+                    for ($i = 0;$i< count($publishQueueManageData->Queue); $i++) {
+
+                        $publishResult = "";
+
+                        if(intval($publishQueueManageData->Queue[$i]["Result"]) ==
+                            abs(DefineCode::PUBLISH) + BaseManageGen::PUBLISH_TRANSFER_RESULT_SUCCESS
+                        ){
+                            $publishResult = "Ok";
+                            $result .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                                .'<br />'
+                            ;
+                        }else{
+                            $publishResult = "<span style='color:red'>ERROR</span>";
+                            $error .= $publishQueueManageData->Queue[$i]["DestinationPath"].' -> '.$publishResult
+                                .'<br />'
+                            ;
+                        }
+                    }
+                    $strDocumentNewsId=substr($strDocumentNewsId,1);
+                    $waitPublish=0; //还原状态
+                    $documentNewsManageData->UpdateWaitPublish($waitPublish,$siteId,$channelId,$state,$strDocumentNewsId);
+                    $restCount=$documentNewsManageData->GetCountOfWaitPublishList($siteId,$channelId,"",$state);
+                    $result="还剩下".$restCount."条<br>".$result;
+                    $url = $_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING'];
+                    if($error!=''){
+                        $error.='<a href="'.$url.'" style="color: rgb(82, 89, 107); cursor: pointer;">[继续发布]</a>';
+                        $templateContent = str_ireplace("{Result}", $error, $templateContent);
+                    }else{
+                        $templateContent = str_ireplace("{Result}", $result, $templateContent);
+                        if($restCount>0)
+                            header('refresh:0 ' . $url);
+                    }
 
                 }
                 $result.="文档状态错误";
@@ -181,7 +267,7 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
 
         $documentNewsManageData = new DocumentNewsManageData();
         $waitPublish=1; //等待发布状态
-        $result=$documentNewsManageData->UpdateWaitPublishForSite($waitPublish,$siteId,$state); //全设为1
+        $result=$documentNewsManageData->UpdateWaitPublish($waitPublish,$siteId,0,$state); //全设为1
         $result=json_encode($result);
         return $result;
     }
@@ -204,7 +290,7 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
 
         $documentNewsManageData = new DocumentNewsManageData();
         $waitPublish=0; //取消
-        $result=$documentNewsManageData->UpdateWaitPublishForSite($waitPublish,$siteId);
+        $result=$documentNewsManageData->UpdateWaitPublish($waitPublish,$siteId);
         $result=json_encode($result);
         return $result;
     }
