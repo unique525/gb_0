@@ -40,8 +40,12 @@ class UserManageData extends BaseManageData
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-            if ($searchType == 1) { //会员名
-                $searchSql = " AND (u.UserName like :SearchKey)";
+            if ($searchType == 1) { //会员名,手机号,邮箱地址
+                $searchSql = " AND ((u.UserName like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                $searchSql .= " OR (u.UserMobile like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                $searchSql .= " OR (u.UserEmail like :SearchKey))";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }elseif ($searchType == 2) { //IP
                 $searchSql = " AND (u.RegIp like :SearchKey)";
