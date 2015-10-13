@@ -307,7 +307,25 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                         $strArticlePicId=substr($strArticlePicId,1);
                                         $strDuplicatedUploadFileId=$uploadFileManageData->DuplicateByUploadFileId($strArticlePicId,$targetCid,$toTableType);
                                         if(strlen($strDuplicatedUploadFileId)>0){
-                                            //新数据id加入UploadFiles字段
+
+
+
+                                            //水印图
+                                            $doWaterMark=Control::PostRequest("DoWaterMark","off");
+                                            $watermarkUploadFilePath="";
+                                            if($doWaterMark=='on'){
+                                                $siteConfigData = new SiteConfigData($toSiteId);
+                                                $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
+                                                if ($watermarkUploadFileId > 0) {
+                                                    $uploadFileData = new UploadFileData();
+                                                    $watermarkUploadFilePath =
+                                                        $uploadFileData->GetUploadFilePath(
+                                                            $watermarkUploadFileId, true);
+                                                }
+                                            }
+
+
+                                            //将附件图片更新至content内容字段
                                             $picStyle=Control::PostRequest("PicStyle","default");
                                             switch($picStyle){
                                                 case "default":
@@ -326,7 +344,18 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                             $strPrependContent='<div align="center">';
                                             $arrayOfUploadFiles=$uploadFileManageData->GetListById($strDuplicatedUploadFileId);
                                             foreach($arrayOfUploadFiles as $oneArticlePic){
-                                                $strPrependContent.='<p><img src="'.$oneArticlePic[$picPathType].'" /></p>';
+
+                                                //打水印
+                                                if($doWaterMark=='on'&&$watermarkUploadFilePath!=""){
+                                                    parent::GenUploadFileWatermark1(
+                                                        $oneArticlePic["UploadFileId"],
+                                                        $watermarkUploadFilePath);
+                                                }
+                                                if($doWaterMark=='on'&&$oneArticlePic["UploadFileWatermarkPath1"]!=""){  //有水印地址默认用水印地址
+                                                    $strPrependContent.='<p><img src="'.$oneArticlePic['UploadFileWatermarkPath1'].'" /></p>';
+                                                }else{
+                                                    $strPrependContent.='<p><img src="'.$oneArticlePic[$picPathType].'" /></p>';
+                                                }
                                                 $documentNewsPicManageData->Create($newId,$oneArticlePic["UploadFileId"],0);//加入DocumentNewsPic表
                                             }
                                             $strPrependContent.='</div>';
