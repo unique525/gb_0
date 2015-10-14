@@ -95,6 +95,7 @@
                                 <a target="_blank" href="#"><span
                                         style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a>
                                 <a href="/default.php?secu=manage&mod=forum&m=create&parent_id={f_ForumId}&forum_rank=1&site_id={SiteId}">[新增子版块]</a>
+
                             </td>
 
                             <td class="spe_line2" style="width:36px;">
@@ -146,7 +147,7 @@
                             </td>
                             <td class="spe_line2"><a target="_blank" href="/default.php?mod=forum_topic&a=list&forum_id={f_ForumId}"><span style="color:{f_ForumNameFontColor};font-weight:{f_ForumNameFontBold};font-size:{f_ForumNameFontSize}">{f_ForumName}</span></a></td>
                             <td class="spe_line2" style="width:90px;text-align:center;"><span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
-                                <a href="/default.php?secu=manage&mod=forum_topic&a=list&forum_id={f_ForumId}&site_id={SiteId}">查看</a>
+                                <a href="/default.php?secu=manage&mod=forum_topic&a=list&forum_id={f_ForumId}&site_id={SiteId}">管理主题</a>
                             </span></td>
                             <td class="spe_line2" style="width:36px;"><img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" /></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>
