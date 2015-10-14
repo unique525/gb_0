@@ -171,7 +171,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
 
 
             $newspaperArticlePublicData = new NewspaperArticlePublicData();
-            $state = $newspaperArticlePublicData->GetState($newspaperArticleId, false);
+            $state = $newspaperArticlePublicData->GetState($newspaperArticleId, true);
             if($state == 100){
 
                 header("HTTP/1.1 404 Not Found");
@@ -292,7 +292,7 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             $tagId = "newspaper_page_and_article";
             if(stripos($templateContent, $tagId) > 0){
                 $newspaperArticlePublicData= new NewspaperArticlePublicData();
-                $arrNewspaperArticles=$newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
+                $arrNewspaperArticles = $newspaperArticlePublicData->GetListOfMultiPage($newspaperPageIds,$state);
 
 
                 $tagName = Template::DEFAULT_TAG_NAME;

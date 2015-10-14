@@ -437,7 +437,6 @@ class NewspaperPublicGen extends BasePublicGen
     /**
      * 版面选择列表
      */
-
     private function GenPageList()
     {
         $channelId = Control::GetRequest("channel_id", 0);
