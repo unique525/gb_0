@@ -110,6 +110,7 @@ class NewspaperArticlePicPublicData extends BasePublicData
                 WHERE
                     nap.NewspaperArticleId=:NewspaperArticleId
                     AND nap.UploadFileId = uf.UploadFileId
+                    AND nap.State<100
                 ORDER BY $orderBySql";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
