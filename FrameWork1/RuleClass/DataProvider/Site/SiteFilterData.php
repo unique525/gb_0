@@ -28,7 +28,7 @@ class SiteFilterData extends BaseData {
                 *
                 FROM
                 " . self::TableName_SiteFilter . "
-                WHERE (SiteId=:SiteId OR SiteId=0) ORDER BY SiteId DESC ;";//取当前站点id=site_id与所有站点id=0的数据
+                WHERE (SiteId=:SiteId OR SiteId=0) AND State<100 ORDER BY SiteId DESC ;";//取当前站点id=site_id与所有站点id=0的数据
 
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
 
