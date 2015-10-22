@@ -140,7 +140,7 @@
             <td class="spe_line" style="width:270px;height:35px;text-align: right;"><label
                     for="DoWaterMark">内容图片是否打水印(仅限数字报复制)：</label></td>
             <td class="spe_line" style="text-align: left">
-                <input type="checkbox" name="DoWaterMark" id="DoWaterMark"/>
+                <input type="checkbox" name="DoWaterMark" id="DoWaterMark" value="on"/>
             </td>
         </tr>
         <tr>

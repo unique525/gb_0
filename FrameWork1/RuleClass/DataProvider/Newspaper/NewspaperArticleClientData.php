@@ -19,24 +19,29 @@ class NewspaperArticleClientData extends BaseClientData {
 
         if ($newspaperPageId > 0) {
 
-            $orderBySql = 'Sort , CreateDate DESC';
+            $orderBySql = 'na.Sort , na.CreateDate DESC';
 
 
             $selectColumn = '
-            *,
-            (SELECT uf.UploadFilePath FROM
-                ' . self::TableName_NewspaperArticlePic . ' nap,
-                ' . self::TableName_UploadFile . ' uf
-                WHERE uf.UploadFileId=nap.UploadFileId
-                AND nap.NewspaperArticleId=' . self::TableName_NewspaperArticle . '.NewspaperArticleId
-                LIMIT 1
-                ) AS UploadFilePath
+            na.*,
+                uf1.UploadFilePath AS TitlePic1UploadFilePath,
+                uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+                uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+                uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+                uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+                uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+                uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+                uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+                uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+                uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+                uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1
             ';
 
-            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . "
+            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle  . " na
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on na.TitlePic1UploadFileId=uf1.UploadFileId
                 WHERE
-                    NewspaperPageId=:NewspaperPageId
-                    AND State<100
+                    na.NewspaperPageId=:NewspaperPageId
+                    AND na.State<100
                 ORDER BY $orderBySql";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
@@ -65,24 +70,28 @@ class NewspaperArticleClientData extends BaseClientData {
 
 
 
-            $orderBySql = 'Sort , CreateDate DESC';
-
+            $orderBySql = 'na.Sort , na.CreateDate DESC';
 
             $selectColumn = '
-            *,
-            (SELECT uf.UploadFilePath FROM
-                ' . self::TableName_NewspaperArticlePic . ' nap,
-                ' . self::TableName_UploadFile . ' uf
-                WHERE uf.UploadFileId=nap.UploadFileId
-                AND nap.NewspaperArticleId=' . self::TableName_NewspaperArticle . '.NewspaperArticleId
-                LIMIT 1
-                ) AS UploadFilePath
+            na.*,
+                uf1.UploadFilePath AS TitlePic1UploadFilePath,
+                uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+                uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+                uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+                uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+                uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+                uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+                uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+                uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+                uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+                uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1
             ';
 
-            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . "
+            $sql = "SELECT $selectColumn FROM " . self::TableName_NewspaperArticle . " na
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on na.TitlePic1UploadFileId=uf1.UploadFileId
                 WHERE
-                    NewspaperPageId IN (SELECT NewspaperPageId FROM ".self::TableName_NewspaperPage." WHERE NewspaperId=:NewspaperId)
-                    AND State<100
+                    na.NewspaperPageId IN (SELECT NewspaperPageId FROM ".self::TableName_NewspaperPage." WHERE NewspaperId=:NewspaperId)
+                    AND na.State<100
                 ORDER BY $orderBySql";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperId", $newspaperId);
@@ -104,19 +113,23 @@ class NewspaperArticleClientData extends BaseClientData {
         $result = null;
         if($newspaperArticleId>0){
             $sql = "
-            SELECT *,
-            (SELECT uf.UploadFilePath FROM
-                " . self::TableName_NewspaperArticlePic . " nap,
-                " . self::TableName_UploadFile . " uf
-                WHERE uf.UploadFileId=nap.UploadFileId
-                AND nap.NewspaperArticleId=" . self::TableName_NewspaperArticle . ".NewspaperArticleId
-                LIMIT 1
-                ) AS UploadFilePath
-
+            SELECT na.*,
+                uf1.UploadFilePath AS TitlePic1UploadFilePath,
+                uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+                uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+                uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+                uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+                uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+                uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+                uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+                uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+                uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+                uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1
             FROM
-            " . self::TableName_NewspaperArticle . "
+            " . self::TableName_NewspaperArticle . " na
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on na.TitlePic1UploadFileId=uf1.UploadFileId
 
-            WHERE NewspaperArticleId=:NewspaperArticleId;";
+            WHEREna. NewspaperArticleId=:NewspaperArticleId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);

@@ -44,7 +44,7 @@ class SearchPublicGen extends BasePublicGen implements IBasePublicGen
         $f = Control::GetRequest("f", "_all");
         $m = Control::GetRequest("m", "no");
         $syn = Control::GetRequest("syn", "no");
-        $s = Control::GetRequest("s", "s_create_date_DESC");
+        $s = Control::GetRequest("s", "s_show_date_DESC");
         $tagId = "big_search";
         if (strlen($searchKey) > 0) {
             if ($pageIndex > 0) {
