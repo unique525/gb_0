@@ -129,7 +129,7 @@ class NewspaperArticleClientData extends BaseClientData {
             " . self::TableName_NewspaperArticle . " na
             LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on na.TitlePic1UploadFileId=uf1.UploadFileId
 
-            WHERE na. NewspaperArticleId=:NewspaperArticleId;";
+            WHERE na.NewspaperArticleId=:NewspaperArticleId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
