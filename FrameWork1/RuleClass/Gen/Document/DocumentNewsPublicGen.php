@@ -252,11 +252,11 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
             $documentNewsPublicData=new DocumentNewsPublicData();
             $result = $documentNewsPublicData->AddHit($documentNewsId);
             if($result>0){
-                //if (isset($_GET['jsonpcallback'])) {
-                //    echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
-                //}
-                //$arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
-                //$result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
+                if (isset($_GET['jsonpcallback'])) {
+                    echo Control::GetRequest("jsonpcallback","") . '([{ReCommon:"' . $result . '"}])';
+                }
+                $arrayOne = $documentNewsPublicData->GetHit($documentNewsId);
+                $result=$arrayOne["Hit"]+$arrayOne["VirtualHit"];
             }
         }
         return $result;
@@ -321,10 +321,14 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     $arrList = $documentNewsPublicData->GetNewList($siteId, $channelId,$topCount,$state,$order,$showIndex);
                     break;
                 case "child":
-                    $arrList = $documentNewsPublicData->GetListOfChild($channelId,$topCount,$state,$order,$showIndex);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrList = $documentNewsPublicData->GetListOfChild($strChannelId,$topCount,$state,$order,$showIndex);
                     break;
                 case "grandson":
-                    $arrList = $documentNewsPublicData->GetListOfGrandson($channelId,$topCount,$state,$order,$showIndex);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrList = $documentNewsPublicData->GetListOfChild($strChannelId,$topCount,$state,$order,$showIndex);
                     break;
                 default:
                     $arrList = $documentNewsPublicData->GetNewList($channelId,$topCount,$state,$order,$showIndex);
@@ -342,7 +346,17 @@ class DocumentNewsPublicGen extends BasePublicGen implements IBasePublicGen {
                     if(strlen($directUrl)>0){
                         $columnValue['DocumentNewsUrl'] = $directUrl;
                     }else{
+                        $sitePublicData=new SitePublicData();
+                        $siteUrl=$sitePublicData->GetSiteUrl($siteId,true);
+
+                        //暂时解决www.changsha.cn资讯热点没有域名的问题
+                        if($siteUrl==''){
+                            $siteUrl='http://news.changsha.cn/';
+                        }
+                        //end
+
                         $columnValue['DocumentNewsUrl'] =
+                            $siteUrl.
                             '/h/'.$columnValue['ChannelId'].
                             '/'.$publishDate.
                             '/'.$columnValue['DocumentNewsId'].'.html';

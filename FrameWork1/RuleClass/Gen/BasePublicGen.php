@@ -570,16 +570,24 @@ class BasePublicGen extends BaseGen
                     $arrDocumentNewsList = $documentNewsPublicData->GetNewList($siteId, $channelId, $tagTopCount, $state, 0, 0, true);
                     break;
                 case "child":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy, 0, true);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChildrenChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($strChildrenChannelId, $channelId, $tagTopCount, $state, $orderBy, 0, true);
                     break;
                 case "grandson":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy, 0, true);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChildrenChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfChild($strChildrenChannelId, $channelId, $tagTopCount, $state, $orderBy, 0, true);
                     break;
                 case "rec_level_child":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy, true);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChildrenChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($strChildrenChannelId,$channelId, $tagTopCount, $state, "", $orderBy, true);
                     break;
                 case "rec_level_grandson":
-                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy, true);
+                    $channelPublicData=new ChannelPublicData();
+                    $strChildrenChannelId=$channelPublicData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsPublicData->GetListOfRecLevelChild($strChildrenChannelId,$channelId, $tagTopCount, $state, "", $orderBy, true);
                     break;
                 case "rec_level_belong_site":
                     $recLevel = intval($tagWhereValue);
