@@ -19,7 +19,9 @@
                 }
                 $("#mainForm").attr("action", "/default.php?secu=manage" +
                     "&mod=newspaper_article_pic&m={method}" +
+                    "&newspaper_article_id={NewspaperArticleId}" +
                     "&newspaper_article_pic_id={NewspaperArticlePicId}" +
+                    "&site_id=" + parent.G_NowSiteId +
                     "&tab_index=" + parent.G_TabIndex + "");
 
                 $('#mainForm').submit();
@@ -54,7 +56,11 @@
             </tr>
             <tr>
                 <td class="spe_line" style="width:160px;height:40px;text-align: right;">图片：</td>
-                <td colspan="3" class="spe_line" style="text-align: left">
+                <td colspan="3" class="spe_line" style="height:40px;line-height:40px;text-align: left;display:{DisplayCreate}">
+                    <input name="newspaper_article_pic" id="newspaper_article_pic" type="file"
+                           maxlength="300" class="input_box" style="width:300px;"/>
+                </td>
+                <td colspan="3" class="spe_line" style="height:40px;line-height:40px;text-align: left;display:{DisplayModify}">
                     <a href="/default.php?secu=manage&mod=upload_file&m=modify&table_id={NewspaperArticlePicId}&site_id={site_id}&upload_file_id={UploadFileId}">文件管理</a>
 
                 </td>

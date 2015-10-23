@@ -2,47 +2,48 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
     {common_head}
-
-
     <script type="text/javascript">
-        $("document").ready(function () {
+        <!--
+        $(function () {
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                //parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper&m=create';
-                //parent.G_TabTitle =  '新增';
-                //parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=newspaper_article_pic&m=create&newspaper_article_id={NewspaperArticleId}&tab_index={TabIndex}'+ '&site_id=' + parent.G_NowSiteId;
+
             });
 
             $(".btn_modify").click(function (event) {
                 event.preventDefault();
                 var newspaperArticlePicId=$(this).attr("idvalue");
-                var newspaperArticlePicTitle=$(this).attr("title");
-                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article_pic&m=modify' + '&newspaper_article_pic_id=' + newspaperArticlePicId + '&site_id=' + parent.G_NowSiteId;
-                parent.G_TabTitle = newspaperArticlePicTitle;
-                parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=newspaper_article_pic&m=modify' + '&newspaper_article_id={NewspaperArticleId}&&tab_index={TabIndex}&newspaper_article_pic_id=' + newspaperArticlePicId + '&site_id=' + parent.G_NowSiteId;
             });
 
-            //格式化站点状态
+
+            //格式化状态
             $(".span_state").each(function(){
                 $(this).html(formatState($(this).text()));
             });
 
-            //开启站点
+            //格式化题图按钮
+            $(".btn_update_title_pic").each(function(){
+                $(this).html(IsTitlePic($(this).attr("idvalue")));
+            });
+
+            //开启
             $(".img_open").click(function(){
                 var newspaperArticlePicId = parseInt($(this).attr("idvalue"));
                 var state = 0; //开启状态
                 modifyState(newspaperArticlePicId, state);
             });
-            //停用站点
+            //停用
             $(".img_close").click(function(){
                 var newspaperArticlePicId = parseInt($(this).attr("idvalue"));
                 var state = 100; //开启状态
                 modifyState(newspaperArticlePicId, state);
             });
         });
-
 
 
         function modifyState(newspaperArticlePicId,state){
@@ -57,7 +58,9 @@
                     dataType: "jsonp",
                     jsonp: "jsonpcallback",
                     success: function(data) {
-                        $("#span_state_"+newspaperArticlePicId).html(formatState(state));
+                        $(".btn_update_title_pic").each(function(){
+                            $(this).html(IsTitlePic($(this).attr("idvalue")));
+                        });
                     }
                 });
             }
@@ -80,18 +83,78 @@
                     break;
             }
         }
+
+        /**
+         * 格式化题图按钮
+         * @return {string}
+         */
+        function IsTitlePic(uploadFileId){
+            var titlePicId="{TitlePic1UploadFileId}";
+            if(uploadFileId==titlePicId){
+                return "<"+"span style='color:green'>当前题图<"+"/span>"
+            }else{
+                return "设为题图";
+            }
+        }
+
+
+
+        function AjaxUpdateTitlePic1(UploadFileId){
+            if(UploadFileId>0){
+                $.ajax({
+                    type: "get",
+                    url: "/default.php?secu=manage&mod=newspaper_article&m=async_modify_tp1",
+                    data: {
+                        newspaper_article_id: {NewspaperArticleId},
+                        title_pic_1_upload_file_id: UploadFileId
+                    },
+                    dataType: "jsonp",
+                    jsonp: "jsonpcallback",
+                    success: function(data) {
+                        if(data["result"]>0){
+                            window.location.reload();
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                });
+            }
+        }
+        -->
     </script>
+    <style>
+
+        /***** 图片管理css  *****/
+        .li_pic_img_item{
+            width:276px;
+            float: left;
+            margin: 10px;
+            box-shadow: 0 0 5px #666;
+            padding-right: 4px;
+            background: none repeat scroll 0 0 #EFEFEF;
+            position: relative;
+        }
+        .notice {width:100%;height:100%;position: absolute;background-color: rgba(3, 3, 3, 0.7);z-index: 5;display: none}
+        .pic_img_container {width:280px;height:190px;background-color: rgb(253, 253, 253)}
+        .pic_img_container img{max-width:280px;max-height:190px;display: block}
+        .pic_img_title{padding:3px 5px;width:266px;height:22px;position:relative}
+        .pic_img_title input{width:265px;height:15px;position: absolute;margin-top:3px;z-index: 10}
+        .pic_img_state{padding:3px 5px;position: relative}
+        .pic_img_state span{float:left;}
+        .pic_img_state img{vertical-align:middle;cursor: pointer}
+        .btn_update_title_pic {float:right;cursor: pointer;border: 1px solid #B0B0B0;padding:0 5px;right:0;top: 3px;background: #eee;z-index: 10;position: absolute}
+    </style>
 </head>
 <body>
-<div id="dialog_box" title="提示" style="display:none;">
-    <div id="dialog_content">
-    </div>
-</div>
 <div class="div_list">
+
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
+            <td id="td_main_btn" width="105">
+                <a class="btn2" style="padding:3px 10px" href="/default.php?secu=manage&mod=newspaper_article&m=list&newspaper_page_id={NewspaperPageId}" idvalue="{NewspaperPageId}" title="返回文档管理">返回文档管理</a>
+            </td>
             <td id="td_main_btn">
-                 <a class="btn2" style="padding:3px 10px" href="/default.php?secu=manage&mod=newspaper_article&m=list&newspaper_page_id={NewspaperPageId}" idvalue="{NewspaperPageId}" title="返回文档管理">返回文档管理</a>
+                <a class="btn2" id="btn_create" style="padding:3px 10px;cursor: pointer"  idvalue="{NewspaperArticleId}" title="新增">新增</a>
             </td>
             <td style="text-align: right; margin-right: 8px;">
                 <div id="search_box">
@@ -106,44 +169,47 @@
             </td>
         </tr>
     </table>
-    <table class="grid" width="100%" cellpadding="0" cellspacing="0">
-        <tr class="grid_title">
-            <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
-            <td style="width: 40px; text-align: center;">编辑</td>
-            <td>标题</td>
-            <td style="width: 180px;text-align:center;">创建时间</td>
-            <td style="width: 40px; text-align: center;">状态</td>
-            <td style="width: 80px;text-align:center;">启用&nbsp;&nbsp;停用</td>
-            <td style="width:80px;text-align:left;padding:0 10px 0 10px">预览</td>
-        </tr>
-    </table>
-    <ul id="sort_grid">
-        <icms id="newspaper_article_pic_list" type="list">
-            <item>
-                <![CDATA[
-                <li id="sort_{f_NewspaperArticlePicId}">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr class="grid_item">
-                            <td class="spe_line2" style="width:30px;text-align:center;"><input class="input_select" type="checkbox" name="input_select" value="{f_NewspaperArticlePicId}"/></td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><img class="btn_modify" title="文章编辑" style="cursor:pointer;" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticlePicId}" alt="编辑"/></td>
-                            <td class="spe_line2"><a target="_blank" href="/default.php?mod=newspaper_article&a=detail&newspaper_article_pic_id={f_NewspaperArticlePicId}">{f_Remark}</a></td>
-                            <td class="spe_line2" style="width:180px;text-align:center;" title="创建时间">{f_CreateDate}</td>
-                            <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_NewspaperArticlePicId}" class="span_state" idvalue="{f_NewspaperArticlePicId}">{f_State}</span></td>
-                            <td class="spe_line2" style="width:80px;text-align:center;">
-                                <img class="img_open" idvalue="{f_NewspaperArticlePicId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <img class="img_close" idvalue="{f_NewspaperArticlePicId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
 
-                            <td class="spe_line2" style="width:80px;text-align:left;padding:0 10px 0 10px">
-                                <span  class="show_title_pic" idvalue="{f_UploadFileId}">预览</span>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-                ]]>
-            </item>
-        </icms>
-    </ul>
-    <div>{pager_button}</div>
+        <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>
+
+                    <div id="tabs-5">
+                        <div class="div_list" id="">
+                            <ul id="old_pic_list">
+
+                                <icms id="newspaper_article_pic_list" type="list">
+                                    <item>
+                                        <![CDATA[
+                                        <li class="li_pic_img_item" id="UploadFileId_{f_UploadFileId}" >
+                                            <div class="notice" id="notice_{f_UploadFileId}"></div>
+
+                                            <table class="pic_img_container" cellspacing="0"><tr><td align="center" valign="center"><img class="pic_slider_img" onclick="showOriImg('{f_UploadFilePath}')" idvalue="{f_UploadFileId}" src="{f_UploadFilePath}" style="cursor:pointer;" title="点击查看原始图片"/></td></tr></table>
+                                            <div class="pic_img_state" style="padding:3px 5px;">
+                                                <span id="span_state_{f_NewspaperArticlePicId}" class="span_state" idvalue="{f_NewspaperArticlePicId}">{f_State}</span>
+                                                <img class="img_open" idvalue="{f_NewspaperArticlePicId}" title="启用" src="/system_template/{template_name}/images/manage/start.jpg"
+                                                     alt="{f_UploadFileId}"/>
+                                                <img class="img_close" idvalue="{f_NewspaperArticlePicId}" title="停用" src="/system_template/{template_name}/images/manage/stop.jpg"
+                                                     alt="{f_UploadFileId}"/>
+                                                <img class="btn_modify" src="/system_template/{template_name}/images/manage/edit.gif" idvalue="{f_NewspaperArticlePicId}" title="编辑" />
+                                                <div class="btn_update_title_pic" idvalue="{f_UploadFileId}" title="{f_ShowInPicSlider}" id="update_pic_title_{f_UploadFileId}" onclick="AjaxUpdateTitlePic1({f_UploadFileId})" ></div>
+                                            </div>
+
+
+                                        </li>
+
+                                        ]]>
+                                    </item>
+                                </icms>
+                                <li style="clear:left;"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    {pager_button}
 </div>
+
 </body>
 </html>

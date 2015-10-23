@@ -27,4 +27,7 @@
     <module id="9">
         <content><![CDATA[还没有相关的数据！]]></content>
     </module>
+    <module id="10">
+        <content><![CDATA[上传文件出错或没有上传文件！]]></content>
+    </module>
 </root>

@@ -37,6 +37,114 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
 
 
     /**
+     * 新增
+     * @return string 模板内容页面
+     */
+    private function GenCreate()
+    {
+        $tempContent = Template::Load("newspaper/newspaper_article_pic_deal.html", "common");
+        $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
+        $resultJavaScript = "";
+        $manageUserId = Control::GetManageUserId();
+
+        $siteId = intval(Control::GetRequest("site_id",0));
+
+        if ($newspaperArticleId > 0 && $manageUserId > 0) {
+            parent::ReplaceFirst($tempContent);
+
+            $tempContent = str_ireplace("{site_id}", $siteId, $tempContent);
+
+            $newspaperArticlePicManageData = new NewspaperArticlePicManageData();
+
+
+            if (!empty($_POST)) {
+                $fileElementName = "newspaper_article_pic";
+                $tableType = UploadFileData::UPLOAD_TABLE_TYPE_NEWSPAPER_ARTICLE_PIC; //
+                $tableId = $newspaperArticleId;
+                $uploadFile = new UploadFile();
+                $uploadFileId = 0;
+                $PicResult = self::Upload(
+                    $fileElementName,
+                    $tableType,
+                    $tableId,
+                    $uploadFile,
+                    $uploadFileId
+                );
+
+
+                //水印图
+                $watermarkUploadFilePath="";
+                $siteConfigData = new SiteConfigData($siteId);
+                $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
+                if ($watermarkUploadFileId > 0) {
+                    $uploadFileData = new UploadFileData();
+                    $watermarkUploadFilePath =
+                        $uploadFileData->GetUploadFilePath(
+                            $watermarkUploadFileId, true);
+
+                //打水印
+                if($watermarkUploadFilePath!=""){
+                    parent::GenUploadFileWatermark1(
+                        $uploadFileId,
+                        $watermarkUploadFilePath);
+                }
+                }
+
+
+                if (intval($PicResult) > 0) {
+
+
+                    $httpPostData = $_POST;
+                    $httpPostData["f_UploadFileId"]=$uploadFileId;
+                    $httpPostData["f_NewspaperArticleId"]=$newspaperArticleId;
+                    $result = $newspaperArticlePicManageData->Create($httpPostData);
+                    //加入操作日志
+                    $operateContent = 'Create Newspaper Article Pic,POST FORM:' . implode('|', $_POST) . ';\r\nResult:result:' . $result;
+                    self::CreateManageUserLog($operateContent);
+
+                    if ($result > 0) {
+                        //删除缓冲
+                        parent::DelAllCache();
+
+                        $closeTab = Control::PostRequest("CloseTab", 0);
+                        if ($closeTab == 1) {
+                            Control::GoUrl("/default.php?secu=manage&mod=newspaper_article_pic&m=list&newspaper_article_id=$newspaperArticleId&tab_index=$tabIndex");
+                        } else {
+                            Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                        }
+                    } else {
+                        $resultJavaScript .= Control::GetJqueryMessage(Language::Load('newspaper', 4)); //编辑失败！
+                    }
+
+                } else {
+                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('newspaper', 10)); //上传文件出错或没有上传文件！
+                }
+            }
+
+            $tempContent = str_ireplace("{NewsPaperArticleId}", $newspaperArticleId, $tempContent);
+            $tempContent = str_ireplace("{TabIndex}", $tabIndex, $tempContent);
+
+            //加载原有数据
+            $arrayField=$newspaperArticlePicManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent,$arrayField);
+
+
+            $tempContent = str_ireplace("{DisplayCreate}", "block", $tempContent);
+            $tempContent = str_ireplace("{DisplayModify}", "none", $tempContent);
+
+            $patterns = '/\{s_(.*?)\}/';
+            $tempContent = preg_replace($patterns, "", $tempContent);
+        }else{
+            //!id
+        }
+        parent::ReplaceEnd($tempContent);
+        $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        return $tempContent;
+    }
+
+
+    /**
      * 编辑
      * @return string 模板内容页面
      */
@@ -44,6 +152,8 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
     {
         $tempContent = Template::Load("newspaper/newspaper_article_pic_deal.html", "common");
         $newspaperArticlePicId = Control::GetRequest("newspaper_article_pic_id", 0);
+        $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
+        $tabIndex = Control::GetRequest("tab_index", 0);
         $resultJavaScript = "";
         $manageUserId = Control::GetManageUserId();
 
@@ -75,7 +185,7 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
 
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
-                        $resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl("/default.php?secu=manage&mod=newspaper_article_pic&m=list&newspaper_article_id=$newspaperArticleId&tab_index=$tabIndex");
                     } else {
                         Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
                     }
@@ -83,6 +193,11 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('newspaper', 4)); //编辑失败！
                 }
             }
+
+            $tempContent = str_ireplace("{DisplayCreate}", "none", $tempContent);
+            $tempContent = str_ireplace("{DisplayModify}", "block", $tempContent);
+            $tempContent = str_ireplace("{NewsPaperArticleId}", $newspaperArticleId, $tempContent);
+            $tempContent = str_ireplace("{TabIndex}", $tabIndex, $tempContent);
 
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
@@ -123,7 +238,7 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
             if (!$can) {
                 $result = -10;
             } else {
-                $result = $newspaperPageManageData->ModifyState($newspaperArticlePicId, $state);
+                $result = $newspaperArticlePicManageData->ModifyState($newspaperArticlePicId, $state);
                 //加入操作日志
                 $operateContent = 'Modify State Newspaper Article Pic,GET PARAM:' . implode('|', $_GET) . ';\r\nResult:' . $result;
                 self::CreateManageUserLog($operateContent);
@@ -159,6 +274,7 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
         $searchKey = urldecode($searchKey);
 
         $newspaperArticlePicManageData = new NewspaperArticlePicManageData();
+        $newspaperArticleManageData = new NewspaperArticleManageData();
 
         $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
 
@@ -197,6 +313,10 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
                     $tempContent
                 );
 
+                //区分题图
+                $titlePicUploadFileId=$newspaperArticleManageData->GetTitlePic1UploadFileId($newspaperArticleId);
+                $tempContent = str_ireplace("{TitlePic1UploadFileId}",$titlePicUploadFileId,$tempContent);
+
 
 
             } else {
@@ -205,7 +325,6 @@ class NewspaperArticlePicManageGen extends BaseManageGen {
             }
 
 
-            $newspaperArticleManageData = new NewspaperArticleManageData();
             $newspaperPageId = $newspaperArticleManageData->GetNewspaperPageId($newspaperArticleId,true);
             $tempContent = str_ireplace("{NewspaperPageId}",$newspaperPageId,$tempContent);
         }

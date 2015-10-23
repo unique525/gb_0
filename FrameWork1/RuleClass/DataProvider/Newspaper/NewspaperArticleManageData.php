@@ -362,4 +362,59 @@ class NewspaperArticleManageData extends BaseManageData {
         }
         return $result;
     }
+
+
+
+    /**
+     * 由id取得题图1的upload_file_id
+     * @param int $newspaperArticleId id
+     * @param bool $withCache 是否使用缓冲
+     * @return int 取得对应数组
+     */
+    public function GetTitlePic1UploadFileId($newspaperArticleId,$withCache=false)
+    {
+
+        $result = -1;
+        if ($newspaperArticleId >0) {
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_title_pic_1_upload_file_id.cache_' . $newspaperArticleId . '';
+
+            $sql = "SELECT TitlePic1UploadFileId FROM
+                        " . self::TableName_NewspaperArticle . "
+                    WHERE NewspaperArticleId = :NewspaperArticleId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 更新题图1
+     * @param int $newspaperArticleId id
+     * @param int $UploadFileId upload_file_id
+     * @return int 结果
+     */
+    public function UpdateTitlePic1UploadFileId($newspaperArticleId,$UploadFileId)
+    {
+
+        $result = -1;
+        if ($newspaperArticleId >0&&$UploadFileId>0) {
+
+
+            $sql = "update
+                        " . self::TableName_NewspaperArticle . "
+                    SET TitlePic1UploadFileId=:TitlePic1UploadFileId
+                    WHERE NewspaperArticleId = :NewspaperArticleId
+                    ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TitlePic1UploadFileId", $UploadFileId);
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }

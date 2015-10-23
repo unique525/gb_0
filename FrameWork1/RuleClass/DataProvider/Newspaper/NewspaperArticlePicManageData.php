@@ -133,7 +133,7 @@ class NewspaperArticlePicManageData extends BaseManageData {
     }
 
     /**
-     * 根据后台管理员id返回此管理员可以管理的站点列表数据集
+     * 根据后台管理员id返回此管理员可以管理的列表数据集
      * @param int $newspaperArticleId 电子报文章id
      * @param int $pageBegin 分页起始位置
      * @param int $pageSize 分页大小
@@ -157,10 +157,11 @@ class NewspaperArticlePicManageData extends BaseManageData {
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
         }
-        $sql = "SELECT * FROM " . self::TableName_NewspaperArticlePic . "
+        $sql = "SELECT nap.*,uf.* FROM " . self::TableName_NewspaperArticlePic . " nap
+               LEFT OUTER JOIN " .self::TableName_UploadFile." uf on nap.UploadFileId=uf.UploadFileId
                         WHERE
-                            NewspaperArticleId = :NewspaperArticleId
-                        ORDER BY CreateDate
+                            nap.NewspaperArticleId = :NewspaperArticleId
+                        ORDER BY nap.CreateDate
                         LIMIT " . $pageBegin . "," . $pageSize . ";";
         $sqlCount = "SELECT Count(*) FROM " . self::TableName_NewspaperArticlePic . "
                         WHERE
@@ -175,6 +176,9 @@ class NewspaperArticlePicManageData extends BaseManageData {
         $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
         return $result;
     }
+
+
+
 
     /**
      * 取得状态

@@ -36,6 +36,9 @@ class NewspaperArticleManageGen extends BaseManageGen {
             case "async_modify_state":
                 $result = self::AsyncModifyState();
                 break;
+            case "async_modify_tp1":
+                $result = self::AsyncModifyTitlePic1();
+                break;
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -430,5 +433,24 @@ class NewspaperArticleManageGen extends BaseManageGen {
 
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+
+
+    /**
+     * 修改题图1
+     * @return string 返回Jsonp修改结果
+     */
+    private function AsyncModifyTitlePic1()
+    {
+        $result=-1;
+        $newspaperArticleId = Control::GetRequest("newspaper_article_id", 0);
+        $titlePic1UploadFileId = Control::GetRequest("title_pic_1_upload_file_id", 0);
+        if ($newspaperArticleId>0&&$titlePic1UploadFileId>0) {
+            parent::DelAllCache();
+            $newspaperArticleManageData = new NewspaperArticleManageData();
+            $result = $newspaperArticleManageData->UpdateTitlePic1UploadFileId($newspaperArticleId,$titlePic1UploadFileId);
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
     }
 }

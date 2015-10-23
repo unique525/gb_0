@@ -8,7 +8,6 @@
     <script type="text/javascript">
         $("document").ready(function () {
 
-
             $("#btn_select_all").click(function(event) {
                 event.preventDefault();
                 var inputSelect = $("[name='input_select']");
@@ -35,6 +34,14 @@
                 parent.addTab();
             });
 
+            $(".btn_pic_list").click(function (event) {
+                event.preventDefault();
+                var newspaperArticleId=$(this).attr("idvalue");
+                var newspaperArticleTitle=$(this).attr("title");
+                parent.G_TabUrl = '/default.php?secu=manage&mod=newspaper_article_pic&&m=list&newspaper_article_id='+newspaperArticleId+'';
+                parent.G_TabTitle = newspaperArticleTitle;
+                parent.addTab();
+            });
             /**
              * 复制
              * **/
@@ -199,7 +206,7 @@
                                 <img class="img_close" idvalue="{f_NewspaperArticleId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer"/></td>
 
                             <td class="spe_line2" style="width:80px;text-align:left;padding:0 10px 0 10px">
-                                <a href="/default.php?secu=manage&mod=newspaper_article_pic&&m=list&newspaper_article_id={f_NewspaperArticleId}">图片管理</a>
+                                <a class="btn_pic_list" style="cursor: pointer" idvalue="{f_NewspaperArticleId}" title="图片管理">图片管理</a>
                             </td>
                             <td class="spe_line2" style="width:120px;text-align:center;" title="">{f_NewspaperPageName}</td>
                             <td class="spe_line2" style="width:60px;text-align:center;" title="">{f_NewspaperPageNo}</td>
