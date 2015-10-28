@@ -75,7 +75,6 @@ class ForumPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ForumRank", $forumRank);
             $dataProperty->AddField("SiteId", $siteId);
-
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
 
         }

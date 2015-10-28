@@ -650,7 +650,7 @@ class Template
     {
         $listTemplate = str_ireplace("{c_no}", $i + 1, $listTemplate); //加入输出序号
 
-        if (strtolower($tagType) === 'document_news_list')
+        if (strtolower($tagType) == self::TAG_TYPE_DOCUMENT_NEWS_LIST)
         {
             self::FormatDocumentNewsRow(
                 $listTemplate,
@@ -658,7 +658,16 @@ class Template
             );
         }
 
-        if (strtolower($tagType) === 'related_document_news_list')
+        if (strtolower($tagType) == self::TAG_TYPE_ACTIVITY_LIST)
+        {
+            self::FormatActivityRow(
+                $listTemplate,
+                $columns
+            );
+        }
+
+
+        if (strtolower($tagType) === self::TAG_TYPE_RELATED_DOCUMENT_NEWS_LIST)
         {
             self::FormatDocumentNewsRow(
                 $listTemplate,
@@ -671,7 +680,7 @@ class Template
         foreach ($columns as $columnName => $columnValue) {
 
 
-            if (strtolower($tagType) === 'document_news_list')
+            if (strtolower($tagType) === self::TAG_TYPE_DOCUMENT_NEWS_LIST)
             {
                 self::FormatDocumentNewsColumnValue(
                     $columnName,
@@ -685,7 +694,7 @@ class Template
                     $itemType
                 );
             }
-            else if (strtolower($tagType) === 'product_list')
+            else if (strtolower($tagType) === self::TAG_TYPE_PRODUCT_LIST)
             {
                 self::FormatProductColumnValue(
                     $columnName,
@@ -698,7 +707,7 @@ class Template
                     $itemType
                 );
             }
-            else if (strtolower($tagType) === 'activity_list')
+            else if (strtolower($tagType) === self::TAG_TYPE_ACTIVITY_LIST)
             {
                 self::FormatActivityColumnValue(
                     $columnName,
@@ -740,6 +749,24 @@ class Template
         } else {
             $listTemplate = str_ireplace("{c_DocumentNewsUrl}",
                 "/h/{f_ChannelId}/{f_year}{f_month}{f_day}/{f_DocumentNewsId}.html", $listTemplate);
+        }
+
+    }
+
+
+    /**
+     * 为活动格式化所有行的内容
+     * @param string $listTemplate 列表模板
+     * @param array $columns 列数组
+     */
+    private static function FormatActivityRow(&$listTemplate, $columns){
+
+        if (isset($columns["DirectUrl"]) && $columns["DirectUrl"] != '') { //链接文档
+            $listTemplate = str_ireplace("{c_ActivityUrl}", $columns["DirectUrl"], $listTemplate); //直接输出url
+        } else {
+            $listTemplate = str_ireplace("{c_ActivityUrl}",
+                "/default.php?mod=activity&a=detail&temp=activity_detail&activity_id={f_ActivityId}"
+                , $listTemplate);
         }
 
     }

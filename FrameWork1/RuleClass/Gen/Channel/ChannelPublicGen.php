@@ -149,7 +149,7 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenList() {
         $siteId = parent::GetSiteIdByDomain();
         $channelId = Control::GetRequest("channel_id",0);
-        $templateTag=Control::GetRequest("temp","channel_list");
+        $templateTag = Control::GetRequest("temp","channel_list");
         $pageIndex = Control::GetRequest("p",0);
         $pageSize = Control::GetRequest("ps",0);
         if($pageIndex>1&&$pageSize>0){
@@ -242,9 +242,9 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $defaultTemp = "default";
 
+
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId, "", $templateMode);
-
 
         /*******************页面级的缓存 begin********************** */
 

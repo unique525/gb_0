@@ -23,6 +23,7 @@ class UserPublicData extends BasePublicData {
             $userPassWithMd5 = substr($userPassWithMd5,0,20);
         }
 
+
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)

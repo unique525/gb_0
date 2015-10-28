@@ -1445,6 +1445,10 @@ class BasePublicGen extends BaseGen
                 if (strlen($result) <= 0) {
                     $result = $channelTemplatePublicData->GetChannelTemplateContentForDynamic(
                         $siteId, $channelTemplateType, $channelTemplateTag, false);
+
+                    //本站模板不存在，则加载全系统模板
+                    //TODO 需要研究
+
                 }
             } elseif (self::IsPad()) {
                 $templateMode = 2;

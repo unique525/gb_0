@@ -37,7 +37,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, 0, "", $templateMode);//(site id 为0时，全系统搜索模板)
 
-        $forumId = Control::GetRequest("forum_id", 0);
+        $forumId = Control::GetRequest("forum_id", "");
 
         $forumPublicData = new ForumPublicData();
 
@@ -121,6 +121,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
         $forumPublicData = new ForumPublicData();
+
         if(strlen($forumId)>0){
             if(stripos("_",$forumId)){ //能找到 _
 
@@ -152,14 +153,13 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         }else{
+
             $forumRank = 0;
             $arrRankOneList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
 
             $forumRank = 1;
             $arrRankTwoList = $forumPublicData->GetListByForumRank($siteId, $forumRank, true);
         }
-
-
 
 
         $tagId = "forum_".$siteId;

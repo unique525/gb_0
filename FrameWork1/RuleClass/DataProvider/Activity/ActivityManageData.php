@@ -219,14 +219,14 @@ class ActivityManageData extends BaseManageData{
      * @param string $state 状态
      * @return int 执行结果
      */
-    public function ModifyState($activityUserId,$state) {
+    public function ModifyState($activityId,$state) {
         $result = -1;
-        if ($activityUserId < 0) {
+        if ($activityId < 0) {
             return $result;
         }
-        $sql = "UPDATE " . self::TableName_ActivityUser . " SET State=:State WHERE ActivityUserId=:ActivityUserId";
+        $sql = "UPDATE " . self::TableName_Activity . " SET State=:State WHERE ActivityId=:ActivityId";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField("ActivityUserId", $activityUserId);
+        $dataProperty->AddField("ActivityId", $activityId);
         $dataProperty->AddField("State", $state);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return  $result;

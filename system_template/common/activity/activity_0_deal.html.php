@@ -422,18 +422,6 @@
         </div>
     </div>
 </div>
-<!--<div id="tabs-3">
-    <div id="uploader">
-        <p>您的浏览器不支持 Flash, SilverLight, Gears, BrowserPlus 或 HTML5，不能使用组图上传功能</p>
-    </div>
-    <div class="spe_line" style=" line-height: 30px;"> <label for="f_ShowPicMethod">使用组图控件展示内容中的图片</label>
-        <select id="f_ShowPicMethod" name="f_ShowPicMethod">
-            <option value="0" >关闭</option>
-            <option value="1" >开启</option>
-        </select>
-        {s_ShowPicMethod}
-    </div>
-</div>-->
 
 </div>
 </td>
