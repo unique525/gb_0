@@ -1179,8 +1179,6 @@ class BaseManageGen extends BaseGen
                     $parentIdName
                 );
                 //生成投票专用js
-                $debug=new DebugLogManageData();
-                $debug->Create($templateContent);
                 $isAddJs=strpos($templateContent,'{VotePretempJs'.$voteId.'}');
                 if($isAddJs){
                     $pretempJsContent = Template::Load('vote/vote_front_js_pretemp.html', 'default', 'front_template');
