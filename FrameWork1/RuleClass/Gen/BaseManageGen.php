@@ -331,6 +331,28 @@ class BaseManageGen extends BaseGen
 
                             }
                         }
+
+                        /*** 处理模板附件 ***/
+                        //读取频道附件，生成临时ZIP文件并解压到目录
+                        /*
+                        if ($arrChannelTemplateList[$i]["Attachment"]!=NULL) {
+                            $attachmentDir = DIRECTORY_SEPARATOR . $arrChannelTemplateList[$i]["AttachmentName"];
+                            $attachmentDir = str_ireplace("//", "/", $attachmentDir);
+                            $attachmentFileName = $attachmentDir . DIRECTORY_SEPARATOR . "template_attachment_" . $arrChannelTemplateList[$i]["ChannelTemplateId"].".zip";
+                            FileObject::Write($attachmentFileName, $arrChannelTemplateList[$i]["Attachment"]);
+                            //////////////zip解压//////////////
+                            $zip = new ZipArchive();
+                            echo $attachmentFileName."<br>";
+                            if ($zip->open(PHYSICAL_PATH.$attachmentFileName) !== TRUE) {
+                                exit("cannot open $attachmentFileName\n");
+                            }
+                            $zip->extractTo(PHYSICAL_PATH.$attachmentDir);
+                            $zip->close();
+                            //删除临时zip
+                            FileObject::DeleteFile(PHYSICAL_PATH.$attachmentFileName);
+                        }*/
+
+
                     }
                 }
 
@@ -694,16 +716,24 @@ class BaseManageGen extends BaseGen
                     $arrDocumentNewsList = $documentNewsManageData->GetNewList($channelId, $tagTopCount, $state);
                     break;
                 case "child":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfChild($channelId, $tagTopCount, $state, $orderBy);
+                    $channelManageData=new ChannelManageData();
+                    $strChildrenChannelId=$channelManageData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfChild($strChildrenChannelId,$channelId, $tagTopCount, $state, $orderBy);
                     break;
                 case "grandson":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfGrandson($channelId, $tagTopCount, $state, $orderBy);
+                    $channelManageData=new ChannelManageData();
+                    $strChildrenChannelId=$channelManageData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfChild($strChildrenChannelId,$channelId, $tagTopCount, $state, $orderBy);
                     break;
                 case "rec_level_child":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelChild($channelId, $tagTopCount, $state, "", $orderBy);
+                    $channelManageData=new ChannelManageData();
+                    $strChildrenChannelId=$channelManageData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelChild($strChildrenChannelId, $channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 case "rec_level_grandson":
-                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelGrandson($channelId, $tagTopCount, $state, "", $orderBy);
+                    $channelManageData=new ChannelManageData();
+                    $strChildrenChannelId=$channelManageData->GetChildrenChannelId($channelId,true);
+                    $arrDocumentNewsList = $documentNewsManageData->GetListOfRecLevelChild($strChildrenChannelId, $channelId, $tagTopCount, $state, "", $orderBy);
                     break;
                 case "rec_level_belong_site":
                     $recLevel = intval($tagWhereValue);
