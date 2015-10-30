@@ -270,7 +270,7 @@ private function AsyncCreate(){
             $arrayUnique=$customFormFieldPublicData->GetUniqueField($customFormId);
             $isRepeat=0;
             foreach($arrayUnique as $uniqueField){
-                $uniqueContent=Control::GetRequest("cf_".$customFormId."_".$uniqueField["CustomFormFieldId"],"");
+                $uniqueContent=Control::PostOrGetRequest("cf_".$customFormId."_".$uniqueField["CustomFormFieldId"],"");
                 $repeat=$customFormContentPublicData->CheckRepeat($customFormId,$uniqueField["CustomFormFieldId"],$uniqueField["CustomFormFieldType"],$uniqueContent);
 
                 if($repeat>0){
@@ -286,15 +286,17 @@ private function AsyncCreate(){
             }
 
         }
-
         if ($newId > 0) {
 
             //先删除旧数据
             $customFormContentPublicData->Delete($newId);
             //读取表单 cf_CustomFormId_CustomFormFieldId
-            foreach ($_GET as $key => $value) {
+
+
+            foreach ($_POST as $key => $value) {
                 if (strpos($key, "cf_") === 0) { //
                     $arr = Format::ToSplit($key, '_');
+
                     if (count($arr) == 3) {
                         $customFormId = $arr[1];
                         $customFormFieldId = $arr[2];

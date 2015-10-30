@@ -159,7 +159,7 @@ class CustomFormManageGen extends BaseManageGen implements IBaseManageGen {
         if ($customFormId > 0) {
             $customFormManageData = new CustomFormManageData();
             $channelId = $customFormManageData->GetChannelId($customFormId, 0);
-            $channelData = new channelManageData();
+            $channelData = new ChannelManageData();
             $siteId = $channelData->GetSiteId($channelId,"");
 
             $nowManageUserId = Control::GetManageUserId();
