@@ -116,6 +116,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
     private function getDefaultTemplateContent($siteId, $forumId, $tempContent){
 
+        parent::ReplaceFirst($tempContent);
         parent::ReplaceFirstForForum($tempContent);
 
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
@@ -193,7 +194,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         parent::ReplaceTemplate($tempContent);
 
         parent::ReplaceEndForForum($tempContent);
-
+        parent::ReplaceEnd($tempContent);
 
 
 

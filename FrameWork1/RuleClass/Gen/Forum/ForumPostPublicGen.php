@@ -190,6 +190,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         parent::ReplaceFirstForForum($templateContent);
 
+        parent::ReplaceFirst($templateContent);
 
 
         $forumPublicData = new ForumPublicData();
@@ -210,6 +211,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         parent::ReplaceTemplate($templateContent);
 
         parent::ReplaceEndForForum($templateContent);
+
+        parent::ReplaceEnd($templateContent);
         parent::ReplaceSiteConfig($siteId, $templateContent);
 
 

@@ -217,6 +217,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         parent::ReplaceFirstForForum($templateContent);
 
+        parent::ReplaceFirst($templateContent);
 
         $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
         $forumPublicData = new ForumPublicData();
@@ -235,6 +236,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         parent::ReplaceTemplate($templateContent);
         parent::ReplaceEndForForum($templateContent);
+
+        parent::ReplaceEnd($templateContent);
         parent::ReplaceSiteConfig($siteId, $templateContent);
 
         /*******************过滤字符 begin********************** */

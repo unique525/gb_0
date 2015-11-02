@@ -103,7 +103,9 @@ class ForumPublicData extends BasePublicData {
      */
     public function GetListInForumId($forumId) {
         $forumId = Format::FormatSql($forumId);
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ForumId IN ($forumId) AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC;";
+        $sql = "SELECT * FROM " . self::TableName_Forum . "
+
+                WHERE ForumId IN ($forumId) AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC;";
         $dataProperty = null;
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         return $result;
@@ -117,7 +119,16 @@ class ForumPublicData extends BasePublicData {
      */
     public function GetListInParentId($siteId, $parentId) {
         $parentId = Format::FormatSql($parentId);
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId IN ($parentId) AND SiteId=:SiteId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
+        $sql = "SELECT f.*,
+                        uf1.UploadFilePath AS ForumPic1UploadFilePath,
+
+                        uf2.UploadFilePath AS ForumPic2UploadFilePath
+
+                FROM " . self::TableName_Forum . " f
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 ON (f.ForumPic1UploadFileId=uf1.UploadFileId)
+            LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON (f.ForumPic2UploadFileId=uf2.UploadFileId)
+
+        WHERE f.ParentId IN ($parentId) AND f.SiteId=:SiteId AND f.State<".ForumData::STATE_REMOVED." ORDER BY f.Sort DESC";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -130,7 +141,18 @@ class ForumPublicData extends BasePublicData {
      * @return array
      */
     public function GetListByParentId($parentId) {
-        $sql = "SELECT * FROM " . self::TableName_Forum . " WHERE ParentId=:ParentId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
+        $sql = "SELECT f.*,
+                        uf1.UploadFilePath AS ForumPic1UploadFilePath,
+
+                        uf2.UploadFilePath AS ForumPic2UploadFilePath
+
+                FROM " . self::TableName_Forum . " f
+
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 ON (f.ForumPic1UploadFileId=uf1.UploadFileId)
+                LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 ON (f.ForumPic2UploadFileId=uf2.UploadFileId)
+
+
+                WHERE ParentId=:ParentId AND State<".ForumData::STATE_REMOVED." ORDER BY Sort DESC";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ParentId", $parentId);
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
