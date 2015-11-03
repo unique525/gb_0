@@ -105,9 +105,10 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
     private function GenDefault()
     {
 
+        $lotteryId = Control::PostOrGetRequest("lottery_id", 1);
         $userId = Control::GetUserId();
 
-        $loginUrl = "/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=lottery&a=default&lottery_id=1&temp=lottery_1");
+        $loginUrl = "/default.php?mod=user&a=login&re_url=".urlencode("/default.php?mod=lottery&a=default&lottery_id=$lotteryId&temp=lottery_1");
 
         if ($userId < 0) {
             Control::GoUrl($loginUrl);
@@ -136,7 +137,6 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
         $tempContent = parent::ReplaceTemplate($tempContent, $tagTopCount);
 
 
-        $lotteryId = Control::PostOrGetRequest("lottery_id", 1);
 
         if ($lotteryId > 0) {
 
