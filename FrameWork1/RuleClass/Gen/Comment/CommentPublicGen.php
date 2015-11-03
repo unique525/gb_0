@@ -273,8 +273,8 @@ class CommentPublicGen extends BasePublicGen implements IBasePublicGen
                     break;
                 case CommentData::COMMENT_TABLE_TYPE_OF_DOCUMENT_NEWS: //新闻资讯
                     $documentNewsPublicData = new DocumentNewsPublicData();
-                    $openState = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
-                    if ($openState == 40) { //根据频道设置而定
+                    $openComment = $documentNewsPublicData->GetOpenComment($tableId, FALSE);
+                    if ($openComment == 40) { //根据频道设置而定
                         $channelId = $documentNewsPublicData->GetChannelId($tableId, FALSE);
                         $channelPublicData = new ChannelPublicData();
                         $openComment = $channelPublicData->GetOpenComment($channelId, TRUE);
