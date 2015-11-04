@@ -11,7 +11,7 @@
             //日期控件
             $(".GetDate").datepicker({
                 dateFormat: 'yy-mm-dd',
-                numberOfMonths: 3,
+                numberOfMonths: 1,
                 showButtonPanel: true
             });
 

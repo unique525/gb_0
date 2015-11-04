@@ -3,11 +3,39 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {common_head}
+    <script type="text/javascript" src="/system_js/jquery_ui/jquery-ui-timepicker-addon.js"></script>
+    <style>
+        /* css for timepicker */
+        .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+        .ui-timepicker-div dl { text-align: left; }
+        .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+        .ui-timepicker-div dl dd { margin: 0 10px 10px 45%; }
+        .ui-timepicker-div td { font-size: 90%; }
+        .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
+        .ui-timepicker-rtl{ direction: rtl; }
+        .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+        .ui-timepicker-rtl dl dt{ float: right; clear: right; }
+        .ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
+    </style>
 
     <script>
         $(function(){
 
+            $(function(){
+
+                $(".GetDate").datetimepicker({
+                    showSecond: true,
+                    dateFormat: 'yy-mm-dd',
+                    numberOfMonths: 1,
+                    timeFormat: 'HH:mm:ss',
+                    stepHour: 1,
+                    stepMinute: 1,
+                    stepSecond: 1
+                });
+
+
+            });
 
         });
         function submitForm(continueCreate) {
@@ -53,6 +81,10 @@
                 <td class="spe_line"><input type="number" id="f_LimitContent" name="f_LimitContent" value="{LimitContent}"/>（例如答题100分才能抽奖，这里就填100）</td>
             </tr>
             <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_LimitUserGroup">抽奖限制参加的会员组：</label></td>
+                <td class="spe_line"><input type="number" id="f_LimitUserGroup" name="f_LimitUserGroup" value="{LimitUserGroup}"/>（填入会员组ID,以,分隔）</td>
+            </tr>
+            <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_OddsType">抽奖方式：</label></td>
                 <td class="spe_line">
                     <select id="f_OddsType" name="f_OddsType">
@@ -70,6 +102,24 @@
                     </select>
                     {s_State}
                 </td>
+            </tr>
+
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_BeginDate">开始时间：</label></td>
+                <td class="spe_line"><input class="GetDate" type="text" id="f_BeginDate" name="f_BeginDate" value="{BeginDate}"/></td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_EndDate">结束时间：</label></td>
+                <td class="spe_line"><input class="GetDate" type="text" id="f_EndDate" name="f_EndDate" value="{EndDate}"/></td>
+            </tr>
+
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_TableId">对应表ID：</label></td>
+                <td class="spe_line"><input type="number" id="f_TableId" name="f_TableId" value="{TableId}"/>（可为空）</td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_TableType">对应表类型：</label></td>
+                <td class="spe_line"><input type="number" id="f_TableType" name="f_TableType" value="{TableType}"/>（可为空）</td>
             </tr>
 
         </table>
