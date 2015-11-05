@@ -1345,7 +1345,6 @@ class BasePublicGen extends BaseGen
                 $tagContent = str_ireplace("{ItemTitleDisplay}",$itemTitleDisplay, $tagContent);
                 $tagContent = str_ireplace("{BtnDisplay}",$btnDisplay, $tagContent);
             }
-
             $arrVoteItemList = null;
             $arrVoteSelectItemList = array();
             $tableIdName = "VoteItemId";
@@ -1368,14 +1367,42 @@ class BasePublicGen extends BaseGen
                 }
                 if (strlen($sbVoteItemId) > 0) {
                     //echo $sbVoteItemId;
-                    //二级
-                    $voteSelectItemManageData = new VoteSelectItemManageData();
-                    $arrVoteSelectItemList = $voteSelectItemManageData->GetList(
-                        $sbVoteItemId,
-                        $state,
-                        $tagOrder,
-                        $tagTopCount
-                    );
+                    //二级(投票选项)
+
+                    //投票选项链接的table type
+                    $sbVoteItemTableType = Template::GetParamValue($tagContent, "table_type");
+
+                    //投票选项的top count
+                    $topCountOfSelectItem = Template::GetParamValue($tagContent, "child_top_count");
+
+                    $voteSelectItemPublicData = new VoteSelectItemPublicData();
+                    $tagTopCountOfSelectItem=$topCountOfSelectItem;
+
+
+
+                    //链接table id的字段
+                    switch($sbVoteItemTableType){
+                        case 1: //document news
+                            $arrVoteSelectItemList = $voteSelectItemPublicData->GetListWithDocumentNews(
+                                $sbVoteItemId,
+                                $state,
+                                $tagOrder,
+                                $tagTopCountOfSelectItem
+                            );
+                            break;
+                        default; //默认无链接
+                            $beginDate=Control::GetRequest("begin_date","");
+                            $endDate=Control::GetRequest("end_date","");
+                            $arrVoteSelectItemList = $voteSelectItemPublicData->GetList(
+                                $sbVoteItemId,
+                                $state,
+                                $tagOrder,
+                                $tagTopCountOfSelectItem,
+                                $beginDate,
+                                $endDate
+                            );
+                            break;
+                    }
                 }
             }
 
@@ -1390,6 +1417,15 @@ class BasePublicGen extends BaseGen
                     $tableIdName,
                     $parentIdName
                 );
+
+                //生成投票专用js
+                $isAddJs=strpos($templateContent,'{VotePretempJs'.$voteId.'}');
+                if($isAddJs){
+                    $pretempJsContent = Template::Load('vote/vote_front_js_pretemp.html', 'default', 'front_template');
+                    $pretempJsContent = str_ireplace('{VoteId}', $voteId, $pretempJsContent);
+                    $templateContent = str_ireplace('{VotePretempJs'.$voteId.'}', $pretempJsContent, $templateContent);
+                }
+
                 //把对应ID的CMS标记替换成指定内容
                 //替换子循环里的<![CDATA[标记
                 $tagContent = str_ireplace("[CDATA]", "<![CDATA[", $tagContent);

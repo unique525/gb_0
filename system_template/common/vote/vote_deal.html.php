@@ -122,6 +122,10 @@
                     <td class="spe_line"><input name="f_UserScoreNum" id="f_UserScoreNum" value="{UserScoreNum}" type="text" class="input_number" style=" width: 60px;" />(注:输入数字,设定用户每投一票获得积分数，0表示不积分)</td>
                 </tr>
                 <tr>
+                    <td class="spe_line" height="30" align="right"><label for="f_LimitUserGroupId">用户组限制：</label></td>
+                    <td class="spe_line"><input name="f_LimitUserGroupId" id="f_LimitUserGroupId" value="{LimitUserGroupId}" type="text" class="input_number" style=" width: 60px;" />(注:只有该组用户才能参与)</td>
+                </tr>
+                <tr>
                     <td class="spe_line" height="30" align="right">票数：</td>
                     <td class="spe_line">{RecordCount}</td>
                 </tr>

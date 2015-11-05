@@ -115,6 +115,51 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = Template::Load("vote/vote_deal.html", "common");
         $voteId = Control::GetRequest("vote_id", 0);
         $pageIndex = Control::GetRequest("p", 1);
+
+        $manageUserId=Control::GetManageUserId();
+
+        /**********************************************************************
+         ******************************判断是否有操作权限**********************
+         **********************************************************************/
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $voteManageData=new VoteManageData();
+        $channelManageData=new ChannelManageData();
+        $manageUserManageData=new ManageUserManageData;
+        $channelId=$voteManageData->GetChannelId($voteId,true);
+        $siteId=$channelManageData->GetSiteId($channelId,true);
+        $ownerId=$voteManageData->GetManageUserId($voteId,true);
+        $documentNewsManageUserGroupId = $manageUserManageData->GetManageUserGroupId($ownerId, true);
+        $nowManageUserGroupId = $manageUserManageData->GetManageUserGroupId($manageUserId, true);
+        //1 编辑本频道文档权限
+        $can = $manageUserAuthorityManageData->CanChannelModify($siteId, $channelId, $manageUserId);
+        if ($can) { //有编辑本频道文档权限
+            //2 检查是否有在本频道编辑他人文档的权限
+            if ($ownerId !== $manageUserId) { //发稿人与当前操作人不是同一人时才判断
+                $can = $manageUserAuthorityManageData->CanChannelDoOthers($siteId, $channelId, $manageUserId);
+            } else {
+                //如果发稿人与当前操作人是同一人，则不处理
+            }
+            //3 检查是否有在本频道编辑同一管理组他人文档的权限
+            if (!$can) {
+                //是否是同一管理组
+
+                if ($documentNewsManageUserGroupId == $nowManageUserGroupId) {
+                    //是同一组才进行判断
+                    $can = $manageUserAuthorityManageData->CanChannelDoSameGroupOthers($siteId, $channelId, $manageUserId);
+                }
+            }
+        }
+        if($can){
+            if($nowManageUserGroupId!=1&&$nowManageUserGroupId!=3){//1:admin组 3:长沙晚报网
+                $can=false;
+            }
+        }
+        if (!$can) {
+            return Language::Load('document', 26);
+        }
+
+
+
         parent::ReplaceFirst($tempContent);
         $voteManageData = new VoteManageData();
         if ($voteId > 0) {

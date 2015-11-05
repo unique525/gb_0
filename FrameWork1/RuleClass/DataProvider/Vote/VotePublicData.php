@@ -24,9 +24,18 @@ class VotePublicData extends BasePublicData {
     /**
      * 查询启用题目和选项的ID、票数
      * @param int $voteId  投票ID号
+     * @param string $beginDate  开始时间
+     * @param string $endDate  结束时间
      * @return array 返回查询到的数据结果集
      */
-    public function GetSelectItemList($voteId) {
+    public function GetSelectItemList($voteId,$beginDate="",$endDate="") {
+
+        if($beginDate!=""&&$endDate!=""){
+            $strSelectDate=" AND PublishDate>='$beginDate' AND PublishDate<='$endDate' ";
+        }else{
+            $strSelectDate="";
+        }
+
         $dataProperty = new DataProperty();
         $sqlStr = "select t2.VoteItemId,t2.VoteSelectItemId,
         t2.RecordCount as VoteSelectItemRecordCount,
@@ -37,7 +46,7 @@ class VotePublicData extends BasePublicData {
         from " . self::TableName_Vote . " t inner join " . self::TableName_VoteItem . " t1
         on t.VoteId=t1.VoteId inner join " . self::TableName_VoteSelectItem . " t2
         on t1.VoteItemId=t2.VoteItemId
-        where t.VoteId=:VoteId and t1.State=0 and t2.State=0";
+        where t.VoteId=:VoteId and t1.State=0 and t2.State=0 $strSelectDate";
         $dataProperty->AddField("VoteId", $voteId);
         $result = $this->dbOperator->GetArrayList($sqlStr, $dataProperty);
         return $result;
@@ -138,6 +147,26 @@ class VotePublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 获取组id
+     * @param int $voteId
+     * @param bool $withCache
+     * @return int 返回修改结果
+     */
+    public function GetLimitUserGroupId($voteId, $withCache)
+    {
+        $result = -1;
+        if($voteId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$voteId;
+            $cacheFile = 'user_get_user_group_id.cache_' . $voteId . '';
+            $sql = "SELECT LimitUserGroupId FROM " . self::TableName_Vote . " where VoteId = :VoteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>

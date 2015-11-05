@@ -111,6 +111,9 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+
+        $voteIdFromUrl = Control::GetRequest("vote_id","0");
+        $tempContent = str_ireplace("{vote_id_from_url}", $voteIdFromUrl, $tempContent);  //替换icms投票标签的id（参数在url内get）
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
 
 
@@ -245,7 +248,6 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId, "", $templateMode);
-
         /*******************页面级的缓存 begin********************** */
 
 
@@ -308,6 +310,8 @@ class ChannelPublicGen extends BasePublicGen implements IBasePublicGen {
 
         $channelPublicData = new ChannelPublicData();
         $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+        $voteIdFromUrl = Control::GetRequest("vote_id","0");
+        $tempContent = str_ireplace("{vote_id_from_url}", $voteIdFromUrl, $tempContent);  //替换icms投票标签的id（参数在url内get）
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
         $tempContent = str_ireplace("{ChannelName}", $currentChannelName, $tempContent);
 

@@ -56,6 +56,109 @@ class VoteSelectItemPublicData extends BasePublicData {
         }
         return $result;
     }
+
+
+    /**
+     * 根据题目ID获取题目下所有选项数据
+     * @param int $voteItemId   题目ID,，可以是 id,id,id 的形式
+     * @param int $state    题目选项状态
+     * @param string $order    排序
+     * @param int $topCount    题目选项条数
+     * @param string $beginDate  开始时间
+     * @param string $endDate  结束时间
+     * @return array  返回查询题目选项数组
+     */
+    public function GetList($voteItemId,$state,$order = "",$topCount = null,$beginDate="",$endDate="") {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        switch ($order) {
+            default:
+                $order = " ORDER BY Sort,VoteSelectItemId ASC ";
+                break;
+        }
+
+
+        if($beginDate!=""&&$endDate!=""){
+            $strSelectDate=" AND PublishDate>='$beginDate' AND PublishDate<='$endDate' ";
+        }else{
+            $strSelectDate="";
+        }
+
+        if($voteItemId>0)
+        {
+            $voteItemId = Format::FormatSql($voteItemId);
+            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,t2.DirectUrl,t2.Type,t2.Author,t2.Editor,t2.PublishDate,t2.PageNo,
+                    CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
+                    t3.*
+                    FROM " . self::TableName_VoteItem . " t1
+                    LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " t2 ON t1.VoteItemId=t2.VoteItemId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." t3 on t2.TitlePic1UploadFileId=t3.UploadFileId
+                    WHERE t2.State=:State
+                    AND t2.VoteItemId IN ($voteItemId) $strSelectDate "
+                . $order
+                . $topCount;
+            $debug=new DebugLogManageData();
+            $debug->Create($sql);
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据题目ID获取题目下所有选项数据与关联资讯文档的相关内容
+     * @param int $voteItemId   题目ID,，可以是 id,id,id 的形式
+     * @param int $state    题目选项状态
+     * @param string $order    排序
+     * @param int $topCount    题目选项条数
+     * @return array  返回查询题目选项数组
+     */
+    public function GetListWithDocumentNews($voteItemId,$state,$order = "",$topCount = null) {
+        $result = null;
+        if ($topCount != null)
+            $topCount = " limit " . $topCount;
+        switch ($order) {
+            default:
+                $order = " ORDER BY Sort,VoteSelectItemId ASC ";
+                break;
+        }
+        if($voteItemId>0)
+        {
+            $voteItemId = Format::FormatSql($voteItemId);
+            $sql = "SELECT
+            t2.VoteItemId,
+            t2.VoteSelectItemId,
+            t2.VoteSelectItemTitle,
+            t2.Sort,
+            t2.State,
+            t2.AddCount,
+            t2.RecordCount,
+            t2.DirectUrl,t2.Type,t2.Author,t2.Editor,t2.PublishDate,t2.PageNo,
+            CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
+            t3.*,
+            doc.DocumentNewsSubTitle,
+            doc.DocumentNewsCiteTitle,
+            doc.DocumentNewsShortTitle,
+            doc.DocumentNewsIntro
+                    FROM " . self::TableName_VoteItem . " t1
+                    LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " t2 ON t1.VoteItemId=t2.VoteItemId
+                    LEFT OUTER JOIN " .self::TableName_DocumentNews." doc on t2.TableId=doc.DocumentNewsId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." t3 on doc.TitlePic1UploadFileId=t3.UploadFileId
+                    WHERE t2.State=:State
+                    AND t2.VoteItemId IN ($voteItemId)"
+                . $order
+                . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+
 }
 
 ?>

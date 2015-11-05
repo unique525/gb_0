@@ -203,6 +203,26 @@ class UserPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 修改用户密码
+     * @param int $userId
+     * @param bool $withCache
+     * @return int 返回修改结果
+     */
+    public function GetUserGroupId($userId, $withCache)
+    {
+        $result = -1;
+        if($userId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userId;
+            $cacheFile = 'user_get_user_group_id.cache_' . $userId . '';
+            $sql = "SELECT UserGroupId FROM " . self::TableName_User . " where userId = :userId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("userId", $userId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
 }
 

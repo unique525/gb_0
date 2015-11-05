@@ -44,7 +44,7 @@ class VoteRecordData extends BasePublicData
         foreach ($voteRecordDetail as $Row) {
             $Row["VoteRecordId"] = $voteRecordId;
             $dataProperty = new DataProperty();
-            $sql[] = "INSERT INTO " . self::TableName_VoteRecordDetail . " (VoteRecordId,VoteItemId,VoteSelectItemId) VALUES (:VoteRecordId,:VoteItemId,:VoteSelectItemId) ";
+            $sql[] = "INSERT INTO " . self::TableName_VoteRecordDetail . " (VoteRecordId,VoteItemId,VoteSelectItemId,Score,UserId) VALUES (:VoteRecordId,:VoteItemId,:VoteSelectItemId,:Score,:UserId) ";
             $dataProperty->ArrayField = $Row;
             $dataPropertyList[] = $dataProperty;
         }
@@ -93,6 +93,127 @@ class VoteRecordData extends BasePublicData
             $dataProperty->AddField("VoteId", $voteId);
             $dataProperty->AddField("UserId", $userId);
             $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+    /**
+     * 删除用户在该投票的投票记录
+     * @param int $voteId 投票调查Id
+     * @param string $userId 用户Id
+     * @return int  返回执行结果
+     */
+    public function DeleteUserLastRecord($voteId, $userId)
+    {
+        $result = -1;
+        if ($voteId > 0 && $userId > 0) {
+            $sql = "DELETE FROM " . self::TableName_VoteRecord . "
+         WHERE VoteId=:VoteId AND UserId=:UserId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 删除用户在该投票的详细投票记录
+     * @param int $voteRecordId 投票记录Id
+     * @param string $userId 用户Id
+     * @return int  返回执行结果
+     */
+    public function DeleteUserLastRecordDetail($voteRecordId, $userId)
+    {
+        $result = -1;
+        if ($voteRecordId > 0 && $userId > 0) {
+            $sql = "DELETE FROM " . self::TableName_VoteRecordDetail . "
+         WHERE VoteRecordId=:VoteRecordId AND UserId=:UserId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteRecordId", $voteRecordId);
+            $dataProperty->AddField("UserId", $userId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 取得一条user的投票记录id
+     * @param int $voteId 投票调查id
+     * @param int $userId
+     * @return int 返回id
+     */
+    public function GetRecordIdOfUser($voteId,$userId)
+    {
+        $result = -1;
+        if ($voteId > 0&&$userId>0) {
+            $sql = "SELECT VoteRecordId FROM " . self::TableName_VoteRecord . " WHERE UserId=:UserId AND VoteId=:VoteId
+            ORDER BY CreateDate DESC LIMIT 1 ;";
+            //$sql = "SELECT
+            //    detail.*,
+            //    rcd.
+            //    FROM " . self::TableName_VoteRecordDetail . " detail
+            //    LEFT OUTER JOIN " . self::TableName_VoteRecord . " rcd ON detail.VoteSelectItemId=rcd.VoteSelectItemId
+            //    WHERE VoteItemId=:VoteItemId ORDER BY RecordCount DESC LIMIT $topCount";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId", $userId);
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->dbOperator->GetInt($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得一条投票记录的详细的投票内容
+     * @param int $voteRecordId 投票记录id
+     * @return array 返回列表数组
+     */
+    public function GetRecordDetail($voteRecordId)
+    {
+        $result = null;
+        if ($voteRecordId > 0) {
+            $sql = "SELECT *
+                FROM " . self::TableName_VoteRecordDetail . "
+                WHERE VoteRecordId=:VoteRecordId ";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteRecordId", $voteRecordId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得打分数据集
+     * @param int $voteId 投票id
+     * @param int $beginDate
+     * @param int $endDate
+     * @return array 返回列表数组
+     */
+    public function GetScoreList($voteId,$beginDate,$endDate)
+    {
+        $result = null;
+        if ($voteId > 0) {
+
+            if($beginDate!=""&&$endDate!=""){
+                $strSelectDate=" AND PublishDate>='$beginDate' AND PublishDate<='$endDate' ";
+            }else{
+                $strSelectDate="";
+            }
+
+
+            $sql = "SELECT SUM(vrd.Score) AS Score ,vsi.*
+                FROM " . self::TableName_VoteRecordDetail . " vrd
+                LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " vsi ON vrd.VoteSelectItemId=vsi.VoteSelectItemId
+                INNER JOIN " . self::TableName_VoteItem . " vi ON vi.VoteItemId=vsi.VoteItemId
+                WHERE vi.VoteId=:VoteId $strSelectDate
+                GROUP BY vrd.VoteSelectItemId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }

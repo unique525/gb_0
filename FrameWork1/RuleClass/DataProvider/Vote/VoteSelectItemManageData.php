@@ -35,7 +35,7 @@ class VoteSelectItemManageData extends BaseManageData
      * @return array  选项一维数组
      */
     public function GetOne($voteSelectItemId) {
-        $sql = "SELECT VoteSelectItemId,VoteItemId,Sort,State,VoteSelectItemTitle,RecordCount,AddCount,TitlePic1UploadFileId,DirectUrl
+        $sql = "SELECT VoteSelectItemId,VoteItemId,Sort,State,VoteSelectItemTitle,RecordCount,AddCount,TitlePic1UploadFileId,DirectUrl,Type,Author,Editor,PublishDate,PageNo
         FROM " . self::TableName_VoteSelectItem . "
         WHERE voteSelectItemId=:voteSelectItemId";
         $dataProperty = new DataProperty();
@@ -127,7 +127,7 @@ class VoteSelectItemManageData extends BaseManageData
         if($voteItemId>0)
         {
             $voteItemId = Format::FormatSql($voteItemId);
-            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,t2.DirectUrl,
+            $sql = "SELECT t2.VoteItemId,t2.VoteSelectItemId,t2.VoteSelectItemTitle,t2.Sort,t2.State,t2.AddCount,t2.RecordCount,t2.DirectUrl,t2.Type,t2.Author,t2.Editor,t2.PublishDate,t2.PageNo,
                     CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
                     t3.*
                     FROM " . self::TableName_VoteItem . " t1
@@ -172,7 +172,7 @@ class VoteSelectItemManageData extends BaseManageData
             t2.State,
             t2.AddCount,
             t2.RecordCount,
-            t2.DirectUrl,
+            t2.DirectUrl,t2.Type,t2.Author,t2.Editor,t2.PublishDate,t2.PageNo,
             CASE t1.VoteItemType WHEN '0' THEN 'radio' ELSE 'checkbox' END AS VoteItemTypeName,
             t3.*,
             doc.DocumentNewsSubTitle,

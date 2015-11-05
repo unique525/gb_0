@@ -79,7 +79,7 @@ class VoteManageData extends BaseManageData
         if ($voteId < 0) {
             return $result;
         }
-        $sql = "SELECT VoteId,SiteId,ChannelId,VoteTitle,State,CreateDate,BeginDate,EndDate,Sort,RecordCount,AddCount,IsCheckCode,IpMaxCount,UserMaxCount,UserScoreNum,TemplateName FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
+        $sql = "SELECT VoteId,SiteId,ChannelId,VoteTitle,State,CreateDate,BeginDate,EndDate,Sort,RecordCount,AddCount,IsCheckCode,IpMaxCount,UserMaxCount,UserScoreNum,TemplateName,LimitUserGroupId FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId;";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("VoteId", $voteId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
@@ -184,6 +184,45 @@ class VoteManageData extends BaseManageData
         return $result;
     }
 
+    /**
+     * 根据投票调查id取得频道id
+     * @param int $voteId 投票调查id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 模板名称
+     */
+    public function GetChannelId($voteId, $withCache)
+    {
+        $result = -1;
+        if ($voteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
+            $cacheFile = 'vote_get_channel_id.cache_' . $voteId . '';
+            $sql = "SELECT ChannelId FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
+     * 根据投票调查id取得管理员id
+     * @param int $voteId 投票调查id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 模板名称
+     */
+    public function GetManageUserId($voteId, $withCache)
+    {
+        $result = -1;
+        if ($voteId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data';
+            $cacheFile = 'vote_get_channel_id.cache_' . $voteId . '';
+            $sql = "SELECT ManageUserId FROM " . self::TableName_Vote . " WHERE VoteId=:VoteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
 
 ?>
