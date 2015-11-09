@@ -429,7 +429,7 @@ function UploadFileFormatHtml(fileName){
             break;
         case "swf":
             url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
@@ -447,7 +447,7 @@ function UploadFileFormatHtml(fileName){
             break;
         case "flv":
             url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
@@ -465,7 +465,7 @@ function UploadFileFormatHtml(fileName){
             break;
         case "mp4":
             url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/public_js/jwplayer.js"></scr'+'ipt>';
+            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
