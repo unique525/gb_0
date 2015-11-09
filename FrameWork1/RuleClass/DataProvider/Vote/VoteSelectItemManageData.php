@@ -30,6 +30,47 @@ class VoteSelectItemManageData extends BaseManageData
     }
 
     /**
+     * 批量新建投票选项
+     * @param array $ItemDetailArray 选项记录数组
+     * @return int 返回执行结果
+     */
+    public function CreateVoteItemBatch($ItemDetailArray)
+    {
+        $sql = array();
+        $dataPropertyList = array();
+
+        foreach ($ItemDetailArray as $value) {
+
+            $dataProperty = new DataProperty();
+            $dataProperty->ArrayField = $value;
+            $dataPropertyList[] = $dataProperty;
+
+            $sql[] = "INSERT INTO " . self::TableName_VoteSelectItem . " (Type, VoteSelectItemTitle, Author, Editor, PublishDate, PageNo,VoteItemId)
+                       VALUES (:Type, :VoteSelectItemTitle, :Author, :Editor, :PublishDate, :PageNo, :VoteItemId)";
+
+
+        }
+        $result = $this->dbOperator->ExecuteBatch($sql, $dataPropertyList);
+        return $result;
+    }
+
+    /**
+     * @param $voteItemId int 投票选项id
+     * @return int 执行结果
+     */
+    public function RemoveDataBeforeImportFromTxt($voteItemId){
+
+        $removeData  = new DataProperty();
+        $removeData->AddField("VoteItemId",$voteItemId);
+
+        $sql = "DELETE FROM " . self::TableName_VoteSelectItem .
+               " WHERE VoteItemId = :VoteItemId";
+        $result = $this->dbOperator->Execute($sql, $removeData);
+        return $result;
+    }
+
+
+    /**
      * 获取一个选项的数据
      * @param int $voteSelectItemId  选项Id
      * @return array  选项一维数组

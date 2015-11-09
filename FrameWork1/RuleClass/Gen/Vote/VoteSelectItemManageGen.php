@@ -39,6 +39,12 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
             case "create_from_channel":
                 $result = self::GenCreateFromChannel();
                 break;
+            case "create_from_txt":
+                $result = self::GenCreateFromTxt();
+                break;
+            case "check_upload_txt":
+                $result = self::CheckUploadTxt();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -397,6 +403,80 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
         return $tempContent;
     }
+
+    /**从复制的TXT文本录入数据**/
+    public function GenCreateFromTxt(){
+        $result = -1;
+
+        $tempContent = Template::Load("vote/vote_txt_source_input.html", "common");
+        $voteItemId=Control::GetRequest("vote_item_id",0);
+
+        if($voteItemId > 0){
+            $tempContent = str_ireplace("{VoteItemId}", strval($voteItemId), $tempContent);
+            $result = $tempContent;
+        }
+       return $result;
+    }
+
+    /**
+     * 检查接收到的txt文本
+     * txt的格式类似 string@string@string!|!string@string@string!|!string@string@string
+     * 简单的对格式进行检查,符合格式则更新数据库
+     **/
+    public function CheckUploadTxt(){
+        $result = -1;
+        $voteItemId = Control::GetRequest("vote_item_id", 0);
+        $txt        = Control::PostRequest("txt", "");
+
+        if($voteItemId > 0 && $txt != ""){
+            $txtArray = explode("!|!", $txt);
+
+            $dataArray = array();
+            $new = new VoteSelectItemManageData;
+
+            try {
+                foreach($txtArray as $voteItem){
+                    //过滤空项,长度可以在可能的最小长度值内随之设置
+                    if(strlen($voteItem) > 5){
+                        $voteItem = explode("@",$voteItem);
+                        //简单过滤不符合格式的项
+                        if(count($voteItem) == 6){
+                            $tempArray = array();
+
+                            $tempArray["Type"]                = $voteItem[0];
+                            $tempArray["VoteSelectItemTitle"] = $voteItem[1];
+                            $tempArray["Author"]              = $voteItem[2];
+                            $tempArray["Editor"]              = $voteItem[3];
+                            $tempArray["PublishDate"]         = $voteItem[4];
+                            $tempArray["PageNo"]              = $voteItem[5];
+                            $tempArray["VoteItemId"]          = $voteItemId;
+
+                            $dataArray[] = $tempArray;
+                        }
+                        else{
+                            $result = -2;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception $e){
+                return -2;
+            }
+            //格式检查正确则删除旧数据
+            if($result != -2){
+                $result = $new->RemoveDataBeforeImportFromTxt($voteItemId);
+            }
+
+            if($result >= 0){
+                $result = $new->CreateVoteItemBatch($dataArray);
+            }
+
+        }
+        return $result;
+
+    }
+
 
 }
 

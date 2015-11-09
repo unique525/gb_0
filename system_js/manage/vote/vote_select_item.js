@@ -76,7 +76,6 @@ $(function() {
 
 
     //从节点导入选项
-
     var btnGetFromDocumentNews = $("#btn_create_from_channel");
     btnGetFromDocumentNews.css("cursor", "pointer");
     btnGetFromDocumentNews.click(function(event) {
@@ -91,6 +90,25 @@ $(function() {
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'从节点导入选项',
+            overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
+        });
+    });
+
+    //从txt导入选项
+    var btnGetFromTxt = $("#btn_create_from_txt");
+    btnGetFromTxt.css("cursor", "pointer");
+    btnGetFromTxt.click(function(event) {
+        event.preventDefault();
+        var voteItemId = Request["vote_item_id"];
+        var url='/default.php?secu=manage&mod=vote_select_item&m=create_from_txt&vote_item_id=' + voteItemId;
+        $("#dialog_frame").attr("src",url);
+        $("#dialog_resultbox").dialog({
+            hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
+            autoOpen:true,
+            height:400,
+            width:900,
+            modal:true, //蒙层（弹出会影响页面大小）
+            title:'从txt导入',
             overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
         });
     });
@@ -176,6 +194,7 @@ function _ModifyVoteSelectItemState(idvalue, state) {
         }
     });
 }
+
 
 
 
