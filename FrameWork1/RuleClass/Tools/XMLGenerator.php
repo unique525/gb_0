@@ -87,20 +87,20 @@ class XMLGenerator {
             $rss .= "<Hit>{$items[$i]['Hit']}</Hit>\r\n";
             $rss .= "<PublishDate>{$items[$i]['PublishDate']}</PublishDate>\r\n";
             $rss .= "<AllHit>{$items[$i]['AllHit']}</AllHit>\r\n";
-            $rss .= "<DocumentNewsUrl>{$items[$i]['DocumentNewsUrl']}</DocumentNewsUrl>\r\n";
+            $rss .= "<DocumentNewsUrl><![CDATA[{$items[$i]['DocumentNewsUrl']}]]></DocumentNewsUrl>\r\n";
 
 
-            $rss .= "<TitlePic1UploadFilePath>{$items[$i]['TitlePic1UploadFilePath']}</TitlePic1UploadFilePath>\r\n";
-            $rss .= "<TitlePic1UploadFileMobilePath>{$items[$i]['TitlePic1UploadFileMobilePath']}</TitlePic1UploadFileMobilePath>\r\n";
-            $rss .= "<TitlePic1UploadFilePadPath>{$items[$i]['TitlePic1UploadFilePadPath']}</TitlePic1UploadFilePadPath>\r\n";
-            $rss .= "<TitlePic1UploadFileThumbPath1>{$items[$i]['TitlePic1UploadFileThumbPath1']}</TitlePic1UploadFileThumbPath1>\r\n";
-            $rss .= "<TitlePic1UploadFileThumbPath2>{$items[$i]['TitlePic1UploadFileThumbPath2']}</TitlePic1UploadFileThumbPath2>\r\n";
-            $rss .= "<TitlePic1UploadFileThumbPath3>{$items[$i]['TitlePic1UploadFileThumbPath3']}</TitlePic1UploadFileThumbPath3>\r\n";
-            $rss .= "<TitlePic1UploadFileWatermarkPath1>{$items[$i]['TitlePic1UploadFileWatermarkPath1']}</TitlePic1UploadFileWatermarkPath1>\r\n";
-            $rss .= "<TitlePic1UploadFileWatermarkPath2>{$items[$i]['TitlePic1UploadFileWatermarkPath2']}</TitlePic1UploadFileWatermarkPath2>\r\n";
-            $rss .= "<TitlePic1UploadFileCompressPath1>{$items[$i]['TitlePic1UploadFileCompressPath1']}</TitlePic1UploadFileCompressPath1>\r\n";
-            $rss .= "<TitlePic1UploadFileCompressPath2>{$items[$i]['TitlePic1UploadFileCompressPath2']}</TitlePic1UploadFileCompressPath2>\r\n";
-            $rss .= "<TitlePic1UploadFileCutPath1>{$items[$i]['TitlePic1UploadFileCutPath1']}</TitlePic1UploadFileCutPath1>\r\n";
+            $rss .= "<TitlePic1UploadFilePath><![CDATA[{$items[$i]['TitlePic1UploadFilePath']}]]></TitlePic1UploadFilePath>\r\n";
+            $rss .= "<TitlePic1UploadFileMobilePath><![CDATA[{$items[$i]['TitlePic1UploadFileMobilePath']}]]></TitlePic1UploadFileMobilePath>\r\n";
+            $rss .= "<TitlePic1UploadFilePadPath><![CDATA[{$items[$i]['TitlePic1UploadFilePadPath']}]]></TitlePic1UploadFilePadPath>\r\n";
+            $rss .= "<TitlePic1UploadFileThumbPath1><![CDATA[{$items[$i]['TitlePic1UploadFileThumbPath1']}]]></TitlePic1UploadFileThumbPath1>\r\n";
+            $rss .= "<TitlePic1UploadFileThumbPath2><![CDATA[{$items[$i]['TitlePic1UploadFileThumbPath2']}]]></TitlePic1UploadFileThumbPath2>\r\n";
+            $rss .= "<TitlePic1UploadFileThumbPath3><![CDATA[{$items[$i]['TitlePic1UploadFileThumbPath3']}]]></TitlePic1UploadFileThumbPath3>\r\n";
+            $rss .= "<TitlePic1UploadFileWatermarkPath1><![CDATA[{$items[$i]['TitlePic1UploadFileWatermarkPath1']}]]></TitlePic1UploadFileWatermarkPath1>\r\n";
+            $rss .= "<TitlePic1UploadFileWatermarkPath2><![CDATA[{$items[$i]['TitlePic1UploadFileWatermarkPath2']}]]></TitlePic1UploadFileWatermarkPath2>\r\n";
+            $rss .= "<TitlePic1UploadFileCompressPath1><![CDATA[{$items[$i]['TitlePic1UploadFileCompressPath1']}]]></TitlePic1UploadFileCompressPath1>\r\n";
+            $rss .= "<TitlePic1UploadFileCompressPath2><![CDATA[{$items[$i]['TitlePic1UploadFileCompressPath2']}]]></TitlePic1UploadFileCompressPath2>\r\n";
+            $rss .= "<TitlePic1UploadFileCutPath1><![CDATA[{$items[$i]['TitlePic1UploadFileCutPath1']}]]></TitlePic1UploadFileCutPath1>\r\n";
 
 
             $rss .= "<TitlePic2UploadFilePath>{$items[$i]['TitlePic2UploadFilePath']}</TitlePic2UploadFilePath>\r\n";
