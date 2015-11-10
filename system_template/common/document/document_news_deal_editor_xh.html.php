@@ -713,10 +713,10 @@ function DocumentNewsTagPulling(){
 <div style=" margin-top:3px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
+            <td style="width:75%;height: 400px;"><label for="f_DocumentNewsContent"></label><textarea  class="xheditor  {internalScript:'true'}"
                                                                                  id="f_DocumentNewsContent"
                                                                                  name="f_DocumentNewsContent"
-                                                                                 style=" width: 100%;">{DocumentNewsContent}</textarea>
+                                                                                 style=" width: 100%;height: 400px;">{DocumentNewsContent}</textarea>
             </td>
             <td style="vertical-align:top;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0"
