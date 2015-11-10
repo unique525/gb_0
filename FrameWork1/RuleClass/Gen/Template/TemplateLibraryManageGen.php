@@ -5,7 +5,7 @@
  *
  * @author zhangchi
  */
-class TemplateLibraryGen extends BaseManageGen implements IBaseManageGen {
+class TemplateLibraryManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * 牵引生成方法(继承接口)

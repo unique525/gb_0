@@ -276,19 +276,19 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $visitManageGen->Gen();
                     break;
                 case "template_library":
-                    $templateLibraryGen = new TemplateLibraryGen();
+                    $templateLibraryGen = new TemplateLibraryManageGen();
                     $result = $templateLibraryGen->Gen();
                     break;
                 case "template_library_content":
-                    $templateLibraryContentGen = new TemplateLibraryContentGen();
+                    $templateLibraryContentGen = new TemplateLibraryContentManageGen();
                     $result = $templateLibraryContentGen->Gen();
                     break;
                 case "template_library_channel":
-                    $templateLibraryChannelGen = new TemplateLibraryChannelGen();
+                    $templateLibraryChannelGen = new TemplateLibraryChannelManageGen();
                     $result = $templateLibraryChannelGen->Gen();
                     break;
                 case "template_library_channel_content":
-                    $templateLibraryChannelContentGen = new TemplateLibraryChannelContentGen();
+                    $templateLibraryChannelContentGen = new TemplateLibraryChannelContentManageGen();
                     $result = $templateLibraryChannelContentGen->Gen();
                     break;
                 case "exam_question_class":
