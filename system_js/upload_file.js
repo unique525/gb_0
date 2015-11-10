@@ -402,8 +402,10 @@ function AjaxFileUpload(
         error: function (data, status, e)
         {
             btnUpload.removeAttr("disabled");
-            alert('status:'+status);
-            alert('e:'+e);
+            //alert('status:'+status);
+            //alert('e:'+e);
+            console.log('status:'+status);
+            console.log('e:'+e);
         }
     });
 }
@@ -447,7 +449,7 @@ function UploadFileFormatHtml(fileName){
             break;
         case "flv":
             url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
+            //url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
             url += '<scr'+'ipt type="text/javascript">';
             url += 'jwplayer("mediaspace").setup({';
@@ -464,22 +466,23 @@ function UploadFileFormatHtml(fileName){
             url += '</scr'+'ipt>';
             break;
         case "mp4":
-            url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
-            url += '<div id="mediaspace"></div>';
-            url += '<scr'+'ipt type="text/javascript">';
-            url += 'jwplayer("mediaspace").setup({';
-            url += '"flashplayer": "/front_js/jwplayer.swf",';
-            url += 'type:"http",';
-            url += '"file": "'+fileName+'",';
-            url += '"image": "",';
-            url += '"streamer": "start",';
-            url += '"autostart": "true",';
-            url += '"controlbar": "bottom",';
-            url += '"width": "500",';
-            url += '"height": "430"';
-            url += '});';
-            url += '</scr'+'ipt>';
+            url = '<video src = ' + fileName + ' controls="controls">';
+            //url = '';
+            //url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
+            //url += '<div id="mediaspace"></div>';
+            //url += '<scr'+'ipt type="text/javascript">';
+            //url += 'jwplayer("mediaspace").setup({';
+            //url += '"flashplayer": "/front_js/jwplayer.swf",';
+            //url += 'type:"http",';
+            //url += '"file": "'+fileName+'",';
+            //url += '"image": "",';
+            //url += '"streamer": "start",';
+            //url += '"autostart": "true",';
+            //url += '"controlbar": "bottom",';
+            //url += '"width": "500",';
+            //url += '"height": "430"';
+            //url += '});';
+            //url += '</scr'+'ipt>';
             break;
         case "wmv":
             url = '';
@@ -534,7 +537,7 @@ function UploadFileFormatHtml(fileName){
             url += "</object>";
             break;
         default:
-            url = fileName;
+            url = '<a href="'+fileName+'" target="_blank">'+fileName+'</a>';
             break;
     }
     return url;
