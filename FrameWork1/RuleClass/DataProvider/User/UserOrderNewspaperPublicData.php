@@ -92,6 +92,39 @@ class UserOrderNewspaperPublicData extends BasePublicData {
         return $result;
     }
 
+    /**检查用户是否购买了当前日期的报纸
+     * @param int $userId 用户id
+     * @param int $newspaperId 报纸id
+     * @param String $publishDate 报纸出版日期
+     * @return bool
+     */
+    public function CheckIsBoughtInTime($userId,$newspaperId,$publishDate){
+        $result = -1;
+        if($userId > 0 && $newspaperId > 0){
+            $sql = "SELECT
+                        count(*)
+                    FROM ".self::TableName_UserOrderNewspaper." uon,
+                         ".self::TableName_UserOrder." uo
+                    WHERE
+                        uo.UserId = :UserId
+                        AND uon.UserId = uo.UserId
+                        AND uon.UserOrderId = uo.UserOrderId
+                        AND uon.NewspaperId = :NewspaperId
+                        AND uon.EndDate>=:NowTime
+
+                        AND (      uo.State = ".UserOrderData::STATE_DONE."
+                                OR uo.State = ".UserOrderData::STATE_PAYMENT." )
+
+                        ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("NewspaperId",$newspaperId);
+            $dataProperty->AddField("NowTime",$publishDate);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 获取订单中的电子报列表
      * @param int $userOrderId 会员订单Id

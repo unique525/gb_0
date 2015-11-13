@@ -142,7 +142,8 @@ class NewspaperPublicGen extends BasePublicGen
         $channelId,
         $publishDate,
         $newspaperPageId,
-        $templateContent){
+        $templateContent)
+    {
         if ($channelId > 0) {
             $newspaperPublicData = new NewspaperPublicData();
             $newspaperPagePublicData = new NewspaperPagePublicData();
@@ -189,122 +190,172 @@ class NewspaperPublicGen extends BasePublicGen
 
 
                 if ($currentNewspaperPageId > 0) {
+                    $firstNewspaperPageMustPay=1;
+                    $secondNewspaperPageMustPay=1;
+                    //$userId = Control::GetUserId();
+                    $userId = 1;
+                    $IsAuthorizedUser = self::IsAuthorizedUser($userId, $currentNewspaperId);
+                    if ($IsAuthorizedUser || self::IsFreeRead($currentNewspaperId,$currentNewspaperPageId)) {
+                        //$arrOneNewspaperPage = $newspaperPagePublicData->GetOne($currentNewspaperPageId);
+                        //Template::ReplaceOne($templateContent, $arrOneNewspaperPage);
+
+                        //pc 当前第一个版面
+                        $firstNewspaperPageMustPay=0;
+
+                        $firstNewspaperPageNo = $newspaperPagePublicData->GetNewspaperPageNo(
+                            $currentNewspaperPageId,
+                            true
+                        );
+                        $templateContent = str_ireplace("{NewspaperPageNo}",
+                            $firstNewspaperPageNo,
+                            $templateContent
+                        );
+
+                        $templateContent = str_ireplace("{NewspaperFirstPageId}",
+                            $currentNewspaperPageId,
+                            $templateContent
+                        );
 
 
-                    $arrOneNewspaperPage = $newspaperPagePublicData->GetOne($currentNewspaperPageId);
+                        $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
+                            $currentNewspaperPageId,
+                            true
+                        );
 
-                    Template::ReplaceOne($templateContent, $arrOneNewspaperPage);
+                        $templateContent = str_ireplace("{UploadFilePath_First}",
+                            $firstUploadFilePath,
+                            $templateContent
+                        );
 
-
-                    //pc 当前第一个版面
-                    $templateContent = str_ireplace("{NewspaperFirstPageId}",
-                        $currentNewspaperPageId,
-                        $templateContent
-                    );
-
-
-
-
-                    $firstUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
-                        $currentNewspaperPageId,
-                        true
-                    );
-
-                    $templateContent = str_ireplace("{UploadFilePath_First}",
-                        $firstUploadFilePath,
-                        $templateContent
-                    );
-
-                    $firstPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
-                        $currentNewspaperPageId,
-                        true
-                    );
-                    $templateContent = str_ireplace("{FirstPdfUploadFilePath}",
-                        $firstPdfUploadFilePath,
-                        $templateContent
-                    );
+                        $firstPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
+                            $currentNewspaperPageId,
+                            true
+                        );
+                        $templateContent = str_ireplace("{FirstPdfUploadFilePath}",
+                            $firstPdfUploadFilePath,
+                            $templateContent
+                        );
 
 
-                    //pc 当前第二个版面
+                        //生成第一个版面文章位置xy坐标数据
+                        $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                        $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($currentNewspaperPageId, 100, 0);
+                        $arrFirstPageArticlePointList = array();
+                        if (!empty($arrFirstPageArticleList)) {
+                            foreach ($arrFirstPageArticleList as $value) {
+                                $newsPaperArticleId = $value["NewspaperArticleId"];
+                                $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                                $picMapping = $value["PicMapping"];
+                                $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
+                            }
+                            $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                                $arr = Format::FixJsonEncode($arrFirstPageArticlePointList),
+                                $templateContent
+                            );
+                        } else {
+                            $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                                "null",
+                                $templateContent
+                            );
+                        }
+                    }
+
+
                     $secondNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
                         $currentNewspaperId,
                         $currentNewspaperPageId,
                         true
                     );
 
-                    $secondNewspaperPageNo = $newspaperPagePublicData->GetNewspaperPageNo(
-                        $secondNewspaperPageId,
-                        true
-                    );
+                    if ($IsAuthorizedUser || self::IsFreeRead($currentNewspaperId,$secondNewspaperPageId)) {
+
+                        //pc 当前第二个版面
+                        $secondNewspaperPageMustPay=0;
+
+                        $secondNewspaperPageNo = $newspaperPagePublicData->GetNewspaperPageNo(
+                            $secondNewspaperPageId,
+                            true
+                        );
 
 
+                        $templateContent = str_ireplace("{SecondNewspaperPageNo}",
+                            $secondNewspaperPageNo,
+                            $templateContent
+                        );
 
+                        $templateContent = str_ireplace("{NewspaperSecondPageId}",
+                            $secondNewspaperPageId,
+                            $templateContent
+                        );
+                        $templateContent = str_ireplace("{NextNewspaperPageId}",
+                            $secondNewspaperPageId,
+                            $templateContent
+                        );
+                        $secondUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
+                            $secondNewspaperPageId,
+                            true
+                        );
 
+                        $templateContent = str_ireplace("{UploadFilePath_Second}",
+                            $secondUploadFilePath,
+                            $templateContent
+                        );
 
-                    $templateContent = str_ireplace("{SecondNewspaperPageNo}",
-                        $secondNewspaperPageNo,
-                        $templateContent
-                    );
+                        $secondPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
+                            $secondNewspaperPageId,
+                            true
+                        );
+                        $templateContent = str_ireplace("{SecondPdfUploadFilePath}",
+                            $secondPdfUploadFilePath,
+                            $templateContent
+                        );
 
-                    $templateContent = str_ireplace("{NewspaperSecondPageId}",
-                        $secondNewspaperPageId,
-                        $templateContent
-                    );
-                    $templateContent = str_ireplace("{NextNewspaperPageId}",
-                        $secondNewspaperPageId,
-                        $templateContent
-                    );
-                    $secondUploadFilePath = $newspaperPagePublicData->GetUploadFilePath(
-                        $secondNewspaperPageId,
-                        true
-                    );
+                        //生成第二个版面文章位置xy坐标数据
+                        $newspaperArticlePublicData = new NewspaperArticlePublicData();
+                        $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId, 100, 0);
+                        $arrSecondPageArticlePointList = array();
 
-                    $secondPdfUploadFilePath = $newspaperPagePublicData->GetPdfUploadFilePath(
-                        $secondNewspaperPageId,
-                        true
-                    );
-                    $templateContent = str_ireplace("{SecondPdfUploadFilePath}",
-                        $secondPdfUploadFilePath,
-                        $templateContent
-                    );
-
-                    //////////////////////付费阅读///////////////////////////
-                    $firstNewspaperPageMustPay = $newspaperPagePublicData->GetMustPay(
-                        $currentNewspaperPageId,
-                        true
-                    );
-                    $secondNewspaperPageMustPay = $newspaperPagePublicData->GetMustPay(
-                        $secondNewspaperPageId,
-                        true
-                    );
-
-                    if ($firstNewspaperPageMustPay>0 || $secondNewspaperPageMustPay>0){
-
-                        $userId = Control::GetUserId();
-                        if ($userId > 0){
-
-                            $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
-
-                            $isBuy = $userOrderNewspaperPublicData->CheckIsBought($userId, $currentNewspaperId);
-                            //可以直接看付费报纸
-                            $canExplore = parent::GetUserPopedomBoolValue(UserPopedomData::UserCanExploreMustPayNewspaper);
-
-                            if ($isBuy>0 || $canExplore){
-                                $firstNewspaperPageMustPay = 0;//已经买了
-                                $secondNewspaperPageMustPay = 0;
+                        if (!empty($arrSecondPageArticleList)) {
+                            foreach ($arrSecondPageArticleList as $value) {
+                                $newsPaperArticleId = $value["NewspaperArticleId"];
+                                $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
+                                $picMapping = $value["PicMapping"];
+                                $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
                             }
+                            $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                                $arr = Format::FixJsonEncode($arrSecondPageArticlePointList),
+                                $templateContent
+                            );
+                        } else {
+                            $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                                "null",
+                                $templateContent
+                            );
                         }
-
                     }
 
+                    //给前台是否显示付费信息标志赋值
                     $templateContent = str_ireplace("{FirstNewspaperPageMustPay}",
                         $firstNewspaperPageMustPay,
                         $templateContent
                     );
+                    if($firstNewspaperPageMustPay==1){
+                        $templateContent = str_ireplace("{FirstPageArticlePoint}",
+                            "null",
+                            $templateContent
+                        );
+                    }
                     $templateContent = str_ireplace("{SecondNewspaperPageMustPay}",
                         $secondNewspaperPageMustPay,
                         $templateContent
                     );
+                    if($secondNewspaperPageMustPay==1){
+                        $templateContent = str_ireplace("{SecondPageArticlePoint}",
+                            "null",
+                            $templateContent
+                        );
+                    }
+
 
                     //pc 当前第三个版面id
                     $thirdNewspaperPageId = $newspaperPagePublicData->GetNewspaperPageIdOfNext(
@@ -314,11 +365,6 @@ class NewspaperPublicGen extends BasePublicGen
                     );
                     $templateContent = str_ireplace("{ThirdNewspaperPageId}",
                         $thirdNewspaperPageId,
-                        $templateContent
-                    );
-
-                    $templateContent = str_ireplace("{UploadFilePath_Second}",
-                        $secondUploadFilePath,
                         $templateContent
                     );
 
@@ -342,52 +388,9 @@ class NewspaperPublicGen extends BasePublicGen
                         $templateContent
                     );
 
-                    $newspaperArticlePublicData = new NewspaperArticlePublicData();
-
-                    //生成第一个版面文章位置xy坐标数据
-                    $arrFirstPageArticleList = $newspaperArticlePublicData->GetList($currentNewspaperPageId, 100, 0);
-                    $arrFirstPageArticlePointList = array();
-                    if (!empty($arrFirstPageArticleList)) {
-                        foreach ($arrFirstPageArticleList as $value) {
-                            $newsPaperArticleId = $value["NewspaperArticleId"];
-                            $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-                            $picMapping = $value["PicMapping"];
-                            $arrFirstPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
-                        }
-                        $templateContent = str_ireplace("{FirstPageArticlePoint}",
-                            $arr = Format::FixJsonEncode($arrFirstPageArticlePointList),
-                            $templateContent
-                        );
-                    }else{
-                        $templateContent = str_ireplace("{FirstPageArticlePoint}",
-                            "null",
-                            $templateContent
-                        );
-                    }
-                    //生成第二个版面文章位置xy坐标数据
-                    $arrSecondPageArticleList = $newspaperArticlePublicData->GetList($secondNewspaperPageId, 100, 0);
-                    $arrSecondPageArticlePointList = array();
-
-                    if (!empty($arrSecondPageArticleList)) {
-                        foreach ($arrSecondPageArticleList as $value) {
-                            $newsPaperArticleId = $value["NewspaperArticleId"];
-                            $newsPaperArticleTitle = $value["NewspaperArticleTitle"];
-                            $picMapping = $value["PicMapping"];
-                            $arrSecondPageArticlePointList[] = self::GenPoint($newsPaperArticleId, $newsPaperArticleTitle, $picMapping);
-                        }
-                        $templateContent = str_ireplace("{SecondPageArticlePoint}",
-                            $arr = Format::FixJsonEncode($arrSecondPageArticlePointList),
-                            $templateContent
-                        );
-                    }else{
-                        $templateContent = str_ireplace("{SecondPageArticlePoint}",
-                            "null",
-                            $templateContent
-                        );
-                    }
 
 
-                    //版面选择
+                    //版面导航
                     $arrNewspaperPages = $newspaperPagePublicData->GetListForSelectPage($currentNewspaperId);
                     $listName = "newspaper_page";
 
@@ -571,5 +574,57 @@ class NewspaperPublicGen extends BasePublicGen
             sort($arr_x);
             sort($arr_y);
         }
+    }
+
+    //检查当前版面是否属于免费内容
+    function IsFreeRead($newspaperId, $newspaperPageId)
+    {
+        $result = false;
+        if ($newspaperId > 0 && $newspaperPageId > 0) {
+            $pageIndex = self::GetNewspaperPageIndex($newspaperId, $newspaperPageId);
+            //前八版免费
+            if ($pageIndex >=0 && $pageIndex < 100000) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    //得到当前版面序号
+    function GetNewspaperPageIndex($newspaperId,$newspaperPageId)
+    {
+        $result=-1;
+        if ($newspaperId > 0 && $newspaperPageId > 0) {
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+            $newspaperPageIdList = $newspaperPagePublicData->GetNewspaperIdList($newspaperId, true);
+            if (count($newspaperPageIdList) > 0) {
+                $newspaperPageIdArr = array();
+                foreach($newspaperPageIdList as $columnValue) {
+                    $newspaperPageIdArr[] = $columnValue["NewspaperPageId"];
+                }
+                $result = array_search($newspaperPageId, $newspaperPageIdArr);
+            }
+        }
+        return $result;
+    }
+
+    //根据用户判断是否能看报纸
+    function IsAuthorizedUser($userId,$newspaperId)
+    {
+        $result=false;
+        if ($userId > 0){
+            //是否购买了报纸
+            $newspaperPublicData = new NewspaperPublicData();
+            $publishDate=$newspaperPublicData->GetPublishDate($newspaperId, true);
+            $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
+            $isBuy = $userOrderNewspaperPublicData->CheckIsBoughtInTime($userId, $newspaperId, $publishDate);
+            //可以直接免费看付费报纸
+            $canExplore = parent::GetUserPopedomBoolValue(UserPopedomData::UserCanExploreMustPayNewspaper);
+            //购买了报纸或有权限可以直接免费看报纸
+            if ($isBuy>0 || $canExplore){
+                $result=true;
+            }
+        }
+        return $result;
     }
 } 
