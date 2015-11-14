@@ -196,8 +196,10 @@ class NewspaperPublicGen extends BasePublicGen
                     $userId = 1;
                     $IsAuthorizedUser = self::IsAuthorizedUser($userId, $currentNewspaperId);
                     if ($IsAuthorizedUser || self::IsFreeRead($currentNewspaperId,$currentNewspaperPageId)) {
-                        //$arrOneNewspaperPage = $newspaperPagePublicData->GetOne($currentNewspaperPageId);
-                        //Template::ReplaceOne($templateContent, $arrOneNewspaperPage);
+
+                        //比如手机版{UploadFileCompressPath1}这个也要替换，手机版只有一个页面，要统一逻辑，如此的话，统一从这里得数据是不是好些，留到后面处理
+                        $arrOneNewspaperPage = $newspaperPagePublicData->GetOne($currentNewspaperPageId);
+                        Template::ReplaceOne($templateContent, $arrOneNewspaperPage);
 
                         //pc 当前第一个版面
                         $firstNewspaperPageMustPay=0;
