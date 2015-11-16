@@ -12,6 +12,8 @@ class UserOrderNewspaperPublicData extends BasePublicData {
      * @param $userId
      * @param $newspaperId
      * @param $salePrice
+     * @param $beginDate
+     * @param $endDate
      * @return int
      */
     public function Create(
@@ -19,7 +21,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
         $siteId,
         $userId,
         $newspaperId,
-        $salePrice
+        $salePrice,
+        $beginDate,
+        $endDate
     ){
         $result = -1;
         if(
@@ -34,7 +38,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         UserId,
                         NewspaperId,
                         SalePrice,
-                        CreateDate
+                        CreateDate,
+                        BeginDate,
+                        EndDate
                     )
                     VALUES
                     (
@@ -43,7 +49,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         :UserId,
                         :NewspaperId,
                         :SalePrice,
-                        now()
+                        now(),
+                        :BeginDate,
+                        :EndDate
                     );
 
             ";
@@ -53,6 +61,8 @@ class UserOrderNewspaperPublicData extends BasePublicData {
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("NewspaperId",$newspaperId);
             $dataProperty->AddField("SalePrice",$salePrice);
+            $dataProperty->AddField("BeginDate",$beginDate);
+            $dataProperty->AddField("EndDate",$endDate);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
         }

@@ -618,8 +618,10 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
 
                 $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
 
+                $beginDate=date('Y-m-d');
+                $endDate=date("Y-m-d",strtotime("+1 year"));
                 $userOrderNewspaperPublicData->Create(
-                    $userOrderId,$siteId,$userId, $newspaperId,$allPrice
+                    $userOrderId,$siteId,$userId, $newspaperId,$allPrice,$beginDate,$endDate
                 );
 
                 //支付选择页面
