@@ -53,14 +53,14 @@ class BaseGen
         if (isset($arr)) {
             if (count($arr) > 1) {
                 $arr2 = $arr[1];
-                foreach ($arr2 as $key => $val) {
-                    $docContent = "<$keyName$val</$keyName>";
-                    $siteAdId = Template::GetParamValue($docContent, "id", $keyName);
+                //foreach ($arr2 as $key => $val) {
+                    //$docContent = "<$keyName$val</$keyName>";
+                    //$siteAdId = Template::GetParamValue($docContent, "id", $keyName);
 
-                    $adgen = new AdGen();
-                    $pre_content = $adgen->GenFormatAd($siteAdId);
-                    $templateContent = Template::ReplaceSiteAd($templateContent, $siteAdId, $pre_content);
-                }
+                    //$adgen = new AdGen();
+                    //$pre_content = $adgen->GenFormatAd($siteAdId);
+                    //$templateContent = Template::ReplaceSiteAd($templateContent, $siteAdId, $pre_content);
+                //}
             }
         }
 
@@ -96,12 +96,15 @@ class BaseGen
         $commonBodyDeal = Template::Load("manage/common_body_deal.html", "common");
         $commonBodyList = Template::Load("manage/common_body_list.html", "common");
 
+        $currentUrl = urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+
         $tabIndex = Control::GetRequest("tab_index", 0);
 
         $manageDomainForRex = str_ireplace("http://", "", MANAGE_DOMAIN);
         $manageDomainForRex = str_ireplace("https://", "", $manageDomainForRex);
         $manageDomainForRex = str_ireplace(".", "\.", $manageDomainForRex);
 
+        $templateContent = str_ireplace("{CurrentUrl}", $currentUrl, $templateContent);
         $templateContent = str_ireplace("{tab_index}", $tabIndex, $templateContent);
         $templateContent = str_ireplace("{common_head}", $commonHead, $templateContent);
         $templateContent = str_ireplace("{common_body_deal}", $commonBodyDeal, $templateContent);

@@ -407,6 +407,8 @@ class NewspaperPublicGen extends BasePublicGen
 
             Template::RemoveCustomTag($templateContent);
 
+            parent::ReplaceEnd($templateContent);
+
         }
         return $templateContent;
     }
@@ -431,6 +433,7 @@ class NewspaperPublicGen extends BasePublicGen
             $siteId = $channelPublicData->GetSiteId($channelId, true);
 
             parent::ReplaceSiteInfo($siteId, $templateContent);
+            parent::ReplaceEnd($templateContent);
 
         }
         return $templateContent;
@@ -487,8 +490,9 @@ class NewspaperPublicGen extends BasePublicGen
                 Template::ReplaceList($templateContent, $arrNewspaperPages, $listName, $tagName, $arrNewspaperArticles, $tableIdName, $parentIdName);
             } else {
                 $listName = "newspaper_page_and_article";
-                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($templateContent, $listName);
             }
+            parent::ReplaceEnd($templateContent);
         }
         return $templateContent;
 
