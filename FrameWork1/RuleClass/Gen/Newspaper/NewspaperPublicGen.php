@@ -584,7 +584,13 @@ class NewspaperPublicGen extends BasePublicGen
         if ($newspaperId > 0 && $newspaperPageId > 0) {
             $pageIndex = self::GetNewspaperPageIndex($newspaperId, $newspaperPageId);
             //前八版免费
-            if ($pageIndex >=0 && $pageIndex < 100000) {
+            if($newspaperId==43)
+            {
+            if ($pageIndex >=0 && $pageIndex < 8) {
+                $result = true;
+            }
+            }
+            else{
                 $result = true;
             }
         }
