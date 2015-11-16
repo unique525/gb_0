@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 	<script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 	<script src="/system_js/tiny_mce/tiny_mce_src.js"></script>
-	<script src="/system_js/tiny_mce/editor.js"></script>
+	<script src="/system_js/tiny_mce/editor.js?uploadfiletype=1"></script>
 	<script type="text/javascript">
 		//切换到xheditor编辑器
 		function changeEditor() {

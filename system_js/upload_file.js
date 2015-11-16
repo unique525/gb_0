@@ -402,12 +402,19 @@ function AjaxFileUpload(
         error: function (data, status, e)
         {
             btnUpload.removeAttr("disabled");
-            alert('status:'+status);
-            alert('e:'+e);
+            //alert('status:'+status);
+            //alert('e:'+e);
+            console.log('status:'+status);
+            console.log('e:'+e);
         }
     });
 }
+
+//生成两段代码
+//一段script用于编辑器内置的视频插件预览
+//一个object用于将视频嵌入网页
 function UploadFileFormatHtml(fileName){
+
     fileName = fileName.toLowerCase();
     var fileEx = fileName.substr(fileName.lastIndexOf(".")+1);
     var url = '';
@@ -428,6 +435,7 @@ function UploadFileFormatHtml(fileName){
             url =  '<img src="'+fileName+'" />';
             break;
         case "swf":
+            //用于编辑器预览
             url = '';
             url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
@@ -444,8 +452,14 @@ function UploadFileFormatHtml(fileName){
             url += '"height": "430"';
             url += '});';
             url += '</scr'+'ipt>';
+            //用于发布到页面实际视频
+            url += '';
+            url += '<object width="320" height="240" data="' + fileName + '" type="application/x-shockwave-flash">';
+            url += '<param name="src"  value="' + fileName + '" />';
+            url += '</object>';
             break;
         case "flv":
+            //用于编辑器预览
             url = '';
             url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
             url += '<div id="mediaspace"></div>';
@@ -462,24 +476,33 @@ function UploadFileFormatHtml(fileName){
             url += '"height": "430"';
             url += '});';
             url += '</scr'+'ipt>';
+           //用于发布到页面实际视频
+            url += '';
+            url += '<object width="320" height="240" data="/system_js/tiny_mce/plugins/media/moxieplayer.swf" type="application/x-shockwave-flash">';
+            url += '<param name="src" value="/system_js/tiny_mce/plugins/media/moxieplayer.swf" />';
+            url += '<param name="allowfullscreen" value="true" />';
+            url += '<param name="allowscriptaccess" value="true" />';
+            url += '<param name="flashvars" value="url=' + fileName + '&amp;poster=/" />';
+            url += '</object>';
             break;
         case "mp4":
-            url = '';
-            url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
-            url += '<div id="mediaspace"></div>';
-            url += '<scr'+'ipt type="text/javascript">';
-            url += 'jwplayer("mediaspace").setup({';
-            url += '"flashplayer": "/front_js/jwplayer.swf",';
-            url += 'type:"http",';
-            url += '"file": "'+fileName+'",';
-            url += '"image": "",';
-            url += '"streamer": "start",';
-            url += '"autostart": "true",';
-            url += '"controlbar": "bottom",';
-            url += '"width": "500",';
-            url += '"height": "430"';
-            url += '});';
-            url += '</scr'+'ipt>';
+            url = '<video src = ' + fileName + ' controls="controls">';
+            //url = '';
+            //url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
+            //url += '<div id="mediaspace"></div>';
+            //url += '<scr'+'ipt type="text/javascript">';
+            //url += 'jwplayer("mediaspace").setup({';
+            //url += '"flashplayer": "/front_js/jwplayer.swf",';
+            //url += 'type:"http",';
+            //url += '"file": "'+fileName+'",';
+            //url += '"image": "",';
+            //url += '"streamer": "start",';
+            //url += '"autostart": "true",';
+            //url += '"controlbar": "bottom",';
+            //url += '"width": "500",';
+            //url += '"height": "430"';
+            //url += '});';
+            //url += '</scr'+'ipt>';
             break;
         case "wmv":
             url = '';
@@ -534,7 +557,7 @@ function UploadFileFormatHtml(fileName){
             url += "</object>";
             break;
         default:
-            url = fileName;
+            url = '<a href="'+fileName+'" target="_blank">'+fileName+'</a>';
             break;
     }
     return url;

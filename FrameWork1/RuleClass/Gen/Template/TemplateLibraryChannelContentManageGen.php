@@ -5,7 +5,7 @@
  *
  * @author zhangchi
  */
-class TemplateLibraryChannelContentGen extends BaseManageGen implements IBaseManageGen {
+class TemplateLibraryChannelContentManageGen extends BaseManageGen implements IBaseManageGen {
 
     /**
      * @return mixed|string|

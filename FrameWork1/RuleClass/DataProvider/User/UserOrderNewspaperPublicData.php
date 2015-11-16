@@ -12,6 +12,8 @@ class UserOrderNewspaperPublicData extends BasePublicData {
      * @param $userId
      * @param $newspaperId
      * @param $salePrice
+     * @param $beginDate
+     * @param $endDate
      * @return int
      */
     public function Create(
@@ -19,7 +21,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
         $siteId,
         $userId,
         $newspaperId,
-        $salePrice
+        $salePrice,
+        $beginDate,
+        $endDate
     ){
         $result = -1;
         if(
@@ -34,7 +38,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         UserId,
                         NewspaperId,
                         SalePrice,
-                        CreateDate
+                        CreateDate,
+                        BeginDate,
+                        EndDate
                     )
                     VALUES
                     (
@@ -43,7 +49,9 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         :UserId,
                         :NewspaperId,
                         :SalePrice,
-                        now()
+                        now(),
+                        :BeginDate,
+                        :EndDate
                     );
 
             ";
@@ -53,6 +61,8 @@ class UserOrderNewspaperPublicData extends BasePublicData {
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("NewspaperId",$newspaperId);
             $dataProperty->AddField("SalePrice",$salePrice);
+            $dataProperty->AddField("BeginDate",$beginDate);
+            $dataProperty->AddField("EndDate",$endDate);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
         }
@@ -87,6 +97,39 @@ class UserOrderNewspaperPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("NewspaperId",$newspaperId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**检查用户是否购买了当前日期的报纸
+     * @param int $userId 用户id
+     * @param int $newspaperId 报纸id
+     * @param String $publishDate 报纸出版日期
+     * @return bool
+     */
+    public function CheckIsBoughtInTime($userId,$newspaperId,$publishDate){
+        $result = -1;
+        if($userId > 0 && $newspaperId > 0){
+            $sql = "SELECT
+                        count(*)
+                    FROM ".self::TableName_UserOrderNewspaper." uon,
+                         ".self::TableName_UserOrder." uo
+                    WHERE
+                        uo.UserId = :UserId
+                        AND uon.UserId = uo.UserId
+                        AND uon.UserOrderId = uo.UserOrderId
+                        AND uon.NewspaperId = :NewspaperId
+                        AND uon.EndDate>=:NowTime
+
+                        AND (      uo.State = ".UserOrderData::STATE_DONE."
+                                OR uo.State = ".UserOrderData::STATE_PAYMENT." )
+
+                        ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("NewspaperId",$newspaperId);
+            $dataProperty->AddField("NowTime",$publishDate);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;

@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/system_js/plupload-2.1.2/js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
 <link rel="stylesheet" href="/system_js/fancy_box/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="/system_js/fancy_box/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script src="/front_js/jwplayer.js"></script>
 	<script type="text/javascript">
 		//切换到tiny编辑器
 		function changeEditor() {
@@ -39,7 +40,7 @@
 		}
 	</script>
 <script type="text/javascript">
-<!--
+
 var editor;
 var plUpload=$('#uploader').pluploadQueue();
 
@@ -713,10 +714,10 @@ function DocumentNewsTagPulling(){
 <div style=" margin-top:3px;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td width="75%"><label for="f_DocumentNewsContent"></label><textarea class="mceEditor"
+            <td style="width:75%;height: 400px;"><label for="f_DocumentNewsContent"></label><textarea  class="xheditor  {internalScript:'true'}"
                                                                                  id="f_DocumentNewsContent"
                                                                                  name="f_DocumentNewsContent"
-                                                                                 style=" width: 100%;">{DocumentNewsContent}</textarea>
+                                                                                 style=" width: 100%;height: 400px;">{DocumentNewsContent}</textarea>
             </td>
             <td style="vertical-align:top;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0"

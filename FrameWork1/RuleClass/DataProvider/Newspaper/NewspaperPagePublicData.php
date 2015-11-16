@@ -507,4 +507,27 @@ class NewspaperPagePublicData extends BasePublicData
             //$result = $this->dbOperator->GetArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);}
         return $result;
     }
+
+    /**
+     * 根据报纸id取得所有版面id列表
+     * @param int $newspaperId 电子报id
+     * @param bool $withCache 是否从缓冲中取
+     * @return array 电子报版面id数据集
+     */
+    public function GetNewspaperIdList($newspaperId, $withCache)
+    {
+        $result = null;
+        if ($newspaperId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_newspaper_id_list.cache_' . $newspaperId . '';
+            $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
+                    WHERE NewspaperId=:NewspaperId;
+                    AND State<100
+                    ORDER BY Sort,NewspaperPageId ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperId", $newspaperId);
+            $result = parent::GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }
