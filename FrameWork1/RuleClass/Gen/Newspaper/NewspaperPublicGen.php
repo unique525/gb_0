@@ -192,8 +192,7 @@ class NewspaperPublicGen extends BasePublicGen
                 if ($currentNewspaperPageId > 0) {
                     $firstNewspaperPageMustPay=1;
                     $secondNewspaperPageMustPay=1;
-                    //$userId = Control::GetUserId();
-                    $userId = 1;
+                    $userId = Control::GetUserId();
                     $IsAuthorizedUser = self::IsAuthorizedUser($userId, $currentNewspaperId);
                     if ($IsAuthorizedUser || self::IsFreeRead($currentNewspaperId,$currentNewspaperPageId)) {
 
