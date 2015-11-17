@@ -49,7 +49,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                     (
                         :UserOrderId,
                         :SiteId,
-                        :ChannelId
+                        :ChannelId,
                         :UserId,
                         :NewspaperId,
                         :SalePrice,

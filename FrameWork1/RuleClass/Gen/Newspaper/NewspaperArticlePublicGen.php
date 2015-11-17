@@ -149,7 +149,7 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
             if(count($arrNewspaperPages)>0){
                 Template::ReplaceList($templateContent, $arrNewspaperPages, $listName);
             }else{
-                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($templateContent, $listName);
             }
 
             $templateContent = parent::ReplaceTemplate($templateContent);
@@ -239,9 +239,6 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
         $channelId = $newspaperArticlePublicData->GetChannelId($newspaperArticleId, true);
         $templateContent = str_ireplace("{ChannelId}", $channelId, $templateContent);
 
-        $templateContent = parent::ReplaceTemplate($templateContent);
-
-
         $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
         $IsAuthorizedUser = self::IsAuthorizedUser(Control::GetUserId(), $newspaperArticleId);
         if ($IsAuthorizedUser || self::IsFreeReadByNewspaperArticleId($newspaperArticleId)){
@@ -254,12 +251,16 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
             str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
         }
         else{
+            Template::ReplaceCustomTag($templateContent,"newspaper_article_".$newspaperArticleId,"");
+            Template::ReplaceCustomTag($templateContent,"newspaper_article_slider".$newspaperArticleId,"");
             $newspaperArticlePublicData = new NewspaperArticlePublicData();
             $newspaperPagePublicData = new NewspaperPagePublicData();
             $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
             $arrOne["NewspaperArticleContent"] ="<br /><br /><span id='pay_message' align='center'>此内容需要付费后阅读，<a href=/default.php?mod=user_order&a=confirm&newspaper_id=".$newspaperId."&site_id=".$siteId.">[立即购买]</span>";
         }
+
+        $templateContent = parent::ReplaceTemplate($templateContent);
 
 
         Template::ReplaceOne($templateContent, $arrOne);
@@ -286,7 +287,7 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
         if(count($arrNewspaperPages)>0){
             Template::ReplaceList($templateContent, $arrNewspaperPages, $tagId);
         }else{
-            Template::RemoveCustomTag($tempContent, $tagId);
+            Template::RemoveCustomTag($templateContent, $tagId);
         }
 
         //$templateContent = parent::ReplaceTemplate($templateContent);
@@ -328,7 +329,7 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
         }
         else{
             $tagId = "newspaper_page_and_article";
-            Template::RemoveCustomTag($tempContent, $tagId);
+            Template::RemoveCustomTag($templateContent, $tagId);
         }
 
         parent::ReplaceEnd($templateContent);
