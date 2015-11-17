@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Newspaper
  * @author zhangchi
  */
-class NewspaperArticlePublicGen extends BasePublicGen {
+class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
 
     /**
      * 引导方法
@@ -197,6 +197,8 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 '_temp_'.$defaultTemp.
                 '_mode_' . $templateMode;
             $withCache = true;
+            $IsAuthorizedUser = self::IsAuthorizedUser(Control::GetUserId(), $newspaperArticleId);
+            if ($IsAuthorizedUser || self::IsFreeReadByNewspaperArticleId($newspaperArticleId)){
             if($withCache){
                 $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
@@ -207,6 +209,10 @@ class NewspaperArticlePublicGen extends BasePublicGen {
                 } else {
                     $result = $pageCache;
                 }
+            }else{
+                $result = self::getDetailTemplateContent(
+                    $siteId,$newspaperArticleId,$templateContent);
+            }
             }else{
                 $result = self::getDetailTemplateContent(
                     $siteId,$newspaperArticleId,$templateContent);
@@ -236,8 +242,9 @@ class NewspaperArticlePublicGen extends BasePublicGen {
         $templateContent = parent::ReplaceTemplate($templateContent);
 
 
-
         $arrOne = $newspaperArticlePublicData->GetOne($newspaperArticleId);
+        $IsAuthorizedUser = self::IsAuthorizedUser(Control::GetUserId(), $newspaperArticleId);
+        if ($IsAuthorizedUser || self::IsFreeReadByNewspaperArticleId($newspaperArticleId)){
 
         $arrOne["NewspaperArticleContent"] =
             str_ireplace("\n","<br /><br />", $arrOne["NewspaperArticleContent"]);
@@ -245,6 +252,14 @@ class NewspaperArticlePublicGen extends BasePublicGen {
             str_ireplace("&lt;","<", $arrOne["NewspaperArticleContent"]);
         $arrOne["NewspaperArticleContent"] =
             str_ireplace("&gt;",">", $arrOne["NewspaperArticleContent"]);
+        }
+        else{
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+            $newspaperPagePublicData = new NewspaperPagePublicData();
+            $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
+            $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
+            $arrOne["NewspaperArticleContent"] ="<br /><br /><span id='pay_message' align='center'>此内容需要付费后阅读，<a href=/default.php?mod=user_order&a=confirm&newspaper_id=".$newspaperId."&site_id=".$siteId.">[立即购买]</span>";
+        }
 
 
         Template::ReplaceOne($templateContent, $arrOne);

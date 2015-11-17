@@ -9,6 +9,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
     /**
      * @param $userOrderId
      * @param $siteId
+     * @param $channelId
      * @param $userId
      * @param $newspaperId
      * @param $salePrice
@@ -19,6 +20,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
     public function Create(
         $userOrderId,
         $siteId,
+        $channelId,
         $userId,
         $newspaperId,
         $salePrice,
@@ -35,6 +37,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                     (
                         UserOrderId,
                         SiteId,
+                        ChannelId,
                         UserId,
                         NewspaperId,
                         SalePrice,
@@ -46,6 +49,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                     (
                         :UserOrderId,
                         :SiteId,
+                        :ChannelId
                         :UserId,
                         :NewspaperId,
                         :SalePrice,
@@ -58,6 +62,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("ChannelId",$channelId);
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("NewspaperId",$newspaperId);
             $dataProperty->AddField("SalePrice",$salePrice);
@@ -102,15 +107,15 @@ class UserOrderNewspaperPublicData extends BasePublicData {
         return $result;
     }
 
-    /**检查用户是否购买了当前日期的报纸
+    /**检查用户是否购买了当前报纸
      * @param int $userId 用户id
-     * @param int $newspaperId 报纸id
+     * @param int $channelId 报纸频道id
      * @param String $publishDate 报纸出版日期
      * @return bool
      */
-    public function CheckIsBoughtInTime($userId,$newspaperId,$publishDate){
+    public function CheckIsBoughtInTimeByChannelId($userId,$channelId,$publishDate){
         $result = -1;
-        if($userId > 0 && $newspaperId > 0){
+        if($userId > 0 && $channelId > 0){
             $sql = "SELECT
                         count(*)
                     FROM ".self::TableName_UserOrderNewspaper." uon,
@@ -119,7 +124,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         uo.UserId = :UserId
                         AND uon.UserId = uo.UserId
                         AND uon.UserOrderId = uo.UserOrderId
-                        AND uon.NewspaperId = :NewspaperId
+                        AND uon.ChannelId = :ChannelId
                         AND uon.EndDate>=:NowTime
 
                         AND (      uo.State = ".UserOrderData::STATE_DONE."
@@ -128,7 +133,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserId",$userId);
-            $dataProperty->AddField("NewspaperId",$newspaperId);
+            $dataProperty->AddField("ChannelId",$channelId);
             $dataProperty->AddField("NowTime",$publishDate);
             $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
