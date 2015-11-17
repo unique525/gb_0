@@ -257,7 +257,7 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen {
             $newspaperPagePublicData = new NewspaperPagePublicData();
             $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
             $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
-            $arrOne["NewspaperArticleContent"] ="<br /><br /><span id='pay_message' align='center'>此内容需要付费后阅读，<a href=/default.php?mod=user_order&a=confirm&newspaper_id=".$newspaperId."&newspaper_article_id=".$newspaperArticleId."&site_id=".$siteId.">[立即购买]</span>";
+            $arrOne["NewspaperArticleContent"] ="<br /><br /><span id='pay_message' align='center'>此内容需要付费后阅读，<a href=/default.php?mod=user_order&a=confirm&newspaper_id=".$newspaperId."&newspaper_article_id=".$newspaperArticleId."&site_id=".$siteId.">[立即购买]</a></span>";
         }
 
         $templateContent = parent::ReplaceTemplate($templateContent);
