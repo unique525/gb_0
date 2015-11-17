@@ -12,6 +12,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
      * @param $channelId
      * @param $userId
      * @param $newspaperId
+     * @param $newspaperArticleId
      * @param $salePrice
      * @param $beginDate
      * @param $endDate
@@ -23,6 +24,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
         $channelId,
         $userId,
         $newspaperId,
+        $newspaperArticleId,
         $salePrice,
         $beginDate,
         $endDate
@@ -40,6 +42,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         ChannelId,
                         UserId,
                         NewspaperId,
+                        NewspaperArticleId,
                         SalePrice,
                         CreateDate,
                         BeginDate,
@@ -52,6 +55,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
                         :ChannelId,
                         :UserId,
                         :NewspaperId,
+                        :NewspaperArticleId,
                         :SalePrice,
                         now(),
                         :BeginDate,
@@ -65,6 +69,7 @@ class UserOrderNewspaperPublicData extends BasePublicData {
             $dataProperty->AddField("ChannelId",$channelId);
             $dataProperty->AddField("UserId",$userId);
             $dataProperty->AddField("NewspaperId",$newspaperId);
+            $dataProperty->AddField("NewspaperArticleId",$newspaperArticleId);
             $dataProperty->AddField("SalePrice",$salePrice);
             $dataProperty->AddField("BeginDate",$beginDate);
             $dataProperty->AddField("EndDate",$endDate);

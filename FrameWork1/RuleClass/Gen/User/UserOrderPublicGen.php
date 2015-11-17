@@ -205,6 +205,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
 
         //电子报id
         $newspaperId = intval(Control::GetRequest("newspaper_id", 0));
+        //电子报文章id
+        $newspaperArticleId = intval(Control::GetRequest("newspaper_article_id", 0));
 
         //$templateFileUrl = "user/user_order_confirm.html";
         //$templateName = "default";
@@ -404,7 +406,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
                 $templateContent = strtr($templateContent, $replace_arr);
 
         }
-        elseif($newspaperId > 0 && $userId > 0 && $siteId > 0){
+        elseif(($newspaperId > 0||$newspaperArticleId>0) && $userId > 0 && $siteId > 0){
             //电子报的创建订单
 
             $salePrice = 0.1; //TODO 电子报每份售价，暂时写死
@@ -412,6 +414,8 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
             $templateContent = str_ireplace("{SalePrice}",sprintf("%1\$.3f", $salePrice), $templateContent);
 
             $templateContent = str_ireplace("{NewspaperId}",$newspaperId, $templateContent);
+
+            $templateContent = str_ireplace("{NewspaperArticleId}",$newspaperArticleId, $templateContent);
         }
 
 
@@ -441,6 +445,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
         $createDateDes = Des::Encrypt($createDate, UserOrderData::USER_ORDER_DES_KEY);
         $arrUserCarId = Control::PostRequest("s_ArrUserCarId", "");
         $newspaperId = intval(Control::PostRequest("s_NewspaperId", ""));
+        $newspaperArticleId = intval(Control::PostRequest("s_NewspaperArticleId", ""));
 
 
 
@@ -585,7 +590,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
             }
         }
 
-        elseif($siteId > 0 && $userId > 0 && $allPrice > 0 && $newspaperId > 0){
+        elseif($siteId > 0 && $userId > 0 && $allPrice > 0 && ($newspaperId > 0||$newspaperArticleId>0)){
 
             //电子报购买
 
@@ -623,7 +628,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
                 $newspaperPublicData = new NewspaperPublicData();
                 $channelId=$newspaperPublicData->GetChannelId($newspaperId, true);
                 $userOrderNewspaperPublicData->Create(
-                    $userOrderId,$siteId,$channelId,$userId, $newspaperId,$allPrice,$beginDate,$endDate
+                    $userOrderId,$siteId,$channelId,$userId, $newspaperId,$newspaperArticleId,$allPrice,$beginDate,$endDate
                 );
 
                 //支付选择页面
