@@ -199,4 +199,27 @@ class UserOrderNewspaperPublicData extends BasePublicData {
 
         return $result;
     }
+
+    /**
+     * 取得电子报文章id
+     * @param int $userOrderId 订单编号
+     * @param bool $withCache 是否从缓冲中取
+     * @return float 电子报id
+     */
+    public function GetNewspaperArticleId($userOrderId, $withCache){
+        $result =-1;
+        if($userOrderId>0){
+
+            $cacheDir = UserOrderData::GetCachePath($userOrderId);
+            $cacheFile = 'user_order_newspaper_get_newspaper_article_id.cache_' . $userOrderId . '';
+            $sql = "SELECT NewspaperArticleId FROM " . self::TableName_UserOrderNewspaper . "
+                    WHERE UserOrderId=:UserOrderId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderId", $userOrderId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+
+        return $result;
+    }
 } 

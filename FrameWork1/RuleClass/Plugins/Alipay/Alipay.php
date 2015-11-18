@@ -381,9 +381,15 @@ class Alipay
             if ($userOrderTableType == UserOrderData::USER_ORDER_TABLE_TYPE_NEWSPAPER){
 
                 $userOrderNewspaperPublicData = new UserOrderNewspaperPublicData();
+                $newspaperArticleId = $userOrderNewspaperPublicData->GetNewspaperArticleId($userOrderId, true);
                 $newspaperId = $userOrderNewspaperPublicData->GetNewspaperId($userOrderId, true);
 
-                if ($newspaperId>0){
+                if ($newspaperArticleId>0){
+
+                    Control::GoUrl("/newspaper_article-detail-$newspaperArticleId.html");
+
+                }
+                else if ($newspaperId>0){
 
 
                     $newspaperPublicData = new NewspaperPublicData();
