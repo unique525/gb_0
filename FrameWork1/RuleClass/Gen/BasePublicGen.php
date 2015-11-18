@@ -1605,6 +1605,42 @@ class BasePublicGen extends BaseGen
 
     }
 
+
+    /**
+     * 替换模板中的用户信息面板 {UserInfoPanel}
+     * @param string $templateContent 模板
+     * @param int $siteId 站点id
+     * @param string $forceLoginTemp 强制指定的已登录用户面板模板名称
+     * @param string $forceLoginNotTemp 强制指定的未登录用户面板模板名称
+     */
+    protected function ReplaceUserInfoPanel(&$templateContent, $siteId, $forceLoginTemp = "",$forceLoginNotTemp = "")
+    {
+        $userId = Control::GetUserId();
+        $refUrl = urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+        if ($userId > 0) {
+            $defaultTemp = "user_info_panel_login";
+            $userInfoTemplateContent = self::GetDynamicTemplateContent(
+                $defaultTemp,
+                $siteId,
+                $forceLoginTemp,
+                $templateMode);
+            $userInfoTemplateContent = str_ireplace("{UserInfoPanelUserName}", Control::GetUserName(), $userInfoTemplateContent);
+            $userInfoTemplateContent = str_ireplace("{UserInfoPanelLoginOutUrl}", "/default.php?mod=user&a=logout&re_url=$refUrl", $userInfoTemplateContent);
+        } else {
+            $defaultTemp = "user_info_panel_not_login";
+            $userInfoTemplateContent = self::GetDynamicTemplateContent(
+                $defaultTemp,
+                $siteId,
+                $forceLoginNotTemp,
+                $templateMode);
+            $userInfoTemplateContent = str_ireplace("{UserInfoPanelRegisterUrl}", "/default.php?mod=user&a=register&re_url=$refUrl", $userInfoTemplateContent);
+            $userInfoTemplateContent = str_ireplace("{UserInfoPanelLoginUrl}", "/default.php?mod=user&a=login&re_url=$refUrl", $userInfoTemplateContent);
+        }
+        $templateContent=str_ireplace("{UserInfoPanel}", $userInfoTemplateContent, $templateContent);
+    }
+
+
+
     /**
      * 根据 site id 和 user id 查找会员权限
      * @param string $userPopedomName 会员权限字段名称

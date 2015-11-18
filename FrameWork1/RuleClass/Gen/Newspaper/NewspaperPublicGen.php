@@ -132,6 +132,9 @@ class NewspaperPublicGen extends NewspaperBasePublicGen
         }
 
         /*******************页面级的缓存 end  ********************** */
+
+        parent::ReplaceUserInfoPanel($result, $siteId);
+
         return $result;
     }
 
