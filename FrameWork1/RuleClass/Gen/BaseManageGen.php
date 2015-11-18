@@ -1488,6 +1488,12 @@ class BaseManageGen extends BaseGen
                                         //3.替换资讯内容和其他一些内容
                                         $manageUserName = Control::GetManageUserName();
                                         $arrOne = $documentNewsManageData->GetOne($documentNewsId);
+
+                                        if(strlen($arrOne["DirectUrl"])>0){
+                                            $channelTemplateContent = '<script>window.location.href="'.$arrOne["DirectUrl"].'";</script>';
+                                        }
+
+
                                         if($arrOne["PublishManageUserName"]==""){
                                             $arrOne["PublishManageUserName"]=$manageUserName;
                                         }
