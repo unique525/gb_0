@@ -41,12 +41,12 @@ class UserManageData extends BaseManageData
         $dataProperty->AddField("SiteId", $siteId);
         if (strlen($searchKey) > 0 && $searchKey != "undefined") {
             if ($searchType == 1) { //会员名,手机号,邮箱地址
-                $searchSql = " AND ((u.UserName like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-                $searchSql .= " OR (u.UserMobile like :SearchKey)";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
-                $searchSql .= " OR (u.UserEmail like :SearchKey))";
-                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+                $searchSql = " AND ((u.UserName like :SearchKey1)";
+                $dataProperty->AddField("SearchKey1", "%" . $searchKey . "%");
+                $searchSql .= " OR (u.UserMobile like :SearchKey2)";
+                $dataProperty->AddField("SearchKey2", "%" . $searchKey . "%");
+                $searchSql .= " OR (u.UserEmail like :SearchKey3))";
+                $dataProperty->AddField("SearchKey3", "%" . $searchKey . "%");
             }elseif ($searchType == 2) { //IP
                 $searchSql = " AND (u.RegIp like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
