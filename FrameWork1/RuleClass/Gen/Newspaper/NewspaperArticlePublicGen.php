@@ -263,19 +263,25 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen
                 Template::ReplaceCustomTag($result, "newspaper_article_slider" . $newspaperArticleId, "");
 
 
-                $defaultTemp = "newspaper_article_not_buy_content";
+                if($userId>0){
+                    $defaultTemp = "newspaper_article_not_buy_content";
+                }
+                else{
+                    $defaultTemp = "newspaper_article_not_buy_content_not_login";
+                }
+
                 $newspaperArticleNotBuyContent = self::GetDynamicTemplateContent(
                     $defaultTemp,
                     $siteId,
                     "",
                     $templateMode);
 
-
                 $result = str_ireplace("{NewsArticleBuyContent}", $newspaperArticleNotBuyContent, $result);
                 $result = str_ireplace("{NewspaperId}", $newspaperId, $result);
                 $result = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $result);
                 $result = str_ireplace("{SiteId}", $siteId, $result);
-
+                $refUrl = urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+                $result = str_ireplace("{LoginUrl}", "/default.php?mod=user&a=login&re_url=$refUrl", $result);
                 Template::ReplaceOne($result, $arrOne);
 
             }
