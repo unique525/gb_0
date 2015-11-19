@@ -275,8 +275,6 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen
                 $result = str_ireplace("{NewspaperId}", $newspaperId, $result);
                 $result = str_ireplace("{NewspaperArticleId}", $newspaperArticleId, $result);
                 $result = str_ireplace("{SiteId}", $siteId, $result);
-                $refUrl = urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
-                $result = str_ireplace("{LoginUrl}", "/default.php?mod=user&a=login&re_url=$refUrl", $result);
 
                 Template::ReplaceOne($result, $arrOne);
 
