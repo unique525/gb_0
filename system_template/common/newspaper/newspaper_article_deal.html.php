@@ -96,7 +96,16 @@
                     <input id="f_Sort" name="f_Sort" type="text" value="{Sort}" maxlength="10" class="input_number"/>
                 </td>
             </tr>
-
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="f_NewspaperArticleType">类型：</label></td>
+                <td class="spe_line">
+                    <select id="f_NewspaperArticleType" name="f_NewspaperArticleType">
+                        <option value="1">普通</option>
+                        <option value="2">广告</option>
+                    </select>
+                    {s_NewspaperArticleType}
+                </td>
+            </tr>
             <tr>
                 <td class="spe_line" height="30" align="right"><label for="f_State">状态：</label></td>
                 <td class="spe_line">

@@ -224,6 +224,29 @@ class UserPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 通过会员账号取得会员信息
+     * @param int $userAccount 会员名称
+     * @return array 会员手机帐号
+     */
+    public function GetListByUserAccount($userAccount)
+    {
+        $result = null;
+        if(!empty($userAccount)){
+            $sql = "SELECT t.*,t1.Email FROM ".self::TableName_User ." t "
+            ." LEFT OUTER JOIN ".self::TableName_UserInfo ." t1 "
+            ." ON t.UserId=t1.UserId "
+            ." WHERE (t.UserName = :UserName OR t.UserEmail = :UserEmail OR t.UserMobile = :UserMobile)";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserName",$userAccount);
+            $dataProperty->AddField("UserEmail",$userAccount);
+            $dataProperty->AddField("UserMobile",$userAccount);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 }
 
 ?>

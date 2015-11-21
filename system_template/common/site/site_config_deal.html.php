@@ -133,6 +133,7 @@
                             <li><a href="#tabs-3">资讯设置</a></li>
                             <li><a href="#tabs-4">电子报设置</a></li>
                             <li><a href="#tabs-5">第三方接口设置</a></li>
+                            <li><a href="#tabs-6">邮件参数设置</a></li>
                         </ul>
                         <div id="tabs-1">
                             <div style="">
@@ -422,10 +423,60 @@
                                             <input id="cfg_PayAlipayKey" type="text" class="input_box" style="width:300px;" name="cfg_PayAlipayKey" value="{cfg_PayAlipayKey}"/>
                                         </td>
                                     </tr>
-
-
-
-
+                                </table>
+                            </div>
+                        </div>
+                        <div id="tabs-6">
+                            <div>
+                                <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailSmtpHost">SMTP服务器地址：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailSmtpHost" id="cfg_MailSmtpHost" value="{cfg_MailSmtpHost}" maxlength="200" type="text" class="input_box" style=" width: 500px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailSmtpUserName">SMTP服务器用户名：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailSmtpUserName" id="cfg_MailSmtpUserName" value="{cfg_MailSmtpUserName}" maxlength="200" type="text" class="input_box" style=" width: 500px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailSmtpPassword">SMTP服务器密码：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailSmtpPassword" id="cfg_MailSmtpPassword" value="{cfg_MailSmtpPassword}" maxlength="200" type="text" class="input_box" style=" width: 500px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailSmtpPort">SMTP服务器的端口号：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailSmtpPort" id="cfg_MailSmtpPort" value="{cfg_MailSmtpPort}" maxlength="8" type="text" class="input_number" style=" width: 100px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailFrom">发件人地址：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailFrom" id="cfg_MailFrom" value="{cfg_MailFrom}" maxlength="200" type="text" class="input_box" style=" width: 500px;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="30" align="right">
+                                            <label for="cfg_MailReplyTo">邮件回复地址：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input name="cfg_MailReplyTo" id="cfg_MailReplyTo" value="{cfg_MailReplyTo}" maxlength="200" type="text" class="input_box" style=" width: 500px;" />
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

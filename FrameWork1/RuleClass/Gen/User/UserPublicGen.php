@@ -81,6 +81,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "async_modify_user_pass": //密码修改操作
                 $result = self::AsyncModifyUserPass();
                 break;
+            case "async_find_user_pass_by_email": //通过邮件找回密码操作
+                $result = self::AsyncFindUserPassByEmail();
+                break;
             case "get_wx_access_token_oauth2":
                 self::GetWxAccessTokenOauth2();
                 break;
@@ -1154,6 +1157,38 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             $result=-2;//未登录
         }
         return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+    }
+
+    /**
+     * 会员前台密码修改
+     * @return string
+     */
+    private function AsyncFindUserPassByEmail()
+    {
+        $result = -1;//参数错误
+        $userAccount = Control::GetRequest("user_account", "");
+        $siteId = parent::GetSiteIdByDomain();
+        if (!empty($userAccount)) {
+            $userInfoList = null;
+            $userPublicData = new UserPublicData();
+            $userInfoList = $userPublicData->GetListByUserAccount($userAccount);
+            if (count($userInfoList) > 0) {
+                foreach ($userInfoList as $value) {
+                    $userEmail = $value["UserEmail"];
+                    $email = $value["Email"];
+                    if (!empty($userEmail)) {
+                        $result = parent::Mail($siteId, $userEmail, "来自长沙晚报网的密码找回邮件", "您的密码是：".$value["UserPass"]);
+                    } else if (!empty($email)) {
+                        $result = parent::Mail($siteId, $email, "来自长沙晚报网的密码找回邮件", "您的密码是：".$value["UserPass"]);
+                    }else {
+                        $result=-3;//用户未填写邮箱
+                    }
+                }
+            } else {
+                $result = -2; //用户名不存在
+            }
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
     }
 
 }

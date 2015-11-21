@@ -1626,6 +1626,7 @@ class BasePublicGen extends BaseGen
                 $templateMode);
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelUserName}", Control::GetUserName(), $userInfoTemplateContent);
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelLoginOutUrl}", "/default.php?mod=user&a=logout&re_url=$refUrl", $userInfoTemplateContent);
+            $userInfoTemplateContent = str_ireplace("{UserInfoPanelEditPassUrl}", "/default.php?mod=user&a=modify_user_pass&re_url=$refUrl", $userInfoTemplateContent);
         } else {
             $defaultTemp = "user_info_panel_not_login";
             $userInfoTemplateContent = self::GetDynamicTemplateContent(
