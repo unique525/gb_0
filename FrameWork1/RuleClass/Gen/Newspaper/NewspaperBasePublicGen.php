@@ -18,9 +18,13 @@ class NewspaperBasePublicGen extends BasePublicGen {
         $newspaperArticleTitle = $newspaperArticlePublicData->GetNewspaperArticleTitle($newspaperArticleId, true);
         $newspaperArticleType = $newspaperArticlePublicData->GetNewspaperArticleType($newspaperArticleId, true);
         $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
+        $newspaperPageName = $newspaperPagePublicData->GetNewspaperPageName($newspaperPageId,true);
         $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
-        //如果文章标题带有广告两字或文章属于广告类别则可以免费查看
-        if($newspaperArticleType==2||(!empty($newspaperArticleTitle)&&strpos($newspaperArticleTitle,"广告"))){
+        //如果文章属于广告类别或者文章所属版面名称带了广告两字或文章标题带有广告两字可以免费查看
+        if($newspaperArticleType==2
+            ||(!empty($newspaperPageName)&&strpos($newspaperPageName,"广告")!==false)
+            ||(!empty($newspaperArticleTitle)&&strpos($newspaperArticleTitle,"广告")!==false)
+        ){
             $result=true;
         }
         else if ($newspaperId > 0 && $newspaperPageId > 0) {//当日报纸前八版免费
