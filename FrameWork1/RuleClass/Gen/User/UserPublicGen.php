@@ -1114,21 +1114,15 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
     }
 
 
-    private function GenRetrieveUserPass(){
-        $userId = Control::GetUserId();
-        if($userId > 0){
-            $siteId = parent::GetSiteIdByDomain();
+    private function GenRetrieveUserPass()
+    {
+        $siteId = parent::GetSiteIdByDomain();
 
-            $templateContent = parent::GetDynamicTemplateContent("user_password_forget",$siteId);
-            parent::ReplaceFirst($templateContent);
-
-            $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
-            parent::ReplaceSiteConfig($siteId,$templateContent);
-            parent::ReplaceEnd($templateContent);
-            return $templateContent;
-        }else{
-            return "";
-        }
+        $templateContent = parent::GetDynamicTemplateContent("user_password_forget", $siteId);
+        parent::ReplaceFirst($templateContent);
+        parent::ReplaceSiteConfig($siteId, $templateContent);
+        parent::ReplaceEnd($templateContent);
+        return $templateContent;
     }
 
 
