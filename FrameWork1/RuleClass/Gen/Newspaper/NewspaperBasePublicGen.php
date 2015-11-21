@@ -14,20 +14,29 @@ class NewspaperBasePublicGen extends BasePublicGen {
         $result = false;
         $newspaperArticlePublicData = new NewspaperArticlePublicData();
         $newspaperPagePublicData = new NewspaperPagePublicData();
+        $newspaperPublicData = new NewspaperPublicData();
+        $newspaperArticleTitle = $newspaperArticlePublicData->GetNewspaperArticleTitle($newspaperArticleId, true);
+        $newspaperArticleType = $newspaperArticlePublicData->GetNewspaperArticleType($newspaperArticleId, true);
         $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
         $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
-        if ($newspaperId > 0 && $newspaperPageId > 0) {
+        //如果文章标题带有广告两字或文章属于广告类别则可以免费查看
+        if($newspaperArticleType==2||(!empty($newspaperArticleTitle)&&strpos($newspaperArticleTitle,"广告"))){
+            $result=true;
+        }
+        else if ($newspaperId > 0 && $newspaperPageId > 0) {//当日报纸前八版免费
             $pageIndex = self::GetNewspaperPageIndex($newspaperId, $newspaperPageId);
-            //前八版免费
-            if($newspaperId==43)
-            {
-                if ($pageIndex >=0 && $pageIndex < 8) {
+            //if($newspaperId==43)
+            //{
+                $publishDate=$newspaperPublicData->GetPublishDate($newspaperId,true);
+                $publishDate=date("Y-m-d",strtotime($publishDate));
+                $nowDate=date("Y-m-d",time());
+                if ($publishDate==$nowDate&&$pageIndex >=0 && $pageIndex < 8) {
                     $result = true;
                 }
-            }
-            else{
-                $result = true;
-            }
+            //}
+            //else{
+                //$result = true;
+            //}
         }
         return $result;
     }

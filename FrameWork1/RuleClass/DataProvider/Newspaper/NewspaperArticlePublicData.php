@@ -180,6 +180,58 @@ class NewspaperArticlePublicData extends BasePublicData
     }
 
     /**
+     * 取得文章标题
+     * @param int $newspaperArticleId 文章id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 标题
+     */
+    public function GetNewspaperArticleTitle($newspaperArticleId, $withCache){
+
+        $result = "";
+        if ($newspaperArticleId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_newspaper_article_title.cache_' . $newspaperArticleId . '';
+            $sql = "SELECT NewspaperArticleTitle FROM " . self::TableName_NewspaperArticle . "
+
+                    WHERE NewspaperArticleId=:NewspaperArticleId
+                     ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+
+
+    }
+
+    /**
+     * 取得文章类型
+     * @param int $newspaperArticleId 文章id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 标题
+     */
+    public function GetNewspaperArticleType($newspaperArticleId, $withCache){
+
+        $result = "";
+        if ($newspaperArticleId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_article_data';
+            $cacheFile = 'newspaper_article_get_newspaper_article_type.cache_' . $newspaperArticleId . '';
+            $sql = "SELECT NewspaperArticleType FROM " . self::TableName_NewspaperArticle . "
+
+                    WHERE NewspaperArticleId=:NewspaperArticleId
+                     ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+
+        return $result;
+
+
+    }
+
+    /**
      * 取得文章的版面id
      * @param int $newspaperArticleId 文章id
      * @param bool $withCache 是否从缓冲中取

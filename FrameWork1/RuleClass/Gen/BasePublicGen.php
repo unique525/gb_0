@@ -1715,8 +1715,9 @@ class BasePublicGen extends BaseGen
                 $userGroupId = $userRolePublicData->GetUserGroupId(
                     $siteId,
                     $userId,
-                    true
+                    false
                 );
+                //******上面使用缓存有问题，老是输出groupid为2或11待查//
 
                 $result = $userPopedomPublicData->GetValueBySiteIdAndUserGroupId(
                     $siteId,

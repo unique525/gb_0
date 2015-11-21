@@ -409,7 +409,7 @@ class UserOrderPublicGen extends BasePublicGen implements IBasePublicGen
         elseif(($newspaperId > 0||$newspaperArticleId>0) && $userId > 0 && $siteId > 0){
             //电子报的创建订单
 
-            $salePrice = 0.1; //TODO 电子报每份售价，暂时写死
+            $salePrice = 72; //TODO 电子报每份售价，暂时写死
 
             $templateContent = str_ireplace("{SalePrice}",sprintf("%1\$.3f", $salePrice), $templateContent);
 
