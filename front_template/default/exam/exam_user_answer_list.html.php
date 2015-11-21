@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>开始答题</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/system_js/common.js"></script>
@@ -20,7 +22,7 @@
                 var answerValue = $(this).attr("value");
                 $.ajax({
                     url: "default.php",
-                    data: {mod: "exam_user_answer",a: "sub_answer",exam_user_answer_id:examUserAnswerId,answer_value: answerValue},
+                    data: {mod: "exam_user_answer",a: "async_sub_answer",exam_user_answer_id:examUserAnswerId,answer_value: answerValue},
                     dataType: "jsonp",
                     jsonp:"JsonpCallBack",
                     success:function(data){
@@ -30,12 +32,8 @@
             });
 
             $("#subPaper").click(function(){
-
-            });
-
-            $("#subPaper").click(function(){
                 var examUserPaperId = Request["exam_user_paper_id"];
-                window.location.href = "/default.php?mod=exam_user_paper&a=paper_score&exam_user_paper_id="+examUserPaperId;
+                window.location.href = "/default.php?mod=exam_user_paper&a=finished&exam_user_paper_id="+examUserPaperId;
             })
 
         });
@@ -59,15 +57,50 @@
             return result;
         }
     </script>
+
+    <style>
+        /*--css reset--*/
+        html,body,h1,h2,h3,h4,h5,h6,p,ol,ul,li,pre,code,address,variable,form,fieldset,blockquote {
+            padding:0;
+            margin:0;
+            font-size:62.5%;
+            font-weight:normal;
+            font-family:"Microsoft YaHei";
+            color:#172d06;
+        }
+        ol{margin-left:0; list-style:none;}
+        ul{margin-left:0; list-style:none;}
+
+        a{ color:#3e4a61; text-decoration:none;}
+        a:hover{ text-decoration:underline;}
+        img,input{ vertical-align:middle;}
+        .clean{ clear:both;}
+        .left{ float:left;}
+        .right{ float:right;}
+        .hidden{ display:none;}
+        img{ border:none}
+        /*--css reset over--*/
+
+        body{ background:#fff4e8;}
+
+        .title{ font-size:1.5rem; line-height:6rem; background:#fc7a3e; color:#fff;}
+        .q_list{ padding:20px 5%;}
+        .q_list li{ font-size:1.5rem; line-height:3rem; border-bottom:1px dashed #333; padding:15px 0;}
+        .q_list li input{}
+        .submit {padding-bottom:44px; padding-top:20px;}
+        .submit input{ width:100px; height:40px; line-height:40px; border:none; background:#fc7a3e; color:#fff;  font-size:17px; font-family:"Microsoft YaHei";}
+
+    </style>
+
 </head>
 <body>
-<div align="left">
+<div>
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
-            <td style="text-align: center;">“三严三实”专题教育及党章知识竞赛题库</td>
+            <td class="title"  style="text-align: center;"></td>
         </tr>
     </table>
-    <ul>
+    <ul class="q_list">
 
         <icms id="exam_user_answer_list" type="list">
             <item>
@@ -75,7 +108,7 @@
                 <li>
                     <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td style="width:300px;text-align:left;">{f_ExamQuestionTitle}</td>
+                            <td style="width:300px;text-align:left; font-size:1.5rem; font-weight:bold;">{f_ExamQuestionTitle}</td>
                         </tr>
                         <tr>
                             <td style="width:150px;text-align:left;"><span id="span_answer_{f_ExamQuestionId}" title="{f_ExamUserAnswerId}" class="span_answer" idvalue="{f_ExamQuestionId}">{f_SelectItem}</span></td>
@@ -90,7 +123,7 @@
     </ul>
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
-            <td align="center"><input type="button" idvalue="" value="交卷" id="subPaper"></in></td>
+            <td class="submit"  align="center"><input type="button" idvalue="" value="交    卷" id="subPaper"></in></td>
         </tr>
     </table>
 </div>

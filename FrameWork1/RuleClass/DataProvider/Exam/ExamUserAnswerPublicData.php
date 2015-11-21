@@ -59,6 +59,7 @@ class ExamUserAnswerPublicData extends BasePublicData{
         return $result;
     }
 
+    //将答案写入ExamUserAnswer表
     public function  ModifyAnswer($examUserAnswerId,$answer){
         $dataProperty = new DataProperty();
         $sql = "UPDATE ".self::TableName_ExamUserAnswer." SET Answer=:Answer

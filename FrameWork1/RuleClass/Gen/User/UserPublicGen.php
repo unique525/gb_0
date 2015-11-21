@@ -74,6 +74,10 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "modify_user_pass": //生成修改密码界面
                  $result = self::GenModifyUserPass();
                 break;
+            case "user_password_forget": //生成找回密码页面
+                $result = self::GenRetrieveUserPass();
+                break;
+
             case "async_modify_user_pass": //密码修改操作
                 $result = self::AsyncModifyUserPass();
                 break;
@@ -1093,7 +1097,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             //$templateName = "default";
             //$templatePath = "front_template";
             //$templateContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-            $templateContent = parent::GetDynamicTemplateContent("user_pass_modify");
+            $templateContent = parent::GetDynamicTemplateContent("user_pass_modify",$siteId);
             parent::ReplaceFirst($templateContent);
 
 
@@ -1105,6 +1109,26 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             return "";
         }
     }
+
+
+    private function GenRetrieveUserPass(){
+        $userId = Control::GetUserId();
+        if($userId > 0){
+            $siteId = parent::GetSiteIdByDomain();
+
+            $templateContent = parent::GetDynamicTemplateContent("user_password_forget",$siteId);
+            parent::ReplaceFirst($templateContent);
+
+            $templateContent = str_ireplace("{UserId}", strval($userId), $templateContent);
+            parent::ReplaceSiteConfig($siteId,$templateContent);
+            parent::ReplaceEnd($templateContent);
+            return $templateContent;
+        }else{
+            return "";
+        }
+    }
+
+
 
     /**
      * 会员前台密码修改
