@@ -545,8 +545,7 @@ class PHPMailer {
   public function Send() {
     try {
       if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
-          return false;
-        //throw new phpmailerException($this->Lang('provide_address'), self::STOP_CRITICAL);
+        throw new phpmailerException($this->Lang('provide_address'), self::STOP_CRITICAL);
       }
 
       // Set whether the message is multipart/alternative
