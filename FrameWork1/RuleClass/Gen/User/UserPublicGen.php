@@ -18,7 +18,11 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     const ERROR_FAIL_REGISTER = -5;//注册失败
 
-    const ERROR_FORMAT = -6;//格式错误
+    const ERROR_FORMAT_USER_NAME = -6;//用户名格式错误
+
+    const ERROR_FORMAT_USER_EMAIL = -7;//邮箱格式错误
+
+    const ERROR_FORMAT_USER_MOBILE = -8;//手机格式错误
 
     const SUCCESS_REGISTER = 1;//注册成功
 
@@ -750,7 +754,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                         return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_NAME.'})';
                     }
                 } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT_USER_NAME.'})';
                 }
             }
 
@@ -761,7 +765,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                         return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_EMAIL.'})';
                     }
                 } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT_USER_EMAIL.'})';
                 }
             }
 
@@ -772,7 +776,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
                         return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_REPEAT_USER_MOBILE.'})';
                     }
                 } else {
-                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT.'})';
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT_USER_MOBILE.'})';
                 }
             }
             //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
