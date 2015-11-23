@@ -461,7 +461,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      echo $this->Lang('invalid_address').': '.$address;
+      //echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
     if ($kind != 'ReplyTo') {
@@ -545,7 +545,8 @@ class PHPMailer {
   public function Send() {
     try {
       if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
-        throw new phpmailerException($this->Lang('provide_address'), self::STOP_CRITICAL);
+          return false;
+        //throw new phpmailerException($this->Lang('provide_address'), self::STOP_CRITICAL);
       }
 
       // Set whether the message is multipart/alternative
@@ -581,9 +582,9 @@ class PHPMailer {
     } catch (phpmailerException $e) {
       $this->SetError($e->getMessage());
       if ($this->exceptions) {
-        throw $e;
+        //throw $e; 不抛出异常，留给前台处理
       }
-      echo $e->getMessage()."\n";
+      //echo $e->getMessage()."\n";不抛出异常，留给前台处理
       return false;
     }
   }
