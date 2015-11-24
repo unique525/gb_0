@@ -1,0 +1,37 @@
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+/*Data for the table `cst_manage_menu_of_column` */
+
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (1,'站点和频道','{manage_menu_of_site_channel}','icon4.gif',0,100);
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (2,'任务管理','{manage_menu_of_task}','icon3.gif',0,80);
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (3,'高级查询','{manage_menu_of_search}','icon2.gif',0,70);
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (4,'系统设置','{manage_menu_of_system_config}','icon1.gif',0,0);
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (5,'会员管理','{manage_menu_of_user_manage}','icon6.gif',0,90);
+insert  into `cst_manage_menu_of_column`(`ManageMenuOfColumnId`,`ManageMenuOfColumnName`,`ManageMenuOfColumnContent`,`ManageMenuOfColumnIcon`,`State`,`Sort`) values (6,'论坛管理','{manage_menu_of_forum}','icon7.gif',0,91);
+
+/*Data for the table `cst_manage_menu_of_user` */
+
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (1,'会员管理','UserExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (2,'会员组列表','UserGroupExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (3,'会员订单管理','UserOrderExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (4,'会员相册管理','UserAlbumExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (5,'会员相册分类管理','UserAlbumTypeExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (6,'会员等级管理','UserLevelExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (7,'所属会员管理','UserRoleExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (8,'会员收藏管理','UserFavoriteExplore','',0,0);
+insert  into `cst_manage_menu_of_user`(`ManageMenuOfUserId`,`ManageMenuOfUserName`,`ManageMenuOfUserTagName`,`ManageMenuOfUserContent`,`Sort`,`State`) values (9,'会员参数设置','UserSiteConfig','',0,0);
+
+/*Data for the table `cst_manage_user` */
+
+insert  into `cst_manage_user`(`ManageUserId`,`ManageUserName`,`ManageUserPass`,`ManageUserGroupId`,`CreateDate`,`State`,`Sort`,`EndDate`,`UserId`,`UserName`,`Mobile`,`OpenPublicLogin`,`SmsVerifyLogin`,`OtpVerifyLogin`,`OtpBarCode`,`OtpAuthorityKey`,`OtpCurrentSuccess`,`OtpCurrentDrift`) values (1,'admin','zaq1xsw2',1,'0000-00-00 00:00:00',0,0,'3000-00-00 00:00:00',0,'','',1,0,0,'','',0,0);
+
+
+insert  into `cst_manage_user_group`(`ManageUserGroupId`,`ManageUserGroupName`,`Sort`,`State`,`ManageMenuOfColumnIdValue`,`CreateDate`) values (1,'管理员',0,0,'1,2,3,4,5,6','0000-00-00 00:00:00');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
