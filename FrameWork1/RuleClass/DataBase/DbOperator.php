@@ -409,6 +409,16 @@ class DbOperator {
     private function BindStmt(&$stmt, DataProperty $dataProperty) {
         $fields = $dataProperty->ArrayField;
         foreach ($fields as $key => $field) {
+
+            if (is_int($field)){
+                $stmt->bindValue(":" . $key, intval($field), PDO::PARAM_INT);
+            }elseif (is_float($field)){
+                $stmt->bindValue(":" . $key, floatval($field), PDO::PARAM_STR);
+            }else{
+                $stmt->bindValue(":" . $key, $field, PDO::PARAM_STR);
+            }
+
+            /**
             if (!is_string($field)) {
                 if (is_float($field)) {
                     $stmt->bindValue(":" . $key, floatval($field), PDO::PARAM_STR);
@@ -420,6 +430,7 @@ class DbOperator {
             } else {
                 $stmt->bindValue(":" . $key, $field, PDO::PARAM_STR);
             }
+             */
         }
     }
 }

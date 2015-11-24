@@ -261,7 +261,7 @@ class ChannelManageData extends BaseManageData
             $sql = "SELECT
                     GROUP_CONCAT(ChannelId) FROM " . self::TableName_Channel . "
 
-                WHERE ParentId = :ParentId
+                    WHERE ParentId = :ParentId
                     AND State<100;
 
                     ";
@@ -292,9 +292,13 @@ class ChannelManageData extends BaseManageData
     public function CreateWhenSiteCreate($siteId, $manageUserId, $channelName)
     {
         $result = -1;
-        if ($siteId > 0 && $manageUserId > 0 && !empty($channelName)) {
+        if ($siteId > 0 && $manageUserId > 0 && strlen($channelName)>0) {
             $dataProperty = new DataProperty();
-            $sql = "INSERT INTO " . self::TableName_Channel . " (SiteId,CreateDate,ManageUserId,ChannelName) VALUES (:SiteId,now(),:ManageUserId,:ChannelName);";
+            $sql = "INSERT INTO " . self::TableName_Channel .
+                   " (SiteId,CreateDate,ManageUserId,ChannelName)
+                        VALUES
+                     (:SiteId,now(),:ManageUserId,:ChannelName);
+                     ";
             $dataProperty->AddField("SiteId", $siteId);
             $dataProperty->AddField("ManageUserId", $manageUserId);
             $dataProperty->AddField("ChannelName", $channelName);

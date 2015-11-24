@@ -27,4 +27,7 @@
     <module id="9">
         <content><![CDATA[没有找到站点数据，请先新增一个站点！]]></content>
     </module>
+    <module id="10">
+        <content><![CDATA[首页]]></content>
+    </module>
 </root>
