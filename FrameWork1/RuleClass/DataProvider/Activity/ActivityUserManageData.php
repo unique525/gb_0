@@ -80,6 +80,7 @@ class ActivityUserManageData extends BaseManageData{
         }
         return $result;
     }
+
     /**
      * 获取活动成员分页列表
      * @param int $activityId 活动id
@@ -91,28 +92,35 @@ class ActivityUserManageData extends BaseManageData{
      */
     public function GetUserListPager($activityId, $pageBegin, $pageSize, $searchKey, &$allCount) {
         $result=-1;
-        if($activityId>0){
+        if($activityId > 0){
             $searchSql = "";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ActivityId", $activityId);
 
             if (strlen($searchKey) > 0 && $searchKey != "undefined") {
-                $searchSql.=" AND Activity LIKE :SearchKey ";
+                $searchSql.=" AND u.UserName LIKE :SearchKey ";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
 
             $sql = 'SELECT au.*,'.
-                           'u.UserName,'.
-                           'a.ActivityTitle'.
-           ' FROM '.self::TableName_ActivityUser.' au'.
-           ' INNER JOIN ' . self::TableName_User . ' u ON (u.UserId=au.UserId)'.
-           ' LEFT OUTER JOIN ' . self::TableName_Activity . ' a ON (a.ActivityId=au.ActivityId)'.
-           ' WHERE au.ActivityId=:ActivityId  '. $searchSql .
-           ' ORDER BY au.ActivityUserId DESC'.
-           ' LIMIT ' . $pageBegin . ',' . $pageSize . ';';
+                'u.UserName,'.
+                'a.ActivityTitle'.
+                ' FROM '.self::TableName_ActivityUser.' au'.
+                ' INNER JOIN ' .self::TableName_User. ' u ON (u.UserId=au.UserId'.$searchSql.')'.
+                ' LEFT OUTER JOIN ' . self::TableName_Activity . ' a ON (a.ActivityId=au.ActivityId)'.
+                ' WHERE au.ActivityId=:ActivityId  '.
+                ' ORDER BY au.ActivityUserId DESC'.
+                ' LIMIT ' . $pageBegin . ',' . $pageSize . ';';
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-            $sqlCount = "SELECT count(*) FROM " . self::TableName_ActivityUser . " WHERE ActivityId=:ActivityId " . $searchSql . " ;";
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+
+            $sqlCounts = 'SELECT COUNT(ActivityUserId)'.
+                ' FROM '.self::TableName_ActivityUser.' au'.
+                ' INNER JOIN ' .self::TableName_User. ' u ON (u.UserId=au.UserId'.$searchSql.')'.
+                ' LEFT OUTER JOIN ' . self::TableName_Activity . ' a ON (a.ActivityId=au.ActivityId)'.
+                ' WHERE au.ActivityId=:ActivityId  '.
+                ' ORDER BY au.ActivityUserId DESC'.
+                ' LIMIT ' . $pageBegin . ',' . $pageSize . ';';
+            $allCount = $this->dbOperator->GetInt($sqlCounts, $dataProperty);
         }
         return $result;
     }
