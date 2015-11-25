@@ -40,6 +40,10 @@ class Des {
      * @return string 加密后的字符串
      */
     public static function Encrypt($content,$key) {
+
+        //5.6以上版本不支持8位KEY
+        $key = $key.$key;
+
         $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
         $passCrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $content, MCRYPT_MODE_ECB, $iv );
         $encode = urlencode( $passCrypt );
@@ -53,6 +57,10 @@ class Des {
      * @return string 解密后的字符串
      */
     public static function Decrypt($content,$key) {
+
+        //5.6以上版本不支持8位KEY
+        $key = $key.$key;
+
         $decoded = urldecode( $content );
         $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
         $decrypted = mcrypt_decrypt ( MCRYPT_RIJNDAEL_256, $key, $decoded, MCRYPT_MODE_ECB, $iv );

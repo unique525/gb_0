@@ -1229,6 +1229,17 @@ class BasePublicGen extends BaseGen
     }
 
 
+    /**
+     * @param $channelTemplateContent
+     * @param $siteId
+     * @param $tagId
+     * @param $tagContent
+     * @param $tagTopCount
+     * @param $tagWhere
+     * @param $tagOrder
+     * @param $state
+     * @return string
+     */
     private function ReplaceTemplateOfForumTopicList(
         $channelTemplateContent,
         $siteId,

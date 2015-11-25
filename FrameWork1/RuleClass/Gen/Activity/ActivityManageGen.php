@@ -41,7 +41,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             case "modify":
                 $result = self::GenModify();
                 break;
-            case "list":
+            case "list":    //活动列表
                 $result = self::GenList();
                 break;
             case "async_publish":

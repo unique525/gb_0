@@ -224,7 +224,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $activityManageGen->Gen();
                     break;
                 case "activity_user":
-                    $activityUserManageGen = new ActivityUsermanageGen();
+                    $activityUserManageGen = new ActivityUserManageGen();
                     $result = $activityUserManageGen->Gen();
                     break;
                 case "activity_class":

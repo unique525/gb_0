@@ -224,6 +224,7 @@ class ActivityManageData extends BaseManageData{
         if ($activityId < 0) {
             return $result;
         }
+
         $sql = "UPDATE " . self::TableName_Activity . " SET State=:State WHERE ActivityId=:ActivityId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ActivityId", $activityId);
@@ -233,26 +234,46 @@ class ActivityManageData extends BaseManageData{
     }
 
     /**
-     * 同步cst_activity_user表中已通过的人员数到cst_activity表的ApplyUserCount字段
+     * 同步cst_activity_user表中已通过的人员数到cst_activity表的JoinUserCount字段
+     * 同步cst_activity_user表中总人员数到cst_activity表的ApplyUserCount字段
      * @param $activityId int    活动id
      * @return int        int    执行结果
      */
     public function SyncModifyState($activityId)
     {
         $result = -1;
+
+        //同步已参加人员数
         $dataProperty  = new DataProperty();
         $dataProperty->AddField("ActivityId",$activityId);
-
         $sql = 'SELECT count(State)' .
             ' FROM '  . self::TableName_ActivityUser .
             ' WHERE ActivityId=:ActivityId AND State=1;';
+        $joinUserCount = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        if ($joinUserCount >= 0){
+            $dataProperty->AddField('JoinUserCount', $joinUserCount);
+            $sql = 'UPDATE ' . self::TableName_Activity .
+                    ' SET JoinUserCount=:JoinUserCount'.
+                    ' WHERE ActivityId=:ActivityId';
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        $dataProperty->RemoveField("JoinUserCount");
+
+        //同步总人数
+        $sql = 'SELECT COUNT(*)'.
+                ' FROM ' . self::TableName_ActivityUser .
+                ' WHERE ActivityId=:ActivityId;';
+
         $applyUserCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
-        if ($applyUserCount >= 0){
-            $dataProperty->AddField('ApplyUserCount', $applyUserCount);
-             $sql = 'UPDATE ' . self::TableName_Activity .
-                    ' SET ApplyUserCount=:ApplyUserCount'.
-                    ' WHERE ActivityId=:ActivityId';
+        if($applyUserCount >= 0){
+            $dataProperty->AddField("ApplyUserCount",$applyUserCount);
+
+            $sql = 'UPDATE ' . self::TableName_Activity .
+                ' SET ApplyUserCount=:ApplyUserCount'.
+                ' WHERE ActivityId=:ActivityId';
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
     return $result;

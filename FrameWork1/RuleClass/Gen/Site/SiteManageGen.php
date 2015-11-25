@@ -94,6 +94,9 @@ class SiteManageGen extends BaseManageGen implements IBaseManageGen
 
                     }
 
+                    $channelManageData = new ChannelManageData();
+                    $channelManageData->CreateWhenSiteCreate($siteId,$manageUserId,Language::Load('site',10));
+
                     $closeTab = Control::PostRequest("CloseTab", 0);
                     if ($closeTab == 1) {
                         //Control::CloseTab();

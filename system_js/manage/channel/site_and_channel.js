@@ -67,15 +67,18 @@ $(function () {
         if(firstSite != undefined){
 
             var siteId = firstSite.attr("idvalue");
-            var siteName = firstSite.html();
-            var siteUrl = firstSite.attr("title");
+            if (siteId != undefined){
+                var siteName = firstSite.html();
+                var siteUrl = firstSite.attr("title");
 
-            divNowSelectedSite.attr("idvalue",siteId);
-            divNowSelectedSite.html(siteName);
-            divNowSelectedSite.attr("title",siteUrl);
-            if (siteId.length > 0) {
-                LoadSite(siteId, siteName, siteUrl);
+                divNowSelectedSite.attr("idvalue",siteId);
+                divNowSelectedSite.html(siteName);
+                divNowSelectedSite.attr("title",siteUrl);
+                if (siteId.length > 0) {
+                    LoadSite(siteId, siteName, siteUrl);
+                }
             }
+
         }
     }
 
