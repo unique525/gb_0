@@ -268,9 +268,9 @@
                                 style="text-align:left;overflow: hidden;white-space:nowrap; width:auto; margin-right: 5px;"
                                 title="{f_ActivityTitle}">
                                     <a target="_blank"
+                                       href="/default.php?mod=activity&a=detail&activity_id={f_ActivityId}"
                                        class="link_view"
-                                       idvalue="{f_ActivityId}"
-                                       pub_date="{f_year}{f_month}{f_day}">{f_ActivityTitle}
+                                       idvalue="{f_ActivityId}">{f_ActivityTitle}
                                     </a>
                             </td>
 

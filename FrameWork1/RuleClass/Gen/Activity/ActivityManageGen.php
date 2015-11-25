@@ -306,6 +306,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             $allCount = 0;
             $activityData = new ActivityManageData();
             $arrList = $activityData->GetListPager($channelId, $pageBegin, $pageSize, $allCount, $searchKey);
+
             if ($arrList != null && count($arrList) > 0) {
 
                 $activityClassManageData=new ActivityClassManageData();//取得ActivityClassName 并加入数组
@@ -343,6 +344,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
             $tempContent = Template::Load("activity/activity_".$activityType."_deal.html","common");
             $resultJavaScript="";
             $manageUserId = Control::GetManageUserId();
+
             $manageUsername = Control::GetManageUserName();
             $channelId = Control::GetRequest("channel_id", 0);
             $tabIndex = Control::GetRequest("tab_index", 1);
@@ -530,7 +532,7 @@ class ActivityManageGen extends BaseManageGen implements IBaseManageGen {
 
                 $manageUserData = new ManageUserManageData();
                 $userId = $manageUserData->GetUserId($manageUserId,true); //取后台管理员挂接的USERId号
-                if (intval($userId) <= 0) {
+                if (intval($userId) < 0) {
                     $resultJavaScript .= Control::GetJqueryMessage(Language::Load('activity', 22));//警告：获取对应用户名失败！用户名为空！
                     //$resultJavaScript .= Control::GetCloseTab();
                 }
