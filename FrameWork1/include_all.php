@@ -51,7 +51,7 @@ include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxApi.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/WeiXin/WxJsSDK.php");
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Plugins/GifEncoder.php");
 
-/****************  TOOLS   ******************/
+/****************  DataValueObject   ******************/
 $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/DataValueObject";
 $arrFileNames = array();
 $arrFiles = getFileNames($dir, $arrFileNames);
@@ -62,6 +62,9 @@ foreach ($arrFiles as $fileName) {
 
 include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/DataBase/MemoryCache.php");
 
+
+
+/**
 $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'system_data';
 $cacheFile = 'php_files';
 
@@ -102,6 +105,10 @@ function  __autoload($className) {
 
 }
 //include once rule class
+*/
+
+
+include_all();
 
 function include_all(){
 
@@ -138,7 +145,7 @@ function include_all(){
     foreach ($arrFiles as $fileName) {
         include_once($fileName);
     }
-/*
+
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseGen.php");
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BasePublicGen.php");
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/BaseManageGen.php");
@@ -147,13 +154,15 @@ function include_all(){
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseManageGen.php");
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/IBaseClientGen.php");
     include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/Forum/ForumBasePublicGen.php");
+
+    include_once(RELATIVE_PATH . "/FrameWork1/RuleClass/Gen/Newspaper/NewspaperBasePublicGen.php");
 //include once rule class
     $dir = RELATIVE_PATH . "/FrameWork1/RuleClass/Gen";
     $arrFiles = getFileNames($dir, $arrFileNames);
     foreach ($arrFiles as $fileName) {
         include_once($fileName);
     }
-*/
+
 
 }
 

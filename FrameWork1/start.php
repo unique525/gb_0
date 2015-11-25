@@ -14,6 +14,8 @@ mb_internal_encoding('utf8');
 date_default_timezone_set('Asia/Shanghai'); //'Asia/Shanghai' 亚洲/上海
 //////////////////step 1 include all files///////////////////
 require RELATIVE_PATH . "/FrameWork1/include_all.php";
+
+
 $security = Control::GetRequest("secu", "");
 $client = Control::GetRequest("client", "");
 if ($security === "manage") {
