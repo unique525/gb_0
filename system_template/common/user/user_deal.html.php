@@ -15,7 +15,7 @@
 
             $("#btn_modify_user_info").click(function(){
                 var state = $("#f_State").val();
-                if(state < 100){
+                //if(state < 100){
                     var url='/default.php?secu=manage&mod=user_info&m=modify&user_id={UserId}&site_id='+parent.G_NowSiteId;
                     $("#user_info_dialog_frame").attr("src",url);
                     $("#dialog_user_info_box").dialog({
@@ -27,17 +27,14 @@
                         title:'会员详细信息',
                         overlay: {opacity: 0.5, background: "black" ,overflow:'auto'}
                     });
-                }else{
+               // }else{
                     alert("用户为停用状态，请修改为非停用状态再编辑用户详细信息");
-                }
+               // }
             });
         });
 
         function submitForm(continueCreate) {
-            if ($('#f_UserName').val() == '') {
-                $("#dialog_box").dialog({width: 300, height: 100});
-                $("#dialog_content").html("请输入会员账号");
-            } else if ($('#UserPass').val().length >0 && $('#UserPass').val().length < 6) {
+            if ($('#UserPass').val().length >0 && $('#UserPass').val().length < 6) {
                 $("#dialog_box").dialog({width: 300, height: 100});
                 $("#dialog_content").html("会员密码不能少于6位");
             } else {
@@ -70,7 +67,7 @@
 </div>
 <div class="div_list">
     <form id="mainForm" enctype="multipart/form-data"
-          action="/default.php?secu=manage&mod=user&m={method}&user_id={UserId}&site_id={SiteId}&tab_index={tab_index}"
+          action="/default.php?secu=manage&mod=user&m={method}&user_id= {UserId}&site_id={SiteId}&tab_index={tab_index}"
           method="post">
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>

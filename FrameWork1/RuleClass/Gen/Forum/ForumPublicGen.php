@@ -111,6 +111,9 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         /*******************页面级的缓存 end  ********************** */
 
+        parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
+
+
         return $result;
     }
 

@@ -23,7 +23,9 @@ class ChannelTemplatePublicData extends BasePublicData {
         $channelTemplateTag,
         $withCache
     ){
+
         $result = "";
+
         if($channelTemplateType == ChannelTemplateData::CHANNEL_TEMPLATE_TYPE_DYNAMIC ){ //动态模板
 
 
@@ -63,6 +65,7 @@ class ChannelTemplatePublicData extends BasePublicData {
 
 
         }
+
         return $result;
     }
 

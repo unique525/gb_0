@@ -22,6 +22,7 @@
             <td style="width: 90px; text-align: center;">状态</td>
             <td style="width: 30px;"></td>
             <td>名称</td>
+            <td style="width: 70px;">类型</td>
             <td style="width: 70px; text-align: center;">帖子管理</td>
             <td style="width: 45px; text-align: center;"></td>
             <td style="width: 50px; text-align: center;">排序</td>

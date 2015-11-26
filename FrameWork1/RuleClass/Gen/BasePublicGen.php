@@ -1628,6 +1628,7 @@ class BasePublicGen extends BaseGen
     {
         $userId = Control::GetUserId();
         $refUrl = urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+
         if ($userId > 0) {
             $defaultTemp = "user_info_panel_login";
             $userInfoTemplateContent = self::GetDynamicTemplateContent(
@@ -1635,20 +1636,30 @@ class BasePublicGen extends BaseGen
                 $siteId,
                 $forceLoginTemp,
                 $templateMode);
+
+            if($forceLoginNotTemp == 'forum_user_no_login'){
+                $bug = new DebugLogManageData();
+                $bug->Create($userInfoTemplateContent);
+            }
+
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelUserName}", Control::GetUserName(), $userInfoTemplateContent);
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelLoginOutUrl}", "/default.php?mod=user&a=logout&re_url=$refUrl", $userInfoTemplateContent);
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelEditPassUrl}", "/default.php?mod=user&a=modify_user_pass&re_url=$refUrl", $userInfoTemplateContent);
-        } else {
+        }
+        else {
             $defaultTemp = "user_info_panel_not_login";
             $userInfoTemplateContent = self::GetDynamicTemplateContent(
                 $defaultTemp,
                 $siteId,
                 $forceLoginNotTemp,
                 $templateMode);
+
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelRegisterUrl}", "/default.php?mod=user&a=register&re_url=$refUrl", $userInfoTemplateContent);
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelLoginUrl}", "/default.php?mod=user&a=login&re_url=$refUrl", $userInfoTemplateContent);
         }
+
         $templateContent=str_ireplace("{UserInfoPanel}", $userInfoTemplateContent, $templateContent);
+
     }
 
 

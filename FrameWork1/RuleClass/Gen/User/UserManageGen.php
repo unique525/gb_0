@@ -187,17 +187,50 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                     $httpPostData = Format::FormatHtmlTagInPost($_POST);
                     $userName = Control::PostRequest("f_UserName", "");
                     $userPass = Control::PostRequest("UserPass", "");
-                    if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
-                        //老帐号名和新帐号名不同时，要检查是否已经存在
-                        $oldUserName = Control::PostRequest("OldUserName", "");
-                        $newUserName = Control::PostRequest("f_UserName", "");
-                        if ($oldUserName != $newUserName) {
-                            $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
-                            if ($hasCount > 0) { //同站点下不许存在相同的用户名
-                                Control::ShowMessage(Language::Load('user', 20));
-                                return $templateContent;
+
+                    if($userName != ''){
+
+                        if ((preg_match("/^[\x{4e00}-\x{9fa5}\w]+$/u", $userName) || preg_match("/^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\.][a-zA-Z0-9]{2,4}([\.][a-zA-Z0-9]{2,3})?$/u",$userName)) && preg_match("/^[a-z0-9A-z]{6,}$/", $userPass)) { //如果没有非法字符
+                            //老帐号名和新帐号名不同时，要检查是否已经存在
+                            $oldUserName = Control::PostRequest("OldUserName", "");
+                            $newUserName = Control::PostRequest("f_UserName", "");
+                            if ($oldUserName != $newUserName) {
+                                $hasCount = $userManageData->GetCountByUserNameNotNowUserId($newUserName, $userId);
+                                if ($hasCount > 0) { //同站点下不许存在相同的用户名
+                                    Control::ShowMessage(Language::Load('user', 20));
+                                    return $templateContent;
+                                }
                             }
+
+                            $result = $userManageData->Modify($httpPostData, $userId);
+                            if ($result > 0) {
+                                //加入操作日志
+                                $operateContent = 'Modify User,POST FORM:' . implode('|', $_POST) . ';\r\nResult:UserId:' . $result;
+                                self::CreateManageUserLog($operateContent);
+                                if(strlen($userPass)>0){
+                                    //修改md5加密的密码
+                                    $userManageData->ModifyUserPass(
+                                        $userId,
+                                        $userPass
+                                    );
+                                }
+
+                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
+                                $closeTab = Control::PostRequest("CloseTab", 0);
+                                if ($closeTab == 1) {
+                                    //Control::CloseTab();
+                                    $resultJavaScript .= Control::GetCloseTab();
+                                } else {
+                                    Control::GoUrl($_SERVER["PHP_SELF"] . "?" . $_SERVER['QUERY_STRING']);
+                                }
+                            } else {
+                                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
+                            }
+                        } else {
+                            $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
                         }
+                    }
+                    else{
 
                         $result = $userManageData->Modify($httpPostData, $userId);
                         if ($result > 0) {
@@ -212,8 +245,6 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                                 );
                             }
 
-
-
                             $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 7));
                             $closeTab = Control::PostRequest("CloseTab", 0);
                             if ($closeTab == 1) {
@@ -225,9 +256,8 @@ class UserManageGen extends BaseManageGen implements IBaseManageGen
                         } else {
                             $resultJavaScript .= Control::GetJqueryMessage(Language::Load('user', 8));
                         }
-                    } else {
-                        $resultJavaScript = Control::GetJqueryMessage(Language::Load('user', 41));
                     }
+
                 }
 
                 $arrOne = $userManageData->GetOne($userId);
