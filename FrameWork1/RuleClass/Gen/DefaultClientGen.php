@@ -125,6 +125,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $searchClientGen = new SearchClientGen();
                 $result = $searchClientGen->GenClient();
                 break;
+            case "promotion_record":
+                $promotionRecordClientGen = new PromotionRecordClientGen();
+                $result = $promotionRecordClientGen->GenClient();
+                break;
             default:
                 $result = "";
                 break;

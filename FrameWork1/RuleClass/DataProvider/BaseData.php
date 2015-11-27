@@ -802,6 +802,17 @@ class BaseData
      */
     const TableId_ExamUserAnswer = "ExamUserAnswerId";
 
+    /**
+     * 邀请码记录 数据表名
+     */
+    const TableName_PromotionRecord = "cst_promotion_record";
+    /**
+     * 邀请码记录 数据表自增字段名
+     */
+    const TableId_PromotionRecord = "PromotionRecordId";
+
+
+
 
     /**
      * 调试 数据表名
