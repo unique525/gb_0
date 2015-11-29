@@ -24,7 +24,8 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $commonManageGen = new CommonManageGen();
                     $result = $commonManageGen->Gen();
                     break;
-                case "manage_user":
+                case "manage_use
+                r":
                     $manageUserManageGen = new ManageUserManageGen();
                     $result = $manageUserManageGen->Gen();
                     break;
@@ -174,6 +175,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                 case "custom_form_content":
                     $customFormContentManageGen = new CustomFormContentManageGen();
                     $result = $customFormContentManageGen->Gen();
+                    break;
+                case "forum_topic_type":
+                    $forumTopicTypeManageGen = new ForumTopicTypeManageGen();
+                    $result = $forumTopicTypeManageGen->Gen();
                     break;
                 case "vote":
                     $voteManageGen = new VoteManageGen();

@@ -30,7 +30,13 @@ $(function() {
         parent.addTab();
     });
 
-
+    //修改帖子类型
+    $(".btn_topic_type").click(function(){
+        var forumId = $(this).attr("idvalue");
+        parent.G_TabUrl='/default.php?secu=manage&mod=forum_topic_type&m=list&site_id=' + parent.G_NowSiteId + '&forum_id=' + forumId;
+        parent.G_TabTitle = '修改类型';
+        parent.addTab();
+    });
 
 
 

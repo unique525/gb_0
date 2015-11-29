@@ -67,11 +67,7 @@
             });
         }
 
-        /**
-         * reloadUserState()的子方法
-         * 格式化状态值
-         * @return {string}
-         */
+        //格式化状态值
         function _setUserState(state) {
             state = state.toString();
             switch(state) {
