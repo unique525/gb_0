@@ -14,7 +14,7 @@
 
             //新建类型
             $("#btn_create").click(function(){
-                var url = '/default.php?secu=manage&mod=forum_topic_type&m=create_page&site_id=' + siteId + '&forum_id=' + forumId;
+                var url = '/default.php?secu=manage&mod=forum_topic_type&m=create_page&forum_id=' + forumId;
                 $("#dialog_frame").attr("src", url);
                 $("#dialog_resultbox").dialog({
                     hide: true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
@@ -61,7 +61,8 @@
                 }
             });
 
-           $('.edit_type').click(function(){
+            //编辑按钮
+            $('.edit_type').click(function(){
                var forumTopicTypeId = $(this).attr("idvalue");
                var url = '/default.php?secu=manage&mod=forum_topic_type&m=modify_page&forum_id=' +forumId+ '&forum_topic_type_id=' +forumTopicTypeId;
                $("#dialog_frame").attr("src", url);
@@ -75,6 +76,17 @@
                    overlay: {opacity: 0.5, background: "black", overflow: 'auto'}
                });
            });
+
+            //搜索
+            $('#btn_search').click(function(){
+                var search_key = $("#search_key").val();
+                if(search_key != ''){
+                    parent.G_TabUrl = "/default.php?secu=manage&mod=forum_topic_type&m=list&forum_id=" +forumId+ "&search_key=" +search_key;
+                    parent.G_TabTitle = '类型搜索';
+                    parent.addTab();
+                }
+            });
+
 
         });
 
@@ -134,7 +146,6 @@
         }
 
         function deleteType(forumId, forumTopicTypeId){
-
             if(forumTopicTypeId > 0) {
                 $.ajax({
                     type: "get",
@@ -166,11 +177,13 @@
     </script>
 </head>
 <body>
+<!----jquery ui弹框----->
 <div id="dialog_resultbox" title="提示信息" style="display: none;">
     <div id="result_table" style="font-size: 14px;">
         <iframe id="dialog_frame" src="" frameBorder="0" style="border: 0; " scrolling="auto" width="100%" height="300px"></iframe>
     </div>
 </div>
+
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 1px;">
     <tr>
         <td id="td_main_btn" width="83">
