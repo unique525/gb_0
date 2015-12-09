@@ -308,7 +308,27 @@ $(function () {
     });
 
 
+    //插入mms
+    $("#btn_show_add_mms").click(function(){
+        var offSet=$(this).offset();
+        //$("#add_mms").css("left",offSet.left);
+        $("#add_mms").css("top",offSet.top);
+        $("#add_mms").show();
+    })
 
+    $("#btn_ad_mms").click(function(){
+        var url=$("#mms_url").val();
+        var width=$("#mms_width").val();
+        var height=$("#mms_height").val();
+        var html='<p><object style="display: block; margin-left: auto; margin-right: auto;" width="'+width+'" height="'+height+'" classid="clsid:6bf52a52-394a-11d3-b153-00c04f79faa6" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701"><param name="url" value="'+url+'" /><param name="url" value="'+url+'" /><embed style="display: block; margin-left: auto; margin-right: auto;" width="'+width+'" height="'+height+'" type="application/x-mplayer2" src="'+url+'" url="'+url+'" /></object></p>'
+        if(editor){
+
+            editor.pasteHTML(html);
+
+
+        }
+        $("#add_mms").hide();
+    })
 
 });
 
@@ -787,6 +807,18 @@ function DocumentNewsTagPulling(){
                                    class="input_box" size="7" style="width:60%; background: #ffffff;"/> <img
                                 id="loading" src="/system_template/common/images/loading1.gif"
                                 style="display:none;"/><input id="btnUploadToContent" type="button" value="上传"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="height:35px;">加mms：</td>
+                        <td>
+                            <input id="btn_show_add_mms" type="button" value="点击插入mms"/>
+                            <div id="add_mms" style="position: absolute;right:10px; width: 240px; border: 1px solid rgb(204, 204, 204); padding: 10px; background-color: rgb(255, 255, 255); height: 60px; line-height: 30px;display:none">
+                                <label>mms地址：</label><input style="width: 150px; background: rgb(255, 255, 255) none repeat scroll 0% 0%;" id="mms_url" class="input_box" type="text"><br>
+                                <label>宽度：</label><input style="width: 40px;" id="mms_width" value="800" type="text">
+                                <label>高度：</label><input style="width: 40px;" id="mms_height" value="600" type="text">
+                                <input id="btn_ad_mms" value="确定" type="button">
+                            </div>
                         </td>
                     </tr>
                     <tr>
