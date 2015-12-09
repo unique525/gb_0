@@ -112,6 +112,10 @@
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_EndDate">结束时间：</label></td>
                 <td class="spe_line"><input class="GetDate" type="text" id="f_EndDate" name="f_EndDate" value="{EndDate}"/></td>
             </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_OneUserDoLimit">单个用户参与限制：</label></td>
+                <td class="spe_line"><input type="number" id="f_OneUserDoLimit" name="f_OneUserDoLimit" value="{OneUserDoLimit}"/>（次）</td>
+            </tr>
 
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_TableId">对应表ID：</label></td>

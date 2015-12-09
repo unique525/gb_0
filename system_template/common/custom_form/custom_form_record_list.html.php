@@ -8,6 +8,13 @@
         $("document").ready(function(){
             var channelId = Request["channel_id"];
 
+            //日期控件
+            $(".GetDate").datepicker({
+                dateFormat: 'yy-mm-dd',
+                numberOfMonths: 3,
+                showButtonPanel: true
+            });
+
             $("#btn_create_custom_form_record").click(function(event) {
                 event.preventDefault();
                 parent.G_TabUrl = '/default.php?secu=manage&mod=custom_form_record&m=create&custom_form_id={CustomFormId}';
@@ -74,10 +81,17 @@
             });
 
             //随机抽取
-            $("#new_window_for_random").click(function(){
+            $(".new_window_for_random").click(function(){
+                var randomHit=$(this).attr("num");
                 var randomCount=$("#random_count").val();
+                var beginTime=$("#random_begin_time").val();
+                var endTime=$("#random_end_time").val();
+                var timePick="";
+                if(beginTime!=""&&beginTime!="开始时间"&&endTime!=""&&endTime!="结束时间"){
+                    timePick="&begin_time="+beginTime+"&end_time="+endTime;
+                }
                 if(randomCount>0){
-                    var url="/default.php?secu=manage&mod=custom_form_record&m=random_list&custom_form_id={CustomFormId}&new_window=1&ps="+randomCount;
+                    var url="/default.php?secu=manage&mod=custom_form_record&m=random_list&custom_form_id={CustomFormId}&new_window=1&ps="+randomCount+timePick+"&random_hit="+randomHit;
                     window.open(url);
                 }else{
                     alert("随机数输入错误！");
@@ -136,10 +150,13 @@
                 <input id="btn_run_search" class="btn2" value="提交搜索" title="提交搜索" type="button" style="display:none" />
             </td>
             <td id="td_main_btn" align="right" style="padding: 3px 0;">
-                <div id="search_box">
+                <div id="search_box" style="float:left">
                     <label for="random_count"></label><input id="random_count" name="random_count" class="input_number" value="随机数" type="text">
-                    <input id="new_window_for_random" class="btn2" value="随机抽取" type="button">
+                    <label for="random_begin_time"></label><input id="random_begin_time" name="random_begin_time" class="GetDate" value="开始时间" type="text">
+                    <label for="random_end_time"></label><input id="random_end_time" name="random_end_time" class="GetDate" value="结束时间" type="text">
+                    <input id="new_window_for_random" class="btn2 new_window_for_random" value="随机抽取" type="button">
                 </div>
+
             </td>
             <td id="td_main_btn" align="right" style="width:240px;padding: 3px 0;">
                 <div id="search_box">
