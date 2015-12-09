@@ -353,8 +353,6 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
                     $score = $examUserPaperPublicData->GetScore($userId, $examUserPaperId, false);
 
                     $limitContent = intval($lotteryPublicData->GetLimitContent($lotteryId, true));
-                    $debug=new DebugLogManageData();
-                    $debug->Create($score.":score"."   limit:".$limitContent);
                     if ($score >= $limitContent) {
                         /** 查看table id是否已抽过奖 **/
                         $lotteryTimesCount = $lotteryUserPublicData->GetLotteryTimeCount($userId, $tableType, $examUserPaperId, false);
