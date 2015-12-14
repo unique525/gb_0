@@ -66,9 +66,6 @@ class UserFavoriteManageGen extends BaseManageGen implements IBaseManageGen {
         $userFavoriteId = Control::GetRequest("user_favorite_id",0);
         $siteId = Control::GetRequest("site_id",0);
 
-        $debug = new DebugLogManageData();
-        $debug->Create($userFavoriteId."----".$siteId);
-
         if($userFavoriteId > 0 && $siteId > 0){
             $userFavoriteManageData = new UserFavoriteManageData();
             $result = $userFavoriteManageData->Delete($userFavoriteId,$siteId);

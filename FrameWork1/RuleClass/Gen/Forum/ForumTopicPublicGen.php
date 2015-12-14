@@ -65,7 +65,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             return "";
         }
 
-        $pageSize = Control::GetRequest("ps", 30);
+        $pageSize = Control::GetRequest("ps", 5);
         $pageIndex = Control::GetRequest("p", 1);
 
 
@@ -197,17 +197,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         if (count($arrForumTopicList) > 0) {
 
             Template::ReplaceList($templateContent, $arrForumTopicList, $tagId);
-            $styleNumber = 1;
-            $pagerTemplate = parent::GetDynamicTemplateContent(
-                "pager_button");
-            //$tempContent = Template::Load("pager/pager_style$styleNumber.html", "common");
-            $isJs = FALSE;
-            $navUrl = "/default.php?mod=forum_topic&a=list&forum_id=$forumId&p={0}&ps=$pageSize";
-            $jsFunctionName = "";
-            $jsParamList = "";
-            $pagerButton = Pager::ShowPageButton(
-                $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+            $templateMode = 0;
+            $pagerTemplate = parent::GetDynamicTemplateContent("pager_button", 0, '',$templateMode);
 
+            $navUrl = "/default.php?mod=forum_topic&a=list&forum_id=$forumId&p={n}&ps=$pageSize";
+            $pagerButtonListTemplateContent = Template::Load('pager_new/pager_list_style_default.html', 'default', 'front_template');
+            $pagerButton = Pager::CreatePageButtons($pagerTemplate,true,true,'',$pageIndex,$pageSize,$allCount,$pagerButtonListTemplateContent,$navUrl);
             $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
 
         } else {

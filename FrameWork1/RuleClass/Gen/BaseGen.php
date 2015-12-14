@@ -718,8 +718,6 @@ class BaseGen
 
             $dirPath = self::GetUploadFilePath($tableType, $tableId, $manageUserId, $userId, $uploadPath, $fileExtension, $newFileName);
 
-            $debug=new DebugLogManageData();
-            $debug->Create($dirPath);
             if (!empty($dirPath) && strlen($dirPath) > 0 && !empty($newFileName) && strlen($newFileName) > 0) {
                 FileObject::CreateDir($dirPath);
                 $moveResult = move_uploaded_file($_FILES[$fileElementName]['tmp_name'], $dirPath . $newFileName);

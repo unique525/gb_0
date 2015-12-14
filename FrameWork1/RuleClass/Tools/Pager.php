@@ -58,6 +58,7 @@ class Pager {
                 }
             }
         }
+
         $outHtml = "";
         if ($pageSize > 0 && $pageSize < $allCount) {
             $outHtml = $templateContent;
@@ -146,9 +147,9 @@ class Pager {
             $outHtml = str_ireplace("{PreIndexC}", $pageIndex - 1, $outHtml);
             $outHtml = str_ireplace("{FirstIndexC}", "1", $outHtml);
             $outHtml = str_ireplace("{Rd}", str_ireplace("&$pageIndexName={0}", "", $navUrl), $outHtml);
+            $outHtml = str_ireplace("{PageIndexName}", $pageIndexName, $outHtml);
             $outHtml = str_ireplace("{Url}&p=", "", $outHtml);
             $outHtml = str_ireplace("{BoxStyle}", "pb1", $outHtml);
-            $outHtml = str_ireplace("{PageIndexName}", $pageIndexName, $outHtml);
             $outHtml = str_ireplace("{PageSizeName}", $pageSizeName, $outHtml);
             if($showGoTo){
                 $outHtml = str_ireplace("{ShowGoTo}", "", $outHtml);
@@ -165,11 +166,11 @@ class Pager {
      * @return string 返回默认的分页模板HTML
      */
     public static function GetPagerDefaultTempContent() {
-        return '<a class="webdings-red" href="{url}&p={firstindex}"><font face="webdings">第一页</font></a>
-                <a {showpre} href="{url}&p={preindex}">上一页</a>
+        return '<a class="webdings-red" href="{firstindex}"><font face="webdings">第一页</font></a>
+                <a {showpre} href="{preindex}">上一页</a>
                 {pagerlist}
-                <a {shownext} title="点击查看下一页记录" href="{url}&p={nextindex}">下一页</a>
-                <a class="webdings-red" href="{url}&p={endindex}"><font face="webdings" title="最后一页">:</font></a>
+                <a {shownext} title="点击查看下一页记录" href="{nextindex}">下一页</a>
+                <a class="webdings-red" href="{endindex}"><font face="webdings" title="最后一页">:</font></a>
                 &nbsp;&nbsp;&nbsp;{nowindex}/{allindex}页&nbsp;&nbsp;&nbsp;总数{allcount}&nbsp;&nbsp;&nbsp;每页{pagesize}&nbsp;条';
     }
 
@@ -178,9 +179,189 @@ class Pager {
      * @return string 返回默认的分页按钮HTML
      */
     public static function GetPagerDefaultListTemp() {
-        return '&nbsp;<a title="跳转到第{index}页" href="{url}&p={index}">{indexcontent}</a>';
+        return '&nbsp;<a title="跳转到第{index}页" href="{index}">{indexcontent}</a>';
     }
 
-}
+    /**
+     * @param $pageTemplate string 模版内容
+     * @param $error        string 错误信息
+     */
+    private static function ReplacePageError(&$pageTemplate, $error){
+        $pageTemplate = str_ireplace('{pageError}', $error, $pageTemplate);
+    }
 
-?>
+    /**
+     * 单页按钮是指类似 [上一页][1][2][3][4][下一页] 中的数字页码按钮
+     * @param $pageTemplate        string   分页模版
+     * @param $isFront             bool     是否前台使用
+     * @param bool|true $showGoTo  bool     是否显示页码跳转框
+     * @param string $styleName    string   后台使用时单页按钮的模版
+     * @param $pageIndex           int      页码
+     * @param $pageSize            int      每页条数
+     * @param $allCount            int      总条数
+     * @param $pageButtonList      int      前台使用时单页按钮的模版
+     * @param $pageButtonListUrl   int      单页按钮指向的链接
+     * @return mixed|string        int      完整的翻页按钮组件
+     */
+    public static function CreatePageButtons(
+        $pageTemplate,
+        $isFront,
+        $showGoTo = true,
+        $styleName = 'default',
+        $pageIndex,
+        $pageSize,
+        $allCount,
+        $pageButtonList,
+        $pageButtonListUrl
+    ){
+        /*****加载翻页模版文件*****/
+        $templateContent = trim($pageTemplate);
+        if(strlen($pageTemplate) <= 0){
+            $pageTemplate    = self::GetPagerDefaultTempContent();
+            $pageButtonList  = self::GetPagerDefaultListTemp();
+        }
+        else{
+
+            if(!$isFront){
+                $pageButtonList = Template::Load("pager_new/pager_list_style_$styleName.html", "common");
+            }
+        }
+
+        /*****处理有误的页码*****/
+        if(!is_numeric($pageSize) || !is_numeric($allCount)){
+            self::ReplacePageError($pageTemplate, '页码类型错误');
+            return $pageTemplate;
+        }
+
+        if($pageSize < 0  || $pageSize > $allCount){
+
+            if($allCount >= 0){
+                $pageSize = $allCount;
+            }
+            else{
+                self::ReplacePageError($pageTemplate, '错误的总页码');
+                return $pageTemplate;
+            }
+
+        }
+
+        /*****计算单页按钮的数量*****/
+        $allButtonCount = 0;
+        if($allCount % $pageSize == 0){
+            $allButtonCount = intval(($allCount / $pageSize));
+        }
+        else{
+            $allButtonCount = intval(($allCount / $pageSize) + 1);
+        }
+
+        /*****生成单页按钮列表*****/
+        $buttonCollection = '';
+        if ($pageIndex <= 5){
+            $upCount = 10;
+
+            if($allButtonCount < $upCount){
+              $upCount = $allButtonCount;
+            }
+
+            for($i = 1; $i <= $upCount; $i++){
+                $subPageButtonList = $pageButtonList;
+                $subPageButtonList = str_ireplace('{pageNumber}', $i, $subPageButtonList);
+                $subPageButtonList = str_ireplace('{pageHref}', str_ireplace("{n}", strval($i), $pageButtonListUrl), $subPageButtonList);
+
+                if($i == $pageIndex){
+                    $subPageButtonList = str_ireplace("{BoxStyle}", "pb2", $subPageButtonList);
+                }
+
+                $buttonCollection = $buttonCollection . $subPageButtonList;
+            }
+
+        }
+        else{
+            if($allButtonCount - $pageIndex > 5){
+                $upCount   = 5;
+                $downCount = 5;
+            }
+            else{
+                $upCount = 10 - ($allButtonCount - $pageIndex);
+                $downCount = $upCount;
+            }
+
+            for ($i = $pageIndex - $upCount; $i < $pageIndex + $downCount; $i++) {
+                $subPageButtonList = $pageButtonList;
+                if($allButtonCount >= $i){
+                    if ($i > 0) {
+                        $subPageButtonList = str_ireplace('{pageNumber}', $i, $subPageButtonList);
+                        $subPageButtonList = str_ireplace('{pageHref}', str_ireplace("{n}", strval($i), $pageButtonListUrl), $subPageButtonList);
+
+                        if($i == $pageIndex){
+                            $subPageButtonList = str_ireplace("{BoxStyle}", "pb2", $subPageButtonList);
+                        }
+
+                        $buttonCollection = $buttonCollection . $subPageButtonList;
+                    }
+
+                }
+            }
+        }
+
+        /*****在翻到最后一页时,PC版隐藏下一页按钮/移动版改变下一页按钮的文字并将其链接指向空地址*****/
+        if($pageIndex < $allButtonCount){
+            $pageTemplate = str_ireplace("{ShowNext}", "", $pageTemplate);
+            $pageTemplate = str_ireplace("{Mobile_NextIndex}", '下一页', $pageTemplate);
+
+        }
+        else{
+            $pageTemplate = str_ireplace("{ShowNext}", "style=\"display:none\"", $pageTemplate);
+            $pageTemplate = str_ireplace("{Mobile_NextIndex}", '末页', $pageTemplate);
+            $pageTemplate = str_ireplace("{Mobile_NextIndexUrl}", '', $pageTemplate);
+
+        }
+
+        $pageTemplate = str_ireplace("{NextIndex}", str_ireplace("{n}", strval($pageIndex + 1), $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{Mobile_NextIndexUrl}", str_ireplace("{n}", strval($pageIndex + 1), $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{EndIndex}", str_ireplace("{n}", strval($allButtonCount), $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{all_content_url}", str_ireplace("{n}", "0", $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{NextIndexC}", $pageIndex + 1, $pageTemplate);
+        $pageTemplate = str_ireplace("{EndIndexC}", $allButtonCount, $pageTemplate);
+        $pageTemplate = str_ireplace("{NowIndex}", strval($pageIndex), $pageTemplate);
+        $pageTemplate = str_ireplace("{AllIndex}", strval($allButtonCount), $pageTemplate);
+        $pageTemplate = str_ireplace("{AllCount}", strval($allCount), $pageTemplate);
+        $pageTemplate = str_ireplace("{PageSize}", strval($pageSize), $pageTemplate);
+
+        $pageTemplate = str_ireplace("{PageList}", strval($buttonCollection), $pageTemplate);
+
+        /*****在翻到第一页时进行与翻到最后一页类似的相反的操作*****/
+        if ($pageIndex > 1) {
+            $pageTemplate = str_ireplace("{ShowPre}", "", $pageTemplate);
+            $pageTemplate = str_ireplace("{mobile_preIndex}", '上一页', $pageTemplate);
+        } else {
+            $pageTemplate = str_ireplace("{ShowPre}", "style=\"display:none\"", $pageTemplate);
+            $pageTemplate = str_ireplace("{mobile_preIndex}", '首页', $pageTemplate);
+            $pageTemplate = str_ireplace("{mobile_PreIndexUrl}", '', $pageTemplate);
+        }
+
+        $pageTemplate = str_ireplace("{PreIndex}", str_ireplace("{n}", strval($pageIndex - 1), $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{mobile_PreIndexUrl}", str_ireplace("{n}", strval($pageIndex - 1), $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{FirstIndex}", str_ireplace("{n}", "1", $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{PreIndexC}", $pageIndex - 1, $pageTemplate);
+        $pageTemplate = str_ireplace("{FirstIndexC}", "1", $pageTemplate);
+        $pageTemplate = str_ireplace("{Rd}", str_ireplace("&p={n}", "", $pageButtonListUrl), $pageTemplate);
+        $pageTemplate = str_ireplace("{PageIndexName}", 'p', $pageTemplate);
+        $pageTemplate = str_ireplace("{BoxStyle}", "pb1", $pageTemplate);
+        $pageTemplate = str_ireplace("{BoxStyle}", "pb1", $pageTemplate);
+        self::ReplacePageError($pageTemplate, '');
+
+
+        if($showGoTo){
+            $pageTemplate = str_ireplace("{ShowGoTo}", "", $pageTemplate);
+        }else{
+            $pageTemplate = str_ireplace("{ShowGoTo}", "none", $pageTemplate);
+        }
+
+        return $pageTemplate;
+    }
+
+
+
+
+}
