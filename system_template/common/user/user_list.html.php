@@ -74,7 +74,29 @@
 
             var boxWidth = 240;//($(document).width() - 96) / 3;
             $(".li_list_width_img").css("width", boxWidth);
+
+            //格式化状态信息
+            $(".span_state").each(function(){
+                var state = $(this).attr("idvalue");
+                $(this).html(FormatUserState(state));
+            });
         });
+        function FormatUserState(state){
+            var result;
+            switch(state){
+                case "0":
+                    result = '开启';
+                    break;
+                case "10":
+                    result = '未激活';
+                    break;
+                case "100":
+                    result = '停用';
+                    break;
+            }
+            return result;
+        }
+
     </script>
 </head>
 <body>
