@@ -433,13 +433,11 @@ class VoteSelectItemManageGen extends BaseManageGen implements IBaseManageGen
     }
 
     /**
-     * 检查接收到的txt文本
-     * txt的格式类似 string@string@string!|!string@string@string!|!string@string@string
-     * 简单的对格式进行检查,符合格式则更新数据库
+     * 处理json
+     * 更新数据库
      **/
     public function CheckUploadTxt()
     {
-        $bug = new DebugLogManageData();
 
         $resultStatus = -1;
         $resultMessage = '';
