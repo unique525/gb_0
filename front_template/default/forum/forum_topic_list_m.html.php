@@ -61,12 +61,22 @@
             <item>
                 <![CDATA[
                 <table class="topic_list" cellpadding="0" cellspacing="0" width="100%">
-                    <tr><td colspan="2">
+                    <tr>
+                        <td colspan="2">
                             <div class="forum_topic_title">
                                 <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
                                     {f_ForumTopicTitle}
                                 </a></div>
-                        </td></tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="forum_topic_title">
+                                <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
+                                    {f_ForumTopicTitle}
+                                </a></div>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="forum_topic_item" align="left">
                             <div class="forum_topic_user_name">{f_UserName} ({f_PostTime})</div>
