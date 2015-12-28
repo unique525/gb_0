@@ -9,6 +9,17 @@
         });
         function submitForm(closeTab)
         {
+            //把所有未选中的checkbox设置为选中以post提交有数据，同时赋值为0传递给后台表示未选中
+            var t1 = document.getElementsByTagName("input");
+            for(var i=0;i<t1.length;i++)
+            {
+                if(t1[i].type == "checkbox"){
+                    if(!(t1[i].checked)){
+                        t1[i].checked = true;
+                        t1[i].value = "0";
+                    }
+                }
+            }
             $('#main_form').submit();
         }
 
