@@ -63,6 +63,15 @@
                 }
             });
 
+            $(".modify_user_popedom").click(function(event){
+                event.preventDefault();
+                var userId = $(this).attr("idvalue");
+                parent.G_TabUrl = "/default.php?secu=manage&mod=user_popedom&user_id="+userId+"&m=modify&site_id="+ parent.G_NowSiteId
+                    +"&p="+parent.G_NowPageIndex+"&ps="+parent.G_PageSize;
+                parent.G_TabTitle = '编辑会员权限';
+                parent.addTab();
+            });
+
             /***会员管理页面js***/
             $(".img_avatar").each(function(){
                 var avatar = $(this).attr("src");
@@ -149,6 +158,11 @@
                                         <span class="btn2 modify_user" idvalue="{f_UserId}">修改</span>
                                         <span class="btn2 modify_user_info" idvalue="{f_UserId}">修改详细信息</span>
                                     </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div style="float:left;margin:2px 6px"><span class="btn2 modify_user_popedom" idvalue="{f_UserId}">设置权限</span></div>
                                 </td>
                             </tr>
                         </table>

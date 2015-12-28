@@ -60,8 +60,12 @@
                 <td class="spe_line"><input name="u_UserSetRecCountDayMax" id="u_UserSetRecCountDayMax" value="{UserSetRecCountDayMax}" maxlength="2" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制）</td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="u_ForumPostAllowUpload">可以浏览付费报纸：</label></td>
+                <td class="spe_line" height="30" align="right"><label for="u_UserCanExploreMustPayNewspaper">可以浏览付费报纸：</label></td>
                 <td class="spe_line"><input name="u_UserCanExploreMustPayNewspaper" id="u_UserCanExploreMustPayNewspaper" {c_UserCanExploreMustPayNewspaper} type="checkbox" /></td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="u_UserCanScoreArticle">可以进行月度评稿打分：</label></td>
+                <td class="spe_line"><input name="u_UserCanScoreArticle" id="u_UserCanScoreArticle" {c_UserCanScoreArticle} type="checkbox" /></td>
             </tr>
         </table>
     </div>
