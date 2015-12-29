@@ -95,6 +95,34 @@ class UserPopedomManageGen extends BaseManageGen implements IBaseManageGen
 
             }elseif($userId>0){
                 //对会员授权
+
+                //读取表单
+                foreach ($_POST as $key => $value) {
+                    if (strpos($key, "u_") === 0) { //
+                        $arr = Format::ToSplit($key, '_');
+                        if (count($arr) == 2) {
+                            $userPopedomName = $arr[1];
+                            //为数组则转化为逗号分割字符串,对应checkbox应用
+                            if (is_array($value)) {
+                                $value = implode(",", $value);
+                            }
+                            $value = stripslashes($value);
+
+                            if($value=='on'){
+                                $value = 1;
+                            }else{
+                                $value = 0;
+                            }
+
+                            $userPopedomManageData->SetValueBySiteIdAndUserId(
+                                $siteId,
+                                $userId,
+                                $userPopedomName,
+                                $value
+                            );
+                        }
+                    }
+                }
             }
         }
 

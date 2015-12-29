@@ -1463,6 +1463,7 @@ class BasePublicGen extends BaseGen
     protected function GetDynamicTemplateContent($defaultTemp = "", $siteId = 0, $forceTemp = "", &$templateMode = 0)
     {
 
+
         $result = "";
         if ($siteId < 0) {
             $siteId = self::GetSiteIdByDomain();
@@ -1638,8 +1639,7 @@ class BasePublicGen extends BaseGen
                 $templateMode);
 
             if($forceLoginNotTemp == 'forum_user_no_login'){
-                $bug = new DebugLogManageData();
-                $bug->Create($userInfoTemplateContent);
+
             }
 
             $userInfoTemplateContent = str_ireplace("{UserInfoPanelUserName}", Control::GetUserName(), $userInfoTemplateContent);

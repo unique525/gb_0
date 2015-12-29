@@ -136,4 +136,9 @@ class UserPopedomData {
      */
     const UserCanExploreMustPayNewspaper = "UserCanExploreMustPayNewspaper";
 
+    /**
+     * 可以进行月度评稿打分
+     */
+    const UserCanScoreArticle = "UserCanScoreArticle";
+
 } 
