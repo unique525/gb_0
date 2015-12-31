@@ -20,6 +20,13 @@
     <script type="text/javascript">
 
         $(function(){
+            $(".span_nickname").each(function(){
+                if($(this).html().length<=0){
+
+                    $(this).html("晚报网友");
+
+                }
+            });
 
             $(".img_avatar").each(function(){
 
@@ -61,15 +68,25 @@
             <item>
                 <![CDATA[
                 <table class="topic_list" cellpadding="0" cellspacing="0" width="100%">
-                    <tr><td colspan="2">
+                    <tr>
+                        <td colspan="2">
                             <div class="forum_topic_title">
                                 <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
                                     {f_ForumTopicTitle}
                                 </a></div>
-                        </td></tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="forum_topic_title">
+                                <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
+                                    {f_ForumTopicTitle}
+                                </a></div>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="forum_topic_item" align="left">
-                            <div class="forum_topic_user_name">{f_UserName} ({f_PostTime})</div>
+                            <div class="forum_topic_user_name"><span  class="span_nickname">{f_NickName}</span> ({f_PostTime})</div>
                         </td>
                         <td class="forum_topic_item" align="right">
                             <div class="forum_topic_user_name">阅{f_HitCount}/回{f_ReplyCount}</div>

@@ -30,6 +30,7 @@ class ForumManageData extends BaseManageData {
         $preNumber = "";
         $addFieldNames = array();
         $addFieldValues = array();
+
         if (!empty($httpPostData)) {
             $sql = parent::GetInsertSql(
                 $httpPostData,

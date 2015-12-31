@@ -583,16 +583,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $siteId = parent::GetSiteIdByDomain();
         }
 
-        //$templateFileUrl = "forum/forum_topic_deal.html";
-        //$templateName = "default";
-        //$templatePath = "front_template";
-        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
-
-        $templateMode = 0;
-        $defaultTemp = "forum_topic_modify";
-        $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, 0, "", $templateMode);
-
+        $templateFileUrl = "forum/forum_topic_deal.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
 
         //forum topic type list
         $forumTopicTypePublicData = new ForumTopicTypePublicData();
@@ -620,7 +614,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
         $forumPostPublicDate = new ForumPostPublicData();
-        $arrOne = $forumPostPublicDate->GetOneForTopic($forumTopicId);
+        $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
         if (!empty($_POST)) {
@@ -662,32 +656,47 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             );
             if ($result > 0) {
                 $siteId = Control::PostRequest("f_SiteId", "");
+                $isTopic = 1;
                 $forumPostTitle = $forumTopicTitle;
                 $accessLimitNumber = "";
                 $accessLimitContent = "";
                 $showSign = 0;
+                $postIp = Control::GetIp();
                 $isOneSale = 0;
+                $addMoney = 0;
+                $addScore = 0;
+                $addCharm = 0;
+                $addExp = 0;
                 $showBoughtUser = 0;
+                $sort = 0;
+                $state = 0;
                 $uploadFiles = Control::PostRequest("file_upload_to_content", "");
                 $forumPostPublicDate = new ForumPostPublicData();
-
-
-                $result = $forumPostPublicDate->ModifyForTopic(
+                $result = $forumPostPublicDate->Modify(
+                    $siteId,
                     $forumTopicId,
+                    $isTopic,
                     $forumPostTitle,
                     $forumPostContent,
+                    $postTime,
                     $forumTopicAudit,
                     $forumTopicAccess,
                     $accessLimitNumber,
                     $accessLimitContent,
                     $showSign,
+                    $postIp,
                     $isOneSale,
+                    $addMoney,
+                    $addScore,
+                    $addCharm,
+                    $addExp,
                     $showBoughtUser,
+                    $sort,
+                    $state,
                     $uploadFiles
                 );
                 if ($result > 0) {
-                    //转到帖子列表页
-                    Control::GoUrl("/default.php?mod=forum_topic&a=list&forum_topic_id=$forumTopicId&forum_id=$forumId");
+
                 }
             }
         }

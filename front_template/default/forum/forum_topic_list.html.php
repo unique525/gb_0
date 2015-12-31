@@ -69,7 +69,7 @@
                                     <a href="/default.php?mod=forum_post&a=list&forum_topic_id={f_ForumTopicId}">
                                         {f_ForumTopicTitle}
                                     </a></div>
-                                <div class="forum_topic_user_name">{f_UserName}</div>
+                                <div class="forum_topic_user_name">{f_NickName}</div>
                             </td>
                             <td class="forum_topic_item" width="300px" align="right">
                                 <div class="forum_topic_user_name">阅读：{f_HitCount}   回复：{f_ReplyCount}</div>

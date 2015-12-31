@@ -26,6 +26,9 @@ class UserRoleManageData extends BaseManageData {
             }elseif ($searchType == 2) { //IP
                 $searchSql = " AND (".self::TableName_User.".RegIp like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }elseif ($searchType == 3) { //手机号码
+                $searchSql = " AND (".self::TableName_User.".UserMobile like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
         }
 
@@ -77,6 +80,9 @@ class UserRoleManageData extends BaseManageData {
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }elseif ($searchType == 2) { //IP
                 $searchSql = " AND (".self::TableName_User.".RegIp like :SearchKey)";
+                $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
+            }elseif ($searchType == 3) { //手机号码
+                $searchSql = " AND (".self::TableName_User.".UserMobile like :SearchKey)";
                 $dataProperty->AddField("SearchKey", "%" . $searchKey . "%");
             }
         }

@@ -407,6 +407,48 @@ class ForumTopicPublicData extends BasePublicData
     }
 
     /**
+     * 置顶主题（可缓存）
+     * @param $siteId
+     * @param $topCount
+     * @param bool $withCache
+     * @return array|null
+     */
+    public function GetListOfTop(
+        $siteId,
+        $topCount,
+        $withCache = false
+    )
+    {
+        if ($siteId > 0) {
+            $topCount = intval($topCount);
+            if ($topCount <= 0) {
+                $topCount = 10;
+            }
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_topic_data';
+            $cacheFile = 'forum_get_list_of_best.cache_' . $siteId . '_' . $topCount;
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $sql = "
+            SELECT
+                ft.*
+            FROM
+            " . self::TableName_ForumTopic . " ft
+
+            WHERE ft.SiteId=:SiteId
+                AND ft.Sort=".ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP."
+                AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
+            ORDER BY ft.PostTime DESC
+            LIMIT $topCount;";
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
      * 分页列表数据集
      * @param int $forumId
      * @param int $pageBegin

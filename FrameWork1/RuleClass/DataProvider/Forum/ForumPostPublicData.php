@@ -123,32 +123,27 @@ class ForumPostPublicData extends BasePublicData {
 
     }
 
-    /**
-     * 编辑主题对应的帖子内容
-     * @param $forumTopicId
-     * @param $forumPostTitle
-     * @param $forumPostContent
-     * @param $forumTopicAudit
-     * @param $forumTopicAccess
-     * @param $accessLimitNumber
-     * @param $accessLimitContent
-     * @param $showSign
-     * @param $isOneSale
-     * @param $showBoughtUser
-     * @param $uploadFiles
-     * @return int
-     */
-    public function ModifyForTopic(
+    public function Modify(
+        $siteId,
         $forumTopicId,
+        $isTopic,
         $forumPostTitle,
         $forumPostContent,
+        $postTime,
         $forumTopicAudit,
         $forumTopicAccess,
         $accessLimitNumber,
         $accessLimitContent,
         $showSign,
+        $postIp,
         $isOneSale,
+        $addMoney,
+        $addScore,
+        $addCharm,
+        $addExp,
         $showBoughtUser,
+        $sort,
+        $state,
         $uploadFiles
     ){
         $result = -1;
@@ -157,32 +152,28 @@ class ForumPostPublicData extends BasePublicData {
         ){
 
             $dataProperty = new DataProperty();
+            $dataProperty->AddField("SiteId", $siteId);
+            $dataProperty->AddField("IsTopic", $isTopic);
             $dataProperty->AddField("ForumPostTitle", $forumPostTitle);
             $dataProperty->AddField("ForumPostContent", $forumPostContent);
+            $dataProperty->AddField("PostTime", $postTime);
             $dataProperty->AddField("ForumTopicAudit", $forumTopicAudit);
             $dataProperty->AddField("ForumTopicAccess", $forumTopicAccess);
             $dataProperty->AddField("AccessLimitNumber", $accessLimitNumber);
             $dataProperty->AddField("AccessLimitContent", $accessLimitContent);
             $dataProperty->AddField("ShowSign", $showSign);
+            $dataProperty->AddField("PostIp", $postIp);
             $dataProperty->AddField("IsOneSale", $isOneSale);
+            $dataProperty->AddField("AddMoney", $addMoney);
+            $dataProperty->AddField("AddScore", $addScore);
+            $dataProperty->AddField("AddCharm", $addCharm);
+            $dataProperty->AddField("AddExp", $addExp);
             $dataProperty->AddField("ShowBoughtUser", $showBoughtUser);
+            $dataProperty->AddField("Sort", $sort);
+            $dataProperty->AddField("State", $state);
             $dataProperty->AddField("UploadFiles", $uploadFiles);
-            $dataProperty->AddField("ForumTopicId", $forumTopicId);
-
-            $fieldNames= "
-            ForumPostTitle=:ForumPostTitle,
-            ForumPostContent=:ForumPostContent,
-            ForumTopicAudit=:ForumTopicAudit,
-            ForumTopicAccess=:ForumTopicAccess,
-            AccessLimitNumber=:AccessLimitNumber,
-            AccessLimitContent=:AccessLimitContent,
-            ShowSign=:ShowSign,
-            IsOneSale=:IsOneSale,
-            ShowBoughtUser=:ShowBoughtUser,
-            UploadFiles=:UploadFiles";
-            $sql = "UPDATE " . self::TableName_ForumPost . " SET " . $fieldNames ."
-                    WHERE ForumTopicId = :ForumTopicId AND IsTopic=1";
-
+            $fieldNames= "SiteId=:SiteId,IsTopic=:IsTopic,ForumPostTitle=:ForumPostTitle,ForumPostContent=:ForumPostContent,PostTime=:PostTime,ForumTopicAudit=:ForumTopicAudit,ForumTopicAccess=:ForumTopicAccess,AccessLimitNumber=:AccessLimitNumber,AccessLimitContent=:AccessLimitContent,ShowSign=:ShowSign,PostIp=:PostIp,IsOneSale=:IsOneSale,AddMoney=:AddMoney,AddScore=:AddScore,AddCharm=:AddCharm,AddExp=:AddExp,ShowBoughtUser=:ShowBoughtUser,Sort=:Sort,State=:State,UploadFiles=:UploadFiles";
+            $sql = "UPDATE " . self::TableName_ForumPost . " SET " . $fieldNames ." WHERE forumTopicId =". $forumTopicId ."";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
 
@@ -191,15 +182,14 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 取得一条信息
-     * @param int $forumTopicId 主题id
+     * @param int $forumPostId 帖子id
      * @return array 帖子信息数组
      */
-    public function GetOneForTopic($forumTopicId)
+    public function GetOne($forumPostId)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumPost . "
-                WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " AND IsTopic=1;";
+        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumPost. "=:" . self::TableId_ForumPost . ";";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
+        $dataProperty->AddField(self::TableId_ForumPost, $forumPostId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }

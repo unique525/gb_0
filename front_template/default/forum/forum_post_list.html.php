@@ -192,6 +192,7 @@
                                     <tr>
                                         <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
+
                                         </td>
                                         <td class="forum_post_post_time" style="padding-right:10px;" align="right">楼主</td>
                                     </tr>
@@ -209,7 +210,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" align="right" style="padding:10px;">
-                                <a href="/default.php?mod=forum_topic&a=modify&forum_topic_id={f_ForumTopicId}">编辑</a>
+                                <a href="/default.php?mod=forum_topic&a=modify&forum_topic_id={f_ForumTopicId}&forum_id={f_ForumId}">编辑</a>
                                 <span id="add_to_user_favorite" style="cursor:pointer;" title="{f_ForumPostTitle}">收藏</span>
                                 <span>举报</span>
                                 <a class="fancybox fancybox.iframe" href="/default.php?mod=forum_topic&a=operate&forum_topic_id={f_ForumTopicId}">主题管理</a>
