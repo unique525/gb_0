@@ -156,6 +156,7 @@ class ForumTopicPublicData extends BasePublicData
             $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames . " WHERE forumTopicId =" . $forumTopicId . "";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
+        echo $result;
         return $result;
     }
 
