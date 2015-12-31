@@ -138,7 +138,8 @@ class ForumTopicClientData extends BaseClientData {
 
                         uf2.UploadFilePath AS ContentUploadFilePath1,
                         uf3.UploadFilePath AS ContentUploadFilePath2,
-                        uf4.UploadFilePath AS ContentUploadFilePath3
+                        uf4.UploadFilePath AS ContentUploadFilePath3,
+                        uf5.UploadFilePath AS ContentUploadFilePath4
             FROM
             " . self::TableName_ForumTopic . " ft
             INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)
@@ -147,6 +148,7 @@ class ForumTopicClientData extends BaseClientData {
             LEFT OUTER JOIN " . self::TableName_UploadFile . " uf2 ON (ft.ContentUploadFileId1=uf2.UploadFileId)
             LEFT OUTER JOIN " . self::TableName_UploadFile . " uf3 ON (ft.ContentUploadFileId2=uf3.UploadFileId)
             LEFT OUTER JOIN " . self::TableName_UploadFile . " uf4 ON (ft.ContentUploadFileId3=uf4.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf5 ON (ft.ContentUploadFileId4=uf5.UploadFileId)
 
             WHERE ft.ForumId=:ForumId  " . $searchSql . "
             ORDER BY ft.Sort DESC,ft.PostTime DESC
