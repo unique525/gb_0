@@ -425,7 +425,12 @@ class ForumTopicPublicData extends BasePublicData
                         ui.AvatarUploadFileId,
                         uf.UploadFilePath AS AvatarUploadFilePath,
                         uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
-                        uf.UploadFilePadPath AS AvatarUploadFilePadPath
+                        uf.UploadFilePadPath AS AvatarUploadFilePadPath,
+
+                        uf2.UploadFilePath AS ContentUploadFilePath1,
+                        uf3.UploadFilePath AS ContentUploadFilePath2,
+                        uf4.UploadFilePath AS ContentUploadFilePath3,
+                        uf5.UploadFilePath AS ContentUploadFilePath4
             FROM
             " . self::TableName_ForumTopic . " ft
             INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)
