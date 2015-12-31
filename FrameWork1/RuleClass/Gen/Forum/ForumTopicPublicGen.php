@@ -17,6 +17,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
     {
 
         $action = Control::GetRequest("a", "");
+
         switch ($action) {
             case "list":
                 $result = self::GenList();
@@ -569,11 +570,14 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
     private function GenModify()
     {
+        $isTopic =1;
         $forumId = Control::GetRequest("forum_id", 0);
+
         if ($forumId <= 0) {
             die("");
         }
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+
         if ($forumTopicId <= 0) {
             die("");
         }
@@ -582,10 +586,15 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $siteId = parent::GetSiteIdByDomain();
         }
 
-        $templateFileUrl = "forum/forum_topic_deal.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        //$templateFileUrl = "forum/forum_topic_deal.html";
+        //$templateName = "default";
+        //$templatePath = "front_template";
+        //$tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+        $templateMode = 0;
+        $defaultTemp = "forum_topic_create";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, 0, "", $templateMode);
 
         //forum topic type list
         $forumTopicTypePublicData = new ForumTopicTypePublicData();
@@ -597,7 +606,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         } else {
             Template::RemoveCustomTag($tempContent, $tagId);
         }
-
         //user group list
         $userGroupPublicData = new UserGroupPublicData();
         $tagId = "user_group_list";
@@ -609,12 +617,13 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         }
 
         $forumTopicPublicData = new ForumTopicPublicData();
-        $arrOne = $forumTopicPublicData->GetOne($forumTopicId);
-        Template::ReplaceOne($tempContent, $arrOne, false, false);
+        $arrOneTopic = $forumTopicPublicData->GetOne($forumTopicId);
+        Template::ReplaceOne($tempContent, $arrOneTopic, false, false);
+
 
         $forumPostPublicDate = new ForumPostPublicData();
-        $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
-        Template::ReplaceOne($tempContent, $arrOne, false, false);
+        $arrOnePost = $forumPostPublicDate->GetOne($forumTopicId,$isTopic);
+        Template::ReplaceOne($tempContent, $arrOnePost, false, false);
 
         if (!empty($_POST)) {
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");

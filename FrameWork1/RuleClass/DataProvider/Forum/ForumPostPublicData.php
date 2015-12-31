@@ -182,14 +182,15 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 取得一条信息
-     * @param int $forumPostId 帖子id
+     * @param int $forumTopicId 帖子id
+     * @param int $isTopic 是否主题
      * @return array 帖子信息数组
      */
-    public function GetOne($forumPostId)
+    public function GetOne($forumTopicId,$isTopic)
     {
-        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumPost. "=:" . self::TableId_ForumPost . ";";
+        $sql = "SELECT * FROM " . self::TableName_ForumPost . " WHERE " . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " AND IsTopic=$isTopic;";
         $dataProperty = new DataProperty();
-        $dataProperty->AddField(self::TableId_ForumPost, $forumPostId);
+        $dataProperty->AddField(self::TableId_ForumTopic, $forumTopicId);
         $result = $this->dbOperator->GetArray($sql, $dataProperty);
         return $result;
     }
