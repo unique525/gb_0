@@ -1281,10 +1281,24 @@ class BasePublicGen extends BaseGen
                         $withCache
                     );
                     break;
+                case "top" :
+                    $withCache = true;
+                    $arrList = $forumTopicPublicData->GetListOfTop(
+                        $siteId,
+                        $tagTopCount,
+                        $withCache
+                    );
+                    for($i=0;$i<count($arrList);$i++){
+                        $arrList[$i]["ForumTopicTitle"] = Format::FormatHtmlTag($arrList[$i]["ForumTopicTitle"]);
+                    }
+                    break;
             }
 
             if (!empty($arrList)) {
+
                 Template::ReplaceList($tagContent, $arrList, $tagId);
+                //$tagContent = Format::FormatHtmlTag($tagContent);
+
                 //把对应ID的CMS标记替换成指定内容
                 $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
             } else {

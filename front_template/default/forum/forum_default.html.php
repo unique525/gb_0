@@ -179,7 +179,7 @@
             </item>
             <child>
                 <![CDATA[
-                <div class="div_forum_two_item" tabindex="{child_count}" idvalue="{c_child_no}">
+                <div  class="div_forum_two_item" tabindex="{child_count}" idvalue="{c_child_no}">
                     <table>
                         <tr>
                             <td class="td_pic"><a href="/default.php?mod=forum_topic&forum_id={f_ForumId}"><img src="{f_ForumPic1UploadFilePath}" /></a></td>
@@ -191,7 +191,7 @@
                         </tr>
                     </table>
                     <div class="topic_list show_topic_list_{f_ParentId}">
-                        <ul class="ul_topic_list_{child_count}">
+                        <ul  class="ul_topic_list_{child_count}">
                             {child_info_string}
                         </ul>
                     </div>

@@ -63,7 +63,7 @@
 
 
 
-<div id="forum_list">
+<div id="forum_top_topic_list">
     <div class="content">
         <icms id="forum_{SiteId}" type="forum_list" where="parent">
             <item>

@@ -55,7 +55,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
      */
     private function GenList()
     {
-
         $siteId = parent::GetSiteIdByDomain();
 
 

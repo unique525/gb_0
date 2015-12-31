@@ -195,7 +195,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
 
         parent::ReplaceTemplate($tempContent);
-
         parent::ReplaceEndForForum($tempContent);
         parent::ReplaceEnd($tempContent);
 
