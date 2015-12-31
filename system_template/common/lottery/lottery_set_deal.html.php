@@ -56,11 +56,11 @@
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_DayLimit">每日设奖：</label></td>
-                <td class="spe_line"><input type="number" id="f_DayLimit" name="f_DayLimit" value="{DayLimit}"/> 个</td>
+                <td class="spe_line"><input type="number" id="f_DayLimit" name="f_DayLimit" value="{DayLimit}"/> 个(一般不能为0)</td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_TotalLimit">总设奖：</label></td>
-                <td class="spe_line"><input type="number" id="f_TotalLimit" name="f_TotalLimit" value="{TotalLimit}"/> 个</td>
+                <td class="spe_line"><input type="number" id="f_TotalLimit" name="f_TotalLimit" value="{TotalLimit}"/> 个(一般不能为0)</td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_LotterySetGroup">奖项组：</label></td>
@@ -68,11 +68,11 @@
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_OneUserLimit">每人获奖限制：</label></td>
-                <td class="spe_line"><input type="number" id="f_OneUserLimit" name="f_OneUserLimit" value="{OneUserLimit}"/> 次</td>
+                <td class="spe_line"><input type="number" id="f_OneUserLimit" name="f_OneUserLimit" value="{OneUserLimit}"/> 次(-1为不做限制)</td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_OneUserDoLimit">每人抽奖限制次数：</label></td>
-                <td class="spe_line"><input type="number" id="f_OneUserDoLimit" name="f_OneUserDoLimit" value="{OneUserDoLimit}"/> 次</td>
+                <td class="spe_line"><input type="number" id="f_OneUserDoLimit" name="f_OneUserDoLimit" value="{OneUserDoLimit}"/> 次(0为不做限制)</td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_BeginTime">开始时间：</label></td>

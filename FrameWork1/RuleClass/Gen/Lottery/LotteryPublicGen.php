@@ -233,7 +233,7 @@ class LotteryPublicGen extends BasePublicGen implements IBasePublicGen
 
             }
 
-            parent::ReplaceWeiXinJsApi($tempContent);
+            //parent::ReplaceWeiXinJsApi($tempContent);
 
         }
 

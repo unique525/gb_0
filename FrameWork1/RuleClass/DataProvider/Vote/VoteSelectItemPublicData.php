@@ -98,8 +98,7 @@ class VoteSelectItemPublicData extends BasePublicData {
                     AND t2.VoteItemId IN ($voteItemId) $strSelectDate "
                 . $order
                 . $topCount;
-            $debug=new DebugLogManageData();
-            $debug->Create($sql);
+
             $dataProperty = new DataProperty();
             $dataProperty->AddField("State", $state);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

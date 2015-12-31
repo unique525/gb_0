@@ -433,6 +433,11 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthority = new ManageUserAuthorityManageData();
         $can = $manageUserAuthority->CanChannelExplore($siteId, $channelId, $manageUserId);
+
+
+
+
+
         if ($can != 1) {
             Control::ShowMessage(Language::Load('custom_form', 3));
             return "";
@@ -453,7 +458,9 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $pageSize = Control::GetRequest("ps", 20);
             $allCount = 0;
 
-            $listOfRecordArray = $customFormRecordManageData->GetRandomList($customFormId, $pageSize);
+            $beginTime=Control::PostOrGetRequest("begin_time","");
+            $endTime=Control::PostOrGetRequest("end_time","");
+            $listOfRecordArray = $customFormRecordManageData->GetRandomList($customFormId, $pageSize,$beginTime,$endTime);
 
             $listTable="";
             $fieldSelectionForSearch="";
@@ -653,6 +660,22 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
             $fieldSelectionForSearch="";
             if (count($listOfRecordArray) > 0) {
                 $listTable = self::GetCustomFormRecordListTable($listOfFieldArray,$listOfRecordArray);
+
+                /**
+                 临时导出csv
+                 **/
+                $isCsv=Control::GetRequest("csv_file","");
+                if($isCsv=="1"){
+                    $listTable = self::GetCustomFormRecordListCSV($listOfFieldArray,$listOfRecordArray);
+                    return $listTable;
+                }
+
+
+
+                /**
+                临时导出csv end
+                 **/
+
                 ////搜索字段选择框////
                 foreach($listOfFieldArray as $value){
                     $fieldSelectionForSearch.='<option value = "'.$value["CustomFormFieldId"].'_'.$value["CustomFormFieldType"].'" >'.$value["CustomFormFieldName"].'</option>';
@@ -748,6 +771,89 @@ class CustomFormRecordManageGen extends BaseManageGen implements IBaseManageGen 
         return $listTable;
     }
 
+
+
+    /**
+     * 取得表单记录列表的html表格代码
+     * @param array $listOfFieldArray 表单字段ID数据
+     * @param array $listOfRecordArray 表单记录ID数据
+     * @return string 表单列表页面html
+     */
+    private function GetCustomFormRecordListCSV($listOfFieldArray,$listOfRecordArray){
+
+        $listTable = '';
+        for ($f = 0; $f < count($listOfFieldArray); $f++) {
+            if($f>0){
+                $listTable.=';';
+            }
+            $listTable .= $listOfFieldArray[$f]["CustomFormFieldName"] . '';
+        }
+        $listTable .= ';状态';
+        $listTable .= ';时间';
+        $listTable .= "\n";
+        for ($i = 0; $i < count($listOfRecordArray); $i++) {
+            $customFormRecordId = intval($listOfRecordArray[$i]["CustomFormRecordId"]);
+
+
+            $customFormContentManageData=new CustomFormContentManageData();
+            $listOfContentArray = $customFormContentManageData->GetList($customFormRecordId);
+
+            for ($j = 0; $j < count($listOfFieldArray); $j++) {
+                $customFormFieldId = $listOfFieldArray[$j]["CustomFormFieldId"];
+                $customFormFieldType = $listOfFieldArray[$j]["CustomFormFieldType"];
+                if($j>0){
+                    $listTable .= ';';
+                }
+                for ($k = 0; $k < count($listOfContentArray); $k++) {
+
+                    if ($listOfContentArray[$k]["CustomFormFieldId"] == $customFormFieldId) {
+                        switch (intval($customFormFieldType)) {
+                            case 0:
+                                $listTable .= $listOfContentArray[$k]["ContentOfInt"];
+                                break;
+                            case 1:
+                                $contentOfString=str_ireplace(";", '；', $listOfContentArray[$k]["ContentOfString"]);
+                                $contentOfString='"'.$contentOfString.'"';
+                                $listTable .= $contentOfString;
+                                break;
+                            case 2:
+                                $contentOfText=str_ireplace(";", '；',$listOfContentArray[$k]["ContentOfText"]);
+                                $contentOfText='"'.$contentOfText.'"';
+                                $listTable .= $contentOfText;
+                                break;
+                            case 3:
+                                $listTable .= $listOfContentArray[$k]["ContentOfFloat"];
+                                break;
+                            case 4:
+                                $listTable .= $listOfContentArray[$k]["ContentOfDatetime"];
+                                break;
+                            case 5:
+                                //$listTable.='<a href="/default.php?secu=manage&mod=custom_form_content&m=get_attachment&custom_form_content_id='.$listOfContentArray[$k]["CustomFormContentId"].'" target="_blank">[下载]</a>';
+                                //$listTable.='</span>';
+                                //$listTable.='<span id="'.$listOfContentArray[$k]["CustomFormContentId"].'" class="btn_delete_attachment" style="cursor:pointer">[删除]</span>';
+                                //$listTable .= $listOfContentArray[$k]["ContentOfBlob"];
+                                break;
+                        }
+                    }
+                }
+            }
+            $listTable .= ';' . $listOfRecordArray[$i]["State"] . '';
+            $listTable .= ';' . $listOfRecordArray[$i]["CreateDate"] . '';
+            $listTable .= "\n";
+        }
+        $listTable .= '';
+
+
+        $filename = date('Ymd').'.csv'; //设置文件名
+        header("Content-type:text/csv");
+        header("Content-Disposition:attachment;filename=".$filename);
+        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+        header('Expires:0');
+        header('Pragma:public');
+        echo $listTable;
+
+        //return $listTable;
+    }
 
     /**
      * 通过表单字段关键字搜索并取得表单记录列表

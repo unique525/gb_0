@@ -1,0 +1,1 @@
+<div class="{BoxStyle}"><a href="{pageHref}">{pageNumber}</a></div>

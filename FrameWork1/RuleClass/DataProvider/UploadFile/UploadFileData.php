@@ -405,21 +405,7 @@ class UploadFileData extends BaseData
         $dataProperty->AddField("IsBatchUpload", $isBatchUpload);
         $dataProperty->AddField("UploadFileId", $uploadFileId);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
-        $debug = new DebugLogManageData();
-        $debug->Create($uploadFileId
-            ."--".$uploadFileName
-            ."--".$uploadFileSize
-            ."--".$uploadFileExtentionName
-            ."--".$uploadFileOrgName
-            ."--".$uploadFilePath
-            ."--".$tableType
-            ."--".$tableId
-            ."--".$manageUserId
-            ."--".$userId
-            ."--".$uploadFileTitle
-            ."--".$uploadFileInfo
-            ."--".$isBatchUpload
-        );
+
         return $result;
     }
 

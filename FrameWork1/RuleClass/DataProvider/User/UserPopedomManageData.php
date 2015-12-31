@@ -123,6 +123,64 @@ class UserPopedomManageData extends BaseManageData {
     }
 
     /**
+     * 根据站点ID和会员ID设置权限值
+     * @param int $siteId
+     * @param int $userId
+     * @param string $userPopedomName
+     * @param string $userPopedomValue
+     * @return int
+     */
+    public function SetValueBySiteIdAndUserId(
+        $siteId,
+        $userId,
+        $userPopedomName,
+        $userPopedomValue
+    ) {
+
+        $sql = "SELECT count(*)
+                FROM " . self::TableName_UserPopedom . "
+
+                WHERE SiteId=:SiteId
+                AND UserId=:UserId
+                AND UserPopedomName=:UserPopedomName;
+                ";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("UserId", $userId);
+        $dataProperty->AddField("UserPopedomName", $userPopedomName);
+        $hasCount = $this->dbOperator->GetInt($sql, $dataProperty);
+
+        if ($hasCount > 0) { //已存在相关配置记录
+            $sql = "UPDATE " . self::TableName_UserPopedom . " SET
+                    UserPopedomValue=:UserPopedomValue
+                    WHERE SiteId=:SiteId
+                    AND UserId=:UserId
+                    AND UserPopedomName=:UserPopedomName;";
+            $dataProperty->AddField("UserPopedomValue", $userPopedomValue);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        } else {
+            $sql = "INSERT INTO " . self::TableName_UserPopedom . "
+                    (
+                    SiteId,
+                    UserId,
+                    UserPopedomName,
+                    UserPopedomValue
+                    )
+                    VALUES
+                    (
+                    :SiteId,
+                    :UserId,
+                    :UserPopedomName,
+                    :UserPopedomValue
+                    );";
+            $dataProperty->AddField("UserPopedomValue", $userPopedomValue);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
+
+    /**
      * 根据论坛ID和会员ID取得权限数据列表
      * @param int $forumId
      * @param int $userId

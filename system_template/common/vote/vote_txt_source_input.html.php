@@ -15,39 +15,79 @@
             var voteItemId = {voteItemId};
 
             $("#upLoad").click(function(){
-                var txt = initTxt();
-                $.ajax({
-                    type: "POST",
-                    url: "/default.php?secu=manage&mod=vote_select_item&m=check_upload_txt&vote_item_id=" + voteItemId,
-                    data: {txt : txt},
-                    success: function(data){
-                        if(data > 0){
-                            alert("上传成功");
-                            parent.location.href = parent.location.href;
+                var txt = initTextToJson();
+
+                if(txt != -1){
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/default.php?secu=manage&mod=vote_select_item&m=check_upload_txt&vote_item_id=" + voteItemId,
+                        data: {txt: txt},
+                        dataType:"jsonp",
+                        jsonp:"jsonpcallback",
+                        success: function(data){
+
+                            if(data["result"] == 1){
+                                alert("上传成功");
+                                parent.location.reload();
+                            }
+                            else{
+                                alert("错误:"+data["message"]);
+                            }
                         }
-                        else if(data == -2){
-                            parent.location.href = parent.location.href;
-                            alert("数据格式不正确");
-                        }
-                        else{
-                            parent.location.href = parent.location.href;
-                            alert("上传错误,请联系管理员");
-                        }
-                    }
-                });
+                    });
+                }
 
             });
         });
 
-            function initTxt(){
-                var txt = $("textarea").val();
-                txt = txt.replace(/[\r\n]/g, "!|!"); //将换行替换为!|!
-                txt = txt.replace(/\s/g, "@");     //将空格或制表符替换为@
-                txt = txt.replace(/，/ig, ",");  //替换中文逗号
-                txt = txt.replace(/<[^>]+>/g,""); //删除HTML标记
+        function initTextToJson(){
+            var rawTxt = $("textarea").val();
+            rawTxt = rawTxt.replace();
+            rawTxt = rawTxt.replace(/\，/g, ",");
+            rawTxt = rawTxt.replace(/\、/g, ",");
+            var result = [];
 
-                return txt;
+            var arrayRow = rawTxt.split("\r\n");                    //分割行
+            arrayRow = rawTxt.split("\n");                    //分割行
+
+            for(var i = 0; i < arrayRow.length; i++){
+
+                if((arrayRow[i].replace(/(^\s*)|(\s*$)/g, "")).length > 0){                //丢弃 去掉首位空白字符之后的长度为0(整行没有文字)的行
+
+                    var arrayContent = arrayRow[i].split("\t");     //分割每一行的每个列
+
+                    if(arrayContent[1].length > 0){                 //在此处设置不能为空的项
+                        var temp = [];
+
+                        for(var j = 0; j < arrayContent.length; j++){
+
+                            temp.push(arrayContent[j]);
+                        }
+
+                        result.push(temp);
+                    }
+                    else{
+                        showErrorMessage(i, arrayContent[1]);
+                        return -1;
+                    }
+
+                }
             }
+
+            return JSON.stringify(result);
+        }
+
+        function showErrorMessage(i, title){
+            var message;
+            if(title == ''){
+                message = "第" + i + "行附近,标题为空";
+            }
+            else{
+                message = "第" + i + "行,标题为" + title + "  格式错误";
+            }
+            alert(message);
+        }
 
     </script>
 </head>

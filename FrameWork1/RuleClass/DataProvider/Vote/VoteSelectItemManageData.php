@@ -38,15 +38,14 @@ class VoteSelectItemManageData extends BaseManageData
     {
         $sql = array();
         $dataPropertyList = array();
-
         foreach ($ItemDetailArray as $value) {
 
             $dataProperty = new DataProperty();
             $dataProperty->ArrayField = $value;
             $dataPropertyList[] = $dataProperty;
 
-            $sql[] = "INSERT INTO " . self::TableName_VoteSelectItem . " (Type, VoteSelectItemTitle, Author, Editor, PublishDate, PageNo,VoteItemId)
-                       VALUES (:Type, :VoteSelectItemTitle, :Author, :Editor, :PublishDate, :PageNo, :VoteItemId)";
+            $sql[] = "INSERT INTO " . self::TableName_VoteSelectItem . " (Type, VoteSelectItemTitle, Author, Editor, PublishDate, PageNo, Email,VoteItemId)
+                       VALUES (:Type, :VoteSelectItemTitle, :Author, :Editor, :PublishDate, :PageNo, :Email,:VoteItemId)";
 
 
         }

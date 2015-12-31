@@ -486,23 +486,7 @@ function UploadFileFormatHtml(fileName){
             url += '</object>';
             break;
         case "mp4":
-            url = '<video src = ' + fileName + ' controls="controls">';
-            //url = '';
-            //url += '<scr'+'ipt type="text/javascript" src="/front_js/jwplayer.js"></scr'+'ipt>';
-            //url += '<div id="mediaspace"></div>';
-            //url += '<scr'+'ipt type="text/javascript">';
-            //url += 'jwplayer("mediaspace").setup({';
-            //url += '"flashplayer": "/front_js/jwplayer.swf",';
-            //url += 'type:"http",';
-            //url += '"file": "'+fileName+'",';
-            //url += '"image": "",';
-            //url += '"streamer": "start",';
-            //url += '"autostart": "true",';
-            //url += '"controlbar": "bottom",';
-            //url += '"width": "500",';
-            //url += '"height": "430"';
-            //url += '});';
-            //url += '</scr'+'ipt>';
+            url = '<video src = ' + fileName + ' controls="controls" poster="http://news.changsha.cn/images100001/default.jpg">';
             break;
         case "wmv":
             url = '';

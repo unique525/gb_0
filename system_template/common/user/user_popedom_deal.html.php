@@ -9,6 +9,17 @@
         });
         function submitForm(closeTab)
         {
+            //把所有未选中的checkbox设置为选中以post提交有数据，同时赋值为0传递给后台表示未选中
+            var t1 = document.getElementsByTagName("input");
+            for(var i=0;i<t1.length;i++)
+            {
+                if(t1[i].type == "checkbox"){
+                    if(!(t1[i].checked)){
+                        t1[i].checked = true;
+                        t1[i].value = "0";
+                    }
+                }
+            }
             $('#main_form').submit();
         }
 
@@ -60,8 +71,12 @@
                 <td class="spe_line"><input name="u_UserSetRecCountDayMax" id="u_UserSetRecCountDayMax" value="{UserSetRecCountDayMax}" maxlength="2" type="text" class="input_number" style=" width: 100px;" /> （0表示不限制）</td>
             </tr>
             <tr>
-                <td class="spe_line" height="30" align="right"><label for="u_ForumPostAllowUpload">可以浏览付费报纸：</label></td>
+                <td class="spe_line" height="30" align="right"><label for="u_UserCanExploreMustPayNewspaper">可以浏览付费报纸：</label></td>
                 <td class="spe_line"><input name="u_UserCanExploreMustPayNewspaper" id="u_UserCanExploreMustPayNewspaper" {c_UserCanExploreMustPayNewspaper} type="checkbox" /></td>
+            </tr>
+            <tr>
+                <td class="spe_line" height="30" align="right"><label for="u_UserCanScoreArticle">可以进行月度评稿打分：</label></td>
+                <td class="spe_line"><input name="u_UserCanScoreArticle" id="u_UserCanScoreArticle" {c_UserCanScoreArticle} type="checkbox" /></td>
             </tr>
         </table>
     </div>

@@ -34,7 +34,7 @@ class CustomFormRecordManageData extends BaseManageData {
         if(!empty($httpPostData)){
             $dataProperty = new DataProperty();
             $sql = parent::GetUpdateSql($httpPostData,self::TableName_CustomFormRecord, self::TableId_CustomFormRecord, $customFormRecordId, $dataProperty);
-           $result = $this->dbOperator->Execute($sql, $dataProperty);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
         return $result;
     }
@@ -65,14 +65,20 @@ class CustomFormRecordManageData extends BaseManageData {
      * 获取随机表单记录列表
      * @param int $customFormId 表单id
      * @param int $pageSize 每页大小
+     * @param int $beginTime 开始时间
+     * @param int $endTime 截止时间
      * @return array 表单记录数据集
      */
-    public function GetRandomList($customFormId, $pageSize) {
+    public function GetRandomList($customFormId, $pageSize,$beginTime,$endTime) {
         $result=-1;
         if($customFormId>0){
+            $selectDate="";
+            if($beginTime!=""&&$endTime!=""){
+                $selectDate=" AND CreateDate>'$beginTime' AND CreateDate<'$endTime' ";
+            }
             $dataProperty = new DataProperty();
             $dataProperty->AddField("CustomFormId", $customFormId);
-            $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND State=0 ORDER BY Rand() LIMIT $pageSize ;";
+            $sql = "SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND State=0 $selectDate ORDER BY Rand() LIMIT $pageSize ;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
@@ -153,7 +159,7 @@ class CustomFormRecordManageData extends BaseManageData {
                     if($value["content"]==""){
                         continue;
                     }
-                    echo $value["type"];
+                    //echo $value["type"];
                     switch ($value["type"]) {
                         case 0://int
                             $arr = Format::ToSplit($value["content"], '_');
@@ -206,7 +212,7 @@ class CustomFormRecordManageData extends BaseManageData {
                         case 5://blob
                             break;
                         case -1://state状态
-                            echo "in";
+                            //echo "in";
                             $dataProperty->AddField("State", $value['content']);
                             $sqlSearch.=' AND State=:State ';
                             break;
@@ -219,15 +225,15 @@ class CustomFormRecordManageData extends BaseManageData {
 
             }
             $sql="SELECT * FROM " . self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId " .$sqlSearch. " ORDER BY Sort DESC,CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize . " ;";
-            echo $sql;
+            //echo $sql;
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
-/*  由于太耗资源。。 不分页了  调1000条
-            $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
-                  (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
-                    .$sqlSearch. ");";
-            $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
-            */
+            /*  由于太耗资源。。 不分页了  调1000条
+                        $sqlCount = "SELECT count(*) FROM ".self::TableName_CustomFormRecord . " WHERE CustomFormId=:CustomFormId AND CustomFormRecordId IN
+                              (SELECT CustomFormRecordId FROM " . self::TableName_CustomFormContent. " WHERE CustomFormId=:CustomFormId "
+                                .$sqlSearch. ");";
+                        $allCount = $this->dbOperator->GetInt($sqlCount, $dataProperty);
+                        */
         }
         return $result;
     }

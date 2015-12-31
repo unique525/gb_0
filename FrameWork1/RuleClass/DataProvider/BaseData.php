@@ -1151,8 +1151,10 @@ class BaseData
             $mem = MemoryCache::getInstance();
             if (self::checkCacheServerStats($mem->getStats())){
                 $arrKeys = $mem->getAllKeys();
-                foreach($arrKeys as $key){
-                    $mem->delete($key);
+                if(!empty($arrKeys)){
+                    foreach($arrKeys as $key){
+                        $mem->delete($key);
+                    }
                 }
             }
         }else{

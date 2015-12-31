@@ -138,7 +138,7 @@ class UserOrderManageData extends BaseManageData{
     public function GetOne($userOrderId,$siteId){
         $result = null;
         if($userOrderId > 0 && $siteId > 0){
-            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM ".self::TableName_UserOrder." uo,".self::TableName_UserReceiveInfo." uri WHERE uo.UserOrderId = :UserOrderId AND uo.SiteId = :SiteId AND uo.UserReceiveInfoId = uri.UserReceiveInfoId; ";
+            $sql = "SELECT uo.*,uri.ReceivePersonName,uri.Address,uri.Mobile FROM ".self::TableName_UserOrder." uo LEFT OUTER JOIN ".self::TableName_UserReceiveInfo." uri ON uo.UserReceiveInfoId = uri.UserReceiveInfoId WHERE uo.UserOrderId = :UserOrderId AND uo.SiteId = :SiteId; ";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserOrderId",$userOrderId);
             $dataProperty->AddField("SiteId",$siteId);
