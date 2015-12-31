@@ -436,6 +436,10 @@ class ForumTopicPublicData extends BasePublicData
             INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)
 
             LEFT OUTER JOIN " . self::TableName_UploadFile . " uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf2 ON (ft.ContentUploadFileId1=uf2.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf3 ON (ft.ContentUploadFileId2=uf3.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf4 ON (ft.ContentUploadFileId3=uf4.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf5 ON (ft.ContentUploadFileId4=uf5.UploadFileId)
 
             WHERE ft.ForumId=:ForumId  " . $searchSql . " AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
             ORDER BY ft.Sort DESC,ft.PostTime DESC
