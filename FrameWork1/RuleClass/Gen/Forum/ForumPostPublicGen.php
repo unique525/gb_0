@@ -24,6 +24,15 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "modify":
+                $result = self::GenModify();
+                break;
+            case "operate":
+                $result = self::GenOperate();
+                break;
+            case "async_remove_to_bin":
+                $result = self::AsyncRemoveToBin();
+                break;
             case "reply":
                 self::Reply();
                 break;
@@ -551,5 +560,138 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 Control::ShowMessage("false");
             }
         }
+    }
+
+    private function GenModify()
+    {
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
+        if ($forumId <= 0) {
+            die("");
+        }
+        $forumPostId = Control::GetRequest("forum_post_id", 0);
+        if ($forumPostId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+        $templateMode = 0;
+        $defaultTemp = "forum_post_modify";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
+
+        $forumPostPublicDate = new ForumPostPublicData();
+        $arrOne = $forumPostPublicDate->GetOne($forumPostId);
+        Template::ReplaceOne($tempContent, $arrOne, false, false);
+        if (!empty($_POST)) {
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
+            $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
+            //内容中不允许脚本等
+            $forumPostContent = Format::RemoveScript($forumPostContent);
+            $forumPostModify = new ForumPostPublicData();
+            $result = $forumPostModify->ModifyContent($forumPostId,$forumPostContent );
+            if ($result > 0) {
+                Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+            }
+        }
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+        $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+        return $tempContent;
+    }
+
+    /**
+     * 操作帖子
+     * @return string 返回模板页面
+     */
+    private function GenOperate()
+    {
+        $forumPostId = Control::GetRequest("forum_post_id", 0);
+        if ($forumPostId <= 0) {
+            die("");
+        }
+        $siteId = Control::GetRequest("site_id", 0);
+        if ($siteId <= 0) {
+            $siteId = parent::GetSiteIdByDomain();
+        }
+
+        $forumTopicPublicData = new ForumTopicPublicData();
+        $forumId = $forumTopicPublicData->GetForumId($forumPostId, true);
+
+        $userId = Control::GetUserId();
+        if ($userId <= 0) {
+
+            $returnUrl = urlencode("/default.php?mod=forum_post&a=operate&forum_post_id=$forumPostId");
+
+            Control::GoUrl("/default.php?mod=user&a=login&re_url=$returnUrl");
+            return "";
+        }
+
+        $templateFileUrl = "forum/forum_post_operate.html";
+        $templateName = "default";
+        $templatePath = "front_template";
+        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+
+
+        $tempContent = str_ireplace("{ForumPostId}", $forumPostId, $tempContent);
+        $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
+
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceEndForForum($tempContent);
+        parent::ReplaceSiteConfig($siteId, $tempContent);
+
+        return $tempContent;
+    }
+
+    private function AsyncRemoveToBin()
+    {
+
+
+        $forumPostId = Control::GetRequest("forum_post_id", 0);
+        $userId = Control::GetUserId();
+
+        if ($forumPostId > 0 && $userId >= 0) {
+            $forumPostPublicData = new ForumPostPublicData();
+            $forumUserId = $forumPostPublicData->GetUserId($forumPostId, true);
+            $can = false;
+            if ($forumUserId == $userId){ //自己的帖子
+                //读取权限
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteSelfPost);
+
+            }else{
+                $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteOtherPost);
+
+
+            }
+
+            if ($can) {
+
+                $forumPostPublicData = new ForumPostPublicData();
+                $result = $forumPostPublicData->ModifyState(
+                    $forumPostId,
+                    ForumPostData::FORUM_POST_STATE_REMOVED
+                );
+
+                if ($result > 0) {
+
+                    //删除缓冲
+                    parent::DelAllCache();
+
+                }
+
+            } else {
+                $result = -10; //没有权限
+            }
+
+        } else {
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
     }
 } 

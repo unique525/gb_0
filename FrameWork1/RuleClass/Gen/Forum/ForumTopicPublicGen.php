@@ -583,10 +583,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $siteId = parent::GetSiteIdByDomain();
         }
 
-        $templateFileUrl = "forum/forum_topic_deal.html";
-        $templateName = "default";
-        $templatePath = "front_template";
-        $tempContent = Template::Load($templateFileUrl, $templateName, $templatePath);
+        $templateMode = 0;
+        $defaultTemp = "forum_topic_modify";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
 
         //forum topic type list
         $forumTopicTypePublicData = new ForumTopicTypePublicData();
@@ -612,16 +612,18 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $forumTopicPublicData = new ForumTopicPublicData();
         $arrOne = $forumTopicPublicData->GetOne($forumTopicId);
         Template::ReplaceOne($tempContent, $arrOne, false, false);
-
+        $isTopic = 1;
         $forumPostPublicDate = new ForumPostPublicData();
-        $arrOne = $forumPostPublicDate->GetOne($forumTopicId);
+        $arrOne = $forumPostPublicDate->GetOneForTopicId($forumTopicId,$isTopic);
+
         Template::ReplaceOne($tempContent, $arrOne, false, false);
 
         if (!empty($_POST)) {
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
 
-            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
+            $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
 
@@ -696,7 +698,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $uploadFiles
                 );
                 if ($result > 0) {
-
+                    Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
                 }
             }
         }
