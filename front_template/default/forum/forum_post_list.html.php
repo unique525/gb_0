@@ -192,6 +192,7 @@
                                     <tr>
                                         <td>
                                             <div class="forum_post_title">{f_ForumPostTitle}</div>
+
                                         </td>
                                         <td class="forum_post_post_time" style="padding-right:10px;" align="right">楼主</td>
                                     </tr>
