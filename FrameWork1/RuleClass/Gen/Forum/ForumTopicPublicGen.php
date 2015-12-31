@@ -65,7 +65,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             return "";
         }
 
-        $pageSize = Control::GetRequest("ps", 5);
+        $pageSize = Control::GetRequest("ps", 25);
         $pageIndex = Control::GetRequest("p", 1);
 
 
