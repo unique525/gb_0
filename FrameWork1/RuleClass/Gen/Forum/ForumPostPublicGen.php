@@ -131,7 +131,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $result = str_ireplace("{UserRegisterUrl}", $userRegisterUrl, $result);
 
 
-
+        parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
         return $result;
 
 

@@ -14,6 +14,7 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
      */
     public function GenPublic() {
         $action = Control::GetRequest("a", "");
+
         switch ($action) {
             default:
                 $result = self::GenDefault();
@@ -31,9 +32,9 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $siteId = parent::GetSiteIdByDomain();
 
         /*******************页面级的缓存 begin********************** */
-
         $templateMode = 0;
         $defaultTemp = "forum_default";
+
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, 0, "", $templateMode);//(site id 为0时，全系统搜索模板)
 
@@ -112,7 +113,6 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         /*******************页面级的缓存 end  ********************** */
 
         parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
-
 
         return $result;
     }
