@@ -199,7 +199,7 @@ class Pager {
      * @param $pageIndex           int      页码
      * @param $pageSize            int      每页条数
      * @param $allCount            int      总条数
-     * @param $pageButtonList      int      前台使用时单页按钮的模版
+     * @param $pageButtonList      string   前台使用时单页按钮的模版
      * @param $pageButtonListUrl   int      单页按钮指向的链接
      * @return mixed|string        int      完整的翻页按钮组件
      */
