@@ -665,12 +665,9 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
             }else{
                 $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumDeleteOtherPost);
-
-
             }
 
             if ($can) {
-
                 $forumPostPublicData = new ForumPostPublicData();
                 $result = $forumPostPublicData->ModifyState(
                     $forumPostId,

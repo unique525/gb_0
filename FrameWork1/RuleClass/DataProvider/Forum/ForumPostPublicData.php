@@ -245,7 +245,7 @@ class ForumPostPublicData extends BasePublicData {
                 LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
 
 
-                WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " ORDER BY fp.IsTopic DESC, fp.PostTime
+                WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " AND fp.state=0 ORDER BY fp.IsTopic DESC, fp.PostTime
 
                 LIMIT " .$pageBegin . "," . $pageSize . ";";
         $dataProperty = new DataProperty();
@@ -255,7 +255,7 @@ class ForumPostPublicData extends BasePublicData {
         //统计总数
         $sql = "SELECT count(*)
                 FROM " . self::TableName_ForumPost  . "
-                WHERE ForumTopicId=:ForumTopicId;";
+                WHERE ForumTopicId=:ForumTopicId AND fp.state=0;";
 
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
@@ -284,7 +284,7 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 修改帖子状态
-     * @param int $forumPostId 主题id
+     * @param int $forumPostId 帖子id
      * @param int $state 状态
      * @return int 操作结果
      */
@@ -292,12 +292,9 @@ class ForumPostPublicData extends BasePublicData {
         $result = -1;
         if ($forumPostId > 0) {
             $dataProperty = new DataProperty();
-            $sql = "UPDATE " . self::TableName_ForumPost . " SET
-                    State = :State
-                    WHERE ForumPostId = :ForumPostId
-                    ;";
+            $sql = "UPDATE " . self::TableName_ForumPost . " SET State=:State WHERE ForumPostId=:ForumPostId;";
             $dataProperty->AddField("State", $state);
-            $dataProperty->AddField("ForumTopicId", $forumPostId);
+            $dataProperty->AddField("ForumPostId", $forumPostId);
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
 
