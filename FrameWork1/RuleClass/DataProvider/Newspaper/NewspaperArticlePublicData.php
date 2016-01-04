@@ -152,6 +152,35 @@ class NewspaperArticlePublicData extends BasePublicData
     }
 
     /**
+     * 更新文章里的TitlePic1UploadFileId
+     * @param int $newspaperArticleId
+     * @param int $titlePic1UploadFileId
+     * @return int 执行结果
+     */
+    public function ModifyTitlePic1UploadFileId($newspaperArticleId,$titlePic1UploadFileId){
+
+        $result = -1;
+        if ($newspaperArticleId > 0 && $titlePic1UploadFileId > 0) {
+
+            $sql = "UPDATE " . self::TableName_NewspaperArticle . "
+
+                SET TitlePic1UploadFileId=:TitlePic1UploadFileId
+
+                WHERE NewspaperArticleId=:NewspaperArticleId
+                ;";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperArticleId", $newspaperArticleId);
+            $dataProperty->AddField("TitlePic1UploadFileId", $titlePic1UploadFileId);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+
+        return $result;
+
+    }
+
+    /**
      * 根据文章标题和版面id返回文章id
      * @param string $newspaperArticleTitle 文章标题
      * @param int $newspaperPageId 版面id
