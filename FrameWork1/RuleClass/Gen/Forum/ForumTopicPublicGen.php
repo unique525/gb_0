@@ -58,8 +58,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         $siteId = parent::GetSiteIdByDomain();
 
-
         $forumId = Control::GetRequest("forum_id", 0);
+
+
         if ($forumId <= 0) {
 
             return "";
@@ -123,13 +124,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         }
 
-
         /*******************页面级的缓存 begin********************** */
         $templateMode = 0;
         $defaultTemp = "forum_topic_list";
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
-
 
         $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
         $cacheFile = 'forum_topic_list_forum_id_'
@@ -139,9 +138,11 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             . '_ps_' . $pageSize;
         $withCache = true;
         if ($withCache) {
+
             $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
             if ($pageCache === false) {
+
                 $result = self::getListOfTemplateContent(
                     $siteId,
                     $forumId,
@@ -149,6 +150,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $pageIndex,
                     $pageSize
                 );
+
+
                 parent::AddCache($cacheDir, $cacheFile, $result, 60);
             } else {
                 $result = $pageCache;
@@ -164,7 +167,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         }
 
         /*******************页面级的缓存 end  ********************** */
-
+        parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
         return $result;
     }
 
@@ -179,6 +182,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
         $templateContent = str_ireplace("{ForumId}", $forumId, $templateContent);
         $templateContent = str_ireplace("{SiteId}", $siteId, $templateContent);
+
 
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
@@ -202,7 +206,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
             $navUrl = "/default.php?mod=forum_topic&a=list&forum_id=$forumId&p={n}&ps=$pageSize";
             $pagerButtonListTemplateContent = Template::Load('pager_new/pager_list_style_default.html', 'default', 'front_template');
+
             $pagerButton = Pager::CreatePageButtons($pagerTemplate,true,true,'',$pageIndex,$pageSize,$allCount,$pagerButtonListTemplateContent,$navUrl);
+
             $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
 
         } else {

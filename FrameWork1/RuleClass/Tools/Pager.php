@@ -199,7 +199,7 @@ class Pager {
      * @param $pageIndex           int      页码
      * @param $pageSize            int      每页条数
      * @param $allCount            int      总条数
-     * @param $pageButtonList      int      前台使用时单页按钮的模版
+     * @param $pageButtonList      string   前台使用时单页按钮的模版
      * @param $pageButtonListUrl   int      单页按钮指向的链接
      * @return mixed|string        int      完整的翻页按钮组件
      */
@@ -227,6 +227,7 @@ class Pager {
             }
         }
 
+
         /*****处理有误的页码*****/
         if(!is_numeric($pageSize) || !is_numeric($allCount)){
             self::ReplacePageError($pageTemplate, '页码类型错误');
@@ -253,6 +254,7 @@ class Pager {
         else{
             $allButtonCount = intval(($allCount / $pageSize) + 1);
         }
+
 
         /*****生成单页按钮列表*****/
         $buttonCollection = '';
@@ -336,7 +338,7 @@ class Pager {
             $pageTemplate = str_ireplace("{mobile_preIndex}", '上一页', $pageTemplate);
         } else {
             $pageTemplate = str_ireplace("{ShowPre}", "style=\"display:none\"", $pageTemplate);
-            $pageTemplate = str_ireplace("{mobile_preIndex}", '首页', $pageTemplate);
+            $pageTemplate = str_ireplace("{mobile_preIndex}", '已是第一页', $pageTemplate);
             $pageTemplate = str_ireplace("{mobile_PreIndexUrl}", '', $pageTemplate);
         }
 
@@ -357,7 +359,6 @@ class Pager {
         }else{
             $pageTemplate = str_ireplace("{ShowGoTo}", "none", $pageTemplate);
         }
-
         return $pageTemplate;
     }
 

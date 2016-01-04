@@ -79,7 +79,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             . '_p_' . $pageIndex
             . '_ps_' . $pageSize
         ;
-        $withCache = true;
+        $withCache = false;
         if($withCache){
             $pageCache = parent::GetCache($cacheDir, $cacheFile);
 
@@ -131,7 +131,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $result = str_ireplace("{UserRegisterUrl}", $userRegisterUrl, $result);
 
 
-
+        parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
         return $result;
 
 
@@ -180,16 +180,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
             $templateContent = str_ireplace("[/ATTACHMENT]", "", $templateContent);
 
-            $styleNumber = 1;
-            $pagerTemplate = parent::GetDynamicTemplateContent(
-                "pager_button");
-            $isJs = FALSE;
-            $navUrl = "default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId&p={0}&ps=$pageSize";
+            $pagerTemplate = parent::GetDynamicTemplateContent("pager_button", 0, '',$templateMode);
+            $navUrl = "default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId&p={n}&ps=$pageSize";
 
-            $jsFunctionName = "";
-            $jsParamList = "";
-            $pagerButton = Pager::ShowPageButton(
-                $pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex, $styleNumber, $isJs, $jsFunctionName, $jsParamList);
+            $pagerButtonListTemplateContent = Template::Load('pager_new/pager_list_style_default.html', 'default', 'front_template');
+            $pagerButton = Pager::CreatePageButtons($pagerTemplate,true,true,'',$pageIndex,$pageSize,$allCount,$pagerButtonListTemplateContent,$navUrl);
 
             $templateContent = str_ireplace("{pager_button}", $pagerButton, $templateContent);
 
