@@ -903,6 +903,13 @@ function DocumentNewsTagPulling(){
                                 <option value="20">上首页 排序20</option>
                             </select>
                             {s_ShowInClientIndex}(越大越靠前)
+
+                            <label for="f_ShowMutiPicInClientList">客户端列表组图：</label>
+                            <select id="f_ShowMutiPicInClientList" name="f_ShowMutiPicInClientList">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                            {s_ShowMutiPicInClientList}
                         </td>
                     </tr>
                 </table>
