@@ -521,7 +521,7 @@ class NewspaperPagePublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
             $cacheFile = 'newspaper_page_get_newspaper_id_list.cache_' . $newspaperId . '';
             $sql = "SELECT NewspaperPageId FROM " . self::TableName_NewspaperPage . "
-                    WHERE NewspaperId=:NewspaperId;
+                    WHERE NewspaperId=:NewspaperId
                     AND State<100
                     ORDER BY Sort,NewspaperPageId ;";
             $dataProperty = new DataProperty();
