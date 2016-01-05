@@ -235,6 +235,7 @@ class ForumPostPublicData extends BasePublicData {
     {
         $sql = "SELECT fp.*,
                         ui.AvatarUploadFileId,
+                        ui.NickName,
                         uf.UploadFilePath AS AvatarUploadFilePath,
                         uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
                         uf.UploadFilePadPath AS AvatarUploadFilePadPath
@@ -253,12 +254,11 @@ class ForumPostPublicData extends BasePublicData {
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
         //统计总数
-        $sql = "SELECT count(*)
-                FROM " . self::TableName_ForumPost  . "
-                WHERE ForumTopicId=:ForumTopicId AND fp.state=0;";
+        $sql = "SELECT count(*)".
+                " FROM " .self::TableName_ForumPost. " fp".
+                " WHERE ForumTopicId=:ForumTopicId AND fp.state=0;";
 
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
-
 
         return $result;
     }

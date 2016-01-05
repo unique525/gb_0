@@ -386,6 +386,9 @@ class Format
             case "jpg":
                 $result = '<img alt="' . $uploadFileId . '" src="' . $filePath . '" />';
                 break;
+            case "jpeg":
+                $result = '<img alt="' . $uploadFileId . '" src="' . $filePath . '" />';
+                break;
             case "gif":
                 $result = '<img alt="' . $uploadFileId . '" src="' . $filePath . '" />';
                 break;
@@ -442,6 +445,9 @@ class Format
                 $result = '<object width="640" height="480" classid="clsid:6bf52a52-394a-11d3-b153-00c04f79faa6" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701"><param name="url" value="' . $filePath . '" /><embed width="640" height="480" type="application/x-mplayer2" src="' . $filePath . '" /></object>';
                 break;
             default:
+                if(strlen($sourceFileName)<=0){
+                    $sourceFileName = '[download]';
+                }
                 $result = '<a href="' . $filePath . '" target="_blank">' . $sourceFileName . '</a>';
                 break;
         }
