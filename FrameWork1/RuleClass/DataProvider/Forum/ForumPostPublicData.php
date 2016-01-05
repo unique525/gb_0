@@ -235,6 +235,7 @@ class ForumPostPublicData extends BasePublicData {
     {
         $sql = "SELECT fp.*,
                         ui.AvatarUploadFileId,
+                        ui.NickName,
                         uf.UploadFilePath AS AvatarUploadFilePath,
                         uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
                         uf.UploadFilePadPath AS AvatarUploadFilePadPath
