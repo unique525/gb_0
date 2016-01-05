@@ -188,8 +188,10 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $allCount = 0;
 
         $state = 0;
-
+        $topCount = 3;
         $forumTopicPublicData = new ForumTopicPublicData();
+        $arrForumTopicListForTop=$forumTopicPublicData->GetListOfTop( $siteId, $topCount);
+
         $arrForumTopicList = $forumTopicPublicData->GetListPager(
             $forumId,
             $pageBegin,
@@ -215,6 +217,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             Template::RemoveCustomTag($templateContent, $tagId);
             $templateContent = str_ireplace("{pager_button}", Language::Load("document", 7), $templateContent);
         }
+        if (count($arrForumTopicListForTop) > 0) {
+            $tagId = "forum_topic_top_list";
+
+            Template::ReplaceList($templateContent, $arrForumTopicListForTop, $tagId);
+        }
+
 
         parent::ReplaceFirstForForum($templateContent);
 

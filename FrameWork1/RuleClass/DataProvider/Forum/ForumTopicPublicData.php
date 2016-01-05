@@ -466,6 +466,7 @@ class ForumTopicPublicData extends BasePublicData
             SELECT
                         ft.*,
                         ui.AvatarUploadFileId,
+                        ui.NickName,
                         uf.UploadFilePath AS AvatarUploadFilePath,
                         uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
                         uf.UploadFilePadPath AS AvatarUploadFilePadPath,
