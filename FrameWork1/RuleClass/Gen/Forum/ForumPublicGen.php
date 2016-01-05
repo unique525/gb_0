@@ -16,6 +16,9 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
         $action = Control::GetRequest("a", "");
 
         switch ($action) {
+            case "search":
+                $result = self::GenSearch();
+                break;
             default:
                 $result = self::GenDefault();
                 break;
@@ -216,6 +219,56 @@ class ForumPublicGen extends ForumBasePublicGen implements IBasePublicGen {
 
         return $tempContent;
     }
+
+    private function GenSearch(){
+        $key = trim(Control::GetRequest("key", ''));
+        $pageIndex = Control::GetRequest("p", 1);
+        $pageSize = Control::GetRequest("ps", 30);
+
+        $siteId = parent::GetSiteIdByDomain();
+
+        $TemplateName = 'forum_search_result';
+        $templateMode = 0;
+        $tempContent = parent::GetDynamicTemplateContent($TemplateName, 0, "", $templateMode);
+
+        parent::ReplaceFirst($tempContent);
+        parent::ReplaceFirstForForum($tempContent);
+        parent::ReplaceUserInfoPanel($tempContent, $siteId, 'forum_user_is_login', 'forum_user_no_login');
+
+        $allCount=0;
+        $pageBegin = ($pageIndex - 1) * $pageSize;
+        $forumPublicDate = new ForumPublicData();
+        $arrSearchResult = $forumPublicDate->GetSearchResultArray($siteId, $pageBegin, $pageSize, $allCount,$key);
+
+
+        $tagId = "forum_search_list";
+        if(count($arrSearchResult) > 0){
+            Template::ReplaceList($tempContent, $arrSearchResult, $tagId);
+
+            $templateMode = 0;
+            $pagerTemplate = parent::GetDynamicTemplateContent("pager_button", 0, '',$templateMode);
+
+            $navUrl = "/default.php?mod=forum&a=search&SiteId=$siteId&p={n}&ps=$pageSize&key=$key";
+            $pagerButtonListTemplateContent = Template::Load('pager_new/pager_list_style_default.html', 'default', 'front_template');
+
+            $pagerButton = Pager::CreatePageButtons($pagerTemplate,true,true,'',$pageIndex,$pageSize,$allCount,$pagerButtonListTemplateContent,$navUrl);
+
+            $tempContent = str_ireplace("{pager_button}", $pagerButton, $tempContent);
+            return $tempContent;
+
+        }
+        else{
+            $arrSearchResult=[];
+            Template::ReplaceList($tempContent, $arrSearchResult, $tagId);
+            $tempContent = str_ireplace("{pager_button}", '未找包含关键词到结果', $tempContent);
+            return $tempContent;
+
+
+        }
+
+    }
+
+
 }
 
 ?>

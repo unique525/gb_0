@@ -18,7 +18,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:360,
+            height:400,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'新增题目选项',
@@ -41,7 +41,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:360,
+            height:400,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'编辑题目选项',
@@ -66,7 +66,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:360,
+            height:400,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'维持比例加票数',
@@ -86,7 +86,7 @@ $(function() {
         $("#dialog_resultbox").dialog({
             hide:true,    //点击关闭是隐藏,如果不加这项,关闭弹窗后再点就会出错.
             autoOpen:true,
-            height:360,
+            height:400,
             width:800,
             modal:true, //蒙层（弹出会影响页面大小）
             title:'从节点导入选项',

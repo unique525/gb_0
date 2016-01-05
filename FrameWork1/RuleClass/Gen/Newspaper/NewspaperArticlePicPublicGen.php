@@ -69,6 +69,9 @@ class NewspaperArticlePicPublicGen extends BasePublicGen {
                 }
             }
 
+            //更新文章里的TitlePic1UploadFileId
+            $newspaperArticlePublicData = new NewspaperArticlePublicData();
+            $newspaperArticlePublicData->ModifyTitlePic1UploadFileId($newspaperArticleId, $uploadFileId);
 
             //删除缓冲
             parent::DelAllCache();

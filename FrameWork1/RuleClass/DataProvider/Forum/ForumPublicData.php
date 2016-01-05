@@ -295,6 +295,59 @@ class ForumPublicData extends BasePublicData {
         return $result;
     }
 
+    public function GetSearchResultArray($siteId, $pageBegin, $pageSize, &$allCount, $key)
+    {
+
+        $searchSql = "";
+        if($key != ''){
+            $searchSql = " AND ft.ForumTopicTitle LIKE '%".$key. "%' ";
+        }
+        $dataProperty = new DataProperty();
+
+        $dataProperty->AddField("SiteId", $siteId);
+
+        $sql = "SELECT".
+                        " ft.*,".
+                        "ui.AvatarUploadFileId,".
+                        "uf.UploadFilePath AS AvatarUploadFilePath,".
+                        "uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,".
+                        "uf.UploadFilePadPath AS AvatarUploadFilePadPath,".
+
+                        "uf2.UploadFilePath AS ContentUploadFilePath1,".
+                        "uf3.UploadFilePath AS ContentUploadFilePath2,".
+                        "uf4.UploadFilePath AS ContentUploadFilePath3,".
+                        "uf5.UploadFilePath AS ContentUploadFilePath4".
+
+                " FROM".
+                        " " .self::TableName_ForumTopic. " ft".
+                        " INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)".
+                        " LEFT OUTER JOIN " .self::TableName_UploadFile. " uf ON (ui.AvatarUploadFileId=uf.UploadFileId)".
+                        " LEFT OUTER JOIN " .self::TableName_UploadFile. " uf2 ON (ft.ContentUploadFileId1=uf2.UploadFileId)".
+                        " LEFT OUTER JOIN " .self::TableName_UploadFile. " uf3 ON (ft.ContentUploadFileId2=uf3.UploadFileId)".
+                        " LEFT OUTER JOIN " .self::TableName_UploadFile. " uf4 ON (ft.ContentUploadFileId3=uf4.UploadFileId)".
+                        " LEFT OUTER JOIN " .self::TableName_UploadFile. " uf5 ON (ft.ContentUploadFileId4=uf5.UploadFileId)".
+
+                " WHERE".
+                        " ft.SiteId=:SiteId".
+                        " AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED.
+                        $searchSql.
+
+                " ORDER BY".
+                        " ft.Sort DESC,".
+                        " ft.PostTime DESC".
+
+                " LIMIT " .$pageBegin. "," .$pageSize. ";";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        //统计总数
+        $sql = "SELECT count(*)".
+                " FROM " . self::TableName_ForumTopic .' ft'.
+                " WHERE SiteId=:SiteId "
+                .$searchSql.";";
+        $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
+        return $result;
+    }
+
 }
 
 ?>

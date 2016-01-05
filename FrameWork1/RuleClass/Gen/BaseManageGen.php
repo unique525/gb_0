@@ -145,6 +145,7 @@ class BaseManageGen extends BaseGen
 
                 $timeEnd = Control::GetMicroTime();
 
+
                 $publishLogManageData->Create(
                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
                     PublishLogManageData::TABLE_TYPE_CHANNEL,
@@ -209,6 +210,7 @@ class BaseManageGen extends BaseGen
 
 
                                 $timeEnd = Control::GetMicroTime();
+
                                 $publishLogManageData->Create(
                                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
                                     PublishLogManageData::TABLE_TYPE_CHANNEL,
@@ -364,7 +366,9 @@ class BaseManageGen extends BaseGen
 
             if ($executeTransfer) {
                 $timeStart = Control::GetMicroTime();
-                self::TransferPublishQueue($publishQueueManageData, $siteId);
+
+                return self::TransferPublishQueue($publishQueueManageData, $siteId);
+
                 $timeEnd = Control::GetMicroTime();
                 $publishLogManageData->Create(
                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
@@ -381,6 +385,7 @@ class BaseManageGen extends BaseGen
         } else {
             $result = DefineCode::PUBLISH + self::PUBLISH_CHANNEL_RESULT_CHANNEL_ID_ERROR;
         }
+
 
         return $result;
     }
@@ -1268,6 +1273,7 @@ class BaseManageGen extends BaseGen
         $arrFtpOne = $ftpManageData->GetOneBySiteId($siteId);
         $ftpManageData->FillFtp($arrFtpOne, $ftp);
 
+
         //判断是用ftp方式传输还是直接写文件方式传输
         if (!empty($ftpInfo)) { //定义了ftp配置信息，使用ftp方式传输
             $openFtpLog = false;
@@ -1280,6 +1286,7 @@ class BaseManageGen extends BaseGen
                     $destinationPath = $publishQueueManageData->Queue[$i]["DestinationPath"];
                     $channelTemplateContent = $publishQueueManageData->Queue[$i]["Content"];
                     $result = FileObject::Write($destinationPath, $channelTemplateContent);
+
                     if ($result > 0) { //成功返回成功码
                         $publishQueueManageData->Queue[$i]["Result"] =
                             abs(DefineCode::PUBLISH) + self::PUBLISH_TRANSFER_RESULT_SUCCESS;

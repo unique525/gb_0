@@ -5,9 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="/system_js/jquery-1.9.1.min.js"></script>
     <style>
-        textarea{ height:370px; width:100% }
+        textarea{ height:280px; width:100% }
         #upLoad{ border:none; color:#ffffff; background:#52596B; height:28px; line-height:28px; padding-left:10px; padding-right:10px;
-            font-size:14px; cursor:pointer; width:30px; margin:10px auto }
+            font-size:14px; cursor:pointer; width:30px; margin:0px auto;margin-top:10px; }
     </style>
     <script>
         $(function(){
