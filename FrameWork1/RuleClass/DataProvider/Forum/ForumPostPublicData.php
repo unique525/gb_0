@@ -301,4 +301,5 @@ class ForumPostPublicData extends BasePublicData {
 
         return $result;
     }
+
 } 

@@ -14,7 +14,7 @@ ul{list-style-type:none;}
 .spe_all{clear:both;font-size:0;overflow:hidden;margin:0;padding:0;border:0;line-height:0;}
 
 .btn{font-family:Microsoft YaHei,Verdana,serif;border:none;color:#f1f1f1;background:#8e8e8e;height:30px;line-height:28px;padding-left:10px;padding-right:10px;font-size:14px;cursor:pointer;}
-.btn2{font-family:Microsoft YaHei,Verdana,serif;height: 40px;width: 120px; line-height: 40px; text-align:center; background-color: #32A5E7;border: 0;color:#ffffff;font-size:16px;cursor:pointer;}
+.btn2{font-family:Microsoft YaHei,Verdana,serif;height: 40px;width: 120px; line-height: 40px; text-align:center; background-color: #32A5E7;border: 0;color:#ffffff;font-size:16px;cursor:pointer; }
 .btn2_a{color:#ffffff;font-size:16px;}
 .btn3{font-family:Microsoft YaHei,Verdana,serif;height: 40px;width: 120px; line-height: 40px; text-align:center; background-color: #D87D03;border: 0;color:#ffffff;font-size:16px;}
 .btn3_a{color:#ffffff;font-size:16px;}

@@ -21,6 +21,7 @@
 
 
         $(function(){
+            //删帖
             var forumTopicDelete = $("#forum_topic_delete");
             forumTopicDelete.click(function(){
                 var forumTopicId = parseInt(Request["forum_topic_id"]);
@@ -54,7 +55,7 @@
 
                 }
             });
-
+            //置顶
             var forumTopicSetTop = $(".forum_topic_set_top");
             forumTopicSetTop.click(function(){
                 var forumTopicId = parseInt(Request["forum_topic_id"]);
@@ -91,7 +92,7 @@
 
                 }
             });
-
+            //取消置顶
             var forumTopicCancelTop = $("#forum_topic_cancel_top");
             forumTopicCancelTop.click(function(){
                 var forumTopicId = parseInt(Request["forum_topic_id"]);
@@ -126,6 +127,75 @@
                 }
             });
 
+            //加为精华
+            var forumTopicBest = $("#forum_topic_best");
+            forumTopicBest.click(function(){
+                var forumTopicId = parseInt(Request["forum_topic_id"]);
+                if (forumTopicId == undefined || forumTopicId <=0){
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("帖子ID不能为空");
+                }
+                else {
+                    $.ajax({
+                        type: "get",
+                        url: "/default.php?mod=forum_topic&a=async_set_best",
+                        data: {
+                            forum_topic_id: forumTopicId
+                        },
+                        dataType: "jsonp",
+                        jsonp: "jsonpcallback",
+                        success: function(result) {
+
+                            var resultCode = parseInt(result);
+                            if(resultCode > 0){
+                                alert("加精成功");
+                                parent.location.href = '/default.php?mod=forum_topic&forum_id={ForumId}';
+                            }else if(resultCode == -10){
+                                alert("您没有权限操作此功能");
+                            }else if(resultCode == -5){
+                                alert("参数不正确或者没有登录");
+                            }
+
+                        }
+                    });
+
+                }
+            });
+
+            //取消精华
+            var forumTopicCancelBest = $("#forum_topic_cancel_best");
+            forumTopicCancelBest.click(function(){
+                var forumTopicId = parseInt(Request["forum_topic_id"]);
+                if (forumTopicId == undefined || forumTopicId <=0){
+                    $("#dialog_box").dialog({width: 300, height: 100});
+                    $("#dialog_content").html("帖子ID不能为空");
+                }
+                else {
+                    $.ajax({
+                        type: "get",
+                        url: "/default.php?mod=forum_topic&a=async_cancel_best",
+                        data: {
+                            forum_topic_id: forumTopicId
+                        },
+                        dataType: "jsonp",
+                        jsonp: "jsonpcallback",
+                        success: function(result) {
+
+                            var resultCode = parseInt(result);
+                            if(resultCode > 0){
+                                alert("取消成功");
+                                parent.location.href = '/default.php?mod=forum_topic&forum_id={ForumId}';
+                            }else if(resultCode == -10){
+                                alert("您没有权限操作此功能");
+                            }else if(resultCode == -5){
+                                alert("参数不正确或者没有登录");
+                            }
+
+                        }
+                    });
+
+                }
+            });
         });
 
 
@@ -146,6 +216,8 @@
         <input id="forum_topic_set_top_1" type="button" class="btn2 forum_topic_set_top" idvalue="1" value="分区置顶" />
         <input id="forum_topic_set_top_2" type="button" class="btn2 forum_topic_set_top" idvalue="2" value="全站置顶" />
         <input id="forum_topic_cancel_top" type="button" class="btn2" value="取消置顶" />
+        <input id="forum_topic_best" type="button" class="btn2 forum_topic_set_best" value="加入精华" />
+        <input id="forum_topic_cancel_best" type="button" class="btn2 forum_topic_cancel_best" style="margin-top: 10px;" value="取消精华" />
     </div>
 </div>
 </body>

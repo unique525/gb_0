@@ -106,9 +106,14 @@ class UserPopedomData {
      * 将主题设为全部版块置顶
      */
     const ForumPostSetAllTop = "ForumPostSetAllTop";
+    /**
+     * 将主题设为精华
+     */
+    const ForumSetBestTopic = "ForumSetBestTopic";
+
     private $ForumMoveTopic; //移动主题(可以移动自己或他人的主题，一般只有版主以上身份有此权限)
     private $ForumCopyTopic; //复制主题(可以复制自己或他人的主题，一般只有版主以上身份有此权限)
-    private $ForumSetBestTopic; //将主题设为精华主题
+    //private $ForumSetBestTopic; //将主题设为精华主题
     private $ForumSetRecTopic; //将主题设为推荐主题
     private $ForumPostAllowUpload; //允许在帖子中上传文件
     private $ForumPostAllowUploadType; //帖子中允许上传的文件类型

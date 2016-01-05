@@ -555,4 +555,23 @@ class ForumTopicPublicData extends BasePublicData
         }
         return $result;
     }
+
+    /**
+     * 将帖子加为精华
+     * @param int $forumTopicId 主题id
+     * @param int $forumTopicClass 主题类型
+     * @return int 操作结果
+     */
+    public function ModifyForumTopicClass($forumTopicId,$forumTopicClass){
+        $result = -1;
+        if ($forumTopicId > 0) {
+            $dataProperty = new DataProperty();
+            $sql = "UPDATE " . self::TableName_ForumTopic. " SET ForumTopicClass=:ForumTopicClass WHERE ForumTopicId=:ForumTopicId;";
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $dataProperty->AddField("ForumTopicClass", $forumTopicClass);
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+        return $result;
+    }
 } 

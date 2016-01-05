@@ -39,6 +39,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             case "async_cancel_top":
                 $result = self::AsyncCancelTop();
                 break;
+            case "async_set_best":
+                $result = self::AsyncSetBest();
+                break;
+            case "async_cancel_best":
+                $result = self::AsyncCancelBest();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -938,6 +944,74 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $result = -10; //没有权限
             }
 
+        } else {
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
+    }
+
+    /**
+     * 设为精华
+     * @return string
+     */
+    private function AsyncSetBest()
+    {
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $userId = Control::GetUserId();
+        $forumTopicClass = ForumTopicData::FORUM_TOPIC_CLASS_BEST;
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetBest = false;
+            //读取权限
+            $canSetBest = parent::GetUserPopedomBoolValue(UserPopedomData::ForumSetBestTopic);
+
+            if ($canSetBest) {
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifyForumTopicClass(
+                    $forumTopicId,
+                    $forumTopicClass
+                );
+                if ($result > 0) {
+                    //删除缓冲
+                    parent::DelAllCache();
+                }
+            } else {
+                $result = -10; //没有权限
+            }
+        } else {
+            $result = -5; //参数不正确或者没有登录
+        }
+
+        return Control::GetRequest("jsonpcallback", "") . '(' . $result . ')';
+    }
+
+    /**
+     * 取消精华
+     * @return string
+     */
+    private function AsyncCancelBest()
+    {
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $userId = Control::GetUserId();
+        $forumTopicClass = ForumTopicData::FORUM_TOPIC_CLASS_NORMAL;
+        if ($forumTopicId > 0 && $userId >= 0) {
+            $canSetBest = false;
+            //读取权限
+            $canSetBest = parent::GetUserPopedomBoolValue(UserPopedomData::ForumSetBestTopic);
+
+            if ($canSetBest) {
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $result = $forumTopicPublicData->ModifyForumTopicClass(
+                    $forumTopicId,
+                    $forumTopicClass
+                );
+                if ($result > 0) {
+                    //删除缓冲
+                    parent::DelAllCache();
+                }
+            } else {
+                $result = -10; //没有权限
+            }
         } else {
             $result = -5; //参数不正确或者没有登录
         }
