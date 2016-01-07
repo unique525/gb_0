@@ -16,6 +16,9 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         $function = Control::GetRequest("f", "");
         switch ($function) {
 
+            case "list_of_site":
+                $result = self::GenListOfSite();
+                break;
             case "list_of_channel":
                 $result = self::GenListOfChannel();
                 break;
@@ -29,6 +32,50 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
+    }
+
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenListOfSite(){
+
+        $result = "[{}]";
+        $resultCode = 0;
+
+        $siteId = intval(Control::GetRequest("site_id", 0));
+
+        if($siteId>0){
+            $pageSize = intval(Control::GetRequest("ps", 20));
+            $pageIndex = intval(Control::GetRequest("p", 1));
+            $searchKey = Control::GetRequest("search_key", "");
+            $searchType = intval(Control::GetRequest("search_type", -1));
+            $showInClientIndex = intval(Control::GetRequest("show_in_client_index", -1));
+            $searchKey = urldecode($searchKey);
+
+            $pageBegin = ($pageIndex - 1) * $pageSize;
+            $documentNewsClientData = new DocumentNewsClientData();
+            $arrDocumentNewsList = $documentNewsClientData->GetListOfSite(
+                $siteId,
+                $pageBegin,
+                $pageSize,
+                $searchKey,
+                $searchType,
+                $showInClientIndex
+            );
+            if (count($arrDocumentNewsList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrDocumentNewsList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
     }
 
     /**
