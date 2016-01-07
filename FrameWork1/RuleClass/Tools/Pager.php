@@ -229,21 +229,9 @@ class Pager {
 
 
         /*****处理有误的页码*****/
-        if(!is_numeric($pageSize) || !is_numeric($allCount)){
-            self::ReplacePageError($pageTemplate, '页码类型错误');
+        if($allCount < 0){
+            self::ReplacePageError($pageTemplate, '错误的总页码数['.$allCount.'],总页码不能为负');
             return $pageTemplate;
-        }
-
-        if($pageSize < 0  || $pageSize > $allCount){
-
-            if($allCount >= 0){
-                $pageSize = $allCount;
-            }
-            else{
-                self::ReplacePageError($pageTemplate, '错误的总页码');
-                return $pageTemplate;
-            }
-
         }
 
         /*****计算单页按钮的数量*****/

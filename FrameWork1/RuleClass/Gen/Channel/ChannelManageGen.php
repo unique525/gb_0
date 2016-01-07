@@ -494,10 +494,12 @@ class ChannelManageGen extends BaseManageGen implements IBaseManageGen {
      */
     private function GenListForManageLeft() {
         $siteId = Control::GetRequest("site_id", 0);
+
         $manageUserId = Control::GetManageUserId();
         if ($siteId > 0 && $manageUserId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
             $cacheFile = 'channel_for_manage_left.cache_' . $siteId . '_' . $manageUserId . '';
+
             if (strlen(parent::GetCache($cacheDir, $cacheFile)) <= 0) {
                 $channelManageData = new ChannelManageData();
                 $arrList = $channelManageData->GetListForManageLeft($siteId, $manageUserId);
