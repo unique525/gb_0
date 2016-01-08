@@ -23,6 +23,25 @@ class UserInfoManageData extends BaseManageData {
         return $result;
     }
 
+
+    /**
+     * 新增用户信息
+     * @param int $userId 用户Id
+     * @param int $realName 真实姓名
+     * @return int 运行结果
+     */
+    public function CreateForOfflineOrder($userId,$realName){
+        $result = -1;
+        if($userId > 0){
+            $sql = "INSERT INTO ".self::TableName_UserInfo." (UserId,RealName) VALUES (:UserId,:RealName);";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("RealName",$realName);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
     public function Modify($httpPostData,$userId){
         $result = -1;
         if(!empty($httpPostData) && $userId > 0){

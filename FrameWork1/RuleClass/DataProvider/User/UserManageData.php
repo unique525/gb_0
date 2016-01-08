@@ -181,4 +181,24 @@ class UserManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 查找是否已存在用户名、手机号、邮箱号
+     * @param string $searchKey 搜索字段
+     * @return  int 会员信息列表数据集
+     */
+    public function CheckRepeat($searchKey)
+    {
+        $result = -1;
+        if ($searchKey != ""&&$searchKey!=null) {
+            $sql = "SELECT UserId FROM " . self::TableName_User . " WHERE UserName=:UserName OR UserMobile=:UserMobile OR UserEmail=:UserEmail FOR UPDATE;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserName", $searchKey);
+            $dataProperty->AddField("UserMobile", $searchKey);
+            $dataProperty->AddField("UserEmail", $searchKey);
+            $result = $this->dbOperator->Getint($sql, $dataProperty);
+        }
+        return $result;
+    }
+
 } 

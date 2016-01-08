@@ -11,6 +11,38 @@ class UserOrderManageData extends BaseManageData{
         return parent::GetFields(self::TableName_UserOrder);
     }
 
+
+    /**
+     *
+     * 为线下订单新增
+     * @param string $userOrderNumber
+     * @param string $createDate
+     * @param int $userId
+     * @param float $allPrice
+     * @param int $userOrderState
+     * @param int $siteId
+     * @param int $userOrderTableType
+     * @return int
+     */
+    public function CreateForOfflineOrder($userOrderNumber,$createDate,$userId,$allPrice,$userOrderState,$siteId,$userOrderTableType){
+        $result=-1;
+        if($userOrderNumber!=""&&$userId>0&&$siteId>0){
+            $sql="INSERT INTO ".self::TableName_UserOrder." (UserOrderNumber,CreateDate,UserId,AllPrice,State,SiteId,UserOrderTableType) VALUES (:UserOrderNumber,:CreateDate,:UserId,:AllPrice,:State,:SiteId,:UserOrderTableType) ";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserOrderNumber",$userOrderNumber);
+            $dataProperty->AddField("CreateDate",$createDate);
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("AllPrice",$allPrice);
+            $dataProperty->AddField("State",$userOrderState);
+            $dataProperty->AddField("SiteId",$siteId);
+            $dataProperty->AddField("UserOrderTableType",$userOrderTableType);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+
+
+        return $result;
+    }
     /**
      * 修改
      * @param array $httpPostData $_POST数组
@@ -241,6 +273,24 @@ class UserOrderManageData extends BaseManageData{
             $dataProperty->AddField("BeginDate",$beginDate);
             $dataProperty->AddField("EndDate",$endDate);
             $result = $this->dbOperator->GetArrayList($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 检查是否已存在订单
+     * @param $userId
+     * @param $userOrderType
+     * @return int
+     */
+    public function CheckRepeatForOfflineOrder($userId,$userOrderType=1){  //1:电子报类型订单
+        $result = -1;
+        if($userId > 0){
+            $dataProperty = new DataProperty();
+            $sql = "SELECT UserOrderId FROM ".self::TableName_UserOrder." WHERE UserId=:UserId AND UserOrderType=:UserOrderType FOR UPDATE;";
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("UserOrderType",$userOrderType);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
         }
         return $result;
     }

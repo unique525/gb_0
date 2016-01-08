@@ -175,4 +175,25 @@ class UserOrderPayManageData extends BaseManageData
 
         return $result;
     }
+
+
+    /**
+     * 检查是否已存在记录
+     * @param $userId
+     * @param $userOrderId
+     * @return int
+     */
+    public function CheckRepeatForOfflineOrder($userId,$userOrderId){
+        $result=-1;
+        if($userId>0&&$userOrderId>0){
+            $sql="SELECT UserOrderPayId FROM " . self::TableName_UserOrderPay . " WHERE UserId=:UserId AND UserOrderId=:UserOrderId FOR UPDATE";
+
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("UserOrderId",$userOrderId);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+
+        }
+        return $result;
+    }
 }

@@ -14,6 +14,13 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         $result = "";
         $method = Control::GetRequest("m", "");
         switch($method){
+            case "async_create_offline_order":
+                $result = self::AsyncCreateOfflineOrder();
+                break;
+            case "async_renewal_offline_order_for_newspaper":
+                $result = self::AsyncRenewalOfflineOrderForNewspaper();
+                break;
+
             case "modify":
                 $result = self::GenModify();
                 break;
@@ -353,4 +360,185 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
         }
         return "";
     }
+
+
+    /**
+     * 新增线下订单
+     * @return int
+     */
+    private function AsyncCreateOfflineOrder(){
+        $result=-1;
+        $siteId=Control::GetRequest("site_id",0);
+        $manageUserId=Control::GetManageUserId();
+
+        /** 检查权限 **/
+        $manageUserAuthorityManageData=new ManageUserAuthorityManageData();
+        //$can=$manageUserAuthorityManageData->CanUserOrder
+        //if(!$can){
+        //    return -10;//无权限
+        //}
+
+
+        $userName = Control::PostOrGetRequest("user_name","");
+        $realName = Control::PostOrGetRequest("real_name","");
+        $userManageData=new UserManageData;
+        $userOrderNewspaperManageData=new UserOrderNewspaperManageData();
+        if ($userName != ""&&$siteId>0)
+        {
+            //检测用户名是否重复
+            $newUserId=0;
+            $repeatUserId=$userManageData->CheckRepeat($userName);
+            if ($repeatUserId <= 0)
+            {   //生成新用户
+                $httpPostData=array();
+                $httpPostData["f_UserName"]=$userName;
+                $httpPostData["f_UserPass"]="123654888";
+                $newUserId=$userManageData->Create($httpPostData,$siteId);
+                if($newUserId>0){
+                    //生成用户信息表
+                    $userInfoManageData=new UserInfoManageData;
+                    $userInfoId=$userInfoManageData->CreateForOfflineOrder($newUserId,$realName);
+                    if($userInfoId<0){
+                        $result=-3;//用户信息新建失败
+                        return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+                    }
+
+                    //挂接用户到对应用户组
+                    $userRoleManageData=new UserRoleManageData();
+                    $userGroupId = 12; //线下支付电子报
+                    $userRoleId=$userRoleManageData->CreateOrModify($newUserId,$userGroupId,$siteId);
+                    if($userRoleId<0){
+                        $result= -4;//用户组挂接失败
+                        return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+                    }
+                }else{
+                    $result = -2; //用户新建失败
+                    return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+                }
+            }else{
+                //已存在用户,检查是否已有报纸订单
+                $userOrderNewspaperArray=$userOrderNewspaperManageData->GetOrderOfUser($repeatUserId);
+                if(count($userOrderNewspaperArray)>0){
+
+                    $result = 10; //已有订单
+                    return Control::GetRequest("jsonpcallback","").
+                    '({"result":"'.$result.'","result_data":'.json_encode($userOrderNewspaperArray).'})';
+                }
+            }
+
+            //插入用户订单表
+            $userOrderTableType=1;//电子报类型订单
+            $userOrderNumber = UserOrderData::GenUserOrderNumber();
+            $allPrice = 72.00;//一个订单的总价
+            $userOrderState = 20;//已付款，未发货
+            $userOrderManageData=new UserOrderManageData();
+            $createDate=strval(date('Y-m-d H:i:s', time()));
+            $userOrderId=$userOrderManageData->CreateForOfflineOrder($userOrderNumber,$createDate,$newUserId,$allPrice,$userOrderState,$siteId,$userOrderTableType);
+            if($userOrderId<0){
+
+                $result = -11;//获取订单失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+
+
+            //插入报纸订单表
+            $channelId = 15;//电子报所在频道id
+            $salePrice = 72.00;//订单支付金额
+            $beginDate = "2016-1-1";
+            $endDate = "2016-12-31";
+            $userOrderNewspaperId=$userOrderNewspaperManageData->CreateForOfflineOrder($siteId,$channelId,$userOrderId,$newUserId,$createDate,$salePrice,$beginDate,$endDate);
+            if($userOrderNewspaperId<0){
+                $result = -12;//获取报纸订单失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+
+            //插入支付表
+            $httpPostData=array();
+            $httpPostData["f_PayPrice"]=72.00;//实际支付金额;
+            $httpPostData["f_PayDate"]=$createDate;//"2015-12-31";//;
+            $httpPostData["f_PayWay"]="线下统一支付";//;
+            $userOrderPayManageData=new UserOrderPayManageData();
+            $userOrderPayId=$userOrderPayManageData->Create($httpPostData,$userOrderId,$manageUserId);
+            if($userOrderPayId<0){
+                $result = -13;//获取支付id失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+        }
+        else{
+            $result = -1; //user id错误
+            return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+        }
+        $result = 1;
+        return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+    }
+
+    /**
+     * 更新报纸续期
+     * @return int
+     */
+    private function AsyncRenewalOfflineOrderForNewspaper(){
+        $result=-1;
+        $userId = Control::PostOrGetRequest("user_id","");
+        $siteId = Control::PostOrGetRequest("site_id","");
+        $manageUserId = Control::PostOrGetRequest("manage_user_id","");
+        $userOrderNewspaperId = Control::PostOrGetRequest("user_order_newspaper_id","");
+        if($userId>0&&$userOrderNewspaperId>0){
+
+            //插入用户订单表
+            $userOrderTableType=1;//电子报类型订单
+            $userOrderNumber = UserOrderData::GenUserOrderNumber();
+            $allPrice = 72.00;//一个订单的总价
+            $userOrderState = 20;//已付款，未发货
+            $userOrderManageData=new UserOrderManageData();
+            $createDate=strval(date('Y-m-d H:i:s', time()));
+            $userOrderId=$userOrderManageData->CreateForOfflineOrder($userOrderNumber,$createDate,$userId,$allPrice,$userOrderState,$siteId,$userOrderTableType);
+            if($userOrderId<0){
+
+                $result = -11;//获取订单失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+
+            //插入支付表
+            $httpPostData=array();
+            $httpPostData["f_PayPrice"]=72.00;//实际支付金额;
+            $httpPostData["f_PayDate"]=$createDate;//"2015-12-31";//;
+            $httpPostData["f_PayWay"]="线下统一支付";//;
+            $userOrderPayManageData=new UserOrderPayManageData();
+            $userOrderPayId=$userOrderPayManageData->Create($httpPostData,$userOrderId,$manageUserId);
+            if($userOrderPayId<0){
+
+                //失败 删除新建的订单
+                $httpPostData=array();
+                $httpPostData["f_State"]=100;
+                $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
+                $result = -13;//获取支付id失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+
+            //更新报纸订单表
+
+            $userOrderNewspaperManageData=new UserOrderNewspaperManageData();
+            $userOrderNewspaperInfoArray=$userOrderNewspaperManageData->GetInfoForUpdate($userOrderNewspaperId);
+            $lastEndDate=$userOrderNewspaperInfoArray["EndDate"];
+            $lastEndDateArray=explode("-",$lastEndDate);
+            if(!empty($lastEndDateArray)){
+                $year=$lastEndDateArray[0]+1; //加一年
+                $salePrice = 72.00+$userOrderNewspaperInfoArray["SalePrice"];//订单支付金额增加
+                $endDate = $year."-12-31";
+                $result=$userOrderNewspaperManageData->UpdateOrderForRenewal($userOrderNewspaperId,$userOrderId,$salePrice,$endDate);
+            }
+            if($result<0){
+                //失败 删除新建的订单
+                $httpPostData=array();
+                $httpPostData["f_State"]=100;
+                $userOrderManageData->Modify($httpPostData,$userOrderId,$siteId);
+                $userOrderPayManageData->Modify($httpPostData,$userOrderPayId);
+                $result = -12;//获取报纸订单失败
+                return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+            }
+        }
+        return Control::GetRequest("jsonpcallback","").'({"result":"'.$result.'"})';
+    }
+
+
 }
