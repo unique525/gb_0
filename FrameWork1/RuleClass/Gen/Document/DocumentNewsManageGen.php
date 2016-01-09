@@ -243,6 +243,19 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
 
                         }
                         if ($uploadFileId2>0){
+                            $documentNewsTitlePic2MobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
+                            if ($documentNewsTitlePic2MobileWidth <= 0) {
+                                $documentNewsTitlePic2MobileWidth = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId2, $documentNewsTitlePic2MobileWidth);
+
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId2, $documentNewsTitlePicPadWidth);
+
+
                             //资讯题图2压缩图宽度值
                             $documentNewsTitlePic2CompressWidth = $siteConfigData->DocumentNewsTitlePic2CompressWidth;
                             //资讯题图2压缩图高度值
@@ -255,6 +268,21 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $documentNewsTitlePic2CompressHeight
                                 );
                             }
+                        }
+                        if ($uploadFileId3>0){
+                            $documentNewsTitlePicMobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
+                            if ($documentNewsTitlePicMobileWidth <= 0) {
+                                $documentNewsTitlePicMobileWidth = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId3, $documentNewsTitlePicMobileWidth);
+
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId3, $documentNewsTitlePicPadWidth);
+
+
                         }
 
 
@@ -617,6 +645,18 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                         }
 
                         if ($uploadFileId2 > 0){
+                            $documentNewsTitlePicMobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
+                            if ($documentNewsTitlePicMobileWidth <= 0) {
+                                $documentNewsTitlePicMobileWidth = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId2, $documentNewsTitlePicMobileWidth);
+
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId2, $documentNewsTitlePicPadWidth);
+
                             //资讯题图2压缩图宽度值
                             $documentNewsTitlePic2CompressWidth = intval($siteConfigData->DocumentNewsTitlePic2CompressWidth);
                             //资讯题图2压缩图高度值
@@ -629,6 +669,22 @@ class DocumentNewsManageGen extends BaseManageGen implements IBaseManageGen
                                     $documentNewsTitlePic2CompressHeight
                                 );
                             }
+                        }
+
+                        if ($uploadFileId3 > 0){
+                            $documentNewsTitlePicMobileWidth = $siteConfigData->DocumentNewsTitlePicMobileWidth;
+                            if ($documentNewsTitlePicMobileWidth <= 0) {
+                                $documentNewsTitlePicMobileWidth = 320; //默认320宽
+                            }
+                            self::GenUploadFileMobile($uploadFileId3, $documentNewsTitlePicMobileWidth);
+
+                            $documentNewsTitlePicPadWidth = $siteConfigData->DocumentNewsTitlePicPadWidth;
+                            if ($documentNewsTitlePicPadWidth <= 0) {
+                                $documentNewsTitlePicPadWidth = 1024; //默认1024宽
+                            }
+                            self::GenUploadFilePad($uploadFileId3, $documentNewsTitlePicPadWidth);
+
+
                         }
                     }
 
