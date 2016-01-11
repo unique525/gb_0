@@ -84,7 +84,7 @@ class UserOrderManageData extends BaseManageData{
         return $result;
     }
 
-    public function GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,&$allCount){
+    public function GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,&$allCount,$searchKey=""){
         $result = null;
         if($siteId > 0){
             $sql = "SELECT uo.*,u.UserName,u.UserMobile FROM ".self::TableName_UserOrder." uo LEFT JOIN ".self::TableName_User
@@ -129,6 +129,13 @@ class UserOrderManageData extends BaseManageData{
                 $sql = $sql . $addSql;
                 $sqlCount = $sqlCount . $addSql;
             }
+
+            if ($searchKey != "") {
+                    $addSql = " AND (u.UserName='$searchKey' OR u.UserMobile='$searchKey' OR u.UserEmail='$searchKey') ";
+                $sql = $sql . $addSql;
+                $sqlCount = $sqlCount . $addSql;
+            }
+
             $sql = $sql . " ORDER BY uo.CreateDate DESC LIMIT " . $pageBegin . "," . $pageSize;
             $dataProperty->AddField("SiteId",$siteId);
 

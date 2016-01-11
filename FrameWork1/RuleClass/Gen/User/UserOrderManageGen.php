@@ -208,8 +208,9 @@ class UserOrderManageGen extends BaseManageGen implements IBaseManageGen{
             $state = Control::GetRequest("state",0);
             $beginDate = Control::GetRequest("begin_date","");
             $endDate = Control::GetRequest("end_date","");
+            $searchKey = Control::GetRequest("search_key","");
             $userOrderManageData = new UserOrderManageData();
-            $arrUserOrderList = $userOrderManageData->GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,$allCount);
+            $arrUserOrderList = $userOrderManageData->GetListForSearch($siteId,$userOrderNumber,$state,$beginDate,$endDate,$pageBegin,$pageSize,$allCount,$searchKey);
 
             $tagId = "user_order_list";
             if(count($arrUserOrderList) > 0){

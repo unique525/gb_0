@@ -61,8 +61,9 @@
                 var state = $("#state").val();
                 var begin_date = $("#begin_date").val();
                 var end_date = $("#end_date").val();
+                var search_key = $("#search_key").val();
                 window.location.href="/default.php?secu=manage&mod=user_order&m=list_for_search" +"&site_id="+site_id+
-                    "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date;
+                    "&user_order_number="+user_order_number+"&state="+state+"&begin_date="+begin_date+"&end_date="+end_date+"&search_key="+search_key;
             });
 
             $("#btn_export").click(function(){
@@ -234,6 +235,7 @@
             <input id="btn_show_create_window" type="button" class="btn2" value="新建线下订单"/>
         </div>
         <div class="search" style="width:99%;height:30px">
+            <label for="search_key">搜索关键字：</label><input type="text" id="search_key" style="width:80px;" value=""/>
             订单号：<input type="text" id="user_order_number" value=""/>
             订单状态：
             <select id="state">
