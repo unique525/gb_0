@@ -81,7 +81,7 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::ShowMessage(Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        $resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad&m=list' . '&site_id=' . $siteId . '&site_name=' . $siteName);
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -156,7 +156,7 @@ class SiteAdManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::ShowMessage(Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        $resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad&m=list' . '&site_id=' . $siteId . '&site_name=' . $siteName);
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }

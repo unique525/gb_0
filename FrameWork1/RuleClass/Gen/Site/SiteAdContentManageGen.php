@@ -47,6 +47,10 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
         $resultJavaScript="";
         $siteAdId=Control::GetRequest("site_ad_id",-1);
         $tabIndex = Control::GetRequest("tab_index", 1);
+        $siteId=Control::GetRequest("site_id","");
+        $siteName=Control::GetRequest("site_name","");
+        $siteAdName=Control::GetRequest("site_ad_name","");
+        $widthHeight=Control::GetRequest("width_height","");
 
 
         parent::ReplaceFirst($tempContent);
@@ -115,7 +119,10 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::ShowMessage($warningWhenSuccess.Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        $resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad_content&m=list&site_id='.$siteId.'&site_name='.$siteName.'&site_ad_id='.$siteAdId.'&site_ad_name='.$siteAdName.'&width_height='.$widthHeight);
+                        //$resultJavaScript .= Control::GetCloseTab();
+                    }else if($closeTab == 2){ //确认并更新js
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad_content&m=list&site_id='.$siteId.'&site_name='.$siteName.'&site_ad_id='.$siteAdId.'&site_ad_name='.$siteAdName.'&width_height='.$widthHeight.'&update_js=1');
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -131,6 +138,11 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                 "{SiteAdId}" => $siteAdId,
                 "{TabIndex}" => $tabIndex,
                 "{CreateDate}" => $crateDate,
+                "{SiteId}" => $siteId,
+                "{SiteName}" => $siteName,
+                "{SiteAdName}" => $siteAdName,
+                "{WidthHeight}" => $widthHeight,
+                "{ResidenceTime}"=>"5", //广告默认停留时间设为5
                 "{display}" => ""
             );
             $tempContent = strtr($tempContent, $replace_arr);
@@ -160,6 +172,10 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
         $siteAdId=Control::GetRequest("site_ad_id",-1);
         $tabIndex = Control::GetRequest("tab_index", 1);
         $siteAdContentId= Control::GetRequest("site_ad_content_id",-1);
+        $siteId=Control::GetRequest("site_id","");
+        $siteName=Control::GetRequest("site_name","");
+        $siteAdName=Control::GetRequest("site_ad_name","");
+        $widthHeight=Control::GetRequest("width_height","");
         $siteAdContentId=intval($siteAdContentId);
 
 
@@ -230,7 +246,10 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
                     Control::ShowMessage($warningWhenSuccess.Language::Load('site_ad', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
-                        $resultJavaScript .= Control::GetCloseTab();
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad_content&m=list&site_id='.$siteId.'&site_name='.$siteName.'&site_ad_id='.$siteAdId.'&site_ad_name='.$siteAdName.'&width_height='.$widthHeight);
+                        //$resultJavaScript .= Control::GetCloseTab();
+                    }else if($closeTab == 2){ //确认并更新js
+                        Control::GoUrl('/default.php?secu=manage&mod=site_ad_content&m=list&site_id='.$siteId.'&site_name='.$siteName.'&site_ad_id='.$siteAdId.'&site_ad_name='.$siteAdName.'&width_height='.$widthHeight.'&update_js=1');
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -247,12 +266,18 @@ class SiteAdContentManageGen extends BaseManageGen implements IBaseManageGen {
             }
 
 
+
             $siteAdManageData=new SiteAdManageData();
             $arrayOfOneSiteAd=$siteAdManageData->GetOne($siteAdId);
             $replace_arr = array(
                 "{SiteAdWidth}" => $arrayOfOneSiteAd["SiteAdWidth"],
                 "{SiteAdHeight}" => $arrayOfOneSiteAd["SiteAdHeight"],
                 "{TabIndex}" => $tabIndex,
+                "{SiteId}" => $siteId,
+                "{SiteName}" => $siteName,
+                "{SiteAdId}" => $siteAdId,
+                "{SiteAdName}" => $siteAdName,
+                "{WidthHeight}" => $widthHeight,
                 "{display}" => "none"
             );
             $tempContent = strtr($tempContent, $replace_arr);
