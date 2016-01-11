@@ -119,7 +119,7 @@
                         <td colspan="2" height="30" align="center">
                             <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
                             <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
-                            <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+                            <input class="btn" value="取 消" type="button" onclick="window.location.href='/default.php?secu=manage&mod=site_ad&m=list&site_id={SiteId}&site_name={SiteName}';"/>
                         </td>
                     </tr>
                 </table>

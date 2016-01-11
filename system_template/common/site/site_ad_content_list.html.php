@@ -14,6 +14,12 @@
             var siteName = Request["site_name"];
             siteName=decodeURI(siteName);
             var widthHeight = Request["width_height"];
+
+            var autoUpdateJs=Request["update_js"];
+            if(autoUpdateJs==1){
+                window.open('/default.php?secu=manage&mod=site_ad&m=create_js&site_ad_id='+ siteAdId + '&site_id='+ siteId,'', 'width=500, height=380, top=320, left=180, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+            }
+
             $("#btn_select_all").click(function (event) {
                 event.preventDefault();
                 var inputSelect = $("[name='doc_input']");
@@ -36,9 +42,10 @@
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=create' + '&site_ad_id=' + siteAdId;
-                parent.G_TabTitle = siteAdName + '-新建广告';
-                parent.addTab();
+                window.location.href='/default.php?secu=manage&mod=site_ad_content&m=create&site_id='+siteId+'&site_name='+siteName+'&site_ad_id='+siteAdId+'&site_ad_name='+siteAdName+'&width_height='+widthHeight;
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=create' + '&site_ad_id=' + siteAdId;
+                //parent.G_TabTitle = siteAdName + '-新建广告';
+                //parent.addTab();
             });
 
             $("#btn_back").click(function (event) {
@@ -55,9 +62,11 @@
                 var siteAdContentId = $(this).attr('idvalue');
                 var siteAdContentTitle = $(this).attr('title');
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=modify&site_ad_content_id=' + siteAdContentId + '&site_ad_id=' + siteAdId;
-                parent.G_TabTitle = siteAdContentTitle + '-编辑广告';
-                parent.addTab();
+                window.location.href='/default.php?secu=manage&mod=site_ad_content&m=modify&site_ad_content_id=' + siteAdContentId + '&site_id='+siteId+'&site_name='+siteName+'&site_ad_id='+siteAdId+'&site_ad_name='+siteAdName+'&width_height='+widthHeight;
+
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad_content&m=modify&site_ad_content_id=' + siteAdContentId + '&site_ad_id=' + siteAdId;
+                //parent.G_TabTitle = siteAdContentTitle + '-编辑广告';
+                //parent.addTab();
             });
 
 

@@ -32,9 +32,11 @@
 
             $("#btn_create").click(function (event) {
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=create' + '&site_id=' + siteId + '&site_name=' + siteName;
-                parent.G_TabTitle = siteName + '-新建广告位';
-                parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=site_ad&m=create' + '&site_id=' + siteId + '&site_name=' + siteName;
+
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=create' + '&site_id=' + siteId + '&site_name=' + siteName;
+                //parent.G_TabTitle = siteName + '-新建广告位';
+                //parent.addTab();
             });
 
             var btnContent = $(".span_content");
@@ -54,9 +56,11 @@
             btnEdit.click(function (event) {
                 var siteAdId = $(this).attr('idvalue');
                 event.preventDefault();
-                parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=modify&site_ad_id=' + siteAdId + '&site_id=' + siteId + '&site_name=' + siteName;
-                parent.G_TabTitle = siteName + '-编辑广告位';
-                parent.addTab();
+                window.location.href = '/default.php?secu=manage&mod=site_ad&m=modify&site_ad_id=' + siteAdId + '&site_id=' + siteId + '&site_name=' + siteName;
+
+                //parent.G_TabUrl = '/default.php?secu=manage&mod=site_ad&m=modify&site_ad_id=' + siteAdId + '&site_id=' + siteId + '&site_name=' + siteName;
+                //parent.G_TabTitle = siteName + '-编辑广告位';
+                //parent.addTab();
             });
 
             var btnSetJs = $(".span_create_js");

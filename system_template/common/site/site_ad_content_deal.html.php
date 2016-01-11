@@ -193,6 +193,8 @@
             if(submit==1) {
                 if (continueCreate == 1) {
                     $("#CloseTab").val("0");
+                } else if(continueCreate ==2) {
+                    $("#CloseTab").val("2"); //确认并更新JS
                 } else {
                     $("#CloseTab").val("1");
                 }
@@ -376,7 +378,8 @@
                 <td colspan="2" height="30" align="center">
                     <input class="btn" value="确认并关闭" type="button" onclick="submitForm(0)"/>
                     <input class="btn" value="确认并继续新增" style="display:{display}" type="button" onclick="submitForm(1)"/>
-                    <input class="btn" value="取 消" type="button" onclick="closeTab()"/>
+                    <input class="btn" value="确认并更新JS" type="button" onclick="submitForm(2)"/>
+                    <input class="btn" value="取 消" type="button" onclick="window.location.href='/default.php?secu=manage&mod=site_ad_content&m=list&site_id={SiteId}&site_name={SiteName}&site_ad_id={SiteAdId}&site_ad_name={SiteAdName}&width_height={WidthHeight}';"/>
                 </td>
             </tr>
         </table>
