@@ -57,6 +57,29 @@
                 var state = 100; //开启状态
                 modifyState(manageUserId, state);
             });
+
+
+
+
+            var btnSearch = $("#btn_search");
+            btnSearch.css("cursor", "pointer");
+            btnSearch.click(function(event) {
+                event.preventDefault();
+                var pageIndex = parseInt(Request["p"]);
+                if (pageIndex == undefined || isNaN(pageIndex) || pageIndex <= 0) {
+                    pageIndex = 1;
+                }
+                var searchKey = encodeURIComponent($("#search_key").val());
+                if(searchKey.length<=0){
+                    alert("请输入查询关键字");
+                }else{
+                    window.location.href = '/default.php?secu=manage' +
+                        '&mod=manage_user&m=list&search_key='+searchKey+'&tab_index='+ parent.G_TabIndex +'&p=' + pageIndex;
+                }
+
+
+            });
+
         });
 
 

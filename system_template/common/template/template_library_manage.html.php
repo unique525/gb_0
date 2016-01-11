@@ -17,7 +17,7 @@
                 $(".template_manage").click(function(event){
                     event.preventDefault();
                     var tId = $(this).attr("idvalue");
-                    parent.G_TabUrl = '/default.php?secu=manage&mod=template_library&m=content&template_library_id='+tId+'';
+                    parent.G_TabUrl = '/default.php?secu=manage&mod=template_library_content&m=list&template_library_id='+tId+'';
                     parent.G_TabTitle = '库模板管理';
                     parent.addTab();
                 });

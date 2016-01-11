@@ -9,11 +9,11 @@ $incSystemName = 'iCMS';
  * 系统数据库配置
  */
 $incDatabaseInfo = array();
-$incDatabaseInfo[] = 'localhost';
+$incDatabaseInfo[] = '130.1.0.134';
 $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'dbicms2';
 $incDatabaseInfo[] = 'root';
-$incDatabaseInfo[] = 'GData1012';
+$incDatabaseInfo[] = 'csolbbs2010';
 $incDatabaseInfo[] = '0'; //debug
 $incDatabaseInfo = implode('|',$incDatabaseInfo);
 
@@ -37,7 +37,7 @@ $incOpenManageUserLog = true;
 /**
  * 安全ip设置
  */
-$incSecurityIP = array();
+$incSecurityIP = array("127.0.0.1","::1","222.247.40.25");
 $incSecurityIP = implode('|',$incSecurityIP);
 
 ?>

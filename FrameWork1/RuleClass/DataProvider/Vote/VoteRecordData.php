@@ -44,7 +44,7 @@ class VoteRecordData extends BasePublicData
         foreach ($voteRecordDetail as $Row) {
             $Row["VoteRecordId"] = $voteRecordId;
             $dataProperty = new DataProperty();
-            $sql[] = "INSERT INTO " . self::TableName_VoteRecordDetail . " (VoteRecordId,VoteItemId,VoteSelectItemId,Score,UserId) VALUES (:VoteRecordId,:VoteItemId,:VoteSelectItemId,:Score,:UserId) ";
+            $sql[] = "INSERT INTO " . self::TableName_VoteRecordDetail . " (VoteRecordId,VoteItemId,VoteSelectItemId,Score,UserId,Comment) VALUES (:VoteRecordId,:VoteItemId,:VoteSelectItemId,:Score,:UserId,:Comment) ";
             $dataProperty->ArrayField = $Row;
             $dataPropertyList[] = $dataProperty;
         }
@@ -188,11 +188,11 @@ class VoteRecordData extends BasePublicData
     /**
      * 取得打分数据集
      * @param int $voteId 投票id
-     * @param int $beginDate
-     * @param int $endDate
+     * @param string $beginDate
+     * @param string $endDate
      * @return array 返回列表数组
      */
-    public function GetScoreList($voteId,$beginDate,$endDate)
+    public function GetScoreList($voteId,$beginDate="",$endDate="")
     {
         $result = null;
         if ($voteId > 0) {
@@ -218,6 +218,40 @@ class VoteRecordData extends BasePublicData
         return $result;
     }
 
+
+    /**
+     * 取得一条稿件的所有打分记录
+     * @param int $voteSelectItemId 选项id
+     * @param string $beginDate
+     * @param string $endDate
+     * @return array 返回列表数组
+     */
+    public function GetOneScoreDetail($voteSelectItemId,$beginDate="",$endDate="")
+    {
+        $result = null;
+        if ($voteSelectItemId > 0) {
+
+            if($beginDate!=""&&$endDate!=""){
+                $strSelectDate=" AND PublishDate>='$beginDate' AND PublishDate<='$endDate' ";
+            }else{
+                $strSelectDate="";
+            }
+
+
+            $sql = "SELECT vrd.Score, vrd.Comment, u.UserName,u.UserMobile,ui.RealName
+                FROM " . self::TableName_VoteRecordDetail . " vrd
+                LEFT OUTER JOIN " . self::TableName_User . " u ON vrd.UserId=u.UserId
+                LEFT OUTER JOIN " . self::TableName_UserInfo . " ui ON vrd.UserId=ui.UserId
+                WHERE vrd.VoteSelectItemId=:VoteSelectItemId $strSelectDate ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+
+
+    }
 }
 
 ?>

@@ -163,7 +163,29 @@ class VotePublicData extends BasePublicData {
             $sql = "SELECT LimitUserGroupId FROM " . self::TableName_Vote . " where VoteId = :VoteId";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("VoteId", $voteId);
-            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 获取组投票标题
+     * @param int $voteId
+     * @param bool $withCache
+     * @return int
+     */
+    public function GetVoteTitle($voteId, $withCache)
+    {
+        $result = -1;
+        if($voteId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_data'
+                . DIRECTORY_SEPARATOR .$voteId;
+            $cacheFile = 'vote_get_vote_title.cache_' . $voteId . '';
+            $sql = "SELECT VoteTitle FROM " . self::TableName_Vote . " where VoteId = :VoteId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }

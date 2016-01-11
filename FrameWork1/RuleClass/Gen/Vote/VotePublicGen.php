@@ -1,5 +1,4 @@
- <?php
-
+<?php
 /**
  * 投票调查前台生成类
  * @category iCMS
@@ -42,6 +41,12 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
                 break;
             case "async_get_score_result":
                 $result = self::AsyncGetScoreResult();
+                break;
+            case "async_get_one_score_detail":
+                $result = self::AsyncGetOneScoreDetail();
+                break;
+            case "async_get_vote_name":
+                $result = self::AsyncGetVoteTitle();
                 break;
             default:
                 break;
@@ -245,14 +250,17 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
      * @return array 返回数据集结果
      */
     public function GenScore() {
-        if (!empty($_GET)) {
+        if (!empty($_POST)) {
             session_start();
-            $voteId = intval(Control::GetRequest("vote_id", "0"));
+            $voteId = intval(Control::PostOrGetRequest("vote_id", "0"));
             $userId = Control::GetUserID();
+            if($userId<=0){
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","result_content":"no user id"})';   //未登录
+            }
             $userPublicData=new UserPublicData();
             $userGroupId=$userPublicData->GetUserGroupId($userId,true);
-            $sessionName = Control::GetRequest("sn","");
-            $code = Control::GetRequest("check_code" . $voteId,"");
+            $sessionName = Control::PostOrGetRequest("sn","");
+            $code = Control::PostOrGetRequest("check_code" . $voteId,"");
             $createDate = date("Y-m-d H:i:s", time());
             $ipAddress = Control::GetIP();
             $agent = Control::GetOS() . "与" . Control::GetBrowser();
@@ -267,7 +275,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             $isCheckCode = $arrRow['IsCheckCode'];
             if ($isCheckCode == "1") {//如果启用了验证码先做验证码判断
                 if (VerifyCode::Check($sessionName, 0, $code)==1)
-                    return Control::GetRequest("jsonpcallback","") . '({"result":"-5"})';
+                    return Control::GetRequest("jsonpcallback","") . '({"result":"-5","result_content":"check code error"})';  //验证失败
             }
             //销毁验证码session
             unset($_SESSION[$sessionName]);
@@ -276,26 +284,17 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             /**********************
              * user group 权限判断
              **********************/
-            $strLimitUserGroupId=$votePublicData->GetLimitUserGroupId($voteId,true);
-            if($strLimitUserGroupId!=""){
-                $can=false;
-                $arrLimitUserGroupId=str_split($strLimitUserGroupId,",");
-                foreach($arrLimitUserGroupId as $limitUserGroupId){
-                        if($limitUserGroupId==$userGroupId){
-                            $can=true;
-                        }
+            $canScore = parent::GetUserPopedomBoolValue(UserPopedomData::UserCanScoreArticle);
+                if(!$canScore){
+                    return Control::GetRequest("jsonpcallback","") . '({"result":"-20","result_content":"user group no permission"})'; //用户组无权限
                 }
-                if(!$can){
-                    return Control::GetRequest("jsonpcallback","") . '({"result":"-11"})'; //用户组无权限
-                }
-            }
 
 
 
             $voteCheckCode=null;
             $voteItemIdArr=array();
-            //解析$_GET生成对应数组
-            foreach ($_GET as $key1 => $value1) {
+            //解析$_POST生成对应数组
+            foreach ($_POST as $key1 => $value1) {
                 if (strpos($key1, "vote_select_item") === 0) {
                     $voteItemId = str_ireplace("vote_select_item", "", $key1);
                     $allNum = 0;
@@ -307,26 +306,33 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
                             return Control::GetRequest("jsonpcallback","") . '({"result":"-7"})';
                         }
                         $voteSelectItemIdArr[] = $voteSelectItemId;   //收集要提交的选项ID并组成数组
-                        $voteSelectItemScore = intval(Control::GetRequest("score_$voteSelectItemId", "0"));
-                        $voteRecordDetailArr[] = array("VoteItemId" => $voteItemId, "VoteSelectItemId" => $voteSelectItemId, "Score" => $voteSelectItemScore, "UserId"=>$userId);
+                        $voteSelectItemScore = intval(Control::PostOrGetRequest("score_$voteSelectItemId", "0"));
+                        $voteSelectItemComment = Control::PostOrGetRequest("comment_$voteSelectItemId", "");
+                        $voteRecordDetailArr[] = array(
+                            "VoteItemId" => $voteItemId,
+                            "VoteSelectItemId" => $voteSelectItemId,
+                            "Score" => $voteSelectItemScore,
+                            "UserId"=>$userId,
+                            'Comment'=>$voteSelectItemComment
+                        );
                     }
                     $voteItemIdArr[] = array($voteItemId, $allNum);   //收集要提交的题目ID并组成数组
                 }
             }
             //判断投票是否为空并反馈
             if ($voteItemIdArr == null) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-2"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-2","result_content":"no vote data"})';
             }
             $state = $arrRow['State'];
             //判断投票是否停止
             if ($state != 0) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-3"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-3","result_content":"vote stopped"})';
             }
             //判断投票是否在有效时间段内
             $beginDate = $arrRow['BeginDate'];
             $endDate = $arrRow['EndDate'];
             if (!(strtotime($createDate) > strtotime($beginDate) && strtotime($createDate) < strtotime($endDate))) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-4"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-4","result_content":"vote stopped"})';
             }
             /*/判断每个投票项（多选）是不是符合最大选择数和最小选择数目限制
             $arrItemList = $voteItemPublicData->GetListByVoteId($voteId, 0);
@@ -358,29 +364,30 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
 
             //删除上次打分的数据
             $lastRecordId=$voteRecordData->GetRecordIdOfUser($voteId,$userId);
-            $DeleteLastRecord=$voteRecordData->DeleteUserLastRecord($voteId, $userId);
-            $DeleteLastRecordDetail=$voteRecordData->DeleteUserLastRecordDetail($lastRecordId, $userId);
-            if ($DeleteLastRecord <0 || $DeleteLastRecordDetail<0) {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-9","Delete old record error"})';   //删除旧记录失败
+            if($lastRecordId>0){ //有记录 先删除旧记录
+                $DeleteLastRecord=$voteRecordData->DeleteUserLastRecord($voteId, $userId);
+                $DeleteLastRecordDetail=$voteRecordData->DeleteUserLastRecordDetail($lastRecordId, $userId);
+                if ($DeleteLastRecord <0 || $DeleteLastRecordDetail<0) {
+                    return Control::GetRequest("jsonpcallback","") . '({"result":"-9","result_content":"Delete old record error"})';   //删除旧记录失败
+                }
+            }else{ //之前无记录 增加投票统计数据
+                $result = $votePublicData->UpdateCount($voteId); //投票提交 - 更新投票票数+1
+                $result = $voteItemPublicData->UpdateCountBatch($voteItemIdArr); //题目提交 - 批量更新题目票数+1
+                $result = $voteSelectItemPublicData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交 — 根据题目选项id集合数组，对应的选项票数加1
             }
 
-            if($DeleteLastRecord==0&&$DeleteLastRecordDetail==0){ //如果之前没有数据 才新增记录
-                $result = $votePublicData->UpdateCount($voteId); //投票提交
-                $result = $voteItemPublicData->UpdateCountBatch($voteItemIdArr); //题目提交
-                $result = $voteSelectItemPublicData->UpdateCountBatch($voteSelectItemIdArr);  //选项提交
-            }
-            $result = $voteRecordData->Create($voteId, $userId, $ipAddress, $agent, $createDate); //投票记录提交
-            $voteRecordId = $result; //得到投票记录主表id
+
+            $voteRecordId = $voteRecordData->Create($voteId, $userId, $ipAddress, $agent, $createDate); //投票记录提交
             $result = $voteRecordData->CreateDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
             //返回页面响应结果
             if ($result == 1) {
                 return Control::GetRequest("jsonpcallback","") . '({"result":"1","VoteRecordId":"' . $voteRecordId . '"})';
             } else {
-                return Control::GetRequest("jsonpcallback","") . '({"result":"-1","VoteRecordId":"' . $voteRecordId . '"})';
+                return Control::GetRequest("jsonpcallback","") . '({"result":"-11","result_content":"VoteRecordId:' . $voteRecordId . '"})';
             }
         }
         else {
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-1"})';
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-10","result_content":"post empty"})'; //提交失败
         }
     }
 
@@ -470,50 +477,101 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
 
     private function AsyncGetRecordOfUser(){
         $result=null;
-        $userId=1;//Control::GetUserId();
+        $userId=Control::GetUserId();
         if($userId<=0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-1","no user id"})';   //未登录
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-1","result_content":"no user id"})';   //未登录
         }
 
         $voteId = Control::GetRequest("vote_id","-1");
         if($voteId<0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-2","vote id error"})';   //投票id错误
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-2","result_content":"vote id error"})';   //投票id错误
         }
 
         $voteRecordData=new VoteRecordData();
         $voteRecordId=$voteRecordData->GetRecordIdOfUser($voteId,$userId);
         if($voteRecordId<=0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-3","vote record id error"})';   //投票记录获取失败
+            return Control::GetRequest("jsonpcallback","") . '({"result":"2","result_content":"vote record id error"})';   //投票记录获取失败
         }
 
         $result=$voteRecordData->GetRecordDetail($voteRecordId);
-        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
+
+        return Control::GetRequest("jsonpcallback","") . '({"result":"1","result_content":'.json_encode($result).'})';
+        //return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
     }
 
 
     private function AsyncGetScoreResult(){
         $result = null;
 
-        $userId=1;//Control::GetUserId();
+        $userId=Control::GetUserId();
         if($userId<=0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-1","no user id"})';   //未登录
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-1","result_content":"no user id"})';   //未登录
         }
 
         $voteId = Control::GetRequest("vote_id","-1");
         if($voteId<0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-2","vote id error"})';   //投票id错误
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-2","result_content":"vote id error"})';   //投票id错误
         }
 
 
-        $beginDate=Control::GetRequest("begin_date","");
-        $endDate=Control::GetRequest("end_date","");
+        /**********************
+         * user group 权限判断
+         **********************/
+        $canScore = parent::GetUserPopedomBoolValue(UserPopedomData::UserCanScoreArticle);
+        if(!$canScore){
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-20","result_content":"user group no permission"})'; //用户组无权限
+        }
+
+
+
+        //$beginDate=Control::GetRequest("begin_date","");  如果url内为空 ajax会提交undefined造成数据库取空
+        //$endDate=Control::GetRequest("end_date","");
+        $beginDate='';
+        $endDate='';
         $voteRecordData = new VoteRecordData();
         $result = $voteRecordData->GetScoreList($voteId,$beginDate,$endDate);       //获取结果
 
         if($result==null){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"-3","data error"})';   //获取失败
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-3","result_content":"data error"})';   //获取失败
         }
-        return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
+        return Control::GetRequest("jsonpcallback","") . '({"result":"1","result_content":'.json_encode($result).'})';
+        //return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
+    }
+
+    private function AsyncGetOneScoreDetail(){
+        $result = null;
+
+        $userId=Control::GetUserId();
+        if($userId<=0){
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-1","result_content":"no user id"})';   //未登录
+        }
+
+        $voteSelectItemId = Control::GetRequest("vote_select_item_id","-1");
+        if($voteSelectItemId<0){
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-2","result_content":"vote select item id error"})';   //投票id错误
+        }
+
+
+        //$beginDate=Control::GetRequest("begin_date","");  如果url内为空 ajax会提交undefined造成数据库取空
+        //$endDate=Control::GetRequest("end_date","");
+        $beginDate='';
+        $endDate='';
+        $voteRecordDetailData = new VoteRecordData();
+        $result = $voteRecordDetailData->GetOneScoreDetail($voteSelectItemId,$beginDate,$endDate);       //获取结果
+
+        if($result==null){
+            return Control::GetRequest("jsonpcallback","") . '({"result":"-3","result_content":"data error"})';   //获取失败
+        }
+        return Control::GetRequest("jsonpcallback","") . '({"result":"1","result_content":'.json_encode($result).'})';
+        //return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
+    }
+
+    private function AsyncGetVoteTitle(){
+        $result = "";
+        $voteId=Control::GetRequest("vote_id",0);
+        $votePublicData=new VotePublicData();
+        $result=$votePublicData->GetVoteTitle($voteId,true);
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
     }
 }
 

@@ -9,7 +9,7 @@ class TemplateLibraryManageData extends BaseManageData {
 
     
     public function Create($templateLibraryName,$manageUserId,$siteId,$createDate){
-        $sql = "INSERT INTO ".self::TableName_TemplateLibrary." (TemplateLibraryName,ManageUserId,SiteId,CreateDate) values (:TemplateLibraryName,:ManageUserId,:SiteId,'$createDate'')";
+        $sql = "INSERT INTO ".self::TableName_TemplateLibrary." (TemplateLibraryName,ManageUserId,SiteId,CreateDate) values (:TemplateLibraryName,:ManageUserId,:SiteId,'$createDate')";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("TemplateLibraryName", $templateLibraryName);
         $dataProperty->AddField("ManageUserId", $manageUserId);

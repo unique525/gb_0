@@ -93,6 +93,10 @@ class Template
      * 模板标签类型： 活动列表
      */
     const TAG_TYPE_ACTIVITY_LIST = "activity_list";
+    /**
+     * 外部接口类型： 资讯列表
+     */
+    const TAG_TYPE_INTERFACE_CONTENT_LIST = "interface_content_list";
 
     /**
      * 读取模板内容

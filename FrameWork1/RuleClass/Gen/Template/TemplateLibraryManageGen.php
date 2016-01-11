@@ -151,7 +151,7 @@ class TemplateLibraryManageGen extends BaseManageGen implements IBaseManageGen {
             $templateLibraryChannelContentManageData->RemoveTemplateChannelContent($channelId);
 
 
-            $replaceArray=null;  //模板替换频道id的数组
+            $replaceArray=array();  //模板替换频道id的数组
             foreach($arrayCreatedChannelId as $key=>$Id){
                 $replaceArray["{template_channel_id_" . $key . "}"]="channel_".$Id;
             }

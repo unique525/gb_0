@@ -251,11 +251,118 @@ class BasePublicGen extends BaseGen
                             );
                         }
                         break;
+                    case Template::TAG_TYPE_INTERFACE_CONTENT_LIST:
+                        $channelId = intval(str_ireplace("channel_", "", $tagId));
+                        if ($channelId > 0) {
+                            $templateContent = self::ReplaceTemplateOfInterfaceContentList(
+                                $templateContent,
+                                $channelId,
+                                $tagId,
+                                $tagContent,
+                                $tagTopCount
+                            );
+                        }
+                        break;
                 }
             }
         }
         return $templateContent;
     }
+
+
+
+
+    /**
+     * 替换外部接口列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $channelId 频道id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @return mixed|string 内容模板
+     */
+    private function ReplaceTemplateOfInterfaceContentList(
+        $channelTemplateContent,
+        $channelId,
+        $tagId,
+        $tagContent,
+        $tagTopCount
+    )
+    {
+        if ($channelId > 0) {
+
+
+
+            $arrDocumentNewsList = null;
+
+            $channelPublicData=new ChannelPublicData();
+            $interfaceData=new InterfaceData();
+
+            $publishApiUrl=$channelPublicData->GetPublishApiUrl($channelId,true);
+            $publishApiType=$channelPublicData->GetPublishApiType($channelId,true);
+            $jsonType="icms1";
+
+            switch ($publishApiType) { //外部接口数据格式
+                case(0): //json
+                    $arrDocumentNewsList = $interfaceData->GetList($publishApiUrl, $jsonType, true);
+                    break;
+                case(1): //xml
+                    $rss = new RSS();
+                    $rss->load($publishApiUrl);
+                    $arrDocumentNewsList = $rss->getItems();
+                    break;
+                default: //json
+                    $arrDocumentNewsList = $interfaceData->GetList($publishApiUrl, $jsonType, true);
+                    break;
+            }
+
+            $array_split=explode(",",$tagTopCount);
+            if(count($array_split)==1){
+                $arrDocumentNewsList=array_slice($arrDocumentNewsList,0,$array_split[0]);//截取前x条
+            }elseif(count($array_split)==2){
+                $arrDocumentNewsList=array_slice($arrDocumentNewsList,$array_split[0],$array_split[1]);//截取x,x条
+            }
+
+            //$activityPublicData = new ActivityPublicData();
+
+            /*/排序方式
+            switch ($tagOrder) {
+                case "new":
+                    $orderBy = 0;
+                    break;
+                case "hit":
+                    $orderBy = 1;
+                    break;
+                default:
+                    $orderBy = 0;
+                    break;
+            }
+
+            switch ($tagWhere) {
+                case "new":
+                    $arrDocumentNewsList = $activityPublicData->GetNewList($channelId, $tagTopCount, $state);
+                    break;
+                default :
+                    $arrDocumentNewsList = $activityPublicData->GetList($channelId, $tagTopCount, $state, $orderBy);
+                    break;
+            }*/
+
+            if (!empty($arrDocumentNewsList)) {
+                Template::ReplaceList($tagContent, $arrDocumentNewsList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+
+
     /**
      * 替换活动列表的内容
      * @param string $channelTemplateContent 要处理的模板内容
@@ -370,6 +477,7 @@ class BasePublicGen extends BaseGen
             $parentIdName = "ChannelId";
             $thirdTableIdName = "ChannelId";
             $thirdParentIdName = "ParentId";
+
 
             switch ($tagWhere) {
                 case "parent":
