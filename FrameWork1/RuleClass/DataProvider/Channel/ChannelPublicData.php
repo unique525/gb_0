@@ -13,7 +13,7 @@ class ChannelPublicData extends BasePublicData {
      * @param int $channelId 频道id
      * @param bool $withCache
      * @return array|null 取得对应数组
-     */
+
     public function GetOne($channelId, $withCache = true){
         $result = null;
         if($channelId>0){
@@ -22,6 +22,72 @@ class ChannelPublicData extends BasePublicData {
             $cacheFile = 'channel_get_one.cache_' . $channelId;
 
             $sql = "SELECT * FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+
+        }
+        return $result;
+    }*/
+
+
+    /**
+     * 返回一行数据
+     * @param int $channelId 频道id
+     * @param bool $withCache
+     * @return array|null 取得对应数组
+     */
+    public function GetOne($channelId, $withCache = true){
+        $result = null;
+        if($channelId>0){
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_one.cache_' . $channelId;
+
+            $sql = "SELECT c.*,
+
+            uf1.UploadFilePath AS TitlePic1UploadFilePath,
+            uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
+            uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
+            uf1.UploadFileThumbPath1 AS TitlePic1UploadFileThumbPath1,
+            uf1.UploadFileThumbPath2 AS TitlePic1UploadFileThumbPath2,
+            uf1.UploadFileThumbPath3 AS TitlePic1UploadFileThumbPath3,
+            uf1.UploadFileWatermarkPath1 AS TitlePic1UploadFileWatermarkPath1,
+            uf1.UploadFileWatermarkPath2 AS TitlePic1UploadFileWatermarkPath2,
+            uf1.UploadFileCompressPath1 AS TitlePic1UploadFileCompressPath1,
+            uf1.UploadFileCompressPath2 AS TitlePic1UploadFileCompressPath2,
+            uf1.UploadFileCutPath1 AS TitlePic1UploadFileCutPath1,
+
+
+            uf2.UploadFilePath AS TitlePic2UploadFilePath,
+            uf2.UploadFileMobilePath AS TitlePic2UploadFileMobilePath,
+            uf2.UploadFilePadPath AS TitlePic2UploadFilePadPath,
+            uf2.UploadFileThumbPath1 AS TitlePic2UploadFileThumbPath1,
+            uf2.UploadFileThumbPath2 AS TitlePic2UploadFileThumbPath2,
+            uf2.UploadFileThumbPath3 AS TitlePic2UploadFileThumbPath3,
+            uf2.UploadFileWatermarkPath1 AS TitlePic2UploadFileWatermarkPath1,
+            uf2.UploadFileWatermarkPath2 AS TitlePic2UploadFileWatermarkPath2,
+            uf2.UploadFileCompressPath1 AS TitlePic2UploadFileCompressPath1,
+            uf2.UploadFileCompressPath2 AS TitlePic2UploadFileCompressPath2,
+            uf2.UploadFileCutPath1 AS TitlePic2UploadFileCutPath1,
+
+
+            uf3.UploadFilePath AS TitlePic3UploadFilePath,
+            uf3.UploadFileMobilePath AS TitlePic3UploadFileMobilePath,
+            uf3.UploadFilePadPath AS TitlePic3UploadFilePadPath,
+            uf3.UploadFileThumbPath1 AS TitlePic3UploadFileThumbPath1,
+            uf3.UploadFileThumbPath2 AS TitlePic3UploadFileThumbPath2,
+            uf3.UploadFileThumbPath3 AS TitlePic3UploadFileThumbPath3,
+            uf3.UploadFileWatermarkPath1 AS TitlePic3UploadFileWatermarkPath1,
+            uf3.UploadFileWatermarkPath2 AS TitlePic3UploadFileWatermarkPath2,
+            uf3.UploadFileCompressPath1 AS TitlePic3UploadFileCompressPath1,
+            uf3.UploadFileCompressPath2 AS TitlePic3UploadFileCompressPath2,
+            uf3.UploadFileCutPath1 AS TitlePic3UploadFileCutPath1
+             FROM " . self::TableName_Channel . " c
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on c.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on c.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on c.TitlePic3UploadFileId=uf3.UploadFileId
+             WHERE c.ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -283,6 +349,49 @@ class ChannelPublicData extends BasePublicData {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
             $cacheFile = 'channel_get_channel_open_comment.cache_' . $channelId . '';
             $sql = "SELECT OpenComment FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * 取得频道外部接口url
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string url
+     */
+    public function GetPublishApiUrl($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_publish_api_url.cache_' . $channelId . '';
+            $sql = "SELECT PublishApiUrl FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ChannelId", $channelId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得频道外部接口类型
+     * @param int $channelId 频道id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 类型对应值
+     */
+    public function GetPublishApiType($channelId, $withCache)
+    {
+        $result = -1;
+        if ($channelId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'channel_data';
+            $cacheFile = 'channel_get_publish_api_type.cache_' . $channelId . '';
+            $sql = "SELECT PublishApiType FROM " . self::TableName_Channel . " WHERE ChannelId=:ChannelId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ChannelId", $channelId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
