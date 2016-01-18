@@ -811,6 +811,15 @@ class BaseData
      */
     const TableId_PromotionRecord = "PromotionRecordId";
 
+    /**
+     * 客户端顶部栏目 数据表名
+     */
+    const TableName_ClientColumn = "cst_client_column";
+    /**
+     * 客户端顶部栏目 数据表自增字段名
+     */
+    const TableId_ClientColumn = "ClientColumnId";
+
 
 
 
