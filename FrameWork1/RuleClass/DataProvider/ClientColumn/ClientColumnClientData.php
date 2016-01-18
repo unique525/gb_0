@@ -16,10 +16,8 @@ class ClientColumnClientData extends BaseClientData
      */
     public function GetListOfSite($siteId)
     {
-
         $dataProperty = new DataProperty();
         $dataProperty->AddField("SiteId", $siteId);
-
 
         $sql = "SELECT * FROM " . self::TableName_ClientColumn . "
                 WHERE SiteId=:SiteId AND State<100

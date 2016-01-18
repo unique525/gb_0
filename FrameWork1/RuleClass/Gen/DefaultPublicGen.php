@@ -135,8 +135,8 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $result = $searchPublicGen->GenPublic();
                 break;
             case "vote":
-                $activityPublicGen = new VotePublicGen();
-                $result = $activityPublicGen->GenPublic();
+                //$votePublicGen = new VotePublicGen();
+                //$result = $votePublicGen->GenPublic();
                 break;
             case "activity":
                 $activityPublicGen = new ActivityPublicGen();
