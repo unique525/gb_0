@@ -23,7 +23,7 @@ class ClientColumnClientData extends BaseClientData
 
         $sql = "SELECT * FROM " . self::TableName_ClientColumn . "
                 WHERE SiteId=:SiteId AND State<100
-                ORDER BY CurrentIndex DESC";
+                ORDER BY CurrentIndex";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 
