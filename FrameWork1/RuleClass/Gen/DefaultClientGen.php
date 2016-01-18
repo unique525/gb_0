@@ -89,6 +89,10 @@ class DefaultClientGen extends BaseClientGen implements IBaseClientGen {
                 $userFavoriteClientGen = new UserFavoriteClientGen();
                 $result = $userFavoriteClientGen->GenClient();
                 break;
+            case "client_column":
+                $clientColumnClientGen = new ClientColumnClientGen();
+                $result = $clientColumnClientGen->GenClient();
+                break;
             case "client_app":
                 $clientAppClientGen = new ClientAppClientGen();
                 $result = $clientAppClientGen->GenClient();
