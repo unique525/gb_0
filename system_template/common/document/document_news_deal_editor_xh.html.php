@@ -869,49 +869,7 @@ function DocumentNewsTagPulling(){
                             {s_ShowIndex}(越大越靠前)
                         </td>
                     </tr>
-                    <tr>
-                        <td style="height:35px;text-align: right;"><label for="f_ShowInClient">客户端：</label></td>
-                        <td style="text-align: left">
-                            <select id="f_ShowInClient" name="f_ShowInClient">
-                                <option value="1">推送</option>
-                                <option value="0">不推送</option>
-                            </select>
-                            {s_ShowInClient}
 
-                            <label for="f_ShowInClientIndex">客户端首页：</label>
-                            <select id="f_ShowInClientIndex" name="f_ShowInClientIndex">
-                                <option value="0">不上首页</option>
-                                <option value="1">上首页 排序1</option>
-                                <option value="2">上首页 排序2</option>
-                                <option value="3">上首页 排序3</option>
-                                <option value="4">上首页 排序4</option>
-                                <option value="5">上首页 排序5</option>
-                                <option value="6">上首页 排序6</option>
-                                <option value="7">上首页 排序7</option>
-                                <option value="8">上首页 排序8</option>
-                                <option value="9">上首页 排序9</option>
-                                <option value="10">上首页 排序10</option>
-                                <option value="11">上首页 排序11</option>
-                                <option value="12">上首页 排序12</option>
-                                <option value="13">上首页 排序13</option>
-                                <option value="14">上首页 排序14</option>
-                                <option value="15">上首页 排序15</option>
-                                <option value="16">上首页 排序16</option>
-                                <option value="17">上首页 排序17</option>
-                                <option value="18">上首页 排序18</option>
-                                <option value="19">上首页 排序19</option>
-                                <option value="20">上首页 排序20</option>
-                            </select>
-                            {s_ShowInClientIndex}(越大越靠前)
-
-                            <label for="f_ShowMutiPicInClientList">客户端列表组图：</label>
-                            <select id="f_ShowMutiPicInClientList" name="f_ShowMutiPicInClientList">
-                                <option value="0">否</option>
-                                <option value="1">是</option>
-                            </select>
-                            {s_ShowMutiPicInClientList}
-                        </td>
-                    </tr>
                 </table>
 
 
@@ -988,6 +946,58 @@ function DocumentNewsTagPulling(){
                     是
                 </label>
                 {r_IsHot}
+            </td>
+
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+
+            <td class="spe_line" style="width:80px;height:35px;text-align: right;"><label for="f_ShowInClient">客户端：</label></td>
+            <td class="spe_line" style="text-align: left">
+                <select id="f_ShowInClient" name="f_ShowInClient">
+                    <option value="1">推送</option>
+                    <option value="0">不推送</option>
+                </select>
+                {s_ShowInClient}
+            </td>
+            <td class="spe_line" style="width:130px;height:35px;text-align: right;"><label for="f_ShowInClientIndex">客户端首页：</label>
+            </td>
+            <td class="spe_line" style="text-align: left">
+                <select id="f_ShowInClientIndex" name="f_ShowInClientIndex">
+                    <option value="0">不上首页</option>
+                    <option value="1">上首页 排序1</option>
+                    <option value="2">上首页 排序2</option>
+                    <option value="3">上首页 排序3</option>
+                    <option value="4">上首页 排序4</option>
+                    <option value="5">上首页 排序5</option>
+                    <option value="6">上首页 排序6</option>
+                    <option value="7">上首页 排序7</option>
+                    <option value="8">上首页 排序8</option>
+                    <option value="9">上首页 排序9</option>
+                    <option value="10">上首页 排序10</option>
+                    <option value="11">上首页 排序11</option>
+                    <option value="12">上首页 排序12</option>
+                    <option value="13">上首页 排序13</option>
+                    <option value="14">上首页 排序14</option>
+                    <option value="15">上首页 排序15</option>
+                    <option value="16">上首页 排序16</option>
+                    <option value="17">上首页 排序17</option>
+                    <option value="18">上首页 排序18</option>
+                    <option value="19">上首页 排序19</option>
+                    <option value="20">上首页 排序20</option>
+                </select>
+                {s_ShowInClientIndex}(越大越靠前)
+            </td>
+            <td class="spe_line" style="width:160px;height:35px;text-align: right;"><label for="f_ShowMutiPicInClientList">客户端列表模式：</label></td>
+            <td class="spe_line" style="text-align: left">
+                <select id="f_ShowMutiPicInClientList" name="f_ShowMutiPicInClientList">
+                    <option value="0">普通模式(左边题图右边标题)</option>
+                    <option value="1">组图模式(三张组图，对应题图1,2,3)</option>
+                    <option value="2">单图模式(单张图，对应题图1)</option>
+                    <option value="3">纯文字模式(对应标题)</option>
+                </select>
+                {s_ShowMutiPicInClientList}
             </td>
 
         </tr>
