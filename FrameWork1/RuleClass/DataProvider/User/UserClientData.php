@@ -21,7 +21,7 @@ class UserClientData extends BaseClientData {
 
             $sql = "SELECT UserPass,UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                        ;";
+                        AND State=0;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
             $dataProperty->AddField("UserEmail",$userAccount);

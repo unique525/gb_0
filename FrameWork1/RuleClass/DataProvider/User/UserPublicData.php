@@ -27,7 +27,8 @@ class UserPublicData extends BasePublicData {
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                            AND (UserPass = :UserPass OR left(UserPassWithMd5,20) = :UserPassWithMd5);";
+                            AND (UserPass = :UserPass OR left(UserPassWithMd5,20) = :UserPassWithMd5)
+                            AND State=0;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
             $dataProperty->AddField("UserEmail",$userAccount);
