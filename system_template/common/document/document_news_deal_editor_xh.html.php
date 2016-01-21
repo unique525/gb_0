@@ -994,7 +994,7 @@ function DocumentNewsTagPulling(){
                 <select id="f_ShowMutiPicInClientList" name="f_ShowMutiPicInClientList">
                     <option value="0">普通模式(左边题图右边标题)</option>
                     <option value="1">组图模式(三张组图，对应题图1,2,3)</option>
-                    <option value="2">单图模式(单张图，对应题图1)</option>
+                    <option value="2">单图模式(单张图，对应题图2)</option>
                     <option value="3">纯文字模式(对应标题)</option>
                 </select>
                 {s_ShowMutiPicInClientList}
