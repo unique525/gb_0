@@ -150,9 +150,11 @@ class VoteManageGen extends BaseManageGen implements IBaseManageGen
             }
         }
         if($can){
-            if($nowManageUserGroupId!=1&&$nowManageUserGroupId!=3){//1:admin组 3:长沙晚报网
-                $can=false;
-            }
+            //if($channelId==100139&&  //稿件评优节点
+            //    $nowManageUserGroupId!=1&&  //1:admin组
+            //    $nowManageUserGroupId!=3){ //3:长沙晚报网
+            //    $can=false;
+            //}
         }
         if (!$can) {
             return Language::Load('document', 26);

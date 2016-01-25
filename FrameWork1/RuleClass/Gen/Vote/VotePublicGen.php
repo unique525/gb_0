@@ -48,6 +48,10 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             case "async_get_vote_name":
                 $result = self::AsyncGetVoteTitle();
                 break;
+            case "async_get_top_vote_item_name":
+                $result = self::AsyncGetTopVoteItemTitle();
+                break;
+
             default:
                 break;
         }
@@ -100,7 +104,8 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
                         }
                         $voteSelectItemIdArr[] = $voteSelectItemId;   //收集要提交的选项ID并组成数组
                         $voteSelectItemScore = intval(Control::GetRequest("score_$voteSelectItemId", "0"));
-                        $voteRecordDetailArr[] = array("VoteItemId" => $voteItemId, "VoteSelectItemId" => $voteSelectItemId, "Score" => $voteSelectItemScore, "UserId"=>$userId);
+                        $voteSelectItemComment = Control::PostOrGetRequest("comment_$voteSelectItemId", "");
+                        $voteRecordDetailArr[] = array("VoteItemId" => $voteItemId, "VoteSelectItemId" => $voteSelectItemId, "Score" => $voteSelectItemScore, "UserId"=>$userId,"Comment"=>$voteSelectItemComment);
                     }
                     $voteItemIdArr[] = array($voteItemId, $allNum);   //收集要提交的题目ID并组成数组
                 }
@@ -293,6 +298,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
 
             $voteCheckCode=null;
             $voteItemIdArr=array();
+            $voteItemId=0;
             //解析$_POST生成对应数组
             foreach ($_POST as $key1 => $value1) {
                 if (strpos($key1, "vote_select_item") === 0) {
@@ -377,7 +383,7 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
             }
 
 
-            $voteRecordId = $voteRecordData->Create($voteId, $userId, $ipAddress, $agent, $createDate); //投票记录提交
+            $voteRecordId = $voteRecordData->CreateScoreRecord($voteId,$voteItemId, $userId, $ipAddress, $agent, $createDate); //投票记录提交
             $result = $voteRecordData->CreateDetailBatch($voteRecordId, $voteRecordDetailArr); //投票详细记录提交
             //返回页面响应结果
             if ($result == 1) {
@@ -490,11 +496,37 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
         $voteRecordData=new VoteRecordData();
         $voteRecordId=$voteRecordData->GetRecordIdOfUser($voteId,$userId);
         if($voteRecordId<=0){
-            return Control::GetRequest("jsonpcallback","") . '({"result":"2","result_content":"vote record id error"})';   //投票记录获取失败
+
+            //获取其他人评分数据
+            $voteItemPublicData=new VoteItemPublicData();
+            $voteItemId=$voteItemPublicData->GetTopVoteItemId($voteId,false);
+            $voteSelectItemPublicData=new VoteSelectItemPublicData();
+            $result=$voteSelectItemPublicData->GetList($voteItemId,0);
+            foreach($result as $key=>$voteSelectItem){
+                $scoresDetail=$voteRecordData->GetScoreDetailOfOneSelectItem($voteSelectItem["VoteSelectItemId"]);
+                if(!empty($scoresDetail)){
+                    foreach($scoresDetail as $oneScoreDetail){
+                        $result[$key]["Score_".$oneScoreDetail["Score"]]=$oneScoreDetail["Count"];
+                    }
+                }
+            }
+            return Control::GetRequest("jsonpcallback","") . '({"result":"2","result_content":'.json_encode($result).'})';   //投票记录获取失败
         }
 
         $result=$voteRecordData->GetRecordDetail($voteRecordId);
 
+
+        //获取其他人评分数据
+        if(!empty($result)){
+            foreach($result as $key=>$voteSelectItemRecord){
+                $scoresDetail=$voteRecordData->GetScoreDetailOfOneSelectItem($voteSelectItemRecord["VoteSelectItemId"]);
+                if(!empty($scoresDetail)){
+                    foreach($scoresDetail as $oneScoreDetail){
+                        $result[$key]["Score_".$oneScoreDetail["Score"]]=$oneScoreDetail["Count"];
+                    }
+                }
+            }
+        }
         return Control::GetRequest("jsonpcallback","") . '({"result":"1","result_content":'.json_encode($result).'})';
         //return Control::GetRequest("jsonpcallback","") . '('.json_encode($result).')';
     }
@@ -573,6 +605,19 @@ class VotePublicGen extends BasePublicGen implements IBasePublicGen
         $result=$votePublicData->GetVoteTitle($voteId,true);
         return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
     }
+
+
+
+    private function AsyncGetTopVoteItemTitle(){
+        $result = "";
+        $voteId=Control::GetRequest("vote_id",0);
+        $voteItemPublicData=new VoteItemPublicData();
+        $result=$voteItemPublicData->GetTopVoteItemTitle($voteId,false);
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
+
+
+
 }
 
 ?>
