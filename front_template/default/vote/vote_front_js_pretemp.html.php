@@ -72,29 +72,29 @@
         $("#checkcode_sub{VoteId}").attr("idvalue1",voteItemId);
         $("#checkcode_sub{VoteId}").attr("idvalue2",voteSelectItemId);
         var offSet=$("#"+voteSelectItemId).offset();
-        $("#votecheckcodeclass{VoteId}").css("top","0");
-        $("#votecheckcodeclass{VoteId}").css("left","0");
-        $("#votecheckcodeclass{VoteId}").offset(offSet);
+        $("#votecheckcodeclass{VoteId}").css("top",offSet.top);
+        $("#votecheckcodeclass{VoteId}").css("left",offSet.left);
+        //$("#votecheckcodeclass{VoteId}").offset(offSet);
         $("#votecheckcodeclass{VoteId}").show();
         $("#checkcode_sub{VoteId}").show();
     }
 
 
-    function ShowCheckCodeForSubmitAll{VoteId}(){
-        var offSet=$("#ShowCheckCodeForSubmitAll{VoteId}").offset();
-        $("#votecheckcodeclass{VoteId}").css("top","0");
-        $("#votecheckcodeclass{VoteId}").css("left","0");
-        $("#votecheckcodeclass{VoteId}").offset(offSet);
+    function ShowCheckCodeForSubmitAll{VoteId}(tag){
+        var offSet=$(tag).offset();
+        $("#votecheckcodeclass{VoteId}").css("top",offSet.top);
+        $("#votecheckcodeclass{VoteId}").css("left",offSet.left);
+        //$("#votecheckcodeclass{VoteId}").offset(offSet);
         $("#votecheckcodeclass{VoteId}").show();
         $("#checkcode_all_sub{VoteId}").show();
     }
 
 
-    function ShowCheckCodeForSubmitScore{VoteId}(){
-        var offSet=$("#ShowCheckCodeForSubmitScore{VoteId}").offset();
-        $("#votecheckcodeclass{VoteId}").css("top","0");
-        $("#votecheckcodeclass{VoteId}").css("left","0");
-        $("#votecheckcodeclass{VoteId}").offset(offSet);
+    function ShowCheckCodeForSubmitScore{VoteId}(tag){
+        var offSet=$(tag).offset();
+        $("#votecheckcodeclass{VoteId}").css("top",offSet.top);
+        $("#votecheckcodeclass{VoteId}").css("left",offSet.left);
+        //$("#votecheckcodeclass{VoteId}").offset(offSet);
         $("#votecheckcodeclass{VoteId}").show();
         $("#checkcode_score_sub{VoteId}").show();
     }
@@ -134,7 +134,7 @@
                 //div.html("投票");
             },
             error: function (data, status, e){
-                alert(data.readyState);
+                //alert(data.readyState);
                 if ( $("#checkimg{VoteId}").length > 0 )
                     $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
                 //div.html("投票");
@@ -181,7 +181,7 @@
                 else {alert("投票失败！");}
             },
             error: function (data, status, e){
-                alert(data.readyState);
+                //alert(data.readyState);
                 if ( $("#checkimg{VoteId}").length > 0 )
                     $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
             }
@@ -229,7 +229,7 @@
                 else {alert("投票失败！");}
             },
             error: function (data, status, e){
-                alert(data.readyState);
+                //alert(data.readyState);
                 if ( $("#checkimg{VoteId}").length > 0 )
                     $("#checkimg{VoteId}").trigger('onclick');//再次刷新图片
             }

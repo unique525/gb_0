@@ -71,6 +71,50 @@ class VoteItemPublicData extends BasePublicData {
         return $result;
     }
 
+    /**
+     * 获取一条可用的vote item title
+     * @param $voteId
+     * @param bool $withCache
+     * @return string
+     */
+    public function GetTopVoteItemTitle($voteId,$withCache=false) {
+        $result="";
+        if ($voteId>0) {
+            $dataProperty = new DataProperty();
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_item_data';
+            $cacheFile = 'vote_item_get_top_vote_item_title.cache_' . $voteId . '';
+            $sqlStr = "SELECT
+            VoteItemTitle
+            FROM " . self::TableName_VoteItem . "
+            WHERE VoteId=:VoteId AND State!=100 ORDER BY VoteItemId DESC LIMIT 1";
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfStringValue($sqlStr, $dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 获取一条可用的vote item id
+     * @param $voteId
+     * @param bool $withCache
+     * @return int
+     */
+    public function GetTopVoteItemId($voteId,$withCache=false) {
+        $result=0;
+        if ($voteId>0) {
+            $dataProperty = new DataProperty();
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'vote_item_data';
+            $cacheFile = 'vote_item_get_top_vote_item_id.cache_' . $voteId . '';
+            $sqlStr = "SELECT
+            VoteItemId
+            FROM " . self::TableName_VoteItem . "
+            WHERE VoteId=:VoteId AND State!=100 ORDER BY VoteItemId DESC LIMIT 1";
+            $dataProperty->AddField("VoteId", $voteId);
+            $result = $this->GetInfoOfIntValue($sqlStr, $dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+        return $result;
+    }
 
 }
 

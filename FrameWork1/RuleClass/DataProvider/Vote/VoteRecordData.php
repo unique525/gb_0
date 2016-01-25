@@ -33,6 +33,31 @@ class VoteRecordData extends BasePublicData
     }
 
     /**
+     * 新建投票调查记录
+     * @param int $voteId 投票调查Id
+     * @param int $voteItemId 投票题目Id
+     * @param int $userId 用户Id
+     * @param string $ipAddress 用户IP
+     * @param string $agent 用户系统信息
+     * @param string $createDate 创建时间
+     * @return int  返回执行结果
+     */
+    public function CreateScoreRecord($voteId, $voteItemId, $userId, $ipAddress, $agent, $createDate)
+    {
+        $sql = "INSERT INTO " . self::TableName_VoteRecord . " (VoteId,VoteItemId,UserId,ipAddress,Agent,CreateDate) values (:VoteId,:VoteItemId,:UserId,:IpAddress,:Agent,:CreateDate) ";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("VoteId", $voteId);
+        $dataProperty->AddField("VoteItemId", $voteItemId);
+        $dataProperty->AddField("UserId", $userId);
+        $dataProperty->AddField("CreateDate", $createDate);
+        $dataProperty->AddField("IpAddress", $ipAddress);
+        $dataProperty->AddField("Agent", $agent);
+        $result = $this->dbOperator->LastInsertId($sql, $dataProperty);
+        return $result;
+    }
+
+
+    /**
      * 批量新建投票调查明细记录
      * @param int $voteRecordId 投票调查记录表Id
      * @param array $voteRecordDetail 投票调查明细记录数组
@@ -41,6 +66,7 @@ class VoteRecordData extends BasePublicData
     public function CreateDetailBatch($voteRecordId, $voteRecordDetail)
     {
         $sql = array();
+        $dataPropertyList=array();
         foreach ($voteRecordDetail as $Row) {
             $Row["VoteRecordId"] = $voteRecordId;
             $dataProperty = new DataProperty();
@@ -148,7 +174,8 @@ class VoteRecordData extends BasePublicData
     {
         $result = -1;
         if ($voteId > 0&&$userId>0) {
-            $sql = "SELECT VoteRecordId FROM " . self::TableName_VoteRecord . " WHERE UserId=:UserId AND VoteId=:VoteId
+            $sql = "SELECT VoteRecordId FROM " . self::TableName_VoteRecord . "
+            WHERE UserId=:UserId AND VoteItemId=(SELECT VoteItemId FROM ". self::TableName_VoteItem." WHERE VoteId=:VoteId AND State!=100 LIMIT 1)
             ORDER BY CreateDate DESC LIMIT 1 ;";
             //$sql = "SELECT
             //    detail.*,
@@ -208,11 +235,10 @@ class VoteRecordData extends BasePublicData
                 FROM " . self::TableName_VoteRecordDetail . " vrd
                 LEFT OUTER JOIN " . self::TableName_VoteSelectItem . " vsi ON vrd.VoteSelectItemId=vsi.VoteSelectItemId
                 INNER JOIN " . self::TableName_VoteItem . " vi ON vi.VoteItemId=vsi.VoteItemId
-                WHERE vi.VoteId=:VoteId $strSelectDate
+                WHERE vrd.VoteItemId=(SELECT VoteItemId FROM " . self::TableName_VoteItem . " WHERE VoteId=:VoteId AND State!=100 LIMIT 1) $strSelectDate
                 GROUP BY vrd.VoteSelectItemId ;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("VoteId", $voteId);
-
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
@@ -251,6 +277,26 @@ class VoteRecordData extends BasePublicData
         return $result;
 
 
+    }
+
+    /**
+     * 获取一条选项的分数分布情况（1分的X个，2分的Y个...）
+     * @param $voteSelectItemId
+     * @return array
+     */
+    public function GetScoreDetailOfOneSelectItem($voteSelectItemId){
+
+        $result = array();
+        if ($voteSelectItemId > 0) {
+            $sql = "SELECT COUNT(*) as Count,Score
+                    FROM " . self::TableName_VoteRecordDetail . "
+                    WHERE VoteSelectItemId=:VoteSelectItemId group by Score";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("VoteSelectItemId", $voteSelectItemId);
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
     }
 }
 
