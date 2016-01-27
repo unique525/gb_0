@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="130.1.0.71" overwriteAll="false" preserveTimestamps="false">
+  <component name="PublishConfigData" overwriteAll="false" preserveTimestamps="false">
     <serverData>
-      <paths name="130.1.0.71">
+      <paths name="Bird">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="61.147.124.36">
+      <paths name="icms">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
@@ -19,3 +19,4 @@
     </serverData>
   </component>
 </project>
+
