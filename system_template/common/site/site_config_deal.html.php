@@ -292,6 +292,60 @@
 
                                     <tr>
                                         <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic1MobileWidth">适配手机客户端，资讯题图1的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic1MobileWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic1MobileWidth" value="{cfg_DocumentNewsTitlePic1MobileWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic1PadWidth">适配平板客户端，资讯题图1的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic1PadWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic1PadWidth" value="{cfg_DocumentNewsTitlePic1PadWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic2MobileWidth">适配手机客户端，资讯题图2的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic2MobileWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic2MobileWidth" value="{cfg_DocumentNewsTitlePic2MobileWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic2PadWidth">适配平板客户端，资讯题图2的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic2PadWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic2PadWidth" value="{cfg_DocumentNewsTitlePic2PadWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic3MobileWidth">适配手机客户端，资讯题图3的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic3MobileWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic3MobileWidth" value="{cfg_DocumentNewsTitlePic3MobileWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_DocumentNewsTitlePic3PadWidth">适配平板客户端，资讯题图3的同比缩小宽度值：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_DocumentNewsTitlePic3PadWidth" type="text" class="input_number" name="cfg_DocumentNewsTitlePic3PadWidth" value="{cfg_DocumentNewsTitlePic3PadWidth}"/> （0为不处理）
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
                                             <label for="cfg_DocumentNewsTitlePic1CompressWidth">资讯题图1压缩图宽度值：</label>
                                         </td>
                                         <td class="spe_line">

@@ -94,8 +94,6 @@
  * @property string $SmsThirdUserName
  * @property string $SmsThirdPassword
  * @property string $UserSmsMessageContent
- * @property int $DocumentNewsTitlePicMobileWidth
- * @property int $DocumentNewsTitlePicPadWidth
  * @property int $ChannelTitlePic1MobileWidth
  * @property int $ChannelTitlePic1PadWidth
  * @property int $ChannelTitlePic2MobileWidth
@@ -134,6 +132,13 @@
  *
  *
  * @property string $NewspaperArticlePicWatermarkUploadFileId
+ *
+ * @property int $DocumentNewsTitlePic1MobileWidth
+ * @property int $DocumentNewsTitlePic1PadWidth
+ * @property int $DocumentNewsTitlePic2MobileWidth
+ * @property int $DocumentNewsTitlePic2PadWidth
+ * @property int $DocumentNewsTitlePic3MobileWidth
+ * @property int $DocumentNewsTitlePic3PadWidth
  *
  * @property string $DocumentNewsContentPicWatermarkUploadFileId
  * @property int $DocumentNewsTitlePic1CompressWidth
@@ -264,8 +269,6 @@ class SiteConfigData extends BaseData {
         "UserOrderFirstSubPrice",
 
         "MailSmtpPort",
-        "DocumentNewsTitlePicMobileWidth",
-        "DocumentNewsTitlePicPadWidth",
 
         "ChannelTitlePic1MobileWidth",
         "ChannelTitlePic1PadWidth",
@@ -298,6 +301,12 @@ class SiteConfigData extends BaseData {
         "ActivityTitlePic3MobileWidth",
         "ActivityTitlePic3PadWidth",
 
+        "DocumentNewsTitlePic1MobileWidth",
+        "DocumentNewsTitlePic1PadWidth",
+        "DocumentNewsTitlePic2MobileWidth",
+        "DocumentNewsTitlePic2PadWidth",
+        "DocumentNewsTitlePic3MobileWidth",
+        "DocumentNewsTitlePic3PadWidth",
         "DocumentNewsTitlePic1CompressWidth",
         "DocumentNewsTitlePic1CompressHeight",
         "DocumentNewsTitlePic2CompressWidth",
@@ -508,8 +517,19 @@ class SiteConfigData extends BaseData {
     ////////////////////////资讯/////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
-    private $DocumentNewsTitlePicMobileWidth = 0; //为适配手机客户端，资讯题图的同比缩小宽度值
-    private $DocumentNewsTitlePicPadWidth = 0; //为适配平板客户端，资讯题图的同比缩小宽度值
+    private $DocumentNewsTitlePic1MobileWidth = 0; //为适配手机客户端，资讯题图1的同比缩小宽度值
+    private $DocumentNewsTitlePic1PadWidth = 0; //为适配平板客户端，资讯题图1的同比缩小宽度值
+    private $DocumentNewsTitlePic2MobileWidth = 0; //为适配手机客户端，资讯题图2的同比缩小宽度值
+    private $DocumentNewsTitlePic2PadWidth = 0; //为适配平板客户端，资讯题图2的同比缩小宽度值
+    private $DocumentNewsTitlePic3MobileWidth = 0; //为适配手机客户端，资讯题图3的同比缩小宽度值
+    private $DocumentNewsTitlePic3PadWidth = 0; //为适配平板客户端，资讯题图3的同比缩小宽度值
+    private $DocumentNewsContentPicWatermarkUploadFileId = 0;
+
+    private $DocumentNewsTitlePic1CompressWidth = 0; //资讯题图1压缩图宽度值
+    private $DocumentNewsTitlePic1CompressHeight = 0; //资讯题图1压缩图高度值
+
+    private $DocumentNewsTitlePic2CompressWidth = 0; //资讯题图2压缩图宽度值
+    private $DocumentNewsTitlePic2CompressHeight = 0;//资讯题图2压缩图高度值
 
     private $ChannelTitlePic1MobileWidth = 0;  //为适配手机客户端，频道题图1的同比缩小宽度值
     private $ChannelTitlePic1PadWidth = 0;     //为适配平板客户端，频道题图1的同比缩小宽度值
@@ -559,13 +579,6 @@ class SiteConfigData extends BaseData {
 
     private $NewspaperArticlePicWatermarkUploadFileId = 0;//报纸文章附件上传的图片中的水印图
 
-    private $DocumentNewsContentPicWatermarkUploadFileId = 0;
-
-    private $DocumentNewsTitlePic1CompressWidth = 0; //资讯题图1压缩图宽度值
-    private $DocumentNewsTitlePic1CompressHeight = 0; //资讯题图1压缩图高度值
-
-    private $DocumentNewsTitlePic2CompressWidth = 0; //资讯题图2压缩图宽度值
-    private $DocumentNewsTitlePic2CompressHeight = 0;//资讯题图2压缩图高度值
 
     /**
      * MOB的短信验证请求网址
@@ -824,6 +837,70 @@ class SiteConfigData extends BaseData {
     public function getWeiXinJsApiTicketGetTime()
     {
         return $this->WeiXinJsApiTicketGetTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentNewsTitlePic2MobileWidth()
+    {
+        return $this->DocumentNewsTitlePic2MobileWidth;
+    }
+
+    /**
+     * @param int $DocumentNewsTitlePic2MobileWidth
+     */
+    public function setDocumentNewsTitlePic2MobileWidth($DocumentNewsTitlePic2MobileWidth)
+    {
+        $this->DocumentNewsTitlePic2MobileWidth = $DocumentNewsTitlePic2MobileWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentNewsTitlePic2PadWidth()
+    {
+        return $this->DocumentNewsTitlePic2PadWidth;
+    }
+
+    /**
+     * @param int $DocumentNewsTitlePic2PadWidth
+     */
+    public function setDocumentNewsTitlePic2PadWidth($DocumentNewsTitlePic2PadWidth)
+    {
+        $this->DocumentNewsTitlePic2PadWidth = $DocumentNewsTitlePic2PadWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentNewsTitlePic3MobileWidth()
+    {
+        return $this->DocumentNewsTitlePic3MobileWidth;
+    }
+
+    /**
+     * @param int $DocumentNewsTitlePic3MobileWidth
+     */
+    public function setDocumentNewsTitlePic3MobileWidth($DocumentNewsTitlePic3MobileWidth)
+    {
+        $this->DocumentNewsTitlePic3MobileWidth = $DocumentNewsTitlePic3MobileWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentNewsTitlePic3PadWidth()
+    {
+        return $this->DocumentNewsTitlePic3PadWidth;
+    }
+
+    /**
+     * @param int $DocumentNewsTitlePic3PadWidth
+     */
+    public function setDocumentNewsTitlePic3PadWidth($DocumentNewsTitlePic3PadWidth)
+    {
+        $this->DocumentNewsTitlePic3PadWidth = $DocumentNewsTitlePic3PadWidth;
     }
 
 
@@ -1107,35 +1184,35 @@ class SiteConfigData extends BaseData {
     }
 
     /**
-     * @param mixed $DocumentNewsTitlePicMobileWidth
+     * @param mixed $DocumentNewsTitlePic1MobileWidth
      */
-    public function setDocumentNewsTitlePicMobileWidth($DocumentNewsTitlePicMobileWidth)
+    public function setDocumentNewsTitlePic1MobileWidth($DocumentNewsTitlePic1MobileWidth)
     {
-        $this->DocumentNewsTitlePicMobileWidth = $DocumentNewsTitlePicMobileWidth;
+        $this->DocumentNewsTitlePic1MobileWidth = $DocumentNewsTitlePic1MobileWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getDocumentNewsTitlePicMobileWidth()
+    public function getDocumentNewsTitlePic1MobileWidth()
     {
-        return $this->DocumentNewsTitlePicMobileWidth;
+        return $this->DocumentNewsTitlePic1MobileWidth;
     }
 
     /**
-     * @param mixed $DocumentNewsTitlePicPadWidth
+     * @param mixed $DocumentNewsTitlePic1PadWidth
      */
-    public function setDocumentNewsTitlePicPadWidth($DocumentNewsTitlePicPadWidth)
+    public function setDocumentNewsTitlePic1PadWidth($DocumentNewsTitlePic1PadWidth)
     {
-        $this->DocumentNewsTitlePicPadWidth = $DocumentNewsTitlePicPadWidth;
+        $this->DocumentNewsTitlePic1PadWidth = $DocumentNewsTitlePic1PadWidth;
     }
 
     /**
      * @return mixed
      */
-    public function getDocumentNewsTitlePicPadWidth()
+    public function getDocumentNewsTitlePic1PadWidth()
     {
-        return $this->DocumentNewsTitlePicPadWidth;
+        return $this->DocumentNewsTitlePic1PadWidth;
     }
 
     /**
