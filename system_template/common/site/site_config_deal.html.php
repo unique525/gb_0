@@ -423,6 +423,35 @@
                                             <input id="cfg_PayAlipayKey" type="text" class="input_box" style="width:300px;" name="cfg_PayAlipayKey" value="{cfg_PayAlipayKey}"/>
                                         </td>
                                     </tr>
+
+
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_MobSmsCheckUrl">MOB的短信验证请求网址：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_MobSmsCheckUrl" type="text" class="input_box" style="width:300px;" name="cfg_MobSmsCheckUrl" value="{cfg_MobSmsCheckUrl}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_MobAppKey">MOB的APP KEY：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_MobAppKey" type="text" class="input_box" style="width:300px;" name="cfg_MobAppKey" value="{cfg_MobAppKey}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="spe_line" height="40" align="right">
+                                            <label for="cfg_MobAppSecret">MOB的APP SECRET：</label>
+                                        </td>
+                                        <td class="spe_line">
+                                            <input id="cfg_MobAppSecret" type="text" class="input_box" style="width:300px;" name="cfg_MobAppSecret" value="{cfg_MobAppSecret}"/>
+                                        </td>
+                                    </tr>
+
+
+
                                 </table>
                             </div>
                         </div>

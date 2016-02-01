@@ -205,10 +205,10 @@ class UserPublicData extends BasePublicData {
     }
 
     /**
-     * 修改用户密码
+     * 取得会员组
      * @param int $userId
      * @param bool $withCache
-     * @return int 返回修改结果
+     * @return int 返回结果
      */
     public function GetUserGroupId($userId, $withCache)
     {

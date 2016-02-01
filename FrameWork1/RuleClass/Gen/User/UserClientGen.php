@@ -26,6 +26,10 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenRegisterWithUserMobile();
                 break;
 
+            case "modify_user_pass_with_sms_code":
+                $result = self::GenModifyUserPassWithSmsCode();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -232,6 +236,118 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         }
 
         return '{"result_code":"' . $resultCode . '","user":' . $result . '}';
+    }
+
+    private function GenModifyUserPassWithSmsCode(){
+
+        $result = "[{}]";
+
+        //$userAccount = Format::FormatHtmlTag(Control::PostOrGetRequest("UserAccount", ""));
+        $userMobile = Format::FormatHtmlTag(Control::PostOrGetRequest("UserMobile", ""));
+        $newUserPass = Format::FormatSql(Control::PostOrGetRequest("NewUserPass", ""));
+        $smsCode = Format::FormatSql(Control::PostOrGetRequest("SmsCode", ""));
+        $newUserPassMd5 = Control::PostOrGetRequest("NewUserPassMd5", "");
+        $regIp = Control::GetIp();
+        $siteId = intval(Control::PostOrGetRequest("SiteId",""));
+
+        if (strlen($userMobile) > 0
+            && strlen($newUserPass) > 0
+            && strlen($smsCode) > 0
+            && strlen($regIp) > 0
+            && $siteId > 0
+        ) {
+
+            $siteConfigData = new SiteConfigData($siteId);
+
+            $mobSmsCheckUrl = $siteConfigData->MobSmsCheckUrl;
+            $mobAppKey = $siteConfigData->MobAppKey;
+
+            /**
+             *
+             *
+            返回值	错误描述
+            200	发送短信成功
+            405	AppKey为空
+            406	AppKey无效
+            456	国家代码或手机号码为空
+            457	手机号码格式错误
+            466	请求校验的验证码为空
+            467	请求校验验证码频繁（5分钟内同一个appkey的同一个号码最多只能校验三次）
+            468	验证码错误
+            474	没有打开服务端验证开关
+             *
+             */
+
+            // 发送验证码
+            $checkResult = Control::CurlPostRequest( $mobSmsCheckUrl,
+                        array(
+                        'appkey' => $mobAppKey,
+                        'phone' => $userMobile,
+                        'zone' => '86',
+                        'code' => $smsCode,
+                        ) );
+
+            $checkResult = intval($checkResult);
+
+            if($checkResult == 200){
+
+                //成功
+                //modify pass
+
+
+
+                $newUserPass = Des::DecryptFitAll($newUserPass, "ZAQ!xsw2");
+
+                if (strlen($newUserPass)>0){
+
+
+                    $userClientData = new UserClientData();
+
+
+
+
+                }
+
+
+
+            }else{
+
+
+
+            }
+
+
+            /**
+
+
+            $userClientData = new UserClientData();
+
+            $userId = $userClientData->Login($userAccount, $userPass);
+
+            if($userId <= 0){
+                $resultCode = UserBaseGen::LOGIN_ERROR_USER_PASS;
+            }else {
+                $resultCode = UserBaseGen::LOGIN_SUCCESS;
+                $withCache = FALSE;
+                $arrUserOne = $userClientData->GetOne($userId,$withCache);
+
+                //将user pass 进行md5加密返回
+                if($arrUserOne["UserPass"]){
+                    $arrUserOne["UserPass"] = md5($arrUserOne["UserPass"]);
+                }
+
+                $result = Format::FixJsonEncode($arrUserOne);
+            }
+             */
+
+        } else {
+            $resultCode = UserBaseGen::LOGIN_ILLEGAL_PARAMETER;
+        }
+
+
+
+        return '{"result_code":"' . $resultCode . '","sms_check":' . $result . '}';
+
     }
 }
 

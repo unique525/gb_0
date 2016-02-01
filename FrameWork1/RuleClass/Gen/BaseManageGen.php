@@ -289,7 +289,7 @@ class BaseManageGen extends BaseGen
                                             $publishLogManageData->Create(
                                                 PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
                                                 PublishLogManageData::TABLE_TYPE_CHANNEL,
-                                                $arrChannelIds[$x],
+                                                $arrChannelIds[$x]["ChannelId"],
                                                 "",
                                                 "",
                                                 $timeEnd - $timeStart,
@@ -377,9 +377,7 @@ class BaseManageGen extends BaseGen
 
             if ($executeTransfer) {
                 $timeStart = Control::GetMicroTime();
-
-                return self::TransferPublishQueue($publishQueueManageData, $siteId);
-
+                self::TransferPublishQueue($publishQueueManageData, $siteId);
                 $timeEnd = Control::GetMicroTime();
                 $publishLogManageData->Create(
                     PublishLogManageData::TRANSFER_TYPE_NO_DEFINE,
