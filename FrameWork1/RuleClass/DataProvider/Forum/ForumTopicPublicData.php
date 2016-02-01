@@ -47,14 +47,11 @@ class ForumTopicPublicData extends BasePublicData
     )
     {
         $result = -1;
-
-
         if (
             $siteId > 0
             && $forumId > 0
             && strlen($forumTopicTitle) > 0
             && $userId > 0
-            && strlen($userName) > 0
         ) {
 
 
@@ -156,7 +153,6 @@ class ForumTopicPublicData extends BasePublicData
             $sql = "UPDATE " . self::TableName_ForumTopic . " SET " . $fieldNames . " WHERE forumTopicId =" . $forumTopicId . "";
             $result = $this->dbOperator->Execute($sql, $dataProperty);
         }
-        echo $result;
         return $result;
     }
 

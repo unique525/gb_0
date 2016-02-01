@@ -34,7 +34,7 @@ class ForumPostPublicData extends BasePublicData {
         $uploadFiles
     ){
         $result = -1;
-        if($siteId>0 && $forumId>0 && $userId>0 && strlen($userName)>0){
+        if($siteId>0 && $forumId>0 && $userId>0){
             $sql = "INSERT INTO " . self::TableName_ForumPost . "
                     (
                     SiteId,
@@ -265,7 +265,7 @@ class ForumPostPublicData extends BasePublicData {
 
     /**
      * 取得会员id
-     * @param int $forumPostId 主题id
+     * @param int $forumPostId 帖子id
      * @param bool $withCache 是否从缓冲中取
      * @return int 论坛id
      */
@@ -274,7 +274,7 @@ class ForumPostPublicData extends BasePublicData {
         if ($forumPostId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_post_data';
             $cacheFile = 'forum_post_get_user_id.cache_' . $forumPostId . '';
-            $sql = "SELECT UserId FROM " . self::TableName_ForumTopic . " WHERE ForumPostId =:ForumPostId;";
+            $sql = "SELECT UserId FROM " . self::TableName_ForumPost . " WHERE ForumPostId =:ForumPostId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField(self::TableId_ForumPost, $forumPostId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

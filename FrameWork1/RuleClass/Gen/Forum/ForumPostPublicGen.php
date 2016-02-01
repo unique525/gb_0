@@ -560,6 +560,11 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
     {
         $forumTopicId = Control::GetRequest("forum_topic_id", 0);
         $forumId = Control::GetRequest("forum_id", 0);
+        $userId = Control::GetUserId();
+        $defaultTemp = "forum_post_modify";
+        $templateMode = 0;
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
         if ($forumId <= 0) {
             die("");
         }
@@ -571,25 +576,41 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
         if ($siteId <= 0) {
             $siteId = parent::GetSiteIdByDomain();
         }
-        $templateMode = 0;
-        $defaultTemp = "forum_post_modify";
-        $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
+        if($userId > 0){
+                $forumPostPublicData = new ForumPostPublicData();
+                $forumUserId = $forumPostPublicData->GetUserId($forumPostId, true);
+                if ($forumUserId == $userId){ //自己的帖子
+                    //读取权限
+                    $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumEditSelfPost);
 
-        $forumPostPublicDate = new ForumPostPublicData();
-        $arrOne = $forumPostPublicDate->GetOne($forumPostId);
-        Template::ReplaceOne($tempContent, $arrOne, false, false);
-        if (!empty($_POST)) {
-            $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
-            $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
-            //内容中不允许脚本等
-            $forumPostContent = Format::RemoveScript($forumPostContent);
-            $forumPostModify = new ForumPostPublicData();
-            $result = $forumPostModify->ModifyContent($forumPostId,$forumPostContent );
-            if ($result > 0) {
+                }else{
+                    $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumEditSelfPost);
+                }
+                if ($can) {
+
+                $forumPostPublicDate = new ForumPostPublicData();
+                $arrOne = $forumPostPublicDate->GetOne($forumPostId);
+                Template::ReplaceOne($tempContent, $arrOne, false, false);
+                if (!empty($_POST)) {
+                    $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
+                    $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
+                    //内容中不允许脚本等
+                    $forumPostContent = Format::RemoveScript($forumPostContent);
+                    $forumPostModify = new ForumPostPublicData();
+                    $result = $forumPostModify->ModifyContent($forumPostId,$forumPostContent );
+                    if ($result > 0) {
+                        Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+                    }
+                }
+            } else {
                 Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+                $result = -10; //没有权限
             }
         }
+        Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+
+
+
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
 

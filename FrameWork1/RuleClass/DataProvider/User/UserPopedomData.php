@@ -61,7 +61,7 @@ class UserPopedomData {
      * 编辑自己的帖子
      * @var bool
      */
-    private $ForumEditSelfPost; //编辑自己的帖子
+    const ForumEditSelfPost = "ForumEditSelfPost"; //编辑自己的帖子
     /**
      * 编辑其他人的帖子
      * @var bool
@@ -73,7 +73,8 @@ class UserPopedomData {
      */
     const ForumDeleteSelfPost = "ForumDeleteSelfPost"; //删除自己的帖子
     const ForumDeleteOtherPost = "ForumDeleteOtherPost"; //删除其他人的帖子
-    private $ForumForbidOtherEditMyTopic; //禁止其他人编辑自己的主题(一般只有管理员有此权限)
+
+    const  ForumForbidOtherEditMyTopic = "ForumForbidOtherEditMyTopic"; //禁止其他人编辑自己的主题(一般只有管理员有此权限)
     private $ForumForbidOtherEditMyReply; //禁止其他人编辑自己的回复(一般只有管理员有此权限)
     private $ForumForbidOtherDeleteMyTopic; //禁止其他人删除自己的主题(一般只有管理员有此权限)
     private $ForumForbidOtherDeleteMyReply; //禁止其他人删除自己的回复(一般只有管理员有此权限)

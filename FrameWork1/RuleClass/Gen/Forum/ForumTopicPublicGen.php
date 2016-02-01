@@ -341,15 +341,12 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $postTime = date("Y-m-d H:i:s", time());
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
-
             $forumTopicMood = Control::PostRequest("f_ForumTopicMood", "");
             $forumTopicAttach = Control::PostRequest("f_ForumTopicAttach", "");
             $titleBold = Control::PostRequest("f_TitleBold", "");
             $titleColor = Control::PostRequest("f_TitleColor", "");
             $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
             $forumTopicPublicData = new ForumTopicPublicData();
-
-
             $forumTopicId = $forumTopicPublicData->Create(
                 $siteId,
                 $forumId,
@@ -516,8 +513,8 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $showBoughtUser = 0;
                 $sort = 0;
                 $state = 0;
-                $forumTopicPostData = new ForumPostPublicData();
-                $forumPostId = $forumTopicPostData->Create(
+                $forumPostPublicData = new ForumPostPublicData();
+                $forumPostId = $forumPostPublicData->Create(
                     $siteId,
                     $forumId,
                     $forumTopicId,
@@ -637,7 +634,6 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
         $arrOne = $forumPostPublicDate->GetOneForTopicId($forumTopicId,$isTopic);
 
         Template::ReplaceOne($tempContent, $arrOne, false, false);
-
         if (!empty($_POST)) {
             $forumTopicTitle = Control::PostRequest("f_ForumTopicTitle", "");
             $forumTopicTitle = Format::FormatHtmlTag($forumTopicTitle);
@@ -660,67 +656,86 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $titleColor = Control::PostRequest("f_TitleColor", "");
             $titleBgImage = Control::PostRequest("f_TitleBgImage", "");
             $forumTopicModify = new ForumTopicPublicData();
-            $result = $forumTopicModify->Modify(
-                $forumTopicId,
-                $forumTopicTitle,
-                $forumTopicTypeId,
-                $forumTopicTypeName,
-                $forumTopicAudit,
-                $forumTopicAccess,
-                $postTime,
-                $userId,
-                $userName,
-                $forumTopicMood,
-                $forumTopicAttach,
-                $titleBold,
-                $titleColor,
-                $titleBgImage
-            );
-            if ($result > 0) {
-                $siteId = Control::PostRequest("f_SiteId", "");
-                $isTopic = 1;
-                $forumPostTitle = $forumTopicTitle;
-                $accessLimitNumber = "";
-                $accessLimitContent = "";
-                $showSign = 0;
-                $postIp = Control::GetIp();
-                $isOneSale = 0;
-                $addMoney = 0;
-                $addScore = 0;
-                $addCharm = 0;
-                $addExp = 0;
-                $showBoughtUser = 0;
-                $sort = 0;
-                $state = 0;
-                $uploadFiles = Control::PostRequest("file_upload_to_content", "");
-                $forumPostPublicDate = new ForumPostPublicData();
-                $result = $forumPostPublicDate->Modify(
-                    $siteId,
-                    $forumTopicId,
-                    $isTopic,
-                    $forumPostTitle,
-                    $forumPostContent,
-                    $postTime,
-                    $forumTopicAudit,
-                    $forumTopicAccess,
-                    $accessLimitNumber,
-                    $accessLimitContent,
-                    $showSign,
-                    $postIp,
-                    $isOneSale,
-                    $addMoney,
-                    $addScore,
-                    $addCharm,
-                    $addExp,
-                    $showBoughtUser,
-                    $sort,
-                    $state,
-                    $uploadFiles
-                );
-                if ($result > 0) {
-                    Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+            if($userId > 0){
+
+                $forumTopicPublicData = new ForumTopicPublicData();
+                $forumUserId = $forumTopicPublicData->GetUserId($forumTopicId, true);
+                if ($forumUserId == $userId){ //自己的帖子
+                    //读取权限
+                    $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumForbidOtherEditMyTopic);
+
+                }else{
+                    $can = parent::GetUserPopedomBoolValue(UserPopedomData::ForumForbidOtherEditMyTopic);
                 }
-            }
+                if ($can) {
+                    $result = $forumTopicModify->Modify(
+                        $forumTopicId,
+                        $forumTopicTitle,
+                        $forumTopicTypeId,
+                        $forumTopicTypeName,
+                        $forumTopicAudit,
+                        $forumTopicAccess,
+                        $postTime,
+                        $userId,
+                        $userName,
+                        $forumTopicMood,
+                        $forumTopicAttach,
+                        $titleBold,
+                        $titleColor,
+                        $titleBgImage
+                    );
+                    if ($result > 0) {
+                        $siteId = Control::PostRequest("f_SiteId", "");
+                        $isTopic = 1;
+                        $forumPostTitle = $forumTopicTitle;
+                        $accessLimitNumber = "";
+                        $accessLimitContent = "";
+                        $showSign = 0;
+                        $postIp = Control::GetIp();
+                        $isOneSale = 0;
+                        $addMoney = 0;
+                        $addScore = 0;
+                        $addCharm = 0;
+                        $addExp = 0;
+                        $showBoughtUser = 0;
+                        $sort = 0;
+                        $state = 0;
+                        $uploadFiles = Control::PostRequest("file_upload_to_content", "");
+                        $forumPostPublicDate = new ForumPostPublicData();
+                        $result = $forumPostPublicDate->Modify(
+                            $siteId,
+                            $forumTopicId,
+                            $isTopic,
+                            $forumPostTitle,
+                            $forumPostContent,
+                            $postTime,
+                            $forumTopicAudit,
+                            $forumTopicAccess,
+                            $accessLimitNumber,
+                            $accessLimitContent,
+                            $showSign,
+                            $postIp,
+                            $isOneSale,
+                            $addMoney,
+                            $addScore,
+                            $addCharm,
+                            $addExp,
+                            $showBoughtUser,
+                            $sort,
+                            $state,
+                            $uploadFiles
+                        );
+                        if ($result > 0) {
+                            echo "ok1";
+                            Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+                        }
+                    }
+                }
+                else {
+                    Control::GoUrl("/default.php?mod=forum_post&a=list&forum_topic_id=$forumTopicId");
+                    $result = -10; //没有权限
+                }
+        }
         }
         $tempContent = str_ireplace("{ForumId}", $forumId, $tempContent);
         $tempContent = str_ireplace("{ForumTopicId}", "", $tempContent);
