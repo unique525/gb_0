@@ -279,7 +279,7 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
              */
 
             // 发送验证码
-            $checkResult = Control::CurlPostRequest( $mobSmsCheckUrl,
+            $resultCode = Control::CurlPostRequest( $mobSmsCheckUrl,
                         array(
                         'appkey' => $mobAppKey,
                         'phone' => $userMobile,
@@ -287,15 +287,15 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                         'code' => $smsCode,
                         ) );
 
-            $checkResult = intval($checkResult);
+            $resultCode = intval($resultCode);
 
-            if($checkResult == 200){
+            if($resultCode == 200){
 
                 //成功
                 //modify pass
 
 
-
+                //des decrypt
                 $newUserPass = Des::DecryptFitAll($newUserPass, "ZAQ!xsw2");
 
                 if (strlen($newUserPass)>0){
@@ -303,6 +303,9 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
 
                     $userClientData = new UserClientData();
 
+                    $result = $userClientData->ModifyPassword($userMobile, $newUserPass);
+
+                    //$newUserPassMd5
 
 
 
@@ -310,11 +313,8 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
 
 
 
-            }else{
-
-
-
             }
+
 
 
             /**
