@@ -159,5 +159,24 @@ class UserClientData extends BaseClientData {
         }
         return $result;
     }
+
+    /**
+     * 修改用户密码
+     * @param string $userMobile
+     * @param string $userPass
+     * @return int 返回修改结果
+     */
+    public function ModifyPassword($userMobile, $userPass)
+    {
+        $result = -1;
+        if(strlen($userMobile) > 0){
+            $sql = "UPDATE " . self::TableName_User . " SET UserPass = :UserPass WHERE UserMobile = :UserMobile;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserPass", $userPass);
+            $dataProperty->AddField("UserMobile", $userMobile);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
 ?>

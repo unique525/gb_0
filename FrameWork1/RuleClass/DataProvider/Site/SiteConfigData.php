@@ -157,6 +157,9 @@
  * @property string WeiXinJsApiTicket
  * @property string WeiXinJsApiTicketGetTime
  *
+ * @property string MobSmsCheckUrl
+ * @property string MobAppKey
+ * @property string MobAppSecret
  *
  * @author zhangchi
  */
@@ -563,6 +566,73 @@ class SiteConfigData extends BaseData {
 
     private $DocumentNewsTitlePic2CompressWidth = 0; //资讯题图2压缩图宽度值
     private $DocumentNewsTitlePic2CompressHeight = 0;//资讯题图2压缩图高度值
+
+    /**
+     * MOB的短信验证请求网址
+     * @var string
+     */
+    private $MobSmsCheckUrl = "https://webapi.sms.mob.com/sms/verify";
+    /**
+     * MOB的APP KEY
+     * @var string
+     */
+    private $MobAppKey = "";
+    /**
+     * MOB的APP SECRET
+     * @var string
+     */
+    private $MobAppSecret = "";
+
+    /**
+     * @return string
+     */
+    public function getMobSmsCheckUrl()
+    {
+        return $this->MobSmsCheckUrl;
+    }
+
+    /**
+     * @param string $MobSmsCheckUrl
+     */
+    public function setMobSmsCheckUrl($MobSmsCheckUrl)
+    {
+        $this->MobSmsCheckUrl = $MobSmsCheckUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobAppKey()
+    {
+        return $this->MobAppKey;
+    }
+
+    /**
+     * @param string $MobAppKey
+     */
+    public function setMobAppKey($MobAppKey)
+    {
+        $this->MobAppKey = $MobAppKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobAppSecret()
+    {
+        return $this->MobAppSecret;
+    }
+
+    /**
+     * @param string $MobAppSecret
+     */
+    public function setMobAppSecret($MobAppSecret)
+    {
+        $this->MobAppSecret = $MobAppSecret;
+    }
+
+
+
 
     /**
      * @param mixed $WeiXinAppId
