@@ -30,6 +30,10 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 $result = self::GenModifyUserPassWithSmsCode();
                 break;
 
+            case "check_repeat_user_mobile":
+                $result = self::GenCheckRepeatUserMobile();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -348,6 +352,27 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
 
         return '{"result_code":"' . $resultCode . '","sms_check":' . $result . '}';
 
+    }
+
+    private function GenCheckRepeatUserMobile(){
+        $result = "[{}]";
+
+        //$userAccount = Format::FormatHtmlTag(Control::PostOrGetRequest("UserAccount", ""));
+        $userMobile = Format::FormatHtmlTag(Control::PostOrGetRequest("UserMobile", ""));
+
+        if (strlen($userMobile)>0){
+            $resultCode = 1;
+
+            $userClientData = new UserClientData();
+
+            $result = $userClientData->CheckRepeatUserMobile($userMobile);
+
+        }else{
+            $resultCode = -10;
+
+        }
+
+        return '{"result_code":"' . $resultCode . '","repeat_user_mobile_check":' . $result . '}';
     }
 }
 
