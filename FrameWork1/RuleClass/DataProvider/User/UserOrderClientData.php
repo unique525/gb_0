@@ -25,6 +25,7 @@ class UserOrderClientData extends BaseClientData {
      * @param $siteId
      * @param $createDate
      * @param $createDateDes
+     * @param $userOrderTableType
      * @return int
      */
     public function Create(
@@ -42,7 +43,8 @@ class UserOrderClientData extends BaseClientData {
         $autoSendMessage,
         $siteId,
         $createDate,
-        $createDateDes
+        $createDateDes,
+        $userOrderTableType = UserOrderData::USER_ORDER_TABLE_TYPE_PRODUCT
     )
     {
         $result = -1;
@@ -69,7 +71,8 @@ class UserOrderClientData extends BaseClientData {
                     SiteId,
                     CreateDate,
                     CreateDateDes,
-                    State
+                    State,
+                    UserOrderTableType
                     )
                     VALUES
                     (
@@ -88,7 +91,8 @@ class UserOrderClientData extends BaseClientData {
                     :SiteId,
                     :CreateDate,
                     :CreateDateDes,
-                    :State
+                    :State,
+                    :UserOrderTableType
                     );
             ";
 
@@ -109,6 +113,7 @@ class UserOrderClientData extends BaseClientData {
             $dataProperty->AddField("CreateDate",$createDate);
             $dataProperty->AddField("CreateDateDes",$createDateDes);
             $dataProperty->AddField("State",UserOrderData::STATE_NON_PAYMENT);
+            $dataProperty->AddField("UserOrderTableType",$userOrderTableType);
             $result = $this->dbOperator->LastInsertId($sql,$dataProperty);
 
         }

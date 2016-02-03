@@ -6,6 +6,8 @@
  * @author zhangchi
  */
 class UserOrderNewspaperPublicData extends BasePublicData {
+
+
     /**
      * @param $userOrderId
      * @param $siteId

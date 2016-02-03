@@ -65,6 +65,12 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
             $createDate = strval(date('Y-m-d H:i:s', time()));
             $createDateDes = Des::Encrypt($createDate, UserOrderData::USER_ORDER_DES_KEY);
 
+            //newspaper
+            $newspaperId = intval(Control::PostOrGetRequest("NewspaperId", ""));
+            $newspaperArticleId = intval(Control::PostOrGetRequest("NewspaperArticleId", ""));
+
+            $userOrderTableType = intval(Control::PostOrGetRequest("UserOrderTableType", ""));
+
             if(
                 $userReceiveInfoId>0
                 && $siteId>0
@@ -75,6 +81,8 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                 $userOrderName = "";
                 $userOrderNumber = UserOrderData::GenUserOrderNumber();
                 $userOrderNumberDes = Des::Encrypt($userOrderNumber, UserOrderData::USER_ORDER_DES_KEY);
+
+
 
                 $userOrderId = $userOrderClientData->Create(
                     $userOrderName,
@@ -91,14 +99,15 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
                     $autoSendMessage,
                     $siteId,
                     $createDate,
-                    $createDateDes
+                    $createDateDes,
+                    $userOrderTableType
                 );
 
                 if($userOrderId>0){
                     $result = Format::FixJsonEncode($userOrderClientData->GetOne($userOrderId,$userId,$siteId));
 
 
-                    //客户端上，单独调用订单产品表新增接口
+                    //客户端上，单独调用订单产品表新增接口 或 订单电子报表新增接口
 
                     //客户端上，单独调用购物车删除接口
 
