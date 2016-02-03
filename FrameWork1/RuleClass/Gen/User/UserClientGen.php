@@ -302,24 +302,23 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 //des decrypt
                 $newUserPass = Des::DecryptFitAll($newUserPass, "ZAQ!xsw2");
 
-                if (strlen($newUserPass)>0){
-
+                //use md5 to recheck
+                if ($newUserPassMd5 == md5($newUserPass)
+                    && strlen($newUserPass)>0
+                ){
 
                     $userClientData = new UserClientData();
 
                     $result = $userClientData->ModifyPassword($userMobile, $newUserPass);
 
-                    //$newUserPassMd5
-
-
-
+                    //将user pass 进行md5加密返回
+                    if($result > 0){
+                        $result = Format::FixJsonEncode(md5($newUserPass));
+                    }else{
+                        //return result
+                    }
                 }
-
-
-
             }
-
-
 
             /**
 
@@ -346,7 +345,7 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         } else {
             $resultCode = UserBaseGen::LOGIN_ILLEGAL_PARAMETER;
         }
-        return '{"result_code":"' . $resultCode . '","sms_check":' . $result . '}';
+        return '{"result_code":"' . $resultCode . '","modify_user_pass":' . $result . '}';
 
     }
 
