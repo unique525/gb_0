@@ -251,13 +251,12 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
         $newUserPass = Format::FormatSql(Control::PostOrGetRequest("NewUserPass", ""));
         $smsCode = Format::FormatSql(Control::PostOrGetRequest("SmsCode", ""));
         $newUserPassMd5 = Control::PostOrGetRequest("NewUserPassMd5", "");
-        $regIp = Control::GetIp();
         $siteId = intval(Control::PostOrGetRequest("SiteId",""));
 
         if (strlen($userMobile) > 0
             && strlen($newUserPass) > 0
+            && strlen($newUserPassMd5) > 0
             && strlen($smsCode) > 0
-            && strlen($regIp) > 0
             && $siteId > 0
         ) {
 
@@ -303,9 +302,7 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 $newUserPass = Des::DecryptFitAll($newUserPass, "ZAQ!xsw2");
 
                 //use md5 to recheck
-                if ($newUserPassMd5 == md5($newUserPass)
-                    && strlen($newUserPass)>0
-                ){
+                if ($newUserPassMd5 == md5($newUserPass)){
 
                     $userClientData = new UserClientData();
 
@@ -320,28 +317,6 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                 }
             }
 
-            /**
-
-
-            $userClientData = new UserClientData();
-
-            $userId = $userClientData->Login($userAccount, $userPass);
-
-            if($userId <= 0){
-                $resultCode = UserBaseGen::LOGIN_ERROR_USER_PASS;
-            }else {
-                $resultCode = UserBaseGen::LOGIN_SUCCESS;
-                $withCache = FALSE;
-                $arrUserOne = $userClientData->GetOne($userId,$withCache);
-
-                //将user pass 进行md5加密返回
-                if($arrUserOne["UserPass"]){
-                    $arrUserOne["UserPass"] = md5($arrUserOne["UserPass"]);
-                }
-
-                $result = Format::FixJsonEncode($arrUserOne);
-            }
-             */
         } else {
             $resultCode = UserBaseGen::LOGIN_ILLEGAL_PARAMETER;
         }
