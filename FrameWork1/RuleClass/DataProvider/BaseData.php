@@ -828,6 +828,12 @@ class BaseData
      */
     const TableName_DebugLog = "cst_debug_log";
 
+
+    /**
+     * 会员等级 视图
+     */
+    const ViewName_UserLevel = "view_User_Level";
+
     /**
      * 数据库操作对象的实例
      * @var DbOperator 返回数据库操作对象

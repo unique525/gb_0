@@ -238,15 +238,21 @@ class ForumPostPublicData extends BasePublicData {
                         ui.NickName,
                         uf.UploadFilePath AS AvatarUploadFilePath,
                         uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
-                        uf.UploadFilePadPath AS AvatarUploadFilePadPath
+                        uf.UploadFilePadPath AS AvatarUploadFilePadPath,
+                        usl.UserLevel,
+                        usl.UserLevelName,
+                        usl.UserLevelPic
                 FROM " . self::TableName_ForumPost . " fp
 
                 INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=fp.UserId)
 
                 LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+                LEFT OUTER JOIN " .self::ViewName_UserLevel ." usl ON (ui.UserId = usl.UserId)
 
+                WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . "
+                AND fp.state=0
 
-                WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . " AND fp.state=0 ORDER BY fp.IsTopic DESC, fp.PostTime
+                ORDER BY fp.IsTopic DESC, fp.PostTime
 
                 LIMIT " .$pageBegin . "," . $pageSize . ";";
         $dataProperty = new DataProperty();
@@ -257,6 +263,8 @@ class ForumPostPublicData extends BasePublicData {
         $sql = "SELECT count(*)".
                 " FROM " .self::TableName_ForumPost. " fp".
                 " WHERE ForumTopicId=:ForumTopicId AND fp.state=0;";
+
+
 
         $allCount = $this->dbOperator->GetInt($sql, $dataProperty);
 
