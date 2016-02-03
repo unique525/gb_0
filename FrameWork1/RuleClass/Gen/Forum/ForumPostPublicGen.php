@@ -171,6 +171,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $pageSize,
             $allCount
         );
+
         if (count($arrForumPost) > 0) {
 
             Template::ReplaceList($templateContent, $arrForumPost, $tagId);
