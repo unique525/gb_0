@@ -37,7 +37,7 @@ class UserOrderNewspaperClientGen extends BaseClientGen implements IBaseClientGe
         if ($userId <= 0) {
             $resultCode = $userId; //会员检验失败,参数错误
         } else {
-            $siteId = Control::PostOrGetRequest("SiteId", 0);
+            $siteId = Control::PostOrGetRequest("site_id", 0);
             $userOrderId = intval(Control::PostOrGetRequest("UserOrderId", 0));
             $newspaperId = intval(Control::PostOrGetRequest("NewspaperId", 0));
             $newspaperArticleId = intval(Control::PostOrGetRequest("NewspaperArticleId", 0));

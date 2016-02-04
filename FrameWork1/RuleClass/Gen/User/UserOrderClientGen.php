@@ -72,17 +72,13 @@ class UserOrderClientGen extends BaseClientGen implements IBaseClientGen {
             $userOrderTableType = intval(Control::PostOrGetRequest("UserOrderTableType", ""));
 
             if(
-                $userReceiveInfoId>0
-                && $siteId>0
-                && $userId>0
+                $siteId>0 && $userId>0
             ){
 
                 $userOrderClientData = new UserOrderClientData();
                 $userOrderName = "";
                 $userOrderNumber = UserOrderData::GenUserOrderNumber();
                 $userOrderNumberDes = Des::Encrypt($userOrderNumber, UserOrderData::USER_ORDER_DES_KEY);
-
-
 
                 $userOrderId = $userOrderClientData->Create(
                     $userOrderName,

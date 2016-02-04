@@ -33,7 +33,6 @@ class UserOrderNewspaperClientData extends BaseClientData {
         $result = -1;
         if(
             $userOrderId>0
-            && $newspaperId>0
         ){
 
             $sql = "INSERT INTO ".self::TableName_UserOrderNewspaper."
