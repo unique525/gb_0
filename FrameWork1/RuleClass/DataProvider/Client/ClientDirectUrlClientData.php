@@ -9,9 +9,9 @@
 class ClientDirectUrlClientData extends BaseClientData
 {
     /**
-     * 获取directUrl
+     * 获取DirectUrl
      * @param int $clientDirectUrlId
-     * @return  array DirectUrl
+     * @return  String DirectUrl
      */
     public function GetDirectUrl($clientDirectUrlId) {
         $result = -1;
