@@ -282,7 +282,7 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
              */
 
             // 发送验证码
-            $resultCode = Control::CurlPostRequest( $mobSmsCheckUrl,
+            $jsonMessage = Control::CurlPostRequest( $mobSmsCheckUrl,
                         array(
                         'appkey' => $mobAppKey,
                         'phone' => $userMobile,
@@ -290,7 +290,12 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
                         'code' => $smsCode,
                         ) );
 
-            $resultCode = intval($resultCode);
+            //$resultCode = intval($resultCode);
+            $arrMessage = Format::FixJsonDecode($jsonMessage);
+            $resultCode=$arrMessage["status"];
+            if(!empty($resultCode)){
+                $resultCode = intval($resultCode);
+            }
 
             if($resultCode == 200){
 
