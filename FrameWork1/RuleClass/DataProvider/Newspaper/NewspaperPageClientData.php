@@ -39,4 +39,24 @@ class NewspaperPageClientData extends BaseClientData {
         return $result;
     }
 
+
+    /**
+     * 取得所属电子报id
+     * @param int $newspaperPageId 电子报版面id
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 电子报id
+     */
+    public function GetNewspaperId($newspaperPageId, $withCache)
+    {
+        $result = -1;
+        if ($newspaperPageId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'newspaper_page_data';
+            $cacheFile = 'newspaper_page_get_newspaper_id.cache_' . $newspaperPageId . '';
+            $sql = "SELECT NewspaperId FROM " . self::TableName_NewspaperPage . " WHERE NewspaperPageId=:NewspaperPageId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("NewspaperPageId", $newspaperPageId);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 }

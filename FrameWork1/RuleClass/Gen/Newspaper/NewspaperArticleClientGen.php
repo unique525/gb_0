@@ -120,4 +120,42 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
 
     }
 
+    /**
+     * 根据用户判断是否能看报纸
+     * @param $siteId
+     * @param $userId
+     * @param $newspaperArticleId
+     * @return bool
+     */
+    function IsAuthorizedUser($siteId, $userId, $newspaperArticleId)
+    {
+        $result=false;
+        if ($userId > 0){
+            //是否购买了报纸
+            $newspaperArticleClientData = new NewspaperArticleClientData();
+            $newspaperPageClientData = new NewspaperPageClientData();
+            $newspaperClientData = new NewspaperClientData();
+
+            $newspaperPageId = $newspaperArticleClientData->GetNewspaperPageId($newspaperArticleId, true);
+            $newspaperId = $newspaperPageClientData->GetNewspaperId($newspaperPageId, true);
+
+            $channelId=$newspaperClientData->GetChannelId($newspaperId, true);
+            $publishDate=$newspaperClientData->GetPublishDate($newspaperId, true);
+            $userOrderNewspaperClientData = new UserOrderNewspaperClientData();
+            $isBuy = $userOrderNewspaperClientData->CheckIsBoughtInTimeByChannelId(
+                $userId,
+                $channelId,
+                $publishDate);
+            //可以直接免费看付费报纸
+            $canExplore = parent::GetUserPopedomBoolValue(
+                $siteId,
+                $userId,
+                UserPopedomData::UserCanExploreMustPayNewspaper);
+            //购买了报纸或有权限可以直接免费看报纸
+            if ($isBuy>0 || $canExplore){
+                $result=true;
+            }
+        }
+        return $result;
+    }
 } 

@@ -98,4 +98,38 @@ class UserOrderNewspaperClientData extends BaseClientData {
         }
         return $result;
     }
+
+
+    /**检查用户是否购买了当前报纸
+     * @param int $userId 用户id
+     * @param int $channelId 报纸频道id
+     * @param String $publishDate 报纸出版日期
+     * @return bool
+     */
+    public function CheckIsBoughtInTimeByChannelId($userId,$channelId,$publishDate){
+        $result = -1;
+        if($userId > 0 && $channelId > 0){
+            $sql = "SELECT
+                        count(*)
+                    FROM ".self::TableName_UserOrderNewspaper." uon,
+                         ".self::TableName_UserOrder." uo
+                    WHERE
+                        uo.UserId = :UserId
+                        AND uon.UserId = uo.UserId
+                        AND uon.UserOrderId = uo.UserOrderId
+                        AND uon.ChannelId = :ChannelId
+                        AND uon.EndDate>=:NowTime
+
+                        AND (      uo.State = ".UserOrderData::STATE_DONE."
+                                OR uo.State = ".UserOrderData::STATE_PAYMENT." )
+
+                        ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserId",$userId);
+            $dataProperty->AddField("ChannelId",$channelId);
+            $dataProperty->AddField("NowTime",$publishDate);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
 } 
