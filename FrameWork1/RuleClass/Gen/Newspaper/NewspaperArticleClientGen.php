@@ -26,6 +26,10 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
                 $result = self::GetOne();
                 break;
 
+            case "check_is_bought":
+                $result = self::CheckIsBought();
+                break;
+
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;
@@ -122,40 +126,58 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
 
     /**
      * 根据用户判断是否能看报纸
-     * @param $siteId
-     * @param $userId
-     * @param $newspaperArticleId
-     * @return bool
+     * @return string
      */
-    function IsAuthorizedUser($siteId, $userId, $newspaperArticleId)
+    function CheckIsBought()
     {
-        $result=false;
-        if ($userId > 0){
-            //是否购买了报纸
-            $newspaperArticleClientData = new NewspaperArticleClientData();
-            $newspaperPageClientData = new NewspaperPageClientData();
-            $newspaperClientData = new NewspaperClientData();
+        $result = "[{}]";
 
-            $newspaperPageId = $newspaperArticleClientData->GetNewspaperPageId($newspaperArticleId, true);
-            $newspaperId = $newspaperPageClientData->GetNewspaperId($newspaperPageId, true);
+        $userId = parent::GetUserId();
 
-            $channelId=$newspaperClientData->GetChannelId($newspaperId, true);
-            $publishDate=$newspaperClientData->GetPublishDate($newspaperId, true);
-            $userOrderNewspaperClientData = new UserOrderNewspaperClientData();
-            $isBuy = $userOrderNewspaperClientData->CheckIsBoughtInTimeByChannelId(
-                $userId,
-                $channelId,
-                $publishDate);
-            //可以直接免费看付费报纸
-            $canExplore = parent::GetUserPopedomBoolValue(
-                $siteId,
-                $userId,
-                UserPopedomData::UserCanExploreMustPayNewspaper);
-            //购买了报纸或有权限可以直接免费看报纸
-            if ($isBuy>0 || $canExplore){
-                $result=true;
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            $siteId = Control::PostOrGetRequest("site_id", 0);
+            $newspaperArticleId = intval(Control::PostOrGetRequest("NewspaperArticleId", 0));
+
+            if ($siteId > 0
+                && $newspaperArticleId > 0
+
+            ) {
+                $resultCode = 1;
+                //是否购买了报纸
+                $newspaperArticleClientData = new NewspaperArticleClientData();
+                $newspaperPageClientData = new NewspaperPageClientData();
+                $newspaperClientData = new NewspaperClientData();
+
+                $newspaperPageId = $newspaperArticleClientData->GetNewspaperPageId($newspaperArticleId, true);
+                $newspaperId = $newspaperPageClientData->GetNewspaperId($newspaperPageId, true);
+
+                $channelId=$newspaperClientData->GetChannelId($newspaperId, true);
+                $publishDate=$newspaperClientData->GetPublishDate($newspaperId, true);
+                $userOrderNewspaperClientData = new UserOrderNewspaperClientData();
+                $isBuy = $userOrderNewspaperClientData->CheckIsBoughtInTimeByChannelId(
+                    $userId,
+                    $channelId,
+                    $publishDate);
+                //可以直接免费看付费报纸
+                $canExplore = parent::GetUserPopedomBoolValue(
+                    $siteId,
+                    $userId,
+                    UserPopedomData::UserCanExploreMustPayNewspaper);
+                //购买了报纸或有权限可以直接免费看报纸
+                if ($isBuy>0 || $canExplore){
+
+                    $arrOne = $newspaperArticleClientData->GetOne($newspaperArticleId,true);
+                    $result = Format::FixJsonEncode($arrOne);
+                }
+
+            } else {
+                $resultCode = -5;//参数不正确
             }
+
         }
-        return $result;
+        return '{"result_code":"' . $resultCode . '","result":' . $result . '}';
+
     }
 } 

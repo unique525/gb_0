@@ -176,11 +176,13 @@ class DocumentNewsClientData extends BaseClientData {
             }
         }
 
+        $orderBy = " dn.ShowFullDate DESC ";
+
         if ($showInClientIndex>-1){
 
             $searchSql = " AND ShowInClientIndex>=:ShowInClientIndex ";
             $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
-
+            $orderBy = " dn.ShowInClientIndex DESC, dn.ShowFullDate DESC ";
         }
 
         $sql = "
@@ -192,7 +194,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.SiteId=:SiteId AND dn.State=30 AND dn.ShowInClient=1 " . $searchSql . "
-            ORDER BY dn.ShowInClientIndex DESC, dn.ShowFullDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize . ";";
 
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -252,10 +254,14 @@ class DocumentNewsClientData extends BaseClientData {
             }
         }
 
+        $orderBy = " dn.ShowFullDate DESC ";
+
         if ($showInClientIndex>-1){
 
             $searchSql = " AND ShowInClientIndex>=:ShowInClientIndex ";
             $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
+
+            $orderBy = " dn.ShowInClientIndex DESC, dn.ShowFullDate DESC ";
 
         }
 
@@ -268,7 +274,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.ChannelId=:ChannelId AND dn.State=30 AND dn.ShowInClient=1 " . $searchSql . "
-            ORDER BY dn.ShowInClientIndex DESC, dn.ShowFullDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize . ";";
 
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -328,11 +334,13 @@ class DocumentNewsClientData extends BaseClientData {
             }
         }
 
+        $orderBy = " dn.ShowFullDate DESC ";
+
         if ($showInClientIndex>-1){
 
             $searchSql = " AND ShowInClientIndex>=:ShowInClientIndex ";
             $dataProperty->AddField("ShowInClientIndex", $showInClientIndex);
-
+            $orderBy = " dn.ShowInClientIndex DESC, dn.ShowFullDate DESC ";
         }
 
         $sql = "
@@ -344,7 +352,7 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
             WHERE dn.ChannelId IN ($channelIds) AND dn.State=30 AND dn.ShowInClient=1 " . $searchSql . "
-            ORDER BY dn.ShowInClientIndex DESC, dn.ShowFullDate DESC LIMIT " . $pageBegin . "," . $pageSize . ";";
+            ORDER BY $orderBy LIMIT " . $pageBegin . "," . $pageSize . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
 

@@ -22,7 +22,6 @@ class UserOrderNewspaperClientGen extends BaseClientGen implements IBaseClientGe
                 $result = self::GenCreate();
                 break;
 
-
         }
         $result = str_ireplace("{function}", $function, $result);
         return $result;

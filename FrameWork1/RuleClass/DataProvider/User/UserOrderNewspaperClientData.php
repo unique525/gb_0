@@ -100,7 +100,8 @@ class UserOrderNewspaperClientData extends BaseClientData {
     }
 
 
-    /**检查用户是否购买了当前报纸
+    /**
+     * 检查用户是否购买了当前报纸
      * @param int $userId 用户id
      * @param int $channelId 报纸频道id
      * @param String $publishDate 报纸出版日期
