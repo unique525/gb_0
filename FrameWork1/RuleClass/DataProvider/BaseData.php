@@ -693,6 +693,8 @@ class BaseData
      * 客户端应用程序 数据表名
      */
     const TableName_Client_App = "cst_client_app";
+
+    const TableName_Client_Direct_Url = "cst_client_direct_url";
     /**
      * 客户端应用程序 数据表自增字段名
      */

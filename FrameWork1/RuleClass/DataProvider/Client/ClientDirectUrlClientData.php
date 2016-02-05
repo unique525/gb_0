@@ -1,12 +1,42 @@
 <?php
 
 /**
- * ¿Í»§¶Ë ¿Í»§¶ËÍøÖ·×ªÏò Êý¾ÝÀà
+ *
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_DataProvider_Client
  * @author zhangchi
  */
 class ClientDirectUrlClientData extends BaseClientData
 {
+    /**
+     * èŽ·å–directUrl
+     * @param int $clientDirectUrlId
+     * @return  array DirectUrl
+     */
+    public function GetDirectUrl($clientDirectUrlId) {
+        $result = -1;
+        if ($clientDirectUrlId > 0) {
+            $sql = "SELECT DirectUrl FROM  " . self::TableName_Client_Direct_Url . " WHERE ClientDirectUrlId =:ClientDirectUrlId";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ClientDirectUrlId", $clientDirectUrlId);
+            $result = $this->dbOperator->GetString($sql, $dataProperty);
+        }
+        return $result;
+    }
 
+    /**
+     * å¢žåŠ ä¸€ä¸ªç‚¹å‡»
+     * @param int $clientDirectUrlId id
+     * @return int æ“ä½œç»“æžœ
+     */
+    public function AddHit($clientDirectUrlId){
+        $result = -1;
+        if($clientDirectUrlId > 0){
+            $sql = "UPDATE ".self::TableName_Client_Direct_Url." SET Hit = Hit+1 WHERE ClientDirectUrlId=:ClientDirectUrlId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ClientDirectUrlId",$clientDirectUrlId);
+            $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
 }
