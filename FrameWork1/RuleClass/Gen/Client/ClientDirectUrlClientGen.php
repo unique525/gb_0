@@ -40,7 +40,8 @@ class ClientDirectUrlClientGen extends BaseClientGen implements IBaseClientGen {
             if(strlen($ClientDirectUrl) > 0){
                 $result =  $ClientDirectUrlClientData->AddHit($clientDirectUrlId);
                 if($result > 0){
-                    header($ClientDirectUrl);
+                    Control::GoUrl($ClientDirectUrl);
+                    return;
                 }
             }
         }
