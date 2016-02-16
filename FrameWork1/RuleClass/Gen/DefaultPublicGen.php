@@ -161,8 +161,8 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $result = $examUserAnswerPublicGen->GenPublic();
                 break;
             case "client_direct":
-                $ClientDirectUrlClientGen = new ClientDirectUrlClientGen();
-                $result = $ClientDirectUrlClientGen->GenClient();
+                $ClientDirectUrlPublicGen = new ClientDirectUrlPublicGen();
+                $result = $ClientDirectUrlPublicGen->GenPublic();
                 break;
             default:
                 $result = self::GenDefaultPublic();
