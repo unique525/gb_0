@@ -34,13 +34,12 @@ class ClientDirectUrlClientGen extends BaseClientGen implements IBaseClientGen {
         $clientDirectUrlId = Control::GetRequest("client_direct_url_id", 0);
 
         if($clientDirectUrlId > 0){
-            $ClientDirectUrl = "";
-            $ClientDirectUrlClientData = new ClientDirectUrlClientData();
-            $ClientDirectUrl = $ClientDirectUrlClientData->GetDirectUrl($clientDirectUrlId);
-            if(strlen($ClientDirectUrl) > 0){
-                $result =  $ClientDirectUrlClientData->AddHit($clientDirectUrlId);
+            $clientDirectUrlClientData = new ClientDirectUrlClientData();
+            $clientDirectUrl = $clientDirectUrlClientData->GetDirectUrl($clientDirectUrlId);
+            if(strlen($clientDirectUrl) > 0){
+                $result =  $clientDirectUrlClientData->AddHit($clientDirectUrlId);
                 if($result > 0){
-                    Control::GoUrl($ClientDirectUrl);
+                    Control::GoUrl($clientDirectUrl);
                     return;
                 }
             }
