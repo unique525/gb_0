@@ -223,6 +223,17 @@
                 </td>
                 <td class="spe_line"></td>
             </tr>
+            <tr>
+                <td class="spe_line"></td>
+                <td class="spe_line" align="right">微信OPENID：</td>
+                <td class="spe_line">
+                    {WxOpenId}
+                </td>
+                <td class="spe_line" align="right"></td>
+                <td class="spe_line">
+                </td>
+                <td class="spe_line"></td>
+            </tr>
         </table>
         <table width="99%" align="center" border="0" cellspacing="0" cellpadding="0">
             <tr>

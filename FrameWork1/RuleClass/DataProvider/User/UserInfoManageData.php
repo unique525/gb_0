@@ -106,10 +106,12 @@ class UserInfoManageData extends BaseManageData {
             ".self::TableName_UserLevel.".UserLevelName,
             ".self::TableName_UserLevel.".UserLevelPic,
             ".self::TableName_UserLevel.".UserLevel,
-            ".self::TableName_UserRole.".UserGroupID
+            ".self::TableName_UserRole.".UserGroupID,
+            ".self::TableName_UserPlugins.".WxOpenId
             FROM ".self::TableName_User."
             INNER JOIN ".self::TableName_UserInfo." ON (".self::TableName_User.".UserID = ".self::TableName_UserInfo.".UserID)
             LEFT JOIN ".self::TableName_UploadFile." ON ".self::TableName_UserInfo.".AvatarUploadFileId = ".self::TableName_UploadFile.".UploadFileId
+            LEFT JOIN ".self::TableName_UserPlugins." ON ".self::TableName_UserInfo.".UserID = ".self::TableName_UserPlugins.".UserID
             LEFT JOIN ".self::TableName_UserSiteLevel." ON (".self::TableName_User.".UserID = ".self::TableName_UserSiteLevel.".UserId) AND ".self::TableName_UserSiteLevel.".SiteId=:SiteId
             LEFT JOIN ".self::TableName_UserRole." ON (".self::TableName_User.".UserID = ".self::TableName_UserRole.".UserID) AND ".self::TableName_UserRole.".SiteID = :SiteId2
             LEFT JOIN ".self::TableName_UserLevel." ON (".self::TableName_UserSiteLevel.".SiteId = ".self::TableName_UserLevel.".SiteID) AND (".self::TableName_UserSiteLevel.".UserLevelId = ".self::TableName_UserLevel.".UserLevelID)
