@@ -84,12 +84,8 @@
                                         <div class="forum_state" title="0" idvalue="{f_ForumId}">正常</div>
                                         <div class="forum_state" title="1" idvalue="{f_ForumId}">禁止访问</div>
                                         <div class="forum_state" title="2" idvalue="{f_ForumId}">暂时关闭</div>
-                                        <div class="forum_state" style="display:none;" title="3" idvalue="{f_ForumId}">
-                                            按用户加密
-                                        </div>
-                                        <div class="forum_state" style="display:none;" title="4" idvalue="{f_ForumId}">
-                                            按身份加密
-                                        </div>
+                                        <div class="forum_state" style="display:none;" title="3" idvalue="{f_ForumId}">按用户加密</div>
+                                        <div class="forum_state" style="display:none;" title="4" idvalue="{f_ForumId}">按身份加密</div>
                                         <div class="forum_state" style="display:none;" title="5" idvalue="{f_ForumId}">
                                             按发帖加密
                                         </div>
@@ -129,8 +125,9 @@
                             </td>
 
                             <!----------管理--------------->
-                            <td class="spe_line2" style="width:90px;text-align:center;"><span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
-                                <a href="/default.php?secu=manage&mod=forum_topic&a=list&forum_id={f_ForumId}&site_id={SiteId}">管理主题</a>
+                            <td class="spe_line2" style="width:90px;text-align:center;">
+                                <span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
+                                <a href="/default.php?secu=manage&mod=forum_topic&m=list&forum_id={f_ForumId}&site_id={SiteId}">管理主题</a>
                             </span></td>
 
                             <!----------移动--------------->
@@ -193,7 +190,7 @@
                                       idvalue="{f_ForumId}">帖子类型管理</span>
                             </td>
                             <td class="spe_line2" style="width:90px;text-align:center;"><span class="btn_topic_list" style="cursor: pointer" idvalue="{f_ForumId}">
-                                <a href="/default.php?secu=manage&mod=forum_topic&a=list&forum_id={f_ForumId}&site_id={SiteId}">管理主题</a>
+                                <a href="/default.php?secu=manage&mod=forum_topic&m=list&forum_id={f_ForumId}&site_id={SiteId}">管理主题</a>
                             </span></td>
                             <td class="spe_line2" style="width:36px;"><img class="img_up system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_up.gif" idvalue="{f_ForumId}" title="向上移动" alt="向上" /><img class="img_down system_image" style="cursor: pointer" src="/system_template/{template_name}/images/manage/arr_down.gif" idvalue="{f_ForumId}" title="向下移动" alt="向下" /></td>
                             <td class="spe_line2" style="width:50px;text-align:center;" title="文档的排序数字，越大越靠前">{f_Sort}</td>

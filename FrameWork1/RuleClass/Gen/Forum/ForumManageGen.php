@@ -32,6 +32,10 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             case "reset_last_info":
                 $result = self::ResetLastInfo();
                 break;
+            case "get_move_window":
+                $result = self::getMoveWindow();
+                break;
+
         }
         $result = str_ireplace("{method}", $method, $result);
         return $result;
@@ -328,6 +332,7 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
             $forumManageData = new ForumManageData();
             $forumRank = 0;
             $arrRankOneList = $forumManageData->GetListByRank($siteId, $forumRank);
+
             $forumRank = 1;
             $arrRankTwoList = $forumManageData->GetListByRank($siteId, $forumRank);
             $forumRank = 2;
@@ -466,6 +471,53 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
 
         return "finished";
 
+    }
+
+    private function getMoveWindow()
+    {
+        $result = null;
+
+        $siteId = Control::GetRequest("site_id", 0);
+        $forumId = Control::GetRequest("forum_id", 0);
+        $forumTopicIds = Control::GetRequest("forum_ids",0);
+
+        ///////////////判断是否有操作权限///////////////////
+        $manageUserId = Control::GetManageUserId();
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
+        if ($can == 1) {
+            $forumManageData = new ForumManageData();
+            $forumRank = 0;
+            $arrRankOneList = $forumManageData->GetListByRank($siteId, $forumRank);
+            $forumRank = 1;
+            $arrRankTwoList = $forumManageData->GetListByRank($siteId, $forumRank);
+            $forumRank = 2;
+            $arrRankThreeList = $forumManageData->GetListByRank($siteId, $forumRank);
+
+            $tempContent = Template::Load("forum/forum_topic_move.html","common");
+
+            $tagId = "forum_list";
+            Template::ReplaceList(
+                $tempContent,
+                $arrRankOneList,
+                $tagId,
+                Template::DEFAULT_TAG_NAME,
+                $arrRankTwoList,
+                "ForumId",
+                "ParentId",
+                $arrRankThreeList,
+                "ForumId",
+                "ParentId"
+            );
+
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            $tempContent = str_ireplace("{forumId}", $forumId, $tempContent);
+            $tempContent = str_ireplace("{forumIds}", $forumTopicIds, $tempContent);
+
+            parent::ReplaceEnd($tempContent);
+            $result = $tempContent;
+        }
+        return $result;
     }
 }
 

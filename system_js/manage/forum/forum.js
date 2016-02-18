@@ -55,7 +55,7 @@ $(function() {
         var state = $(this).attr('title');
 
         event.preventDefault();
-        $.post("/default.php?secu=manage&mod=forum&a=async_modify_state&forum_id=" + forumId + "&state=" + state, {
+        $.post("/default.php?secu=manage&mod=forum&m=async_modify_state&forum_id=" + forumId + "&state=" + state, {
             resultbox: $(this).html()
         }, function(result) {
             //操作完成后触发的命令
