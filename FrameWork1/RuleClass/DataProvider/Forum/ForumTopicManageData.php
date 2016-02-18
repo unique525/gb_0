@@ -123,4 +123,38 @@ class ForumTopicManageData extends BaseManageData {
         }
         return $result;
     }
+
+    /**
+     * 将帖子移到别的板块
+     * @param $siteId          int      站点id
+     * @param $forumId         int      接受移动的板块id
+     * @param $forumTopicIdArr array    被移动的帖子的topicId数组
+     */
+    public function MoveTopicToOtherBlock($siteId, $forumId, $forumTopicIdArr)
+    {
+        $result = -1;
+
+        if($siteId > 0 && $forumId > 0 && count($forumTopicIdArr) > 0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField('ForumId', $forumId);
+            $sql = 'UPDATE ' .self::TableName_ForumTopic .
+                    ' SET ForumId=:ForumId '.
+                    ' WHERE ';
+
+            foreach($forumTopicIdArr as $item){
+                $sql .= ' (ForumTopicId=' .$item. ' AND SiteId=' .$siteId.') OR';
+            }
+
+            $sql = substr($sql, 0, strlen($sql)-3);
+            $sql = $sql. ';';
+
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            if($result == true){
+                $result = 1;
+            }
+        }
+
+        return $result;
+
+    }
 } 

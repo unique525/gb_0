@@ -25,6 +25,9 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             case "remove_to_bin":
                 $result = self::GenRemoveToBin();
                 break;
+            case "move_topic_to_other_block":
+                $result = self::moveTopicToOtherBlock();
+                break;
         }
         $result = str_ireplace("{action}", $method, $result);
         return $result;
@@ -53,12 +56,12 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             if ($can == 1) {
 
                 $forumTopicArray=$forumTopicManageData->GetListPager($siteId,$forumId,$pageBegin,$pageSize,$allCount,$searchKey);
-                if(count($forumTopicArray)>0){
+                    if(count($forumTopicArray)>0){
                     Template::ReplaceList($tempContent, $forumTopicArray, $listName);
                     $styleNumber = 1;
                     $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
                     $isJs = FALSE;
-                    $navUrl = "default.php?secu=manage&mod=forum_topic&a=list&site_id=$siteId&p={0}&ps=$pageSize";
+                    $navUrl = "default.php?secu=manage&mod=forum_topic&m=list&site_id=$siteId&forum_id=$forumId&p={0}&ps=$pageSize";
                     $jsFunctionName = "";
                     $jsParamList = "";
                     $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
@@ -84,6 +87,7 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
 
         parent::ReplaceEnd($tempContent);
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
+        $tempContent = str_ireplace('{f_ForumId}', $forumId, $tempContent);
         $result = $tempContent;
         return $result;
     }
@@ -134,6 +138,26 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
     private function GenRemoveToBin(){
         $result = -1;
         return $result;
+    }
+
+    private function moveTopicToOtherBlock()
+    {
+
+        $result = -4;
+
+        $siteId = Control::GetRequest("site_id", 0);
+        $forumIdMoveTo = Control::PostRequest("forum_id_move_to", 0);
+        $forumTopicIds = Control::GetRequest("forum_ids",0);
+        ///////////////判断是否有操作权限///////////////////
+        $manageUserId = Control::GetManageUserId();
+        $manageUserAuthority = new ManageUserAuthorityManageData();
+        $can = $manageUserAuthority->CanManageUserModify($siteId, 0, $manageUserId);
+        if ($can == 1) {
+            $forumTopicManageData = new ForumTopicManageData();
+            $forumTopicIdArr = explode('|!|', $forumTopicIds);
+            $result = $forumTopicManageData->MoveTopicToOtherBlock($siteId, $forumIdMoveTo, $forumTopicIdArr);
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
     }
 }
 
