@@ -19,10 +19,10 @@ class UserPublicData extends BasePublicData {
         $result = -1;
         $userPassWithMd5 = $userPass;
         $userPassWithMd5 = md5($userPassWithMd5);
+        $userPassWithMd5 = str_ireplace('0', '', $userPassWithMd5);
         if(strlen($userPassWithMd5)>20){
             $userPassWithMd5 = substr($userPassWithMd5,0,20);
         }
-
 
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
