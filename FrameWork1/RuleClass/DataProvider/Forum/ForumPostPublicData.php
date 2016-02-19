@@ -242,14 +242,13 @@ class ForumPostPublicData extends BasePublicData {
                         usl.UserLevel,
                         usl.UserLevelName,
                         usl.UserLevelPic
-                FROM " . self::TableName_ForumPost . " fp
-
-                INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=fp.UserId)
+                FROM " . self::TableName_ForumPost . " fp, " .self::TableName_UserInfo." ui
 
                 LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
                 LEFT OUTER JOIN " .self::ViewName_UserLevel ." usl ON (ui.UserId = usl.UserId)
 
                 WHERE fp." . self::TableId_ForumTopic. "=:" . self::TableId_ForumTopic . "
+                AND ui.UserId=fp.UserId
                 AND fp.state=0
 
                 ORDER BY fp.IsTopic DESC, fp.PostTime
