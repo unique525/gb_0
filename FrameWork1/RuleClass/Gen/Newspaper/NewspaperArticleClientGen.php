@@ -144,7 +144,7 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
                 && $newspaperArticleId > 0
 
             ) {
-                $resultCode = 1;
+                $resultCode = 0;
                 //是否购买了报纸
                 $newspaperArticleClientData = new NewspaperArticleClientData();
                 $newspaperPageClientData = new NewspaperPageClientData();
@@ -167,7 +167,7 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
                     UserPopedomData::UserCanExploreMustPayNewspaper);
                 //购买了报纸或有权限可以直接免费看报纸
                 if ($isBuy>0 || $canExplore){
-
+                    $resultCode = 1;
                     $arrOne = $newspaperArticleClientData->GetOne($newspaperArticleId,true);
                     $result = Format::FixJsonEncode($arrOne);
                 }

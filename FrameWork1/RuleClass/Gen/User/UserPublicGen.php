@@ -676,15 +676,15 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     private function AsyncLogin(){
         $userAccount = Control::GetRequest("user_account", "");
-        $userPass = Control::GetRequest("user_pass", "");
+        $userPass = Control::GetRequest("user_pass", "", false);
         $hour = Control::GetRequest("hour", 1);
-        $userPassWithMd5 = Control::GetRequest("user_pass_with_md5", "");
+        //$userPassWithMd5 = Control::GetRequest("user_pass_with_md5", "");
         $siteId = parent::GetSiteIdByDomain();
 
-        if(!empty($userAccount) && (!empty($userPass) || !empty($userPassWithMd5)) && $siteId > 0){
-            $userPassWithMd5 = $userPass;
+        if(!empty($userAccount) && !empty($userPass) && $siteId > 0){
+            //$userPassWithMd5 = $userPass;
             $userPublicData = new UserPublicData();
-            $userId = $userPublicData->Login($userAccount, $userPass, $userPassWithMd5);
+            $userId = $userPublicData->Login($userAccount, $userPass);
             if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {

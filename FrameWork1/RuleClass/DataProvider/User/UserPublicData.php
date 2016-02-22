@@ -13,16 +13,16 @@ class UserPublicData extends BasePublicData {
      * 混合登录
      * @param string $userAccount 会员登录帐号，可以是会员名，会员邮箱，会员手机号码
      * @param string $userPass 会员密码
-     * @param string $userPassWithMd5 会员密码MD5
      * @return int 返回userId
      */
-    public function Login($userAccount,$userPass,$userPassWithMd5=""){
+    public function Login($userAccount,$userPass){
         $result = -1;
+        $userPassWithMd5 = $userPass;
         $userPassWithMd5 = md5($userPassWithMd5);
+        $userPassWithMd5 = str_ireplace('0', '', $userPassWithMd5);
         if(strlen($userPassWithMd5)>20){
             $userPassWithMd5 = substr($userPassWithMd5,0,20);
         }
-
 
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."

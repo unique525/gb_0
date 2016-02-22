@@ -34,4 +34,5 @@
 
 #forum_post .content{width:1000px;}
 #forum_post .left{width:700px;}
+#forum_post .forum_post_content img{max-width: 650px;}
 #forum_post .right{width:280px;}
