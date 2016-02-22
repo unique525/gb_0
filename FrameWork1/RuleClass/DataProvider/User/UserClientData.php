@@ -161,6 +161,27 @@ class UserClientData extends BaseClientData {
     }
 
     /**
+     * 取得会员帐号
+     * @param string $userMobile 会员mobile
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 会员帐号
+     */
+    public function GetUserIdByUserMobile($userMobile, $withCache)
+    {
+        $result = -1;
+        if (strlen($userMobile) > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userMobile;
+            $cacheFile = 'user_get_user_id_by_user_mobile.cache_' . $userMobile . '';
+            $sql = "SELECT UserId FROM " . self::TableName_User . " WHERE UserMobile=:UserMobile;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("UserMobile", $userMobile);
+            $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+    /**
      * 修改用户密码
      * @param string $userMobile
      * @param string $userPass

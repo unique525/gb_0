@@ -311,19 +311,37 @@ class UserClientGen extends BaseClientGen implements IBaseClientGen
 
                     $userClientData = new UserClientData();
 
-                    $result = $userClientData->ModifyPassword($userMobile, $newUserPass);
+                    $resultOp = $userClientData->ModifyPassword($userMobile, $newUserPass);
 
                     //将user pass 进行md5加密返回
-                    if($result > 0){
-                        $result = Format::FixJsonEncode(md5($newUserPass));
+                    if($resultOp > 0){
+                        //$result = Format::FixJsonEncode(md5($newUserPass));
+                        $userId = $userClientData->GetUserIdByUserMobile($userMobile, true);
+                        $withCache = FALSE;
+                        $arrUserOne = $userClientData->GetOne($userId,$withCache);
+
+                        //将user pass 进行md5加密返回
+                        if($arrUserOne["UserPass"]){
+                            $arrUserOne["UserPass"] = md5($arrUserOne["UserPass"]);
+                        }
+
+                        $result = Format::FixJsonEncode($arrUserOne);
+
+
+
+
                     }else{
-                        //return result
+                        $resultCode = -4; //数据操作失败
                     }
+                }else{
+                    $resultCode = -3; //md5验证失败
                 }
+            }else{
+                //$resultCode = -468;//验证码错误
             }
 
         } else {
-            $resultCode = UserBaseGen::LOGIN_ILLEGAL_PARAMETER;
+            $resultCode = -2;
         }
         return '{"result_code":"' . $resultCode . '","modify_user_pass":' . $result . '}';
 
