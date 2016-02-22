@@ -99,6 +99,9 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "get_wx_user_info":
                 $result = self::GetWxUserInfo();
                 break;
+            case "temp_register":  //临时自动注册
+                $result = self::TempRegister();
+                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -645,6 +648,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
     }
 
+
     private function GenRegister(){
 
         $siteId = parent::GetSiteIdByDomain();
@@ -911,6 +915,58 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         Control::SetUserCookie($userId, $userName);
 
     }
+
+
+    /**
+     * 临时自动注册
+     */
+    private function TempRegister(){
+        $siteId = parent::GetSiteIdByDomain();
+        $userMobile = Format::FormatHtmlTag(Control::PostOrGetRequest("UserMobile", "", false));
+        $userName=$userMobile;
+        $userPass = "111111";
+        $userGroupId = Format::FormatHtmlTag(Control::PostRequest("user_group_id", 0, false));
+        $regIp = Control::GetIp();
+        $createDate = strval(date('Y-m-d H:i:s', time()));
+        if ($siteId > 0 && (!empty($userMobile)) && !empty($userPass) && !empty($regIp)) {
+            //重名注册检查以及格式匹配检查
+            //~~~~~~~~~~~~~~开始~~~~~~~~~~~~~~~~~
+            if (!empty($userMobile)) {
+                if (preg_match("/^13\d{9}$|^15\d{9}$|^18\d{9}$/", $userMobile)) {
+                    $isSameMobile = self::IsRepeatUserMobile($userMobile);
+                    if ($isSameMobile) { //已有号码  直接登录
+                        $userPublicData=new UserPublicData();
+                        $userId = $userPublicData->Login($userMobile, $userPass);
+                        if($userId <= 0){
+                            return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
+                        }else {
+                            $hour = 9999999;//直接登录
+                            Control::SetUserCookie($userId,$userMobile, $hour);
+                            return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
+                        }
+                    }
+                } else {
+                    return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FORMAT_USER_MOBILE.'})';
+                }
+            }
+            //~~~~~~~~~~~~~~结束~~~~~~~~~~~~~~~~~
+            $userPublicData = new UserPublicData();
+            $siteConfigData = new SiteConfigData($siteId);
+            $newUserId = $userPublicData->Create($siteId, $userPass, $regIp, $userName, "", $userMobile);
+            if ($newUserId > 0) {
+
+                self::CreateUserEx($siteId, $newUserId, $userName, $siteConfigData,$userGroupId);
+
+                return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::SUCCESS_REGISTER.'})';
+            } else {
+                return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_FAIL_REGISTER.'})';
+            }
+        } else {
+            return Control::GetRequest("jsonpcallback", "") . '({"result":'.self::ERROR_PARAMETER.'})';
+        }
+    }
+
+
 
     private function AsyncGetOne(){
         $userId = intval(Control::GetUserId());
