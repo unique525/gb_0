@@ -4,6 +4,17 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>{cfg_ForumIeTitle}</title>
     {forum_common_head}
+    <meta name="keywords" content="{cfg_ForumIeKeywords}" />
+    <meta name="description" content="{cfg_ForumIeDescription}" />
+    <meta name="generator" content="{cfg_MetaGenerator}Sense CMS" />
+    <meta name="author" content="{cfg_MetaAuthor}" />
+    <meta name="copyright" content="{cfg_MetaCopyright}" />
+    <meta name="application-name" content="{cfg_MetaApplicationName}" />
+    <meta name="msapplication-tooltip" content="{cfg_MetaMsApplicationTooltip}" />
+    <link rel="archives" title="archives" href="/default.php?mod=forum&a=archiver" />
+    <link type="text/css" href="/front_template/common/common.css" rel="stylesheet" />
+    <link type="text/css" href="/front_template/default/skins/gray/common.css" rel="stylesheet" />
+    <link type="text/css" href="/front_template/default/skins/gray/width_19.css" rel="stylesheet" />
     <script type="text/javascript" src="/system_js/xheditor-1.1.14/xheditor-1.1.14-zh-cn.min.js"></script>
     <script type="text/javascript" src="/system_js/color_picker.js"></script>
     <script type="text/javascript" src="/system_js/ajax_file_upload.js"></script>
