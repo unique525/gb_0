@@ -360,6 +360,61 @@ class DocumentNewsClientData extends BaseClientData {
     }
 
     /**
+     * 取得资讯列表数据集
+     * @param int $siteId
+     * @param array $arrLike
+     * @param int $top
+     * @return array 资讯列表数据集
+     */
+    public function GetListOfRelative(
+        $siteId,
+        $arrLike,
+        $top
+    )
+    {
+        $siteId = Format::FormatSql($siteId);
+        $likeSql = '';
+        $dataProperty = new DataProperty();
+
+        $dataProperty->AddField("SiteId", $siteId);
+
+        if (!empty($arrLike)) {
+
+            foreach($arrLike as $val){
+
+                $likeSql .= " OR (dn.DocumentNewsTitle like '%".$val."%')";
+
+            }
+
+
+        }
+
+        $pos = stripos(strtolower($likeSql), ' OR');
+        if ($pos !== false) {
+
+            $likeSql = substr($likeSql, 3);
+
+        }
+        $orderBy = " dn.ShowFullDate DESC ";
+
+
+        $sql = "
+            SELECT
+                ".self::SELECT_COLUMN_FOR_LIST."
+            FROM
+            " . self::TableName_DocumentNews . " dn
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
+                    LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
+            WHERE dn.SiteId = :SiteId AND dn.State=30 AND dn.ShowInClient=1 AND (" . $likeSql . ")
+            ORDER BY $orderBy LIMIT " . $top . ";";
+
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        return $result;
+    }
+
+    /**
      * 返回一行数据
      * @param int $documentNewsId 资讯id
      * @param bool $withCache 是否使用缓存
@@ -399,6 +454,34 @@ class DocumentNewsClientData extends BaseClientData {
             $dataProperty = new DataProperty();
             $dataProperty->AddField("DocumentNewsId",$documentNewsId);
             $result = $this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+    public function GetDocumentNewsMainTag($documentNewsId,$withCache){
+        $result = "";
+        if($documentNewsId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'channel_get_document_news_main_tag.cache_' . $documentNewsId . '';
+            $sql = "SELECT DocumentNewsMainTag FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->GetInfoOfStringValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
+        }
+        return $result;
+    }
+
+
+    public function GetDocumentNewsTag($documentNewsId,$withCache){
+        $result = "";
+        if($documentNewsId > 0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'document_news_data';
+            $cacheFile = 'channel_get_document_news_tag.cache_' . $documentNewsId . '';
+            $sql = "SELECT DocumentNewsTag FROM ".self::TableName_DocumentNews." WHERE DocumentNewsId = :DocumentNewsId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("DocumentNewsId",$documentNewsId);
+            $result = $this->GetInfoOfStringValue($sql,$dataProperty,$withCache,$cacheDir,$cacheFile);
         }
         return $result;
     }

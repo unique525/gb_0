@@ -28,6 +28,9 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
             case "get_one":
                 $result = self::GetOne();
                 break;
+            case "relative":
+                $result = self::GenRelative();
+                break;
 
         }
         $result = str_ireplace("{function}", $function, $result);
@@ -38,7 +41,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenListOfSite(){
+    private function GenListOfSite(){
 
         $result = "[{}]";
         $resultCode = 0;
@@ -82,7 +85,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenListOfChannel(){
+    private function GenListOfChannel(){
 
         $result = "[{}]";
         $resultCode = 0;
@@ -126,7 +129,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
      * 返回列表数据集
      * @return string
      */
-    public function GenListOfChannels(){
+    private function GenListOfChannels(){
 
         $result = "[{}]";
         $resultCode = 0;
@@ -189,6 +192,72 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
 
         return '{"result_code":"' . $resultCode . '","document_news":' . $result . '}';
 
+
+    }
+
+
+    private function GenRelative(){
+        $result = "[{}]";
+        $resultCode = 0;
+
+        $siteId = intval(Control::GetRequest("site_id", 0));
+        $documentNewsId = intval(Control::PostOrGetRequest("document_news_id",0));
+        $top = intval(Control::GetRequest("top", 5));
+
+        if($siteId>0 && $documentNewsId>0){
+
+            $documentNewsClientData = new DocumentNewsClientData();
+
+            $documentNewsMainTag = $documentNewsClientData->GetDocumentNewsMainTag($documentNewsId,true);
+            $documentNewsTag = $documentNewsClientData->GetDocumentNewsTag($documentNewsId,true);
+
+            $arrLike = array();
+
+            if (strlen($documentNewsMainTag)>0){
+
+                $arrLike[] = $documentNewsMainTag;
+
+            }
+
+            if (strlen($documentNewsTag)>0){
+
+                $arr = explode(' ',$documentNewsTag);
+
+                if (empty($arr)){
+
+                    $arr = explode($documentNewsTag,',');
+
+                }
+                foreach($arr as $val){
+
+                    $val = str_ireplace(" ","",$val);
+
+                    if(strlen($val)>0){
+                        $arrLike[] = $val;
+                    }
+
+                }
+
+            }
+
+            $arrDocumentNewsList = $documentNewsClientData->GetListOfRelative(
+                $siteId,
+                $arrLike,
+                $top
+            );
+            if (count($arrDocumentNewsList) > 0) {
+                $resultCode = 1;
+                $result = Format::FixJsonEncode($arrDocumentNewsList);
+            }
+            else{
+                $resultCode = -2;
+            }
+        }
+        else{
+            $resultCode = -1;
+        }
+
+        return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
 
     }
 } 
