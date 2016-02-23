@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 公开访问 客户端直接转向 生成类
+ *
  * @category iCMS
  * @package iCMS_FrameWork1_RuleClass_Gen_Client
  * @author zhangchi
@@ -9,8 +9,8 @@
 class ClientDirectUrlPublicGen extends BasePublicGen implements IBasePublicGen {
 
     /**
-     * 引导方法
-     * @return string 返回执行结果
+     *
+     * @return string
      */
     public function GenPublic() {
         $result = "";
