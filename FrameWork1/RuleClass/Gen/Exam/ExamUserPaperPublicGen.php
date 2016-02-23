@@ -133,13 +133,27 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
 
         $mustSelect = 1;
         $withCache = false;
+        $examQuestionType = 1;
         $mustCount = $examQuestionClassPublicData->GetMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrMustQuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $mustCount);
+        $arrMustType1QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $mustCount,$examQuestionType);
+        $examQuestionType = 2;
+        $mustCount = $examQuestionClassPublicData->GetMustSelectType2Count($examQuestionClassId,$withCache);
+        $arrMustType2QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $mustCount,$examQuestionType);
+        $examQuestionType = 3;
+        $mustCount = $examQuestionClassPublicData->GetMustSelectType3Count($examQuestionClassId,$withCache);
+        $arrMustType3QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $mustCount,$examQuestionType);
 
 
         $mustSelect = 0;
+        $examQuestionType = 1;
         $nonCount = $examQuestionClassPublicData->GetNonMustSelectType1Count($examQuestionClassId,$withCache);
-        $arrNonMustQuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount);
+        $arrNonMustType1QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount,$examQuestionType);
+        $examQuestionType = 2;
+        $nonCount = $examQuestionClassPublicData->GetNonMustSelectType2Count($examQuestionClassId,$withCache);
+        $arrNonMustType2QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount,$examQuestionType);
+        $examQuestionType = 3;
+        $nonCount = $examQuestionClassPublicData->GetNonMustSelectType3Count($examQuestionClassId,$withCache);
+        $arrNonMustType3QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount,$examQuestionType);
 
         $beginTime = date("Y-m-d H:i:s", time());
         $endTime = "";
@@ -147,19 +161,33 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $answer = "";
         $examUserPaperId = $examUserPaperPublicData->Create($userId,$beginTime,$endTime,$getScore);
         $createData = date("Y-m-d H:i:s", time());
-        $lastExamUserAnswerId1 = 0;
-        $lastExamUserAnswerId2 = 0;
 
         if($examUserPaperId > 0){
+            $lastExamUserAnswerId1 = 0;
+            $lastExamUserAnswerId2 = 0;
+            $lastExamUserAnswerId3 = 0;
+            $lastExamUserAnswerId4 = 0;
+            $lastExamUserAnswerId5 = 0;
+            $lastExamUserAnswerId6 = 0;
 
-            for($i=0;$i<count($arrMustQuestionList);$i++){
-                $lastExamUserAnswerId1 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustQuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustQuestionList[$i]['State'],$getScore);
+            for($i=0;$i<count($arrMustType1QuestionList);$i++){
+                $lastExamUserAnswerId1 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType1QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType1QuestionList[$i]['State'],$getScore);
             }
-            for($j=0;$j<count($arrNonMustQuestionList);$j++){
-                $lastExamUserAnswerId2 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustQuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustQuestionList[$j]['State'],$getScore);
+            for($j=0;$j<count($arrMustType1QuestionList);$j++){
+                $lastExamUserAnswerId2= $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType2QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType2QuestionList[$i]['State'],$getScore);
             }
-            if($lastExamUserAnswerId1 > 0 || $lastExamUserAnswerId2 > 0){
+            for($k=0;$k<count($arrMustType1QuestionList);$k++){
+                $lastExamUserAnswerId3 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType3QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType3QuestionList[$i]['State'],$getScore);
+            }
 
+            for($m=0;$m<count($arrNonMustType1QuestionList);$m++){
+                $lastExamUserAnswerId4 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType1QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType1QuestionList[$j]['State'],$getScore);
+            }
+            for($n=0;$m<count($arrNonMustType2QuestionList);$n++){
+                $lastExamUserAnswerId5 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType2QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType2QuestionList[$j]['State'],$getScore);
+            }
+            for($o=0;$o<count($arrNonMustType3QuestionList);$o++){
+                $lastExamUserAnswerId6 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType3QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType3QuestionList[$j]['State'],$getScore);
             }
             header("location: /default.php?mod=exam_user_answer&a=list&exam_user_paper_id=" .$examUserPaperId."");
 
