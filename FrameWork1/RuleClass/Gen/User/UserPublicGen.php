@@ -683,6 +683,8 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
 
         if(!empty($userAccount) && !empty($userPass) && $siteId > 0){
             //$userPassWithMd5 = $userPass;
+
+
             $userPublicData = new UserPublicData();
             $userId = $userPublicData->Login($userAccount, $userPass);
             if($userId <= 0){

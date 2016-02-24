@@ -24,10 +24,11 @@ class UserPublicData extends BasePublicData {
             $userPassWithMd5 = substr($userPassWithMd5,0,20);
         }
 
+
         if(!empty($userAccount) && (!empty($userPass) || !empty($UserPassWithMd5))){
             $sql = "SELECT UserId FROM ".self::TableName_User."
                         WHERE (UserName = :UserName OR UserEmail = :UserEmail OR UserMobile = :UserMobile)
-                            AND (UserPass = :UserPass OR left(UserPassWithMd5,20) = :UserPassWithMd5)
+                            AND (UserPass = :UserPass OR left(REPLACE(UserPassWithMd5, '0', ''),20) = :UserPassWithMd5)
                             AND State=0;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("UserName",$userAccount);
