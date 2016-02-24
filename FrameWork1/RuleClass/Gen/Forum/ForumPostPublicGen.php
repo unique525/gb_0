@@ -298,7 +298,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
 
                 parent::UploadMultiple(
-                    "file_upload_to_content",
+                    "file_upload_to_content_of_wap",
                     $tableType,
                     $tableId,
                     $arrUploadFile, //UploadFile类型的数组
