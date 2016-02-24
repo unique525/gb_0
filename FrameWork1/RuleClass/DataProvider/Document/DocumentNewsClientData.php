@@ -362,12 +362,14 @@ class DocumentNewsClientData extends BaseClientData {
     /**
      * 取得资讯列表数据集
      * @param int $siteId
+     * @param int $documentNewsId
      * @param array $arrLike
      * @param int $top
      * @return array 资讯列表数据集
      */
     public function GetListOfRelative(
         $siteId,
+        $documentNewsId,
         $arrLike,
         $top
     )
@@ -377,6 +379,7 @@ class DocumentNewsClientData extends BaseClientData {
         $dataProperty = new DataProperty();
 
         $dataProperty->AddField("SiteId", $siteId);
+        $dataProperty->AddField("DocumentNewsId", $documentNewsId);
 
         if (!empty($arrLike)) {
 
@@ -406,7 +409,10 @@ class DocumentNewsClientData extends BaseClientData {
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf1 on dn.TitlePic1UploadFileId=uf1.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf2 on dn.TitlePic2UploadFileId=uf2.UploadFileId
                     LEFT OUTER JOIN " .self::TableName_UploadFile." uf3 on dn.TitlePic3UploadFileId=uf3.UploadFileId
-            WHERE dn.SiteId = :SiteId AND dn.State=30 AND dn.ShowInClient=1 AND (" . $likeSql . ")
+            WHERE dn.SiteId = :SiteId
+            AND dn.State=30
+            AND dn.DocumentNewsId <> :DocumentNewsId
+            AND dn.ShowInClient=1 AND (" . $likeSql . ")
             ORDER BY $orderBy LIMIT " . $top . ";";
 
         $result = $this->dbOperator->GetArrayList($sql, $dataProperty);

@@ -242,6 +242,7 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
 
             $arrDocumentNewsList = $documentNewsClientData->GetListOfRelative(
                 $siteId,
+                $documentNewsId,
                 $arrLike,
                 $top
             );
