@@ -449,7 +449,7 @@ class BaseGen
                     if ($moveResult) {
                         //数据库操作
                         $uploadFileData = new UploadFileData();
-
+/*
                         if (!empty($arrUploadFileId)) {
                             //修改原有uploadFile数据
                             if(isset($arrUploadFileId[$i])){
@@ -478,19 +478,20 @@ class BaseGen
                             }
 
                         }else{
-                            //创建新的uploadFile数据
-                            $uploadFileId = $uploadFileData->Create(
-                                $newFileName,
-                                $file_size, //文件大小，字节
-                                $fileExtension,
-                                $file_name, //原始文件名
-                                str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
-                                $tableType,
-                                $tableId,
-                                $manageUserId,
-                                $userId
-                            );
-                        }
+*/
+                        //创建新的uploadFile数据
+                        $uploadFileId = $uploadFileData->Create(
+                            $newFileName,
+                            $file_size, //文件大小，字节
+                            $fileExtension,
+                            $file_name, //原始文件名
+                            str_ireplace(PHYSICAL_PATH, "", $dirPath) . $newFileName, //文件路径+文件名
+                            $tableType,
+                            $tableId,
+                            $manageUserId,
+                            $userId
+                        );
+//}
 
 
                         if ($uploadFileId > 0) {
