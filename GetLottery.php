@@ -14,6 +14,36 @@ echo 123;
 $get=new Get();
 $get->GetOriginalList(0);
 
+$server = $_SERVER['SERVER_NAME'];
+
+/*
+ *
+
+
+
+
+*/
+if (stripos(strtolower($server), 'qcbll.com') !== false) {
+    header('Location: http://qcbll.com');
+    return;
+}
+if (stripos(strtolower($server), 'enjoystock.net') !== false) {
+    header('Location: http://enjoystock.net');
+    return;
+}
+if (stripos(strtolower($server), 'maozhumeili.com ') !== false) {
+    header('Location: http://maozhumeili.com ');
+    return;
+}
+if (stripos(strtolower($server), 'cylhct.com') !== false) {
+    header('Location: http://cylhct.com');
+    return;
+}
+if (stripos(strtolower($server), 'lyk68.com') !== false) {
+    header('Location: http://lyk68.com');
+    return;
+}
+
 
 
 class Get extends BaseManageData

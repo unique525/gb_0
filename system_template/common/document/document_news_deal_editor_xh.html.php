@@ -999,7 +999,17 @@ function DocumentNewsTagPulling(){
                 </select>
                 {s_ShowMutiPicInClientList}
             </td>
-
+            <td class="spe_line" style="text-align: left">
+                <select id="f_ClientIconType" name="f_ClientIconType">
+                    <option value="0">图标类型 - 无</option>
+                    <option value="1">图标类型 - 专题</option>
+                    <option value="2">图标类型 - 组图</option>
+                    <option value="3">图标类型 - 推广</option>
+                    <option value="4">图标类型 - 图说</option>
+                    <option value="5">图标类型 - 活动</option>
+                </select>
+                {s_ClientIconType}
+            </td>
         </tr>
     </table>
 </div>
